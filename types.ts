@@ -1,0 +1,309 @@
+
+import React from 'react';
+
+
+export interface SiteUser {
+  id: string;
+  username: string;
+  password: string;
+  email: string;
+  phone: string;
+  createdAt: number;
+  status?: 'pending' | 'active' | 'suspended';
+  notes?: string;
+}
+
+export interface UserMessage {
+  id: string;
+  userId: string;
+  username: string;
+  content: string;
+  isRead: boolean;
+  createdAt: number;
+}
+
+export interface PaymentRequest {
+  id: string;
+  userId: string;
+  username: string;
+  type: 'crypto' | 'bank';
+  method: string;       // e.g. 'USDT TRC-20', 'Ziraat Bankası'
+  amount: number;
+  currency: string;     // 'TL', 'USDT', 'BTC'
+  txHash?: string;      // for crypto
+  senderName?: string;  // for bank
+  status: 'pending' | 'confirmed' | 'rejected';
+  createdAt: number;
+  processedAt?: number;
+  adminNote?: string;
+}
+
+export interface PaymentConfig {
+  cryptoWallets: { network: string; symbol: string; address: string; isActive: boolean }[];
+  bankAccounts: { bank: string; iban: string; holder: string; isActive: boolean }[];
+  minDepositTL: number;
+  isActive: boolean;
+}
+
+export interface EditorAccount {
+  id: string;
+  name: string;
+  username: string;
+  password: string;
+  createdAt: number;
+}
+
+
+export interface Brand {
+  id: string;
+  name: string;
+  subtitle: string;
+  offerMain: string;
+  offerSub: string;
+  logo: string;
+  link: string;
+  bonusText?: string;
+  isSponsor?: boolean;
+}
+
+export interface NavItem {
+  label: string;
+  path: string;
+  icon?: React.ReactNode;
+}
+
+// New Systems Types
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  reward: number;
+  icon: string;
+  cooldownHours: number;
+  isActive: boolean;
+}
+
+export interface TaskLog {
+  taskId: string;
+  completedAt: number;
+}
+
+export interface CaseReward {
+  id: string;
+  value: number;
+  probability: number; // 0 to 1
+  label: string;
+}
+
+export interface UserStats {
+  balance: number;
+  vipLevel: number;
+  taskLogs: TaskLog[];
+  caseHistory: { rewardLabel: string, timestamp: number }[];
+  bonusHistory: { amount: number, reason: string, timestamp: number }[];
+}
+
+export interface AutoBonusConfig {
+  amount: number;
+  target: 'all' | 'vip_only';
+  intervalHours: number;
+  lastRun: number;
+  isActive: boolean;
+}
+
+export interface BookieOdd {
+  name: string;
+  odd1: string;
+  odd2: string;
+  link: string;
+  isHighest?: boolean;
+}
+
+export interface MatchAnalysis {
+  id: string;
+  league: string;
+  homeTeam: string;
+  awayTeam: string;
+  matchTime: string;
+  matchDate: string; // ISO format (YYYY-MM-DD)
+  analysis: string; // legacy/fallback
+  tacticalSummary: string;
+  breakingPoint: string;
+  bettingScenario: string;
+  prediction: string;
+  confidence: number; // 0 to 100
+  modelScore: number;
+  recentHistory: string;
+  expectedGoals: string;
+  bookieOdds: BookieOdd[];
+  createdAt: number;
+  sport?: 'Futbol' | 'Basketbol';
+  editorId?: string;
+}
+
+export interface CouponMatch {
+  matchId: string;
+  homeTeam: string;
+  awayTeam: string;
+  prediction: string;
+  odd: string;
+  analysis?: string;
+  confidence?: number;
+}
+
+export interface Coupon {
+  id: string;
+  title: string;
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
+  matches: CouponMatch[];
+  totalOdd: string;
+  date: string; // YYYY-MM-DD
+  editorId?: string;
+}
+export interface WheelReward {
+  id: string;
+  label: string;
+  type: 'nakit' | 'freespin' | 'freebet' | 'bonus' | 'pas' | 'iphone' | 'ps5';
+  value: string;
+  weight: number; // Probability weight
+  color: string;
+  icon?: string;
+}
+
+export interface WheelConfig {
+  rewards: WheelReward[];
+  lastSpinTime: number;
+  spinCooldownHours: number;
+}
+
+// ─── Casino 724 Blackjack ───────────────────────────────────────────────────
+export interface BlackjackReward {
+  id: string;
+  label: string;
+  emoji: string;
+  weight: number; // Probability weight (higher = more likely)
+  color: string;  // Hex for UI
+}
+
+export interface BlackjackConfig {
+  rewards: BlackjackReward[];
+  cooldownHours: number;      // Hours between plays (default 4)
+  dealerHitSoft17: boolean;   // Dealer hits soft-17 rule
+  lastPlayTime: number;       // Unix ms of last play (per user)
+}
+
+
+// Popular Leagues Types
+export interface LeagueTab {
+  id: string;
+  name: string;
+  logo: string;
+}
+
+export interface LeagueMatch {
+  id: string;
+  date: string; // e.g., '28 Feb 2026'
+  homeTeam: string;
+  homeLogo: string;
+  awayTeam: string;
+  awayLogo: string;
+  status?: 'Yaklaşan' | 'Tamamlandı';
+  homeScore?: number | null;
+  awayScore?: number | null;
+}
+
+export interface LeagueStanding {
+  rank: number;
+  team: string;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goalDiff: string; // e.g., '+42', '-6'
+  goalsFor: number;
+  goalsAgainst: number;
+  points: number;
+  form: ('W' | 'D' | 'L')[];
+  zone?: 'champions-league' | 'europa-league' | 'conference-league' | 'relegation';
+}
+
+export interface LeaguePrediction {
+  id: string;
+  leagueSlug: string; // e.g., 'LALIGA'
+  homeTeam: string;
+  homeLogo: string;
+  awayTeam: string;
+  awayLogo: string;
+  dateStr: string; // e.g., '28.02 / 03:00'
+  resultPrediction?: string; // e.g., '1', '2', 'x1'
+  totalGoalsPrediction?: string; // e.g., '-2.5', '+2.5', '+1.5'
+  bttsPrediction?: string; // e.g., 'Var', 'Yok'
+  homePrediction?: string;
+  awayPrediction?: string;
+  scorePrediction: string; // e.g., '0-1 | 0-0 | 2-0 | 1-1'
+}
+
+export interface LeagueStats {
+  topScorers: { name: string; goals: number }[];
+  topAssists: { name: string; assists: number }[];
+  seasonStats: {
+    redCards: number;
+    yellowCards: number;
+    totalGoals: number;
+  };
+}
+
+// ─── Loyalty / Gamification Module ───────────────────────────────────────────
+export interface LoyaltyTriggerRule {
+  id: string;
+  name: string;           // e.g. "Yatırım Tetikleyicisi"
+  description: string;
+  triggerType: 'deposit' | 'volume' | 'manual';
+  thresholdAmount: number; // e.g. 500 TL per deposit
+  coinsAwarded: number;    // e.g. 250
+  ticketsAwarded: number;  // e.g. 1
+  isActive: boolean;
+}
+
+export interface MarketItem {
+  id: string;
+  name: string;          // e.g. "100 TL Nakit Bonus"
+  description: string;
+  type: 'cash_bonus' | 'freespin' | 'freebet' | 'custom';
+  coinCost: number;       // Cost in coins
+  emoji: string;
+  color: string;
+  isActive: boolean;
+  stock: number;          // -1 = unlimited
+}
+
+export interface CoinTransaction {
+  id: string;
+  userId: string;
+  type: 'earn' | 'spend';
+  amount: number;
+  tickets?: number;
+  pendingTickets?: number;
+  reason: string;
+  timestamp: number;
+}
+
+export interface UserLoyalty {
+  userId: string;
+  coins: number;
+  tickets: number; // total earned tickets
+  pendingTickets: number; // tickets waiting to be assigned to a slot
+  totalEarned: number;
+  transactions: CoinTransaction[];
+  lastVolumeResetDate: string; // ISO date
+  dailyVolumeAccumulated: number;
+}
+
+export interface LoyaltyConfig {
+  rules: LoyaltyTriggerRule[];
+  marketItems: MarketItem[];
+  programName: string;    // e.g. "Betlivo Sadakat Programı"
+  coinName: string;       // e.g. "Coin" or "BP"
+  isActive: boolean;
+}
+
