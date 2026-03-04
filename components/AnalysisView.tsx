@@ -501,34 +501,6 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                     </div>
                 )}
             </div>
-
-            {/* Sticky Floating Mini Box */}
-            {
-                stickyMatch && bestBookie && (
-                    <div className="fixed bottom-6 right-6 z-50 animate-fade-in-up">
-                        <div className="bg-[#0e0e0e] border border-[#f0b90b] rounded-2xl p-4 shadow-[0_10px_40px_rgba(0,0,0,0.9)] backdrop-blur-md flex items-center gap-4 group/sticky transition-all hover:scale-105 border-l-4">
-                            <div className="w-10 h-10 rounded-full bg-[#f0b90b]/10 flex items-center justify-center border border-[#f0b90b]/30">
-                                <Zap className="w-5 h-5 text-[#f0b90b]" />
-                            </div>
-                            <div className="flex flex-col min-w-[140px]">
-                                <div className="flex items-center gap-1">
-                                    <span className="text-[#f0b90b] font-black text-[12px] uppercase tracking-tighter">⚡ {stickyMatch.prediction}</span>
-                                    <span className="text-white font-black text-[12px]">{bestBookie.odd1}</span>
-                                </div>
-                                <span className="text-zinc-500 font-black text-[9px] uppercase tracking-[0.2em]">{bestBookie.name}</span>
-                            </div>
-                            <a
-                                href={bestBookie.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-[#f0b90b] text-black px-5 py-2.5 rounded-xl text-[10px] font-black uppercase shadow-[0_0_15px_rgba(240,185,11,0.3)] hover:shadow-[0_0_25px_#f0b90b] transition-all active:scale-95"
-                            >
-                                HEMEN OYNA
-                            </a>
-                        </div>
-                    </div>
-                )
-            }
         </div>
     );
 };

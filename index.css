@@ -388,10 +388,10 @@ body {
 }
 
 .brand-card:hover {
-  border-color: rgba(var(--primary-rgb), 0.3);
-  background: var(--bg-card-hover);
-  transform: translateY(-6px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(var(--primary-rgb), 0.08);
+  border-color: rgba(var(--primary-rgb), 0.4);
+  background: linear-gradient(180deg, rgba(var(--primary-rgb), 0.06) 0%, var(--bg-card-hover) 100%);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), 0 0 50px rgba(var(--primary-rgb), 0.12), inset 0 1px 0 rgba(var(--primary-rgb), 0.1);
 }
 
 .brand-card:hover::before {
@@ -718,4 +718,59 @@ body {
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ===== Premium Card Hover Effects ===== */
+.news-card {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.news-card:hover {
+  border-color: rgba(240, 185, 11, 0.25) !important;
+  background: linear-gradient(180deg, #161618 0%, #0e0e10 100%) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7), 0 0 40px rgba(240, 185, 11, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Global card premium hover – for any card-like element */
+[class*="rounded-2xl"][class*="border"][class*="bg-"]:hover,
+[class*="rounded-xl"][class*="border"][class*="bg-"]:hover {
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Featured news card glow */
+.news-featured {
+  position: relative;
+}
+
+.news-featured::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(240, 185, 11, 0.3), transparent 50%, rgba(240, 185, 11, 0.1));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.news-featured:hover::before {
+  opacity: 1;
+}
+
+/* Pulse badge animation */
+@keyframes badge-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  50% {
+    box-shadow: 0 0 16px currentColor;
+  }
+}
+
+.badge-pulse {
+  animation: badge-pulse 2s ease-in-out infinite;
 }

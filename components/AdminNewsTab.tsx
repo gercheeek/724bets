@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown, Sparkles, Send, Bot, User as UserIcon, Wand2, ArrowRight } from 'lucide-react';
 import { NewsArticle, NewsAuthor, NEWS_CATEGORIES } from '../types';
 
 interface AdminNewsTabProps {
     role: string;
+}
+
+interface AiMessage {
+    role: 'ai' | 'user';
+    content: string;
 }
 
 const generateSlug = (title: string): string => {
@@ -17,12 +22,139 @@ const generateSlug = (title: string): string => {
         .substring(0, 80);
 };
 
+// AI Content Generation Engine (client-side template-based approach)
+const generateAiArticle = (topic: string, category: string, style: string): { title: string; excerpt: string; content: string; seoTitle: string; seoDesc: string } => {
+    const templates: Record<string, { titles: string[]; intros: string[]; bodies: string[]; conclusions: string[] }> = {
+        'Futbol': {
+            titles: [
+                `${topic}: Futbol Dünyasının Gündemi`,
+                `${topic} – Sahadan Son Gelişmeler`,
+                `${topic}: Taraftarlar Şokta!`,
+            ],
+            intros: [
+                `<p>Futbol dünyasının gündeminde bugün <strong>${topic}</strong> konusu yer alıyor. Son gelişmeler hem taraftarları hem de uzmanları heyecanlandırdı.</p>`,
+                `<p>Spor kamuoyunda büyük yankı uyandıran <strong>${topic}</strong> hakkında tüm bildiklerimizi derledik. İşte detaylar...</p>`,
+            ],
+            bodies: [
+                `<h2>Detaylı Analiz</h2><p>Uzman yorumcuların değerlendirmesine göre, bu gelişme sezonun gidişatını doğrudan etkileyecek nitelikte. Takımların kadro yapılanması ve taktik tercihleri bu süreçte belirleyici rol oynayacak.</p><p>İstatistikler incelendiğinde, benzer durumlarda tarihsel olarak dikkat çekici sonuçlar ortaya çıktığı görülüyor. Özellikle son 5 sezonda yaşanan gelişmeler, mevcut tablonun daha iyi anlaşılmasına yardımcı oluyor.</p>`,
+                `<h2>Perde Arkası</h2><p>Kulüp yönetiminden sızan bilgilere göre, transfer komitesi yoğun bir şekilde çalışıyor. Teknik ekibin talepleri doğrultusunda hem yerli hem de yabancı alternatiflerin masada olduğu belirtiliyor.</p><p>Menajer çevreleri ise durumun henüz netleşmediğini, önümüzdeki hafta içerisinde somut adımlar atılabileceğini ifade ediyor.</p>`,
+            ],
+            conclusions: [
+                `<h2>Sonuç ve Beklentiler</h2><p>Gelişmelerin seyri taraftarların sabırsızlıkla beklediği bir süreç. Uzmanlar, bu konunun çözüme kavuşmasının takımın sezon hedeflerine ulaşmasında kritik öneme sahip olduğunu vurguluyor.</p><p>724bets.net olarak bu konudaki gelişmeleri yakından takip etmeye devam ediyoruz. Güncellemeler için sitemizi ziyaret etmeyi unutmayın!</p>`,
+            ]
+        },
+        'Basketbol': {
+            titles: [
+                `${topic}: Parkede Fırtına!`,
+                `${topic} – Basketbol Dünyasının Gündemi`,
+                `${topic}: Sayı Yağmuru Bekleniyor`,
+            ],
+            intros: [
+                `<p>Basketbol dünyasında <strong>${topic}</strong> konusu gündemin en sıcak maddesi. Parkelerde yaşanan gelişmeler tüm basketbolseverlerin dikkatini çekiyor.</p>`,
+            ],
+            bodies: [
+                `<h2>Maç Analizi</h2><p>Takımların performans grafikleri incelendiğinde, hücum verimliliği ve savunma organizasyonu ön plana çıkıyor. Pick and roll oyunundaki başarı oranları, maçın kaderini belirleyen en önemli faktörler arasında.</p><p>Oyuncu istatistikleri de dikkat çekici rakamlar ortaya koyuyor. Özellikle üç sayılık atış yüzdeleri ve ribaund performansları maçın sonucunu doğrudan etkileyen unsurlara dönüşüyor.</p>`,
+            ],
+            conclusions: [
+                `<h2>Tahmin ve Değerlendirme</h2><p>Uzman kadromuzun değerlendirmesine göre, bu sezon basketbolda yaşanacak rekabetin çok daha çekişmeli geçmesi bekleniyor. Detaylı analizler ve güncel haberler için 724bets.net'i takipte kalın!</p>`,
+            ]
+        },
+        'Formula 1': {
+            titles: [
+                `${topic}: Pistlerde Heyecan Dorukta!`,
+                `${topic} – F1 Paddock'tan Son Dakika`,
+            ],
+            intros: [
+                `<p>Formula 1 dünyasında <strong>${topic}</strong> gelişmesi büyük ses getirdi. Paddock'ta herkes bu konuyu konuşuyor.</p>`,
+            ],
+            bodies: [
+                `<h2>Teknik Detaylar</h2><p>Takımların aerodinamik güncellemeleri ve güç ünitesi performansları bu sezonun en belirleyici faktörleri. Yeni düzenlemeler kapsamında yer efekti kurallarının yarış stratejilerine olan etkisi giderek daha belirgin hale geliyor.</p><p>Sıralama turlarında ve yarış temposunda gözlemlenen farklar, takım sıralamasının her yarışta değişebileceğine işaret ediyor.</p>`,
+            ],
+            conclusions: [
+                `<h2>Sezon Değerlendirmesi</h2><p>Bu gelişme, şampiyonluk mücadelesinde dengeleri değiştirecek potansiyele sahip. Tüm F1 gelişmelerini 724bets.net'ten takip edin!</p>`,
+            ]
+        },
+        'MotoGP': {
+            titles: [
+                `${topic}: Virajlarda Nefes Kesen Anlar!`,
+                `${topic} – MotoGP Gündeminden Son Haberler`,
+            ],
+            intros: [
+                `<p>MotoGP dünyasında <strong>${topic}</strong> konusu büyük ilgi topluyor. Motor sporları tutkunları bu gelişmeyi yakından takip ediyor.</p>`,
+            ],
+            bodies: [
+                `<h2>Yarış Stratejisi</h2><p>Lastik yönetimi ve motor gücü optimizasyonu bu sezonun en kritik bileşenleri. Pilotların viraj giriş hızları ve frenleme noktaları, sıralama farklarını belirleyen temel faktörler olarak öne çıkıyor.</p><p>Takım patronlarının açıklamalarına göre, yeni aerodinamik paket ciddi bir performans artışı sağlamış durumda.</p>`,
+            ],
+            conclusions: [
+                `<h2>Sıradaki Yarış</h2><p>Şampiyonluk mücadelesi kızışıyor! Tüm motor sporları haberleri için 724bets.net'i takip edin.</p>`,
+            ]
+        },
+        'Superbike': {
+            titles: [
+                `${topic}: WSBK'da Heyecan Devam Ediyor!`,
+                `${topic} – Superbike Şampiyonasında Son Durum`,
+            ],
+            intros: [
+                `<p>Superbike Dünya Şampiyonası'nda <strong>${topic}</strong> gelişmesi sürücüler ve takımlar arasında büyük yankı uyandırdı.</p>`,
+            ],
+            bodies: [
+                `<h2>Pist Performansı</h2><p>Sürücülerin tur zamanları ve yarış boyunca gösterdikleri tutarlılık, şampiyonluk mücadelesinde belirleyici rol oynuyor. Elektronik ayarlar ve süspansiyon optimizasyonları pist bazında kritik farklar yaratıyor.</p>`,
+            ],
+            conclusions: [
+                `<h2>Şampiyonluk Tablosu</h2><p>Puan tablosundaki dengeler her yarışta değişiyor. Güncel gelişmeler için 724bets.net her zaman yanınızda!</p>`,
+            ]
+        },
+        'Tenis': {
+            titles: [
+                `${topic}: Kortlarda Sürpriz!`,
+                `${topic} – Tenis Dünyasının En Sıcak Gündemi`,
+            ],
+            intros: [
+                `<p>Tenis dünyasında <strong>${topic}</strong> konusu gündeme bomba gibi düştü. Turnuva sonuçları ve performans analizleri dikkat çekiyor.</p>`,
+            ],
+            bodies: [
+                `<h2>Maç Detayları</h2><p>Servis istatistikleri ve rally uzunlukları incelendiğinde, oyuncuların fiziksel ve mental dayanıklılıklarının belirleyici olduğu görülüyor. Özellikle break point dönüşüm oranları maçın kaderini tayin eden kritik anlara dönüşüyor.</p><p>Kort yüzeyinin oyun tarzına etkisi de göz ardı edilemeyecek bir faktör olarak karşımıza çıkıyor.</p>`,
+            ],
+            conclusions: [
+                `<h2>Turnuva Takvimi</h2><p>Sezonun kalan kısmında büyük turnuvalar bizi bekliyor. Tüm tenis haberleri için 724bets.net'i takipte kalın!</p>`,
+            ]
+        }
+    };
+
+    const t = templates[category] || templates['Futbol'];
+    const rand = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+
+    const title = rand(t.titles);
+    const intro = rand(t.intros);
+    const body = rand(t.bodies);
+    const conclusion = rand(t.conclusions);
+
+    let content = intro + body + conclusion;
+
+    if (style === 'detaylı') {
+        content = intro + `<h2>Arka Plan</h2><p>Bu konunun geçmişine baktığımızda, benzer gelişmelerin daha önce de yaşandığını ancak bu seferki boyutun çok daha farklı olduğunu görebiliyoruz. Uzmanların çoğunluğu bu durumun kalıcı olacağını ve sonuçlarının uzun vadede hissedileceğini öngörüyor.</p>` + body + `<h2>Uzman Görüşleri</h2><p>"Bu gelişme tarihi nitelikte" diyen spor yorumcuları, konunun sadece sporun değil, toplumsal dinamiklerin de bir yansıması olduğunu vurguluyor. Teknik analistler ise istatistiksel verilerle durumu destekliyor.</p>` + conclusion;
+    } else if (style === 'kısa') {
+        content = intro + `<p>${topic} konusunda kısa özet: Gelişmeler hızla devam ediyor ve sonuçlar yakında netleşecek. Detaylı bilgi için sitemizi takip etmeye devam edin.</p>`;
+    }
+
+    const excerpt = `${topic} hakkında en güncel spor haberleri ve analizler. Detaylar 724bets.net'te!`;
+
+    return {
+        title,
+        excerpt: excerpt.substring(0, 120),
+        content,
+        seoTitle: `${topic} - Spor Haberleri | 724bets.net`,
+        seoDesc: excerpt,
+    };
+};
+
 const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     const [articles, setArticles] = useState<NewsArticle[]>([]);
     const [authors, setAuthors] = useState<NewsAuthor[]>([]);
     const [editingArticle, setEditingArticle] = useState<NewsArticle | null>(null);
     const [showForm, setShowForm] = useState(false);
     const [showAuthors, setShowAuthors] = useState(false);
+    const [showAiChat, setShowAiChat] = useState(false);
     const [newAuthorUsername, setNewAuthorUsername] = useState('');
     const [newAuthorPassword, setNewAuthorPassword] = useState('');
     const [newAuthorDisplayName, setNewAuthorDisplayName] = useState('');
@@ -38,6 +170,16 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     const [formSlug, setFormSlug] = useState('');
     const [formStatus, setFormStatus] = useState<'draft' | 'published'>('draft');
 
+    // AI Chat state
+    const [aiMessages, setAiMessages] = useState<AiMessage[]>([]);
+    const [aiInput, setAiInput] = useState('');
+    const [aiStep, setAiStep] = useState(0);
+    const [aiTopic, setAiTopic] = useState('');
+    const [aiCategory, setAiCategory] = useState('Futbol');
+    const [aiStyle, setAiStyle] = useState('normal');
+    const [aiTyping, setAiTyping] = useState(false);
+    const chatRef = useRef<HTMLDivElement>(null);
+
     const isAdmin = role === 'admin';
 
     useEffect(() => {
@@ -48,6 +190,10 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
             if (storedAuthors) setAuthors(JSON.parse(storedAuthors));
         } catch { /* ignore */ }
     }, []);
+
+    useEffect(() => {
+        if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }, [aiMessages]);
 
     const saveArticles = (updated: NewsArticle[]) => {
         setArticles(updated);
@@ -148,17 +294,103 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
         saveAuthors(authors.filter(a => a.id !== id));
     };
 
+    // AI Chat Functions
+    const startAiChat = () => {
+        setShowAiChat(true);
+        setAiStep(0);
+        setAiMessages([]);
+        setAiTopic('');
+        setAiCategory('Futbol');
+        setAiStyle('normal');
+        addAiMessage('Merhaba! 🤖 Ben yapay zeka haber asistanınız. Size profesyonel bir spor haberi oluşturmada yardımcı olacağım.\n\n📌 Hangi konuda haber yazmamı istersiniz? Örneğin:\n• "Galatasaray transfer gündemi"\n• "NBA final serisi"\n• "Verstappen yeni sözleşme"\n\nKonunuzu yazın, ben size harika bir haber hazırlayayım!');
+    };
+
+    const addAiMessage = (content: string) => {
+        setAiMessages(prev => [...prev, { role: 'ai', content }]);
+    };
+
+    const handleAiSend = () => {
+        if (!aiInput.trim()) return;
+        const userMsg = aiInput.trim();
+        setAiMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+        setAiInput('');
+        setAiTyping(true);
+
+        setTimeout(() => {
+            setAiTyping(false);
+            if (aiStep === 0) {
+                // User entered the topic
+                setAiTopic(userMsg);
+                setAiStep(1);
+                addAiMessage(`Harika bir konu! 🎯 "${userMsg}" hakkında haber yazacağım.\n\n📂 Hangi kategoride olsun?\n\n${NEWS_CATEGORIES.map((c, i) => `${i + 1}. ${c.name}`).join('\n')}\n\nNumara veya kategori adını yazın:`);
+            } else if (aiStep === 1) {
+                // User selected category
+                const catIdx = parseInt(userMsg) - 1;
+                const selectedCat = NEWS_CATEGORIES[catIdx]?.name ||
+                    NEWS_CATEGORIES.find(c => c.name.toLowerCase() === userMsg.toLowerCase())?.name ||
+                    'Futbol';
+                setAiCategory(selectedCat);
+                setAiStep(2);
+                addAiMessage(`✅ Kategori: ${selectedCat}\n\n📝 Haber tarzını seçin:\n\n1. **Kısa** – Hızlı ve özet haber\n2. **Normal** – Standart haber yazısı\n3. **Detaylı** – Kapsamlı analiz haberi\n\nNumara veya tarz adını yazın:`);
+            } else if (aiStep === 2) {
+                // User selected style
+                let style = 'normal';
+                if (userMsg.includes('1') || userMsg.toLowerCase().includes('kısa')) style = 'kısa';
+                if (userMsg.includes('3') || userMsg.toLowerCase().includes('detay')) style = 'detaylı';
+                setAiStyle(style);
+                setAiStep(3);
+
+                // Generate the article
+                const result = generateAiArticle(aiTopic, aiCategory, style);
+
+                addAiMessage(`✨ Haberiniz hazır!\n\n**Başlık:** ${result.title}\n\n**Özet:** ${result.excerpt}\n\n**Kategori:** ${aiCategory}\n**Tarz:** ${style === 'kısa' ? 'Kısa' : style === 'detaylı' ? 'Detaylı' : 'Normal'}\n\n---\n\n🔄 Beğendiniz mi?\n• **"Evet"** → Formu doldurup düzenlemenize aktarayım\n• **"Yeniden"** → Farklı bir versiyonunu yazayım\n• **"Değiştir"** → Yeni bir konu ile baştan başlayalım`);
+
+                // Store the generated article temporarily
+                setFormTitle(result.title);
+                setFormExcerpt(result.excerpt);
+                setFormContent(result.content);
+                setFormCategory(aiCategory);
+                setFormSeoTitle(result.seoTitle);
+                setFormSeoDesc(result.seoDesc);
+                setFormSlug(generateSlug(result.title));
+            } else if (aiStep === 3) {
+                const lower = userMsg.toLowerCase();
+                if (lower.includes('evet') || lower.includes('tamam') || lower.includes('onayla') || lower.includes('aktar')) {
+                    addAiMessage('🎉 Harika! Haberi düzenleme formuna aktardım. Artık istediğiniz değişiklikleri yapıp kaydedebilirsiniz.\n\n💡 İpucu: Formu kapatmadan önce "Yayınlandı" durumunu seçmeyi unutmayın!');
+                    setShowForm(true);
+                    setShowAiChat(false);
+                    setAiStep(0);
+                } else if (lower.includes('yeniden') || lower.includes('tekrar')) {
+                    const result = generateAiArticle(aiTopic, aiCategory, aiStyle);
+                    setFormTitle(result.title);
+                    setFormExcerpt(result.excerpt);
+                    setFormContent(result.content);
+                    setFormSeoTitle(result.seoTitle);
+                    setFormSeoDesc(result.seoDesc);
+                    setFormSlug(generateSlug(result.title));
+                    addAiMessage(`🔄 Yeni versiyon hazır!\n\n**Başlık:** ${result.title}\n\n**Özet:** ${result.excerpt}\n\n---\n\n• **"Evet"** → Formu doldurup aktarayım\n• **"Yeniden"** → Bir daha deneyelim\n• **"Değiştir"** → Yeni konu ile başlayalım`);
+                } else if (lower.includes('değiştir') || lower.includes('yeni konu') || lower.includes('baştan')) {
+                    setAiStep(0);
+                    resetForm();
+                    addAiMessage('Tamam! 🔄 Yeni bir konu belirleyelim.\n\n📌 Hangi konuda haber yazmamı istersiniz?');
+                } else {
+                    addAiMessage('Anlayamadım 🤔 Lütfen şunlardan birini yazın:\n• **"Evet"** → Haberi aktarma\n• **"Yeniden"** → Yeni versiyon\n• **"Değiştir"** → Yeni konu');
+                }
+            }
+        }, 800 + Math.random() * 600);
+    };
+
     const inputClass = "w-full bg-black border border-zinc-800 rounded-xl py-3 px-4 text-white text-sm focus:border-[#f0b90b] transition-colors outline-none placeholder-zinc-600";
 
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
                     <h2 className="text-xl font-black text-white uppercase tracking-tight">📰 Haber Yönetimi</h2>
                     <p className="text-zinc-500 text-xs font-bold mt-1">{articles.length} haber mevcut</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
                     {isAdmin && (
                         <button
                             onClick={() => setShowAuthors(!showAuthors)}
@@ -168,6 +400,12 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                         </button>
                     )}
                     <button
+                        onClick={startAiChat}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 transition-all shadow-lg shadow-purple-900/30"
+                    >
+                        <Sparkles className="w-3.5 h-3.5" /> AI ile Yaz
+                    </button>
+                    <button
                         onClick={openNewForm}
                         className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest bg-[#f0b90b] text-black hover:bg-[#f0b90b]/90 transition-all"
                     >
@@ -175,6 +413,131 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                     </button>
                 </div>
             </div>
+
+            {/* AI Chat Panel */}
+            {showAiChat && (
+                <div className="rounded-2xl overflow-hidden border border-purple-500/30 shadow-[0_0_30px_rgba(147,51,234,0.15)]">
+                    {/* AI Chat Header */}
+                    <div className="bg-gradient-to-r from-purple-900/80 to-indigo-900/80 px-5 py-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-purple-500/20 border border-purple-400/30 flex items-center justify-center">
+                                <Bot className="w-5 h-5 text-purple-300" />
+                            </div>
+                            <div>
+                                <h3 className="text-white font-black text-sm">AI Haber Asistanı</h3>
+                                <p className="text-purple-300 text-[10px] font-bold">Yapay zeka destekli haber oluşturucu</p>
+                            </div>
+                        </div>
+                        <button onClick={() => setShowAiChat(false)} className="text-zinc-400 hover:text-white transition-colors">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    {/* Chat Messages */}
+                    <div ref={chatRef} className="bg-[#0a0a0f] p-5 space-y-4 max-h-[400px] overflow-y-auto" style={{ scrollBehavior: 'smooth' }}>
+                        {aiMessages.map((msg, i) => (
+                            <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                {msg.role === 'ai' && (
+                                    <div className="w-7 h-7 rounded-full bg-purple-500/20 border border-purple-400/20 flex items-center justify-center flex-shrink-0 mt-1">
+                                        <Bot className="w-4 h-4 text-purple-400" />
+                                    </div>
+                                )}
+                                <div
+                                    className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${msg.role === 'user'
+                                            ? 'bg-[#f0b90b]/10 border border-[#f0b90b]/20 text-white'
+                                            : 'bg-zinc-900 border border-zinc-800 text-zinc-300'
+                                        }`}
+                                >
+                                    {msg.content.split('**').map((part, pi) =>
+                                        pi % 2 === 1 ? <strong key={pi} className="text-white">{part}</strong> : <span key={pi}>{part}</span>
+                                    )}
+                                </div>
+                                {msg.role === 'user' && (
+                                    <div className="w-7 h-7 rounded-full bg-[#f0b90b]/20 border border-[#f0b90b]/20 flex items-center justify-center flex-shrink-0 mt-1">
+                                        <UserIcon className="w-4 h-4 text-[#f0b90b]" />
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                        {aiTyping && (
+                            <div className="flex gap-3">
+                                <div className="w-7 h-7 rounded-full bg-purple-500/20 border border-purple-400/20 flex items-center justify-center flex-shrink-0">
+                                    <Bot className="w-4 h-4 text-purple-400" />
+                                </div>
+                                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3">
+                                    <div className="flex gap-1.5">
+                                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Chat Input */}
+                    <div className="bg-[#0a0a0f] border-t border-zinc-800 p-4">
+                        <div className="flex gap-3">
+                            <input
+                                value={aiInput}
+                                onChange={e => setAiInput(e.target.value)}
+                                onKeyDown={e => e.key === 'Enter' && handleAiSend()}
+                                placeholder="Mesajınızı yazın..."
+                                className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl py-3 px-4 text-white text-sm focus:border-purple-500 transition-colors outline-none placeholder-zinc-600"
+                                disabled={aiTyping}
+                            />
+                            <button
+                                onClick={handleAiSend}
+                                disabled={aiTyping || !aiInput.trim()}
+                                className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center text-white hover:from-purple-500 hover:to-indigo-500 transition-all disabled:opacity-40"
+                            >
+                                <Send className="w-4 h-4" />
+                            </button>
+                        </div>
+                        {/* Quick actions */}
+                        {aiStep === 1 && (
+                            <div className="flex gap-2 mt-3 flex-wrap">
+                                {NEWS_CATEGORIES.map((c, i) => (
+                                    <button
+                                        key={c.name}
+                                        onClick={() => { setAiInput(`${i + 1}`); }}
+                                        className="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all hover:scale-105"
+                                        style={{ background: `${c.color}15`, borderColor: `${c.color}30`, color: c.color }}
+                                    >
+                                        {c.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        {aiStep === 2 && (
+                            <div className="flex gap-2 mt-3">
+                                {['1. Kısa', '2. Normal', '3. Detaylı'].map(s => (
+                                    <button
+                                        key={s}
+                                        onClick={() => setAiInput(s.split('. ')[0])}
+                                        className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all"
+                                    >
+                                        {s}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        {aiStep === 3 && (
+                            <div className="flex gap-2 mt-3">
+                                {['✅ Evet', '🔄 Yeniden', '🔀 Değiştir'].map(s => (
+                                    <button
+                                        key={s}
+                                        onClick={() => setAiInput(s.split(' ')[1])}
+                                        className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all"
+                                    >
+                                        {s}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {/* Author Management (admin only) */}
             {isAdmin && showAuthors && (
@@ -203,7 +566,6 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                             ))}
                         </div>
                     )}
-                    {/* Default author info */}
                     <p className="text-zinc-600 text-[10px] font-bold">
                         💡 Varsayılan: yazar1 / 123456 (otomatik tanımlı)
                     </p>
@@ -273,11 +635,11 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
 
             {/* Articles List */}
             <div className="space-y-3">
-                {articles.length === 0 && !showForm && (
+                {articles.length === 0 && !showForm && !showAiChat && (
                     <div className="text-center py-12">
                         <div className="text-5xl mb-3">📰</div>
                         <p className="text-zinc-500 text-sm font-bold">Henüz haber eklenmedi.</p>
-                        <p className="text-zinc-600 text-xs mt-1">Yukarıdaki "Yeni Haber" butonuyla başlayın.</p>
+                        <p className="text-zinc-600 text-xs mt-1">Yukarıdaki "Yeni Haber" veya "AI ile Yaz" butonuyla başlayın.</p>
                     </div>
                 )}
                 {articles.map(article => (

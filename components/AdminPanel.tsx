@@ -674,13 +674,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </>
           )}
 
-          <p className="text-[10px] text-zinc-500 font-black px-3 mt-6 mb-2 uppercase tracking-widest">SİSTEMLER</p>
-          <button onClick={() => setActiveTab('analysis')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'analysis' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-            <TrendingUp className="w-4 h-4" /> MAÇ ANALİZLERİ
-          </button>
-          <button onClick={() => setActiveTab('coupons')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'coupons' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-            <Ticket className="w-4 h-4" /> GÜNÜN KUPONLARI
-          </button>
+          {!isAuthor && (
+            <>
+              <p className="text-[10px] text-zinc-500 font-black px-3 mt-6 mb-2 uppercase tracking-widest">SİSTEMLER</p>
+              <button onClick={() => setActiveTab('analysis')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'analysis' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <TrendingUp className="w-4 h-4" /> MAÇ ANALİZLERİ
+              </button>
+              <button onClick={() => setActiveTab('coupons')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'coupons' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <Ticket className="w-4 h-4" /> GÜNÜN KUPONLARI
+              </button>
+            </>
+          )}
           {role === 'admin' && (
             <>
               <button onClick={() => setActiveTab('leagues')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'leagues' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
@@ -717,19 +721,21 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           )}
 
-          <div className="space-y-1">
-            <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest pl-4 mb-2 mt-4">İletişim & Destek</div>
-            <button
-              onClick={() => setActiveTab('messages')}
-              className={`w-full flex justify-between items-center px-4 py-3 rounded-2xl text-xs font-black uppercase transition-all
+          {!isAuthor && (
+            <div className="space-y-1">
+              <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest pl-4 mb-2 mt-4">İletişim & Destek</div>
+              <button
+                onClick={() => setActiveTab('messages')}
+                className={`w-full flex justify-between items-center px-4 py-3 rounded-2xl text-xs font-black uppercase transition-all
                 ${activeTab === 'messages' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20 scale-105' : 'text-zinc-400 hover:bg-white/5 hover:text-white'}`}
-            >
-              <div className="flex items-center gap-3">
-                <MessageSquare className="w-4 h-4" /> MESAJLAR
-              </div>
-              {unreadCount > 0 && <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full">{unreadCount}</span>}
-            </button>
-          </div>
+              >
+                <div className="flex items-center gap-3">
+                  <MessageSquare className="w-4 h-4" /> MESAJLAR
+                </div>
+                {unreadCount > 0 && <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full">{unreadCount}</span>}
+              </button>
+            </div>
+          )}
         </nav>
 
         <div className="mt-auto space-y-2">
