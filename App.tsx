@@ -15,11 +15,12 @@ import ChatBot from './components/ChatBot';
 import SearchModal from './components/SearchModal';
 import LoyaltyPanel, { DEFAULT_LOYALTY_CONFIG } from './components/LoyaltyPanel';
 import RaffleView from './components/RaffleView';
+import PoolGame from './components/PoolGame';
 import { BRANDS as INITIAL_BRANDS } from './constants';
 import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig } from './types';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle'>('home');
+  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool'>('home');
   const [userRole, setUserRole] = useState<string | null>(null);
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | null>(null);
@@ -454,6 +455,15 @@ const App: React.FC = () => {
               </button>
             </div>
           )
+        )}
+
+        {view === 'pool' && (
+          <PoolGame
+            userId={siteUser?.id || userRole || 'guest'}
+            username={siteUser?.username || 'Misafir'}
+            isLoggedIn={!!(siteUser || userRole)}
+            onLoginRequired={() => setAuthModalMode('member')}
+          />
         )}
       </main>
 

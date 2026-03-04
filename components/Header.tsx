@@ -268,6 +268,13 @@ const Header: React.FC<HeaderProps> = ({
 
           <a
             href="#"
+            className={activeView === 'pool' ? 'active' : ''}
+            onClick={(e) => { e.preventDefault(); onViewChange?.('pool'); }}
+          >
+            🎱 724TOTO
+          </a>
+          <a
+            href="#"
             className={activeView === 'blackjack' ? 'active' : ''}
             onClick={(e) => { e.preventDefault(); onViewChange?.('blackjack'); }}
           >

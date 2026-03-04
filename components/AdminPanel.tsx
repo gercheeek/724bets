@@ -3,6 +3,7 @@ import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save
 import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
+import AdminPoolTab from './AdminPoolTab';
 
 interface AdminPanelProps {
   brands: Brand[];
@@ -30,7 +31,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   brands, hero, themeColor, hashtags, role, wheelConfig, bjConfig, loyaltyConfig, leagueData,
   onSaveBrands, onSaveHero, onThemeChange, onHashtagsChange, onSaveWheelConfig, onSaveBjConfig, onSaveLoyaltyConfig, onSaveLeagueData, onLogout, onNavigateHome
 }) => {
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'leagues' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages'>(role === 'editor' ? 'coupons' : 'content');
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'leagues' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool'>(role === 'editor' ? 'coupons' : 'content');
 
   // Messages State
   const [messages, setMessages] = useState<UserMessage[]>(() => {
@@ -685,6 +686,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
               <button onClick={() => setActiveTab('blackjack')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'blackjack' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Zap className="w-4 h-4" /> CASINO 724
+              </button>
+              <button onClick={() => setActiveTab('pool')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'pool' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <Trophy className="w-4 h-4" /> 724TOTO YÖNETİMİ
               </button>
               <button onClick={() => setActiveTab('loyalty')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'loyalty' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Star className="w-4 h-4" /> SADAKAT / BİLET
@@ -2200,6 +2204,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             <Save className="w-4 h-4" /> Sadakat Ayarlarını Kaydet
           </button>
         </div>
+      )}
+
+      {activeTab === 'pool' && (
+        <AdminPoolTab />
       )}
 
       {activeTab === 'members' && (
