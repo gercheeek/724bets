@@ -262,6 +262,13 @@ const Header: React.FC<HeaderProps> = ({
           >
             Güvenilir Siteler
           </a>
+          <a
+            href="#"
+            className={activeView === 'news' ? 'active' : ''}
+            onClick={(e) => { e.preventDefault(); onViewChange?.('news'); }}
+          >
+            📰 Haberler
+          </a>
 
           {/* Separator - Removed to eliminate white lines */}
 

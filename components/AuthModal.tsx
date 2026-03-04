@@ -95,6 +95,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         const editor = editors.find(ed => ed.username.toLowerCase() === uname && ed.password === aPassword);
         if (editor) { onAdminLogin(`editor_${editor.id}`); return; }
         if (['editor1', 'editor2', 'editor3'].includes(uname) && aPassword === '123456') { onAdminLogin(uname); return; }
+        // Author login (yazar1/123456 default + dynamic authors)
+        if (uname === 'yazar1' && aPassword === '123456') { onAdminLogin('author_yazar1'); return; }
+        try {
+            const newsAuthors = JSON.parse(localStorage.getItem('site_news_authors') || '[]');
+            const author = newsAuthors.find((a: any) => a.username.toLowerCase() === uname && a.password === aPassword);
+            if (author) { onAdminLogin(`author_${author.username}`); return; }
+        } catch { /* ignore */ }
         setAError('Kullanıcı adı veya şifre hatalı!');
     };
 

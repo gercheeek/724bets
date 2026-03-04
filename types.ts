@@ -307,3 +307,39 @@ export interface LoyaltyConfig {
   isActive: boolean;
 }
 
+// ─── News Module ─────────────────────────────────────────────────────────────
+export interface NewsArticle {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;        // HTML content
+  category: string;       // e.g. 'Futbol', 'Basketbol'
+  image: string;          // Cover image URL
+  authorId: string;
+  authorName: string;
+  views: number;
+  status: 'draft' | 'published';
+  seoTitle?: string;
+  seoDescription?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface NewsAuthor {
+  id: string;
+  username: string;
+  password: string;
+  displayName: string;
+  role: 'author';
+}
+
+export const NEWS_CATEGORIES: { name: string; color: string }[] = [
+  { name: 'Futbol', color: '#22c55e' },
+  { name: 'Basketbol', color: '#f97316' },
+  { name: 'Formula 1', color: '#ef4444' },
+  { name: 'MotoGP', color: '#8b5cf6' },
+  { name: 'Superbike', color: '#ec4899' },
+  { name: 'Tenis', color: '#06b6d4' },
+];
+

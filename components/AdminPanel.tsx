@@ -4,13 +4,14 @@ import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, Bl
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
+import AdminNewsTab from './AdminNewsTab';
 
 interface AdminPanelProps {
   brands: Brand[];
   hero: Brand;
   themeColor: string;
   hashtags: string;
-  role: 'admin' | 'editor';
+  role: 'admin' | 'editor' | string;
   wheelConfig: WheelConfig;
   bjConfig?: BlackjackConfig;
   loyaltyConfig?: LoyaltyConfig;
@@ -31,7 +32,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   brands, hero, themeColor, hashtags, role, wheelConfig, bjConfig, loyaltyConfig, leagueData,
   onSaveBrands, onSaveHero, onThemeChange, onHashtagsChange, onSaveWheelConfig, onSaveBjConfig, onSaveLoyaltyConfig, onSaveLeagueData, onLogout, onNavigateHome
 }) => {
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'leagues' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool'>(role === 'editor' ? 'coupons' : 'content');
+  const isAuthor = role.startsWith('author_');
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'leagues' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
 
   // Messages State
   const [messages, setMessages] = useState<UserMessage[]>(() => {
@@ -703,6 +705,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 <User className="w-4 h-4" /> EDİTÖRLER
               </button>
             </>
+          )}
+
+          {/* News tab - visible to admin & authors */}
+          {(role === 'admin' || isAuthor) && (
+            <div className="space-y-1">
+              <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest pl-4 mb-2 mt-4">Haberler</div>
+              <button onClick={() => setActiveTab('news')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs w-full ${activeTab === 'news' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                📰 HABER YÖNETİMİ
+              </button>
+            </div>
           )}
 
           <div className="space-y-1">
@@ -2208,6 +2220,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
       {activeTab === 'pool' && (
         <AdminPoolTab />
+      )}
+
+      {activeTab === 'news' && (
+        <div className="flex-1 overflow-y-auto p-6">
+          <AdminNewsTab role={role} />
+        </div>
       )}
 
       {activeTab === 'members' && (

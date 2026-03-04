@@ -16,11 +16,15 @@ import SearchModal from './components/SearchModal';
 import LoyaltyPanel, { DEFAULT_LOYALTY_CONFIG } from './components/LoyaltyPanel';
 import RaffleView from './components/RaffleView';
 import PoolGame from './components/PoolGame';
+import NewsSection from './components/NewsSection';
+import NewsView from './components/NewsView';
+import NewsDetailView from './components/NewsDetailView';
 import { BRANDS as INITIAL_BRANDS } from './constants';
 import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig } from './types';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool'>('home');
+  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail'>('home');
+  const [selectedArticleId, setSelectedArticleId] = useState<string>('');
   const [userRole, setUserRole] = useState<string | null>(null);
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | null>(null);
@@ -259,6 +263,13 @@ const App: React.FC = () => {
 
             <div className="section-divider" />
 
+            <NewsSection
+              onViewChange={handleViewChange}
+              onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            />
+
+            <div className="section-divider" />
+
             <section id="brands-section" className="brands-section relative z-10">
               <div className="brands-header mb-12 animate-fade-in-up">
                 <h2 className="text-[40px] md:text-[48px] font-black text-white italic uppercase tracking-tighter">
@@ -463,6 +474,21 @@ const App: React.FC = () => {
             username={siteUser?.username || 'Misafir'}
             isLoggedIn={!!(siteUser || userRole)}
             onLoginRequired={() => setAuthModalMode('member')}
+          />
+        )}
+
+        {view === 'news' && (
+          <NewsView
+            onViewChange={handleViewChange}
+            onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          />
+        )}
+
+        {view === 'news-detail' && selectedArticleId && (
+          <NewsDetailView
+            articleId={selectedArticleId}
+            onViewChange={handleViewChange}
+            onArticleClick={(id) => { setSelectedArticleId(id); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           />
         )}
       </main>
