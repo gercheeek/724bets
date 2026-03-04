@@ -263,8 +263,7 @@ const Header: React.FC<HeaderProps> = ({
             Güvenilir Siteler
           </a>
 
-          {/* Separator */}
-          <div style={{ width: '1px', height: '18px', background: 'rgba(255,255,255,0.08)', margin: '0 4px', flexShrink: 0 }} />
+          {/* Separator - Removed to eliminate white lines */}
 
           <a
             href="#"
@@ -301,7 +300,6 @@ const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onSearchClick}
             className="flex items-center gap-2 px-3 py-2 rounded-full transition-all hover:bg-white/[0.07] group"
-            style={{ border: '1px solid rgba(255,255,255,0.07)' }}
             title="Maç Ara"
           >
             <Search className="w-4 h-4 text-zinc-400 group-hover:text-[#f0b90b] transition-colors" />
