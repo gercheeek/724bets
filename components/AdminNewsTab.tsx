@@ -22,130 +22,43 @@ const generateSlug = (title: string): string => {
         .substring(0, 80);
 };
 
-// AI Content Generation Engine (client-side template-based approach)
-const generateAiArticle = (topic: string, category: string, style: string): { title: string; excerpt: string; content: string; seoTitle: string; seoDesc: string } => {
-    const templates: Record<string, { titles: string[]; intros: string[]; bodies: string[]; conclusions: string[] }> = {
-        'Futbol': {
-            titles: [
-                `${topic}: Futbol Dünyasının Gündemi`,
-                `${topic} – Sahadan Son Gelişmeler`,
-                `${topic}: Taraftarlar Şokta!`,
-            ],
-            intros: [
-                `<p>Futbol dünyasının gündeminde bugün <strong>${topic}</strong> konusu yer alıyor. Son gelişmeler hem taraftarları hem de uzmanları heyecanlandırdı.</p>`,
-                `<p>Spor kamuoyunda büyük yankı uyandıran <strong>${topic}</strong> hakkında tüm bildiklerimizi derledik. İşte detaylar...</p>`,
-            ],
-            bodies: [
-                `<h2>Detaylı Analiz</h2><p>Uzman yorumcuların değerlendirmesine göre, bu gelişme sezonun gidişatını doğrudan etkileyecek nitelikte. Takımların kadro yapılanması ve taktik tercihleri bu süreçte belirleyici rol oynayacak.</p><p>İstatistikler incelendiğinde, benzer durumlarda tarihsel olarak dikkat çekici sonuçlar ortaya çıktığı görülüyor. Özellikle son 5 sezonda yaşanan gelişmeler, mevcut tablonun daha iyi anlaşılmasına yardımcı oluyor.</p>`,
-                `<h2>Perde Arkası</h2><p>Kulüp yönetiminden sızan bilgilere göre, transfer komitesi yoğun bir şekilde çalışıyor. Teknik ekibin talepleri doğrultusunda hem yerli hem de yabancı alternatiflerin masada olduğu belirtiliyor.</p><p>Menajer çevreleri ise durumun henüz netleşmediğini, önümüzdeki hafta içerisinde somut adımlar atılabileceğini ifade ediyor.</p>`,
-            ],
-            conclusions: [
-                `<h2>Sonuç ve Beklentiler</h2><p>Gelişmelerin seyri taraftarların sabırsızlıkla beklediği bir süreç. Uzmanlar, bu konunun çözüme kavuşmasının takımın sezon hedeflerine ulaşmasında kritik öneme sahip olduğunu vurguluyor.</p><p>724bets.net olarak bu konudaki gelişmeleri yakından takip etmeye devam ediyoruz. Güncellemeler için sitemizi ziyaret etmeyi unutmayın!</p>`,
-            ]
-        },
-        'Basketbol': {
-            titles: [
-                `${topic}: Parkede Fırtına!`,
-                `${topic} – Basketbol Dünyasının Gündemi`,
-                `${topic}: Sayı Yağmuru Bekleniyor`,
-            ],
-            intros: [
-                `<p>Basketbol dünyasında <strong>${topic}</strong> konusu gündemin en sıcak maddesi. Parkelerde yaşanan gelişmeler tüm basketbolseverlerin dikkatini çekiyor.</p>`,
-            ],
-            bodies: [
-                `<h2>Maç Analizi</h2><p>Takımların performans grafikleri incelendiğinde, hücum verimliliği ve savunma organizasyonu ön plana çıkıyor. Pick and roll oyunundaki başarı oranları, maçın kaderini belirleyen en önemli faktörler arasında.</p><p>Oyuncu istatistikleri de dikkat çekici rakamlar ortaya koyuyor. Özellikle üç sayılık atış yüzdeleri ve ribaund performansları maçın sonucunu doğrudan etkileyen unsurlara dönüşüyor.</p>`,
-            ],
-            conclusions: [
-                `<h2>Tahmin ve Değerlendirme</h2><p>Uzman kadromuzun değerlendirmesine göre, bu sezon basketbolda yaşanacak rekabetin çok daha çekişmeli geçmesi bekleniyor. Detaylı analizler ve güncel haberler için 724bets.net'i takipte kalın!</p>`,
-            ]
-        },
-        'Formula 1': {
-            titles: [
-                `${topic}: Pistlerde Heyecan Dorukta!`,
-                `${topic} – F1 Paddock'tan Son Dakika`,
-            ],
-            intros: [
-                `<p>Formula 1 dünyasında <strong>${topic}</strong> gelişmesi büyük ses getirdi. Paddock'ta herkes bu konuyu konuşuyor.</p>`,
-            ],
-            bodies: [
-                `<h2>Teknik Detaylar</h2><p>Takımların aerodinamik güncellemeleri ve güç ünitesi performansları bu sezonun en belirleyici faktörleri. Yeni düzenlemeler kapsamında yer efekti kurallarının yarış stratejilerine olan etkisi giderek daha belirgin hale geliyor.</p><p>Sıralama turlarında ve yarış temposunda gözlemlenen farklar, takım sıralamasının her yarışta değişebileceğine işaret ediyor.</p>`,
-            ],
-            conclusions: [
-                `<h2>Sezon Değerlendirmesi</h2><p>Bu gelişme, şampiyonluk mücadelesinde dengeleri değiştirecek potansiyele sahip. Tüm F1 gelişmelerini 724bets.net'ten takip edin!</p>`,
-            ]
-        },
-        'MotoGP': {
-            titles: [
-                `${topic}: Virajlarda Nefes Kesen Anlar!`,
-                `${topic} – MotoGP Gündeminden Son Haberler`,
-            ],
-            intros: [
-                `<p>MotoGP dünyasında <strong>${topic}</strong> konusu büyük ilgi topluyor. Motor sporları tutkunları bu gelişmeyi yakından takip ediyor.</p>`,
-            ],
-            bodies: [
-                `<h2>Yarış Stratejisi</h2><p>Lastik yönetimi ve motor gücü optimizasyonu bu sezonun en kritik bileşenleri. Pilotların viraj giriş hızları ve frenleme noktaları, sıralama farklarını belirleyen temel faktörler olarak öne çıkıyor.</p><p>Takım patronlarının açıklamalarına göre, yeni aerodinamik paket ciddi bir performans artışı sağlamış durumda.</p>`,
-            ],
-            conclusions: [
-                `<h2>Sıradaki Yarış</h2><p>Şampiyonluk mücadelesi kızışıyor! Tüm motor sporları haberleri için 724bets.net'i takip edin.</p>`,
-            ]
-        },
-        'Superbike': {
-            titles: [
-                `${topic}: WSBK'da Heyecan Devam Ediyor!`,
-                `${topic} – Superbike Şampiyonasında Son Durum`,
-            ],
-            intros: [
-                `<p>Superbike Dünya Şampiyonası'nda <strong>${topic}</strong> gelişmesi sürücüler ve takımlar arasında büyük yankı uyandırdı.</p>`,
-            ],
-            bodies: [
-                `<h2>Pist Performansı</h2><p>Sürücülerin tur zamanları ve yarış boyunca gösterdikleri tutarlılık, şampiyonluk mücadelesinde belirleyici rol oynuyor. Elektronik ayarlar ve süspansiyon optimizasyonları pist bazında kritik farklar yaratıyor.</p>`,
-            ],
-            conclusions: [
-                `<h2>Şampiyonluk Tablosu</h2><p>Puan tablosundaki dengeler her yarışta değişiyor. Güncel gelişmeler için 724bets.net her zaman yanınızda!</p>`,
-            ]
-        },
-        'Tenis': {
-            titles: [
-                `${topic}: Kortlarda Sürpriz!`,
-                `${topic} – Tenis Dünyasının En Sıcak Gündemi`,
-            ],
-            intros: [
-                `<p>Tenis dünyasında <strong>${topic}</strong> konusu gündeme bomba gibi düştü. Turnuva sonuçları ve performans analizleri dikkat çekiyor.</p>`,
-            ],
-            bodies: [
-                `<h2>Maç Detayları</h2><p>Servis istatistikleri ve rally uzunlukları incelendiğinde, oyuncuların fiziksel ve mental dayanıklılıklarının belirleyici olduğu görülüyor. Özellikle break point dönüşüm oranları maçın kaderini tayin eden kritik anlara dönüşüyor.</p><p>Kort yüzeyinin oyun tarzına etkisi de göz ardı edilemeyecek bir faktör olarak karşımıza çıkıyor.</p>`,
-            ],
-            conclusions: [
-                `<h2>Turnuva Takvimi</h2><p>Sezonun kalan kısmında büyük turnuvalar bizi bekliyor. Tüm tenis haberleri için 724bets.net'i takipte kalın!</p>`,
-            ]
+// AI Content Generation Engine (OpenAI API integration)
+const generateAiArticleOpenAI = async (topic: string, category: string, style: string, apiKey: string) => {
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                response_format: { type: 'json_object' },
+                messages: [
+                    {
+                        role: 'system',
+                        content: `Sen profesyonel, ödüllü bir spor haberi editörüsün. Sana verilen konu, kategori ve tarz bilgilerine göre SEO uyumlu, çok kaliteli, heyecan verici ve HTML formatında (<p>, <h2>, <strong> kullanarak) bir spor haberi yazmalısın. Çıktıyı doğrudan JSON olarak ver. Zorunlu JSON yapısı: { "title": "Çarpıcı Başlık", "excerpt": "Kısa 120 karakterlik özet", "content": "HTML formatında detaylı içerik...", "seoTitle": "SEO için başlık | 724bets.net", "seoDesc": "SEO için açıklama" }`
+                    },
+                    {
+                        role: 'user',
+                        content: `Konu: ${topic}\nKategori: ${category}\nTarz: ${style}`
+                    }
+                ],
+                temperature: 0.7,
+            })
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error?.message || 'API Hatası');
         }
-    };
 
-    const t = templates[category] || templates['Futbol'];
-    const rand = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
-
-    const title = rand(t.titles);
-    const intro = rand(t.intros);
-    const body = rand(t.bodies);
-    const conclusion = rand(t.conclusions);
-
-    let content = intro + body + conclusion;
-
-    if (style === 'detaylı') {
-        content = intro + `<h2>Arka Plan</h2><p>Bu konunun geçmişine baktığımızda, benzer gelişmelerin daha önce de yaşandığını ancak bu seferki boyutun çok daha farklı olduğunu görebiliyoruz. Uzmanların çoğunluğu bu durumun kalıcı olacağını ve sonuçlarının uzun vadede hissedileceğini öngörüyor.</p>` + body + `<h2>Uzman Görüşleri</h2><p>"Bu gelişme tarihi nitelikte" diyen spor yorumcuları, konunun sadece sporun değil, toplumsal dinamiklerin de bir yansıması olduğunu vurguluyor. Teknik analistler ise istatistiksel verilerle durumu destekliyor.</p>` + conclusion;
-    } else if (style === 'kısa') {
-        content = intro + `<p>${topic} konusunda kısa özet: Gelişmeler hızla devam ediyor ve sonuçlar yakında netleşecek. Detaylı bilgi için sitemizi takip etmeye devam edin.</p>`;
+        const data = await response.json();
+        const content = data.choices[0].message.content;
+        return JSON.parse(content);
+    } catch (error: any) {
+        throw new Error(error.message || 'Üretim sırasında bir hata oluştu.');
     }
-
-    const excerpt = `${topic} hakkında en güncel spor haberleri ve analizler. Detaylar 724bets.net'te!`;
-
-    return {
-        title,
-        excerpt: excerpt.substring(0, 120),
-        content,
-        seoTitle: `${topic} - Spor Haberleri | 724bets.net`,
-        seoDesc: excerpt,
-    };
 };
 
 const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
@@ -173,11 +86,12 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     // AI Chat state
     const [aiMessages, setAiMessages] = useState<AiMessage[]>([]);
     const [aiInput, setAiInput] = useState('');
-    const [aiStep, setAiStep] = useState(0);
+    const [aiStep, setAiStep] = useState(-1);
     const [aiTopic, setAiTopic] = useState('');
     const [aiCategory, setAiCategory] = useState('Futbol');
     const [aiStyle, setAiStyle] = useState('normal');
     const [aiTyping, setAiTyping] = useState(false);
+    const [openAiKey, setOpenAiKey] = useState('');
     const chatRef = useRef<HTMLDivElement>(null);
 
     const isAdmin = role === 'admin';
@@ -188,6 +102,8 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
             if (storedArticles) setArticles(JSON.parse(storedArticles));
             const storedAuthors = localStorage.getItem('site_news_authors');
             if (storedAuthors) setAuthors(JSON.parse(storedAuthors));
+            const storedKey = localStorage.getItem('site_openai_key');
+            if (storedKey) setOpenAiKey(storedKey);
         } catch { /* ignore */ }
     }, []);
 
@@ -297,33 +213,56 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     // AI Chat Functions
     const startAiChat = () => {
         setShowAiChat(true);
-        setAiStep(0);
         setAiMessages([]);
         setAiTopic('');
         setAiCategory('Futbol');
         setAiStyle('normal');
-        addAiMessage('Merhaba! 🤖 Ben yapay zeka haber asistanınız. Size profesyonel bir spor haberi oluşturmada yardımcı olacağım.\n\n📌 Hangi konuda haber yazmamı istersiniz? Örneğin:\n• "Galatasaray transfer gündemi"\n• "NBA final serisi"\n• "Verstappen yeni sözleşme"\n\nKonunuzu yazın, ben size harika bir haber hazırlayayım!');
+
+        if (!openAiKey) {
+            setAiStep(-1);
+            addAiMessage('Merhaba! 🤖 Ben yapay zeka haber asistanınız. Sizin için profesyonel içerikler üretebilmem için lütfen OpenAI API anahtarınızı (API Key) girin.\n\n*(Anahtarınız sadece tarayıcınızda şifrelenerek saklanır, sunucuya gönderilmez)*');
+        } else {
+            setAiStep(0);
+            addAiMessage('Merhaba! 🤖 Ben yapay zeka haber asistanınız. Size ChatGPT gücüyle profesyonel bir spor haberi oluşturmada yardımcı olacağım.\n\n📌 Hangi konuda haber yazmamı istersiniz? Örneğin:\n• "Galatasaray transfer gündemi"\n• "NBA final serisi"\n• "Verstappen yeni sözleşme"\n\nKonunuzu yazın, ben size harika bir haber hazırlayayım!');
+        }
     };
 
     const addAiMessage = (content: string) => {
         setAiMessages(prev => [...prev, { role: 'ai', content }]);
     };
 
-    const handleAiSend = () => {
+    const handleAiSend = async () => {
         if (!aiInput.trim()) return;
         const userMsg = aiInput.trim();
         setAiMessages(prev => [...prev, { role: 'user', content: userMsg }]);
         setAiInput('');
         setAiTyping(true);
 
-        setTimeout(() => {
-            setAiTyping(false);
+        if (aiStep === -1) {
+            setTimeout(() => {
+                setAiTyping(false);
+                const key = userMsg;
+                if (key.startsWith('sk-') || key.length > 20) {
+                    setOpenAiKey(key);
+                    localStorage.setItem('site_openai_key', key);
+                    setAiStep(0);
+                    addAiMessage('✅ API Anahtarı başarıyla kaydedildi!\n\nŞimdi başlayalım. 📌 Hangi konuda haber yazmamı istersiniz?');
+                } else {
+                    addAiMessage('Geçersiz bir API anahtarı girdiniz. Lütfen "sk-" ile başlayan geçerli bir OpenAI API anahtarı girin:');
+                }
+            }, 800);
+            return;
+        }
+
+        setTimeout(async () => {
             if (aiStep === 0) {
+                setAiTyping(false);
                 // User entered the topic
                 setAiTopic(userMsg);
                 setAiStep(1);
                 addAiMessage(`Harika bir konu! 🎯 "${userMsg}" hakkında haber yazacağım.\n\n📂 Hangi kategoride olsun?\n\n${NEWS_CATEGORIES.map((c, i) => `${i + 1}. ${c.name}`).join('\n')}\n\nNumara veya kategori adını yazın:`);
             } else if (aiStep === 1) {
+                setAiTyping(false);
                 // User selected category
                 const catIdx = parseInt(userMsg) - 1;
                 const selectedCat = NEWS_CATEGORIES[catIdx]?.name ||
@@ -340,20 +279,33 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                 setAiStyle(style);
                 setAiStep(3);
 
-                // Generate the article
-                const result = generateAiArticle(aiTopic, aiCategory, style);
+                try {
+                    // Generate the article with OpenAI
+                    addAiMessage(`🔄 OpenAI ChatGPT ile bağlantı kuruluyor... Sizin için "${aiTopic}" konulu profesyonel haberi yazıyorum. Bu işlem 10-20 saniye sürebilir...`);
 
-                addAiMessage(`✨ Haberiniz hazır!\n\n**Başlık:** ${result.title}\n\n**Özet:** ${result.excerpt}\n\n**Kategori:** ${aiCategory}\n**Tarz:** ${style === 'kısa' ? 'Kısa' : style === 'detaylı' ? 'Detaylı' : 'Normal'}\n\n---\n\n🔄 Beğendiniz mi?\n• **"Evet"** → Formu doldurup düzenlemenize aktarayım\n• **"Yeniden"** → Farklı bir versiyonunu yazayım\n• **"Değiştir"** → Yeni bir konu ile baştan başlayalım`);
+                    const result = await generateAiArticleOpenAI(aiTopic, aiCategory, style, openAiKey);
 
-                // Store the generated article temporarily
-                setFormTitle(result.title);
-                setFormExcerpt(result.excerpt);
-                setFormContent(result.content);
-                setFormCategory(aiCategory);
-                setFormSeoTitle(result.seoTitle);
-                setFormSeoDesc(result.seoDesc);
-                setFormSlug(generateSlug(result.title));
+                    setAiTyping(false);
+                    addAiMessage(`✨ Haberiniz ChatGPT tarafından başarıyla hazırlandı!\n\n**Başlık:** ${result.title}\n\n**Özet:** ${result.excerpt}\n\n**Kategori:** ${aiCategory}\n**Tarz:** ${style === 'kısa' ? 'Kısa' : style === 'detaylı' ? 'Detaylı' : 'Normal'}\n\n---\n\n🔄 Beğendiniz mi?\n• **"Evet"** → Formu doldurup düzenlemenize aktarayım\n• **"Yeniden"** → Farklı bir versiyonunu yazayım\n• **"Değiştir"** → Yeni bir konu ile baştan başlayalım`);
+
+                    // Store the generated article temporarily
+                    setFormTitle(result.title);
+                    setFormExcerpt(result.excerpt);
+                    setFormContent(result.content);
+                    setFormCategory(aiCategory);
+                    setFormSeoTitle(result.seoTitle);
+                    setFormSeoDesc(result.seoDesc);
+                    setFormSlug(generateSlug(result.title));
+                } catch (error: any) {
+                    setAiTyping(false);
+                    console.error("OpenAI Hatası:", error);
+                    let errMsg = error.message;
+                    if (errMsg.includes('401')) errMsg = 'API Anahtarınız geçersiz veya süresi dolmuş. Lütfen geçerli bir anahtar girin.';
+                    addAiMessage(`❌ Bir hata oluştu:\n${errMsg}\n\nLütfen API ayarlarınızı kontrol edip API anahtarınızı sıfırlamak için "sıfırla" yazın veya tekrar denemek için "yeniden" yazın.`);
+                    setAiStep(4); // Error state
+                }
             } else if (aiStep === 3) {
+                setAiTyping(false);
                 const lower = userMsg.toLowerCase();
                 if (lower.includes('evet') || lower.includes('tamam') || lower.includes('onayla') || lower.includes('aktar')) {
                     addAiMessage('🎉 Harika! Haberi düzenleme formuna aktardım. Artık istediğiniz değişiklikleri yapıp kaydedebilirsiniz.\n\n💡 İpucu: Formu kapatmadan önce "Yayınlandı" durumunu seçmeyi unutmayın!');
@@ -361,20 +313,38 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                     setShowAiChat(false);
                     setAiStep(0);
                 } else if (lower.includes('yeniden') || lower.includes('tekrar')) {
-                    const result = generateAiArticle(aiTopic, aiCategory, aiStyle);
-                    setFormTitle(result.title);
-                    setFormExcerpt(result.excerpt);
-                    setFormContent(result.content);
-                    setFormSeoTitle(result.seoTitle);
-                    setFormSeoDesc(result.seoDesc);
-                    setFormSlug(generateSlug(result.title));
-                    addAiMessage(`🔄 Yeni versiyon hazır!\n\n**Başlık:** ${result.title}\n\n**Özet:** ${result.excerpt}\n\n---\n\n• **"Evet"** → Formu doldurup aktarayım\n• **"Yeniden"** → Bir daha deneyelim\n• **"Değiştir"** → Yeni konu ile başlayalım`);
+                    setAiTyping(true);
+                    try {
+                        const result = await generateAiArticleOpenAI(aiTopic, aiCategory, aiStyle, openAiKey);
+                        setAiTyping(false);
+                        setFormTitle(result.title);
+                        setFormExcerpt(result.excerpt);
+                        setFormContent(result.content);
+                        setFormSeoTitle(result.seoTitle);
+                        setFormSeoDesc(result.seoDesc);
+                        setFormSlug(generateSlug(result.title));
+                        addAiMessage(`🔄 Yeni versiyon ChatGPT tarafından hazırlandı!\n\n**Başlık:** ${result.title}\n\n**Özet:** ${result.excerpt}\n\n---\n\n• **"Evet"** → Formu doldurup aktarayım\n• **"Yeniden"** → Bir daha deneyelim\n• **"Değiştir"** → Yeni konu ile başlayalım`);
+                    } catch (error: any) {
+                        setAiTyping(false);
+                        addAiMessage(`❌ Hata: ${error.message}`);
+                    }
                 } else if (lower.includes('değiştir') || lower.includes('yeni konu') || lower.includes('baştan')) {
                     setAiStep(0);
                     resetForm();
                     addAiMessage('Tamam! 🔄 Yeni bir konu belirleyelim.\n\n📌 Hangi konuda haber yazmamı istersiniz?');
                 } else {
                     addAiMessage('Anlayamadım 🤔 Lütfen şunlardan birini yazın:\n• **"Evet"** → Haberi aktarma\n• **"Yeniden"** → Yeni versiyon\n• **"Değiştir"** → Yeni konu');
+                }
+            } else if (aiStep === 4) {
+                setAiTyping(false);
+                if (userMsg.toLowerCase().includes('sıfırla')) {
+                    setOpenAiKey('');
+                    localStorage.removeItem('site_openai_key');
+                    setAiStep(-1);
+                    addAiMessage('API Anahtarınız silindi. Lütfen yeni bir OpenAI API anahtarı girin:');
+                } else {
+                    setAiStep(2);
+                    handleAiSend(); // Retry step 2
                 }
             }
         }, 800 + Math.random() * 600);
@@ -444,8 +414,8 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                                 )}
                                 <div
                                     className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${msg.role === 'user'
-                                            ? 'bg-[#f0b90b]/10 border border-[#f0b90b]/20 text-white'
-                                            : 'bg-zinc-900 border border-zinc-800 text-zinc-300'
+                                        ? 'bg-[#f0b90b]/10 border border-[#f0b90b]/20 text-white'
+                                        : 'bg-zinc-900 border border-zinc-800 text-zinc-300'
                                         }`}
                                 >
                                     {msg.content.split('**').map((part, pi) =>
