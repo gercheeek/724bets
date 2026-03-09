@@ -2,6 +2,32 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Zap, Settings, User, Shield, Pen, LogOut, ChevronDown, Search, Coins, Send, X, MessageSquare } from 'lucide-react';
 import { SiteUser, UserLoyalty } from '../types';
 
+export interface NavVisibility {
+  coupons: boolean;
+  analysis: boolean;
+  leagues: boolean;
+  brands: boolean;
+  news: boolean;
+  pool: boolean;
+  blackjack: boolean;
+  loyalty: boolean;
+  raffle: boolean;
+  giveaway: boolean;
+}
+
+export const DEFAULT_NAV_VISIBILITY: NavVisibility = {
+  coupons: true,
+  analysis: true,
+  leagues: true,
+  brands: true,
+  news: true,
+  pool: true,
+  blackjack: true,
+  loyalty: true,
+  raffle: true,
+  giveaway: true,
+};
+
 interface HeaderProps {
   onAdminClick?: () => void;
   onViewChange?: (view: string) => void;
@@ -12,6 +38,7 @@ interface HeaderProps {
   onMemberLoginClick?: () => void;
   onMemberLogout?: () => void;
   onSearchClick?: () => void;
+  navVisibility?: NavVisibility;
 }
 
 function getUserLoyalty(userId: string): UserLoyalty {
@@ -30,6 +57,7 @@ const Header: React.FC<HeaderProps> = ({
   onMemberLoginClick,
   onMemberLogout,
   onSearchClick,
+  navVisibility,
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -212,94 +240,106 @@ const Header: React.FC<HeaderProps> = ({
           >
             Ana Sayfa
           </a>
-          <a
-            href="#daily-coupons"
-            onClick={(e) => {
-              e.preventDefault();
-              if (activeView === 'home') {
-                const el = document.getElementById('daily-coupons');
-                if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
-              } else {
-                onViewChange?.('home');
-                setTimeout(() => {
-                  const el = document.getElementById('daily-coupons');
-                  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
-                }, 100);
-              }
-            }}
-          >
-            Günün Kuponları
-          </a>
-          <a
-            href="#"
-            className={activeView === 'analysis' ? 'active' : ''}
-            onClick={(e) => { e.preventDefault(); onViewChange?.('analysis'); }}
-          >
-            Analizler
-          </a>
-          <a
-            href="#popular-leagues-section"
-            onClick={(e) => {
-              e.preventDefault();
-              if (activeView === 'home') {
-                const el = document.getElementById('popular-leagues-section');
-                if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
-              } else {
-                onViewChange?.('home');
-                setTimeout(() => {
+          {(navVisibility?.coupons !== false) && (
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); onViewChange?.('home'); setTimeout(() => { const el = document.getElementById('coupons-section'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); }, 100); }}
+            >
+              Günün Kuponları
+            </a>
+          )}
+          {(navVisibility?.analysis !== false) && (
+            <a
+              href="#"
+              className={activeView === 'analysis' ? 'active' : ''}
+              onClick={(e) => { e.preventDefault(); onViewChange?.('analysis'); }}
+            >
+              Analizler
+            </a>
+          )}
+          {(navVisibility?.leagues !== false) && (
+            <a
+              href="#popular-leagues-section"
+              onClick={(e) => {
+                e.preventDefault();
+                if (activeView === 'home') {
                   const el = document.getElementById('popular-leagues-section');
                   if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
-                }, 100);
-              }
-            }}
-          >
-            Ligler
-          </a>
-          <a
-            href="#"
-            className={activeView === 'brands' ? 'active' : ''}
-            onClick={(e) => { e.preventDefault(); onViewChange?.('brands'); }}
-          >
-            Güvenilir Siteler
-          </a>
-          <a
-            href="#"
-            className={activeView === 'news' ? 'active' : ''}
-            onClick={(e) => { e.preventDefault(); onViewChange?.('news'); }}
-          >
-            📰 Haberler
-          </a>
-
-          {/* Separator - Removed to eliminate white lines */}
-
-          <a
-            href="#"
-            className={activeView === 'pool' ? 'active' : ''}
-            onClick={(e) => { e.preventDefault(); onViewChange?.('pool'); }}
-          >
-            🎱 724TOTO
-          </a>
-          <a
-            href="#"
-            className={activeView === 'blackjack' ? 'active' : ''}
-            onClick={(e) => { e.preventDefault(); onViewChange?.('blackjack'); }}
-          >
-            🎴 Casino
-          </a>
-          <a
-            href="#"
-            className={activeView === 'loyalty' ? 'active' : ''}
-            onClick={(e) => { e.preventDefault(); onViewChange?.('loyalty'); }}
-          >
-            🎯 Görevler
-          </a>
-          <a
-            href="#"
-            className={activeView === 'raffle' ? 'active' : ''}
-            onClick={(e) => { e.preventDefault(); onViewChange?.('raffle'); }}
-          >
-            🎟️ Bilet
-          </a>
+                } else {
+                  onViewChange?.('home');
+                  setTimeout(() => {
+                    const el = document.getElementById('popular-leagues-section');
+                    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+                  }, 100);
+                }
+              }}
+            >
+              Ligler
+            </a>
+          )}
+          {(navVisibility?.brands !== false) && (
+            <a
+              href="#"
+              className={activeView === 'brands' ? 'active' : ''}
+              onClick={(e) => { e.preventDefault(); onViewChange?.('brands'); }}
+            >
+              Güvenilir Siteler
+            </a>
+          )}
+          {(navVisibility?.news !== false) && (
+            <a
+              href="#"
+              className={activeView === 'news' ? 'active' : ''}
+              onClick={(e) => { e.preventDefault(); onViewChange?.('news'); }}
+            >
+              📰 Haberler
+            </a>
+          )}
+          {(navVisibility?.pool !== false) && (
+            <a
+              href="#"
+              className={activeView === 'pool' ? 'active' : ''}
+              onClick={(e) => { e.preventDefault(); onViewChange?.('pool'); }}
+            >
+              🎱 724TOTO
+            </a>
+          )}
+          {(navVisibility?.blackjack !== false) && (
+            <a
+              href="#"
+              className={activeView === 'blackjack' ? 'active' : ''}
+              onClick={(e) => { e.preventDefault(); onViewChange?.('blackjack'); }}
+            >
+              🎴 Casino
+            </a>
+          )}
+          {(navVisibility?.loyalty !== false) && (
+            <a
+              href="#"
+              className={activeView === 'loyalty' ? 'active' : ''}
+              onClick={(e) => { e.preventDefault(); onViewChange?.('loyalty'); }}
+            >
+              🎯 Görevler
+            </a>
+          )}
+          {(navVisibility?.raffle !== false) && (
+            <a
+              href="#"
+              className={activeView === 'raffle' ? 'active' : ''}
+              onClick={(e) => { e.preventDefault(); onViewChange?.('raffle'); }}
+            >
+              🎟️ Bilet
+            </a>
+          )}
+          {(navVisibility?.giveaway !== false) && userRole && (
+            <a
+              href="#"
+              className={activeView === 'giveaway' ? 'active' : ''}
+              onClick={(e) => { e.preventDefault(); onViewChange?.('giveaway'); }}
+            >
+              🎁 Çekiliş
+            </a>
+          )}
         </nav>
 
         <div className="header-right" style={{ gap: '8px' }}>

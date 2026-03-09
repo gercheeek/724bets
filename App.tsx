@@ -19,11 +19,58 @@ import PoolGame from './components/PoolGame';
 import NewsSection from './components/NewsSection';
 import NewsView from './components/NewsView';
 import NewsDetailView from './components/NewsDetailView';
+import BetLivoWheel from './components/BetLivoWheel';
+import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
+import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig } from './types';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, BetLivoWheelConfig, GiveawayConfig } from './types';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail'>('home');
+  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway'>('home');
+
+  // BetLivo Wheel Config
+  const [wheelCarkConfig, setWheelCarkConfig] = useState<BetLivoWheelConfig>(() => {
+    const stored = localStorage.getItem('site_betlivo_wheel');
+    return stored ? JSON.parse(stored) : {
+      participants: [],
+      prizes: [
+        { id: '1', name: '100 Free Spin', emoji: '🎰', stock: 10 },
+        { id: '2', name: '50 TL Nakit', emoji: '💰', stock: 5 },
+        { id: '3', name: '200 TL Freebet', emoji: '⚽', stock: 3 },
+      ],
+      history: [],
+      riggedWinner: null,
+      betlivoTrigger: false,
+      transparentBg: false,
+    };
+  });
+
+  const handleWheelCarkConfigChange = (cfg: BetLivoWheelConfig) => {
+    setWheelCarkConfig(cfg);
+    localStorage.setItem('site_betlivo_wheel', JSON.stringify(cfg));
+  };
+  // Giveaway Config
+  const [giveawayConfig, setGiveawayConfig] = useState<GiveawayConfig>(() => {
+    const stored = localStorage.getItem('site_giveaway_config');
+    return stored ? JSON.parse(stored) : DEFAULT_GIVEAWAY_CONFIG;
+  });
+
+  const handleGiveawayConfigChange = (cfg: GiveawayConfig) => {
+    setGiveawayConfig(cfg);
+    localStorage.setItem('site_giveaway_config', JSON.stringify(cfg));
+  };
+
+  // Nav Visibility
+  const [navVisibility, setNavVisibility] = useState<NavVisibility>(() => {
+    const stored = localStorage.getItem('site_nav_visibility');
+    return stored ? JSON.parse(stored) : DEFAULT_NAV_VISIBILITY;
+  });
+
+  const handleNavVisibilityChange = (vis: NavVisibility) => {
+    setNavVisibility(vis);
+    localStorage.setItem('site_nav_visibility', JSON.stringify(vis));
+  };
+
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
   const [userRole, setUserRole] = useState<string | null>(null);
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
@@ -168,6 +215,10 @@ const App: React.FC = () => {
         setView('home');
       }}
       onNavigateHome={() => setView('home')}
+      giveawayConfig={giveawayConfig}
+      onSaveGiveawayConfig={handleGiveawayConfigChange}
+      navVisibility={navVisibility}
+      onSaveNavVisibility={handleNavVisibilityChange}
     />
   );
 
@@ -238,6 +289,7 @@ const App: React.FC = () => {
           localStorage.removeItem('site_current_member');
         }}
         onSearchClick={() => setShowSearch(true)}
+        navVisibility={navVisibility}
       />
 
       <main style={{ position: 'relative', zIndex: 10, paddingTop: '80px' }}>
@@ -489,6 +541,22 @@ const App: React.FC = () => {
             articleId={selectedArticleId}
             onViewChange={handleViewChange}
             onArticleClick={(id) => { setSelectedArticleId(id); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          />
+        )}
+
+        {view === 'wheel' && (
+          <BetLivoWheel
+            config={wheelCarkConfig}
+            onConfigChange={handleWheelCarkConfigChange}
+            isAdmin={!!userRole}
+          />
+        )}
+
+        {view === 'giveaway' && (
+          <GiveawayView
+            config={giveawayConfig}
+            onConfigChange={handleGiveawayConfigChange}
+            isAdmin={!!userRole}
           />
         )}
       </main>

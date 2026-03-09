@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage } from '../types';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
 import AdminNewsTab from './AdminNewsTab';
+import AdminGiveawayTab from './AdminGiveawayTab';
+import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './Header';
 
 interface AdminPanelProps {
   brands: Brand[];
@@ -26,14 +28,20 @@ interface AdminPanelProps {
   onSaveLeagueData?: (data: Record<string, any>) => void;
   onLogout: () => void;
   onNavigateHome?: () => void;
+  giveawayConfig?: GiveawayConfig;
+  onSaveGiveawayConfig?: (config: GiveawayConfig) => void;
+  navVisibility?: NavVisibility;
+  onSaveNavVisibility?: (vis: NavVisibility) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
   brands, hero, themeColor, hashtags, role, wheelConfig, bjConfig, loyaltyConfig, leagueData,
-  onSaveBrands, onSaveHero, onThemeChange, onHashtagsChange, onSaveWheelConfig, onSaveBjConfig, onSaveLoyaltyConfig, onSaveLeagueData, onLogout, onNavigateHome
+  onSaveBrands, onSaveHero, onThemeChange, onHashtagsChange, onSaveWheelConfig, onSaveBjConfig, onSaveLoyaltyConfig, onSaveLeagueData, onLogout, onNavigateHome,
+  giveawayConfig, onSaveGiveawayConfig,
+  navVisibility, onSaveNavVisibility
 }) => {
   const isAuthor = role.startsWith('author_');
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'leagues' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'leagues' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
 
   // Messages State
   const [messages, setMessages] = useState<UserMessage[]>(() => {
@@ -671,6 +679,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               <button onClick={() => setActiveTab('seo')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'seo' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Search className="w-4 h-4" /> SEO & HASHTAG
               </button>
+              <button onClick={() => setActiveTab('visibility')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'visibility' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <Eye className="w-4 h-4" /> SAYFA GÖRÜNÜRLÜğü
+              </button>
             </>
           )}
 
@@ -707,6 +718,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
               <button onClick={() => setActiveTab('editors')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'editors' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <User className="w-4 h-4" /> EDİTÖRLER
+              </button>
+              <button onClick={() => setActiveTab('giveaway')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'giveaway' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <Gift className="w-4 h-4" /> ÇEKİLİŞ YÖNETİMİ
               </button>
             </>
           )}
@@ -2231,6 +2245,60 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       {activeTab === 'news' && (
         <div className="flex-1 overflow-y-auto p-6">
           <AdminNewsTab role={role} />
+        </div>
+      )}
+
+      {activeTab === 'giveaway' && giveawayConfig && onSaveGiveawayConfig && (
+        <AdminGiveawayTab
+          config={giveawayConfig}
+          onConfigChange={onSaveGiveawayConfig}
+        />
+      )}
+
+      {/* ─── VISIBILITY TAB ─── */}
+      {activeTab === 'visibility' && (
+        <div className="space-y-8 animate-fade-in-up p-6 overflow-y-auto w-full max-w-4xl mx-auto">
+          <div>
+            <h2 className="text-2xl font-black text-white flex items-center gap-3">
+              <Eye className="text-primary" /> SAYFA GÖRÜNÜRLÜĞÜ
+            </h2>
+            <p className="text-zinc-500 text-sm font-bold mt-2">
+              Sitedeki sayfaları açıp kapatarak kullanıcıların erişimini yönetin.
+              Çekiliş sayfası sadece yöneticilere görünür durumda kalmaya devam edecektir.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {([
+              { key: 'coupons', label: 'Günün Kuponları' },
+              { key: 'analysis', label: 'Analizler' },
+              { key: 'leagues', label: 'Ligler' },
+              { key: 'brands', label: 'Güvenilir Siteler' },
+              { key: 'news', label: '📰 Haberler' },
+              { key: 'pool', label: '🎱 724TOTO' },
+              { key: 'blackjack', label: '🎴 Casino' },
+              { key: 'loyalty', label: '🎯 Görevler' },
+              { key: 'raffle', label: '🎟️ Bilet' },
+              { key: 'giveaway', label: '🎁 Çekiliş' },
+            ] as const).map(item => {
+              const isActive = navVisibility?.[item.key] !== false;
+              return (
+                <div key={item.key} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex items-center justify-between">
+                  <span className="text-white font-bold">{item.label}</span>
+                  <button
+                    onClick={() => {
+                      if (navVisibility && onSaveNavVisibility) {
+                        onSaveNavVisibility({ ...navVisibility, [item.key]: !isActive });
+                      }
+                    }}
+                    className={`w-14 h-8 rounded-full transition-all flex items-center p-1 ${isActive ? 'bg-green-500' : 'bg-zinc-700'}`}
+                  >
+                    <div className={`w-6 h-6 rounded-full bg-white transition-all ${isActive ? 'translate-x-6' : 'translate-x-0'}`} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 

@@ -343,3 +343,143 @@ export const NEWS_CATEGORIES: { name: string; color: string }[] = [
   { name: 'Tenis', color: '#06b6d4' },
 ];
 
+// ─── BetLivo Çarkıfelek & Kasa Sistemi ──────────────────────────────────────
+export interface WheelParticipant {
+  id: string;
+  name: string;
+}
+
+export interface WheelPrize {
+  id: string;
+  name: string;
+  emoji: string;
+  stock: number;
+}
+
+export interface WheelHistoryEntry {
+  winner: string;
+  prize: string;
+  timestamp: number;
+}
+
+export interface BetLivoWheelConfig {
+  participants: WheelParticipant[];
+  prizes: WheelPrize[];
+  history: WheelHistoryEntry[];
+  riggedWinner: string | null;
+  betlivoTrigger: boolean;
+  transparentBg: boolean;
+}
+
+// ─── Coin Request Sistemi ────────────────────────────────────────────────────
+export interface CoinRequest {
+  id: string;
+  userId: string;
+  username: string;
+  siteName: string;
+  amount: number;
+  coinAmount: number;
+  transactionId: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: number;
+  processedAt?: number;
+  adminNote?: string;
+}
+
+// ─── Pool (724TOTO) Sistemi ──────────────────────────────────────────────────
+export interface PoolMatch {
+  id: string;
+  homeTeam: string;
+  awayTeam: string;
+  league: string;
+  matchDate: string;
+  result?: '1' | 'X' | '2';
+}
+
+export interface PoolEntry {
+  id: string;
+  userId: string;
+  username: string;
+  predictions: ('1' | 'X' | '2')[];
+  correctCount?: number;
+  createdAt: number;
+}
+
+export interface PoolConfig {
+  id: string;
+  matches: PoolMatch[];
+  entries: PoolEntry[];
+  status: 'open' | 'live' | 'completed';
+  prizePool: number;
+  prize15: number;
+  prize14: number;
+  prize13: number;
+  freeEntryUsed: Record<string, boolean>;
+  createdAt: number;
+  completedAt?: number;
+}
+
+// ─── Giveaway / Çekiliş Sistemi ─────────────────────────────────────────────
+export interface Giveaway {
+  id: string;
+  title: string;
+  description: string;
+  instagramPostUrl: string;
+  startDate: string; // ISO date
+  drawDate: string;  // ISO date
+  status: 'draft' | 'active' | 'completed';
+}
+
+export interface GiveawayPrize {
+  id: string;
+  giveawayId: string;
+  prizeName: string;
+  quantity: number;
+  icon: string; // emoji
+  winnerId?: string;
+}
+
+export interface GiveawayParticipant {
+  id: string;
+  giveawayId: string;
+  name: string;
+  instagram: string;
+  referralCode: string;
+  referralCount: number;
+  entries: number;
+  joinedAt: number;
+}
+
+export interface GiveawayWinner {
+  id: string;
+  giveawayId: string;
+  participantId: string;
+  participantName: string;
+  prizeId: string;
+  prizeName: string;
+  timestamp: number;
+}
+
+export interface GiveawayRule {
+  id: string;
+  action: string;
+  label: string;
+  entryValue: number;
+  icon: string;
+}
+
+export interface GiveawayActivity {
+  id: string;
+  message: string;
+  timestamp: number;
+}
+
+export interface GiveawayConfig {
+  giveaways: Giveaway[];
+  prizes: GiveawayPrize[];
+  participants: GiveawayParticipant[];
+  winners: GiveawayWinner[];
+  rules: GiveawayRule[];
+  activities: GiveawayActivity[];
+}
+
