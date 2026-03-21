@@ -16,37 +16,42 @@ const PRAISE_ITEMS = [
 
 const DynamicCTA: React.FC<DynamicCTAProps> = ({ onNavigate }) => {
     return (
-        <section className="relative w-full overflow-hidden bg-[#060606] border-y border-zinc-800/60 py-16 flex flex-col items-center justify-center min-h-[300px]">
+        <section className="relative w-full overflow-hidden py-16 flex flex-col items-center justify-center min-h-[300px]" style={{ background: 'var(--bg-elevated)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
 
             {/* Background radial gradient for depth */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(240,185,11,0.03)_0%,transparent_70%)] pointer-events-none" />
 
             {/* Main Premium Text */}
             <div className="relative z-10 text-center mb-10 px-4">
-                <h2 className="text-3xl md:text-5xl font-black text-white italic tracking-tight uppercase leading-tight">
+                <h2 className="text-3xl md:text-5xl font-black italic tracking-tight uppercase leading-tight" style={{ color: 'var(--text-primary)' }}>
                     Kazanç Tesadüf Değil, <br className="md:hidden" />
                     <span className="text-[#f0b90b] drop-shadow-[0_0_15px_rgba(240,185,11,0.3)] border-b-4 border-[#f0b90b] pb-1 inline-block mt-2 md:mt-0">
                         STRATEJİ İŞİDİR.
                     </span>
                 </h2>
-                <p className="mt-6 text-zinc-400 max-w-2xl mx-auto text-sm md:text-base font-medium leading-relaxed">
+                <p className="mt-6 max-w-2xl mx-auto text-sm md:text-base font-medium leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                     724Bets, sadece sıradan tahminler paylaşmaz. Kusursuz istatistik, anlık takım formu, xG verileri ve yapay zeka destekli detaylı maç içi senaryolarla profesyonel analizler üretir.
                 </p>
             </div>
 
             {/* Interactive Infinite Marquee */}
             <div className="w-full relative flex overflow-x-hidden mb-12">
-                <div className="absolute top-0 bottom-0 left-0 w-16 md:w-32 z-10 bg-gradient-to-r from-[#060606] to-transparent" />
-                <div className="absolute top-0 bottom-0 right-0 w-16 md:w-32 z-10 bg-gradient-to-l from-[#060606] to-transparent" />
+                <div className="absolute top-0 bottom-0 left-0 w-16 md:w-32 z-10" style={{ background: `linear-gradient(to right, var(--bg-elevated), transparent)` }} />
+                <div className="absolute top-0 bottom-0 right-0 w-16 md:w-32 z-10" style={{ background: `linear-gradient(to left, var(--bg-elevated), transparent)` }} />
 
                 <div className="animate-marquee whitespace-nowrap flex items-center shrink-0">
                     {[...PRAISE_ITEMS, ...PRAISE_ITEMS, ...PRAISE_ITEMS].map((item, index) => (
                         <div
                             key={`marquee-item-${index}`}
-                            className="group mx-4 flex items-center gap-3 bg-[#0a0a0a] border border-zinc-800/80 px-6 py-3 rounded-full hover:border-[#f0b90b]/50 hover:bg-[#111] hover:scale-105 transition-all duration-300 cursor-default"
+                            className="group mx-4 flex items-center gap-3 px-6 py-3 rounded-full hover:border-[#f0b90b]/50 hover:scale-105 transition-all duration-300 cursor-default"
+                            style={{
+                                background: 'var(--bg-card)',
+                                border: '1px solid var(--border-subtle)',
+                                boxShadow: 'var(--shadow-card)'
+                            }}
                         >
                             <div className="group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(240,185,11,0.5)] transition-all duration-300">{item.icon}</div>
-                            <span className="font-bold text-zinc-300 tracking-wide text-sm group-hover:text-white transition-colors">{item.text}</span>
+                            <span className="font-bold tracking-wide text-sm transition-colors" style={{ color: 'var(--text-secondary)' }}>{item.text}</span>
                         </div>
                     ))}
                 </div>

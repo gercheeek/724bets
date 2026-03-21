@@ -37,16 +37,16 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <section className="relative w-full py-32 bg-[#0B0B0F] overflow-hidden border-t border-white/5">
+    <section className="relative w-full py-32 overflow-hidden" style={{ background: 'var(--bg-main)', borderTop: '1px solid var(--border-subtle)' }}>
       <div className="relative max-w-[1240px] mx-auto px-6">
 
         {/* Header */}
         <div className="text-center mb-24 animate-fade-in-up">
-          <h2 className="text-[42px] md:text-[56px] font-black text-white mb-6 leading-tight">
+          <h2 className="text-[42px] md:text-[56px] font-black mb-6 leading-tight" style={{ color: 'var(--text-primary)' }}>
             Kazanç Tesadüf Değil,<br />
             <span className="text-[#FFC107]">ANALİZ</span> İşidir.
           </h2>
-          <p className="text-[#A0A0A0] text-lg max-w-2xl mx-auto font-medium leading-relaxed mb-8">
+          <p className="text-lg max-w-2xl mx-auto font-medium leading-relaxed mb-8" style={{ color: 'var(--text-muted)' }}>
             724Bets, sadece tahmin paylaşmaz. İstatistik, form, xG ve maç içi senaryolarla
             veri destekli profesyonel analizler üretir.
           </p>
@@ -64,15 +64,20 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             <div
               key={idx}
               className="glass-card p-10 rounded-[30px] hover:border-[#FFC107]/30 transition-all duration-500 group animate-fade-in-up"
-              style={{ animationDelay: `${idx * 0.1}s` }}
+              style={{
+                animationDelay: `${idx * 0.1}s`,
+                background: 'var(--bg-card)',
+                boxShadow: 'var(--shadow-card)',
+                border: '1px solid var(--border-subtle)'
+              }}
             >
               <div className="mb-8 p-4 bg-[#FFC107]/5 rounded-2xl w-fit group-hover:bg-[#FFC107]/10 transition-colors">
                 {feature.icon}
               </div>
-              <h3 className="text-white font-black text-xl mb-4 italic uppercase tracking-tight">
+              <h3 className="font-black text-xl mb-4 italic uppercase tracking-tight" style={{ color: 'var(--text-primary)' }}>
                 {feature.title}
               </h3>
-              <p className="text-zinc-500 text-sm font-medium leading-relaxed">
+              <p className="text-sm font-medium leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                 {feature.desc}
               </p>
             </div>
@@ -80,11 +85,11 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
 
         {/* Trust/Stats Strip */}
-        <div className="bg-[#111118] border border-white/5 rounded-[40px] px-12 py-10 flex flex-wrap items-center justify-around gap-12 animate-fade-in-up animate-delay-4">
+        <div className="rounded-[40px] px-12 py-10 flex flex-wrap items-center justify-around gap-12 animate-fade-in-up animate-delay-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)' }}>
           {stats.map((stat, idx) => (
             <div key={idx} className="flex flex-col items-center gap-2">
               <span className="text-[#FFC107] text-4xl font-black italic">{stat.value}</span>
-              <span className="text-zinc-600 text-[10px] font-black tracking-[0.2em] uppercase">{stat.label}</span>
+              <span className="text-[10px] font-black tracking-[0.2em] uppercase" style={{ color: 'var(--text-dim)' }}>{stat.label}</span>
             </div>
           ))}
         </div>

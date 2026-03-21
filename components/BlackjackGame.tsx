@@ -335,13 +335,12 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
     // ─── COOLDOWN SCREEN ────────────────────────────────────────────────
     if (phase === 'waiting' && cooldownLeft > 0 && isLoggedIn) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center gap-6 px-4"
-                style={{ background: 'radial-gradient(ellipse at center, #0a1a0a 0%, #060606 100%)' }}>
+            <div className="min-h-screen flex flex-col items-center justify-center gap-6 px-4">
                 <div className="text-7xl">⏳</div>
                 <div className="text-center">
-                    <div className="text-white font-black text-3xl mb-2 uppercase tracking-tight">Bir Sonraki El</div>
+                    <div className="text-[var(--text-primary)] font-black text-3xl mb-2 uppercase tracking-tight">Bir Sonraki El</div>
                     <div className="text-[#f0b90b] font-black text-5xl tabular-nums tracking-widest">{formatCooldown(cooldownLeft)}</div>
-                    <div className="text-zinc-500 font-bold text-sm mt-3">Her {cooldownHours} saatte bir el oynama hakkınız var</div>
+                    <div className="text-[var(--text-muted)] font-bold text-sm mt-3">Her {cooldownHours} saatte bir el oynama hakkınız var</div>
                 </div>
             </div>
         );
@@ -349,26 +348,24 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
 
     // ─── TABLE SCREEN ────────────────────────────────────────────────────
     return (
-        <div className="min-h-screen relative overflow-hidden" style={{
-            background: 'radial-gradient(ellipse at center top, #0a1a0a 0%, #031003 50%, #060606 100%)',
-        }}>
-            {/* Casino felt texture */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{
-                backgroundImage: 'repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)',
+        <div className="min-h-screen relative overflow-hidden transition-colors duration-500">
+            {/* Background Texture Overlay */}
+            <div className="absolute inset-0 opacity-[0.02]" style={{
+                backgroundImage: 'repeating-linear-gradient(45deg, var(--text-primary) 0, var(--text-primary) 1px, transparent 0, transparent 50%)',
                 backgroundSize: '6px 6px',
             }} />
 
-            <div className="relative z-10 max-w-3xl mx-auto px-4 py-6">
+            <div className="relative z-10 max-w-3xl mx-auto px-4 py-6 mt-16">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <div className="flex items-center gap-2 mb-0.5">
                             <span className="text-2xl">🎴</span>
-                            <h1 className="text-white font-black text-2xl tracking-tight">
+                            <h1 className="text-[var(--text-primary)] font-black text-2xl tracking-tight">
                                 CASINO <span style={{ color: '#f0b90b' }}>724</span>
                             </h1>
                         </div>
-                        <div className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em]">Blackjack · Profesyonel Masa</div>
+                        <div className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">Blackjack · Profesyonel Masa</div>
                     </div>
                     {!isLoggedIn ? (
                         <button onClick={onLoginRequired}
@@ -542,10 +539,9 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                         { label: 'El Hakkı', value: `Her ${cooldownHours} Saat` },
                         { label: 'Mod', value: 'Ücretsiz Demo' },
                     ].map((item, i) => (
-                        <div key={i} className="px-3 py-2.5 rounded-xl text-center"
-                            style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <div className="text-zinc-700 text-[9px] font-black uppercase tracking-widest mb-0.5">{item.label}</div>
-                            <div className="text-zinc-300 font-black text-xs">{item.value}</div>
+                        <div key={i} className="px-3 py-2.5 rounded-xl text-center bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                            <div className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest mb-0.5">{item.label}</div>
+                            <div className="text-[var(--text-primary)] font-black text-xs">{item.value}</div>
                         </div>
                     ))}
                 </div>

@@ -111,7 +111,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
     const totalSold = ticketPool.length;
 
     return (
-        <div className="min-h-screen" style={{ background: 'radial-gradient(ellipse at top, #08050f 0%, #060606 100%)' }}>
+        <div className="min-h-screen transition-colors duration-500 pb-20">
             <div className="max-w-2xl mx-auto px-4 py-8">
 
                 {/* Header */}
@@ -120,19 +120,18 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                         style={{ background: 'linear-gradient(135deg, #7c3aed22, #4f46e522)', border: '2px solid rgba(124,58,237,0.3)', boxShadow: '0 0 40px rgba(124,58,237,0.15)' }}>
                         🎟️
                     </div>
-                    <h1 className="text-white font-black text-3xl mb-1 tracking-tight">Bilet <span style={{ color: '#a78bfa' }}>Etkinliği</span></h1>
-                    <p className="text-zinc-500 text-sm font-bold">724bets.net × Betlivo Çekilişi</p>
+                    <h1 className="text-[var(--text-primary)] font-black text-3xl mb-1 tracking-tight">Bilet <span style={{ color: '#a78bfa' }}>Etkinliği</span></h1>
+                    <p className="text-[var(--text-muted)] text-sm font-bold">724bets.net × Betlivo Çekilişi</p>
                 </div>
 
                 {/* Ticket Balance */}
-                <div className="p-5 rounded-3xl mb-5 text-center"
-                    style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(79,70,229,0.08))', border: '1.5px solid rgba(124,58,237,0.25)', boxShadow: '0 0 40px rgba(124,58,237,0.08)' }}>
-                    <div className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Mevcut Bilet Sayınız</div>
+                <div className="p-5 rounded-3xl mb-5 text-center bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-[0_0_40px_rgba(124,58,237,0.05)]">
+                    <div className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.3em] mb-2">Mevcut Bilet Sayınız</div>
                     <div className="flex items-center justify-center gap-3 mb-2">
                         <Ticket className="w-8 h-8 text-purple-400" />
-                        <span className="text-white font-black text-6xl tabular-nums">{loyalty.tickets}</span>
+                        <span className="text-[var(--text-primary)] font-black text-6xl tabular-nums">{loyalty.tickets}</span>
                     </div>
-                    <div className="text-zinc-600 text-xs font-bold">
+                    <div className="text-[var(--text-muted)] text-xs font-bold">
                         {loyalty.tickets === 0 ? 'Henüz bilet kazanmadınız' : `${loyalty.tickets} bilet çekilişe katılmaya hak kazandı`}
                     </div>
                     {loyalty.pendingTickets > 0 && (
@@ -140,33 +139,33 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                             Aşağıdaki tablodan {loyalty.pendingTickets} adet bilet seçimi yapınız 👇
                         </div>
                     )}
-                    <div className="flex items-center justify-center gap-1.5 mt-3 text-[10px] text-zinc-700 font-bold">
+                    <div className="flex items-center justify-center gap-1.5 mt-3 text-[10px] text-[var(--text-dim)] font-bold">
                         <Info className="w-3 h-3" />
                         Her bilet eşit şansla çekilişe girer
                     </div>
                 </div>
 
                 {/* Buy Ticket with Coins */}
-                <div className="p-4 rounded-2xl mb-6 relative overflow-hidden" style={{ background: 'rgba(240,185,11,0.03)', border: '1px solid rgba(240,185,11,0.1)' }}>
+                <div className="p-4 rounded-2xl mb-6 relative overflow-hidden bg-[#f0b90b]/5 border border-[#f0b90b]/20">
                     {/* Background decor */}
                     <div className="absolute -right-10 -bottom-10 opacity-10 blur-xl">
                         <Coins className="w-40 h-40 text-[#f0b90b]" />
                     </div>
 
-                    <h3 className="text-white font-black text-sm uppercase tracking-widest mb-1 flex items-center gap-2">
+                    <h3 className="text-[var(--text-primary)] font-black text-sm uppercase tracking-widest mb-1 flex items-center gap-2">
                         <Coins className="w-4 h-4 text-[#f0b90b]" /> Coin ile Bilet Al
                     </h3>
-                    <p className="text-zinc-500 text-[11px] mb-4">Birikmiş coinlerinizi kullanarak ekstra çekiliş şansı yakalayın.</p>
+                    <p className="text-[var(--text-muted)] text-[11px] mb-4">Birikmiş coinlerinizi kullanarak ekstra çekiliş şansı yakalayın.</p>
 
                     <div className="flex flex-col sm:flex-row items-center gap-3">
-                        <div className="flex-1 w-full bg-zinc-900/50 rounded-xl p-3 flex items-center justify-between border border-zinc-800">
+                        <div className="flex-1 w-full bg-[var(--bg-input)] rounded-xl p-3 flex items-center justify-between border border-[var(--border-subtle)]">
                             <div>
-                                <div className="text-zinc-500 text-[10px] font-black uppercase">1 Bilet Bedeli</div>
+                                <div className="text-[var(--text-muted)] text-[10px] font-black uppercase">1 Bilet Bedeli</div>
                                 <div className="text-[#f0b90b] font-black text-lg">{TICKET_PRICE} Coin</div>
                             </div>
                             <div className="text-right">
-                                <div className="text-zinc-500 text-[10px] font-black uppercase">Mevcut Bakiyeniz</div>
-                                <div className="text-white font-black text-lg">{loyalty.coins.toLocaleString('tr')}</div>
+                                <div className="text-[var(--text-muted)] text-[10px] font-black uppercase">Mevcut Bakiyeniz</div>
+                                <div className="text-[var(--text-primary)] font-black text-lg">{loyalty.coins.toLocaleString('tr')}</div>
                             </div>
                         </div>
 
@@ -176,7 +175,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                             className={`w-full sm:w-auto px-6 py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-lg flex-shrink-0
                                 ${loyalty.coins >= TICKET_PRICE
                                     ? 'bg-[#f0b90b] text-black hover:bg-[#f0b90b]/90 hover:scale-105 shadow-[0_0_20px_rgba(240,185,11,0.3)]'
-                                    : 'bg-zinc-800 text-zinc-600 cursor-not-allowed border border-zinc-700'}`}
+                                    : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-subtle)]'}`}
                         >
                             SATIN AL
                         </button>
@@ -191,7 +190,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
 
                 {/* How to earn tickets - NEW UI */}
                 <div className="mb-8">
-                    <h3 className="text-white font-black text-xl tracking-tight mb-4 text-center sm:text-left">
+                    <h3 className="text-[var(--text-primary)] font-black text-xl tracking-tight mb-4 text-center sm:text-left">
                         Bilet Sistemi Nasıl Çalışır?
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -201,33 +200,32 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                             { step: 3, title: 'Onay Bekle', desc: 'Talebin incelenir ve biletlerin yansır', color: '#26c6da' },
                             { step: 4, title: 'Çekilişe Katıl', desc: 'Biletlerin ile çekilişe otomatik katıl', color: '#4dd0e1' },
                         ].map(item => (
-                            <div key={item.step} className="p-4 rounded-2xl flex flex-col justify-center items-center text-center transition-all hover:-translate-y-1"
-                                style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <div key={item.step} className="p-4 rounded-2xl flex flex-col justify-center items-center text-center transition-all hover:-translate-y-1 bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                                 <div className="w-10 h-10 rounded-full flex items-center justify-center text-black font-black text-lg mb-3 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
                                     style={{ backgroundColor: item.color }}>
                                     {item.step}
                                 </div>
-                                <div className="text-white font-black text-xs uppercase tracking-wider mb-1 mt-1">{item.title}</div>
-                                <div className="text-zinc-500 text-[10px] sm:text-xs leading-snug">{item.desc}</div>
+                                <div className="text-[var(--text-primary)] font-black text-xs uppercase tracking-wider mb-1 mt-1">{item.title}</div>
+                                <div className="text-[var(--text-muted)] text-[10px] sm:text-xs leading-snug">{item.desc}</div>
                             </div>
                         ))}
                     </div>
 
                     {/* FAQs */}
                     <div className="mb-4">
-                        <h3 className="text-white font-black text-lg mb-3">Sıkça Sorulan Sorular</h3>
+                        <h3 className="text-[var(--text-primary)] font-black text-lg mb-3">Sıkça Sorulan Sorular</h3>
                         <div className="space-y-2">
                             {faqs.map((faq, idx) => (
-                                <div key={idx} className="rounded-xl overflow-hidden transition-all" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                <div key={idx} className="rounded-xl overflow-hidden transition-all bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                                     <button
                                         onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                                        className="w-full flex items-center justify-between px-4 py-3.5 text-left hover:bg-white/[0.02] transition-colors"
+                                        className="w-full flex items-center justify-between px-4 py-3.5 text-left hover:bg-[var(--bg-card-hover)] transition-colors"
                                     >
-                                        <span className="text-zinc-300 font-bold text-xs sm:text-sm">{faq.q}</span>
-                                        <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
+                                        <span className="text-[var(--text-primary)] font-bold text-xs sm:text-sm">{faq.q}</span>
+                                        <ChevronDown className={`w-4 h-4 text-[var(--text-muted)] transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
                                     </button>
                                     {openFaq === idx && (
-                                        <div className="px-4 pb-4 pt-1 text-zinc-500 text-xs leading-relaxed animate-fade-in">
+                                        <div className="px-4 pb-4 pt-1 text-[var(--text-muted)] text-xs leading-relaxed animate-fade-in">
                                             {faq.a}
                                         </div>
                                     )}
@@ -240,10 +238,10 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                 {/* 200 Ticket Visual Pool */}
                 <div className="mb-8">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-white font-black text-lg uppercase tracking-tight flex items-center gap-2">
+                        <h3 className="text-[var(--text-primary)] font-black text-lg uppercase tracking-tight flex items-center gap-2">
                             <Users className="w-5 h-5 text-purple-400" /> Bilet Havuzu
                         </h3>
-                        <div className="text-zinc-500 text-xs font-bold bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-full">
+                        <div className="text-[var(--text-muted)] text-xs font-bold bg-[var(--bg-input)] border border-[var(--border-subtle)] px-3 py-1 rounded-full">
                             {totalSold} / {TOTAL_POOL_SIZE} Satıldı
                         </div>
                     </div>
@@ -256,7 +254,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                                     onClick={() => !isSold && handleSelectSlot(index)}
                                     className={`relative aspect-[2/1] rounded flex items-center justify-center overflow-hidden transition-all duration-300
                                         ${isSold ? (slot.isMe ? 'bg-purple-500 border border-purple-400 z-10 scale-105 shadow-[0_0_15px_rgba(168,85,247,0.5)]' : 'bg-[#f0b90b]/20 border border-[#f0b90b]/30')
-                                            : loyalty.pendingTickets > 0 ? 'bg-zinc-800 border border-purple-500/50 cursor-pointer hover:bg-purple-500/20 hover:border-purple-400 animate-pulse' : 'bg-zinc-900 border border-zinc-800/50'}
+                                            : loyalty.pendingTickets > 0 ? 'bg-[var(--bg-input)] border border-purple-500/50 cursor-pointer hover:bg-purple-500/20 hover:border-purple-400 animate-pulse' : 'bg-[var(--bg-elevated)] border border-[var(--border-subtle)]'}
                                     `}
                                 >
                                     {/* background texture */}
@@ -265,12 +263,12 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                                     )}
 
                                     {/* perforation holes */}
-                                    <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#060606]"></div>
-                                    <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#060606]"></div>
+                                    <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[var(--bg-main)]"></div>
+                                    <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[var(--bg-main)]"></div>
 
                                     {/* content */}
                                     <span className={`relative z-10 text-[8px] sm:text-[9px] font-black tracking-tighter w-full text-center truncate px-2
-                                        ${isSold ? (slot.isMe ? 'text-white drop-shadow-md' : 'text-[#f0b90b]') : 'text-zinc-700'}`}>
+                                        ${isSold ? (slot.isMe ? 'text-white drop-shadow-md' : 'text-[#f0b90b]') : 'text-[var(--text-dim)]'}`}>
                                         {isSold ? (
                                             slot.isMe ? 'SİZ' : slot.username.length > 5 ? slot.username.substring(0, 4) + '..' : slot.username
                                         ) : index + 1}
@@ -282,19 +280,19 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                 </div>
 
                 {/* Raffle Prizes */}
-                <div className="p-4 rounded-2xl mb-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <h3 className="text-white font-black text-sm uppercase tracking-widest mb-3 flex items-center gap-2">
+                <div className="p-4 rounded-2xl mb-4 bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                    <h3 className="text-[var(--text-primary)] font-black text-sm uppercase tracking-widest mb-3 flex items-center gap-2">
                         <Trophy className="w-4 h-4 text-[#f0b90b]" /> Çekiliş Ödülleri
                     </h3>
                     <div className="space-y-2">
                         {rafflePrizes.map((p, i) => (
-                            <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
-                                style={{ background: i === 0 ? `${p.color}0c` : 'rgba(0,0,0,0.2)', border: `1px solid ${i === 0 ? `${p.color}22` : 'rgba(255,255,255,0.04)'}` }}>
+                            <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl border"
+                                style={{ background: i === 0 ? `${p.color}0c` : 'var(--bg-input)', borderColor: i === 0 ? `${p.color}22` : 'var(--border-subtle)' }}>
                                 <span className="text-2xl">{p.emoji}</span>
                                 <div className="flex-1">
-                                    <span className="text-white font-black text-sm">{p.prize}</span>
+                                    <span className="text-[var(--text-primary)] font-black text-sm">{p.prize}</span>
                                 </div>
-                                <span className="text-zinc-700 font-black text-xs">{p.rank}</span>
+                                <span className="text-[var(--text-dim)] font-black text-xs">{p.rank}</span>
                             </div>
                         ))}
                     </div>
@@ -302,17 +300,17 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
 
                 {/* Ticket history */}
                 {ticketTransactions.length > 0 && (
-                    <div className="p-4 rounded-2xl" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <h3 className="text-white font-black text-sm uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-zinc-500" /> Bilet Geçmişi
+                    <div className="p-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                        <h3 className="text-[var(--text-primary)] font-black text-sm uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-[var(--text-muted)]" /> Bilet Geçmişi
                         </h3>
                         <div className="space-y-2">
                             {ticketTransactions.slice(0, 10).map(tx => (
-                                <div key={tx.id} className="flex items-center gap-3 px-3 py-2 rounded-xl" style={{ background: 'rgba(0,0,0,0.3)' }}>
+                                <div key={tx.id} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-[var(--bg-input)]">
                                     <Ticket className="w-4 h-4 text-purple-400 flex-shrink-0" />
                                     <div className="flex-1 min-w-0">
-                                        <div className="text-white font-bold text-xs truncate">{tx.reason}</div>
-                                        <div className="text-zinc-700 text-[10px]">{new Date(tx.timestamp).toLocaleString('tr-TR')}</div>
+                                        <div className="text-[var(--text-primary)] font-bold text-xs truncate">{tx.reason}</div>
+                                        <div className="text-[var(--text-dim)] text-[10px]">{new Date(tx.timestamp).toLocaleString('tr-TR')}</div>
                                     </div>
                                     <span className="text-purple-400 font-black text-sm">+{tx.tickets} 🎟️</span>
                                 </div>
@@ -322,10 +320,10 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                 )}
 
                 {/* Next draw countdown placeholder */}
-                <div className="mt-4 p-4 rounded-2xl text-center" style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)' }}>
-                    <div className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Sonraki Çekiliş</div>
+                <div className="mt-4 p-4 rounded-2xl text-center bg-purple-500/5 border border-purple-500/20">
+                    <div className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em] mb-1">Sonraki Çekiliş</div>
                     <div className="text-purple-400 font-black text-xl">Yakında Duyurulacak</div>
-                    <div className="text-zinc-700 text-xs mt-1 font-bold">Biletlerinizi biriktirmeye devam edin!</div>
+                    <div className="text-[var(--text-dim)] text-xs mt-1 font-bold">Biletlerinizi biriktirmeye devam edin!</div>
                 </div>
             </div>
         </div>

@@ -26,14 +26,46 @@ export function seedEcosystemData() {
         { home: 'ATLETİCO MADRİD', away: 'TOTTENHAM', league: 'Şampiyonlar Ligi', date: '2026-03-10', time: '23:00', sport: 'Futbol' },
     ];
 
-    // ─── 1. SEED POOL ──────────────────────────────────────────────────────────
-    const poolMatches: PoolMatch[] = matches.map((m, i) => ({
-        id: `pm-${i}`,
-        homeTeam: m.home,
-        awayTeam: m.away,
-        league: m.league,
-        matchDate: `${m.date} ${m.time}`,
-    }));
+    // Analysis data per match for the 724TOTO analysis panel
+    const analysisData: Record<string, { homeForm: ('W' | 'D' | 'L')[], awayForm: ('W' | 'D' | 'L')[], homeWinPct: number, awayWinPct: number, missingHome: string, missingAway: string, comment: string }> = {
+        'WOLVES-LIVERPOOL': { homeForm: ['L', 'D', 'W', 'L', 'D'], awayForm: ['W', 'W', 'W', 'D', 'W'], homeWinPct: 28, awayWinPct: 62, missingHome: 'Neto, Kalajdžić sakatlıkları devam ediyor', missingAway: 'Jota diz sakatlığı, Konaté belirsiz', comment: 'Liverpool deplasman formunda çok güçlü, Wolves zorlanacak' },
+        'ASTON VILLA-CHELSEA': { homeForm: ['W', 'W', 'D', 'W', 'L'], awayForm: ['W', 'D', 'L', 'W', 'W'], homeWinPct: 48, awayWinPct: 42, missingHome: 'Digne cezalı, Bailey belirsiz', missingAway: 'Reece James uzun süreli sakat', comment: 'Dengeli maç, Villa evinde hafif favori' },
+        'NEWCASTLE-MAN. UNITED': { homeForm: ['W', 'W', 'W', 'D', 'W'], awayForm: ['L', 'D', 'L', 'W', 'L'], homeWinPct: 65, awayWinPct: 22, missingHome: 'Wilson diz sakatlığı', missingAway: 'Shaw, Mount ve Lindelöf sakat', comment: 'Newcastle ev sahibi avantajıyla net favori' },
+        'FENERBAHÇE BEKO-MONACO': { homeForm: ['W', 'L', 'W', 'W', 'D'], awayForm: ['W', 'W', 'L', 'D', 'W'], homeWinPct: 55, awayWinPct: 40, missingHome: 'Hayes dizden sakat', missingAway: 'Okobo belirsiz', comment: 'EuroLeague kritik maç, Fener evinde güçlü' },
+        'BAYERN MÜNİH-GLADBACH': { homeForm: ['W', 'W', 'W', 'W', 'D'], awayForm: ['L', 'D', 'L', 'W', 'L'], homeWinPct: 78, awayWinPct: 12, missingHome: 'Goretzka kas sakatlığı', missingAway: 'Plea ve Thuram sakat', comment: 'Bayern evinde dominant, yüksek skor bekleniyor' },
+        'PSG-MONACO': { homeForm: ['W', 'D', 'W', 'W', 'W'], awayForm: ['W', 'W', 'D', 'L', 'W'], homeWinPct: 58, awayWinPct: 30, missingHome: 'Ramos cezalı', missingAway: 'Ben Yedder kas sorunu', comment: 'Fransız Ligue 1 derbisi, bol gol bekleniyor' },
+        'OLYMPIACOS-PANATHİNAİKOS': { homeForm: ['W', 'W', 'L', 'W', 'W'], awayForm: ['D', 'W', 'W', 'L', 'D'], homeWinPct: 52, awayWinPct: 38, missingHome: 'El Arabi sakatlık', missingAway: 'Juankar cezalı', comment: 'Yunan derbisinde sürpriz her zaman mümkün' },
+        'ATLETİCO MADRİD-R. SOCİEDAD': { homeForm: ['W', 'D', 'W', 'D', 'W'], awayForm: ['D', 'L', 'W', 'W', 'D'], homeWinPct: 50, awayWinPct: 30, missingHome: 'Savic kas problemi', missingAway: 'Merino cezalı', comment: 'Atletico evinde çok sağlam, alt gollü maç' },
+        'ATHLETİC BİLBAO-BARCELONA': { homeForm: ['W', 'D', 'W', 'L', 'W'], awayForm: ['W', 'W', 'W', 'D', 'W'], homeWinPct: 38, awayWinPct: 50, missingHome: 'Berenguer belirsiz', missingAway: 'Araujo uzun süreli sakat', comment: 'San Mames zor deplasman ama Barça çok formda' },
+        'MİAMİ HEAT-BROOKLYN NETS': { homeForm: ['W', 'L', 'W', 'W', 'D'], awayForm: ['L', 'L', 'W', 'L', 'L'], homeWinPct: 68, awayWinPct: 22, missingHome: 'Herro belirsiz', missingAway: 'Simmons sezonu kapattı', comment: 'Heat evinde rahat kazanır, Nets çok zayıf' },
+        'AC MİLAN-İNTER': { homeForm: ['W', 'D', 'L', 'W', 'W'], awayForm: ['W', 'W', 'W', 'D', 'W'], homeWinPct: 38, awayWinPct: 48, missingHome: 'Bennacer uzun süreli sakat', missingAway: 'Acerbi belirsiz', comment: 'Milano derbisi tahmin edilemez, KG VAR güçlü' },
+        'DALLAS MAVERİCKS-PHOENİX SUNS': { homeForm: ['W', 'W', 'D', 'W', 'L'], awayForm: ['W', 'L', 'W', 'W', 'W'], homeWinPct: 52, awayWinPct: 45, missingHome: 'Hardaway Jr. diz sakatlığı', missingAway: 'Nurkic belirsiz', comment: 'Doncic vs Durant, yüksek skorlu maç bekleniyor' },
+        'GALATASARAY-LİVERPOOL': { homeForm: ['W', 'W', 'D', 'W', 'L'], awayForm: ['W', 'W', 'W', 'W', 'D'], homeWinPct: 30, awayWinPct: 55, missingHome: 'Torreira cezalı', missingAway: 'Diaz kas sakatlığı', comment: 'GS taraftar avantajıyla sürpriz yapabilir' },
+        'NEWCASTLE-BARCELONA': { homeForm: ['W', 'W', 'W', 'D', 'W'], awayForm: ['W', 'W', 'W', 'D', 'W'], homeWinPct: 42, awayWinPct: 48, missingHome: 'Wilson uzun süreli sakat', missingAway: 'Christensen belirsiz', comment: 'İki güçlü takım, açık ve gollü maç' },
+        'ATLETİCO MADRİD-TOTTENHAM': { homeForm: ['W', 'D', 'W', 'D', 'W'], awayForm: ['W', 'L', 'W', 'W', 'D'], homeWinPct: 45, awayWinPct: 35, missingHome: 'Hermoso cezalı', missingAway: 'Romero diz sakatlığı', comment: 'Simeone taktik savaşını kazanır, düşük gollü' },
+    };
+
+    const poolMatches: PoolMatch[] = matches.map((m, i) => {
+        const key = `${m.home}-${m.away}`;
+        const ad = analysisData[key];
+        return {
+            id: `pm-${i}`,
+            homeTeam: m.home,
+            awayTeam: m.away,
+            league: m.league,
+            matchDate: `${m.date} ${m.time}`,
+            ...(ad ? {
+                analysis: {
+                    homeForm: ad.homeForm,
+                    awayForm: ad.awayForm,
+                    homeWinPct: ad.homeWinPct,
+                    awayWinPct: ad.awayWinPct,
+                    missingPlayers: { home: ad.missingHome, away: ad.missingAway },
+                    editorComment: ad.comment,
+                }
+            } : {}),
+        };
+    });
 
     const poolConfig: PoolConfig = {
         id: 'pool-seed-1',

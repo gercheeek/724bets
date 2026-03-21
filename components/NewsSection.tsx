@@ -61,10 +61,10 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                         </div>
                         <span className="text-[#f0b90b] text-[10px] font-black uppercase tracking-[0.3em]">GÜNCEL HABERLER</span>
                     </div>
-                    <h2 className="text-[32px] md:text-[40px] font-black text-white italic uppercase tracking-tighter leading-none">
+                    <h2 className="text-[32px] md:text-[40px] font-black italic uppercase tracking-tighter leading-none" style={{ color: 'var(--text-primary)' }}>
                         SON SPOR <span className="text-[#f0b90b]">HABERLERİ</span>
                     </h2>
-                    <p className="text-zinc-600 text-xs font-bold mt-2 max-w-md">
+                    <p className="text-xs font-bold mt-2 max-w-md" style={{ color: 'var(--text-dim)' }}>
                         Spor dünyasından en güncel gelişmeler, transfer haberleri ve maç analizleri
                     </p>
                 </div>
@@ -84,9 +84,9 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                     onClick={() => onArticleClick?.(featured.id)}
                     className="lg:col-span-3 news-card news-featured group cursor-pointer rounded-2xl overflow-hidden relative"
                     style={{
-                        background: 'linear-gradient(180deg, #111113 0%, #0a0a0c 100%)',
-                        border: '1px solid rgba(255,255,255,0.06)',
-                        boxShadow: '0 4px 30px rgba(0,0,0,0.5)',
+                        background: 'var(--bg-card)',
+                        border: '1px solid var(--border-subtle)',
+                        boxShadow: 'var(--shadow-card)',
                     }}
                 >
                     <div className="relative overflow-hidden" style={{ height: '320px' }}>
@@ -96,7 +96,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                             loading="lazy"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/40 to-transparent" />
                         <span
                             className="absolute top-4 left-4 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white badge-pulse"
                             style={{ background: getCategoryColor(featured.category), boxShadow: `0 0 15px ${getCategoryColor(featured.category)}50` }}
@@ -123,7 +123,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                             </div>
                         </div>
                         {/* Hover CTA */}
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#1A1A1A]/30">
                             <span className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-black bg-[#f0b90b] shadow-lg shadow-[#f0b90b]/20">
                                 Haberi Oku →
                             </span>
@@ -139,9 +139,9 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                             onClick={() => onArticleClick?.(article.id)}
                             className="news-card group cursor-pointer rounded-2xl overflow-hidden flex-1"
                             style={{
-                                background: 'linear-gradient(180deg, #111113 0%, #0a0a0c 100%)',
-                                border: '1px solid rgba(255,255,255,0.06)',
-                                boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+                                background: 'var(--bg-card)',
+                                border: '1px solid var(--border-subtle)',
+                                boxShadow: 'var(--shadow-card)',
                             }}
                         >
                             <div className="relative overflow-hidden" style={{ height: '140px' }}>
@@ -151,7 +151,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                                     loading="lazy"
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/70 via-transparent to-transparent" />
                                 <span
                                     className="absolute top-3 left-3 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-white"
                                     style={{ background: getCategoryColor(article.category) }}
@@ -160,10 +160,10 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                                 </span>
                             </div>
                             <div className="p-4">
-                                <h3 className="text-white font-black text-sm leading-snug mb-2 line-clamp-2 group-hover:text-[#f0b90b] transition-colors">
+                                <h3 className="font-black text-sm leading-snug mb-2 line-clamp-2 group-hover:text-[#f0b90b] transition-colors" style={{ color: 'var(--text-primary)' }}>
                                     {article.title}
                                 </h3>
-                                <div className="flex items-center gap-3 text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
+                                <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>
                                     <span className="flex items-center gap-1"><Clock className="w-2.5 h-2.5" />{formatDate(article.createdAt)}</span>
                                     <span className="flex items-center gap-1"><Eye className="w-2.5 h-2.5" />{article.views.toLocaleString('tr')}</span>
                                 </div>
@@ -182,8 +182,8 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                             onClick={() => onArticleClick?.(article.id)}
                             className="news-card group cursor-pointer rounded-xl overflow-hidden"
                             style={{
-                                background: 'linear-gradient(180deg, #111113 0%, #0a0a0c 100%)',
-                                border: '1px solid rgba(255,255,255,0.06)',
+                                background: 'var(--bg-card)',
+                                border: '1px solid var(--border-subtle)',
                             }}
                         >
                             <div className="relative overflow-hidden" style={{ height: '120px' }}>
@@ -193,7 +193,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                                     loading="lazy"
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/60 to-transparent" />
                                 <span
                                     className="absolute top-2 left-2 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white"
                                     style={{ background: getCategoryColor(article.category) }}
@@ -202,10 +202,10 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                                 </span>
                             </div>
                             <div className="p-3">
-                                <h3 className="text-white font-bold text-xs leading-snug mb-1 line-clamp-2 group-hover:text-[#f0b90b] transition-colors">
+                                <h3 className="font-bold text-xs leading-snug mb-1 line-clamp-2 group-hover:text-[#f0b90b] transition-colors" style={{ color: 'var(--text-primary)' }}>
                                     {article.title}
                                 </h3>
-                                <span className="text-zinc-600 text-[9px] font-bold">{formatDate(article.createdAt)}</span>
+                                <span className="text-[9px] font-bold" style={{ color: 'var(--text-dim)' }}>{formatDate(article.createdAt)}</span>
                             </div>
                         </article>
                     ))}
@@ -224,12 +224,12 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
             </div>
 
             {/* Engagement Banner */}
-            <div className="mt-10 p-6 rounded-2xl border border-zinc-800/60 bg-gradient-to-r from-[#0f0e04]/60 via-transparent to-[#0f0e04]/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="mt-10 p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)' }}>
                 <div className="flex items-center gap-4">
                     <div className="text-3xl">🏆</div>
                     <div>
-                        <p className="text-white font-black text-sm">Günlük Spor Haberleri</p>
-                        <p className="text-zinc-500 text-xs">Her gün güncellenen haber ve analizlerle bilgi sahibi olun</p>
+                        <p className="font-black text-sm" style={{ color: 'var(--text-primary)' }}>Günlük Spor Haberleri</p>
+                        <p className="text-xs" style={{ color: 'var(--text-dim)' }}>Her gün güncellenen haber ve analizlerle bilgi sahibi olun</p>
                     </div>
                 </div>
                 <button

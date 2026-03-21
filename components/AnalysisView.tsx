@@ -84,7 +84,6 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
     return (
         <div
             className="w-full min-h-screen font-sans overflow-x-hidden pb-20 relative transition-all duration-700"
-            style={{ background: selectedSport === 'Futbol' ? 'linear-gradient(180deg, #0a120a 0%, #0e0e0e 15%, #0e0e0e 100%)' : 'linear-gradient(180deg, #120a06 0%, #0e0e0e 15%, #0e0e0e 100%)' }}
         >
             {/* Sport-Themed Ambient Glow */}
             <div
@@ -105,7 +104,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                         onClick={() => { setSelectedSport('Futbol'); setSelectedLeague('TÜMÜ'); }}
                         className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Futbol'
                             ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
-                            : 'bg-zinc-900 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                             }`}
                     >
                         <span className="text-xl">⚽</span> Futbol
@@ -114,7 +113,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                         onClick={() => { setSelectedSport('Basketbol'); setSelectedLeague('TÜMÜ'); }}
                         className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Basketbol'
                             ? 'bg-[#E4510B] text-white shadow-[0_0_25px_rgba(228,81,11,0.3)] scale-105'
-                            : 'bg-zinc-900 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                             }`}
                     >
                         <span className="text-xl">🏀</span> Basketbol
@@ -130,7 +129,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                         }}
                         className={`flex flex-col items-center justify-center min-w-[80px] h-[52px] rounded-lg transition-all duration-300 ${selectedDate === 'WEEKLY'
                             ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)] scale-105'
-                            : 'bg-[#0a0a0a] border border-white/5 text-[#f0b90b] hover:border-[#f0b90b]/50'
+                            : 'bg-[var(--bg-card)] border-[var(--border-subtle)] border text-[#f0b90b] hover:border-[#f0b90b]/50'
                             }`}
                     >
                         <span className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">TÜM</span>
@@ -150,11 +149,11 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                 }}
                                 className={`flex flex-col items-center justify-center min-w-[80px] h-[52px] rounded-lg transition-all duration-300 ${isSelected
                                     ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)] scale-105'
-                                    : 'bg-[#0a0a0a] border border-white/5 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'
+                                    : 'bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--text-dim)] hover:text-[var(--text-primary)]'
                                     }`}
                             >
-                                <span className={`text-[8px] font-black uppercase tracking-widest leading-none mb-1 ${isSelected ? 'text-black' : 'text-zinc-500'}`}>{dayName}</span>
-                                <span className={`text-[11px] font-black leading-none ${isSelected ? 'text-black' : 'text-zinc-300'}`}>{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
+                                <span className={`text-[8px] font-black uppercase tracking-widest leading-none mb-1 ${isSelected ? 'text-black' : 'text-[var(--text-muted)]'}`}>{dayName}</span>
+                                <span className={`text-[11px] font-black leading-none ${isSelected ? 'text-black' : 'text-[var(--text-primary)]'}`}>{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
                             </button>
                         );
                     })}
@@ -165,7 +164,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                     <h2 className="text-[36px] md:text-[42px] font-black italic uppercase tracking-[-0.03em] text-[#f0b90b] mb-1">
                         ANALİZLER
                     </h2>
-                    <p className="text-zinc-600 font-bold uppercase text-[9px] tracking-[0.2em]">
+                    <p className="text-[var(--text-dim)] font-bold uppercase text-[9px] tracking-[0.2em]">
                         YAPAY ZEKA VE EDİTÖR ONAYLI TÜM MAÇ ANALİZLERİ
                     </p>
                 </div>
@@ -178,7 +177,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                             onClick={() => setSelectedLeague(league)}
                             className={`px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all duration-300 whitespace-nowrap ${selectedLeague === league
                                 ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)]'
-                                : 'bg-transparent border-zinc-800/80 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300'
+                                : 'bg-transparent border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-hover)] hover:text-[var(--text-primary)]'
                                 }`}
                         >
                             {league}
@@ -196,13 +195,13 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                     return (
                         <div key={leagueName} className="space-y-4">
                             {/* League Section Header */}
-                            <div className="flex items-center gap-3 px-2 border-b border-white/5 pb-2">
+                            <div className="flex items-center gap-3 px-2 border-b border-[var(--border-subtle)] pb-2">
                                 <div className={`w-1 h-3.5 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#f0b90b]'}`}></div>
-                                <h3 className="text-white font-black text-xs md:text-sm uppercase tracking-widest">{leagueName}</h3>
+                                <h3 className="text-[var(--text-primary)] font-black text-xs md:text-sm uppercase tracking-widest">{leagueName}</h3>
                             </div>
 
                             {/* Desktop Header */}
-                            <div className="hidden md:grid grid-cols-12 gap-3 px-6 py-1 text-[8px] font-black text-zinc-600 uppercase tracking-widest border-b border-transparent">
+                            <div className="hidden md:grid grid-cols-12 gap-3 px-6 py-1 text-[8px] font-black text-[var(--text-muted)] uppercase tracking-widest border-b border-transparent">
                                 <div className="col-span-1">SAAT</div>
                                 <div className="col-span-4 pl-8">MAÇ</div>
                                 <div className="col-span-3 text-center">TAHMİN</div>
@@ -225,15 +224,15 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                     return (
                                         <div key={analysis.id} className="relative">
                                             {/* Blurred preview */}
-                                            <div className="bg-[#060606] border-b border-white/5 px-5 py-4 md:py-0 md:h-[60px] flex flex-col md:grid md:grid-cols-12 items-center gap-3 select-none" style={{ filter: 'blur(5px)', userSelect: 'none' }}>
-                                                <div className="col-span-1 text-zinc-600 text-[11px] font-black">{analysis.matchTime}</div>
+                                            <div className="bg-[var(--bg-card)] border-b border-[var(--border-subtle)] px-5 py-4 md:py-0 md:h-[60px] flex flex-col md:grid md:grid-cols-12 items-center gap-3 select-none" style={{ filter: 'blur(5px)', userSelect: 'none' }}>
+                                                <div className="col-span-1 text-[var(--text-muted)] text-[11px] font-black">{analysis.matchTime}</div>
                                                 <div className="col-span-4 flex items-center gap-2 pl-0 md:pl-8">
-                                                    <div className="text-xs font-black text-white truncate">{analysis.homeTeam} - {analysis.awayTeam}</div>
+                                                    <div className="text-xs font-black text-[var(--text-primary)] truncate">{analysis.homeTeam} - {analysis.awayTeam}</div>
                                                 </div>
                                                 <div className="col-span-3 text-center">
-                                                    <span className="px-3 py-1 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-black text-zinc-500">{analysis.prediction}</span>
+                                                    <span className="px-3 py-1 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded text-[10px] font-black text-[var(--text-muted)]">{analysis.prediction}</span>
                                                 </div>
-                                                <div className="col-span-1 text-center text-[11px] font-black text-zinc-600">{analysis.confidence}%</div>
+                                                <div className="col-span-1 text-center text-[11px] font-black text-[var(--text-muted)]">{analysis.confidence}%</div>
                                             </div>
                                             {/* Lock overlay */}
                                             <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[1px]">
@@ -252,7 +251,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                 return (
                                     <div
                                         key={analysis.id}
-                                        className={`bg-[#060606] border-b border-white/5 transition-colors duration-200 ${isExpanded ? borderGlowClassName : `hover:bg-[#0a0a0a]`}`}
+                                        className={`bg-[var(--bg-card)] border-b border-[var(--border-subtle)] transition-colors duration-200 ${isExpanded ? borderGlowClassName : `hover:bg-[var(--bg-card-hover)]`}`}
                                     >
                                         {/* Row (Compact Desktop) */}
                                         <div
@@ -262,21 +261,21 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                             {/* Mobile Header / Desktop Time */}
                                             <div className="col-span-1 flex items-center justify-between w-full md:w-auto">
                                                 <div className="flex items-center gap-2">
-                                                    <Clock className="w-3.5 h-3.5 text-zinc-600 md:hidden" />
+                                                    <Clock className="w-3.5 h-3.5 text-[var(--text-muted)] md:hidden" />
                                                     <span className="text-[#f0b90b] font-black text-[11px] md:text-xs tracking-wide">
                                                         {selectedDate === 'WEEKLY' && <span className="text-[#f0b90b] mr-2">{new Date(analysis.matchDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>}
                                                         {analysis.matchTime}
                                                     </span>
                                                 </div>
                                                 <div className="md:hidden">
-                                                    {isExpanded ? <ChevronUp className="w-4 h-4 text-[#f0b90b]" /> : <ChevronDown className="w-4 h-4 text-zinc-600" />}
+                                                    {isExpanded ? <ChevronUp className="w-4 h-4 text-[#f0b90b]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                                                 </div>
                                             </div>
 
                                             {/* Match Name */}
                                             <div className="col-span-4 w-full md:w-auto pl-0 md:pl-8">
-                                                <h3 className="text-white font-black text-[13px] tracking-tight uppercase italic truncate">
-                                                    {analysis.homeTeam} <span className="text-zinc-600 font-medium mx-1 not-italic text-[10px] uppercase">VS</span> {analysis.awayTeam}
+                                                <h3 className="text-[var(--text-primary)] font-black text-[13px] tracking-tight uppercase italic truncate">
+                                                    {analysis.homeTeam} <span className="text-[var(--text-muted)] font-medium mx-1 not-italic text-[10px] uppercase">VS</span> {analysis.awayTeam}
                                                 </h3>
                                             </div>
 
@@ -288,39 +287,39 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                             </div>
 
                                             {/* Odds Columns (Desktop Only) */}
-                                            <div className="hidden md:flex col-span-1 justify-center border-l border-zinc-800/20 py-1">
+                                            <div className="hidden md:flex col-span-1 justify-center border-l border-[var(--border-subtle)] py-1">
                                                 <span className="text-[#f0b90b] font-black text-[13px]">{highestOdds.odd1}</span>
                                             </div>
-                                            <div className="hidden md:flex col-span-1 justify-center border-l border-zinc-800/20 py-1">
+                                            <div className="hidden md:flex col-span-1 justify-center border-l border-[var(--border-subtle)] py-1">
                                                 <span className="text-[#f0b90b] font-black text-[13px]">{highestOdds.odd2}</span>
                                             </div>
 
                                             {/* Mobile Bottom Row */}
-                                            <div className="flex md:hidden w-full items-center justify-between pt-3 border-t border-zinc-900/50 mt-1">
+                                            <div className="flex md:hidden w-full items-center justify-between pt-3 border-t border-[var(--border-subtle)] mt-1">
                                                 <div className="flex gap-4">
                                                     <div className="flex flex-col">
-                                                        <span className="text-zinc-600 text-[8px] font-black uppercase tracking-widest">KG VAR</span>
+                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase tracking-widest">KG VAR</span>
                                                         <span className="text-[#f0b90b] font-black text-xs mt-0.5">{highestOdds.odd1}</span>
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className="text-zinc-600 text-[8px] font-black uppercase tracking-widest">2.5 ÜST</span>
+                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase tracking-widest">2.5 ÜST</span>
                                                         <span className="text-[#f0b90b] font-black text-xs mt-0.5">{highestOdds.odd2}</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col items-end">
-                                                    <span className="text-zinc-600 text-[8px] font-black uppercase tracking-widest">GÜVEN</span>
-                                                    <span className="text-white font-black text-xs mt-0.5">%{analysis.confidence}</span>
+                                                    <span className="text-[var(--text-muted)] text-[8px] font-black uppercase tracking-widest">GÜVEN</span>
+                                                    <span className="text-[var(--text-primary)] font-black text-xs mt-0.5">%{analysis.confidence}</span>
                                                 </div>
                                             </div>
 
                                             {/* Confidence (Desktop Only) */}
                                             <div className="hidden md:flex col-span-1 items-center justify-center">
-                                                <span className="text-white font-black text-[12px]">%{analysis.confidence}</span>
+                                                <span className="text-[var(--text-primary)] font-black text-[12px]">%{analysis.confidence}</span>
                                             </div>
 
                                             {/* Actions (Desktop Only) */}
                                             <div className="hidden md:flex col-span-1 justify-end pr-2">
-                                                <div className={`p-1 transition-colors ${isExpanded ? 'text-[#f0b90b]' : 'text-zinc-600 group-hover:text-zinc-400'}`}>
+                                                <div className={`p-1 transition-colors ${isExpanded ? 'text-[#f0b90b]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'}`}>
                                                     {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                                                 </div>
                                             </div>
@@ -328,17 +327,17 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
 
                                         {/* Accordion Content */}
                                         {isExpanded && (
-                                            <div className="border-t border-[#f0b90b]/20 bg-[#151515] p-6 animate-fade-in">
+                                            <div className="border-t border-[#f0b90b]/20 bg-[var(--bg-elevated)] p-6 animate-fade-in">
                                                 <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
                                                     {/* Left: Editor Analysis (60%) */}
                                                     <div className="lg:col-span-6 space-y-6">
                                                         <div className="flex items-center justify-between mb-4">
                                                             <div className="flex items-center gap-2">
                                                                 <div className="w-1 h-4 bg-[#f0b90b]"></div>
-                                                                <h4 className="text-white font-black text-[11px] uppercase tracking-widest italic">EDİTÖR DETAYLI ANALİZİ</h4>
+                                                                <h4 className="text-[var(--text-primary)] font-black text-[11px] uppercase tracking-widest italic">EDİTÖR DETAYLI ANALİZİ</h4>
                                                             </div>
-                                                            <div className="flex items-center gap-1.5 px-3 py-1 bg-[#1a160b]/50 border border-[#f0b90b]/30 rounded-[4px] shadow-[inset_0_1px_4px_rgba(240,185,11,0.1)]">
-                                                                <User className="w-3.5 h-3.5 text-zinc-500" />
+                                                            <div className="flex items-center gap-1.5 px-3 py-1 bg-[var(--bg-card)] border border-[#f0b90b]/30 rounded-[4px] shadow-[inset_0_1px_4px_rgba(240,185,11,0.1)]">
+                                                                <User className="w-3.5 h-3.5 text-[var(--text-muted)]" />
                                                                 <span className="text-[10px] font-black text-[#f0b90b] tracking-widest uppercase">
                                                                     {analysis.editorId === 'admin' ? 'YÖNETİCİ' : analysis.editorId ? analysis.editorId : 'EDİTÖR'}
                                                                 </span>
@@ -349,29 +348,29 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                                             <div className="space-y-2">
                                                                 <div className="flex items-center gap-2">
                                                                     <Search className="w-3.5 h-3.5 text-[#f0b90b]" />
-                                                                    <span className="text-zinc-400 font-black text-[9px] uppercase tracking-widest">TAKTİK ÖZET</span>
+                                                                    <span className="text-[var(--text-dim)] font-black text-[9px] uppercase tracking-widest">TAKTİK ÖZET</span>
                                                                 </div>
-                                                                <p className="text-white/80 text-[13px] leading-relaxed italic pl-5.5 border-l border-zinc-800 ml-1.5">{analysis.tacticalSummary}</p>
+                                                                <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic pl-5.5 border-l border-[var(--border-subtle)] ml-1.5">{analysis.tacticalSummary}</p>
                                                             </div>
 
                                                             <div className="space-y-2">
                                                                 <div className="flex items-center gap-2">
                                                                     <Zap className="w-3.5 h-3.5 text-[#f0b90b]" />
-                                                                    <span className="text-zinc-400 font-black text-[9px] uppercase tracking-widest">MAÇIN KIRILMA ANI</span>
+                                                                    <span className="text-[var(--text-dim)] font-black text-[9px] uppercase tracking-widest">MAÇIN KIRILMA ANI</span>
                                                                 </div>
-                                                                <p className="text-white/80 text-[13px] leading-relaxed italic pl-5.5 border-l border-zinc-800 ml-1.5">{analysis.breakingPoint}</p>
+                                                                <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic pl-5.5 border-l border-[var(--border-subtle)] ml-1.5">{analysis.breakingPoint}</p>
                                                             </div>
 
                                                             <div className="space-y-2">
                                                                 <div className="flex items-center gap-2">
                                                                     <Target className="w-3.5 h-3.5 text-[#f0b90b]" />
-                                                                    <span className="text-zinc-400 font-black text-[9px] uppercase tracking-widest">BAHİS SENARYOSU</span>
+                                                                    <span className="text-[var(--text-dim)] font-black text-[9px] uppercase tracking-widest">BAHİS SENARYOSU</span>
                                                                 </div>
                                                                 {isLoggedIn ? (
-                                                                    <p className="text-white/80 text-[13px] leading-relaxed italic pl-5.5 border-l border-zinc-800 ml-1.5">{analysis.bettingScenario}</p>
+                                                                    <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic pl-5.5 border-l border-[var(--border-subtle)] ml-1.5">{analysis.bettingScenario}</p>
                                                                 ) : (
                                                                     <div className="relative">
-                                                                        <p className="text-white/80 text-[13px] leading-relaxed italic pl-5.5 border-l border-zinc-800 ml-1.5" style={{ filter: 'blur(5px)', userSelect: 'none' }}>{analysis.bettingScenario}</p>
+                                                                        <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic pl-5.5 border-l border-[var(--border-subtle)] ml-1.5" style={{ filter: 'blur(5px)', userSelect: 'none' }}>{analysis.bettingScenario}</p>
                                                                         <div className="absolute inset-0 flex items-center">
                                                                             <button onClick={onLoginRequired} className="flex items-center gap-1.5 px-3 py-1 bg-[#f0b90b] text-black font-black text-[9px] rounded-full uppercase tracking-widest hover:bg-[#f0b90b]/90 transition-all shadow-[0_0_12px_rgba(240,185,11,0.3)]">
                                                                                 <Lock className="w-3 h-3" /> Üye Ol, Gör
@@ -382,24 +381,24 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                                             </div>
                                                         </div>
 
-                                                        <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-tight pt-4">⏳ Oranlar maç saatine kadar değişebilir.</p>
+                                                        <p className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-tight pt-4">⏳ Oranlar maç saatine kadar değişebilir.</p>
                                                     </div>
 
                                                     {/* Right: Best Odds (40%) */}
                                                     {/* Right: Best Odds (40%) */}
-                                                    <div className="lg:col-span-4 lg:border-l lg:border-zinc-900 lg:pl-8">
+                                                    <div className="lg:col-span-4 lg:border-l lg:border-[var(--border-subtle)] lg:pl-8">
                                                         {isLoggedIn ? (
                                                             <>
                                                                 <div className="flex items-center gap-2 mb-6">
                                                                     <Flame className="w-4 h-4 text-[#f0b90b]" />
-                                                                    <h5 className="text-white font-black text-[11px] uppercase tracking-widest italic tracking-tight">EN İYİ ORANLAR</h5>
+                                                                    <h5 className="text-[var(--text-primary)] font-black text-[11px] uppercase tracking-widest italic tracking-tight">EN İYİ ORANLAR</h5>
                                                                 </div>
                                                                 <div className="space-y-3">
                                                                     {analysis.bookieOdds.map((bookie, bidx) => (
-                                                                        <div key={bidx} className={`p-4 rounded-lg bg-black border border-zinc-900 group/odd transition-all hover:border-[#f0b90b]/30 ${bookie.isHighest ? 'ring-1 ring-[#f0b90b]/30 shadow-[0_0_15px_rgba(240,185,11,0.05)]' : ''}`}>
+                                                                        <div key={bidx} className={`p-4 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)] group/odd transition-all hover:border-[#f0b90b]/30 ${bookie.isHighest ? 'ring-1 ring-[#f0b90b]/30 shadow-[0_0_15px_rgba(240,185,11,0.05)]' : ''}`}>
                                                                             <div className="flex items-center justify-between mb-3">
                                                                                 <div className="flex items-center gap-2">
-                                                                                    <span className="text-white font-black text-[12px] uppercase">{bookie.name}</span>
+                                                                                    <span className="text-[var(--text-primary)] font-black text-[12px] uppercase">{bookie.name}</span>
                                                                                     {bookie.isHighest && (
                                                                                         <span className="bg-[#f0b90b] text-black text-[7px] font-black px-1.5 py-0.5 rounded animate-pulse">EN YÜKSEK</span>
                                                                                     )}
@@ -408,11 +407,11 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                                                             <div className="flex items-center justify-between">
                                                                                 <div className="flex gap-4">
                                                                                     <div className="flex flex-col">
-                                                                                        <span className="text-zinc-600 text-[8px] font-black uppercase">KG VAR</span>
+                                                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase">KG VAR</span>
                                                                                         <span className="text-[#f0b90b] font-black text-sm">{bookie.odd1}</span>
                                                                                     </div>
                                                                                     <div className="flex flex-col">
-                                                                                        <span className="text-zinc-600 text-[8px] font-black uppercase">2.5 ÜST</span>
+                                                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase">2.5 ÜST</span>
                                                                                         <span className="text-[#f0b90b] font-black text-sm">{bookie.odd2}</span>
                                                                                     </div>
                                                                                 </div>
@@ -422,7 +421,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                                                                     rel="noopener noreferrer"
                                                                                     className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase transition-all ${bookie.isHighest
                                                                                         ? 'bg-[#f0b90b] text-black hover:shadow-[0_0_15px_rgba(240,185,11,0.5)] active:scale-95'
-                                                                                        : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800'
+                                                                                        : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                                                                                         }`}
                                                                                 >
                                                                                     {bookie.isHighest ? 'EN YÜKSEK ORAN' : 'ŞİMDİ OYNA'}
@@ -435,14 +434,14 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                                         ) : (
                                                             <div className="relative">
                                                                 <div className="flex items-center gap-2 mb-4">
-                                                                    <Flame className="w-4 h-4 text-zinc-600" />
-                                                                    <h5 className="text-zinc-500 font-black text-[11px] uppercase tracking-widest italic">EN İYİ ORANLAR</h5>
+                                                                    <Flame className="w-4 h-4 text-[var(--text-muted)]" />
+                                                                    <h5 className="text-[var(--text-muted)] font-black text-[11px] uppercase tracking-widest italic">EN İYİ ORANLAR</h5>
                                                                 </div>
                                                                 <div className="space-y-3" style={{ filter: 'blur(6px)', userSelect: 'none', pointerEvents: 'none' }}>
                                                                     {['REALBET', 'MARSBAHİS', 'BETS10'].map((name, i) => (
-                                                                        <div key={i} className="p-4 rounded-lg bg-black border border-zinc-900">
+                                                                        <div key={i} className="p-4 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                                                                             <div className="flex items-center justify-between mb-2">
-                                                                                <span className="text-white font-black text-[12px] uppercase">{name}</span>
+                                                                                <span className="text-[var(--text-primary)] font-black text-[12px] uppercase">{name}</span>
                                                                                 {i === 1 && <span className="bg-[#f0b90b] text-black text-[7px] font-black px-1.5 py-0.5 rounded">EN YÜKSEK</span>}
                                                                             </div>
                                                                             <div className="flex gap-4">
@@ -452,7 +451,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                                                         </div>
                                                                     ))}
                                                                 </div>
-                                                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl bg-black/50 backdrop-blur-[2px]">
+                                                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl bg-[var(--bg-overlay)] backdrop-blur-[2px]">
                                                                     <Lock className="w-6 h-6 text-[#f0b90b]" />
                                                                     <button
                                                                         onClick={onLoginRequired}
@@ -460,30 +459,30 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
                                                                     >
                                                                         Üye Ol, Oranları Gör
                                                                     </button>
-                                                                    <p className="text-zinc-500 text-[9px] font-bold uppercase tracking-widest">Canlı oran karşılaştırması</p>
+                                                                    <p className="text-[var(--text-muted)] text-[9px] font-bold uppercase tracking-widest">Canlı oran karşılaştırması</p>
                                                                 </div>
                                                             </div>
                                                         )}
                                                     </div>
 
                                                     {/* Footer Strip */}
-                                                    <div className="mt-8 pt-6 border-t border-zinc-900 flex flex-wrap items-center justify-between gap-4">
-                                                        <div className="flex items-center gap-4 text-zinc-500 text-[9px] font-black uppercase tracking-widest">
+                                                    <div className="mt-8 pt-6 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-4">
+                                                        <div className="flex items-center gap-4 text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">
                                                             <div className="flex items-center gap-1.5">
                                                                 <TrendingUp className="w-3 h-3 text-[#f0b90b]" />
-                                                                <span>Model: <span className="text-white">{analysis.modelScore}/100</span></span>
+                                                                <span>Model: <span className="text-[var(--text-primary)]">{analysis.modelScore}/100</span></span>
                                                             </div>
                                                             <div className="flex items-center gap-1.5">
                                                                 <Trophy className="w-3 h-3 text-[#f0b90b]" />
-                                                                <span>Son 10: <span className="text-white">{analysis.recentHistory}</span></span>
+                                                                <span>Son 10: <span className="text-[var(--text-primary)]">{analysis.recentHistory}</span></span>
                                                             </div>
                                                             <div className="flex items-center gap-1.5">
                                                                 <Target className="w-3 h-3 text-[#f0b90b]" />
-                                                                <span>xG: <span className="text-white">{analysis.expectedGoals}</span></span>
+                                                                <span>xG: <span className="text-[var(--text-primary)]">{analysis.expectedGoals}</span></span>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="text-[8px] text-zinc-700 font-bold uppercase">{new Date(analysis.createdAt).toLocaleDateString('tr-TR')} Güncellendi</div>
+                                                    <div className="text-[8px] text-[var(--text-dim)] font-bold uppercase">{new Date(analysis.createdAt).toLocaleDateString('tr-TR')} Güncellendi</div>
                                                 </div>
                                             </div>
                                         )}
@@ -496,8 +495,8 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = nu
 
                 {Object.keys(groupedAnalyses).length === 0 && (
                     <div className="py-20 text-center space-y-4">
-                        <AlertCircle className="w-12 h-12 text-zinc-800 mx-auto" />
-                        <p className="text-zinc-600 font-black text-xs uppercase tracking-widest">Seçili gün ve kategori için analiz bulunamadı.</p>
+                        <AlertCircle className="w-12 h-12 text-[var(--text-dim)] mx-auto" />
+                        <p className="text-[var(--text-muted)] font-black text-xs uppercase tracking-widest">Seçili gün ve kategori için analiz bulunamadı.</p>
                     </div>
                 )}
             </div>

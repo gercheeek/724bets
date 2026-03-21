@@ -387,6 +387,15 @@ export interface CoinRequest {
 }
 
 // ─── Pool (724TOTO) Sistemi ──────────────────────────────────────────────────
+export interface PoolMatchAnalysis {
+  homeForm: ('W' | 'D' | 'L')[];  // Last 5 matches
+  awayForm: ('W' | 'D' | 'L')[];
+  homeWinPct: number;              // 0-100
+  awayWinPct: number;              // 0-100
+  missingPlayers: { home: string; away: string };
+  editorComment: string;
+}
+
 export interface PoolMatch {
   id: string;
   homeTeam: string;
@@ -394,6 +403,7 @@ export interface PoolMatch {
   league: string;
   matchDate: string;
   result?: '1' | 'X' | '2';
+  analysis?: PoolMatchAnalysis;
 }
 
 export interface PoolEntry {

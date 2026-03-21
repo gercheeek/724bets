@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { ThemeProvider } from './ThemeContext';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import DailyCoupons from './components/DailyCoupons';
@@ -8,7 +9,7 @@ import AdminPanel from './components/AdminPanel';
 import AuthModal from './components/AuthModal';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
-import PopularLeagues, { INITIAL_LEAGUE_DATA } from './components/PopularLeagues';
+import { INITIAL_LEAGUE_DATA } from './components/PopularLeagues';
 import DynamicCTA from './components/DynamicCTA';
 import BetlivoPopup from './components/BetlivoPopup';
 import ChatBot from './components/ChatBot';
@@ -16,6 +17,7 @@ import SearchModal from './components/SearchModal';
 import LoyaltyPanel, { DEFAULT_LOYALTY_CONFIG } from './components/LoyaltyPanel';
 import RaffleView from './components/RaffleView';
 import PoolGame from './components/PoolGame';
+import { seedEcosystemData } from './seedEcosystem';
 import NewsSection from './components/NewsSection';
 import NewsView from './components/NewsView';
 import NewsDetailView from './components/NewsDetailView';
@@ -108,10 +110,15 @@ const App: React.FC = () => {
     sessionStorage.setItem('betlivo_popup_seen', '1');
   };
 
+  // Seed ecosystem data on first load
+  useEffect(() => {
+    seedEcosystemData();
+  }, []);
+
   // Load data from LocalStorage
   useEffect(() => {
     const savedBrands = localStorage.getItem('site_brands');
-    const savedTheme = localStorage.getItem('site_theme');
+    const savedColor = localStorage.getItem('site_primary_color');
     const savedHashtags = localStorage.getItem('site_hashtags');
     const savedCoupons = localStorage.getItem('site_coupons');
     const savedWheel = localStorage.getItem('site_wheel_config');
@@ -121,7 +128,7 @@ const App: React.FC = () => {
 
     setBrands(savedBrands ? JSON.parse(savedBrands) : INITIAL_BRANDS);
 
-    if (savedTheme) setThemeColor(savedTheme);
+    if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
     if (savedHashtags) setHashtags(savedHashtags);
     if (savedCoupons) setCoupons(JSON.parse(savedCoupons));
     if (savedWheel) setBjConfig(JSON.parse(savedWheel));
@@ -132,12 +139,14 @@ const App: React.FC = () => {
 
   // Global theme handling
   useEffect(() => {
-    document.documentElement.style.setProperty('--primary', themeColor);
-    const r = parseInt(themeColor.slice(1, 3), 16);
-    const g = parseInt(themeColor.slice(3, 5), 16);
-    const b = parseInt(themeColor.slice(5, 7), 16);
-    document.documentElement.style.setProperty('--primary-rgb', `${r}, ${g}, ${b}`);
-    localStorage.setItem('site_theme', themeColor);
+    if (themeColor.startsWith('#')) {
+      document.documentElement.style.setProperty('--primary', themeColor);
+      const r = parseInt(themeColor.slice(1, 3), 16);
+      const g = parseInt(themeColor.slice(3, 5), 16);
+      const b = parseInt(themeColor.slice(5, 7), 16);
+      document.documentElement.style.setProperty('--primary-rgb', `${r}, ${g}, ${b}`);
+      localStorage.setItem('site_primary_color', themeColor);
+    }
   }, [themeColor]);
 
   useEffect(() => {
@@ -250,7 +259,13 @@ const App: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000', color: '#fff', overflowX: 'hidden' }}>
+    <ThemeProvider>
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--bg-main)',
+      color: 'var(--text-primary)',
+      overflowX: 'hidden'
+    }}>
       {/* Auth Modal Overlay */}
       {authModalMode && (
         <AuthModal
@@ -307,11 +322,7 @@ const App: React.FC = () => {
 
             <DynamicCTA onNavigate={handleViewChange} />
 
-            <PopularLeagues
-              leagueData={leagueData}
-              isLoggedIn={!!(siteUser || userRole)}
-              onLoginRequired={() => setAuthModalMode('member')}
-            />
+
 
             <div className="section-divider" />
 
@@ -324,11 +335,11 @@ const App: React.FC = () => {
 
             <section id="brands-section" className="brands-section relative z-10">
               <div className="brands-header mb-12 animate-fade-in-up">
-                <h2 className="text-[40px] md:text-[48px] font-black text-white italic uppercase tracking-tighter">
+                <h2 className="text-[40px] md:text-[48px] font-black italic uppercase tracking-tighter" style={{ color: 'var(--text-primary)' }}>
                   GÜVENİLİR <span className="text-[#FFC107]">FİRMALAR</span>
                 </h2>
                 <div className="h-1 w-20 bg-[#FFC107] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
-                <p className="text-zinc-500 font-bold uppercase text-[11px] tracking-[0.3em]">
+                <p className="font-bold uppercase text-[11px] tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
                   Sizin için test ettiğimiz, ödemesini yapan lisanslı siteler.
                 </p>
               </div>
@@ -343,18 +354,18 @@ const App: React.FC = () => {
                   rel="noopener noreferrer"
                   className="relative w-full flex flex-col md:flex-row items-center gap-6 md:gap-10 px-6 md:px-12 py-8 md:py-10 rounded-3xl overflow-hidden group cursor-pointer"
                   style={{
-                    background: 'linear-gradient(135deg, #0a0800 0%, #120d00 40%, #0a0800 100%)',
-                    border: '2px solid rgba(240,185,11,0.6)',
-                    boxShadow: '0 0 40px rgba(240,185,11,0.15), inset 0 1px 0 rgba(240,185,11,0.1)',
+                    background: 'linear-gradient(135deg, #FFFDF5 0%, #FFF9E5 40%, #FFFDF5 100%)',
+                    border: '2px solid rgba(240,185,11,0.4)',
+                    boxShadow: '0 4px 30px rgba(240,185,11,0.08)',
                     textDecoration: 'none',
                     transition: 'all 0.4s ease',
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 0 70px rgba(240,185,11,0.35), inset 0 1px 0 rgba(240,185,11,0.15)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 0 40px rgba(240,185,11,0.15), inset 0 1px 0 rgba(240,185,11,0.1)'; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 8px 40px rgba(240,185,11,0.18)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 30px rgba(240,185,11,0.08)'; }}
                 >
                   {/* Background animated glow orbs */}
-                  <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#f0b90b]/10 blur-[80px] pointer-events-none group-hover:bg-[#f0b90b]/18 transition-all duration-700" />
-                  <div className="absolute left-0 top-0 w-[200px] h-full bg-[#f0b90b]/5 blur-[60px] pointer-events-none" />
+                  <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#f0b90b]/5 blur-[80px] pointer-events-none group-hover:bg-[#f0b90b]/10 transition-all duration-700" />
+                  <div className="absolute left-0 top-0 w-[200px] h-full bg-[#f0b90b]/3 blur-[60px] pointer-events-none" />
                   {/* Shimmer line */}
                   <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#f0b90b]/80 to-transparent group-hover:via-[#f0b90b] transition-all duration-500" />
                   <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#f0b90b]/30 to-transparent" />
@@ -370,11 +381,11 @@ const App: React.FC = () => {
                   {/* Content */}
                   <div className="relative z-10 flex-1 text-center md:text-left">
                     <div className="flex flex-wrap items-center gap-3 mb-2 justify-center md:justify-start">
-                      <span className="text-[#f0b90b] font-black text-3xl md:text-4xl tracking-tighter uppercase leading-none">BETLIVO</span>
+                      <span className="font-black text-3xl md:text-4xl tracking-tighter uppercase leading-none" style={{ color: 'var(--text-primary)' }}>BETLIVO</span>
                       <span className="px-3 py-1 text-black font-black text-[10px] uppercase rounded-full tracking-widest" style={{ background: 'linear-gradient(90deg,#f0b90b,#ffd357)', animation: 'pulse 2s infinite' }}>🥇 ANA SPONSOR</span>
                       <span className="px-2 py-0.5 border border-green-500/50 text-green-400 font-black text-[9px] uppercase rounded-full tracking-widest">🟢 CANLI</span>
                     </div>
-                    <p className="text-zinc-300 text-sm md:text-base font-bold mb-3">
+                    <p className="text-sm md:text-base font-bold mb-3" style={{ color: 'var(--text-muted)' }}>
                       🎁 %100 Hoşgeldin Bonusu &nbsp;·&nbsp; ⚡ Anında Ödeme &nbsp;·&nbsp; 🔒 Lisanslı &amp; Güvenli &nbsp;·&nbsp; 📞 7/24 Destek
                     </p>
                     <div className="flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-widest justify-center md:justify-start">
@@ -391,7 +402,7 @@ const App: React.FC = () => {
                       style={{ background: 'linear-gradient(135deg, #f0b90b 0%, #ffd357 50%, #f0b90b 100%)', boxShadow: '0 0 25px rgba(240,185,11,0.5)', backgroundSize: '200% 100%' }}>
                       🚀 ŞİMDİ KAYIT OL
                     </div>
-                    <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Ücretsiz · 2 Dakika</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Ücretsiz · 2 Dakika</span>
                   </div>
                 </a>
 
@@ -402,42 +413,42 @@ const App: React.FC = () => {
                   rel="noopener noreferrer"
                   className="relative w-full flex flex-col md:flex-row items-center gap-5 md:gap-8 px-6 md:px-10 py-6 md:py-7 rounded-2xl overflow-hidden group cursor-pointer"
                   style={{
-                    background: 'linear-gradient(135deg, #0d0d0f 0%, #111115 50%, #0d0d0f 100%)',
-                    border: '1.5px solid rgba(99,102,241,0.35)',
-                    boxShadow: '0 0 20px rgba(99,102,241,0.08)',
+                    background: 'linear-gradient(135deg, #F0F0FF 0%, #E8E8F8 50%, #F0F0FF 100%)',
+                    border: '1.5px solid rgba(99,102,241,0.25)',
+                    boxShadow: '0 4px 20px rgba(99,102,241,0.06)',
                     textDecoration: 'none',
                     transition: 'all 0.3s ease',
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 0 35px rgba(99,102,241,0.18)'; (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(99,102,241,0.6)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 0 20px rgba(99,102,241,0.08)'; (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(99,102,241,0.35)'; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 8px 30px rgba(99,102,241,0.12)'; (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(99,102,241,0.45)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 20px rgba(99,102,241,0.06)'; (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(99,102,241,0.25)'; }}
                 >
                   {/* Background glow */}
-                  <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-[250px] h-[250px] rounded-full bg-indigo-500/5 blur-[60px] pointer-events-none group-hover:bg-indigo-500/10 transition-all duration-500" />
-                  <div className="absolute top-0 left-0 w-full h-[1.5px] bg-gradient-to-r from-transparent via-indigo-500/60 to-transparent group-hover:via-indigo-400 transition-all duration-400" />
+                  <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-[250px] h-[250px] rounded-full bg-indigo-500/3 blur-[60px] pointer-events-none group-hover:bg-indigo-500/6 transition-all duration-500" />
+                  <div className="absolute top-0 left-0 w-full h-[1.5px] bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent group-hover:via-indigo-400/60 transition-all duration-400" />
                   {/* Moving shimmer */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-500/[0.04] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-900 pointer-events-none" />
 
                   {/* Logo */}
-                  <div className="relative z-10 flex-shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300 border border-indigo-500/30"
-                    style={{ background: 'linear-gradient(135deg, #1e1e2e, #2a2a40)', boxShadow: '0 0 15px rgba(99,102,241,0.2)' }}>
-                    <span className="text-indigo-400 font-black text-[9px] uppercase tracking-tight leading-tight text-center">BET<br />KOM</span>
+                  <div className="relative z-10 flex-shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300 border border-indigo-500/20"
+                    style={{ background: 'linear-gradient(135deg, #E8E8F8, #D8D8F0)', boxShadow: '0 2px 10px rgba(99,102,241,0.1)' }}>
+                    <span className="text-indigo-600 font-black text-[9px] uppercase tracking-tight leading-tight text-center">BET<br />KOM</span>
                   </div>
 
                   {/* Content */}
                   <div className="relative z-10 flex-1 text-center md:text-left">
                     <div className="flex flex-wrap items-center gap-2 mb-1 justify-center md:justify-start">
-                      <span className="text-white font-black text-xl md:text-2xl tracking-tighter uppercase">BETKOM</span>
-                      <span className="px-2 py-0.5 bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 font-black text-[9px] uppercase rounded-full tracking-widest">SPONSOR</span>
+                      <span className="font-black text-xl md:text-2xl tracking-tighter uppercase" style={{ color: 'var(--text-primary)' }}>BETKOM</span>
+                      <span className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 font-black text-[9px] uppercase rounded-full tracking-widest">SPONSOR</span>
                       <span className="px-2 py-0.5 border border-green-500/40 text-green-400 font-black text-[9px] uppercase rounded-full tracking-widest">🟢 AKTİF</span>
                     </div>
-                    <p className="text-zinc-500 text-xs md:text-sm font-bold mb-2">
+                    <p className="text-xs md:text-sm font-bold mb-2" style={{ color: 'var(--text-muted)' }}>
                       🎯 %50 Spor Bonusu &nbsp;·&nbsp; 💳 Güvenli Ödeme &nbsp;·&nbsp; 🏆 Yüksek Oranlar
                     </p>
                     <div className="flex flex-wrap gap-1.5 text-[9px] font-black uppercase tracking-widest justify-center md:justify-start">
-                      <span className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-md">Futbol</span>
-                      <span className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-md">Basketbol</span>
-                      <span className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-md">Tenis</span>
-                      <span className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-md">Canlı</span>
+                      <span className="px-2 py-0.5 bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 rounded-md">Futbol</span>
+                      <span className="px-2 py-0.5 bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 rounded-md">Basketbol</span>
+                      <span className="px-2 py-0.5 bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 rounded-md">Tenis</span>
+                      <span className="px-2 py-0.5 bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 rounded-md">Canlı</span>
                     </div>
                   </div>
 
@@ -447,7 +458,7 @@ const App: React.FC = () => {
                       style={{ background: 'linear-gradient(135deg, #3730a3, #4f46e5)', boxShadow: '0 0 15px rgba(99,102,241,0.25)' }}>
                       🎯 HEMEN İNCELE
                     </div>
-                    <span className="text-zinc-600 text-[9px] font-bold uppercase tracking-widest">Bonusu Kap</span>
+                    <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>Bonusu Kap</span>
                   </div>
                 </a>
               </div>
@@ -593,6 +604,7 @@ const App: React.FC = () => {
       {/* ── AI Chat Assistant ── */}
       <ChatBot />
     </div>
+    </ThemeProvider>
   );
 };
 

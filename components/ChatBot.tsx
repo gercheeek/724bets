@@ -151,7 +151,7 @@ const ChatBot: React.FC = () => {
                 >
                     {open ? <ChevronDown className="w-7 h-7 text-black" /> : <MessageCircle className="w-7 h-7 text-black" />}
                     {!open && unread > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center border-2 border-black">
+                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center border-2 border-white">
                             {unread}
                         </span>
                     )}
@@ -168,9 +168,9 @@ const ChatBot: React.FC = () => {
             <div
                 className="fixed bottom-24 right-6 z-[8999] w-[340px] max-w-[calc(100vw-2rem)] rounded-3xl overflow-hidden flex flex-col"
                 style={{
-                    background: 'linear-gradient(145deg, #0d0d0d, #111111)',
-                    border: '1.5px solid rgba(240,185,11,0.3)',
-                    boxShadow: '0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(240,185,11,0.1)',
+                    background: 'var(--bg-card)',
+                    border: '1.5px solid var(--border-card)',
+                    boxShadow: 'var(--shadow-modal)',
                     height: open ? '480px' : '0px',
                     opacity: open ? 1 : 0,
                     pointerEvents: open ? 'all' : 'none',
@@ -178,20 +178,20 @@ const ChatBot: React.FC = () => {
                 }}
             >
                 {/* Header */}
-                <div className="flex-shrink-0 flex items-center gap-3 px-4 py-3 border-b border-zinc-800/80"
-                    style={{ background: 'linear-gradient(90deg, #0a0800, #120d00)' }}>
+                <div className="flex-shrink-0 flex items-center gap-3 px-4 py-3"
+                    style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
                     <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                         style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 12px rgba(240,185,11,0.4)' }}>
                         <span className="text-black font-black text-[8px] leading-tight uppercase text-center">724<br />BETS</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                        <div className="text-white font-black text-sm">Banu · Canlı Destek</div>
+                        <div className="font-black text-sm" style={{ color: 'var(--text-primary)' }}>Banu · Canlı Destek</div>
                         <div className="flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                             <span className="text-green-400 text-[10px] font-bold">Çevrimiçi · TSİ saatleri</span>
                         </div>
                     </div>
-                    <button onClick={() => setOpen(false)} className="text-zinc-600 hover:text-zinc-400 transition-colors">
+                    <button onClick={() => setOpen(false)} className="text-[#9CA3AF] hover:text-[#4B5563] transition-colors">
                         <X className="w-4 h-4" />
                     </button>
                 </div>
@@ -205,9 +205,9 @@ const ChatBot: React.FC = () => {
                                     className="px-3.5 py-2.5 rounded-2xl text-sm whitespace-pre-line"
                                     style={msg.from === 'bot'
                                         ? {
-                                            background: 'rgba(240,185,11,0.08)',
+                                            background: 'rgba(240,185,11,0.06)',
                                             border: '1px solid rgba(240,185,11,0.15)',
-                                            color: '#e0e0e0',
+                                            color: 'var(--text-secondary)',
                                             borderRadius: '4px 18px 18px 18px',
                                         }
                                         : {
@@ -234,7 +234,7 @@ const ChatBot: React.FC = () => {
                                         </>
                                     ) : msg.text}
                                 </div>
-                                <div className="text-zinc-700 text-[9px] font-bold mt-1 px-1 text-right">{msg.time}</div>
+                                <div className="text-[#9CA3AF] text-[9px] font-bold mt-1 px-1 text-right">{msg.time}</div>
                             </div>
                         </div>
                     ))}
@@ -242,7 +242,7 @@ const ChatBot: React.FC = () => {
                     {typing && (
                         <div className="flex justify-start">
                             <div className="px-4 py-3 rounded-2xl flex items-center gap-1.5"
-                                style={{ background: 'rgba(240,185,11,0.06)', border: '1px solid rgba(240,185,11,0.12)', borderRadius: '4px 18px 18px 18px' }}>
+                                style={{ background: 'rgba(240,185,11,0.05)', border: '1px solid rgba(240,185,11,0.12)', borderRadius: '4px 18px 18px 18px' }}>
                                 {[0, 1, 2].map(i => (
                                     <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#f0b90b]"
                                         style={{ animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />
@@ -260,7 +260,7 @@ const ChatBot: React.FC = () => {
                             key={q}
                             onClick={() => send(q)}
                             className="flex-shrink-0 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all hover:border-[#f0b90b]/50 hover:text-[#f0b90b]"
-                            style={{ border: '1px solid rgba(240,185,11,0.2)', color: 'rgba(255,255,255,0.5)', background: 'transparent', whiteSpace: 'nowrap' }}
+                            style={{ border: '1px solid var(--border-card)', color: 'var(--text-muted)', background: 'transparent', whiteSpace: 'nowrap' }}
                         >
                             {q}
                         </button>
@@ -275,13 +275,14 @@ const ChatBot: React.FC = () => {
                         onChange={e => setInput(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && send()}
                         placeholder="Mesajınızı yazın..."
-                        className="flex-1 px-4 py-2.5 rounded-xl text-sm text-white placeholder-zinc-600 outline-none transition-all"
+                        className="flex-1 px-4 py-2.5 rounded-xl text-sm placeholder-[#9CA3AF] outline-none transition-all"
                         style={{
-                            background: 'rgba(255,255,255,0.04)',
-                            border: '1px solid rgba(255,255,255,0.08)',
+                            background: 'var(--bg-elevated)',
+                            border: '1px solid var(--border-card)',
+                            color: 'var(--text-primary)',
                         }}
                         onFocus={e => { e.target.style.borderColor = 'rgba(240,185,11,0.4)'; }}
-                        onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                        onBlur={e => { e.target.style.borderColor = 'rgba(0,0,0,0.08)'; }}
                     />
                     <button
                         onClick={() => send()}
