@@ -288,26 +288,20 @@ const Header: React.FC<HeaderProps> = ({
             {/* Logo */}
             <div
               className="header-logo shrink-0"
-            onClick={() => onViewChange?.('home')}
-            onMouseEnter={() => setLogoHovered(true)}
-            onMouseLeave={() => setLogoHovered(false)}
-            style={{ transform: logoHovered ? 'scale(1.03)' : 'scale(1)' }}
-          >
-            <div className="flex items-center gap-0.5 relative">
-              {logoHovered && (
-                <div className="absolute inset-0 bg-[#f0b90b] blur-[20px] opacity-20 rounded-full" />
-              )}
-              <span className="text-2xl font-black tracking-tighter" style={{ color: 'var(--header-logo-text)', textShadow: 'none' }}>
-                7<span className="text-[#f0b90b]">24</span>
-              </span>
-              <span className="text-base font-bold tracking-tight opacity-80 ml-0.5" style={{ color: 'var(--header-logo-text)', textShadow: 'none' }}>
-                bets
-              </span>
-              <span className="text-sm font-bold tracking-tight opacity-60 ml-0.5" style={{ color: 'var(--header-logo-text)', textShadow: 'none' }}>
-                .net
-              </span>
+              onClick={() => onViewChange?.('home')}
+              onMouseEnter={() => setLogoHovered(true)}
+              onMouseLeave={() => setLogoHovered(false)}
+              style={{ transform: logoHovered ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.3s ease' }}
+            >
+              <img 
+                src="/logo.png" 
+                alt="7/24Bets" 
+                className="h-9 md:h-11 w-auto object-contain"
+                style={{ 
+                  filter: theme === 'light' && !isScrolled ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' : 'none'
+                }}
+              />
             </div>
-          </div>
 
           {/* Marquee (Kayan Yazı) */}
           {marqueeConfig?.isActive && (
