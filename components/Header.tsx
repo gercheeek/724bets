@@ -297,13 +297,13 @@ const Header: React.FC<HeaderProps> = ({
               {logoHovered && (
                 <div className="absolute inset-0 bg-[#f0b90b] blur-[20px] opacity-20 rounded-full" />
               )}
-              <span className="text-2xl font-black tracking-tighter text-white" style={{ textShadow: 'none' }}>
+              <span className="text-2xl font-black tracking-tighter" style={{ color: 'var(--header-logo-text)', textShadow: 'none' }}>
                 7<span className="text-[#f0b90b]">24</span>
               </span>
-              <span className="text-base font-bold tracking-tight text-white/80 ml-0.5" style={{ textShadow: 'none' }}>
+              <span className="text-base font-bold tracking-tight opacity-80 ml-0.5" style={{ color: 'var(--header-logo-text)', textShadow: 'none' }}>
                 bets
               </span>
-              <span className="text-sm font-bold tracking-tight text-white/60 ml-0.5" style={{ textShadow: 'none' }}>
+              <span className="text-sm font-bold tracking-tight opacity-60 ml-0.5" style={{ color: 'var(--header-logo-text)', textShadow: 'none' }}>
                 .net
               </span>
             </div>
@@ -381,7 +381,13 @@ const Header: React.FC<HeaderProps> = ({
       {/* DEPOSIT MODAL */}
       {showDepositModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-black/8 rounded-3xl w-full max-w-sm overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.15)] relative">
+          <div 
+            className="rounded-3xl w-full max-w-sm overflow-hidden shadow-modal relative" 
+            style={{ 
+              background: 'var(--bg-card)', 
+              border: '1px solid var(--border-card)' 
+            }}
+          >
             <button
               onClick={() => setShowDepositModal(false)}
               className="absolute top-4 right-4 text-[#9CA3AF] hover:text-[#1A1A1A] transition-colors"
@@ -394,20 +400,25 @@ const Header: React.FC<HeaderProps> = ({
                 <Send className="w-6 h-6 text-blue-400" />
               </div>
 
-              <h3 className="text-xl font-black text-[#1A1A1A] mb-2">Yatırım Bildirimi</h3>
-              <p className="text-[#6B7280] text-sm mb-6">
+              <h3 className="text-xl font-black mb-2" style={{ color: 'var(--text-primary)' }}>Yatırım Bildirimi</h3>
+              <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
                 Betlivo'ya yaptığınız yatırımların onaylanması ve <strong>Coin / Bilet</strong> tanımlamalarınızın yapılması için Betlivo kullanıcı adınızı bize iletin.
               </p>
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-bold text-[#9CA3AF] uppercase ml-1 block mb-1">Betlivo Kullanıcı Adınız</label>
+                  <label className="text-xs font-bold uppercase ml-1 block mb-1" style={{ color: 'var(--text-dim)' }}>Betlivo Kullanıcı Adınız</label>
                   <input
                     type="text"
                     value={depositUsername}
                     onChange={(e) => setDepositUsername(e.target.value)}
                     placeholder="Kullanıcı adınızı girin"
-                    className="w-full bg-[#F8F9FA] border border-black/8 rounded-xl px-4 py-3 text-[#1A1A1A] text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                    style={{ 
+                      background: 'var(--bg-elevated)', 
+                      borderColor: 'var(--border-subtle)',
+                      color: 'var(--text-primary)'
+                    }}
                   />
                 </div>
 

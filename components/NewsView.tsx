@@ -48,12 +48,12 @@ const NewsView: React.FC<NewsViewProps> = ({ onViewChange, onArticleClick }) => 
             <div className="flex items-center gap-4 mb-8">
                 <button
                     onClick={() => onViewChange?.('home')}
-                    className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-600 transition-all"
+                    className="w-10 h-10 rounded-full bg-theme-elevated border border-theme-subtle flex items-center justify-center text-zinc-400 hover:text-theme-primary hover:border-zinc-600 transition-all"
                 >
                     <ArrowLeft className="w-4 h-4" />
                 </button>
                 <div>
-                    <h1 className="text-[28px] md:text-[36px] font-black text-white italic uppercase tracking-tighter">
+                    <h1 className="text-[28px] md:text-[36px] font-black text-theme-primary italic uppercase tracking-tighter">
                         SPOR <span className="text-[#f0b90b]">HABERLERİ</span>
                     </h1>
                     <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">
@@ -96,12 +96,7 @@ const NewsView: React.FC<NewsViewProps> = ({ onViewChange, onArticleClick }) => 
                     <article
                         key={article.id}
                         onClick={() => onArticleClick?.(article.id)}
-                        className="group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
-                        style={{
-                            background: 'linear-gradient(180deg, #111113 0%, #0a0a0c 100%)',
-                            border: '1px solid rgba(255,255,255,0.06)',
-                            boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-                        }}
+                        className="group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-theme-main border-theme-subtle shadow-card"
                     >
                         {/* Image */}
                         <div className="relative overflow-hidden" style={{ aspectRatio: '16/9' }}>
@@ -127,7 +122,7 @@ const NewsView: React.FC<NewsViewProps> = ({ onViewChange, onArticleClick }) => 
 
                         {/* Content */}
                         <div className="p-5">
-                            <h3 className="text-white font-black text-sm leading-snug mb-2 line-clamp-2 group-hover:text-[#f0b90b] transition-colors">
+                            <h3 className="text-theme-primary font-black text-sm leading-snug mb-2 line-clamp-2 group-hover:text-[#f0b90b] transition-colors">
                                 {article.title}
                             </h3>
                             <p className="text-zinc-500 text-xs leading-relaxed mb-4 line-clamp-2">

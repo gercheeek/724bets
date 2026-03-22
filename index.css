@@ -113,6 +113,16 @@ body {
   transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), color 3s ease-in-out;
 }
 
+/* Theme-Aware Utility Classes */
+.text-theme-primary { color: var(--text-primary); }
+.text-theme-secondary { color: var(--text-secondary); }
+.text-theme-muted { color: var(--text-muted); }
+.bg-theme-main { background-color: var(--bg-main); }
+.bg-theme-card { background-color: var(--bg-card); }
+.bg-theme-elevated { background-color: var(--bg-elevated); }
+.border-theme-subtle { border-color: var(--border-subtle); }
+.border-theme-card { border-color: var(--border-card); }
+
 /* Global cinematic transitions for containers matching the prompt's request */
 .glass-panel, .brand-card, .game-card, .analysis-row {
   transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), border-color 3s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;

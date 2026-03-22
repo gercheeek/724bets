@@ -621,7 +621,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
         <section id="popular-leagues-section" className="brands-section relative z-10 py-16">
             <div className="container mx-auto px-4 max-w-7xl">
                 <div className="brands-header mb-12 animate-fade-in-up text-center w-full">
-                    <h2 className="text-[32px] md:text-[40px] font-black text-white italic uppercase tracking-tighter flex items-center justify-center gap-3">
+                    <h2 className="text-[32px] md:text-[40px] font-black text-theme-primary italic uppercase tracking-tighter flex items-center justify-center gap-3">
                         <TrophyIcon /> EN POPÜLER <span className="text-[#FFC107]">LİGLER</span>
                     </h2>
                     <div className="h-1 w-20 bg-[#FFC107] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
@@ -652,7 +652,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                             <div className="flex bg-[#030303] divide-x divide-zinc-800/60 border-t border-zinc-800/60 text-[10px] md:text-xs">
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setActiveLeague(league.id); setActiveTab('tahminler'); }}
-                                    className={`flex-1 py-3 text-center transition-colors font-bold ${activeLeague === league.id && activeTab === 'tahminler' ? 'text-[#f0b90b] bg-white/[0.02]' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.02]'}`}
+                                    className={`flex-1 py-3 text-center transition-colors font-bold ${activeLeague === league.id && activeTab === 'tahminler' ? 'text-[#f0b90b] bg-white/[0.02]' : 'text-theme-muted hover:text-theme-secondary hover:bg-white/[0.02]'}`}
                                 >
                                     Tahminler
                                 </button>
@@ -674,7 +674,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                 </div>
 
                 {/* Content Area */}
-                <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 shadow-2xl min-h-[500px]">
+                <div className="bg-theme-card rounded-2xl border border-theme-subtle p-6 shadow-card min-h-[500px]">
                     {!activeData ? (
                         <div className="flex flex-col items-center justify-center h-64 text-zinc-500">
                             <TrophyIcon />
@@ -756,7 +756,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                 <ul className="space-y-4">
                                                     {activeData.stats.topScorers.map((scorer: any, idx: number) => (
                                                         <li key={idx} className="flex justify-between items-center bg-zinc-950 p-3 rounded-xl border border-zinc-800">
-                                                            <span className="font-bold text-white">{scorer.name}</span>
+                                                            <span className="font-bold text-theme-primary">{scorer.name}</span>
                                                             <span className="text-zinc-400">Goller <span className="text-blue-500 font-bold ml-1">{scorer.goals}</span></span>
                                                         </li>
                                                     ))}

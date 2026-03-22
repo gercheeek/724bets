@@ -120,7 +120,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                             ))}
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-[#9CA3AF] text-[10px] font-bold">TOPLAM ORAN</span>
+                                            <span style={{ color: 'var(--text-dim)', fontSize: '10px', fontWeight: 'bold' }}>TOPLAM ORAN</span>
                                             <span className="text-[#FFC107] text-sm font-black">{coupon.totalOdd}</span>
                                         </div>
                                     </div>

@@ -378,15 +378,15 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
     ] as any[];
 
     if (!activeGiveaway) return (
-        <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-[#0e0e0e]">
+        <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-theme-main">
             <div className="text-7xl">🎁</div>
-            <h2 className="text-white font-black text-3xl uppercase tracking-tight">Çekiliş Bulunamadı</h2>
-            <p className="text-zinc-500 font-bold text-sm">Şu anda aktif bir çekiliş bulunmuyor.</p>
+            <h2 className="text-theme-primary font-black text-3xl uppercase tracking-tight">Çekiliş Bulunamadı</h2>
+            <p className="text-theme-muted font-bold text-sm">Şu anda aktif bir çekiliş bulunmuyor.</p>
         </div>
     );
 
     return (
-        <div style={{ minHeight: '100vh', background: '#0a0a0f', position: 'relative' }}>
+        <div style={{ minHeight: '100vh', background: 'var(--bg-main)', position: 'relative' }}>
             {/* ═══════════════ 1. HERO ═══════════════ */}
             <section style={{
                 padding: '80px 24px 60px',
@@ -420,12 +420,12 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                         fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 900, lineHeight: 1.1,
                         letterSpacing: '-2px', marginBottom: '16px', textTransform: 'uppercase',
                     }}>
-                        <span style={{ color: '#fff' }}>Haftalık </span>
+                        <span style={{ color: 'var(--text-primary)' }}>Haftalık </span>
                         <span style={{ color: '#f0b90b', textShadow: '0 0 40px rgba(240,185,11,0.4)' }}>Büyük Çekiliş</span>
                     </h1>
 
                     <p style={{
-                        color: '#a0a0a0', fontSize: '16px', fontWeight: 500, maxWidth: '550px',
+                        color: 'var(--text-secondary)', fontSize: '16px', fontWeight: 500, maxWidth: '550px',
                         margin: '0 auto 40px', lineHeight: 1.7,
                     }}>
                         {activeGiveaway.description}
@@ -451,7 +451,7 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                                 }}>
                                     {String(item.val).padStart(2, '0')}
                                 </div>
-                                <div style={{ fontSize: '9px', fontWeight: 800, color: '#666', letterSpacing: '0.2em', marginTop: '4px' }}>
+                                <div style={{ fontSize: '9px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.2em', marginTop: '4px' }}>
                                     {item.label}
                                 </div>
                             </div>
@@ -474,11 +474,12 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                         {prizes.map((prize, i) => (
                             <div key={prize.id} style={{
-                                background: 'rgba(255,255,255,0.03)',
-                                border: '1px solid rgba(255,255,255,0.08)',
+                                background: 'var(--bg-card)',
+                                border: '1px solid var(--border-subtle)',
                                 borderRadius: '24px', padding: '32px 24px', textAlign: 'center',
                                 position: 'relative', overflow: 'hidden',
                                 transition: 'all 0.4s ease',
+                                boxShadow: 'var(--shadow-card)',
                             }}
                                 onMouseEnter={e => {
                                     (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(240,185,11,0.4)';
@@ -498,7 +499,7 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                                     }} />
                                 )}
                                 <div style={{ fontSize: '48px', marginBottom: '12px' }}>{prize.icon}</div>
-                                <div style={{ fontSize: '18px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>
+                                <div style={{ fontSize: '18px', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '8px' }}>
                                     {prize.prizeName}
                                 </div>
                                 <div style={{
@@ -523,8 +524,9 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                     </div>
 
                     <div style={{
-                        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                        background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
                         borderRadius: '24px', padding: '32px', maxWidth: '600px', margin: '0 auto',
+                        boxShadow: 'var(--shadow-card)',
                     }}>
                         {rules.map((rule, i) => (
                             <div key={rule.id} style={{
@@ -541,7 +543,7 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                                     {rule.icon}
                                 </div>
                                 <div style={{ flex: 1 }}>
-                                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>{rule.label}</div>
+                                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>{rule.label}</div>
                                 </div>
                                 <div style={{
                                     padding: '4px 12px', borderRadius: '999px',
@@ -816,11 +818,11 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                     onClick={() => setShowWinnerPopup(false)}
                 >
                     <div style={{
-                        background: 'linear-gradient(180deg, #111118 0%, #0a0a0f 100%)',
+                        background: 'var(--bg-card)',
                         border: '2px solid rgba(240,185,11,0.4)',
                         borderRadius: '32px', padding: '48px 40px', textAlign: 'center',
                         maxWidth: '420px', width: '90%', position: 'relative',
-                        boxShadow: '0 0 80px rgba(240,185,11,0.15), 0 40px 100px rgba(0,0,0,0.8)',
+                        boxShadow: 'var(--shadow-modal)',
                         animation: 'fadeInUp 0.5s ease-out',
                     }}
                         onClick={e => e.stopPropagation()}
@@ -844,10 +846,10 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                             border: '1px solid rgba(240,185,11,0.2)', borderRadius: '20px',
                             marginBottom: '20px',
                         }}>
-                            <div style={{ fontSize: '11px', fontWeight: 800, color: '#666', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '8px' }}>
+                            <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '8px' }}>
                                 KAZANAN
                             </div>
-                            <div style={{ fontSize: '24px', fontWeight: 900, color: '#fff' }}>
+                            <div style={{ fontSize: '24px', fontWeight: 900, color: 'var(--text-primary)' }}>
                                 {currentWinner.name}
                             </div>
                         </div>
