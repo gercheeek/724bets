@@ -61,7 +61,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                         </div>
                         <span className="text-[#f0b90b] text-[10px] font-black uppercase tracking-[0.3em]">GÜNCEL HABERLER</span>
                     </div>
-                    <h2 className="text-[32px] md:text-[40px] font-black italic uppercase tracking-tighter leading-none" style={{ color: 'var(--text-primary)' }}>
+                    <h2 className="text-[32px] md:text-[40px] font-black italic uppercase tracking-tighter leading-none text-theme-primary">
                         SON SPOR <span className="text-[#f0b90b]">HABERLERİ</span>
                     </h2>
                     <p className="text-xs font-bold mt-2 max-w-md" style={{ color: 'var(--text-dim)' }}>
@@ -160,7 +160,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                                 </span>
                             </div>
                             <div className="p-4">
-                                <h3 className="font-black text-sm leading-snug mb-2 line-clamp-2 group-hover:text-[#f0b90b] transition-colors" style={{ color: 'var(--text-primary)' }}>
+                                <h3 className="font-black text-sm leading-snug mb-2 line-clamp-2 group-hover:text-[#f0b90b] transition-colors text-theme-primary">
                                     {article.title}
                                 </h3>
                                 <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>
@@ -202,7 +202,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                                 </span>
                             </div>
                             <div className="p-3">
-                                <h3 className="font-bold text-xs leading-snug mb-1 line-clamp-2 group-hover:text-[#f0b90b] transition-colors" style={{ color: 'var(--text-primary)' }}>
+                                <h3 className="font-bold text-xs leading-snug mb-1 line-clamp-2 group-hover:text-[#f0b90b] transition-colors text-theme-primary">
                                     {article.title}
                                 </h3>
                                 <span className="text-[9px] font-bold" style={{ color: 'var(--text-dim)' }}>{formatDate(article.createdAt)}</span>
@@ -228,8 +228,8 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
                 <div className="flex items-center gap-4">
                     <div className="text-3xl">🏆</div>
                     <div>
-                        <p className="font-black text-sm" style={{ color: 'var(--text-primary)' }}>Günlük Spor Haberleri</p>
-                        <p className="text-xs" style={{ color: 'var(--text-dim)' }}>Her gün güncellenen haber ve analizlerle bilgi sahibi olun</p>
+                        <p className="font-black text-sm text-theme-primary">Günlük Spor Haberleri</p>
+                        <p className="text-xs text-theme-muted">Her gün güncellenen haber ve analizlerle bilgi sahibi olun</p>
                     </div>
                 </div>
                 <button

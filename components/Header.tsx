@@ -296,7 +296,7 @@ const Header: React.FC<HeaderProps> = ({
               <img 
                 src="/logo.png" 
                 alt="7/24Bets" 
-                className="h-9 md:h-11 w-auto object-contain"
+                className="h-12 md:h-[60px] w-auto object-contain"
                 style={{ 
                   filter: theme === 'light' && !isScrolled ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' : 'none'
                 }}

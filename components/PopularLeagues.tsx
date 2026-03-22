@@ -636,8 +636,8 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                             className={`
                 group relative border rounded-xl overflow-hidden cursor-pointer transition-all duration-300 flex flex-col justify-between
                 ${activeLeague === league.id
-                                    ? 'border-[#f0b90b] bg-[#0a0a0a] shadow-[inset_0_0_15px_rgba(240,185,11,0.03)] z-10'
-                                    : 'border-zinc-800/80 bg-[#060606] hover:border-zinc-700 hover:bg-[#0a0a0a]'}
+                                    ? 'border-[#f0b90b] bg-theme-card shadow-[inset_0_0_15px_rgba(240,185,11,0.03)] z-10'
+                                    : 'border-theme-subtle bg-theme-main hover:border-zinc-700 hover:bg-theme-card'}
               `}
                         >
                             <div className="p-5 flex flex-col items-center justify-center gap-3 relative z-10 mt-2">
@@ -646,10 +646,10 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                     alt={league.name}
                                     className={`w-12 h-12 object-cover rounded-full border border-zinc-800 transition-all duration-300 relative z-10 ${activeLeague === league.id ? 'border-zinc-600 shadow-lg' : 'grayscale-[0.5] group-hover:grayscale-0'}`}
                                 />
-                                <span className={`font-black text-[13px] tracking-wide transition-colors duration-300 ${activeLeague === league.id ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-200'}`}>{league.name}</span>
+                                <span className={`font-black text-[13px] tracking-wide transition-colors duration-300 ${activeLeague === league.id ? 'text-theme-primary' : 'text-theme-muted group-hover:text-theme-secondary'}`}>{league.name}</span>
                             </div>
 
-                            <div className="flex bg-[#030303] divide-x divide-zinc-800/60 border-t border-zinc-800/60 text-[10px] md:text-xs">
+                            <div className="flex bg-theme-elevated divide-x border-t border-theme-subtle text-[10px] md:text-xs">
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setActiveLeague(league.id); setActiveTab('tahminler'); }}
                                     className={`flex-1 py-3 text-center transition-colors font-bold ${activeLeague === league.id && activeTab === 'tahminler' ? 'text-[#f0b90b] bg-white/[0.02]' : 'text-theme-muted hover:text-theme-secondary hover:bg-white/[0.02]'}`}
@@ -692,7 +692,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                         {/* Yaklaşan Maçlar */}
                                         <div>
                                             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">Yaklaşan (Bugün) <span className="text-sm text-zinc-500 font-normal">({activeData.upcoming?.length || 0})</span></h3>
-                                            <div className="bg-zinc-950 rounded-xl border border-zinc-800 overflow-hidden divide-y divide-zinc-800/50">
+                                            <div className="bg-theme-main rounded-xl border border-theme-subtle overflow-hidden divide-y divide-theme-subtle">
                                                 {isLoadingLive ? (
                                                     <div className="p-8 text-center text-zinc-400 flex flex-col items-center">
                                                         <div className="w-6 h-6 border-2 border-zinc-500 border-t-[#f0b90b] rounded-full animate-spin mb-3"></div>
@@ -723,7 +723,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                         {/* Son Sonuçlar */}
                                         <div>
                                             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">Son Sonuçlar <span className="text-sm text-zinc-500 font-normal">({activeData.recent?.length || 0})</span></h3>
-                                            <div className="bg-zinc-950 rounded-xl border border-zinc-800 overflow-hidden divide-y divide-zinc-800/50">
+                                            <div className="bg-theme-main rounded-xl border border-theme-subtle overflow-hidden divide-y divide-theme-subtle">
                                                 {activeData.recent?.map(match => (
                                                     <div key={match.id} className="p-4 hover:bg-white/5 transition-colors">
                                                         <div className="text-center text-xs text-zinc-500 mb-2">{match.date}</div>
@@ -755,7 +755,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                 <h3 className="text-lg font-bold mb-4 border-b border-zinc-800 pb-2">Gol Kralları</h3>
                                                 <ul className="space-y-4">
                                                     {activeData.stats.topScorers.map((scorer: any, idx: number) => (
-                                                        <li key={idx} className="flex justify-between items-center bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                                                        <li key={idx} className="flex justify-between items-center bg-theme-main p-3 rounded-xl border border-theme-subtle">
                                                             <span className="font-bold text-theme-primary">{scorer.name}</span>
                                                             <span className="text-zinc-400">Goller <span className="text-blue-500 font-bold ml-1">{scorer.goals}</span></span>
                                                         </li>
@@ -767,8 +767,8 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                 <h3 className="text-lg font-bold mb-4 border-b border-zinc-800 pb-2">Asist Kralları</h3>
                                                 <ul className="space-y-4">
                                                     {activeData.stats.topAssists.map((assister: any, idx: number) => (
-                                                        <li key={idx} className="flex justify-between items-center bg-zinc-950 p-3 rounded-xl border border-zinc-800">
-                                                            <span className="font-bold text-white">{assister.name}</span>
+                                                        <li key={idx} className="flex justify-between items-center bg-theme-main p-3 rounded-xl border border-theme-subtle">
+                                                            <span className="font-bold text-theme-primary">{assister.name}</span>
                                                             <span className="text-zinc-400">Asist <span className="text-blue-500 font-bold ml-1">{assister.assists}</span></span>
                                                         </li>
                                                     ))}
@@ -778,22 +778,22 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                             <div>
                                                 <h3 className="text-lg font-bold mb-4 border-b border-zinc-800 pb-2">Sezon İstatistikleri</h3>
                                                 <ul className="space-y-4">
-                                                    <li className="flex items-center gap-4 bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                                                    <li className="flex items-center gap-4 bg-theme-main p-3 rounded-xl border border-theme-subtle">
                                                         <div className="w-6 h-8 bg-red-500 rounded-sm"></div>
-                                                        <span className="font-bold text-lg w-10 text-center">{activeData.stats.seasonStats.redCards}</span>
-                                                        <span className="text-white font-semibold flex-1">Kırmızı Kart</span>
+                                                        <span className="font-bold text-lg w-10 text-center text-theme-primary">{activeData.stats.seasonStats.redCards}</span>
+                                                        <span className="text-theme-primary font-semibold flex-1">Kırmızı Kart</span>
                                                     </li>
-                                                    <li className="flex items-center gap-4 bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                                                    <li className="flex items-center gap-4 bg-theme-main p-3 rounded-xl border border-theme-subtle">
                                                         <div className="w-6 h-8 bg-yellow-400 rounded-sm"></div>
-                                                        <span className="font-bold text-lg w-10 text-center">{activeData.stats.seasonStats.yellowCards}</span>
-                                                        <span className="text-white font-semibold flex-1">Sarı Kart</span>
+                                                        <span className="font-bold text-lg w-10 text-center text-theme-primary">{activeData.stats.seasonStats.yellowCards}</span>
+                                                        <span className="text-theme-primary font-semibold flex-1">Sarı Kart</span>
                                                     </li>
-                                                    <li className="flex items-center gap-4 bg-zinc-950 p-3 rounded-xl border border-zinc-800">
-                                                        <div className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-white/50">
+                                                    <li className="flex items-center gap-4 bg-theme-main p-3 rounded-xl border border-theme-subtle">
+                                                        <div className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-theme-subtle">
                                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" /><path d="m11 19.93-3.64-2.65-.63-4.39 3.16-3.15 4.22.63 2.65 3.64-1.26 4.22-3.16 3.15z" /></svg>
                                                         </div>
-                                                        <span className="font-bold text-lg w-10 text-center">{activeData.stats.seasonStats.totalGoals}</span>
-                                                        <span className="text-white font-semibold flex-1">Goller</span>
+                                                        <span className="font-bold text-lg w-10 text-center text-theme-primary">{activeData.stats.seasonStats.totalGoals}</span>
+                                                        <span className="text-theme-primary font-semibold flex-1">Goller</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -813,7 +813,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                     </div>
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-sm text-left align-middle border-collapse">
-                                            <thead className="text-xs uppercase bg-zinc-950 text-zinc-400 border-b border-zinc-700">
+                                            <thead className="text-xs uppercase bg-theme-elevated text-theme-muted border-b border-theme-subtle">
                                                 <tr>
                                                     <th className="px-4 py-3 w-10 text-center">Pos</th>
                                                     <th className="px-4 py-3">Takım</th>
@@ -828,11 +828,11 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                     <th className="px-4 py-3 text-center">Form</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="divide-y divide-zinc-800">
+                                            <tbody className="divide-y border-theme-subtle">
                                                 {activeData.standings?.map((row) => (
                                                     <tr key={row.rank} className={getRowBgClass(row.zone)}>
                                                         <td className="px-4 py-3 text-center font-bold">{row.rank}</td>
-                                                        <td className="px-4 py-3 font-semibold text-white">{row.team}</td>
+                                                        <td className="px-4 py-3 font-semibold text-theme-primary">{row.team}</td>
                                                         <td className="px-2 py-3 text-center text-zinc-400">{row.played}</td>
                                                         <td className="px-2 py-3 text-center text-zinc-400">{row.won}</td>
                                                         <td className="px-2 py-3 text-center text-zinc-400">{row.drawn}</td>
@@ -840,7 +840,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                         <td className={`px-2 py-3 text-center font-medium ${row.goalDiff.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>{row.goalDiff}</td>
                                                         <td className="px-2 py-3 text-center text-zinc-400">{row.goalsFor}</td>
                                                         <td className="px-2 py-3 text-center text-zinc-400">{row.goalsAgainst}</td>
-                                                        <td className="px-2 py-3 text-center font-bold text-white bg-white/5">{row.points}</td>
+                                                        <td className="px-2 py-3 text-center font-bold text-theme-primary bg-white/5">{row.points}</td>
                                                         <td className="px-4 py-3">
                                                             <div className="flex items-center justify-center gap-1">
                                                                 {row.form.map((f, i) => (
@@ -859,7 +859,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                             {/* TAHMİNLER TAB (Predictions) */}
                             {activeTab === 'tahminler' && (
                                 <div className="overflow-x-auto">
-                                    <table className="w-full text-sm text-center align-middle border-collapse bg-[#060606] rounded-xl overflow-hidden border border-zinc-800/50">
+                                    <table className="w-full text-sm text-center align-middle border-collapse bg-theme-main rounded-xl overflow-hidden border border-theme-subtle/50">
                                         <thead className="text-[10px] sm:text-xs font-black bg-[#7289da] text-white uppercase tracking-widest">
                                             <tr>
                                                 <th className="px-2 py-3 border-r border-[#8498df]"></th>
@@ -875,7 +875,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                 <th className="px-4 py-3">DETAY</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-zinc-800/80">
+                                        <tbody className="divide-y border-theme-subtle/30">
                                             {activeData.predictions?.map((pred, i) => {
                                                 const isLocked = !isLoggedIn && i >= 3;
                                                 if (isLocked) {
@@ -886,7 +886,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                                     {/* Blurred fake row */}
                                                                     <div className="flex items-center gap-4 opacity-30" style={{ filter: 'blur(4px)', userSelect: 'none' }}>
                                                                         <span className="text-zinc-500 text-xs font-black w-16">{pred.leagueSlug}</span>
-                                                                        <span className="text-white text-sm font-black">{pred.homeTeam} - {pred.awayTeam}</span>
+                                                                         <span className="text-theme-primary text-sm font-black">{pred.homeTeam} - {pred.awayTeam}</span>
                                                                         <span className="text-zinc-400 text-xs">{pred.dateStr}</span>
                                                                         <span className="text-white font-black">{pred.resultPrediction}</span>
                                                                         <span className="text-green-500 font-bold text-xs">{pred.totalGoalsPrediction}</span>
@@ -906,7 +906,7 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                     );
                                                 }
                                                 return (
-                                                    <tr key={pred.id} className="hover:bg-[#0a0a0a] transition-colors group">
+                                                    <tr key={pred.id} className="hover:bg-theme-elevated transition-colors group">
                                                         <td className="px-2 py-3 border-r border-zinc-800/80">
                                                             <div className="flex flex-col items-center text-zinc-600 transition-colors group-hover:text-[#7289da]">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></svg>
@@ -917,18 +917,18 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                                         </td>
                                                         <td className="px-4 py-3 text-left border-r border-zinc-800/80">
                                                             <div className="flex flex-col gap-1.5 text-[13px]">
-                                                                <div className="flex items-center gap-2">
-                                                                    <span className="font-bold text-white transition-colors group-hover:text-zinc-200">{pred.homeTeam}</span>
+                                                                 <div className="flex items-center gap-2">
+                                                                    <span className="font-bold text-theme-primary transition-colors group-hover:text-[#7289da]">{pred.homeTeam}</span>
                                                                 </div>
                                                                 <div className="flex items-center gap-2">
-                                                                    <span className="font-bold text-white transition-colors group-hover:text-zinc-200">{pred.awayTeam}</span>
+                                                                    <span className="font-bold text-theme-primary transition-colors group-hover:text-[#7289da]">{pred.awayTeam}</span>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td className="px-4 py-3 border-r border-zinc-800/80 font-mono text-zinc-300 text-xs whitespace-nowrap">
                                                             {pred.dateStr}
                                                         </td>
-                                                        <td className="px-3 py-3 border-r border-zinc-800/80 font-black text-white text-sm">
+                                                        <td className="px-3 py-3 border-r border-theme-subtle/30 font-black text-theme-primary text-sm">
                                                             {pred.resultPrediction}
                                                         </td>
                                                         <td className={`px-3 py-3 border-r border-zinc-800/80 font-bold text-xs ${pred.totalGoalsPrediction?.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>

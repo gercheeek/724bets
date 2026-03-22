@@ -9,8 +9,8 @@
 
 /* ── Light Theme (default) ── */
 :root {
-  --primary: #FFC107;
-  --primary-rgb: 255, 193, 7;
+  --primary: #D97706; /* Darker amber/gold for better contrast in light mode */
+  --primary-rgb: 217, 119, 6;
 
   --bg-main: #F8F9FA;
   --bg-elevated: #F0F1F3;
