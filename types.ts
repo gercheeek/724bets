@@ -493,3 +493,12 @@ export interface GiveawayConfig {
   activities: GiveawayActivity[];
 }
 
+// ─── Header Marquee (Kayan Yazı) Sistemi ─────────────────────────────────────
+export interface MarqueeConfig {
+  isActive: boolean;
+  text: string;
+  speed: number;       // e.g. 50 (seconds to complete a loop)
+  color: string;       // e.g. '#f0b90b'
+  isBold: boolean;
+}
+

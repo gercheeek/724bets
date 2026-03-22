@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig } from '../types';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
@@ -32,13 +32,15 @@ interface AdminPanelProps {
   onSaveGiveawayConfig?: (config: GiveawayConfig) => void;
   navVisibility?: NavVisibility;
   onSaveNavVisibility?: (vis: NavVisibility) => void;
+  marqueeConfig?: MarqueeConfig;
+  onSaveMarqueeConfig?: (config: MarqueeConfig) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
   brands, hero, themeColor, hashtags, role, wheelConfig, bjConfig, loyaltyConfig, leagueData,
   onSaveBrands, onSaveHero, onThemeChange, onHashtagsChange, onSaveWheelConfig, onSaveBjConfig, onSaveLoyaltyConfig, onSaveLeagueData, onLogout, onNavigateHome,
   giveawayConfig, onSaveGiveawayConfig,
-  navVisibility, onSaveNavVisibility
+  navVisibility, onSaveNavVisibility, marqueeConfig, onSaveMarqueeConfig
 }) => {
   const isAuthor = role.startsWith('author_');
   const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'leagues' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
@@ -2298,6 +2300,72 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               );
             })}
+          </div>
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 mt-8 space-y-4">
+            <h3 className="text-xl font-black text-white flex items-center gap-2 mb-4">
+              ✨ Üst Menü Kayan Yazı (Marquee)
+            </h3>
+            
+            <div className="flex items-center justify-between mb-4">
+               <span className="text-zinc-400 font-bold">Kayan Yazı Aktifliği</span>
+               <button
+                  onClick={() => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, isActive: !marqueeConfig.isActive })}
+                  className={`w-14 h-8 rounded-full transition-all flex items-center p-1 ${marqueeConfig?.isActive ? 'bg-green-500' : 'bg-zinc-700'}`}
+                >
+                  <div className={`w-6 h-6 rounded-full bg-white transition-all ${marqueeConfig?.isActive ? 'translate-x-6' : 'translate-x-0'}`} />
+                </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Yazı İçeriği</label>
+                <input 
+                  type="text" 
+                  value={marqueeConfig?.text || ''} 
+                  onChange={(e) => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, text: e.target.value })}
+                  className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"
+                  placeholder="Kayan yazı metni..."
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Geçiş Hızı (Saniye)</label>
+                  <input 
+                    type="number" 
+                    value={marqueeConfig?.speed || 20} 
+                    onChange={(e) => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, speed: Number(e.target.value) })}
+                    className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Yazı Rengi</label>
+                  <div className="flex gap-2">
+                    <input 
+                      type="color" 
+                      value={marqueeConfig?.color || '#f0b90b'} 
+                      onChange={(e) => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, color: e.target.value })}
+                      className="w-12 h-12 bg-black border border-zinc-800 rounded-xl p-1 shrink-0 cursor-pointer"
+                    />
+                    <input 
+                      type="text" 
+                      value={marqueeConfig?.color || '#f0b90b'} 
+                      onChange={(e) => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, color: e.target.value })}
+                      className="flex-1 bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Kalın Yazı (Bold)</label>
+                  <button
+                    onClick={() => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, isBold: !marqueeConfig.isBold })}
+                    className={`w-full h-12 rounded-xl transition-all font-bold flex items-center justify-center ${marqueeConfig?.isBold ? 'bg-primary text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
+                  >
+                    {marqueeConfig?.isBold ? 'KALIN KONTÜR' : 'NORMAL (Pasif)'}
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

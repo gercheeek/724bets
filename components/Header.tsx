@@ -4,7 +4,7 @@ import {
   MessageSquare, Sun, Moon, Home, Ticket, BarChart3, Shield, Newspaper,
   Target, Spade, Trophy, TicketCheck, Gift
 } from 'lucide-react';
-import { SiteUser, UserLoyalty } from '../types';
+import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
 
 export interface NavVisibility {
@@ -44,6 +44,7 @@ interface HeaderProps {
   onMemberLogout?: () => void;
   onSearchClick?: () => void;
   navVisibility?: NavVisibility;
+  marqueeConfig?: MarqueeConfig;
 }
 
 function getUserLoyalty(userId: string): UserLoyalty {
@@ -76,6 +77,7 @@ const Header: React.FC<HeaderProps> = ({
   onMemberLogout,
   onSearchClick,
   navVisibility,
+  marqueeConfig,
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -271,11 +273,21 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <>
       <div className={`header-wrapper ${isScrolled ? 'scrolled' : ''}`}>
+        <style>{`
+          @keyframes custom-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-custom-marquee {
+            animation: custom-marquee var(--speed, 20s) linear infinite;
+          }
+        `}</style>
         {/* ══════ TIER 1: Top Bar ══════ */}
         <div className="header-topbar">
-          {/* Logo */}
-          <div
-            className="header-logo"
+          <div className="flex items-center gap-4 flex-1 overflow-hidden">
+            {/* Logo */}
+            <div
+              className="header-logo shrink-0"
             onClick={() => onViewChange?.('home')}
             onMouseEnter={() => setLogoHovered(true)}
             onMouseLeave={() => setLogoHovered(false)}
@@ -295,6 +307,27 @@ const Header: React.FC<HeaderProps> = ({
                 .net
               </span>
             </div>
+          </div>
+
+          {/* Marquee (Kayan Yazı) */}
+          {marqueeConfig?.isActive && (
+            <div className="hidden md:flex flex-1 overflow-hidden ml-2 border-l border-white/10 pl-4 items-center h-8" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
+              <div 
+                className="whitespace-nowrap animate-custom-marquee inline-block"
+                style={{ 
+                  color: marqueeConfig.color, 
+                  fontWeight: marqueeConfig.isBold ? 900 : 500,
+                  '--speed': `${marqueeConfig.speed}s` 
+                } as React.CSSProperties}
+              >
+                <span className="pr-12">{marqueeConfig.text}</span>
+                <span className="pr-12">{marqueeConfig.text}</span>
+                <span className="pr-12">{marqueeConfig.text}</span>
+                <span className="pr-12">{marqueeConfig.text}</span>
+                <span className="pr-12">{marqueeConfig.text}</span>
+              </div>
+            </div>
+          )}
           </div>
 
           {/* Right side: theme + search + user */}

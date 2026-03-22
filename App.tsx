@@ -9,7 +9,7 @@ import AdminPanel from './components/AdminPanel';
 import AuthModal from './components/AuthModal';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
-import { INITIAL_LEAGUE_DATA } from './components/PopularLeagues';
+import PopularLeagues, { INITIAL_LEAGUE_DATA } from './components/PopularLeagues';
 import DynamicCTA from './components/DynamicCTA';
 import BetlivoPopup from './components/BetlivoPopup';
 import ChatBot from './components/ChatBot';
@@ -25,7 +25,16 @@ import BetLivoWheel from './components/BetLivoWheel';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, BetLivoWheelConfig, GiveawayConfig } from './types';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, BetLivoWheelConfig, GiveawayConfig, MarqueeConfig } from './types';
+
+export const DEFAULT_MARQUEE_CONFIG: MarqueeConfig = {
+  isActive: true,
+  text: 'Hoş geldiniz! En yüksek oranlar sadece 724bets.net adresinde!',
+  speed: 20,
+  color: '#f0b90b',
+  isBold: true
+};
+
 
 const App: React.FC = () => {
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway'>('home');
@@ -60,6 +69,17 @@ const App: React.FC = () => {
   const handleGiveawayConfigChange = (cfg: GiveawayConfig) => {
     setGiveawayConfig(cfg);
     localStorage.setItem('site_giveaway_config', JSON.stringify(cfg));
+  };
+
+  // Marquee Config
+  const [marqueeConfig, setMarqueeConfig] = useState<MarqueeConfig>(() => {
+    const stored = localStorage.getItem('site_marquee_config');
+    return stored ? JSON.parse(stored) : DEFAULT_MARQUEE_CONFIG;
+  });
+
+  const handleMarqueeConfigChange = (cfg: MarqueeConfig) => {
+    setMarqueeConfig(cfg);
+    localStorage.setItem('site_marquee_config', JSON.stringify(cfg));
   };
 
   // Nav Visibility
@@ -228,6 +248,8 @@ const App: React.FC = () => {
       onSaveGiveawayConfig={handleGiveawayConfigChange}
       navVisibility={navVisibility}
       onSaveNavVisibility={handleNavVisibilityChange}
+      marqueeConfig={marqueeConfig}
+      onSaveMarqueeConfig={handleMarqueeConfigChange}
     />
   );
 
@@ -305,6 +327,7 @@ const App: React.FC = () => {
         }}
         onSearchClick={() => setShowSearch(true)}
         navVisibility={navVisibility}
+        marqueeConfig={marqueeConfig}
       />
 
       <main style={{ position: 'relative', zIndex: 10, paddingTop: '80px' }}>
@@ -316,6 +339,14 @@ const App: React.FC = () => {
 
             <DailyCoupons
               coupons={coupons}
+              isLoggedIn={!!(siteUser || userRole)}
+              onLoginRequired={() => setAuthModalMode('member')}
+            />
+
+            <div className="section-divider" />
+
+            <PopularLeagues
+              leagueData={leagueData}
               isLoggedIn={!!(siteUser || userRole)}
               onLoginRequired={() => setAuthModalMode('member')}
             />
@@ -352,16 +383,8 @@ const App: React.FC = () => {
                   href="https://betlivo.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative w-full flex flex-col md:flex-row items-center gap-6 md:gap-10 px-6 md:px-12 py-8 md:py-10 rounded-3xl overflow-hidden group cursor-pointer"
-                  style={{
-                    background: 'linear-gradient(135deg, #FFFDF5 0%, #FFF9E5 40%, #FFFDF5 100%)',
-                    border: '2px solid rgba(240,185,11,0.4)',
-                    boxShadow: '0 4px 30px rgba(240,185,11,0.08)',
-                    textDecoration: 'none',
-                    transition: 'all 0.4s ease',
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 8px 40px rgba(240,185,11,0.18)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 30px rgba(240,185,11,0.08)'; }}
+                  className="brand-card altin relative w-full flex flex-col md:flex-row items-center gap-6 md:gap-10 px-6 md:px-12 py-8 md:py-10 rounded-3xl overflow-hidden group cursor-pointer"
+                  style={{ textDecoration: 'none' }}
                 >
                   {/* Background animated glow orbs */}
                   <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#f0b90b]/5 blur-[80px] pointer-events-none group-hover:bg-[#f0b90b]/10 transition-all duration-700" />
@@ -411,16 +434,8 @@ const App: React.FC = () => {
                   href="https://betkom.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative w-full flex flex-col md:flex-row items-center gap-5 md:gap-8 px-6 md:px-10 py-6 md:py-7 rounded-2xl overflow-hidden group cursor-pointer"
-                  style={{
-                    background: 'linear-gradient(135deg, #F0F0FF 0%, #E8E8F8 50%, #F0F0FF 100%)',
-                    border: '1.5px solid rgba(99,102,241,0.25)',
-                    boxShadow: '0 4px 20px rgba(99,102,241,0.06)',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 8px 30px rgba(99,102,241,0.12)'; (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(99,102,241,0.45)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 20px rgba(99,102,241,0.06)'; (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(99,102,241,0.25)'; }}
+                  className="brand-card gumus relative w-full flex flex-col md:flex-row items-center gap-5 md:gap-8 px-6 md:px-10 py-6 md:py-7 rounded-2xl overflow-hidden group cursor-pointer"
+                  style={{ textDecoration: 'none' }}
                 >
                   {/* Background glow */}
                   <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-[250px] h-[250px] rounded-full bg-indigo-500/3 blur-[60px] pointer-events-none group-hover:bg-indigo-500/6 transition-all duration-500" />

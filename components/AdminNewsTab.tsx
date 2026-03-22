@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown, Sparkles, Send, Bot, User as UserIcon, Wand2, ArrowRight } from 'lucide-react';
+import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown, Sparkles, Send, Bot, User as UserIcon, Wand2, ArrowRight, AlertCircle } from 'lucide-react';
 import { NewsArticle, NewsAuthor, NEWS_CATEGORIES } from '../types';
 
 interface AdminNewsTabProps {
@@ -23,27 +23,43 @@ const generateSlug = (title: string): string => {
 };
 
 // AI Content Generation Engine (OpenAI API integration)
-const generateAiArticleOpenAI = async (topic: string, category: string, style: string, apiKey: string) => {
+const generateBulkAiArticles = async (newsList: string, apiKey: string): Promise<AiGeneratedArticle[]> => {
     try {
+        // Sanitize apiKey to avoid ISO-8859-1 code point errors in headers
+        const sanitizedKey = (apiKey || '').trim().replace(/[^\x20-\x7E]/g, ''); 
+        
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Authorization': `Bearer ${sanitizedKey}`
             },
             body: JSON.stringify({
                 model: 'gpt-4o-mini',
-                response_format: { type: 'json_object' },
                 messages: [
                     {
                         role: 'system',
-                        content: `Sen profesyonel, ödüllü bir spor haberi editörüsün. Sana verilen konu, kategori ve tarz bilgilerine göre SEO uyumlu, çok kaliteli, heyecan verici ve HTML formatında (<p>, <h2>, <strong> kullanarak) bir spor haberi yazmalısın. Çıktıyı doğrudan JSON olarak ver. Zorunlu JSON yapısı: { "title": "Çarpıcı Başlık", "excerpt": "Kısa 120 karakterlik özet", "content": "HTML formatında detaylı içerik...", "seoTitle": "SEO için başlık | 724bets.net", "seoDesc": "SEO için açıklama" }`
+                        content: `Sen profesyonel bir spor haberi editörüsün. Kullanıcının verdiği numaralandırılmış haber konuları listesini al ve her bir konu için ayrı, SEO uyumlu, yüksek kaliteli ve HTML formatında (<p>, <h2>, <strong> kullanarak) haberler yaz. 
+Çıktıyı MUTLAKA şu yapıda bir JSON objesi olarak ver:
+{
+  "articles": [
+    { 
+      "title": "Başlık", 
+      "excerpt": "120 karakterlik özet", 
+      "content": "HTML içerik...", 
+      "category": "Futbol/Basketbol/Tenis/Voleybol/Diğer", 
+      "seoTitle": "SEO Başlığı", 
+      "seoDesc": "SEO Açıklaması" 
+    }
+  ]
+}`
                     },
                     {
                         role: 'user',
-                        content: `Konu: ${topic}\nKategori: ${category}\nTarz: ${style}`
+                        content: `Haber listesi:\n${newsList}`
                     }
                 ],
+                response_format: { type: 'json_object' },
                 temperature: 0.7,
             })
         });
@@ -54,12 +70,27 @@ const generateAiArticleOpenAI = async (topic: string, category: string, style: s
         }
 
         const data = await response.json();
-        const content = data.choices[0].message.content;
-        return JSON.parse(content);
+        const rawContent = data.choices[0].message.content;
+        const parsed = JSON.parse(rawContent);
+        
+        // Handle both root array and { articles: [...] }
+        if (Array.isArray(parsed)) return parsed;
+        if (parsed.articles && Array.isArray(parsed.articles)) return parsed.articles;
+        if (parsed.news && Array.isArray(parsed.news)) return parsed.news;
+        return [parsed];
     } catch (error: any) {
         throw new Error(error.message || 'Üretim sırasında bir hata oluştu.');
     }
 };
+
+interface AiGeneratedArticle {
+    title: string;
+    excerpt: string;
+    content: string;
+    category: string;
+    seoTitle: string;
+    seoDesc: string;
+}
 
 const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     const [articles, setArticles] = useState<NewsArticle[]>([]);
@@ -83,16 +114,12 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     const [formSlug, setFormSlug] = useState('');
     const [formStatus, setFormStatus] = useState<'draft' | 'published'>('draft');
 
-    // AI Chat state
-    const [aiMessages, setAiMessages] = useState<AiMessage[]>([]);
-    const [aiInput, setAiInput] = useState('');
-    const [aiStep, setAiStep] = useState(-1);
-    const [aiTopic, setAiTopic] = useState('');
-    const [aiCategory, setAiCategory] = useState('Futbol');
-    const [aiStyle, setAiStyle] = useState('normal');
-    const [aiTyping, setAiTyping] = useState(false);
+    // AI Bulk state
+    const [aiBulkInput, setAiBulkInput] = useState('');
+    const [aiPreviews, setAiPreviews] = useState<AiGeneratedArticle[]>([]);
+    const [isGenerating, setIsGenerating] = useState(false);
     const [openAiKey, setOpenAiKey] = useState('');
-    const chatRef = useRef<HTMLDivElement>(null);
+    const [aiError, setAiError] = useState('');
 
     const isAdmin = role === 'admin';
 
@@ -106,10 +133,6 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
             if (storedKey) setOpenAiKey(storedKey);
         } catch { /* ignore */ }
     }, []);
-
-    useEffect(() => {
-        if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }, [aiMessages]);
 
     const saveArticles = (updated: NewsArticle[]) => {
         setArticles(updated);
@@ -210,144 +233,63 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
         saveAuthors(authors.filter(a => a.id !== id));
     };
 
-    // AI Chat Functions
+    // AI Bulk Functions
     const startAiChat = () => {
         setShowAiChat(true);
-        setAiMessages([]);
-        setAiTopic('');
-        setAiCategory('Futbol');
-        setAiStyle('normal');
+        setAiBulkInput('');
+        setAiPreviews([]);
+        setAiError('');
+    };
 
+    const handleGenerateBulk = async () => {
+        if (!aiBulkInput.trim()) return;
         if (!openAiKey) {
-            setAiStep(-1);
-            addAiMessage('Merhaba! 🤖 Ben yapay zeka haber asistanınız. Sizin için profesyonel içerikler üretebilmem için lütfen OpenAI API anahtarınızı (API Key) girin.\n\n*(Anahtarınız sadece tarayıcınızda şifrelenerek saklanır, sunucuya gönderilmez)*');
-        } else {
-            setAiStep(0);
-            addAiMessage('Merhaba! 🤖 Ben yapay zeka haber asistanınız. Size ChatGPT gücüyle profesyonel bir spor haberi oluşturmada yardımcı olacağım.\n\n📌 Hangi konuda haber yazmamı istersiniz? Örneğin:\n• "Galatasaray transfer gündemi"\n• "NBA final serisi"\n• "Verstappen yeni sözleşme"\n\nKonunuzu yazın, ben size harika bir haber hazırlayayım!');
-        }
-    };
-
-    const addAiMessage = (content: string) => {
-        setAiMessages(prev => [...prev, { role: 'ai', content }]);
-    };
-
-    const handleAiSend = async () => {
-        if (!aiInput.trim()) return;
-        const userMsg = aiInput.trim();
-        setAiMessages(prev => [...prev, { role: 'user', content: userMsg }]);
-        setAiInput('');
-        setAiTyping(true);
-
-        if (aiStep === -1) {
-            setTimeout(() => {
-                setAiTyping(false);
-                const key = userMsg;
-                if (key.startsWith('sk-') || key.length > 20) {
-                    setOpenAiKey(key);
-                    localStorage.setItem('site_openai_key', key);
-                    setAiStep(0);
-                    addAiMessage('✅ API Anahtarı başarıyla kaydedildi!\n\nŞimdi başlayalım. 📌 Hangi konuda haber yazmamı istersiniz?');
-                } else {
-                    addAiMessage('Geçersiz bir API anahtarı girdiniz. Lütfen "sk-" ile başlayan geçerli bir OpenAI API anahtarı girin:');
-                }
-            }, 800);
+            setAiError('Lütfen önce OpenAI API anahtarınızı girin.');
             return;
         }
 
-        setTimeout(async () => {
-            if (aiStep === 0) {
-                setAiTyping(false);
-                // User entered the topic
-                setAiTopic(userMsg);
-                setAiStep(1);
-                addAiMessage(`Harika bir konu! 🎯 "${userMsg}" hakkında haber yazacağım.\n\n📂 Hangi kategoride olsun?\n\n${NEWS_CATEGORIES.map((c, i) => `${i + 1}. ${c.name}`).join('\n')}\n\nNumara veya kategori adını yazın:`);
-            } else if (aiStep === 1) {
-                setAiTyping(false);
-                // User selected category
-                const catIdx = parseInt(userMsg) - 1;
-                const selectedCat = NEWS_CATEGORIES[catIdx]?.name ||
-                    NEWS_CATEGORIES.find(c => c.name.toLowerCase() === userMsg.toLowerCase())?.name ||
-                    'Futbol';
-                setAiCategory(selectedCat);
-                setAiStep(2);
-                addAiMessage(`✅ Kategori: ${selectedCat}\n\n📝 Haber tarzını seçin:\n\n1. **Kısa** – Hızlı ve özet haber\n2. **Normal** – Standart haber yazısı\n3. **Detaylı** – Kapsamlı analiz haberi\n\nNumara veya tarz adını yazın:`);
-            } else if (aiStep === 2) {
-                // User selected style
-                let style = 'normal';
-                if (userMsg.includes('1') || userMsg.toLowerCase().includes('kısa')) style = 'kısa';
-                if (userMsg.includes('3') || userMsg.toLowerCase().includes('detay')) style = 'detaylı';
-                setAiStyle(style);
-                setAiStep(3);
+        setIsGenerating(true);
+        setAiError('');
+        try {
+            const results = await generateBulkAiArticles(aiBulkInput, openAiKey);
+            setAiPreviews(results);
+        } catch (error: any) {
+            setAiError(error.message || 'Haberler üretilirken bir hata oluştu.');
+        } finally {
+            setIsGenerating(false);
+        }
+    };
 
-                try {
-                    // Generate the article with OpenAI
-                    addAiMessage(`🔄 OpenAI ChatGPT ile bağlantı kuruluyor... Sizin için "${aiTopic}" konulu profesyonel haberi yazıyorum. Bu işlem 10-20 saniye sürebilir...`);
+    const handleImportArticle = (preview: AiGeneratedArticle) => {
+        const now = Date.now();
+        const title = preview.title;
+        const slug = generateSlug(title);
+        
+        const newArticle: NewsArticle = {
+            id: 'news-' + now + Math.random().toString(36).substr(2, 5),
+            title: title,
+            slug,
+            excerpt: preview.excerpt,
+            content: preview.content,
+            category: preview.category || 'Futbol',
+            image: `https://picsum.photos/seed/${slug}/800/450`,
+            authorId: role,
+            authorName: role === 'admin' ? 'Admin' : role.replace('author_', ''),
+            views: 0,
+            status: 'draft',
+            seoTitle: preview.seoTitle,
+            seoDescription: preview.seoDesc,
+            createdAt: now,
+            updatedAt: now,
+        };
+        
+        saveArticles([newArticle, ...articles]);
+        setAiPreviews(prev => prev.filter(p => p !== preview));
+    };
 
-                    const result = await generateAiArticleOpenAI(aiTopic, aiCategory, style, openAiKey);
-
-                    setAiTyping(false);
-                    addAiMessage(`✨ Haberiniz ChatGPT tarafından başarıyla hazırlandı!\n\n**Başlık:** ${result.title}\n\n**Özet:** ${result.excerpt}\n\n**Kategori:** ${aiCategory}\n**Tarz:** ${style === 'kısa' ? 'Kısa' : style === 'detaylı' ? 'Detaylı' : 'Normal'}\n\n---\n\n🔄 Beğendiniz mi?\n• **"Evet"** → Formu doldurup düzenlemenize aktarayım\n• **"Yeniden"** → Farklı bir versiyonunu yazayım\n• **"Değiştir"** → Yeni bir konu ile baştan başlayalım`);
-
-                    // Store the generated article temporarily
-                    setFormTitle(result.title);
-                    setFormExcerpt(result.excerpt);
-                    setFormContent(result.content);
-                    setFormCategory(aiCategory);
-                    setFormSeoTitle(result.seoTitle);
-                    setFormSeoDesc(result.seoDesc);
-                    setFormSlug(generateSlug(result.title));
-                } catch (error: any) {
-                    setAiTyping(false);
-                    console.error("OpenAI Hatası:", error);
-                    let errMsg = error.message;
-                    if (errMsg.includes('401')) errMsg = 'API Anahtarınız geçersiz veya süresi dolmuş. Lütfen geçerli bir anahtar girin.';
-                    addAiMessage(`❌ Bir hata oluştu:\n${errMsg}\n\nLütfen API ayarlarınızı kontrol edip API anahtarınızı sıfırlamak için "sıfırla" yazın veya tekrar denemek için "yeniden" yazın.`);
-                    setAiStep(4); // Error state
-                }
-            } else if (aiStep === 3) {
-                setAiTyping(false);
-                const lower = userMsg.toLowerCase();
-                if (lower.includes('evet') || lower.includes('tamam') || lower.includes('onayla') || lower.includes('aktar')) {
-                    addAiMessage('🎉 Harika! Haberi düzenleme formuna aktardım. Artık istediğiniz değişiklikleri yapıp kaydedebilirsiniz.\n\n💡 İpucu: Formu kapatmadan önce "Yayınlandı" durumunu seçmeyi unutmayın!');
-                    setShowForm(true);
-                    setShowAiChat(false);
-                    setAiStep(0);
-                } else if (lower.includes('yeniden') || lower.includes('tekrar')) {
-                    setAiTyping(true);
-                    try {
-                        const result = await generateAiArticleOpenAI(aiTopic, aiCategory, aiStyle, openAiKey);
-                        setAiTyping(false);
-                        setFormTitle(result.title);
-                        setFormExcerpt(result.excerpt);
-                        setFormContent(result.content);
-                        setFormSeoTitle(result.seoTitle);
-                        setFormSeoDesc(result.seoDesc);
-                        setFormSlug(generateSlug(result.title));
-                        addAiMessage(`🔄 Yeni versiyon ChatGPT tarafından hazırlandı!\n\n**Başlık:** ${result.title}\n\n**Özet:** ${result.excerpt}\n\n---\n\n• **"Evet"** → Formu doldurup aktarayım\n• **"Yeniden"** → Bir daha deneyelim\n• **"Değiştir"** → Yeni konu ile başlayalım`);
-                    } catch (error: any) {
-                        setAiTyping(false);
-                        addAiMessage(`❌ Hata: ${error.message}`);
-                    }
-                } else if (lower.includes('değiştir') || lower.includes('yeni konu') || lower.includes('baştan')) {
-                    setAiStep(0);
-                    resetForm();
-                    addAiMessage('Tamam! 🔄 Yeni bir konu belirleyelim.\n\n📌 Hangi konuda haber yazmamı istersiniz?');
-                } else {
-                    addAiMessage('Anlayamadım 🤔 Lütfen şunlardan birini yazın:\n• **"Evet"** → Haberi aktarma\n• **"Yeniden"** → Yeni versiyon\n• **"Değiştir"** → Yeni konu');
-                }
-            } else if (aiStep === 4) {
-                setAiTyping(false);
-                if (userMsg.toLowerCase().includes('sıfırla')) {
-                    setOpenAiKey('');
-                    localStorage.removeItem('site_openai_key');
-                    setAiStep(-1);
-                    addAiMessage('API Anahtarınız silindi. Lütfen yeni bir OpenAI API anahtarı girin:');
-                } else {
-                    setAiStep(2);
-                    handleAiSend(); // Retry step 2
-                }
-            }
-        }, 800 + Math.random() * 600);
+    const handleImportAll = () => {
+        aiPreviews.forEach(p => handleImportArticle(p));
+        setShowAiChat(false);
     };
 
     const inputClass = "w-full bg-black border border-zinc-800 rounded-xl py-3 px-4 text-white text-sm focus:border-[#f0b90b] transition-colors outline-none placeholder-zinc-600";
@@ -384,18 +326,18 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                 </div>
             </div>
 
-            {/* AI Chat Panel */}
+            {/* AI Bulk Panel */}
             {showAiChat && (
-                <div className="rounded-2xl overflow-hidden border border-purple-500/30 shadow-[0_0_30px_rgba(147,51,234,0.15)]">
-                    {/* AI Chat Header */}
+                <div className="rounded-2xl overflow-hidden border border-purple-500/30 shadow-[0_0_30px_rgba(147,51,234,0.15)] bg-[#0a0a0f]">
+                    {/* AI Header */}
                     <div className="bg-gradient-to-r from-purple-900/80 to-indigo-900/80 px-5 py-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-full bg-purple-500/20 border border-purple-400/30 flex items-center justify-center">
                                 <Bot className="w-5 h-5 text-purple-300" />
                             </div>
                             <div>
-                                <h3 className="text-white font-black text-sm">AI Haber Asistanı</h3>
-                                <p className="text-purple-300 text-[10px] font-bold">Yapay zeka destekli haber oluşturucu</p>
+                                <h3 className="text-white font-black text-sm uppercase">AI Toplu Haber Hazırlayıcı</h3>
+                                <p className="text-purple-300 text-[10px] font-bold">Listelediğiniz haberleri AI tek tek yazar</p>
                             </div>
                         </div>
                         <button onClick={() => setShowAiChat(false)} className="text-zinc-400 hover:text-white transition-colors">
@@ -403,106 +345,93 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                         </button>
                     </div>
 
-                    {/* Chat Messages */}
-                    <div ref={chatRef} className="bg-[#0a0a0f] p-5 space-y-4 max-h-[400px] overflow-y-auto" style={{ scrollBehavior: 'smooth' }}>
-                        {aiMessages.map((msg, i) => (
-                            <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                {msg.role === 'ai' && (
-                                    <div className="w-7 h-7 rounded-full bg-purple-500/20 border border-purple-400/20 flex items-center justify-center flex-shrink-0 mt-1">
-                                        <Bot className="w-4 h-4 text-purple-400" />
-                                    </div>
-                                )}
-                                <div
-                                    className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${msg.role === 'user'
-                                        ? 'bg-[#f0b90b]/10 border border-[#f0b90b]/20 text-white'
-                                        : 'bg-zinc-900 border border-zinc-800 text-zinc-300'
-                                        }`}
-                                >
-                                    {msg.content.split('**').map((part, pi) =>
-                                        pi % 2 === 1 ? <strong key={pi} className="text-white">{part}</strong> : <span key={pi}>{part}</span>
-                                    )}
-                                </div>
-                                {msg.role === 'user' && (
-                                    <div className="w-7 h-7 rounded-full bg-[#f0b90b]/20 border border-[#f0b90b]/20 flex items-center justify-center flex-shrink-0 mt-1">
-                                        <UserIcon className="w-4 h-4 text-[#f0b90b]" />
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                        {aiTyping && (
-                            <div className="flex gap-3">
-                                <div className="w-7 h-7 rounded-full bg-purple-500/20 border border-purple-400/20 flex items-center justify-center flex-shrink-0">
-                                    <Bot className="w-4 h-4 text-purple-400" />
-                                </div>
-                                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3">
-                                    <div className="flex gap-1.5">
-                                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                                    </div>
+                    <div className="p-6 space-y-6">
+                        {!openAiKey && (
+                            <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl space-y-3">
+                                <p className="text-red-400 text-xs font-bold flex items-center gap-2">
+                                    <AlertCircle className="w-4 h-4" /> OpenAI API anahtarınız eksik!
+                                </p>
+                                <div className="flex gap-3">
+                                    <input 
+                                        type="password"
+                                        placeholder="sk-..."
+                                        className="flex-1 bg-black border border-zinc-800 rounded-lg px-4 py-2 text-white text-xs outline-none focus:border-[#f0b90b]"
+                                        onChange={(e) => {
+                                            const key = e.target.value.trim().replace(/[^\x20-\x7E]/g, '');
+                                            if (key.startsWith('sk-')) {
+                                                setOpenAiKey(key);
+                                                localStorage.setItem('site_openai_key', key);
+                                            }
+                                        }}
+                                    />
                                 </div>
                             </div>
                         )}
-                    </div>
 
-                    {/* Chat Input */}
-                    <div className="bg-[#0a0a0f] border-t border-zinc-800 p-4">
-                        <div className="flex gap-3">
-                            <input
-                                value={aiInput}
-                                onChange={e => setAiInput(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleAiSend()}
-                                placeholder="Mesajınızı yazın..."
-                                className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl py-3 px-4 text-white text-sm focus:border-purple-500 transition-colors outline-none placeholder-zinc-600"
-                                disabled={aiTyping}
+                        <div className="space-y-2">
+                            <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest pl-1">Haber Listesi (Numaralandırılmış)</label>
+                            <textarea
+                                value={aiBulkInput}
+                                onChange={e => setAiBulkInput(e.target.value)}
+                                placeholder="Örn:\n1. Galatasaray bugün antrenman yaptı\n2. Fenerbahçe'de yeni transfer gelişmesi\n3. NBA'de gecenin sonuçları..."
+                                className="w-full h-32 bg-zinc-900/50 border border-zinc-800 rounded-xl py-3 px-4 text-white text-sm focus:border-purple-500 transition-colors outline-none placeholder-zinc-700 resize-none font-medium"
+                                disabled={isGenerating}
                             />
-                            <button
-                                onClick={handleAiSend}
-                                disabled={aiTyping || !aiInput.trim()}
-                                className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center text-white hover:from-purple-500 hover:to-indigo-500 transition-all disabled:opacity-40"
-                            >
-                                <Send className="w-4 h-4" />
-                            </button>
                         </div>
-                        {/* Quick actions */}
-                        {aiStep === 1 && (
-                            <div className="flex gap-2 mt-3 flex-wrap">
-                                {NEWS_CATEGORIES.map((c, i) => (
-                                    <button
-                                        key={c.name}
-                                        onClick={() => { setAiInput(`${i + 1}`); }}
-                                        className="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all hover:scale-105"
-                                        style={{ background: `${c.color}15`, borderColor: `${c.color}30`, color: c.color }}
-                                    >
-                                        {c.name}
-                                    </button>
-                                ))}
+
+                        {aiError && (
+                            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-xs font-bold">
+                                {aiError}
                             </div>
                         )}
-                        {aiStep === 2 && (
-                            <div className="flex gap-2 mt-3">
-                                {['1. Kısa', '2. Normal', '3. Detaylı'].map(s => (
-                                    <button
-                                        key={s}
-                                        onClick={() => setAiInput(s.split('. ')[0])}
-                                        className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all"
+
+                        <button
+                            onClick={handleGenerateBulk}
+                            disabled={isGenerating || !aiBulkInput.trim() || !openAiKey}
+                            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black py-4 rounded-xl transition-all shadow-lg shadow-purple-900/40 disabled:opacity-40 flex items-center justify-center gap-3 uppercase text-xs tracking-widest"
+                        >
+                            {isGenerating ? (
+                                <>
+                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    Haberler Yazılıyor...
+                                </>
+                            ) : (
+                                <>
+                                    <Sparkles className="w-4 h-4" />
+                                    Yapay Zekaya Yazdır
+                                </>
+                            )}
+                        </button>
+
+                        {/* Previews List */}
+                        {aiPreviews.length > 0 && (
+                            <div className="mt-8 space-y-4 pt-6 border-t border-zinc-800">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-white font-black text-xs uppercase tracking-widest">Hazırlanan Haberler ({aiPreviews.length})</h4>
+                                    <button 
+                                        onClick={handleImportAll}
+                                        className="text-[10px] font-black uppercase text-emerald-400 hover:text-emerald-300 transition-colors"
                                     >
-                                        {s}
+                                        Hepsini Aktar
                                     </button>
-                                ))}
-                            </div>
-                        )}
-                        {aiStep === 3 && (
-                            <div className="flex gap-2 mt-3">
-                                {['✅ Evet', '🔄 Yeniden', '🔀 Değiştir'].map(s => (
-                                    <button
-                                        key={s}
-                                        onClick={() => setAiInput(s.split(' ')[1])}
-                                        className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all"
-                                    >
-                                        {s}
-                                    </button>
-                                ))}
+                                </div>
+                                <div className="space-y-3">
+                                    {aiPreviews.map((p, idx) => (
+                                        <div key={idx} className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
+                                            <div className="flex items-start justify-between gap-3">
+                                                <h5 className="text-white text-xs font-bold leading-tight">{p.title}</h5>
+                                                <button 
+                                                    onClick={() => handleImportArticle(p)}
+                                                    className="shrink-0 w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center hover:bg-emerald-500/30 transition-all"
+                                                    title="Aktar"
+                                                >
+                                                    <Plus className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                            <p className="text-zinc-500 text-[10px] line-clamp-2">{p.excerpt}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>

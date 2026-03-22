@@ -646,6 +646,143 @@ body {
   transform: scale(0.97);
 }
 
+/* ===== Brand Card Tiers (Altın / Gümüş / Bronz) ===== */
+/* 1. ALTIN KART (index 0 – 1. sıra) */
+.brand-card.altin {
+  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fcf6ba 75%, #aa771c 100%);
+  box-shadow: 0 12px 40px rgba(184, 134, 11, 0.45), 0 0 0 1px rgba(255,255,200,0.25) inset;
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  color: #1a1000;
+}
+.brand-card.altin::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,200,0.7), transparent);
+  opacity: 1;
+}
+.brand-card.altin:hover {
+  box-shadow: 0 20px 60px rgba(184, 134, 11, 0.55), 0 0 40px rgba(255,215,0,0.25);
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(255, 215, 0, 0.6);
+}
+.brand-card.altin .brand-card-name {
+  color: #3d2800;
+  text-shadow: 0 1px 2px rgba(255,255,200,0.5);
+}
+.brand-card.altin .brand-card-subtitle {
+  color: #6b4700;
+}
+.brand-card.altin .brand-card-offer-main {
+  color: #3d2800;
+}
+.brand-card.altin .brand-card-offer-sub {
+  color: #6b4700;
+}
+.brand-card.altin .brand-card-bonus {
+  color: #3d2800;
+}
+.brand-card.altin .brand-card-btn {
+  background: linear-gradient(to bottom, #8a6d3b, #5c4220);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.brand-card.altin .brand-card-btn:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+/* 2. GÜMÜŞ KART (index 1 – 2. sıra) */
+.brand-card.gumus {
+  background: linear-gradient(135deg, #a7a7a7 0%, #e8e8e8 25%, #b0b0b0 50%, #e8e8e8 75%, #888888 100%);
+  box-shadow: 0 10px 35px rgba(169, 169, 169, 0.35), 0 0 0 1px rgba(255,255,255,0.2) inset;
+  border: 1px solid rgba(220, 220, 220, 0.4);
+  color: #111;
+}
+.brand-card.gumus::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  opacity: 1;
+}
+.brand-card.gumus:hover {
+  box-shadow: 0 18px 50px rgba(150, 150, 150, 0.4);
+  transform: translateY(-8px) scale(1.02);
+}
+.brand-card.gumus .brand-card-name {
+  color: #111;
+}
+.brand-card.gumus .brand-card-subtitle {
+  color: #444;
+}
+.brand-card.gumus .brand-card-offer-main {
+  color: #222;
+}
+.brand-card.gumus .brand-card-offer-sub {
+  color: #555;
+}
+.brand-card.gumus .brand-card-bonus {
+  color: #333;
+}
+.brand-card.gumus .brand-card-btn {
+  background: linear-gradient(to bottom, #555, #2e2e2e);
+  color: #fff;
+}
+.brand-card.gumus .brand-card-btn:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+
+/* 3. BRONZ KART (index 2+ – 3. sıra ve sonrası) */
+.brand-card.bronz {
+  background: linear-gradient(135deg, #804a00 0%, #c4a265 40%, #b08d57 60%, #804a00 100%);
+  box-shadow: 0 10px 30px rgba(139, 69, 19, 0.35);
+  border: 1px solid rgba(184, 115, 51, 0.3);
+  color: #fff;
+}
+.brand-card.bronz::before {
+  background: linear-gradient(90deg, transparent, rgba(255,200,130,0.4), transparent);
+  opacity: 1;
+}
+.brand-card.bronz:hover {
+  box-shadow: 0 18px 50px rgba(139, 69, 19, 0.45), 0 0 20px rgba(196,162,101,0.2);
+  transform: translateY(-8px) scale(1.02);
+}
+.brand-card.bronz .brand-card-name {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.brand-card.bronz .brand-card-subtitle {
+  color: rgba(255,255,255,0.75);
+}
+.brand-card.bronz .brand-card-offer-main {
+  color: #ffe8c0;
+}
+.brand-card.bronz .brand-card-offer-sub {
+  color: rgba(255,255,255,0.7);
+}
+.brand-card.bronz .brand-card-bonus {
+  color: rgba(255,255,255,0.8);
+}
+.brand-card.bronz .brand-card-btn {
+  background: linear-gradient(to bottom, #c4a265, #804a00);
+  color: #fff;
+}
+.brand-card.bronz .brand-card-btn:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* Shimmer animation for all metallic cards */
+@keyframes metalShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.brand-card.altin::after,
+.brand-card.gumus::after,
+.brand-card.bronz::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: metalShimmer 3s linear infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
 /* ===== Footer ===== */
 .site-footer {
   width: 100%;

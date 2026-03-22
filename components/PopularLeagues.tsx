@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LeagueTab, LeagueMatch, LeagueStanding, LeaguePrediction } from '../types';
+import { fetchTodaysMatches } from '../utils/sportsApi';
 
 // Icons
 const TrophyIcon = () => (
@@ -554,6 +555,38 @@ interface PopularLeaguesProps {
 const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LEAGUE_DATA, isLoggedIn = false, onLoginRequired }) => {
     const [activeLeague, setActiveLeague] = useState<string>('premier-league');
     const [activeTab, setActiveTab] = useState<'fikstur' | 'puan-durumu' | 'tahminler' | 'istatistikler'>('tahminler');
+    const [liveMatches, setLiveMatches] = useState<Record<string, LeagueMatch[]>>({});
+    const [isLoadingLive, setIsLoadingLive] = useState(false);
+
+    useEffect(() => {
+        const loadLiveMatches = async () => {
+            // Only fetch for soccer leagues by default. In a real scenario, you'd map the league ID to a specific API ID.
+            if (activeTab === 'istatistikler' && !liveMatches[activeLeague]) {
+                setIsLoadingLive(true);
+                const events = await fetchTodaysMatches('Soccer');
+                
+                // Transform SportsEvent to LeagueMatch
+                const transformed: LeagueMatch[] = events.map(e => ({
+                    id: e.idEvent,
+                    date: e.strTime ? `${e.strTime.substring(0, 5)}` : (e.dateEvent || 'TBD'),
+                    homeTeam: e.strHomeTeam,
+                    homeLogo: e.strHomeTeamBadge || '',
+                    awayTeam: e.strAwayTeam,
+                    awayLogo: e.strAwayTeamBadge || '',
+                    homeScore: e.intHomeScore ? parseInt(e.intHomeScore) : undefined,
+                    awayScore: e.intAwayScore ? parseInt(e.intAwayScore) : undefined
+                }));
+
+                setLiveMatches(prev => ({
+                    ...prev,
+                    [activeLeague]: transformed
+                }));
+                setIsLoadingLive(false);
+            }
+        };
+
+        loadLiveMatches();
+    }, [activeLeague, activeTab]);
 
     // Helper for form badge color
     const getFormBadgeColor = (result: 'W' | 'D' | 'L') => {
@@ -575,7 +608,14 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
         }
     };
 
-    const activeData = leagueData[activeLeague];
+    // Merge live data with static data. If we have live data, show it first, then mock.
+    const baseData = leagueData[activeLeague];
+    const activeData = baseData ? {
+        ...baseData,
+        upcoming: liveMatches[activeLeague] && liveMatches[activeLeague].length > 0 
+            ? liveMatches[activeLeague] 
+            : baseData.upcoming
+    } : undefined;
 
     return (
         <section id="popular-leagues-section" className="brands-section relative z-10 py-16">
@@ -651,11 +691,18 @@ const PopularLeagues: React.FC<PopularLeaguesProps> = ({ leagueData = INITIAL_LE
                                     <div className="grid md:grid-cols-2 gap-8">
                                         {/* Yaklaşan Maçlar */}
                                         <div>
-                                            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">Yaklaşan <span className="text-sm text-zinc-500 font-normal">({activeData.upcoming?.length || 0})</span></h3>
+                                            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">Yaklaşan (Bugün) <span className="text-sm text-zinc-500 font-normal">({activeData.upcoming?.length || 0})</span></h3>
                                             <div className="bg-zinc-950 rounded-xl border border-zinc-800 overflow-hidden divide-y divide-zinc-800/50">
-                                                {activeData.upcoming?.map(match => (
+                                                {isLoadingLive ? (
+                                                    <div className="p-8 text-center text-zinc-400 flex flex-col items-center">
+                                                        <div className="w-6 h-6 border-2 border-zinc-500 border-t-[#f0b90b] rounded-full animate-spin mb-3"></div>
+                                                        Canlı veriler yükleniyor...
+                                                    </div>
+                                                ) : activeData.upcoming?.map(match => (
                                                     <div key={match.id} className="p-4 hover:bg-white/5 transition-colors">
-                                                        <div className="text-center text-xs text-zinc-500 mb-2">{match.date}</div>
+                                                        <div className="text-center text-xs text-[#f0b90b] font-bold mb-2 tracking-wider flex items-center justify-center gap-1">
+                                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span> {match.date}
+                                                        </div>
                                                         <div className="flex items-center justify-between">
                                                             <div className="flex items-center gap-2 flex-1 justify-end">
                                                                 <span className="font-bold text-sm">{match.homeTeam}</span>
