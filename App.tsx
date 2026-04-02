@@ -25,8 +25,8 @@ import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView
 import BetlivoSidePanel from './components/BetlivoSidePanel';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, BetLivoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig } from './types';
-import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG } from './constants';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, BetLivoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig } from './types';
+import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG } from './constants';
 
 
 const App: React.FC = () => {
@@ -110,6 +110,17 @@ const App: React.FC = () => {
   const handleWelcomePopupConfigChange = (cfg: WelcomePopupConfig) => {
     setWelcomePopupConfig(cfg);
     localStorage.setItem('site_welcome_popup', JSON.stringify(cfg));
+  };
+
+  // Live Odds Config
+  const [liveOddsConfig, setLiveOddsConfig] = useState<LiveOddsConfig>(() => {
+    const stored = localStorage.getItem('site_live_odds');
+    return stored ? JSON.parse(stored) : DEFAULT_LIVE_ODDS_CONFIG;
+  });
+
+  const handleLiveOddsConfigChange = (cfg: LiveOddsConfig) => {
+    setLiveOddsConfig(cfg);
+    localStorage.setItem('site_live_odds', JSON.stringify(cfg));
   };
 
   const [bjConfig, setBjConfig] = useState<BlackjackConfig>({
@@ -242,6 +253,8 @@ const App: React.FC = () => {
       onSaveMarqueeConfig={handleMarqueeConfigChange}
       welcomePopupConfig={welcomePopupConfig}
       onSaveWelcomePopupConfig={handleWelcomePopupConfigChange}
+      liveOddsConfig={liveOddsConfig}
+      onSaveLiveOddsConfig={handleLiveOddsConfigChange}
     />
   );
 
@@ -320,6 +333,7 @@ const App: React.FC = () => {
         onSearchClick={() => setShowSearch(true)}
         navVisibility={navVisibility}
         marqueeConfig={marqueeConfig}
+        liveOddsConfig={liveOddsConfig}
       />
 
       <main style={{ position: 'relative', zIndex: 10, paddingTop: '130px' }}>

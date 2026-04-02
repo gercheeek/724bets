@@ -539,3 +539,22 @@ export interface TicketEventConfig {
     winners?: { userId: string; username: string; prize: string }[];
     createdAt: number;
 }
+
+// ─── Live Odds Ticker (Popüler Maç Oranları) ────────────────────────────────
+export interface LiveOddsMatch {
+    id: string;
+    homeTeam: string;
+    awayTeam: string;
+    league: string;
+    matchTime: string;       // e.g. "21:00"
+    odd1: string;            // Home win
+    oddX: string;            // Draw
+    odd2: string;            // Away win
+    isLive: boolean;         // Show LIVE badge
+    link: string;            // Redirect URL
+}
+
+export interface LiveOddsConfig {
+    isActive: boolean;
+    matches: LiveOddsMatch[];
+}

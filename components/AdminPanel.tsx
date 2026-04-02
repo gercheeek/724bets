@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig } from '../types';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
@@ -34,6 +34,8 @@ interface AdminPanelProps {
   onSaveMarqueeConfig?: (config: MarqueeConfig) => void;
   welcomePopupConfig?: WelcomePopupConfig;
   onSaveWelcomePopupConfig?: (config: WelcomePopupConfig) => void;
+  liveOddsConfig?: LiveOddsConfig;
+  onSaveLiveOddsConfig?: (config: LiveOddsConfig) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -41,10 +43,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   onSaveBrands, onSaveHero, onThemeChange, onHashtagsChange, onSaveWheelConfig, onSaveBjConfig, onSaveLoyaltyConfig, onLogout, onNavigateHome,
   giveawayConfig, onSaveGiveawayConfig,
   navVisibility, onSaveNavVisibility, marqueeConfig, onSaveMarqueeConfig,
-  welcomePopupConfig, onSaveWelcomePopupConfig
+  welcomePopupConfig, onSaveWelcomePopupConfig,
+  liveOddsConfig, onSaveLiveOddsConfig
 }) => {
   const isAuthor = role.startsWith('author_');
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility' | 'liveodds'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
 
   // Messages State
   const [messages, setMessages] = useState<UserMessage[]>(() => {
@@ -58,6 +61,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localBjConfig, setLocalBjConfig] = useState<BlackjackConfig>(bjConfig || { rewards: [], cooldownHours: 4, dealerHitSoft17: true, lastPlayTime: 0 });
   const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: 'Betlivo Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
   const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: 'BETLIVO', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
+
+  // Live Odds state
+  const [localLiveOdds, setLocalLiveOdds] = useState<LiveOddsConfig>(liveOddsConfig || { isActive: true, matches: [] });
 
   // New Management Local State
   const [localAnalyses, setLocalAnalyses] = useState<MatchAnalysis[]>([]);
@@ -877,6 +883,205 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
             </section>
+          </div>
+        )}
+
+        {/* ═══ LIVE ODDS MANAGEMENT ═══ */}
+        {activeTab === 'liveodds' && (
+          <div className="space-y-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center border border-green-500/20">
+                  <Activity className="w-6 h-6 text-green-400" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black italic uppercase tracking-tighter">Canlı Oran Yönetimi</h2>
+                  <p className="text-zinc-500 text-xs font-bold mt-1">Header’daki kayan oran bandındaki popüler maçları yönetin.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex bg-black/40 p-1 rounded-xl border border-zinc-800">
+                  <button
+                    onClick={() => { const u = { ...localLiveOdds, isActive: true }; setLocalLiveOdds(u); onSaveLiveOddsConfig?.(u); }}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase transition-all ${localLiveOdds.isActive ? 'bg-green-500 text-black' : 'text-zinc-500'}`}
+                  >AKTİF</button>
+                  <button
+                    onClick={() => { const u = { ...localLiveOdds, isActive: false }; setLocalLiveOdds(u); onSaveLiveOddsConfig?.(u); }}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase transition-all ${!localLiveOdds.isActive ? 'bg-red-500 text-white' : 'text-zinc-500'}`}
+                  >PASİF</button>
+                </div>
+                <button
+                  onClick={() => {
+                    const newMatch: LiveOddsMatch = {
+                      id: Date.now().toString(),
+                      homeTeam: '',
+                      awayTeam: '',
+                      league: '',
+                      matchTime: '20:00',
+                      odd1: '1.90',
+                      oddX: '3.50',
+                      odd2: '3.80',
+                      isLive: false,
+                      link: 'https://t.ly/GercekLivo',
+                    };
+                    const u = { ...localLiveOdds, matches: [...localLiveOdds.matches, newMatch] };
+                    setLocalLiveOdds(u);
+                    onSaveLiveOddsConfig?.(u);
+                  }}
+                  className="bg-green-500 hover:bg-green-400 text-black font-black px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all text-xs"
+                >
+                  <Plus className="w-4 h-4" /> YENİ MAÇ EKLE
+                </button>
+              </div>
+            </div>
+
+            {localLiveOdds.matches.length === 0 ? (
+              <div className="text-center py-16 text-zinc-600">
+                <Activity className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                <p className="font-bold">Henüz maç eklenmedi</p>
+                <p className="text-sm mt-1">“Yeni Maç Ekle” butonuna tıklayarak başlayın.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {localLiveOdds.matches.map((match, idx) => (
+                  <div key={match.id} className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <span className="text-zinc-600 text-xs font-bold">#{idx + 1}</span>
+                        <button
+                          onClick={() => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, isLive: !m.isLive } : m) };
+                            setLocalLiveOdds(updated);
+                            onSaveLiveOddsConfig?.(updated);
+                          }}
+                          className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase transition-all border ${match.isLive ? 'bg-red-500/15 border-red-500/30 text-red-400' : 'bg-zinc-800 border-zinc-700 text-zinc-500'}`}
+                        >
+                          {match.isLive ? '🔴 CANLI' : 'CANLI DEĞİL'}
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => {
+                          const updated = { ...localLiveOdds, matches: localLiveOdds.matches.filter(m => m.id !== match.id) };
+                          setLocalLiveOdds(updated);
+                          onSaveLiveOddsConfig?.(updated);
+                        }}
+                        className="text-red-500 hover:bg-red-500/10 p-2 rounded-xl transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-black text-zinc-600 uppercase">Ev Sahibi</label>
+                        <input
+                          value={match.homeTeam}
+                          onChange={(e) => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, homeTeam: e.target.value } : m) };
+                            setLocalLiveOdds(updated);
+                          }}
+                          onBlur={() => onSaveLiveOddsConfig?.(localLiveOdds)}
+                          className="w-full bg-black border border-zinc-800 rounded-xl p-2.5 text-sm font-bold focus:border-green-500/50 transition-all"
+                          placeholder="Galatasaray"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-black text-zinc-600 uppercase">Deplasman</label>
+                        <input
+                          value={match.awayTeam}
+                          onChange={(e) => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, awayTeam: e.target.value } : m) };
+                            setLocalLiveOdds(updated);
+                          }}
+                          onBlur={() => onSaveLiveOddsConfig?.(localLiveOdds)}
+                          className="w-full bg-black border border-zinc-800 rounded-xl p-2.5 text-sm font-bold focus:border-green-500/50 transition-all"
+                          placeholder="Fenerbahçe"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-black text-zinc-600 uppercase">Lig</label>
+                        <input
+                          value={match.league}
+                          onChange={(e) => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, league: e.target.value } : m) };
+                            setLocalLiveOdds(updated);
+                          }}
+                          onBlur={() => onSaveLiveOddsConfig?.(localLiveOdds)}
+                          className="w-full bg-black border border-zinc-800 rounded-xl p-2.5 text-sm font-bold focus:border-green-500/50 transition-all"
+                          placeholder="Süper Lig"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-black text-zinc-600 uppercase">Saat</label>
+                        <input
+                          value={match.matchTime}
+                          onChange={(e) => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, matchTime: e.target.value } : m) };
+                            setLocalLiveOdds(updated);
+                          }}
+                          onBlur={() => onSaveLiveOddsConfig?.(localLiveOdds)}
+                          className="w-full bg-black border border-zinc-800 rounded-xl p-2.5 text-sm font-bold focus:border-green-500/50 transition-all"
+                          placeholder="21:00"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 md:grid-cols-4 gap-3 mt-3">
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-black text-[#f0b90b] uppercase">1 (Ev Sahibi)</label>
+                        <input
+                          value={match.odd1}
+                          onChange={(e) => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, odd1: e.target.value } : m) };
+                            setLocalLiveOdds(updated);
+                          }}
+                          onBlur={() => onSaveLiveOddsConfig?.(localLiveOdds)}
+                          className="w-full bg-black border border-[#f0b90b]/20 rounded-xl p-2.5 text-sm font-black text-[#f0b90b] text-center focus:border-[#f0b90b]/50 transition-all"
+                          placeholder="2.10"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-black text-zinc-400 uppercase">X (Beraberlik)</label>
+                        <input
+                          value={match.oddX}
+                          onChange={(e) => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, oddX: e.target.value } : m) };
+                            setLocalLiveOdds(updated);
+                          }}
+                          onBlur={() => onSaveLiveOddsConfig?.(localLiveOdds)}
+                          className="w-full bg-black border border-zinc-800 rounded-xl p-2.5 text-sm font-black text-zinc-400 text-center focus:border-zinc-600 transition-all"
+                          placeholder="3.40"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-black text-blue-400 uppercase">2 (Deplasman)</label>
+                        <input
+                          value={match.odd2}
+                          onChange={(e) => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, odd2: e.target.value } : m) };
+                            setLocalLiveOdds(updated);
+                          }}
+                          onBlur={() => onSaveLiveOddsConfig?.(localLiveOdds)}
+                          className="w-full bg-black border border-blue-500/20 rounded-xl p-2.5 text-sm font-black text-blue-400 text-center focus:border-blue-500/50 transition-all"
+                          placeholder="3.25"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-black text-zinc-600 uppercase">Link</label>
+                        <input
+                          value={match.link}
+                          onChange={(e) => {
+                            const updated = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, link: e.target.value } : m) };
+                            setLocalLiveOdds(updated);
+                          }}
+                          onBlur={() => onSaveLiveOddsConfig?.(localLiveOdds)}
+                          className="w-full bg-black border border-zinc-800 rounded-xl p-2.5 text-sm font-bold focus:border-green-500/50 transition-all"
+                          placeholder="https://..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

@@ -1224,3 +1224,17 @@ body {
   border-radius: 2px;
   margin: 0 auto 16px;
 }
+
+/* ═══ Live Odds Ticker Animation ═══ */
+@keyframes oddsScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-odds-scroll {
+  animation: oddsScroll calc(var(--odds-count, 5) * 6s) linear infinite;
+}
+
+.animate-odds-scroll:hover {
+  animation-play-state: paused;
+}

@@ -4,7 +4,7 @@ import {
   MessageSquare, Sun, Moon, Home, Ticket, BarChart3, Shield, Newspaper,
   Target, Spade, Trophy, TicketCheck, Gift
 } from 'lucide-react';
-import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
+import { SiteUser, UserLoyalty, MarqueeConfig, LiveOddsConfig } from '../types';
 import { useTheme } from '../ThemeContext';
 
 export interface NavVisibility {
@@ -45,6 +45,7 @@ interface HeaderProps {
   onSearchClick?: () => void;
   navVisibility?: NavVisibility;
   marqueeConfig?: MarqueeConfig;
+  liveOddsConfig?: LiveOddsConfig;
 }
 
 function getUserLoyalty(userId: string): UserLoyalty {
@@ -78,6 +79,7 @@ const Header: React.FC<HeaderProps> = ({
   onSearchClick,
   navVisibility,
   marqueeConfig,
+  liveOddsConfig,
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -424,6 +426,58 @@ const Header: React.FC<HeaderProps> = ({
                 <span className="pr-12">{marqueeConfig.text}</span>
                 <span className="pr-12">{marqueeConfig.text}</span>
                 <span className="pr-12">{marqueeConfig.text}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══════ TIER 3: Live Odds Ticker Bar ══════ */}
+        {liveOddsConfig?.isActive && liveOddsConfig.matches.length > 0 && (
+          <div className="header-categories" style={{ padding: '0', borderBottom: '1px solid rgba(255,255,255,0.04)', background: '#08080C' }}>
+            <div className="w-full overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 2%, black 98%, transparent)' }}>
+              <div className="flex items-center gap-0 animate-odds-scroll whitespace-nowrap" style={{ '--odds-count': liveOddsConfig.matches.length } as React.CSSProperties}>
+                {[...liveOddsConfig.matches, ...liveOddsConfig.matches].map((match, idx) => (
+                  <a
+                    key={`odds-${idx}`}
+                    href={match.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-5 py-2 border-r border-white/[0.04] hover:bg-white/[0.03] transition-all duration-200 group shrink-0"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {/* Live badge */}
+                    {match.isLive && (
+                      <span className="flex items-center gap-1 px-1.5 py-0.5 bg-red-500/15 border border-red-500/30 rounded text-[9px] font-black text-red-400 uppercase tracking-wider">
+                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+                        Canlı
+                      </span>
+                    )}
+                    {!match.isLive && (
+                      <span className="text-[9px] font-bold text-zinc-500 min-w-[32px]">{match.matchTime}</span>
+                    )}
+
+                    {/* Teams */}
+                    <span className="text-[11px] font-bold text-zinc-300 group-hover:text-white transition-colors">
+                      {match.homeTeam} <span className="text-zinc-600 mx-0.5">vs</span> {match.awayTeam}
+                    </span>
+
+                    {/* Odds buttons */}
+                    <div className="flex items-center gap-1">
+                      <span className="px-2 py-1 rounded text-[10px] font-black bg-[#f0b90b]/8 text-[#f0b90b] border border-[#f0b90b]/15 hover:bg-[#f0b90b]/20 hover:border-[#f0b90b]/40 transition-all cursor-pointer" title="1">
+                        {match.odd1}
+                      </span>
+                      <span className="px-2 py-1 rounded text-[10px] font-black bg-white/[0.04] text-zinc-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-white transition-all cursor-pointer" title="X">
+                        {match.oddX}
+                      </span>
+                      <span className="px-2 py-1 rounded text-[10px] font-black bg-[#3b82f6]/8 text-[#60a5fa] border border-[#3b82f6]/15 hover:bg-[#3b82f6]/20 hover:border-[#3b82f6]/40 transition-all cursor-pointer" title="2">
+                        {match.odd2}
+                      </span>
+                    </div>
+
+                    {/* League badge */}
+                    <span className="text-[8px] font-bold text-zinc-600 uppercase tracking-wider">{match.league}</span>
+                  </a>
+                ))}
               </div>
             </div>
           </div>
