@@ -132,11 +132,24 @@ const App: React.FC = () => {
 
   // Show Betlivo popup once per browser session
   useEffect(() => {
-    if (!welcomePopupConfig.isActive) return;
+    if (!welcomePopupConfig.isActive) {
+      setShowBetlivoPopup(false);
+      return;
+    }
+    
+    // Explicitly show it if it's active. If we want it only once per session, 
+    // the sessionStorage check is fine, but for testing (toggling ON/OFF) we should probably clear it.
     const seen = sessionStorage.getItem('betlivo_popup_seen');
     if (!seen) {
       const t = setTimeout(() => setShowBetlivoPopup(true), 1200);
       return () => clearTimeout(t);
+    } else {
+       // If it is active but already seen, and it JUST became active (toggled on), 
+       // we should probably show it again for admin testing.
+       // The simplest way is to clear the flag when we want it to show.
+       sessionStorage.removeItem('betlivo_popup_seen');
+       const t = setTimeout(() => setShowBetlivoPopup(true), 1200);
+       return () => clearTimeout(t);
     }
   }, [welcomePopupConfig.isActive]);
 

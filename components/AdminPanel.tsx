@@ -116,6 +116,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (welcomePopupConfig) setLocalWelcomePopup(welcomePopupConfig);
+  }, [welcomePopupConfig]);
+
+  useEffect(() => {
+    if (liveOddsConfig) setLocalLiveOdds(liveOddsConfig);
+  }, [liveOddsConfig]);
+
   const handleBrandChange = (index: number, field: keyof Brand, value: string) => {
     const updated = [...localBrands];
     updated[index] = { ...updated[index], [field]: value };
@@ -812,13 +820,21 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
                 <div className="flex items-center gap-3 bg-black/40 p-2 rounded-2xl border border-zinc-800">
                    <button
-                    onClick={() => setLocalWelcomePopup({ ...localWelcomePopup, isActive: true })}
+                    onClick={() => {
+                        const updated = { ...localWelcomePopup, isActive: true };
+                        setLocalWelcomePopup(updated);
+                        onSaveWelcomePopupConfig?.(updated);
+                    }}
                     className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${localWelcomePopup.isActive ? 'bg-[#f0b90b] text-black' : 'text-zinc-500'}`}
                   >
                     AKTİF
                   </button>
                   <button
-                    onClick={() => setLocalWelcomePopup({ ...localWelcomePopup, isActive: false })}
+                    onClick={() => {
+                        const updated = { ...localWelcomePopup, isActive: false };
+                        setLocalWelcomePopup(updated);
+                        onSaveWelcomePopupConfig?.(updated);
+                    }}
                     className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${!localWelcomePopup.isActive ? 'bg-red-500 text-white' : 'text-zinc-500'}`}
                   >
                     PASİF
