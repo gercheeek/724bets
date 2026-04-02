@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Brand } from './types';
+import { Brand, MarqueeConfig, WelcomePopupConfig } from './types';
 
 export const BRANDS: Brand[] = [
   {
@@ -54,3 +54,21 @@ export const BRANDS: Brand[] = [
     link: '#',
   },
 ];
+
+export const DEFAULT_MARQUEE_CONFIG: MarqueeConfig = {
+  isActive: true,
+  text: 'Hoş geldiniz! En yüksek oranlar sadece 724bets.net adresinde!',
+  speed: 50,
+  color: '#f0b90b',
+  isBold: true,
+};
+
+export const DEFAULT_WELCOME_POPUP_CONFIG: WelcomePopupConfig = {
+  isActive: true,
+  title: 'BETLIVO',
+  subtitle: "Türkiye'nin En Güvenilir Bahis Platformu",
+  offerMain: '%100 HOŞGELDİN BONUSU',
+  offerSub: 'İlk yatırımınıza özel · Anında hesabınıza yükler',
+  buttonText: '🚀 HEMEN KAYDOL — ÜCRETSİZ',
+  buttonLink: 'https://betlivo.com',
+};

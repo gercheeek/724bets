@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
+import { WelcomePopupConfig } from '../types';
 
 interface BetlivoPopupProps {
     onClose: () => void;
+    config: WelcomePopupConfig;
 }
 
-const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose }) => {
+const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose, config }) => {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
@@ -91,9 +93,9 @@ const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose }) => {
                         <div>
                             <h2 className="text-5xl font-black tracking-tighter uppercase leading-none mb-1"
                                 style={{ color: '#f0b90b' }}>
-                                BETLIVO
+                                {config.title}
                             </h2>
-                            <p className="text-zinc-400 text-sm font-bold">Türkiye'nin En Güvenilir Bahis Platformu</p>
+                            <p className="text-zinc-400 text-sm font-bold">{config.subtitle}</p>
                         </div>
                     </div>
 
@@ -104,11 +106,10 @@ const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose }) => {
                             border: '1px solid rgba(240,185,11,0.2)',
                         }}>
                         <div className="text-4xl md:text-5xl font-black text-white mb-2">
-                            %100{' '}
-                            <span style={{ color: '#f0b90b' }}>HOŞGELDİN BONUSU</span>
+                            {config.offerMain}
                         </div>
                         <p className="text-zinc-400 text-sm font-bold">
-                            İlk yatırımınıza özel · Anında hesabınıza yükler
+                            {config.offerSub}
                         </p>
                     </div>
 
@@ -131,7 +132,7 @@ const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose }) => {
                     {/* CTA buttons */}
                     <div className="flex flex-col sm:flex-row gap-3">
                         <a
-                            href="https://betlivo.com"
+                            href={config.buttonLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm uppercase tracking-widest text-black transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -141,7 +142,7 @@ const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose }) => {
                                 textDecoration: 'none',
                             }}
                         >
-                            🚀 HEMEN KAYDOL — ÜCRETSİZ
+                            {config.buttonText}
                         </a>
                         <button
                             onClick={handleClose}

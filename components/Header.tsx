@@ -257,7 +257,7 @@ const Header: React.FC<HeaderProps> = ({
       onViewChange?.(cat.view);
       setTimeout(() => {
         const el = document.getElementById(cat.scrollTo!);
-        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' });
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 15, behavior: 'smooth' });
       }, 100);
     } else {
       onViewChange?.(cat.view);
@@ -281,52 +281,111 @@ const Header: React.FC<HeaderProps> = ({
           .animate-custom-marquee {
             animation: custom-marquee var(--speed, 20s) linear infinite;
           }
+          @keyframes logoShimmer {
+            0%   { background-position: 200% center; }
+            100% { background-position: -200% center; }
+          }
+          @keyframes logoGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(240,185,11,0.3), 0 0 20px rgba(240,185,11,0.1); }
+            50% { text-shadow: 0 0 15px rgba(240,185,11,0.5), 0 0 30px rgba(240,185,11,0.2), 0 0 45px rgba(240,185,11,0.1); }
+          }
+          .logo-text-724 {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+            padding: 6px 16px;
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            border: 1px solid transparent;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+          .logo-text-724 .logo-num {
+            background: linear-gradient(135deg, #f0b90b, #ffdd57, #f0b90b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoGlow 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(240,185,11,0.4));
+          }
+          .logo-text-724 .logo-dot {
+            color: #f0b90b;
+            -webkit-text-fill-color: #f0b90b;
+            font-weight: 900;
+          }
+          .logo-text-724 .logo-ext {
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 20px;
+          }
+          .logo-text-724:hover {
+            background: linear-gradient(135deg, rgba(240,185,11,0.1), rgba(255,215,0,0.04));
+            border-color: rgba(240,185,11,0.2);
+            box-shadow: 0 0 35px rgba(240,185,11,0.15), 0 0 70px rgba(240,185,11,0.05);
+            transform: scale(1.04);
+          }
+          .logo-text-724::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 40%, rgba(255,215,0,0.1) 50%, transparent 60%);
+            background-size: 200% 100%;
+            border-radius: inherit;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+          .logo-text-724:hover::after {
+            opacity: 1;
+            animation: logoShimmer 2s ease-in-out infinite;
+          }
         `}</style>
-        {/* ══════ TIER 1: Top Bar ══════ */}
-        <div className="header-topbar">
-          <div className="flex items-center gap-4 flex-1 overflow-hidden">
-            {/* Logo */}
-            <div
-              className="header-logo shrink-0"
-              onClick={() => onViewChange?.('home')}
-              onMouseEnter={() => setLogoHovered(true)}
-              onMouseLeave={() => setLogoHovered(false)}
-              style={{ transform: logoHovered ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.3s ease' }}
-            >
-              <img 
-                src="/logo.png" 
-                alt="7/24Bets" 
-                className="h-12 md:h-[60px] w-auto object-contain"
-                style={{ 
-                  filter: theme === 'light' && !isScrolled ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' : 'none'
-                }}
-              />
-            </div>
 
-          {/* Marquee (Kayan Yazı) */}
-          {marqueeConfig?.isActive && (
-            <div className="hidden md:flex flex-1 overflow-hidden ml-2 border-l border-white/10 pl-4 items-center h-8" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
-              <div 
-                className="whitespace-nowrap animate-custom-marquee inline-block"
-                style={{ 
-                  color: marqueeConfig.color, 
-                  fontWeight: marqueeConfig.isBold ? 900 : 500,
-                  '--speed': `${marqueeConfig.speed}s` 
-                } as React.CSSProperties}
-              >
-                <span className="pr-12">{marqueeConfig.text}</span>
-                <span className="pr-12">{marqueeConfig.text}</span>
-                <span className="pr-12">{marqueeConfig.text}</span>
-                <span className="pr-12">{marqueeConfig.text}</span>
-                <span className="pr-12">{marqueeConfig.text}</span>
-              </div>
-            </div>
-          )}
+        {/* ══════ TIER 1: Top Bar — Logo + Nav + Controls ══════ */}
+        <div className="header-topbar">
+          {/* Left: Logo Text */}
+          <div
+            className="logo-text-724 shrink-0"
+            onClick={() => onViewChange?.('home')}
+          >
+            <span className="logo-num">724BAHİS</span>
+            <span className="logo-dot">.</span>
+            <span className="logo-ext">NET</span>
           </div>
 
-          {/* Right side: theme + search + user */}
+          {/* Center: Navigation Items */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '2px', flex: 1, justifyContent: 'center', overflow: 'auto', scrollbarWidth: 'none' }}>
+            {categories.map((cat) => {
+              if (cat.visKey && navVisibility?.[cat.visKey] === false) return null;
+              if (cat.requireRole && !userRole) return null;
+              const active = isCategoryActive(cat);
+              return (
+                <button
+                  key={cat.key}
+                  className={`header-cat-item ${active ? 'active' : ''}`}
+                  onClick={() => handleCategoryClick(cat)}
+                  style={{ padding: '8px 14px', flexDirection: 'row', gap: '6px' }}
+                >
+                  <span className="header-cat-icon">{cat.icon}</span>
+                  <span className="header-cat-label" style={{ fontSize: '11px' }}>{cat.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Right: Theme + Search + User */}
           <div className="header-topbar-right">
-            {/* Theme toggle */}
             <button
               onClick={toggleTheme}
               className="header-icon-btn"
@@ -336,7 +395,6 @@ const Header: React.FC<HeaderProps> = ({
                 ? <Moon className="w-4 h-4" />
                 : <Sun className="w-4 h-4" />}
             </button>
-            {/* Search button */}
             <button
               onClick={onSearchClick}
               className="header-icon-btn"
@@ -348,28 +406,28 @@ const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* ══════ TIER 2: Category Bar ══════ */}
-        <nav className="header-categories">
-          {categories.map((cat) => {
-            // Visibility check
-            if (cat.visKey && navVisibility?.[cat.visKey] === false) return null;
-            // Role check
-            if (cat.requireRole && !userRole) return null;
-
-            const active = isCategoryActive(cat);
-
-            return (
-              <button
-                key={cat.key}
-                className={`header-cat-item ${active ? 'active' : ''}`}
-                onClick={() => handleCategoryClick(cat)}
+        {/* ══════ TIER 2: Marquee Bar ══════ */}
+        {marqueeConfig?.isActive && (
+          <div className="header-categories" style={{ justifyContent: 'center', padding: '6px 16px' }}>
+            <div className="flex-1 overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
+              <div 
+                className="whitespace-nowrap animate-custom-marquee inline-block"
+                style={{ 
+                  color: marqueeConfig.color, 
+                  fontWeight: marqueeConfig.isBold ? 900 : 500,
+                  fontSize: '13px',
+                  '--speed': `${marqueeConfig.speed}s` 
+                } as React.CSSProperties}
               >
-                <span className="header-cat-icon">{cat.icon}</span>
-                <span className="header-cat-label">{cat.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+                <span className="pr-12">{marqueeConfig.text}</span>
+                <span className="pr-12">{marqueeConfig.text}</span>
+                <span className="pr-12">{marqueeConfig.text}</span>
+                <span className="pr-12">{marqueeConfig.text}</span>
+                <span className="pr-12">{marqueeConfig.text}</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* DEPOSIT MODAL */}

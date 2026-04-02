@@ -27,6 +27,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
     const [buyMsg, setBuyMsg] = useState('');
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [ticketPool, setTicketPool] = useState<{ slot: number, userId: string, username: string }[]>(getTicketPool);
+    const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+    // Form states
+    const [depositUsername, setDepositUsername] = useState('');
+    const [depositAmount, setDepositAmount] = useState('');
+    const [depositDate, setDepositDate] = useState('');
+    const [depositTicket, setDepositTicket] = useState('');
 
     const faqs = [
         { q: "Bilet nasıl kazanılır?", a: "Sponsor sitemiz Betlivo'ya yatırımlar yaparak veya Görevler sekmesindeki etkinlikleri tamamlayarak bilet kazanabilirsiniz." },
@@ -41,6 +48,40 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
 
     // Refresh on mount
     useEffect(() => { setLoyalty(loadUserLoyalty(userId)); }, [userId]);
+
+    const showSuccess = (msg: string) => {
+        setSuccessMsg(msg);
+        setTimeout(() => setSuccessMsg(null), 3000);
+    };
+
+    const handleDepositRequest = () => {
+        if (!depositUsername.trim() || !depositAmount.trim() || !depositDate.trim() || !depositTicket.trim()) {
+            showSuccess('❌ Lütfen tüm alanları doldurun.');
+            return;
+        }
+
+        try {
+            const messages = JSON.parse(localStorage.getItem('site_messages') || '[]');
+            const newMessage = {
+                id: Date.now().toString(),
+                userId: userId,
+                username: depositUsername,
+                content: `Bilet Etkinliği Talebi:\nKullanıcı Adı: ${depositUsername}\nYatırım Tutarı: ${depositAmount} TL\nTarih: ${depositDate}\nİstenilen Bilet No: ${depositTicket}\n\nKullanıcı bilet etkinliği kapsamında bilet talebi oluşturdu.`,
+                isRead: false,
+                createdAt: Date.now()
+            };
+
+            localStorage.setItem('site_messages', JSON.stringify([...messages, newMessage]));
+
+            showSuccess('✅ Talebiniz başarıyla alındı! İnceleme sonrası eklenecektir.');
+            setDepositUsername('');
+            setDepositAmount('');
+            setDepositDate('');
+            setDepositTicket('');
+        } catch {
+            showSuccess('❌ Bir hata oluştu.');
+        }
+    };
 
     const TICKET_PRICE = 500; // 500 coins = 1 ticket
 
@@ -112,6 +153,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
 
     return (
         <div className="min-h-screen transition-colors duration-500 pb-20">
+            {/* Success notification */}
+            {successMsg && (
+                <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9700] px-6 py-3 rounded-2xl font-black text-sm text-[var(--text-primary)] shadow-[0_10px_40px_rgba(0,0,0,0.3)] bg-[var(--bg-elevated)] border border-purple-500/40 transition-all"
+                    style={{ animation: 'slideDown 0.3s ease' }}>
+                    {successMsg}
+                </div>
+            )}
             <div className="max-w-2xl mx-auto px-4 py-8">
 
                 {/* Header */}
@@ -186,6 +234,52 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                             {buyMsg}
                         </div>
                     )}
+                </div>
+
+                {/* Deposit Request Form (Talep Oluştur) */}
+                <div className="p-6 rounded-3xl mb-8 space-y-4 bg-purple-500/5 border border-purple-500/15 shadow-[0_0_50px_rgba(168,85,247,0.03)]">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-2xl bg-purple-500/10 flex items-center justify-center">
+                            <Ticket className="w-5 h-5 text-purple-400" />
+                        </div>
+                        <div>
+                            <div className="text-[var(--text-primary)] font-black text-lg tracking-tight">Talep Oluştur</div>
+                            <div className="text-[var(--text-muted)] text-[11px] font-medium">Her 500 TL yatırım için 250 Coin + 1 Bilet</div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3 mt-4">
+                        <div className="group relative">
+                            <input type="text" placeholder="Betlivo Kullanıcı Adı" value={depositUsername}
+                                onChange={e => setDepositUsername(e.target.value)}
+                                className="w-full px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-bold outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/5 transition-all"
+                            />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <input type="number" placeholder="Yatırım Tutarı" value={depositAmount}
+                                onChange={e => setDepositAmount(e.target.value)}
+                                className="px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-bold outline-none focus:border-purple-500/50 transition-all"
+                            />
+                            <input type="datetime-local" value={depositDate}
+                                onChange={e => setDepositDate(e.target.value)}
+                                className="px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-bold outline-none focus:border-purple-500/50 transition-all h-[46px]"
+                            />
+                            <input type="number" placeholder="İstenilen Bilet No" value={depositTicket}
+                                onChange={e => setDepositTicket(e.target.value)}
+                                className="px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-bold outline-none focus:border-purple-500/50 transition-all"
+                                min="1" max="200"
+                            />
+                        </div>
+                        <button onClick={handleDepositRequest}
+                            className="w-full py-4 rounded-2xl font-black text-sm text-white uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-95 shadow-[0_10px_30px_rgba(168,85,247,0.25)]"
+                            style={{ background: 'linear-gradient(135deg, #a78bfa, #7c3aed)' }}>
+                            Talep Et
+                        </button>
+                    </div>
+                    <div className="text-[var(--text-dim)] text-[10px] text-center font-bold px-4 leading-relaxed">
+                        Talebiniz incelendikten sonra biletleriniz yansır. <br/>
+                        Miktar: Her 500 TL = 250 Coin + 1 Bilet
+                    </div>
                 </div>
 
                 {/* How to earn tickets - NEW UI */}
@@ -326,6 +420,12 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                     <div className="text-[var(--text-dim)] text-xs mt-1 font-bold">Biletlerinizi biriktirmeye devam edin!</div>
                 </div>
             </div>
+            <style>{`
+                @keyframes slideDown {
+                    from { transform: translate(-50%, -20px); opacity: 0; }
+                    to { transform: translate(-50%, 0); opacity: 1; }
+                }
+            `}</style>
         </div>
     );
 };

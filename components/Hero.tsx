@@ -37,11 +37,11 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <section className="relative w-full py-32 overflow-hidden" style={{ background: 'var(--bg-main)', borderTop: '1px solid var(--border-subtle)' }}>
+    <section className="relative w-full py-12 overflow-hidden" style={{ background: 'var(--bg-main)', borderTop: '1px solid var(--border-subtle)' }}>
       <div className="relative max-w-[1240px] mx-auto px-6">
 
         {/* Header */}
-        <div className="text-center mb-24 animate-fade-in-up">
+        <div className="text-center mb-8 animate-fade-in-up">
           <h2 className="text-[42px] md:text-[56px] font-black mb-6 leading-tight" style={{ color: 'var(--text-primary)' }}>
             Kazanç Tesadüf Değil,<br />
             <span className="text-[#FFC107]">ANALİZ</span> İşidir.
@@ -59,11 +59,11 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {features.map((feature, idx) => (
             <div
               key={idx}
-              className="glass-card p-10 rounded-[30px] hover:border-[#FFC107]/30 transition-all duration-500 group animate-fade-in-up"
+              className="glass-card p-6 rounded-[30px] hover:border-[#FFC107]/30 transition-all duration-500 group animate-fade-in-up"
               style={{
                 animationDelay: `${idx * 0.1}s`,
                 background: 'var(--bg-card)',

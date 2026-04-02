@@ -1,6 +1,95 @@
 import { MatchAnalysis, NewsArticle } from './types';
 
 export const demoAnalyses: MatchAnalysis[] = [
+    // MARCH 31 - NATIONAL MATCHES
+    {
+        id: 'kosovo-turkey-20260331',
+        league: 'Milli Maçlar',
+        homeTeam: 'KOSOVA',
+        awayTeam: 'TÜRKİYE',
+        matchTime: '21:45',
+        matchDate: '2026-03-31',
+        analysis: 'Maç Analizi: Ay-yıldızlı ekibimiz, yarı finalde Romanya engelini aşarak finale yükseldi. Kosova ise sürpriz bir çıkışla Slovakya’yı eledi. Priştine’de ateşli bir atmosfer bizi beklese de, kadro kalitesi ve tecrübe anlamında net favoriyiz. Arda Güler ve Kenan Yıldız\'ın yaratıcılığı, Kosova\'nın savunma boşluklarını cezalandıracaktır. Günün Tercihi: Maç Sonucu 2 (Türkiye Kazanır). Sürpriz Tercih: Karşılıklı Gol Var & MS 2. Skor Tahmini: 1-2.',
+        tacticalSummary: 'Arda Güler ve Kenan Yıldız\'ın yaratıcılığı belirleyici olacaktır.',
+        breakingPoint: 'Savunma boşluklarının cezalandırılması.',
+        bettingScenario: 'Milli heyecan en yüksek oranlarla Betlivo iş ortaklığıyla sitemizde!',
+        prediction: 'MS 2 (TÜRKİYE KAZANIR)',
+        confidence: 94,
+        modelScore: 89,
+        recentHistory: 'Yeni Analiz',
+        expectedGoals: '2.50',
+        bookieOdds: [
+            { name: 'BETLİVO', odd1: '1.92', odd2: '2.05', link: 'https://724bets.net/betlivo/', isHighest: true },
+            { name: 'MARSBAHİS', odd1: '1.85', odd2: '1.98', link: 'https://google.com' }
+        ],
+        createdAt: Date.now()
+    },
+    {
+        id: 'sweden-poland-20260331',
+        league: 'Milli Maçlar',
+        homeTeam: 'İSVEÇ',
+        awayTeam: 'POLONYA',
+        matchTime: '21:45',
+        matchDate: '2026-03-31',
+        analysis: 'Maç Analizi: Gecenin en sert eşleşmesi. İsveç’te formunun zirvesinde olan Gyökeres, Polonya savunması için en büyük tehdit. Polonya ise Lewandowski sonrası dönemde daha kolektif bir oyun sergiliyor ancak deplasmanda olmaları büyük dezavantaj. Fizik gücü yüksek, düşük tempolu bir maç bekliyoruz. Günün Tercihi: 2.5 Alt. Sürpriz Tercih: Maç Sonucu 0 (Beraberlik - Uzatmalara Gider). Skor Tahmini: 1-1.',
+        tacticalSummary: 'Gyökeres tehdidi ve fizik gücü yüksek oyun.',
+        breakingPoint: 'Polonya\'nın deplasman dezavantajı.',
+        bettingScenario: 'Bu maçın canlı bahis seçenekleri maç saatinde 724bets.net\'te yayında olacak.',
+        prediction: '2.5 ALT',
+        confidence: 88,
+        modelScore: 85,
+        recentHistory: 'Yeni Analiz',
+        expectedGoals: '1.95',
+        bookieOdds: [
+            { name: 'BETLİVO', odd1: '1.85', odd2: '1.95', link: 'https://724bets.net/betlivo/', isHighest: true },
+            { name: 'MARSBAHİS', odd1: '1.78', odd2: '1.88', link: 'https://google.com' }
+        ],
+        createdAt: Date.now()
+    },
+    {
+        id: 'bosnia-italy-20260331',
+        league: 'Milli Maçlar',
+        homeTeam: 'BOSNA HERSEK',
+        awayTeam: 'İTALYA',
+        matchTime: '21:45',
+        matchDate: '2026-03-31',
+        analysis: 'Maç Analizi: İtalya, son dönemdeki formsuzluğunu bu finalle unutturmak istiyor. Bosna Hersek ise sahasında çok dirençli bir takım ancak İtalya\'nın orta saha üstünlüğü maçın kaderini belirleyecektir. İtalya kontrollü başlayıp ikinci yarıda sonuca gitmeye çalışacaktır. Günün Tercihi: Maç Sonucu 2 (İtalya Kazanır). Sürpriz Tercih: Toplam Gol Aralığı 2-3. Skor Tahmini: 0-2.',
+        tacticalSummary: 'İtalya\'nın orta saha üstünlüğü belirleyici olacaktır.',
+        breakingPoint: 'İkinci yarıda İtalya\'nın kuracağı baskı.',
+        bettingScenario: 'İtalya\'nın katı savunmasına güvenenler için "Gök Mavililer Gol Yemez" seçeneği Betlivo\'da değerlendirilebilir.',
+        prediction: 'MS 2 (İTALYA KAZANIR)',
+        confidence: 90,
+        modelScore: 87,
+        recentHistory: 'Yeni Analiz',
+        expectedGoals: '2.10',
+        bookieOdds: [
+            { name: 'BETLİVO', odd1: '1.75', odd2: '1.85', link: 'https://724bets.net/betlivo/', isHighest: true },
+            { name: 'MARSBAHİS', odd1: '1.70', odd2: '1.80', link: 'https://google.com' }
+        ],
+        createdAt: Date.now()
+    },
+    {
+        id: 'czechia-denmark-20260331',
+        league: 'Milli Maçlar',
+        homeTeam: 'ÇEKYA',
+        awayTeam: 'DANİMARKA',
+        matchTime: '21:45',
+        matchDate: '2026-03-31',
+        analysis: 'Maç Analizi: İki disiplinli Avrupa ekibi karşı karşıya. Danimarka, yarı finaldeki 4-0\'lık galibiyetiyle ne kadar formda olduğunu gösterdi. Çekya ise daha çok duran toplar ve savunma disipliniyle ayakta kalmaya çalışıyor. Danimarka\'nın hücum zenginliği bu maçta ağır basıyor. Günün Tercihi: Danimarka Çifte Şans (02). Sürpriz Tercih: Maç Sonucu 2. Skor Tahmini: 0-1.',
+        tacticalSummary: 'Danimarka\'nın hücum zenginliği ve disiplinli oyun.',
+        breakingPoint: 'Danimarka\'nın yarı finaldeki 4-0\'lık performansı.',
+        bettingScenario: 'Günün en dengeli maçı için "Sistem" kuponlarını tercih etmenizi öneriyoruz.',
+        prediction: 'DANİMARKA ÇİFTE ŞANS (02)',
+        confidence: 85,
+        modelScore: 83,
+        recentHistory: 'Yeni Analiz',
+        expectedGoals: '2.25',
+        bookieOdds: [
+            { name: 'BETLİVO', odd1: '1.68', odd2: '1.78', link: 'https://724bets.net/betlivo/', isHighest: true },
+            { name: 'MARSBAHİS', odd1: '1.60', odd2: '1.70', link: 'https://google.com' }
+        ],
+        createdAt: Date.now()
+    },
     // FEBRUARY 27
     {
         id: 'wolverhampton-villa',
@@ -1682,6 +1771,18 @@ export const demoAnalyses: MatchAnalysis[] = [
 ];
 
 export const demoCoupons: any[] = [ // Using any for simplicity or I can import Coupon type
+    {
+        id: 'national-matches-31mar',
+        title: 'MİLLİ MAÇ ÖZEL KASASI',
+        riskLevel: 'MEDIUM',
+        matches: [
+            { matchId: 'kosovo-turkey-20260331', homeTeam: 'KOSOVA', awayTeam: 'TÜRKİYE', prediction: 'MS 2', odd: '1.92' },
+            { matchId: 'bosnia-italy-20260331', homeTeam: 'BOSNA HERSEK', awayTeam: 'İTALYA', prediction: 'MS 2', odd: '1.75' },
+            { matchId: 'czechia-denmark-20260331', homeTeam: 'ÇEKYA', awayTeam: 'DANİMARKA', prediction: 'DANIMARKA 02 ÇŞ', odd: '1.68' }
+        ],
+        totalOdd: '5.64',
+        date: '2026-03-31'
+    },
     {
         id: 'low-risk-01',
         title: 'GÜNÜN KASASI',

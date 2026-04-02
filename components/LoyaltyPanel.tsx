@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     LoyaltyConfig, UserLoyalty, MarketItem, CoinTransaction
 } from '../types';
@@ -119,21 +119,15 @@ interface LoyaltyPanelProps {
     config: LoyaltyConfig;
     userId: string;
     onClose?: () => void;
+    onNavigate: (view: string) => void;
 }
 
-const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose }) => {
+const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, onNavigate }) => {
     const cfg = { ...DEFAULT_LOYALTY_CONFIG, ...config, rules: config.rules?.length ? config.rules : DEFAULT_LOYALTY_CONFIG.rules, marketItems: config.marketItems?.length ? config.marketItems : DEFAULT_LOYALTY_CONFIG.marketItems };
     const [loyalty, setLoyalty] = useState<UserLoyalty>(() => loadUserLoyalty(userId));
     const [activeTab, setActiveTab] = useState<'wallet' | 'tasks' | 'market' | 'history'>('wallet');
     const [confirmItem, setConfirmItem] = useState<MarketItem | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
-    // Deposit Request State
-    // Deposit Request State
-    const [depositUsername, setDepositUsername] = useState('');
-    const [depositAmount, setDepositAmount] = useState('');
-    const [depositDate, setDepositDate] = useState('');
-    const [depositTicket, setDepositTicket] = useState('');
 
     const showSuccess = (msg: string) => {
         setSuccessMsg(msg);
@@ -154,35 +148,12 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose }) 
         return updated;
     };
 
-    // Deposit Request Handler
-    const handleDepositRequest = () => {
-        if (!depositUsername.trim() || !depositAmount.trim() || !depositDate.trim() || !depositTicket.trim()) {
-            showSuccess('❌ Lütfen tüm alanları doldurun.');
-            return;
-        }
+    const statCards = [
+        { label: 'Coin Bakiyesi', value: loyalty.coins.toLocaleString('tr-TR'), icon: <Coins className="w-5 h-5" />, color: '#f0b90b' },
+        { label: 'Bilet Sayısı', value: loyalty.tickets, icon: <Ticket className="w-5 h-5" />, color: '#a78bfa', sub: `${loyalty.pendingTickets} bekleyen` },
+        { label: 'Toplam Kazanç', value: loyalty.totalEarned.toLocaleString('tr-TR'), icon: <Trophy className="w-5 h-5" />, color: '#ec4899' },
+    ];
 
-        try {
-            const messages = JSON.parse(localStorage.getItem('site_messages') || '[]');
-            const newMessage = {
-                id: Date.now().toString(),
-                userId: userId,
-                username: depositUsername,
-                content: `Betlivo Bilet/Coin Talebi:\nKullanıcı Adı: ${depositUsername}\nYatırım Tutarı: ${depositAmount} TL\nTarih: ${depositDate}\nİstenilen Bilet No: ${depositTicket}\n\nKullanıcı hesabına sadakat puanı ve belirtilen bileti talep ediyor.`,
-                isRead: false,
-                createdAt: Date.now()
-            };
-
-            localStorage.setItem('site_messages', JSON.stringify([...messages, newMessage]));
-
-            showSuccess('✅ Talebiniz başarıyla alındı! İnceleme sonrası eklenecektir.');
-            setDepositUsername('');
-            setDepositAmount('');
-            setDepositDate('');
-            setDepositTicket('');
-        } catch {
-            showSuccess('❌ Bir hata oluştu.');
-        }
-    };
 
     // Simulate slot volume
     const handleVolume = () => {
@@ -282,44 +253,21 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose }) 
                 {activeTab === 'wallet' && (
                     <div className="space-y-4">
                         {/* Deposit request form */}
-                        {depositRule && depositRule.isActive && (
-                            <div className="p-4 rounded-2xl space-y-3 bg-[#f0b90b]/5 border border-[#f0b90b]/15">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-xl bg-[#f0b90b]/10 flex items-center justify-center"><Coins className="w-4 h-4 text-[#f0b90b]" /></div>
-                                    <div>
-                                        <div className="text-[var(--text-primary)] font-black text-sm">Talep Oluştur</div>
-                                        <div className="text-[var(--text-muted)] text-[10px]">{depositRule.description}</div>
-                                    </div>
-                                </div>
-                                <div className="space-y-2 mt-2">
-                                    <input type="text" placeholder="Betlivo Kullanıcı Adı" value={depositUsername}
-                                        onChange={e => setDepositUsername(e.target.value)}
-                                        className="w-full px-3 py-2 rounded-xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-bold outline-none focus:border-[#f0b90b]/40 transition-colors"
-                                    />
-                                    <div className="flex gap-2">
-                                        <input type="number" placeholder="Yatırım" value={depositAmount}
-                                            onChange={e => setDepositAmount(e.target.value)}
-                                            className="w-1/3 px-3 py-2 rounded-xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-bold outline-none focus:border-[#f0b90b]/40 transition-colors"
-                                        />
-                                        <input type="datetime-local" placeholder="Tarih" value={depositDate}
-                                            onChange={e => setDepositDate(e.target.value)}
-                                            className="w-1/3 px-3 py-2 rounded-xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-[10px] font-bold outline-none focus:border-[#f0b90b]/40 transition-colors"
-                                        />
-                                        <input type="number" placeholder="Bilet No" value={depositTicket}
-                                            onChange={e => setDepositTicket(e.target.value)}
-                                            className="w-1/3 px-3 py-2 rounded-xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-bold outline-none focus:border-[#f0b90b]/40 transition-colors"
-                                            min="1" max="200"
-                                        />
-                                    </div>
-                                    <button onClick={handleDepositRequest}
-                                        className="w-full py-2.5 rounded-xl font-black text-sm text-black transition-all hover:scale-105"
-                                        style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 15px rgba(240,185,11,0.2)' }}>
-                                        Talep Et
-                                    </button>
-                                </div>
-                                <div className="text-[var(--text-dim)] text-[10px] text-center font-bold">Talebiniz incelendikten sonra biletleriniz yansır. Miktar: Her {depositRule.thresholdAmount} TL = {depositRule.coinsAwarded} {cfg.coinName} + {depositRule.ticketsAwarded} Bilet</div>
+                        {/* Redirect to Bilet Etkinliği */}
+                        <div className="p-5 rounded-2xl space-y-3 bg-purple-500/5 border border-purple-500/15 text-center">
+                            <div className="flex flex-col items-center gap-2 mb-2">
+                                <Ticket className="w-8 h-8 text-purple-400" />
+                                <div className="text-[var(--text-primary)] font-black text-sm uppercase">Bilet Etkinliği Talebi</div>
+                                <p className="text-[var(--text-muted)] text-[10px] font-medium max-w-xs mx-auto">
+                                    Bilet taleplerinizi artık doğrudan Bilet Etkinliği sayfasından gerçekleştirebilirsiniz.
+                                </p>
                             </div>
-                        )}
+                            <button onClick={() => { onNavigate('raffle'); if (onClose) onClose(); }}
+                                className="w-full py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-white transition-all hover:scale-[1.02]"
+                                style={{ background: 'linear-gradient(135deg, #a78bfa, #7c3aed)' }}>
+                                Bilet Sayfasına Git
+                            </button>
+                        </div>
 
                         {/* Volume progress */}
                         {volumeRule && volumeRule.isActive && (

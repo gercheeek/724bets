@@ -9,9 +9,8 @@ import AdminPanel from './components/AdminPanel';
 import AuthModal from './components/AuthModal';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
-import PopularLeagues, { INITIAL_LEAGUE_DATA } from './components/PopularLeagues';
-import DynamicCTA from './components/DynamicCTA';
 import BetlivoPopup from './components/BetlivoPopup';
+import DynamicCTA from './components/DynamicCTA';
 import ChatBot from './components/ChatBot';
 import SearchModal from './components/SearchModal';
 import LoyaltyPanel, { DEFAULT_LOYALTY_CONFIG } from './components/LoyaltyPanel';
@@ -23,17 +22,11 @@ import NewsView from './components/NewsView';
 import NewsDetailView from './components/NewsDetailView';
 import BetLivoWheel from './components/BetLivoWheel';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
+import BetlivoSidePanel from './components/BetlivoSidePanel';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, BetLivoWheelConfig, GiveawayConfig, MarqueeConfig } from './types';
-
-export const DEFAULT_MARQUEE_CONFIG: MarqueeConfig = {
-  isActive: true,
-  text: 'Hoş geldiniz! En yüksek oranlar sadece 724bets.net adresinde!',
-  speed: 20,
-  color: '#f0b90b',
-  isBold: true
-};
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, BetLivoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig } from './types';
+import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG } from './constants';
 
 
 const App: React.FC = () => {
@@ -101,13 +94,23 @@ const App: React.FC = () => {
   const [themeColor, setThemeColor] = useState('#eab308');
   const [hashtags, setHashtags] = useState('');
   const [coupons, setCoupons] = useState<Coupon[]>([]);
-  const [leagueData, setLeagueData] = useState<Record<string, any>>(INITIAL_LEAGUE_DATA);
   const [showBetlivoPopup, setShowBetlivoPopup] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
     return stored ? JSON.parse(stored) : DEFAULT_LOYALTY_CONFIG;
   });
+
+  // Welcome Popup Config
+  const [welcomePopupConfig, setWelcomePopupConfig] = useState<WelcomePopupConfig>(() => {
+    const stored = localStorage.getItem('site_welcome_popup');
+    return stored ? JSON.parse(stored) : DEFAULT_WELCOME_POPUP_CONFIG;
+  });
+
+  const handleWelcomePopupConfigChange = (cfg: WelcomePopupConfig) => {
+    setWelcomePopupConfig(cfg);
+    localStorage.setItem('site_welcome_popup', JSON.stringify(cfg));
+  };
 
   const [bjConfig, setBjConfig] = useState<BlackjackConfig>({
     rewards: [],
@@ -118,12 +121,13 @@ const App: React.FC = () => {
 
   // Show Betlivo popup once per browser session
   useEffect(() => {
+    if (!welcomePopupConfig.isActive) return;
     const seen = sessionStorage.getItem('betlivo_popup_seen');
     if (!seen) {
       const t = setTimeout(() => setShowBetlivoPopup(true), 1200);
       return () => clearTimeout(t);
     }
-  }, []);
+  }, [welcomePopupConfig.isActive]);
 
   const handleCloseBetlivoPopup = () => {
     setShowBetlivoPopup(false);
@@ -142,17 +146,15 @@ const App: React.FC = () => {
     const savedHashtags = localStorage.getItem('site_hashtags');
     const savedCoupons = localStorage.getItem('site_coupons');
     const savedWheel = localStorage.getItem('site_wheel_config');
-    const savedLeagues = localStorage.getItem('site_leagues');
     const savedRole = localStorage.getItem('site_user_role');
     const savedMember = localStorage.getItem('site_current_member');
 
     setBrands(savedBrands ? JSON.parse(savedBrands) : INITIAL_BRANDS);
 
-    if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
     if (savedHashtags) setHashtags(savedHashtags);
     if (savedCoupons) setCoupons(JSON.parse(savedCoupons));
     if (savedWheel) setBjConfig(JSON.parse(savedWheel));
-    if (savedLeagues) setLeagueData(JSON.parse(savedLeagues));
+    if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
     if (savedRole) setUserRole(savedRole as string);
     if (savedMember) setSiteUser(JSON.parse(savedMember));
   }, []);
@@ -193,11 +195,6 @@ const App: React.FC = () => {
     if (savedHero) setHero(JSON.parse(savedHero));
   }, []);
 
-  const saveHashtags = (newTags: string) => {
-    setHashtags(newTags);
-    localStorage.setItem('site_hashtags', newTags);
-  };
-
   const handleGameComplete = (lastPlayTime: number) => {
     const newConfig = { ...bjConfig, lastPlayTime };
     setBjConfig(newConfig);
@@ -231,13 +228,6 @@ const App: React.FC = () => {
 
       themeColor={themeColor}
       onThemeChange={setThemeColor}
-      hashtags={hashtags}
-      onHashtagsChange={setHashtags}
-      leagueData={leagueData}
-      onSaveLeagueData={(data) => {
-        setLeagueData(data);
-        localStorage.setItem('site_leagues', JSON.stringify(data));
-      }}
       onLogout={() => {
         setUserRole(null);
         localStorage.removeItem('site_user_role');
@@ -250,6 +240,8 @@ const App: React.FC = () => {
       onSaveNavVisibility={handleNavVisibilityChange}
       marqueeConfig={marqueeConfig}
       onSaveMarqueeConfig={handleMarqueeConfigChange}
+      welcomePopupConfig={welcomePopupConfig}
+      onSaveWelcomePopupConfig={handleWelcomePopupConfigChange}
     />
   );
 
@@ -257,7 +249,7 @@ const App: React.FC = () => {
   const scrollToBrands = () => {
     const brandsEl = document.getElementById('brands-section');
     if (brandsEl) {
-      const y = brandsEl.getBoundingClientRect().top + window.scrollY - 80;
+      const y = brandsEl.getBoundingClientRect().top + window.scrollY - 15;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
@@ -330,7 +322,7 @@ const App: React.FC = () => {
         marqueeConfig={marqueeConfig}
       />
 
-      <main style={{ position: 'relative', zIndex: 10, paddingTop: '80px' }}>
+      <main style={{ position: 'relative', zIndex: 10, paddingTop: '130px' }}>
         {view === 'home' && (
           <>
             <Hero onNavigate={handleViewChange} />
@@ -344,12 +336,6 @@ const App: React.FC = () => {
             />
 
             <div className="section-divider" />
-
-            <PopularLeagues
-              leagueData={leagueData}
-              isLoggedIn={!!(siteUser || userRole)}
-              onLoginRequired={() => setAuthModalMode('member')}
-            />
 
             <DynamicCTA onNavigate={handleViewChange} />
 
@@ -512,6 +498,7 @@ const App: React.FC = () => {
               config={loyaltyConfig}
               userId={siteUser?.id || userRole || 'guest'}
               onClose={() => setView('home')}
+              onNavigate={handleViewChange}
             />
           ) : (
             <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-[#0e0e0e]">
@@ -604,20 +591,30 @@ const App: React.FC = () => {
       </footer>
 
       {/* ── Betlivo Welcome Popup (once per session) ── */}
-      {showBetlivoPopup && <BetlivoPopup onClose={handleCloseBetlivoPopup} />}
+      {showBetlivoPopup && (
+        <BetlivoPopup
+          onClose={handleCloseBetlivoPopup}
+          config={welcomePopupConfig}
+        />
+      )}
 
       {/* ── Match Search Modal ── */}
       {showSearch && (
         <SearchModal
           onClose={() => setShowSearch(false)}
           coupons={coupons}
-          leagueData={leagueData}
           onNavigate={handleViewChange}
         />
       )}
 
       {/* ── AI Chat Assistant ── */}
       <ChatBot />
+
+      {/* ── Betlivo Side Panel ── */}
+      <>
+        <BetlivoSidePanel position="left" />
+        <BetlivoSidePanel position="right" />
+      </>
     </div>
     </ThemeProvider>
   );

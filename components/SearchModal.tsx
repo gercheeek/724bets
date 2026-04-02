@@ -5,7 +5,6 @@ import { Coupon } from '../types';
 interface SearchModalProps {
     onClose: () => void;
     coupons?: Coupon[];
-    leagueData?: Record<string, any>;
     onNavigate?: (view: string) => void;
 }
 
@@ -18,7 +17,7 @@ interface SearchResult {
     icon: React.ReactNode;
 }
 
-const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], leagueData = {}, onNavigate }) => {
+const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavigate }) => {
     const [query, setQuery] = useState('');
     const [visible, setVisible] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -65,7 +64,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], league
                         onNavigate?.('home');
                         setTimeout(() => {
                             const el = document.getElementById('daily-coupons');
-                            if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+                            if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 15, behavior: 'smooth' });
                         }, 150);
                         handleClose();
                     },
@@ -73,35 +72,9 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], league
             }
         });
 
-        // Search league predictions
-        Object.entries(leagueData).forEach(([leagueId, data]) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const d = data as any;
-            if (!d?.predictions) return;
-            d.predictions.forEach((pred: any) => {
-                const searchStr = `${pred.homeTeam ?? ''} ${pred.awayTeam ?? ''} ${pred.leagueSlug ?? ''} ${leagueId}`.toLowerCase();
-                if (searchStr.includes(q)) {
-                    hits.push({
-                        type: 'league',
-                        title: `${pred.homeTeam ?? '?'} vs ${pred.awayTeam ?? '?'}`,
-                        subtitle: pred.leagueSlug ?? leagueId,
-                        meta: `Sonuç: ${pred.resultPrediction ?? '-'} · ${pred.dateStr ?? ''}`,
-                        icon: <Trophy className="w-4 h-4 text-indigo-400" />,
-                        action: () => {
-                            onNavigate?.('home');
-                            setTimeout(() => {
-                                const el = document.getElementById('popular-leagues-section');
-                                if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
-                            }, 150);
-                            handleClose();
-                        },
-                    });
-                }
-            });
-        });
 
         return hits.slice(0, 12); // max 12 results
-    }, [query, coupons, leagueData]);
+    }, [query, coupons]);
 
     // Suggestions when query empty
     const suggestions = ['Chelsea', 'Galatasaray', 'Real Madrid', 'NBA', 'Fenerbahçe', 'Manchester City', 'Bayern', 'PSG'];
@@ -218,9 +191,8 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], league
                             </div>
                             <div className="mt-6 grid grid-cols-3 gap-2">
                                 {[
-                                    { label: 'Günün Kuponları', icon: <Ticket className="w-4 h-4" />, action: () => { onNavigate?.('home'); setTimeout(() => { const el = document.getElementById('daily-coupons'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); }, 150); handleClose(); } },
+                                    { label: 'Günün Kuponları', icon: <Ticket className="w-4 h-4" />, action: () => { onNavigate?.('home'); setTimeout(() => { const el = document.getElementById('daily-coupons'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 15, behavior: 'smooth' }); }, 150); handleClose(); } },
                                     { label: 'Analizler', icon: <BarChart2 className="w-4 h-4" />, action: () => { onNavigate?.('analysis'); handleClose(); } },
-                                    { label: 'Ligler', icon: <Trophy className="w-4 h-4" />, action: () => { onNavigate?.('home'); setTimeout(() => { const el = document.getElementById('popular-leagues-section'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); }, 150); handleClose(); } },
                                 ].map((item, i) => (
                                     <button key={i} onClick={item.action}
                                         className="flex items-center justify-center gap-2 py-3 rounded-xl font-black text-xs text-zinc-500 transition-all hover:text-white"

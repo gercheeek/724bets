@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig } from '../types';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
@@ -24,8 +24,6 @@ interface AdminPanelProps {
   onSaveWheelConfig: (config: WheelConfig) => void;
   onSaveBjConfig?: (config: BlackjackConfig) => void;
   onSaveLoyaltyConfig?: (config: LoyaltyConfig) => void;
-  leagueData?: Record<string, any>;
-  onSaveLeagueData?: (data: Record<string, any>) => void;
   onLogout: () => void;
   onNavigateHome?: () => void;
   giveawayConfig?: GiveawayConfig;
@@ -34,16 +32,19 @@ interface AdminPanelProps {
   onSaveNavVisibility?: (vis: NavVisibility) => void;
   marqueeConfig?: MarqueeConfig;
   onSaveMarqueeConfig?: (config: MarqueeConfig) => void;
+  welcomePopupConfig?: WelcomePopupConfig;
+  onSaveWelcomePopupConfig?: (config: WelcomePopupConfig) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
-  brands, hero, themeColor, hashtags, role, wheelConfig, bjConfig, loyaltyConfig, leagueData,
-  onSaveBrands, onSaveHero, onThemeChange, onHashtagsChange, onSaveWheelConfig, onSaveBjConfig, onSaveLoyaltyConfig, onSaveLeagueData, onLogout, onNavigateHome,
+  brands, hero, themeColor, hashtags, role, wheelConfig, bjConfig, loyaltyConfig,
+  onSaveBrands, onSaveHero, onThemeChange, onHashtagsChange, onSaveWheelConfig, onSaveBjConfig, onSaveLoyaltyConfig, onLogout, onNavigateHome,
   giveawayConfig, onSaveGiveawayConfig,
-  navVisibility, onSaveNavVisibility, marqueeConfig, onSaveMarqueeConfig
+  navVisibility, onSaveNavVisibility, marqueeConfig, onSaveMarqueeConfig,
+  welcomePopupConfig, onSaveWelcomePopupConfig
 }) => {
   const isAuthor = role.startsWith('author_');
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'leagues' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
 
   // Messages State
   const [messages, setMessages] = useState<UserMessage[]>(() => {
@@ -56,6 +57,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localWheelConfig, setLocalWheelConfig] = useState<WheelConfig>({ ...wheelConfig });
   const [localBjConfig, setLocalBjConfig] = useState<BlackjackConfig>(bjConfig || { rewards: [], cooldownHours: 4, dealerHitSoft17: true, lastPlayTime: 0 });
   const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: 'Betlivo Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
+  const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: 'BETLIVO', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
 
   // New Management Local State
   const [localAnalyses, setLocalAnalyses] = useState<MatchAnalysis[]>([]);
@@ -77,7 +79,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [couponAiDate, setCouponAiDate] = useState(() => new Date().toISOString().split('T')[0]);
 
   // JSON Editor State
-  const [jsonInput, setJsonInput] = useState(() => JSON.stringify(leagueData || {}, null, 2));
+  const [jsonInput, setJsonInput] = useState('');
   const [jsonError, setJsonError] = useState('');
 
   // Editor Management State
@@ -135,18 +137,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     localStorage.setItem('site_analyses', JSON.stringify(localAnalyses));
     localStorage.setItem('site_coupons', JSON.stringify(localCoupons));
     onSaveWheelConfig(localWheelConfig);
-
-    try {
-      const parsed = JSON.parse(jsonInput);
-      if (onSaveLeagueData) {
-        onSaveLeagueData(parsed);
-      }
-      setJsonError('');
-      alert('Tüm sistem değişiklikleri kaydedildi!');
-    } catch (err) {
-      setJsonError('Geçersiz JSON formatı. Lütfen JSON verisini kontrol edin!');
-      alert('HATA: Diğer ayarlar kaydedildi ancak Lig Verileri JSON hatası nedeniyle kaydedilemedi!');
+    if (onSaveWelcomePopupConfig) {
+      onSaveWelcomePopupConfig(localWelcomePopup);
     }
+
+    alert('Tüm sistem değişiklikleri kaydedildi!');
   };
 
   const handleAiParse = () => {
@@ -700,9 +695,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           )}
           {role === 'admin' && (
             <>
-              <button onClick={() => setActiveTab('leagues')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'leagues' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Trophy className="w-4 h-4" /> LİG YÖNETİMİ
-              </button>
               <button onClick={() => setActiveTab('blackjack')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'blackjack' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Zap className="w-4 h-4" /> CASINO 724
               </button>
@@ -797,6 +789,92 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     <button onClick={() => setLocalBrands(localBrands.filter((_, i) => i !== idx))} className="text-red-500 hover:bg-red-500/10 p-2 rounded-xl"><Trash2 /></button>
                   </div>
                 ))}
+              </div>
+            </section>
+
+            <section className="bg-zinc-900 border border-zinc-800 p-8 rounded-[40px] relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#f0b90b]/5 blur-3xl rounded-full" />
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-[#f0b90b]/10 rounded-2xl flex items-center justify-center border border-[#f0b90b]/20">
+                    <Zap className="w-6 h-6 text-[#f0b90b]" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black italic uppercase tracking-tighter">Açılış Pop-up Yönetimi</h2>
+                    <p className="text-zinc-500 text-xs font-bold mt-1">Site ilk açıldığında gösterilen "Hoş geldin" reklamını yönetin.</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-black/40 p-2 rounded-2xl border border-zinc-800">
+                   <button
+                    onClick={() => setLocalWelcomePopup({ ...localWelcomePopup, isActive: true })}
+                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${localWelcomePopup.isActive ? 'bg-[#f0b90b] text-black' : 'text-zinc-500'}`}
+                  >
+                    AKTİF
+                  </button>
+                  <button
+                    onClick={() => setLocalWelcomePopup({ ...localWelcomePopup, isActive: false })}
+                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${!localWelcomePopup.isActive ? 'bg-red-500 text-white' : 'text-zinc-500'}`}
+                  >
+                    PASİF
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Popup Başlığı (Marka)</label>
+                  <input
+                    value={localWelcomePopup.title}
+                    onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, title: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold focus:border-[#f0b90b]/50 transition-all"
+                    placeholder="Örn: BETLIVO"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Alt Başlık</label>
+                  <input
+                    value={localWelcomePopup.subtitle}
+                    onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, subtitle: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold focus:border-[#f0b90b]/50 transition-all"
+                    placeholder="Örn: Türkiye'nin En Güvenilir Bahis Platformu"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Ana Teklif (Büyük Yazı)</label>
+                  <input
+                    value={localWelcomePopup.offerMain}
+                    onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, offerMain: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-black text-[#f0b90b] focus:border-[#f0b90b]/50 transition-all"
+                    placeholder="Örn: %100 HOŞGELDİN BONUSU"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Teklif Detayı</label>
+                  <input
+                    value={localWelcomePopup.offerSub}
+                    onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, offerSub: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold focus:border-[#f0b90b]/50 transition-all"
+                    placeholder="Örn: İlk yatırımınıza özel anında yükleme"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Buton Yazısı</label>
+                  <input
+                    value={localWelcomePopup.buttonText}
+                    onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, buttonText: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold focus:border-[#f0b90b]/50 transition-all"
+                    placeholder="Örn: KAYIT OL"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Buton Linki</label>
+                  <input
+                    value={localWelcomePopup.buttonLink}
+                    onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, buttonLink: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold focus:border-[#f0b90b]/50 transition-all"
+                    placeholder="https://..."
+                  />
+                </div>
               </div>
             </section>
           </div>
@@ -2274,7 +2352,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             {([
               { key: 'coupons', label: 'Günün Kuponları' },
               { key: 'analysis', label: 'Analizler' },
-              { key: 'leagues', label: 'Ligler' },
               { key: 'brands', label: 'Güvenilir Siteler' },
               { key: 'news', label: '📰 Haberler' },
               { key: 'pool', label: '🎱 724TOTO' },

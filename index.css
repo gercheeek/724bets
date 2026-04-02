@@ -151,7 +151,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 24px;
+  padding: 6px 24px;
   background: #111118;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), border-color 3s ease-in-out;

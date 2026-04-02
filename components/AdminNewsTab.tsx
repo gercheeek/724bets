@@ -22,6 +22,15 @@ const generateSlug = (title: string): string => {
         .substring(0, 80);
 };
 
+interface AiGeneratedArticle {
+    title: string;
+    excerpt: string;
+    content: string;
+    category: string;
+    seoTitle: string;
+    seoDesc: string;
+}
+
 // AI Content Generation Engine (OpenAI API integration)
 const generateBulkAiArticles = async (newsList: string, apiKey: string): Promise<AiGeneratedArticle[]> => {
     try {
@@ -83,14 +92,6 @@ const generateBulkAiArticles = async (newsList: string, apiKey: string): Promise
     }
 };
 
-interface AiGeneratedArticle {
-    title: string;
-    excerpt: string;
-    content: string;
-    category: string;
-    seoTitle: string;
-    seoDesc: string;
-}
 
 const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     const [articles, setArticles] = useState<NewsArticle[]>([]);

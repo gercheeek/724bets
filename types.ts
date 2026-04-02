@@ -502,3 +502,40 @@ export interface MarqueeConfig {
   isBold: boolean;
 }
 
+
+// ─── Welcome Popup (Açılış Pop-up) Sistemi ──────────────────────────────────
+export interface WelcomePopupConfig {
+  isActive: boolean;
+  title: string;
+  subtitle: string;
+  offerMain: string;
+  offerSub: string;
+  buttonText: string;
+  buttonLink: string;
+}
+
+// ─── Ticket (Bilet) Sistemi Tipleri ──────────────────────────────────────────
+export interface TicketSiteRequirement {
+    siteName: string;
+    minVolume: number;
+}
+export interface TicketRequest {
+    id: string;
+    userId: string;
+    username: string;
+    status: 'pending' | 'approved' | 'rejected';
+    createdAt: number;
+    processedAt?: number;
+    adminNote?: string;
+}
+export interface TicketEventConfig {
+    id: string;
+    periodDays: number;
+    entryCost: number;
+    siteRequirements: TicketSiteRequirement[];
+    currentPeriodStart: number;
+    status: 'active' | 'drawing' | 'completed';
+    requests: TicketRequest[];
+    winners?: { userId: string; username: string; prize: string }[];
+    createdAt: number;
+}
