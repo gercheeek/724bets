@@ -63,7 +63,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: 'BETLIVO', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
 
   // Live Odds state
-  const [localLiveOdds, setLocalLiveOdds] = useState<LiveOddsConfig>(liveOddsConfig || { isActive: true, matches: [] });
+  const [localLiveOdds, setLocalLiveOdds] = useState<LiveOddsConfig>(() => {
+    if (liveOddsConfig) {
+      return { ...liveOddsConfig, matches: liveOddsConfig.matches || [] };
+    }
+    return { isActive: true, matches: [] };
+  });
 
   // New Management Local State
   const [localAnalyses, setLocalAnalyses] = useState<MatchAnalysis[]>([]);
@@ -121,7 +126,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   }, [welcomePopupConfig]);
 
   useEffect(() => {
-    if (liveOddsConfig) setLocalLiveOdds(liveOddsConfig);
+    if (liveOddsConfig) {
+      setLocalLiveOdds({
+        ...liveOddsConfig,
+        matches: liveOddsConfig.matches || []
+      });
+    }
   }, [liveOddsConfig]);
 
   const handleBrandChange = (index: number, field: keyof Brand, value: string) => {
@@ -943,7 +953,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       isLive: false,
                       link: 'https://t.ly/GercekLivo',
                     };
-                    const u = { ...localLiveOdds, matches: [...localLiveOdds.matches, newMatch] };
+                    const u = { ...localLiveOdds, matches: [...(localLiveOdds.matches || []), newMatch] };
                     setLocalLiveOdds(u);
                     onSaveLiveOddsConfig?.(u);
                   }}
