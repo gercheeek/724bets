@@ -693,6 +693,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               <button onClick={() => setActiveTab('visibility')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'visibility' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Eye className="w-4 h-4" /> SAYFA GÖRÜNÜRLÜğü
               </button>
+              <button onClick={() => setActiveTab('liveodds')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'liveodds' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <Activity className="w-4 h-4" /> CANLI ORANLAR
+              </button>
             </>
           )}
 
