@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
-import { Lock, User, X, LogIn, UserPlus, Shield, Mail, Phone, Clock } from 'lucide-react';
-import { SiteUser, EditorAccount } from '../types';
+import { Lock, User, X, LogIn, UserPlus, Shield, Mail, Phone, Clock, Loader2 } from 'lucide-react';
+import { SiteUser, EditorAccount, UserLoyalty } from '../types';
+import { supabase } from '../utils/supabase';
 
 interface AuthModalProps {
     mode: 'member' | 'admin';
@@ -42,48 +42,106 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
     const [aPassword, setAPassword] = useState('');
     const [aError, setAError] = useState('');
 
-    const getMembers = (): SiteUser[] => {
-        try { return JSON.parse(localStorage.getItem('site_members') || '[]'); } catch { return []; }
-    };
+    const [loading, setLoading] = useState(false);
 
     const getEditors = (): EditorAccount[] => {
         try { return JSON.parse(localStorage.getItem('site_editors') || '[]'); } catch { return []; }
     };
 
-    const handleMemberSubmit = (e: React.FormEvent) => {
+    const handleMemberSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setMError(''); setMSuccess('');
+        setLoading(true);
         const uname = mUsername.trim().toLowerCase();
 
         if (memberMode === 'login') {
-            const members = getMembers();
-            const found = members.find(m => m.username.toLowerCase() === uname && m.password === mPassword);
-            if (!found) { setMError('Kullanıcı adı veya şifre hatalı!'); return; }
-            if (found.status === 'pending') { setMError('Hesabınız henüz onaylanmadı. Ekibimiz en kısa sürede inceleyecektir.'); return; }
-            if (found.status === 'suspended') { setMError('Hesabınız askıya alınmıştır. Destek hattımızla iletişime geçin.'); return; }
-            onMemberLogin(found);
+            const { data: found, error } = await supabase
+                .from('members')
+                .select('*')
+                .eq('username', mUsername.trim())
+                .eq('password', mPassword)
+                .single();
+
+            if (error || !found) {
+                setMError('Kullanıcı adı veya şifre hatalı!');
+                setLoading(false);
+                return;
+            }
+
+            if (found.status === 'pending') {
+                setMError('Hesabınız henüz onaylanmadı. Ekibimiz en kısa sürede inceleyecektir.');
+                setLoading(false);
+                return;
+            }
+
+            if (found.status === 'suspended') {
+                setMError('Hesabınız askıya alınmıştır. Destek hattımızla iletişime geçin.');
+                setLoading(false);
+                return;
+            }
+
+            onMemberLogin({
+                id: found.id,
+                username: found.username,
+                password: found.password,
+                email: found.email || '',
+                phone: found.phone || '',
+                createdAt: new Date(found.created_at).getTime(),
+                status: found.status || 'active',
+                notes: found.notes || ''
+            });
         } else {
-            if (uname.length < 3) { setMError('Kullanıcı adı en az 3 karakter olmalı.'); return; }
-            if (!mEmail.includes('@')) { setMError('Geçerli bir e-posta adresi girin.'); return; }
-            if (mPhone.replace(/\D/g, '').length < 10) { setMError('Geçerli bir telefon numarası girin.'); return; }
-            if (mPassword.length < 6) { setMError('Şifre en az 6 karakter olmalı.'); return; }
-            if (mPassword !== mPasswordConfirm) { setMError('Şifreler eşleşmiyor.'); return; }
-            const members = getMembers();
-            if (members.some(m => m.username.toLowerCase() === uname)) { setMError('Bu kullanıcı adı zaten alınmış!'); return; }
-            if (members.some(m => m.email?.toLowerCase() === mEmail.toLowerCase())) { setMError('Bu e-posta zaten kayıtlı!'); return; }
-            const newUser: SiteUser = {
-                id: Date.now().toString(),
+            if (uname.length < 3) { setMError('Kullanıcı adı en az 3 karakter olmalı.'); setLoading(false); return; }
+            if (!mEmail.includes('@')) { setMError('Geçerli bir e-posta adresi girin.'); setLoading(false); return; }
+            if (mPhone.replace(/\D/g, '').length < 10) { setMError('Geçerli bir telefon numarası girin.'); setLoading(false); return; }
+            if (mPassword.length < 6) { setMError('Şifre en az 6 karakter olmalı.'); setLoading(false); return; }
+            if (mPassword !== mPasswordConfirm) { setMError('Şifreler eşleşmiyor.'); setLoading(false); return; }
+
+            // Check existing
+            const { data: existing } = await supabase
+                .from('members')
+                .select('username, email')
+                .or(`username.eq.${mUsername.trim()},email.eq.${mEmail.trim().toLowerCase()}`);
+            
+            if (existing && existing.length > 0) {
+                if (existing.some(u => u.username.toLowerCase() === uname)) {
+                    setMError('Bu kullanıcı adı zaten alınmış!');
+                } else {
+                    setMError('Bu e-posta zaten kayıtlı!');
+                }
+                setLoading(false);
+                return;
+            }
+
+            const { data: newUser, error: insertError } = await supabase.from('members').insert([{
                 username: mUsername.trim(),
                 email: mEmail.trim().toLowerCase(),
                 phone: mPhone.trim(),
                 password: mPassword,
-                createdAt: Date.now(),
-                status: 'pending',
-            };
-            members.push(newUser);
-            localStorage.setItem('site_members', JSON.stringify(members));
+                status: 'pending'
+            }]).select().single();
+
+            if (insertError || !newUser) {
+                setMError('Kayıt oluşturulurken bir hata oluştu: ' + insertError?.message);
+                setLoading(false);
+                return;
+            }
+
+            // Create initial loyalty record
+            await supabase.from('loyalty').insert([{
+                user_id: newUser.id,
+                coins: 0,
+                tickets: 0,
+                pending_tickets: 0,
+                total_earned: 0,
+                transactions: [],
+                last_volume_reset_date: '',
+                daily_volume_accumulated: 0
+            }]);
+
             setRegistrationPending(true);
         }
+        setLoading(false);
     };
 
     const handleAdminSubmit = (e: React.FormEvent) => {
@@ -191,9 +249,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                         {mError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">{mError}</p>}
                                         {mSuccess && <p className="text-emerald-500 text-xs font-bold text-center bg-emerald-500/10 py-2 rounded-lg border border-emerald-500/20">{mSuccess}</p>}
 
-                                        <button type="submit"
-                                            className="w-full bg-[#f0b90b] hover:bg-[#f0b90b]/90 text-black font-black py-3.5 rounded-xl transition-all text-sm tracking-widest uppercase mt-1">
-                                            {memberMode === 'login' ? 'GİRİŞ YAP' : 'KAYIT OL'}
+                                        <button type="submit" disabled={loading}
+                                            className="w-full bg-[#f0b90b] hover:bg-[#f0b90b]/90 text-black font-black py-3.5 rounded-xl transition-all text-sm tracking-widest uppercase mt-1 flex items-center justify-center gap-2">
+                                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (memberMode === 'login' ? 'GİRİŞ YAP' : 'KAYIT OL')}
                                         </button>
                                     </form>
 
