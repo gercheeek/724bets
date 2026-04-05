@@ -52,8 +52,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   analyses, coupons, onSaveAnalyses, onSaveCoupons
 }) => {
   const isAuthor = role.startsWith('author_');
-  const isEditor = role.startsWith('editor_') || role === 'editor';
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility' | 'liveodds'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
+  const isEditor = role.startsWith('editor');
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility' | 'liveodds'>(isAuthor || isEditor ? 'news' : 'content');
   const mainRef = useRef<HTMLElement>(null);
 
   // Scroll to top when tab changes
