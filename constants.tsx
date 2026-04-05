@@ -57,20 +57,20 @@ export const BRANDS: Brand[] = [
 
 export const DEFAULT_MARQUEE_CONFIG: MarqueeConfig = {
   isActive: true,
-  text: 'Hoş geldiniz! En yüksek oranlar sadece 724bets.net adresinde!',
+  text: 'Hoş geldiniz! En yüksek oranlar ve anında ödeme Betlivo güvencesiyle!',
   speed: 50,
-  color: '#f0b90b',
+  color: '#22c55e', // Betlivo Green
   isBold: true,
 };
 
 export const DEFAULT_WELCOME_POPUP_CONFIG: WelcomePopupConfig = {
   isActive: true,
-  title: '724BAHİS',
-  subtitle: "Türkiye'nin En Güvenilir Bahis Platformu",
-  offerMain: '%100 HOŞGELDİN BONUSU',
-  offerSub: 'İlk yatırımınıza özel · Anında hesabınıza yükler',
+  title: 'BETLİVO',
+  subtitle: "Türkiye'nin En Dinamik ve Güvenilir Bahis Platformu",
+  offerMain: '%200 HOŞGELDİN BONUSU',
+  offerSub: 'İlk yatırımınıza özel · Anında hesabınıza yüklenir',
   buttonText: '🚀 HEMEN KAYDOL — ÜCRETSİZ',
-  buttonLink: 'https://724bahis.net',
+  buttonLink: 'https://betlivo.com',
 };
 
 export const DEFAULT_LIVE_ODDS_CONFIG: LiveOddsConfig = {

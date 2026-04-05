@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown, Sparkles, Send, Bot, User as UserIcon, Wand2, ArrowRight, AlertCircle, Upload, Image as ImageIcon, Link as LinkIcon, Bold, Italic, Heading2, List, Quote, Type, ImagePlus, ExternalLink, Copy, Check } from 'lucide-react';
+import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown, Sparkles, Send, Bot, User as UserIcon, Wand2, ArrowRight, AlertCircle, Upload, Image as ImageIcon, Link as LinkIcon, Bold, Italic, Heading2, List, Quote, Type, ImagePlus, ExternalLink, Copy, Check, Zap, Briefcase, Layout } from 'lucide-react';
 import { NewsArticle, NewsAuthor, NEWS_CATEGORIES } from '../types';
 import { supabase } from '../utils/supabase';
 
@@ -94,6 +94,90 @@ const generateBulkAiArticles = async (newsList: string, apiKey: string): Promise
 };
 
 
+// AI Refined Single Content Generation (Master Prompt v2 with Vision & Tonality)
+const generateRefinedAiArticle = async (
+    rawText: string, 
+    imageInfo: string, 
+    apiKey: string, 
+    tonality: 'excited' | 'formal' = 'excited',
+    imageUrls: string[] = []
+): Promise<AiGeneratedArticle> => {
+    try {
+        const sanitizedKey = (apiKey || '').trim().replace(/[^\x20-\x7E]/g, '');
+        
+        const tonalityInstructions = tonality === 'excited' 
+            ? "Dinamik, enerjik, ünlemler içeren, spor fanatiği ağzıyla yazılmış, okuyucuyu gaza getiren bir dil kullan."
+            : "Resmi, habercilik etiğine uygun, nesnel, kurumsal ve ciddi bir dil kullan.";
+
+        const messages: any[] = [
+            {
+                role: 'system',
+                content: `Sen profesyonel bir spor içerik editörü ve SEO uzmanısın. Kullanıcının verdiği taslak metni ve (varsa) görselleri sentezleyerek yayınlanmaya hazır bir blog yazısı oluştur.
+                        
+Kurallar:
+1. Başlık: Dikkat çekici ve anahtar kelime odaklı.
+2. Dil ve Ton: ${tonalityInstructions} Kısa cümleler ve maddelendirmeler içeren HTML formatı (<p>, <h2>, <strong>, <ul>, <li>).
+3. Görsel Yerleşimi: Metin içinde en mantıklı yerlere [RESİM-1 BURAYA], [RESİM-2 BURAYA] etiketlerini yerleştir ve her birinin altına kısa/etkileyici bir 'caption' (alt yazı) ekle.
+4. SEO: SEO Başlığı (60 karakter), SEO Açıklaması (160 karakter), ve anahtar kelimeler ayarla.
+5. Sonuç: Profesyonel bir bitiş mesajı veya soruyla bitir.
+
+Çıktıyı MUTLAKA şu JSON yapısında ver:
+{
+  "title": "Ana Başlık",
+  "excerpt": "Haberin 120-150 karakterlik özeti",
+  "content": "HTML formatında sentezlenmiş içerik (RESİM etiketli)",
+  "category": "Tahmin edilen kategori (Futbol/Basketbol/etc)",
+  "seoTitle": "SEO optimize edilmiş başlık",
+  "seoDesc": "Meta açıklama",
+  "keywords": "etiket1, etiket2"
+}`
+            }
+        ];
+
+        // Prepare user content (Multi-modal if images present)
+        const userContent: any[] = [
+            { type: "text", text: `Kaynak Metin:\n${rawText}\n\nEk Görsel Bilgisi:\n${imageInfo}` }
+        ];
+
+        imageUrls.forEach(url => {
+            userContent.push({
+                type: "image_url",
+                image_url: { url }
+            });
+        });
+
+        messages.push({
+            role: 'user',
+            content: userContent
+        });
+
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sanitizedKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini', // Vision support + low cost
+                messages: messages,
+                response_format: { type: 'json_object' },
+                temperature: 0.75
+            })
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error?.message || 'API Hatası');
+        }
+
+        const data = await response.json();
+        return JSON.parse(data.choices[0].message.content);
+    } catch (error: any) {
+        throw new Error(error.message || 'Sentezleme sırasında bir hata oluştu.');
+    }
+};
+
+
 const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     const [articles, setArticles] = useState<NewsArticle[]>([]);
     const [authors, setAuthors] = useState<NewsAuthor[]>([]);
@@ -132,6 +216,14 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
     const [isGenerating, setIsGenerating] = useState(false);
     const [openAiKey, setOpenAiKey] = useState('');
     const [aiError, setAiError] = useState('');
+    const [showAiRefiner, setShowAiRefiner] = useState(false);
+    const [aiRawInput, setAiRawInput] = useState('');
+    const [aiImageInput, setAiImageInput] = useState('');
+    const [isRefining, setIsRefining] = useState(false);
+    const [aiTonality, setAiTonality] = useState<'excited' | 'formal'>('excited');
+    const [aiVisionImages, setAiVisionImages] = useState<string[]>([]);
+    const [aiPreviewData, setAiPreviewData] = useState<AiGeneratedArticle | null>(null);
+    const [showAiPreview, setShowAiPreview] = useState(false);
 
     const isAdmin = role === 'admin';
 
@@ -487,6 +579,57 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
         setShowAiChat(false);
     };
 
+    const handleGenerateRefined = async () => {
+        if (!aiRawInput.trim()) return;
+        if (!openAiKey) {
+            alert('Lütfen önce OpenAI API anahtarınızı girin.');
+            return;
+        }
+
+        setIsRefining(true);
+        try {
+            const res = await generateRefinedAiArticle(aiRawInput, aiImageInput, openAiKey, aiTonality, aiVisionImages);
+            setAiPreviewData(res);
+            setShowAiPreview(true);
+        } catch (error: any) {
+            alert('⚠️ Hata: ' + error.message);
+        } finally {
+            setIsRefining(false);
+        }
+    };
+
+    const applyAiPreview = () => {
+        if (!aiPreviewData) return;
+        setFormTitle(aiPreviewData.title);
+        setFormExcerpt(aiPreviewData.excerpt);
+        setFormCategory(aiPreviewData.category || 'Futbol');
+        setFormContent(aiPreviewData.content);
+        setFormSeoTitle(aiPreviewData.seoTitle || '');
+        setFormSeoDesc(aiPreviewData.seoDesc || '');
+        setFormSeoKeywords((aiPreviewData as any).keywords || '');
+        setFormSlug(generateSlug(aiPreviewData.title));
+        
+        setShowAiRefiner(false);
+        setShowAiPreview(false);
+        setAiPreviewData(null);
+        setAiRawInput('');
+        setAiImageInput('');
+        setAiVisionImages([]);
+    };
+
+    const handleVisionImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+        
+        const newImages: string[] = [];
+        for (let i = 0; i < files.length; i++) {
+            if (aiVisionImages.length + newImages.length >= 4) break;
+            const base64 = await fileToBase64(files[i]);
+            newImages.push(base64);
+        }
+        setAiVisionImages(prev => [...prev, ...newImages]);
+    };
+
     const inputClass = "w-full bg-black border border-zinc-800 rounded-xl py-3 px-4 text-white text-sm focus:border-[#f0b90b] transition-colors outline-none placeholder-zinc-600";
 
     return (
@@ -678,7 +821,119 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                         </button>
                     </div>
 
-                    <input value={formTitle} onChange={e => { setFormTitle(e.target.value); if (!editingArticle) setFormSlug(generateSlug(e.target.value)); }} placeholder="Haber Başlığı" className={inputClass} />
+                    <div className="flex items-center justify-between gap-4 mb-2">
+                        <input value={formTitle} onChange={e => { setFormTitle(e.target.value); if (!editingArticle) setFormSlug(generateSlug(e.target.value)); }} placeholder="Haber Başlığı" className={inputClass + " flex-1"} />
+                        <button 
+                            onClick={() => setShowAiRefiner(!showAiRefiner)}
+                            className={`shrink-0 flex items-center gap-2 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${showAiRefiner ? 'bg-purple-600 text-white' : 'bg-purple-600/10 text-purple-400 border border-purple-500/20 hover:bg-purple-600/20'}`}
+                            title="AI Sentezleme (Master Prompt)"
+                        >
+                            <Sparkles className="w-4 h-4" />
+                            {showAiRefiner ? 'Kapat' : 'AI Sentezle'}
+                        </button>
+                    </div>
+
+                    {/* ═══ AI MASTER PROMPT REFINER PANEL ═══ */}
+                    {showAiRefiner && (
+                        <div className="p-5 rounded-xl bg-purple-900/10 border border-purple-500/30 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+                                    <Wand2 className="w-4 h-4 text-purple-300" />
+                                </div>
+                                <div>
+                                    <h4 className="text-white text-[11px] font-black uppercase tracking-widest leading-none">AI Editör Asistanı</h4>
+                                    <p className="text-purple-300/70 text-[9px] font-bold mt-1">Ham metni ve görsel bilgilerini profesyonel bir habere dönüştürür.</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between px-1">
+                                            <label className="text-purple-300 text-[10px] font-black uppercase tracking-widest leading-none">Tonlama Seçimi</label>
+                                            <span className="text-[9px] text-zinc-600 font-bold uppercase">{aiTonality === 'excited' ? 'Heyecanlı/Dinamik' : 'Ciddi/Resmi'}</span>
+                                        </div>
+                                        <div className="flex gap-2 p-1 bg-black/40 rounded-xl border border-purple-500/10">
+                                            <button 
+                                                onClick={() => setAiTonality('excited')}
+                                                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-[10px] font-black uppercase transition-all ${aiTonality === 'excited' ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/40' : 'text-zinc-500 hover:text-zinc-300'}`}
+                                            >
+                                                <Zap className="w-3.5 h-3.5" /> Dinamik
+                                            </button>
+                                            <button 
+                                                onClick={() => setAiTonality('formal')}
+                                                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-[10px] font-black uppercase transition-all ${aiTonality === 'formal' ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/40' : 'text-zinc-500 hover:text-zinc-300'}`}
+                                            >
+                                                <Briefcase className="w-3.5 h-3.5" /> Resmi
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-purple-300 text-[10px] font-black uppercase tracking-widest pl-1">Kaynak Metin (Ham Haber)</label>
+                                        <textarea 
+                                            value={aiRawInput}
+                                            onChange={e => setAiRawInput(e.target.value)}
+                                            placeholder="Buraya kopyaladığınız ham haberi yapıştırın..."
+                                            className="w-full h-40 bg-black/40 border border-purple-500/20 rounded-xl py-3 px-4 text-white text-xs focus:border-purple-500 transition-colors outline-none placeholder-purple-900/50 resize-none"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between px-1">
+                                            <label className="text-purple-300 text-[10px] font-black uppercase tracking-widest leading-none">Vision: Görsel Analizi</label>
+                                            <span className="text-[9px] text-zinc-600 font-bold uppercase">{aiVisionImages.length}/4 Fotoğraf</span>
+                                        </div>
+                                        <div className="grid grid-cols-4 gap-2 h-[45px]">
+                                            {aiVisionImages.map((img, idx) => (
+                                                <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-purple-500/30">
+                                                    <img src={img} className="w-full h-full object-cover" />
+                                                    <button onClick={() => setAiVisionImages(prev => prev.filter((_, i) => i !== idx))} className="absolute top-0 right-0 w-4 h-4 bg-red-600 text-white text-[10px] flex items-center justify-center">×</button>
+                                                </div>
+                                            ))}
+                                            {aiVisionImages.length < 4 && (
+                                                <label className="aspect-square rounded-lg border-2 border-dashed border-purple-500/20 flex items-center justify-center hover:bg-purple-500/5 transition-all cursor-pointer">
+                                                    <Plus className="w-4 h-4 text-purple-500/50" />
+                                                    <input type="file" hidden accept="image/*" multiple onChange={handleVisionImageUpload} />
+                                                </label>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-purple-300 text-[10px] font-black uppercase tracking-widest pl-1">Ek Detaylar (Opsiyonel)</label>
+                                        <textarea 
+                                            value={aiImageInput}
+                                            onChange={e => setAiImageInput(e.target.value)}
+                                            placeholder="Görsellere bakarken AI'nın dikkat etmesini istediğiniz detaylar..."
+                                            className="w-full h-40 bg-black/40 border border-purple-500/20 rounded-xl py-3 px-4 text-white text-xs focus:border-purple-500 transition-colors outline-none placeholder-purple-900/50 resize-none"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleGenerateRefined}
+                                disabled={isRefining || !aiRawInput.trim() || !openAiKey}
+                                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black py-3 rounded-xl transition-all shadow-lg shadow-purple-900/40 disabled:opacity-40 flex items-center justify-center gap-3 uppercase text-[10px] tracking-widest"
+                            >
+                                {isRefining ? (
+                                    <>
+                                        <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        Sentezleniyor...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Bot className="w-3.5 h-3.5" />
+                                        Haberi Profesyonelce Sentezle (Master Prompt)
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    )}
+
                     <textarea value={formExcerpt} onChange={e => setFormExcerpt(e.target.value)} placeholder="Kısa açıklama (max 120 karakter)" maxLength={120} rows={2} className={inputClass} />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -912,6 +1167,70 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                     </div>
                 ))}
             </div>
+            {/* Preview Modal */}
+            {showAiPreview && aiPreviewData && (
+                <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+                    <div className="w-full max-w-2xl bg-[#0a0a0f] border border-purple-500/30 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(147,51,234,0.2)] animate-in zoom-in-95 duration-200">
+                        <div className="bg-gradient-to-r from-purple-900/80 to-indigo-900/80 px-6 py-5 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center border border-purple-400/30">
+                                    <Layout className="w-5 h-5 text-purple-300" />
+                                </div>
+                                <div>
+                                    <h3 className="text-white font-black text-sm uppercase tracking-widest">Sentezleme Önizleme</h3>
+                                    <p className="text-purple-300 text-[10px] font-bold">Verileri onayladığınızda form alanlarına aktarılacaktır</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setShowAiPreview(false)} className="text-zinc-400 hover:text-white transition-colors">
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+                        
+                        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                            <div className="space-y-2">
+                                <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Başlık</label>
+                                <p className="text-white text-lg font-black leading-tight bg-zinc-900/50 p-4 rounded-xl border border-zinc-800">{aiPreviewData.title}</p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Kategori</label>
+                                    <p className="text-[#f0b90b] text-xs font-black uppercase bg-zinc-900/50 px-4 py-2 rounded-lg border border-zinc-800 inline-block">{aiPreviewData.category}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Tonlama</label>
+                                    <p className="text-purple-400 text-xs font-black uppercase bg-zinc-900/50 px-4 py-2 rounded-lg border border-zinc-800 inline-block">{aiTonality === 'excited' ? 'Dinamik' : 'Resmi'}</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Haber Özeti</label>
+                                <p className="text-zinc-300 text-xs leading-relaxed bg-zinc-900/50 p-4 rounded-xl border border-zinc-800">{aiPreviewData.excerpt}</p>
+                            </div>
+
+                            <div className="p-4 rounded-xl bg-purple-500/5 border border-purple-500/10 flex items-start gap-3">
+                                <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                                <p className="text-[10px] text-purple-300/80 font-medium leading-relaxed">Makale metni görsel etiketleri (`[RESİM-X]`) ile birlikte hazırlandı. Onayladığınızda zengin metin editörüne aktarılacaktır.</p>
+                            </div>
+                        </div>
+
+                        <div className="p-6 bg-zinc-950/50 border-t border-zinc-800 flex gap-3">
+                            <button 
+                                onClick={() => setShowAiPreview(false)}
+                                className="flex-1 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-all bg-zinc-900/50"
+                            >
+                                İptal
+                            </button>
+                            <button 
+                                onClick={applyAiPreview}
+                                className="flex-[2] py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-900/40 hover:scale-[1.02] active:scale-95 transition-all"
+                            >
+                                Onayla ve Formu Doldur
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -10,26 +10,26 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
     const slides = [
         {
             badge: "ŞÖLEN",
-            titleLine1: "%200",
+            titleLine1: "%300",
             titleLine2: "NAKİT!",
-            desc: "Salı, Çarşamba ve Perşembe Günlerine Özel",
-            link: "https://724bahis.net",
+            desc: "Pazartesi ve Cuma Günlerine Özel Yatırım Bonusu",
+            link: "https://betlivo.com",
             btnText: "HEMEN KATIL"
         },
         {
             badge: "00:00 - 08:00",
-            titleLine1: "%30 GECE",
+            titleLine1: "%40 GECE",
             titleLine2: "KAYIP",
-            desc: "Gece Kuşlarına Özel Anlık Kayıp Bonusu",
-            link: "https://724bahis.net",
+            desc: "Betlivo'da Gece Kuşlarına Özel Anlık Kayıp Bonusu",
+            link: "https://betlivo.com",
             btnText: "HEMEN AL"
         },
         {
             badge: "SADAKAT",
             titleLine1: "HAFTALIK",
-            titleLine2: "%10 İADE",
-            desc: "Aylık %5 Bonus İle Her Zaman Güvendesin",
-            link: "https://724bahis.net",
+            titleLine2: "%15 İADE",
+            desc: "Her Hafta %15 Sadakat Bonusu Betlivo'da",
+            link: "https://betlivo.com",
             btnText: "GÜVENCEYE AL"
         }
     ];
@@ -46,7 +46,7 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
             <style>
                 {`
                     :root {
-                        --site-gold: #f0b90b;
+                        --site-green: #22c55e;
                         --site-dark: #0a0a0a;
                         --site-text: #ffffff;
                         --site-gray: #a1a1aa;
@@ -58,9 +58,9 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
                         transform: translateY(-50%);
                         width: 190px;
                         background: rgba(10, 10, 10, 0.95);
-                        border: 1px solid var(--site-gold);
+                        border: 1px solid var(--site-green);
                         border-radius: 20px;
-                        box-shadow: 0 0 30px rgba(240, 185, 11, 0.15);
+                        box-shadow: 0 0 30px rgba(34, 197, 94, 0.15);
                         z-index: 10000;
                         padding: 25px 15px;
                         font-family: 'Inter', sans-serif;
@@ -81,10 +81,10 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
                         font-weight: 900;
                         font-size: 14px;
                         letter-spacing: 1px;
-                        border-bottom: 1px solid rgba(240, 185, 11, 0.2);
+                        border-bottom: 1px solid rgba(34, 197, 94, 0.2);
                         padding-bottom: 15px;
                         margin-bottom: 25px;
-                        color: var(--site-gold);
+                        color: var(--site-green);
                         text-transform: uppercase;
                     }
 
@@ -102,8 +102,8 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
                     }
 
                     .badge {
-                        background: linear-gradient(90deg, #f0b90b, #ffd357);
-                        color: #000;
+                        background: linear-gradient(90deg, #22c55e, #4ade80);
+                        color: #fff;
                         font-size: 10px;
                         font-weight: 900;
                         padding: 4px 12px;
@@ -117,7 +117,7 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
                         line-height: 1.1;
                         margin: 10px 0 16px 0;
                         color: #ffffff;
-                        text-shadow: 0 0 15px rgba(240, 185, 11, 0.3);
+                        text-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
                     }
 
                     .promo-desc {
@@ -131,20 +131,20 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
                     .panel-btn {
                         display: block;
                         width: 100%;
-                        background: linear-gradient(135deg, #f0b90b, #ffd357);
-                        color: #000 !important;
+                        background: linear-gradient(135deg, #22c55e, #16a34a);
+                        color: #fff !important;
                         text-decoration: none;
                         font-weight: 900;
                         font-size: 13px;
                         padding: 14px 0;
                         border-radius: 12px;
                         transition: 0.3s;
-                        box-shadow: 0 5px 15px rgba(240, 185, 11, 0.2);
+                        box-shadow: 0 5px 15px rgba(34, 197, 94, 0.2);
                     }
 
                     .panel-btn:hover {
                         transform: translateY(-3px);
-                        box-shadow: 0 8px 20px rgba(240, 185, 11, 0.4);
+                        box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
                     }
 
                     .dots-container {
@@ -163,7 +163,7 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
                     }
 
                     .dot.active {
-                        background-color: var(--site-gold);
+                        background-color: var(--site-green);
                         width: 12px;
                         border-radius: 10px;
                     }
@@ -189,7 +189,7 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
             </style>
 
             <div className={`brand-side-panel ${position}`}>
-                <div className="panel-header">724BAHİS Teklifler</div>
+                <div className="panel-header">BETLİVO Teklifler</div>
                 
                 <div id="campaign-wrapper">
                     {slides.map((slide, index) => (

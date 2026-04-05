@@ -431,51 +431,51 @@ const App: React.FC = () => {
               {/* ===== FEATURED SPONSOR BANNERS ===== */}
               <div className="flex flex-col gap-4 mb-14 animate-fade-in-up">
 
-                {/* ═══════════════ 724BAHİS – ANA SPONSOR ═══════════════ */}
+                {/* ═══════════════ BETLİVO – ANA SPONSOR ═══════════════ */}
                 <a
-                  href="https://724bahis.net"
+                  href="https://betlivo.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="brand-card altin relative w-full flex flex-col md:flex-row items-center gap-6 md:gap-10 px-6 md:px-12 py-8 md:py-10 rounded-3xl overflow-hidden group cursor-pointer"
+                  className="brand-card betlivo relative w-full flex flex-col md:flex-row items-center gap-6 md:gap-10 px-6 md:px-12 py-8 md:py-10 rounded-3xl overflow-hidden group cursor-pointer"
                   style={{ textDecoration: 'none' }}
                 >
                   {/* Background animated glow orbs */}
-                  <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#f0b90b]/5 blur-[80px] pointer-events-none group-hover:bg-[#f0b90b]/10 transition-all duration-700" />
-                  <div className="absolute left-0 top-0 w-[200px] h-full bg-[#f0b90b]/3 blur-[60px] pointer-events-none" />
+                  <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-emerald-500/5 blur-[80px] pointer-events-none group-hover:bg-emerald-500/10 transition-all duration-700" />
+                  <div className="absolute left-0 top-0 w-[200px] h-full bg-emerald-500/3 blur-[60px] pointer-events-none" />
                   {/* Shimmer line */}
-                  <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#f0b90b]/80 to-transparent group-hover:via-[#f0b90b] transition-all duration-500" />
-                  <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#f0b90b]/30 to-transparent" />
+                  <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-emerald-500/80 to-transparent group-hover:via-emerald-400 transition-all duration-500" />
+                  <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
                   {/* Moving shimmer overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#f0b90b]/[0.03] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/[0.03] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 pointer-events-none" />
 
                   {/* Logo */}
                   <div className="relative z-10 flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-                    style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 30px rgba(240,185,11,0.5)' }}>
-                    <span className="text-black font-black text-sm md:text-base uppercase tracking-tighter leading-tight text-center">724<br />BAHİS</span>
+                    style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 0 30px rgba(34,197,94,0.5)' }}>
+                    <span className="text-white font-black text-sm md:text-base uppercase tracking-tighter leading-tight text-center">BET<br />LİVO</span>
                   </div>
 
                   {/* Content */}
                   <div className="relative z-10 flex-1 text-center md:text-left">
                     <div className="flex flex-wrap items-center gap-3 mb-2 justify-center md:justify-start">
-                      <span className="font-black text-3xl md:text-4xl tracking-tighter uppercase leading-none" style={{ color: 'var(--text-primary)' }}>724BAHİS</span>
-                      <span className="px-3 py-1 text-black font-black text-[10px] uppercase rounded-full tracking-widest" style={{ background: 'linear-gradient(90deg,#f0b90b,#ffd357)', animation: 'pulse 2s infinite' }}>🥇 ANA SPONSOR</span>
+                      <span className="font-black text-3xl md:text-4xl tracking-tighter uppercase leading-none" style={{ color: 'var(--text-primary)' }}>BETLİVO</span>
+                      <span className="px-3 py-1 text-white font-black text-[10px] uppercase rounded-full tracking-widest" style={{ background: 'linear-gradient(90deg,#22c55e,#4ade80)', animation: 'pulse 2s infinite' }}>🥇 ANA SPONSOR</span>
                       <span className="px-2 py-0.5 border border-green-500/50 text-green-400 font-black text-[9px] uppercase rounded-full tracking-widest">🟢 CANLI</span>
                     </div>
                     <p className="text-sm md:text-base font-bold mb-3" style={{ color: 'var(--text-muted)' }}>
-                      🎁 %100 Hoşgeldin Bonusu &nbsp;·&nbsp; ⚡ Anında Ödeme &nbsp;·&nbsp; 🔒 Lisanslı &amp; Güvenli &nbsp;·&nbsp; 📞 7/24 Destek
+                      🎁 %200 Hoşgeldin Bonusu &nbsp;·&nbsp; ⚡ Anında Ödeme &nbsp;·&nbsp; 🔒 Lisanslı &amp; Güvenli &nbsp;·&nbsp; 📞 7/24 Destek
                     </p>
                     <div className="flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-widest justify-center md:justify-start">
-                      <span className="px-2.5 py-1 bg-[#f0b90b]/10 border border-[#f0b90b]/30 text-[#f0b90b] rounded-lg">Spor Bahsi</span>
-                      <span className="px-2.5 py-1 bg-[#f0b90b]/10 border border-[#f0b90b]/30 text-[#f0b90b] rounded-lg">Canlı Bahis</span>
-                      <span className="px-2.5 py-1 bg-[#f0b90b]/10 border border-[#f0b90b]/30 text-[#f0b90b] rounded-lg">Casino</span>
-                      <span className="px-2.5 py-1 bg-[#f0b90b]/10 border border-[#f0b90b]/30 text-[#f0b90b] rounded-lg">e-Spor</span>
+                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">Spor Bahsi</span>
+                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">Canlı Bahis</span>
+                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">Casino</span>
+                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">e-Spor</span>
                     </div>
                   </div>
 
                   {/* CTA */}
                   <div className="relative z-10 flex-shrink-0 flex flex-col items-center gap-2">
-                    <div className="px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest text-black group-hover:scale-105 transition-all duration-300 whitespace-nowrap"
-                      style={{ background: 'linear-gradient(135deg, #f0b90b 0%, #ffd357 50%, #f0b90b 100%)', boxShadow: '0 0 25px rgba(240,185,11,0.5)', backgroundSize: '200% 100%' }}>
+                    <div className="px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest text-white group-hover:scale-105 transition-all duration-300 whitespace-nowrap"
+                      style={{ background: 'linear-gradient(135deg, #22c55e 0%, #4ade80 50%, #22c55e 100%)', boxShadow: '0 0 25px rgba(34,197,94,0.5)', backgroundSize: '200% 100%' }}>
                       🚀 ŞİMDİ KAYIT OL
                     </div>
                     <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Ücretsiz · 2 Dakika</span>
