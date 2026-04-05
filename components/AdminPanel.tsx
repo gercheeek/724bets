@@ -52,6 +52,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   analyses, coupons, onSaveAnalyses, onSaveCoupons
 }) => {
   const isAuthor = role.startsWith('author_');
+  const isEditor = role.startsWith('editor_') || role === 'editor';
   const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility' | 'liveodds'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
   const mainRef = useRef<HTMLElement>(null);
 
@@ -748,8 +749,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </>
           )}
 
-          {/* News tab - visible to admin & authors */}
-          {(role === 'admin' || isAuthor) && (
+          {/* News tab - visible to admin, authors & editors */}
+          {(role === 'admin' || isAuthor || isEditor) && (
             <div className="space-y-1">
               <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest pl-4 mb-2 mt-4">Haberler</div>
               <button onClick={() => setActiveTab('news')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs w-full ${activeTab === 'news' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
