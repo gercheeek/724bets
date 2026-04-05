@@ -2559,7 +2559,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       )}
 
       {activeTab === 'news' && (
-        <AdminNewsTab role={role} />
+        <div className="animate-fade-in">
+          <AdminNewsTab role={role} />
+        </div>
       )}
 
       {activeTab === 'giveaway' && giveawayConfig && onSaveGiveawayConfig && (
