@@ -345,6 +345,11 @@ const App: React.FC = () => {
           onMemberLogin={(user) => {
             setSiteUser(user);
             localStorage.setItem('site_current_member', JSON.stringify(user));
+            // Eğer üyenin atanmış bir yetkisi varsa (admin, editor, author), bunu global role olarak ata
+            if (user.role && user.role !== 'member') {
+              setUserRole(user.role);
+              localStorage.setItem('site_user_role', user.role);
+            }
             setAuthModalMode(null);
           }}
           onAdminLogin={(role) => {
@@ -373,7 +378,10 @@ const App: React.FC = () => {
         onMemberLoginClick={() => setAuthModalMode('member')}
         onMemberLogout={() => {
           setSiteUser(null);
+          setUserRole(null);
           localStorage.removeItem('site_current_member');
+          localStorage.removeItem('site_user_role');
+          if (view === 'admin') setView('home');
         }}
         onSearchClick={() => setShowSearch(true)}
         navVisibility={navVisibility}

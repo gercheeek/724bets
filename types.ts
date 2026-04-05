@@ -11,6 +11,7 @@ export interface SiteUser {
   createdAt: number;
   status?: 'pending' | 'active' | 'suspended';
   notes?: string;
+  role?: 'admin' | 'editor' | 'author' | 'member';
 }
 
 export interface UserMessage {

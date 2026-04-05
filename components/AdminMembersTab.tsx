@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SiteUser, UserLoyalty } from '../types';
 import {
     Users, Search, Trash2, Ban, CheckCircle2, Coins, Ticket,
-    Mail, Phone, ChevronDown, ChevronUp, Edit3, Save, X, Plus, Eye, Loader2
+    Mail, Phone, ChevronDown, ChevronUp, Edit3, Save, X, Plus, Eye, Loader2, Shield
 } from 'lucide-react';
 import { supabase } from '../utils/supabase';
 
@@ -18,6 +18,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
     const [editNotes, setEditNotes] = useState(member.notes || '');
     const [manualCoins, setManualCoins] = useState('');
     const [manualTickets, setManualTickets] = useState('');
+    const [editRole, setEditRole] = useState<SiteUser['role']>(member.role || 'member');
     const [msg, setMsg] = useState('');
 
     useEffect(() => {
@@ -70,6 +71,17 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
         const { error } = await supabase.from('members').update({ notes: editNotes }).eq('id', member.id);
         if (!error) {
             showMsg('✅ Not kaydedildi.');
+            onRefresh();
+        }
+    };
+
+    const handleSaveRole = async () => {
+        const { error } = await supabase.from('members').update({ role: editRole }).eq('id', member.id);
+        if (error) {
+            console.error('Error updating role:', error);
+            showMsg('❌ Yetki güncellenemedi (Veritabanı hatası).');
+        } else {
+            showMsg(`✅ Yetki '${editRole}' olarak güncellendi.`);
             onRefresh();
         }
     };
@@ -127,6 +139,11 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                                     : 'bg-green-500/10 text-green-400'}`}>
                             {member.status === 'suspended' ? '⛔ ASKIDA' : member.status === 'pending' ? '⏳ BEKLİYOR' : '✅ AKTİF'}
                         </span>
+                        {member.role && member.role !== 'member' && (
+                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 flex items-center gap-1">
+                                <Shield className="w-2 h-2" /> {member.role.toUpperCase()}
+                            </span>
+                        )}
                     </div>
                     <div className="flex items-center gap-3 mt-0.5 flex-wrap">
                         <span className="text-zinc-600 text-[10px] flex items-center gap-1"><Mail className="w-3 h-3" />{member.email || '—'}</span>
@@ -169,6 +186,35 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                                         <button onClick={handleAddTickets} className="px-3 py-1.5 rounded-lg font-black text-[10px] text-white bg-purple-500 hover:bg-purple-400 transition-all"><Plus className="w-3 h-3" /></button>
                                     </div>
                                 </div>
+                            </div>
+
+                            {/* Role Management Section */}
+                            <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(255,185,11,0.03)', border: '1px solid rgba(240,185,11,0.1)' }}>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Shield className="w-3.5 h-3.5 text-[#f0b90b]" />
+                                    <span className="text-white font-black text-[11px] uppercase tracking-wider">Yetki Yönetimi</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <select 
+                                        value={editRole}
+                                        onChange={(e) => setEditRole(e.target.value as any)}
+                                        className="flex-1 bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg px-3 py-1.5 outline-none focus:border-[#f0b90b]/50"
+                                    >
+                                        <option value="member">Normal Üye</option>
+                                        <option value="author">Yazar (Haber Düzenler)</option>
+                                        <option value="editor">Editör (Haber+Kupon+Analiz)</option>
+                                        <option value="admin">Full Yönetici (Her Şey)</option>
+                                    </select>
+                                    <button
+                                        onClick={handleSaveRole}
+                                        className="px-4 py-1.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all flex items-center gap-1.5"
+                                    >
+                                        <Save className="w-3 h-3" /> Güncelle
+                                    </button>
+                                </div>
+                                <p className="text-zinc-600 text-[9px] font-medium leading-relaxed italic">
+                                    * Üyeye verdiğiniz yetki, bir sonraki girişinde aktif olacaktır.
+                                </p>
                             </div>
 
                             {/* Ticket history */}

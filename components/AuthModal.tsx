@@ -88,7 +88,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 phone: found.phone || '',
                 createdAt: new Date(found.created_at).getTime(),
                 status: found.status || 'active',
-                notes: found.notes || ''
+                notes: found.notes || '',
+                role: found.role || 'member'
             });
         } else {
             if (uname.length < 3) { setMError('Kullanıcı adı en az 3 karakter olmalı.'); setLoading(false); return; }
