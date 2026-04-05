@@ -670,10 +670,12 @@ const App: React.FC = () => {
       <ChatBot />
 
       {/* ── 724BAHİS Side Panel ── */}
-      <>
-        <BrandSidePanel position="left" />
-        <BrandSidePanel position="right" />
-      </>
+      {view !== 'news' && view !== 'news-detail' && (
+        <>
+          <BrandSidePanel position="left" />
+          <BrandSidePanel position="right" />
+        </>
+      )}
     </div>
     </ThemeProvider>
   );
