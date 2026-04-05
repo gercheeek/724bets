@@ -185,23 +185,48 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
         } catch { /* ignore */ }
     }, []);
 
-    // Generic upload function
+    // Convert file to base64 data URL (fallback when Storage is unavailable)
+    const fileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    };
+
+    // Generic upload function — tries Supabase Storage first, falls back to base64
     const uploadImageToSupabase = async (file: File): Promise<string> => {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-        const filePath = `news/${fileName}`;
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            throw new Error('Dosya boyutu 5MB\'dan küçük olmalıdır.');
+        }
 
-        const { data, error } = await supabase.storage
-            .from('news_images')
-            .upload(filePath, file);
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+            const filePath = `news/${fileName}`;
 
-        if (error) throw error;
+            const { data, error } = await supabase.storage
+                .from('news_images')
+                .upload(filePath, file, { upsert: true });
 
-        const { data: { publicUrl } } = supabase.storage
-            .from('news_images')
-            .getPublicUrl(filePath);
+            if (error) {
+                console.warn('Supabase Storage hatası, base64 fallback kullanılıyor:', error.message);
+                // Fallback: convert to base64 data URL
+                return await fileToBase64(file);
+            }
 
-        return publicUrl;
+            const { data: { publicUrl } } = supabase.storage
+                .from('news_images')
+                .getPublicUrl(filePath);
+
+            return publicUrl;
+        } catch (err: any) {
+            console.warn('Storage erişim hatası, base64 fallback kullanılıyor:', err.message);
+            // Fallback: convert to base64 data URL
+            return await fileToBase64(file);
+        }
     };
 
     // Cover image upload
@@ -213,7 +238,7 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
             const url = await uploadImageToSupabase(file);
             setFormImage(url);
         } catch (error: any) {
-            alert('Resim yüklenirken hata: ' + error.message);
+            alert('⚠️ Resim yüklenemedi: ' + (error.message || 'Bilinmeyen hata'));
         } finally {
             setIsUploading(false);
         }
@@ -230,7 +255,7 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                 setUploadedMedia(prev => [...prev, { url, name: files[i].name }]);
             }
         } catch (error: any) {
-            alert('Resim yüklenirken hata: ' + error.message);
+            alert('⚠️ Resim yüklenemedi: ' + (error.message || 'Bilinmeyen hata'));
         } finally {
             setContentImageUploading(false);
         }
