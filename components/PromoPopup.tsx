@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { WelcomePopupConfig } from '../types';
 
-interface BetlivoPopupProps {
+interface PromoPopupProps {
     onClose: () => void;
     config: WelcomePopupConfig;
 }
 
-const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose, config }) => {
+const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
@@ -88,7 +88,7 @@ const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose, config }) => {
                     <div className="flex items-center gap-5 mb-6">
                         <div className="w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0"
                             style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 30px rgba(240,185,11,0.5)' }}>
-                            <span className="text-black font-black text-base uppercase tracking-tighter leading-tight text-center">BET<br />LIVO</span>
+                            <span className="text-black font-black text-base uppercase tracking-tighter leading-tight text-center">724<br />BAHİS</span>
                         </div>
                         <div>
                             <h2 className="text-5xl font-black tracking-tighter uppercase leading-none mb-1"
@@ -165,4 +165,4 @@ const BetlivoPopup: React.FC<BetlivoPopupProps> = ({ onClose, config }) => {
     );
 };
 
-export default BetlivoPopup;
+export default PromoPopup;

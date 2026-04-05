@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Eye, Clock, Flame, ArrowRight, TrendingUp } from 'lucide-react';
 import { NewsArticle, NEWS_CATEGORIES } from '../types';
-import { demoNews } from '../demoData';
+import { supabase } from '../utils/supabase';
 
 interface NewsSectionProps {
     onViewChange?: (view: string) => void;
@@ -12,17 +12,37 @@ const NewsSection: React.FC<NewsSectionProps> = ({ onViewChange, onArticleClick 
     const [articles, setArticles] = useState<NewsArticle[]>([]);
 
     useEffect(() => {
-        try {
-            const stored = localStorage.getItem('site_news');
-            const parsed: NewsArticle[] = stored ? JSON.parse(stored) : [];
-            const published = [...parsed, ...demoNews]
-                .filter(a => a.status === 'published')
-                .sort((a, b) => b.createdAt - a.createdAt);
-            const unique = Array.from(new Map(published.map(a => [a.id, a])).values());
-            setArticles(unique.slice(0, 7));
-        } catch {
-            setArticles(demoNews.filter(a => a.status === 'published').slice(0, 7));
-        }
+        const fetchNews = async () => {
+            const { data, error } = await supabase
+                .from('news')
+                .select('*')
+                .eq('status', 'published')
+                .order('created_at', { ascending: false })
+                .limit(7);
+            
+            if (data) {
+                const mapped: NewsArticle[] = data.map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    slug: item.slug,
+                    excerpt: item.excerpt || '',
+                    content: item.content || '',
+                    category: item.category || 'Futbol',
+                    image: item.image || '',
+                    authorId: item.author_id || '',
+                    authorName: item.author_name || 'Admin',
+                    views: item.views || 0,
+                    status: item.status || 'draft',
+                    seoTitle: item.seo_title,
+                    seoDescription: item.seo_description,
+                    seoKeywords: item.seo_keywords,
+                    createdAt: new Date(item.created_at).getTime(),
+                    updatedAt: new Date(item.updated_at).getTime()
+                }));
+                setArticles(mapped);
+            }
+        };
+        fetchNews();
     }, []);
 
     const getCategoryColor = (cat: string) => {

@@ -9,9 +9,13 @@ import AdminPanel from './components/AdminPanel';
 import AuthModal from './components/AuthModal';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
-import BetlivoPopup from './components/BetlivoPopup';
+import PromoPopup from './components/PromoPopup';
 import DynamicCTA from './components/DynamicCTA';
 import ChatBot from './components/ChatBot';
+import NewsDetailView from './components/NewsDetailView';
+import PromoWheel from './components/PromoWheel';
+import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
+import BrandSidePanel from './components/BrandSidePanel';
 import SearchModal from './components/SearchModal';
 import LoyaltyPanel, { DEFAULT_LOYALTY_CONFIG } from './components/LoyaltyPanel';
 import RaffleView from './components/RaffleView';
@@ -19,21 +23,18 @@ import PoolGame from './components/PoolGame';
 import { seedEcosystemData } from './seedEcosystem';
 import NewsSection from './components/NewsSection';
 import NewsView from './components/NewsView';
-import NewsDetailView from './components/NewsDetailView';
-import BetLivoWheel from './components/BetLivoWheel';
-import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
-import BetlivoSidePanel from './components/BetlivoSidePanel';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, BetLivoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig } from './types';
-import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG } from './constants';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis } from './types';
+import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG } from './constants';
+import { demoAnalyses } from './demoData';
 
 
 const App: React.FC = () => {
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway'>('home');
 
-  // BetLivo Wheel Config
-  const [wheelCarkConfig, setWheelCarkConfig] = useState<BetLivoWheelConfig>(() => {
+  // Promo Wheel Config
+  const [wheelCarkConfig, setWheelCarkConfig] = useState<PromoWheelConfig>(() => {
     const stored = localStorage.getItem('site_betlivo_wheel');
     return stored ? JSON.parse(stored) : {
       participants: [],
@@ -49,7 +50,7 @@ const App: React.FC = () => {
     };
   });
 
-  const handleWheelCarkConfigChange = (cfg: BetLivoWheelConfig) => {
+  const handleWheelCarkConfigChange = (cfg: PromoWheelConfig) => {
     setWheelCarkConfig(cfg);
     localStorage.setItem('site_betlivo_wheel', JSON.stringify(cfg));
   };
@@ -99,6 +100,12 @@ const App: React.FC = () => {
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
     return stored ? JSON.parse(stored) : DEFAULT_LOYALTY_CONFIG;
+  });
+
+  const [analyses, setAnalyses] = useState<MatchAnalysis[]>([]);
+  const [wheelConfig, setWheelConfig] = useState<WheelConfig>(() => {
+    const stored = localStorage.getItem('site_casino_wheel');
+    return stored ? JSON.parse(stored) : DEFAULT_WHEEL_CONFIG;
   });
 
   // Welcome Popup Config
@@ -169,7 +176,8 @@ const App: React.FC = () => {
     const savedColor = localStorage.getItem('site_primary_color');
     const savedHashtags = localStorage.getItem('site_hashtags');
     const savedCoupons = localStorage.getItem('site_coupons');
-    const savedWheel = localStorage.getItem('site_wheel_config');
+    const savedAnalyses = localStorage.getItem('site_analyses');
+    const savedBj = localStorage.getItem('site_bj_config');
     const savedRole = localStorage.getItem('site_user_role');
     const savedMember = localStorage.getItem('site_current_member');
 
@@ -177,7 +185,10 @@ const App: React.FC = () => {
 
     if (savedHashtags) setHashtags(savedHashtags);
     if (savedCoupons) setCoupons(JSON.parse(savedCoupons));
-    if (savedWheel) setBjConfig(JSON.parse(savedWheel));
+    if (savedAnalyses) setAnalyses(JSON.parse(savedAnalyses));
+    else setAnalyses(demoAnalyses);
+
+    if (savedBj) setBjConfig(JSON.parse(savedBj));
     if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
     if (savedRole) setUserRole(savedRole as string);
     if (savedMember) setSiteUser(JSON.parse(savedMember));
@@ -206,11 +217,26 @@ const App: React.FC = () => {
     localStorage.setItem('site_brands', JSON.stringify(newBrands));
   };
 
+  const saveAnalyses = (newAnalyses: MatchAnalysis[]) => {
+    setAnalyses(newAnalyses);
+    localStorage.setItem('site_analyses', JSON.stringify(newAnalyses));
+  };
+
+  const saveCoupons = (newCoupons: Coupon[]) => {
+    setCoupons(newCoupons);
+    localStorage.setItem('site_coupons', JSON.stringify(newCoupons));
+  };
+
+  const saveWheelConfig = (cfg: WheelConfig) => {
+    setWheelConfig(cfg);
+    localStorage.setItem('site_casino_wheel', JSON.stringify(cfg));
+  };
+
   // Hero brand for admin (keep backward compatibility)
   const heroDefault: Brand = {
-    id: 'betlivo', name: 'BETLİVO', subtitle: 'CASINO & CANLI BAHİS',
+    id: '724bahis', name: '724BAHİS', subtitle: 'CASINO & CANLI BAHİS',
     offerMain: '%280', offerSub: 'HOŞGELDİN BONUSU !!!',
-    logo: 'https://picsum.photos/seed/betlivo/400/400', link: '#', isSponsor: true,
+    logo: 'https://picsum.photos/seed/724bahis/400/400', link: 'https://724bahis.net', isSponsor: true,
   };
   const [hero, setHero] = useState<Brand>(heroDefault);
 
@@ -222,7 +248,7 @@ const App: React.FC = () => {
   const handleGameComplete = (lastPlayTime: number) => {
     const newConfig = { ...bjConfig, lastPlayTime };
     setBjConfig(newConfig);
-    localStorage.setItem('site_wheel_config', JSON.stringify(newConfig));
+    localStorage.setItem('site_bj_config', JSON.stringify(newConfig));
   };
 
   const saveHero = (newHero: Brand) => {
@@ -235,15 +261,19 @@ const App: React.FC = () => {
       brands={brands}
       hero={hero}
       role={userRole || 'admin'}
-      wheelConfig={{ rewards: [], lastSpinTime: 0, spinCooldownHours: 6 }}
+      wheelConfig={wheelConfig}
       bjConfig={bjConfig}
       loyaltyConfig={loyaltyConfig}
+      analyses={analyses}
+      coupons={coupons}
       onSaveBrands={saveBrands}
       onSaveHero={saveHero}
-      onSaveWheelConfig={() => { }}
+      onSaveAnalyses={saveAnalyses}
+      onSaveCoupons={saveCoupons}
+      onSaveWheelConfig={saveWheelConfig}
       onSaveBjConfig={(cfg) => {
         setBjConfig(cfg);
-        localStorage.setItem('site_wheel_config', JSON.stringify(cfg));
+        localStorage.setItem('site_bj_config', JSON.stringify(cfg));
       }}
       onSaveLoyaltyConfig={(cfg) => {
         setLoyaltyConfig(cfg);
@@ -304,8 +334,10 @@ const App: React.FC = () => {
       minHeight: '100vh',
       background: 'var(--bg-main)',
       color: 'var(--text-primary)',
-      overflowX: 'hidden'
+      overflowX: 'hidden',
+      position: 'relative'
     }}>
+
       {/* Auth Modal Overlay */}
       {authModalMode && (
         <AuthModal
@@ -391,9 +423,9 @@ const App: React.FC = () => {
               {/* ===== FEATURED SPONSOR BANNERS ===== */}
               <div className="flex flex-col gap-4 mb-14 animate-fade-in-up">
 
-                {/* ═══════════════ BETLIVO – ANA SPONSOR ═══════════════ */}
+                {/* ═══════════════ 724BAHİS – ANA SPONSOR ═══════════════ */}
                 <a
-                  href="https://betlivo.com"
+                  href="https://724bahis.net"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="brand-card altin relative w-full flex flex-col md:flex-row items-center gap-6 md:gap-10 px-6 md:px-12 py-8 md:py-10 rounded-3xl overflow-hidden group cursor-pointer"
@@ -411,13 +443,13 @@ const App: React.FC = () => {
                   {/* Logo */}
                   <div className="relative z-10 flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
                     style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 30px rgba(240,185,11,0.5)' }}>
-                    <span className="text-black font-black text-sm md:text-base uppercase tracking-tighter leading-tight text-center">BET<br />LIVO</span>
+                    <span className="text-black font-black text-sm md:text-base uppercase tracking-tighter leading-tight text-center">724<br />BAHİS</span>
                   </div>
 
                   {/* Content */}
                   <div className="relative z-10 flex-1 text-center md:text-left">
                     <div className="flex flex-wrap items-center gap-3 mb-2 justify-center md:justify-start">
-                      <span className="font-black text-3xl md:text-4xl tracking-tighter uppercase leading-none" style={{ color: 'var(--text-primary)' }}>BETLIVO</span>
+                      <span className="font-black text-3xl md:text-4xl tracking-tighter uppercase leading-none" style={{ color: 'var(--text-primary)' }}>724BAHİS</span>
                       <span className="px-3 py-1 text-black font-black text-[10px] uppercase rounded-full tracking-widest" style={{ background: 'linear-gradient(90deg,#f0b90b,#ffd357)', animation: 'pulse 2s infinite' }}>🥇 ANA SPONSOR</span>
                       <span className="px-2 py-0.5 border border-green-500/50 text-green-400 font-black text-[9px] uppercase rounded-full tracking-widest">🟢 CANLI</span>
                     </div>
@@ -585,7 +617,7 @@ const App: React.FC = () => {
         )}
 
         {view === 'wheel' && (
-          <BetLivoWheel
+          <PromoWheel
             config={wheelCarkConfig}
             onConfigChange={handleWheelCarkConfigChange}
             isAdmin={!!userRole}
@@ -617,9 +649,9 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* ── Betlivo Welcome Popup (once per session) ── */}
+      {/* ── 724BAHİS Welcome Popup (once per session) ── */}
       {showBetlivoPopup && (
-        <BetlivoPopup
+        <PromoPopup
           onClose={handleCloseBetlivoPopup}
           config={welcomePopupConfig}
         />
@@ -637,10 +669,10 @@ const App: React.FC = () => {
       {/* ── AI Chat Assistant ── */}
       <ChatBot />
 
-      {/* ── Betlivo Side Panel ── */}
+      {/* ── 724BAHİS Side Panel ── */}
       <>
-        <BetlivoSidePanel position="left" />
-        <BetlivoSidePanel position="right" />
+        <BrandSidePanel position="left" />
+        <BrandSidePanel position="right" />
       </>
     </div>
     </ThemeProvider>

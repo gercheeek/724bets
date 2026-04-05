@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import confetti from 'canvas-confetti';
-import { WheelParticipant, WheelPrize, WheelHistoryEntry, BetLivoWheelConfig } from '../types';
+import { WheelParticipant, WheelPrize, WheelHistoryEntry, PromoWheelConfig } from '../types';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const BETLIVO_GOLD = '#f0b90b';
-const BETLIVO_GOLD_DARK = '#c49a09';
+const SITE_GOLD = '#f0b90b';
+const SITE_GOLD_DARK = '#c49a09';
 const WHEEL_COLORS = [
     '#1a1a2e', '#16213e', '#0f3460', '#1a1a3e',
     '#162140', '#0f2850', '#1a1a4e', '#162150',
@@ -12,20 +12,20 @@ const WHEEL_COLORS = [
 const TICK_SOUND_FREQ = 800;
 const TICK_SOUND_DURATION = 0.03;
 
-interface BetLivoWheelProps {
-    config: BetLivoWheelConfig;
-    onConfigChange: (config: BetLivoWheelConfig) => void;
+interface PromoWheelProps {
+    config: PromoWheelConfig;
+    onConfigChange: (config: PromoWheelConfig) => void;
     isAdmin?: boolean;
 }
 
-// ─── Utility: Build segments with 2 fixed BETLİVO slices at opposite poles ──
+// ─── Utility: Build segments with 2 fixed 724BAHİS slices at opposite poles ──
 function buildSegments(participants: WheelParticipant[]) {
     const names = participants.map(p => p.name);
     if (names.length === 0) {
         return [
-            { label: 'BETLİVO', isBetlivo: true },
+            { label: '724BAHİS', isBetlivo: true },
             { label: 'Katılımcı Yok', isBetlivo: false },
-            { label: 'BETLİVO', isBetlivo: true },
+            { label: '724BAHİS', isBetlivo: true },
             { label: 'Katılımcı Yok', isBetlivo: false },
         ];
     }
@@ -35,14 +35,15 @@ function buildSegments(participants: WheelParticipant[]) {
     const segments: { label: string; isBetlivo: boolean }[] = [];
     // First half of participants
     firstHalf.forEach(n => segments.push({ label: n, isBetlivo: false }));
-    // First BETLİVO segment
-    segments.push({ label: 'BETLİVO', isBetlivo: true });
+    // First 724BAHİS segment
+    segments.push({ label: '724BAHİS', isBetlivo: true });
     // Second half
     secondHalf.forEach(n => segments.push({ label: n, isBetlivo: false }));
-    // Second BETLİVO segment (opposite pole)
-    segments.push({ label: 'BETLİVO', isBetlivo: true });
+    // Second 724BAHİS segment (opposite pole)
+    segments.push({ label: '724BAHİS', isBetlivo: true });
     return segments;
 }
+
 
 // ─── Tick Sound Generator ────────────────────────────────────────────────────
 function playTick() {
@@ -114,14 +115,14 @@ const LootBox: React.FC<{
             }}>
                 <div style={{
                     width: '100%', height: '100%',
-                    background: `linear-gradient(135deg, ${BETLIVO_GOLD}, ${BETLIVO_GOLD_DARK})`,
+                    background: `linear-gradient(135deg, ${SITE_GOLD}, ${SITE_GOLD_DARK})`,
                     borderRadius: 24, border: '4px solid rgba(255,255,255,0.3)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexDirection: 'column', gap: 8,
                     boxShadow: `0 0 60px rgba(240,185,11,0.5), inset 0 2px 0 rgba(255,255,255,0.3)`,
                 }}>
                     <span style={{ fontSize: 64 }}>📦</span>
-                    <span style={{ color: '#000', fontWeight: 900, fontSize: 18, letterSpacing: 2 }}>BETLİVO</span>
+                    <span style={{ color: '#000', fontWeight: 900, fontSize: 18, letterSpacing: 2 }}>724BAHİS</span>
                     <span style={{ color: 'rgba(0,0,0,0.5)', fontWeight: 700, fontSize: 11, letterSpacing: 3 }}>GANİMET KASASI</span>
                 </div>
             </div>
@@ -149,7 +150,7 @@ const LootBox: React.FC<{
                         </span>
                     </div>
                     <p style={{ color: '#a1a1aa', fontWeight: 700, fontSize: 14, marginTop: 8 }}>
-                        🎉 Tebrikler <span style={{ color: BETLIVO_GOLD }}>{winner}</span>!
+                        🎉 Tebrikler <span style={{ color: SITE_GOLD }}>{winner}</span>!
                     </p>
                     <button onClick={onClose} style={{
                         marginTop: 20, padding: '14px 48px',
@@ -158,7 +159,7 @@ const LootBox: React.FC<{
                         cursor: 'pointer', letterSpacing: 1,
                         transition: 'all 0.3s ease',
                     }}
-                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(240,185,11,0.2)'; e.currentTarget.style.borderColor = BETLIVO_GOLD; }}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(240,185,11,0.2)'; e.currentTarget.style.borderColor = SITE_GOLD; }}
                         onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
                     >
                         KAPAT
@@ -169,10 +170,11 @@ const LootBox: React.FC<{
     );
 };
 
+
 // ═════════════════════════════════════════════════════════════════════════════
 // ██  MAIN COMPONENT  ████████████████████████████████████████████████████████
 // ═════════════════════════════════════════════════════════════════════════════
-const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isAdmin }) => {
+const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [spinning, setSpinning] = useState(false);
     const [currentAngle, setCurrentAngle] = useState(0);
@@ -213,9 +215,9 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
         ctx.save();
         ctx.beginPath();
         ctx.arc(CENTER, CENTER, RADIUS + 12, 0, 2 * Math.PI);
-        ctx.strokeStyle = BETLIVO_GOLD;
+        ctx.strokeStyle = SITE_GOLD;
         ctx.lineWidth = 3;
-        ctx.shadowColor = BETLIVO_GOLD;
+        ctx.shadowColor = SITE_GOLD;
         ctx.shadowBlur = 20;
         ctx.stroke();
         ctx.restore();
@@ -271,7 +273,7 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
         innerGrad.addColorStop(1, '#111');
         ctx.fillStyle = innerGrad;
         ctx.fill();
-        ctx.strokeStyle = BETLIVO_GOLD;
+        ctx.strokeStyle = SITE_GOLD;
         ctx.lineWidth = 3;
         ctx.stroke();
         ctx.restore();
@@ -279,11 +281,11 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
         // Inner logo
         ctx.save();
         ctx.font = 'bold 11px "Inter", sans-serif';
-        ctx.fillStyle = BETLIVO_GOLD;
+        ctx.fillStyle = SITE_GOLD;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('BET', CENTER, CENTER - 7);
-        ctx.fillText('LİVO', CENTER, CENTER + 7);
+        ctx.fillText('724', CENTER, CENTER - 7);
+        ctx.fillText('BAHİS', CENTER, CENTER + 7);
         ctx.restore();
 
         // ─── Pointer (top) ───────────────────────────────────────────────────
@@ -295,9 +297,9 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
         ctx.closePath();
         const pointerGrad = ctx.createLinearGradient(CENTER, 12, CENTER, 48);
         pointerGrad.addColorStop(0, '#ffd357');
-        pointerGrad.addColorStop(1, BETLIVO_GOLD);
+        pointerGrad.addColorStop(1, SITE_GOLD);
         ctx.fillStyle = pointerGrad;
-        ctx.shadowColor = BETLIVO_GOLD;
+        ctx.shadowColor = SITE_GOLD;
         ctx.shadowBlur = 15;
         ctx.fill();
         ctx.strokeStyle = '#000';
@@ -313,8 +315,8 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
             ctx.save();
             ctx.beginPath();
             ctx.arc(nx, ny, 4, 0, 2 * Math.PI);
-            ctx.fillStyle = BETLIVO_GOLD;
-            ctx.shadowColor = BETLIVO_GOLD;
+            ctx.fillStyle = SITE_GOLD;
+            ctx.shadowColor = SITE_GOLD;
             ctx.shadowBlur = 6;
             ctx.fill();
             ctx.restore();
@@ -397,20 +399,20 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
                 setWinner(winningSeg.label);
 
                 if (winningSeg.isBetlivo) {
-                    // BetLivo Kasa!
+                    // 724BAHİS Kasa!
                     const availablePrizes = config.prizes.filter(p => p.stock > 0);
                     const prize = availablePrizes.length > 0
                         ? availablePrizes[Math.floor(Math.random() * availablePrizes.length)]
                         : null;
                     setLootPrize(prize);
-                    setLootWinner('BETLİVO');
+                    setLootWinner('724BAHİS');
                     setTimeout(() => setShowLootBox(true), 800);
                     // Deduct stock
                     if (prize) {
                         const updatedPrizes = config.prizes.map(p =>
                             p.id === prize.id ? { ...p, stock: p.stock - 1 } : p
                         );
-                        const entry: WheelHistoryEntry = { winner: 'BETLİVO KASA', prize: prize.name, timestamp: Date.now() };
+                        const entry: WheelHistoryEntry = { winner: '724BAHİS KASA', prize: prize.name, timestamp: Date.now() };
                         onConfigChange({ ...config, prizes: updatedPrizes, history: [entry, ...config.history] });
                     }
                 } else {
@@ -507,7 +509,7 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
             <div style={{ textAlign: 'center', marginBottom: 40 }}>
                 <h1 style={{
                     fontSize: 42, fontWeight: 900, letterSpacing: -1,
-                    background: `linear-gradient(135deg, ${BETLIVO_GOLD}, #ffd357)`,
+                    background: `linear-gradient(135deg, ${SITE_GOLD}, #ffd357)`,
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                     marginBottom: 8,
                 }}>
@@ -599,7 +601,7 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
                                         background: 'rgba(255,255,255,0.03)', fontSize: 12,
                                         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                                     }}>
-                                        <span style={{ color: BETLIVO_GOLD, fontWeight: 800 }}>{h.winner}</span>
+                                        <span style={{ color: SITE_GOLD, fontWeight: 800 }}>{h.winner}</span>
                                         <span style={{ color: '#71717a', fontWeight: 600 }}>{h.prize}</span>
                                     </div>
                                 ))}
@@ -635,7 +637,7 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
                         disabled={spinning || segments.length < 3}
                         style={{
                             marginTop: 32, padding: '18px 64px',
-                            background: spinning ? '#333' : `linear-gradient(135deg, ${BETLIVO_GOLD}, #ffd357)`,
+                            background: spinning ? '#333' : `linear-gradient(135deg, ${SITE_GOLD}, #ffd357)`,
                             border: 'none', borderRadius: 20,
                             color: spinning ? '#666' : '#000',
                             fontWeight: 900, fontSize: 18, letterSpacing: 2,
@@ -659,7 +661,7 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
                             <div style={{ color: '#a1a1aa', fontSize: 12, fontWeight: 700, marginBottom: 4, letterSpacing: 2 }}>
                                 🎯 KAZANAN
                             </div>
-                            <div style={{ color: BETLIVO_GOLD, fontSize: 24, fontWeight: 900, letterSpacing: 1 }}>
+                            <div style={{ color: SITE_GOLD, fontSize: 24, fontWeight: 900, letterSpacing: 1 }}>
                                 {winner}
                             </div>
                         </div>
@@ -707,23 +709,23 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
                             )}
                         </div>
 
-                        {/* BetLivo Trigger */}
+                        {/* 724BAHİS Trigger */}
                         <div style={{ marginBottom: 20 }}>
                             <button
                                 onClick={() => onConfigChange({ ...config, betlivoTrigger: !config.betlivoTrigger })}
                                 style={{
                                     width: '100%', padding: '12px 16px', borderRadius: 14,
                                     background: config.betlivoTrigger ? 'rgba(240,185,11,0.2)' : 'rgba(255,255,255,0.05)',
-                                    border: `2px solid ${config.betlivoTrigger ? BETLIVO_GOLD : 'rgba(255,255,255,0.1)'}`,
-                                    color: config.betlivoTrigger ? BETLIVO_GOLD : '#71717a',
+                                    border: `2px solid ${config.betlivoTrigger ? SITE_GOLD : 'rgba(255,255,255,0.1)'}`,
+                                    color: config.betlivoTrigger ? SITE_GOLD : '#71717a',
                                     fontWeight: 900, fontSize: 13, cursor: 'pointer',
                                     letterSpacing: 1, transition: 'all 0.3s ease',
                                 }}
                             >
-                                {config.betlivoTrigger ? '✅ BETLİVO TRİGGER AKTİF' : '💤 BETLİVO TRİGGER'}
+                                {config.betlivoTrigger ? '✅ 724BAHİS TRİGGER AKTİF' : '💤 724BAHİS TRİGGER'}
                             </button>
                             {config.betlivoTrigger && (
-                                <p style={{ color: BETLIVO_GOLD, fontSize: 11, fontWeight: 700, marginTop: 6 }}>
+                                <p style={{ color: SITE_GOLD, fontSize: 11, fontWeight: 700, marginTop: 6 }}>
                                     Çark altın dilimde duracak → Kasa açılır!
                                 </p>
                             )}
@@ -858,7 +860,7 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
                         </h3>
                         <p style={{ color: '#71717a', fontSize: 12, fontWeight: 600, marginBottom: 16 }}>
                             JSON dizisi, virgülle ayrılmış veya her satıra bir isim yapıştırın.<br />
-                            Örn: <code style={{ color: BETLIVO_GOLD }}>["ali", "veli", "ayse"]</code> veya düz liste
+                            Örn: <code style={{ color: SITE_GOLD }}>["ali", "veli", "ayse"]</code> veya düz liste
                         </p>
                         <textarea
                             value={jsonInput}
@@ -887,7 +889,7 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
                                 onClick={handleJsonPaste}
                                 style={{
                                     flex: 1, padding: '12px', borderRadius: 14,
-                                    background: `linear-gradient(135deg, ${BETLIVO_GOLD}, #ffd357)`,
+                                    background: `linear-gradient(135deg, ${SITE_GOLD}, #ffd357)`,
                                     border: 'none', color: '#000', fontWeight: 900, fontSize: 13,
                                     cursor: 'pointer', boxShadow: '0 0 20px rgba(240,185,11,0.3)',
                                 }}
@@ -929,4 +931,4 @@ const BetLivoWheel: React.FC<BetLivoWheelProps> = ({ config, onConfigChange, isA
     );
 };
 
-export default BetLivoWheel;
+export default PromoWheel;

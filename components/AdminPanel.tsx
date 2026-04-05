@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User } from 'lucide-react';
 import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
@@ -36,6 +36,10 @@ interface AdminPanelProps {
   onSaveWelcomePopupConfig?: (config: WelcomePopupConfig) => void;
   liveOddsConfig?: LiveOddsConfig;
   onSaveLiveOddsConfig?: (config: LiveOddsConfig) => void;
+  analyses: MatchAnalysis[];
+  coupons: Coupon[];
+  onSaveAnalyses: (analyses: MatchAnalysis[]) => void;
+  onSaveCoupons: (coupons: Coupon[]) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -44,10 +48,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   giveawayConfig, onSaveGiveawayConfig,
   navVisibility, onSaveNavVisibility, marqueeConfig, onSaveMarqueeConfig,
   welcomePopupConfig, onSaveWelcomePopupConfig,
-  liveOddsConfig, onSaveLiveOddsConfig
+  liveOddsConfig, onSaveLiveOddsConfig,
+  analyses, coupons, onSaveAnalyses, onSaveCoupons
 }) => {
   const isAuthor = role.startsWith('author_');
   const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility' | 'liveodds'>(isAuthor ? 'news' : (role === 'editor' ? 'coupons' : 'content'));
+  const mainRef = useRef<HTMLElement>(null);
+
+  // Scroll to top when tab changes
+  useEffect(() => {
+    if (mainRef.current) mainRef.current.scrollTop = 0;
+  }, [activeTab]);
 
   // Messages State
   const [messages, setMessages] = useState<UserMessage[]>(() => {
@@ -59,8 +70,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localHashtags, setLocalHashtags] = useState(hashtags);
   const [localWheelConfig, setLocalWheelConfig] = useState<WheelConfig>({ ...wheelConfig });
   const [localBjConfig, setLocalBjConfig] = useState<BlackjackConfig>(bjConfig || { rewards: [], cooldownHours: 4, dealerHitSoft17: true, lastPlayTime: 0 });
-  const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: 'Betlivo Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
-  const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: 'BETLIVO', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
+  const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: '724BAHİS Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
+  const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: '724BAHİS', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
 
   // Live Odds state
   const [localLiveOdds, setLocalLiveOdds] = useState<LiveOddsConfig>(() => {
@@ -71,10 +82,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   });
 
   // New Management Local State
-  const [localAnalyses, setLocalAnalyses] = useState<MatchAnalysis[]>([]);
+  const [localAnalyses, setLocalAnalyses] = useState<MatchAnalysis[]>(analyses);
   const [editingAnalysisId, setEditingAnalysisId] = useState<string | null>(null);
 
-  const [localCoupons, setLocalCoupons] = useState<Coupon[]>([]);
+  const [localCoupons, setLocalCoupons] = useState<Coupon[]>(coupons);
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
 
   const [adminSport, setAdminSport] = useState<'Futbol' | 'Basketbol'>('Futbol');
@@ -105,21 +116,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [editorError, setEditorError] = useState('');
 
   useEffect(() => {
-    const savedAnalyses = localStorage.getItem('site_analyses');
-    const savedCoupons = localStorage.getItem('site_coupons');
+    setLocalAnalyses(analyses);
+  }, [analyses]);
 
-    if (savedAnalyses) {
-      setLocalAnalyses(JSON.parse(savedAnalyses));
-    } else {
-      setLocalAnalyses(demoAnalyses);
-    }
-
-    if (savedCoupons) {
-      setLocalCoupons(JSON.parse(savedCoupons));
-    } else {
-      setLocalCoupons(demoCoupons);
-    }
-  }, []);
+  useEffect(() => {
+    setLocalCoupons(coupons);
+  }, [coupons]);
 
   useEffect(() => {
     if (welcomePopupConfig) setLocalWelcomePopup(welcomePopupConfig);
@@ -158,8 +160,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     onSaveBrands(localBrands);
     onSaveHero(localHero);
     onHashtagsChange(localHashtags);
-    localStorage.setItem('site_analyses', JSON.stringify(localAnalyses));
-    localStorage.setItem('site_coupons', JSON.stringify(localCoupons));
+    onSaveAnalyses(localAnalyses);
+    onSaveCoupons(localCoupons);
     onSaveWheelConfig(localWheelConfig);
     if (onSaveWelcomePopupConfig) {
       onSaveWelcomePopupConfig(localWelcomePopup);
@@ -495,7 +497,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         expectedGoals: (1.5 + (hashString(homeTeam) % 20) / 10).toFixed(1), // 1.5 to 3.4
 
         bookieOdds: [
-          { name: 'BETLİVO', odd1: (1.45 + Math.random() * 0.4).toFixed(2), odd2: (1.50 + Math.random() * 0.4).toFixed(2), link: 'https://' },
+          { name: '724BAHİS', odd1: (1.45 + Math.random() * 0.4).toFixed(2), odd2: (1.50 + Math.random() * 0.4).toFixed(2), link: 'https://' },
           { name: 'BETKOM', odd1: (1.42 + Math.random() * 0.4).toFixed(2), odd2: (1.48 + Math.random() * 0.4).toFixed(2), link: 'https://' },
           { name: 'MARSBAHİS', odd1: (1.48 + Math.random() * 0.4).toFixed(2), odd2: (1.55 + Math.random() * 0.4).toFixed(2), link: 'https://', isHighest: true }
         ],
@@ -788,7 +790,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       </aside>
 
-      <main className="flex-1 p-6 md:p-10 overflow-y-auto max-h-screen">
+      <main ref={mainRef} className="flex-1 p-6 md:p-10 overflow-y-auto max-h-screen">
         {activeTab === 'content' && (
           <div className="space-y-12">
             <section>
@@ -862,7 +864,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     value={localWelcomePopup.title}
                     onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, title: e.target.value })}
                     className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold focus:border-[#f0b90b]/50 transition-all"
-                    placeholder="Örn: BETLIVO"
+                    placeholder="Örn: 724BAHİS"
                   />
                 </div>
                 <div className="space-y-2">
@@ -1467,7 +1469,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           recentHistory: '8 Kazanç',
                           expectedGoals: '3.1',
                           bookieOdds: [
-                            { name: 'BETLİVO', odd1: '1.72', odd2: '1.85', link: 'https://' },
+                            { name: '724BAHİS', odd1: '1.72', odd2: '1.85', link: 'https://' },
                             { name: 'BETKOM', odd1: '1.70', odd2: '1.83', link: 'https://' },
                             { name: 'MARSBAHİS', odd1: '1.75', odd2: '1.88', link: 'https://', isHighest: true }
                           ],
@@ -2401,7 +2403,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             <span className="text-3xl">⭐</span>
             <div>
               <h2 className="text-white font-black text-xl uppercase tracking-tight">Sadakat Programı Ayarları</h2>
-              <p className="text-zinc-500 text-xs font-bold">724bets.net × Betlivo Loyalty/Gamification</p>
+              <p className="text-zinc-500 text-xs font-bold">724bets.net × 724BAHİS Loyalty/Gamification</p>
             </div>
           </div>
 
@@ -2557,9 +2559,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       )}
 
       {activeTab === 'news' && (
-        <div className="flex-1 overflow-y-auto p-6">
-          <AdminNewsTab role={role} />
-        </div>
+        <AdminNewsTab role={role} />
       )}
 
       {activeTab === 'giveaway' && giveawayConfig && onSaveGiveawayConfig && (
@@ -2695,7 +2695,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               <h2 className="text-2xl font-black text-white flex items-center gap-3">
                 <MessageSquare className="text-blue-400" /> KULLANICI MESAJLARI
               </h2>
-              <p className="text-zinc-500 text-xs font-bold uppercase mt-1">Betlivo yatırımları ve üye bildirimleri</p>
+              <p className="text-zinc-500 text-xs font-bold uppercase mt-1">724BAHİS yatırımları ve üye bildirimleri</p>
             </div>
           </div>
 

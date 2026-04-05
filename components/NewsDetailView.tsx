@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Eye, Clock, User, Share2, Twitter, Copy, ChevronRight } from 'lucide-react';
 import { NewsArticle, NEWS_CATEGORIES } from '../types';
-import { demoNews } from '../demoData';
+import { supabase } from '../utils/supabase';
 
 interface NewsDetailViewProps {
     articleId: string;
@@ -15,25 +15,72 @@ const NewsDetailView: React.FC<NewsDetailViewProps> = ({ articleId, onViewChange
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
-        try {
-            const stored = localStorage.getItem('site_news');
-            const parsed: NewsArticle[] = stored ? JSON.parse(stored) : [];
-            const all = [...parsed, ...demoNews]
-                .filter(a => a.status === 'published')
-                .sort((a, b) => b.createdAt - a.createdAt);
-            const unique = Array.from(new Map(all.map(a => [a.id, a])).values());
-            setAllArticles(unique);
-            const found = unique.find(a => a.id === articleId);
-            if (found) {
-                setArticle(found);
-                // Increment views
-                found.views += 1;
+        const fetchArticleData = async () => {
+            // Fetch the specific article
+            const { data: item, error } = await supabase
+                .from('news')
+                .select('*')
+                .eq('id', articleId)
+                .single();
+            
+            if (item) {
+                const mapped: NewsArticle = {
+                    id: item.id,
+                    title: item.title,
+                    slug: item.slug,
+                    excerpt: item.excerpt || '',
+                    content: item.content || '',
+                    category: item.category || 'Futbol',
+                    image: item.image || '',
+                    authorId: item.author_id || '',
+                    authorName: item.author_name || 'Admin',
+                    views: item.views || 0,
+                    status: item.status || 'draft',
+                    seoTitle: item.seo_title,
+                    seoDescription: item.seo_description,
+                    seoKeywords: item.seo_keywords,
+                    createdAt: new Date(item.created_at).getTime(),
+                    updatedAt: new Date(item.updated_at).getTime()
+                };
+                setArticle(mapped);
+                
+                // Update SEO
+                document.title = mapped.seoTitle || mapped.title;
+
+                // Increment views in DB
+                await supabase
+                    .from('news')
+                    .update({ views: (item.views || 0) + 1 })
+                    .eq('id', articleId);
             }
-        } catch {
-            const found = demoNews.find(a => a.id === articleId);
-            if (found) setArticle(found);
-            setAllArticles(demoNews);
-        }
+
+            // Fetch all articles for sidebar (latest/related)
+            const { data: allData } = await supabase
+                .from('news')
+                .select('*')
+                .eq('status', 'published')
+                .order('created_at', { ascending: false });
+
+            if (allData) {
+                const allMapped: NewsArticle[] = allData.map(d => ({
+                    id: d.id,
+                    title: d.title,
+                    slug: d.slug,
+                    excerpt: d.excerpt || '',
+                    content: d.content || '',
+                    category: d.category || 'Futbol',
+                    image: d.image || '',
+                    authorId: d.author_id || '',
+                    authorName: d.author_name || 'Admin',
+                    views: d.views || 0,
+                    status: d.status || 'draft',
+                    createdAt: new Date(d.created_at).getTime(),
+                    updatedAt: new Date(d.updated_at).getTime()
+                }));
+                setAllArticles(allMapped);
+            }
+        };
+        fetchArticleData();
     }, [articleId]);
 
     const getCategoryColor = (cat: string) => {

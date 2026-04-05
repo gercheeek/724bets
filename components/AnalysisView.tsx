@@ -7,26 +7,17 @@ import DailyCoupons from './DailyCoupons';
 
 interface AnalysisViewProps {
     onNavigate?: (view: string) => void;
+    analyses?: MatchAnalysis[];
     coupons?: Coupon[];
     siteUser?: SiteUser | null;
     isLoggedIn?: boolean;
     onLoginRequired?: () => void;
 }
 
-const AnalysisView: React.FC<AnalysisViewProps> = ({ coupons = [], siteUser = null, isLoggedIn = false, onLoginRequired }) => {
-    const [analyses, setAnalyses] = useState<MatchAnalysis[]>([]);
+const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = [], siteUser = null, isLoggedIn = false, onLoginRequired }) => {
     const [expandedId, setExpandedId] = useState<string | null>(null);
     const [selectedSport, setSelectedSport] = useState<'Futbol' | 'Basketbol'>('Futbol');
     const [selectedLeague, setSelectedLeague] = useState<string>('TÜMÜ');
-
-    useEffect(() => {
-        const saved = localStorage.getItem('site_analyses');
-        if (saved) {
-            setAnalyses(JSON.parse(saved));
-        } else {
-            setAnalyses(demoAnalyses);
-        }
-    }, []);
 
     const toggleExpand = (id: string) => {
         setExpandedId(expandedId === id ? null : id);

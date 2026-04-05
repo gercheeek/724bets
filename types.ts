@@ -322,6 +322,7 @@ export interface NewsArticle {
   status: 'draft' | 'published';
   seoTitle?: string;
   seoDescription?: string;
+  seoKeywords?: string;
   createdAt: number;
   updatedAt: number;
 }
@@ -362,7 +363,7 @@ export interface WheelHistoryEntry {
   timestamp: number;
 }
 
-export interface BetLivoWheelConfig {
+export interface PromoWheelConfig {
   participants: WheelParticipant[];
   prizes: WheelPrize[];
   history: WheelHistoryEntry[];

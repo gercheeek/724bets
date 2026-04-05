@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Eye, Clock, ArrowLeft } from 'lucide-react';
 import { NewsArticle, NEWS_CATEGORIES } from '../types';
-import { demoNews } from '../demoData';
+import { supabase } from '../utils/supabase';
 
 interface NewsViewProps {
     onViewChange?: (view: string) => void;
@@ -13,18 +13,36 @@ const NewsView: React.FC<NewsViewProps> = ({ onViewChange, onArticleClick }) => 
     const [activeCategory, setActiveCategory] = useState('Tümü');
 
     useEffect(() => {
-        try {
-            const stored = localStorage.getItem('site_news');
-            const parsed: NewsArticle[] = stored ? JSON.parse(stored) : [];
-            const all = [...parsed, ...demoNews]
-                .filter(a => a.status === 'published')
-                .sort((a, b) => b.createdAt - a.createdAt);
-            // Deduplicate by id
-            const unique = Array.from(new Map(all.map(a => [a.id, a])).values());
-            setArticles(unique);
-        } catch {
-            setArticles(demoNews.filter(a => a.status === 'published'));
-        }
+        const fetchNews = async () => {
+            const { data, error } = await supabase
+                .from('news')
+                .select('*')
+                .eq('status', 'published')
+                .order('created_at', { ascending: false });
+            
+            if (data) {
+                const mapped: NewsArticle[] = data.map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    slug: item.slug,
+                    excerpt: item.excerpt || '',
+                    content: item.content || '',
+                    category: item.category || 'Futbol',
+                    image: item.image || '',
+                    authorId: item.author_id || '',
+                    authorName: item.author_name || 'Admin',
+                    views: item.views || 0,
+                    status: item.status || 'draft',
+                    seoTitle: item.seo_title,
+                    seoDescription: item.seo_description,
+                    seoKeywords: item.seo_keywords,
+                    createdAt: new Date(item.created_at).getTime(),
+                    updatedAt: new Date(item.updated_at).getTime()
+                }));
+                setArticles(mapped);
+            }
+        };
+        fetchNews();
     }, []);
 
     const getCategoryColor = (cat: string) => {
