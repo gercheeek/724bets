@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { MatchAnalysis, Coupon, SiteUser } from '../types';
 import { Trophy, Clock, ChevronDown, ChevronUp, AlertCircle, Search, Zap, Target, Flame, TrendingUp, Filter, User, Lock } from 'lucide-react';
-import { demoAnalyses } from '../demoData';
 import DailyCoupons from './DailyCoupons';
 
 interface AnalysisViewProps {
@@ -178,9 +177,9 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                         <div key={leagueName} className="space-y-4">
                             {/* League Section Header */}
                             <div className="flex items-center gap-3 px-4 pt-4 pb-3 mb-2 relative">
-                                <div className={`absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent ${selectedSport === 'Basketbol' ? 'via-[#E4510B]/50' : 'via-[#f0b90b]/50'} to-transparent`}></div>
-                                <div className={`w-1 h-4 rounded-full ${selectedSport === 'Basketbol' ? 'bg-[#E4510B] shadow-[0_0_10px_rgba(228,81,11,0.8)]' : 'bg-[#f0b90b] shadow-[0_0_10px_rgba(240,185,11,0.8)]'}`}></div>
-                                <h3 className="text-white font-black text-xs md:text-sm uppercase tracking-[0.15em]">{leagueName}</h3>
+                                <div className={`absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent ${selectedSport === 'Basketbol' ? 'via-[#E4510B]/50' : 'via-[#f0b90b]/50'} to-transparent`} style={{ background: `linear-gradient(to right, transparent, ${selectedSport === 'Basketbol' ? 'rgba(228,81,11,0.5)' : 'rgba(240,185,11,0.5)'}, transparent)` }}></div>
+                                <div className={`w-1 h-4 rounded-full ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#f0b90b]'}`} style={{ boxShadow: selectedSport === 'Basketbol' ? '0 0 10px rgba(228,81,11,0.8)' : '0 0 10px rgba(240,185,11,0.8)' }}></div>
+                                <h3 className="text-[var(--text-primary)] font-black text-xs md:text-sm uppercase tracking-[0.15em]">{leagueName}</h3>
                             </div>
 
                             {/* Desktop Header */}
@@ -310,7 +309,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
                                         {/* Accordion Content */}
                                         {isExpanded && (
-                                            <div className={`border-t bg-[var(--bg-elevated)] p-6 animate-fade-in ${selectedSport === 'Basketbol' ? 'border-[#E4510B]/30 box-shadow-[inset_0_10px_20px_rgba(228,81,11,0.05)]' : 'border-[#f0b90b]/30 box-shadow-[inset_0_10px_20px_rgba(240,185,11,0.05)]'}`}>
+                                            <div className="border-t bg-[var(--bg-elevated)] p-6 animate-fade-in" style={{ borderColor: selectedSport === 'Basketbol' ? 'rgba(228,81,11,0.3)' : 'rgba(240,185,11,0.3)', boxShadow: selectedSport === 'Basketbol' ? 'inset 0 10px 20px rgba(228,81,11,0.05)' : 'inset 0 10px 20px rgba(240,185,11,0.05)' }}>
                                                 <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
                                                     {/* Left: Editor Analysis (60%) */}
                                                     <div className="lg:col-span-6 space-y-6">
@@ -341,7 +340,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                                     <Zap className="w-3.5 h-3.5 text-[#f0b90b]" />
                                                                     <span className="text-[var(--text-dim)] font-black text-[9px] uppercase tracking-widest">MAÇIN KIRILMA ANI</span>
                                                                 </div>
-                                                                <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic pl-5.5 border-l border-[var(--border-subtle)] ml-1.5">{analysis.breakingPoint}</p>
+                                                                <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic border-l border-[var(--border-subtle)]" style={{ paddingLeft: '22px', marginLeft: '6px' }}>{analysis.breakingPoint}</p>
                                                             </div>
 
                                                             <div className="space-y-2">
@@ -465,7 +464,9 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="text-[8px] text-[var(--text-dim)] font-bold uppercase">{new Date(analysis.createdAt).toLocaleDateString('tr-TR')} Güncellendi</div>
+                                                    <div className="text-[8px] text-[var(--text-dim)] font-bold uppercase">
+                                                        {analysis.createdAt ? new Date(analysis.createdAt).toLocaleDateString('tr-TR') : '---'} Güncellendi
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}

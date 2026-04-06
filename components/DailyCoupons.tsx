@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Coupon } from '../types';
 import { Ticket, Zap, Flame, Shield, TrendingUp, ChevronRight, BarChart3, X, CheckCircle2, Lock, User } from 'lucide-react';
-import { demoCoupons } from '../demoData';
 
 interface DailyCouponsProps {
     coupons?: Coupon[];
@@ -24,7 +23,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
         dates.push(d.toISOString().split('T')[0]);
     }
 
-    const baseCoupons = coupons && coupons.length > 0 ? coupons : demoCoupons;
+    const baseCoupons = coupons || [];
     const displayCoupons = baseCoupons.filter(c => selectedDate === 'WEEKLY' ? dates.includes(c.date) : c.date === selectedDate);
 
     return (

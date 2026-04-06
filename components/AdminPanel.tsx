@@ -1223,7 +1223,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       onClick={() => {
                         if (window.confirm('Tüm kuponları silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')) {
                           setLocalCoupons([]);
-                          localStorage.setItem('site_coupons', JSON.stringify([]));
+                          onSaveCoupons([]);
                         }
                       }}
                       className="bg-red-500/10 text-red-500 border border-red-500/20 font-black px-4 py-3 rounded-2xl flex items-center gap-2 hover:bg-red-500 hover:text-white transition-all active:scale-95 text-xs uppercase"
@@ -1289,7 +1289,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             if (window.confirm('Bu kuponu silmek istediğinize emin misiniz?')) {
                               const updated = localCoupons.filter(c => c.id !== coupon.id);
                               setLocalCoupons(updated);
-                              localStorage.setItem('site_coupons', JSON.stringify(updated));
+                              onSaveCoupons(updated);
                             }
                           }}
                           className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
@@ -1488,6 +1488,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         onClick={() => {
                           if (window.confirm('Tüm analizleri silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')) {
                             setLocalAnalyses([]);
+                            onSaveAnalyses([]);
                           }
                         }}
                         className="bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white font-black px-6 py-3 rounded-2xl flex items-center gap-2 transition-all active:scale-95 text-xs uppercase"
@@ -1529,6 +1530,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         }`}
                     >
                       <span className="text-xl">🏀</span> Basketbol
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-4 mb-2">
+                    <div className="flex gap-4">
+                      {/* ... buttons ... */}
+                    </div>
+                    <button 
+                      onClick={() => {
+                        if (window.confirm('Tüm analizleri silmek istediğinize emin misiniz?')) {
+                          setLocalAnalyses([]);
+                          onSaveAnalyses([]);
+                          alert('Tüm analizler temizlendi!');
+                        }
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white rounded-xl text-[10px] font-black uppercase transition-all border border-red-600/20"
+                    >
+                      <Trash2 className="w-4 h-4" /> TÜMÜNÜ TEMİZLE
                     </button>
                   </div>
 
@@ -1584,7 +1603,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             <button
                               onClick={() => {
                                 if (window.confirm('Bu analizi silmek istediğinize emin misiniz?')) {
-                                  setLocalAnalyses(localAnalyses.filter(a => a.id !== analysis.id));
+                                  const updated = localAnalyses.filter(a => a.id !== analysis.id);
+                                  setLocalAnalyses(updated);
+                                  onSaveAnalyses(updated);
                                 }
                               }}
                               className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"

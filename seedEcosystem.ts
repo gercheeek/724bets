@@ -9,38 +9,29 @@ export function seedEcosystemData() {
     // ─── 1. SEED ANALYSES ──────────────────────────────────────────────────────
     try {
         const existingAnalysesStr = localStorage.getItem('site_analyses');
-        const existingAnalyses = existingAnalysesStr ? JSON.parse(existingAnalysesStr) : [];
         
-        // Only add demoAnalyses that don't exist yet (by ID) to avoid duplicates
-        const existingIds = new Set(existingAnalyses.map((a: MatchAnalysis) => a.id));
-        const newAnalyses = demoAnalyses.filter(a => !existingIds.has(a.id));
-        
-        if (newAnalyses.length > 0) {
-            localStorage.setItem('site_analyses', JSON.stringify([...newAnalyses, ...existingAnalyses]));
-        } else if (!existingAnalysesStr) {
+        // Only seed if the key doesn't exist at all (null)
+        if (existingAnalysesStr === null) {
             localStorage.setItem('site_analyses', JSON.stringify(demoAnalyses));
+        } else {
+            // Optional: If you want to merge NEW demo analyses into existing list without overwriting, 
+            // you can keep the ID-check logic, but ONLY if they are NOT empty.
+            // For now, let's respect the user's decision to empty it.
         }
     } catch (e) {
         console.error('Seed Analyses Error:', e);
-        localStorage.setItem('site_analyses', JSON.stringify(demoAnalyses));
     }
 
     // ─── 2. SEED COUPONS ───────────────────────────────────────────────────────
     try {
         const existingCouponsStr = localStorage.getItem('site_coupons');
-        const existingCoupons = existingCouponsStr ? JSON.parse(existingCouponsStr) : [];
         
-        const existingCouponIds = new Set(existingCoupons.map((c: any) => c.id));
-        const newCoupons = demoCoupons.filter(c => !existingCouponIds.has(c.id));
-
-        if (newCoupons.length > 0) {
-            localStorage.setItem('site_coupons', JSON.stringify([...newCoupons, ...existingCoupons]));
-        } else if (!existingCouponsStr) {
+        // Only seed if the key doesn't exist at all (null)
+        if (existingCouponsStr === null) {
             localStorage.setItem('site_coupons', JSON.stringify(demoCoupons));
         }
     } catch (e) {
         console.error('Seed Coupons Error:', e);
-        localStorage.setItem('site_coupons', JSON.stringify(demoCoupons));
     }
 
     // ─── 3. SEED POOL (724TOTO) ────────────────────────────────────────────────

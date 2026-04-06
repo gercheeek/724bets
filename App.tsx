@@ -186,7 +186,6 @@ const App: React.FC = () => {
     if (savedHashtags) setHashtags(savedHashtags);
     if (savedCoupons) setCoupons(JSON.parse(savedCoupons));
     if (savedAnalyses) setAnalyses(JSON.parse(savedAnalyses));
-    else setAnalyses(demoAnalyses);
 
     if (savedBj) setBjConfig(JSON.parse(savedBj));
     if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
@@ -279,6 +278,7 @@ const App: React.FC = () => {
         setLoyaltyConfig(cfg);
         localStorage.setItem('site_loyalty_config', JSON.stringify(cfg));
       }}
+      onHashtagsChange={setHashtags}
 
       themeColor={themeColor}
       onThemeChange={setThemeColor}
@@ -287,7 +287,10 @@ const App: React.FC = () => {
         localStorage.removeItem('site_user_role');
         setView('home');
       }}
-      onNavigateHome={() => setView('home')}
+      onNavigateHome={() => {
+        setView('home');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }}
       giveawayConfig={giveawayConfig}
       onSaveGiveawayConfig={handleGiveawayConfigChange}
       navVisibility={navVisibility}
