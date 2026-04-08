@@ -184,43 +184,49 @@ const App: React.FC = () => {
     sessionStorage.setItem('betlivo_popup_seen', '1');
   };
 
-  // Seed ecosystem data on first load
+  // --- UNIFIED INITIALIZATION (Seed -> Local -> Supabase) ---
   useEffect(() => {
-    seedEcosystemData();
-  }, []);
+    let isMounted = true;
 
-  // Load data from LocalStorage
-  useEffect(() => {
-    const savedBrands = localStorage.getItem('site_brands');
-    const savedColor = localStorage.getItem('site_primary_color');
-    const savedHashtags = localStorage.getItem('site_hashtags');
-    const savedCoupons = localStorage.getItem('site_coupons');
-    const savedAnalyses = localStorage.getItem('site_analyses');
-    const savedBj = localStorage.getItem('site_bj_config');
-    const savedRole = localStorage.getItem('site_user_role');
-    const savedMember = localStorage.getItem('site_current_member');
-
-    setBrands(savedBrands ? JSON.parse(savedBrands) : INITIAL_BRANDS);
-
-    if (savedHashtags) setHashtags(savedHashtags);
-    if (savedCoupons) setCoupons(JSON.parse(savedCoupons));
-    if (savedAnalyses) setAnalyses(JSON.parse(savedAnalyses));
-
-    if (savedBj) setBjConfig(JSON.parse(savedBj));
-    if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
-    if (savedRole) setUserRole(savedRole as string);
-    if (savedMember) setSiteUser(JSON.parse(savedMember));
-  }, []);
-
-  // --- NEW: Load Global Data from Supabase ---
-  useEffect(() => {
-    async function loadGlobalConfigs() {
+    async function initData() {
       try {
+        // 1. Seed Demo Data (Only runs once, won't overwrite Supabase now)
+        await seedEcosystemData();
+
+        // 2. Load Local Data (Fallback UI before network finishes)
+        if (!isMounted) return;
+        const savedBrands = localStorage.getItem('site_brands');
+        const savedColor = localStorage.getItem('site_primary_color');
+        const savedHashtags = localStorage.getItem('site_hashtags');
+        const savedCoupons = localStorage.getItem('site_coupons');
+        const savedAnalyses = localStorage.getItem('site_analyses');
+        const savedBj = localStorage.getItem('site_bj_config');
+        const savedRole = localStorage.getItem('site_user_role');
+        const savedMember = localStorage.getItem('site_current_member');
+
+        setBrands(savedBrands ? JSON.parse(savedBrands) : INITIAL_BRANDS);
+        if (savedHashtags) setHashtags(savedHashtags);
+        if (savedCoupons) setCoupons(JSON.parse(savedCoupons));
+        if (savedAnalyses) {
+          const parsed = JSON.parse(savedAnalyses);
+          const cleaned = parsed.filter((a: any) => a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A');
+          setAnalyses(cleaned);
+        }
+        if (savedBj) setBjConfig(JSON.parse(savedBj));
+        if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
+        if (savedRole) setUserRole(savedRole as string);
+        if (savedMember) setSiteUser(JSON.parse(savedMember));
+
+        // 3. Load Global Data from Supabase (Overrides Local)
         const globalAnalyses = await getGlobalConfig('site_analyses');
-        if (globalAnalyses) setAnalyses(globalAnalyses);
+        if (!isMounted) return;
+        if (globalAnalyses && Array.isArray(globalAnalyses) && globalAnalyses.length > 0) {
+          const cleaned = globalAnalyses.filter((a: any) => a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A');
+          setAnalyses(cleaned);
+        }
 
         const globalCoupons = await getGlobalConfig('site_coupons');
-        if (globalCoupons) setCoupons(globalCoupons);
+        if (globalCoupons && Array.isArray(globalCoupons) && globalCoupons.length > 0) setCoupons(globalCoupons);
 
         const globalBrands = await getGlobalConfig('site_brands');
         if (globalBrands) setBrands(globalBrands);
@@ -231,8 +237,8 @@ const App: React.FC = () => {
         const globalHashtags = await getGlobalConfig('site_hashtags');
         if (globalHashtags) setHashtags(globalHashtags);
 
-        const globalConfig = await getGlobalConfig('site_primary_color');
-        if (globalConfig) setThemeColor(globalConfig);
+        const globalColor = await getGlobalConfig('site_primary_color');
+        if (globalColor) setThemeColor(globalColor);
 
         const globalBj = await getGlobalConfig('site_bj_config');
         if (globalBj) setBjConfig(globalBj);
@@ -260,11 +266,17 @@ const App: React.FC = () => {
 
         const globalPromoWheel = await getGlobalConfig('site_betlivo_wheel');
         if (globalPromoWheel) setWheelCarkConfig(globalPromoWheel);
+
       } catch (err) {
-        console.error('Error fetching global configs:', err);
+        console.error('Initialization error:', err);
       }
     }
-    loadGlobalConfigs();
+
+    initData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Global theme handling

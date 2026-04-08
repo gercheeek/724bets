@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MatchAnalysis } from '../types';
-import { ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronRight, TrendingUp } from 'lucide-react';
 
 interface HomeAnalysesProps {
     analyses: MatchAnalysis[];
@@ -87,45 +87,71 @@ const HomeAnalyses: React.FC<HomeAnalysesProps> = ({ analyses, onNavigate }) => 
                         <div className="text-center">GÜVEN</div>
                     </div>
 
-                    {/* Table Rows */}
-                    <div className="space-y-3">
+                    {/* Premium Cards Grid */}
+                    <div className="grid grid-cols-1 gap-6">
                         {topAnalyses.map((item) => {
                             const kgVarOdd = (1.50 + Math.random() * 0.4).toFixed(2);
                             const ustOdd = (1.60 + Math.random() * 0.4).toFixed(2);
                             
                             return (
-                                <div key={item.id} className="bg-[#121212] border border-zinc-800/60 rounded-2xl overflow-hidden hover:border-[#f0b90b]/50 hover:shadow-[0_0_20px_rgba(240,185,11,0.1)] transition-all duration-300">
+                                <div key={item.id} className="group relative">
+                                    {/* Premium Match Card */}
                                     <div 
-                                        className="grid grid-cols-1 md:grid-cols-[100px_minmax(200px,1fr)_180px_80px_80px_80px] items-center gap-4 p-4 md:px-6 cursor-pointer"
                                         onClick={() => onNavigate('analysis')}
+                                        className="bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md p-6 rounded-[32px] flex flex-col md:flex-row items-center justify-between transition-all duration-500 hover:border-[#f0b90b]/40 hover:bg-zinc-900/60 hover:-translate-y-1 shadow-2xl shadow-black/40 cursor-pointer"
                                     >
-                                        <div className="flex flex-col text-xs font-black">
-                                            <span className="text-[#f0b90b]">{formatDate(item.matchDate)}</span>
-                                            <span className="text-[#f0b90b]">{item.matchTime}</span>
-                                        </div>
-
-                                        <div className="flex items-center gap-2 text-sm font-black italic uppercase tracking-tight text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                                            <span>{item.homeTeam}</span>
-                                            <span className="text-zinc-600 text-[10px] font-medium not-italic px-1">vs</span>
-                                            <span>{item.awayTeam}</span>
-                                        </div>
-
-                                        <div className="flex justify-start md:justify-center">
-                                            <div className="px-4 py-2 rounded-xl border border-[#f0b90b]/30 bg-[#f0b90b]/5 text-[#f0b90b] text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
-                                                {item.prediction}
+                                        <div className="flex items-center gap-8 w-full md:w-auto">
+                                            {/* Icon Wrapper */}
+                                            <div className="hidden lg:flex w-16 h-16 bg-black rounded-3xl items-center justify-center border border-zinc-800/80 transition-all duration-500 group-hover:border-[#f0b90b]/30 group-hover:shadow-[0_0_20px_rgba(240,185,11,0.15)]">
+                                                <TrendingUp className="w-7 h-7 text-[#f0b90b]" />
+                                            </div>
+                                            
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-3 mb-2.5">
+                                                    <div className="px-2.5 py-1 bg-zinc-800/80 rounded-lg border border-zinc-700/50">
+                                                        <span className="text-zinc-400 text-[10px] font-black tracking-widest uppercase">{formatDate(item.matchDate)}</span>
+                                                    </div>
+                                                    <span className="text-[#f0b90b] text-[11px] font-black">{item.matchTime}</span>
+                                                    <span className="ml-2 text-zinc-600 text-[9px] font-black uppercase tracking-widest">{item.league}</span>
+                                                </div>
+                                                <h3 className="text-white font-black text-xl uppercase italic tracking-tight flex items-center gap-3">
+                                                    {item.homeTeam} 
+                                                    <span className="text-zinc-600 font-medium not-italic text-xs lowercase">vs</span> 
+                                                    {item.awayTeam}
+                                                </h3>
                                             </div>
                                         </div>
 
-                                        <div className="flex md:justify-center">
-                                            <span className="text-[#f0b90b] font-black text-sm">{kgVarOdd}</span>
-                                        </div>
+                                        <div className="flex items-center gap-8 mt-6 md:mt-0 w-full md:w-auto justify-between md:justify-end">
+                                            {/* Prediction Badge */}
+                                            <div className="flex flex-col items-center gap-1.5">
+                                                <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">EDİTÖR TAHMİNİ</span>
+                                                <div className="px-5 py-2.5 bg-[#f0b90b]/10 border border-[#f0b90b]/30 rounded-2xl">
+                                                    <span className="text-[#f0b90b] font-black text-xs uppercase italic">{item.prediction}</span>
+                                                </div>
+                                            </div>
 
-                                        <div className="flex md:justify-center">
-                                            <span className="text-[#f0b90b] font-black text-sm">{ustOdd}</span>
-                                        </div>
+                                            {/* Odds Preview */}
+                                            <div className="flex gap-6">
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">KG VAR</span>
+                                                    <span className="text-white font-black text-lg tracking-tighter">{kgVarOdd}</span>
+                                                </div>
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">2.5 ÜST</span>
+                                                    <span className="text-white font-black text-lg tracking-tighter">{ustOdd}</span>
+                                                </div>
+                                            </div>
 
-                                        <div className="flex md:justify-center">
-                                            <span className="text-white font-black text-sm tracking-wide">%{item.confidence}</span>
+                                            {/* Confidence Level */}
+                                            <div className="flex flex-col items-end min-w-[80px]">
+                                                <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">GÜVEN</span>
+                                                <span className="text-2xl font-black text-[#f0b90b] tracking-tighter">%{item.confidence}</span>
+                                            </div>
+
+                                            <div className="hidden lg:flex items-center justify-center p-3 bg-zinc-800/50 rounded-2xl border border-zinc-700/50 group-hover:bg-[#f0b90b] group-hover:text-black transition-all">
+                                                <ChevronRight className="w-5 h-5" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

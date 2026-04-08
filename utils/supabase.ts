@@ -18,10 +18,14 @@ export async function getGlobalConfig(key: string) {
     .from('site_configs')
     .select('value')
     .eq('key', key)
-    .single();
+    .limit(1)
+    .maybeSingle();
   
-  if (error) return null;
-  return data.value;
+  if (error) {
+    console.error(`Supabase fetch error for key '${key}':`, error);
+    return null;
+  }
+  return data ? data.value : null;
 }
 
 export async function updateGlobalConfig(key: string, value: any) {

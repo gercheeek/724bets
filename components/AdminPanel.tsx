@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User } from 'lucide-react';
+import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, Database } from 'lucide-react';
 import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
@@ -7,6 +7,7 @@ import AdminPoolTab from './AdminPoolTab';
 import AdminNewsTab from './AdminNewsTab';
 import AdminGiveawayTab from './AdminGiveawayTab';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './Header';
+import { supabase } from '../utils/supabase';
 
 interface AdminPanelProps {
   brands: Brand[];
@@ -115,6 +116,65 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [showEditorPassword, setShowEditorPassword] = useState(false);
   const [editorSaveMsg, setEditorSaveMsg] = useState('');
   const [editorError, setEditorError] = useState('');
+
+  // Cloud Sync Status
+  const [syncStatus, setSyncStatus] = useState<'checking' | 'connected' | 'error' | 'no_table'>('checking');
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  useEffect(() => {
+    const checkSupabase = async () => {
+      try {
+        const { error } = await supabase.from('site_configs').select('key').limit(1);
+        if (error) {
+          if (error.code === '42P01') setSyncStatus('no_table');
+          else setSyncStatus('error');
+        } else {
+          setSyncStatus('connected');
+        }
+      } catch (e) {
+        setSyncStatus('error');
+      }
+    };
+    checkSupabase();
+  }, []);
+
+  const handleCloudSync = async () => {
+    setIsSyncing(true);
+    try {
+      const configs = [
+        { key: 'site_analyses', value: analyses },
+        { key: 'site_coupons', value: coupons },
+        { key: 'site_brands', value: brands },
+        { key: 'site_hero', value: hero },
+        { key: 'site_primary_color', value: themeColor },
+        { key: 'site_hashtags', value: hashtags },
+        { key: 'site_bj_config', value: bjConfig },
+        { key: 'site_loyalty_config', value: loyaltyConfig },
+        { key: 'site_giveaway_config', value: giveawayConfig },
+        { key: 'site_marquee_config', value: marqueeConfig },
+        { key: 'site_nav_visibility', value: navVisibility },
+        { key: 'site_casino_wheel', value: wheelConfig },
+        { key: 'site_welcome_popup', value: welcomePopupConfig },
+        { key: 'site_live_odds', value: liveOddsConfig },
+      ];
+
+      for (const cfg of configs) {
+         if (cfg.value) {
+            await supabase.from('site_configs').upsert({ 
+              key: cfg.key, 
+              value: cfg.value,
+              updated_at: new Date().toISOString() 
+            });
+         }
+      }
+      alert('Tüm veriler başarıyla buluta (Supabase) senkronize edildi!');
+      setSyncStatus('connected');
+    } catch (err) {
+      alert('Senkronizasyon hatası: ' + (err as any).message);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   useEffect(() => {
     setLocalAnalyses(analyses);
@@ -692,6 +752,41 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-black font-black">7</div>
           <span className="font-black text-xl italic text-primary">Admin</span>
+        </div>
+
+        {/* Cloud Sync Status Card */}
+        <div className="p-4 rounded-2xl bg-black/40 border border-zinc-800 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">BULUT DURUMU</span>
+            <div className={`w-2 h-2 rounded-full animate-pulse ${
+              syncStatus === 'connected' ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 
+              syncStatus === 'no_table' ? 'bg-orange-500' : 'bg-red-500'
+            }`} />
+          </div>
+          
+          {syncStatus === 'connected' ? (
+            <p className="text-[10px] text-green-500/80 font-bold">Supabase Bağlantısı Aktif</p>
+          ) : syncStatus === 'no_table' ? (
+            <div className="space-y-1">
+              <p className="text-[10px] text-orange-400 font-bold">Tablo Bulunamadı</p>
+              <p className="text-[8px] text-zinc-600 leading-tight">Lütfen Supabase'de SQL betiğini çalıştırın.</p>
+            </div>
+          ) : (
+            <p className="text-[10px] text-red-400 font-bold">Bağlantı Kesildi</p>
+          )}
+
+          <button 
+            onClick={handleCloudSync}
+            disabled={isSyncing || syncStatus === 'no_table'}
+            className={`w-full py-2 rounded-xl text-[9px] font-black uppercase transition-all flex items-center justify-center gap-2 ${
+              isSyncing ? 'bg-zinc-800 text-zinc-500' : 
+              syncStatus === 'no_table' ? 'bg-zinc-900 text-zinc-600 border border-zinc-800' :
+              'bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-black hover:shadow-[0_0_15px_rgba(240,185,11,0.3)]'
+            }`}
+          >
+            {isSyncing ? <RefreshCw className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+            {isSyncing ? 'SENKRONİZE EDİLİYOR...' : 'BULUTA PUSHLA'}
+          </button>
         </div>
 
         <nav className="flex flex-col gap-1">
@@ -1541,24 +1636,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between gap-4 mb-2">
-                    <div className="flex gap-4">
-                      {/* ... buttons ... */}
-                    </div>
-                    <button 
-                      onClick={() => {
-                        if (window.confirm('Tüm analizleri silmek istediğinize emin misiniz?')) {
-                          setLocalAnalyses([]);
-                          onSaveAnalyses([]);
-                          alert('Tüm analizler temizlendi!');
-                        }
-                      }}
-                      className="flex items-center gap-2 px-4 py-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white rounded-xl text-[10px] font-black uppercase transition-all border border-red-600/20"
-                    >
-                      <Trash2 className="w-4 h-4" /> TÜMÜNÜ TEMİZLE
-                    </button>
-                  </div>
-
                   <div className="relative z-10 space-y-12">
                     {(() => {
                       const isBasketballLeague = (analysis: MatchAnalysis) => {
@@ -1567,17 +1644,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         return lower.includes('nba') || lower.includes('basket') || lower.includes('euroleague');
                       };
 
-                      const groups = localAnalyses.reduce((acc, analysis) => {
-                        if (!acc[analysis.league]) acc[analysis.league] = [];
-                        acc[analysis.league].push(analysis);
-                        return acc;
-                      }, {} as Record<string, MatchAnalysis[]>);
+                      const groups = localAnalyses
+                        .filter(a => a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A') // Junk data filtering
+                        .reduce((acc, analysis) => {
+                          if (!acc[analysis.league]) acc[analysis.league] = [];
+                          acc[analysis.league].push(analysis);
+                          return acc;
+                        }, {} as Record<string, MatchAnalysis[]>);
 
                       const footballGroups: Record<string, MatchAnalysis[]> = {};
                       const basketballGroups: Record<string, MatchAnalysis[]> = {};
 
                       Object.keys(groups).forEach(league => {
-                        // Check the first analysis in the group to determine the sport of the league
                         const sampleAnalysis = groups[league][0];
                         if (isBasketballLeague(sampleAnalysis)) {
                           basketballGroups[league] = groups[league];
@@ -1587,39 +1665,61 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       });
 
                       const renderMatchRow = (analysis: MatchAnalysis) => (
-                        <div key={analysis.id} className="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl flex items-center justify-between group hover:border-[#f0b90b]/50 transition-all">
-                          <div className="flex items-center gap-6">
-                            <div className={`w-12 h-12 bg-black rounded-xl flex items-center justify-center border border-zinc-800 transition-colors ${adminSport === 'Futbol' ? 'group-hover:border-emerald-500/30' : 'group-hover:border-orange-500/30'}`}>
-                              <TrendingUp className={`w-6 h-6 ${adminSport === 'Futbol' ? 'text-emerald-500' : 'text-orange-500'}`} />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="text-zinc-600 text-[10px] font-bold">{analysis.matchDate} - {analysis.matchTime}</span>
+                        <div key={analysis.id} className="group relative">
+                          {/* Premium Match Card */}
+                          <div className="bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-sm p-5 rounded-[24px] flex items-center justify-between transition-all duration-300 hover:border-[#f0b90b]/40 hover:bg-zinc-900/60 hover:translate-x-1 shadow-lg shadow-black/20">
+                            <div className="flex items-center gap-6">
+                              <div className={`w-14 h-14 bg-black rounded-2xl flex items-center justify-center border border-zinc-800/80 transition-all duration-500 group-hover:border-[#f0b90b]/30 group-hover:shadow-[0_0_20px_rgba(240,185,11,0.1)]`}>
+                                <TrendingUp className={`w-6 h-6 ${adminSport === 'Futbol' ? 'text-emerald-400' : 'text-orange-400'}`} />
                               </div>
-                              <h3 className="text-white font-black text-sm uppercase italic">
-                                {analysis.homeTeam || '---'} <span className="text-zinc-600 font-normal mx-1">vs</span> {analysis.awayTeam || '---'}
-                              </h3>
+                              
+                              <div>
+                                <div className="flex items-center gap-3 mb-1.5">
+                                  <div className="px-2 py-0.5 bg-zinc-800/80 rounded-md border border-zinc-700/50">
+                                    <span className="text-zinc-400 text-[9px] font-black tracking-widest uppercase">{analysis.matchDate}</span>
+                                  </div>
+                                  <span className="text-[#f0b90b] text-[10px] font-black">{analysis.matchTime}</span>
+                                </div>
+                                <h3 className="text-white font-black text-base uppercase italic tracking-tight flex items-center gap-2">
+                                  {analysis.homeTeam} 
+                                  <span className="text-zinc-600 font-medium not-italic text-xs lowercase">vs</span> 
+                                  {analysis.awayTeam}
+                                </h3>
+                                
+                                {analysis.analysis && (
+                                  <p className="mt-2 text-zinc-500 text-[10px] font-medium leading-relaxed max-w-xl line-clamp-1 italic">
+                                    "{analysis.analysis.substring(0, 100)}..."
+                                  </p>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                              onClick={() => setEditingAnalysisId(analysis.id)}
-                              className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                            >
-                              <Edit3 className="w-3.5 h-3.5" /> DÜZENLE
-                            </button>
-                            <button
-                              onClick={() => {
-                                if (window.confirm('Bu analizi silmek istediğinize emin misiniz?')) {
-                                  const updated = localAnalyses.filter(a => a.id !== analysis.id);
-                                  setLocalAnalyses(updated);
-                                  onSaveAnalyses(updated);
-                                }
-                              }}
-                              className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+
+                            <div className="flex items-center gap-3 pr-2">
+                              <div className="hidden lg:flex flex-col items-end mr-4">
+                                <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">GÜVEN</span>
+                                <span className="text-xs font-black text-[#f0b90b] tracking-tighter">%{analysis.confidence}</span>
+                              </div>
+
+                              <button
+                                onClick={() => setEditingAnalysisId(analysis.id)}
+                                className="flex items-center gap-2 bg-zinc-800/80 hover:bg-[#f0b90b] text-zinc-300 hover:text-black px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all duration-300 border border-zinc-700/50 hover:border-transparent active:scale-95"
+                              >
+                                <Edit3 className="w-3.5 h-3.5" /> DÜZENLE
+                              </button>
+                              
+                              <button
+                                onClick={() => {
+                                  if (window.confirm('Bu analizi silmek istediğinize emin misiniz?')) {
+                                    const updated = localAnalyses.filter(a => a.id !== analysis.id);
+                                    setLocalAnalyses(updated);
+                                    onSaveAnalyses(updated);
+                                  }
+                                }}
+                                className="p-2.5 text-rose-500/50 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all active:scale-90"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       );
@@ -1627,26 +1727,33 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       return (
                         <>
                           {localAnalyses.length === 0 && (
-                            <div className="py-20 text-center border-2 border-dashed border-zinc-800 rounded-[30px] space-y-4">
+                            <div className="py-20 text-center border-2 border-dashed border-zinc-800 rounded-[40px] space-y-4">
                               <AlertCircle className="w-12 h-12 text-zinc-800 mx-auto" />
                               <p className="text-zinc-600 font-black text-xs uppercase tracking-widest">Henüz analiz eklenmemiş.</p>
                             </div>
                           )}
 
-                          {/* FUTBOL BÖLÜMÜ */}
                           {adminSport === 'Futbol' && Object.keys(footballGroups).length > 0 && (
-                            <div className="space-y-6 animate-fade-in">
-                              <div className="flex items-center gap-3 border-b border-emerald-500/20 pb-4">
-                                <span className="text-3xl">⚽</span>
-                                <h2 className="text-xl font-black text-emerald-500 uppercase tracking-widest">Futbol Analizleri</h2>
+                            <div className="space-y-10 animate-fade-in">
+                              <div className="flex items-center gap-4 border-b border-zinc-800/50 pb-6">
+                                <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center">
+                                  <span className="text-2xl">⚽</span>
+                                </div>
+                                <div>
+                                  <h2 className="text-xl font-black text-white uppercase tracking-wider">Futbol Analizleri</h2>
+                                  <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mt-1">Toplam {Object.values(footballGroups).flat().length} Aktif Yayın</p>
+                                </div>
                               </div>
 
                               {Object.entries(footballGroups).map(([league, items]) => (
-                                <div key={league} className="space-y-3">
-                                  <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                                    <div className="w-1 h-3 bg-emerald-500 rounded-full" /> {league}
-                                  </h3>
-                                  <div className="grid grid-cols-1 gap-2 pl-3">
+                                <div key={league} className="space-y-4">
+                                  <div className="flex items-center justify-between px-2">
+                                    <h3 className="text-[11px] font-black text-[#f0b90b] uppercase tracking-[0.3em] flex items-center gap-3">
+                                      <div className="w-6 h-[1px] bg-[#f0b90b]/30" /> {league}
+                                    </h3>
+                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{items.length} MAÇ</span>
+                                  </div>
+                                  <div className="grid grid-cols-1 gap-4">
                                     {items.map(renderMatchRow)}
                                   </div>
                                 </div>
@@ -1654,20 +1761,27 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             </div>
                           )}
 
-                          {/* BASKETBOL BÖLÜMÜ */}
                           {adminSport === 'Basketbol' && Object.keys(basketballGroups).length > 0 && (
-                            <div className="space-y-6 animate-fade-in">
-                              <div className="flex items-center gap-3 border-b border-orange-500/20 pb-4">
-                                <span className="text-3xl">🏀</span>
-                                <h2 className="text-xl font-black text-orange-500 uppercase tracking-widest">Basketbol Analizleri</h2>
+                            <div className="space-y-10 animate-fade-in">
+                              <div className="flex items-center gap-4 border-b border-zinc-800/50 pb-6">
+                                <div className="w-12 h-12 bg-orange-500/10 border border-orange-500/20 rounded-2xl flex items-center justify-center">
+                                  <span className="text-2xl">🏀</span>
+                                </div>
+                                <div>
+                                  <h2 className="text-xl font-black text-white uppercase tracking-wider">Basketbol Analizleri</h2>
+                                  <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mt-1">Toplam {Object.values(basketballGroups).flat().length} Aktif Yayın</p>
+                                </div>
                               </div>
 
                               {Object.entries(basketballGroups).map(([league, items]) => (
-                                <div key={league} className="space-y-3">
-                                  <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                                    <div className="w-1 h-3 bg-orange-500 rounded-full" /> {league}
-                                  </h3>
-                                  <div className="grid grid-cols-1 gap-2 pl-3">
+                                <div key={league} className="space-y-4">
+                                  <div className="flex items-center justify-between px-2">
+                                    <h3 className="text-[11px] font-black text-orange-500 uppercase tracking-[0.3em] flex items-center gap-3">
+                                      <div className="w-6 h-[1px] bg-orange-500/30" /> {league}
+                                    </h3>
+                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{items.length} MAÇ</span>
+                                  </div>
+                                  <div className="grid grid-cols-1 gap-4">
                                     {items.map(renderMatchRow)}
                                   </div>
                                 </div>
