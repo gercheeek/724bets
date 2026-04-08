@@ -10,3 +10,24 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// --- Global Config Helpers ---
+
+export async function getGlobalConfig(key: string) {
+  const { data, error } = await supabase
+    .from('site_configs')
+    .select('value')
+    .eq('key', key)
+    .single();
+  
+  if (error) return null;
+  return data.value;
+}
+
+export async function updateGlobalConfig(key: string, value: any) {
+  const { error } = await supabase
+    .from('site_configs')
+    .upsert({ key, value, updated_at: new Date().toISOString() });
+  
+  return { error };
+}

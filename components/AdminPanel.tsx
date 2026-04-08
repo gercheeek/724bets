@@ -226,7 +226,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       `Favori takımın patlama yapacağı bir eşleşme değil. Handikaplı maç sonucu deplesman veya maç sonu 3.5 Alt bahisleri ile kupona sağlam bir temel atılır.`,
       `Taraf bahsi oynayan yanar. Bu maç tam bir "KG VAR" maçı, iki takımın da defansı evlere şenlik, bol gollü bir şov izleriz.`,
       `Büyük paralar oynamaktansa, İlk Yarı 1.5 Alt seçeneğine kasa atılıp rahatça arkaya yaslanılacak türden kilitli bir karşılaşma.`,
-      `Süpriz avcıları için deplasmanın ilk yarıyı önde kapatması mükemmel oran veriyor. İlk Yarı 2 oranı ciddi bir value (değerli oran) barındırıyor.`,
+      `Sürpriz avcıları için deplasmanın ilk yarıyı önde kapatması mükemmel oran veriyor. İlk Yarı 2 oranı ciddi bir value (değerli oran) barındırıyor.`,
       `Maç sonu sürpriz çıkma ihtimali çok yüksek, canlıdan izleyip gidişata göre "Sıradaki Golü Kim Atar" kovalayın, taraf bahsinden uzak durun.`
     ];
 
@@ -511,7 +511,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     }
 
     if (newAnalyses.length > 0) {
-      setLocalAnalyses([...newAnalyses, ...localAnalyses]);
+      const updatedAnalyses = [...newAnalyses, ...localAnalyses];
+      setLocalAnalyses(updatedAnalyses);
+      onSaveAnalyses(updatedAnalyses);
       if (newAnalyses.length === 1) {
         setEditingAnalysisId(newAnalyses[0].id);
       }
@@ -546,7 +548,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
     const getHighRiskTemplates = (home: string, away: string, pred: string) => [
       `Günün en kilit ve risk barındıran maçlarından biri! Çoğu bahis severin uzak durduğu ${home} - ${away} mücadelesinde, sıradan istatistiklerin ötesine geçiyoruz. Takımların psikolojik kırılganlıkları ve ekstrem senaryoları analiz edildiğinde "${pred}" tercihi müthiş bir Value (Değerli Oran) yaratıyor. Büyük cesaret, büyük kazanç.`,
-      `Süpriz arayanlar için muazzam bir fırsat! ${home} ve ${away} arasındaki dengesizlik asimetrik bir maç profili ortaya çıkarıyor. Herkesin beklediği skorun aksine biz rüzgarın tersine eseceğini düşünüyoruz. "${pred}" tahmini, tamamen handikapların ve açılan oranların yanlış değerlendirilmesinden faydalanmak üzere kurgulandı. Heyecan garantili.`,
+      `Sürpriz arayanlar için muazzam bir fırsat! ${home} ve ${away} arasındaki dengesizlik asimetrik bir maç profili ortaya çıkarıyor. Herkesin beklediği skorun aksine biz rüzgarın tersine eseceğini düşünüyoruz. "${pred}" tahmini, tamamen handikapların ve açılan oranların yanlış değerlendirilmesinden faydalanmak üzere kurgulandı. Heyecan garantili.`,
       `Taraf bahsinin adeta Rus ruletine benzediği bu eşleşmede, ${home} ve ${away} sahaya her şeyini verecek. Maçın son saniyesine kadar heyecanın bitmeyeceği bu platformda, radikal bir öngörüyle hareket ederek "${pred}" riskini alıyoruz. Yüksek oran kovalayan ve adrenalin sevenler için gecenin vazgeçilmezi olacak detaylar barındırıyor.`
     ];
 
@@ -671,7 +673,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         editorId: role
       };
 
-      setLocalCoupons([newCoupon, ...localCoupons]);
+      const updatedCoupons = [newCoupon, ...localCoupons];
+      setLocalCoupons(updatedCoupons);
+      onSaveCoupons(updatedCoupons);
       setEditingCouponId(newCoupon.id);
       alert(`Kupon başarıyla ${newMatches.length} maç ile üretildi! (Toplam Oran: ${totalOdd.toFixed(2)})`);
     } else {
@@ -1244,7 +1248,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           totalOdd: '1.50',
                           date: new Date().toISOString().split('T')[0]
                         };
-                        setLocalCoupons([newCoupon, ...localCoupons]);
+                        const updatedCoupons = [newCoupon, ...localCoupons];
+                        setLocalCoupons(updatedCoupons);
+                        onSaveCoupons(updatedCoupons);
                         setEditingCouponId(newId);
                       }}
                       className="bg-[#f0b90b] text-black font-black px-6 py-3 rounded-2xl flex items-center gap-2 hover:shadow-[0_0_20px_rgba(240,185,11,0.3)] transition-all active:scale-95 text-xs uppercase"
@@ -1476,7 +1482,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           ],
                           createdAt: Date.now()
                         };
-                        setLocalAnalyses([newAnalysis, ...localAnalyses]);
+                        const updatedAnalyses = [newAnalysis, ...localAnalyses];
+                        setLocalAnalyses(updatedAnalyses);
+                        onSaveAnalyses(updatedAnalyses);
                         setEditingAnalysisId(newId);
                       }}
                       className="bg-[#f0b90b] text-black font-black px-6 py-3 rounded-2xl flex items-center gap-2 hover:shadow-[0_0_20px_rgba(240,185,11,0.3)] transition-all active:scale-95 text-xs uppercase"

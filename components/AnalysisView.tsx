@@ -245,7 +245,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                 <div className="flex items-center gap-2">
                                                     <Clock className="w-3.5 h-3.5 text-[var(--text-muted)] md:hidden" />
                                                     <span className="text-[#f0b90b] font-black text-[11px] md:text-xs tracking-wide">
-                                                        {selectedDate === 'WEEKLY' && <span className="text-[#f0b90b] mr-2">{new Date(analysis.matchDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>}
+                                                        {selectedDate === 'WEEKLY' && <span className="text-[#f0b90b] mr-2">{new Date(analysis.matchDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
                                                         {analysis.matchTime}
                                                     </span>
                                                 </div>
@@ -309,8 +309,28 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
                                         {/* Accordion Content */}
                                         {isExpanded && (
-                                            <div className="border-t bg-[var(--bg-elevated)] p-6 animate-fade-in" style={{ borderColor: selectedSport === 'Basketbol' ? 'rgba(228,81,11,0.3)' : 'rgba(240,185,11,0.3)', boxShadow: selectedSport === 'Basketbol' ? 'inset 0 10px 20px rgba(228,81,11,0.05)' : 'inset 0 10px 20px rgba(240,185,11,0.05)' }}>
-                                                <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
+                                            <div className="border-t bg-[#050505] p-0 animate-fade-in relative overflow-hidden" style={{ borderColor: selectedSport === 'Basketbol' ? 'rgba(228,81,11,0.3)' : 'rgba(240,185,11,0.3)' }}>
+                                                
+                                                {/* PREMIUM STADIUM BACKGROUND LAYER */}
+                                                <div className="absolute inset-0 z-0 overflow-hidden">
+                                                    <div 
+                                                        className="absolute inset-0 opacity-40 mix-blend-screen scale-110"
+                                                        style={{
+                                                            backgroundImage: selectedSport === 'Futbol' 
+                                                                ? 'url("https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?q=80&w=2000&auto=format&fit=crop")' 
+                                                                : 'url("https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=2000&auto=format&fit=crop")',
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                            filter: 'contrast(1.2) brightness(0.8) saturate(1.2)',
+                                                        }}
+                                                    />
+                                                    {/* Pro Grade Overlays */}
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-[#050505] opacity-90" />
+                                                    <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+                                                    <div className="absolute inset-0 bg-black/50" />
+                                                </div>
+                                                
+                                                <div className="relative z-10 p-6 grid grid-cols-1 lg:grid-cols-10 gap-8">
                                                     {/* Left: Editor Analysis (60%) */}
                                                     <div className="lg:col-span-6 space-y-6">
                                                         <div className="flex items-center justify-between mb-4">
@@ -447,26 +467,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                         )}
                                                     </div>
 
-                                                    {/* Footer Strip */}
-                                                    <div className="mt-8 pt-6 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-4">
-                                                        <div className="flex items-center gap-4 text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">
-                                                            <div className="flex items-center gap-1.5">
-                                                                <TrendingUp className="w-3 h-3 text-[#f0b90b]" />
-                                                                <span>Model: <span className="text-[var(--text-primary)]">{analysis.modelScore}/100</span></span>
-                                                            </div>
-                                                            <div className="flex items-center gap-1.5">
-                                                                <Trophy className="w-3 h-3 text-[#f0b90b]" />
-                                                                <span>Son 10: <span className="text-[var(--text-primary)]">{analysis.recentHistory}</span></span>
-                                                            </div>
-                                                            <div className="flex items-center gap-1.5">
-                                                                <Target className="w-3 h-3 text-[#f0b90b]" />
-                                                                <span>xG: <span className="text-[var(--text-primary)]">{analysis.expectedGoals}</span></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-[8px] text-[var(--text-dim)] font-bold uppercase">
-                                                        {analysis.createdAt ? new Date(analysis.createdAt).toLocaleDateString('tr-TR') : '---'} Güncellendi
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         )}

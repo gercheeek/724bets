@@ -21,8 +21,10 @@ import LoyaltyPanel, { DEFAULT_LOYALTY_CONFIG } from './components/LoyaltyPanel'
 import RaffleView from './components/RaffleView';
 import PoolGame from './components/PoolGame';
 import { seedEcosystemData } from './seedEcosystem';
+import { getGlobalConfig, updateGlobalConfig } from './utils/supabase';
 import NewsSection from './components/NewsSection';
 import NewsView from './components/NewsView';
+import HomeAnalyses from './components/HomeAnalyses';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
 import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis } from './types';
@@ -53,6 +55,7 @@ const App: React.FC = () => {
   const handleWheelCarkConfigChange = (cfg: PromoWheelConfig) => {
     setWheelCarkConfig(cfg);
     localStorage.setItem('site_betlivo_wheel', JSON.stringify(cfg));
+    updateGlobalConfig('site_betlivo_wheel', cfg);
   };
   // Giveaway Config
   const [giveawayConfig, setGiveawayConfig] = useState<GiveawayConfig>(() => {
@@ -63,6 +66,7 @@ const App: React.FC = () => {
   const handleGiveawayConfigChange = (cfg: GiveawayConfig) => {
     setGiveawayConfig(cfg);
     localStorage.setItem('site_giveaway_config', JSON.stringify(cfg));
+    updateGlobalConfig('site_giveaway_config', cfg);
   };
 
   // Marquee Config
@@ -74,6 +78,7 @@ const App: React.FC = () => {
   const handleMarqueeConfigChange = (cfg: MarqueeConfig) => {
     setMarqueeConfig(cfg);
     localStorage.setItem('site_marquee_config', JSON.stringify(cfg));
+    updateGlobalConfig('site_marquee_config', cfg);
   };
 
   // Nav Visibility
@@ -85,6 +90,7 @@ const App: React.FC = () => {
   const handleNavVisibilityChange = (vis: NavVisibility) => {
     setNavVisibility(vis);
     localStorage.setItem('site_nav_visibility', JSON.stringify(vis));
+    updateGlobalConfig('site_nav_visibility', vis);
   };
 
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
@@ -92,6 +98,17 @@ const App: React.FC = () => {
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | null>(null);
   const [brands, setBrands] = useState<Brand[]>([]);
+
+  // Typo Migration & Clean-up effect
+  useEffect(() => {
+    const stored = localStorage.getItem('site_analyses');
+    if (stored && stored.includes('Süpriz')) {
+      const fixed = stored.replace(/Süpriz/g, 'Sürpriz');
+      localStorage.setItem('site_analyses', fixed);
+      // Trigger a reload of analyses if they are held in state anywhere
+      window.dispatchEvent(new Event('storage'));
+    }
+  }, []);
   const [themeColor, setThemeColor] = useState('#eab308');
   const [hashtags, setHashtags] = useState('');
   const [coupons, setCoupons] = useState<Coupon[]>([]);
@@ -117,6 +134,7 @@ const App: React.FC = () => {
   const handleWelcomePopupConfigChange = (cfg: WelcomePopupConfig) => {
     setWelcomePopupConfig(cfg);
     localStorage.setItem('site_welcome_popup', JSON.stringify(cfg));
+    updateGlobalConfig('site_welcome_popup', cfg);
   };
 
   // Live Odds Config
@@ -128,6 +146,7 @@ const App: React.FC = () => {
   const handleLiveOddsConfigChange = (cfg: LiveOddsConfig) => {
     setLiveOddsConfig(cfg);
     localStorage.setItem('site_live_odds', JSON.stringify(cfg));
+    updateGlobalConfig('site_live_odds', cfg);
   };
 
   const [bjConfig, setBjConfig] = useState<BlackjackConfig>({
@@ -193,6 +212,61 @@ const App: React.FC = () => {
     if (savedMember) setSiteUser(JSON.parse(savedMember));
   }, []);
 
+  // --- NEW: Load Global Data from Supabase ---
+  useEffect(() => {
+    async function loadGlobalConfigs() {
+      try {
+        const globalAnalyses = await getGlobalConfig('site_analyses');
+        if (globalAnalyses) setAnalyses(globalAnalyses);
+
+        const globalCoupons = await getGlobalConfig('site_coupons');
+        if (globalCoupons) setCoupons(globalCoupons);
+
+        const globalBrands = await getGlobalConfig('site_brands');
+        if (globalBrands) setBrands(globalBrands);
+
+        const globalHero = await getGlobalConfig('site_hero');
+        if (globalHero) setHero(globalHero);
+
+        const globalHashtags = await getGlobalConfig('site_hashtags');
+        if (globalHashtags) setHashtags(globalHashtags);
+
+        const globalConfig = await getGlobalConfig('site_primary_color');
+        if (globalConfig) setThemeColor(globalConfig);
+
+        const globalBj = await getGlobalConfig('site_bj_config');
+        if (globalBj) setBjConfig(globalBj);
+
+        const globalLoyalty = await getGlobalConfig('site_loyalty_config');
+        if (globalLoyalty) setLoyaltyConfig(globalLoyalty);
+
+        const globalGiveaway = await getGlobalConfig('site_giveaway_config');
+        if (globalGiveaway) setGiveawayConfig(globalGiveaway);
+
+        const globalMarquee = await getGlobalConfig('site_marquee_config');
+        if (globalMarquee) setMarqueeConfig(globalMarquee);
+
+        const globalNav = await getGlobalConfig('site_nav_visibility');
+        if (globalNav) setNavVisibility(globalNav);
+
+        const globalWheel = await getGlobalConfig('site_casino_wheel');
+        if (globalWheel) setWheelConfig(globalWheel);
+
+        const globalWelcome = await getGlobalConfig('site_welcome_popup');
+        if (globalWelcome) setWelcomePopupConfig(globalWelcome);
+
+        const globalLiveOdds = await getGlobalConfig('site_live_odds');
+        if (globalLiveOdds) setLiveOddsConfig(globalLiveOdds);
+
+        const globalPromoWheel = await getGlobalConfig('site_betlivo_wheel');
+        if (globalPromoWheel) setWheelCarkConfig(globalPromoWheel);
+      } catch (err) {
+        console.error('Error fetching global configs:', err);
+      }
+    }
+    loadGlobalConfigs();
+  }, []);
+
   // Global theme handling
   useEffect(() => {
     if (themeColor.startsWith('#')) {
@@ -202,6 +276,7 @@ const App: React.FC = () => {
       const b = parseInt(themeColor.slice(5, 7), 16);
       document.documentElement.style.setProperty('--primary-rgb', `${r}, ${g}, ${b}`);
       localStorage.setItem('site_primary_color', themeColor);
+      updateGlobalConfig('site_primary_color', themeColor);
     }
   }, [themeColor]);
 
@@ -209,26 +284,31 @@ const App: React.FC = () => {
     const seoDiv = document.getElementById('seo-hashtags');
     if (seoDiv) seoDiv.innerText = hashtags;
     localStorage.setItem('site_hashtags', hashtags);
+    updateGlobalConfig('site_hashtags', hashtags);
   }, [hashtags]);
 
   const saveBrands = (newBrands: Brand[]) => {
     setBrands(newBrands);
     localStorage.setItem('site_brands', JSON.stringify(newBrands));
+    updateGlobalConfig('site_brands', newBrands);
   };
 
   const saveAnalyses = (newAnalyses: MatchAnalysis[]) => {
     setAnalyses(newAnalyses);
     localStorage.setItem('site_analyses', JSON.stringify(newAnalyses));
+    updateGlobalConfig('site_analyses', newAnalyses);
   };
 
   const saveCoupons = (newCoupons: Coupon[]) => {
     setCoupons(newCoupons);
     localStorage.setItem('site_coupons', JSON.stringify(newCoupons));
+    updateGlobalConfig('site_coupons', newCoupons);
   };
 
   const saveWheelConfig = (cfg: WheelConfig) => {
     setWheelConfig(cfg);
     localStorage.setItem('site_casino_wheel', JSON.stringify(cfg));
+    updateGlobalConfig('site_casino_wheel', cfg);
   };
 
   // Hero brand for admin (keep backward compatibility)
@@ -253,6 +333,7 @@ const App: React.FC = () => {
   const saveHero = (newHero: Brand) => {
     setHero(newHero);
     localStorage.setItem('site_hero', JSON.stringify(newHero));
+    updateGlobalConfig('site_hero', newHero);
   };
 
   if (view === 'admin') return (
@@ -273,15 +354,18 @@ const App: React.FC = () => {
       onSaveBjConfig={(cfg) => {
         setBjConfig(cfg);
         localStorage.setItem('site_bj_config', JSON.stringify(cfg));
+        updateGlobalConfig('site_bj_config', cfg);
       }}
       onSaveLoyaltyConfig={(cfg) => {
         setLoyaltyConfig(cfg);
         localStorage.setItem('site_loyalty_config', JSON.stringify(cfg));
+        updateGlobalConfig('site_loyalty_config', cfg);
       }}
       onHashtagsChange={setHashtags}
 
       themeColor={themeColor}
       onThemeChange={setThemeColor}
+      hashtags={hashtags || ''}
       onLogout={() => {
         setUserRole(null);
         localStorage.removeItem('site_user_role');
@@ -289,7 +373,7 @@ const App: React.FC = () => {
       }}
       onNavigateHome={() => {
         setView('home');
-        window.scrollTo({ top: 0, behavior: 'instant' });
+        window.scrollTo({ top: 0, behavior: 'auto' });
       }}
       giveawayConfig={giveawayConfig}
       onSaveGiveawayConfig={handleGiveawayConfigChange}
@@ -403,6 +487,13 @@ const App: React.FC = () => {
               coupons={coupons}
               isLoggedIn={!!(siteUser || userRole)}
               onLoginRequired={() => setAuthModalMode('member')}
+            />
+
+            <div className="section-divider" />
+
+            <HomeAnalyses 
+              analyses={analyses} 
+              onNavigate={handleViewChange} 
             />
 
             <div className="section-divider" />
@@ -546,6 +637,7 @@ const App: React.FC = () => {
         {view === 'analysis' && (
           <AnalysisView
             onNavigate={handleViewChange}
+            analyses={analyses}
             coupons={coupons}
             siteUser={siteUser}
             isLoggedIn={!!(siteUser || userRole)}
@@ -656,7 +748,7 @@ const App: React.FC = () => {
           Kumar bağımlılık yapabilir ve ciddi mali kayıplara neden olabilir. 18 yaşından küçüklerin kumar oynaması yasaktır.
         </p>
         <div className="footer-hashtags">
-          {hashtags.split(',').map((tag, i) => <span key={i}>{tag.trim()}</span>)}
+          {(hashtags || '').split(',').map((tag, i) => tag.trim() ? <span key={i}>{tag.trim()}</span> : null)}
         </div>
       </footer>
 
