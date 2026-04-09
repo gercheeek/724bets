@@ -113,12 +113,13 @@ const App: React.FC = () => {
       needsUpdate = true;
     }
 
-    // 2. Remove Corrupted Boluspor/League-is-Analysis entry
+    // 2. Remove Corrupted Boluspor/Porto/League-is-Analysis entry
     const beforeCount = parsed.length;
     parsed = parsed.filter((a: any) => 
       a.league && 
-      a.league.length < 100 && 
-      !a.league.includes('Boluspor orta sıralarda')
+      a.league.length < 80 && 
+      !a.league.includes('Boluspor orta sıralarda') &&
+      !a.league.includes('Porto Dragao')
     );
     if (parsed.length !== beforeCount) needsUpdate = true;
 
@@ -230,7 +231,9 @@ const App: React.FC = () => {
           const parsed = JSON.parse(savedAnalyses);
           const cleaned = parsed.filter((a: any) => 
             a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
-            a.league && a.league.length < 100 && !a.league.includes('Boluspor orta sıralarda')
+            a.league && a.league.length < 80 && 
+            !a.league.includes('Boluspor orta sıralarda') &&
+            !a.league.includes('Porto Dragao')
           );
           setAnalyses(cleaned);
         }
@@ -245,7 +248,9 @@ const App: React.FC = () => {
         if (globalAnalyses && Array.isArray(globalAnalyses) && globalAnalyses.length > 0) {
           const cleaned = globalAnalyses.filter((a: any) => 
             a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
-            a.league && a.league.length < 100 && !a.league.includes('Boluspor orta sıralarda')
+            a.league && a.league.length < 80 && 
+            !a.league.includes('Boluspor orta sıralarda') &&
+            !a.league.includes('Porto Dragao')
           );
           setAnalyses(cleaned);
         }
