@@ -151,15 +151,16 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
 
                 {/* League Filter */}
-                <div className="flex overflow-x-auto gap-2 mb-4 pb-3 justify-center scrollbar-none">
+                <div className="flex overflow-x-auto gap-2 mb-4 pb-3 justify-center scrollbar-none px-4">
                     {leagues.map((league) => (
                         <button
                             key={league}
+                            title={league}
                             onClick={() => setSelectedLeague(league)}
-                            className={`px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all duration-300 whitespace-nowrap ${selectedLeague === league
-                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)]'
-                                : 'bg-transparent border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-hover)] hover:text-[var(--text-primary)]'
-                                }`}
+                            className={`px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all duration-300 ${selectedLeague === league
+                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)] scale-105'
+                                : 'bg-transparent border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[#f0b90b]/50 hover:text-[var(--text-primary)] hover:scale-[1.02]'
+                                } max-w-[140px] md:max-w-[200px] shrink-0 truncate`}
                         >
                             {league}
                         </button>
@@ -178,8 +179,8 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                             {/* League Section Header */}
                             <div className="flex items-center gap-3 px-4 pt-4 pb-3 mb-2 relative">
                                 <div className={`absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent ${selectedSport === 'Basketbol' ? 'via-[#E4510B]/50' : 'via-[#f0b90b]/50'} to-transparent`} style={{ background: `linear-gradient(to right, transparent, ${selectedSport === 'Basketbol' ? 'rgba(228,81,11,0.5)' : 'rgba(240,185,11,0.5)'}, transparent)` }}></div>
-                                <div className={`w-1 h-4 rounded-full ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#f0b90b]'}`} style={{ boxShadow: selectedSport === 'Basketbol' ? '0 0 10px rgba(228,81,11,0.8)' : '0 0 10px rgba(240,185,11,0.8)' }}></div>
-                                <h3 className="text-[var(--text-primary)] font-black text-xs md:text-sm uppercase tracking-[0.15em]">{leagueName}</h3>
+                                <div className={`w-1 h-4 shrink-0 rounded-full ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#f0b90b]'}`} style={{ boxShadow: selectedSport === 'Basketbol' ? '0 0 10px rgba(228,81,11,0.8)' : '0 0 10px rgba(240,185,11,0.8)' }}></div>
+                                <h3 className="text-[var(--text-primary)] font-black text-xs md:text-sm uppercase tracking-[0.15em] flex-1 min-w-0 truncate" title={leagueName}>{leagueName}</h3>
                             </div>
 
                             {/* Desktop Header */}
@@ -208,12 +209,12 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                         <div key={analysis.id} className="relative mb-3">
                                             {/* Blurred preview */}
                                             <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-xl px-5 py-4 md:py-0 md:h-[68px] flex flex-col md:grid md:grid-cols-12 items-center gap-3 select-none overflow-hidden" style={{ filter: 'blur(6px)', userSelect: 'none' }}>
-                                                <div className="col-span-1 text-[var(--text-muted)] text-[11px] font-black">{analysis.matchTime}</div>
-                                                <div className="col-span-4 flex items-center gap-2 pl-0 md:pl-8 border-l border-transparent md:border-[var(--border-subtle)] h-full py-4">
-                                                    <div className="text-xs font-black text-[var(--text-primary)] truncate">{analysis.homeTeam} - {analysis.awayTeam}</div>
+                                                <div className="col-span-1 text-[var(--text-muted)] text-[11px] font-black shrink-0">{analysis.matchTime}</div>
+                                                <div className="col-span-4 flex items-center gap-2 pl-0 md:pl-8 border-l border-transparent md:border-[var(--border-subtle)] h-full py-4 md:min-w-0 md:w-full">
+                                                    <div className="text-xs font-black text-[var(--text-primary)] truncate w-full">{analysis.homeTeam} - {analysis.awayTeam}</div>
                                                 </div>
-                                                <div className="col-span-3 text-center">
-                                                    <span className="px-3 py-1 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded text-[10px] font-black text-[var(--text-muted)]">{analysis.prediction}</span>
+                                                <div className="col-span-3 text-center shrink-0">
+                                                    <span className="px-3 py-1 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded text-[10px] font-black text-[var(--text-muted)] truncate max-w-[120px] inline-block">{analysis.prediction}</span>
                                                 </div>
                                                 <div className="col-span-1 text-center text-[11px] font-black text-[var(--text-muted)]">{analysis.confidence}%</div>
                                             </div>
@@ -255,16 +256,18 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                             </div>
 
                                             {/* Match Name */}
-                                            <div className={`col-span-4 w-full md:w-auto md:pl-6 border-l border-transparent md:border-[var(--border-subtle)] h-full flex items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <h3 className="text-[var(--text-primary)] font-black text-[13px] tracking-tight uppercase italic truncate pt-2 md:pt-0">
-                                                    {analysis.homeTeam} <span className="text-[var(--text-muted)] font-medium mx-1.5 not-italic text-[9px] uppercase">VS</span> {analysis.awayTeam}
+                                            <div className={`col-span-4 w-full md:w-full md:pl-6 border-l border-transparent md:border-[var(--border-subtle)] h-full flex items-center transition-colors duration-300 md:min-w-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
+                                                <h3 className="text-[var(--text-primary)] font-black text-[13px] tracking-tight uppercase italic truncate pt-2 md:pt-0 w-full" title={`${analysis.homeTeam} VS ${analysis.awayTeam}`}>
+                                                    <span className="truncate inline-block align-bottom max-w-[40%]">{analysis.homeTeam}</span>
+                                                    <span className="text-[var(--text-muted)] font-medium mx-1.5 not-italic text-[9px] uppercase shrink-0">VS</span> 
+                                                    <span className="truncate inline-block align-bottom max-w-[40%]">{analysis.awayTeam}</span>
                                                 </h3>
                                             </div>
 
                                             {/* Prediction Badge (Button Style) */}
-                                            <div className={`col-span-3 w-full md:w-auto flex justify-start md:justify-center border-l border-transparent md:border-[var(--border-subtle)] h-full items-center transition-colors duration-300 pt-2 md:pt-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
+                                            <div className={`col-span-3 w-full md:w-auto flex justify-start md:justify-center border-l border-transparent md:border-[var(--border-subtle)] h-full items-center transition-colors duration-300 pt-2 md:pt-0 shrink-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
                                                 <div className={`border px-4 py-1.5 rounded-[6px] text-center w-full max-w-[170px] transition-all duration-300 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]/5 border-[#E4510B]/30 group-hover:bg-[#E4510B]/15 group-hover:border-[#E4510B]/60' : 'bg-[#f0b90b]/5 border-[#f0b90b]/30 group-hover:bg-[#f0b90b]/15 group-hover:border-[#f0b90b]/60'}`}>
-                                                    <span className={`${selectedSport === 'Basketbol' ? 'text-[#E4510B]' : 'text-[#f0b90b]'} font-black text-[11px] uppercase tracking-wider`}>{analysis.prediction}</span>
+                                                    <span className={`${selectedSport === 'Basketbol' ? 'text-[#E4510B]' : 'text-[#f0b90b]'} font-black text-[11px] uppercase tracking-wider block truncate`} title={analysis.prediction}>{analysis.prediction}</span>
                                                 </div>
                                             </div>
 
