@@ -177,22 +177,22 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                     return (
                         <div key={leagueName} className="space-y-4">
                             {/* League Section Header */}
-                            <div className="flex items-center gap-3 px-4 pt-4 pb-3 mb-2 relative">
+                            <div className="flex items-start gap-4 px-4 pt-4 pb-3 mb-2 relative group-header">
                                 <div className={`absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent ${selectedSport === 'Basketbol' ? 'via-[#E4510B]/50' : 'via-[#f0b90b]/50'} to-transparent`} style={{ background: `linear-gradient(to right, transparent, ${selectedSport === 'Basketbol' ? 'rgba(228,81,11,0.5)' : 'rgba(240,185,11,0.5)'}, transparent)` }}></div>
-                                <div className={`w-1 h-4 shrink-0 rounded-full ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#f0b90b]'}`} style={{ boxShadow: selectedSport === 'Basketbol' ? '0 0 10px rgba(228,81,11,0.8)' : '0 0 10px rgba(240,185,11,0.8)' }}></div>
-                                <h3 className="text-[var(--text-primary)] font-black text-xs md:text-sm uppercase tracking-[0.15em] flex-1 min-w-0 truncate" title={leagueName}>{leagueName}</h3>
+                                <div className={`w-1.5 h-5 shrink-0 rounded-full mt-0.5 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#f0b90b]'}`} style={{ boxShadow: selectedSport === 'Basketbol' ? '0 0 15px rgba(228,81,11,0.6)' : '0 0 15px rgba(240,185,11,0.6)' }}></div>
+                                <h3 className="text-[var(--text-primary)] font-black text-[11px] md:text-[13px] uppercase tracking-[0.18em] leading-relaxed break-words" title={leagueName}>{leagueName}</h3>
                             </div>
 
                             {/* Desktop Header */}
-                            <div className="hidden md:grid grid-cols-12 gap-3 px-6 py-2 mb-2 text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest relative">
-                                <div className="absolute bottom-0 left-4 right-4 h-[1px] bg-[var(--border-subtle)]"></div>
-                                <div className="col-span-1">SAAT</div>
-                                <div className="col-span-4 pl-8">MAÇ</div>
-                                <div className="col-span-3 text-center">TAHMİN</div>
-                                <div className="col-span-1 text-center">{selectedSport === 'Basketbol' ? 'ÜST' : 'KG VAR'}</div>
-                                <div className="col-span-1 text-center">{selectedSport === 'Basketbol' ? 'ALT' : '2.5 ÜST'}</div>
-                                <div className="col-span-1 text-center">GÜVEN</div>
-                                <div className="col-span-1 text-right pr-2">AÇ</div>
+                            <div className="hidden md:flex items-center gap-4 px-6 py-3 mb-2 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest relative">
+                                <div className="absolute bottom-0 left-4 right-4 h-[1px] bg-[var(--border-subtle)]/30"></div>
+                                <div className="w-[100px] shrink-0">SAAT</div>
+                                <div className="flex-1 pl-4">MAÇ</div>
+                                <div className="w-[180px] shrink-0 text-center">TAHMİN</div>
+                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ÜST' : 'KG VAR'}</div>
+                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ALT' : '2.5 ÜST'}</div>
+                                <div className="w-[80px] shrink-0 text-center">GÜVEN</div>
+                                <div className="w-[40px] shrink-0 text-right">AÇ</div>
                             </div>
 
                             {groupedAnalyses[leagueName].map((analysis, analysisIdx) => {
@@ -234,78 +234,82 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                 return (
                                     <div
                                         key={analysis.id}
-                                        className={`bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-xl mb-3 overflow-hidden transition-all duration-300 group ${isExpanded ? borderGlowClassName + ' ring-1 ' + (selectedSport === 'Basketbol' ? 'ring-[#E4510B]/30' : 'ring-[#f0b90b]/30') : hoverBorderClassName + ' hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:-translate-y-0.5'}`}
+                                        className={`bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-[20px] mb-4 overflow-hidden transition-all duration-500 group ${isExpanded ? borderGlowClassName + ' ring-1 ' + (selectedSport === 'Basketbol' ? 'ring-[#E4510B]/30' : 'ring-[#f0b90b]/30') : hoverBorderClassName + ' hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)] hover:shadow-[#f0b90b10] hover:-translate-y-1 hover:border-[#f0b90b]/30'}`}
                                     >
-                                        {/* Row (Compact Desktop) */}
+                                        {/* Row (Flexible Desktop) */}
                                         <div
-                                            className="px-5 py-4 md:py-0 md:h-[68px] flex flex-col md:grid md:grid-cols-12 items-center gap-3 cursor-pointer relative"
+                                            className="px-6 py-5 md:py-0 md:h-[76px] flex flex-col md:flex-row items-center gap-4 cursor-pointer relative"
                                             onClick={() => toggleExpand(analysis.id)}
                                         >
-                                            {/* Mobile Header / Desktop Time */}
-                                            <div className="col-span-1 flex items-center justify-between w-full md:w-auto">
-                                                <div className="flex items-center gap-2">
-                                                    <Clock className="w-3.5 h-3.5 text-[var(--text-muted)] md:hidden" />
-                                                    <span className="text-[#f0b90b] font-black text-[11px] md:text-xs tracking-wide">
-                                                        {selectedDate === 'WEEKLY' && <span className="text-[#f0b90b] mr-2">{new Date(analysis.matchDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
+                                            {/* Time Column */}
+                                            <div className="w-full md:w-[100px] shrink-0 flex items-center justify-between md:justify-start">
+                                                <div className="flex flex-col">
+                                                    {selectedDate === 'WEEKLY' && <span className="text-[var(--text-muted)] text-[8px] font-black uppercase mb-0.5">{new Date(analysis.matchDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>}
+                                                    <span className="text-[#f0b90b] font-black text-[11px] md:text-[13px] tracking-wide">
                                                         {analysis.matchTime}
                                                     </span>
                                                 </div>
                                                 <div className="md:hidden">
-                                                    {isExpanded ? <ChevronUp className="w-4 h-4 text-[#f0b90b]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
+                                                    {isExpanded ? <ChevronUp className="w-5 h-5 text-[#f0b90b]" /> : <ChevronDown className="w-5 h-5 text-[var(--text-muted)]" />}
                                                 </div>
                                             </div>
 
-                                            {/* Match Name */}
-                                            <div className={`col-span-4 w-full md:w-full md:pl-6 border-l border-transparent md:border-[var(--border-subtle)] h-full flex items-center transition-colors duration-300 md:min-w-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <h3 className="text-[var(--text-primary)] font-black text-[13px] tracking-tight uppercase italic truncate pt-2 md:pt-0 w-full" title={`${analysis.homeTeam} VS ${analysis.awayTeam}`}>
-                                                    <span className="truncate inline-block align-bottom max-w-[40%]">{analysis.homeTeam}</span>
-                                                    <span className="text-[var(--text-muted)] font-medium mx-1.5 not-italic text-[9px] uppercase shrink-0">VS</span> 
-                                                    <span className="truncate inline-block align-bottom max-w-[40%]">{analysis.awayTeam}</span>
+                                            {/* Match Name Column (Flex-1) */}
+                                            <div className={`w-full md:flex-1 md:pl-6 border-l border-transparent md:border-[var(--border-subtle)]/40 h-full flex items-center transition-colors duration-300 md:min-w-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
+                                                <h3 className="text-[var(--text-primary)] font-black text-[14px] md:text-[16px] tracking-tight uppercase italic pt-2 md:pt-0 w-full flex items-center gap-2 flex-wrap" title={`${analysis.homeTeam} VS ${analysis.awayTeam}`}>
+                                                    <span className="text-white group-hover:text-[#f0b90b] transition-colors duration-300">{analysis.homeTeam}</span>
+                                                    <span className="text-[var(--text-muted)] font-medium not-italic text-[10px] uppercase shrink-0 px-2 opacity-50">VS</span> 
+                                                    <span className="text-white group-hover:text-[#f0b90b] transition-colors duration-300">{analysis.awayTeam}</span>
                                                 </h3>
                                             </div>
 
-                                            {/* Prediction Badge (Button Style) */}
-                                            <div className={`col-span-3 w-full md:w-auto flex justify-start md:justify-center border-l border-transparent md:border-[var(--border-subtle)] h-full items-center transition-colors duration-300 pt-2 md:pt-0 shrink-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <div className={`border px-4 py-1.5 rounded-[6px] text-center w-full max-w-[170px] transition-all duration-300 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]/5 border-[#E4510B]/30 group-hover:bg-[#E4510B]/15 group-hover:border-[#E4510B]/60' : 'bg-[#f0b90b]/5 border-[#f0b90b]/30 group-hover:bg-[#f0b90b]/15 group-hover:border-[#f0b90b]/60'}`}>
-                                                    <span className={`${selectedSport === 'Basketbol' ? 'text-[#E4510B]' : 'text-[#f0b90b]'} font-black text-[11px] uppercase tracking-wider block truncate`} title={analysis.prediction}>{analysis.prediction}</span>
+                                            {/* Prediction Badge */}
+                                            <div className={`w-full md:w-[180px] shrink-0 flex justify-start md:justify-center border-l border-transparent md:border-[var(--border-subtle)]/40 h-full items-center transition-colors duration-300 pt-2 md:pt-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
+                                                <div className={`border px-5 py-2 rounded-xl text-center w-full transition-all duration-300 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]/5 border-[#E4510B]/20 group-hover:bg-[#E4510B]/10 group-hover:border-[#E4510B]/50' : 'bg-[#f0b90b]/5 border-[#f0b90b]/20 group-hover:bg-[#f0b90b]/10 group-hover:border-[#f0b90b]/50'}`}>
+                                                    <span className={`${selectedSport === 'Basketbol' ? 'text-[#E4510B]' : 'text-[#f0b90b]'} font-black text-[11px] md:text-[12px] uppercase tracking-wider block`} title={analysis.prediction}>{analysis.prediction}</span>
                                                 </div>
                                             </div>
 
                                             {/* Odds Columns (Desktop Only) */}
-                                            <div className={`hidden md:flex col-span-1 justify-center border-l border-[var(--border-subtle)] h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <span className={`${highlightColorClassName} font-black text-[14px]`}>{highestOdds.odd1}</span>
+                                            <div className={`hidden md:flex w-[80px] shrink-0 justify-center border-l border-[var(--border-subtle)]/40 h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
+                                                <span className={`${highlightColorClassName} font-black text-[15px] group-hover:scale-110 transition-transform`}>{highestOdds.odd1}</span>
                                             </div>
-                                            <div className={`hidden md:flex col-span-1 justify-center border-l border-[var(--border-subtle)] h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <span className={`${highlightColorClassName} font-black text-[14px]`}>{highestOdds.odd2}</span>
+                                            <div className={`hidden md:flex w-[80px] shrink-0 justify-center border-l border-[var(--border-subtle)]/40 h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
+                                                <span className={`${highlightColorClassName} font-black text-[15px] group-hover:scale-110 transition-transform`}>{highestOdds.odd2}</span>
                                             </div>
 
                                             {/* Mobile Bottom Row */}
-                                            <div className="flex md:hidden w-full items-center justify-between pt-3 border-t border-[var(--border-subtle)] mt-1">
-                                                <div className="flex gap-4">
+                                            <div className="flex md:hidden w-full items-center justify-between pt-4 border-t border-zinc-800/50 mt-1">
+                                                <div className="flex gap-6">
                                                     <div className="flex flex-col">
-                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase tracking-widest">KG VAR</span>
-                                                        <span className="text-[#f0b90b] font-black text-xs mt-0.5">{highestOdds.odd1}</span>
+                                                        <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ÜST' : 'KG VAR'}</span>
+                                                        <span className="text-[#f0b90b] font-black text-sm mt-0.5">{highestOdds.odd1}</span>
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase tracking-widest">2.5 ÜST</span>
-                                                        <span className="text-[#f0b90b] font-black text-xs mt-0.5">{highestOdds.odd2}</span>
+                                                        <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ALT' : '2.5 ÜST'}</span>
+                                                        <span className="text-[#f0b90b] font-black text-sm mt-0.5">{highestOdds.odd2}</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col items-end">
-                                                    <span className="text-[var(--text-muted)] text-[8px] font-black uppercase tracking-widest">GÜVEN</span>
-                                                    <span className="text-[var(--text-primary)] font-black text-xs mt-0.5">%{analysis.confidence}</span>
+                                                    <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">GÜVEN</span>
+                                                    <span className="text-[var(--text-primary)] font-black text-sm mt-0.5">%{analysis.confidence}</span>
                                                 </div>
                                             </div>
 
-                                            {/* Confidence (Desktop Only) */}
-                                            <div className={`hidden md:flex col-span-1 items-center justify-center border-l border-[var(--border-subtle)] h-full transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <span className="text-[var(--text-primary)] font-black text-[13px]">%{analysis.confidence}</span>
+                                            {/* Confidence Column (Desktop Only) */}
+                                            <div className={`hidden md:flex w-[80px] shrink-0 items-center justify-center border-l border-[var(--border-subtle)]/40 h-full transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[var(--text-primary)] font-black text-[14px]">%{analysis.confidence}</span>
+                                                    <div className="w-8 h-1 bg-zinc-800 mt-1 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-[#f0b90b]" style={{ width: `${analysis.confidence}%` }}></div>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            {/* Actions (Desktop Only) */}
-                                            <div className={`hidden md:flex col-span-1 justify-end pr-4 border-l border-[var(--border-subtle)] h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <div className={`p-1.5 rounded-full transition-colors ${isExpanded ? (selectedSport === 'Basketbol' ? 'bg-[#E4510B]/20 text-[#E4510B]' : 'bg-[#f0b90b]/20 text-[#f0b90b]') : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] group-hover:bg-[var(--border-subtle)] group-hover:text-white'}`}>
-                                                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                            {/* Actions Box */}
+                                            <div className={`hidden md:flex w-[40px] shrink-0 justify-center border-l border-[var(--border-subtle)]/40 h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
+                                                <div className={`p-2 rounded-xl transition-all duration-300 ${isExpanded ? (selectedSport === 'Basketbol' ? 'bg-[#E4510B] text-white' : 'bg-[#f0b90b] text-black') : 'bg-zinc-800 text-zinc-500 group-hover:bg-zinc-700 group-hover:text-white'}`}>
+                                                    {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                                                 </div>
                                             </div>
                                         </div>

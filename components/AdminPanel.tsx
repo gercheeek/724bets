@@ -1667,10 +1667,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       const renderMatchRow = (analysis: MatchAnalysis) => (
                         <div key={analysis.id} className="group relative">
                           {/* Premium Match Card */}
-                          <div className="bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-sm p-5 rounded-[24px] flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all duration-300 hover:border-[#f0b90b]/40 hover:bg-zinc-900/60 hover:translate-x-1 shadow-lg shadow-black/20">
+                          <div className="bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-md p-6 rounded-[28px] flex flex-col md:flex-row items-center md:items-center justify-between gap-6 transition-all duration-500 hover:border-[#f0b90b]/40 hover:bg-zinc-900/80 hover:-translate-y-1 shadow-2xl shadow-black/40">
                             <div className="flex items-center gap-6 flex-1 min-w-0 w-full">
-                              <div className={`shrink-0 w-14 h-14 bg-black rounded-2xl flex items-center justify-center border border-zinc-800/80 transition-all duration-500 group-hover:border-[#f0b90b]/30 group-hover:shadow-[0_0_20px_rgba(240,185,11,0.1)]`}>
-                                <TrendingUp className={`w-6 h-6 ${adminSport === 'Futbol' ? 'text-emerald-400' : 'text-orange-400'}`} />
+                              <div className={`shrink-0 w-16 h-16 bg-black rounded-3xl flex items-center justify-center border border-zinc-800/80 transition-all duration-500 group-hover:border-[#f0b90b]/30 group-hover:shadow-[0_0_20px_rgba(240,185,11,0.2)]`}>
+                                <TrendingUp className={`w-7 h-7 ${adminSport === 'Futbol' ? 'text-emerald-400' : 'text-orange-400'}`} />
                               </div>
                               
                               <div className="flex-1 min-w-0">
@@ -1747,12 +1747,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                               {Object.entries(footballGroups).map(([league, items]) => (
                                 <div key={league} className="space-y-4">
-                                  <div className="flex items-start md:items-center justify-between px-2 gap-4">
-                                    <h3 className="text-[11px] font-black text-[#f0b90b] uppercase tracking-[0.3em] flex items-center gap-3 overflow-hidden flex-1 min-w-0">
-                                      <div className="w-6 h-[1px] bg-[#f0b90b]/30 shrink-0" /> 
-                                      <span className="truncate">{league}</span>
+                                  <div className="flex items-start justify-between px-2 gap-4 group-header pt-4">
+                                    <h3 className="text-[12px] md:text-[14px] font-black text-[#f0b90b] uppercase tracking-[0.2em] flex items-start gap-4 flex-1 min-w-0 leading-relaxed">
+                                      <div className="w-1.5 h-5 bg-[#f0b90b] shrink-0 rounded-full mt-0.5 shadow-[0_0_10px_rgba(240,185,11,0.5)]" /> 
+                                      <span className="break-words">{league}</span>
                                     </h3>
-                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-1 md:mt-0">{items.length} MAÇ</span>
+                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-1">{items.length} MAÇ</span>
                                   </div>
                                   <div className="grid grid-cols-1 gap-4">
                                     {items.map(renderMatchRow)}
@@ -1776,12 +1776,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                               {Object.entries(basketballGroups).map(([league, items]) => (
                                 <div key={league} className="space-y-4">
-                                  <div className="flex items-start md:items-center justify-between px-2 gap-4">
-                                    <h3 className="text-[11px] font-black text-orange-500 uppercase tracking-[0.3em] flex items-center gap-3 overflow-hidden flex-1 min-w-0">
-                                      <div className="w-6 h-[1px] bg-orange-500/30 shrink-0" /> 
-                                      <span className="truncate">{league}</span>
+                                  <div className="flex items-start justify-between px-2 gap-4 group-header pt-4">
+                                    <h3 className="text-[12px] md:text-[14px] font-black text-orange-500 uppercase tracking-[0.2em] flex items-start gap-4 flex-1 min-w-0 leading-relaxed">
+                                      <div className="w-1.5 h-5 bg-orange-500 shrink-0 rounded-full mt-0.5 shadow-[0_0_10px_rgba(228,81,11,0.5)]" /> 
+                                      <span className="break-words">{league}</span>
                                     </h3>
-                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-1 md:mt-0">{items.length} MAÇ</span>
+                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-1">{items.length} MAÇ</span>
                                   </div>
                                   <div className="grid grid-cols-1 gap-4">
                                     {items.map(renderMatchRow)}
