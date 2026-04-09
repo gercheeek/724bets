@@ -1648,6 +1648,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         .filter(a => 
                           a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
                           a.league && a.league.length < 80 && 
+                          a.matchDate >= '2026-04-09' && // START FRESH
                           !a.league.includes('Boluspor orta sıralarda') &&
                           !a.league.includes('Porto Dragao')
                         )

@@ -113,11 +113,12 @@ const App: React.FC = () => {
       needsUpdate = true;
     }
 
-    // 2. Remove Corrupted Boluspor/Porto/League-is-Analysis entry
+    // 2. Remove Corrupted/Legacy entries (Clean Slate 9 April 2026)
     const beforeCount = parsed.length;
     parsed = parsed.filter((a: any) => 
       a.league && 
       a.league.length < 80 && 
+      a.matchDate >= '2026-04-09' && // START FRESH FROM TODAY
       !a.league.includes('Boluspor orta sıralarda') &&
       !a.league.includes('Porto Dragao')
     );
@@ -232,6 +233,7 @@ const App: React.FC = () => {
           const cleaned = parsed.filter((a: any) => 
             a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
             a.league && a.league.length < 80 && 
+            a.matchDate >= '2026-04-09' && // START FRESH
             !a.league.includes('Boluspor orta sıralarda') &&
             !a.league.includes('Porto Dragao')
           );
@@ -249,6 +251,7 @@ const App: React.FC = () => {
           const cleaned = globalAnalyses.filter((a: any) => 
             a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
             a.league && a.league.length < 80 && 
+            a.matchDate >= '2026-04-09' && // START FRESH
             !a.league.includes('Boluspor orta sıralarda') &&
             !a.league.includes('Porto Dragao')
           );

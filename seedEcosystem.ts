@@ -2,7 +2,7 @@ import { supabase } from './utils/supabase';
 import { MatchAnalysis, PoolConfig } from './types';
 import { demoAnalyses, demoCoupons } from './demoData';
 
-const SEED_FLAG = 'ecosystem_seeded_v3'; // Bumped to v3 to trigger cloud-check
+const SEED_FLAG = 'ecosystem_seeded_v4'; // Bumped to v4 for 9 April Clean Slate reset
 
 export async function seedEcosystemData() {
     if (localStorage.getItem(SEED_FLAG)) return;
