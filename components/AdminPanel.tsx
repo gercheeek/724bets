@@ -1645,7 +1645,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       };
 
                       const groups = localAnalyses
-                        .filter(a => a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A') // Junk data filtering
+                        .filter(a => 
+                          a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
+                          a.league && a.league.length < 100 && !a.league.includes('Boluspor orta sıralarda')
+                        )
                         .reduce((acc, analysis) => {
                           if (!acc[analysis.league]) acc[analysis.league] = [];
                           acc[analysis.league].push(analysis);

@@ -102,10 +102,29 @@ const App: React.FC = () => {
   // Typo Migration & Clean-up effect
   useEffect(() => {
     const stored = localStorage.getItem('site_analyses');
-    if (stored && stored.includes('Süpriz')) {
-      const fixed = stored.replace(/Süpriz/g, 'Sürpriz');
-      localStorage.setItem('site_analyses', fixed);
-      // Trigger a reload of analyses if they are held in state anywhere
+    if (!stored) return;
+
+    let parsed = JSON.parse(stored);
+    let needsUpdate = false;
+
+    // 1. Fix Sürpriz typo
+    if (stored.includes('Süpriz')) {
+      parsed = JSON.parse(stored.replace(/Süpriz/g, 'Sürpriz'));
+      needsUpdate = true;
+    }
+
+    // 2. Remove Corrupted Boluspor/League-is-Analysis entry
+    const beforeCount = parsed.length;
+    parsed = parsed.filter((a: any) => 
+      a.league && 
+      a.league.length < 100 && 
+      !a.league.includes('Boluspor orta sıralarda')
+    );
+    if (parsed.length !== beforeCount) needsUpdate = true;
+
+    if (needsUpdate) {
+      localStorage.setItem('site_analyses', JSON.stringify(parsed));
+      setAnalyses(parsed);
       window.dispatchEvent(new Event('storage'));
     }
   }, []);
@@ -209,7 +228,10 @@ const App: React.FC = () => {
         if (savedCoupons) setCoupons(JSON.parse(savedCoupons));
         if (savedAnalyses) {
           const parsed = JSON.parse(savedAnalyses);
-          const cleaned = parsed.filter((a: any) => a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A');
+          const cleaned = parsed.filter((a: any) => 
+            a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
+            a.league && a.league.length < 100 && !a.league.includes('Boluspor orta sıralarda')
+          );
           setAnalyses(cleaned);
         }
         if (savedBj) setBjConfig(JSON.parse(savedBj));
@@ -221,7 +243,10 @@ const App: React.FC = () => {
         const globalAnalyses = await getGlobalConfig('site_analyses');
         if (!isMounted) return;
         if (globalAnalyses && Array.isArray(globalAnalyses) && globalAnalyses.length > 0) {
-          const cleaned = globalAnalyses.filter((a: any) => a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A');
+          const cleaned = globalAnalyses.filter((a: any) => 
+            a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
+            a.league && a.league.length < 100 && !a.league.includes('Boluspor orta sıralarda')
+          );
           setAnalyses(cleaned);
         }
 
