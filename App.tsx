@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import DashboardHero from './components/DashboardHero';
+import AppLoader from './components/AppLoader';
 import DailyCoupons from './components/DailyCoupons';
 import BrandCard from './components/BrandCard';
 import AdminPanel from './components/AdminPanel';
@@ -33,6 +35,7 @@ import { demoAnalyses } from './demoData';
 
 
 const App: React.FC = () => {
+  const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('loading');
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway'>('home');
 
   // Promo Wheel Config
@@ -177,32 +180,25 @@ const App: React.FC = () => {
     lastPlayTime: 0,
   });
 
-  // Show Betlivo popup once per browser session
+  // 3-Stage App Flow: Loader -> Action Popup -> Ready
   useEffect(() => {
-    if (!welcomePopupConfig.isActive) {
-      setShowBetlivoPopup(false);
-      return;
-    }
-    
-    // Explicitly show it if it's active. If we want it only once per session, 
-    // the sessionStorage check is fine, but for testing (toggling ON/OFF) we should probably clear it.
-    const seen = sessionStorage.getItem('betlivo_popup_seen');
-    if (!seen) {
-      const t = setTimeout(() => setShowBetlivoPopup(true), 1200);
-      return () => clearTimeout(t);
-    } else {
-       // If it is active but already seen, and it JUST became active (toggled on), 
-       // we should probably show it again for admin testing.
-       // The simplest way is to clear the flag when we want it to show.
-       sessionStorage.removeItem('betlivo_popup_seen');
-       const t = setTimeout(() => setShowBetlivoPopup(true), 1200);
-       return () => clearTimeout(t);
-    }
+    // Stage 1: Loader runs for 4 seconds
+    const loaderTimer = setTimeout(() => {
+      // Stage 2: Show popup if active, else skip to ready
+      if (welcomePopupConfig.isActive) {
+        setAppStage('popup');
+        setShowBetlivoPopup(true);
+      } else {
+        setAppStage('ready');
+      }
+    }, 4000); // 4 Seconds Load Time
+
+    return () => clearTimeout(loaderTimer);
   }, [welcomePopupConfig.isActive]);
 
   const handleCloseBetlivoPopup = () => {
     setShowBetlivoPopup(false);
-    sessionStorage.setItem('betlivo_popup_seen', '1');
+    setAppStage('ready'); // Stage 3: Unblock the site
   };
 
   // --- UNIFIED INITIALIZATION (Seed -> Local -> Supabase) ---
@@ -463,12 +459,15 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
     <div style={{
+      maxHeight: appStage === 'loading' ? '100vh' : 'auto',
+      overflow: appStage === 'loading' ? 'hidden' : 'visible',
       minHeight: '100vh',
       background: 'var(--bg-main)',
       color: 'var(--text-primary)',
       overflowX: 'hidden',
       position: 'relative'
     }}>
+      {appStage === 'loading' && <AppLoader />}
 
       {/* Auth Modal Overlay */}
       {authModalMode && (
@@ -521,38 +520,44 @@ const App: React.FC = () => {
         liveOddsConfig={liveOddsConfig}
       />
 
-      <main style={{ position: 'relative', zIndex: 10, paddingTop: '130px' }}>
+      <main style={{ position: 'relative', zIndex: 10, paddingTop: '130px', filter: appStage === 'popup' ? 'blur(10px)' : 'none', pointerEvents: appStage === 'popup' ? 'none' : 'auto', transition: 'filter 0.5s' }}>
         {view === 'home' && (
           <>
-            <Hero onNavigate={handleViewChange} />
+            <div className="max-w-[1400px] mx-auto px-4 xl:px-6 animate-fade-in pb-12">
+              <DashboardHero 
+                  featuredMatch={analyses.length > 0 ? analyses[0] : undefined} 
+                  onNavigate={handleViewChange} 
+              />
+              
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+                {/* Left Column: Kuponlar */}
+                <div className="lg:col-span-3 order-2 lg:order-1">
+                  <DailyCoupons
+                    coupons={coupons}
+                    isLoggedIn={!!(siteUser || userRole)}
+                    onLoginRequired={() => setAuthModalMode('member')}
+                  />
+                </div>
+                
+                {/* Middle Column: Analiz Akışı */}
+                <div className="lg:col-span-6 order-1 lg:order-2">
+                  <HomeAnalyses 
+                    analyses={analyses} 
+                    onNavigate={handleViewChange} 
+                  />
+                </div>
+                
+                {/* Right Column: Sıcak Gelişmeler */}
+                <div className="lg:col-span-3 order-3">
+                  <NewsSection
+                    onViewChange={handleViewChange}
+                    onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  />
+                </div>
+              </div>
 
-            <div className="section-divider" />
-
-            <DailyCoupons
-              coupons={coupons}
-              isLoggedIn={!!(siteUser || userRole)}
-              onLoginRequired={() => setAuthModalMode('member')}
-            />
-
-            <div className="section-divider" />
-
-            <HomeAnalyses 
-              analyses={analyses} 
-              onNavigate={handleViewChange} 
-            />
-
-            <div className="section-divider" />
-
-            <DynamicCTA onNavigate={handleViewChange} />
-
-
-
-            <div className="section-divider" />
-
-            <NewsSection
-              onViewChange={handleViewChange}
-              onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            />
+              <DynamicCTA onNavigate={handleViewChange} />
+            </div>
 
             <div className="section-divider" />
 

@@ -146,13 +146,13 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
                         </a>
                         <button
                             onClick={handleClose}
-                            className="py-4 px-6 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:bg-white/5"
+                            className="py-4 px-6 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:bg-white/5 active:scale-95"
                             style={{
                                 border: '1px solid rgba(255,255,255,0.1)',
-                                color: 'rgba(255,255,255,0.4)',
+                                color: 'rgba(255,255,255,0.6)',
                             }}
                         >
-                            Daha Sonra
+                            SİTEYE DEVAM ET
                         </button>
                     </div>
 
