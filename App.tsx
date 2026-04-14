@@ -481,14 +481,6 @@ const App: React.FC = () => {
     />
   );
 
-  // Scroll to brands section
-  const scrollToBrands = () => {
-    const brandsEl = document.getElementById('brands-section');
-    if (brandsEl) {
-      const y = brandsEl.getBoundingClientRect().top + window.scrollY - 15;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  };
 
   const handleViewChange = (v: string) => {
     // Lucky Wheel is members-only
@@ -497,8 +489,8 @@ const App: React.FC = () => {
       return;
     }
     if (v === 'brands') {
-      setView('home');
-      setTimeout(scrollToBrands, 100);
+      setView('brands');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (v === 'home') {
       setView('home');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -640,26 +632,7 @@ const App: React.FC = () => {
               {/* ═══ BEST PICKS FULL WIDTH ═══ */}
               <BestPicks analyses={analyses} onNavigate={handleViewChange} />
 
-              {/* ═══ BRANDS SECTION ═══ */}
-              <section id="brands-section" className="brands-section relative z-10">
-                <div className="brands-header mb-12 animate-fade-in-up">
-                  <h2 className="text-[40px] md:text-[48px] font-black italic uppercase tracking-tighter" style={{ color: 'var(--text-primary)' }}>
-                    GÜVENİLİR <span className="text-[#FFC107]">FİRMALAR</span>
-                  </h2>
-                  <div className="h-1 w-20 bg-[#FFC107] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
-                  <p className="font-bold uppercase text-[11px] tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
-                    Sizin için test ettiğimiz, ödemesini yapan lisanslı siteler.
-                  </p>
-                </div>
 
-
-
-                <div className="brands-grid">
-                  {brands.map((brand, index) => (
-                    <BrandCard key={brand.id} brand={brand} index={index} />
-                  ))}
-                </div>
-              </section>
 
               {/* ═══ PORTAL FOOTER ═══ */}
               <div className="portal-footer">
@@ -676,6 +649,28 @@ const App: React.FC = () => {
               <PortalMobileNav activeView={view} onViewChange={handleViewChange} />
             </>
           )}
+
+        {view === 'brands' && (
+          <div className="animate-fade-in" style={{ padding: '40px 0 100px' }}>
+            <section id="brands-section" className="brands-section relative z-10">
+              <div className="brands-header mb-12 animate-fade-in-up">
+                <h2 className="text-[40px] md:text-[48px] font-black italic uppercase tracking-tighter" style={{ color: 'var(--text-primary)' }}>
+                  GÜVENİLİR <span className="text-[#FFC107]">FİRMALAR</span>
+                </h2>
+                <div className="h-1 w-20 bg-[#FFC107] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
+                <p className="font-bold uppercase text-[11px] tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
+                  Sizin için test ettiğimiz, ödemesini yapan lisanslı siteler.
+                </p>
+              </div>
+
+              <div className="brands-grid">
+                {brands.map((brand, index) => (
+                  <BrandCard key={brand.id} brand={brand} index={index} />
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
 
         {view === 'analysis' && (
           <AnalysisView
