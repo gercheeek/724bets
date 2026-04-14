@@ -35,7 +35,7 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
       </div>
 
       {/* Compact iddaa-style table */}
-      <div style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '10px', overflow: 'hidden' }}>
+      <div className="frosted-glass" style={{ background: 'rgba(13, 13, 13, 0.6)', border: '1px solid #1a1a1a', borderRadius: '10px', overflow: 'hidden' }}>
         {/* Table header row */}
         <div style={{ display: 'grid', gridTemplateColumns: '50px 1fr 100px 50px 50px 45px', alignItems: 'center', padding: '6px 10px', borderBottom: '1px solid #151515', gap: '4px' }}>
           <span style={{ fontSize: '7px', fontWeight: 800, color: '#444', textTransform: 'uppercase', letterSpacing: '1px' }}>SAAT</span>
@@ -51,6 +51,7 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
           const kgOdd = (1.50 + Math.random() * 0.4).toFixed(2);
           const ustOdd = (1.60 + Math.random() * 0.4).toFixed(2);
           const confColor = item.confidence >= 90 ? '#22c55e' : '#f0b90b';
+          const isLive = item.matchTime === 'CANLI' || idx === 0; // Mocking live status for demo
 
           return (
             <div
@@ -71,7 +72,10 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
             >
               {/* Time */}
               <div>
-                <div style={{ fontSize: '10px', fontWeight: 800, color: '#f0b90b' }}>{item.matchTime || '21:00'}</div>
+                <div style={{ fontSize: '10px', fontWeight: 800, color: isLive ? '#ef4444' : '#f0b90b', display: 'flex', alignItems: 'center' }}>
+                    {isLive && <span className="live-pulsating-dot" />}
+                    {isLive ? 'CANLI' : item.matchTime || '21:00'}
+                </div>
                 <div style={{ fontSize: '6px', fontWeight: 700, color: '#333', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '1px' }}>{item.league?.substring(0, 12)}</div>
               </div>
 

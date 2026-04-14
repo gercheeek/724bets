@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Coupon } from '../types';
 import { demoCoupons } from '../demoData';
 import { Zap, Shield, Flame, ChevronRight, ArrowRight } from 'lucide-react';
@@ -7,6 +7,35 @@ interface PortalCouponsTeaserProps {
     coupons?: Coupon[];
     onViewChange: (view: string) => void;
 }
+
+const AnimatedNumber: React.FC<{ value: number }> = ({ value }) => {
+    const [displayVal, setDisplayVal] = useState(1);
+
+    useEffect(() => {
+        let start = 1.00;
+        const end = value;
+        if (start === end) return;
+        
+        const duration = 1000;
+        const steps = 60;
+        const increment = (end - start) / steps;
+        const stepTime = Math.abs(Math.floor(duration / steps));
+        
+        const timer = setInterval(() => {
+            start += increment;
+            if ((increment > 0 && start >= end) || (increment < 0 && start <= end)) {
+                setDisplayVal(end);
+                clearInterval(timer);
+            } else {
+                setDisplayVal(Number(start.toFixed(2)));
+            }
+        }, stepTime);
+        
+        return () => clearInterval(timer);
+    }, [value]);
+
+    return <span>{displayVal.toFixed(2)}</span>;
+};
 
 const PortalCouponsTeaser: React.FC<PortalCouponsTeaserProps> = ({ coupons, onViewChange }) => {
     const baseCoupons = (coupons && coupons.length > 0) ? coupons : demoCoupons;
@@ -43,8 +72,9 @@ const PortalCouponsTeaser: React.FC<PortalCouponsTeaserProps> = ({ coupons, onVi
                         <div
                             key={coupon.id}
                             onClick={() => onViewChange('coupons')}
+                            className="gold-beam-effect frosted-glass"
                             style={{ 
-                                background: '#0d0d0d', 
+                                background: 'rgba(13, 13, 13, 0.6)', 
                                 border: '1px solid #1a1a1a', 
                                 borderRadius: '10px', 
                                 padding: '10px 12px', 
@@ -61,7 +91,9 @@ const PortalCouponsTeaser: React.FC<PortalCouponsTeaserProps> = ({ coupons, onVi
                                     <span style={{ fontSize: '8px', fontWeight: 900, color: riskColor, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{riskLabel}</span>
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
-                                    <span style={{ fontSize: '16px', fontWeight: 900, color: '#fff', fontStyle: 'italic' }}>{coupon.totalOdd}</span>
+                                    <span style={{ fontSize: '16px', fontWeight: 900, color: '#fff', fontStyle: 'italic' }}>
+                                        <AnimatedNumber value={parseFloat(coupon.totalOdd)} />
+                                    </span>
                                     <span style={{ fontSize: '10px', fontWeight: 800, color: '#f0b90b', marginLeft: '2px' }}>x</span>
                                 </div>
                             </div>
