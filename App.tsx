@@ -512,24 +512,6 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      {isMaintenanceActive && view !== 'admin' ? (
-        <MaintenanceScreen 
-          message={siteStatusConfig.maintenanceMessage} 
-          onAdminLogin={() => setAuthModalMode('admin')}
-        />
-      ) : (
-        <div style={{
-          maxHeight: appStage === 'loading' ? '100vh' : 'auto',
-          overflow: appStage === 'loading' ? 'hidden' : 'visible',
-          minHeight: '100vh',
-          background: 'var(--bg-main)',
-          color: 'var(--text-primary)',
-          overflowX: 'hidden',
-          position: 'relative'
-        }}>
-
-      {appStage === 'loading' && <AppLoader />}
-
       {/* Auth Modal Overlay */}
       {authModalMode && (
         <AuthModal
@@ -553,6 +535,25 @@ const App: React.FC = () => {
           onClose={() => setAuthModalMode(null)}
         />
       )}
+
+      {isMaintenanceActive && view !== 'admin' ? (
+        <MaintenanceScreen 
+          message={siteStatusConfig.maintenanceMessage} 
+          onAdminLogin={() => setAuthModalMode('admin')}
+        />
+      ) : (
+        <div style={{
+          maxHeight: appStage === 'loading' ? '100vh' : 'auto',
+          overflow: appStage === 'loading' ? 'hidden' : 'visible',
+          minHeight: '100vh',
+          background: 'var(--bg-main)',
+          color: 'var(--text-primary)',
+          overflowX: 'hidden',
+          position: 'relative'
+        }}>
+
+      {appStage === 'loading' && <AppLoader />}
+
 
       <Header
         onAdminClick={() => {
