@@ -533,6 +533,7 @@ const App: React.FC = () => {
             setView('admin');
           }}
           onClose={() => setAuthModalMode(null)}
+          hideMemberLogin={isMaintenanceActive && authModalMode === 'admin'}
         />
       )}
 
