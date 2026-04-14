@@ -581,8 +581,7 @@ const App: React.FC = () => {
         <div style={{ visibility: appStage !== 'loading' ? 'visible' : 'hidden', height: appStage === 'loading' ? '100vh' : 'auto', overflow: appStage === 'loading' ? 'hidden' : 'visible' }}>
           {view === 'home' && (
             <>
-              {/* ═══ PORTAL TICKER ═══ */}
-              <PortalTicker analyses={analyses} liveOddsConfig={liveOddsConfig} />
+              {/* Redundant PortalTicker removed in favor of Header Ticker */}
 
               {/* ═══ PORTAL BODY (Sidebar + Content) ═══ */}
               <div className="portal-body">
