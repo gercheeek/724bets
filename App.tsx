@@ -585,7 +585,8 @@ const App: React.FC = () => {
 
               {/* ═══ PORTAL BODY (Sidebar + Content) ═══ */}
               <div className="portal-body">
-                {/* Left Sidebar removed as requested */}
+                {/* Left Side Spacer - Keeps the content centered and balanced */}
+                <div className="hidden lg:block"></div>
 
                 {/* Main Content: Match List */}
                 <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
