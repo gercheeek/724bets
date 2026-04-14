@@ -3,9 +3,10 @@ import { Settings, Tool, Clock, Lock } from 'lucide-react';
 
 interface MaintenanceScreenProps {
   message?: string;
+  onAdminLogin?: () => void;
 }
 
-const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message }) => {
+const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminLogin }) => {
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6"
       style={{
@@ -24,7 +25,7 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message }) => {
             <Settings className="w-10 h-10 text-black animate-spin" style={{ animationDuration: '4s' }} />
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white mb-2">
-            724<span className="text-amber-500">BETS</span>
+            724<span className="text-amber-500">BAHİS.NET</span>
           </h1>
           <p className="text-zinc-500 font-bold tracking-[0.3em] uppercase text-xs">Premium Gaming & Analysis</p>
         </div>
@@ -58,11 +59,19 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message }) => {
               </div>
             ))}
           </div>
+
+          <button
+            onClick={onAdminLogin}
+            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-zinc-800/50 hover:bg-amber-500/10 border border-zinc-700 hover:border-amber-500/30 text-[10px] font-black text-zinc-500 hover:text-amber-500 uppercase tracking-widest transition-all duration-300 group"
+          >
+            <Lock className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+            YETKİLİ GİRİŞİ
+          </button>
         </div>
 
         {/* Footer info */}
         <p className="mt-8 text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
-           © 2026 724BETS · Güven ve Hız Bir Arada
+           © 2026 724BAHİS.NET · Güven ve Hız Bir Arada
         </p>
       </div>
       

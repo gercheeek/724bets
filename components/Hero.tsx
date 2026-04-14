@@ -47,7 +47,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             <span className="text-[#FFC107]">ANALİZ</span> İşidir.
           </h2>
           <p className="text-lg max-w-2xl mx-auto font-medium leading-relaxed mb-8" style={{ color: 'var(--text-muted)' }}>
-            724Bets, sadece tahmin paylaşmaz. İstatistik, form, xG ve maç içi senaryolarla
+            724BAHİS.NET, sadece tahmin paylaşmaz. İstatistik, form, xG ve maç içi senaryolarla
             veri destekli profesyonel analizler üretir.
           </p>
           <button

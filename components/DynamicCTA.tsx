@@ -31,7 +31,7 @@ const DynamicCTA: React.FC<DynamicCTAProps> = ({ onNavigate }) => {
                         </span>
                     </h2>
                     <p className="mt-6 max-w-2xl mx-auto text-sm md:text-base font-medium leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                        724Bets, sadece sıradan tahminler paylaşmaz. Kusursuz istatistik, anlık takım formu, xG verileri ve yapay zeka destekli detaylı maç içi senaryolarla profesyonel analizler üretir.
+                        724BAHİS.NET, sadece sıradan tahminler paylaşmaz. Kusursuz istatistik, anlık takım formu, xG verileri ve yapay zeka destekli detaylı maç içi senaryolarla profesyonel analizler üretir.
                     </p>
                 </div>
 

@@ -75,8 +75,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localHashtags, setLocalHashtags] = useState(hashtags);
   const [localWheelConfig, setLocalWheelConfig] = useState<WheelConfig>({ ...wheelConfig });
   const [localBjConfig, setLocalBjConfig] = useState<BlackjackConfig>(bjConfig || { rewards: [], cooldownHours: 4, dealerHitSoft17: true, lastPlayTime: 0 });
-  const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: '724BAHİS Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
-  const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: '724BAHİS', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
+  const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: '724BAHİS.NET Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
+  const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: '724BAHİS.NET', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
 
   const [localSiteStatus, setLocalSiteStatus] = useState<SiteStatusConfig>(siteStatusConfig || { isMaintenanceMode: false, maintenanceMessage: 'Sistemlerimizde bakım çalışması var.' });
 
@@ -571,7 +571,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         expectedGoals: (1.5 + (hashString(homeTeam) % 20) / 10).toFixed(1), // 1.5 to 3.4
 
         bookieOdds: [
-          { name: '724BAHİS', odd1: (1.45 + Math.random() * 0.4).toFixed(2), odd2: (1.50 + Math.random() * 0.4).toFixed(2), link: 'https://' },
+          { name: '724BAHİS.NET', odd1: (1.45 + Math.random() * 0.4).toFixed(2), odd2: (1.50 + Math.random() * 0.4).toFixed(2), link: 'https://' },
           { name: 'BETKOM', odd1: (1.42 + Math.random() * 0.4).toFixed(2), odd2: (1.48 + Math.random() * 0.4).toFixed(2), link: 'https://' },
           { name: 'MARSBAHİS', odd1: (1.48 + Math.random() * 0.4).toFixed(2), odd2: (1.55 + Math.random() * 0.4).toFixed(2), link: 'https://', isHighest: true }
         ],
@@ -980,7 +980,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     value={localWelcomePopup.title}
                     onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, title: e.target.value })}
                     className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold focus:border-[#f0b90b]/50 transition-all"
-                    placeholder="Örn: 724BAHİS"
+                    placeholder="Örn: 724BAHİS.NET"
                   />
                 </div>
                 <div className="space-y-2">
@@ -1587,7 +1587,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           recentHistory: '8 Kazanç',
                           expectedGoals: '3.1',
                           bookieOdds: [
-                            { name: '724BAHİS', odd1: '1.72', odd2: '1.85', link: 'https://' },
+                            { name: '724BAHİS.NET', odd1: '1.72', odd2: '1.85', link: 'https://' },
                             { name: 'BETKOM', odd1: '1.70', odd2: '1.83', link: 'https://' },
                             { name: 'MARSBAHİS', odd1: '1.75', odd2: '1.88', link: 'https://', isHighest: true }
                           ],
@@ -2571,7 +2571,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             <span className="text-3xl">⭐</span>
             <div>
               <h2 className="text-white font-black text-xl uppercase tracking-tight">Sadakat Programı Ayarları</h2>
-              <p className="text-zinc-500 text-xs font-bold">724bets.net × 724BAHİS Loyalty/Gamification</p>
+              <p className="text-zinc-500 text-xs font-bold">724bahis.net.net × 724BAHİS.NET Loyalty/Gamification</p>
             </div>
           </div>
 
@@ -2865,7 +2865,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               <h2 className="text-2xl font-black text-white flex items-center gap-3">
                 <MessageSquare className="text-blue-400" /> KULLANICI MESAJLARI
               </h2>
-              <p className="text-zinc-500 text-xs font-bold uppercase mt-1">724BAHİS yatırımları ve üye bildirimleri</p>
+              <p className="text-zinc-500 text-xs font-bold uppercase mt-1">724BAHİS.NET yatırımları ve üye bildirimleri</p>
             </div>
           </div>
 

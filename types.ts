@@ -303,7 +303,7 @@ export interface UserLoyalty {
 export interface LoyaltyConfig {
   rules: LoyaltyTriggerRule[];
   marketItems: MarketItem[];
-  programName: string;    // e.g. "724BETS Sadakat Programı"
+  programName: string;    // e.g. "724BAHİS.NET Sadakat Programı"
   coinName: string;       // e.g. "Coin" or "BP"
   isActive: boolean;
 }
@@ -345,7 +345,7 @@ export const NEWS_CATEGORIES: { name: string; color: string }[] = [
   { name: 'Tenis', color: '#06b6d4' },
 ];
 
-// ─── 724BETS Çarkıfelek & Kasa Sistemi ──────────────────────────────────────
+// ─── 724BAHİS.NET Çarkıfelek & Kasa Sistemi ──────────────────────────────────────
 export interface WheelParticipant {
   id: string;
   name: string;

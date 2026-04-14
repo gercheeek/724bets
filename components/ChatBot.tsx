@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, ChevronDown } from 'lucide-react';
 
 // ─────────────── KNOWLEDGE BASE ───────────────
-const WHATSAPP_LINK = 'https://wa.me/905XXXXXXXXX?text=724bets.net%20sitesinden%20destek%20istiyorum';
+const WHATSAPP_LINK = 'https://wa.me/905XXXXXXXXX?text=724bahis.net.net%20sitesinden%20destek%20istiyorum';
 
 interface Message {
     from: 'bot' | 'user';
@@ -14,12 +14,12 @@ const now = () => new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minu
 
 const MATCH_SCHEDULE: Record<string, string[]> = {
     '1 Mart': [
-        '🏀 NBA — OKC Thunder vs Denver Nuggets\n🕒 Saat: 04:00 TSİ\n📺 Yayın: 724bets.net',
-        '🏀 EuroLeague — Anadolu Efes Maçı\n🕒 Saat: 20:30 TSİ\n📺 Yayın: 724bets.net',
+        '🏀 NBA — OKC Thunder vs Denver Nuggets\n🕒 Saat: 04:00 TSİ\n📺 Yayın: 724bahis.net.net',
+        '🏀 EuroLeague — Anadolu Efes Maçı\n🕒 Saat: 20:30 TSİ\n📺 Yayın: 724bahis.net.net',
     ],
     '2 Mart': [
-        '🏀 BSL — Bursaspor Maçı\n🕒 Saat: 19:00 TSİ\n📺 Yayın: 724bets.net',
-        '🏀 NBA — Golden State Warriors Maçı\n🕒 Saat: 04:30 TSİ\n📺 Yayın: 724bets.net',
+        '🏀 BSL — Bursaspor Maçı\n🕒 Saat: 19:00 TSİ\n📺 Yayın: 724bahis.net.net',
+        '🏀 NBA — Golden State Warriors Maçı\n🕒 Saat: 04:30 TSİ\n📺 Yayın: 724bahis.net.net',
     ],
 };
 
@@ -30,7 +30,7 @@ function getBotReply(input: string): string {
 
     // WhatsApp / Support triggers
     if (SUPPORT_TRIGGERS.some(t => msg.includes(t))) {
-        return `Size daha hızlı yardımcı olabilmemiz için lütfen 724bets.net WhatsApp hattımıza yazın:\n\n👉 ${WHATSAPP_LINK}`;
+        return `Size daha hızlı yardımcı olabilmemiz için lütfen 724bahis.net.net WhatsApp hattımıza yazın:\n\n👉 ${WHATSAPP_LINK}`;
     }
 
     // Match schedule queries
@@ -52,12 +52,12 @@ function getBotReply(input: string): string {
 
     // NBA
     if (msg.includes('nba') || msg.includes('basketbol')) {
-        return `🏀 NBA & Basketbol yayınlarımızı 724bets.net üzerinden canlı takip edebilirsiniz!\n\nYaklaşan NBA maçları için günlük yayın akışını menüden görebilirsiniz. Özel maç sorularınız için:\n📅 1 Mart: OKC - Denver (04:00 TSİ)\n📅 2 Mart: GSW maçı (04:30 TSİ)`;
+        return `🏀 NBA & Basketbol yayınlarımızı 724bahis.net.net üzerinden canlı takip edebilirsiniz!\n\nYaklaşan NBA maçları için günlük yayın akışını menüden görebilirsiniz. Özel maç sorularınız için:\n📅 1 Mart: OKC - Denver (04:00 TSİ)\n📅 2 Mart: GSW maçı (04:30 TSİ)`;
     }
 
     // Football
     if (msg.includes('futbol') || msg.includes('süper lig') || msg.includes('premier') || msg.includes('la liga')) {
-        return `⚽ Futbol yayınları ve analizleri için 724bets.net'in **Analizler** bölümünü inceleyin!\n\nGünlük maç tahminlerini ve istatistiksel analizlerimizi ücretsiz görüntüleyebilirsiniz.`;
+        return `⚽ Futbol yayınları ve analizleri için 724bahis.net.net'in **Analizler** bölümünü inceleyin!\n\nGünlük maç tahminlerini ve istatistiksel analizlerimizi ücretsiz görüntüleyebilirsiniz.`;
     }
 
     // EuroLeague / BSL
@@ -82,12 +82,12 @@ function getBotReply(input: string): string {
 
     // Hello / Greeting
     if (msg.includes('merhaba') || msg.includes('selam') || msg.includes('hey') || msg === 'hi' || msg === 'hello') {
-        return `Merhaba! 👋 Ben 724bets.net asistanıyım.\n\nSize şu konularda yardımcı olabilirim:\n• 🏀 Maç saatleri & yayın programı\n• 📊 Analiz & tahmin bilgisi\n• 🔧 Teknik destek\n• 💬 Canlı destek yönlendirme\n\nNasıl yardımcı olabilirim?`;
+        return `Merhaba! 👋 Ben 724bahis.net.net asistanıyım.\n\nSize şu konularda yardımcı olabilirim:\n• 🏀 Maç saatleri & yayın programı\n• 📊 Analiz & tahmin bilgisi\n• 🔧 Teknik destek\n• 💬 Canlı destek yönlendirme\n\nNasıl yardımcı olabilirim?`;
     }
 
-    // 724BETS / sponsors
-    if (msg.includes('724bets') || msg.includes('sponsor') || msg.includes('reklam')) {
-        return `✨ 724BETS, sitemizin ana sponsorudur.\n\nAyrıcalıklı bonus ve kampanyalar için:\n🌐 724bets.net\n\nİş birliği talepleriniz için:\n👉 ${WHATSAPP_LINK}`;
+    // 724BAHİS.NET / sponsors
+    if (msg.includes('724bahis.net') || msg.includes('sponsor') || msg.includes('reklam')) {
+        return `✨ 724BAHİS.NET, sitemizin ana sponsorudur.\n\nAyrıcalıklı bonus ve kampanyalar için:\n🌐 724bahis.net.net\n\nİş birliği talepleriniz için:\n👉 ${WHATSAPP_LINK}`;
     }
 
     // Default
@@ -106,7 +106,7 @@ const ChatBot: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([
         {
             from: 'bot',
-            text: 'Merhaba! 👋 Ben Banu, 724bets.net canlı destek asistanınızım. Size nasıl yardımcı olabilirim? 😊',
+            text: 'Merhaba! 👋 Ben Banu, 724bahis.net.net canlı destek asistanınızım. Size nasıl yardımcı olabilirim? 😊',
             time: now(),
         },
     ]);

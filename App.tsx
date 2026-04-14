@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import Header from './components/Header';
+import { Crown } from 'lucide-react';
 import Hero from './components/Hero';
 import DashboardHero from './components/DashboardHero';
 import AppLoader from './components/AppLoader';
@@ -159,16 +160,16 @@ const App: React.FC = () => {
     // 3. Branding Migration for Marquee & Popup
     const storedMarquee = localStorage.getItem('site_marquee_config');
     if (storedMarquee && /betlivo/i.test(storedMarquee)) {
-      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724BETS'));
+      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724BAHİS.NET'));
       localStorage.setItem('site_marquee_config', JSON.stringify(parsedMarquee));
       setMarqueeConfig(parsedMarquee);
     }
 
     const storedWelcome = localStorage.getItem('site_welcome_popup');
     if (storedWelcome && /betlivo/i.test(storedWelcome)) {
-      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724BETS'));
+      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724BAHİS.NET'));
       // Also catch the 'BETLIVOX' variant if it exists
-      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BETSX/gi, '724BETS'));
+      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BAHİS.NETX/gi, '724BAHİS.NET'));
       localStorage.setItem('site_welcome_popup', JSON.stringify(cleanedWelcome));
       setWelcomePopupConfig(cleanedWelcome);
     }
@@ -320,7 +321,7 @@ const App: React.FC = () => {
 
         const globalMarquee = await getGlobalConfig('site_marquee_config');
         if (globalMarquee) {
-          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724BETS'));
+          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724BAHİS.NET'));
           setMarqueeConfig(cleaned);
         }
 
@@ -332,7 +333,7 @@ const App: React.FC = () => {
 
         const globalWelcome = await getGlobalConfig('site_welcome_popup');
         if (globalWelcome) {
-          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724BETS').replace(/724BETSX/gi, '724BETS'));
+          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724BAHİS.NET').replace(/724BAHİS.NETX/gi, '724BAHİS.NET'));
           setWelcomePopupConfig(cleaned);
         }
 
@@ -512,7 +513,10 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
       {isMaintenanceActive && view !== 'admin' ? (
-        <MaintenanceScreen message={siteStatusConfig.maintenanceMessage} />
+        <MaintenanceScreen 
+          message={siteStatusConfig.maintenanceMessage} 
+          onAdminLogin={() => setAuthModalMode('admin')}
+        />
       ) : (
         <div style={{
           maxHeight: appStage === 'loading' ? '100vh' : 'auto',
@@ -787,6 +791,15 @@ const App: React.FC = () => {
         </p>
         <div className="footer-hashtags">
           {(hashtags || '').split(',').map((tag, i) => tag.trim() ? <span key={i}>{tag.trim()}</span> : null)}
+        </div>
+        <div className="flex justify-center mt-6">
+          <button 
+            onClick={() => setAuthModalMode('admin')}
+            className="text-zinc-800 hover:text-amber-500 transition-all duration-300 transform hover:scale-125"
+            title="Sistem Girişi"
+          >
+            <Crown size={20} />
+          </button>
         </div>
       </footer>
 

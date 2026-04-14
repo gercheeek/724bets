@@ -13,23 +13,23 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
             titleLine1: "%300",
             titleLine2: "NAKİT!",
             desc: "Pazartesi ve Cuma Günlerine Özel Yatırım Bonusu",
-            link: "https://724bets.net",
+            link: "https://724bahis.net.net",
             btnText: "HEMEN KATIL"
         },
         {
             badge: "00:00 - 08:00",
             titleLine1: "%40 GECE",
             titleLine2: "KAYIP",
-            desc: "724BETS'te Gece Kuşlarına Özel Anlık Kayıp Bonusu",
-            link: "https://724bets.net",
+            desc: "724BAHİS.NET'te Gece Kuşlarına Özel Anlık Kayıp Bonusu",
+            link: "https://724bahis.net.net",
             btnText: "HEMEN AL"
         },
         {
             badge: "SADAKAT",
             titleLine1: "HAFTALIK",
             titleLine2: "%15 İADE",
-            desc: "Her Hafta %15 Sadakat Bonusu 724BETS'te",
-            link: "https://724bets.net",
+            desc: "Her Hafta %15 Sadakat Bonusu 724BAHİS.NET'te",
+            link: "https://724bahis.net.net",
             btnText: "GÜVENCEYE AL"
         }
     ];
@@ -189,7 +189,7 @@ const BrandSidePanel: React.FC<BrandSidePanelProps> = ({ position = 'left' }) =>
             </style>
 
             <div className={`brand-side-panel ${position}`}>
-                <div className="panel-header">724BETS Teklifler</div>
+                <div className="panel-header">724BAHİS.NET Teklifler</div>
                 
                 <div id="campaign-wrapper">
                     {slides.map((slide, index) => (

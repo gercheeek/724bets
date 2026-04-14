@@ -18,14 +18,14 @@ interface PromoWheelProps {
     isAdmin?: boolean;
 }
 
-// ─── Utility: Build segments with 2 fixed 724BAHİS slices at opposite poles ──
+// ─── Utility: Build segments with 2 fixed 724BAHİS.NET slices at opposite poles ──
 function buildSegments(participants: WheelParticipant[]) {
     const names = participants.map(p => p.name);
     if (names.length === 0) {
         return [
-            { label: '724BAHİS', isFeatured: true },
+            { label: '724BAHİS.NET', isFeatured: true },
             { label: 'Katılımcı Yok', isFeatured: false },
-            { label: '724BAHİS', isFeatured: true },
+            { label: '724BAHİS.NET', isFeatured: true },
             { label: 'Katılımcı Yok', isFeatured: false },
         ];
     }
@@ -35,12 +35,12 @@ function buildSegments(participants: WheelParticipant[]) {
     const segments: { label: string; isFeatured: boolean }[] = [];
     // First half of participants
     firstHalf.forEach(n => segments.push({ label: n, isFeatured: false }));
-    // First 724BAHİS segment
-    segments.push({ label: '724BAHİS', isFeatured: true });
+    // First 724BAHİS.NET segment
+    segments.push({ label: '724BAHİS.NET', isFeatured: true });
     // Second half
     secondHalf.forEach(n => segments.push({ label: n, isFeatured: false }));
-    // Second 724BAHİS segment (opposite pole)
-    segments.push({ label: '724BAHİS', isFeatured: true });
+    // Second 724BAHİS.NET segment (opposite pole)
+    segments.push({ label: '724BAHİS.NET', isFeatured: true });
     return segments;
 }
 
@@ -122,7 +122,7 @@ const LootBox: React.FC<{
                     boxShadow: `0 0 60px rgba(240,185,11,0.5), inset 0 2px 0 rgba(255,255,255,0.3)`,
                 }}>
                     <span style={{ fontSize: 64 }}>📦</span>
-                    <span style={{ color: '#000', fontWeight: 900, fontSize: 18, letterSpacing: 2 }}>724BAHİS</span>
+                    <span style={{ color: '#000', fontWeight: 900, fontSize: 18, letterSpacing: 2 }}>724BAHİS.NET</span>
                     <span style={{ color: 'rgba(0,0,0,0.5)', fontWeight: 700, fontSize: 11, letterSpacing: 3 }}>GANİMET KASASI</span>
                 </div>
             </div>
@@ -358,7 +358,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                 targetAngle = fullRotations + Math.random() * 2 * Math.PI;
             }
         } else if (config.featuredTrigger) {
-            // Force to one of the 724BETS segments
+            // Force to one of the 724BAHİS.NET segments
             const featuredIndices = segments.map((s, i) => s.isFeatured ? i : -1).filter(i => i >= 0);
             const chosen = featuredIndices[Math.floor(Math.random() * featuredIndices.length)];
             const segCenter = chosen * segmentAngle + segmentAngle / 2;
@@ -399,20 +399,20 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                 setWinner(winningSeg.label);
 
                 if (winningSeg.isFeatured) {
-                    // 724BAHİS Kasa!
+                    // 724BAHİS.NET Kasa!
                     const availablePrizes = config.prizes.filter(p => p.stock > 0);
                     const prize = availablePrizes.length > 0
                         ? availablePrizes[Math.floor(Math.random() * availablePrizes.length)]
                         : null;
                     setLootPrize(prize);
-                    setLootWinner('724BAHİS');
+                    setLootWinner('724BAHİS.NET');
                     setTimeout(() => setShowLootBox(true), 800);
                     // Deduct stock
                     if (prize) {
                         const updatedPrizes = config.prizes.map(p =>
                             p.id === prize.id ? { ...p, stock: p.stock - 1 } : p
                         );
-                        const entry: WheelHistoryEntry = { winner: '724BAHİS KASA', prize: prize.name, timestamp: Date.now() };
+                        const entry: WheelHistoryEntry = { winner: '724BAHİS.NET KASA', prize: prize.name, timestamp: Date.now() };
                         onConfigChange({ ...config, prizes: updatedPrizes, history: [entry, ...config.history] });
                     }
                 } else {
@@ -513,7 +513,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                     marginBottom: 8,
                 }}>
-                    🎡 724BAHİS ÇARKIFELEĞİ
+                    🎡 724BAHİS.NET ÇARKIFELEĞİ
                 </h1>
                 <p style={{ color: '#71717a', fontWeight: 700, fontSize: 14, letterSpacing: 2, textTransform: 'uppercase' }}>
                     Canlı Yayın Çekiliş Sistemi
@@ -709,7 +709,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                             )}
                         </div>
 
-                        {/* 724BAHİS Trigger */}
+                        {/* 724BAHİS.NET Trigger */}
                         <div style={{ marginBottom: 20 }}>
                             <button
                                 onClick={() => onConfigChange({ ...config, featuredTrigger: !config.featuredTrigger })}
@@ -722,7 +722,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                                     letterSpacing: 1, transition: 'all 0.3s ease',
                                 }}
                             >
-                                {config.featuredTrigger ? '✅ 724BAHİS TRİGGER AKTİF' : '💤 724BAHİS TRİGGER'}
+                                {config.featuredTrigger ? '✅ 724BAHİS.NET TRİGGER AKTİF' : '💤 724BAHİS.NET TRİGGER'}
                             </button>
                             {config.featuredTrigger && (
                                 <p style={{ color: SITE_GOLD, fontSize: 11, fontWeight: 700, marginTop: 6 }}>

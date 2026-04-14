@@ -57,20 +57,20 @@ export const BRANDS: Brand[] = [
 
 export const DEFAULT_MARQUEE_CONFIG: MarqueeConfig = {
   isActive: true,
-  text: 'Hoş geldiniz! En yüksek oranlar ve anında ödeme 724BETS güvencesiyle!',
+  text: 'Hoş geldiniz! En yüksek oranlar ve anında ödeme 724BAHİS.NET güvencesiyle!',
   speed: 50,
-  color: '#FFC107', // 724BETS Yellow
+  color: '#FFC107', // 724BAHİS.NET Yellow
   isBold: true,
 };
 
 export const DEFAULT_WELCOME_POPUP_CONFIG: WelcomePopupConfig = {
   isActive: true,
-  title: '724BAHİS',
+  title: '724BAHİS.NET',
   subtitle: "Türkiye'nin En Dinamik ve Güvenilir Bahis Platformu",
   offerMain: '%200 HOŞGELDİN BONUSU',
   offerSub: 'İlk yatırımınıza özel · Anında hesabınıza yüklenir',
   buttonText: '🚀 HEMEN KAYDOL — ÜCRETSİZ',
-  buttonLink: 'https://724bets.net',
+  buttonLink: 'https://724bahis.net',
 };
 
 export const DEFAULT_LIVE_ODDS_CONFIG: LiveOddsConfig = {

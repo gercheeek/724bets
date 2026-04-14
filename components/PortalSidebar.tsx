@@ -56,7 +56,7 @@ const PortalSidebar: React.FC<PortalSidebarProps> = ({
           <Target className="w-4 h-4" />
         </div>
         <div>
-          <div className="portal-sb-logo-title">724BAHİS</div>
+          <div className="portal-sb-logo-title">724BAHİS.NET</div>
           <div className="portal-sb-logo-sub">Premium Analiz</div>
         </div>
       </div>

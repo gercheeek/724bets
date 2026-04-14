@@ -16,7 +16,7 @@ const AppLoader: React.FC = () => {
             <div className="relative mb-12 animate-float">
                 <div className="absolute inset-0 bg-[#FFC107] blur-[100px] opacity-20 animate-pulse pointer-events-none"></div>
                 <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter" style={{ background: 'linear-gradient(135deg, #f0b90b 0%, #FFC107 50%, #d4a008 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 0 20px rgba(240,185,11,0.4))' }}>
-                    724BETS
+                    724BAHİS.NET
                 </h1>
             </div>
 
