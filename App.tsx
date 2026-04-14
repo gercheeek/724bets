@@ -590,6 +590,10 @@ const App: React.FC = () => {
 
                 {/* Main Content: Match List */}
                 <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                  <PortalCouponsTeaser 
+                    coupons={coupons}
+                    onViewChange={handleViewChange}
+                  />
                   <PortalMatchList
                     analyses={analyses}
                     selectedLeague={portalLeague}
@@ -598,10 +602,6 @@ const App: React.FC = () => {
                   <PortalNewsTeaser 
                     onViewChange={handleViewChange}
                     onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  />
-                  <PortalCouponsTeaser 
-                    coupons={coupons}
-                    onViewChange={handleViewChange}
                   />
                 </div>
 

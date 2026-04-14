@@ -66,40 +66,40 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
             <div
               key={item.id}
               className="portal-match-card"
-              style={{ padding: '12px 14px', minHeight: 'auto', marginBottom: '10px' }}
+              style={{ padding: '8px 12px', minHeight: 'auto', marginBottom: '8px' }}
               onClick={() => onNavigate('analysis')}
             >
               {/* Time Column */}
-              <div className="portal-mc-time">
-                <div className="portal-mc-date">{formatDate(item.matchDate)}</div>
-                <div className="portal-mc-hour">{item.matchTime || '21:00'}</div>
-                <div className="portal-mc-comp">{item.league}</div>
+              <div className="portal-mc-time" style={{ gap: '1px' }}>
+                <div className="portal-mc-date" style={{ fontSize: '7px' }}>{formatDate(item.matchDate)}</div>
+                <div className="portal-mc-hour" style={{ fontSize: '11px' }}>{item.matchTime || '21:00'}</div>
+                <div className="portal-mc-comp" style={{ fontSize: '7px' }}>{item.league}</div>
               </div>
 
               {/* Teams Column */}
-              <div>
-                <div className="portal-mc-home">{item.homeTeam}</div>
-                <div className="portal-mc-vs">vs</div>
-                <div className="portal-mc-away">{item.awayTeam}</div>
+              <div style={{ gap: '1px', display: 'flex', flexDirection: 'column' }}>
+                <div className="portal-mc-home" style={{ fontSize: '11px' }}>{item.homeTeam}</div>
+                <div className="portal-mc-vs" style={{ fontSize: '8px', margin: '0' }}>vs</div>
+                <div className="portal-mc-away" style={{ fontSize: '11px' }}>{item.awayTeam}</div>
               </div>
 
               {/* Right Column: Prediction + Stats */}
               <div className="portal-mc-right">
-                <div className={`portal-pred-badge ${isHome ? 'portal-pred-home' : 'portal-pred-away'}`}>
+                <div className={`portal-pred-badge ${isHome ? 'portal-pred-home' : 'portal-pred-away'}`} style={{ fontSize: '9px', padding: '2px 8px' }}>
                   {item.prediction}
                 </div>
-                <div className="portal-mc-stats">
-                  <div className="portal-ms">
-                    <div className="portal-ms-v">{kgVarOdd}</div>
-                    <div className="portal-ms-k">KG Var</div>
+                <div className="portal-mc-stats" style={{ gap: '8px' }}>
+                  <div className="portal-ms" style={{ minWidth: '35px' }}>
+                    <div className="portal-ms-v" style={{ fontSize: '10px' }}>{kgVarOdd}</div>
+                    <div className="portal-ms-k" style={{ fontSize: '6px' }}>KG Var</div>
                   </div>
-                  <div className="portal-ms">
-                    <div className="portal-ms-v">{ustOdd}</div>
-                    <div className="portal-ms-k">2.5 Üst</div>
+                  <div className="portal-ms" style={{ minWidth: '35px' }}>
+                    <div className="portal-ms-v" style={{ fontSize: '10px' }}>{ustOdd}</div>
+                    <div className="portal-ms-k" style={{ fontSize: '6px' }}>2.5 ÜST</div>
                   </div>
-                  <div className="portal-ms">
-                    <div className={`portal-ms-v portal-conf-v ${confClass}`}>%{item.confidence}</div>
-                    <div className="portal-ms-k">Güven</div>
+                  <div className="portal-ms" style={{ minWidth: '35px' }}>
+                    <div className={`portal-ms-v portal-conf-v ${confClass}`} style={{ fontSize: '10px' }}>%{item.confidence}</div>
+                    <div className="portal-ms-k" style={{ fontSize: '6px' }}>Güven</div>
                   </div>
                 </div>
               </div>
