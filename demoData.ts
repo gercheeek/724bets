@@ -2,7 +2,44 @@ import { MatchAnalysis, NewsArticle } from './types';
 
 export const demoAnalyses: MatchAnalysis[] = [];
 
-export const demoCoupons: any[] = [];
+export const demoCoupons: any[] = [
+    {
+        id: 'coupon-1',
+        title: 'Günün Bankosu',
+        date: new Date().toISOString().split('T')[0],
+        riskLevel: 'LOW',
+        category: 'Futbol',
+        totalOdd: '3.45',
+        matches: [
+            { homeTeam: 'Arsenal', awayTeam: 'Liverpool', prediction: 'MS 1', odd: '1.85', analysis: 'Arsenal iç sahada dominant bir oyun sergiliyor. Liverpool ise savunmada eksiklerle boğuşuyor.' },
+            { homeTeam: 'Real Madrid', awayTeam: 'Barcelona', prediction: '2.5 ÜST', odd: '1.65', analysis: 'El Clasico mücadeleleri genelde bol gollü geçer, iki takımın da hücum hattı formda.' }
+        ]
+    },
+    {
+        id: 'coupon-2',
+        title: 'NBA Gecesi',
+        date: new Date().toISOString().split('T')[0],
+        riskLevel: 'MEDIUM',
+        category: 'Basketbol',
+        totalOdd: '4.10',
+        matches: [
+            { homeTeam: 'LA Lakers', awayTeam: 'GS Warriors', prediction: 'MS 1', odd: '1.90', analysis: 'Lakers, LeBron ve Davis\'in dönüşüyle ivme yakaladı.' },
+            { homeTeam: 'Miami Heat', awayTeam: 'NY Knicks', prediction: '215.5 ÜST', odd: '2.15', analysis: 'İki takımın da tempolu oyunları baremin aşılmasını sağlayacaktır.' }
+        ]
+    },
+    {
+        id: 'coupon-3',
+        title: 'Hafta Sonu Sürprizi',
+        date: new Date().toISOString().split('T')[0],
+        riskLevel: 'HIGH',
+        category: 'Futbol',
+        totalOdd: '12.50',
+        matches: [
+            { homeTeam: 'Dortmund', awayTeam: 'Bayern Münih', prediction: 'MS 1', odd: '3.20', analysis: 'Dortmund bu sezon evinde devlere geçit vermiyor.' },
+            { homeTeam: 'Napoli', awayTeam: 'Juventus', prediction: 'KG VAR', odd: '1.95', analysis: 'Napoli savunması son haftalarda hata yapıyor, Juve boş geçmez.' }
+        ]
+    }
+];
 
 export const demoNews: NewsArticle[] = [
     {

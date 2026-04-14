@@ -610,7 +610,7 @@ const App: React.FC = () => {
                 {/* Right Sidebar: News + Coupons */}
                 <div className="portal-right-sidebar">
                   {/* News Widget ("Gündem") */}
-                  <div style={{ padding: '24px 20px 20px' }}>
+                  <div style={{ padding: '0px 20px 16px' }}>
                     <div className="portal-section-heading">
                       🔥 GÜNDEM & HABERLER
                     </div>
@@ -621,7 +621,7 @@ const App: React.FC = () => {
                   </div>
 
                   {/* Daily Coupons Section */}
-                  <div style={{ padding: '0 20px 24px' }}>
+                  <div style={{ padding: '0 20px 16px' }}>
                     <div className="portal-section-heading" style={{ marginTop: 8 }}>
                       🎫 GÜNÜN KUPONLARI
                     </div>

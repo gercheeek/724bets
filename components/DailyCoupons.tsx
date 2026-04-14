@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Coupon } from '../types';
+import { demoCoupons } from '../demoData';
 import { Ticket, Zap, Flame, Shield, TrendingUp, ChevronRight, BarChart3, X, CheckCircle2, Lock, User } from 'lucide-react';
 
 interface DailyCouponsProps {
@@ -24,7 +25,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
         dates.push(d.toISOString().split('T')[0]);
     }
 
-    const baseCoupons = coupons || [];
+    const baseCoupons = (coupons && coupons.length > 0) ? coupons : demoCoupons;
     const displayCoupons = baseCoupons.filter(c => {
         const matchesDate = selectedDate === 'WEEKLY' ? dates.includes(c.date) : c.date === selectedDate;
         const matchesCategory = selectedCategory === 'Tümü' || c.category === selectedCategory;
@@ -32,24 +33,23 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
     });
 
     return (
-        <section id="daily-coupons" className="relative w-full bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md rounded-2xl p-4 md:p-5 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-5 pb-4 border-b border-zinc-800/50">
+        <section id="daily-coupons" className="relative w-full bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md rounded-2xl p-3 md:p-4 h-full flex flex-col">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/50">
                 <div className="flex items-center gap-2">
-                    <span className="text-xl">🔥</span>
-                    <h3 className="text-white font-black uppercase tracking-widest text-sm">GÜNÜN KUPONLARI</h3>
+                    <span className="text-sm">🔥</span>
+                    <h3 className="text-white font-black uppercase tracking-widest text-[10px]">GÜNÜN KUPONLARI</h3>
                 </div>
             </div>
 
-            <div className="flex overflow-x-auto gap-2 mb-6 pb-2 justify-start scrollbar-none animate-fade-in-up">
+            <div className="flex overflow-x-auto gap-1.5 mb-3 pb-1 justify-start scrollbar-none animate-fade-in-up">
                 <button
                     onClick={() => setSelectedDate('WEEKLY')}
-                    className={`flex flex-col items-center justify-center min-w-[70px] h-[52px] rounded-xl border transition-all duration-300 ${selectedDate === 'WEEKLY'
-                        ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_4px_20px_rgba(240,185,11,0.3)]'
+                    className={`flex flex-col items-center justify-center min-w-[55px] h-[38px] rounded-lg border transition-all duration-300 ${selectedDate === 'WEEKLY'
+                        ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_2px_10px_rgba(240,185,11,0.2)]'
                         : 'bg-zinc-800/20 border-zinc-700/50 text-zinc-500 hover:border-zinc-500 hover:text-white'
                         }`}
                 >
-                    <span className="text-[8px] font-black uppercase tracking-widest mb-0.5">HEPSİ</span>
-                    <span className="text-xs font-bold italic">TÜMÜ</span>
+                    <span className="text-[7px] font-black uppercase tracking-widest leading-none">TÜMÜ</span>
                 </button>
 
                 {dates.slice(0, 5).map((date) => {
@@ -60,27 +60,27 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                         <button
                             key={date}
                             onClick={() => setSelectedDate(date)}
-                            className={`flex flex-col items-center justify-center min-w-[65px] h-[52px] rounded-xl border transition-all duration-300 ${isSelected
-                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_4px_20px_rgba(240,185,11,0.3)]'
+                            className={`flex flex-col items-center justify-center min-w-[55px] h-[38px] rounded-lg border transition-all duration-300 ${isSelected
+                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_2px_10px_rgba(240,185,11,0.2)]'
                                 : 'bg-zinc-800/20 border-zinc-700/50 text-zinc-500 hover:border-zinc-500 hover:text-white'
                                 }`}
                         >
-                            <span className="text-[8px] font-black uppercase tracking-widest mb-0.5">{dayName}</span>
-                            <span className="text-xs font-bold italic">{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
+                            <span className="text-[7px] font-black uppercase tracking-widest mb-0.5 leading-none">{dayName}</span>
+                            <span className="text-[9px] font-bold leading-none">{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
                         </button>
                     );
                 })}
             </div>
 
             {/* Category Filter */}
-            <div className="flex overflow-x-auto gap-2 mb-6 pb-2 justify-start scrollbar-none">
-                {['Tümü', 'Futbol', 'Basketbol', 'Formula 1', 'MotoGP', 'Superbike', 'Tenis'].map(cat => (
+            <div className="flex overflow-x-auto gap-1.5 mb-4 pb-1 justify-start scrollbar-none">
+                {['Tümü', 'Futbol', 'Basketbol', 'Tenis'].map(cat => (
                     <button
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
-                        className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all duration-300 shrink-0 ${
+                        className={`px-3 py-1.5 rounded-lg text-[8px] font-black uppercase tracking-widest border transition-all duration-300 shrink-0 ${
                             selectedCategory === cat
-                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)] scale-105'
+                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_10px_rgba(240,185,11,0.15)]'
                                 : 'bg-transparent border-zinc-700/50 text-zinc-500 hover:border-zinc-500 hover:text-white'
                         }`}
                     >
