@@ -7,11 +7,12 @@ interface DailyCouponsProps {
     coupons?: Coupon[];
     isLoggedIn?: boolean;
     onLoginRequired?: () => void;
+    hideHeading?: boolean;
 }
 
 import { generateSafeAnalysis } from '../utils/helpers';
 
-const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false, onLoginRequired }) => {
+const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false, onLoginRequired, hideHeading = false }) => {
     const baseDateStr = new Date().toISOString().split('T')[0];
     const [selectedDate, setSelectedDate] = useState<string>('WEEKLY'); // Default to Weekly
     const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
@@ -34,12 +35,14 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
 
     return (
         <section id="daily-coupons" className="relative w-full bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md rounded-2xl p-3 md:p-4 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/50">
-                <div className="flex items-center gap-2">
-                    <span className="text-sm">🔥</span>
-                    <h3 className="text-white font-black uppercase tracking-widest text-[10px]">GÜNÜN KUPONLARI</h3>
+            {!hideHeading && (
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/50">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm">🔥</span>
+                        <h3 className="text-white font-black uppercase tracking-widest text-[10px]">GÜNÜN KUPONLARI</h3>
+                    </div>
                 </div>
-            </div>
+            )}
 
             <div className="flex overflow-x-auto gap-1.5 mb-3 pb-1 justify-start scrollbar-none animate-fade-in-up">
                 <button
