@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
+import { demoNews } from '../demoData';
 import { NewsArticle, NEWS_CATEGORIES } from '../types';
 import { Clock, ExternalLink } from 'lucide-react';
 
@@ -20,7 +21,7 @@ const PortalNewsTeaser: React.FC<PortalNewsTeaserProps> = ({ onViewChange, onArt
                 .order('created_at', { ascending: false })
                 .limit(2);
             
-            if (data) {
+            if (data && data.length > 0) {
                 const mapped: NewsArticle[] = data.map(item => ({
                     id: item.id,
                     title: item.title,
@@ -37,6 +38,8 @@ const PortalNewsTeaser: React.FC<PortalNewsTeaserProps> = ({ onViewChange, onArt
                     updatedAt: new Date(item.updated_at).getTime()
                 }));
                 setArticles(mapped);
+            } else {
+                setArticles(demoNews.slice(0, 2));
             }
         };
         fetchNews();

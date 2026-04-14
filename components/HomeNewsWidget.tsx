@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
+import { demoNews } from '../demoData';
 import { NewsArticle, NEWS_CATEGORIES } from '../types';
 import { ChevronRight, Clock, Star } from 'lucide-react';
 
@@ -20,7 +21,7 @@ const HomeNewsWidget: React.FC<HomeNewsWidgetProps> = ({ onViewChange, onArticle
                 .order('created_at', { ascending: false })
                 .limit(4);
             
-            if (data) {
+            if (data && data.length > 0) {
                 const mapped: NewsArticle[] = data.map(item => ({
                     id: item.id,
                     title: item.title,
@@ -37,6 +38,8 @@ const HomeNewsWidget: React.FC<HomeNewsWidgetProps> = ({ onViewChange, onArticle
                     updatedAt: new Date(item.updated_at).getTime()
                 }));
                 setArticles(mapped);
+            } else {
+                setArticles(demoNews.slice(0, 4));
             }
         };
         fetchNews();
