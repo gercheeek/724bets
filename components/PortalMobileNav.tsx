@@ -10,7 +10,7 @@ const PortalMobileNav: React.FC<PortalMobileNavProps> = ({ activeView, onViewCha
   const items = [
     { view: 'home', label: 'Ana Sayfa', icon: <Home style={{ width: 20, height: 20 }} /> },
     { view: 'analysis', label: 'Analizler', icon: <BarChart3 style={{ width: 20, height: 20 }} /> },
-    { view: 'home', label: 'Kuponlar', icon: <Ticket style={{ width: 20, height: 20 }} />, scrollTo: 'daily-coupons' },
+    { view: 'coupons', label: 'Kuponlar', icon: <Ticket style={{ width: 20, height: 20 }} /> },
     { view: 'brands', label: 'Siteler', icon: <Shield style={{ width: 20, height: 20 }} /> },
     { view: 'loyalty', label: 'Profil', icon: <User style={{ width: 20, height: 20 }} /> },
   ];

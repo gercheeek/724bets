@@ -44,11 +44,12 @@ import PortalMatchList from './components/PortalMatchList';
 import BestPicks from './components/BestPicks';
 import PortalMobileNav from './components/PortalMobileNav';
 import PortalNewsTeaser from './components/PortalNewsTeaser';
-
+import PortalCouponsTeaser from './components/PortalCouponsTeaser';
+import CouponsView from './components/CouponsView';
 
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('loading');
-  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway'>('home');
+  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway' | 'coupons'>('home');
 
   // Promo Wheel Config
   const [promoWheelConfig, setPromoWheelConfig] = useState<PromoWheelConfig>(() => {
@@ -605,9 +606,13 @@ const App: React.FC = () => {
                     onViewChange={handleViewChange}
                     onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   />
+                  <PortalCouponsTeaser 
+                    coupons={coupons}
+                    onViewChange={handleViewChange}
+                  />
                 </div>
 
-                {/* Right Sidebar: News + Coupons */}
+                {/* Right Sidebar: News */}
                 <div className="portal-right-sidebar">
                   {/* News Widget ("Gündem") */}
                   <div style={{ padding: '0px 20px 16px' }}>
@@ -617,18 +622,6 @@ const App: React.FC = () => {
                     <HomeNewsWidget
                       onViewChange={handleViewChange}
                       onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                    />
-                  </div>
-
-                  {/* Daily Coupons Section */}
-                  <div style={{ padding: '0 20px 16px' }}>
-                    <div className="portal-section-heading" style={{ marginTop: 8 }}>
-                      🎫 GÜNÜN KUPONLARI
-                    </div>
-                    <DailyCoupons
-                      coupons={coupons}
-                      isLoggedIn={!!(siteUser || userRole)}
-                      onLoginRequired={() => setAuthModalMode('member')}
                     />
                   </div>
                 </div>
@@ -775,6 +768,17 @@ const App: React.FC = () => {
             config={giveawayConfig}
             onConfigChange={handleGiveawayConfigChange}
             isAdmin={!!userRole}
+          />
+        )}
+
+        {view === 'coupons' && (
+          <CouponsView
+            coupons={coupons}
+            siteUser={siteUser}
+            userRole={userRole}
+            setAuthModalMode={setAuthModalMode}
+            onNavigate={handleViewChange}
+            statusConfig={siteStatusConfig}
           />
         )}
       </div>

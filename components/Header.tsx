@@ -95,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({
   /* ── Category list ── */
   const categories: CategoryItem[] = [
     { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
-    { key: 'coupons', view: 'home', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons', scrollTo: 'daily-coupons' },
+    { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
     { key: 'analysis', view: 'analysis', label: 'Analizler', icon: <BarChart3 className={ICON_SIZE} />, visKey: 'analysis' },
     { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
     { key: 'news', view: 'news', label: 'Haberler', icon: <Newspaper className={ICON_SIZE} />, visKey: 'news' },
