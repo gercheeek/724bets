@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, Database } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch } from '../types';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
@@ -41,6 +41,8 @@ interface AdminPanelProps {
   coupons: Coupon[];
   onSaveAnalyses: (analyses: MatchAnalysis[]) => void;
   onSaveCoupons: (coupons: Coupon[]) => void;
+  siteStatusConfig?: SiteStatusConfig;
+  onSaveSiteStatusConfig?: (config: SiteStatusConfig) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -50,11 +52,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   navVisibility, onSaveNavVisibility, marqueeConfig, onSaveMarqueeConfig,
   welcomePopupConfig, onSaveWelcomePopupConfig,
   liveOddsConfig, onSaveLiveOddsConfig,
-  analyses, coupons, onSaveAnalyses, onSaveCoupons
+  analyses, coupons, onSaveAnalyses, onSaveCoupons,
+  siteStatusConfig, onSaveSiteStatusConfig
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility' | 'liveodds'>(isAuthor || isEditor ? 'news' : 'content');
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'visibility' | 'liveodds' | 'system'>(isAuthor || isEditor ? 'news' : 'content');
   const mainRef = useRef<HTMLElement>(null);
 
   // Scroll to top when tab changes
@@ -74,6 +77,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localBjConfig, setLocalBjConfig] = useState<BlackjackConfig>(bjConfig || { rewards: [], cooldownHours: 4, dealerHitSoft17: true, lastPlayTime: 0 });
   const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: '724BAHİS Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
   const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: '724BAHİS', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
+
+  const [localSiteStatus, setLocalSiteStatus] = useState<SiteStatusConfig>(siteStatusConfig || { isMaintenanceMode: false, maintenanceMessage: 'Sistemlerimizde bakım çalışması var.' });
 
   // Live Odds state
   const [localLiveOdds, setLocalLiveOdds] = useState<LiveOddsConfig>(() => {
@@ -156,6 +161,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         { key: 'site_casino_wheel', value: wheelConfig },
         { key: 'site_welcome_popup', value: welcomePopupConfig },
         { key: 'site_live_odds', value: liveOddsConfig },
+        { key: 'site_status', value: localSiteStatus },
       ];
 
       for (const cfg of configs) {
@@ -197,6 +203,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     }
   }, [liveOddsConfig]);
 
+  useEffect(() => {
+    if (siteStatusConfig) setLocalSiteStatus(siteStatusConfig);
+  }, [siteStatusConfig]);
+
   const handleBrandChange = (index: number, field: keyof Brand, value: string) => {
     const updated = [...localBrands];
     updated[index] = { ...updated[index], [field]: value };
@@ -226,6 +236,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     onSaveWheelConfig(localWheelConfig);
     if (onSaveWelcomePopupConfig) {
       onSaveWelcomePopupConfig(localWelcomePopup);
+    }
+    if (onSaveSiteStatusConfig) {
+      onSaveSiteStatusConfig(localSiteStatus);
     }
 
     alert('Tüm sistem değişiklikleri kaydedildi!');
@@ -844,6 +857,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
               <button onClick={() => setActiveTab('giveaway')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'giveaway' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Gift className="w-4 h-4" /> ÇEKİLİŞ YÖNETİMİ
+              </button>
+              <button onClick={() => setActiveTab('system')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'system' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <Settings className="w-4 h-4" /> SİSTEM AYARLARI
               </button>
             </>
           )}
@@ -2938,6 +2954,78 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
         </div>
       )}
+
+      {/* ─── SYSTEM STATUS (MAINTENANCE) TAB ─── */}
+      {activeTab === 'system' && (
+        <div className="space-y-10 animate-fade-in-up">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-black text-white flex items-center gap-3">
+                <Settings className="text-amber-500" /> SİSTEM VE BAKIM
+              </h2>
+              <p className="text-zinc-500 text-xs font-bold uppercase mt-1">Site erişim durumunu ve bakım modunu yönetin</p>
+            </div>
+            <button
+              onClick={() => {
+                onSaveSiteStatusConfig?.(localSiteStatus);
+                alert('Bakım modu ayarları başarıyla kaydedildi!');
+              }}
+              className="bg-primary hover:bg-primary/90 text-black px-6 py-3 rounded-xl font-black flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(240,185,11,0.3)] hover:scale-105"
+            >
+              <Save className="w-5 h-5" /> KAYDET
+            </button>
+          </div>
+
+          <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[30px] shadow-2xl relative overflow-hidden group hover:border-amber-500/50 transition-colors">
+            
+            <div className="flex items-start justify-between mb-8">
+              <div className="space-y-4 w-full">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="text-[12px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                       {localSiteStatus.isMaintenanceMode ? <Lock className="w-4 h-4 text-red-500" /> : <Unlock className="w-4 h-4 text-green-500" />}
+                       BAKIM MODU (MAINTENANCE MODE)
+                    </label>
+                    <p className="text-xs text-zinc-500 mt-1">
+                      Aktif edildiğinde, yöneticiler ve editörler haricindeki tüm kullanıcılara "Bakım Modu" ekranı gösterilir.
+                    </p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={localSiteStatus.isMaintenanceMode}
+                      onChange={(e) => setLocalSiteStatus({...localSiteStatus, isMaintenanceMode: e.target.checked })}
+                      className="sr-only peer"
+                    />
+                    <div className="w-14 h-7 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-amber-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]"></div>
+                  </label>
+                </div>
+
+                <div className="w-full h-px bg-zinc-800/50 my-6" />
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Bakım Modu Açıklaması</label>
+                  <textarea
+                    value={localSiteStatus.maintenanceMessage}
+                    onChange={(e) => setLocalSiteStatus({...localSiteStatus, maintenanceMessage: e.target.value})}
+                    rows={3}
+                    placeholder="Değerli üyelerimiz, sistemlerimizde planlı bir bakım çalışması..."
+                    className="w-full bg-black/50 border border-zinc-800 p-4 rounded-xl text-white font-medium focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-all resize-none text-sm placeholder:text-zinc-700"
+                  />
+                  <p className="text-[10px] text-zinc-600 font-bold uppercase mt-1">Bu mesaj ziyaretçilere Bakım Ekranında gösterilecektir.</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Warning visual depending on mode */}
+            {localSiteStatus.isMaintenanceMode && (
+              <div className="absolute top-0 right-0 p-8 w-64 h-64 bg-red-500/10 blur-[80px] pointer-events-none rounded-full" />
+            )}
+            
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

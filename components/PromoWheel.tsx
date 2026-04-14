@@ -23,24 +23,24 @@ function buildSegments(participants: WheelParticipant[]) {
     const names = participants.map(p => p.name);
     if (names.length === 0) {
         return [
-            { label: '724BAHİS', isBetlivo: true },
-            { label: 'Katılımcı Yok', isBetlivo: false },
-            { label: '724BAHİS', isBetlivo: true },
-            { label: 'Katılımcı Yok', isBetlivo: false },
+            { label: '724BAHİS', isFeatured: true },
+            { label: 'Katılımcı Yok', isFeatured: false },
+            { label: '724BAHİS', isFeatured: true },
+            { label: 'Katılımcı Yok', isFeatured: false },
         ];
     }
     const half = Math.ceil(names.length / 2);
     const firstHalf = names.slice(0, half);
     const secondHalf = names.slice(half);
-    const segments: { label: string; isBetlivo: boolean }[] = [];
+    const segments: { label: string; isFeatured: boolean }[] = [];
     // First half of participants
-    firstHalf.forEach(n => segments.push({ label: n, isBetlivo: false }));
+    firstHalf.forEach(n => segments.push({ label: n, isFeatured: false }));
     // First 724BAHİS segment
-    segments.push({ label: '724BAHİS', isBetlivo: true });
+    segments.push({ label: '724BAHİS', isFeatured: true });
     // Second half
-    secondHalf.forEach(n => segments.push({ label: n, isBetlivo: false }));
+    secondHalf.forEach(n => segments.push({ label: n, isFeatured: false }));
     // Second 724BAHİS segment (opposite pole)
-    segments.push({ label: '724BAHİS', isBetlivo: true });
+    segments.push({ label: '724BAHİS', isFeatured: true });
     return segments;
 }
 
@@ -233,7 +233,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
             ctx.arc(CENTER, CENTER, RADIUS, startAngle, endAngle);
             ctx.closePath();
 
-            if (seg.isBetlivo) {
+            if (seg.isFeatured) {
                 const grad = ctx.createRadialGradient(CENTER, CENTER, 0, CENTER, CENTER, RADIUS);
                 grad.addColorStop(0, '#3d2e00');
                 grad.addColorStop(0.7, '#f0b90b');
@@ -245,8 +245,8 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
             ctx.fill();
 
             // Segment border
-            ctx.strokeStyle = seg.isBetlivo ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.08)';
-            ctx.lineWidth = seg.isBetlivo ? 2 : 1;
+            ctx.strokeStyle = seg.isFeatured ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.08)';
+            ctx.lineWidth = seg.isFeatured ? 2 : 1;
             ctx.stroke();
             ctx.restore();
 
@@ -255,10 +255,10 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
             ctx.translate(CENTER, CENTER);
             ctx.rotate(startAngle + segmentAngle / 2);
             ctx.textAlign = 'right';
-            ctx.font = seg.isBetlivo ? 'bold 16px "Inter", sans-serif' : '13px "Inter", sans-serif';
-            ctx.fillStyle = seg.isBetlivo ? '#000' : '#fff';
-            ctx.shadowColor = seg.isBetlivo ? 'transparent' : 'rgba(0,0,0,0.5)';
-            ctx.shadowBlur = seg.isBetlivo ? 0 : 4;
+            ctx.font = seg.isFeatured ? 'bold 16px "Inter", sans-serif' : '13px "Inter", sans-serif';
+            ctx.fillStyle = seg.isFeatured ? '#000' : '#fff';
+            ctx.shadowColor = seg.isFeatured ? 'transparent' : 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = seg.isFeatured ? 0 : 4;
             const label = seg.label.length > 14 ? seg.label.substring(0, 13) + '…' : seg.label;
             ctx.fillText(label, RADIUS - 18, 5);
             ctx.restore();
@@ -349,7 +349,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
 
         if (config.riggedWinner) {
             // Force to a specific participant
-            const idx = segments.findIndex(s => s.label === config.riggedWinner && !s.isBetlivo);
+            const idx = segments.findIndex(s => s.label === config.riggedWinner && !s.isFeatured);
             if (idx >= 0) {
                 const segCenter = idx * segmentAngle + segmentAngle / 2;
                 // Pointer is at top (-π/2). The segment must align with the pointer.
@@ -357,10 +357,10 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
             } else {
                 targetAngle = fullRotations + Math.random() * 2 * Math.PI;
             }
-        } else if (config.betlivoTrigger) {
-            // Force to one of the BETLİVO segments
-            const betlivoIndices = segments.map((s, i) => s.isBetlivo ? i : -1).filter(i => i >= 0);
-            const chosen = betlivoIndices[Math.floor(Math.random() * betlivoIndices.length)];
+        } else if (config.featuredTrigger) {
+            // Force to one of the 724BETS segments
+            const featuredIndices = segments.map((s, i) => s.isFeatured ? i : -1).filter(i => i >= 0);
+            const chosen = featuredIndices[Math.floor(Math.random() * featuredIndices.length)];
             const segCenter = chosen * segmentAngle + segmentAngle / 2;
             targetAngle = -Math.PI / 2 - segCenter + fullRotations;
         } else {
@@ -398,7 +398,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                 const winningSeg = getWinnerFromAngle(currentA);
                 setWinner(winningSeg.label);
 
-                if (winningSeg.isBetlivo) {
+                if (winningSeg.isFeatured) {
                     // 724BAHİS Kasa!
                     const availablePrizes = config.prizes.filter(p => p.stock > 0);
                     const prize = availablePrizes.length > 0
@@ -438,9 +438,9 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                         onConfigChange({ ...config, riggedWinner: null });
                     }
                 }
-                // Clear betlivo trigger after use
-                if (config.betlivoTrigger) {
-                    onConfigChange({ ...config, betlivoTrigger: false });
+                // Clear featured trigger after use
+                if (config.featuredTrigger) {
+                    onConfigChange({ ...config, featuredTrigger: false });
                 }
             }
         };
@@ -513,7 +513,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                     marginBottom: 8,
                 }}>
-                    🎡 BETLİVO ÇARKIFELEĞİ
+                    🎡 724BAHİS ÇARKIFELEĞİ
                 </h1>
                 <p style={{ color: '#71717a', fontWeight: 700, fontSize: 14, letterSpacing: 2, textTransform: 'uppercase' }}>
                     Canlı Yayın Çekiliş Sistemi
@@ -712,19 +712,19 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                         {/* 724BAHİS Trigger */}
                         <div style={{ marginBottom: 20 }}>
                             <button
-                                onClick={() => onConfigChange({ ...config, betlivoTrigger: !config.betlivoTrigger })}
+                                onClick={() => onConfigChange({ ...config, featuredTrigger: !config.featuredTrigger })}
                                 style={{
                                     width: '100%', padding: '12px 16px', borderRadius: 14,
-                                    background: config.betlivoTrigger ? 'rgba(240,185,11,0.2)' : 'rgba(255,255,255,0.05)',
-                                    border: `2px solid ${config.betlivoTrigger ? SITE_GOLD : 'rgba(255,255,255,0.1)'}`,
-                                    color: config.betlivoTrigger ? SITE_GOLD : '#71717a',
+                                    background: config.featuredTrigger ? 'rgba(240,185,11,0.2)' : 'rgba(255,255,255,0.05)',
+                                    border: `2px solid ${config.featuredTrigger ? SITE_GOLD : 'rgba(255,255,255,0.1)'}`,
+                                    color: config.featuredTrigger ? SITE_GOLD : '#71717a',
                                     fontWeight: 900, fontSize: 13, cursor: 'pointer',
                                     letterSpacing: 1, transition: 'all 0.3s ease',
                                 }}
                             >
-                                {config.betlivoTrigger ? '✅ 724BAHİS TRİGGER AKTİF' : '💤 724BAHİS TRİGGER'}
+                                {config.featuredTrigger ? '✅ 724BAHİS TRİGGER AKTİF' : '💤 724BAHİS TRİGGER'}
                             </button>
-                            {config.betlivoTrigger && (
+                            {config.featuredTrigger && (
                                 <p style={{ color: SITE_GOLD, fontSize: 11, fontWeight: 700, marginTop: 6 }}>
                                     Çark altın dilimde duracak → Kasa açılır!
                                 </p>

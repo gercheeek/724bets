@@ -303,7 +303,7 @@ export interface UserLoyalty {
 export interface LoyaltyConfig {
   rules: LoyaltyTriggerRule[];
   marketItems: MarketItem[];
-  programName: string;    // e.g. "Betlivo Sadakat Programı"
+  programName: string;    // e.g. "724BETS Sadakat Programı"
   coinName: string;       // e.g. "Coin" or "BP"
   isActive: boolean;
 }
@@ -345,7 +345,7 @@ export const NEWS_CATEGORIES: { name: string; color: string }[] = [
   { name: 'Tenis', color: '#06b6d4' },
 ];
 
-// ─── BetLivo Çarkıfelek & Kasa Sistemi ──────────────────────────────────────
+// ─── 724BETS Çarkıfelek & Kasa Sistemi ──────────────────────────────────────
 export interface WheelParticipant {
   id: string;
   name: string;
@@ -369,7 +369,7 @@ export interface PromoWheelConfig {
   prizes: WheelPrize[];
   history: WheelHistoryEntry[];
   riggedWinner: string | null;
-  betlivoTrigger: boolean;
+  featuredTrigger: boolean;
   transparentBg: boolean;
 }
 
@@ -559,4 +559,10 @@ export interface LiveOddsMatch {
 export interface LiveOddsConfig {
     isActive: boolean;
     matches: LiveOddsMatch[];
+}
+
+// ─── Site Status (Maintenance Mode) ──────────────────────────────────────────
+export interface SiteStatusConfig {
+    isMaintenanceMode: boolean;
+    maintenanceMessage: string;
 }

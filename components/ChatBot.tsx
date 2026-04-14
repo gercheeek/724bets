@@ -85,9 +85,9 @@ function getBotReply(input: string): string {
         return `Merhaba! 👋 Ben 724bets.net asistanıyım.\n\nSize şu konularda yardımcı olabilirim:\n• 🏀 Maç saatleri & yayın programı\n• 📊 Analiz & tahmin bilgisi\n• 🔧 Teknik destek\n• 💬 Canlı destek yönlendirme\n\nNasıl yardımcı olabilirim?`;
     }
 
-    // Betlivo / sponsors
-    if (msg.includes('betlivo') || msg.includes('sponsor') || msg.includes('reklam')) {
-        return `✨ Betlivo, 724bets.net'in ana sponsorudur.\n\nAyrıcalıklı bonus ve kampanyalar için:\n🌐 betlivo.com\n\nİş birliği talepleriniz için:\n👉 ${WHATSAPP_LINK}`;
+    // 724BETS / sponsors
+    if (msg.includes('724bets') || msg.includes('sponsor') || msg.includes('reklam')) {
+        return `✨ 724BETS, sitemizin ana sponsorudur.\n\nAyrıcalıklı bonus ve kampanyalar için:\n🌐 724bets.net\n\nİş birliği talepleriniz için:\n👉 ${WHATSAPP_LINK}`;
     }
 
     // Default

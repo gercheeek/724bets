@@ -36,13 +36,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
     const [depositTicket, setDepositTicket] = useState('');
 
     const faqs = [
-        { q: "Bilet nasıl kazanılır?", a: "Sponsor sitemiz Betlivo'ya yatırımlar yaparak veya Görevler sekmesindeki etkinlikleri tamamlayarak bilet kazanabilirsiniz." },
-        { q: "Bilet talebi nasıl oluşturulur?", a: "Görevler sayfasındaki form aracılığıyla Betlivo kullanıcı adınızı, yatırım miktarınızı ve tarihini girerek talep oluşturabilirsiniz." },
+        { q: "Bilet nasıl kazanılır?", a: "Sponsor sitemiz 724BETS'e yatırımlar yaparak veya Görevler sekmesindeki etkinlikleri tamamlayarak bilet kazanabilirsiniz." },
+        { q: "Bilet talebi nasıl oluşturulur?", a: "Görevler sayfasındaki form aracılığıyla 724BETS kullanıcı adınızı, yatırım miktarınızı ve tarihini girerek talep oluşturabilirsiniz." },
         { q: "Yatırım tarihi ve saati neden isteniyor?", a: "Yatırımınızın sistem tarafından teyit edilebilmesi için talep edilmektedir." },
         { q: "Bilet talebim ne kadar sürede onaylanır?", a: "Talepleriniz uzman ekibimiz tarafından kontrol edilip en kısa sürede otomatik olarak onaylanır." },
         { q: "Bilet liderliği nasıl çalışır?", a: "Bilet havuzumuzdan, en fazla bilete sahip olan kullanıcıların biletleri sıralı olarak sergilenir." },
         { q: "Çekiliş nasıl yapılır?", a: "Çekiliş günlerinde bilet havuzundaki biletler arasından şeffaf bir bilgisayar algoritması ile kazananlar belirlenir." },
-        { q: "Sponsor bilgisi neden isteniyor?", a: "Çekilişlerimiz partnerimiz Betlivo sponsorluğunda gerçekleştiği için oyuncu teyiti zorunludur." },
+        { q: "Sponsor bilgisi neden isteniyor?", a: "Çekilişlerimiz partnerimiz 724BETS sponsorluğunda gerçekleştiği için oyuncu teyiti zorunludur." },
         { q: "Telefon doğrulaması neden gerekli?", a: "Sadece gerçek kişilerin ödül alabilmesi ve multi hesapların engellenmesi için istenmektedir." }
     ];
 
@@ -169,7 +169,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
                         🎟️
                     </div>
                     <h1 className="text-[var(--text-primary)] font-black text-3xl mb-1 tracking-tight">Bilet <span style={{ color: '#a78bfa' }}>Etkinliği</span></h1>
-                    <p className="text-[var(--text-muted)] text-sm font-bold">724bets.net × Betlivo Çekilişi</p>
+                    <p className="text-[var(--text-muted)] text-sm font-bold">724bets.net × 724BETS Çekilişi</p>
                 </div>
 
                 {/* Ticket Balance */}
@@ -250,7 +250,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
 
                     <div className="space-y-3 mt-4">
                         <div className="group relative">
-                            <input type="text" placeholder="Betlivo Kullanıcı Adı" value={depositUsername}
+                            <input type="text" placeholder="724BETS Kullanıcı Adı" value={depositUsername}
                                 onChange={e => setDepositUsername(e.target.value)}
                                 className="w-full px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-bold outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/5 transition-all"
                             />

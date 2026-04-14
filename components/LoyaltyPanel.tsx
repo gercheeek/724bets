@@ -9,7 +9,7 @@ import {
 
 // ─── Default Config ────────────────────────────────────────────────────────
 export const DEFAULT_LOYALTY_CONFIG: LoyaltyConfig = {
-    programName: 'Betlivo Sadakat Programı',
+    programName: '724BETS Sadakat Programı',
     coinName: 'Coin',
     isActive: true,
     rules: [
@@ -220,7 +220,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                             <Star className="w-5 h-5 text-[#f0b90b]" />
                             <h1 className="text-[var(--text-primary)] font-black text-xl tracking-tight">{cfg.programName}</h1>
                         </div>
-                        <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">724bets.net × Betlivo Sadakat Sistemi</p>
+                        <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">724bets.net × 724BETS Sadakat Sistemi</p>
                     </div>
                     {onClose && (
                         <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">

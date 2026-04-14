@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig } from './types';
+import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig, SiteStatusConfig } from './types';
 
 export const BRANDS: Brand[] = [
   {
@@ -57,20 +57,20 @@ export const BRANDS: Brand[] = [
 
 export const DEFAULT_MARQUEE_CONFIG: MarqueeConfig = {
   isActive: true,
-  text: 'Hoş geldiniz! En yüksek oranlar ve anında ödeme Betlivo güvencesiyle!',
+  text: 'Hoş geldiniz! En yüksek oranlar ve anında ödeme 724BETS güvencesiyle!',
   speed: 50,
-  color: '#22c55e', // Betlivo Green
+  color: '#FFC107', // 724BETS Yellow
   isBold: true,
 };
 
 export const DEFAULT_WELCOME_POPUP_CONFIG: WelcomePopupConfig = {
   isActive: true,
-  title: 'BETLİVO',
+  title: '724BAHİS',
   subtitle: "Türkiye'nin En Dinamik ve Güvenilir Bahis Platformu",
   offerMain: '%200 HOŞGELDİN BONUSU',
   offerSub: 'İlk yatırımınıza özel · Anında hesabınıza yüklenir',
   buttonText: '🚀 HEMEN KAYDOL — ÜCRETSİZ',
-  buttonLink: 'https://betlivo.com',
+  buttonLink: 'https://724bets.net',
 };
 
 export const DEFAULT_LIVE_ODDS_CONFIG: LiveOddsConfig = {
@@ -88,4 +88,9 @@ export const DEFAULT_WHEEL_CONFIG: WheelConfig = {
   ],
   lastSpinTime: 0,
   spinCooldownHours: 6,
+};
+
+export const DEFAULT_SITE_STATUS_CONFIG: SiteStatusConfig = {
+    isMaintenanceMode: false,
+    maintenanceMessage: 'Değerli üyelerimiz, sistemlerimizde planlı bir bakım çalışması yürütülmektedir. Çok kısa bir süre sonra tekrar sizinle olacağız!',
 };

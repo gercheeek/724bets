@@ -12,6 +12,7 @@ import AuthModal from './components/AuthModal';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
 import PromoPopup from './components/PromoPopup';
+import MaintenanceScreen from './components/MaintenanceScreen';
 import DynamicCTA from './components/DynamicCTA';
 import ChatBot from './components/ChatBot';
 import NewsDetailView from './components/NewsDetailView';
@@ -25,13 +26,22 @@ import PoolGame from './components/PoolGame';
 import { seedEcosystemData } from './seedEcosystem';
 import { getGlobalConfig, updateGlobalConfig } from './utils/supabase';
 import NewsSection from './components/NewsSection';
+import HomeNewsWidget from './components/HomeNewsWidget';
 import NewsView from './components/NewsView';
 import HomeAnalyses from './components/HomeAnalyses';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis } from './types';
-import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG } from './constants';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig } from './types';
+import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG } from './constants';
 import { demoAnalyses } from './demoData';
+
+// Portal Components
+import PortalSidebar from './components/PortalSidebar';
+import PortalTicker from './components/PortalTicker';
+import PortalHero from './components/PortalHero';
+import PortalMatchList from './components/PortalMatchList';
+import BestPicks from './components/BestPicks';
+import PortalMobileNav from './components/PortalMobileNav';
 
 
 const App: React.FC = () => {
@@ -39,8 +49,8 @@ const App: React.FC = () => {
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway'>('home');
 
   // Promo Wheel Config
-  const [wheelCarkConfig, setWheelCarkConfig] = useState<PromoWheelConfig>(() => {
-    const stored = localStorage.getItem('site_betlivo_wheel');
+  const [promoWheelConfig, setPromoWheelConfig] = useState<PromoWheelConfig>(() => {
+    const stored = localStorage.getItem('site_featured_wheel') || localStorage.getItem('site_betlivo_wheel');
     return stored ? JSON.parse(stored) : {
       participants: [],
       prizes: [
@@ -50,15 +60,15 @@ const App: React.FC = () => {
       ],
       history: [],
       riggedWinner: null,
-      betlivoTrigger: false,
+      featuredTrigger: false,
       transparentBg: false,
     };
   });
 
-  const handleWheelCarkConfigChange = (cfg: PromoWheelConfig) => {
-    setWheelCarkConfig(cfg);
-    localStorage.setItem('site_betlivo_wheel', JSON.stringify(cfg));
-    updateGlobalConfig('site_betlivo_wheel', cfg);
+  const handlePromoWheelConfigChange = (cfg: PromoWheelConfig) => {
+    setPromoWheelConfig(cfg);
+    localStorage.setItem('site_featured_wheel', JSON.stringify(cfg));
+    updateGlobalConfig('site_featured_wheel', cfg);
   };
   // Giveaway Config
   const [giveawayConfig, setGiveawayConfig] = useState<GiveawayConfig>(() => {
@@ -96,8 +106,21 @@ const App: React.FC = () => {
     updateGlobalConfig('site_nav_visibility', vis);
   };
 
+  // Site Status (Maintenance) Config
+  const [siteStatusConfig, setSiteStatusConfig] = useState<SiteStatusConfig>(() => {
+    const stored = localStorage.getItem('site_status');
+    return stored ? JSON.parse(stored) : DEFAULT_SITE_STATUS_CONFIG;
+  });
+
+  const handleSiteStatusConfigChange = (cfg: SiteStatusConfig) => {
+    setSiteStatusConfig(cfg);
+    localStorage.setItem('site_status', JSON.stringify(cfg));
+    updateGlobalConfig('site_status', cfg);
+  };
+
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [portalLeague, setPortalLeague] = useState<string>('Tümü');
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | null>(null);
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -132,11 +155,28 @@ const App: React.FC = () => {
       setAnalyses(parsed);
       window.dispatchEvent(new Event('storage'));
     }
+
+    // 3. Branding Migration for Marquee & Popup
+    const storedMarquee = localStorage.getItem('site_marquee_config');
+    if (storedMarquee && /betlivo/i.test(storedMarquee)) {
+      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724BETS'));
+      localStorage.setItem('site_marquee_config', JSON.stringify(parsedMarquee));
+      setMarqueeConfig(parsedMarquee);
+    }
+
+    const storedWelcome = localStorage.getItem('site_welcome_popup');
+    if (storedWelcome && /betlivo/i.test(storedWelcome)) {
+      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724BETS'));
+      // Also catch the 'BETLIVOX' variant if it exists
+      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BETSX/gi, '724BETS'));
+      localStorage.setItem('site_welcome_popup', JSON.stringify(cleanedWelcome));
+      setWelcomePopupConfig(cleanedWelcome);
+    }
   }, []);
   const [themeColor, setThemeColor] = useState('#eab308');
   const [hashtags, setHashtags] = useState('');
   const [coupons, setCoupons] = useState<Coupon[]>([]);
-  const [showBetlivoPopup, setShowBetlivoPopup] = useState<boolean>(false);
+  const [showWelcomePopup, setShowWelcomePopup] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
@@ -187,7 +227,7 @@ const App: React.FC = () => {
       // Stage 2: Show popup if active, else skip to ready
       if (welcomePopupConfig.isActive) {
         setAppStage('popup');
-        setShowBetlivoPopup(true);
+        setShowWelcomePopup(true);
       } else {
         setAppStage('ready');
       }
@@ -196,8 +236,8 @@ const App: React.FC = () => {
     return () => clearTimeout(loaderTimer);
   }, [welcomePopupConfig.isActive]);
 
-  const handleCloseBetlivoPopup = () => {
-    setShowBetlivoPopup(false);
+  const handleCloseWelcomePopup = () => {
+    setShowWelcomePopup(false);
     setAppStage('ready'); // Stage 3: Unblock the site
   };
 
@@ -279,7 +319,10 @@ const App: React.FC = () => {
         if (globalGiveaway) setGiveawayConfig(globalGiveaway);
 
         const globalMarquee = await getGlobalConfig('site_marquee_config');
-        if (globalMarquee) setMarqueeConfig(globalMarquee);
+        if (globalMarquee) {
+          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724BETS'));
+          setMarqueeConfig(cleaned);
+        }
 
         const globalNav = await getGlobalConfig('site_nav_visibility');
         if (globalNav) setNavVisibility(globalNav);
@@ -288,13 +331,19 @@ const App: React.FC = () => {
         if (globalWheel) setWheelConfig(globalWheel);
 
         const globalWelcome = await getGlobalConfig('site_welcome_popup');
-        if (globalWelcome) setWelcomePopupConfig(globalWelcome);
+        if (globalWelcome) {
+          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724BETS').replace(/724BETSX/gi, '724BETS'));
+          setWelcomePopupConfig(cleaned);
+        }
+
+        const globalSiteStatus = await getGlobalConfig('site_status');
+        if (globalSiteStatus) setSiteStatusConfig(globalSiteStatus);
 
         const globalLiveOdds = await getGlobalConfig('site_live_odds');
         if (globalLiveOdds) setLiveOddsConfig(globalLiveOdds);
 
-        const globalPromoWheel = await getGlobalConfig('site_betlivo_wheel');
-        if (globalPromoWheel) setWheelCarkConfig(globalPromoWheel);
+        const globalPromoWheel = await getGlobalConfig('site_featured_wheel') || await getGlobalConfig('site_betlivo_wheel');
+        if (globalPromoWheel) setPromoWheelConfig(globalPromoWheel);
 
       } catch (err) {
         console.error('Initialization error:', err);
@@ -426,6 +475,8 @@ const App: React.FC = () => {
       onSaveWelcomePopupConfig={handleWelcomePopupConfigChange}
       liveOddsConfig={liveOddsConfig}
       onSaveLiveOddsConfig={handleLiveOddsConfigChange}
+      siteStatusConfig={siteStatusConfig}
+      onSaveSiteStatusConfig={handleSiteStatusConfigChange}
     />
   );
 
@@ -456,17 +507,23 @@ const App: React.FC = () => {
     }
   };
 
+  const isMaintenanceActive = siteStatusConfig.isMaintenanceMode && userRole !== 'admin' && userRole !== 'editor';
+
   return (
     <ThemeProvider>
-    <div style={{
-      maxHeight: appStage === 'loading' ? '100vh' : 'auto',
-      overflow: appStage === 'loading' ? 'hidden' : 'visible',
-      minHeight: '100vh',
-      background: 'var(--bg-main)',
-      color: 'var(--text-primary)',
-      overflowX: 'hidden',
-      position: 'relative'
-    }}>
+      {isMaintenanceActive && view !== 'admin' ? (
+        <MaintenanceScreen message={siteStatusConfig.maintenanceMessage} />
+      ) : (
+        <div style={{
+          maxHeight: appStage === 'loading' ? '100vh' : 'auto',
+          overflow: appStage === 'loading' ? 'hidden' : 'visible',
+          minHeight: '100vh',
+          background: 'var(--bg-main)',
+          color: 'var(--text-primary)',
+          overflowX: 'hidden',
+          position: 'relative'
+        }}>
+
       {appStage === 'loading' && <AppLoader />}
 
       {/* Auth Modal Overlay */}
@@ -521,168 +578,98 @@ const App: React.FC = () => {
       />
 
       <main style={{ position: 'relative', zIndex: 10, paddingTop: '130px', filter: appStage === 'popup' ? 'blur(10px)' : 'none', pointerEvents: appStage === 'popup' ? 'none' : 'auto', transition: 'filter 0.5s' }}>
-        {view === 'home' && (
-          <>
-            <div className="max-w-[1400px] mx-auto px-4 xl:px-6 animate-fade-in pb-12">
-              <DashboardHero 
-                  featuredMatch={analyses.length > 0 ? analyses[0] : undefined} 
-                  onNavigate={handleViewChange} 
-              />
-              
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-                {/* Left Column: Kuponlar */}
-                <div className="lg:col-span-3 order-2 lg:order-1">
-                  <DailyCoupons
-                    coupons={coupons}
-                    isLoggedIn={!!(siteUser || userRole)}
-                    onLoginRequired={() => setAuthModalMode('member')}
+        <div style={{ visibility: appStage !== 'loading' ? 'visible' : 'hidden', height: appStage === 'loading' ? '100vh' : 'auto', overflow: appStage === 'loading' ? 'hidden' : 'visible' }}>
+          {view === 'home' && (
+            <>
+              {/* ═══ PORTAL TICKER ═══ */}
+              <PortalTicker analyses={analyses} liveOddsConfig={liveOddsConfig} />
+
+              {/* ═══ PORTAL BODY (Sidebar + Content) ═══ */}
+              <div className="portal-body">
+                {/* Left Sidebar */}
+                <PortalSidebar
+                  analyses={analyses}
+                  coupons={coupons}
+                  selectedLeague={portalLeague}
+                  onLeagueSelect={setPortalLeague}
+                  onNavigate={handleViewChange}
+                />
+
+                {/* Main Content: Match List */}
+                <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                  <PortalMatchList
+                    analyses={analyses}
+                    selectedLeague={portalLeague}
+                    onNavigate={handleViewChange}
                   />
                 </div>
-                
-                {/* Middle Column: Analiz Akışı */}
-                <div className="lg:col-span-6 order-1 lg:order-2">
-                  <HomeAnalyses 
-                    analyses={analyses} 
-                    onNavigate={handleViewChange} 
-                  />
+
+                {/* Right Sidebar: News + Coupons */}
+                <div className="portal-right-sidebar">
+                  {/* News Widget ("Gündem") */}
+                  <div style={{ padding: '24px 20px 20px' }}>
+                    <div className="portal-section-heading">
+                      🔥 GÜNDEM & HABERLER
+                    </div>
+                    <HomeNewsWidget
+                      onViewChange={handleViewChange}
+                      onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    />
+                  </div>
+
+                  {/* Daily Coupons Section */}
+                  <div style={{ padding: '0 20px 24px' }}>
+                    <div className="portal-section-heading" style={{ marginTop: 8 }}>
+                      🎫 GÜNÜN KUPONLARI
+                    </div>
+                    <DailyCoupons
+                      coupons={coupons}
+                      isLoggedIn={!!(siteUser || userRole)}
+                      onLoginRequired={() => setAuthModalMode('member')}
+                    />
+                  </div>
                 </div>
-                
-                {/* Right Column: Sıcak Gelişmeler */}
-                <div className="lg:col-span-3 order-3">
-                  <NewsSection
-                    onViewChange={handleViewChange}
-                    onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  />
+              </div>
+
+              {/* ═══ BEST PICKS FULL WIDTH ═══ */}
+              <BestPicks analyses={analyses} onNavigate={handleViewChange} />
+
+              {/* ═══ BRANDS SECTION ═══ */}
+              <section id="brands-section" className="brands-section relative z-10">
+                <div className="brands-header mb-12 animate-fade-in-up">
+                  <h2 className="text-[40px] md:text-[48px] font-black italic uppercase tracking-tighter" style={{ color: 'var(--text-primary)' }}>
+                    GÜVENİLİR <span className="text-[#FFC107]">FİRMALAR</span>
+                  </h2>
+                  <div className="h-1 w-20 bg-[#FFC107] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
+                  <p className="font-bold uppercase text-[11px] tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
+                    Sizin için test ettiğimiz, ödemesini yapan lisanslı siteler.
+                  </p>
+                </div>
+
+
+
+                <div className="brands-grid">
+                  {brands.map((brand, index) => (
+                    <BrandCard key={brand.id} brand={brand} index={index} />
+                  ))}
+                </div>
+              </section>
+
+              {/* ═══ PORTAL FOOTER ═══ */}
+              <div className="portal-footer">
+                <span className="portal-footer-copy">© 2026 724BAHİS.NET · Tüm hakları saklıdır.</span>
+                <div className="portal-footer-links">
+                  <a href="#" onClick={(e) => e.preventDefault()}>Hakkımızda</a>
+                  <a href="#" onClick={(e) => e.preventDefault()}>İletişim</a>
+                  <a href="#" onClick={(e) => e.preventDefault()}>Gizlilik</a>
+                  <a href="#" onClick={(e) => e.preventDefault()}>Kullanım Koşulları</a>
                 </div>
               </div>
 
-              <DynamicCTA onNavigate={handleViewChange} />
-            </div>
-
-            <div className="section-divider" />
-
-            <section id="brands-section" className="brands-section relative z-10">
-              <div className="brands-header mb-12 animate-fade-in-up">
-                <h2 className="text-[40px] md:text-[48px] font-black italic uppercase tracking-tighter" style={{ color: 'var(--text-primary)' }}>
-                  GÜVENİLİR <span className="text-[#FFC107]">FİRMALAR</span>
-                </h2>
-                <div className="h-1 w-20 bg-[#FFC107] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
-                <p className="font-bold uppercase text-[11px] tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
-                  Sizin için test ettiğimiz, ödemesini yapan lisanslı siteler.
-                </p>
-              </div>
-
-              {/* ===== FEATURED SPONSOR BANNERS ===== */}
-              <div className="flex flex-col gap-4 mb-14 animate-fade-in-up">
-
-                {/* ═══════════════ BETLİVO – ANA SPONSOR ═══════════════ */}
-                <a
-                  href="https://betlivo.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="brand-card betlivo relative w-full flex flex-col md:flex-row items-center gap-6 md:gap-10 px-6 md:px-12 py-8 md:py-10 rounded-3xl overflow-hidden group cursor-pointer"
-                  style={{ textDecoration: 'none' }}
-                >
-                  {/* Background animated glow orbs */}
-                  <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-emerald-500/5 blur-[80px] pointer-events-none group-hover:bg-emerald-500/10 transition-all duration-700" />
-                  <div className="absolute left-0 top-0 w-[200px] h-full bg-emerald-500/3 blur-[60px] pointer-events-none" />
-                  {/* Shimmer line */}
-                  <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-emerald-500/80 to-transparent group-hover:via-emerald-400 transition-all duration-500" />
-                  <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
-                  {/* Moving shimmer overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/[0.03] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 pointer-events-none" />
-
-                  {/* Logo */}
-                  <div className="relative z-10 flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-                    style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 0 30px rgba(34,197,94,0.5)' }}>
-                    <span className="text-white font-black text-sm md:text-base uppercase tracking-tighter leading-tight text-center">BET<br />LİVO</span>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative z-10 flex-1 text-center md:text-left">
-                    <div className="flex flex-wrap items-center gap-3 mb-2 justify-center md:justify-start">
-                      <span className="font-black text-3xl md:text-4xl tracking-tighter uppercase leading-none" style={{ color: 'var(--text-primary)' }}>BETLİVO</span>
-                      <span className="px-3 py-1 text-white font-black text-[10px] uppercase rounded-full tracking-widest" style={{ background: 'linear-gradient(90deg,#22c55e,#4ade80)', animation: 'pulse 2s infinite' }}>🥇 ANA SPONSOR</span>
-                      <span className="px-2 py-0.5 border border-green-500/50 text-green-400 font-black text-[9px] uppercase rounded-full tracking-widest">🟢 CANLI</span>
-                    </div>
-                    <p className="text-sm md:text-base font-bold mb-3" style={{ color: 'var(--text-muted)' }}>
-                      🎁 %200 Hoşgeldin Bonusu &nbsp;·&nbsp; ⚡ Anında Ödeme &nbsp;·&nbsp; 🔒 Lisanslı &amp; Güvenli &nbsp;·&nbsp; 📞 7/24 Destek
-                    </p>
-                    <div className="flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-widest justify-center md:justify-start">
-                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">Spor Bahsi</span>
-                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">Canlı Bahis</span>
-                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">Casino</span>
-                      <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">e-Spor</span>
-                    </div>
-                  </div>
-
-                  {/* CTA */}
-                  <div className="relative z-10 flex-shrink-0 flex flex-col items-center gap-2">
-                    <div className="px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest text-white group-hover:scale-105 transition-all duration-300 whitespace-nowrap"
-                      style={{ background: 'linear-gradient(135deg, #22c55e 0%, #4ade80 50%, #22c55e 100%)', boxShadow: '0 0 25px rgba(34,197,94,0.5)', backgroundSize: '200% 100%' }}>
-                      🚀 ŞİMDİ KAYIT OL
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Ücretsiz · 2 Dakika</span>
-                  </div>
-                </a>
-
-                {/* ═══════════════ BETKOM – SPONSOR ═══════════════ */}
-                <a
-                  href="https://betkom.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="brand-card gumus relative w-full flex flex-col md:flex-row items-center gap-5 md:gap-8 px-6 md:px-10 py-6 md:py-7 rounded-2xl overflow-hidden group cursor-pointer"
-                  style={{ textDecoration: 'none' }}
-                >
-                  {/* Background glow */}
-                  <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-[250px] h-[250px] rounded-full bg-indigo-500/3 blur-[60px] pointer-events-none group-hover:bg-indigo-500/6 transition-all duration-500" />
-                  <div className="absolute top-0 left-0 w-full h-[1.5px] bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent group-hover:via-indigo-400/60 transition-all duration-400" />
-                  {/* Moving shimmer */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-500/[0.04] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-900 pointer-events-none" />
-
-                  {/* Logo */}
-                  <div className="relative z-10 flex-shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300 border border-indigo-500/20"
-                    style={{ background: 'linear-gradient(135deg, #E8E8F8, #D8D8F0)', boxShadow: '0 2px 10px rgba(99,102,241,0.1)' }}>
-                    <span className="text-indigo-600 font-black text-[9px] uppercase tracking-tight leading-tight text-center">BET<br />KOM</span>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative z-10 flex-1 text-center md:text-left">
-                    <div className="flex flex-wrap items-center gap-2 mb-1 justify-center md:justify-start">
-                      <span className="font-black text-xl md:text-2xl tracking-tighter uppercase" style={{ color: 'var(--text-primary)' }}>BETKOM</span>
-                      <span className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 font-black text-[9px] uppercase rounded-full tracking-widest">SPONSOR</span>
-                      <span className="px-2 py-0.5 border border-green-500/40 text-green-400 font-black text-[9px] uppercase rounded-full tracking-widest">🟢 AKTİF</span>
-                    </div>
-                    <p className="text-xs md:text-sm font-bold mb-2" style={{ color: 'var(--text-muted)' }}>
-                      🎯 %50 Spor Bonusu &nbsp;·&nbsp; 💳 Güvenli Ödeme &nbsp;·&nbsp; 🏆 Yüksek Oranlar
-                    </p>
-                    <div className="flex flex-wrap gap-1.5 text-[9px] font-black uppercase tracking-widest justify-center md:justify-start">
-                      <span className="px-2 py-0.5 bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 rounded-md">Futbol</span>
-                      <span className="px-2 py-0.5 bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 rounded-md">Basketbol</span>
-                      <span className="px-2 py-0.5 bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 rounded-md">Tenis</span>
-                      <span className="px-2 py-0.5 bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 rounded-md">Canlı</span>
-                    </div>
-                  </div>
-
-                  {/* CTA */}
-                  <div className="relative z-10 flex-shrink-0 flex flex-col items-center gap-1.5">
-                    <div className="px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest text-white group-hover:scale-105 transition-all duration-300 whitespace-nowrap border border-indigo-500/40 group-hover:border-indigo-400"
-                      style={{ background: 'linear-gradient(135deg, #3730a3, #4f46e5)', boxShadow: '0 0 15px rgba(99,102,241,0.25)' }}>
-                      🎯 HEMEN İNCELE
-                    </div>
-                    <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>Bonusu Kap</span>
-                  </div>
-                </a>
-              </div>
-
-              <div className="brands-grid">
-                {brands.map((brand, index) => (
-                  <BrandCard key={brand.id} brand={brand} index={index} />
-                ))}
-              </div>
-            </section>
-          </>
-        )}
+              {/* ═══ MOBILE BOTTOM NAV ═══ */}
+              <PortalMobileNav activeView={view} onViewChange={handleViewChange} />
+            </>
+          )}
 
         {view === 'analysis' && (
           <AnalysisView
@@ -771,8 +758,8 @@ const App: React.FC = () => {
 
         {view === 'wheel' && (
           <PromoWheel
-            config={wheelCarkConfig}
-            onConfigChange={handleWheelCarkConfigChange}
+            config={promoWheelConfig}
+            onConfigChange={handlePromoWheelConfigChange}
             isAdmin={!!userRole}
           />
         )}
@@ -784,6 +771,7 @@ const App: React.FC = () => {
             isAdmin={!!userRole}
           />
         )}
+      </div>
       </main>
 
       <footer className="site-footer">
@@ -803,9 +791,9 @@ const App: React.FC = () => {
       </footer>
 
       {/* ── 724BAHİS Welcome Popup (once per session) ── */}
-      {showBetlivoPopup && (
+      {showWelcomePopup && (
         <PromoPopup
-          onClose={handleCloseBetlivoPopup}
+          onClose={handleCloseWelcomePopup}
           config={welcomePopupConfig}
         />
       )}
@@ -822,14 +810,8 @@ const App: React.FC = () => {
       {/* ── AI Chat Assistant ── */}
       <ChatBot />
 
-      {/* ── 724BAHİS Side Panel ── */}
-      {view !== 'news' && view !== 'news-detail' && (
-        <>
-          <BrandSidePanel position="left" />
-          <BrandSidePanel position="right" />
-        </>
-      )}
     </div>
+    )}
     </ThemeProvider>
   );
 };

@@ -72,7 +72,7 @@ const CoinRequestForm: React.FC<CoinRequestFormProps> = ({ userId, username, onC
                     <label className="text-xs text-zinc-500 font-black uppercase tracking-widest block mb-2">Site Adı</label>
                     <select value={siteName} onChange={e => setSiteName(e.target.value)} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm font-bold">
                         <option value="">Site seçin...</option>
-                        <option value="Betlivo">Betlivo</option>
+                        <option value="724BETS">724BETS</option>
                         <option value="Betkom">Betkom</option>
                         <option value="Marsbahis">Marsbahis</option>
                         <option value="Diğer">Diğer</option>

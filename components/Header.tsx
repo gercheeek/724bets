@@ -119,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({
         id: Date.now().toString(),
         userId: siteUser.id,
         username: siteUser.username,
-        content: `Betlivo Yatırım Bildirimi:\nBetlivo Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
+        content: `724BETS Yatırım Bildirimi:\n724BETS Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
         isRead: false,
         createdAt: Date.now()
       };
@@ -508,12 +508,12 @@ const Header: React.FC<HeaderProps> = ({
 
               <h3 className="text-xl font-black mb-2" style={{ color: 'var(--text-primary)' }}>Yatırım Bildirimi</h3>
               <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-                Betlivo'ya yaptığınız yatırımların onaylanması ve <strong>Coin / Bilet</strong> tanımlamalarınızın yapılması için Betlivo kullanıcı adınızı bize iletin.
+                724BETS'e yaptığınız yatırımların onaylanması ve <strong>Coin / Bilet</strong> tanımlamalarınızın yapılması için 724BETS kullanıcı adınızı bize iletin.
               </p>
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-bold uppercase ml-1 block mb-1" style={{ color: 'var(--text-dim)' }}>Betlivo Kullanıcı Adınız</label>
+                  <label className="text-xs font-bold uppercase ml-1 block mb-1" style={{ color: 'var(--text-dim)' }}>724BETS Kullanıcı Adınız</label>
                   <input
                     type="text"
                     value={depositUsername}

@@ -27,74 +27,62 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
     const displayCoupons = baseCoupons.filter(c => selectedDate === 'WEEKLY' ? dates.includes(c.date) : c.date === selectedDate);
 
     return (
-        <section id="daily-coupons" className="relative w-full py-24 overflow-hidden" style={{ background: 'var(--bg-main)' }}>
-            {/* Premium Background Effects */}
-            <div className="absolute inset-0 opacity-20" />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent, color-mix(in srgb, var(--bg-main) 80%, transparent), var(--bg-main))' }} />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[#FFC107]/5 blur-[120px] rounded-full pointer-events-none" />
-
-            <div className="relative max-w-[1240px] mx-auto px-6">
-                {/* Section Header */}
-                <div className="text-center mb-12 animate-fade-in-up">
-                    <h2 className="text-[48px] md:text-[64px] font-black mb-4 tracking-tighter uppercase leading-none" style={{ color: 'var(--text-primary)' }}>
-                        GÜNÜN <span className="text-[#FFC107]">KUPONLARI</span>
-                    </h2>
-                    <p className="text-lg md:text-xl font-medium max-w-2xl mx-auto" style={{ color: 'var(--text-dim)' }}>
-                        Editör onaylı, veri destekli hazır kuponlar ile kazancınızı maksimize edin.
-                    </p>
+        <section id="daily-coupons" className="relative w-full bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md rounded-2xl p-4 md:p-5 h-full flex flex-col">
+            <div className="flex items-center justify-between mb-5 pb-4 border-b border-zinc-800/50">
+                <div className="flex items-center gap-2">
+                    <span className="text-xl">🔥</span>
+                    <h3 className="text-white font-black uppercase tracking-widest text-sm">GÜNÜN KUPONLARI</h3>
                 </div>
+            </div>
 
-                {/* Date Selection Strip */}
-                <div className="flex overflow-x-auto gap-2 mb-12 pb-3 justify-center scrollbar-none animate-fade-in-up">
-                    <button
-                        onClick={() => setSelectedDate('WEEKLY')}
-                        className={`flex flex-col items-center justify-center min-w-[100px] h-[72px] rounded-2xl border transition-all duration-300 ${selectedDate === 'WEEKLY'
-                            ? 'bg-gradient-to-b from-[#FFFDF5] to-[#FFF9E5] border-[#f0b90b] text-[#f0b90b] shadow-[0_2px_15px_rgba(240,185,11,0.15)] scale-105'
-                            : 'border-[color:var(--border-card)] hover:border-[color:var(--border-hover)]'
-                            }`}
-                    >
-                        <span className="text-[10px] font-black uppercase tracking-widest mb-1">HAFTALIK</span>
-                        <span className="text-sm font-bold">TÜMÜ</span>
-                    </button>
+            <div className="flex overflow-x-auto gap-2 mb-6 pb-2 justify-start scrollbar-none animate-fade-in-up">
+                <button
+                    onClick={() => setSelectedDate('WEEKLY')}
+                    className={`flex flex-col items-center justify-center min-w-[70px] h-[52px] rounded-xl border transition-all duration-300 ${selectedDate === 'WEEKLY'
+                        ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_4px_20px_rgba(240,185,11,0.3)]'
+                        : 'bg-zinc-800/20 border-zinc-700/50 text-zinc-500 hover:border-zinc-500 hover:text-white'
+                        }`}
+                >
+                    <span className="text-[8px] font-black uppercase tracking-widest mb-0.5">HEPSİ</span>
+                    <span className="text-xs font-bold italic">TÜMÜ</span>
+                </button>
 
-                    {dates.map((date) => {
-                        const d = new Date(date);
-                        const isSelected = selectedDate === date;
-                        const dayName = d.toLocaleDateString('tr-TR', { weekday: 'short' });
+                {dates.slice(0, 5).map((date) => {
+                    const d = new Date(date);
+                    const isSelected = selectedDate === date;
+                    const dayName = d.toLocaleDateString('tr-TR', { weekday: 'short' });
+                    return (
+                        <button
+                            key={date}
+                            onClick={() => setSelectedDate(date)}
+                            className={`flex flex-col items-center justify-center min-w-[65px] h-[52px] rounded-xl border transition-all duration-300 ${isSelected
+                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_4px_20px_rgba(240,185,11,0.3)]'
+                                : 'bg-zinc-800/20 border-zinc-700/50 text-zinc-500 hover:border-zinc-500 hover:text-white'
+                                }`}
+                        >
+                            <span className="text-[8px] font-black uppercase tracking-widest mb-0.5">{dayName}</span>
+                            <span className="text-xs font-bold italic">{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
+                        </button>
+                    );
+                })}
+            </div>
+
+            {displayCoupons.length === 0 && (
+                <div className="text-center py-10 rounded-2xl animate-fade-in" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)' }}>
+                    <Lock className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--text-dim)' }} />
+                    <h3 className="text-sm font-black mb-1 uppercase" style={{ color: 'var(--text-primary)' }}>BULUNAMADI</h3>
+                    <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>Bu tarihte kupon yok.</p>
+                </div>
+            )}
+
+            <div className="flex flex-col gap-4 flex-1">
+                {displayCoupons.map((coupon: Coupon, index: number) => {
+                    const isLow = coupon.riskLevel === 'LOW';
+                    const isHigh = coupon.riskLevel === 'HIGH';
+                    const isLocked = !isLoggedIn && index >= 2;
+
+                    if (isLocked) {
                         return (
-                            <button
-                                key={date}
-                                onClick={() => setSelectedDate(date)}
-                                className={`flex flex-col items-center justify-center min-w-[90px] h-[72px] rounded-2xl border transition-all duration-300 ${isSelected
-                                    ? 'bg-gradient-to-b from-[#FFFDF5] to-[#FFF9E5] border-[#f0b90b] text-[#f0b90b] shadow-[0_2px_15px_rgba(240,185,11,0.15)] scale-105'
-                                    : 'border-[color:var(--border-card)] hover:border-[color:var(--border-hover)]'
-                                    }`}
-                            >
-                                <span className="text-[10px] font-black uppercase tracking-widest mb-1">{dayName}</span>
-                                <span className="text-sm font-bold">{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
-                            </button>
-                        );
-                    })}
-                </div>
-
-                {/* Empty State */}
-                {displayCoupons.length === 0 && (
-                    <div className="text-center py-20 rounded-[32px] animate-fade-in" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)' }}>
-                        <Lock className="w-16 h-16 mx-auto mb-6" style={{ color: 'var(--text-dim)' }} />
-                        <h3 className="text-2xl font-black mb-2 uppercase" style={{ color: 'var(--text-primary)' }}>KUPON BULUNAMADI</h3>
-                        <p style={{ color: 'var(--text-muted)' }}>Bu tarihe ait editör kuponu henüz paylaşılmadı.</p>
-                    </div>
-                )}
-
-                {/* Coupons Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {displayCoupons.map((coupon: Coupon, index: number) => {
-                        const isLow = coupon.riskLevel === 'LOW';
-                        const isHigh = coupon.riskLevel === 'HIGH';
-                        const isLocked = !isLoggedIn && index >= 2;
-
-                        if (isLocked) {
-                            return (
                                 <div key={coupon.id} className="relative group" style={{ animationDelay: `${index * 0.1}s` }}>
                                     {/* Blurred Card Preview */}
                                     <div className="rounded-[16px] p-3 pointer-events-none" style={{ filter: 'blur(4px)', userSelect: 'none', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)' }}>
@@ -138,19 +126,20 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                 style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)', animationDelay: `${index * 0.1}s` }}
                             >
                                 {/* Card Header / Badge */}
-                                <div className="flex items-center justify-between mb-3">
-                                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' :
+                                <div className="flex items-center justify-between mb-3 px-1">
+                                    <div className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' :
                                         isHigh ? 'bg-rose-500/10 text-rose-500' :
-                                            'bg-[#FFC107]/10 text-[#FFC107]'
+                                            'bg-[#f0b90b]/10 text-[#f0b90b]'
                                         }`}>
-                                        {isLow ? <Shield className="w-3.5 h-3.5" /> :
-                                            isHigh ? <Flame className="w-3.5 h-3.5" /> :
-                                                <Zap className="w-3.5 h-3.5" />}
-                                        {isLow ? 'BANKO' : isHigh ? 'YÜKSEK RİSK' : 'DEĞER ORAN'}
+                                        {isLow ? <Shield className="w-2.5 h-2.5" /> :
+                                            isHigh ? <Flame className="w-2.5 h-2.5" /> :
+                                                <Zap className="w-2.5 h-2.5" />}
+                                        {isLow ? 'BANKO' : isHigh ? 'YÜKSEK RİSK' : 'ÖNERİ'}
                                     </div>
-                                    <span className="text-[#9CA3AF] font-bold text-[10px] flex items-center gap-1">
-                                        <Zap className="w-2.5 h-2.5 text-[#f0b90b]" /> AI ANALİZ
-                                    </span>
+                                    <div className="flex items-center gap-1">
+                                        <div className="w-1 h-1 rounded-full bg-[#f0b90b] animate-pulse" />
+                                        <span className="text-zinc-500 font-bold text-[8px] uppercase tracking-widest">AI ANALİZ</span>
+                                    </div>
                                 </div>
 
                                 {/* Matches List */}
@@ -226,15 +215,14 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                 </div>
 
                 {/* Section Bottom CTA */}
-                <div className="mt-20 flex flex-col md:flex-row items-center justify-center gap-6 animate-fade-in-up animate-delay-3">
-                    <button className="h-16 px-12 bg-[#FFC107] text-black rounded-full font-black text-sm uppercase tracking-widest hover:shadow-[0_8px_30px_rgba(255,193,7,0.3)] transition-all hover:-translate-y-1">
+                <div className="mt-6 flex flex-col gap-3 animate-fade-in-up animate-delay-3">
+                    <button className="w-full py-3 bg-[#FFC107] text-black rounded-xl font-black text-[10px] uppercase tracking-widest hover:shadow-[0_8px_30px_rgba(255,193,7,0.3)] transition-all">
                         TÜM KUPONLARI GÖR
                     </button>
-                    <button className="h-16 px-12 border-2 rounded-full font-black text-sm uppercase tracking-widest hover:border-[#FFC107] hover:text-[#FFC107] transition-all" style={{ borderColor: 'var(--border-hover)', color: 'var(--text-primary)' }}>
+                    <button className="w-full py-3 border border-zinc-700/50 rounded-xl font-black text-[10px] uppercase tracking-widest hover:border-[#FFC107] hover:text-[#FFC107] transition-all text-zinc-400">
                         CANLI ANALİZLERE GİT
                     </button>
                 </div>
-            </div>
 
             {/* AI Analysis Modal */}
             {selectedCoupon && (
