@@ -62,23 +62,7 @@ const NewsView: React.FC<NewsViewProps> = ({ onViewChange, onArticleClick }) => 
 
     return (
         <div style={{ minHeight: '100vh', padding: '20px 20px 80px', maxWidth: '1200px', margin: '0 auto' }}>
-            {/* Back button + header */}
-            <div className="flex items-center gap-4 mb-8">
-                <button
-                    onClick={() => onViewChange?.('home')}
-                    className="w-10 h-10 rounded-full bg-theme-elevated border border-theme-subtle flex items-center justify-center text-zinc-400 hover:text-theme-primary hover:border-zinc-600 transition-all"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                </button>
-                <div>
-                    <h1 className="text-[28px] md:text-[36px] font-black text-theme-primary italic uppercase tracking-tighter">
-                        SPOR <span className="text-[#f0b90b]">HABERLERİ</span>
-                    </h1>
-                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">
-                        Güncel spor dünyasından en son gelişmeler
-                    </p>
-                </div>
-            </div>
+            {/* Removed Back button + header to save space */}
 
             {/* Category Filter */}
             <div className="flex gap-2 overflow-x-auto pb-4 mb-8 scrollbar-hide" style={{ scrollbarWidth: 'none' }}>

@@ -351,12 +351,16 @@ body {
 }
 
 .header-cat-item.active {
-  color: #FFFFFF;
+  color: #000000;
+  background-color: #f0b90b;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(240,185,11,0.4);
+  font-weight: 900;
+  transform: scale(1.05);
 }
 
 .header-cat-item.active::after {
-  transform: translateX(-50%) scaleX(1);
-  opacity: 1;
+  display: none;
 }
 
 .header-cat-icon {
