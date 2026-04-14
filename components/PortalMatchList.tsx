@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { MatchAnalysis, SportCategory } from '../types';
-import { TrendingUp, ChevronRight, ArrowRight, BarChart3 } from 'lucide-react';
+import { MatchAnalysis } from '../types';
+import { BarChart3, ArrowRight } from 'lucide-react';
 
 interface PortalMatchListProps {
   analyses: MatchAnalysis[];
@@ -9,56 +9,19 @@ interface PortalMatchListProps {
 }
 
 const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLeague, onNavigate }) => {
-  const [sportTab, setSportTab] = useState<SportCategory>('Futbol');
-  const [filterTab, setFilterTab] = useState('Tümü');
-
-  // Filter by sport
-  let filtered = analyses.filter(a => {
-    if (sportTab === 'Basketbol') {
-      return a.sport === 'Basketbol' || a.league?.toLowerCase().includes('nba');
-    } else if (sportTab === 'Futbol') {
-      return (a.sport === 'Futbol' || !a.sport) && !a.league?.toLowerCase().includes('nba');
-    } else {
-      return a.sport === sportTab;
-    }
-  });
-
-  // Filter by league
-  if (selectedLeague !== 'Tümü') {
-    filtered = filtered.filter(a => a.league === selectedLeague);
+  // Filter by league if a specific league is selected from sidebar
+  let displayItems = analyses;
+  if (selectedLeague !== 'Tümü' && selectedLeague !== 'Genel Maçlar') {
+    displayItems = displayItems.filter(a => a.league === selectedLeague);
   }
 
   // Sort by confidence
-  filtered.sort((a, b) => b.confidence - a.confidence);
+  displayItems.sort((a, b) => b.confidence - a.confidence);
 
   // Show limited (Teaser)
-  const displayItems = filtered.slice(0, 4);
+  displayItems = displayItems.slice(0, 4);
 
-  // Day tabs
-  const days: { label: string; date: string }[] = [];
-  const today = new Date();
-  days.push({ label: 'Tüm Hafta', date: 'all' });
-  const dayNames = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
   const monthNames = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() + i);
-    days.push({
-      label: `${dayNames[d.getDay()]} ${d.getDate()} ${monthNames[d.getMonth()]}`,
-      date: d.toISOString().split('T')[0],
-    });
-  }
-
-  const [selectedDay, setSelectedDay] = useState('all');
-
-  // Filter by day
-  let dayFiltered = displayItems;
-  if (selectedDay !== 'all') {
-    dayFiltered = dayFiltered.filter(a => a.matchDate === selectedDay);
-  }
-
-  // Get unique leagues for filter tabs
-  const uniqueLeagues = Array.from(new Set(filtered.map(a => a.league))).slice(0, 3);
 
   // Format date
   const formatDate = (dateStr: string) => {
@@ -69,83 +32,7 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
 
   return (
     <div className="portal-content">
-      {/* Sport Tabs */}
-      <div className="portal-tab-group" style={{ overflowX: 'auto', flexWrap: 'nowrap', paddingBottom: '4px' }}>
-        <button
-          className={`portal-tab-btn ${sportTab === 'Futbol' ? 'active' : 'inactive'}`}
-          onClick={() => setSportTab('Futbol')}
-          style={{ whiteSpace: 'nowrap' }}
-        >
-          ⚽ Futbol
-        </button>
-        <button
-          className={`portal-tab-btn ${sportTab === 'Basketbol' ? 'active' : 'inactive'}`}
-          onClick={() => setSportTab('Basketbol')}
-          style={{ whiteSpace: 'nowrap' }}
-        >
-          🏀 Basketbol
-        </button>
-        <button
-          className={`portal-tab-btn ${sportTab === 'Formula 1' ? 'active' : 'inactive'}`}
-          onClick={() => setSportTab('Formula 1')}
-          style={{ whiteSpace: 'nowrap' }}
-        >
-          🏎️ Formula 1
-        </button>
-        <button
-          className={`portal-tab-btn ${sportTab === 'MotoGP' ? 'active' : 'inactive'}`}
-          onClick={() => setSportTab('MotoGP')}
-          style={{ whiteSpace: 'nowrap' }}
-        >
-          🏍️ MotoGP
-        </button>
-        <button
-          className={`portal-tab-btn ${sportTab === 'Superbike' ? 'active' : 'inactive'}`}
-          onClick={() => setSportTab('Superbike')}
-          style={{ whiteSpace: 'nowrap' }}
-        >
-          🏍️ Superbike
-        </button>
-        <button
-          className={`portal-tab-btn ${sportTab === 'Tenis' ? 'active' : 'inactive'}`}
-          onClick={() => setSportTab('Tenis')}
-          style={{ whiteSpace: 'nowrap' }}
-        >
-          🎾 Tenis
-        </button>
-      </div>
 
-      {/* Day Selector */}
-      <div className="portal-day-group">
-        {days.map(day => (
-          <button
-            key={day.date}
-            className={`portal-day-btn ${selectedDay === day.date ? 'active' : 'inactive'}`}
-            onClick={() => setSelectedDay(day.date)}
-          >
-            {day.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Filter Tabs */}
-      <div className="portal-tab-group">
-        <button
-          className={`portal-tab-btn ${filterTab === 'Tümü' ? 'active' : 'inactive'}`}
-          onClick={() => setFilterTab('Tümü')}
-        >
-          Tümü
-        </button>
-        {uniqueLeagues.map(lg => (
-          <button
-            key={lg}
-            className={`portal-tab-btn ${filterTab === lg ? 'active' : 'inactive'}`}
-            onClick={() => setFilterTab(lg)}
-          >
-            {lg}
-          </button>
-        ))}
-      </div>
 
       {/* Section Heading */}
       <div className="portal-section-heading">
@@ -154,7 +41,7 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
       </div>
 
       {/* Match Cards */}
-      {dayFiltered.length === 0 ? (
+      {displayItems.length === 0 ? (
         <div style={{
           textAlign: 'center',
           padding: '60px 20px',
@@ -169,7 +56,7 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
           </div>
         </div>
       ) : (
-        dayFiltered.map(item => {
+        displayItems.map(item => {
           const kgVarOdd = (1.50 + Math.random() * 0.4).toFixed(2);
           const ustOdd = (1.60 + Math.random() * 0.4).toFixed(2);
           const isHome = item.prediction?.toLowerCase().includes('ev') || item.prediction?.includes('1');
@@ -179,6 +66,7 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
             <div
               key={item.id}
               className="portal-match-card"
+              style={{ padding: '12px 14px', minHeight: 'auto', marginBottom: '10px' }}
               onClick={() => onNavigate('analysis')}
             >
               {/* Time Column */}
