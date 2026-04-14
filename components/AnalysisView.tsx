@@ -103,74 +103,74 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
             </div>
 
             {/* Header / Main Filters */}
-            <div className="w-full max-w-6xl mx-auto px-4 pt-24 text-center mb-0 relative z-10">
+            <div className="w-full max-w-6xl mx-auto px-2 pt-20 text-center mb-0 relative z-10">
                 {/* Sport Toggle */}
-                <div className="flex justify-center gap-4 mb-4 mt-2">
+                <div className="flex overflow-x-auto justify-start md:justify-center gap-2 mb-3 mt-1 pb-1 scrollbar-none px-2">
                     <button
                         onClick={() => { setSelectedSport('Futbol'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Futbol'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Futbol'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
                             : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                             }`}
                     >
-                        <span className="text-xl">⚽</span> Futbol
+                        <span className="text-sm">⚽</span> Futbol
                     </button>
                     <button
                         onClick={() => { setSelectedSport('Basketbol'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Basketbol'
-                            ? 'bg-[#E4510B] text-white shadow-[0_0_25px_rgba(228,81,11,0.3)] scale-105'
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Basketbol'
+                            ? 'bg-[#E4510B] text-white shadow-[0_0_15px_rgba(228,81,11,0.3)] scale-105'
                             : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                             }`}
                     >
-                        <span className="text-xl">🏀</span> Basketbol
+                        <span className="text-sm">🏀</span> Basketbol
                     </button>
                     <button
                         onClick={() => { setSelectedSport('Formula 1'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Formula 1'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Formula 1'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
                             : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                             }`}
                     >
-                        <span className="text-xl">🏎️</span> Formula 1
+                        <span className="text-sm">🏎️</span> Formula 1
                     </button>
                     <button
                         onClick={() => { setSelectedSport('MotoGP'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'MotoGP'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'MotoGP'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
                             : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                             }`}
                     >
-                        <span className="text-xl">🏍️</span> MotoGP
+                        <span className="text-sm">🏍️</span> MotoGP
                     </button>
                     <button
                         onClick={() => { setSelectedSport('Superbike'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Superbike'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Superbike'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
                             : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                             }`}
                     >
-                        <span className="text-xl">🏍️</span> Superbike
+                        <span className="text-sm">🏍️</span> Superbike
                     </button>
                     <button
                         onClick={() => { setSelectedSport('Tenis'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Tenis'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Tenis'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
                             : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
                             }`}
                     >
-                        <span className="text-xl">🎾</span> Tenis
+                        <span className="text-sm">🎾</span> Tenis
                     </button>
                 </div>
 
                 {/* Date Selection */}
-                <div className="flex overflow-x-auto gap-2 mb-6 pb-3 justify-center scrollbar-none">
+                <div className="flex overflow-x-auto gap-2 mb-3 pb-1 justify-start md:justify-center scrollbar-none px-2">
                     <button
                         onClick={() => {
                             setSelectedDate('WEEKLY');
                             setSelectedLeague('TÜMÜ');
                         }}
-                        className={`flex flex-col items-center justify-center min-w-[80px] h-[52px] rounded-lg transition-all duration-300 ${selectedDate === 'WEEKLY'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)] scale-105'
+                        className={`flex flex-col items-center justify-center min-w-[70px] h-[44px] rounded-lg transition-all duration-300 shrink-0 ${selectedDate === 'WEEKLY'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_10px_rgba(240,185,11,0.2)]'
                             : 'bg-[var(--bg-card)] border-[var(--border-subtle)] border text-[#f0b90b] hover:border-[#f0b90b]/50'
                             }`}
                     >
@@ -189,8 +189,8 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                     setSelectedDate(date);
                                     setSelectedLeague('TÜMÜ'); // Reset league filter on date change
                                 }}
-                                className={`flex flex-col items-center justify-center min-w-[80px] h-[52px] rounded-lg transition-all duration-300 ${isSelected
-                                    ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)] scale-105'
+                                className={`flex flex-col items-center justify-center min-w-[70px] h-[44px] rounded-lg transition-all duration-300 shrink-0 ${isSelected
+                                    ? 'bg-[#f0b90b] text-black shadow-[0_0_10px_rgba(240,185,11,0.2)]'
                                     : 'bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--text-dim)] hover:text-[var(--text-primary)]'
                                     }`}
                             >
@@ -203,16 +203,16 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
 
                 {/* League Filter */}
-                <div className="flex overflow-x-auto gap-2 mb-4 pb-3 justify-center scrollbar-none px-4">
+                <div className="flex overflow-x-auto gap-2 mb-4 pb-2 justify-start md:justify-center scrollbar-none px-2">
                     {leagues.map((league) => (
                         <button
                             key={league}
                             title={league}
                             onClick={() => setSelectedLeague(league)}
-                            className={`px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all duration-300 ${selectedLeague === league
-                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)] scale-105'
-                                : 'bg-transparent border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[#f0b90b]/50 hover:text-[var(--text-primary)] hover:scale-[1.02]'
-                                } max-w-[140px] md:max-w-[200px] shrink-0 truncate`}
+                            className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all duration-300 shrink-0 ${selectedLeague === league
+                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_10px_rgba(240,185,11,0.2)]'
+                                : 'bg-[var(--bg-elevated)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[#f0b90b]/50 hover:text-[var(--text-primary)]'
+                                } max-w-[120px] md:max-w-[180px] truncate`}
                         >
                             {league}
                         </button>
