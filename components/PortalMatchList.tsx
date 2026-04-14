@@ -11,7 +11,6 @@ interface PortalMatchListProps {
 const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLeague, onNavigate }) => {
   const [sportTab, setSportTab] = useState<SportCategory>('Futbol');
   const [filterTab, setFilterTab] = useState('Tümü');
-  const [showAll, setShowAll] = useState(false);
 
   // Filter by sport
   let filtered = analyses.filter(a => {
@@ -32,8 +31,8 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
   // Sort by confidence
   filtered.sort((a, b) => b.confidence - a.confidence);
 
-  // Show limited or all
-  const displayItems = showAll ? filtered : filtered.slice(0, 6);
+  // Show limited (Teaser)
+  const displayItems = filtered.slice(0, 4);
 
   // Day tabs
   const days: { label: string; date: string }[] = [];
@@ -221,22 +220,16 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
         })
       )}
 
-      {/* Load More */}
-      {!showAll && filtered.length > 6 && (
-        <div className="portal-load-more">
-          <button className="portal-load-more-btn" onClick={() => setShowAll(true)}>
-            Daha fazla analiz gör ({filtered.length - 6} maç daha)
-          </button>
-        </div>
-      )}
-
-      {showAll && filtered.length > 6 && (
-        <div className="portal-load-more">
-          <button className="portal-load-more-btn" onClick={() => setShowAll(false)}>
-            Daha az göster
-          </button>
-        </div>
-      )}
+      {/* Go to Analyses Button */}
+      <div className="portal-load-more">
+        <button 
+          className="portal-load-more-btn" 
+          onClick={() => onNavigate('analysis')}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+        >
+          TÜM ANALİZLERE GİT <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 };

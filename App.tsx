@@ -43,6 +43,7 @@ import PortalHero from './components/PortalHero';
 import PortalMatchList from './components/PortalMatchList';
 import BestPicks from './components/BestPicks';
 import PortalMobileNav from './components/PortalMobileNav';
+import PortalNewsTeaser from './components/PortalNewsTeaser';
 
 
 const App: React.FC = () => {
@@ -599,6 +600,10 @@ const App: React.FC = () => {
                     analyses={analyses}
                     selectedLeague={portalLeague}
                     onNavigate={handleViewChange}
+                  />
+                  <PortalNewsTeaser 
+                    onViewChange={handleViewChange}
+                    onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   />
                 </div>
 
