@@ -585,14 +585,7 @@ const App: React.FC = () => {
 
               {/* ═══ PORTAL BODY (Sidebar + Content) ═══ */}
               <div className="portal-body">
-                {/* Left Sidebar */}
-                <PortalSidebar
-                  analyses={analyses}
-                  coupons={coupons}
-                  selectedLeague={portalLeague}
-                  onLeagueSelect={setPortalLeague}
-                  onNavigate={handleViewChange}
-                />
+                {/* Left Sidebar removed as requested */}
 
                 {/* Main Content: Match List */}
                 <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
