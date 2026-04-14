@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MatchAnalysis } from '../types';
 import { BarChart3, ArrowRight } from 'lucide-react';
 
@@ -9,114 +9,108 @@ interface PortalMatchListProps {
 }
 
 const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLeague, onNavigate }) => {
-  // Filter by league if a specific league is selected from sidebar
   let displayItems = analyses;
   if (selectedLeague !== 'Tümü' && selectedLeague !== 'Genel Maçlar') {
     displayItems = displayItems.filter(a => a.league === selectedLeague);
   }
-
-  // Sort by confidence
   displayItems.sort((a, b) => b.confidence - a.confidence);
+  displayItems = displayItems.slice(0, 5);
 
-  // Show limited (Teaser)
-  displayItems = displayItems.slice(0, 4);
-
-  const monthNames = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
-
-  // Format date
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return '';
-    const d = new Date(dateStr);
-    return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
-  };
+  if (displayItems.length === 0) return null;
 
   return (
-    <div className="portal-content">
-
-
-      {/* Section Heading */}
-      <div className="portal-section-heading">
-        <BarChart3 style={{ width: 16, height: 16 }} />
-        Öne çıkan analizler
+    <div style={{ margin: '0 0 12px' }}>
+      {/* Compact header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ width: '3px', height: '14px', background: '#f0b90b', borderRadius: '2px' }} />
+          <span style={{ color: '#fff', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px' }}>Analizler</span>
+        </div>
+        <button 
+          onClick={() => onNavigate('analysis')}
+          style={{ background: 'none', border: 'none', color: '#f0b90b', fontSize: '9px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}
+        >
+          TÜMÜ <ArrowRight style={{ width: 10, height: 10 }} />
+        </button>
       </div>
 
-      {/* Match Cards */}
-      {displayItems.length === 0 ? (
-        <div style={{
-          textAlign: 'center',
-          padding: '60px 20px',
-          color: '#555',
-        }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>📊</div>
-          <div style={{ fontSize: 14, fontWeight: 800, color: '#777', marginBottom: 8, textTransform: 'uppercase' as const, letterSpacing: 1 }}>
-            Bu filtrede analiz bulunamadı
-          </div>
-          <div style={{ fontSize: 12, color: '#444' }}>
-            Farklı bir tarih veya lig seçerek tekrar deneyin
-          </div>
+      {/* Compact iddaa-style table */}
+      <div style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '10px', overflow: 'hidden' }}>
+        {/* Table header row */}
+        <div style={{ display: 'grid', gridTemplateColumns: '50px 1fr 100px 50px 50px 45px', alignItems: 'center', padding: '6px 10px', borderBottom: '1px solid #151515', gap: '4px' }}>
+          <span style={{ fontSize: '7px', fontWeight: 800, color: '#444', textTransform: 'uppercase', letterSpacing: '1px' }}>SAAT</span>
+          <span style={{ fontSize: '7px', fontWeight: 800, color: '#444', textTransform: 'uppercase', letterSpacing: '1px' }}>MAÇ</span>
+          <span style={{ fontSize: '7px', fontWeight: 800, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center' }}>TAHMİN</span>
+          <span style={{ fontSize: '7px', fontWeight: 800, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center' }}>KG</span>
+          <span style={{ fontSize: '7px', fontWeight: 800, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center' }}>2.5Ü</span>
+          <span style={{ fontSize: '7px', fontWeight: 800, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>%</span>
         </div>
-      ) : (
-        displayItems.map(item => {
-          const kgVarOdd = (1.50 + Math.random() * 0.4).toFixed(2);
+
+        {/* Match rows */}
+        {displayItems.map((item, idx) => {
+          const kgOdd = (1.50 + Math.random() * 0.4).toFixed(2);
           const ustOdd = (1.60 + Math.random() * 0.4).toFixed(2);
-          const isHome = item.prediction?.toLowerCase().includes('ev') || item.prediction?.includes('1');
-          const confClass = item.confidence >= 90 ? 'portal-conf-green' : 'portal-conf-yellow';
+          const confColor = item.confidence >= 90 ? '#22c55e' : '#f0b90b';
 
           return (
             <div
               key={item.id}
-              className="portal-match-card"
-              style={{ padding: '8px 12px', minHeight: 'auto', marginBottom: '8px' }}
               onClick={() => onNavigate('analysis')}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '50px 1fr 100px 50px 50px 45px',
+                alignItems: 'center',
+                padding: '7px 10px',
+                borderBottom: idx < displayItems.length - 1 ? '1px solid #111' : 'none',
+                cursor: 'pointer',
+                gap: '4px',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#141414')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
-              {/* Time Column */}
-              <div className="portal-mc-time" style={{ gap: '1px' }}>
-                <div className="portal-mc-date" style={{ fontSize: '7px' }}>{formatDate(item.matchDate)}</div>
-                <div className="portal-mc-hour" style={{ fontSize: '11px' }}>{item.matchTime || '21:00'}</div>
-                <div className="portal-mc-comp" style={{ fontSize: '7px' }}>{item.league}</div>
+              {/* Time */}
+              <div>
+                <div style={{ fontSize: '10px', fontWeight: 800, color: '#f0b90b' }}>{item.matchTime || '21:00'}</div>
+                <div style={{ fontSize: '6px', fontWeight: 700, color: '#333', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '1px' }}>{item.league?.substring(0, 12)}</div>
               </div>
 
-              {/* Teams Column */}
-              <div style={{ gap: '1px', display: 'flex', flexDirection: 'column' }}>
-                <div className="portal-mc-home" style={{ fontSize: '11px' }}>{item.homeTeam}</div>
-                <div className="portal-mc-vs" style={{ fontSize: '8px', margin: '0' }}>vs</div>
-                <div className="portal-mc-away" style={{ fontSize: '11px' }}>{item.awayTeam}</div>
+              {/* Teams */}
+              <div style={{ minWidth: 0 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#e5e5e5', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
+                  {item.homeTeam} <span style={{ color: '#333', fontSize: '8px', fontWeight: 600, margin: '0 2px' }}>vs</span> {item.awayTeam}
+                </span>
               </div>
 
-              {/* Right Column: Prediction + Stats */}
-              <div className="portal-mc-right">
-                <div className={`portal-pred-badge ${isHome ? 'portal-pred-home' : 'portal-pred-away'}`} style={{ fontSize: '9px', padding: '2px 8px' }}>
+              {/* Prediction badge */}
+              <div style={{ textAlign: 'center' }}>
+                <span style={{
+                  display: 'inline-block',
+                  padding: '2px 6px',
+                  borderRadius: '4px',
+                  fontSize: '8px',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  background: item.prediction?.toLowerCase().includes('ev') ? 'rgba(34,197,94,0.1)' : 'rgba(240,185,11,0.1)',
+                  color: item.prediction?.toLowerCase().includes('ev') ? '#22c55e' : '#f0b90b',
+                  border: `1px solid ${item.prediction?.toLowerCase().includes('ev') ? 'rgba(34,197,94,0.2)' : 'rgba(240,185,11,0.2)'}`,
+                }}>
                   {item.prediction}
-                </div>
-                <div className="portal-mc-stats" style={{ gap: '8px' }}>
-                  <div className="portal-ms" style={{ minWidth: '35px' }}>
-                    <div className="portal-ms-v" style={{ fontSize: '10px' }}>{kgVarOdd}</div>
-                    <div className="portal-ms-k" style={{ fontSize: '6px' }}>KG Var</div>
-                  </div>
-                  <div className="portal-ms" style={{ minWidth: '35px' }}>
-                    <div className="portal-ms-v" style={{ fontSize: '10px' }}>{ustOdd}</div>
-                    <div className="portal-ms-k" style={{ fontSize: '6px' }}>2.5 ÜST</div>
-                  </div>
-                  <div className="portal-ms" style={{ minWidth: '35px' }}>
-                    <div className={`portal-ms-v portal-conf-v ${confClass}`} style={{ fontSize: '10px' }}>%{item.confidence}</div>
-                    <div className="portal-ms-k" style={{ fontSize: '6px' }}>Güven</div>
-                  </div>
-                </div>
+                </span>
               </div>
+
+              {/* KG Odd */}
+              <div style={{ textAlign: 'center', fontSize: '10px', fontWeight: 800, color: '#ccc' }}>{kgOdd}</div>
+
+              {/* 2.5U Odd */}
+              <div style={{ textAlign: 'center', fontSize: '10px', fontWeight: 800, color: '#ccc' }}>{ustOdd}</div>
+
+              {/* Confidence */}
+              <div style={{ textAlign: 'right', fontSize: '11px', fontWeight: 900, color: confColor }}>%{item.confidence}</div>
             </div>
           );
-        })
-      )}
-
-      {/* Go to Analyses Button */}
-      <div className="portal-load-more">
-        <button 
-          className="portal-load-more-btn" 
-          onClick={() => onNavigate('analysis')}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-        >
-          TÜM ANALİZLERE GİT <ArrowRight className="w-4 h-4" />
-        </button>
+        })}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Coupon } from '../types';
 import { demoCoupons } from '../demoData';
-import { Zap, Shield, Flame, ChevronRight } from 'lucide-react';
+import { Zap, Shield, Flame, ChevronRight, ArrowRight } from 'lucide-react';
 
 interface PortalCouponsTeaserProps {
     coupons?: Coupon[];
@@ -10,87 +10,76 @@ interface PortalCouponsTeaserProps {
 
 const PortalCouponsTeaser: React.FC<PortalCouponsTeaserProps> = ({ coupons, onViewChange }) => {
     const baseCoupons = (coupons && coupons.length > 0) ? coupons : demoCoupons;
-    
-    // Sort logic or just grab the top 2
     const displayCoupons = baseCoupons.slice(0, 2);
 
     if (displayCoupons.length === 0) return null;
 
     return (
-        <div className="mt-8 mb-6 px-4 md:px-0 animate-fade-in-up animate-delay-1">
-            <div className="portal-section-heading" style={{ marginBottom: '16px' }}>
-                <span className="text-xl">🎫</span> BİZE GÜVEN, KAZAN!
+        <div style={{ margin: '8px 0 12px' }}>
+            {/* Compact header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ width: '3px', height: '14px', background: '#f0b90b', borderRadius: '2px' }} />
+                    <span style={{ color: '#fff', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px' }}>Günün Kuponları</span>
+                </div>
+                <button 
+                    onClick={() => onViewChange('coupons')}
+                    style={{ background: 'none', border: 'none', color: '#f0b90b', fontSize: '9px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}
+                >
+                    TÜMÜ <ArrowRight style={{ width: 10, height: 10 }} />
+                </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 {displayCoupons.map((coupon, idx) => {
                     const isLow = coupon.riskLevel === 'LOW';
                     const isHigh = coupon.riskLevel === 'HIGH';
+                    const riskColor = isLow ? '#22c55e' : isHigh ? '#ef4444' : '#f0b90b';
+                    const riskBg = isLow ? 'rgba(34,197,94,0.08)' : isHigh ? 'rgba(239,68,68,0.08)' : 'rgba(240,185,11,0.08)';
+                    const riskLabel = isLow ? 'BANKO' : isHigh ? 'RİSKLİ' : 'ÖNERİ';
+                    const RiskIcon = isLow ? Shield : isHigh ? Flame : Zap;
 
                     return (
                         <div
                             key={coupon.id}
                             onClick={() => onViewChange('coupons')}
-                            className="group relative rounded-xl p-3 transition-all duration-500 hover:border-[#FFC107]/50 hover:scale-[1.01] cursor-pointer"
-                            style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)', animationDelay: `${idx * 0.1}s` }}
+                            style={{ 
+                                background: '#0d0d0d', 
+                                border: '1px solid #1a1a1a', 
+                                borderRadius: '10px', 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                transition: 'all 0.3s',
+                            }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(240,185,11,0.4)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#1a1a1a'; e.currentTarget.style.transform = 'translateY(0)'; }}
                         >
-                             {/* Card Header */}
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-1.5">
-                                    <div className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest flex items-center gap-1 ${isLow ? 'bg-emerald-500/10 text-emerald-500' :
-                                        isHigh ? 'bg-rose-500/10 text-rose-500' :
-                                            'bg-[#f0b90b]/10 text-[#f0b90b]'
-                                        }`}>
-                                        {isLow ? <Shield className="w-2.5 h-2.5" /> :
-                                            isHigh ? <Flame className="w-2.5 h-2.5" /> :
-                                                <Zap className="w-2.5 h-2.5" />}
-                                        {isLow ? 'BANKO' : isHigh ? 'RİSKLİ' : 'ÖNERİ'}
-                                    </div>
-                                    {coupon.category && (
-                                        <div className="px-1.5 py-0.5 rounded bg-zinc-800/80 border border-zinc-700/50 text-[8px] font-black uppercase text-zinc-300">
-                                            {coupon.category}
-                                        </div>
-                                    )}
+                            {/* Risk badge + Total odd */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 6px', borderRadius: '4px', background: riskBg, border: `1px solid ${riskColor}20` }}>
+                                    <RiskIcon style={{ width: 9, height: 9, color: riskColor }} />
+                                    <span style={{ fontSize: '8px', fontWeight: 900, color: riskColor, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{riskLabel}</span>
                                 </div>
-                                <div className="flex items-center gap-1">
-                                    <div className="w-1 h-1 rounded-full bg-[#f0b90b] animate-pulse" />
-                                    <span className="text-zinc-500 font-bold text-[8px] uppercase tracking-widest">AI</span>
+                                <div style={{ textAlign: 'right' }}>
+                                    <span style={{ fontSize: '16px', fontWeight: 900, color: '#fff', fontStyle: 'italic' }}>{coupon.totalOdd}</span>
+                                    <span style={{ fontSize: '10px', fontWeight: 800, color: '#f0b90b', marginLeft: '2px' }}>x</span>
                                 </div>
                             </div>
 
-                             {/* Content */}
-                            <div className="space-y-2 mb-3">
-                                {coupon.matches.slice(0, 2).map((match, midx) => (
-                                    <div key={midx} className="flex flex-col gap-1">
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-black text-[10.5px] uppercase italic tracking-tight truncate max-w-[80%]" style={{ color: 'var(--text-primary)' }}>
-                                                {match.homeTeam} - {match.awayTeam}
-                                            </span>
-                                            <span className="text-[#FFC107] font-black text-xs">{match.odd}</span>
+                            {/* Matches compact */}
+                            {coupon.matches.slice(0, 2).map((match, midx) => (
+                                <div key={midx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '3px 0', borderTop: midx > 0 ? '1px solid #111' : 'none' }}>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <div style={{ fontSize: '9.5px', fontWeight: 800, color: '#ddd', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {match.homeTeam} - {match.awayTeam}
                                         </div>
-                                        <div className="flex items-center gap-1.5">
-                                            <div className="h-[1.5px] w-4 bg-[#FFC107]/30 rounded-full" />
-                                            <span className="font-bold text-[9px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-                                                {match.prediction}
-                                            </span>
+                                        <div style={{ fontSize: '7px', fontWeight: 700, color: '#444', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '1px' }}>
+                                            {match.prediction}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-
-                             {/* Total Odd Bar */}
-                            <div className="pt-3 border-t border-black/5 flex items-center justify-between">
-                                <div className="flex flex-col">
-                                    <span className="font-black text-[8px] uppercase tracking-widest mb-0.5" style={{ color: 'var(--text-muted)' }}>ORAN</span>
-                                    <div className="text-xl font-black italic leading-none" style={{ color: 'var(--text-primary)' }}>
-                                        {coupon.totalOdd}<span className="text-[#FFC107] text-xs ml-0.5">x</span>
-                                    </div>
+                                    <span style={{ fontSize: '10px', fontWeight: 900, color: '#f0b90b', marginLeft: '8px', flexShrink: 0 }}>{match.odd}</span>
                                 </div>
-
-                                <button className="px-3 py-1.5 bg-[#FFC107]/10 text-[#FFC107] group-hover:bg-[#FFC107] group-hover:text-black font-black text-[9px] uppercase rounded flex items-center gap-1 transition-all">
-                                    İNCELE <ChevronRight className="w-2.5 h-2.5" />
-                                </button>
-                            </div>
+                            ))}
                         </div>
                     );
                 })}

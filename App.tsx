@@ -581,15 +581,8 @@ const App: React.FC = () => {
         <div style={{ visibility: appStage !== 'loading' ? 'visible' : 'hidden', height: appStage === 'loading' ? '100vh' : 'auto', overflow: appStage === 'loading' ? 'hidden' : 'visible' }}>
           {view === 'home' && (
             <>
-              {/* Redundant PortalTicker removed in favor of Header Ticker */}
-
-              {/* ═══ PORTAL BODY (Sidebar + Content) ═══ */}
+              {/* ═══ PORTAL BODY (Single Column Centered) ═══ */}
               <div className="portal-body">
-                {/* Left Side Spacer - Keeps the content centered and balanced */}
-                <div className="hidden lg:block"></div>
-
-                {/* Main Content: Match List */}
-                <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
                   <PortalCouponsTeaser 
                     coupons={coupons}
                     onViewChange={handleViewChange}
@@ -603,21 +596,6 @@ const App: React.FC = () => {
                     onViewChange={handleViewChange}
                     onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   />
-                </div>
-
-                {/* Right Sidebar: News */}
-                <div className="portal-right-sidebar">
-                  {/* News Widget ("Gündem") */}
-                  <div style={{ padding: '0px 20px 16px' }}>
-                    <div className="portal-section-heading">
-                      🔥 GÜNDEM & HABERLER
-                    </div>
-                    <HomeNewsWidget
-                      onViewChange={handleViewChange}
-                      onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                    />
-                  </div>
-                </div>
               </div>
 
               {/* ═══ BEST PICKS FULL WIDTH ═══ */}
