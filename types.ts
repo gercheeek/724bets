@@ -120,6 +120,8 @@ export interface BookieOdd {
   isHighest?: boolean;
 }
 
+export type SportCategory = 'Futbol' | 'Basketbol' | 'Formula 1' | 'MotoGP' | 'Superbike' | 'Tenis';
+
 export interface MatchAnalysis {
   id: string;
   league: string;
@@ -138,7 +140,7 @@ export interface MatchAnalysis {
   expectedGoals: string;
   bookieOdds: BookieOdd[];
   createdAt: number;
-  sport?: 'Futbol' | 'Basketbol';
+  sport?: SportCategory;
   editorId?: string;
 }
 
@@ -160,6 +162,7 @@ export interface Coupon {
   totalOdd: string;
   date: string; // YYYY-MM-DD
   editorId?: string;
+  category?: SportCategory;
 }
 export interface WheelReward {
   id: string;

@@ -13,6 +13,7 @@ import { generateSafeAnalysis } from '../utils/helpers';
 const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false, onLoginRequired }) => {
     const baseDateStr = new Date().toISOString().split('T')[0];
     const [selectedDate, setSelectedDate] = useState<string>('WEEKLY'); // Default to Weekly
+    const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
     const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
 
     const dates: string[] = [];
@@ -24,7 +25,11 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
     }
 
     const baseCoupons = coupons || [];
-    const displayCoupons = baseCoupons.filter(c => selectedDate === 'WEEKLY' ? dates.includes(c.date) : c.date === selectedDate);
+    const displayCoupons = baseCoupons.filter(c => {
+        const matchesDate = selectedDate === 'WEEKLY' ? dates.includes(c.date) : c.date === selectedDate;
+        const matchesCategory = selectedCategory === 'Tümü' || c.category === selectedCategory;
+        return matchesDate && matchesCategory;
+    });
 
     return (
         <section id="daily-coupons" className="relative w-full bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md rounded-2xl p-4 md:p-5 h-full flex flex-col">
@@ -67,6 +72,23 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                 })}
             </div>
 
+            {/* Category Filter */}
+            <div className="flex overflow-x-auto gap-2 mb-6 pb-2 justify-start scrollbar-none">
+                {['Tümü', 'Futbol', 'Basketbol', 'Formula 1', 'MotoGP', 'Superbike', 'Tenis'].map(cat => (
+                    <button
+                        key={cat}
+                        onClick={() => setSelectedCategory(cat)}
+                        className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all duration-300 shrink-0 ${
+                            selectedCategory === cat
+                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.2)] scale-105'
+                                : 'bg-transparent border-zinc-700/50 text-zinc-500 hover:border-zinc-500 hover:text-white'
+                        }`}
+                    >
+                        {cat}
+                    </button>
+                ))}
+            </div>
+
             {displayCoupons.length === 0 && (
                 <div className="text-center py-10 rounded-2xl animate-fade-in" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)' }}>
                     <Lock className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--text-dim)' }} />
@@ -87,8 +109,15 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                     {/* Blurred Card Preview */}
                                     <div className="rounded-[16px] p-3 pointer-events-none" style={{ filter: 'blur(4px)', userSelect: 'none', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)' }}>
                                         <div className="flex items-center justify-between mb-3">
-                                            <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' : isHigh ? 'bg-rose-500/10 text-rose-500' : 'bg-[#FFC107]/10 text-[#FFC107]'}`}>
-                                                {isLow ? '🛡 BANKO' : isHigh ? '🔥 YÜKSEK RİSK' : '⚡ DEĞER ORAN'}
+                                            <div className="flex gap-1.5 flex-wrap">
+                                                <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' : isHigh ? 'bg-rose-500/10 text-rose-500' : 'bg-[#FFC107]/10 text-[#FFC107]'}`}>
+                                                    {isLow ? '🛡 BANKO' : isHigh ? '🔥 YÜKSEK RİSK' : '⚡ DEĞER ORAN'}
+                                                </div>
+                                                {coupon.category && (
+                                                    <div className="px-3 py-1 bg-zinc-800/80 border border-zinc-700/50 rounded-full text-[9px] font-black uppercase text-zinc-300">
+                                                        {coupon.category}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="space-y-2 mb-3">
@@ -127,14 +156,21 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                             >
                                 {/* Card Header / Badge */}
                                 <div className="flex items-center justify-between mb-3 px-1">
-                                    <div className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' :
-                                        isHigh ? 'bg-rose-500/10 text-rose-500' :
-                                            'bg-[#f0b90b]/10 text-[#f0b90b]'
-                                        }`}>
-                                        {isLow ? <Shield className="w-2.5 h-2.5" /> :
-                                            isHigh ? <Flame className="w-2.5 h-2.5" /> :
-                                                <Zap className="w-2.5 h-2.5" />}
-                                        {isLow ? 'BANKO' : isHigh ? 'YÜKSEK RİSK' : 'ÖNERİ'}
+                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                        <div className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' :
+                                            isHigh ? 'bg-rose-500/10 text-rose-500' :
+                                                'bg-[#f0b90b]/10 text-[#f0b90b]'
+                                            }`}>
+                                            {isLow ? <Shield className="w-2.5 h-2.5" /> :
+                                                isHigh ? <Flame className="w-2.5 h-2.5" /> :
+                                                    <Zap className="w-2.5 h-2.5" />}
+                                            {isLow ? 'BANKO' : isHigh ? 'YÜKSEK RİSK' : 'ÖNERİ'}
+                                        </div>
+                                        {coupon.category && (
+                                            <div className="px-2 py-0.5 rounded-md bg-zinc-800/80 border border-zinc-700/50 text-[8px] font-black uppercase text-zinc-300">
+                                                {coupon.category}
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <div className="w-1 h-1 rounded-full bg-[#f0b90b] animate-pulse" />

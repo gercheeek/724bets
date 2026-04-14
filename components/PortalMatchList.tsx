@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MatchAnalysis } from '../types';
+import { MatchAnalysis, SportCategory } from '../types';
 import { TrendingUp, ChevronRight, ArrowRight, BarChart3 } from 'lucide-react';
 
 interface PortalMatchListProps {
@@ -9,14 +9,19 @@ interface PortalMatchListProps {
 }
 
 const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLeague, onNavigate }) => {
-  const [sportTab, setSportTab] = useState<'Futbol' | 'Basketbol'>('Futbol');
+  const [sportTab, setSportTab] = useState<SportCategory>('Futbol');
   const [filterTab, setFilterTab] = useState('Tümü');
   const [showAll, setShowAll] = useState(false);
 
   // Filter by sport
   let filtered = analyses.filter(a => {
-    if (sportTab === 'Basketbol') return a.sport === 'Basketbol' || a.league?.toLowerCase().includes('nba');
-    return a.sport !== 'Basketbol' && !a.league?.toLowerCase().includes('nba');
+    if (sportTab === 'Basketbol') {
+      return a.sport === 'Basketbol' || a.league?.toLowerCase().includes('nba');
+    } else if (sportTab === 'Futbol') {
+      return (a.sport === 'Futbol' || !a.sport) && !a.league?.toLowerCase().includes('nba');
+    } else {
+      return a.sport === sportTab;
+    }
   });
 
   // Filter by league
@@ -66,18 +71,48 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
   return (
     <div className="portal-content">
       {/* Sport Tabs */}
-      <div className="portal-tab-group">
+      <div className="portal-tab-group" style={{ overflowX: 'auto', flexWrap: 'nowrap', paddingBottom: '4px' }}>
         <button
           className={`portal-tab-btn ${sportTab === 'Futbol' ? 'active' : 'inactive'}`}
           onClick={() => setSportTab('Futbol')}
+          style={{ whiteSpace: 'nowrap' }}
         >
           ⚽ Futbol
         </button>
         <button
           className={`portal-tab-btn ${sportTab === 'Basketbol' ? 'active' : 'inactive'}`}
           onClick={() => setSportTab('Basketbol')}
+          style={{ whiteSpace: 'nowrap' }}
         >
           🏀 Basketbol
+        </button>
+        <button
+          className={`portal-tab-btn ${sportTab === 'Formula 1' ? 'active' : 'inactive'}`}
+          onClick={() => setSportTab('Formula 1')}
+          style={{ whiteSpace: 'nowrap' }}
+        >
+          🏎️ Formula 1
+        </button>
+        <button
+          className={`portal-tab-btn ${sportTab === 'MotoGP' ? 'active' : 'inactive'}`}
+          onClick={() => setSportTab('MotoGP')}
+          style={{ whiteSpace: 'nowrap' }}
+        >
+          🏍️ MotoGP
+        </button>
+        <button
+          className={`portal-tab-btn ${sportTab === 'Superbike' ? 'active' : 'inactive'}`}
+          onClick={() => setSportTab('Superbike')}
+          style={{ whiteSpace: 'nowrap' }}
+        >
+          🏍️ Superbike
+        </button>
+        <button
+          className={`portal-tab-btn ${sportTab === 'Tenis' ? 'active' : 'inactive'}`}
+          onClick={() => setSportTab('Tenis')}
+          style={{ whiteSpace: 'nowrap' }}
+        >
+          🎾 Tenis
         </button>
       </div>
 

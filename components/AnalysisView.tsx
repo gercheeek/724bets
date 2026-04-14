@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { MatchAnalysis, Coupon, SiteUser } from '../types';
+import { MatchAnalysis, Coupon, SiteUser, SportCategory } from '../types';
 import { Trophy, Clock, ChevronDown, ChevronUp, AlertCircle, Search, Zap, Target, Flame, TrendingUp, Filter, User, Lock } from 'lucide-react';
 import DailyCoupons from './DailyCoupons';
 
@@ -15,7 +15,7 @@ interface AnalysisViewProps {
 
 const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = [], siteUser = null, isLoggedIn = false, onLoginRequired }) => {
     const [expandedId, setExpandedId] = useState<string | null>(null);
-    const [selectedSport, setSelectedSport] = useState<'Futbol' | 'Basketbol'>('Futbol');
+    const [selectedSport, setSelectedSport] = useState<SportCategory>('Futbol');
     const [selectedLeague, setSelectedLeague] = useState<string>('TÜMÜ');
 
     const toggleExpand = (id: string) => {
@@ -41,18 +41,34 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
     }
 
     const filteredAnalyses = analyses.filter(a => {
-        const isBasketball = isBasketballLeague(a);
-        const matchesSport = selectedSport === 'Basketbol' ? isBasketball : !isBasketball;
         const matchesDate = selectedDate === 'WEEKLY' ? dates.includes(a.matchDate) : a.matchDate === selectedDate;
         const matchesLeague = selectedLeague === 'TÜMÜ' || a.league === selectedLeague;
+        
+        let matchesSport = false;
+        if (selectedSport === 'Basketbol') {
+            matchesSport = a.sport === 'Basketbol' || a.league.toLowerCase().includes('nba') || a.league.toLowerCase().includes('basket') || a.league.toLowerCase().includes('euroleague');
+        } else if (selectedSport === 'Futbol') {
+            matchesSport = (!a.sport || a.sport === 'Futbol') && !(a.league.toLowerCase().includes('nba') || a.league.toLowerCase().includes('basket') || a.league.toLowerCase().includes('euroleague'));
+        } else {
+            matchesSport = a.sport === selectedSport;
+        }
 
         return matchesSport && matchesDate && matchesLeague;
     });
 
     const leagues = ['TÜMÜ', ...Array.from(new Set(analyses.filter(a => {
-        const isBasketball = isBasketballLeague(a);
-        const dateMatch = selectedDate === 'WEEKLY' ? dates.includes(a.matchDate) : a.matchDate === selectedDate;
-        return dateMatch && (selectedSport === 'Basketbol' ? isBasketball : !isBasketball);
+        const matchesDate = selectedDate === 'WEEKLY' ? dates.includes(a.matchDate) : a.matchDate === selectedDate;
+        
+        let matchesSport = false;
+        if (selectedSport === 'Basketbol') {
+            matchesSport = a.sport === 'Basketbol' || a.league.toLowerCase().includes('nba') || a.league.toLowerCase().includes('basket') || a.league.toLowerCase().includes('euroleague');
+        } else if (selectedSport === 'Futbol') {
+            matchesSport = (!a.sport || a.sport === 'Futbol') && !(a.league.toLowerCase().includes('nba') || a.league.toLowerCase().includes('basket') || a.league.toLowerCase().includes('euroleague'));
+        } else {
+            matchesSport = a.sport === selectedSport;
+        }
+
+        return matchesDate && matchesSport;
     }).map(a => a.league)))];
 
     // Grouping by League (Date is already filtered)
@@ -107,6 +123,42 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                             }`}
                     >
                         <span className="text-xl">🏀</span> Basketbol
+                    </button>
+                    <button
+                        onClick={() => { setSelectedSport('Formula 1'); setSelectedLeague('TÜMÜ'); }}
+                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Formula 1'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                            }`}
+                    >
+                        <span className="text-xl">🏎️</span> Formula 1
+                    </button>
+                    <button
+                        onClick={() => { setSelectedSport('MotoGP'); setSelectedLeague('TÜMÜ'); }}
+                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'MotoGP'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                            }`}
+                    >
+                        <span className="text-xl">🏍️</span> MotoGP
+                    </button>
+                    <button
+                        onClick={() => { setSelectedSport('Superbike'); setSelectedLeague('TÜMÜ'); }}
+                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Superbike'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                            }`}
+                    >
+                        <span className="text-xl">🏍️</span> Superbike
+                    </button>
+                    <button
+                        onClick={() => { setSelectedSport('Tenis'); setSelectedLeague('TÜMÜ'); }}
+                        className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${selectedSport === 'Tenis'
+                            ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                            }`}
+                    >
+                        <span className="text-xl">🎾</span> Tenis
                     </button>
                 </div>
 
@@ -189,8 +241,8 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                 <div className="w-[100px] shrink-0">SAAT</div>
                                 <div className="flex-1 pl-4">MAÇ</div>
                                 <div className="w-[180px] shrink-0 text-center">TAHMİN</div>
-                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ÜST' : 'KG VAR'}</div>
-                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ALT' : '2.5 ÜST'}</div>
+                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ÜST' : selectedSport === 'Futbol' ? 'KG VAR' : 'SEÇİM 1'}</div>
+                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ALT' : selectedSport === 'Futbol' ? '2.5 ÜST' : 'SEÇİM 2'}</div>
                                 <div className="w-[80px] shrink-0 text-center">GÜVEN</div>
                                 <div className="w-[40px] shrink-0 text-right">AÇ</div>
                             </div>
@@ -282,11 +334,11 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                             <div className="flex md:hidden w-full items-center justify-between pt-4 border-t border-zinc-800/50 mt-1">
                                                 <div className="flex gap-6">
                                                     <div className="flex flex-col">
-                                                        <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ÜST' : 'KG VAR'}</span>
+                                                        <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ÜST' : selectedSport === 'Futbol' ? 'KG VAR' : 'SEÇİM 1'}</span>
                                                         <span className="text-[#f0b90b] font-black text-sm mt-0.5">{highestOdds.odd1}</span>
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ALT' : '2.5 ÜST'}</span>
+                                                        <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ALT' : selectedSport === 'Futbol' ? '2.5 ÜST' : 'SEÇİM 2'}</span>
                                                         <span className="text-[#f0b90b] font-black text-sm mt-0.5">{highestOdds.odd2}</span>
                                                     </div>
                                                 </div>
@@ -416,11 +468,11 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                                             <div className="flex items-center justify-between">
                                                                                 <div className="flex gap-4">
                                                                                     <div className="flex flex-col">
-                                                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase">KG VAR</span>
+                                                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase">{selectedSport === 'Basketbol' ? 'ÜST' : selectedSport === 'Futbol' ? 'KG VAR' : 'SEÇİM 1'}</span>
                                                                                         <span className="text-[#f0b90b] font-black text-sm">{bookie.odd1}</span>
                                                                                     </div>
                                                                                     <div className="flex flex-col">
-                                                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase">2.5 ÜST</span>
+                                                                                        <span className="text-[var(--text-muted)] text-[8px] font-black uppercase">{selectedSport === 'Basketbol' ? 'ALT' : selectedSport === 'Futbol' ? '2.5 ÜST' : 'SEÇİM 2'}</span>
                                                                                         <span className="text-[#f0b90b] font-black text-sm">{bookie.odd2}</span>
                                                                                     </div>
                                                                                 </div>

@@ -95,7 +95,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localCoupons, setLocalCoupons] = useState<Coupon[]>(coupons);
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
 
-  const [adminSport, setAdminSport] = useState<'Futbol' | 'Basketbol'>('Futbol');
+  const [adminSport, setAdminSport] = useState<SportCategory>('Futbol');
 
   // AI Parser States
   const [aiInput, setAiInput] = useState('');
@@ -106,6 +106,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [showCouponAiModal, setShowCouponAiModal] = useState(false);
   const [couponRiskLevel, setCouponRiskLevel] = useState<'LOW' | 'MEDIUM' | 'HIGH'>('MEDIUM');
   const [couponAiDate, setCouponAiDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [couponAiCategory, setCouponAiCategory] = useState<SportCategory | 'Tümü'>('Tümü');
 
   // JSON Editor State
   const [jsonInput, setJsonInput] = useState('');
@@ -743,7 +744,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         matches: newMatches,
         totalOdd: totalOdd.toFixed(2),
         date: currentDate,
-        editorId: role
+        editorId: role,
+        category: couponAiCategory === 'Tümü' ? undefined : couponAiCategory
       };
 
       const updatedCoupons = [newCoupon, ...localCoupons];
@@ -1254,29 +1256,50 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div className="space-y-6">
-                <div className="space-y-3">
-                  <label className="text-xs font-black text-zinc-500 uppercase flex items-center gap-2">
-                    <Ticket className="w-4 h-4" /> KUPON RİSK SEVİYESİ (STRATEJİ)
-                  </label>
-                  <div className="grid grid-cols-3 gap-3">
-                    <button
-                      onClick={() => setCouponRiskLevel('LOW')}
-                      className={`py-3 rounded-xl border font-black text-xs transition-all ${couponRiskLevel === 'LOW' ? 'bg-green-500/20 text-green-500 border-green-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label className="text-xs font-black text-zinc-500 uppercase flex items-center gap-2">
+                      <Ticket className="w-4 h-4" /> KUPON RİSK SEVİYESİ
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                      <button
+                        onClick={() => setCouponRiskLevel('LOW')}
+                        className={`py-3 rounded-xl border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'LOW' ? 'bg-green-500/20 text-green-500 border-green-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                      >
+                        <span className="text-xs">DÜŞÜK</span><span className="text-[8px] opacity-70">(KASA)</span>
+                      </button>
+                      <button
+                        onClick={() => setCouponRiskLevel('MEDIUM')}
+                        className={`py-3 rounded-xl border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                      >
+                        <span className="text-xs">ORTA</span><span className="text-[8px] opacity-70">(İDEAL)</span>
+                      </button>
+                      <button
+                        onClick={() => setCouponRiskLevel('HIGH')}
+                        className={`py-3 rounded-xl border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'HIGH' ? 'bg-red-500/20 text-red-500 border-red-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                      >
+                        <span className="text-xs">YÜKSEK</span><span className="text-[8px] opacity-70">(SÜRPRİZ)</span>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <label className="text-xs font-black text-zinc-500 uppercase flex items-center gap-2">
+                      KATEGORİ (OPSİYONEL)
+                    </label>
+                    <select
+                      value={couponAiCategory}
+                      onChange={(e) => setCouponAiCategory(e.target.value as any)}
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-[14px] text-sm focus:border-[#f0b90b] transition-all outline-none"
                     >
-                      DÜŞÜK RİSK (KASA)
-                    </button>
-                    <button
-                      onClick={() => setCouponRiskLevel('MEDIUM')}
-                      className={`py-3 rounded-xl border font-black text-xs transition-all ${couponRiskLevel === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
-                    >
-                      ORTA RİSK (İDEAL)
-                    </button>
-                    <button
-                      onClick={() => setCouponRiskLevel('HIGH')}
-                      className={`py-3 rounded-xl border font-black text-xs transition-all ${couponRiskLevel === 'HIGH' ? 'bg-red-500/20 text-red-500 border-red-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
-                    >
-                      YÜKSEK RİSK (SÜRPRİZ)
-                    </button>
+                      <option value="Tümü">Karışık (Belirtilmemiş)</option>
+                      <option value="Futbol">Futbol</option>
+                      <option value="Basketbol">Basketbol</option>
+                      <option value="Formula 1">Formula 1</option>
+                      <option value="MotoGP">MotoGP</option>
+                      <option value="Superbike">Superbike</option>
+                      <option value="Tenis">Tenis</option>
+                    </select>
                   </div>
                 </div>
 
@@ -1459,7 +1482,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       </div>
 
                       <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[40px] space-y-10">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                           <div className="space-y-2">
                             <label className="text-[9px] font-black text-zinc-500 uppercase">KUPON BAŞLIĞI</label>
                             <input value={coupon.title} onChange={(e) => {
@@ -1485,6 +1508,26 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             <input value={coupon.totalOdd} onChange={(e) => {
                               const updated = [...localCoupons]; updated[idx].totalOdd = e.target.value; setLocalCoupons(updated);
                             }} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-[#f0b90b] font-black focus:border-[#f0b90b] transition-all outline-none" placeholder="1.50" />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[9px] font-black text-zinc-500 uppercase">KATEGORİ</label>
+                            <select
+                              value={coupon.category || 'Tümü'}
+                              onChange={(e) => {
+                                const updated = [...localCoupons];
+                                updated[idx].category = e.target.value === 'Tümü' ? undefined : (e.target.value as SportCategory);
+                                setLocalCoupons(updated);
+                              }}
+                              className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none"
+                            >
+                              <option value="Tümü">Karışık / Belirtilmemiş</option>
+                              <option value="Futbol">Futbol</option>
+                              <option value="Basketbol">Basketbol</option>
+                              <option value="Formula 1">Formula 1</option>
+                              <option value="MotoGP">MotoGP</option>
+                              <option value="Superbike">Superbike</option>
+                              <option value="Tenis">Tenis</option>
+                            </select>
                           </div>
                         </div>
 
@@ -1638,6 +1681,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
                         : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
                         }`}
+                      style={{ whiteSpace: 'nowrap' }}
                     >
                       <span className="text-xl">⚽</span> Futbol
                     </button>
@@ -1647,18 +1691,64 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         ? 'bg-[#E4510B] text-white shadow-[0_0_25px_rgba(228,81,11,0.3)] scale-105'
                         : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
                         }`}
+                      style={{ whiteSpace: 'nowrap' }}
                     >
                       <span className="text-xl">🏀</span> Basketbol
+                    </button>
+                    <button
+                      onClick={() => setAdminSport('Formula 1')}
+                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'Formula 1'
+                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                        }`}
+                      style={{ whiteSpace: 'nowrap' }}
+                    >
+                      <span className="text-xl">🏎️</span> Formula 1
+                    </button>
+                    <button
+                      onClick={() => setAdminSport('MotoGP')}
+                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'MotoGP'
+                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                        }`}
+                      style={{ whiteSpace: 'nowrap' }}
+                    >
+                      <span className="text-xl">🏍️</span> MotoGP
+                    </button>
+                    <button
+                      onClick={() => setAdminSport('Superbike')}
+                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'Superbike'
+                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                        }`}
+                      style={{ whiteSpace: 'nowrap' }}
+                    >
+                      <span className="text-xl">🏍️</span> Superbike
+                    </button>
+                    <button
+                      onClick={() => setAdminSport('Tenis')}
+                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'Tenis'
+                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
+                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                        }`}
+                      style={{ whiteSpace: 'nowrap' }}
+                    >
+                      <span className="text-xl">🎾</span> Tenis
                     </button>
                   </div>
 
                   <div className="relative z-10 space-y-12">
                     {(() => {
-                      const isBasketballLeague = (analysis: MatchAnalysis) => {
-                        if (analysis.sport) return analysis.sport === 'Basketbol';
-                        const lower = analysis.league.toLowerCase();
-                        return lower.includes('nba') || lower.includes('basket') || lower.includes('euroleague');
+                      const sportConfig = {
+                        'Futbol': { icon: '⚽', colorClassName: 'text-[#f0b90b]', bgClassName: 'bg-emerald-500/10 border-emerald-500/20', lineBg: 'bg-[#f0b90b]' },
+                        'Basketbol': { icon: '🏀', colorClassName: 'text-orange-500', bgClassName: 'bg-orange-500/10 border-orange-500/20', lineBg: 'bg-orange-500' },
+                        'Formula 1': { icon: '🏎️', colorClassName: 'text-[#f0b90b]', bgClassName: 'bg-red-500/10 border-red-500/20', lineBg: 'bg-[#f0b90b]' },
+                        'MotoGP': { icon: '🏍️', colorClassName: 'text-[#f0b90b]', bgClassName: 'bg-blue-500/10 border-blue-500/20', lineBg: 'bg-[#f0b90b]' },
+                        'Superbike': { icon: '🏍️', colorClassName: 'text-[#f0b90b]', bgClassName: 'bg-teal-500/10 border-teal-500/20', lineBg: 'bg-[#f0b90b]' },
+                        'Tenis': { icon: '🎾', colorClassName: 'text-[#f0b90b]', bgClassName: 'bg-green-500/10 border-green-500/20', lineBg: 'bg-[#f0b90b]' },
                       };
+                      
+                      const currentConfig = sportConfig[adminSport as keyof typeof sportConfig] || sportConfig['Futbol'];
 
                       const groups = localAnalyses
                         .filter(a => 
@@ -1674,72 +1764,59 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           return acc;
                         }, {} as Record<string, MatchAnalysis[]>);
 
-                      const footballGroups: Record<string, MatchAnalysis[]> = {};
-                      const basketballGroups: Record<string, MatchAnalysis[]> = {};
+                      const filteredGroups: Record<string, MatchAnalysis[]> = {};
 
                       Object.keys(groups).forEach(league => {
                         const sampleAnalysis = groups[league][0];
-                        if (isBasketballLeague(sampleAnalysis)) {
-                          basketballGroups[league] = groups[league];
+                        let matchesSport = false;
+                        if (adminSport === 'Basketbol') {
+                           matchesSport = sampleAnalysis.sport === 'Basketbol' || sampleAnalysis.league.toLowerCase().includes('nba') || sampleAnalysis.league.toLowerCase().includes('basket') || sampleAnalysis.league.toLowerCase().includes('euroleague');
+                        } else if (adminSport === 'Futbol') {
+                           matchesSport = (!sampleAnalysis.sport || sampleAnalysis.sport === 'Futbol') && !(sampleAnalysis.league.toLowerCase().includes('nba') || sampleAnalysis.league.toLowerCase().includes('basket') || sampleAnalysis.league.toLowerCase().includes('euroleague'));
                         } else {
-                          footballGroups[league] = groups[league];
+                           matchesSport = sampleAnalysis.sport === adminSport;
+                        }
+                        if (matchesSport) {
+                           filteredGroups[league] = groups[league];
                         }
                       });
 
                       const renderMatchRow = (analysis: MatchAnalysis) => (
                         <div key={analysis.id} className="group relative">
-                          {/* Premium Match Card */}
                           <div className="bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-md p-6 rounded-[28px] flex flex-col md:flex-row items-center md:items-center justify-between gap-6 transition-all duration-500 hover:border-[#f0b90b]/40 hover:bg-zinc-900/80 hover:-translate-y-1 shadow-2xl shadow-black/40">
                             <div className="flex items-center gap-6 flex-1 min-w-0 w-full">
                               <div className={`shrink-0 w-16 h-16 bg-black rounded-3xl flex items-center justify-center border border-zinc-800/80 transition-all duration-500 group-hover:border-[#f0b90b]/30 group-hover:shadow-[0_0_20px_rgba(240,185,11,0.2)]`}>
-                                <TrendingUp className={`w-7 h-7 ${adminSport === 'Futbol' ? 'text-emerald-400' : 'text-orange-400'}`} />
+                                <TrendingUp className={`w-7 h-7 ${currentConfig.colorClassName}`} />
                               </div>
                               
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-3 mb-1.5 flex-wrap">
                                   <div className="px-2 py-0.5 bg-zinc-800/80 rounded-md border border-zinc-700/50">
-                                    <span className="text-zinc-400 text-[9px] font-black tracking-widest uppercase">{analysis.matchDate}</span>
+                                    <span className={`text-[9px] font-black tracking-widest uppercase ${currentConfig.colorClassName}`}>{analysis.matchTime}</span>
                                   </div>
-                                  <span className="text-[#f0b90b] text-[10px] font-black">{analysis.matchTime}</span>
+                                  <div className="px-2 py-0.5 bg-zinc-800/80 rounded-md border border-zinc-700/50 flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                                    <span className="text-[9px] font-black tracking-widest text-emerald-400 uppercase">YAYINDA</span>
+                                  </div>
                                 </div>
-                                <h3 className="text-white font-black text-base uppercase italic tracking-tight flex items-center gap-2 flex-wrap">
-                                  <span className="truncate">{analysis.homeTeam}</span>
-                                  <span className="text-zinc-600 font-medium not-italic text-xs lowercase shrink-0">vs</span> 
-                                  <span className="truncate">{analysis.awayTeam}</span>
-                                </h3>
-                                
-                                {analysis.analysis && (
-                                  <p className="mt-2 text-zinc-500 text-[10px] font-medium leading-relaxed max-w-xl line-clamp-1 italic truncate">
-                                    "{analysis.analysis.substring(0, 100)}..."
-                                  </p>
-                                )}
+                                <h4 className="text-base font-black text-white group-hover:text-[#f0b90b] transition-colors truncate uppercase italic tracking-tight">
+                                  {analysis.homeTeam} - {analysis.awayTeam}
+                                </h4>
                               </div>
                             </div>
-
-                            <div className="flex items-center justify-end gap-3 w-full md:w-auto shrink-0 pr-2">
-                              <div className="hidden md:flex flex-col items-end mr-4">
-                                <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">GÜVEN</span>
-                                <span className="text-xs font-black text-[#f0b90b] tracking-tighter">%{analysis.confidence}</span>
-                              </div>
-
-                              <button
-                                onClick={() => setEditingAnalysisId(analysis.id)}
-                                className="flex-1 md:flex-none flex justify-center items-center gap-2 bg-zinc-800/80 hover:bg-[#f0b90b] text-zinc-300 hover:text-black px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all duration-300 border border-zinc-700/50 hover:border-transparent active:scale-95 shrink-0"
-                              >
-                                <Edit3 className="w-3.5 h-3.5" /> DÜZENLE
+                            
+                            <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t border-zinc-800/50 md:border-0 shrink-0">
+                              <button onClick={() => { setEditingAnalysisId(analysis.id); window.scrollTo({ top: 300, behavior: 'smooth' }); }} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/50 text-white font-black text-[10px] uppercase tracking-widest hover:bg-[#f0b90b] hover:text-black hover:border-[#f0b90b] transition-all">
+                                <Edit3 className="w-4 h-4" /> DÜZENLE
                               </button>
-                              
-                              <button
-                                onClick={() => {
+                              <button onClick={() => {
                                   if (window.confirm('Bu analizi silmek istediğinize emin misiniz?')) {
                                     const updated = localAnalyses.filter(a => a.id !== analysis.id);
                                     setLocalAnalyses(updated);
                                     onSaveAnalyses(updated);
                                   }
-                                }}
-                                className="p-2.5 text-rose-500/50 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all active:scale-90 shrink-0 border border-transparent hover:border-rose-500/20"
-                              >
-                                <Trash2 className="w-4 h-4" />
+                                }} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 font-black text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all group/btn">
+                                <Trash2 className="w-4 h-4 group-hover/btn:scale-110 transition-transform" /> SİL
                               </button>
                             </div>
                           </div>
@@ -1748,33 +1825,26 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                       return (
                         <>
-                          {localAnalyses.length === 0 && (
-                            <div className="py-20 text-center border-2 border-dashed border-zinc-800 rounded-[40px] space-y-4">
-                              <AlertCircle className="w-12 h-12 text-zinc-800 mx-auto" />
-                              <p className="text-zinc-600 font-black text-xs uppercase tracking-widest">Henüz analiz eklenmemiş.</p>
-                            </div>
-                          )}
-
-                          {adminSport === 'Futbol' && Object.keys(footballGroups).length > 0 && (
+                          {Object.keys(filteredGroups).length > 0 && (
                             <div className="space-y-10 animate-fade-in">
                               <div className="flex items-center gap-4 border-b border-zinc-800/50 pb-6">
-                                <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center">
-                                  <span className="text-2xl">⚽</span>
+                                <div className={`w-12 h-12 ${currentConfig.bgClassName} border rounded-2xl flex items-center justify-center`}>
+                                  <span className="text-2xl">{currentConfig.icon}</span>
                                 </div>
                                 <div>
-                                  <h2 className="text-xl font-black text-white uppercase tracking-wider">Futbol Analizleri</h2>
-                                  <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mt-1">Toplam {Object.values(footballGroups).flat().length} Aktif Yayın</p>
+                                  <h2 className="text-xl font-black text-white uppercase tracking-wider">{adminSport} Analizleri</h2>
+                                  <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mt-1">Toplam {Object.values(filteredGroups).flat().length} Aktif Yayın</p>
                                 </div>
                               </div>
 
-                              {Object.entries(footballGroups).map(([league, items]) => (
+                              {Object.entries(filteredGroups).map(([league, items]) => (
                                 <div key={league} className="space-y-4">
                                   <div className="flex items-start justify-between px-2 gap-4 group-header pt-4">
-                                    <h3 className="text-[12px] md:text-[14px] font-black text-[#f0b90b] uppercase tracking-[0.2em] flex items-start gap-4 flex-1 min-w-0 leading-relaxed">
-                                      <div className="w-1.5 h-5 bg-[#f0b90b] shrink-0 rounded-full mt-0.5 shadow-[0_0_10px_rgba(240,185,11,0.5)]" /> 
+                                    <h3 className={`text-[12px] md:text-[14px] font-black ${currentConfig.colorClassName} uppercase tracking-[0.2em] flex items-start gap-4 flex-1 min-w-0 leading-relaxed`}>
+                                      <div className={`w-1.5 h-5 ${currentConfig.lineBg} shrink-0 rounded-full mt-0.5 shadow-[0_0_10px_currentColor]`} /> 
                                       <span className="break-words">{league}</span>
                                     </h3>
-                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-1">{items.length} MAÇ</span>
+                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-1">{items.length} YAYIN</span>
                                   </div>
                                   <div className="grid grid-cols-1 gap-4">
                                     {items.map(renderMatchRow)}
@@ -1783,33 +1853,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               ))}
                             </div>
                           )}
-
-                          {adminSport === 'Basketbol' && Object.keys(basketballGroups).length > 0 && (
-                            <div className="space-y-10 animate-fade-in">
-                              <div className="flex items-center gap-4 border-b border-zinc-800/50 pb-6">
-                                <div className="w-12 h-12 bg-orange-500/10 border border-orange-500/20 rounded-2xl flex items-center justify-center">
-                                  <span className="text-2xl">🏀</span>
-                                </div>
-                                <div>
-                                  <h2 className="text-xl font-black text-white uppercase tracking-wider">Basketbol Analizleri</h2>
-                                  <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mt-1">Toplam {Object.values(basketballGroups).flat().length} Aktif Yayın</p>
-                                </div>
-                              </div>
-
-                              {Object.entries(basketballGroups).map(([league, items]) => (
-                                <div key={league} className="space-y-4">
-                                  <div className="flex items-start justify-between px-2 gap-4 group-header pt-4">
-                                    <h3 className="text-[12px] md:text-[14px] font-black text-orange-500 uppercase tracking-[0.2em] flex items-start gap-4 flex-1 min-w-0 leading-relaxed">
-                                      <div className="w-1.5 h-5 bg-orange-500 shrink-0 rounded-full mt-0.5 shadow-[0_0_10px_rgba(228,81,11,0.5)]" /> 
-                                      <span className="break-words">{league}</span>
-                                    </h3>
-                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-1">{items.length} MAÇ</span>
-                                  </div>
-                                  <div className="grid grid-cols-1 gap-4">
-                                    {items.map(renderMatchRow)}
-                                  </div>
-                                </div>
-                              ))}
+                          {Object.keys(filteredGroups).length === 0 && (
+                            <div className="py-20 text-center border border-dashed border-zinc-800 rounded-[40px]">
+                              <AlertCircle className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+                              <p className="text-zinc-400 font-bold">Bu kategori için henüz analiz yok.</p>
                             </div>
                           )}
                         </>
