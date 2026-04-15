@@ -7,24 +7,26 @@ interface NewsSliderProps {
 }
 
 const NewsSlider: React.FC<NewsSliderProps> = ({ config }) => {
-    const activeSlides = config.slides.filter(s => s.isActive).sort((a, b) => a.order - b.order);
+    const activeSlides = (config?.slides || []).filter(s => s.isActive).sort((a, b) => a.order - b.order);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const nextSlide = useCallback(() => {
+        if (activeSlides.length === 0) return;
         setCurrentIndex(prev => (prev + 1) % activeSlides.length);
     }, [activeSlides.length]);
 
     const prevSlide = useCallback(() => {
+        if (activeSlides.length === 0) return;
         setCurrentIndex(prev => (prev - 1 + activeSlides.length) % activeSlides.length);
     }, [activeSlides.length]);
 
     useEffect(() => {
-        if (!config.isActive || activeSlides.length <= 1) return;
+        if (!config?.isActive || activeSlides.length <= 1) return;
         const timer = setInterval(nextSlide, config.autoPlayInterval || 5000);
         return () => clearInterval(timer);
-    }, [config.isActive, activeSlides.length, config.autoPlayInterval, nextSlide]);
+    }, [config?.isActive, activeSlides.length, config?.autoPlayInterval, nextSlide]);
 
-    if (!config.isActive || activeSlides.length === 0) return null;
+    if (!config?.isActive || activeSlides.length === 0) return null;
 
     return (
         <div style={{ margin: '16px 0 24px' }} className="news-slider-container">
