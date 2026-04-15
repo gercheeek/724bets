@@ -263,6 +263,12 @@ const App: React.FC = () => {
 
   // 3-Stage App Flow: Loader -> Action Popup -> Ready
   useEffect(() => {
+    // Stage 1: Skip loader if in maintenance mode
+    if (siteStatusConfig.isMaintenanceMode) {
+      setAppStage('ready');
+      return;
+    }
+
     // Stage 1: Loader runs for 4 seconds
     const loaderTimer = setTimeout(() => {
       // Stage 2: Show popup if active, else skip to ready
@@ -275,7 +281,7 @@ const App: React.FC = () => {
     }, 4000); // 4 Seconds Load Time
 
     return () => clearTimeout(loaderTimer);
-  }, [welcomePopupConfig.isActive]);
+  }, [welcomePopupConfig.isActive, siteStatusConfig.isMaintenanceMode]);
 
   const handleCloseWelcomePopup = () => {
     setShowWelcomePopup(false);
