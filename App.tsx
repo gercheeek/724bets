@@ -41,7 +41,6 @@ import PortalSidebar from './components/PortalSidebar';
 import PortalTicker from './components/PortalTicker';
 import PortalHero from './components/PortalHero';
 import PortalMatchList from './components/PortalMatchList';
-import BestPicks from './components/BestPicks';
 import PortalMobileNav from './components/PortalMobileNav';
 import PortalNewsTeaser from './components/PortalNewsTeaser';
 import PortalCouponsTeaser from './components/PortalCouponsTeaser';
@@ -662,7 +661,6 @@ const App: React.FC = () => {
               {/* ═══ PORTAL BODY (Single Column Centered) ═══ */}
               <div className="portal-body">
                   <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
-                  <BestPicks analyses={analyses} onNavigate={handleViewChange} />
                   <PortalCouponsTeaser 
                     coupons={coupons}
                     onViewChange={handleViewChange}
