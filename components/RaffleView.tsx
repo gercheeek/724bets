@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { LoyaltyConfig, UserLoyalty, SiteUser } from '../types';
-import { Ticket, Trophy, Clock, Star, ChevronRight, Coins, Info, Users, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { LoyaltyConfig, UserLoyalty, SiteUser, RaffleConfig } from '../types';
+import { Ticket, Trophy, Clock, Star, ChevronRight, Coins, Info, Users, ChevronDown, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
 
 function loadUserLoyalty(userId: string): UserLoyalty {
     const stored = localStorage.getItem(`loyalty_${userId}`);
@@ -16,13 +16,118 @@ function getTicketPool(): { slot: number, userId: string, username: string }[] {
     try { return JSON.parse(localStorage.getItem('site_ticket_pool') || '[]'); } catch { return []; }
 }
 
+// --------------------------------------------------------------------------------
+// OPTIMIZATION 1: Isolate CountdownTimer to prevent full page re-renders every 1s
+// --------------------------------------------------------------------------------
+const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
+    const [timeLeft, setTimeLeft] = useState<{ d: number, h: number, m: number, s: number }>({ d: 0, h: 0, m: 0, s: 0 });
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const now = new Date();
+            const difference = targetDate.getTime() - now.getTime();
+            
+            if (difference <= 0) {
+                clearInterval(timer);
+                return;
+            }
+
+            setTimeLeft({
+                d: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                h: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                m: Math.floor((difference / 1000 / 60) % 60),
+                s: Math.floor((difference / 1000) % 60)
+            });
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [targetDate]);
+
+    return (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+            {[
+                { label: 'GÜN', val: timeLeft.d },
+                { label: 'SAAT', val: timeLeft.h },
+                { label: 'DAK', val: timeLeft.m },
+                { label: 'SAN', val: timeLeft.s }
+            ].map((t, idx) => (
+                <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{
+                        width: '100%', height: 48,
+                        background: '#0d0d0d',
+                        border: '1px solid rgba(212,175,55,0.2)',
+                        borderRadius: 10,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 22, fontWeight: 800, color: '#fff',
+                        marginBottom: 4,
+                        position: 'relative'
+                    }}>
+                        {String(t.val).padStart(2, '0')}
+                        <div style={{
+                            position: 'absolute', bottom: 6, left: '25%', right: '25%',
+                            height: 1, background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)',
+                            opacity: 0.5
+                        }} />
+                    </div>
+                    <span style={{ fontSize: 7, color: '#666', fontWeight: 800, letterSpacing: '0.15em' }}>{t.label}</span>
+                </div>
+            ))}
+        </div>
+    );
+});
+
+// --------------------------------------------------------------------------------
+// OPTIMIZATION 2: Memoize individual Ticket Slots to stop re-rendering 200 elements
+// --------------------------------------------------------------------------------
+const TicketSlot = React.memo(({ index, isSold, isMe, username, onSelect }: { index: number, isSold: boolean, isMe: boolean, username: string, onSelect: (idx: number) => void }) => {
+    return (
+        <div
+            title={isSold ? (isMe ? 'Sizin' : username) : `Bilet ${index + 1} (Boş)`}
+            onClick={() => !isSold && onSelect(index)}
+            className={`raffle-slot ${isSold ? '' : 'raffle-slot-empty'}`}
+            style={{
+                height: 24, borderRadius: 3,
+                display: 'flex', justifyContent: 'center', alignItems: 'center',
+                cursor: isSold ? 'default' : 'pointer',
+                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s, border-color 0.3s',
+                ...(isSold
+                    ? (isMe
+                        ? {
+                            background: 'rgba(59,130,246,0.25)',
+                            border: '1px solid #3b82f6',
+                            color: '#3b82f6'
+                        }
+                        : {
+                            background: '#D4AF37',
+                            border: '1px solid #D4AF37',
+                            color: '#000',
+                            boxShadow: '0 0 8px rgba(212,175,55,0.3)'
+                        })
+                    : {
+                        background: '#151515',
+                        border: '1px solid #252525',
+                        color: '#444'
+                    })
+            }}
+        >
+            <span style={{
+                fontSize: 7, fontWeight: isSold && !isMe ? 800 : 600,
+                lineHeight: 1
+            }}>
+                #{String(index + 1).padStart(3, '0')}
+            </span>
+        </div>
+    );
+});
+
+
 interface RaffleViewProps {
+    config: RaffleConfig;
     loyaltyConfig: LoyaltyConfig;
     userId: string;
     onNavigate: (view: string) => void;
 }
 
-const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNavigate }) => {
+const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, onNavigate }) => {
     const [loyalty, setLoyalty] = useState<UserLoyalty>(() => loadUserLoyalty(userId));
     const [buyMsg, setBuyMsg] = useState('');
     const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -35,18 +140,20 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
     const [depositDate, setDepositDate] = useState('');
     const [depositTicket, setDepositTicket] = useState('');
 
-    const faqs = [
-        { q: "Bilet nasıl kazanılır?", a: "Sponsor sitemiz 724BAHİS.NET'e yatırımlar yaparak veya Görevler sekmesindeki etkinlikleri tamamlayarak bilet kazanabilirsiniz." },
-        { q: "Bilet talebi nasıl oluşturulur?", a: "Görevler sayfasındaki form aracılığıyla 724BAHİS.NET kullanıcı adınızı, yatırım miktarınızı ve tarihini girerek talep oluşturabilirsiniz." },
-        { q: "Yatırım tarihi ve saati neden isteniyor?", a: "Yatırımınızın sistem tarafından teyit edilebilmesi için talep edilmektedir." },
-        { q: "Bilet talebim ne kadar sürede onaylanır?", a: "Talepleriniz uzman ekibimiz tarafından kontrol edilip en kısa sürede otomatik olarak onaylanır." },
-        { q: "Bilet liderliği nasıl çalışır?", a: "Bilet havuzumuzdan, en fazla bilete sahip olan kullanıcıların biletleri sıralı olarak sergilenir." },
-        { q: "Çekiliş nasıl yapılır?", a: "Çekiliş günlerinde bilet havuzundaki biletler arasından şeffaf bir bilgisayar algoritması ile kazananlar belirlenir." },
-        { q: "Sponsor bilgisi neden isteniyor?", a: "Çekilişlerimiz partnerimiz 724BAHİS.NET sponsorluğunda gerçekleştiği için oyuncu teyiti zorunludur." },
-        { q: "Telefon doğrulaması neden gerekli?", a: "Sadece gerçek kişilerin ödül alabilmesi ve multi hesapların engellenmesi için istenmektedir." }
-    ];
+    const targetDate = useMemo(() => new Date(config.drawDate), [config.drawDate]);
 
-    // Refresh on mount
+    const renderRuleIcon = (icon: string) => {
+        switch (icon) {
+            case 'Shield': return <Shield size={14} />;
+            case 'AlertTriangle': return <AlertTriangle size={14} />;
+            case 'CheckCircle': return <CheckCircle size={14} />;
+            case 'Users': return <Users size={14} />;
+            case 'Trophy': return <Trophy size={14} />;
+            case 'Info': return <Info size={14} />;
+            default: return <Info size={14} />;
+        }
+    };
+
     useEffect(() => { setLoyalty(loadUserLoyalty(userId)); }, [userId]);
 
     const showSuccess = (msg: string) => {
@@ -85,17 +192,6 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
 
     const TICKET_PRICE = 500; // 500 coins = 1 ticket
 
-    const ticketTransactions = loyalty.transactions.filter(tx => tx.tickets && tx.tickets > 0);
-    const depositRule = loyaltyConfig.rules?.find(r => r.triggerType === 'deposit');
-
-    // Mock raffle prizes (editable via admin in the future)
-    const rafflePrizes = [
-        { rank: '1.', prize: 'iPhone 16 Pro', emoji: '📱', color: '#3b82f6' },
-        { rank: '2.', prize: '5,000 TL Nakit', emoji: '💵', color: '#10b981' },
-        { rank: '3.', prize: '1,000 TL Bonus', emoji: '🎁', color: '#8b5cf6' },
-        { rank: '4-10.', prize: '250 TL Freespin', emoji: '🎰', color: '#f59e0b' },
-    ];
-
     const handleBuyTicket = () => {
         if (loyalty.coins < TICKET_PRICE) {
             setBuyMsg('❌ Yetersiz Coin bakiyesi!');
@@ -121,309 +217,479 @@ const RaffleView: React.FC<RaffleViewProps> = ({ loyaltyConfig, userId, onNaviga
 
     const TOTAL_POOL_SIZE = 200;
 
-    const handleSelectSlot = (slotIndex: number) => {
-        if (loyalty.pendingTickets <= 0) return;
-
-        // check if taken
-        if (ticketPool.find(t => t.slot === slotIndex)) return;
-
-        const newPool = [...ticketPool, { slot: slotIndex, userId: userId, username: getAllMembers().find(m => m.id === userId)?.username || 'Siz' }];
-        setTicketPool(newPool);
-        localStorage.setItem('site_ticket_pool', JSON.stringify(newPool));
-
-        const updated: UserLoyalty = {
-            ...loyalty,
-            pendingTickets: loyalty.pendingTickets - 1,
-            tickets: loyalty.tickets + 1
-        };
-        setLoyalty(updated);
-        localStorage.setItem(`loyalty_${userId}`, JSON.stringify(updated));
-    };
-
-    // Create the final array of 200 slots
-    const poolSlots = Array.from({ length: TOTAL_POOL_SIZE }, (_, i) => {
-        const found = ticketPool.find(t => t.slot === i);
-        if (found) {
-            return { username: found.username, isMe: found.userId === userId };
-        }
-        return { username: '', isMe: false };
-    });
+    // --------------------------------------------------------------------------------
+    // OPTIMIZATION 3: Stable Select Handler using Functional Updates
+    // --------------------------------------------------------------------------------
+    const handleSelectSlot = useCallback((slotIndex: number) => {
+        let success = false;
+        
+        setLoyalty(prevLoyalty => {
+            if (prevLoyalty.pendingTickets <= 0) return prevLoyalty;
+            let ticketAlreadyTaken = false;
+            
+            setTicketPool(prevPool => {
+                if (prevPool.find(t => t.slot === slotIndex)) {
+                     ticketAlreadyTaken = true;
+                     return prevPool;
+                }
+                const newPool = [...prevPool, { slot: slotIndex, userId: userId, username: getAllMembers().find(m => m.id === userId)?.username || 'Siz' }];
+                localStorage.setItem('site_ticket_pool', JSON.stringify(newPool));
+                success = true;
+                return newPool;
+            });
+            
+            if (ticketAlreadyTaken) return prevLoyalty;
+            
+            const updated = {
+                ...prevLoyalty,
+                pendingTickets: prevLoyalty.pendingTickets - 1,
+                tickets: prevLoyalty.tickets + 1
+            };
+            localStorage.setItem(`loyalty_${userId}`, JSON.stringify(updated));
+            return updated;
+        });
+    }, [userId]);
 
     const totalSold = ticketPool.length;
 
     return (
-        <div className="min-h-screen transition-colors duration-500 pb-20">
-            {/* Success notification */}
+        <div style={{ minHeight: '100vh', background: '#0d0d0d', padding: '0 0 80px', fontFamily: "'Inter', sans-serif", color: '#fff' }}>
             {successMsg && (
-                <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9700] px-6 py-3 rounded-2xl font-black text-sm text-[var(--text-primary)] shadow-[0_10px_40px_rgba(0,0,0,0.3)] bg-[var(--bg-elevated)] border border-purple-500/40 transition-all"
-                    style={{ animation: 'slideDown 0.3s ease' }}>
+                <div style={{
+                    position: 'fixed', top: 80, left: '50%', transform: 'translate3d(-50%, 0, 0)', zIndex: 50,
+                    padding: '12px 24px', borderRadius: 12, background: 'rgba(13,13,13,0.95)',
+                    backdropFilter: 'blur(20px)', fontSize: 13, color: '#D4AF37',
+                    border: '1px solid rgba(212,175,55,0.4)', boxShadow: '0 8px 32px rgba(212,175,55,0.15)',
+                    animation: 'slideDown 0.3s ease', willChange: 'transform, opacity'
+                }}>
                     {successMsg}
                 </div>
             )}
-            <div className="max-w-2xl mx-auto px-4 py-8">
-
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl mb-4 text-4xl"
-                        style={{ background: 'linear-gradient(135deg, #7c3aed22, #4f46e522)', border: '2px solid rgba(124,58,237,0.3)', boxShadow: '0 0 40px rgba(124,58,237,0.15)' }}>
-                        🎟️
-                    </div>
-                    <h1 className="text-[var(--text-primary)] font-black text-3xl mb-1 tracking-tight">Bilet <span style={{ color: '#a78bfa' }}>Etkinliği</span></h1>
-                    <p className="text-[var(--text-muted)] text-sm font-bold">724bahis.net.net × 724BAHİS.NET Çekilişi</p>
-                </div>
-
-                {/* Ticket Balance */}
-                <div className="p-5 rounded-3xl mb-5 text-center bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-[0_0_40px_rgba(124,58,237,0.05)]">
-                    <div className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.3em] mb-2">Mevcut Bilet Sayınız</div>
-                    <div className="flex items-center justify-center gap-3 mb-2">
-                        <Ticket className="w-8 h-8 text-purple-400" />
-                        <span className="text-[var(--text-primary)] font-black text-6xl tabular-nums">{loyalty.tickets}</span>
-                    </div>
-                    <div className="text-[var(--text-muted)] text-xs font-bold">
-                        {loyalty.tickets === 0 ? 'Henüz bilet kazanmadınız' : `${loyalty.tickets} bilet çekilişe katılmaya hak kazandı`}
-                    </div>
-                    {loyalty.pendingTickets > 0 && (
-                        <div className="mt-3 inline-block px-4 py-1.5 rounded-xl bg-purple-500/20 border border-purple-500/50 text-purple-400 font-black text-xs animate-pulse">
-                            Aşağıdaki tablodan {loyalty.pendingTickets} adet bilet seçimi yapınız 👇
-                        </div>
-                    )}
-                    <div className="flex items-center justify-center gap-1.5 mt-3 text-[10px] text-[var(--text-dim)] font-bold">
-                        <Info className="w-3 h-3" />
-                        Her bilet eşit şansla çekilişe girer
-                    </div>
-                </div>
-
-                {/* Buy Ticket with Coins */}
-                <div className="p-4 rounded-2xl mb-6 relative overflow-hidden bg-[#f0b90b]/5 border border-[#f0b90b]/20">
-                    {/* Background decor */}
-                    <div className="absolute -right-10 -bottom-10 opacity-10 blur-xl">
-                        <Coins className="w-40 h-40 text-[#f0b90b]" />
-                    </div>
-
-                    <h3 className="text-[var(--text-primary)] font-black text-sm uppercase tracking-widest mb-1 flex items-center gap-2">
-                        <Coins className="w-4 h-4 text-[#f0b90b]" /> Coin ile Bilet Al
-                    </h3>
-                    <p className="text-[var(--text-muted)] text-[11px] mb-4">Birikmiş coinlerinizi kullanarak ekstra çekiliş şansı yakalayın.</p>
-
-                    <div className="flex flex-col sm:flex-row items-center gap-3">
-                        <div className="flex-1 w-full bg-[var(--bg-input)] rounded-xl p-3 flex items-center justify-between border border-[var(--border-subtle)]">
-                            <div>
-                                <div className="text-[var(--text-muted)] text-[10px] font-black uppercase">1 Bilet Bedeli</div>
-                                <div className="text-[#f0b90b] font-black text-lg">{TICKET_PRICE} Coin</div>
+            
+            <div style={{ maxWidth: 1152, margin: '0 auto', padding: '0 16px' }}>
+                <div style={{ display: 'flex', gap: 16, marginBottom: 16, alignItems: 'stretch' }}>
+                    {/* ═══ LEFT SIDEBAR ═══ */}
+                    <div style={{ width: '33.333%', display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+                        
+                        {/* 1. Countdown & VIP Cards Component */}
+                        <div style={{
+                            background: '#1a1a1a', border: '1px solid rgba(212,175,55,0.25)',
+                            borderRadius: 16, padding: 20, overflow: 'hidden', position: 'relative',
+                            flex: '0 0 auto', display: 'flex', flexDirection: 'column', gap: 16
+                        }}>
+                            <div style={{ position: 'absolute', top: 0, right: 0, padding: 16, opacity: 0.05, pointerEvents: 'none' }}>
+                                <Clock size={120} strokeWidth={1} style={{ transform: 'translate(20%, -20%)' }} />
                             </div>
-                            <div className="text-right">
-                                <div className="text-[var(--text-muted)] text-[10px] font-black uppercase">Mevcut Bakiyeniz</div>
-                                <div className="text-[var(--text-primary)] font-black text-lg">{loyalty.coins.toLocaleString('tr')}</div>
-                            </div>
-                        </div>
 
-                        <button
-                            onClick={handleBuyTicket}
-                            disabled={loyalty.coins < TICKET_PRICE}
-                            className={`w-full sm:w-auto px-6 py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-lg flex-shrink-0
-                                ${loyalty.coins >= TICKET_PRICE
-                                    ? 'bg-[#f0b90b] text-black hover:bg-[#f0b90b]/90 hover:scale-105 shadow-[0_0_20px_rgba(240,185,11,0.3)]'
-                                    : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-subtle)]'}`}
-                        >
-                            SATIN AL
-                        </button>
-                    </div>
-
-                    {buyMsg && (
-                        <div className={`mt-3 p-2 rounded-lg text-center text-xs font-bold border ${buyMsg.startsWith('✅') ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
-                            {buyMsg}
-                        </div>
-                    )}
-                </div>
-
-                {/* Deposit Request Form (Talep Oluştur) */}
-                <div className="p-6 rounded-3xl mb-8 space-y-4 bg-purple-500/5 border border-purple-500/15 shadow-[0_0_50px_rgba(168,85,247,0.03)]">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-purple-500/10 flex items-center justify-center">
-                            <Ticket className="w-5 h-5 text-purple-400" />
-                        </div>
-                        <div>
-                            <div className="text-[var(--text-primary)] font-black text-lg tracking-tight">Talep Oluştur</div>
-                            <div className="text-[var(--text-muted)] text-[11px] font-medium">Her 500 TL yatırım için 250 Coin + 1 Bilet</div>
-                        </div>
-                    </div>
-
-                    <div className="space-y-3 mt-4">
-                        <div className="group relative">
-                            <input type="text" placeholder="724BAHİS.NET Kullanıcı Adı" value={depositUsername}
-                                onChange={e => setDepositUsername(e.target.value)}
-                                className="w-full px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-bold outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/5 transition-all"
-                            />
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <input type="number" placeholder="Yatırım Tutarı" value={depositAmount}
-                                onChange={e => setDepositAmount(e.target.value)}
-                                className="px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-bold outline-none focus:border-purple-500/50 transition-all"
-                            />
-                            <input type="datetime-local" value={depositDate}
-                                onChange={e => setDepositDate(e.target.value)}
-                                className="px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-bold outline-none focus:border-purple-500/50 transition-all h-[46px]"
-                            />
-                            <input type="number" placeholder="İstenilen Bilet No" value={depositTicket}
-                                onChange={e => setDepositTicket(e.target.value)}
-                                className="px-4 py-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-bold outline-none focus:border-purple-500/50 transition-all"
-                                min="1" max="200"
-                            />
-                        </div>
-                        <button onClick={handleDepositRequest}
-                            className="w-full py-4 rounded-2xl font-black text-sm text-white uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-95 shadow-[0_10px_30px_rgba(168,85,247,0.25)]"
-                            style={{ background: 'linear-gradient(135deg, #a78bfa, #7c3aed)' }}>
-                            Talep Et
-                        </button>
-                    </div>
-                    <div className="text-[var(--text-dim)] text-[10px] text-center font-bold px-4 leading-relaxed">
-                        Talebiniz incelendikten sonra biletleriniz yansır. <br/>
-                        Miktar: Her 500 TL = 250 Coin + 1 Bilet
-                    </div>
-                </div>
-
-                {/* How to earn tickets - NEW UI */}
-                <div className="mb-8">
-                    <h3 className="text-[var(--text-primary)] font-black text-xl tracking-tight mb-4 text-center sm:text-left">
-                        Bilet Sistemi Nasıl Çalışır?
-                    </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                        {[
-                            { step: 1, title: 'Yatırım Yap', desc: 'Sponsor sitede yatırımını gerçekleştir', color: '#06b6d4' },
-                            { step: 2, title: 'Talep Oluştur', desc: 'Yatırım bilgilerini girerek bilet talep et', color: '#00bcd4' },
-                            { step: 3, title: 'Onay Bekle', desc: 'Talebin incelenir ve biletlerin yansır', color: '#26c6da' },
-                            { step: 4, title: 'Çekilişe Katıl', desc: 'Biletlerin ile çekilişe otomatik katıl', color: '#4dd0e1' },
-                        ].map(item => (
-                            <div key={item.step} className="p-4 rounded-2xl flex flex-col justify-center items-center text-center transition-all hover:-translate-y-1 bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-                                <div className="w-10 h-10 rounded-full flex items-center justify-center text-black font-black text-lg mb-3 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
-                                    style={{ backgroundColor: item.color }}>
-                                    {item.step}
+                            {/* UI ADJUSTMENT: Shrunk VIP Stats embedded directly here (40% smaller) */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, position: 'relative', zIndex: 10 }}>
+                                {/* Biletleriniz Small */}
+                                <div style={{
+                                    borderRadius: 12,
+                                    background: 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(13,13,13,0.95) 50%, rgba(212,175,55,0.05) 100%)',
+                                    border: '1px solid rgba(212,175,55,0.3)',
+                                    padding: '14px 16px',
+                                    boxShadow: '0 4px 16px rgba(0,0,0,0.4)'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                                        <Ticket size={12} style={{ color: '#D4AF37' }} />
+                                        <span style={{ color: '#999', fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                                            MEVCUT BİLETLER
+                                        </span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                                        <span style={{ fontSize: 24, fontWeight: 900, color: '#fff', textShadow: '0 0 20px rgba(212,175,55,0.3)', lineHeight: 1 }}>
+                                            {loyalty.tickets}
+                                        </span>
+                                        <span style={{ fontSize: 10, fontWeight: 600, color: '#D4AF37', opacity: 0.8 }}>Adet</span>
+                                    </div>
                                 </div>
-                                <div className="text-[var(--text-primary)] font-black text-xs uppercase tracking-wider mb-1 mt-1">{item.title}</div>
-                                <div className="text-[var(--text-muted)] text-[10px] sm:text-xs leading-snug">{item.desc}</div>
-                            </div>
-                        ))}
-                    </div>
 
-                    {/* FAQs */}
-                    <div className="mb-4">
-                        <h3 className="text-[var(--text-primary)] font-black text-lg mb-3">Sıkça Sorulan Sorular</h3>
-                        <div className="space-y-2">
-                            {faqs.map((faq, idx) => (
-                                <div key={idx} className="rounded-xl overflow-hidden transition-all bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-                                    <button
-                                        onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                                        className="w-full flex items-center justify-between px-4 py-3.5 text-left hover:bg-[var(--bg-card-hover)] transition-colors"
-                                    >
-                                        <span className="text-[var(--text-primary)] font-bold text-xs sm:text-sm">{faq.q}</span>
-                                        <ChevronDown className={`w-4 h-4 text-[var(--text-muted)] transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
-                                    </button>
-                                    {openFaq === idx && (
-                                        <div className="px-4 pb-4 pt-1 text-[var(--text-muted)] text-xs leading-relaxed animate-fade-in">
-                                            {faq.a}
-                                        </div>
-                                    )}
+                                {/* Mevcut Coin Small */}
+                                <div style={{
+                                    borderRadius: 12,
+                                    background: 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(13,13,13,0.95) 50%, rgba(212,175,55,0.05) 100%)',
+                                    border: '1px solid rgba(212,175,55,0.3)',
+                                    padding: '14px 16px',
+                                    boxShadow: '0 4px 16px rgba(0,0,0,0.4)'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                                        <Coins size={12} style={{ color: '#D4AF37' }} />
+                                        <span style={{ color: '#999', fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                                            MEVCUT COİN
+                                        </span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                                        <span style={{ fontSize: 24, fontWeight: 900, color: '#fff', textShadow: '0 0 20px rgba(212,175,55,0.3)', lineHeight: 1 }}>
+                                            {loyalty.coins.toLocaleString('tr')}
+                                        </span>
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                            </div>
 
-                {/* 200 Ticket Visual Pool */}
-                <div className="mb-8">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-[var(--text-primary)] font-black text-lg uppercase tracking-tight flex items-center gap-2">
-                            <Users className="w-5 h-5 text-purple-400" /> Bilet Havuzu
-                        </h3>
-                        <div className="text-[var(--text-muted)] text-xs font-bold bg-[var(--bg-input)] border border-[var(--border-subtle)] px-3 py-1 rounded-full">
-                            {totalSold} / {TOTAL_POOL_SIZE} Satıldı
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-                        {poolSlots.map((slot, index) => {
-                            const isSold = !!slot.username;
-                            return (
-                                <div key={index}
-                                    onClick={() => !isSold && handleSelectSlot(index)}
-                                    className={`relative aspect-[2/1] rounded flex items-center justify-center overflow-hidden transition-all duration-300
-                                        ${isSold ? (slot.isMe ? 'bg-purple-500 border border-purple-400 z-10 scale-105 shadow-[0_0_15px_rgba(168,85,247,0.5)]' : 'bg-[#f0b90b]/20 border border-[#f0b90b]/30')
-                                            : loyalty.pendingTickets > 0 ? 'bg-[var(--bg-input)] border border-purple-500/50 cursor-pointer hover:bg-purple-500/20 hover:border-purple-400 animate-pulse' : 'bg-[var(--bg-elevated)] border border-[var(--border-subtle)]'}
-                                    `}
+                            {/* Buy Button inside Sidebar */}
+                            <div style={{ position: 'relative', zIndex: 10 }}>
+                                {buyMsg && (
+                                    <div style={{ fontSize: 10, fontWeight: 600, color: buyMsg.includes('✅') ? '#D4AF37' : '#ef4444', textAlign: 'center', marginBottom: 8 }}>
+                                        {buyMsg}
+                                    </div>
+                                )}
+                                <button
+                                    onClick={handleBuyTicket}
+                                    disabled={loyalty.coins < TICKET_PRICE}
+                                    style={{
+                                        width: '100%', padding: '12px 0', borderRadius: 10, fontSize: 11, fontWeight: 800,
+                                        border: 'none', cursor: loyalty.coins >= TICKET_PRICE ? 'pointer' : 'not-allowed',
+                                        transition: 'all 0.3s ease', letterSpacing: '0.05em',
+                                        ...(loyalty.coins >= TICKET_PRICE
+                                            ? {
+                                                background: 'linear-gradient(180deg, #D4AF37 0%, #996515 100%)',
+                                                color: '#0d0d0d',
+                                                boxShadow: '0 4px 20px rgba(212,175,55,0.3)'
+                                            }
+                                            : {
+                                                background: '#1a1a1a', color: '#555',
+                                                border: '1px solid #2a2a2a'
+                                            })
+                                    }}
                                 >
-                                    {/* background texture */}
-                                    {isSold && (
-                                        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 2px, #fff 2px, #fff 4px)' }}></div>
-                                    )}
+                                    YENİ BİLET SATIN AL (500)
+                                </button>
+                            </div>
 
-                                    {/* perforation holes */}
-                                    <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[var(--bg-main)]"></div>
-                                    <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[var(--bg-main)]"></div>
+                            <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent)', margin: '4px 0', position: 'relative', zIndex: 10 }} />
 
-                                    {/* content */}
-                                    <span className={`relative z-10 text-[8px] sm:text-[9px] font-black tracking-tighter w-full text-center truncate px-2
-                                        ${isSold ? (slot.isMe ? 'text-white drop-shadow-md' : 'text-[#f0b90b]') : 'text-[var(--text-dim)]'}`}>
-                                        {isSold ? (
-                                            slot.isMe ? 'SİZ' : slot.username.length > 5 ? slot.username.substring(0, 4) + '..' : slot.username
-                                        ) : index + 1}
+                            <div style={{ position: 'relative', zIndex: 10 }}>
+                                <div style={{
+                                    color: '#D4AF37', fontSize: 10, fontWeight: 800,
+                                    textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 16,
+                                    display: 'flex', alignItems: 'center', gap: 8
+                                }}>
+                                    <Clock size={12} style={{ color: '#D4AF37' }} />
+                                    SONRAKİ ÇEKİLİŞ
+                                </div>
+                                <div style={{
+                                    fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 20,
+                                    padding: '8px 14px', borderRadius: 8,
+                                    border: '1px solid rgba(212,175,55,0.3)',
+                                    background: 'rgba(212,175,55,0.05)',
+                                    display: 'inline-block'
+                                }}>
+                                    {new Date(config.drawDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                                
+                                <CountdownDisplay targetDate={targetDate} />
+                            </div>
+                        </div>
+
+                        {/* 2. Bilet Talep Formu */}
+                        <div style={{
+                            background: '#1a1a1a', border: '1px solid #2a2a2a',
+                            borderRadius: 16, padding: 20, flex: '1 1 auto',
+                            display: 'flex', flexDirection: 'column'
+                        }}>
+                            <div style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                marginBottom: 16, borderBottom: '1px solid #2a2a2a', paddingBottom: 12
+                            }}>
+                                <span style={{ color: '#fff', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                                    TALEP OLUŞTUR
+                                </span>
+                                <span style={{
+                                    color: '#D4AF37', fontSize: 9, fontWeight: 700,
+                                    border: '1px solid rgba(212,175,55,0.3)', padding: '3px 8px',
+                                    borderRadius: 6, letterSpacing: '0.05em'
+                                }}>
+                                    500 TL = 1 Bilet
+                                </span>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+                                <input type="text" placeholder="724BAHİS Kullanıcı Adı" value={depositUsername}
+                                    onChange={e => setDepositUsername(e.target.value)}
+                                    style={{
+                                        width: '100%', padding: '10px 12px', background: '#0d0d0d',
+                                        border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff',
+                                        fontSize: 12, outline: 'none', transition: 'border-color 0.3s'
+                                    }}
+                                    onFocus={e => e.target.style.borderColor = '#D4AF37'}
+                                    onBlur={e => e.target.style.borderColor = '#2a2a2a'}
+                                />
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                                    <input type="number" placeholder="Yatırım Tutarı" value={depositAmount}
+                                        onChange={e => setDepositAmount(e.target.value)}
+                                        style={{
+                                            width: '100%', padding: '10px 12px', background: '#0d0d0d',
+                                            border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff',
+                                            fontSize: 12, outline: 'none', transition: 'border-color 0.3s'
+                                        }}
+                                        onFocus={e => e.target.style.borderColor = '#D4AF37'}
+                                        onBlur={e => e.target.style.borderColor = '#2a2a2a'}
+                                    />
+                                    <input type="number" placeholder="Bilet No (1-200)" value={depositTicket}
+                                        onChange={e => setDepositTicket(e.target.value)}
+                                        style={{
+                                            width: '100%', padding: '10px 12px', background: '#0d0d0d',
+                                            border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff',
+                                            fontSize: 12, outline: 'none', transition: 'border-color 0.3s'
+                                        }}
+                                        onFocus={e => e.target.style.borderColor = '#D4AF37'}
+                                        onBlur={e => e.target.style.borderColor = '#2a2a2a'}
+                                    />
+                                </div>
+                                <input type="datetime-local" value={depositDate}
+                                    onChange={e => setDepositDate(e.target.value)}
+                                    style={{
+                                        width: '100%', padding: '10px 12px', background: '#0d0d0d',
+                                        border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff',
+                                        fontSize: 12, outline: 'none', colorScheme: 'dark',
+                                        transition: 'border-color 0.3s'
+                                    }}
+                                    onFocus={e => e.target.style.borderColor = '#D4AF37'}
+                                    onBlur={e => e.target.style.borderColor = '#2a2a2a'}
+                                />
+                                <button onClick={handleDepositRequest}
+                                    style={{
+                                        width: '100%', marginTop: 8, padding: '14px 0', borderRadius: 10,
+                                        fontWeight: 900, fontSize: 13, letterSpacing: '0.08em',
+                                        color: '#0d0d0d', border: 'none', cursor: 'pointer',
+                                        background: 'linear-gradient(180deg, #D4AF37 0%, #B8860B 50%, #996515 100%)',
+                                        boxShadow: '0 4px 20px rgba(212,175,55,0.35), inset 0 1px 0 rgba(255,255,255,0.25)',
+                                        transition: 'all 0.3s ease', textTransform: 'uppercase'
+                                    }}
+                                >
+                                    TALEP GÖNDER
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* 3. Legend */}
+                        <div style={{
+                            background: '#1a1a1a', border: '1px solid #2a2a2a',
+                            borderRadius: 16, padding: '16px 20px',
+                            flex: '0 0 auto'
+                        }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <div style={{
+                                        width: 14, height: 14, background: '#D4AF37', borderRadius: 3, boxShadow: '0 0 8px rgba(212,175,55,0.4)'
+                                    }} />
+                                    <span style={{ color: '#999', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                                        DOLU BİLET
                                     </span>
                                 </div>
-                            );
-                        })}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <div style={{
+                                        width: 14, height: 14, background: 'rgba(59,130,246,0.3)', border: '1.5px solid #3b82f6', borderRadius: 3
+                                    }} />
+                                    <span style={{ color: '#999', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                                        SİZİN BİLETLERİNİZ
+                                    </span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <div style={{
+                                        width: 14, height: 14, background: '#1a1a1a', border: '1.5px solid #333', borderRadius: 3, boxShadow: '0 0 6px rgba(212,175,55,0.1)'
+                                    }} />
+                                    <span style={{ color: '#999', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                                        BOŞ SLOT
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ═══ RIGHT: Bilet Havuzu WITH VIRTUALIZATION-LIKE MEMO ═══ */}
+                    <div style={{
+                        width: '66.667%', minWidth: 0,
+                        background: '#1a1a1a', border: '1px solid #2a2a2a',
+                        borderRadius: 16, overflow: 'hidden',
+                        display: 'flex', flexDirection: 'column'
+                    }}>
+                        <div style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            padding: 20, borderBottom: '1px solid #2a2a2a', background: '#1a1a1a'
+                        }}>
+                            <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', margin: 0 }}>
+                                BİLET HAVUZU (200 SLOT)
+                            </h3>
+                            <div style={{
+                                color: '#999', fontSize: 12, fontWeight: 600,
+                                border: '1px solid #2a2a2a', background: '#111', padding: '4px 10px',
+                                borderRadius: 8
+                            }}>
+                                {totalSold} / {TOTAL_POOL_SIZE}
+                            </div>
+                        </div>
+                        
+                        <div style={{
+                            padding: '16px 20px', flex: 1,
+                            background: 'rgba(17,17,17,0.3)'
+                        }}>
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(10, 1fr)',
+                                gap: 2, width: '100%',
+                                maxWidth: '100%'
+                            }}>
+                                {/* Optimal rendering loop using useMemo wrapping React.memo slots for high performance */}
+                                {useMemo(() => {
+                                    return Array.from({ length: TOTAL_POOL_SIZE }, (_, index) => {
+                                        const found = ticketPool.find(t => t.slot === index);
+                                        return (
+                                            <TicketSlot 
+                                                key={index} 
+                                                index={index} 
+                                                isSold={!!found} 
+                                                isMe={found?.userId === userId} 
+                                                username={found?.username || ''} 
+                                                onSelect={handleSelectSlot} 
+                                            />
+                                        );
+                                    });
+                                }, [ticketPool, userId, handleSelectSlot])}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Raffle Prizes */}
-                <div className="p-4 rounded-2xl mb-4 bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-                    <h3 className="text-[var(--text-primary)] font-black text-sm uppercase tracking-widest mb-3 flex items-center gap-2">
-                        <Trophy className="w-4 h-4 text-[#f0b90b]" /> Çekiliş Ödülleri
-                    </h3>
-                    <div className="space-y-2">
-                        {rafflePrizes.map((p, i) => (
-                            <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl border"
-                                style={{ background: i === 0 ? `${p.color}0c` : 'var(--bg-input)', borderColor: i === 0 ? `${p.color}22` : 'var(--border-subtle)' }}>
-                                <span className="text-2xl">{p.emoji}</span>
-                                <div className="flex-1">
-                                    <span className="text-[var(--text-primary)] font-black text-sm">{p.prize}</span>
+                {/* ═══ POOL RULES ═══ */}
+                <div style={{
+                    background: '#1a1a1a', border: '1px solid rgba(212,175,55,0.2)',
+                    borderRadius: 16, padding: 24, marginBottom: 16
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+                        <Shield size={16} style={{ color: '#D4AF37' }} />
+                        <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 700, margin: 0, letterSpacing: '0.05em' }}>
+                            BİLET HAVUZU KURALLARI
+                        </h3>
+                        <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, rgba(212,175,55,0.3), transparent)' }} />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
+                        {config.rules.map((rule, idx) => (
+                            <div key={idx} style={{
+                                display: 'flex', alignItems: 'flex-start', gap: 12,
+                                padding: '14px 16px', background: 'rgba(13,13,13,0.6)',
+                                borderRadius: 12, border: '1px solid #222'
+                            }}>
+                                <div style={{
+                                    flexShrink: 0, width: 28, height: 28, borderRadius: 8,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid rgba(212,175,55,0.2)'
+                                }}>
+                                    {renderRuleIcon(rule.icon)}
                                 </div>
-                                <span className="text-[var(--text-dim)] font-black text-xs">{p.rank}</span>
+                                <span style={{ color: '#ccc', fontSize: 12, fontWeight: 500, lineHeight: 1.5, paddingTop: 4 }}>
+                                    {rule.text}
+                                </span>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Ticket history */}
-                {ticketTransactions.length > 0 && (
-                    <div className="p-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-                        <h3 className="text-[var(--text-primary)] font-black text-sm uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-[var(--text-muted)]" /> Bilet Geçmişi
-                        </h3>
-                        <div className="space-y-2">
-                            {ticketTransactions.slice(0, 10).map(tx => (
-                                <div key={tx.id} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-[var(--bg-input)]">
-                                    <Ticket className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                                    <div className="flex-1 min-w-0">
-                                        <div className="text-[var(--text-primary)] font-bold text-xs truncate">{tx.reason}</div>
-                                        <div className="text-[var(--text-dim)] text-[10px]">{new Date(tx.timestamp).toLocaleString('tr-TR')}</div>
-                                    </div>
-                                    <span className="text-purple-400 font-black text-sm">+{tx.tickets} 🎟️</span>
+                {/* ═══ NASIL ÇALIŞIR ═══ */}
+                <div style={{
+                    background: '#1a1a1a', border: '1px solid #2a2a2a',
+                    borderRadius: 16, padding: 20, marginBottom: 16
+                }}>
+                    <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', marginBottom: 16, margin: '0 0 16px' }}>
+                        NASIL ÇALIŞIR?
+                    </h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+                        {[
+                            { emoji: '💰', step: 'Adım 1', label: 'Yatırım Yap' },
+                            { emoji: '🎫', step: 'Adım 2', label: 'Talep Oluştur' },
+                            { emoji: '✅', step: 'Adım 3', label: 'Onay Bekle' },
+                            { emoji: '🎁', step: 'Adım 4', label: 'Çekilişe Katıl' }
+                        ].map((item, idx) => (
+                            <div key={idx} style={{ background: '#0d0d0d', border: '1px solid #2a2a2a', padding: 16, borderRadius: 12, display: 'flex', alignItems: 'center', gap: 14 }}>
+                                <span style={{ fontSize: 24 }}>{item.emoji}</span>
+                                <div>
+                                    <div style={{ fontSize: 10, color: '#888', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.step}</div>
+                                    <div style={{ fontSize: 14, color: '#fff', fontWeight: 600 }}>{item.label}</div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
-                )}
+                </div>
 
-                {/* Next draw countdown placeholder */}
-                <div className="mt-4 p-4 rounded-2xl text-center bg-purple-500/5 border border-purple-500/20">
-                    <div className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em] mb-1">Sonraki Çekiliş</div>
-                    <div className="text-purple-400 font-black text-xl">Yakında Duyurulacak</div>
-                    <div className="text-[var(--text-dim)] text-xs mt-1 font-bold">Biletlerinizi biriktirmeye devam edin!</div>
+                {/* ═══ SSS (FAQ) ═══ */}
+                <div style={{
+                    background: '#1a1a1a', border: '1px solid #2a2a2a',
+                    borderRadius: 16, padding: 20, marginBottom: 32
+                }}>
+                    <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', marginBottom: 16, margin: '0 0 16px' }}>
+                        S.S.S.
+                    </h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                        {config.faqs.map((faq, idx) => (
+                            <div key={idx} style={{ background: '#0d0d0d', border: '1px solid #2a2a2a', borderRadius: 12, overflow: 'hidden' }}>
+                                <button
+                                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                                    style={{
+                                        width: '100%', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                        textAlign: 'left', background: 'transparent', border: 'none', cursor: 'pointer', color: '#fff'
+                                    }}
+                                >
+                                    <span style={{ fontSize: 12, fontWeight: 600 }}>{faq.q}</span>
+                                    <ChevronDown style={{
+                                        width: 16, height: 16, color: '#888', transition: 'transform 0.3s',
+                                        transform: openFaq === idx ? 'rotate(180deg)' : 'rotate(0deg)'
+                                    }} />
+                                </button>
+                                {openFaq === idx && (
+                                    <div style={{ padding: '12px 20px 16px', color: '#888', fontSize: 12, fontWeight: 500, borderTop: '1px solid #2a2a2a' }}>
+                                        {faq.a}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
+
+            {/* PERFORMANCE OPTIMIZED GPU CSS */}
             <style>{`
+                .raffle-slot {
+                    will-change: transform, box-shadow, background-color, border-color;
+                    transform: translate3d(0, 0, 0); 
+                    backface-visibility: hidden;
+                    perspective: 1000px;
+                }
+                .raffle-slot-empty {
+                    position: relative;
+                }
+                .raffle-slot-empty::after {
+                    content: '';
+                    position: absolute;
+                    inset: -1px;
+                    border-radius: 3px;
+                    box-shadow: 0 0 6px rgba(212,175,55,0.08);
+                    opacity: 1;
+                    pointer-events: none;
+                    will-change: opacity;
+                    animation: slotGlowGpu 3s ease-in-out infinite;
+                }
+                .raffle-slot-empty:hover {
+                    background-color: #1e1e1e !important;
+                    border-color: rgba(212,175,55,0.4) !important;
+                    color: #D4AF37 !important;
+                    box-shadow: 0 0 14px rgba(212,175,55,0.25) !important;
+                    transform: scale(1.08) translate3d(0, 0, 0) !important;
+                    z-index: 10;
+                }
+                .raffle-slot-empty:hover::after {
+                    display: none;
+                    animation: none;
+                }
+                @keyframes slotGlowGpu {
+                    0%, 100% { opacity: 0.3; }
+                    50% { opacity: 1; }
+                }
                 @keyframes slideDown {
-                    from { transform: translate(-50%, -20px); opacity: 0; }
-                    to { transform: translate(-50%, 0); opacity: 1; }
+                    from { transform: translate3d(-50%, -20px, 0); opacity: 0; }
+                    to { transform: translate3d(-50%, 0, 0); opacity: 1; }
+                }
+                @media (min-width: 640px) {
+                    .raffle-slot { height: 26px !important; }
                 }
             `}</style>
         </div>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig, SiteStatusConfig } from './types';
+import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig, SiteStatusConfig, RaffleConfig } from './types';
 
 export const BRANDS: Brand[] = [
   {
@@ -93,4 +93,33 @@ export const DEFAULT_WHEEL_CONFIG: WheelConfig = {
 export const DEFAULT_SITE_STATUS_CONFIG: SiteStatusConfig = {
     isMaintenanceMode: false,
     maintenanceMessage: 'Değerli üyelerimiz, sistemlerimizde planlı bir bakım çalışması yürütülmektedir. Çok kısa bir süre sonra tekrar sizinle olacağız!',
+};
+
+export const DEFAULT_RAFFLE_CONFIG: RaffleConfig = {
+    drawDate: '2024-04-20T21:00:00',
+    isActive: true,
+    prizes: [
+        { id: '1', rank: '1.', prize: 'iPhone 17 Pro Max', emoji: '📱', color: '#f0b90b' },
+        { id: '2', rank: '2.', prize: '5,000 TL Nakit', emoji: '💵', color: '#10b981' },
+        { id: '3', rank: '3.', prize: '1,000 TL Bonus', emoji: '🎁', color: '#8b5cf6' },
+        { id: '4', rank: '4-10.', prize: '250 TL Freespin', emoji: '🎰', color: '#f59e0b' },
+    ],
+    rules: [
+        { icon: 'Shield', text: 'Her kullanıcı en fazla 10 bilet satın alabilir.' },
+        { icon: 'AlertTriangle', text: 'Bilet satın alımı geri iade edilemez.' },
+        { icon: 'CheckCircle', text: 'Her 500 TL yatırım = 1 Bilet hakkı kazandırır.' },
+        { icon: 'Users', text: 'Çekiliş sonuçları şeffaf algoritma ile belirlenir.' },
+        { icon: 'Trophy', text: 'Kazananlar çekiliş gününde canlı olarak açıklanır.' },
+        { icon: 'Info', text: 'Bilet havuzundaki slot numaranız çekilişte kullanılır.' },
+    ],
+    faqs: [
+        { q: "Bilet nasıl kazanılır?", a: "Sponsor sitemiz 724BAHİS.NET'e yatırımlar yaparak veya Görevler sekmesindeki etkinlikleri tamamlayarak bilet kazanabilirsiniz." },
+        { q: "Bilet talebi nasıl oluşturulur?", a: "Görevler sayfasındaki form aracılığıyla 724BAHİS.NET kullanıcı adınızı, yatırım miktarınızı ve tarihini girerek talep oluşturabilirsiniz." },
+        { q: "Yatırım tarihi ve saati neden isteniyor?", a: "Yatırımınızın sistem tarafından teyit edilebilmesi için talep edilmektedir." },
+        { q: "Bilet talebim ne kadar sürede onaylanır?", a: "Talepleriniz uzman ekibimiz tarafından kontrol edilip en kısa sürede otomatik olarak onaylanır." },
+        { q: "Bilet liderliği nasıl çalışır?", a: "Bilet havuzumuzdan, en fazla bilete sahip olan kullanıcıların biletleri sıralı olarak sergilenir." },
+        { q: "Çekiliş nasıl yapılır?", a: "Çekiliş günlerinde bilet havuzundaki biletler arasından şeffaf bir bilgisayar algoritması ile kazananlar belirlenir." },
+        { q: "Sponsor bilgisi neden isteniyor?", a: "Çekilişlerimiz partnerimiz 724BAHİS.NET sponsorluğunda gerçekleştiği için oyuncu teyiti zorunludur." },
+        { q: "Telefon doğrulaması neden gerekli?", a: "Sadece gerçek kişilerin ödül alabilmesi ve multi hesapların engellenmesi için istenmektedir." }
+    ]
 };

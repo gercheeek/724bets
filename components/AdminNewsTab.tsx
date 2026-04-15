@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown, Sparkles, Send, Bot, User as UserIcon, Wand2, ArrowRight, AlertCircle, Upload, Image as ImageIcon, Link as LinkIcon, Bold, Italic, Heading2, List, Quote, Type, ImagePlus, ExternalLink, Copy, Check, Zap, Briefcase, Layout } from 'lucide-react';
 import { NewsArticle, NewsAuthor, NEWS_CATEGORIES } from '../types';
 import { supabase } from '../utils/supabase';
+import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
 
 interface AdminNewsTabProps {
     role: string;
@@ -287,39 +288,6 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
         });
     };
 
-    // Generic upload function — tries Supabase Storage first, falls back to base64
-    const uploadImageToSupabase = async (file: File): Promise<string> => {
-        // Validate file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            throw new Error('Dosya boyutu 5MB\'dan küçük olmalıdır.');
-        }
-
-        try {
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-            const filePath = `news/${fileName}`;
-
-            const { data, error } = await supabase.storage
-                .from('news_images')
-                .upload(filePath, file, { upsert: true });
-
-            if (error) {
-                console.warn('Supabase Storage hatası, base64 fallback kullanılıyor:', error.message);
-                // Fallback: convert to base64 data URL
-                return await fileToBase64(file);
-            }
-
-            const { data: { publicUrl } } = supabase.storage
-                .from('news_images')
-                .getPublicUrl(filePath);
-
-            return publicUrl;
-        } catch (err: any) {
-            console.warn('Storage erişim hatası, base64 fallback kullanılıyor:', err.message);
-            // Fallback: convert to base64 data URL
-            return await fileToBase64(file);
-        }
-    };
 
     // Cover image upload
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -327,10 +295,21 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
         if (!file) return;
         setIsUploading(true);
         try {
-            const url = await uploadImageToSupabase(file);
-            setFormImage(url);
+            // Optional: Resize before upload for efficiency
+            const resizedBlob = await resizeImage(file, 1200, 675);
+            const fileName = `news_cover_${Date.now()}.jpg`;
+            
+            const { url, error } = await uploadImageToSupabase(resizedBlob, 'news_images', fileName);
+            
+            if (url) {
+                setFormImage(url);
+            } else {
+                console.error('Haber kapak resmi yükleme hatası:', error);
+                alert(`⚠️ Kapak resmi yüklenemedi: ${error?.message || 'Bilinmeyen hata'} (Kod: ${error?.code || 'N/A'}). Lütfen Supabase 'news_images' bucket ayarlarını ve RLS politikalarını kontrol edin.`);
+            }
         } catch (error: any) {
-            alert('⚠️ Resim yüklenemedi: ' + (error.message || 'Bilinmeyen hata'));
+            console.error('Upload Error:', error);
+            alert('⚠️ Resim hazırlanırken hata oluştu.');
         } finally {
             setIsUploading(false);
         }
@@ -343,11 +322,21 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
         setContentImageUploading(true);
         try {
             for (let i = 0; i < files.length; i++) {
-                const url = await uploadImageToSupabase(files[i]);
-                setUploadedMedia(prev => [...prev, { url, name: files[i].name }]);
+                const resizedBlob = await resizeImage(files[i], 1200, 675);
+                const fileName = `news_content_${Date.now()}_${i}.jpg`;
+                
+                const { url, error } = await uploadImageToSupabase(resizedBlob, 'news_images', fileName);
+                
+                if (url) {
+                    setUploadedMedia(prev => [...prev, { url, name: files[i].name }]);
+                } else {
+                    console.error('Haber içerik resmi yükleme hatası:', error);
+                    alert(`⚠️ ${files[i].name} yüklenemedi: ${error?.message || 'Bilinmeyen hata'}. Kova adını ve RLS izinlerini kontrol edin.`);
+                }
             }
         } catch (error: any) {
-            alert('⚠️ Resim yüklenemedi: ' + (error.message || 'Bilinmeyen hata'));
+            console.error('Content Upload Error:', error);
+            alert('⚠️ Resimler hazırlanırken hata oluştu.');
         } finally {
             setContentImageUploading(false);
         }

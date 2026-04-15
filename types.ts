@@ -569,3 +569,62 @@ export interface SiteStatusConfig {
     isMaintenanceMode: boolean;
     maintenanceMessage: string;
 }
+
+// ─── Hero Slider ─────────────────────────────────────────────────────────────
+export interface HeroSlide {
+    id: string;
+    imageUrl: string;
+    link: string;
+    title: string;
+    isActive: boolean;
+    order: number;
+}
+
+export interface HeroSliderConfig {
+    isActive: boolean;
+    autoPlayInterval: number; // ms
+    slides: HeroSlide[];
+}
+
+// ─── Daily Banko Kupon (Hero Section) ────────────────────────────────────────
+export interface DailyKuponMatch {
+    id: string;
+    homeTeam: string;
+    awayTeam: string;
+    prediction: string;
+    odd: string;
+    league?: string;
+}
+
+export interface DailyKuponConfig {
+    isActive: boolean;
+    title: string;
+    matches: DailyKuponMatch[];
+}
+
+// ─── Raffle (Bilet Havuzu) Config ───────────────────────────────────────────
+export interface RafflePrize {
+    id: string;
+    rank: string;
+    prize: string;
+    emoji: string;
+    color: string;
+}
+
+export interface RaffleRule {
+    icon: string; // lucide icon name or emoji
+    text: string;
+}
+
+export interface RaffleFaq {
+    q: string;
+    a: string;
+}
+
+export interface RaffleConfig {
+    drawDate: string; // ISO date string or specific format
+    isActive: boolean;
+    prizes: RafflePrize[];
+    rules: RaffleRule[];
+    faqs: RaffleFaq[];
+}

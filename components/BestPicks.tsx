@@ -18,9 +18,9 @@ const BestPicks: React.FC<BestPicksProps> = ({ analyses, onNavigate }) => {
   return (
     <section className="portal-best-picks">
       <div className="portal-best-picks-inner">
-        <div className="portal-section-heading">
-          <Star className="w-4 h-4" />
-          En yüksek güven tahminleri
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+          <div style={{ width: '3px', height: '14px', background: '#f0b90b', borderRadius: '2px' }} />
+          <span style={{ color: '#fff', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px' }}>EN YÜKSEK GÜVEN TAHMİNLERİ</span>
         </div>
         <div className="portal-best-picks-grid">
           {topPicks.map((item, index) => {
@@ -30,9 +30,12 @@ const BestPicks: React.FC<BestPicksProps> = ({ analyses, onNavigate }) => {
             return (
               <div
                 key={item.id}
-                className="portal-pick-card"
+                className="portal-pick-card gold-beam-effect frosted-glass"
                 onClick={() => onNavigate('analysis')}
-                style={{ animationDelay: `${index * 0.1}s` }}
+                style={{ 
+                  animationDelay: `${index * 0.1}s`,
+                  background: 'rgba(13, 13, 13, 0.6)',
+                }}
               >
                 {/* Glow Effect */}
                 <div className="portal-pick-glow" />

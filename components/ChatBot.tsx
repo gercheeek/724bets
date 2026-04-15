@@ -101,8 +101,16 @@ const QUICK_REPLIES = [
     'Canlı destek',
 ];
 
-const ChatBot: React.FC = () => {
-    const [open, setOpen] = useState(false);
+interface ChatBotProps {
+    open?: boolean;
+    onToggle?: () => void;
+}
+
+const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
+    const [internalOpen, setInternalOpen] = useState(false);
+    const open = externalOpen !== undefined ? externalOpen : internalOpen;
+    const setOpen = onToggle || setInternalOpen;
+
     const [messages, setMessages] = useState<Message[]>([
         {
             from: 'bot',
@@ -138,35 +146,9 @@ const ChatBot: React.FC = () => {
 
     return (
         <>
-            {/* Floating trigger button + Canlı Destek label */}
-            <div className="fixed bottom-6 right-6 z-[9000] flex flex-col items-center gap-2">
-                <button
-                    onClick={() => setOpen(o => !o)}
-                    className="relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl"
-                    style={{
-                        background: 'linear-gradient(135deg, #f0b90b, #d4a017)',
-                        boxShadow: '0 0 30px rgba(240,185,11,0.55)',
-                    }}
-                    title="Canlı Destek - Banu"
-                >
-                    {open ? <ChevronDown className="w-7 h-7 text-black" /> : <MessageCircle className="w-7 h-7 text-black" />}
-                    {!open && unread > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center border-2 border-white">
-                            {unread}
-                        </span>
-                    )}
-                </button>
-                <span
-                    className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap"
-                    style={{ background: 'rgba(240,185,11,0.12)', color: '#f0b90b', border: '1px solid rgba(240,185,11,0.3)' }}
-                >
-                    🟢 Canlı Destek
-                </span>
-            </div>
-
             {/* Chat panel */}
             <div
-                className="fixed bottom-24 right-6 z-[8999] w-[340px] max-w-[calc(100vw-2rem)] rounded-3xl overflow-hidden flex flex-col"
+                className="fixed top-20 right-6 z-[8999] w-[340px] max-w-[calc(100vw-2rem)] rounded-3xl overflow-hidden flex flex-col"
                 style={{
                     background: 'var(--bg-card)',
                     border: '1.5px solid var(--border-card)',

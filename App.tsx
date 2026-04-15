@@ -32,8 +32,8 @@ import NewsView from './components/NewsView';
 import HomeAnalyses from './components/HomeAnalyses';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig } from './types';
-import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG } from './constants';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig } from './types';
+import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG } from './constants';
 import { demoAnalyses } from './demoData';
 
 // Portal Components
@@ -46,6 +46,7 @@ import PortalMobileNav from './components/PortalMobileNav';
 import PortalNewsTeaser from './components/PortalNewsTeaser';
 import PortalCouponsTeaser from './components/PortalCouponsTeaser';
 import CouponsView from './components/CouponsView';
+import HeroSection from './components/HeroSection';
 
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('loading');
@@ -121,6 +122,42 @@ const App: React.FC = () => {
     updateGlobalConfig('site_status', cfg);
   };
 
+  // Hero Slider Config
+  const [heroSliderConfig, setHeroSliderConfig] = useState<HeroSliderConfig>(() => {
+    const stored = localStorage.getItem('site_hero_slider');
+    return stored ? JSON.parse(stored) : { isActive: true, autoPlayInterval: 5000, slides: [] };
+  });
+
+  const handleHeroSliderConfigChange = (cfg: HeroSliderConfig) => {
+    setHeroSliderConfig(cfg);
+    localStorage.setItem('site_hero_slider', JSON.stringify(cfg));
+    updateGlobalConfig('site_hero_slider', cfg);
+  };
+
+  // Daily Kupon Config
+  const [dailyKuponConfig, setDailyKuponConfig] = useState<DailyKuponConfig>(() => {
+    const stored = localStorage.getItem('site_daily_kupon');
+    return stored ? JSON.parse(stored) : { isActive: true, title: 'GÜNÜN BANKO KUPONU', matches: [] };
+  });
+
+  const handleDailyKuponConfigChange = (cfg: DailyKuponConfig) => {
+    setDailyKuponConfig(cfg);
+    localStorage.setItem('site_daily_kupon', JSON.stringify(cfg));
+    updateGlobalConfig('site_daily_kupon', cfg);
+  };
+
+  // Raffle Config
+  const [raffleConfig, setRaffleConfig] = useState<RaffleConfig>(() => {
+    const stored = localStorage.getItem('site_raffle_config');
+    return stored ? JSON.parse(stored) : DEFAULT_RAFFLE_CONFIG;
+  });
+
+  const handleRaffleConfigChange = (cfg: RaffleConfig) => {
+    setRaffleConfig(cfg);
+    localStorage.setItem('site_raffle_config', JSON.stringify(cfg));
+    updateGlobalConfig('site_raffle_config', cfg);
+  };
+
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
   const [userRole, setUserRole] = useState<string | null>(null);
   const [portalLeague, setPortalLeague] = useState<string>('Tümü');
@@ -181,6 +218,7 @@ const App: React.FC = () => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [showWelcomePopup, setShowWelcomePopup] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
     return stored ? JSON.parse(stored) : DEFAULT_LOYALTY_CONFIG;
@@ -348,6 +386,15 @@ const App: React.FC = () => {
         const globalPromoWheel = await getGlobalConfig('site_featured_wheel') || await getGlobalConfig('site_betlivo_wheel');
         if (globalPromoWheel) setPromoWheelConfig(globalPromoWheel);
 
+        const globalHeroSlider = await getGlobalConfig('site_hero_slider');
+        if (globalHeroSlider) setHeroSliderConfig(globalHeroSlider);
+
+        const globalDailyKupon = await getGlobalConfig('site_daily_kupon');
+        if (globalDailyKupon) setDailyKuponConfig(globalDailyKupon);
+
+        const globalRaffle = await getGlobalConfig('site_raffle_config');
+        if (globalRaffle) setRaffleConfig(globalRaffle);
+
       } catch (err) {
         console.error('Initialization error:', err);
       }
@@ -480,6 +527,12 @@ const App: React.FC = () => {
       onSaveLiveOddsConfig={handleLiveOddsConfigChange}
       siteStatusConfig={siteStatusConfig}
       onSaveSiteStatusConfig={handleSiteStatusConfigChange}
+      heroSliderConfig={heroSliderConfig}
+      onSaveHeroSliderConfig={handleHeroSliderConfigChange}
+      dailyKuponConfig={dailyKuponConfig}
+      onSaveDailyKuponConfig={handleDailyKuponConfigChange}
+      raffleConfig={raffleConfig}
+      onSaveRaffleConfig={handleRaffleConfigChange}
     />
   );
 
@@ -572,17 +625,20 @@ const App: React.FC = () => {
           if (view === 'admin') setView('home');
         }}
         onSearchClick={() => setShowSearch(true)}
+        onSupportClick={() => setIsChatOpen(!isChatOpen)}
         navVisibility={navVisibility}
         marqueeConfig={marqueeConfig}
         liveOddsConfig={liveOddsConfig}
       />
 
-      <main style={{ position: 'relative', zIndex: 10, paddingTop: '130px', filter: appStage === 'popup' ? 'blur(10px)' : 'none', pointerEvents: appStage === 'popup' ? 'none' : 'auto', transition: 'filter 0.5s' }}>
+      <main style={{ position: 'relative', zIndex: 10, paddingTop: '125px', filter: appStage === 'popup' ? 'blur(10px)' : 'none', pointerEvents: appStage === 'popup' ? 'none' : 'auto', transition: 'filter 0.5s' }}>
         <div style={{ visibility: appStage !== 'loading' ? 'visible' : 'hidden', height: appStage === 'loading' ? '100vh' : 'auto', overflow: appStage === 'loading' ? 'hidden' : 'visible' }}>
           {view === 'home' && (
             <>
               {/* ═══ PORTAL BODY (Single Column Centered) ═══ */}
               <div className="portal-body">
+                  <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
+                  <BestPicks analyses={analyses} onNavigate={handleViewChange} />
                   <PortalCouponsTeaser 
                     coupons={coupons}
                     onViewChange={handleViewChange}
@@ -597,11 +653,6 @@ const App: React.FC = () => {
                     onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   />
               </div>
-
-              {/* ═══ BEST PICKS FULL WIDTH ═══ */}
-              <BestPicks analyses={analyses} onNavigate={handleViewChange} />
-
-
 
               {/* ═══ PORTAL FOOTER ═══ */}
               <div className="portal-footer">
@@ -685,6 +736,7 @@ const App: React.FC = () => {
         {view === 'raffle' && (
           (siteUser || userRole) ? (
             <RaffleView
+              config={raffleConfig}
               loyaltyConfig={loyaltyConfig}
               userId={siteUser?.id || userRole || 'guest'}
               onNavigate={(v: string) => setView(v as any)}
@@ -798,7 +850,7 @@ const App: React.FC = () => {
       )}
 
       {/* ── AI Chat Assistant ── */}
-      <ChatBot />
+      <ChatBot open={isChatOpen} onToggle={() => setIsChatOpen(!isChatOpen)} />
 
     </div>
     )}

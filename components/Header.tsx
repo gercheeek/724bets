@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Settings, User, Pen, LogOut, ChevronDown, Search, Coins, Send, X,
-  MessageSquare, Sun, Moon, Home, Ticket, BarChart3, Shield, Newspaper,
+  MessageSquare, Home, Ticket, BarChart3, Shield, Newspaper,
   Target, Spade, Trophy, TicketCheck, Gift
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig, LiveOddsConfig } from '../types';
@@ -46,6 +46,7 @@ interface HeaderProps {
   navVisibility?: NavVisibility;
   marqueeConfig?: MarqueeConfig;
   liveOddsConfig?: LiveOddsConfig;
+  onSupportClick?: () => void;
 }
 
 function getUserLoyalty(userId: string): UserLoyalty {
@@ -80,12 +81,13 @@ const Header: React.FC<HeaderProps> = ({
   navVisibility,
   marqueeConfig,
   liveOddsConfig,
+  onSupportClick,
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   // Deposit Modal State
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -386,23 +388,21 @@ const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Right: Theme + Search + User */}
+          {/* Right: Search + User */}
           <div className="header-topbar-right">
-            <button
-              onClick={toggleTheme}
-              className="header-icon-btn"
-              title={theme === 'light' ? 'Karanlık Tema' : 'Aydınlık Tema'}
-            >
-              {theme === 'light'
-                ? <Moon className="w-4 h-4" />
-                : <Sun className="w-4 h-4" />}
-            </button>
             <button
               onClick={onSearchClick}
               className="header-icon-btn"
               title="Maç Ara"
             >
               <Search className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onSupportClick}
+              className="header-icon-btn"
+              title="Canlı Destek"
+            >
+              <MessageSquare className="w-4 h-4" />
             </button>
             {renderUserStatus()}
           </div>
