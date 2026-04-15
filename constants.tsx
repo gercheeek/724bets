@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig, SiteStatusConfig, RaffleConfig } from './types';
+import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig, SiteStatusConfig, RaffleConfig, PopularBetsConfig } from './types';
+import { demoPopularBets } from './demoData';
 
 export const BRANDS: Brand[] = [
   {
@@ -122,4 +123,9 @@ export const DEFAULT_RAFFLE_CONFIG: RaffleConfig = {
         { q: "Sponsor bilgisi neden isteniyor?", a: "Çekilişlerimiz partnerimiz 724BAHİS.NET sponsorluğunda gerçekleştiği için oyuncu teyiti zorunludur." },
         { q: "Telefon doğrulaması neden gerekli?", a: "Sadece gerçek kişilerin ödül alabilmesi ve multi hesapların engellenmesi için istenmektedir." }
     ]
+};
+
+export const DEFAULT_POPULAR_BETS_CONFIG: PopularBetsConfig = {
+    isActive: true,
+    bets: demoPopularBets
 };

@@ -133,3 +133,58 @@ export const demoNews: NewsArticle[] = [
         updatedAt: Date.now() - 21600000,
     },
 ];
+
+export const demoPopularBets: any[] = [
+    {
+        id: 'pb-1',
+        homeTeam: 'Sarpsborg 08',
+        awayTeam: 'Bodo Glimt',
+        matchTime: 'Bugün 20:00',
+        prediction: 'İlk Yarı/Maç Sonucu:',
+        predictionShort: '1/2',
+        odds: 16.65,
+        playCount: 131,
+        isHot: true,
+        affiliateUrl: 'https://724bahis.net',
+        league: 'Norveç'
+    },
+    {
+        id: 'pb-2',
+        homeTeam: 'Ballymena U',
+        awayTeam: 'Bangor FC',
+        matchTime: 'Bugün 21:45',
+        prediction: 'İlk Yarı/Maç Sonucu:',
+        predictionShort: '2/1',
+        odds: 23.50,
+        playCount: 128,
+        isHot: true,
+        affiliateUrl: 'https://724bahis.net',
+        league: 'K. İrlanda'
+    },
+    {
+        id: 'pb-3',
+        homeTeam: 'Tromso IL',
+        awayTeam: 'Lillestrom',
+        matchTime: 'Bugün 20:00',
+        prediction: 'İlk Yarı/Maç Sonucu:',
+        predictionShort: '2/1',
+        odds: 22.25,
+        playCount: 114,
+        isHot: true,
+        affiliateUrl: 'https://724bahis.net',
+        league: 'Norveç'
+    },
+    {
+        id: 'pb-4',
+        homeTeam: 'AZ Alkmaar',
+        awayTeam: 'Shakhtar Donetsk',
+        matchTime: 'Yarın 19:45',
+        prediction: 'Altı/Üstü 2,5 ve Karşılıklı Gol:',
+        predictionShort: 'Üst ve Var',
+        odds: 1.76,
+        playCount: 82,
+        isHot: true,
+        affiliateUrl: 'https://724bahis.net',
+        league: 'UEFA'
+    }
+];
