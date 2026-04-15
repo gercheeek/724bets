@@ -32,7 +32,7 @@ import NewsView from './components/NewsView';
 import HomeAnalyses from './components/HomeAnalyses';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig } from './types';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig } from './types';
 import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG } from './constants';
 import { demoAnalyses } from './demoData';
 
@@ -47,6 +47,7 @@ import PortalNewsTeaser from './components/PortalNewsTeaser';
 import PortalCouponsTeaser from './components/PortalCouponsTeaser';
 import CouponsView from './components/CouponsView';
 import HeroSection from './components/HeroSection';
+import PopularBets from './components/PopularBets';
 
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('loading');
@@ -156,6 +157,18 @@ const App: React.FC = () => {
     setRaffleConfig(cfg);
     localStorage.setItem('site_raffle_config', JSON.stringify(cfg));
     updateGlobalConfig('site_raffle_config', cfg);
+  };
+
+  // Popular Bets Config
+  const [popularBetsConfig, setPopularBetsConfig] = useState<PopularBetsConfig>(() => {
+    const stored = localStorage.getItem('site_popular_bets');
+    return stored ? JSON.parse(stored) : { isActive: true, bets: [] };
+  });
+
+  const handlePopularBetsConfigChange = (cfg: PopularBetsConfig) => {
+    setPopularBetsConfig(cfg);
+    localStorage.setItem('site_popular_bets', JSON.stringify(cfg));
+    updateGlobalConfig('site_popular_bets', cfg);
   };
 
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
@@ -401,6 +414,9 @@ const App: React.FC = () => {
         const globalRaffle = await getGlobalConfig('site_raffle_config');
         if (globalRaffle) setRaffleConfig(globalRaffle);
 
+        const globalPopularBets = await getGlobalConfig('site_popular_bets');
+        if (globalPopularBets) setPopularBetsConfig(globalPopularBets);
+
       } catch (err) {
         console.error('Initialization error:', err);
       }
@@ -539,6 +555,8 @@ const App: React.FC = () => {
       onSaveDailyKuponConfig={handleDailyKuponConfigChange}
       raffleConfig={raffleConfig}
       onSaveRaffleConfig={handleRaffleConfigChange}
+      popularBetsConfig={popularBetsConfig}
+      onSavePopularBetsConfig={handlePopularBetsConfigChange}
     />
   );
 
@@ -649,6 +667,7 @@ const App: React.FC = () => {
                     coupons={coupons}
                     onViewChange={handleViewChange}
                   />
+                  <PopularBets config={popularBetsConfig} />
                   <PortalMatchList
                     analyses={analyses}
                     selectedLeague={portalLeague}

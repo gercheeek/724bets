@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, Database, ChevronUp, ChevronDown, Layers } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig } from '../types';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
 import AdminNewsTab from './AdminNewsTab';
 import AdminGiveawayTab from './AdminGiveawayTab';
 import AdminRaffleTab from './AdminRaffleTab';
+import AdminPopularBetsTab from './AdminPopularBetsTab';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './Header';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
@@ -51,6 +52,8 @@ interface AdminPanelProps {
   onSaveDailyKuponConfig?: (config: DailyKuponConfig) => void;
   raffleConfig?: RaffleConfig;
   onSaveRaffleConfig?: (config: RaffleConfig) => void;
+  popularBetsConfig?: PopularBetsConfig;
+  onSavePopularBetsConfig?: (config: PopularBetsConfig) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -64,11 +67,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   siteStatusConfig, onSaveSiteStatusConfig,
   heroSliderConfig, onSaveHeroSliderConfig,
   dailyKuponConfig, onSaveDailyKuponConfig,
-  raffleConfig, onSaveRaffleConfig
+  raffleConfig, onSaveRaffleConfig,
+  popularBetsConfig, onSavePopularBetsConfig
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system'>(isAuthor || isEditor ? 'news' : 'content');
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets'>(isAuthor || isEditor ? 'news' : 'content');
   const mainRef = useRef<HTMLElement>(null);
 
   // Scroll to top when tab changes
@@ -111,6 +115,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   const [localRaffleConfig, setLocalRaffleConfig] = useState<RaffleConfig>(
     raffleConfig || { drawDate: '2024-04-20T21:00:00', isActive: true, prizes: [], rules: [], faqs: [] }
+  );
+
+  const [localPopularBetsConfig, setLocalPopularBetsConfig] = useState<PopularBetsConfig>(
+    popularBetsConfig || { isActive: true, bets: [] }
   );
 
   // New Management Local State
@@ -248,6 +256,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   useEffect(() => {
     if (raffleConfig) setLocalRaffleConfig(raffleConfig);
   }, [raffleConfig]);
+
+  useEffect(() => {
+    if (popularBetsConfig) setLocalPopularBetsConfig(popularBetsConfig);
+  }, [popularBetsConfig]);
 
   const handleBrandChange = (index: number, field: keyof Brand, value: string) => {
     const updated = [...localBrands];
@@ -891,6 +903,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
               <button onClick={() => setActiveTab('raffle')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'raffle' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Ticket className="w-4 h-4" /> BİLET HAVUZU
+              </button>
+              <button onClick={() => setActiveTab('popularbets')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'popularbets' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <TrendingUp className="w-4 h-4" /> POPÜLER BAHİSLER
               </button>
               <button onClick={() => setActiveTab('loyalty')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'loyalty' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Star className="w-4 h-4" /> SADAKAT / BİLET
@@ -3268,6 +3283,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           onSave={(cfg) => {
             setLocalRaffleConfig(cfg);
             if (onSaveRaffleConfig) onSaveRaffleConfig(cfg);
+          }} 
+        />
+      )}
+
+      {activeTab === 'popularbets' && (
+        <AdminPopularBetsTab 
+          config={localPopularBetsConfig} 
+          onSave={(cfg) => {
+            setLocalPopularBetsConfig(cfg);
+            if (onSavePopularBetsConfig) onSavePopularBetsConfig(cfg);
           }} 
         />
       )}

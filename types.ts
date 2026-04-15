@@ -628,3 +628,23 @@ export interface RaffleConfig {
     rules: RaffleRule[];
     faqs: RaffleFaq[];
 }
+
+// ─── Popular Bets (Popüler Bahisler) ────────────────────────────────────────
+export interface PopularBet {
+    id: string;
+    homeTeam: string;
+    awayTeam: string;
+    matchTime: string; // e.g. 'Bugün 20:00' or 'Yarın 21:45'
+    prediction: string; // e.g. 'İlk Yarı/Maç Sonucu: 2/1'
+    predictionShort: string; // e.g. '2/1'
+    odds: number;
+    playCount: number;
+    isHot: boolean;
+    affiliateUrl: string;
+    league?: string;
+}
+
+export interface PopularBetsConfig {
+    isActive: boolean;
+    bets: PopularBet[];
+}
