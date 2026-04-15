@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, Database, ChevronUp, ChevronDown, Layers } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, NewsSliderConfig } from '../types';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, NewsSliderConfig, TVConfig } from '../types';
 import { demoAnalyses, demoCoupons } from '../demoData';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
@@ -9,6 +9,7 @@ import AdminGiveawayTab from './AdminGiveawayTab';
 import AdminRaffleTab from './AdminRaffleTab';
 import AdminPopularBetsTab from './AdminPopularBetsTab';
 import AdminNewsSliderTab from './AdminNewsSliderTab';
+import Admin724TVTab from './Admin724TVTab';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './Header';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
@@ -57,6 +58,8 @@ interface AdminPanelProps {
   onSavePopularBetsConfig?: (config: PopularBetsConfig) => void;
   newsSliderConfig?: NewsSliderConfig;
   onSaveNewsSliderConfig?: (config: NewsSliderConfig) => void;
+  tvConfig?: TVConfig;
+  onSaveTvConfig?: (config: TVConfig) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -72,11 +75,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   dailyKuponConfig, onSaveDailyKuponConfig,
   raffleConfig, onSaveRaffleConfig,
   popularBetsConfig, onSavePopularBetsConfig,
-  newsSliderConfig, onSaveNewsSliderConfig
+  newsSliderConfig, onSaveNewsSliderConfig,
+  tvConfig, onSaveTvConfig
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | 'newsslider'>(isAuthor || isEditor ? 'news' : 'content');
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | 'newsslider' | '724tv'>(isAuthor || isEditor ? 'news' : 'content');
   const mainRef = useRef<HTMLElement>(null);
 
   // Scroll to top when tab changes
@@ -127,6 +131,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   const [localNewsSliderConfig, setLocalNewsSliderConfig] = useState<NewsSliderConfig>(
     newsSliderConfig || { isActive: true, autoPlayInterval: 5000, slides: [] }
+  );
+
+  const [localTvConfig, setLocalTvConfig] = useState<TVConfig>(
+    tvConfig || { isActive: true, channels: [], chatEnabled: true, tickerText: '' }
   );
 
   // New Management Local State
@@ -921,6 +929,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
               <button onClick={() => setActiveTab('newsslider')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'newsslider' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Layout className="w-4 h-4" /> GÜNDEM SLIDER
+              </button>
+              <button onClick={() => setActiveTab('724tv')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === '724tv' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
+                <Layers className="w-4 h-4" /> 724TV
               </button>
               <button onClick={() => setActiveTab('loyalty')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'loyalty' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
                 <Star className="w-4 h-4" /> SADAKAT / BİLET
@@ -3318,6 +3329,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           onSave={(cfg) => {
             setLocalNewsSliderConfig(cfg);
             if (onSaveNewsSliderConfig) onSaveNewsSliderConfig(cfg);
+          }} 
+        />
+      )}
+
+      {activeTab === '724tv' && (
+        <Admin724TVTab 
+          config={localTvConfig} 
+          onSave={(cfg) => {
+            setLocalTvConfig(cfg);
+            if (onSaveTvConfig) onSaveTvConfig(cfg);
           }} 
         />
       )}

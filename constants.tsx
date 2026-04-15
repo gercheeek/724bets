@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig, SiteStatusConfig, RaffleConfig, PopularBetsConfig, NewsSliderConfig } from './types';
+import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig, SiteStatusConfig, RaffleConfig, PopularBetsConfig, NewsSliderConfig, TVConfig } from './types';
 import { demoPopularBets } from './demoData';
 
 export const BRANDS: Brand[] = [
@@ -160,6 +160,40 @@ export const DEFAULT_NEWS_SLIDER_CONFIG: NewsSliderConfig = {
             category: 'A MİLLİ TAKIM',
             isActive: true,
             order: 3
+        }
+    ]
+};
+
+export const DEFAULT_TV_CONFIG: TVConfig = {
+    isActive: true,
+    chatEnabled: true,
+    tickerText: 'FB: 1 - GS: 0 | REAL MADRID: 2 - MAN CITY: 2 | BJK: 0 - TS: 0 | ARSENAL: 1 - BAYERN: 1',
+    channels: [
+        {
+            id: 'tv-1',
+            name: '724TV Ana Kanal',
+            slug: '724bahis',
+            platform: 'kick',
+            streamUrl: '724bahis',
+            thumbnailUrl: '',
+            category: 'CANLI YAYIN',
+            isLive: true,
+            isActive: true,
+            order: 1,
+            viewerCount: 342,
+        },
+        {
+            id: 'tv-2',
+            name: 'Maç İzle',
+            slug: 'macizle',
+            platform: 'kick',
+            streamUrl: 'macizle',
+            thumbnailUrl: '',
+            category: 'CANLI MAÇ',
+            isLive: false,
+            isActive: true,
+            order: 2,
+            viewerCount: 0,
         }
     ]
 };

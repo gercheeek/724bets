@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Settings, User, Pen, LogOut, ChevronDown, Search, Coins, Send, X,
   MessageSquare, Home, Ticket, BarChart3, Shield, Newspaper,
-  Target, Spade, Trophy, TicketCheck, Gift
+  Target, Spade, Trophy, TicketCheck, Gift, Tv
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig, LiveOddsConfig } from '../types';
 import { useTheme } from '../ThemeContext';
@@ -106,6 +106,7 @@ const Header: React.FC<HeaderProps> = ({
     { key: 'loyalty', view: 'loyalty', label: 'Görevler', icon: <Trophy className={ICON_SIZE} />, visKey: 'loyalty' },
     { key: 'raffle', view: 'raffle', label: 'Bilet', icon: <TicketCheck className={ICON_SIZE} />, visKey: 'raffle' },
     { key: 'giveaway', view: 'giveaway', label: 'Çekiliş', icon: <Gift className={ICON_SIZE} />, visKey: 'giveaway', requireRole: true },
+    { key: '724tv', view: '724tv', label: '724TV', icon: <Tv className={ICON_SIZE} /> },
   ];
 
   const handleDepositSubmit = () => {

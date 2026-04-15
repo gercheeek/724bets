@@ -665,3 +665,35 @@ export interface NewsSliderConfig {
     autoPlayInterval: number; // ms
     slides: NewsSlide[];
 }
+
+// ─── 724TV (Live Streaming) ──────────────────────────────────────────────────
+export interface TVChannel {
+    id: string;
+    name: string;
+    slug: string; // Kick username or custom identifier
+    platform: 'kick' | 'custom'; // stream platform
+    streamUrl: string; // e.g. kick username or direct URL
+    thumbnailUrl: string;
+    category: string; // e.g. 'CANLI MAÇ', 'CANLI YAYIN', 'SPOR'
+    isLive: boolean;
+    isActive: boolean;
+    order: number;
+    viewerCount?: number;
+}
+
+export interface TVConfig {
+    isActive: boolean;
+    channels: TVChannel[];
+    chatEnabled: boolean;
+    tickerText: string; // live score ticker
+}
+
+export interface TVChatMessage {
+    id: string;
+    userId: string;
+    username: string;
+    message: string;
+    role: 'admin' | 'vip' | 'user';
+    timestamp: number;
+    channelId: string;
+}

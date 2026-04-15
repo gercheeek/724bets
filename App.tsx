@@ -32,8 +32,8 @@ import NewsView from './components/NewsView';
 import HomeAnalyses from './components/HomeAnalyses';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig, NewsSliderConfig } from './types';
-import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG, DEFAULT_POPULAR_BETS_CONFIG, DEFAULT_NEWS_SLIDER_CONFIG } from './constants';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig, NewsSliderConfig, TVConfig } from './types';
+import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG, DEFAULT_POPULAR_BETS_CONFIG, DEFAULT_NEWS_SLIDER_CONFIG, DEFAULT_TV_CONFIG } from './constants';
 import { demoAnalyses } from './demoData';
 
 // Portal Components
@@ -48,10 +48,11 @@ import CouponsView from './components/CouponsView';
 import HeroSection from './components/HeroSection';
 import PopularBets from './components/PopularBets';
 import NewsSlider from './components/NewsSlider';
+import TV724View from './components/TV724View';
 
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('loading');
-  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway' | 'coupons'>('home');
+  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway' | 'coupons' | '724tv'>('home');
 
   // Promo Wheel Config
   const [promoWheelConfig, setPromoWheelConfig] = useState<PromoWheelConfig>(() => {
@@ -181,6 +182,18 @@ const App: React.FC = () => {
     setNewsSliderConfig(cfg);
     localStorage.setItem('site_news_slider', JSON.stringify(cfg));
     updateGlobalConfig('site_news_slider', cfg);
+  };
+
+  // 724TV Config
+  const [tvConfig, setTvConfig] = useState<TVConfig>(() => {
+    const stored = localStorage.getItem('site_tv_config');
+    return stored ? JSON.parse(stored) : DEFAULT_TV_CONFIG;
+  });
+
+  const handleTvConfigChange = (cfg: TVConfig) => {
+    setTvConfig(cfg);
+    localStorage.setItem('site_tv_config', JSON.stringify(cfg));
+    updateGlobalConfig('site_tv_config', cfg);
   };
 
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
@@ -432,6 +445,9 @@ const App: React.FC = () => {
         const globalNewsSlider = await getGlobalConfig('site_news_slider');
         if (globalNewsSlider) setNewsSliderConfig(globalNewsSlider);
 
+        const globalTvConfig = await getGlobalConfig('site_tv_config');
+        if (globalTvConfig) setTvConfig(globalTvConfig);
+
       } catch (err) {
         console.error('Initialization error:', err);
       }
@@ -574,6 +590,8 @@ const App: React.FC = () => {
       onSavePopularBetsConfig={handlePopularBetsConfigChange}
       newsSliderConfig={newsSliderConfig}
       onSaveNewsSliderConfig={handleNewsSliderConfigChange}
+      tvConfig={tvConfig}
+      onSaveTvConfig={handleTvConfigChange}
     />
   );
 
@@ -840,6 +858,15 @@ const App: React.FC = () => {
             setAuthModalMode={setAuthModalMode}
             onNavigate={handleViewChange}
             statusConfig={siteStatusConfig}
+          />
+        )}
+
+        {view === '724tv' && (
+          <TV724View
+            config={tvConfig}
+            siteUser={siteUser}
+            userRole={userRole}
+            onBack={() => handleViewChange('home')}
           />
         )}
       </div>
