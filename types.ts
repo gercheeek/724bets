@@ -648,3 +648,20 @@ export interface PopularBetsConfig {
     isActive: boolean;
     bets: PopularBet[];
 }
+
+// ─── News Slider (Gündem Slider) ─────────────────────────────────────────────
+export interface NewsSlide {
+    id: string;
+    imageUrl: string;
+    link: string;
+    title: string;
+    category: string;
+    isActive: boolean;
+    order: number;
+}
+
+export interface NewsSliderConfig {
+    isActive: boolean;
+    autoPlayInterval: number; // ms
+    slides: NewsSlide[];
+}

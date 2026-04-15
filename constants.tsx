@@ -129,3 +129,37 @@ export const DEFAULT_POPULAR_BETS_CONFIG: PopularBetsConfig = {
     isActive: true,
     bets: demoPopularBets
 };
+
+export const DEFAULT_NEWS_SLIDER_CONFIG: NewsSliderConfig = {
+    isActive: true,
+    autoPlayInterval: 5000,
+    slides: [
+        {
+            id: 'ns-1',
+            imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=2070&auto=format&fit=crop',
+            link: '#',
+            title: 'Real Madrid - Manchester City Maçı Öncesi Son Dakika Gelişmeleri',
+            category: 'ŞAMPİYONLAR LİGİ',
+            isActive: true,
+            order: 1
+        },
+        {
+            id: 'ns-2',
+            imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2093&auto=format&fit=crop',
+            link: '#',
+            title: 'Süper Lig\'de Şampiyonluk Yarışında Kritik Haftaya Girildi',
+            category: 'SÜPER LİG',
+            isActive: true,
+            order: 2
+        },
+        {
+            id: 'ns-3',
+            imageUrl: 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?q=80&w=2069&auto=format&fit=crop',
+            link: '#',
+            title: 'Euro 2024 Öncesi A Milli Takım\'da Hazırlıklar Tam Gaz Sürüyor',
+            category: 'A MİLLİ TAKIM',
+            isActive: true,
+            order: 3
+        }
+    ]
+};

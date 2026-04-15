@@ -47,6 +47,7 @@ import PortalCouponsTeaser from './components/PortalCouponsTeaser';
 import CouponsView from './components/CouponsView';
 import HeroSection from './components/HeroSection';
 import PopularBets from './components/PopularBets';
+import NewsSlider from './components/NewsSlider';
 
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('loading');
@@ -168,6 +169,18 @@ const App: React.FC = () => {
     setPopularBetsConfig(cfg);
     localStorage.setItem('site_popular_bets', JSON.stringify(cfg));
     updateGlobalConfig('site_popular_bets', cfg);
+  };
+
+  // News Slider Config
+  const [newsSliderConfig, setNewsSliderConfig] = useState<NewsSliderConfig>(() => {
+    const stored = localStorage.getItem('site_news_slider');
+    return stored ? JSON.parse(stored) : DEFAULT_NEWS_SLIDER_CONFIG;
+  });
+
+  const handleNewsSliderConfigChange = (cfg: NewsSliderConfig) => {
+    setNewsSliderConfig(cfg);
+    localStorage.setItem('site_news_slider', JSON.stringify(cfg));
+    updateGlobalConfig('site_news_slider', cfg);
   };
 
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
@@ -416,6 +429,9 @@ const App: React.FC = () => {
         const globalPopularBets = await getGlobalConfig('site_popular_bets');
         if (globalPopularBets) setPopularBetsConfig(globalPopularBets);
 
+        const globalNewsSlider = await getGlobalConfig('site_news_slider');
+        if (globalNewsSlider) setNewsSliderConfig(globalNewsSlider);
+
       } catch (err) {
         console.error('Initialization error:', err);
       }
@@ -556,6 +572,8 @@ const App: React.FC = () => {
       onSaveRaffleConfig={handleRaffleConfigChange}
       popularBetsConfig={popularBetsConfig}
       onSavePopularBetsConfig={handlePopularBetsConfigChange}
+      newsSliderConfig={newsSliderConfig}
+      onSaveNewsSliderConfig={handleNewsSliderConfigChange}
     />
   );
 
@@ -666,14 +684,11 @@ const App: React.FC = () => {
                     onViewChange={handleViewChange}
                   />
                   <PopularBets config={popularBetsConfig} />
+                  <NewsSlider config={newsSliderConfig} />
                   <PortalMatchList
                     analyses={analyses}
                     selectedLeague={portalLeague}
                     onNavigate={handleViewChange}
-                  />
-                  <PortalNewsTeaser 
-                    onViewChange={handleViewChange}
-                    onArticleClick={(id) => { setSelectedArticleId(id); setView('news-detail'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                   />
               </div>
 
