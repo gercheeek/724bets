@@ -34,13 +34,13 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
         >
             {/* Popup card */}
             <div
-                className="relative w-full max-w-2xl rounded-3xl overflow-hidden"
+                className="relative w-full max-w-sm md:max-w-lg rounded-3xl overflow-hidden"
                 style={{
                     background: 'linear-gradient(145deg, #020804 0%, #0c0a00 50%, #020804 100%)',
                     border: '2px solid rgba(240,185,11,0.7)',
                     boxShadow: '0 0 80px rgba(240,185,11,0.3), 0 0 200px rgba(240,185,11,0.1)',
-                    transform: visible ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(20px)',
-                    transition: 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)',
+                    transform: visible ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(20px)',
+                    transition: 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)',
                 }}
                 onClick={e => e.stopPropagation()}
             >
@@ -71,7 +71,7 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
                     <X className="w-4 h-4" />
                 </button>
 
-                <div className="relative z-10 p-8 md:p-12">
+                <div className="relative z-10 p-6 md:p-10">
                     {/* Header */}
                     <div className="flex items-center gap-3 mb-6">
                         <span className="px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] rounded-full text-black animate-pulse"
@@ -85,30 +85,30 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
                     </div>
 
                     {/* Logo + Brand name */}
-                    <div className="flex items-center gap-5 mb-6">
-                        <div className="w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0"
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
                             style={{ background: 'linear-gradient(135deg, #f0b90b, #d9a508)', boxShadow: '0 0 30px rgba(240,185,11,0.5)' }}>
-                            <span className="text-black font-black text-xs uppercase tracking-tighter leading-tight text-center">724<br />BETS</span>
+                            <span className="text-black font-black text-[10px] md:text-xs uppercase tracking-tighter leading-tight text-center">724<br />BETS</span>
                         </div>
                         <div>
-                            <h2 className="text-5xl font-black tracking-tighter uppercase leading-none mb-1 shadow-sm"
+                            <h2 className="text-3xl md:text-4xl font-black tracking-tighter uppercase leading-none mb-1 shadow-sm"
                                 style={{ color: '#f0b90b' }}>
                                 {config.title}
                             </h2>
-                            <p className="text-zinc-400 text-sm font-bold">{config.subtitle}</p>
+                            <p className="text-zinc-400 text-xs md:text-sm font-bold">{config.subtitle}</p>
                         </div>
                     </div>
 
                     {/* Offer highlight */}
-                    <div className="rounded-2xl p-5 mb-6"
+                    <div className="rounded-2xl p-4 md:p-5 mb-6"
                         style={{
                             background: 'linear-gradient(135deg, rgba(240,185,11,0.08), rgba(240,185,11,0.03))',
                             border: '1px solid rgba(240,185,11,0.2)',
                         }}>
-                        <div className="text-4xl md:text-5xl font-black text-white mb-2">
+                        <div className="text-2xl md:text-4xl font-black text-white mb-2">
                             {config.offerMain}
                         </div>
-                        <p className="text-zinc-400 text-sm font-bold">
+                        <p className="text-zinc-400 text-xs md:text-sm font-bold">
                             {config.offerSub}
                         </p>
                     </div>
