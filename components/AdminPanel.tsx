@@ -1399,15 +1399,26 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
 
-              {/* Kupon Title */}
-              <div className="mb-6 space-y-2">
-                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Kupon Başlığı</label>
-                <input
-                  value={localDailyKupon.title}
-                  onChange={(e) => setLocalDailyKupon({ ...localDailyKupon, title: e.target.value })}
-                  className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold text-[#f5c518] focus:border-emerald-500/50 transition-all"
-                  placeholder="GÜNÜN BANKO KUPONU"
-                />
+              {/* Kupon Title and Play Link */}
+              <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Kupon Başlığı</label>
+                  <input
+                    value={localDailyKupon.title}
+                    onChange={(e) => setLocalDailyKupon({ ...localDailyKupon, title: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold text-[#f5c518] focus:border-emerald-500/50 transition-all"
+                    placeholder="GÜNÜN BANKO KUPONU"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Hemen Oyna Botunu Linki</label>
+                  <input
+                    value={localDailyKupon.playLink || ''}
+                    onChange={(e) => setLocalDailyKupon({ ...localDailyKupon, playLink: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm font-bold text-emerald-400 focus:border-emerald-500/50 transition-all"
+                    placeholder="https://tracker.canlibahis365.net/..."
+                  />
+                </div>
               </div>
 
               {/* Add Match Button */}

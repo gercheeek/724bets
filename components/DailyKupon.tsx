@@ -34,9 +34,6 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
         </div>
         <div className="daily-kupon-header-text">
           <h3 className="daily-kupon-title">{cfg.title || 'GÜNÜN BANKO KUPONU'}</h3>
-          <span className="daily-kupon-badge">
-            <Zap className="w-3 h-3" /> AI ANALİZ
-          </span>
         </div>
       </div>
 
@@ -62,13 +59,49 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
         ))}
       </div>
 
-      {/* Footer */}
-      <div className="daily-kupon-footer">
-        <div className="daily-kupon-footer-label">TOPLAM ORAN</div>
-        <div className="daily-kupon-footer-odd">
-          {totalOdd.toFixed(2)}
-          <span className="daily-kupon-footer-x">x</span>
+      {/* Footer & Play Button */}
+      <div className="daily-kupon-footer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div>
+          <div className="daily-kupon-footer-label">TOPLAM ORAN</div>
+          <div className="daily-kupon-footer-odd">
+            {totalOdd.toFixed(2)}
+            <span className="daily-kupon-footer-x">x</span>
+          </div>
         </div>
+        <a 
+          href={cfg.playLink || '#'} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            backgroundColor: '#00ff88',
+            color: '#000',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            fontWeight: 900,
+            fontSize: '13px',
+            textDecoration: 'none',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            boxShadow: '0 0 15px rgba(0, 255, 136, 0.3)',
+            transition: 'all 0.2s ease',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#00e67a';
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 255, 136, 0.5)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#00ff88';
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 136, 0.3)';
+          }}
+        >
+          HEMEN OYNA
+        </a>
       </div>
 
       {/* Glow accent */}

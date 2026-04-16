@@ -599,6 +599,7 @@ export interface DailyKuponMatch {
 export interface DailyKuponConfig {
     isActive: boolean;
     title: string;
+    playLink?: string;
     matches: DailyKuponMatch[];
 }
 
