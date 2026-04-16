@@ -690,7 +690,7 @@ const App: React.FC = () => {
         liveOddsConfig={liveOddsConfig}
       />
 
-      <main style={{ position: 'relative', zIndex: 10, paddingTop: '125px', filter: appStage === 'popup' ? 'blur(10px)' : 'none', pointerEvents: appStage === 'popup' ? 'none' : 'auto' }}>
+      <main style={{ position: 'relative', zIndex: 10, filter: appStage === 'popup' ? 'blur(10px)' : 'none', pointerEvents: appStage === 'popup' ? 'none' : 'auto' }}>
         <div style={{ visibility: appStage !== 'loading' ? 'visible' : 'hidden', height: appStage === 'loading' ? '100vh' : 'auto', overflow: appStage === 'loading' ? 'hidden' : 'visible' }}>
           {view === 'home' && (
             <>
