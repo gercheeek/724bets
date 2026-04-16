@@ -260,10 +260,8 @@ const Header: React.FC<HeaderProps> = ({
   const handleCategoryClick = (cat: CategoryItem) => {
     if (cat.scrollTo) {
       onViewChange?.(cat.view);
-      setTimeout(() => {
-        const el = document.getElementById(cat.scrollTo!);
-        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 15, behavior: 'smooth' });
-      }, 100);
+      const el = document.getElementById(cat.scrollTo!);
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 15, behavior: 'auto' });
     } else {
       onViewChange?.(cat.view);
     }
@@ -349,11 +347,19 @@ const Header: React.FC<HeaderProps> = ({
             border-radius: inherit;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
           }
           .logo-text-724:hover::after {
             opacity: 1;
             animation: logoShimmer 2s ease-in-out infinite;
+          }
+          .header-wrapper {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
           }
         `}</style>
 

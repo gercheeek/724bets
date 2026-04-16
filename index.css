@@ -110,7 +110,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), color 3s ease-in-out;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 
@@ -127,7 +127,7 @@ body {
 
 /* Global cinematic transitions for containers matching the prompt's request */
 .glass-panel, .brand-card, .game-card, .analysis-row {
-  transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), border-color 3s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 /* ===== Custom Cinematic Animations ===== */
@@ -173,7 +173,7 @@ body {
   padding: 6px 24px;
   background: #111118;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), border-color 3s ease-in-out;
+  transition: background-color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 }
 
 [data-theme="light"] .header-topbar {
@@ -182,7 +182,7 @@ body {
 }
 
 .header-topbar * {
-  transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), color 3s ease-in-out, border-color 3s ease-in-out, fill 3s ease-in-out, stroke 3s ease-in-out, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
 
 .header-topbar-right {
@@ -295,7 +295,7 @@ body {
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), border-color 3s ease-in-out;
+  transition: background-color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 }
 
 [data-theme="light"] .header-categories {
@@ -308,7 +308,7 @@ body {
 }
 
 .header-categories * {
-  transition: color 3s ease-in-out, border-color 3s ease-in-out, fill 3s ease-in-out, stroke 3s ease-in-out, opacity 0.25s ease;
+  transition: opacity 0.1s ease;
 }
 
 .header-cat-item {
@@ -351,12 +351,13 @@ body {
 }
 
 .header-cat-item.active {
-  color: #000000;
-  background-color: #f0b90b;
+  color: #000000 !important;
+  background-color: #f0b90b !important;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(240,185,11,0.4);
   font-weight: 900;
   transform: scale(1.05);
+  transition: none;
 }
 
 .header-cat-item.active::after {
@@ -461,7 +462,7 @@ body {
   border-radius: var(--radius-full);
   border: 2px solid var(--primary);
   cursor: pointer;
-  transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), color 3s ease-in-out, border-color 3s ease-in-out, box-shadow 0.4s ease-in-out, transform 0.4s ease-in-out;
+  transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out, border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
   text-decoration: none;
   letter-spacing: 0.3px;
 }
@@ -489,7 +490,7 @@ body {
   border-radius: var(--radius-full);
   border: 1.5px solid var(--border-hover);
   cursor: pointer;
-  transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), color 3s ease-in-out, border-color 3s ease-in-out, box-shadow 0.4s ease-in-out, transform 0.4s ease-in-out;
+  transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out, border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
   text-decoration: none;
   letter-spacing: 0.3px;
 }
