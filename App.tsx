@@ -41,6 +41,8 @@ const SITE_CACHE_VERSION = "2026.04.17_v3";
 
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('loading');
+  const [fadeOutLoader, setFadeOutLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway' | 'coupons' | '724tv'>('home');
 
   // Cache Version Control
@@ -293,19 +295,30 @@ const App: React.FC = () => {
   });
 
 
-  // App Flow: Instant Load (Popup -> Ready)
+  // App Flow: Professional Preloader Timing (2.5s + 0.5s Fade)
   useEffect(() => {
-    if (siteStatusConfig.isMaintenanceMode) {
-      setAppStage('ready');
-      return;
-    }
+    const fadeTimer = setTimeout(() => {
+      setFadeOutLoader(true);
+    }, 2500);
 
-    if (welcomePopupConfig.isActive) {
-      setAppStage('popup');
-      setShowWelcomePopup(true);
-    } else {
-      setAppStage('ready');
-    }
+    const readyTimer = setTimeout(() => {
+      if (!siteStatusConfig.isMaintenanceMode) {
+        if (welcomePopupConfig.isActive) {
+          setAppStage('popup');
+          setShowWelcomePopup(true);
+        } else {
+          setAppStage('ready');
+        }
+      } else {
+        setAppStage('ready');
+      }
+      setShowLoader(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(readyTimer);
+    };
   }, [welcomePopupConfig.isActive, siteStatusConfig.isMaintenanceMode]);
 
   const handleCloseWelcomePopup = () => {
@@ -634,15 +647,15 @@ const App: React.FC = () => {
         />
       ) : (
         <div style={{
-          visibility: appStage === 'ready' ? 'visible' : 'hidden',
-          height: appStage === 'ready' ? 'auto' : '100vh',
+          visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
+          height: (appStage === 'ready' || appStage === 'popup') ? 'auto' : '100vh',
           minHeight: '100vh',
           background: 'var(--bg-main)',
           color: 'var(--text-primary)',
           position: 'relative',
-          overflow: appStage === 'ready' ? 'visible' : 'hidden'
+          overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden'
         }}>
-          {appStage === 'loading' && <AppLoader />}
+          {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
       <Header
         onAdminClick={() => {
           if (userRole) {

@@ -1,35 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-const AppLoader: React.FC = () => {
-    const [progress, setProgress] = useState(0);
+interface AppLoaderProps {
+  fadeOut?: boolean;
+}
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setProgress(p => Math.min(p + 3.4, 100)); // ~30 steps, 100ms each = 3000ms
-        }, 100);
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center transition-opacity duration-1000" style={{ background: 'rgba(5, 5, 5, 0.95)', backdropFilter: 'blur(10px)' }}>
-            {/* Logo Pulsing Effect */}
-            <div className="relative mb-12 animate-float">
-                <div className="absolute inset-0 bg-[#FFC107] blur-[100px] opacity-20 animate-pulse pointer-events-none"></div>
-                <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter" style={{ background: 'linear-gradient(135deg, #f0b90b 0%, #FFC107 50%, #d4a008 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 0 20px rgba(240,185,11,0.4))' }}>
-                    724BAHİS.NET
-                </h1>
-            </div>
-
-            {/* Loading Bar */}
-            <div className="w-64 max-w-[80vw] bg-zinc-900 rounded-full h-1.5 overflow-hidden mb-4 relative border border-zinc-800">
-                <div className="absolute top-0 left-0 h-full bg-[#FFC107] transition-all duration-[100ms] ease-linear" style={{ width: `${progress}%`, boxShadow: '0 0 15px rgba(255,193,7,0.8)' }}></div>
-            </div>
-
-            <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
-                Analizler Yükleniyor <span className="opacity-0 lg:animate-[ping_1.5s_infinite]">...</span>
-            </p>
-        </div>
-    );
+const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false }) => {
+  return (
+    <div className={`preloader-white ${fadeOut ? 'preloader-hidden' : ''}`}>
+      {/* 724bets Logo with Pulse Effect */}
+      <img 
+        src="/logo.png" 
+        alt="724bets Logo" 
+        className="preloader-logo-pulse"
+        onError={(e) => {
+          // Fallback if logo.png is not accessible
+          e.currentTarget.style.display = 'none';
+          const parent = e.currentTarget.parentElement;
+          if (parent) {
+            const textLogo = document.createElement('h1');
+            textLogo.innerText = '724BETS';
+            textLogo.className = 'text-4xl font-black text-black preloader-logo-pulse';
+            parent.prepend(textLogo);
+          }
+        }}
+      />
+      
+      {/* Loading Text with Fade Animation */}
+      <p className="preloader-text">
+        Analizler Yükleniyor...
+      </p>
+    </div>
+  );
 };
 
 export default AppLoader;
