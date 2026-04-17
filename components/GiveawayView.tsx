@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Gift, Copy, Check, Trophy, Users, Ticket, Clock, ChevronRight, Star, Zap, ExternalLink, Instagram, Share2, Heart, MessageCircle, Send } from 'lucide-react';
-import { GiveawayConfig, Giveaway, GiveawayPrize, GiveawayParticipant, GiveawayWinner, GiveawayRule, GiveawayActivity } from '../types';
+import { Gift, Copy, Check, Trophy, Users, Ticket, Clock, Zap } from 'lucide-react';
+import { GiveawayConfig } from '../types';
 
 interface GiveawayViewProps {
     config: GiveawayConfig;

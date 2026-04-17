@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CoinRequest } from '../types';
-import { Coins, Send, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { Coins, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const REQUESTS_KEY = 'site_coin_requests';
 

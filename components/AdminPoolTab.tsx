@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PoolConfig, PoolMatch } from '../types';
-import { Plus, Trash2, Play, CheckCircle2, Trophy, RefreshCw, Zap, Sparkles } from 'lucide-react';
+import { Plus, Trash2, Play, Trophy, RefreshCw, Zap, Sparkles } from 'lucide-react';
 
 const POOL_STORAGE_KEY = 'site_pool_config';
 

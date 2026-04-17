@@ -1,6 +1,6 @@
 import React from 'react';
 import { MatchAnalysis } from '../types';
-import { PlayCircle, Target } from 'lucide-react';
+import { PlayCircle } from 'lucide-react';
 
 interface PortalHeroProps {
   analyses: MatchAnalysis[];

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Coupon } from '../types';
 import { demoCoupons } from '../demoData';
-import { Ticket, Zap, Flame, Shield, TrendingUp, ChevronRight, BarChart3, X, CheckCircle2, Lock, User } from 'lucide-react';
+import { Zap, Flame, Shield, X, CheckCircle2, Lock, User } from 'lucide-react';
 
 interface DailyCouponsProps {
     coupons?: Coupon[];

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MatchAnalysis } from '../types';
-import { ChevronDown, ChevronUp, ChevronRight, TrendingUp, BarChart3 } from 'lucide-react';
+import { ChevronRight, TrendingUp, BarChart3 } from 'lucide-react';
 
 interface HomeAnalysesProps {
     analyses: MatchAnalysis[];

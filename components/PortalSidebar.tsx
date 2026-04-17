@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MatchAnalysis, Coupon } from '../types';
-import { Trophy, ChevronRight, Shield, Flame, Zap, Star, TrendingUp, Target } from 'lucide-react';
+import { Target } from 'lucide-react';
 
 interface PortalSidebarProps {
   analyses: MatchAnalysis[];

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Save, Tv, Radio, ToggleLeft, ToggleRight, MessageSquare, ChevronUp, ChevronDown, Image as ImageIcon, Link as LinkIcon, Zap } from 'lucide-react';
+import { Plus, Trash2, Save, Tv, Radio, ToggleLeft, ToggleRight, MessageSquare, ChevronUp, ChevronDown, Image as ImageIcon } from 'lucide-react';
 import { TVConfig, TVChannel } from '../types';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
 
@@ -55,7 +55,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
         setUploadingId(id);
         try {
             const resized = await resizeImage(file, 200, 200);
-            const url = await uploadImageToSupabase(resized, `tv-channels/${id}-${Date.now()}.jpg`);
+            const { url } = await uploadImageToSupabase(resized, 'slider-images', `tv-channels/${id}-${Date.now()}.jpg`);
             if (url) updateChannel(id, 'thumbnailUrl', url);
         } catch (err) {
             console.error('Upload failed:', err);

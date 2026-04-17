@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Save, Flame, TrendingUp, Link as LinkIcon, Clock, Trophy, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Plus, Trash2, Save, Flame, Link as LinkIcon, Clock, Trophy, ToggleLeft, ToggleRight } from 'lucide-react';
 import { PopularBetsConfig, PopularBet } from '../types';
 
 interface AdminPopularBetsTabProps {

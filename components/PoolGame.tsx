@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { PoolConfig, PoolEntry, PoolMatch, PoolMatchAnalysis } from '../types';
-import { Trophy, Users, CheckCircle2, XCircle, Clock, Zap, ChevronDown, ChevronUp, Lock, Coins, AlertTriangle, MessageSquare, X, Activity } from 'lucide-react';
+import { PoolConfig, PoolEntry, PoolMatch } from '../types';
+import { Users, CheckCircle2, XCircle, Clock, ChevronDown, ChevronUp, Lock, Coins, AlertTriangle, MessageSquare, X, Activity } from 'lucide-react';
 
 const POOL_STORAGE_KEY = 'site_pool_config';
 

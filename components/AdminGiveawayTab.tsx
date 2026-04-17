@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Plus, Trash2, Users, Trophy, Gift, Upload, Play, Download, Instagram, Send, Edit3, Save, X, Eye, Clock, Star } from 'lucide-react';
-import { GiveawayConfig, Giveaway, GiveawayPrize, GiveawayParticipant, GiveawayWinner, GiveawayRule } from '../types';
+import { Plus, Trash2, Users, Trophy, Gift, Upload, Download, Instagram, Edit3, Clock } from 'lucide-react';
+import { GiveawayConfig, Giveaway, GiveawayPrize, GiveawayParticipant, GiveawayRule } from '../types';
 
 interface AdminGiveawayTabProps {
     config: GiveawayConfig;

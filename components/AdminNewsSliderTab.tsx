@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Save, Image as ImageIcon, Link as LinkIcon, Clock, ToggleLeft, ToggleRight, Layout, GripVertical, ChevronUp, ChevronDown } from 'lucide-react';
+import { Plus, Trash2, Save, Image as ImageIcon, ToggleLeft, ToggleRight, Layout, ChevronUp, ChevronDown } from 'lucide-react';
 import { NewsSliderConfig, NewsSlide } from '../types';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
 
@@ -48,7 +48,7 @@ const AdminNewsSliderTab: React.FC<AdminNewsSliderTabProps> = ({ config, onSave 
         setUploadingId(id);
         try {
             const resized = await resizeImage(file, 1200, 600);
-            const url = await uploadImageToSupabase(resized, `news-slider/${id}-${Date.now()}.jpg`);
+            const { url } = await uploadImageToSupabase(resized, 'slider-images', `news-slider/${id}-${Date.now()}.jpg`);
             if (url) {
                 updateSlide(id, 'imageUrl', url);
             }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, User, X, LogIn, UserPlus, Shield, Mail, Phone, Clock, Loader2 } from 'lucide-react';
-import { SiteUser, EditorAccount, UserLoyalty } from '../types';
+import { SiteUser, EditorAccount } from '../types';
 import { supabase } from '../utils/supabase';
 
 interface AuthModalProps {

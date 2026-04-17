@@ -1,5 +1,4 @@
-import { supabase } from './utils/supabase';
-import { MatchAnalysis, PoolConfig } from './types';
+import { PoolConfig } from './types';
 import { demoAnalyses, demoCoupons } from './demoData';
 
 const SEED_FLAG = 'ecosystem_seeded_v4'; // Bumped to v4 for 9 April Clean Slate reset

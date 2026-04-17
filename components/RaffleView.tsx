@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LoyaltyConfig, UserLoyalty, SiteUser, RaffleConfig } from '../types';
-import { Ticket, Trophy, Clock, Star, ChevronRight, Coins, Info, Users, ChevronDown, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Ticket, Trophy, Clock, Coins, Info, Users, ChevronDown, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
 
 function loadUserLoyalty(userId: string): UserLoyalty {
     const stored = localStorage.getItem(`loyalty_${userId}`);

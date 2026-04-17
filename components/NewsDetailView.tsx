@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Eye, Clock, User, Share2, Twitter, Copy, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Eye, Clock, User, Share2, Copy } from 'lucide-react';
 import { NewsArticle, NEWS_CATEGORIES } from '../types';
 import { supabase } from '../utils/supabase';
 

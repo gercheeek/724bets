@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from './Header';
 import DailyCoupons from './DailyCoupons';
 import { Coupon, SiteUser, SiteStatusConfig } from '../types';
 

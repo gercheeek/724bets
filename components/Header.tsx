@@ -26,11 +26,11 @@ export const DEFAULT_NAV_VISIBILITY: NavVisibility = {
   leagues: true,
   brands: true,
   news: true,
-  pool: true,
-  blackjack: true,
-  loyalty: true,
-  raffle: true,
-  giveaway: true,
+  pool: false,
+  blackjack: false,
+  loyalty: false,
+  raffle: false,
+  giveaway: false,
 };
 
 interface HeaderProps {
@@ -417,22 +417,96 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* ══════ TIER 2: Marquee Bar ══════ */}
         {marqueeConfig?.isActive && (
-          <div className="header-categories" style={{ justifyContent: 'center', padding: '6px 16px' }}>
-            <div className="flex-1 overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
-              <div 
-                className="whitespace-nowrap animate-custom-marquee inline-block"
-                style={{ 
-                  color: marqueeConfig.color, 
-                  fontWeight: marqueeConfig.isBold ? 900 : 500,
-                  fontSize: '13px',
-                  '--speed': `${marqueeConfig.speed}s` 
-                } as React.CSSProperties}
-              >
-                <span className="pr-12">{marqueeConfig.text}</span>
-                <span className="pr-12">{marqueeConfig.text}</span>
-                <span className="pr-12">{marqueeConfig.text}</span>
-                <span className="pr-12">{marqueeConfig.text}</span>
-                <span className="pr-12">{marqueeConfig.text}</span>
+          <div className="header-categories" style={{ justifyContent: 'center', padding: '10px 16px', background: '#08080C' }}>
+            <style>{`
+              .marquee-container-hover-pause:hover .animate-custom-marquee {
+                animation-play-state: paused;
+              }
+              .marquee-fade-wrapper {
+                animation: marqueeFadeIn 0.8s ease forwards;
+              }
+              @keyframes marqueeFadeIn {
+                from { opacity: 0; transform: translateY(4px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+            `}</style>
+            <div className="flex-1 overflow-hidden marquee-container-hover-pause" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
+              <div key={`${marqueeConfig.text}-${marqueeConfig.speed}`} className="marquee-fade-wrapper">
+                <div 
+                  className="whitespace-nowrap animate-custom-marquee inline-block"
+                  style={{ 
+                    color: '#FFF', 
+                    fontFamily: '"Inter", sans-serif',
+                    fontWeight: 500,
+                    fontSize: '13px',
+                    letterSpacing: '0.5px',
+                    '--speed': `${marqueeConfig.speed || 30}s` 
+                  } as React.CSSProperties}
+                >
+                  {/* 
+                    Smart Separator Density: 
+                    We use an EVEN number of loops (2 or 4) to ensure transform: translateX(-50%) is seamless.
+                  */}
+                  {(() => {
+                    const text = marqueeConfig.text || '';
+                    const separator = (
+                      <span 
+                        style={{ 
+                          color: '#FFD700', 
+                          margin: '0 30px', 
+                          textShadow: '0 0 8px rgba(255,215,0,0.6)',
+                          fontWeight: 900,
+                          letterSpacing: '1px',
+                          display: 'inline-block'
+                        }}
+                      >
+                        724BAHİS.NET
+                      </span>
+                    );
+
+                    const keyword = /724bahis\.net/gi;
+
+                    // CASE 1: Manual Placement via '724bahis.net' keyword
+                    if (text.match(keyword)) {
+                      const parts = text.split(keyword);
+                      return [...Array(2)].map((_, i) => (
+                        <React.Fragment key={i}>
+                          {parts.map((p, j) => (
+                            <React.Fragment key={j}>
+                              <span style={{ whiteSpace: 'pre' }}>{p}</span>
+                              {j < parts.length - 1 && separator}
+                            </React.Fragment>
+                          ))}
+                          {/* Ensure a separator between marquee repetitions */}
+                          {separator}
+                        </React.Fragment>
+                      ));
+                    }
+
+                    // CASE 2: Fallback to Smart Density (for old or short text)
+                    if (text.length < 150) {
+                      return [...Array(4)].map((_, i) => (
+                        <span key={i} className="inline-flex items-center">
+                          <span>{text}</span>
+                          {separator}
+                        </span>
+                      ));
+                    }
+
+                    const chunks = text.match(/.{1,180}(?:\s|$)/g) || [text];
+                    return [...Array(2)].map((_, i) => ( 
+                      <React.Fragment key={i}>
+                        {chunks.map((chunk, j) => (
+                          <span key={j} className="inline-flex items-center">
+                            <span>{chunk.trim()}</span>
+                            {separator}
+                          </span>
+                        ))}
+                        {separator}
+                      </React.Fragment>
+                    ));
+                  })()}
+                </div>
               </div>
             </div>
           </div>
@@ -441,7 +515,7 @@ const Header: React.FC<HeaderProps> = ({
         {/* ══════ TIER 3: Live Odds Ticker Bar ══════ */}
         {liveOddsConfig?.isActive && liveOddsConfig.matches.length > 0 && (
           <div className="header-categories" style={{ padding: '0', borderBottom: '1px solid rgba(255,255,255,0.04)', background: '#08080C' }}>
-            <div className="w-full overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 2%, black 98%, transparent)' }}>
+            <div className="w-full overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 2%, black 98%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 2%, black 98%, transparent)' }}>
               <div className="flex items-center gap-0 animate-odds-scroll whitespace-nowrap" style={{ '--odds-count': liveOddsConfig.matches.length } as React.CSSProperties}>
                 {[...liveOddsConfig.matches, ...liveOddsConfig.matches].map((match, idx) => (
                   <a
@@ -482,7 +556,7 @@ const Header: React.FC<HeaderProps> = ({
                     </div>
 
                     {/* League badge */}
-                    <span className="text-[8px] font-bold text-zinc-600 uppercase tracking-wider">{match.league}</span>
+                    <span className="text-[8px] font-black text-zinc-400 uppercase tracking-wider">{match.league}</span>
                   </a>
                 ))}
               </div>

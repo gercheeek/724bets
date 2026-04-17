@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Gift, Timer, Zap, Trophy, TrendingUp, Smartphone, Gamepad2, Coins, ChevronRight, History, Star, Info } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Timer, Zap, Trophy, TrendingUp, Smartphone, Gamepad2, Coins, ChevronRight, History, Star, Info } from 'lucide-react';
 import { WheelReward } from '../types';
 
 interface LuckyWheelProps {

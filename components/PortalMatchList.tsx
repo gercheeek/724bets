@@ -1,6 +1,6 @@
 import React from 'react';
 import { MatchAnalysis } from '../types';
-import { BarChart3, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface PortalMatchListProps {
   analyses: MatchAnalysis[];
@@ -9,7 +9,7 @@ interface PortalMatchListProps {
 }
 
 const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLeague, onNavigate }) => {
-  let displayItems = analyses;
+  let displayItems = [...analyses];
   if (selectedLeague !== 'Tümü' && selectedLeague !== 'Genel Maçlar') {
     displayItems = displayItems.filter(a => a.league === selectedLeague);
   }
@@ -51,7 +51,7 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
           const kgOdd = (1.50 + Math.random() * 0.4).toFixed(2);
           const ustOdd = (1.60 + Math.random() * 0.4).toFixed(2);
           const confColor = item.confidence >= 90 ? '#22c55e' : '#f0b90b';
-          const isLive = item.matchTime === 'CANLI' || idx === 0; // Mocking live status for demo
+          const isLive = item.matchTime === 'CANLI' || idx === 0;
 
           return (
             <div
@@ -120,4 +120,4 @@ const PortalMatchList: React.FC<PortalMatchListProps> = ({ analyses, selectedLea
   );
 };
 
-export default PortalMatchList;
+export default React.memo(PortalMatchList);

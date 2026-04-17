@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Image, Grid, Shield, Layout, Trophy, Users, Eye, EyeOff, Save, Pen, Plus, Sparkles, TrendingUp, AlertCircle, FileText, Download, CheckCircle, Clock, ExternalLink, Box, Zap, Trash2, Search, Link as LinkIcon, Lock, Unlock, Timer, Gift, Coins, Ticket, Search as SearchIcon, RefreshCw, HandCoins, Activity, Wallet, Trash, Bell, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, Database, ChevronUp, ChevronDown, Layers } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, BlackjackReward, LoyaltyConfig, LoyaltyTriggerRule, MarketItem, EditorAccount, PaymentConfig, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, NewsSliderConfig, TVConfig } from '../types';
-import { demoAnalyses, demoCoupons } from '../demoData';
+import { Settings, Image, Layout, Trophy, Users, Eye, EyeOff, Save, Plus, Sparkles, TrendingUp, AlertCircle, Clock, Box, Zap, Trash2, Search, Lock, Unlock, Timer, Gift, Ticket, RefreshCw, Activity, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, ChevronUp, ChevronDown, Layers } from 'lucide-react';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, LoyaltyConfig, EditorAccount, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, NewsSliderConfig, TVConfig, SportCategory } from '../types';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
 import AdminNewsTab from './AdminNewsTab';
@@ -10,7 +9,7 @@ import AdminRaffleTab from './AdminRaffleTab';
 import AdminPopularBetsTab from './AdminPopularBetsTab';
 import AdminNewsSliderTab from './AdminNewsSliderTab';
 import Admin724TVTab from './Admin724TVTab';
-import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './Header';
+import { NavVisibility } from './Header';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
 
@@ -146,8 +145,54 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
 
   const [adminSport, setAdminSport] = useState<SportCategory>('Futbol');
+  
+  // AI Marquee Parser State
+  const [showAiMarqueeParser, setShowAiMarqueeParser] = useState(false);
+  const [aiMarqueeRawText, setAiMarqueeRawText] = useState('');
 
-  // AI Parser States
+  // AI News Parsing Logic
+  const handleAiMarqueeParse = () => {
+    if (!aiMarqueeRawText.trim()) return;
+
+    // Phrases commonly used by AI in introductions/summaries to be filtered out
+    const filterPhrases = ['işte', 'haberler', 'listedim', 'özetledim', 'derledim', 'olarak', 'odaklı', 'şöyledir'];
+
+    const lines = aiMarqueeRawText.split('\n')
+      .map(l => l.trim())
+      .filter(l => {
+        if (l.length < 2) return false;
+        const lower = l.toLowerCase();
+        // If line is very long and contains "AI speak", filter it out
+        if (lower.split(' ').length > 12 && filterPhrases.some(p => lower.includes(p))) return false;
+        return true;
+      });
+
+    const processedItems: string[] = [];
+    let currentCategory = '';
+
+    lines.forEach(line => {
+      if (line.match(/^(?:🦁|🟡🔵|⚪⚫|🇹🇷|🏆|⚽)/)) {
+        currentCategory = line.toUpperCase();
+      } else {
+        const cleanLine = line.replace(/^\s*[-•*]\s*/, '');
+        if (currentCategory) {
+          processedItems.push(`${currentCategory}: ${cleanLine}`);
+        } else {
+          processedItems.push(cleanLine);
+        }
+      }
+    });
+
+    // Join with the user's suggested manual keyword separator for the premium logo
+    const result = processedItems.join('. 724bahis.net. ');
+    
+    if (marqueeConfig && onSaveMarqueeConfig) {
+      onSaveMarqueeConfig({ ...marqueeConfig, text: result + '. 724bahis.net' });
+    }
+    
+    setShowAiMarqueeParser(false);
+    setAiMarqueeRawText('');
+  };
   const [aiInput, setAiInput] = useState('');
   const [showAiModal, setShowAiModal] = useState(false);
 
@@ -157,6 +202,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [couponRiskLevel, setCouponRiskLevel] = useState<'LOW' | 'MEDIUM' | 'HIGH'>('MEDIUM');
   const [couponAiDate, setCouponAiDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [couponAiCategory, setCouponAiCategory] = useState<SportCategory | 'Tümü'>('Tümü');
+
+  // Live Odds Bulk States
+  const [showLiveOddsBulkModal, setShowLiveOddsBulkModal] = useState(false);
+  const [liveOddsBulkInput, setLiveOddsBulkInput] = useState('');
 
   // JSON Editor State
   const [jsonInput, setJsonInput] = useState('');
@@ -233,6 +282,80 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       alert('Senkronizasyon hatası: ' + (err as any).message);
     } finally {
       setIsSyncing(false);
+    }
+  };
+
+  const handleLiveOddsBulkParse = () => {
+    if (!liveOddsBulkInput.trim()) return;
+
+    const lines = liveOddsBulkInput.split('\n');
+    const newMatches: LiveOddsMatch[] = [];
+    
+    let currentLeague = 'Lig';
+    let currentTime = '20:00';
+
+    lines.forEach((line, index) => {
+      const cleanLine = line.trim();
+      if (!cleanLine) return;
+
+      // Header control: "2. Bundesliga (Almanya) - 19:30"
+      const headerMatch = cleanLine.match(/^(.+?)\s*-\s*(\d{1,2}:\d{2})$/);
+      if (headerMatch) {
+         currentLeague = headerMatch[1].trim();
+         currentTime = headerMatch[2].trim();
+         return; // Move to next line
+      }
+
+      // Match control: "Holstein Kiel - Kaiserslautern | MS1: 2.12 | MSX: 3.60 | MS2: 3.16"
+      if (cleanLine.includes('|')) {
+        const parts = cleanLine.split('|').map(p => p.trim());
+        const teamPart = parts[0].split('-').map(t => t.trim());
+        
+        const homeTeam = teamPart[0] || 'Ev Sahibi';
+        const awayTeam = teamPart[1] || 'Deplasman';
+        
+        // Helper to clean "MS1: 2.12" -> "2.12"
+        const cleanVal = (val: string) => {
+          if (!val) return '1.00';
+          if (val.includes(':')) return val.split(':')[1].trim();
+          return val;
+        };
+
+        // If explicitly formatted as Home - Away | League | Time | ... (Old format)
+        // We detect it if parts[2] looks like a time
+        const isOldFormat = parts.length >= 6 && parts[2].match(/\d{2}:\d{2}/);
+
+        const league = isOldFormat ? parts[1] : currentLeague;
+        const matchTime = isOldFormat ? parts[2] : currentTime;
+        const odd1 = isOldFormat ? cleanVal(parts[3]) : cleanVal(parts[1]);
+        const oddX = isOldFormat ? cleanVal(parts[4]) : cleanVal(parts[2]);
+        const odd2 = isOldFormat ? cleanVal(parts[5]) : cleanVal(parts[3]);
+        const link = (isOldFormat ? parts[6] : parts[4]) || 'https://t.ly/GercekLivo';
+
+        newMatches.push({
+          id: `${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
+          homeTeam,
+          awayTeam,
+          league,
+          matchTime,
+          odd1,
+          oddX,
+          odd2,
+          isLive: false,
+          link
+        });
+      }
+    });
+
+    if (newMatches.length > 0) {
+      const updated = { ...localLiveOdds, matches: [...(localLiveOdds.matches || []), ...newMatches] };
+      setLocalLiveOdds(updated);
+      onSaveLiveOddsConfig?.(updated);
+      setLiveOddsBulkInput('');
+      setShowLiveOddsBulkModal(false);
+      alert(`${newMatches.length} maç başarıyla eklendi!`);
+    } else {
+      alert('Geçerli formatta maç bulunamadı. Lütfen kontrol edin.\nFormat: Lig - Saat (Başlık) ve ardından Takım - Takım | MS1 | MSX | MS2');
     }
   };
 
@@ -1622,6 +1745,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 >
                   <Plus className="w-4 h-4" /> YENİ MAÇ EKLE
                 </button>
+                <button
+                  onClick={() => setShowLiveOddsBulkModal(true)}
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-black px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all text-xs"
+                >
+                  <Layers className="w-4 h-4" /> TOPLU MAÇ EKLE
+                </button>
               </div>
             </div>
 
@@ -1772,6 +1901,64 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Live Odds Bulk Modal */}
+        {showLiveOddsBulkModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+            <div className="bg-zinc-950 border border-blue-500/20 p-8 rounded-[40px] max-w-2xl w-full shadow-[0_0_50px_rgba(59,130,246,0.1)] relative">
+              <button
+                onClick={() => setShowLiveOddsBulkModal(false)}
+                className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800"
+              >
+                ✕
+              </button>
+
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+                  <Layers className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-white italic uppercase">Toplu Maç Ekleme</h3>
+                  <p className="text-zinc-400 text-sm mt-1">Maçları alt alta yapıştırarak hızlıca ekleyin.</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-blue-500/5 border border-blue-500/10 p-4 rounded-2xl">
+                  <h4 className="text-[10px] font-black text-blue-400 uppercase mb-2 tracking-widest">Beklenen Format:</h4>
+                  <p className="text-[11px] text-zinc-500 font-mono">
+                    Ev Sahibi - Deplasman | Lig | Saat | 1 | X | 2 | Link
+                  </p>
+                  <p className="text-[10px] text-zinc-600 mt-2 italic">
+                    Örnek: Galatasaray - Fenerbahçe | Süper Lig | 21:00 | 2.10 | 3.40 | 3.25 | https://724bahis.net
+                  </p>
+                </div>
+
+                <textarea
+                  value={liveOddsBulkInput}
+                  onChange={(e) => setLiveOddsBulkInput(e.target.value)}
+                  placeholder="Maçları buraya yapıştırın..."
+                  className="w-full h-48 bg-black border border-zinc-800 rounded-3xl p-6 text-white text-sm focus:border-blue-500/50 transition-all outline-none resize-none"
+                />
+
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setShowLiveOddsBulkModal(false)}
+                    className="flex-1 py-4 rounded-2xl border border-zinc-800 text-zinc-400 font-black text-xs uppercase tracking-widest hover:bg-zinc-900 transition-all"
+                  >
+                    İptal
+                  </button>
+                  <button
+                    onClick={handleLiveOddsBulkParse}
+                    className="flex-[2] py-4 rounded-2xl bg-blue-600 text-white font-black text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-[0_10px_20px_rgba(37,99,235,0.2)]"
+                  >
+                    Maçları Sisteme Ekle
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -3412,9 +3599,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
 
           <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 mt-8 space-y-4">
-            <h3 className="text-xl font-black text-white flex items-center gap-2 mb-4">
-              ✨ Üst Menü Kayan Yazı (Marquee)
-            </h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-black text-white flex items-center gap-2">
+                ✨ Üst Menü Kayan Yazı (Marquee)
+              </h3>
+              <button
+                onClick={() => setShowAiMarqueeParser(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 text-primary rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-black transition-all shadow-lg shadow-primary/5"
+              >
+                <Sparkles className="w-3.5 h-3.5" /> AI HABER SİHİRBAZI
+              </button>
+            </div>
             
             <div className="flex items-center justify-between mb-4">
                <span className="text-zinc-400 font-bold">Kayan Yazı Aktifliği</span>
@@ -3476,6 +3671,53 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
             </div>
           </div>
+
+          {/* AI Marquee Parser Modal */}
+          {showAiMarqueeParser && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
+              <div className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
+                <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center text-primary">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-black text-lg uppercase tracking-tight">AI HABER SİHİRBAZI</h3>
+                      <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Ham haber metnini kışkırtıcı bir akışa çevirir</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setShowAiMarqueeParser(false)} className="w-10 h-10 bg-zinc-800 rounded-xl flex items-center justify-center text-zinc-400 hover:bg-red-500 hover:text-white transition-all">
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="p-6 space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Haber Metnini Buraya Yapıştırın</label>
+                    <textarea
+                      value={aiMarqueeRawText}
+                      onChange={(e) => setAiMarqueeRawText(e.target.value)}
+                      className="w-full h-80 bg-black border border-zinc-800 rounded-2xl p-5 text-sm font-medium text-zinc-300 focus:border-primary/50 transition-all resize-none leading-relaxed"
+                      placeholder="🦁 Galatasaray Gündemi...&#10;Hakan Çalhanoğlu Bombası: ..."
+                    />
+                  </div>
+                  <div className="flex gap-4 pt-2">
+                    <button
+                      onClick={() => setShowAiMarqueeParser(false)}
+                      className="flex-1 px-6 py-4 bg-zinc-800 text-zinc-400 font-black text-xs rounded-2xl uppercase tracking-widest hover:bg-zinc-700 transition-all"
+                    >
+                      VAZGEÇ
+                    </button>
+                    <button
+                      onClick={handleAiMarqueeParse}
+                      className="flex-[2] px-6 py-4 bg-primary text-black font-black text-xs rounded-2xl uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+                    >
+                      <Zap className="w-4 h-4" /> HABERLERİ DÜZENLE VE UYGULA
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

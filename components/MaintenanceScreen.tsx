@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, Tool, Clock, Lock } from 'lucide-react';
+import { Settings, Lock } from 'lucide-react';
 
 interface MaintenanceScreenProps {
   message?: string;

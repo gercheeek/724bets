@@ -3,10 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import Header from './components/Header';
 import { Crown } from 'lucide-react';
-import Hero from './components/Hero';
-import DashboardHero from './components/DashboardHero';
 import AppLoader from './components/AppLoader';
-import DailyCoupons from './components/DailyCoupons';
 import BrandCard from './components/BrandCard';
 import AdminPanel from './components/AdminPanel';
 import AuthModal from './components/AuthModal';
@@ -14,35 +11,25 @@ import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
 import PromoPopup from './components/PromoPopup';
 import MaintenanceScreen from './components/MaintenanceScreen';
-import DynamicCTA from './components/DynamicCTA';
 import ChatBot from './components/ChatBot';
 import NewsDetailView from './components/NewsDetailView';
 import PromoWheel from './components/PromoWheel';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
-import BrandSidePanel from './components/BrandSidePanel';
 import SearchModal from './components/SearchModal';
 import LoyaltyPanel, { DEFAULT_LOYALTY_CONFIG } from './components/LoyaltyPanel';
 import RaffleView from './components/RaffleView';
 import PoolGame from './components/PoolGame';
 import { seedEcosystemData } from './seedEcosystem';
 import { getGlobalConfig, updateGlobalConfig } from './utils/supabase';
-import NewsSection from './components/NewsSection';
-import HomeNewsWidget from './components/HomeNewsWidget';
 import NewsView from './components/NewsView';
-import HomeAnalyses from './components/HomeAnalyses';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, WheelReward, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig, NewsSliderConfig, TVConfig } from './types';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig, NewsSliderConfig, TVConfig } from './types';
 import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_LIVE_ODDS_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG, DEFAULT_POPULAR_BETS_CONFIG, DEFAULT_NEWS_SLIDER_CONFIG, DEFAULT_TV_CONFIG } from './constants';
-import { demoAnalyses } from './demoData';
 
 // Portal Components
-import PortalSidebar from './components/PortalSidebar';
-import PortalTicker from './components/PortalTicker';
-import PortalHero from './components/PortalHero';
 import PortalMatchList from './components/PortalMatchList';
 import PortalMobileNav from './components/PortalMobileNav';
-import PortalNewsTeaser from './components/PortalNewsTeaser';
 import PortalCouponsTeaser from './components/PortalCouponsTeaser';
 import CouponsView from './components/CouponsView';
 import HeroSection from './components/HeroSection';
@@ -299,26 +286,20 @@ const App: React.FC = () => {
     lastPlayTime: 0,
   });
 
-  // 3-Stage App Flow: Loader -> Action Popup -> Ready
+
+  // App Flow: Instant Load (Popup -> Ready)
   useEffect(() => {
-    // Stage 1: Skip loader if in maintenance mode
     if (siteStatusConfig.isMaintenanceMode) {
       setAppStage('ready');
       return;
     }
 
-    // Stage 1: Loader runs for 4 seconds
-    const loaderTimer = setTimeout(() => {
-      // Stage 2: Show popup if active, else skip to ready
-      if (welcomePopupConfig.isActive) {
-        setAppStage('popup');
-        setShowWelcomePopup(true);
-      } else {
-        setAppStage('ready');
-      }
-    }, 4000); // 4 Seconds Load Time
-
-    return () => clearTimeout(loaderTimer);
+    if (welcomePopupConfig.isActive) {
+      setAppStage('popup');
+      setShowWelcomePopup(true);
+    } else {
+      setAppStage('ready');
+    }
   }, [welcomePopupConfig.isActive, siteStatusConfig.isMaintenanceMode]);
 
   const handleCloseWelcomePopup = () => {
@@ -365,9 +346,40 @@ const App: React.FC = () => {
         if (savedRole) setUserRole(savedRole as string);
         if (savedMember) setSiteUser(JSON.parse(savedMember));
 
-        // 3. Load Global Data from Supabase (Overrides Local)
-        const globalAnalyses = await getGlobalConfig('site_analyses');
+        // 3. Load Global Data from Supabase (Overrides Local) - PARALLEL FETCH
+        const [
+          globalAnalyses, globalCoupons, globalBrands, globalHero, globalHashtags,
+          globalColor, globalBj, globalLoyalty, globalGiveaway, globalMarquee,
+          globalNav, globalWheel, globalWelcome, globalSiteStatus, globalLiveOdds,
+          globalPromoWheel, globalHeroSlider, globalDailyKupon, globalRaffle,
+          globalPopularBets, globalNewsSlider, globalTvConfig
+        ] = await Promise.all([
+          getGlobalConfig('site_analyses'),
+          getGlobalConfig('site_coupons'),
+          getGlobalConfig('site_brands'),
+          getGlobalConfig('site_hero'),
+          getGlobalConfig('site_hashtags'),
+          getGlobalConfig('site_primary_color'),
+          getGlobalConfig('site_bj_config'),
+          getGlobalConfig('site_loyalty_config'),
+          getGlobalConfig('site_giveaway_config'),
+          getGlobalConfig('site_marquee_config'),
+          getGlobalConfig('site_nav_visibility'),
+          getGlobalConfig('site_casino_wheel'),
+          getGlobalConfig('site_welcome_popup'),
+          getGlobalConfig('site_status'),
+          getGlobalConfig('site_live_odds'),
+          Promise.all([getGlobalConfig('site_featured_wheel'), getGlobalConfig('site_betlivo_wheel')]),
+          getGlobalConfig('site_hero_slider'),
+          getGlobalConfig('site_daily_kupon'),
+          getGlobalConfig('site_raffle_config'),
+          getGlobalConfig('site_popular_bets'),
+          getGlobalConfig('site_news_slider'),
+          getGlobalConfig('site_tv_config')
+        ]);
+
         if (!isMounted) return;
+
         if (globalAnalyses && Array.isArray(globalAnalyses) && globalAnalyses.length > 0) {
           const cleaned = globalAnalyses.filter((a: any) => 
             a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
@@ -379,73 +391,39 @@ const App: React.FC = () => {
           setAnalyses(cleaned);
         }
 
-        const globalCoupons = await getGlobalConfig('site_coupons');
         if (globalCoupons && Array.isArray(globalCoupons) && globalCoupons.length > 0) setCoupons(globalCoupons);
-
-        const globalBrands = await getGlobalConfig('site_brands');
         if (globalBrands) setBrands(globalBrands);
-
-        const globalHero = await getGlobalConfig('site_hero');
         if (globalHero) setHero(globalHero);
-
-        const globalHashtags = await getGlobalConfig('site_hashtags');
         if (globalHashtags) setHashtags(globalHashtags);
-
-        const globalColor = await getGlobalConfig('site_primary_color');
         if (globalColor) setThemeColor(globalColor);
-
-        const globalBj = await getGlobalConfig('site_bj_config');
         if (globalBj) setBjConfig(globalBj);
-
-        const globalLoyalty = await getGlobalConfig('site_loyalty_config');
         if (globalLoyalty) setLoyaltyConfig(globalLoyalty);
-
-        const globalGiveaway = await getGlobalConfig('site_giveaway_config');
         if (globalGiveaway) setGiveawayConfig(globalGiveaway);
-
-        const globalMarquee = await getGlobalConfig('site_marquee_config');
+        
         if (globalMarquee) {
           const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724BAHİS.NET'));
           setMarqueeConfig(cleaned);
         }
-
-        const globalNav = await getGlobalConfig('site_nav_visibility');
+        
         if (globalNav) setNavVisibility(globalNav);
-
-        const globalWheel = await getGlobalConfig('site_casino_wheel');
         if (globalWheel) setWheelConfig(globalWheel);
-
-        const globalWelcome = await getGlobalConfig('site_welcome_popup');
+        
         if (globalWelcome) {
           const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724BAHİS.NET').replace(/724BAHİS.NETX/gi, '724BAHİS.NET'));
           setWelcomePopupConfig(cleaned);
         }
-
-        const globalSiteStatus = await getGlobalConfig('site_status');
+        
         if (globalSiteStatus) setSiteStatusConfig(globalSiteStatus);
-
-        const globalLiveOdds = await getGlobalConfig('site_live_odds');
         if (globalLiveOdds) setLiveOddsConfig(globalLiveOdds);
-
-        const globalPromoWheel = await getGlobalConfig('site_featured_wheel') || await getGlobalConfig('site_betlivo_wheel');
-        if (globalPromoWheel) setPromoWheelConfig(globalPromoWheel);
-
-        const globalHeroSlider = await getGlobalConfig('site_hero_slider');
+        
+        const resolvedPromoWheel = globalPromoWheel[0] || globalPromoWheel[1];
+        if (resolvedPromoWheel) setPromoWheelConfig(resolvedPromoWheel);
+        
         if (globalHeroSlider) setHeroSliderConfig(globalHeroSlider);
-
-        const globalDailyKupon = await getGlobalConfig('site_daily_kupon');
         if (globalDailyKupon) setDailyKuponConfig(globalDailyKupon);
-
-        const globalRaffle = await getGlobalConfig('site_raffle_config');
         if (globalRaffle) setRaffleConfig(globalRaffle);
-
-        const globalPopularBets = await getGlobalConfig('site_popular_bets');
         if (globalPopularBets) setPopularBetsConfig(globalPopularBets);
-
-        const globalNewsSlider = await getGlobalConfig('site_news_slider');
         if (globalNewsSlider) setNewsSliderConfig(globalNewsSlider);
-
-        const globalTvConfig = await getGlobalConfig('site_tv_config');
         if (globalTvConfig) setTvConfig(globalTvConfig);
 
       } catch (err) {
@@ -650,18 +628,15 @@ const App: React.FC = () => {
         />
       ) : (
         <div style={{
-          maxHeight: appStage === 'loading' ? '100vh' : 'auto',
-          overflow: appStage === 'loading' ? 'hidden' : 'visible',
+          visibility: appStage === 'ready' ? 'visible' : 'hidden',
+          height: appStage === 'ready' ? 'auto' : '100vh',
           minHeight: '100vh',
           background: 'var(--bg-main)',
           color: 'var(--text-primary)',
-          overflowX: 'hidden',
-          position: 'relative'
+          position: 'relative',
+          overflow: appStage === 'ready' ? 'visible' : 'hidden'
         }}>
-
-      {appStage === 'loading' && <AppLoader />}
-
-
+          {appStage === 'loading' && <AppLoader />}
       <Header
         onAdminClick={() => {
           if (userRole) {
@@ -691,7 +666,7 @@ const App: React.FC = () => {
       />
 
       <main style={{ position: 'relative', zIndex: 10, filter: appStage === 'popup' ? 'blur(10px)' : 'none', pointerEvents: appStage === 'popup' ? 'none' : 'auto' }}>
-        <div style={{ visibility: appStage !== 'loading' ? 'visible' : 'hidden', height: appStage === 'loading' ? '100vh' : 'auto', overflow: appStage === 'loading' ? 'hidden' : 'visible' }}>
+        <div style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100vh', overflow: appStage === 'ready' ? 'visible' : 'hidden' }}>
           {view === 'home' && (
             <>
               {/* ═══ PORTAL BODY (Single Column Centered) ═══ */}

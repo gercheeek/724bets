@@ -1,5 +1,5 @@
 import React from 'react';
-import { LiveOddsConfig, LiveOddsMatch, MatchAnalysis } from '../types';
+import { LiveOddsConfig, MatchAnalysis } from '../types';
 
 interface PortalTickerProps {
   analyses: MatchAnalysis[];

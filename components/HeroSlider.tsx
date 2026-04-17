@@ -50,7 +50,15 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ config, onSlideChange }) => {
     }
   };
 
-  if (!config.isActive || slideCount === 0) return null;
+  if (!config.isActive) return null;
+  
+  if (slideCount === 0) {
+    return (
+      <div className="hero-slider hero-slider-skeleton">
+        {/* Simple loader or skeleton box */}
+      </div>
+    );
+  }
 
   return (
     <div

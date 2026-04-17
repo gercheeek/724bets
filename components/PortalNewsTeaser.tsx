@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import { demoNews } from '../demoData';
 import { NewsArticle, NEWS_CATEGORIES } from '../types';
-import { Clock, ExternalLink, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight } from 'lucide-react';
 
 interface PortalNewsTeaserProps {
     onViewChange: (view: string) => void;

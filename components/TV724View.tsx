@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TVConfig, TVChannel, TVChatMessage } from '../types';
 import { supabase } from '../utils/supabase';
-import { Send, Radio, Users, MessageSquare, Tv, ChevronDown, Zap, Crown, Star, Shield, X } from 'lucide-react';
+import { Send, Users, MessageSquare, Tv, Zap, Crown, Star, Shield, X } from 'lucide-react';
 
 interface TV724ViewProps {
     config: TVConfig;

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { UserStats } from '../types';
-import { Shield, Clock, TrendingUp, History, Star } from 'lucide-react';
+import { Shield, TrendingUp, History, Star } from 'lucide-react';
 
 interface ProfileViewProps {
   userStats: UserStats;

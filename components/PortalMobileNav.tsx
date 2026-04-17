@@ -6,8 +6,15 @@ interface PortalMobileNavProps {
   onViewChange: (view: string) => void;
 }
 
+interface NavItem {
+  view: string;
+  label: string;
+  icon: React.ReactNode;
+  scrollTo?: string;
+}
+
 const PortalMobileNav: React.FC<PortalMobileNavProps> = ({ activeView, onViewChange }) => {
-  const items = [
+  const items: NavItem[] = [
     { view: 'home', label: 'Ana Sayfa', icon: <Home style={{ width: 20, height: 20 }} /> },
     { view: 'analysis', label: 'Analizler', icon: <BarChart3 style={{ width: 20, height: 20 }} /> },
     { view: 'coupons', label: 'Kuponlar', icon: <Ticket style={{ width: 20, height: 20 }} /> },

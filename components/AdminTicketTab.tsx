@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { TicketEventConfig, TicketRequest, TicketSiteRequirement } from '../types';
-import { Ticket, CheckCircle2, XCircle, Plus, Trash2, Trophy, Clock, Settings } from 'lucide-react';
+import React, { useState } from 'react';
+import { TicketEventConfig, TicketSiteRequirement } from '../types';
+import { Ticket, CheckCircle2, XCircle, Plus, Trash2, Trophy } from 'lucide-react';
 
 const EVENT_KEY = 'site_ticket_event';
 

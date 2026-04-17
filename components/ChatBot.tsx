@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, ChevronDown } from 'lucide-react';
+import { X, Send } from 'lucide-react';
 
 // ─────────────── KNOWLEDGE BASE ───────────────
 const WHATSAPP_LINK = 'https://wa.me/905XXXXXXXXX?text=724bahis.net.net%20sitesinden%20destek%20istiyorum';

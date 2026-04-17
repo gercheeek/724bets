@@ -3,8 +3,8 @@ import {
     LoyaltyConfig, UserLoyalty, MarketItem, CoinTransaction
 } from '../types';
 import {
-    Coins, Ticket, Gift, ShoppingBag, TrendingUp, CheckCircle2,
-    Clock, Zap, ArrowRight, Trophy, Star, X, RefreshCw, ChevronRight
+    Coins, Ticket, ShoppingBag, TrendingUp,
+    Clock, Zap, Trophy, Star, X, RefreshCw, ChevronRight
 } from 'lucide-react';
 
 // ─── Default Config ────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trophy, TrendingUp, Zap } from 'lucide-react';
+import { Trophy, TrendingUp } from 'lucide-react';
 import { DailyKuponConfig } from '../types';
 
 interface DailyKuponProps {
@@ -11,17 +11,29 @@ interface DailyKuponProps {
 const DEFAULT_CONFIG: DailyKuponConfig = {
   isActive: true,
   title: "GÜNÜN BANKO KUPONU",
-  matches: [
-    { id: '1', homeTeam: 'Galatasaray', awayTeam: 'Fenerbahçe', prediction: 'M.S 1', odd: '1.85', league: 'Süper Lig' },
-    { id: '2', homeTeam: 'Barcelona', awayTeam: 'Real Madrid', prediction: 'KG VAR', odd: '1.55', league: 'La Liga' },
-    { id: '3', homeTeam: 'Man City', awayTeam: 'Arsenal', prediction: '2.5 ÜST', odd: '1.65', league: 'Premier League' },
-  ]
+  matches: []
 };
 
 const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetKey }) => {
-  const cfg = (config && config.matches && config.matches.length > 0) ? config : DEFAULT_CONFIG;
+  const cfg = config || DEFAULT_CONFIG;
 
   if (!cfg.isActive) return null;
+
+  // Render Skeleton if no match data is present yet
+  if (!cfg.matches || cfg.matches.length === 0) {
+    return (
+      <div className="daily-kupon-card daily-kupon-skeleton">
+        <div className="skeleton-box skeleton" style={{ height: '24px', width: '60%' }}></div>
+        <div className="skeleton-box skeleton" style={{ height: '48px', marginTop: '16px' }}></div>
+        <div className="skeleton-box skeleton" style={{ height: '48px' }}></div>
+        <div className="skeleton-box skeleton" style={{ height: '48px' }}></div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px' }}>
+          <div className="skeleton-box skeleton" style={{ height: '36px', width: '30%' }}></div>
+          <div className="skeleton-box skeleton" style={{ height: '36px', width: '40%' }}></div>
+        </div>
+      </div>
+    );
+  }
 
   const totalOdd = cfg.matches.reduce((acc, m) => acc * parseFloat(m.odd || '1'), 1);
 

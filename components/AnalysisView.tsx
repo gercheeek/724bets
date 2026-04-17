@@ -1,8 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MatchAnalysis, Coupon, SiteUser, SportCategory } from '../types';
-import { Trophy, Clock, ChevronDown, ChevronUp, AlertCircle, Search, Zap, Target, Flame, TrendingUp, Filter, User, Lock } from 'lucide-react';
-import DailyCoupons from './DailyCoupons';
+import { ChevronDown, ChevronUp, AlertCircle, Search, Zap, Target, Flame, User, Lock } from 'lucide-react';
 
 interface AnalysisViewProps {
     onNavigate?: (view: string) => void;

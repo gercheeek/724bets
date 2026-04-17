@@ -16,21 +16,33 @@ export interface SportsEvent {
 
 const API_BASE = 'https://www.thesportsdb.com/api/v1/json/3';
 
-// Helper to fetch today's events for a specific sport (Soccer by default)
 export const fetchTodaysMatches = async (sport: string = 'Soccer'): Promise<SportsEvent[]> => {
     try {
-        // According to docs: eventsday.php?d=YYYY-MM-DD&s=Soccer
         const today = new Date().toISOString().split('T')[0];
+        const cacheKey = `sports_api_today_${sport}_${today}`;
+        const cached = localStorage.getItem(cacheKey);
+        
+        if (cached) {
+            const { data, timestamp } = JSON.parse(cached);
+            if (Date.now() - timestamp < 1000 * 60 * 60) { // 1 saat geçerli
+                return data;
+            }
+        }
+
         const res = await fetch(`${API_BASE}/eventsday.php?d=${today}&s=${sport}`);
         
         if (!res.ok) throw new Error('Failed to fetch from TheSportsDB');
         
         const data = await res.json();
         
-        if (!data.events) return [];
+        if (!data.events) {
+            localStorage.setItem(cacheKey, JSON.stringify({ data: [], timestamp: Date.now() }));
+            return [];
+        }
         
-        // Return up to 20 matches to avoid overwhelming UI if many events occur
-        return data.events.slice(0, 20);
+        const result = data.events.slice(0, 20);
+        localStorage.setItem(cacheKey, JSON.stringify({ data: result, timestamp: Date.now() }));
+        return result;
     } catch (error) {
         console.error('Error fetching matches from TheSportsDB:', error);
         return [];

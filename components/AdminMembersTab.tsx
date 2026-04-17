@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SiteUser, UserLoyalty } from '../types';
-import {
-    Users, Search, Trash2, Ban, CheckCircle2, Coins, Ticket,
-    Mail, Phone, ChevronDown, ChevronUp, Edit3, Save, X, Plus, Eye, Loader2, Shield
+import { Search, Trash2, Ban, CheckCircle2, Coins, Ticket,
+    Mail, Phone, ChevronDown, ChevronUp, Save, Plus, Loader2, Shield
 } from 'lucide-react';
 import { supabase } from '../utils/supabase';
 

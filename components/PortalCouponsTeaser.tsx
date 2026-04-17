@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Coupon } from '../types';
 import { demoCoupons } from '../demoData';
-import { Zap, Shield, Flame, ChevronRight, ArrowRight } from 'lucide-react';
+import { Zap, Shield, Flame, ArrowRight } from 'lucide-react';
 
 interface PortalCouponsTeaserProps {
     coupons?: Coupon[];

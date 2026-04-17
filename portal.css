@@ -2,6 +2,12 @@
    724BAHİS PORTAL — Premium Homepage Styles
    ══════════════════════════════════════════════════════════════ */
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
 /* ─── PORTAL HERO (Full Width) ─── */
 .portal-hero {
   background: #0e0e0e;
@@ -1153,7 +1159,6 @@
   }
 }
 
-/* ─── HERO SLIDER ─── */
 .hero-slider {
   width: 100%;
   position: relative;
@@ -1163,6 +1168,8 @@
   background: #0a0a0a;
   margin-bottom: 20px;
   aspect-ratio: 16 / 8;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  transform: translateZ(0);
 }
 
 .hero-slider-track {
@@ -1295,6 +1302,60 @@
 @keyframes slider-progress {
   from { width: 0%; }
   to { width: 100%; }
+}
+
+/* ── SKELETON LOADERS ── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2s infinite linear;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.hero-slider-skeleton {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  border-radius: 12px;
+  background-color: #0c0c0c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.daily-kupon-skeleton {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  border-radius: 12px;
+  background-color: #0c0c0c;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-box {
+  width: 100%;
+  height: 30px;
+  border-radius: 6px;
+}
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 /* Mobile responsive */

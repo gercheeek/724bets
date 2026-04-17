@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Task, UserStats } from '../types';
-import { CheckCircle, Clock, Star, Gift, Share2, Zap } from 'lucide-react';
+import { Clock, Star, Gift, Share2, Zap } from 'lucide-react';
 
 interface TasksViewProps {
   userStats: UserStats;

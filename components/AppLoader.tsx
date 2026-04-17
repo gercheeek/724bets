@@ -5,13 +5,13 @@ const AppLoader: React.FC = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setProgress(p => Math.min(p + 2.5, 100)); // 40 steps, 100ms each = 4000ms
+            setProgress(p => Math.min(p + 3.4, 100)); // ~30 steps, 100ms each = 3000ms
         }, 100);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="fixed inset-0 z-[99999] bg-[#020503] flex flex-col items-center justify-center transition-opacity duration-500">
+        <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center transition-opacity duration-1000" style={{ background: 'rgba(5, 5, 5, 0.95)', backdropFilter: 'blur(10px)' }}>
             {/* Logo Pulsing Effect */}
             <div className="relative mb-12 animate-float">
                 <div className="absolute inset-0 bg-[#FFC107] blur-[100px] opacity-20 animate-pulse pointer-events-none"></div>
@@ -26,7 +26,7 @@ const AppLoader: React.FC = () => {
             </div>
 
             <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
-                Profesyonel Analizler Hazırlanıyor <span className="opacity-0 lg:animate-[ping_1.5s_infinite]">...</span>
+                Analizler Yükleniyor <span className="opacity-0 lg:animate-[ping_1.5s_infinite]">...</span>
             </p>
         </div>
     );

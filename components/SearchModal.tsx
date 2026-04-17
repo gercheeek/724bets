@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X, Trophy, Ticket, BarChart2, ChevronRight } from 'lucide-react';
+import { Search, X, Ticket, BarChart2, ChevronRight } from 'lucide-react';
 import { Coupon } from '../types';
 
 interface SearchModalProps {

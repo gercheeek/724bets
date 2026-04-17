@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { RaffleConfig, RafflePrize, RaffleRule, RaffleFaq } from '../types';
-import { Ticket, Trophy, Trash2, Plus, Save, Clock, HelpCircle, Shield, AlertTriangle, CheckCircle, Info, Users, Sparkles, RefreshCw, UserPlus, Grid } from 'lucide-react';
+import React, { useState } from 'react';
+import { RaffleConfig } from '../types';
+import { Ticket, Trophy, Trash2, Plus, Save, Clock, HelpCircle, Shield, AlertTriangle, CheckCircle, Info, Users, Sparkles, UserPlus, Grid } from 'lucide-react';
 
 interface AdminRaffleTabProps {
     config: RaffleConfig;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Target, BarChart, ShieldCheck, MessageSquare, CheckCircle2, Users, FileSearch, Zap } from 'lucide-react';
+import { Target, BarChart, MessageSquare, FileSearch } from 'lucide-react';
 
 interface HeroProps {
   onNavigate?: (view: string) => void;

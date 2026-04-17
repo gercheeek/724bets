@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown, Sparkles, Send, Bot, User as UserIcon, Wand2, ArrowRight, AlertCircle, Upload, Image as ImageIcon, Link as LinkIcon, Bold, Italic, Heading2, List, Quote, Type, ImagePlus, ExternalLink, Copy, Check, Zap, Briefcase, Layout } from 'lucide-react';
+import { Plus, Trash2, Edit3, Eye, EyeOff, Save, X, Users, ChevronDown, Sparkles, Bot, Wand2, AlertCircle, Upload, Image as ImageIcon, Link as LinkIcon, Bold, Italic, Heading2, List, Quote, Type, ImagePlus, Copy, Check, Zap, Briefcase, Layout } from 'lucide-react';
 import { NewsArticle, NewsAuthor, NEWS_CATEGORIES } from '../types';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';

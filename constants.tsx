@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Brand, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, WheelConfig, SiteStatusConfig, RaffleConfig, PopularBetsConfig, NewsSliderConfig, TVConfig } from './types';
 import { demoPopularBets } from './demoData';
 
