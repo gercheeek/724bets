@@ -37,9 +37,30 @@ import PopularBets from './components/PopularBets';
 import NewsSlider from './components/NewsSlider';
 import TV724View from './components/TV724View';
 
+const SITE_CACHE_VERSION = "2026.04.17_v3";
+
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('loading');
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'pool' | 'news' | 'news-detail' | 'wheel' | 'giveaway' | 'coupons' | '724tv'>('home');
+
+  // Cache Version Control
+  useEffect(() => {
+    const currentVersion = localStorage.getItem('site_cache_version');
+    if (currentVersion !== SITE_CACHE_VERSION) {
+      // Clear critical content caches to force fresh load
+      const keysToClear = [
+        'site_hero_slider',
+        'site_daily_kupon',
+        'site_live_odds',
+        'site_popular_bets',
+        'site_tv_config',
+        'site_news_slider',
+        'site_analyses'
+      ];
+      keysToClear.forEach(key => localStorage.removeItem(key));
+      localStorage.setItem('site_cache_version', SITE_CACHE_VERSION);
+    }
+  }, []);
 
   // Promo Wheel Config
   const [promoWheelConfig, setPromoWheelConfig] = useState<PromoWheelConfig>(() => {
@@ -111,11 +132,8 @@ const App: React.FC = () => {
     updateGlobalConfig('site_status', cfg);
   };
 
-  // Hero Slider Config
-  const [heroSliderConfig, setHeroSliderConfig] = useState<HeroSliderConfig>(() => {
-    const stored = localStorage.getItem('site_hero_slider');
-    return stored ? JSON.parse(stored) : { isActive: true, autoPlayInterval: 5000, slides: [] };
-  });
+  // Hero Slider Config - Safe Initialization (No Storage Flash)
+  const [heroSliderConfig, setHeroSliderConfig] = useState<HeroSliderConfig>({ isActive: true, autoPlayInterval: 5000, slides: [] });
 
   const handleHeroSliderConfigChange = (cfg: HeroSliderConfig) => {
     setHeroSliderConfig(cfg);
@@ -123,11 +141,8 @@ const App: React.FC = () => {
     updateGlobalConfig('site_hero_slider', cfg);
   };
 
-  // Daily Kupon Config
-  const [dailyKuponConfig, setDailyKuponConfig] = useState<DailyKuponConfig>(() => {
-    const stored = localStorage.getItem('site_daily_kupon');
-    return stored ? JSON.parse(stored) : { isActive: true, title: 'GÜNÜN BANKO KUPONU', matches: [] };
-  });
+  // Daily Kupon Config - Safe Initialization (No Storage Flash)
+  const [dailyKuponConfig, setDailyKuponConfig] = useState<DailyKuponConfig>({ isActive: true, title: 'GÜNÜN BANKO KUPONU', matches: [] });
 
   const handleDailyKuponConfigChange = (cfg: DailyKuponConfig) => {
     setDailyKuponConfig(cfg);
@@ -147,11 +162,8 @@ const App: React.FC = () => {
     updateGlobalConfig('site_raffle_config', cfg);
   };
 
-  // Popular Bets Config
-  const [popularBetsConfig, setPopularBetsConfig] = useState<PopularBetsConfig>(() => {
-    const stored = localStorage.getItem('site_popular_bets');
-    return stored ? JSON.parse(stored) : DEFAULT_POPULAR_BETS_CONFIG;
-  });
+  // Popular Bets Config - Safe Initialization (No Storage Flash)
+  const [popularBetsConfig, setPopularBetsConfig] = useState<PopularBetsConfig>(DEFAULT_POPULAR_BETS_CONFIG);
 
   const handlePopularBetsConfigChange = (cfg: PopularBetsConfig) => {
     setPopularBetsConfig(cfg);
@@ -159,11 +171,8 @@ const App: React.FC = () => {
     updateGlobalConfig('site_popular_bets', cfg);
   };
 
-  // News Slider Config
-  const [newsSliderConfig, setNewsSliderConfig] = useState<NewsSliderConfig>(() => {
-    const stored = localStorage.getItem('site_news_slider');
-    return stored ? JSON.parse(stored) : DEFAULT_NEWS_SLIDER_CONFIG;
-  });
+  // News Slider Config - Safe Initialization (No Storage Flash)
+  const [newsSliderConfig, setNewsSliderConfig] = useState<NewsSliderConfig>(DEFAULT_NEWS_SLIDER_CONFIG);
 
   const handleNewsSliderConfigChange = (cfg: NewsSliderConfig) => {
     setNewsSliderConfig(cfg);
@@ -171,11 +180,8 @@ const App: React.FC = () => {
     updateGlobalConfig('site_news_slider', cfg);
   };
 
-  // 724TV Config
-  const [tvConfig, setTvConfig] = useState<TVConfig>(() => {
-    const stored = localStorage.getItem('site_tv_config');
-    return stored ? JSON.parse(stored) : DEFAULT_TV_CONFIG;
-  });
+  // 724TV Config - Safe Initialization (No Storage Flash)
+  const [tvConfig, setTvConfig] = useState<TVConfig>(DEFAULT_TV_CONFIG);
 
   const handleTvConfigChange = (cfg: TVConfig) => {
     setTvConfig(cfg);

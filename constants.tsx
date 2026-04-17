@@ -166,7 +166,7 @@ export const DEFAULT_NEWS_SLIDER_CONFIG: NewsSliderConfig = {
 export const DEFAULT_TV_CONFIG: TVConfig = {
     isActive: true,
     chatEnabled: true,
-    tickerText: 'FB: 1 - GS: 0 | REAL MADRID: 2 - MAN CITY: 2 | BJK: 0 - TS: 0 | ARSENAL: 1 - BAYERN: 1',
+    tickerText: '724BAHİS.NET | EN YÜKSEK ORANLAR - ANINDA ÇEKİM | TÜM MAÇLAR CANLI VE KESİNTİSİZ | HOŞGELDİN BONUSUNUZU ALMAYI UNUTMAYIN!',
     channels: [
         {
             id: 'tv-1',
