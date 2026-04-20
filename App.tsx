@@ -656,6 +656,7 @@ const App: React.FC = () => {
           overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden'
         }}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
+          <div className={appStage !== 'loading' ? 'app-reveal-mask' : 'app-hidden-initial'} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header
         onAdminClick={() => {
           if (userRole) {
@@ -890,6 +891,7 @@ const App: React.FC = () => {
           </button>
         </div>
       </footer>
+          </div>
 
       {/* ── 724BAHİS Welcome Popup (once per session) ── */}
       {showWelcomePopup && (

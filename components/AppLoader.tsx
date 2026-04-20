@@ -6,29 +6,27 @@ interface AppLoaderProps {
 
 const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false }) => {
   return (
-    <div className={`preloader-white ${fadeOut ? 'preloader-hidden' : ''}`}>
-      {/* 724bets Logo with Pulse Effect */}
-      <img 
-        src="/logo.png" 
-        alt="724bets Logo" 
-        className="preloader-logo-pulse"
-        onError={(e) => {
-          // Fallback if logo.png is not accessible
-          e.currentTarget.style.display = 'none';
-          const parent = e.currentTarget.parentElement;
-          if (parent) {
-            const textLogo = document.createElement('h1');
-            textLogo.innerText = '724BETS';
-            textLogo.className = 'text-4xl font-black text-black preloader-logo-pulse';
-            parent.prepend(textLogo);
-          }
-        }}
-      />
-      
-      {/* Loading Text with Fade Animation */}
-      <p className="preloader-text">
-        Analizler Yükleniyor...
-      </p>
+    <div id="pro-loader" className={fadeOut ? 'loader-hidden' : ''}>
+      {/* 
+        This div holds the cinematic 4K AI background with the ball and stadium lights.
+        By separating it, we can scale or animate the background smoothly.
+      */}
+      <div className="pro-loader-bg"></div>
+
+      <div className="loader-content">
+        <div className="nostalgic-ball-wrapper">
+          <div className="gold-glow"></div>
+          
+          <div className="football-top">
+            {/* The ball is part of the background image, so we just overlay the text exactly in the center */}
+            <span className="site-name">724bahis.net</span>
+          </div>
+
+          <div className="progress-container">
+            <div className="progress-bar"></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
