@@ -561,6 +561,7 @@ export interface LiveOddsMatch {
 
 export interface LiveOddsConfig {
     isActive: boolean;
+    speed?: number;          // seconds per match
     matches: LiveOddsMatch[];
 }
 

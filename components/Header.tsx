@@ -431,7 +431,7 @@ const Header: React.FC<HeaderProps> = ({
               }
             `}</style>
             <div className="flex-1 overflow-hidden marquee-container-hover-pause" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
-              <div key={`${marqueeConfig.text}-${marqueeConfig.speed}`} className="marquee-fade-wrapper">
+              <div key={marqueeConfig.text} className="marquee-fade-wrapper">
                 <div 
                   className="whitespace-nowrap animate-custom-marquee inline-block"
                   style={{ 
@@ -440,7 +440,7 @@ const Header: React.FC<HeaderProps> = ({
                     fontWeight: 500,
                     fontSize: '13px',
                     letterSpacing: '0.5px',
-                    '--speed': `${marqueeConfig.speed || 30}s` 
+                    '--speed': `${marqueeConfig.speed ?? 30}s` 
                   } as React.CSSProperties}
                 >
                   {/* 
@@ -516,7 +516,7 @@ const Header: React.FC<HeaderProps> = ({
         {liveOddsConfig?.isActive && liveOddsConfig.matches.length > 0 && (
           <div className="header-categories" style={{ padding: '0', borderBottom: '1px solid rgba(255,255,255,0.04)', background: '#08080C' }}>
             <div className="w-full overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 2%, black 98%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 2%, black 98%, transparent)' }}>
-              <div className="flex items-center gap-0 animate-odds-scroll whitespace-nowrap" style={{ '--odds-count': liveOddsConfig.matches.length } as React.CSSProperties}>
+              <div className="flex items-center gap-0 animate-odds-scroll whitespace-nowrap" style={{ '--odds-count': liveOddsConfig.matches.length, '--odds-speed': `${liveOddsConfig.speed || 6}s` } as React.CSSProperties}>
                 {[...liveOddsConfig.matches, ...liveOddsConfig.matches].map((match, idx) => (
                   <a
                     key={`odds-${idx}`}

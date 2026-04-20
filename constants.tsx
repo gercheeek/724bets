@@ -58,7 +58,7 @@ export const BRANDS: Brand[] = [
 export const DEFAULT_MARQUEE_CONFIG: MarqueeConfig = {
   isActive: true,
   text: 'Hoş geldiniz! En yüksek oranlar ve anında ödeme 724BAHİS.NET güvencesiyle!',
-  speed: 50,
+  speed: 60,
   color: '#FFC107', // 724BAHİS.NET Yellow
   isBold: true,
 };
@@ -75,6 +75,7 @@ export const DEFAULT_WELCOME_POPUP_CONFIG: WelcomePopupConfig = {
 
 export const DEFAULT_LIVE_ODDS_CONFIG: LiveOddsConfig = {
   isActive: true,
+  speed: 10,
   matches: [],
 };
 

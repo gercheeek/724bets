@@ -918,8 +918,8 @@ html, body {
 .daily-kupon-card {
   background: #141414;
   border: 1px solid rgba(245, 197, 24, 0.15);
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 12px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -965,16 +965,16 @@ html, body {
 .daily-kupon-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-  padding-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
   border-bottom: 1px solid rgba(245, 197, 24, 0.1);
 }
 
 .daily-kupon-header-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
   background: linear-gradient(135deg, rgba(245, 197, 24, 0.15), rgba(245, 197, 24, 0.05));
   border: 1px solid rgba(245, 197, 24, 0.2);
   display: flex;
@@ -1031,11 +1031,11 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 10px 10px;
+  gap: 6px;
+  padding: 8px 10px;
   background: #0c0c0c;
   border: 1px solid #1c1c1c;
-  border-radius: 10px;
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
@@ -1878,4 +1878,51 @@ html, body {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+/* ═══ PREMIUM AI DESIGN PATTERNS ═══ */
+.bg-soccer-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background-image: url('https://images.unsplash.com/photo-1543351611-58f69d7c1781?q=80&w=2000&auto=format&fit=crop'); /* Macro soccer ball */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  mix-blend-mode: luminosity;
+  opacity: 0.12;
+  filter: blur(2px) contrast(1.2);
+  pointer-events: none;
+}
+
+.bg-soccer-gradient-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(20, 25, 40, 0.4) 0%, #000000 60%);
+  pointer-events: none;
+}
+
+.bg-carbon-fiber {
+  background-color: #0d0d0d;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #111 0,
+    #111 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+.bg-net-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+  background-size: 3px 3px;
 }

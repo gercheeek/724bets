@@ -31,10 +31,10 @@ const NewsSlider: React.FC<NewsSliderProps> = ({ config }) => {
     return (
         <div style={{ margin: '16px 0 24px' }} className="news-slider-container">
             {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '4px', height: '18px', background: '#FFD700', borderRadius: '2px' }} />
-                    <span style={{ color: '#fff', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px' }}>GÜNDEM</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ width: '3px', height: '14px', background: '#FFD700', borderRadius: '2px' }} />
+                    <span style={{ color: '#fff', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1.5px' }}>GÜNDEM</span>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <button 
@@ -55,12 +55,12 @@ const NewsSlider: React.FC<NewsSliderProps> = ({ config }) => {
             {/* Slider Content */}
             <div style={{ 
                 position: 'relative', 
-                height: '240px', 
-                borderRadius: '16px', 
+                height: '190px', 
+                borderRadius: '12px', 
                 overflow: 'hidden', 
                 background: '#0a0a0a',
                 border: '1px solid #1a1a1a',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                boxShadow: '0 8px 25px rgba(0,0,0,0.5)'
             }}>
                 {activeSlides.map((slide, index) => (
                     <div
@@ -94,10 +94,10 @@ const NewsSlider: React.FC<NewsSliderProps> = ({ config }) => {
                             bottom: 0, 
                             left: 0, 
                             right: 0, 
-                            padding: '24px',
+                            padding: '16px 20px',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '8px'
+                            gap: '4px'
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span style={{ 
@@ -118,8 +118,8 @@ const NewsSlider: React.FC<NewsSliderProps> = ({ config }) => {
                             
                             <h2 style={{ 
                                 color: '#fff', 
-                                fontSize: '20px', 
-                                md: '24px', 
+                                fontSize: '17px', 
+                                md: '20px', 
                                 fontWeight: 900, 
                                 lineHeight: '1.2',
                                 textShadow: '0 2px 10px rgba(0,0,0,0.5)',

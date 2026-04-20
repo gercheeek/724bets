@@ -1256,7 +1256,7 @@ body {
 }
 
 .animate-odds-scroll {
-  animation: oddsScroll calc(var(--odds-count, 5) * 6s) linear infinite;
+  animation: oddsScroll calc(var(--odds-count, 5) * var(--odds-speed, 6s)) linear infinite;
 }
 
 .animate-odds-scroll:hover {

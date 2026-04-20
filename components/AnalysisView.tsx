@@ -88,130 +88,130 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
     return (
         <div
-            className="w-full min-h-screen font-sans overflow-x-hidden pb-20 relative transition-all duration-700"
+            className="w-full min-h-screen font-sans overflow-x-hidden pb-20 relative transition-all duration-700 bg-black z-0"
         >
-            {/* Sport-Themed Ambient Glow */}
-            <div
-                className="absolute top-0 left-0 right-0 h-[500px] pointer-events-none transition-all duration-700 z-0"
-                style={{ background: sportGlow }}
-            />
-
-            {/* Decorative Sport Pattern */}
-            <div className="absolute top-4 right-8 opacity-[0.03] pointer-events-none z-0 select-none">
-                <span className="text-[200px] font-black">{selectedSport === 'Futbol' ? '⚽' : '🏀'}</span>
-            </div>
-
+            {/* STITCHED SOCCER BALL PATTERN */}
+            <div className="bg-soccer-pattern"></div>
+            
+            {/* Top Vignette Overlay */}
+            <div className="bg-soccer-gradient-overlay"></div>
             {/* Header / Main Filters */}
-            <div className="w-full max-w-6xl mx-auto px-2 pt-20 text-center mb-0 relative z-10">
-                {/* Sport Toggle */}
-                <div className="flex overflow-x-auto justify-start md:justify-center gap-2 mb-3 mt-1 pb-1 scrollbar-none px-2">
+            <div className="w-full max-w-6xl mx-auto px-2 pt-1 text-center mb-0 relative z-10">
+                <div className="flex overflow-x-auto justify-start md:justify-center gap-2 mb-4 mt-1 pb-2 scrollbar-none px-2 z-10 relative">
                     <button
                         onClick={() => { setSelectedSport('Futbol'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Futbol'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
-                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Futbol'
+                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
+                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
                             }`}
                     >
-                        <span className="text-sm">⚽</span> Futbol
+                        <span className="text-sm bg-white/20 rounded-full w-5 h-5 flex items-center justify-center">⚽</span> FUTBOL
                     </button>
                     <button
                         onClick={() => { setSelectedSport('Basketbol'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Basketbol'
-                            ? 'bg-[#E4510B] text-white shadow-[0_0_15px_rgba(228,81,11,0.3)] scale-105'
-                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Basketbol'
+                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
+                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
                             }`}
                     >
-                        <span className="text-sm">🏀</span> Basketbol
+                        <span className="text-sm bg-orange-500/20 text-orange-400 rounded-full w-5 h-5 flex items-center justify-center">🏀</span> BASKETBOL
                     </button>
                     <button
                         onClick={() => { setSelectedSport('Formula 1'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Formula 1'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
-                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Formula 1'
+                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
+                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
                             }`}
                     >
-                        <span className="text-sm">🏎️</span> Formula 1
+                        <span className="text-sm bg-red-500/20 text-red-500 rounded-full w-5 h-5 flex items-center justify-center">🏎️</span> FORMULA 1
                     </button>
                     <button
                         onClick={() => { setSelectedSport('MotoGP'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'MotoGP'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
-                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'MotoGP'
+                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
+                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
                             }`}
                     >
-                        <span className="text-sm">🏍️</span> MotoGP
+                        <span className="text-sm bg-gray-500/20 text-gray-400 rounded-full w-5 h-5 flex items-center justify-center">🏍️</span> MOTOGP
                     </button>
                     <button
                         onClick={() => { setSelectedSport('Superbike'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Superbike'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
-                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Superbike'
+                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
+                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
                             }`}
                     >
-                        <span className="text-sm">🏍️</span> Superbike
+                        <span className="text-sm bg-teal-500/20 text-teal-400 rounded-full w-5 h-5 flex items-center justify-center">🏍️</span> SUPERBIKE
                     </button>
                     <button
                         onClick={() => { setSelectedSport('Tenis'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black uppercase text-[10px] tracking-widest shrink-0 transition-all duration-300 ${selectedSport === 'Tenis'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_15px_rgba(240,185,11,0.3)] scale-105'
-                            : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]'
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Tenis'
+                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
+                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
                             }`}
                     >
-                        <span className="text-sm">🎾</span> Tenis
+                        <span className="text-sm bg-green-500/20 text-green-400 rounded-full w-5 h-5 flex items-center justify-center">🎾</span> TENİS
                     </button>
                 </div>
 
-                {/* Date Selection */}
-                <div className="flex overflow-x-auto gap-2 mb-3 pb-1 justify-start md:justify-center scrollbar-none px-2">
-                    <button
-                        onClick={() => {
-                            setSelectedDate('WEEKLY');
-                            setSelectedLeague('TÜMÜ');
-                        }}
-                        className={`flex flex-col items-center justify-center min-w-[70px] h-[44px] rounded-lg transition-all duration-300 shrink-0 ${selectedDate === 'WEEKLY'
-                            ? 'bg-[#f0b90b] text-black shadow-[0_0_10px_rgba(240,185,11,0.2)]'
-                            : 'bg-[var(--bg-card)] border-[var(--border-subtle)] border text-[#f0b90b] hover:border-[#f0b90b]/50'
-                            }`}
-                    >
-                        <span className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">TÜM</span>
-                        <span className="text-[11px] font-black leading-none">HAFTA</span>
-                    </button>
+                {/* Date Selection Panel */}
+                <div className="flex justify-center mb-5 z-10 relative">
+                    <div className="flex overflow-x-auto gap-2 p-1.5 bg-[#1A1A1A]/80 backdrop-blur-xl border border-white/10 rounded-2xl scrollbar-none max-w-full">
+                        <button
+                            onClick={() => {
+                                setSelectedDate('WEEKLY');
+                                setSelectedLeague('TÜMÜ');
+                            }}
+                            className={`flex flex-col items-center justify-center px-6 h-[46px] rounded-xl transition-all duration-300 shrink-0 ${selectedDate === 'WEEKLY'
+                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.3)]'
+                                : 'bg-transparent text-white hover:bg-white/5'
+                                }`}
+                        >
+                            <span className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">TÜM</span>
+                            <span className="text-[12px] font-black leading-none">HAFTA</span>
+                        </button>
 
-                    {dates.map((date, idx) => {
-                        const d = new Date(date);
-                        const isSelected = selectedDate === date;
-                        const dayName = d.toLocaleDateString('tr-TR', { weekday: 'short' });
-                        return (
-                            <button
-                                key={date}
-                                onClick={() => {
-                                    setSelectedDate(date);
-                                    setSelectedLeague('TÜMÜ'); // Reset league filter on date change
-                                }}
-                                className={`flex flex-col items-center justify-center min-w-[70px] h-[44px] rounded-lg transition-all duration-300 shrink-0 ${isSelected
-                                    ? 'bg-[#f0b90b] text-black shadow-[0_0_10px_rgba(240,185,11,0.2)]'
-                                    : 'bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--text-dim)] hover:text-[var(--text-primary)]'
-                                    }`}
-                            >
-                                <span className={`text-[8px] font-black uppercase tracking-widest leading-none mb-1 ${isSelected ? 'text-black' : 'text-[var(--text-muted)]'}`}>{dayName}</span>
-                                <span className={`text-[11px] font-black leading-none ${isSelected ? 'text-black' : 'text-[var(--text-primary)]'}`}>{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
-                            </button>
-                        );
-                    })}
+                        {dates.map((date, idx) => {
+                            const d = new Date(date);
+                            const isSelected = selectedDate === date;
+                            const dayName = d.toLocaleDateString('tr-TR', { weekday: 'short' }).substring(0, 3);
+                            
+                            return (
+                                <button
+                                    key={date}
+                                    onClick={() => {
+                                        setSelectedDate(date);
+                                        setSelectedLeague('TÜMÜ');
+                                    }}
+                                    className={`flex flex-col items-center justify-center min-w-[65px] h-[46px] px-2 rounded-lg transition-all duration-300 shrink-0 relative ${isSelected ? 'text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
+                                >
+                                    <span className="text-[10px] font-medium tracking-wide mb-1 capitalize">{dayName}</span>
+                                    <span className={`text-[12px] font-bold ${isSelected ? 'text-white' : 'text-zinc-400'}`}>{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
+                                    {isSelected && (
+                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] bg-[#FFC300] rounded-t-md shadow-[0_-2px_8px_rgba(255,195,0,0.5)]"></div>
+                                    )}
+                                    {/* subtle separator for all but last */}
+                                    {idx < dates.length - 1 && (
+                                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-6 bg-white/5"></div>
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
 
 
                 {/* League Filter */}
-                <div className="flex overflow-x-auto gap-2 mb-4 pb-2 justify-start md:justify-center scrollbar-none px-2">
+                <div className="flex overflow-x-auto gap-2.5 mb-6 pb-2 justify-start md:justify-center scrollbar-none px-2 z-10 relative">
                     {leagues.map((league) => (
                         <button
                             key={league}
                             title={league}
                             onClick={() => setSelectedLeague(league)}
-                            className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all duration-300 shrink-0 ${selectedLeague === league
-                                ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_10px_rgba(240,185,11,0.2)]'
-                                : 'bg-[var(--bg-elevated)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[#f0b90b]/50 hover:text-[var(--text-primary)]'
-                                } max-w-[120px] md:max-w-[180px] truncate`}
+                            className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 shrink-0 ${selectedLeague === league
+                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.3)]'
+                                : 'bg-transparent border border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-white'
+                                } max-w-[140px] md:max-w-[200px] truncate`}
                         >
                             {league}
                         </button>
@@ -228,21 +228,25 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                     return (
                         <div key={leagueName} className="space-y-4">
                             {/* League Section Header */}
-                            <div className="flex items-start gap-4 px-4 pt-4 pb-3 mb-2 relative group-header">
-                                <div className={`absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent ${selectedSport === 'Basketbol' ? 'via-[#E4510B]/50' : 'via-[#f0b90b]/50'} to-transparent`} style={{ background: `linear-gradient(to right, transparent, ${selectedSport === 'Basketbol' ? 'rgba(228,81,11,0.5)' : 'rgba(240,185,11,0.5)'}, transparent)` }}></div>
-                                <div className={`w-1.5 h-5 shrink-0 rounded-full mt-0.5 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#f0b90b]'}`} style={{ boxShadow: selectedSport === 'Basketbol' ? '0 0 15px rgba(228,81,11,0.6)' : '0 0 15px rgba(240,185,11,0.6)' }}></div>
-                                <h3 className="text-[var(--text-primary)] font-black text-[11px] md:text-[13px] uppercase tracking-[0.18em] leading-relaxed break-words" title={leagueName}>{leagueName}</h3>
+                            <div className="flex items-start gap-4 px-4 pt-3 pb-1 mb-1 relative group-header">
+                                <div className={`w-1.5 h-5 shrink-0 rounded-full mt-0.5 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#FFC300] shadow-[0_0_12px_rgba(255,195,0,0.8)]'}`}></div>
+                                <h3 className="text-white font-black text-[13px] md:text-[14px] tracking-[0.1em] leading-relaxed break-words" title={leagueName}>{leagueName}</h3>
                             </div>
 
                             {/* Desktop Header */}
-                            <div className="hidden md:flex items-center gap-4 px-6 py-3 mb-2 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest relative">
-                                <div className="absolute bottom-0 left-4 right-4 h-[1px] bg-[var(--border-subtle)]/30"></div>
-                                <div className="w-[100px] shrink-0">SAAT</div>
-                                <div className="flex-1 pl-4">MAÇ</div>
-                                <div className="w-[180px] shrink-0 text-center">TAHMİN</div>
-                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ÜST' : selectedSport === 'Futbol' ? 'KG VAR' : 'SEÇİM 1'}</div>
-                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ALT' : selectedSport === 'Futbol' ? '2.5 ÜST' : 'SEÇİM 2'}</div>
-                                <div className="w-[80px] shrink-0 text-center">GÜVEN</div>
+                            <div className="hidden md:flex items-center gap-4 px-6 py-3 mb-2 text-[10px] font-medium text-zinc-400 tracking-wider relative border-b border-white/5">
+                                <div className="w-[100px] shrink-0">SAAT/TARİH</div>
+                                <div className="flex-1 pl-4">MAÇ <span className="text-[8px] text-zinc-600 block leading-tight mt-0.5">(EV SAHİBİ vs DEPLASMAN)</span></div>
+                                <div className="w-[180px] shrink-0 text-center flex flex-col justify-center items-center">
+                                    <span>TAHMİN</span>
+                                    <div className="flex items-center gap-1 mt-0.5 text-[#FFC300]">
+                                        <span className="text-[8px] text-zinc-500">(ÖNERİ)</span>
+                                        <Target className="w-3 h-3" />
+                                    </div>
+                                </div>
+                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ORAN ÜST' : selectedSport === 'Futbol' ? 'ORAN KG VAR' : 'ORAN 1'}</div>
+                                <div className="w-[80px] shrink-0 text-center">{selectedSport === 'Basketbol' ? 'ORAN ALT' : selectedSport === 'Futbol' ? 'ORAN 2.5 ÜST' : 'ORAN 2'}</div>
+                                <div className="w-[80px] shrink-0 text-center">GÜVEN (%)</div>
                                 <div className="w-[40px] shrink-0 text-right">AÇ</div>
                             </div>
 
@@ -250,16 +254,19 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                 const isFree = isLoggedIn || analysisIdx < freeCount;
                                 const isExpanded = expandedId === analysis.id;
                                 const highestOdds = analysis.bookieOdds.find(b => b.isHighest) || analysis.bookieOdds[0];
-                                const highlightColorClassName = selectedSport === 'Basketbol' ? 'text-[#E4510B]' : 'text-[#f0b90b]';
-                                const borderGlowClassName = selectedSport === 'Basketbol' ? 'border-[#E4510B]/40 shadow-[0_0_15px_rgba(228,81,11,0.1)]' : 'border-[#f0b90b]/40 shadow-[0_0_15px_rgba(240,185,11,0.1)]';
-                                const hoverBorderClassName = selectedSport === 'Basketbol' ? 'hover:border-[#E4510B]/20' : 'hover:border-[#f0b90b]/20';
+                                const highlightColorClassName = selectedSport === 'Basketbol' ? 'text-orange-500' : 'text-white';
+                                const borderGlowClassName = selectedSport === 'Basketbol' ? 'border-[#E4510B]/50 shadow-[0_0_15px_rgba(228,81,11,0.2)]' : 'border-[#FFC300] shadow-[0_0_20px_rgba(255,195,0,0.15)]';
+                                const hoverBorderClassName = selectedSport === 'Basketbol' ? 'hover:border-[#E4510B]/30' : 'hover:border-[#FFC300]/50';
+
+                                // Determine Confidence Gradient Color based on percentage
+                                const gradientColor = analysis.confidence >= 85 ? 'from-green-500 to-green-400' : analysis.confidence >= 70 ? 'from-yellow-500 to-yellow-400' : 'from-red-500 to-red-400';
 
                                 // LOCKED: blur the match and show an overlay
                                 if (!isFree) {
                                     return (
                                         <div key={analysis.id} className="relative mb-3">
                                             {/* Blurred preview */}
-                                            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-xl px-5 py-4 md:py-0 md:h-[68px] flex flex-col md:grid md:grid-cols-12 items-center gap-3 select-none overflow-hidden" style={{ filter: 'blur(6px)', userSelect: 'none' }}>
+                                            <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-[20px] px-4 py-3 md:py-0 md:h-[58px] flex flex-col md:grid md:grid-cols-12 items-center gap-3 select-none overflow-hidden" style={{ filter: 'blur(6px)', userSelect: 'none' }}>
                                                 <div className="col-span-1 text-[var(--text-muted)] text-[11px] font-black shrink-0">{analysis.matchTime}</div>
                                                 <div className="col-span-4 flex items-center gap-2 pl-0 md:pl-8 border-l border-transparent md:border-[var(--border-subtle)] h-full py-4 md:min-w-0 md:w-full">
                                                     <div className="text-xs font-black text-[var(--text-primary)] truncate w-full">{analysis.homeTeam} - {analysis.awayTeam}</div>
@@ -285,82 +292,81 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                 return (
                                     <div
                                         key={analysis.id}
-                                        className={`bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-[20px] mb-4 overflow-hidden transition-all duration-500 group ${isExpanded ? borderGlowClassName + ' ring-1 ' + (selectedSport === 'Basketbol' ? 'ring-[#E4510B]/30' : 'ring-[#f0b90b]/30') : hoverBorderClassName + ' hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)] hover:shadow-[#f0b90b10] hover:-translate-y-1 hover:border-[#f0b90b]/30'}`}
+                                        className={`bg-carbon-fiber frosted-glass border border-white/5 rounded-[16px] mb-3 overflow-hidden transition-all duration-500 group ${isExpanded ? borderGlowClassName + ' ring-1 ' + (selectedSport === 'Basketbol' ? 'ring-[#E4510B]/30' : 'ring-[#FFC300]/30') : hoverBorderClassName + ' hover:shadow-[0_4px_25px_rgba(255,195,0,0.1)]'}`}
                                     >
                                         {/* Row (Flexible Desktop) */}
                                         <div
-                                            className="px-6 py-5 md:py-0 md:h-[76px] flex flex-col md:flex-row items-center gap-4 cursor-pointer relative"
+                                            className="px-4 py-3 md:py-0 md:h-[58px] flex flex-col md:flex-row items-center gap-4 cursor-pointer relative"
                                             onClick={() => toggleExpand(analysis.id)}
                                         >
-                                            {/* Time Column */}
                                             <div className="w-full md:w-[100px] shrink-0 flex items-center justify-between md:justify-start">
                                                 <div className="flex flex-col">
-                                                    {selectedDate === 'WEEKLY' && <span className="text-[var(--text-muted)] text-[8px] font-black uppercase mb-0.5">{new Date(analysis.matchDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>}
-                                                    <span className="text-[#f0b90b] font-black text-[11px] md:text-[13px] tracking-wide">
+                                                    {selectedDate === 'WEEKLY' && <span className="text-zinc-400 text-[8px] font-bold uppercase mb-0.5">{new Date(analysis.matchDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>}
+                                                    <span className="text-white font-black text-[12px] md:text-[14px] tracking-wide">
                                                         {analysis.matchTime}
                                                     </span>
                                                 </div>
                                                 <div className="md:hidden">
-                                                    {isExpanded ? <ChevronUp className="w-5 h-5 text-[#f0b90b]" /> : <ChevronDown className="w-5 h-5 text-[var(--text-muted)]" />}
+                                                    {isExpanded ? <ChevronUp className="w-5 h-5 text-[#FFC300]" /> : <ChevronDown className="w-5 h-5 text-white" />}
                                                 </div>
                                             </div>
 
                                             {/* Match Name Column (Flex-1) */}
-                                            <div className={`w-full md:flex-1 md:pl-6 border-l border-transparent md:border-[var(--border-subtle)]/40 h-full flex items-center transition-colors duration-300 md:min-w-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <h3 className="text-[var(--text-primary)] font-black text-[14px] md:text-[16px] tracking-tight uppercase italic pt-2 md:pt-0 w-full flex items-center gap-2 flex-wrap" title={`${analysis.homeTeam} VS ${analysis.awayTeam}`}>
-                                                    <span className="text-white group-hover:text-[#f0b90b] transition-colors duration-300">{analysis.homeTeam}</span>
-                                                    <span className="text-[var(--text-muted)] font-medium not-italic text-[10px] uppercase shrink-0 px-2 opacity-50">VS</span> 
-                                                    <span className="text-white group-hover:text-[#f0b90b] transition-colors duration-300">{analysis.awayTeam}</span>
+                                            <div className="w-full md:flex-1 md:pl-6 h-full flex items-center md:min-w-0">
+                                                <h3 className="text-white font-black text-[15px] md:text-[16px] tracking-tight uppercase pt-2 md:pt-0 w-full flex items-center gap-1.5 flex-wrap" title={`${analysis.homeTeam} VS ${analysis.awayTeam}`}>
+                                                    <span className="text-white font-extrabold">{analysis.homeTeam}</span>
+                                                    <span className="text-zinc-600 font-bold not-italic text-[9px] uppercase shrink-0 px-1">VS</span> 
+                                                    <span className="text-white font-extrabold">{analysis.awayTeam}</span>
                                                 </h3>
                                             </div>
 
-                                            {/* Prediction Badge */}
-                                            <div className={`w-full md:w-[180px] shrink-0 flex justify-start md:justify-center border-l border-transparent md:border-[var(--border-subtle)]/40 h-full items-center transition-colors duration-300 pt-2 md:pt-0 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <div className={`border px-5 py-2 rounded-xl text-center w-full transition-all duration-300 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]/5 border-[#E4510B]/20 group-hover:bg-[#E4510B]/10 group-hover:border-[#E4510B]/50' : 'bg-[#f0b90b]/5 border-[#f0b90b]/20 group-hover:bg-[#f0b90b]/10 group-hover:border-[#f0b90b]/50'}`}>
-                                                    <span className={`${selectedSport === 'Basketbol' ? 'text-[#E4510B]' : 'text-[#f0b90b]'} font-black text-[11px] md:text-[12px] uppercase tracking-wider block`} title={analysis.prediction}>{analysis.prediction}</span>
+                                            {/* Prediction Badge Container */}
+                                            <div className="w-full md:w-[180px] shrink-0 flex justify-start md:justify-center h-full items-center pt-2 md:pt-0">
+                                                <div className={`bg-net-pattern px-4 py-2 rounded-full text-center w-full shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] border ${selectedSport === 'Basketbol' ? 'border-[#E4510B] shadow-[0_0_10px_rgba(228,81,11,0.3)]' : 'border-[#FFC300] shadow-[0_0_10px_rgba(255,195,0,0.3)]'}`}>
+                                                    <span className={`${selectedSport === 'Basketbol' ? 'text-white' : 'text-[#FFC300] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]'} font-black text-[11px] md:text-[12px] uppercase tracking-wider block`} title={analysis.prediction}>{analysis.prediction}</span>
                                                 </div>
                                             </div>
 
                                             {/* Odds Columns (Desktop Only) */}
-                                            <div className={`hidden md:flex w-[80px] shrink-0 justify-center border-l border-[var(--border-subtle)]/40 h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <span className={`${highlightColorClassName} font-black text-[15px] group-hover:scale-110 transition-transform`}>{highestOdds.odd1}</span>
+                                            <div className="hidden md:flex w-[80px] shrink-0 justify-center border-l border-zinc-700/50 h-full items-center">
+                                                <span className={`${highlightColorClassName} font-black text-[15px]`}>{highestOdds.odd1}</span>
                                             </div>
-                                            <div className={`hidden md:flex w-[80px] shrink-0 justify-center border-l border-[var(--border-subtle)]/40 h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <span className={`${highlightColorClassName} font-black text-[15px] group-hover:scale-110 transition-transform`}>{highestOdds.odd2}</span>
+                                            <div className="hidden md:flex w-[80px] shrink-0 justify-center border-l border-zinc-700/50 h-full items-center">
+                                                <span className={`${highlightColorClassName} font-black text-[15px]`}>{highestOdds.odd2}</span>
                                             </div>
 
                                             {/* Mobile Bottom Row */}
                                             <div className="flex md:hidden w-full items-center justify-between pt-4 border-t border-zinc-800/50 mt-1">
                                                 <div className="flex gap-6">
                                                     <div className="flex flex-col">
-                                                        <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ÜST' : selectedSport === 'Futbol' ? 'KG VAR' : 'SEÇİM 1'}</span>
-                                                        <span className="text-[#f0b90b] font-black text-sm mt-0.5">{highestOdds.odd1}</span>
+                                                        <span className="text-zinc-500 text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ÜST' : selectedSport === 'Futbol' ? 'KG VAR' : 'SEÇİM 1'}</span>
+                                                        <span className="text-white font-black text-sm mt-0.5">{highestOdds.odd1}</span>
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ALT' : selectedSport === 'Futbol' ? '2.5 ÜST' : 'SEÇİM 2'}</span>
-                                                        <span className="text-[#f0b90b] font-black text-sm mt-0.5">{highestOdds.odd2}</span>
+                                                        <span className="text-zinc-500 text-[9px] font-black uppercase tracking-widest">{selectedSport === 'Basketbol' ? 'ALT' : selectedSport === 'Futbol' ? '2.5 ÜST' : 'SEÇİM 2'}</span>
+                                                        <span className="text-white font-black text-sm mt-0.5">{highestOdds.odd2}</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col items-end">
-                                                    <span className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest">GÜVEN</span>
-                                                    <span className="text-[var(--text-primary)] font-black text-sm mt-0.5">%{analysis.confidence}</span>
+                                                    <span className="text-zinc-500 text-[9px] font-black uppercase tracking-widest">GÜVEN</span>
+                                                    <span className="text-white font-black text-sm mt-0.5">%{analysis.confidence}</span>
                                                 </div>
                                             </div>
 
                                             {/* Confidence Column (Desktop Only) */}
-                                            <div className={`hidden md:flex w-[80px] shrink-0 items-center justify-center border-l border-[var(--border-subtle)]/40 h-full transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <div className="flex flex-col items-center">
-                                                    <span className="text-[var(--text-primary)] font-black text-[14px]">%{analysis.confidence}</span>
-                                                    <div className="w-8 h-1 bg-zinc-800 mt-1 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-[#f0b90b]" style={{ width: `${analysis.confidence}%` }}></div>
+                                            <div className="hidden md:flex w-[80px] shrink-0 items-center justify-center border-l border-zinc-700/50 h-full">
+                                                <div className="flex flex-col items-center w-full px-2">
+                                                    <span className="text-white font-black text-[13px]">{analysis.confidence}%</span>
+                                                    <div className="w-full h-1.5 bg-black rounded-full overflow-hidden mt-1 border border-white/10">
+                                                        <div className={`h-full bg-gradient-to-r ${gradientColor}`} style={{ width: `${analysis.confidence}%` }}></div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {/* Actions Box */}
-                                            <div className={`hidden md:flex w-[40px] shrink-0 justify-center border-l border-[var(--border-subtle)]/40 h-full items-center transition-colors duration-300 ${selectedSport === 'Basketbol' ? 'group-hover:border-[#E4510B]/30' : 'group-hover:border-[#f0b90b]/30'}`}>
-                                                <div className={`p-2 rounded-xl transition-all duration-300 ${isExpanded ? (selectedSport === 'Basketbol' ? 'bg-[#E4510B] text-white' : 'bg-[#f0b90b] text-black') : 'bg-zinc-800 text-zinc-500 group-hover:bg-zinc-700 group-hover:text-white'}`}>
-                                                    {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                                            <div className="hidden md:flex w-[40px] shrink-0 justify-center border-l border-zinc-700/50 h-full items-center">
+                                                <div className="p-2 rounded-xl bg-black border border-white/10 text-white flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)]">
+                                                    {isExpanded ? <ChevronUp className="w-4 h-4 text-[#FFC300]" /> : <ChevronDown className="w-4 h-4" />}
                                                 </div>
                                             </div>
                                         </div>
@@ -388,10 +394,10 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                     <div className="absolute inset-0 bg-black/50" />
                                                 </div>
                                                 
-                                                <div className="relative z-10 p-6 grid grid-cols-1 lg:grid-cols-10 gap-8">
+                                                <div className="relative z-10 p-4 md:p-5 grid grid-cols-1 lg:grid-cols-10 gap-4 md:gap-6">
                                                     {/* Left: Editor Analysis (60%) */}
-                                                    <div className="lg:col-span-6 space-y-6">
-                                                        <div className="flex items-center justify-between mb-4">
+                                                    <div className="lg:col-span-6 space-y-4">
+                                                        <div className="flex items-center justify-between mb-2">
                                                             <div className="flex items-center gap-2">
                                                                 <div className="w-1 h-4 bg-[#f0b90b]"></div>
                                                                 <h4 className="text-[var(--text-primary)] font-black text-[11px] uppercase tracking-widest italic">EDİTÖR DETAYLI ANALİZİ</h4>
@@ -404,30 +410,30 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                             </div>
                                                         </div>
 
-                                                        <div className="space-y-5">
-                                                            <div className="space-y-2">
+                                                        <div className="space-y-4">
+                                                            <div className="space-y-1.5">
                                                                 <div className="flex items-center gap-2">
                                                                     <Search className="w-3.5 h-3.5 text-[#f0b90b]" />
                                                                     <span className="text-[var(--text-dim)] font-black text-[9px] uppercase tracking-widest">TAKTİK ÖZET</span>
                                                                 </div>
-                                                                <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic pl-5.5 border-l border-[var(--border-subtle)] ml-1.5">{analysis.tacticalSummary}</p>
+                                                                <p className="text-[var(--text-secondary)] text-[12px] md:text-[13px] leading-relaxed italic pl-5 border-l border-[var(--border-subtle)] ml-1.5">{analysis.tacticalSummary}</p>
                                                             </div>
 
-                                                            <div className="space-y-2">
+                                                            <div className="space-y-1.5">
                                                                 <div className="flex items-center gap-2">
                                                                     <Zap className="w-3.5 h-3.5 text-[#f0b90b]" />
                                                                     <span className="text-[var(--text-dim)] font-black text-[9px] uppercase tracking-widest">MAÇIN KIRILMA ANI</span>
                                                                 </div>
-                                                                <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic border-l border-[var(--border-subtle)]" style={{ paddingLeft: '22px', marginLeft: '6px' }}>{analysis.breakingPoint}</p>
+                                                                <p className="text-[var(--text-secondary)] text-[12px] md:text-[13px] leading-relaxed italic border-l border-[var(--border-subtle)]" style={{ paddingLeft: '20px', marginLeft: '6px' }}>{analysis.breakingPoint}</p>
                                                             </div>
 
-                                                            <div className="space-y-2">
+                                                            <div className="space-y-1.5">
                                                                 <div className="flex items-center gap-2">
                                                                     <Target className="w-3.5 h-3.5 text-[#f0b90b]" />
                                                                     <span className="text-[var(--text-dim)] font-black text-[9px] uppercase tracking-widest">BAHİS SENARYOSU</span>
                                                                 </div>
                                                                 {isLoggedIn ? (
-                                                                    <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic pl-5.5 border-l border-[var(--border-subtle)] ml-1.5">{analysis.bettingScenario}</p>
+                                                                    <p className="text-[var(--text-secondary)] text-[12px] md:text-[13px] leading-relaxed italic pl-5 border-l border-[var(--border-subtle)] ml-1.5">{analysis.bettingScenario}</p>
                                                                 ) : (
                                                                     <div className="relative">
                                                                         <p className="text-[var(--text-secondary)] text-[13px] leading-relaxed italic pl-5.5 border-l border-[var(--border-subtle)] ml-1.5" style={{ filter: 'blur(5px)', userSelect: 'none' }}>{analysis.bettingScenario}</p>
@@ -441,7 +447,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                             </div>
                                                         </div>
 
-                                                        <p className="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-tight pt-4">⏳ Oranlar maç saatine kadar değişebilir.</p>
+                                                        <p className="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-tight pt-2">⏳ Oranlar maç saatine kadar değişebilir.</p>
                                                     </div>
 
                                                     {/* Right: Best Odds (40%) */}
@@ -449,16 +455,16 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                     <div className="lg:col-span-4 lg:border-l lg:border-[var(--border-subtle)] lg:pl-8">
                                                         {isLoggedIn ? (
                                                             <>
-                                                                <div className="flex items-center gap-2 mb-6">
+                                                                <div className="flex items-center gap-2 mb-3">
                                                                     <Flame className="w-4 h-4 text-[#f0b90b]" />
                                                                     <h5 className="text-[var(--text-primary)] font-black text-[11px] uppercase tracking-widest italic tracking-tight">EN İYİ ORANLAR</h5>
                                                                 </div>
-                                                                <div className="space-y-3">
+                                                                <div className="space-y-2">
                                                                     {analysis.bookieOdds.map((bookie, bidx) => (
-                                                                        <div key={bidx} className={`p-4 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)] group/odd transition-all hover:border-[#f0b90b]/30 ${bookie.isHighest ? 'ring-1 ring-[#f0b90b]/30 shadow-[0_0_15px_rgba(240,185,11,0.05)]' : ''}`}>
-                                                                            <div className="flex items-center justify-between mb-3">
+                                                                        <div key={bidx} className={`p-3 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)] group/odd transition-all hover:border-[#f0b90b]/30 ${bookie.isHighest ? 'ring-1 ring-[#f0b90b]/30 shadow-[0_0_15px_rgba(240,185,11,0.05)]' : ''}`}>
+                                                                            <div className="flex items-center justify-between mb-2">
                                                                                 <div className="flex items-center gap-2">
-                                                                                    <span className="text-[var(--text-primary)] font-black text-[12px] uppercase">{bookie.name}</span>
+                                                                                    <span className="text-[var(--text-primary)] font-black text-[11px] uppercase">{bookie.name}</span>
                                                                                     {bookie.isHighest && (
                                                                                         <span className="bg-[#f0b90b] text-black text-[7px] font-black px-1.5 py-0.5 rounded animate-pulse">EN YÜKSEK</span>
                                                                                     )}

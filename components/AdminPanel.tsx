@@ -101,6 +101,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: '724BAHİS.NET', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
 
   const [localSiteStatus, setLocalSiteStatus] = useState<SiteStatusConfig>(siteStatusConfig || { isMaintenanceMode: false, maintenanceMessage: 'Sistemlerimizde bakım çalışması var.' });
+  const [localMarquee, setLocalMarquee] = useState<MarqueeConfig>(marqueeConfig || { isActive: true, text: '', speed: 30, color: '#f0b90b', isBold: true });
 
   // Live Odds state
   const [localLiveOdds, setLocalLiveOdds] = useState<LiveOddsConfig>(() => {
@@ -140,6 +141,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [uploadingSlideId, setUploadingSlideId] = useState<string | null>(null);
   const [localAnalyses, setLocalAnalyses] = useState<MatchAnalysis[]>(analyses);
   const [editingAnalysisId, setEditingAnalysisId] = useState<string | null>(null);
+  const [editAnalysisTab, setEditAnalysisTab] = useState<'basic' | 'details' | 'stats'>('basic');
 
   const [localCoupons, setLocalCoupons] = useState<Coupon[]>(coupons);
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
@@ -184,11 +186,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     });
 
     // Join with the user's suggested manual keyword separator for the premium logo
-    const result = processedItems.join('. 724bahis.net. ');
+    const result = processedItems.join('. 724BAHİS.NET. ');
     
-    if (marqueeConfig && onSaveMarqueeConfig) {
-      onSaveMarqueeConfig({ ...marqueeConfig, text: result + '. 724bahis.net' });
-    }
+    setLocalMarquee({ ...localMarquee, text: result + '. 724BAHİS.NET' });
     
     setShowAiMarqueeParser(false);
     setAiMarqueeRawText('');
@@ -401,6 +401,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   }, [popularBetsConfig]);
 
   useEffect(() => {
+    if (marqueeConfig) setLocalMarquee(marqueeConfig);
+  }, [marqueeConfig]);
+
+  useEffect(() => {
     if (newsSliderConfig) setLocalNewsSliderConfig(newsSliderConfig);
   }, [newsSliderConfig]);
 
@@ -431,15 +435,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     onSaveAnalyses(localAnalyses);
     onSaveCoupons(localCoupons);
     onSaveWheelConfig(localWheelConfig);
-    if (onSaveWelcomePopupConfig) {
-      onSaveWelcomePopupConfig(localWelcomePopup);
-    }
-    if (onSaveSiteStatusConfig) {
-      onSaveSiteStatusConfig(localSiteStatus);
-    }
-    if (onSaveRaffleConfig) {
-      onSaveRaffleConfig(localRaffleConfig);
-    }
+
+    if (onSaveBjConfig) onSaveBjConfig(localBjConfig);
+    if (onSaveLoyaltyConfig) onSaveLoyaltyConfig(localLoyaltyConfig);
+    if (onSaveWelcomePopupConfig) onSaveWelcomePopupConfig(localWelcomePopup);
+    if (onSaveSiteStatusConfig) onSaveSiteStatusConfig(localSiteStatus);
+    if (onSaveRaffleConfig) onSaveRaffleConfig(localRaffleConfig);
+    if (onSaveMarqueeConfig) onSaveMarqueeConfig(localMarquee);
+    if (onSaveLiveOddsConfig) onSaveLiveOddsConfig(localLiveOdds);
+    if (onSaveHeroSliderConfig) onSaveHeroSliderConfig(localHeroSlider);
+    if (onSaveDailyKuponConfig) onSaveDailyKuponConfig(localDailyKupon);
+    if (onSavePopularBetsConfig) onSavePopularBetsConfig(localPopularBetsConfig);
+    if (onSaveNewsSliderConfig) onSaveNewsSliderConfig(localNewsSliderConfig);
+    if (onSaveTvConfig) onSaveTvConfig(localTvConfig);
 
     alert('Tüm sistem değişiklikleri kaydedildi!');
   };
@@ -447,356 +455,49 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const handleAiParse = () => {
     if (!aiInput.trim()) return;
 
-    const lines = aiInput.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-    const newAnalyses: MatchAnalysis[] = [];
-    let baseTime = Date.now();
+    try {
+      let jsonStr = aiInput.trim();
+      
+      // Clean up markdown code blocks if the AI returned them
+      if (jsonStr.startsWith('```json')) jsonStr = jsonStr.substring(7);
+      else if (jsonStr.startsWith('```')) jsonStr = jsonStr.substring(3);
+      if (jsonStr.endsWith('```')) jsonStr = jsonStr.substring(0, jsonStr.length - 3);
+      jsonStr = jsonStr.trim();
 
-    let currentDate = new Date().toISOString().split('T')[0];
-    let currentLeague = 'Genel Maçlar';
-
-    // Randomized Templates
-    // Randomized Templates
-    // Football Templates
-    const getTacticalSummaries = (home: string, away: string) => [
-      `${home} son dönemde iç sahada kanatları inanılmaz efektif kullanıyor.${away} ise kontradan vurma peşinde ama defans defoları çok fazla.Orta sahadaki itiş kakış maçın kaderini çizer.`,
-      `Her iki takım da topu ayağında tutmak isteyecek.${home} baskıyla oyunu rakip yarı alana yığmaya çalışırken, ${away} hızlı hücumcularıyla ters köşe arayacak.`,
-      `${home} cephesinde eksiklere rağmen savunma kurgusu beton gibi.${away} bu kilidi açmak için mecburen duran toplara ve uzaktan şutlara bel bağlayacak.`,
-      `Agresif ve kemik seslerinin geleceği bir 90 dakika.${home} erken bir golle işin fişini çekmek niyetindeyken, ${away} otobüsü ceza sahasına çekip direnecek.`,
-      `${away} takımının yumuşak karnı sol beki.${home} burayı işlerse ilk yarıdan maçı koparır.Açık futbol izleyeceğimiz kesin.`,
-      `İki takım da son haftalarda tel tel dökülüyor.Beraberliğin iki tarafa da yaramayacağı bu maçta ${home} taraftar gazıyla bir adım önde.`,
-      `${away} deplasman fobiğini atlatmış değil.${home} ise evinde tam bir canavar.Kanat organizasyonlarıyla rakibi boğmaları an meselesi.`,
-      `${home} orta sahası fizik olarak çok üstün.${away} pas trafiğini kesemezse kalesinde bol pozisyon görür.Tam bir taktik savaşı.`,
-      `Taraf bahsinin rulet olduğu bir maç.${home} iç saha avantajını kullanıp baskılı başlar ama ${away} takımının geçiş oyunları ölümcül olabilir.`,
-      `${away} takımının forvet hattı inanılmaz formsuz, ancak ${home} savunması da evlere şenlik.Hatayı az yapanın kazanacağı, bol git - gelli bir mücadele.`,
-      `${home} şampiyonluk yolunda hata yapmak istemiyor, ${away} ise can havliyle puan peşinde.İnanılmaz tempolu ve bol kartlı bir maç bizi bekliyor.`,
-      `Defansif zafiyetlerin ön planda olacağı bir eşleşme.${home} hücumda üretken, ${away} ise kontra ataklarda zehir gibi.`,
-      `Statik bir oyun beklemek hata olur.${away} hücum presle ${home} savunmasını hataya zorlayacak.Top kayıpları skoru doğrudan etkiler.`,
-      `${home} takımının merkezden delici atakları var, ${away} ise oyunu kanatlara yayarak sete kalkacak.İlk golü atan maçı rölantiye alır.`,
-      `${away} ligin en katı savunmalarından birine sahip.${home} bu kilidi açmak için uzaktan şutlar denemek zorunda kalacak, sabır testi gibi bir maç.`
-    ];
-
-    const getBreakingPoints = (home: string, away: string) => [
-      `Maçın ilk 20 dakikasında ${home} 'in bulacağı bir erken gol, maçın tamamen Üst'e bağlamasına neden olur.Yoksa kısır bir 90 dakika izleriz.`,
-      `${away} takımının ilk devreyi golsüz kapatması halinde 60. dakikadan ev sahibi taraftarın protestosu başlar.Maçın kırılma anı ikinci yarının başı.`,
-      `${home} savunmasının yapacağı basit bir bireysel hata, ${away} forvetlerinin cezalandırabileceği en net fırsat.İlk golü atan maçı rahat götürür.`,
-      `İkinci yarının başındaki 15 dakikalık dilim çok kritik.${home} bu bölümde tribün desteğini arkasına alıp baskıyı inanılmaz artıracak ve kilidi açacaktır.`,
-      `70'ten sonra her iki takımın da pili biter. Maç başa baş giderse son 15 dakikada çıkacak bir kırmızı kart tüm dengeleri alt üst edebilir.`,
-      `Eğer ${home} ilk yarıda skor bulamazsa, ${away} ikinci yarı kontradan fişi çeker. Kırılma anı tamamen ilk yarının bitiş düdüğü.`,
-      `Hakemin düdükleriyle çok duracak bir maç. Çıkacak erken bir sarı kart, stoperlerin agresifliğini bitirir ve maçı gollü bir havaya sokar.`,
-      `Deplasman ekibinin yorgun as oyuncuları 60'tan sonra oyundan düşmeye başlayacak. ${home} bench'ten gelen oyuncularla bu dakikalarda maçı koparır.`,
-      `Duran toplar bu maçın tek kırılma noktası. ${away} kazanacağı bir kornerde kafayı vurup üstüne yatarak kanser bir futbol oynatabilir.`,
-      `Erken gelecek bir penaltı kararı tüm bahisçileri ters köşeye yatırabilir. Oyun çok gergin geçmeye aday.`,
-      `80. dakikadan sonra taktik-maktik kalmaz, bodoslama bir futbol izleriz. Uzatma dakikaları mucizelere gebe.`
-    ];
-
-    const getBettingScenarios = (home: string, away: string) => [
-      `Canlıcılar için 15-30 dakika arası gol opsiyonu çok tatlı. Maç öncesi verilere bakınca "Karşılıklı Gol Var" seçeneği adeta banko bağırıyor.`,
-      `İlk yarıda kör dövüşü izleriz, risk almaktansa takımların dizilişini görüp ikinci yarı taraf bahislerine çökmek çok daha kârlı.`,
-      `Maç boyu bol korner ve kemik sesleri duyacağız. Alternatif bahis arayanlar için sarı kart ve korner üst seçenekleri tam kuponluk.`,
-      `Sürprize inanılmaz açık bir eşleşme. Taraf bahsine bulaşmak yerine 2.5 Alt veya İlk Yarı Alt seçenekleri uykunuzu kaçırmaz, temiz kazanç.`,
-      `İddaa ustaları bilir, bu tarz maçlarda ev sahibi handikapı tatlıdır. Direkt M.S 1 veya oran yükseltmek isteyenlere 1 & 1.5 Üst kombosu banko.`,
-      `Sistem kuponlarında direkt '0' (beraberlik) denenebilecek bir maç. Kimsenin kazanmaya gücü yetmez, puanları bölüşürler.`,
-      `Favori takımın patlama yapacağı bir eşleşme değil. Handikaplı maç sonucu deplesman veya maç sonu 3.5 Alt bahisleri ile kupona sağlam bir temel atılır.`,
-      `Taraf bahsi oynayan yanar. Bu maç tam bir "KG VAR" maçı, iki takımın da defansı evlere şenlik, bol gollü bir şov izleriz.`,
-      `Büyük paralar oynamaktansa, İlk Yarı 1.5 Alt seçeneğine kasa atılıp rahatça arkaya yaslanılacak türden kilitli bir karşılaşma.`,
-      `Sürpriz avcıları için deplasmanın ilk yarıyı önde kapatması mükemmel oran veriyor. İlk Yarı 2 oranı ciddi bir value (değerli oran) barındırıyor.`,
-      `Maç sonu sürpriz çıkma ihtimali çok yüksek, canlıdan izleyip gidişata göre "Sıradaki Golü Kim Atar" kovalayın, taraf bahsinden uzak durun.`
-    ];
-
-    const getAnalyses = (home: string, away: string) => [
-      `${home} - ${away} mücadelesinde istatistikler tam bir gol düellosu vadediyor. Analiz modellerimiz ÜST seçeneğine %90 güven veriyor, kuponlara banko yazılır.`,
-      `${home} ile ${away} arasındaki bu ters eşleşmede taraf analizi zar atmak gibi. Ancak ev sahibi taraftar baskısıyla bir tık önde. Sistemin önerisi sürpriz arayanlara M.S 1.`,
-      `${home} form grafiği olarak zirvede uçuyor, ${away} ise kümeye doğru serbest düşüşte. İbre net bir şekilde ev sahibinin gollü galibiyetinden yana. Acımazlar.`,
-      `${home} ve ${away} maçı tam bir satranç müsabakasına dönecek. Kısır bir döngüde geçecek, izleyenleri uyutacak ama 2.5 Alt oynayanı zengin edecek bir doksan dakika.`,
-      `Bu ligin en dengesiz iki takımı karşı karşıya. ${home} bir gün şov yapıyor, diğer gün dökülüyor. Ancak yapay zeka bu maçta ev sahibinin hata yapmayacağını öngörüyor.`,
-      `Kağıt üstünde ${home} ağır favori dursa da, ${away} tam bir dev avcısı. İddia ediyorum bu maçta handikap aşılmaz, deplasman takımı dişe diş direnir.`,
-      `Deplasman fobisi olan ${away}, bu cehennem deplasmanından çıkamaz. ${home} ilk yarıdan fişi çeker, oran düşükse İlk Yarı 1 seçeneğine yapışın.`,
-      `İki takımın arasındaki son 5 maçın 4'ü beraberlikle bitmiş. Bu gelenek bozulmaz. Yapay zekamız maçın düğümünün çözülemeyeceğini söylüyor, taraf bahsi oynayan ağlar.`,
-      `Bültenin en tatlı maçlarından biri. ${away} hücum oynayacak, ${home} arkada geniş alan bulacak. Mükemmel bir "Karşılıklı Gol Var" maçı. Kasa katlama garantili.`,
-      `Avrupa kupası yorgunu ${home} rotasyona gidecek. Bu durum ${away} için bulunmaz bir nimet. Oranlar ev sahibinden yana olsa da analiz sistemimiz puan kaybı bekliyor.`,
-      `Son dakika sakatlıkları maçın dinamiklerini baştan aşağı değiştirdi. Normalde ${home} favoriydi ama şu an maç tamamen ortada. Gollere yönelmek en iyisi.`
-    ];
-
-    // Basketball / NBA Templates
-    const getNbaTacticalSummaries = (home: string, away: string) => [
-      `${home} pota altında resmen krallığını ilan etmiş durumda. ${away} ise dış atışlarla ve "koş-ve-at" temposuyla bu kilidi açmaya çalışacak. Tempo atışları belirleyici olur.`,
-      `${home} set hücumlarında topu iğne deliğinden geçirip boş şutörlerini buluyor. ${away} adam değişmeli savunmada hata yaparsa maça erken havlu atar.`,
-      `${home} ilk çeyreklerde genellikle rakibi tartarak, tabiri caizse el freni çekik başlıyor, ${away} ise agresif bir 3 sayı yüzdesiyle şok etkisi yaratma peşinde.`,
-      `Parkede temponun tavan yapacağı bir gece bekliyoruz. ${home} geçiş hücumlarında durdurulamaz bir makine, ${away} ise yarı sahada çok daha pasif ve akılcı oynuyor.`,
-      `${away} takımının bench katkısı bu sezon felaket. İlk beşler dengede dursa da ikinci çeyrekte ${home} rotasyonu girince farkı açarak şov yapacaklardır.`,
-      `Bu maç tam bir spacing (alan paylaşımı) dersi olacak. ${home} dışarı yayılarak eşleşme problemi yaratırken, ${away} tamamen birebir izolasyonlarla skor üretecek.`,
-      `${home} savunmada inanılmaz adam değişiyor ve kısa takımları çok eziyor. ${away} forvetlerinin şut yüzdesi maçın tüm hikayesini belirler.`,
-      `Top kayıplarının çok can yakacağı bir maç. ${home} hızlı hücumlara çıkma konusunda uzman, ${away} top değerini bilmezse ilk devreden fark 20'lere dayanır.`,
-      `Temponun bilerek düşürüleceği, pivotların bol bol itiş kakış yaşayacağı bir Avrupa ekolü maçı. Dış atıştan çok boyalı alan dominasyonu skor tabelasına yansıyacak.`
-    ];
-
-    const getNbaBreakingPoints = (home: string, away: string) => [
-      `Maçın 3. çeyreğinde ${home} takımının ateş alıp çıkaracağı 10-0'lık bir seri maçın tamamen kopmasını sağlar. Molalardan sonraki dönüşler hayati.`,
-      `${away} takımının yıldız oyuncularından birinin erken 3 veya 4 faul alıp kenara gelmesi, tüm rotasyon dengesini alt üst eder. Boyalı alan savaşları maçın kilidi.`,
-      `Son periyoda başa baş girilirse ${home} seyirci gazıyla ve hakem toleransıyla faul çizgisine çok daha rahat gidecektir. Kritik anlardaki serbest atış yüzdesi her şeyi belirler.`,
-      `İkinci çeyrekteki yedek oyuncuların, nam-ı diğer bench'in, sahada kalacağı 6-7 dakikalık bölüm farkın dramatik şekilde açılacağı asıl kırılma noktası olacak.`,
-      `İlk çeyrekte tutmayan üçlükler, takımları pota altına itecek. Eğer ${away} dış atışlarda %30'un altında kalırsa maça daha fazla tutunamaz.`,
-      `Maçın son 3 dakikası tam bir Taktik Faul savaşına dönecek. Süre yönetimi ve koç hamleleri bu maçta oyuncu performansından daha kritik bir kırılma yaratacak.`
-    ];
-
-    const getNbaBettingScenarios = (home: string, away: string) => [
-      `Bu eşleşmede takımların hücum ratingleri atmosferin ötesinde. Maç sonu Uzatmalar Dahil Üst (Over) seçeneği kuponlara tereddütsüz yazılır.`,
-      `Canlı bahisçiler için ilk periyot Ev Sahibi Handikap bahisleri baldan tatlı. Ev sahibi seyircisiyle maça fırtına gibi girip rakibi serseme çevirir.`,
-      `Taraf bahsinden ziyade oyuncu statlarına (Özel Etkinlikler) yönelmek en akılcısı; özellikle ribaunt ve skor barajları bu maçta çok rahat aşılır.`,
-      `Başa baş, dişe diş geçmesi beklenen, son topa kalacak bir maç. Deplasman takımının Handikaplı M.S 2 seçeneği, güvenle değerlendirilebilir, yanılmaz.`,
-      `Handikapların çok yüksek açıldığı bir eşleşme. Favori takım kazanır ama o handikapı aşmak için efor sarf etmez. Handikaplı alt seçenekleri çok cazip.`,
-      `Gecenin bankolarından biri. Ev sahibi handikapı aşarak güle oynaya kazanır. M.S 1 veya Ev Sahibi Takım Sayı Üst bahsi şaşmaz.`,
-      `Günün sürprizi bu maçtan çıkabilir. ${away} son maçlarda gösterdiği reaksiyonla bu yüksek handikapları kolay lokma yapmaz, Deplasman lehine risk alınabilir.`
-    ];
-
-    const getNbaAnalyses = (home: string, away: string) => [
-      `${home} - ${away} mücadelesi parkelerde alev alev bir hücum basketbolu vadediyor. Analiz modellerimiz Üst seçeneğine tartışmasız banko güveni veriyor.`,
-      `${home} ile ${away} arasındaki bu kritik randevuda kazananı kestirmek güç. Ancak ev sahibi taraftar gücüyle bir tık daha şanslı. Yapay zeka, sert savunmalar nedeniyle Alt çıkacağını öngörüyor.`,
-      `${home} inanılmaz bir form grafiği yakaladı, kadroları çok derin. ${away} ise yorgun ve eksik. İbre net bir şekilde ev sahibinin rahat bir galibiyet alıp handikapı darmadağın etmesinden yana.`,
-      `${home} ve ${away} kapışması tam bir koç satrancına dönüşecek. Yarı saha setleri, saniyeleri sonuna kadar kullanan hücumlar yüzünden düşük skorlu, alt kokan bir maç bizleri bekliyor.`,
-      `Ligin iki dinamik ekibi karşı karşıya. ${away} koşmayı seviyor, ${home} ise durdurmayı. Hızlarını kesemezlerse ev sahibi farklı mağlup olur, sürpriz arayanlar için muazzam oran.`,
-      `Bu karşılaşma tamamen ribauntların belirleyeceği bir kavga olacak. Topu alan hızlı çıkacak. Modelimiz, verilen handikaba rağmen maçın sürpriz bir şekilde uzatmalara bile gidebileceğini işaret ediyor.`
-    ];
-
-    for (let i = 0; i < lines.length; i++) {
-      const text = lines[i];
-
-      // 1. Check for Dates (e.g. "🗓 28 Şubat 2026", "28.02.2026")
-      const monthRegex = /(Ocak|Şubat|Mart|Nisan|Mayıs|Haziran|Temmuz|Ağustos|Eylül|Ekim|Kasım|Aralık)/i;
-      if (text.includes('🗓') || monthRegex.test(text)) {
-        const dMatch = text.match(/\d{1,2}/);
-        const yMatch = text.match(/\d{4}/);
-        if (dMatch && yMatch) {
-          let m = "01";
-          let lowerTxt = text.toLowerCase();
-          if (lowerTxt.includes('şubat')) m = "02";
-          else if (lowerTxt.includes('mart')) m = "03";
-          else if (lowerTxt.includes('nisan')) m = "04";
-          else if (lowerTxt.includes('mayıs')) m = "05";
-          else if (lowerTxt.includes('haziran')) m = "06";
-          else if (lowerTxt.includes('temmuz')) m = "07";
-          else if (lowerTxt.includes('ağustos')) m = "08";
-          else if (lowerTxt.includes('eylül')) m = "09";
-          else if (lowerTxt.includes('ekim')) m = "10";
-          else if (lowerTxt.includes('kasım')) m = "11";
-          else if (lowerTxt.includes('aralık')) m = "12";
-
-          currentDate = `${yMatch[0]}-${m}-${dMatch[0].padStart(2, '0')}`;
-        }
-        continue;
-      }
-
-      // 2. Check for League Header
-      if (!text.includes('vs') && !text.includes('-') && !text.match(/\d{2}:\d{2}/) && (text.endsWith(':') || text.includes('League') || text.includes('Liga') || text.includes('Lig'))) {
-        let cleanLeague = text.replace(':', '').replace(/[\(].*?[\)]/g, '').replace('🔹', '').trim();
-        if (cleanLeague.length > 3) {
-          currentLeague = cleanLeague;
-        }
-        continue;
-      }
-
-      let homeTeam = '';
-      let awayTeam = '';
-      let time = '';
-      let matchDate = currentDate;
-      let isNbaFormat = false;
-
-      // 3. Check for NBA 4-Line Format (Team -> Team -> Day -> Time AM/PM)
-      if (i + 3 < lines.length) {
-        const line2 = lines[i + 1];
-        const line3 = lines[i + 2];
-        const line4 = lines[i + 3];
-
-        const isDayName = /Pazartesi|Salı|Çarşamba|Perşembe|Cuma|Cumartesi|Pazar|Bugün|Yarın/i.test(line3);
-        const isAmPmTime = /\d{1,2}:\d{2}\s+(ÖÖ|ÖS|AM|PM)/i.test(line4);
-
-        if (isDayName && isAmPmTime && !text.includes('vs') && !text.includes('-')) {
-          homeTeam = text.trim();
-          awayTeam = line2.trim();
-          isNbaFormat = true;
-
-          // Convert Time to TRT 24H (+8 Hours normally, but we assume the provided list is already in TRT just in AM/PM format)
-          // The user requested: "nba bölümüde yatar saatleri tr saatine göre yaz"
-          // Let's assume the text "1:00 ÖÖ" means 1:00 AM EST. EST to TRT is +8 hours -> 09:00.
-          // Wait, "1:00 ÖÖ" is 1 AM. Games are played at 8 PM EST -> 3 AM TRT.
-          // TRT is +8 from EST. 
-          // If the copy-paste is from Google in TR language, "1:00 ÖÖ" means 01:00 AM TRT natively. 
-          // Just converting 12h to 24h is usually sufficient because Google localization changes it to TRT already.
-          // User: "nba bölümüde yatar saatleri tr saatine göre yaz" implies it might currently be US time, OR it just lacks AM/PM cleanly. 
-          // Let's extract the numbers and apply +8 to be safe, because 1:00 AM EST + 8 = 9:00 AM TRT. But no NBA game plays at 1 AM EST. 
-          // Actually, 8 PM EST = "8:00 ÖS". +8 hrs = 4:00 AM next day. 
-          // However, if the text SAYS "Yarın 1:00 ÖÖ", it ALREADY MEANS 1 AM TRT (which is 6 PM EST, a bit early but possible).
-          // Let's strictly 12h-to-24h format it first.
-          let [timeStr, modifier] = line4.split(/\s+/);
-          let [hoursStr, minutesStr] = timeStr.split(':');
-          let hours = parseInt(hoursStr, 10);
-
-          if (modifier.toUpperCase() === 'ÖS' || modifier.toUpperCase() === 'PM') {
-            if (hours < 12) hours += 12;
-          } else if (modifier.toUpperCase() === 'ÖÖ' || modifier.toUpperCase() === 'AM') {
-            if (hours === 12) hours = 0;
-          }
-
-          time = `${hours.toString().padStart(2, '0')}:${minutesStr}`;
-
-          // Fast-forward loop index
-          i += 3;
-        }
-      }
-
-      // 4. Compact Inline Format (e.g. "28 Şubat 13:30 Kasımpaşa - Çaykur Rizespor")
-      const compactMatch = text.match(/(Ocak|Şubat|Mart|Nisan|Mayıs|Haziran|Temmuz|Ağustos|Eylül|Ekim|Kasım|Aralık)\s+(\d{1,2}:\d{2})\s+([A-ZÇĞİÖŞÜa-zçğıöşü\s.&]+)\s*(?:-)\s*([A-ZÇĞİÖŞÜa-zçğıöşü\s.&]+)/i) ||
-        text.match(/(\d{1,2}\s+(?:Ocak|Şubat|Mart|Nisan|Mayıs|Haziran|Temmuz|Ağustos|Eylül|Ekim|Kasım|Aralık))\s+(\d{1,2}:\d{2})\s+([A-ZÇĞİÖŞÜa-zçğıöşü\s.&]+)\s*(?:-)\s*([A-ZÇĞİÖŞÜa-zçğıöşü\s.&]+)/i);
-
-      if (!isNbaFormat && compactMatch) {
-        // compactMatch[1] = Date string (ignored here as we rely on line-by-line date setting above, or we could parse it, but let's just use it to match)
-        // compactMatch[2] = Time
-        // compactMatch[3] = Home
-        // compactMatch[4] = Away
-        time = compactMatch[2].trim();
-        homeTeam = compactMatch[3].trim().toUpperCase();
-        awayTeam = compactMatch[4].trim().toUpperCase();
-      } else if (!isNbaFormat) {
-        const teamMatch = text.match(/([A-ZÇĞİÖŞÜa-zçğıöşü\s.&]{2,})\s*(?:vs|[-–])\s*([A-ZÇĞİÖŞÜa-zçğıöşü\s.&]{2,})/);
-        if (!teamMatch) continue;
-
-        homeTeam = teamMatch[1].replace('🔹', '').trim().toUpperCase();
-        awayTeam = teamMatch[2].replace('🔹', '').trim().toUpperCase();
-        awayTeam = awayTeam.replace(/\s+[-–].*$/, '').trim();
-
-        if (!homeTeam || !awayTeam) continue;
-
-        const timeMatch = text.match(/([012]?\d:[0-5]\d)/);
-        time = timeMatch?.[1] || '20:00';
-      }
-
-      const isBasketball = adminSport === 'Basketbol' || isNbaFormat || currentLeague.toLowerCase().includes('nba') || currentLeague.toLowerCase().includes('basket') || currentLeague.toLowerCase().includes('euroleague');
-
-      let finalLeague = isNbaFormat ? 'NBA' : currentLeague;
-      if (isBasketball && !finalLeague.toLowerCase().includes('nba') && !finalLeague.toLowerCase().includes('basket') && !finalLeague.toLowerCase().includes('euroleague')) {
-        finalLeague = `${finalLeague} (Basketbol)`;
-      }
-
-      // ---------- PSEUDO-INTELLIGENT PREDICTION LOGIC ----------
-      const hashString = (str: string) => {
-        let hash = 0;
-        for (let j = 0; j < str.length; j++) {
-          hash = ((hash << 5) - hash) + str.charCodeAt(j);
-          hash |= 0;
-        }
-        return Math.abs(hash);
-      };
-
-      const homeStrength = (hashString(homeTeam) % 60) + 40; // 40-99
-      const awayStrength = (hashString(awayTeam) % 60) + 40; // 40-99
-      const strengthDiff = homeStrength - awayStrength;
-
-      let prediction = '';
-      let odd1 = '';
-      let odd2 = '';
-      let confidence = 0;
-      let scenarioIndex = 0; // 0: Match winner, 1: Tight match
-
-      if (isBasketball) {
-        if (strengthDiff > 15) {
-          prediction = 'M.S 1 Ev Sahibi Handikap';
-          odd1 = (1.55 + (hashString(homeTeam) % 30) / 100).toFixed(2);
-          odd2 = (1.60 + (hashString(awayTeam) % 30) / 100).toFixed(2);
-          confidence = 88 + (hashString(homeTeam) % 10);
-          scenarioIndex = 1;
-        } else if (strengthDiff < -15) {
-          prediction = 'Deplasman Handikap';
-          odd1 = (1.65 + (hashString(awayTeam) % 30) / 100).toFixed(2);
-          odd2 = (1.50 + (hashString(homeTeam) % 30) / 100).toFixed(2);
-          confidence = 85 + (hashString(awayTeam) % 10);
-          scenarioIndex = 1;
-        } else {
-          prediction = hashString(homeTeam + awayTeam) % 2 === 0 ? 'Uzatmalar Dahil Üst' : 'Uzatmalar Dahil Alt';
-          odd1 = (1.80 + (hashString(homeTeam) % 15) / 100).toFixed(2);
-          odd2 = (1.80 + (hashString(awayTeam) % 15) / 100).toFixed(2);
-          confidence = 75 + (hashString(homeTeam) % 12);
-          scenarioIndex = 0;
-        }
-      } else {
-        if (strengthDiff > 15) {
-          const opts = ['M.S 1', 'M.S 1 & 1.5 ÜST', 'Ev Sahibi 1.5 ÜST'];
-          prediction = opts[hashString(homeTeam) % opts.length];
-          odd1 = (1.25 + (hashString(homeTeam) % 30) / 100).toFixed(2);
-          odd2 = (1.35 + (hashString(awayTeam) % 30) / 100).toFixed(2);
-          confidence = 88 + (hashString(homeTeam) % 11);
-          scenarioIndex = 1;
-        } else if (strengthDiff < -15) {
-          const opts = ['M.S 2', 'M.S 2 & 1.5 ÜST', 'Deplasman 1.5 ÜST'];
-          prediction = opts[hashString(awayTeam) % opts.length];
-          odd1 = (1.30 + (hashString(homeTeam) % 30) / 100).toFixed(2);
-          odd2 = (1.25 + (hashString(awayTeam) % 30) / 100).toFixed(2);
-          confidence = 85 + (hashString(awayTeam) % 12);
-          scenarioIndex = 1;
-        } else {
-          const opts = ['KG VAR', '2.5 ÜST', 'İlk Yarı 0.5 ÜST'];
-          prediction = opts[hashString(homeTeam + awayTeam) % opts.length];
-          odd1 = (1.65 + (hashString(homeTeam) % 30) / 100).toFixed(2);
-          odd2 = (1.70 + (hashString(awayTeam) % 30) / 100).toFixed(2);
-          confidence = 75 + (hashString(homeTeam) % 10);
-          scenarioIndex = 0;
-        }
-      }
-
-      const tSummaries = isBasketball ? getNbaTacticalSummaries(homeTeam, awayTeam) : getTacticalSummaries(homeTeam, awayTeam);
-      const bPoints = isBasketball ? getNbaBreakingPoints(homeTeam, awayTeam) : getBreakingPoints(homeTeam, awayTeam);
-      const bScenarios = isBasketball ? getNbaBettingScenarios(homeTeam, awayTeam) : getBettingScenarios(homeTeam, awayTeam);
-      const aList = isBasketball ? getNbaAnalyses(homeTeam, awayTeam) : getAnalyses(homeTeam, awayTeam);
-
-      // Seeded PRNG selection combining Team Hashes and loop index (i) to guarantee absolute uniqueness across all generated batches
-      const pickText = (arr: string[], salt: number) => {
-        const uniqueSeed = (scenarioIndex * 7) + (hashString(homeTeam) * 3) + (hashString(awayTeam) * 11) + (i * 13) + salt;
-        return arr[uniqueSeed % arr.length];
-      };
-
-      const newAnalysis: MatchAnalysis = {
-        id: (baseTime + i).toString(),
-        league: finalLeague,
-        homeTeam,
-        awayTeam,
-        matchTime: time,
-        matchDate: matchDate,
-        analysis: pickText(aList, 1),
-        tacticalSummary: pickText(tSummaries, 2),
-        breakingPoint: pickText(bPoints, 3),
-        bettingScenario: pickText(bScenarios, 4),
-        prediction,
-        confidence,
-        modelScore: confidence + (hashString(homeTeam) % 5),
-        recentHistory: `${5 + (hashString(homeTeam) % 4)} Kazanç, ${(hashString(awayTeam) % 3)} Kayıp`,
-        expectedGoals: (1.5 + (hashString(homeTeam) % 20) / 10).toFixed(1), // 1.5 to 3.4
-
-        bookieOdds: [
-          { name: '724BAHİS.NET', odd1: (1.45 + Math.random() * 0.4).toFixed(2), odd2: (1.50 + Math.random() * 0.4).toFixed(2), link: 'https://' },
-          { name: 'BETKOM', odd1: (1.42 + Math.random() * 0.4).toFixed(2), odd2: (1.48 + Math.random() * 0.4).toFixed(2), link: 'https://' },
-          { name: 'MARSBAHİS', odd1: (1.48 + Math.random() * 0.4).toFixed(2), odd2: (1.55 + Math.random() * 0.4).toFixed(2), link: 'https://', isHighest: true }
+      const parsedData = JSON.parse(jsonStr);
+      
+      const newAnalyses = (Array.isArray(parsedData) ? parsedData : [parsedData]).map((item: any) => ({
+        id: Date.now().toString() + Math.random().toString(36).substring(7),
+        league: item.league || 'Genel Maçlar',
+        homeTeam: item.homeTeam || 'Ev Sahibi',
+        awayTeam: item.awayTeam || 'Deplasman',
+        matchTime: item.matchTime || '20:00',
+        matchDate: item.matchDate || new Date().toISOString().split('T')[0],
+        analysis: item.analysis || '',
+        tacticalSummary: item.tacticalSummary || '',
+        breakingPoint: item.breakingPoint || '',
+        bettingScenario: item.bettingScenario || '',
+        prediction: item.prediction || '',
+        confidence: Number(item.confidence) || 85,
+        modelScore: Number(item.modelScore) || 90,
+        recentHistory: item.recentHistory || '8 Kazanç',
+        expectedGoals: item.expectedGoals || '3.1',
+        bookieOdds: item.bookieOdds || [
+          { name: '724BAHİS.NET', odd1: '1.70', odd2: '1.80', link: 'https://', isHighest: true },
+          { name: 'BETKOM', odd1: '1.65', odd2: '1.75', link: 'https://' }
         ],
-        createdAt: baseTime + i,
-        sport: isBasketball ? 'Basketbol' : 'Futbol',
-        editorId: role
-      };
+        createdAt: Date.now()
+      }));
 
-      newAnalyses.push(newAnalysis);
+      const updated = [...newAnalyses, ...localAnalyses];
+      setLocalAnalyses(updated);
+      onSaveAnalyses(updated);
+      setAiInput('');
+      setShowAiModal(false);
+      alert(`${newAnalyses.length} adet analiz başarıyla sisteme eklendi!`);
+    } catch (err) {
+      alert("HATA: Girdiğiniz metin geçerli bir JSON formatında değil. Lütfen AI'den gelen JSON verisini eksiksiz kopyaladığınızdan emin olun.");
     }
-
-    if (newAnalyses.length > 0) {
-      const updatedAnalyses = [...newAnalyses, ...localAnalyses];
-      setLocalAnalyses(updatedAnalyses);
-      onSaveAnalyses(updatedAnalyses);
-      if (newAnalyses.length === 1) {
-        setEditingAnalysisId(newAnalyses[0].id);
-      }
-      alert(`${newAnalyses.length} maç için AI analizi başarıyla üretildi!`);
-    } else {
-      alert('Girilen metinde geçerli bir maç bulunamadı. Lütfen formata uygun girdiğinizden emin olun.');
-    }
-
-    setShowAiModal(false);
-    setAiInput('');
   };
 
   const handleCouponAiParse = () => {
@@ -1747,10 +1448,35 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </button>
                 <button
                   onClick={() => setShowLiveOddsBulkModal(true)}
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-black px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all text-xs"
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-black px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all text-xs mr-4"
                 >
                   <Layers className="w-4 h-4" /> TOPLU MAÇ EKLE
                 </button>
+
+                <div className="flex flex-col gap-1.5 min-w-[140px] px-4 py-2 bg-black/40 rounded-2xl border border-zinc-800">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Kayan Hız</span>
+                    <span className="text-[10px] font-black text-green-400">{localLiveOdds.speed || 6}s</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="60"
+                    step="0.5"
+                    value={localLiveOdds.speed || 6}
+                    onChange={(e) => {
+                      const speed = parseFloat(e.target.value);
+                      const u = { ...localLiveOdds, speed };
+                      setLocalLiveOdds(u);
+                      onSaveLiveOddsConfig?.(u);
+                    }}
+                    className="w-full accent-green-500 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[8px] text-zinc-600 font-bold uppercase">
+                    <span>Hızlı</span>
+                    <span>Yavaş</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -2511,31 +2237,31 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                       const renderMatchRow = (analysis: MatchAnalysis) => (
                         <div key={analysis.id} className="group relative">
-                          <div className="bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-md p-6 rounded-[28px] flex flex-col md:flex-row items-center md:items-center justify-between gap-6 transition-all duration-500 hover:border-[#f0b90b]/40 hover:bg-zinc-900/80 hover:-translate-y-1 shadow-2xl shadow-black/40">
-                            <div className="flex items-center gap-6 flex-1 min-w-0 w-full">
-                              <div className={`shrink-0 w-16 h-16 bg-black rounded-3xl flex items-center justify-center border border-zinc-800/80 transition-all duration-500 group-hover:border-[#f0b90b]/30 group-hover:shadow-[0_0_20px_rgba(240,185,11,0.2)]`}>
-                                <TrendingUp className={`w-7 h-7 ${currentConfig.colorClassName}`} />
+                          <div className="bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-md p-3 md:p-4 rounded-2xl flex flex-col md:flex-row items-center md:items-center justify-between gap-4 transition-all duration-500 hover:border-[#f0b90b]/40 hover:bg-zinc-900/80 hover:-translate-y-1 shadow-2xl shadow-black/40">
+                            <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
+                              <div className={`shrink-0 w-10 h-10 bg-black rounded-xl flex items-center justify-center border border-zinc-800/80 transition-all duration-500 group-hover:border-[#f0b90b]/30 group-hover:shadow-[0_0_20px_rgba(240,185,11,0.2)]`}>
+                                <TrendingUp className={`w-5 h-5 ${currentConfig.colorClassName}`} />
                               </div>
                               
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-3 mb-1.5 flex-wrap">
-                                  <div className="px-2 py-0.5 bg-zinc-800/80 rounded-md border border-zinc-700/50">
-                                    <span className={`text-[9px] font-black tracking-widest uppercase ${currentConfig.colorClassName}`}>{analysis.matchTime}</span>
+                                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                  <div className="px-1.5 py-0.5 bg-zinc-800/80 rounded border border-zinc-700/50">
+                                    <span className={`text-[8px] font-black tracking-widest uppercase ${currentConfig.colorClassName}`}>{analysis.matchTime}</span>
                                   </div>
-                                  <div className="px-2 py-0.5 bg-zinc-800/80 rounded-md border border-zinc-700/50 flex items-center gap-1.5">
+                                  <div className="px-1.5 py-0.5 bg-zinc-800/80 rounded border border-zinc-700/50 flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                                    <span className="text-[9px] font-black tracking-widest text-emerald-400 uppercase">YAYINDA</span>
+                                    <span className="text-[8px] font-black tracking-widest text-emerald-400 uppercase">YAYINDA</span>
                                   </div>
                                 </div>
-                                <h4 className="text-base font-black text-white group-hover:text-[#f0b90b] transition-colors truncate uppercase italic tracking-tight">
+                                <h4 className="text-sm md:text-base font-black text-white group-hover:text-[#f0b90b] transition-colors truncate uppercase italic tracking-tight">
                                   {analysis.homeTeam} - {analysis.awayTeam}
                                 </h4>
                               </div>
                             </div>
                             
-                            <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t border-zinc-800/50 md:border-0 shrink-0">
-                              <button onClick={() => { setEditingAnalysisId(analysis.id); window.scrollTo({ top: 300, behavior: 'smooth' }); }} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/50 text-white font-black text-[10px] uppercase tracking-widest hover:bg-[#f0b90b] hover:text-black hover:border-[#f0b90b] transition-all">
-                                <Edit3 className="w-4 h-4" /> DÜZENLE
+                            <div className="flex items-center gap-3 w-full md:w-auto mt-3 md:mt-0 pt-3 md:pt-0 border-t border-zinc-800/50 md:border-0 shrink-0">
+                              <button onClick={() => { setEditingAnalysisId(analysis.id); window.scrollTo({ top: 300, behavior: 'smooth' }); }} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-800/80 border border-zinc-700/50 text-white font-black text-[9px] uppercase tracking-widest hover:bg-[#f0b90b] hover:text-black hover:border-[#f0b90b] transition-all">
+                                <Edit3 className="w-3.5 h-3.5" /> DÜZENLE
                               </button>
                               <button onClick={() => {
                                   if (window.confirm('Bu analizi silmek istediğinize emin misiniz?')) {
@@ -2543,8 +2269,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                     setLocalAnalyses(updated);
                                     onSaveAnalyses(updated);
                                   }
-                                }} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 font-black text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all group/btn">
-                                <Trash2 className="w-4 h-4 group-hover/btn:scale-110 transition-transform" /> SİL
+                                }} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 font-black text-[9px] uppercase tracking-widest hover:bg-red-50 hover:text-white transition-all group/btn">
+                                <Trash2 className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" /> SİL
                               </button>
                             </div>
                           </div>
@@ -2554,27 +2280,27 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       return (
                         <>
                           {Object.keys(filteredGroups).length > 0 && (
-                            <div className="space-y-10 animate-fade-in">
-                              <div className="flex items-center gap-4 border-b border-zinc-800/50 pb-6">
-                                <div className={`w-12 h-12 ${currentConfig.bgClassName} border rounded-2xl flex items-center justify-center`}>
-                                  <span className="text-2xl">{currentConfig.icon}</span>
+                            <div className="space-y-6 animate-fade-in">
+                              <div className="flex items-center gap-3 border-b border-zinc-800/50 pb-3">
+                                <div className={`w-8 h-8 ${currentConfig.bgClassName} border rounded-xl flex items-center justify-center`}>
+                                  <span className="text-xl">{currentConfig.icon}</span>
                                 </div>
                                 <div>
-                                  <h2 className="text-xl font-black text-white uppercase tracking-wider">{adminSport} Analizleri</h2>
-                                  <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mt-1">Toplam {Object.values(filteredGroups).flat().length} Aktif Yayın</p>
+                                  <h2 className="text-lg font-black text-white uppercase tracking-wider">{adminSport} Analizleri</h2>
+                                  <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-0.5">Toplam {Object.values(filteredGroups).flat().length} Aktif Yayın</p>
                                 </div>
                               </div>
 
                               {Object.entries(filteredGroups).map(([league, items]) => (
-                                <div key={league} className="space-y-4">
-                                  <div className="flex items-start justify-between px-2 gap-4 group-header pt-4">
-                                    <h3 className={`text-[12px] md:text-[14px] font-black ${currentConfig.colorClassName} uppercase tracking-[0.2em] flex items-start gap-4 flex-1 min-w-0 leading-relaxed`}>
-                                      <div className={`w-1.5 h-5 ${currentConfig.lineBg} shrink-0 rounded-full mt-0.5 shadow-[0_0_10px_currentColor]`} /> 
+                                <div key={league} className="space-y-3">
+                                  <div className="flex items-start justify-between px-2 gap-4 group-header pt-2 pb-1 border-b border-zinc-800/30">
+                                    <h3 className={`text-[11px] md:text-[13px] font-black ${currentConfig.colorClassName} uppercase tracking-[0.2em] flex items-start gap-3 flex-1 min-w-0 leading-relaxed`}>
+                                      <div className={`w-1 h-4 ${currentConfig.lineBg} shrink-0 rounded-full shadow-[0_0_10px_currentColor]`} /> 
                                       <span className="break-words">{league}</span>
                                     </h3>
-                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-1">{items.length} YAYIN</span>
+                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-0.5">{items.length} YAYIN</span>
                                   </div>
-                                  <div className="grid grid-cols-1 gap-4">
+                                  <div className="grid grid-cols-1 gap-3">
                                     {items.map(renderMatchRow)}
                                   </div>
                                 </div>
@@ -2630,202 +2356,234 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         </div>
                       </div>
 
-                      <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[40px] space-y-10">
-                        {/* Bölüm 1: Genel Bilgiler */}
-                        <div className="space-y-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-1 h-4 bg-[#f0b90b]"></div>
-                            <h4 className="text-white font-black text-xs uppercase tracking-[0.2em] italic">01. GENEL BİLGİLER</h4>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            <div className="space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><Layout className="w-3 h-3" /> LİG / TURNUVA</label>
-                              <input value={analysis.league} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].league = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none" placeholder="Örn: La Liga" />
-                            </div>
-                            <div className="space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><Calendar className="w-3 h-3" /> MAÇ TARİHİ</label>
-                              <input type="date" value={analysis.matchDate} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].matchDate = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none" />
-                            </div>
-                            <div className="space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><Clock className="w-3 h-3" /> BAŞLANGIÇ SAATİ</label>
-                              <input value={analysis.matchTime} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].matchTime = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none text-white font-bold" placeholder="22:00" />
-                            </div>
-                            <div className="space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><Zap className="w-3 h-3" /> GÜVEN ORANI (%)</label>
-                              <input type="number" value={analysis.confidence} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].confidence = parseInt(e.target.value); setLocalAnalyses(updated);
-                              }} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-[#f0b90b] font-black focus:border-[#f0b90b] transition-all outline-none" />
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                            <div className="space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase italic">EV SAHİBİ</label>
-                              <input value={analysis.homeTeam} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].homeTeam = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-black border border-zinc-800 rounded-xl p-4 text-white font-black uppercase italic text-base focus:border-[#f0b90b] transition-all outline-none" placeholder="REAL MADRID" />
-                            </div>
-                            <div className="space-y-2 relative">
-                              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-4 text-zinc-800 font-bold hidden md:block italic">VS</div>
-                              <label className="text-[9px] font-black text-zinc-500 uppercase italic">DEPLASMAN</label>
-                              <input value={analysis.awayTeam} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].awayTeam = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-black border border-zinc-800 rounded-xl p-4 text-white font-black uppercase italic text-base focus:border-[#f0b90b] transition-all outline-none" placeholder="MANCHESTER CITY" />
-                            </div>
-                            <div className="space-y-2">
-                              <label className="text-[9px] font-black text-[#f0b90b] uppercase italic">NET TAHMİN</label>
-                              <input value={analysis.prediction} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].prediction = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-black border border-[#f0b90b]/30 rounded-xl p-4 text-[#f0b90b] font-black uppercase italic text-base focus:border-[#f0b90b] transition-all outline-none shadow-[0_0_15px_rgba(240,185,11,0.05)]" placeholder="KG VAR / 2.5 ÜST" />
-                            </div>
-                          </div>
+                      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl relative flex flex-col">
+                        {/* Compact Tab Header */}
+                        <div className="flex items-center bg-zinc-800/30 border-b border-zinc-800 p-2 gap-2 overflow-x-auto hide-scrollbar">
+                          <button onClick={() => setEditAnalysisTab('basic')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-xl transition-all flex justify-center ${editAnalysisTab === 'basic' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>1. Temel Bilgiler</button>
+                          <button onClick={() => setEditAnalysisTab('details')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-xl transition-all flex justify-center ${editAnalysisTab === 'details' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>2. Detaylı Analiz</button>
+                          <button onClick={() => setEditAnalysisTab('stats')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-xl transition-all flex justify-center ${editAnalysisTab === 'stats' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>3. Oranlar & İstatistik</button>
                         </div>
 
-                        {/* Bölüm 2: Editör Analizi */}
-                        <div className="space-y-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-1 h-4 bg-[#f0b90b]"></div>
-                            <h4 className="text-white font-black text-xs uppercase tracking-[0.2em] italic">02. EDİTÖR DETAYLI ANALİZİ</h4>
-                          </div>
-
-                          <div className="grid grid-cols-1 gap-6">
-                            <div className="space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><ClipboardList className="w-3 h-3" />📝 ANALİZ METNİ (GENEL)</label>
-                              <textarea value={analysis.analysis} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].analysis = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl p-4 text-sm text-zinc-300 resize-none focus:border-[#f0b90b] transition-all outline-none leading-relaxed italic" placeholder="Genel analiz metni..." />
-                            </div>
-
-                            <div className="space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><Search className="w-3 h-3" />🔎 TAKTİK ÖZET</label>
-                              <textarea value={analysis.tacticalSummary} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].tacticalSummary = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl p-4 text-sm text-zinc-300 resize-none focus:border-[#f0b90b] transition-all outline-none leading-relaxed italic" placeholder="Taktiksel detaylar..." />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <div className="space-y-2">
-                                <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><Zap className="w-3 h-3" />⚡ MAÇIN KIRILMA ANI</label>
-                                <textarea value={analysis.breakingPoint} onChange={(e) => {
-                                  const updated = [...localAnalyses]; updated[idx].breakingPoint = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl p-4 text-sm text-zinc-300 resize-none focus:border-[#f0b90b] transition-all outline-none leading-relaxed italic" placeholder="Kırılma anı senaryosu..." />
-                              </div>
-                              <div className="space-y-2">
-                                <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><Target className="w-3 h-3" />🎯 BAHİS SENARYOSU</label>
-                                <textarea value={analysis.bettingScenario} onChange={(e) => {
-                                  const updated = [...localAnalyses]; updated[idx].bettingScenario = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl p-4 text-sm text-zinc-300 resize-none focus:border-[#f0b90b] transition-all outline-none leading-relaxed italic" placeholder="Beklenen bahis akışı..." />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Bölüm 3: Modeller ve Oranlar */}
-                        <div className="space-y-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-1 h-4 bg-[#f0b90b]"></div>
-                            <h4 className="text-white font-black text-xs uppercase tracking-[0.2em] italic">03. İSTATİSTİK & ORANLAR</h4>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div className="p-4 bg-black rounded-2xl border border-zinc-800 space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><TrendingUp className="w-3 h-3 text-[#f0b90b]" /> MODEL SKORU</label>
-                              <div className="flex items-center gap-4">
-                                <input type="number" value={analysis.modelScore} onChange={(e) => {
-                                  const updated = [...localAnalyses]; updated[idx].modelScore = parseInt(e.target.value); setLocalAnalyses(updated);
-                                }} className="w-20 bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white font-black text-lg" />
-                                <div className="flex-1 h-1.5 bg-zinc-900 rounded-full overflow-hidden">
-                                  <div className="h-full bg-[#f0b90b] shadow-[0_0_8px_#f0b90b]" style={{ width: `${analysis.modelScore}%` }} />
+                        {/* Tab Content */}
+                        <div className="p-6 md:p-8 space-y-8">
+                          {editAnalysisTab === 'basic' && (
+                            <div className="space-y-8 animate-fade-in-up">
+                              {/* Grid 1: Basic Math Info */}
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                                <div className="space-y-2">
+                                  <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Layout className="w-3 h-3" /> LİG / TURNUVA</label>
+                                  <input value={analysis.league} onChange={(e) => {
+                                    const updated = [...localAnalyses]; updated[idx].league = e.target.value; setLocalAnalyses(updated);
+                                  }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" placeholder="Örn: La Liga" />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Calendar className="w-3 h-3" /> MAÇ TARİHİ</label>
+                                  <input type="date" value={analysis.matchDate} onChange={(e) => {
+                                    const updated = [...localAnalyses]; updated[idx].matchDate = e.target.value; setLocalAnalyses(updated);
+                                  }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Clock className="w-3 h-3" /> MAÇ SAATİ</label>
+                                  <input value={analysis.matchTime} onChange={(e) => {
+                                    const updated = [...localAnalyses]; updated[idx].matchTime = e.target.value; setLocalAnalyses(updated);
+                                  }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none text-white font-bold" placeholder="22:00" />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Zap className="w-3 h-3" /> GÜVEN ORANI (%)</label>
+                                  <input type="number" value={analysis.confidence} onChange={(e) => {
+                                    const updated = [...localAnalyses]; updated[idx].confidence = parseInt(e.target.value); setLocalAnalyses(updated);
+                                  }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm text-[#f0b90b] font-black focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" />
                                 </div>
                               </div>
-                            </div>
-                            <div className="p-4 bg-black rounded-2xl border border-zinc-800 space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><Trophy className="w-3 h-3 text-[#f0b90b]" /> SON 10 TAHMİN</label>
-                              <input value={analysis.recentHistory} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].recentHistory = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-white font-black text-sm" placeholder="8 Kazanç" />
-                            </div>
-                            <div className="p-4 bg-black rounded-2xl border border-zinc-800 space-y-2">
-                              <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1.5"><AlertCircle className="w-3 h-3 text-[#f0b90b]" /> xG BEKLENTİSİ</label>
-                              <input value={analysis.expectedGoals} onChange={(e) => {
-                                const updated = [...localAnalyses]; updated[idx].expectedGoals = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-white font-black text-lg" placeholder="3.1" />
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {analysis.bookieOdds.map((bookie, bidx) => (
-                              <div key={bidx} className="bg-black border border-zinc-800 p-6 rounded-[25px] space-y-5 relative overflow-hidden group/odd">
-                                {bookie.isHighest && <div className="absolute top-0 right-0 bg-[#f0b90b] text-black text-[7px] font-black px-3 py-1 rounded-bl-lg transform skew-x-12 translate-x-1 uppercase">LİDER</div>}
-
-                                <div className="space-y-1">
-                                  <label className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">SİTE ADI</label>
-                                  <input value={bookie.name} onChange={(e) => {
-                                    const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].name = e.target.value; setLocalAnalyses(updated);
-                                  }} className="w-full bg-transparent border-b border-zinc-800 text-sm font-black text-white pb-2 uppercase focus:border-white transition-all outline-none" placeholder="Site Adı" />
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                  <div className="space-y-1">
-                                    <label className="text-[8px] font-black text-zinc-600 uppercase">KG VAR</label>
-                                    <input value={bookie.odd1} onChange={(e) => {
-                                      const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].odd1 = e.target.value; setLocalAnalyses(updated);
-                                    }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm text-[#f0b90b] font-black text-center" />
+                              
+                              {/* Grid 2: Teams VS Layout */}
+                              <div className="bg-black/40 border border-zinc-800/80 rounded-2xl p-5 md:p-6 shadow-inner">
+                                <div className="flex flex-col md:flex-row items-center gap-6">
+                                  <div className="flex-1 w-full space-y-2">
+                                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest italic md:pl-2">EV SAHİBİ</label>
+                                    <input value={analysis.homeTeam} onChange={(e) => {
+                                      const updated = [...localAnalyses]; updated[idx].homeTeam = e.target.value; setLocalAnalyses(updated);
+                                    }} className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl px-5 py-4 text-white font-black uppercase italic text-base text-center md:text-left focus:bg-black focus:border-[#f0b90b] transition-all outline-none" placeholder="EV SAHİBİ" />
                                   </div>
-                                  <div className="space-y-1">
-                                    <label className="text-[8px] font-black text-zinc-600 uppercase">2.5 ÜST</label>
-                                    <input value={bookie.odd2} onChange={(e) => {
-                                      const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].odd2 = e.target.value; setLocalAnalyses(updated);
-                                    }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm text-[#f0b90b] font-black text-center" />
+                                  <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center font-black text-[12px] text-zinc-400 shrink-0 shadow-inner z-10 border-4 border-zinc-900">VS</div>
+                                  <div className="flex-1 w-full space-y-2">
+                                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest italic text-right block md:pr-2">DEPLASMAN</label>
+                                    <input value={analysis.awayTeam} onChange={(e) => {
+                                      const updated = [...localAnalyses]; updated[idx].awayTeam = e.target.value; setLocalAnalyses(updated);
+                                    }} className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl px-5 py-4 text-white font-black uppercase italic text-base text-center md:text-right focus:bg-black focus:border-[#f0b90b] transition-all outline-none" placeholder="DEPLASMAN" />
                                   </div>
                                 </div>
+                              </div>
 
-                                <div className="space-y-1">
-                                  <label className="text-[8px] font-black text-zinc-600 uppercase">AFFILIATE LİNK</label>
-                                  <input value={bookie.link} onChange={(e) => {
-                                    const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].link = e.target.value; setLocalAnalyses(updated);
-                                  }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-[9px] text-zinc-500 font-mono truncate" placeholder="https://..." />
+                              {/* Prediction */}
+                              <div className="space-y-2">
+                                <label className="text-[9px] font-black text-[#f0b90b] uppercase tracking-widest italic">NET TAHMİN MOTTOSU</label>
+                                <input value={analysis.prediction} onChange={(e) => {
+                                  const updated = [...localAnalyses]; updated[idx].prediction = e.target.value; setLocalAnalyses(updated);
+                                }} className="w-full bg-[#f0b90b]/5 border border-[#f0b90b]/30 rounded-xl px-5 py-4 text-[#f0b90b] font-black uppercase italic text-lg focus:bg-[#f0b90b]/10 focus:border-[#f0b90b] transition-all outline-none shadow-[0_0_15px_rgba(240,185,11,0.05)]" placeholder="Örn: KG VAR / 2.5 ÜST" />
+                              </div>
+                            </div>
+                          )}
+
+                          {editAnalysisTab === 'details' && (
+                            <div className="space-y-6 animate-fade-in-up">
+                              <div className="space-y-2">
+                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><ClipboardList className="w-4 h-4 text-[#f0b90b]" /> GENEL ANALİZ METNİ</label>
+                                <textarea value={analysis.analysis} onChange={(e) => {
+                                  const updated = [...localAnalyses]; updated[idx].analysis = e.target.value; setLocalAnalyses(updated);
+                                }} className="w-full h-32 bg-black border border-zinc-800 rounded-2xl px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed italic" placeholder="Bu maça ait genel düşüncelerinizi, takım durumlarını buraya yazın..." />
+                              </div>
+
+                              <div className="space-y-2">
+                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Search className="w-4 h-4 text-blue-400" /> TAKTİK ÖZET</label>
+                                <textarea value={analysis.tacticalSummary} onChange={(e) => {
+                                  const updated = [...localAnalyses]; updated[idx].tacticalSummary = e.target.value; setLocalAnalyses(updated);
+                                }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="Takımların taktiksel dizilişleri, eksikleri veya oyun tarzları..." />
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                  <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Zap className="w-4 h-4 text-orange-400" /> KIRILMA ANI</label>
+                                  <textarea value={analysis.breakingPoint} onChange={(e) => {
+                                    const updated = [...localAnalyses]; updated[idx].breakingPoint = e.target.value; setLocalAnalyses(updated);
+                                  }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="Maçta işlerin değişebileceği an (örneğin ilk golü kim atar)..." />
                                 </div>
+                                <div className="space-y-2">
+                                  <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Target className="w-4 h-4 text-emerald-400" /> BAHİS SENARYOSU</label>
+                                  <textarea value={analysis.bettingScenario} onChange={(e) => {
+                                    const updated = [...localAnalyses]; updated[idx].bettingScenario = e.target.value; setLocalAnalyses(updated);
+                                  }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="İdeal bahis akışı (örneğin: İlk yarı 0.5 üst mantıklı)..." />
+                                </div>
+                              </div>
+                            </div>
+                          )}
 
-                                <label className="flex items-center gap-3 cursor-pointer select-none py-1">
-                                  <div className="relative">
-                                    <input type="checkbox" checked={bookie.isHighest} onChange={(e) => {
-                                      const updated = [...localAnalyses];
-                                      updated[idx].bookieOdds.forEach((b, i) => b.isHighest = (i === bidx ? e.target.checked : false));
-                                      setLocalAnalyses(updated);
-                                    }} className="hidden" />
-                                    <div className={`w-10 h-5 rounded-full transition-all ${bookie.isHighest ? 'bg-[#f0b90b]' : 'bg-zinc-800'}`}>
-                                      <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${bookie.isHighest ? 'left-6' : 'left-1'}`} />
+                          {editAnalysisTab === 'stats' && (
+                            <div className="space-y-8 animate-fade-in-up">
+                              {/* İstatistik Satırı */}
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-black/30 p-6 rounded-2xl border border-zinc-800/80">
+                                <div className="space-y-2">
+                                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5 text-[#f0b90b]" /> MODEL SKORU</label>
+                                  <div className="flex items-center gap-4 bg-black border border-zinc-800 p-2 rounded-xl">
+                                    <input type="number" value={analysis.modelScore} onChange={(e) => {
+                                      const updated = [...localAnalyses]; updated[idx].modelScore = parseInt(e.target.value); setLocalAnalyses(updated);
+                                    }} className="w-16 bg-transparent px-2 py-1 text-[#f0b90b] font-black text-lg text-center outline-none" />
+                                    <div className="flex-1 h-2 bg-zinc-900 rounded-full overflow-hidden mr-2">
+                                      <div className="h-full bg-[#f0b90b] shadow-[0_0_8px_#f0b90b]" style={{ width: `${analysis.modelScore}%` }} />
                                     </div>
                                   </div>
-                                  <span className={`text-[9px] font-black uppercase tracking-widest ${bookie.isHighest ? 'text-[#f0b90b]' : 'text-zinc-600'}`}>EN YÜKSEK ORAN</span>
-                                </label>
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Trophy className="w-3.5 h-3.5 text-[#f0b90b]" /> SON 10 TAHMİN</label>
+                                  <input value={analysis.recentHistory} onChange={(e) => {
+                                    const updated = [...localAnalyses]; updated[idx].recentHistory = e.target.value; setLocalAnalyses(updated);
+                                  }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-white font-black text-sm outline-none focus:border-[#f0b90b]" placeholder="Örn: 8 Kazanç, 2 Kayıp" />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><AlertCircle className="w-3.5 h-3.5 text-[#f0b90b]" /> LİG xG BEKLENTİSİ</label>
+                                  <input value={analysis.expectedGoals} onChange={(e) => {
+                                    const updated = [...localAnalyses]; updated[idx].expectedGoals = e.target.value; setLocalAnalyses(updated);
+                                  }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-white font-black text-sm outline-none focus:border-[#f0b90b]" placeholder="Örn: 3.1" />
+                                </div>
                               </div>
-                            ))}
-                          </div>
+                              
+                              {/* Yeni Liste Tasarımlı Oranlar */}
+                              <div className="space-y-4">
+                                <div className="flex items-center justify-between pb-2 border-b border-zinc-800/50">
+                                  <label className="text-[11px] font-black text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                                    <Star className="w-4 h-4 text-[#f0b90b]" /> DESTEKLENEN ORANLAR (SPONSORLAR)
+                                  </label>
+                                  <span className="text-[10px] font-bold text-zinc-500 uppercase">Toplam {analysis.bookieOdds.length} Site</span>
+                                </div>
+                                
+                                <div className="space-y-3">
+                                  {analysis.bookieOdds.map((bookie, bidx) => (
+                                    <div key={bidx} className={`flex flex-col lg:flex-row items-center gap-4 bg-black border ${bookie.isHighest ? 'border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.1)]' : 'border-zinc-800'} rounded-2xl p-4 relative overflow-hidden transition-all duration-300`}>
+                                      
+                                      {/* Left Indicator for Highest Odd */}
+                                      {bookie.isHighest && <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 shadow-[0_0_10px_#22c55e]"></div>}
+                                      
+                                      <div className="w-full lg:w-48 xl:w-56 pl-2 lg:pl-4 flex-shrink-0">
+                                        <label className="text-[9px] font-black text-zinc-500 uppercase mb-1.5 block">SPONSOR ADI</label>
+                                        <input value={bookie.name} onChange={(e) => {
+                                          const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].name = e.target.value; setLocalAnalyses(updated);
+                                        }} className="w-full bg-transparent border-b-2 border-zinc-800 text-[15px] font-black text-white hover:border-zinc-600 focus:border-[#f0b90b] transition-all outline-none uppercase pb-1" placeholder="Site Adı" />
+                                      </div>
+
+                                      <div className="flex gap-4 w-full lg:w-auto flex-shrink-0">
+                                        <div className="w-full lg:w-24">
+                                          <label className="text-[9px] font-black text-zinc-500 uppercase mb-1.5 block text-center">KG VAR</label>
+                                          <input value={bookie.odd1} onChange={(e) => {
+                                            const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].odd1 = e.target.value; setLocalAnalyses(updated);
+                                          }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2 py-2 text-[15px] text-[#f0b90b] font-black text-center outline-none focus:bg-black focus:border-[#f0b90b] transition-all" />
+                                        </div>
+
+                                        <div className="w-full lg:w-24">
+                                          <label className="text-[9px] font-black text-zinc-500 uppercase mb-1.5 block text-center">2.5 ÜST</label>
+                                          <input value={bookie.odd2} onChange={(e) => {
+                                            const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].odd2 = e.target.value; setLocalAnalyses(updated);
+                                          }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2 py-2 text-[15px] text-[#f0b90b] font-black text-center outline-none focus:bg-black focus:border-[#f0b90b] transition-all" />
+                                        </div>
+                                      </div>
+
+                                      <div className="w-full flex-grow">
+                                        <label className="text-[9px] font-black text-zinc-500 uppercase mb-1.5 block">AFFILIATE YÖNLENDİRME LİNKİ</label>
+                                        <input value={bookie.link} onChange={(e) => {
+                                          const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].link = e.target.value; setLocalAnalyses(updated);
+                                        }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-[11px] text-zinc-400 font-mono outline-none focus:bg-black focus:border-blue-500 transition-all" placeholder="https://..." />
+                                      </div>
+
+                                      <label className="w-full lg:w-[160px] flex-shrink-0 flex items-center justify-between lg:justify-end gap-3 cursor-pointer select-none bg-zinc-900/50 hover:bg-zinc-800/80 px-4 py-2.5 rounded-xl border border-zinc-800/50 transition-colors">
+                                        <span className={`text-[10px] font-black uppercase tracking-widest ${bookie.isHighest ? 'text-green-500 drop-shadow-[0_0_5px_rgba(34,197,94,0.4)]' : 'text-zinc-500'}`}>ZİRVE ORAN</span>
+                                        <div className="relative">
+                                          <input type="checkbox" checked={bookie.isHighest} onChange={(e) => {
+                                            const updated = [...localAnalyses];
+                                            updated[idx].bookieOdds.forEach((b, i) => b.isHighest = (i === bidx ? e.target.checked : false));
+                                            setLocalAnalyses(updated);
+                                          }} className="hidden" />
+                                          <div className={`w-10 h-5 rounded-full transition-all ${bookie.isHighest ? 'bg-green-500' : 'bg-zinc-800 shadow-inner'}`}>
+                                            <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all shadow-sm ${bookie.isHighest ? 'left-6' : 'left-1'}`} />
+                                          </div>
+                                        </div>
+                                      </label>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
 
-                        {/* Alt Butonlar */}
-                        <div className="pt-8 border-t border-zinc-850 flex justify-end gap-4">
-                          <button
-                            onClick={() => setEditingAnalysisId(null)}
-                            className="px-8 py-4 rounded-2xl bg-zinc-800 hover:bg-zinc-750 text-white font-black text-xs uppercase transition-all active:scale-95"
-                          >
-                            DÜZENLEMEYİ SONDLANDIR
-                          </button>
-                          <button
-                            onClick={handleSave}
-                            className="px-8 py-4 rounded-2xl bg-[#f0b90b] text-black font-black text-xs uppercase shadow-[0_10px_30px_rgba(240,185,11,0.2)] hover:shadow-[0_10px_40px_rgba(240,185,11,0.4)] transition-all active:scale-95"
-                          >
-                            BÜTÜN SİSTEMİ KAYDET
-                          </button>
+                        {/* Sticky Bottom Bar for Save */}
+                        <div className="sticky bottom-0 bg-zinc-900/95 backdrop-blur-xl border-t border-zinc-800 px-6 md:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-5 z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.3)]">
+                          <div className="flex items-center gap-3">
+                            <span className="relative flex h-3 w-3">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                            </span>
+                            <div className="flex flex-col">
+                              <span className="text-[11px] font-black text-white uppercase tracking-widest">TASLAK AKTİF</span>
+                              <span className="text-[9px] text-zinc-500 font-bold uppercase mt-0.5">Sistem verileri geçici olarak tutuyor</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-3 w-full sm:w-auto">
+                            <button
+                              onClick={() => setEditingAnalysisId(null)}
+                              className="flex-1 sm:flex-none px-6 py-3.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-black text-[11px] uppercase tracking-widest transition-all active:scale-95"
+                            >
+                              İPTAL
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                handleSave();
+                                setEditingAnalysisId(null); // Return to list view directly
+                              }}
+                              className="flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-[#f0b90b] text-black font-black text-[11px] uppercase tracking-widest shadow-[0_0_20px_rgba(240,185,11,0.2)] hover:shadow-[0_0_30px_rgba(240,185,11,0.4)] hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2"
+                            >
+                              <Save className="w-4 h-4" /> KAYDET VE DÖN
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -3180,44 +2938,117 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           </div>
         )}
-      </main>
 
       {/* --- AI SMART PASTE MODAL --- */}
       {showAiModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-fade-in">
           <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setShowAiModal(false)} />
-          <div className="relative bg-zinc-900 w-full max-w-2xl p-8 rounded-[40px] border border-indigo-500/30 shadow-[0_0_50px_rgba(79,70,229,0.2)] animate-scale-in">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
-                <Zap className="text-white w-6 h-6" />
+          <div className="relative bg-zinc-900 w-full max-w-5xl p-8 rounded-[40px] border border-[#f0b90b]/30 shadow-[0_0_50px_rgba(240,185,11,0.15)] animate-scale-in flex flex-col md:flex-row gap-8">
+            
+            {/* Prompt Generator Side */}
+            <div className="flex-1 space-y-4">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 bg-[#f0b90b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#f0b90b]/20">
+                  <Sparkles className="text-black w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-white uppercase italic tracking-tight">AI PROMPT YARDIMCISI</h3>
+                  <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-0.5">BU METNİ KOPYALAYIP CHATGPT'YE YAPIŞTIRIN</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-black text-white uppercase italic tracking-tight">AI TOPLU ANALİZ ÜRETİCİ</h3>
-                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-0.5">Her satıra BİR maç girin. Sistem tümünü otomatik üretecektir.</p>
+              
+              <div className="bg-black border border-zinc-800 rounded-2xl p-5 relative group">
+                <button 
+                  onClick={() => {
+                    const prompt = `Aşağıdaki maçlar için analiz yaz ve SADECE aşağıdaki JSON dizisi formatında çıktı ver. Başka hiçbir açıklama yazma:
+[
+  {
+    "league": "Lig Adı",
+    "homeTeam": "Ev Sahibi",
+    "awayTeam": "Deplasman",
+    "matchDate": "YYYY-MM-DD",
+    "matchTime": "HH:MM",
+    "confidence": 85,
+    "modelScore": 92,
+    "prediction": "KG VAR / 2.5 ÜST",
+    "analysis": "Genel analiz metni...",
+    "tacticalSummary": "Taktik maç özeti...",
+    "breakingPoint": "Maçın kırılma anı...",
+    "bettingScenario": "İdeal bahis senaryosu...",
+    "recentHistory": "Son form durumu",
+    "expectedGoals": "3.1"
+  }
+]
+Maçlar:\n(Buraya liste yazın)`;
+                    navigator.clipboard.writeText(prompt);
+                    alert('Prompt kopyalandı! Şimdi ChatGPT\'ye yapıştırıp altına maç listesini girebilirsiniz.');
+                  }}
+                  className="absolute top-3 right-3 bg-zinc-800 hover:bg-zinc-700 text-white p-2 rounded-lg opacity-100 md:opacity-0 group-hover:opacity-100 transition-all font-bold text-[10px]"
+                >
+                  KOPYALA
+                </button>
+                <pre className="text-[10px] text-zinc-400 font-mono whitespace-pre-wrap leading-relaxed h-[280px] overflow-y-auto custom-scrollbar">
+{`Aşağıdaki maçlar için analiz yaz ve SADECE aşağıdaki JSON formatında bir dizi ([]) döndür. Başka hiçbir açıklama yapma:
+
+[
+  {
+    "league": "Süper Lig",
+    "homeTeam": "Ev Sahibi",
+    "awayTeam": "Deplasman",
+    "matchDate": "2026-05-15",
+    "matchTime": "20:00",
+    "confidence": 85,
+    "modelScore": 92,
+    "prediction": "KG VAR / 2.5 ÜST",
+    "analysis": "1-2 cümlelik genel...",
+    "tacticalSummary": "Taktik savaş...",
+    "breakingPoint": "Kırılma anı...",
+    "bettingScenario": "Bahis önerisi...",
+    "recentHistory": "8 Kazanç, 2 Kayıp",
+    "expectedGoals": "2.8"
+  }
+]
+
+Maç Listesi: `}
+                </pre>
               </div>
             </div>
 
-            <textarea
-              value={aiInput}
-              onChange={(e) => setAiInput(e.target.value)}
-              placeholder={`Örnek Format:\nGalatasaray - Fenerbahçe 20:00\nReal Madrid vs Barcelona 22:30\nArsenal - Chelsea`}
-              className="w-full h-64 bg-black border border-zinc-800 rounded-3xl p-6 text-zinc-300 text-sm outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all resize-none font-mono mb-6"
-            />
+            {/* Paste Side */}
+            <div className="flex-1 flex flex-col mt-8 md:mt-0">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
+                  <Zap className="text-white w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-white uppercase italic tracking-tight">JSON İÇE AKTARICI</h3>
+                  <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-0.5">CHATGPT'DEN GELEN JSON KODUNU BURAYA YAPIŞTIRIN</p>
+                </div>
+              </div>
 
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setShowAiModal(false)}
-                className="flex-1 py-4 rounded-2xl bg-zinc-800 text-white font-black text-xs uppercase hover:bg-zinc-750 transition-all"
-              >
-                VAZGEÇ
-              </button>
-              <button
-                onClick={handleAiParse}
-                className="flex-[2] py-4 rounded-2xl bg-indigo-600 text-white font-black text-xs uppercase shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 hover:shadow-indigo-600/40 transition-all active:scale-95"
-              >
-                ANALİZİ OLUŞTUR VE DÜZENLE
-              </button>
+              <textarea
+                value={aiInput}
+                onChange={(e) => setAiInput(e.target.value)}
+                placeholder={'[\\n  {\\n    "league": "...", \\n    ...\\n  }\\n]'}
+                className="w-full h-full min-h-[150px] md:min-h-[250px] flex-1 bg-black border border-indigo-500/30 rounded-3xl p-6 text-emerald-400 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none font-mono mb-6 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] custom-scrollbar"
+              />
+
+              <div className="flex items-center gap-4 mt-auto">
+                <button
+                  onClick={() => setShowAiModal(false)}
+                  className="flex-1 py-4 rounded-2xl bg-zinc-800 text-white font-black text-xs uppercase hover:bg-zinc-750 transition-all"
+                >
+                  İPTAL
+                </button>
+                <button
+                  onClick={handleAiParse}
+                  className="flex-[2] py-4 rounded-2xl bg-[#f0b90b] text-black font-black text-xs uppercase shadow-[0_0_20px_rgba(240,185,11,0.2)] hover:shadow-[0_0_30px_rgba(240,185,11,0.4)] transition-all active:scale-95 flex justify-center items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" /> VERİLERİ SİSTEME EKLE
+                </button>
+              </div>
             </div>
+
           </div>
         </div>
       )}
@@ -3614,10 +3445,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             <div className="flex items-center justify-between mb-4">
                <span className="text-zinc-400 font-bold">Kayan Yazı Aktifliği</span>
                <button
-                  onClick={() => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, isActive: !marqueeConfig.isActive })}
-                  className={`w-14 h-8 rounded-full transition-all flex items-center p-1 ${marqueeConfig?.isActive ? 'bg-green-500' : 'bg-zinc-700'}`}
+                  onClick={() => setLocalMarquee({ ...localMarquee, isActive: !localMarquee.isActive })}
+                  className={`w-14 h-8 rounded-full transition-all flex items-center p-1 ${localMarquee.isActive ? 'bg-green-500' : 'bg-zinc-700'}`}
                 >
-                  <div className={`w-6 h-6 rounded-full bg-white transition-all ${marqueeConfig?.isActive ? 'translate-x-6' : 'translate-x-0'}`} />
+                  <div className={`w-6 h-6 rounded-full bg-white transition-all ${localMarquee.isActive ? 'translate-x-6' : 'translate-x-0'}`} />
                 </button>
             </div>
 
@@ -3626,35 +3457,47 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Yazı İçeriği</label>
                 <input 
                   type="text" 
-                  value={marqueeConfig?.text || ''} 
-                  onChange={(e) => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, text: e.target.value })}
+                  value={localMarquee.text} 
+                  onChange={(e) => setLocalMarquee({ ...localMarquee, text: e.target.value })}
                   className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"
                   placeholder="Kayan yazı metni..."
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Geçiş Hızı (Saniye)</label>
+                  <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Geçiş Hızı ({localMarquee.speed}s)</label>
                   <input 
-                    type="number" 
-                    value={marqueeConfig?.speed || 20} 
-                    onChange={(e) => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, speed: Number(e.target.value) })}
-                    className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"
+                    type="range" 
+                    min="5"
+                    max="500"
+                    step="5"
+                    value={localMarquee.speed} 
+                    onChange={(e) => {
+                      const speed = Number(e.target.value);
+                      const u = { ...localMarquee, speed };
+                      setLocalMarquee(u);
+                      onSaveMarqueeConfig?.(u);
+                    }}
+                    className="w-full accent-primary h-1.5 bg-black border border-zinc-800 rounded-lg appearance-none cursor-pointer"
                   />
+                  <div className="flex justify-between text-[8px] text-zinc-600 font-bold uppercase mt-1 px-1">
+                    <span>Hızlı (5s)</span>
+                    <span>Yavaş (500s)</span>
+                  </div>
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Yazı Rengi</label>
                   <div className="flex gap-2">
                     <input 
                       type="color" 
-                      value={marqueeConfig?.color || '#f0b90b'} 
-                      onChange={(e) => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, color: e.target.value })}
+                      value={localMarquee.color} 
+                      onChange={(e) => setLocalMarquee({ ...localMarquee, color: e.target.value })}
                       className="w-12 h-12 bg-black border border-zinc-800 rounded-xl p-1 shrink-0 cursor-pointer"
                     />
                     <input 
                       type="text" 
-                      value={marqueeConfig?.color || '#f0b90b'} 
-                      onChange={(e) => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, color: e.target.value })}
+                      value={localMarquee.color} 
+                      onChange={(e) => setLocalMarquee({ ...localMarquee, color: e.target.value })}
                       className="flex-1 bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"
                     />
                   </div>
@@ -3662,18 +3505,31 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div>
                   <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2 mb-1 block">Kalın Yazı (Bold)</label>
                   <button
-                    onClick={() => marqueeConfig && onSaveMarqueeConfig?.({ ...marqueeConfig, isBold: !marqueeConfig.isBold })}
-                    className={`w-full h-12 rounded-xl transition-all font-bold flex items-center justify-center ${marqueeConfig?.isBold ? 'bg-primary text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
+                    onClick={() => setLocalMarquee({ ...localMarquee, isBold: !localMarquee.isBold })}
+                    className={`w-full h-12 rounded-xl transition-all font-bold flex items-center justify-center ${localMarquee.isBold ? 'bg-primary text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
                   >
-                    {marqueeConfig?.isBold ? 'KALIN KONTÜR' : 'NORMAL (Pasif)'}
+                    {localMarquee.isBold ? 'KALIN KONTÜR' : 'NORMAL (Pasif)'}
                   </button>
                 </div>
               </div>
+
+              {/* Individual Save for Marquee (Optional but good) */}
+              <button
+                onClick={() => {
+                  onSaveMarqueeConfig?.(localMarquee);
+                  alert('Kayan yazı ayarları kaydedildi!');
+                }}
+                className="w-full py-4 bg-zinc-800 hover:bg-zinc-700 text-white font-black text-[10px] rounded-xl uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+              >
+                <Save className="w-4 h-4" /> BU BÖLÜMÜ KAYDET
+              </button>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* AI Marquee Parser Modal */}
-          {showAiMarqueeParser && (
+      {/* AI Marquee Parser Modal */}
+      {showAiMarqueeParser && (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
               <div className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
                 <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
@@ -3718,8 +3574,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
             </div>
           )}
-        </div>
-      )}
 
       {activeTab === 'members' && (
         <div className="flex-1 overflow-y-auto p-6">
@@ -3836,10 +3690,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               <p className="text-zinc-500 text-xs font-bold uppercase mt-1">Site erişim durumunu ve bakım modunu yönetin</p>
             </div>
             <button
-              onClick={() => {
-                onSaveSiteStatusConfig?.(localSiteStatus);
-                alert('Bakım modu ayarları başarıyla kaydedildi!');
-              }}
+              onClick={handleSave}
               className="bg-primary hover:bg-primary/90 text-black px-6 py-3 rounded-xl font-black flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(240,185,11,0.3)] hover:scale-105"
             >
               <Save className="w-5 h-5" /> KAYDET
@@ -3895,7 +3746,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
         </div>
       )}
-
+      </main>
     </div>
   );
 };

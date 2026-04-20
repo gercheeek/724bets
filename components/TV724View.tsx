@@ -18,6 +18,11 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     const chatEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
 
+    // Force scroll to top on mount
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     // Initialize with first active channel
     useEffect(() => {
         if (config?.channels?.length > 0) {
@@ -169,16 +174,26 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             background: '#000',
             paddingBottom: '40px',
         }}>
-            {/* ═══ TOP BAR ═══ */}
             <div style={{
+                maxWidth: '1100px',
+                margin: '0 auto',
+                width: '100%',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '16px 24px',
-                borderBottom: '1px solid #1a1a1a',
-                background: 'rgba(0,0,0,0.8)',
-                backdropFilter: 'blur(20px)',
+                flexDirection: 'column',
             }}>
+                {/* ═══ TOP BAR ═══ */}
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '10px 16px',
+                    borderBottom: '1px solid #1a1a1a',
+                    background: 'rgba(0,0,0,0.8)',
+                    backdropFilter: 'blur(20px)',
+                    borderTopLeftRadius: '16px',
+                    borderTopRightRadius: '16px',
+                    marginTop: '10px',
+                }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{
                         display: 'flex', alignItems: 'center', gap: '8px',
@@ -230,15 +245,16 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 </div>
             </div>
 
-            {/* ═══ CHANNEL SELECTOR ═══ */}
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 24px',
-                overflowX: 'auto',
-                borderBottom: '1px solid #111',
-            }}>
+                {/* ═══ CHANNEL SELECTOR ═══ */}
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '10px 20px',
+                    overflowX: 'auto',
+                    borderBottom: '1px solid #111',
+                    background: '#050505',
+                }}>
                 {activeChannels.map(ch => (
                     <button
                         key={ch.id}
@@ -290,14 +306,15 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 ))}
             </div>
 
-            {/* ═══ MAIN CONTENT: VIDEO + CHAT ═══ */}
-            <div style={{
-                display: 'flex',
-                gap: '0',
-                padding: '0',
-                height: 'calc(100vh - 200px)',
-                minHeight: '500px',
-            }}>
+                {/* ═══ MAIN CONTENT: VIDEO + CHAT ═══ */}
+                <div style={{
+                    display: 'flex',
+                    gap: '0',
+                    padding: '0',
+                    height: '560px',
+                    background: '#000',
+                    overflow: 'hidden',
+                }}>
                 {/* VIDEO PLAYER */}
                 <div style={{
                     flex: 1,
@@ -494,6 +511,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                         </div>
                     </div>
                 )}
+                </div>
             </div>
 
             {/* ═══ LIVE TICKER ═══ */}

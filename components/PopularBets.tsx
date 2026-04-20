@@ -14,15 +14,15 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
     return (
         <div style={{ margin: '12px 0 16px' }}>
             {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <div style={{ width: '3px', height: '14px', background: '#FFD700', borderRadius: '2px' }} />
-                    <Flame style={{ width: 13, height: 13, color: '#FFD700' }} />
-                    <span style={{ color: '#fff', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px' }}>Popüler Bahisler</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <div style={{ width: '2px', height: '12px', background: '#FFD700', borderRadius: '1px' }} />
+                    <Flame style={{ width: 12, height: 12, color: '#FFD700' }} />
+                    <span style={{ color: '#fff', fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Popüler Bahisler</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <TrendingUp style={{ width: 10, height: 10, color: '#FFD700' }} />
-                    <span style={{ color: 'rgba(255,215,0,0.6)', fontSize: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    <TrendingUp style={{ width: 9, height: 9, color: '#FFD700' }} />
+                    <span style={{ color: 'rgba(255,215,0,0.6)', fontSize: '7px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
                 </div>
             </div>
 
@@ -38,10 +38,10 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            padding: '10px 12px',
+                            padding: '8px 10px',
                             background: 'linear-gradient(135deg, #1a1a1a 0%, #141414 100%)',
                             border: '1px solid #222',
-                            borderRadius: '10px',
+                            borderRadius: '8px',
                             cursor: 'pointer',
                             textDecoration: 'none',
                             transition: 'all 0.25s ease',
@@ -60,14 +60,14 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
                         }}
                     >
                         {/* Left: Teams + Match Info */}
-                        <div style={{ flex: 1, minWidth: 0, marginRight: '12px' }}>
+                        <div style={{ flex: 1, minWidth: 0, marginRight: '10px' }}>
                             {/* Teams */}
-                            <div style={{ fontSize: '12px', fontWeight: 800, color: '#e5e5e5', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            <div style={{ fontSize: '11px', fontWeight: 800, color: '#e5e5e5', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {bet.homeTeam} - {bet.awayTeam}
                             </div>
 
                             {/* Time + League Badge */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
                                 {bet.isHot && (
                                     <div style={{
                                         display: 'inline-flex',
@@ -103,11 +103,11 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            padding: '8px 14px',
-                            borderRadius: '8px',
+                            padding: '6px 12px',
+                            borderRadius: '6px',
                             background: 'rgba(255,255,255,0.04)',
                             border: '1px solid rgba(255,255,255,0.06)',
-                            minWidth: '100px',
+                            minWidth: '90px',
                             textAlign: 'center',
                         }}>
                             {/* Prediction Type */}
