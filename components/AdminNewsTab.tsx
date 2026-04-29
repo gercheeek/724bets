@@ -1175,7 +1175,7 @@ const AdminNewsTab: React.FC<AdminNewsTabProps> = ({ role }) => {
                             </button>
                         </div>
                         
-                        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                        <div className="p-5 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
                             <div className="space-y-2">
                                 <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Başlık</label>
                                 <p className="text-white text-lg font-black leading-tight bg-zinc-900/50 p-4 rounded-xl border border-zinc-800">{aiPreviewData.title}</p>

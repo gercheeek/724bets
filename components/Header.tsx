@@ -354,10 +354,10 @@ const Header: React.FC<HeaderProps> = ({
           }
           .header-wrapper {
             width: 100%;
-            position: sticky;
+            position: fixed;
             top: 0;
             left: 0;
-            z-index: 100;
+            z-index: 1000;
             display: flex;
             flex-direction: column;
           }

@@ -111,9 +111,9 @@ const AdminTicketTab: React.FC = () => {
     const approvedReqs = event?.requests.filter(r => r.status === 'approved') || [];
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-black flex items-center gap-3"><Ticket className="w-6 h-6 text-[#f0b90b]" /> BİLET ETKİNLİĞİ YÖNETİMİ</h2>
+                <h2 className="text-xl font-black flex items-center gap-3"><Ticket className="w-6 h-6 text-[#f0b90b]" /> BİLET ETKİNLİĞİ YÖNETİMİ</h2>
                 {event && (
                     <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-500 rounded-xl text-xs font-bold border border-red-500/30 hover:bg-red-500/30 transition-all">
                         SIFIRLA

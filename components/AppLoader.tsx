@@ -1,32 +1,33 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 interface AppLoaderProps {
   fadeOut?: boolean;
 }
 
 const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // Ensure autoplay on mobile by triggering play programmatically
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked — silent fail, splash will still fade out on timer
+      });
+    }
+  }, []);
+
   return (
     <div id="pro-loader" className={fadeOut ? 'loader-hidden' : ''}>
-      {/* 
-        This div holds the cinematic 4K AI background with the ball and stadium lights.
-        By separating it, we can scale or animate the background smoothly.
-      */}
-      <div className="pro-loader-bg"></div>
-
-      <div className="loader-content">
-        <div className="nostalgic-ball-wrapper">
-          <div className="gold-glow"></div>
-          
-          <div className="football-top">
-            {/* The ball is part of the background image, so we just overlay the text exactly in the center */}
-            <span className="site-name">724bahis.net</span>
-          </div>
-
-          <div className="progress-container">
-            <div className="progress-bar"></div>
-          </div>
-        </div>
-      </div>
+      <video
+        ref={videoRef}
+        className="splash-video"
+        src="/splash-video.mp4"
+        autoPlay
+        muted
+        playsInline
+        loop
+        preload="auto"
+      />
     </div>
   );
 };

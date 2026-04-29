@@ -16,6 +16,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
     const [expandedId, setExpandedId] = useState<string | null>(null);
     const [selectedSport, setSelectedSport] = useState<SportCategory>('Futbol');
     const [selectedLeague, setSelectedLeague] = useState<string>('TÜMÜ');
+    const [expandedLeagues, setExpandedLeagues] = useState<Record<string, boolean>>({});
 
     const toggleExpand = (id: string) => {
         setExpandedId(expandedId === id ? null : id);
@@ -53,6 +54,13 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
         }
 
         return matchesSport && matchesDate && matchesLeague;
+    }).sort((a, b) => {
+        // First sort by date
+        if (a.matchDate !== b.matchDate) {
+            return a.matchDate.localeCompare(b.matchDate);
+        }
+        // Then sort by time
+        return a.matchTime.localeCompare(b.matchTime);
     });
 
     const leagues = ['TÜMÜ', ...Array.from(new Set(analyses.filter(a => {
@@ -88,134 +96,137 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
     return (
         <div
-            className="w-full min-h-screen font-sans overflow-x-hidden pb-20 relative transition-all duration-700 bg-black z-0"
+            className="w-full min-h-screen font-sans pb-20 relative transition-all duration-700 bg-black"
         >
             {/* STITCHED SOCCER BALL PATTERN */}
             <div className="bg-soccer-pattern"></div>
             
             {/* Top Vignette Overlay */}
             <div className="bg-soccer-gradient-overlay"></div>
-            {/* Header / Main Filters */}
-            <div className="w-full max-w-6xl mx-auto px-2 pt-1 text-center mb-0 relative z-10">
-                <div className="flex overflow-x-auto justify-start md:justify-center gap-2 mb-4 mt-1 pb-2 scrollbar-none px-2 z-10 relative">
-                    <button
-                        onClick={() => { setSelectedSport('Futbol'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Futbol'
-                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
-                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
-                            }`}
-                    >
-                        <span className="text-sm bg-white/20 rounded-full w-5 h-5 flex items-center justify-center">⚽</span> FUTBOL
-                    </button>
-                    <button
-                        onClick={() => { setSelectedSport('Basketbol'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Basketbol'
-                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
-                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
-                            }`}
-                    >
-                        <span className="text-sm bg-orange-500/20 text-orange-400 rounded-full w-5 h-5 flex items-center justify-center">🏀</span> BASKETBOL
-                    </button>
-                    <button
-                        onClick={() => { setSelectedSport('Formula 1'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Formula 1'
-                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
-                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
-                            }`}
-                    >
-                        <span className="text-sm bg-red-500/20 text-red-500 rounded-full w-5 h-5 flex items-center justify-center">🏎️</span> FORMULA 1
-                    </button>
-                    <button
-                        onClick={() => { setSelectedSport('MotoGP'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'MotoGP'
-                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
-                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
-                            }`}
-                    >
-                        <span className="text-sm bg-gray-500/20 text-gray-400 rounded-full w-5 h-5 flex items-center justify-center">🏍️</span> MOTOGP
-                    </button>
-                    <button
-                        onClick={() => { setSelectedSport('Superbike'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Superbike'
-                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
-                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
-                            }`}
-                    >
-                        <span className="text-sm bg-teal-500/20 text-teal-400 rounded-full w-5 h-5 flex items-center justify-center">🏍️</span> SUPERBIKE
-                    </button>
-                    <button
-                        onClick={() => { setSelectedSport('Tenis'); setSelectedLeague('TÜMÜ'); }}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-black uppercase text-[11px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Tenis'
-                            ? 'bg-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.4)] scale-105'
-                            : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
-                            }`}
-                    >
-                        <span className="text-sm bg-green-500/20 text-green-400 rounded-full w-5 h-5 flex items-center justify-center">🎾</span> TENİS
-                    </button>
-                </div>
-
-                {/* Date Selection Panel */}
-                <div className="flex justify-center mb-5 z-10 relative">
-                    <div className="flex overflow-x-auto gap-2 p-1.5 bg-[#1A1A1A]/80 backdrop-blur-xl border border-white/10 rounded-2xl scrollbar-none max-w-full">
+            {/* Header / Main Filters (Sticky) */}
+            <div 
+                className="w-full sticky z-[999] bg-[#0B0B0F]/98 backdrop-blur-3xl border-b border-white/10 pb-3 pt-3 mb-4 transition-all duration-300 shadow-2xl" 
+                style={{ top: 'var(--header-height, 172px)', position: '-webkit-sticky' }}
+            >
+                <div className="w-full max-w-6xl mx-auto px-2 text-center relative">
+                    <div className="flex overflow-x-auto justify-start md:justify-center gap-2 mb-4 pb-1 scrollbar-none px-2 relative">
                         <button
-                            onClick={() => {
-                                setSelectedDate('WEEKLY');
-                                setSelectedLeague('TÜMÜ');
-                            }}
-                            className={`flex flex-col items-center justify-center px-6 h-[46px] rounded-xl transition-all duration-300 shrink-0 ${selectedDate === 'WEEKLY'
-                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.3)]'
-                                : 'bg-transparent text-white hover:bg-white/5'
+                            onClick={() => { setSelectedSport('Futbol'); setSelectedLeague('TÜMÜ'); }}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black uppercase text-[9px] md:text-[10px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Futbol'
+                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.4)] scale-105'
+                                : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
                                 }`}
                         >
-                            <span className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">TÜM</span>
-                            <span className="text-[12px] font-black leading-none">HAFTA</span>
+                            <span className="text-xs bg-white/20 rounded-full w-4 h-4 flex items-center justify-center">⚽</span> FUTBOL
                         </button>
-
-                        {dates.map((date, idx) => {
-                            const d = new Date(date);
-                            const isSelected = selectedDate === date;
-                            const dayName = d.toLocaleDateString('tr-TR', { weekday: 'short' }).substring(0, 3);
-                            
-                            return (
-                                <button
-                                    key={date}
-                                    onClick={() => {
-                                        setSelectedDate(date);
-                                        setSelectedLeague('TÜMÜ');
-                                    }}
-                                    className={`flex flex-col items-center justify-center min-w-[65px] h-[46px] px-2 rounded-lg transition-all duration-300 shrink-0 relative ${isSelected ? 'text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
-                                >
-                                    <span className="text-[10px] font-medium tracking-wide mb-1 capitalize">{dayName}</span>
-                                    <span className={`text-[12px] font-bold ${isSelected ? 'text-white' : 'text-zinc-400'}`}>{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
-                                    {isSelected && (
-                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] bg-[#FFC300] rounded-t-md shadow-[0_-2px_8px_rgba(255,195,0,0.5)]"></div>
-                                    )}
-                                    {/* subtle separator for all but last */}
-                                    {idx < dates.length - 1 && (
-                                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-6 bg-white/5"></div>
-                                    )}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
-
-
-                {/* League Filter */}
-                <div className="flex overflow-x-auto gap-2.5 mb-6 pb-2 justify-start md:justify-center scrollbar-none px-2 z-10 relative">
-                    {leagues.map((league) => (
                         <button
-                            key={league}
-                            title={league}
-                            onClick={() => setSelectedLeague(league)}
-                            className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 shrink-0 ${selectedLeague === league
-                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.3)]'
-                                : 'bg-transparent border border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-white'
-                                } max-w-[140px] md:max-w-[200px] truncate`}
+                            onClick={() => { setSelectedSport('Basketbol'); setSelectedLeague('TÜMÜ'); }}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black uppercase text-[9px] md:text-[10px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Basketbol'
+                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.4)] scale-105'
+                                : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
+                                }`}
                         >
-                            {league}
+                            <span className="text-xs bg-orange-500/20 text-orange-400 rounded-full w-4 h-4 flex items-center justify-center">🏀</span> BASKETBOL
                         </button>
-                    ))}
+                        <button
+                            onClick={() => { setSelectedSport('Formula 1'); setSelectedLeague('TÜMÜ'); }}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black uppercase text-[9px] md:text-[10px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Formula 1'
+                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.4)] scale-105'
+                                : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
+                                }`}
+                        >
+                            <span className="text-xs bg-red-500/20 text-red-500 rounded-full w-4 h-4 flex items-center justify-center">🏎️</span> FORMULA 1
+                        </button>
+                        <button
+                            onClick={() => { setSelectedSport('MotoGP'); setSelectedLeague('TÜMÜ'); }}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black uppercase text-[9px] md:text-[10px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'MotoGP'
+                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.4)] scale-105'
+                                : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
+                                }`}
+                        >
+                            <span className="text-xs bg-gray-500/20 text-gray-400 rounded-full w-4 h-4 flex items-center justify-center">🏍️</span> MOTOGP
+                        </button>
+                        <button
+                            onClick={() => { setSelectedSport('Superbike'); setSelectedLeague('TÜMÜ'); }}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black uppercase text-[9px] md:text-[10px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Superbike'
+                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.4)] scale-105'
+                                : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
+                                }`}
+                        >
+                            <span className="text-xs bg-teal-500/20 text-teal-400 rounded-full w-4 h-4 flex items-center justify-center">🏍️</span> SUPERBIKE
+                        </button>
+                        <button
+                            onClick={() => { setSelectedSport('Tenis'); setSelectedLeague('TÜMÜ'); }}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black uppercase text-[9px] md:text-[10px] tracking-widest shrink-0 transition-all duration-300 backdrop-blur-md ${selectedSport === 'Tenis'
+                                ? 'bg-[#FFC300] text-black shadow-[0_0_15px_rgba(255,195,0,0.4)] scale-105'
+                                : 'bg-zinc-800/80 text-white hover:bg-zinc-700 border border-white/5'
+                                }`}
+                        >
+                            <span className="text-xs bg-green-500/20 text-green-400 rounded-full w-4 h-4 flex items-center justify-center">🎾</span> TENİS
+                        </button>
+                    </div>
+
+                    {/* Date Selection Panel */}
+                    <div className="flex justify-center mb-4 relative">
+                        <div className="flex overflow-x-auto gap-1.5 p-1 bg-[#1A1A1A]/80 backdrop-blur-xl border border-white/10 rounded-2xl scrollbar-none max-w-full">
+                            <button
+                                onClick={() => {
+                                    setSelectedDate('WEEKLY');
+                                    setSelectedLeague('TÜMÜ');
+                                }}
+                                className={`flex flex-col items-center justify-center px-4 h-[36px] rounded-xl transition-all duration-300 shrink-0 ${selectedDate === 'WEEKLY'
+                                    ? 'bg-[#FFC300] text-black shadow-[0_0_10px_rgba(255,195,0,0.3)]'
+                                    : 'bg-transparent text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                <span className="text-[8px] font-black uppercase tracking-widest leading-none mb-0.5">TÜM</span>
+                                <span className="text-[10px] font-black leading-none">HAFTA</span>
+                            </button>
+
+                            {dates.map((date, idx) => {
+                                const d = new Date(date);
+                                const isSelected = selectedDate === date;
+                                const dayName = d.toLocaleDateString('tr-TR', { weekday: 'short' }).substring(0, 3);
+                                
+                                return (
+                                    <button
+                                        key={date}
+                                        onClick={() => {
+                                            setSelectedDate(date);
+                                            setSelectedLeague('TÜMÜ');
+                                        }}
+                                        className={`flex flex-col items-center justify-center min-w-[50px] h-[36px] px-1.5 rounded-lg transition-all duration-300 shrink-0 relative ${isSelected ? 'text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
+                                    >
+                                        <span className="text-[8px] font-medium tracking-wide mb-0.5 capitalize">{dayName}</span>
+                                        <span className={`text-[10px] font-bold ${isSelected ? 'text-white' : 'text-zinc-400'}`}>{d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>
+                                        {isSelected && (
+                                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-[2px] bg-[#FFC300] rounded-t-md shadow-[0_-2px_6px_rgba(255,195,0,0.5)]"></div>
+                                        )}
+                                        {idx < dates.length - 1 && (
+                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-4 bg-white/5"></div>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* League Filter */}
+                    <div className="flex overflow-x-auto gap-2 mb-2 pb-1 justify-start md:justify-center scrollbar-none px-2 relative">
+                        {leagues.map((league) => (
+                            <button
+                                key={league}
+                                title={league}
+                                onClick={() => setSelectedLeague(league)}
+                                className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all duration-300 shrink-0 ${selectedLeague === league
+                                    ? 'bg-[#FFC300] text-black shadow-[0_0_10px_rgba(255,195,0,0.3)]'
+                                    : 'bg-transparent border border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-white'
+                                    } max-w-[120px] md:max-w-[180px] truncate`}
+                            >
+                                {league}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
@@ -228,12 +239,23 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                     return (
                         <div key={leagueName} className="space-y-4">
                             {/* League Section Header */}
-                            <div className="flex items-start gap-4 px-4 pt-3 pb-1 mb-1 relative group-header">
-                                <div className={`w-1.5 h-5 shrink-0 rounded-full mt-0.5 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#FFC300] shadow-[0_0_12px_rgba(255,195,0,0.8)]'}`}></div>
-                                <h3 className="text-white font-black text-[13px] md:text-[14px] tracking-[0.1em] leading-relaxed break-words" title={leagueName}>{leagueName}</h3>
+                            <div 
+                                className="flex items-center justify-between gap-4 px-4 pt-3 pb-1 mb-1 relative group-header cursor-pointer hover:bg-white/5 transition-colors"
+                                onClick={() => setExpandedLeagues(prev => ({ ...prev, [leagueName]: !prev[leagueName] }))}
+                            >
+                                <div className="flex items-start gap-4">
+                                    <div className={`w-1.5 h-5 shrink-0 rounded-full mt-0.5 ${selectedSport === 'Basketbol' ? 'bg-[#E4510B]' : 'bg-[#FFC300] shadow-[0_0_12px_rgba(255,195,0,0.8)]'}`}></div>
+                                    <h3 className="text-white font-black text-[13px] md:text-[14px] tracking-[0.1em] leading-relaxed break-words" title={leagueName}>{leagueName}</h3>
+                                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-0.5 ml-2">({leagueMatches.length} YAYIN)</span>
+                                </div>
+                                <div>
+                                    {expandedLeagues[leagueName] ? <ChevronUp className="w-4 h-4 text-zinc-500" /> : <ChevronDown className="w-4 h-4 text-zinc-500" />}
+                                </div>
                             </div>
 
-                            {/* Desktop Header */}
+                            {expandedLeagues[leagueName] && (
+                                <>
+                                    {/* Desktop Header */}
                             <div className="hidden md:flex items-center gap-4 px-6 py-3 mb-2 text-[10px] font-medium text-zinc-400 tracking-wider relative border-b border-white/5">
                                 <div className="w-[100px] shrink-0">SAAT/TARİH</div>
                                 <div className="flex-1 pl-4">MAÇ <span className="text-[8px] text-zinc-600 block leading-tight mt-0.5">(EV SAHİBİ vs DEPLASMAN)</span></div>
@@ -538,6 +560,8 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                     </div>
                                 );
                             })}
+                                </>
+                            )}
                         </div>
                     );
                 })}

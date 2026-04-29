@@ -295,11 +295,11 @@ const App: React.FC = () => {
   });
 
 
-  // App Flow: Professional Preloader Timing (2.5s + 0.5s Fade)
+  // App Flow: Video Splash Screen Timing (4s display + 0.8s Fade)
   useEffect(() => {
     const fadeTimer = setTimeout(() => {
       setFadeOutLoader(true);
-    }, 2500);
+    }, 4000);
 
     const readyTimer = setTimeout(() => {
       if (!siteStatusConfig.isMaintenanceMode) {
@@ -313,7 +313,7 @@ const App: React.FC = () => {
         setAppStage('ready');
       }
       setShowLoader(false);
-    }, 3000);
+    }, 4800);
 
     return () => {
       clearTimeout(fadeTimer);
@@ -685,8 +685,19 @@ const App: React.FC = () => {
         liveOddsConfig={liveOddsConfig}
       />
 
-      <main style={{ position: 'relative', zIndex: 10, filter: appStage === 'popup' ? 'blur(10px)' : 'none', pointerEvents: appStage === 'popup' ? 'none' : 'auto' }}>
-        <div style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100vh', overflow: appStage === 'ready' ? 'visible' : 'hidden' }}>
+      <main 
+        style={{ 
+          position: 'relative', 
+          zIndex: 10, 
+          filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
+          pointerEvents: appStage === 'popup' ? 'none' : 'auto',
+          paddingTop: (marqueeConfig?.isActive && liveOddsConfig?.isActive) ? '172px' : 
+                      (marqueeConfig?.isActive || liveOddsConfig?.isActive) ? '115px' : '65px',
+          '--header-height': (marqueeConfig?.isActive && liveOddsConfig?.isActive) ? '172px' : 
+                             (marqueeConfig?.isActive || liveOddsConfig?.isActive) ? '115px' : '65px'
+        } as React.CSSProperties}
+      >
+        <div style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100vh' }}>
           {view === 'home' && (
             <>
               {/* ═══ PORTAL BODY (Single Column Centered) ═══ */}

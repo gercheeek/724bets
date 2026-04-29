@@ -79,9 +79,9 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
     };
 
     return (
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-4 animate-fade-in">
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-black flex items-center gap-3">
+                <h2 className="text-xl font-black flex items-center gap-3">
                     <Ticket className="w-6 h-6 text-[#f0b90b]" /> BİLET HAVUZU YÖNETİMİ
                 </h2>
                 <div className="flex gap-2">
@@ -239,7 +239,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
             {/* SLOT EDIT MODAL */}
             {editingSlot !== null && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-                    <div className="bg-zinc-950 border border-zinc-800 p-8 rounded-[32px] max-w-md w-full shadow-2xl relative">
+                    <div className="bg-zinc-950 border border-zinc-800 p-5 rounded-2xl max-w-md w-full shadow-2xl relative">
                         <button onClick={() => setEditingSlot(null)} className="absolute top-6 right-6 text-zinc-500 hover:text-white">✕</button>
                         
                         <div className="flex items-center gap-4 mb-6">

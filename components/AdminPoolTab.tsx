@@ -188,9 +188,9 @@ const AdminPoolTab: React.FC = () => {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-black flex items-center gap-3"><Trophy className="w-6 h-6 text-[#f0b90b]" /> 724BAHİS.NET YÖNETİMİ</h2>
+                <h2 className="text-xl font-black flex items-center gap-3"><Trophy className="w-6 h-6 text-[#f0b90b]" /> 724BAHİS.NET YÖNETİMİ</h2>
                 {pool && (
                     <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-500 rounded-xl text-xs font-bold border border-red-500/30 hover:bg-red-500/30 transition-all">
                         <RefreshCw className="w-4 h-4" /> SIFIRLA
@@ -203,7 +203,7 @@ const AdminPoolTab: React.FC = () => {
             {/* AI PASTE MODAL */}
             {showAiModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-                    <div className="bg-zinc-950 border border-[#f0b90b]/20 p-8 rounded-[40px] max-w-2xl w-full shadow-[0_0_50px_rgba(240,185,11,0.1)] relative">
+                    <div className="bg-zinc-950 border border-[#f0b90b]/20 p-5 rounded-3xl max-w-2xl w-full shadow-[0_0_50px_rgba(240,185,11,0.1)] relative">
                         <button onClick={() => setShowAiModal(false)} className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800">✕</button>
 
                         <div className="flex items-center gap-4 mb-6">
@@ -211,7 +211,7 @@ const AdminPoolTab: React.FC = () => {
                                 <Sparkles className="w-8 h-8 text-black" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-black text-white italic uppercase">AI MAÇ YERLEŞTİRİCİ</h3>
+                                <h3 className="text-xl font-black text-white italic uppercase">AI MAÇ YERLEŞTİRİCİ</h3>
                                 <p className="text-zinc-400 text-sm mt-1">15 maçı kopyalayıp yapıştırın, otomatik olarak ayrıştırılacaktır.</p>
                             </div>
                         </div>

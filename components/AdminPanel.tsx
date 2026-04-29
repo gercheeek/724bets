@@ -80,6 +80,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
   const [activeTab, setActiveTab] = useState<'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'news' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | 'newsslider' | '724tv'>(isAuthor || isEditor ? 'news' : 'content');
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+    site: false,
+    betting: false,
+    reward: false,
+    content: false,
+    admin: false
+  });
+
+  const toggleGroup = (group: string) => {
+    setExpandedGroups(prev => ({ ...prev, [group]: !prev[group] }));
+  };
   const mainRef = useRef<HTMLElement>(null);
 
   // Scroll to top when tab changes
@@ -147,6 +158,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [editingCouponId, setEditingCouponId] = useState<string | null>(null);
 
   const [adminSport, setAdminSport] = useState<SportCategory>('Futbol');
+  const [adminAnalysisDateFilter, setAdminAnalysisDateFilter] = useState<string>('');
+  const [adminAnalysisLeagueFilter, setAdminAnalysisLeagueFilter] = useState<string>('');
+  const [expandedLeagues, setExpandedLeagues] = useState<Record<string, boolean>>({});
   
   // AI Marquee Parser State
   const [showAiMarqueeParser, setShowAiMarqueeParser] = useState(false);
@@ -704,106 +718,166 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           </button>
         </div>
 
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-3">
           {role === 'admin' && (
-            <>
-              <p className="text-[10px] text-zinc-500 font-black px-3 mt-4 mb-2 uppercase tracking-widest">SİTE YAPISI</p>
-              <button onClick={() => setActiveTab('content')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'content' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Layout className="w-4 h-4" /> İÇERİK YÖNETİMİ
+            <div className="bg-black/20 p-2 rounded-2xl border border-white/5 space-y-1 transition-all duration-300">
+              <button 
+                onClick={() => toggleGroup('site')}
+                className="w-full flex items-center justify-between px-2 mt-1 mb-2 group"
+              >
+                <p className="text-[9px] text-zinc-500 font-black uppercase tracking-widest group-hover:text-zinc-300 transition-colors">SİTE & TASARIM</p>
+                {expandedGroups.site ? <ChevronUp className="w-3 h-3 text-zinc-500" /> : <ChevronDown className="w-3 h-3 text-zinc-500" />}
               </button>
-              <button onClick={() => setActiveTab('style')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'style' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Palette className="w-4 h-4" /> SİTE TASARIMI
-              </button>
-              <button onClick={() => setActiveTab('seo')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'seo' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Search className="w-4 h-4" /> SEO & HASHTAG
-              </button>
-              <button onClick={() => setActiveTab('visibility')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'visibility' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Eye className="w-4 h-4" /> SAYFA GÖRÜNÜRLÜğü
-              </button>
-              <button onClick={() => setActiveTab('liveodds')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'liveodds' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Activity className="w-4 h-4" /> CANLI ORANLAR
-              </button>
-            </>
-          )}
-
-          {!isAuthor && (
-            <>
-              <p className="text-[10px] text-zinc-500 font-black px-3 mt-6 mb-2 uppercase tracking-widest">SİSTEMLER</p>
-              <button onClick={() => setActiveTab('analysis')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'analysis' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <TrendingUp className="w-4 h-4" /> MAÇ ANALİZLERİ
-              </button>
-              <button onClick={() => setActiveTab('coupons')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'coupons' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Ticket className="w-4 h-4" /> GÜNÜN KUPONLARI
-              </button>
-            </>
-          )}
-          {role === 'admin' && (
-            <>
-              <button onClick={() => setActiveTab('blackjack')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'blackjack' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Zap className="w-4 h-4" /> CASINO 724
-              </button>
-              <button onClick={() => setActiveTab('pool')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'pool' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Trophy className="w-4 h-4" /> 724TOTO YÖNETİMİ
-              </button>
-              <button onClick={() => setActiveTab('raffle')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'raffle' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Ticket className="w-4 h-4" /> BİLET HAVUZU
-              </button>
-              <button onClick={() => setActiveTab('popularbets')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'popularbets' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <TrendingUp className="w-4 h-4" /> POPÜLER BAHİSLER
-              </button>
-              <button onClick={() => setActiveTab('newsslider')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'newsslider' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Layout className="w-4 h-4" /> GÜNDEM SLIDER
-              </button>
-              <button onClick={() => setActiveTab('724tv')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === '724tv' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Layers className="w-4 h-4" /> 724TV
-              </button>
-              <button onClick={() => setActiveTab('loyalty')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'loyalty' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Star className="w-4 h-4" /> SADAKAT / BİLET
-              </button>
-              <button onClick={() => setActiveTab('members')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'members' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Users className="w-4 h-4" /> ÜYELER
-              </button>
-              <button onClick={() => setActiveTab('payment')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'payment' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <CreditCard className="w-4 h-4" /> ÖDEMELER
-              </button>
-              <button onClick={() => setActiveTab('editors')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'editors' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <User className="w-4 h-4" /> EDİTÖRLER
-              </button>
-              <button onClick={() => setActiveTab('giveaway')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'giveaway' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Gift className="w-4 h-4" /> ÇEKİLİŞ YÖNETİMİ
-              </button>
-              <button onClick={() => setActiveTab('system')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs ${activeTab === 'system' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                <Settings className="w-4 h-4" /> SİSTEM AYARLARI
-              </button>
-            </>
-          )}
-
-          {/* News tab - visible to admin, authors & editors */}
-          {(role === 'admin' || isAuthor || isEditor) && (
-            <div className="space-y-1">
-              <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest pl-4 mb-2 mt-4">Haberler</div>
-              <button onClick={() => setActiveTab('news')} className={`flex items-center gap-3 p-3 rounded-xl transition-colors font-bold text-xs w-full ${activeTab === 'news' ? 'bg-primary text-black' : 'text-zinc-400 hover:bg-zinc-800'}`}>
-                📰 HABER YÖNETİMİ
-              </button>
+              {expandedGroups.site && (
+                <div className="space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <button onClick={() => setActiveTab('content')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'content' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Layout className="w-3.5 h-3.5" /> İÇERİK YÖNETİMİ
+                  </button>
+                  <button onClick={() => setActiveTab('style')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'style' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Palette className="w-3.5 h-3.5" /> SİTE TASARIMI
+                  </button>
+                  <button onClick={() => setActiveTab('seo')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'seo' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Search className="w-3.5 h-3.5" /> SEO & HASHTAG
+                  </button>
+                  <button onClick={() => setActiveTab('visibility')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'visibility' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Eye className="w-3.5 h-3.5" /> SAYFA GÖRÜNÜRLÜĞÜ
+                  </button>
+                  <button onClick={() => setActiveTab('system')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'system' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Settings className="w-3.5 h-3.5" /> SİSTEM AYARLARI
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
           {!isAuthor && (
-            <div className="space-y-1">
-              <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest pl-4 mb-2 mt-4">İletişim & Destek</div>
-              <button
-                onClick={() => setActiveTab('messages')}
-                className={`w-full flex justify-between items-center px-4 py-3 rounded-2xl text-xs font-black uppercase transition-all
-                ${activeTab === 'messages' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20 scale-105' : 'text-zinc-400 hover:bg-white/5 hover:text-white'}`}
+            <div className="bg-black/20 p-2 rounded-2xl border border-white/5 space-y-1 transition-all duration-300">
+              <button 
+                onClick={() => toggleGroup('betting')}
+                className="w-full flex items-center justify-between px-2 mt-1 mb-2 group"
               >
-                <div className="flex items-center gap-3">
-                  <MessageSquare className="w-4 h-4" /> MESAJLAR
-                </div>
-                {unreadCount > 0 && <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full">{unreadCount}</span>}
+                <p className="text-[9px] text-zinc-500 font-black uppercase tracking-widest group-hover:text-zinc-300 transition-colors">SPOR & BAHİS</p>
+                {expandedGroups.betting ? <ChevronUp className="w-3 h-3 text-zinc-500" /> : <ChevronDown className="w-3 h-3 text-zinc-500" />}
               </button>
+              {expandedGroups.betting && (
+                <div className="space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <button onClick={() => setActiveTab('analysis')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'analysis' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <TrendingUp className="w-3.5 h-3.5" /> MAÇ ANALİZLERİ
+                  </button>
+                  <button onClick={() => setActiveTab('coupons')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'coupons' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Ticket className="w-3.5 h-3.5" /> GÜNÜN KUPONLARI
+                  </button>
+                  {role === 'admin' && (
+                    <>
+                      <button onClick={() => setActiveTab('liveodds')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'liveodds' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                        <Activity className="w-3.5 h-3.5" /> CANLI ORANLAR
+                      </button>
+                      <button onClick={() => setActiveTab('popularbets')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'popularbets' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                        <TrendingUp className="w-3.5 h-3.5" /> POPÜLER BAHİSLER
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {role === 'admin' && (
+            <div className="bg-black/20 p-2 rounded-2xl border border-white/5 space-y-1 transition-all duration-300">
+              <button 
+                onClick={() => toggleGroup('reward')}
+                className="w-full flex items-center justify-between px-2 mt-1 mb-2 group"
+              >
+                <p className="text-[9px] text-zinc-500 font-black uppercase tracking-widest group-hover:text-zinc-300 transition-colors">EĞLENCE & ÖDÜL</p>
+                {expandedGroups.reward ? <ChevronUp className="w-3 h-3 text-zinc-500" /> : <ChevronDown className="w-3 h-3 text-zinc-500" />}
+              </button>
+              {expandedGroups.reward && (
+                <div className="space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <button onClick={() => setActiveTab('blackjack')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'blackjack' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Zap className="w-3.5 h-3.5" /> CASINO 724
+                  </button>
+                  <button onClick={() => setActiveTab('pool')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'pool' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Trophy className="w-3.5 h-3.5" /> 724TOTO YÖNETİMİ
+                  </button>
+                  <button onClick={() => setActiveTab('giveaway')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'giveaway' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Gift className="w-3.5 h-3.5" /> ÇEKİLİŞ YÖNETİMİ
+                  </button>
+                  <button onClick={() => setActiveTab('raffle')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'raffle' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Ticket className="w-3.5 h-3.5" /> BİLET HAVUZU
+                  </button>
+                  <button onClick={() => setActiveTab('loyalty')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'loyalty' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Star className="w-3.5 h-3.5" /> SADAKAT / BİLET
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {(role === 'admin' || isAuthor || isEditor) && (
+            <div className="bg-black/20 p-2 rounded-2xl border border-white/5 space-y-1 transition-all duration-300">
+              <button 
+                onClick={() => toggleGroup('content')}
+                className="w-full flex items-center justify-between px-2 mt-1 mb-2 group"
+              >
+                <p className="text-[9px] text-zinc-500 font-black uppercase tracking-widest group-hover:text-zinc-300 transition-colors">İÇERİK BÖLÜMÜ</p>
+                {expandedGroups.content ? <ChevronUp className="w-3 h-3 text-zinc-500" /> : <ChevronDown className="w-3 h-3 text-zinc-500" />}
+              </button>
+              {expandedGroups.content && (
+                <div className="space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <button onClick={() => setActiveTab('news')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'news' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    📰 HABER YÖNETİMİ
+                  </button>
+                  {role === 'admin' && (
+                    <>
+                      <button onClick={() => setActiveTab('newsslider')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'newsslider' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                        <Layout className="w-3.5 h-3.5" /> GÜNDEM SLIDER
+                      </button>
+                      <button onClick={() => setActiveTab('724tv')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === '724tv' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                        <Layers className="w-3.5 h-3.5" /> 724TV
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {role === 'admin' && (
+            <div className="bg-black/20 p-2 rounded-2xl border border-white/5 space-y-1 transition-all duration-300">
+              <button 
+                onClick={() => toggleGroup('admin')}
+                className="w-full flex items-center justify-between px-2 mt-1 mb-2 group"
+              >
+                <p className="text-[9px] text-zinc-500 font-black uppercase tracking-widest group-hover:text-zinc-300 transition-colors">YÖNETİM & DESTEK</p>
+                {expandedGroups.admin ? <ChevronUp className="w-3 h-3 text-zinc-500" /> : <ChevronDown className="w-3 h-3 text-zinc-500" />}
+              </button>
+              {expandedGroups.admin && (
+                <div className="space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <button onClick={() => setActiveTab('members')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'members' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <Users className="w-3.5 h-3.5" /> ÜYELER
+                  </button>
+                  <button onClick={() => setActiveTab('payment')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'payment' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <CreditCard className="w-3.5 h-3.5" /> ÖDEMELER
+                  </button>
+                  <button onClick={() => setActiveTab('editors')} className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors font-bold text-[11px] w-full ${activeTab === 'editors' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}>
+                    <User className="w-3.5 h-3.5" /> EDİTÖRLER
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('messages')}
+                    className={`flex justify-between items-center p-2.5 rounded-xl text-[11px] font-bold transition-all w-full
+                    ${activeTab === 'messages' ? 'bg-[#f0b90b] text-black shadow-lg shadow-[#f0b90b]/20' : 'text-zinc-400 hover:bg-white/5'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <MessageSquare className="w-3.5 h-3.5" /> MESAJLAR
+                    </div>
+                    {unreadCount > 0 && <span className="bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded-full">{unreadCount}</span>}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </nav>
+
 
         <div className="mt-auto space-y-2">
           {onNavigateHome && (
@@ -820,11 +894,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       </aside>
 
-      <main ref={mainRef} className="flex-1 p-6 md:p-10 overflow-y-auto max-h-screen">
+      <main ref={mainRef} className="flex-1 p-4 md:p-6 overflow-y-auto max-h-screen">
         {activeTab === 'content' && (
-          <div className="space-y-12">
+          <div className="space-y-6">
             <section>
-              <h2 className="text-2xl font-black mb-6 flex items-center gap-3">HERO (ANA SPONSOR)</h2>
+              <h2 className="text-xl font-black mb-6 flex items-center gap-3">HERO (ANA SPONSOR)</h2>
               <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-6">
                 <input value={localHero.name} onChange={(e) => setLocalHero({ ...localHero, name: e.target.value })} className="bg-black border border-zinc-800 rounded-xl p-3" placeholder="Marka Adı" />
                 <input value={localHero.logo} onChange={(e) => setLocalHero({ ...localHero, logo: e.target.value })} className="bg-black border border-zinc-800 rounded-xl p-3" placeholder="Logo URL" />
@@ -834,7 +908,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </section>
             <section>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-black">MARKALAR (GRID)</h2>
+                <h2 className="text-xl font-black">MARKALAR (GRID)</h2>
                 <button onClick={addBrand} className="bg-primary text-black font-bold px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-primary/90 transition-all active:scale-95">
                   <Plus className="w-5 h-5" /> YENİ EKLE
                 </button>
@@ -851,15 +925,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
             </section>
 
-            <section className="bg-zinc-900 border border-zinc-800 p-8 rounded-[40px] relative overflow-hidden group">
+            <section className="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#f0b90b]/5 blur-3xl rounded-full" />
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-[#f0b90b]/10 rounded-2xl flex items-center justify-center border border-[#f0b90b]/20">
                     <Zap className="w-6 h-6 text-[#f0b90b]" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-black italic uppercase tracking-tighter">Açılış Pop-up Yönetimi</h2>
+                    <h2 className="text-xl font-black italic uppercase tracking-tighter">Açılış Pop-up Yönetimi</h2>
                     <p className="text-zinc-500 text-xs font-bold mt-1">Site ilk açıldığında gösterilen "Hoş geldin" reklamını yönetin.</p>
                   </div>
                 </div>
@@ -946,15 +1020,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </section>
 
             {/* ═══ HERO SLIDER MANAGEMENT ═══ */}
-            <section className="bg-zinc-900 border border-zinc-800 p-8 rounded-[40px] relative overflow-hidden">
+            <section className="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 blur-3xl rounded-full" />
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center border border-purple-500/20">
                     <Layers className="w-6 h-6 text-purple-400" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-black italic uppercase tracking-tighter">Hero Slider Yönetimi</h2>
+                    <h2 className="text-xl font-black italic uppercase tracking-tighter">Hero Slider Yönetimi</h2>
                     <p className="text-zinc-500 text-xs font-bold mt-1">Ana sayfadaki banner slider görsellerini ve yönlendirme linklerini yönetin.</p>
                   </div>
                 </div>
@@ -1189,15 +1263,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </section>
 
             {/* ═══ BANKO KUPON MANAGEMENT ═══ */}
-            <section className="bg-zinc-900 border border-zinc-800 p-8 rounded-[40px] relative overflow-hidden">
+            <section className="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl relative overflow-hidden">
               <div className="absolute top-0 left-0 w-32 h-32 bg-emerald-500/5 blur-3xl rounded-full" />
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/20">
                     <Trophy className="w-6 h-6 text-emerald-400" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-black italic uppercase tracking-tighter">Banko Kupon Yönetimi</h2>
+                    <h2 className="text-xl font-black italic uppercase tracking-tighter">Banko Kupon Yönetimi</h2>
                     <p className="text-zinc-500 text-xs font-bold mt-1">Hero Section'daki "Günün Banko Kuponu" kartındaki maçları yönetin.</p>
                   </div>
                 </div>
@@ -1264,12 +1338,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
 
               {/* Matches List */}
-              <div className="space-y-4">
+                <div className="space-y-1">
                 {localDailyKupon.matches.map((match, idx) => (
-                  <div key={match.id} className="bg-black/40 border border-zinc-800 rounded-2xl p-5 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <span className="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center text-emerald-400 font-black text-sm">{idx + 1}</span>
+                  <div key={match.id} className="bg-black/20 border border-zinc-800/50 rounded-lg p-2 space-y-2 transition-all hover:bg-black/40">
+                    <div className="flex items-center justify-between border-b border-zinc-800/50 pb-1.5">
+                      <div className="flex items-center gap-2">
+                        <span className="w-5 h-5 bg-emerald-500/10 rounded-md flex items-center justify-center text-emerald-400 font-black text-[9px]">{idx + 1}</span>
                         <span className="text-sm font-black text-white">
                           {match.homeTeam && match.awayTeam ? `${match.homeTeam} vs ${match.awayTeam}` : 'Yeni Maç'}
                         </span>
@@ -1378,7 +1452,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               {localDailyKupon.matches.length > 0 && (
                 <div className="mt-6 p-4 bg-black/40 border border-emerald-500/10 rounded-2xl flex items-center justify-between">
                   <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">TOPLAM ORAN ÖNİZLEME</span>
-                  <span className="text-2xl font-black text-[#00ff88] italic" style={{ textShadow: '0 0 15px rgba(0,255,136,0.3)' }}>
+                  <span className="text-xl font-black text-[#00ff88] italic" style={{ textShadow: '0 0 15px rgba(0,255,136,0.3)' }}>
                     {localDailyKupon.matches.reduce((acc, m) => acc * parseFloat(m.odd || '1'), 1).toFixed(2)}
                     <span className="text-sm text-[#f5c518] ml-1 not-italic">x</span>
                   </span>
@@ -1402,14 +1476,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {/* ═══ LIVE ODDS MANAGEMENT ═══ */}
         {activeTab === 'liveodds' && (
-          <div className="space-y-8">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center border border-green-500/20">
                   <Activity className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black italic uppercase tracking-tighter">Canlı Oran Yönetimi</h2>
+                  <h2 className="text-xl font-black italic uppercase tracking-tighter">Canlı Oran Yönetimi</h2>
                   <p className="text-zinc-500 text-xs font-bold mt-1">Header’daki kayan oran bandındaki popüler maçları yönetin.</p>
                 </div>
               </div>
@@ -1633,7 +1707,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         {/* Live Odds Bulk Modal */}
         {showLiveOddsBulkModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-            <div className="bg-zinc-950 border border-blue-500/20 p-8 rounded-[40px] max-w-2xl w-full shadow-[0_0_50px_rgba(59,130,246,0.1)] relative">
+            <div className="bg-zinc-950 border border-blue-500/20 p-5 rounded-3xl max-w-2xl w-full shadow-[0_0_50px_rgba(59,130,246,0.1)] relative">
               <button
                 onClick={() => setShowLiveOddsBulkModal(false)}
                 className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800"
@@ -1641,12 +1715,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 ✕
               </button>
 
-              <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-4 mb-5">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)]">
                   <Layers className="w-8 h-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-white italic uppercase">Toplu Maç Ekleme</h3>
+                  <h3 className="text-xl font-black text-white italic uppercase">Toplu Maç Ekleme</h3>
                   <p className="text-zinc-400 text-sm mt-1">Maçları alt alta yapıştırarak hızlıca ekleyin.</p>
                 </div>
               </div>
@@ -1691,7 +1765,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         {/* AI Coupon Modal */}
         {showCouponAiModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-            <div className="bg-zinc-950 border border-[#f0b90b]/20 p-8 rounded-[40px] max-w-2xl w-full shadow-[0_0_50px_rgba(240,185,11,0.1)] relative">
+            <div className="bg-zinc-950 border border-[#f0b90b]/20 p-5 rounded-3xl max-w-2xl w-full shadow-[0_0_50px_rgba(240,185,11,0.1)] relative">
               <button
                 onClick={() => setShowCouponAiModal(false)}
                 className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800"
@@ -1699,12 +1773,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 ✕
               </button>
 
-              <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-4 mb-5">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#f0b90b] to-yellow-600 flex items-center justify-center shadow-[0_0_30px_rgba(240,185,11,0.3)]">
                   <Zap className="w-8 h-8 text-black" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-white italic uppercase">AI KUPON ÜRETİCİ</h3>
+                  <h3 className="text-xl font-black text-white italic uppercase">AI KUPON ÜRETİCİ</h3>
                   <p className="text-zinc-400 text-sm mt-1">Metni yapıştırın ve risk seviyesini seçerek anında özel kupon üretin.</p>
                 </div>
               </div>
@@ -1793,13 +1867,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         )}
 
         {activeTab === 'coupons' && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-4 animate-fade-in">
             {!editingCouponId ? (
               // --- MASTER VIEW (LIST) ---
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-black text-white flex items-center gap-3">
+                    <h2 className="text-xl font-black text-white flex items-center gap-3">
                       <Ticket className="text-[#f0b90b]" /> GÜNÜN KUPONLARI
                     </h2>
                     <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Toplam {localCoupons.length} kupon yayında</p>
@@ -1922,8 +1996,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           </button>
                           <button
                             onClick={() => {
-                              localStorage.setItem('site_coupons', JSON.stringify(localCoupons));
-                              alert('Kupon başarıyla güncellendi!');
+                              const sorted = [...localCoupons].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                              setLocalCoupons(sorted);
+                              onSaveCoupons(sorted);
+                              localStorage.setItem('site_coupons', JSON.stringify(sorted));
+                              alert('Kupon başarıyla güncellendi ve tarihe göre sıralandı!');
                             }}
                             className="flex items-center gap-2 bg-[#f0b90b] text-black font-black px-5 py-2 rounded-xl text-xs uppercase shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_#f0b90b] transition-all active:scale-95"
                           >
@@ -1935,8 +2012,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         </div>
                       </div>
 
-                      <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[40px] space-y-10">
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                      <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl space-y-10">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                           <div className="space-y-2">
                             <label className="text-[9px] font-black text-zinc-500 uppercase">KUPON BAŞLIĞI</label>
                             <input value={coupon.title} onChange={(e) => {
@@ -1982,6 +2059,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               <option value="Superbike">Superbike</option>
                               <option value="Tenis">Tenis</option>
                             </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[9px] font-black text-zinc-500 uppercase flex items-center gap-1">
+                              <Calendar className="w-2.5 h-2.5 text-[#f0b90b]" /> KUPON TARİHİ
+                            </label>
+                            <input 
+                              type="date"
+                              value={coupon.date} 
+                              onChange={(e) => {
+                                const updated = [...localCoupons]; updated[idx].date = e.target.value; setLocalCoupons(updated);
+                              }} 
+                              className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none text-white [color-scheme:dark]" 
+                            />
                           </div>
                         </div>
 
@@ -2046,13 +2136,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
         )}
         {activeTab === 'analysis' && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-4 animate-fade-in">
             {!editingAnalysisId ? (
               // --- MASTER VIEW (LIST) ---
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-black text-white flex items-center gap-3">
+                    <h2 className="text-xl font-black text-white flex items-center gap-3">
                       <TrendingUp className="text-[#f0b90b]" /> MAÇ ANALİZ YÖNETİMİ
                     </h2>
                     <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Toplam {localAnalyses.length} analiz yayında</p>
@@ -2063,6 +2153,21 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       className="bg-indigo-600 text-white font-black px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-indigo-500 hover:shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all active:scale-95 text-xs uppercase"
                     >
                       <Zap className="w-4 h-4" /> AI İLE ANALİZ OLUŞTUR
+                    </button>
+                    <button
+                      onClick={() => {
+                        const dates = ['2026-04-28', '2026-04-29', '2026-04-30'];
+                        const updatedAnalyses = localAnalyses.map((analysis, index) => ({
+                          ...analysis,
+                          matchDate: dates[index % dates.length]
+                        }));
+                        setLocalAnalyses(updatedAnalyses);
+                        onSaveAnalyses(updatedAnalyses);
+                        alert('Analiz tarihleri 28, 29 ve 30 Nisan olarak eşit şekilde dağıtıldı!');
+                      }}
+                      className="bg-zinc-800 text-zinc-400 font-black px-4 py-3 rounded-2xl flex items-center gap-2 hover:bg-zinc-700 transition-all active:scale-95 text-xs uppercase border border-zinc-700/50"
+                    >
+                      <Calendar className="w-4 h-4" /> TARİHLERİ DAĞIT
                     </button>
                     <button
                       onClick={() => {
@@ -2109,14 +2214,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         }}
                         className="bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white font-black px-6 py-3 rounded-2xl flex items-center gap-2 transition-all active:scale-95 text-xs uppercase"
                       >
-                        <Trash2 className="w-4 h-4" /> TÜMÜNÜ SİL
+                       <Trash2 className="w-4 h-4" /> TÜMÜNÜ SİL
                       </button>
                     )}
                   </div>
                 </div>
 
                 {/* Gelişmiş Gruplama Listesi & Spor Seçimi (Sport Toggle) */}
-                <div className="space-y-8 relative pb-20">
+                <div className="space-y-4 relative pb-20">
                   {/* Sport-Themed Ambient Glow */}
                   <div
                     className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none transition-all duration-700 z-0 rounded-3xl"
@@ -2127,71 +2232,115 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     }}
                   />
 
-                  {/* Sport Toggle */}
-                  <div className="flex justify-center gap-4 relative z-10">
-                    <button
-                      onClick={() => setAdminSport('Futbol')}
-                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'Futbol'
-                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
-                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
-                        }`}
-                      style={{ whiteSpace: 'nowrap' }}
-                    >
-                      <span className="text-xl">⚽</span> Futbol
-                    </button>
-                    <button
-                      onClick={() => setAdminSport('Basketbol')}
-                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'Basketbol'
-                        ? 'bg-[#E4510B] text-white shadow-[0_0_25px_rgba(228,81,11,0.3)] scale-105'
-                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
-                        }`}
-                      style={{ whiteSpace: 'nowrap' }}
-                    >
-                      <span className="text-xl">🏀</span> Basketbol
-                    </button>
-                    <button
-                      onClick={() => setAdminSport('Formula 1')}
-                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'Formula 1'
-                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
-                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
-                        }`}
-                      style={{ whiteSpace: 'nowrap' }}
-                    >
-                      <span className="text-xl">🏎️</span> Formula 1
-                    </button>
-                    <button
-                      onClick={() => setAdminSport('MotoGP')}
-                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'MotoGP'
-                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
-                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
-                        }`}
-                      style={{ whiteSpace: 'nowrap' }}
-                    >
-                      <span className="text-xl">🏍️</span> MotoGP
-                    </button>
-                    <button
-                      onClick={() => setAdminSport('Superbike')}
-                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'Superbike'
-                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
-                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
-                        }`}
-                      style={{ whiteSpace: 'nowrap' }}
-                    >
-                      <span className="text-xl">🏍️</span> Superbike
-                    </button>
-                    <button
-                      onClick={() => setAdminSport('Tenis')}
-                      className={`flex items-center gap-2 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all duration-300 ${adminSport === 'Tenis'
-                        ? 'bg-[#f0b90b] text-black shadow-[0_0_25px_rgba(240,185,11,0.3)] scale-105'
-                        : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
-                        }`}
-                      style={{ whiteSpace: 'nowrap' }}
-                    >
-                      <span className="text-xl">🎾</span> Tenis
-                    </button>
+                  {/* Sport Toggle & Filters */}
+                  <div className="flex flex-col gap-4 relative z-10">
+                    <div className="flex justify-center gap-2 flex-wrap">
+                      <button
+                        onClick={() => { setAdminSport('Futbol'); setAdminAnalysisLeagueFilter(''); setAdminAnalysisDateFilter(''); }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black uppercase transition-all duration-300 ${adminSport === 'Futbol'
+                          ? 'bg-[#f0b90b] text-black shadow-md'
+                          : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                          }`}
+                      >
+                        <span className="text-xs">⚽</span> <span className="text-[9px]">Futbol</span>
+                      </button>
+                      <button
+                        onClick={() => { setAdminSport('Basketbol'); setAdminAnalysisLeagueFilter(''); setAdminAnalysisDateFilter(''); }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black uppercase transition-all duration-300 ${adminSport === 'Basketbol'
+                          ? 'bg-[#E4510B] text-white shadow-md'
+                          : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                          }`}
+                      >
+                        <span className="text-xs">🏀</span> <span className="text-[9px]">Basketbol</span>
+                      </button>
+                      <button
+                        onClick={() => { setAdminSport('Formula 1'); setAdminAnalysisLeagueFilter(''); setAdminAnalysisDateFilter(''); }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black uppercase transition-all duration-300 ${adminSport === 'Formula 1'
+                          ? 'bg-[#f0b90b] text-black shadow-md'
+                          : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                          }`}
+                      >
+                        <span className="text-xs">🏎️</span> <span className="text-[9px]">F1</span>
+                      </button>
+                      <button
+                        onClick={() => { setAdminSport('MotoGP'); setAdminAnalysisLeagueFilter(''); setAdminAnalysisDateFilter(''); }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black uppercase transition-all duration-300 ${adminSport === 'MotoGP'
+                          ? 'bg-[#f0b90b] text-black shadow-md'
+                          : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                          }`}
+                      >
+                        <span className="text-xs">🏍️</span> <span className="text-[9px]">MotoGP</span>
+                      </button>
+                      <button
+                        onClick={() => { setAdminSport('Superbike'); setAdminAnalysisLeagueFilter(''); setAdminAnalysisDateFilter(''); }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black uppercase transition-all duration-300 ${adminSport === 'Superbike'
+                          ? 'bg-[#f0b90b] text-black shadow-md'
+                          : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                          }`}
+                      >
+                        <span className="text-xs">🏍️</span> <span className="text-[9px]">SBK</span>
+                      </button>
+                      <button
+                        onClick={() => { setAdminSport('Tenis'); setAdminAnalysisLeagueFilter(''); setAdminAnalysisDateFilter(''); }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black uppercase transition-all duration-300 ${adminSport === 'Tenis'
+                          ? 'bg-[#f0b90b] text-black shadow-md'
+                          : 'bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800'
+                          }`}
+                      >
+                        <span className="text-xs">🎾</span> <span className="text-[9px]">Tenis</span>
+                      </button>
+                    </div>
+
+                    {/* League & Date Filters */}
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="relative group">
+                        <select 
+                          value={adminAnalysisLeagueFilter}
+                          onChange={(e) => setAdminAnalysisLeagueFilter(e.target.value)}
+                          className="bg-black/40 border border-zinc-800 text-zinc-300 text-[10px] font-black uppercase px-4 py-2 rounded-xl outline-none focus:border-[#f0b90b]/50 transition-all cursor-pointer appearance-none pr-8 min-w-[140px]"
+                        >
+                          <option value="">TÜM LİGLER</option>
+                          {Array.from(new Set(localAnalyses.filter(a => {
+                            if (adminSport === 'Basketbol') return a.sport === 'Basketbol' || a.league.toLowerCase().includes('nba') || a.league.toLowerCase().includes('basket') || a.league.toLowerCase().includes('euroleague');
+                            if (adminSport === 'Futbol') return (!a.sport || a.sport === 'Futbol') && !(a.league.toLowerCase().includes('nba') || a.league.toLowerCase().includes('basket') || a.league.toLowerCase().includes('euroleague'));
+                            return a.sport === adminSport;
+                          }).map(a => a.league))).sort().map(league => (
+                            <option key={league} value={league}>{league}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-500 pointer-events-none" />
+                      </div>
+
+                      <div className="relative group">
+                        <select 
+                          value={adminAnalysisDateFilter}
+                          onChange={(e) => setAdminAnalysisDateFilter(e.target.value)}
+                          className="bg-black/40 border border-zinc-800 text-zinc-300 text-[10px] font-black uppercase px-4 py-2 rounded-xl outline-none focus:border-[#f0b90b]/50 transition-all cursor-pointer appearance-none pr-8 min-w-[140px]"
+                        >
+                          <option value="">TÜM TARİHLER</option>
+                          {Array.from(new Set(localAnalyses.filter(a => {
+                            if (adminSport === 'Basketbol') return a.sport === 'Basketbol' || a.league.toLowerCase().includes('nba') || a.league.toLowerCase().includes('basket') || a.league.toLowerCase().includes('euroleague');
+                            if (adminSport === 'Futbol') return (!a.sport || a.sport === 'Futbol') && !(a.league.toLowerCase().includes('nba') || a.league.toLowerCase().includes('basket') || a.league.toLowerCase().includes('euroleague'));
+                            return a.sport === adminSport;
+                          }).map(a => a.matchDate))).sort().map((date: any) => (
+                            <option key={date} value={date}>{(date as string).split('-').reverse().join('.')}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-500 pointer-events-none" />
+                      </div>
+
+                      {(adminAnalysisLeagueFilter || adminAnalysisDateFilter) && (
+                        <button 
+                          onClick={() => { setAdminAnalysisLeagueFilter(''); setAdminAnalysisDateFilter(''); }}
+                          className="text-[9px] font-black text-rose-500 hover:text-rose-400 uppercase tracking-widest transition-colors flex items-center gap-1 px-2 py-2"
+                        >
+                          <RefreshCw className="w-3 h-3" /> TEMİZLE
+                        </button>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="relative z-10 space-y-12">
+                  <div className="relative z-10 space-y-6">
                     {(() => {
                       const sportConfig = {
                         'Futbol': { icon: '⚽', colorClassName: 'text-[#f0b90b]', bgClassName: 'bg-emerald-500/10 border-emerald-500/20', lineBg: 'bg-[#f0b90b]' },
@@ -2212,6 +2361,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           !a.league.includes('Boluspor orta sıralarda') &&
                           !a.league.includes('Porto Dragao')
                         )
+                        .sort((a, b) => {
+                          if (a.matchDate !== b.matchDate) return a.matchDate.localeCompare(b.matchDate);
+                          return a.matchTime.localeCompare(b.matchTime);
+                        })
                         .reduce((acc, analysis) => {
                           if (!acc[analysis.league]) acc[analysis.league] = [];
                           acc[analysis.league].push(analysis);
@@ -2220,57 +2373,85 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                       const filteredGroups: Record<string, MatchAnalysis[]> = {};
 
-                      Object.keys(groups).forEach(league => {
-                        const sampleAnalysis = groups[league][0];
-                        let matchesSport = false;
-                        if (adminSport === 'Basketbol') {
-                           matchesSport = sampleAnalysis.sport === 'Basketbol' || sampleAnalysis.league.toLowerCase().includes('nba') || sampleAnalysis.league.toLowerCase().includes('basket') || sampleAnalysis.league.toLowerCase().includes('euroleague');
-                        } else if (adminSport === 'Futbol') {
-                           matchesSport = (!sampleAnalysis.sport || sampleAnalysis.sport === 'Futbol') && !(sampleAnalysis.league.toLowerCase().includes('nba') || sampleAnalysis.league.toLowerCase().includes('basket') || sampleAnalysis.league.toLowerCase().includes('euroleague'));
-                        } else {
-                           matchesSport = sampleAnalysis.sport === adminSport;
-                        }
-                        if (matchesSport) {
-                           filteredGroups[league] = groups[league];
-                        }
-                      });
+                        Object.keys(groups).forEach(league => {
+                          const sampleAnalysis = groups[league][0];
+                          let matchesSport = false;
+                          if (adminSport === 'Basketbol') {
+                             matchesSport = sampleAnalysis.sport === 'Basketbol' || sampleAnalysis.league.toLowerCase().includes('nba') || sampleAnalysis.league.toLowerCase().includes('basket') || sampleAnalysis.league.toLowerCase().includes('euroleague');
+                          } else if (adminSport === 'Futbol') {
+                             matchesSport = (!sampleAnalysis.sport || sampleAnalysis.sport === 'Futbol') && !(sampleAnalysis.league.toLowerCase().includes('nba') || sampleAnalysis.league.toLowerCase().includes('basket') || sampleAnalysis.league.toLowerCase().includes('euroleague'));
+                          } else {
+                             matchesSport = sampleAnalysis.sport === adminSport;
+                          }
+                          
+                          if (matchesSport) {
+                             // Apply Date and League filters
+                             if (adminAnalysisLeagueFilter && league !== adminAnalysisLeagueFilter) return;
+                             
+                             const filteredItems = groups[league].filter(a => {
+                               if (adminAnalysisDateFilter && a.matchDate !== adminAnalysisDateFilter) return false;
+                               return true;
+                             });
+                             
+                             if (filteredItems.length > 0) {
+                               filteredGroups[league] = filteredItems;
+                             }
+                          }
+                        });
 
                       const renderMatchRow = (analysis: MatchAnalysis) => (
-                        <div key={analysis.id} className="group relative">
-                          <div className="bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-md p-3 md:p-4 rounded-2xl flex flex-col md:flex-row items-center md:items-center justify-between gap-4 transition-all duration-500 hover:border-[#f0b90b]/40 hover:bg-zinc-900/80 hover:-translate-y-1 shadow-2xl shadow-black/40">
-                            <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
-                              <div className={`shrink-0 w-10 h-10 bg-black rounded-xl flex items-center justify-center border border-zinc-800/80 transition-all duration-500 group-hover:border-[#f0b90b]/30 group-hover:shadow-[0_0_20px_rgba(240,185,11,0.2)]`}>
-                                <TrendingUp className={`w-5 h-5 ${currentConfig.colorClassName}`} />
-                              </div>
-                              
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                  <div className="px-1.5 py-0.5 bg-zinc-800/80 rounded border border-zinc-700/50">
-                                    <span className={`text-[8px] font-black tracking-widest uppercase ${currentConfig.colorClassName}`}>{analysis.matchTime}</span>
+                        <div key={analysis.id} className="group odd:bg-black/10 even:bg-white/[0.02] border-b border-white/[0.03] last:border-0">
+                          <div className="p-1.5 md:p-2 flex items-center justify-between gap-2 transition-all duration-200 hover:bg-white/[0.05]">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                                  {/* Time & Date */}
+                                  <div className="flex flex-col items-center justify-center min-w-[70px] border-r border-white/5 pr-2 leading-tight">
+                                    <span className="text-[10px] font-black text-[#f0b90b] tracking-wider">{analysis.matchTime}</span>
+                                    <span className="text-[7px] font-medium text-[#94A3B8] uppercase tracking-tighter">
+                                      {(() => {
+                                        const d = new Date(analysis.matchDate);
+                                        const dayName = d.toLocaleDateString('tr-TR', { weekday: 'short' });
+                                        const day = d.getDate().toString().padStart(2, '0');
+                                        const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                                        return `${day}.${month} ${dayName}`;
+                                      })()}
+                                    </span>
                                   </div>
-                                  <div className="px-1.5 py-0.5 bg-zinc-800/80 rounded border border-zinc-700/50 flex items-center gap-1">
-                                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                                    <span className="text-[8px] font-black tracking-widest text-emerald-400 uppercase">YAYINDA</span>
+                                  
+                                  {/* Team Name */}
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="text-[11px] font-semibold text-[#F8FAFC] group-hover:text-white transition-colors truncate uppercase tracking-wider">
+                                      {analysis.homeTeam} - {analysis.awayTeam}
+                                    </h4>
                                   </div>
-                                </div>
-                                <h4 className="text-sm md:text-base font-black text-white group-hover:text-[#f0b90b] transition-colors truncate uppercase italic tracking-tight">
-                                  {analysis.homeTeam} - {analysis.awayTeam}
-                                </h4>
+
+                              {/* Status badge inline */}
+                              <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 bg-emerald-500/5 rounded border border-emerald-500/10">
+                                <span className="w-1 h-1 bg-emerald-500 rounded-full"></span>
+                                <span className="text-[7px] font-black text-emerald-500 uppercase">LIVE</span>
                               </div>
                             </div>
                             
-                            <div className="flex items-center gap-3 w-full md:w-auto mt-3 md:mt-0 pt-3 md:pt-0 border-t border-zinc-800/50 md:border-0 shrink-0">
-                              <button onClick={() => { setEditingAnalysisId(analysis.id); window.scrollTo({ top: 300, behavior: 'smooth' }); }} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-800/80 border border-zinc-700/50 text-white font-black text-[9px] uppercase tracking-widest hover:bg-[#f0b90b] hover:text-black hover:border-[#f0b90b] transition-all">
-                                <Edit3 className="w-3.5 h-3.5" /> DÜZENLE
+                            {/* Actions */}
+                            <div className="flex items-center gap-1 shrink-0">
+                              <button 
+                                onClick={() => { setEditingAnalysisId(analysis.id); window.scrollTo({ top: 300, behavior: 'smooth' }); }} 
+                                className="p-1.5 rounded-md bg-zinc-800 text-zinc-500 hover:bg-[#f0b90b] hover:text-black transition-all"
+                                title="Düzenle"
+                              >
+                                <Edit3 className="w-3 h-3" />
                               </button>
-                              <button onClick={() => {
+                              <button 
+                                onClick={() => {
                                   if (window.confirm('Bu analizi silmek istediğinize emin misiniz?')) {
                                     const updated = localAnalyses.filter(a => a.id !== analysis.id);
                                     setLocalAnalyses(updated);
                                     onSaveAnalyses(updated);
                                   }
-                                }} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 font-black text-[9px] uppercase tracking-widest hover:bg-red-50 hover:text-white transition-all group/btn">
-                                <Trash2 className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" /> SİL
+                                }} 
+                                className="p-1.5 rounded-md bg-red-500/5 text-red-500/60 hover:bg-red-500 hover:text-white transition-all"
+                                title="Sil"
+                              >
+                                <Trash2 className="w-3 h-3" />
                               </button>
                             </div>
                           </div>
@@ -2291,24 +2472,41 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                 </div>
                               </div>
 
-                              {Object.entries(filteredGroups).map(([league, items]) => (
-                                <div key={league} className="space-y-3">
-                                  <div className="flex items-start justify-between px-2 gap-4 group-header pt-2 pb-1 border-b border-zinc-800/30">
-                                    <h3 className={`text-[11px] md:text-[13px] font-black ${currentConfig.colorClassName} uppercase tracking-[0.2em] flex items-start gap-3 flex-1 min-w-0 leading-relaxed`}>
-                                      <div className={`w-1 h-4 ${currentConfig.lineBg} shrink-0 rounded-full shadow-[0_0_10px_currentColor]`} /> 
-                                      <span className="break-words">{league}</span>
-                                    </h3>
-                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest shrink-0 mt-0.5">{items.length} YAYIN</span>
-                                  </div>
-                                  <div className="grid grid-cols-1 gap-3">
-                                    {items.map(renderMatchRow)}
-                                  </div>
-                                </div>
-                              ))}
+                              {Object.entries(filteredGroups).map(([league, items]) => {
+                                  const isExpanded = expandedLeagues[league] === true; // Default to false
+                                  return (
+                                    <div key={league} className="mb-6 last:mb-0">
+                                      <div 
+                                        onClick={() => setExpandedLeagues(prev => ({ ...prev, [league]: !isExpanded }))}
+                                        className="flex items-center justify-between mb-3 border-l-2 border-[#f0b90b] pl-3 cursor-pointer group/header hover:bg-white/[0.02] py-1 transition-colors"
+                                      >
+                                        <div className="flex items-center gap-3">
+                                          <h3 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
+                                            {league}
+                                          </h3>
+                                          <span className="text-[8px] font-bold text-zinc-600 uppercase tracking-widest shrink-0 mt-0.5 px-1.5 py-0.5 bg-zinc-900/50 rounded">{items.length} YAYIN</span>
+                                        </div>
+                                        <div className="pr-2">
+                                          {isExpanded ? (
+                                            <ChevronUp className="w-4 h-4 text-zinc-600 group-hover/header:text-[#f0b90b] transition-colors" />
+                                          ) : (
+                                            <ChevronDown className="w-4 h-4 text-zinc-600 group-hover/header:text-[#f0b90b] transition-colors" />
+                                          )}
+                                        </div>
+                                      </div>
+                                      
+                                      {isExpanded && (
+                                        <div className="bg-zinc-900/40 border border-white/5 rounded-xl overflow-hidden shadow-2xl animate-fade-in">
+                                          {items.map(renderMatchRow)}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
                             </div>
                           )}
                           {Object.keys(filteredGroups).length === 0 && (
-                            <div className="py-20 text-center border border-dashed border-zinc-800 rounded-[40px]">
+                            <div className="py-20 text-center border border-dashed border-zinc-800 rounded-3xl">
                               <AlertCircle className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
                               <p className="text-zinc-400 font-bold">Bu kategori için henüz analiz yok.</p>
                             </div>
@@ -2365,9 +2563,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         </div>
 
                         {/* Tab Content */}
-                        <div className="p-6 md:p-8 space-y-8">
+                        <div className="p-6 md:p-5 space-y-4">
                           {editAnalysisTab === 'basic' && (
-                            <div className="space-y-8 animate-fade-in-up">
+                            <div className="space-y-4 animate-fade-in-up">
                               {/* Grid 1: Basic Math Info */}
                               <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                                 <div className="space-y-2">
@@ -2459,7 +2657,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           )}
 
                           {editAnalysisTab === 'stats' && (
-                            <div className="space-y-8 animate-fade-in-up">
+                            <div className="space-y-4 animate-fade-in-up">
                               {/* İstatistik Satırı */}
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-black/30 p-6 rounded-2xl border border-zinc-800/80">
                                 <div className="space-y-2">
@@ -2598,9 +2796,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {/* Previous style and seo tabs remain same logic but kept for consistency */}
         {activeTab === 'style' && (
-          <div className="max-w-xl space-y-8">
-            <h2 className="text-2xl font-black">SİTE GÖRÜNÜMÜ</h2>
-            <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl space-y-6">
+          <div className="max-w-xl space-y-4">
+            <h2 className="text-xl font-black">SİTE GÖRÜNÜMÜ</h2>
+            <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl space-y-6">
               <div className="flex items-center justify-between">
                 <div><h3 className="font-bold">Ana Renk</h3></div>
                 <input type="color" value={themeColor} onChange={(e) => onThemeChange(e.target.value)} className="w-16 h-16 bg-transparent cursor-pointer" />
@@ -2610,17 +2808,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         )}
 
         {activeTab === 'seo' && (
-          <div className="max-w-2xl space-y-8">
-            <h2 className="text-2xl font-black">CEO / SEO HASHTAG</h2>
+          <div className="max-w-2xl space-y-4">
+            <h2 className="text-xl font-black">CEO / SEO HASHTAG</h2>
             <textarea value={localHashtags} onChange={(e) => setLocalHashtags(e.target.value)} className="w-full h-48 bg-black border border-zinc-800 rounded-2xl p-6 outline-none focus:border-primary text-zinc-300 font-mono text-sm resize-none" />
           </div>
         )}
 
         {activeTab === 'leagues' && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-4 animate-fade-in">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-black text-white flex items-center gap-3">
+                <h2 className="text-xl font-black text-white flex items-center gap-3">
                   <Trophy className="text-[#f0b90b]" /> LİG & VERİ YÖNETİMİ
                 </h2>
                 <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">
@@ -2679,9 +2877,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {/* ===== EDITOR MANAGEMENT TAB ===== */}
         {activeTab === 'editors' && (
-          <div className="space-y-8 animate-fade-in-up">
+          <div className="space-y-4 animate-fade-in-up">
             <div>
-              <h2 className="text-2xl font-black text-white flex items-center gap-3">
+              <h2 className="text-xl font-black text-white flex items-center gap-3">
                 <Users className="text-[#f0b90b]" /> EDİTÖR YÖNETİMİ
               </h2>
               <p className="text-zinc-500 text-xs font-bold uppercase mt-1">Kayıtlı editörleri yönet, yeni editör oluştur</p>
@@ -2827,7 +3025,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           <div className="space-y-10 animate-fade-in-up">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-black text-white flex items-center gap-3">
+                <h2 className="text-xl font-black text-white flex items-center gap-3">
                   <Zap className="text-amber-400" /> ÇARK VE ÖDÜL YÖNETİMİ
                 </h2>
                 <p className="text-zinc-500 text-xs font-bold uppercase mt-1">Ödülleri, oranları ve bekleme süresini buradan ayarlayın</p>
@@ -2943,7 +3141,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       {showAiModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-fade-in">
           <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setShowAiModal(false)} />
-          <div className="relative bg-zinc-900 w-full max-w-5xl p-8 rounded-[40px] border border-[#f0b90b]/30 shadow-[0_0_50px_rgba(240,185,11,0.15)] animate-scale-in flex flex-col md:flex-row gap-8">
+          <div className="relative bg-zinc-900 w-full max-w-5xl p-5 rounded-3xl border border-[#f0b90b]/30 shadow-[0_0_50px_rgba(240,185,11,0.15)] animate-scale-in flex flex-col md:flex-row gap-8">
             
             {/* Prompt Generator Side */}
             <div className="flex-1 space-y-4">
@@ -3387,9 +3585,9 @@ Maç Listesi: `}
 
       {/* ─── VISIBILITY TAB ─── */}
       {activeTab === 'visibility' && (
-        <div className="space-y-8 animate-fade-in-up p-6 overflow-y-auto w-full max-w-4xl mx-auto">
+        <div className="space-y-4 animate-fade-in-up p-6 overflow-y-auto w-full max-w-4xl mx-auto">
           <div>
-            <h2 className="text-2xl font-black text-white flex items-center gap-3">
+            <h2 className="text-xl font-black text-white flex items-center gap-3">
               <Eye className="text-primary" /> SAYFA GÖRÜNÜRLÜĞÜ
             </h2>
             <p className="text-zinc-500 text-sm font-bold mt-2">
@@ -3583,10 +3781,10 @@ Maç Listesi: `}
 
       {/* ─── MESSAGES TAB ─── */}
       {activeTab === 'messages' && (
-        <div className="space-y-8 animate-fade-in-up">
+        <div className="space-y-4 animate-fade-in-up">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-black text-white flex items-center gap-3">
+              <h2 className="text-xl font-black text-white flex items-center gap-3">
                 <MessageSquare className="text-blue-400" /> KULLANICI MESAJLARI
               </h2>
               <p className="text-zinc-500 text-xs font-bold uppercase mt-1">724BAHİS.NET yatırımları ve üye bildirimleri</p>
@@ -3684,7 +3882,7 @@ Maç Listesi: `}
         <div className="space-y-10 animate-fade-in-up">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-black text-white flex items-center gap-3">
+              <h2 className="text-xl font-black text-white flex items-center gap-3">
                 <Settings className="text-amber-500" /> SİSTEM VE BAKIM
               </h2>
               <p className="text-zinc-500 text-xs font-bold uppercase mt-1">Site erişim durumunu ve bakım modunu yönetin</p>
@@ -3697,9 +3895,9 @@ Maç Listesi: `}
             </button>
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-[30px] shadow-2xl relative overflow-hidden group hover:border-amber-500/50 transition-colors">
+          <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-[30px] shadow-2xl relative overflow-hidden group hover:border-amber-500/50 transition-colors">
             
-            <div className="flex items-start justify-between mb-8">
+            <div className="flex items-start justify-between mb-5">
               <div className="space-y-4 w-full">
                 <div className="flex items-center justify-between">
                   <div>
@@ -3740,7 +3938,7 @@ Maç Listesi: `}
             
             {/* Warning visual depending on mode */}
             {localSiteStatus.isMaintenanceMode && (
-              <div className="absolute top-0 right-0 p-8 w-64 h-64 bg-red-500/10 blur-[80px] pointer-events-none rounded-full" />
+              <div className="absolute top-0 right-0 p-5 w-64 h-64 bg-red-500/10 blur-[80px] pointer-events-none rounded-full" />
             )}
             
           </div>

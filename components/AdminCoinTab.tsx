@@ -80,8 +80,8 @@ const AdminCoinTab: React.FC = () => {
     const totalPending = requests.filter(r => r.status === 'pending').reduce((s, r) => s + r.coinAmount, 0);
 
     return (
-        <div className="space-y-8">
-            <h2 className="text-2xl font-black flex items-center gap-3"><Coins className="w-6 h-6 text-[#f0b90b]" /> COİN TALEPLERİ YÖNETİMİ</h2>
+        <div className="space-y-4">
+            <h2 className="text-xl font-black flex items-center gap-3"><Coins className="w-6 h-6 text-[#f0b90b]" /> COİN TALEPLERİ YÖNETİMİ</h2>
 
             {msg && <div className="bg-green-500/20 border border-green-500/30 text-green-400 font-bold text-sm p-4 rounded-xl">{msg}</div>}
 
@@ -89,15 +89,15 @@ const AdminCoinTab: React.FC = () => {
             <div className="grid grid-cols-3 gap-4">
                 <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center">
                     <p className="text-xs text-zinc-500 font-black uppercase tracking-widest mb-1">Onaylanan Toplam</p>
-                    <p className="text-2xl font-black text-green-400">{totalApproved.toLocaleString('tr-TR')} Coin</p>
+                    <p className="text-xl font-black text-green-400">{totalApproved.toLocaleString('tr-TR')} Coin</p>
                 </div>
                 <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center">
                     <p className="text-xs text-zinc-500 font-black uppercase tracking-widest mb-1">Bekleyen Toplam</p>
-                    <p className="text-2xl font-black text-yellow-400">{totalPending.toLocaleString('tr-TR')} Coin</p>
+                    <p className="text-xl font-black text-yellow-400">{totalPending.toLocaleString('tr-TR')} Coin</p>
                 </div>
                 <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center">
                     <p className="text-xs text-zinc-500 font-black uppercase tracking-widest mb-1">Toplam Talep</p>
-                    <p className="text-2xl font-black text-white">{requests.length}</p>
+                    <p className="text-xl font-black text-white">{requests.length}</p>
                 </div>
             </div>
 
