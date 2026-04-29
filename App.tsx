@@ -295,11 +295,11 @@ const App: React.FC = () => {
   });
 
 
-  // App Flow: Video Splash Screen Timing (4s display + 0.8s Fade)
+  // App Flow: Video Splash Screen Timing (3s display + 0.8s Fade)
   useEffect(() => {
     const fadeTimer = setTimeout(() => {
       setFadeOutLoader(true);
-    }, 4000);
+    }, 3000);
 
     const readyTimer = setTimeout(() => {
       if (!siteStatusConfig.isMaintenanceMode) {
@@ -313,7 +313,7 @@ const App: React.FC = () => {
         setAppStage('ready');
       }
       setShowLoader(false);
-    }, 4800);
+    }, 3800);
 
     return () => {
       clearTimeout(fadeTimer);
