@@ -8,7 +8,7 @@ import AdminRaffleTab from './AdminRaffleTab';
 import AdminPopularBetsTab from './AdminPopularBetsTab';
 import Admin724TVTab from './Admin724TVTab';
 import AdminPremiumTab from './AdminPremiumTab';
-
+import AdminCasinoLobbyTab from './AdminCasinoLobbyTab';
 import AdminTrustedTab from './AdminTrustedTab';
 import { NavVisibility } from './Header';
 import { supabase } from '../utils/supabase';
@@ -60,6 +60,8 @@ interface AdminPanelProps {
   onSaveTvConfig?: (config: TVConfig) => void;
   loaderConfig?: LoaderConfig;
   onSaveLoaderConfig?: (config: LoaderConfig) => void;
+  casinoLobbyGames?: CasinoLobbyGame[];
+  onSaveCasinoLobbyGames?: (games: CasinoLobbyGame[]) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -76,11 +78,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   raffleConfig, onSaveRaffleConfig,
   popularBetsConfig, onSavePopularBetsConfig,
   tvConfig, onSaveTvConfig,
-  loaderConfig, onSaveLoaderConfig
+  loaderConfig, onSaveLoaderConfig,
+  casinoLobbyGames, onSaveCasinoLobbyGames
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'trusted'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,
@@ -912,7 +915,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div className="space-y-1">
                   {role === 'admin' && (
                     <>
-
+                      <button onClick={() => setActiveTab('casinolobby')} className={`adm-nav-item ${activeTab === 'casinolobby' ? 'active' : ''}`}>
+                        <Sparkles className="w-4 h-4 text-amber-400" /> CASINO LOBİSİ
+                      </button>
                       <button onClick={() => setActiveTab('trusted')} className={`adm-nav-item ${activeTab === 'trusted' ? 'active' : ''}`}>
                         <ShieldCheck className="w-4 h-4 text-cyan-400" /> GÜVENİLİR SİTELER
                       </button>
@@ -3271,6 +3276,14 @@ Maç Listesi: `}
         />
       )}
 
+      {activeTab === 'casinolobby' && (
+        <AdminCasinoLobbyTab
+          games={casinoLobbyGames || []}
+          onSave={(updatedGames) => {
+            if (onSaveCasinoLobbyGames) onSaveCasinoLobbyGames(updatedGames);
+          }}
+        />
+      )}
 
       {activeTab === 'trusted' && (
         <AdminTrustedTab
