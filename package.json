@@ -8,9 +8,6 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "engines": {
-    "node": "22.x"
-  },
   "dependencies": {
     "@supabase/supabase-js": "^2.101.1",
     "canvas-confetti": "^1.9.4",
