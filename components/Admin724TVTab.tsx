@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Save, Tv, Video, Gift, ToggleRight, ToggleLeft, Edit3, Image as ImageIcon } from 'lucide-react';
+import { Plus, Trash2, Save, Tv, Video, Gift, ToggleRight, ToggleLeft, Edit3, Image as ImageIcon, Youtube } from 'lucide-react';
 import { Streamer, VOD, Gift as GiftType } from '../types';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
 
-const Admin724TVTab: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<'streamers' | 'vods' | 'gifts'>('streamers');
+interface Admin724TVTabProps {
+    config?: any;
+    onSave?: (cfg: any) => void;
+}
+
+const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
+    const [activeTab, setActiveTab] = useState<'streamers' | 'youtube' | 'vods' | 'gifts'>('streamers');
     const [streamers, setStreamers] = useState<Streamer[]>([]);
     const [vods, setVods] = useState<VOD[]>([]);
     const [gifts, setGifts] = useState<GiftType[]>([]);
@@ -19,37 +24,211 @@ const Admin724TVTab: React.FC = () => {
 
     const fetchData = async () => {
         setLoading(true);
-        const { data: s } = await supabase.from('streamers').select('*').order('order_index', { ascending: true });
-        const { data: v } = await supabase.from('vods').select('*').order('created_at', { ascending: false });
-        const { data: g } = await supabase.from('gifts').select('*').order('order_index', { ascending: true });
-        if (s) setStreamers(s);
-        if (v) setVods(v);
-        if (g) setGifts(g);
+        let streamersList: Streamer[] = [];
+        let vodsList: VOD[] = [];
+        let giftsList: GiftType[] = [];
+
+        try {
+            const { data: s, error: sErr } = await supabase.from('streamers').select('*').order('order_index', { ascending: true });
+            if (!sErr && s) {
+                streamersList = s;
+            }
+        } catch (e) {
+            console.error("Error loading streamers from table:", e);
+        }
+
+        try {
+            const { data: configData } = await supabase
+                .from('site_configs')
+                .select('value')
+                .eq('key', 'site_tv_config')
+                .maybeSingle();
+            
+            if (configData?.value?.channels) {
+                const fallbackStreamers = configData.value.channels.map((ch: any) => ({
+                    id: ch.id || `ch_${ch.order || Date.now()}`,
+                    name: ch.name || 'Yayın',
+                    kick_username: ch.platformUsername || ch.slug || ch.streamUrl || '',
+                    platform_type: ch.platformType || ch.platform || 'kick',
+                    avatar_url: ch.thumbnailUrl || '',
+                    tags: ch.tags || [ch.category || 'CANLI YAYIN'],
+                    is_live: ch.isLive || ch.isActive || false,
+                    is_vip: ch.isVip || false,
+                    source_type: ch.sourceType || 'platform',
+                    video_url: ch.videoUrl || '',
+                    iframe_url: ch.iframeUrl || '',
+                    viewer_count: ch.viewer_count || 0,
+                    order_index: ch.order || 0,
+                    fallback_type: ch.fallback_type || 'none',
+                    fallback_video_url: ch.fallback_video_url || '',
+                    fallback_iframe_url: ch.fallback_iframe_url || ''
+                }));
+
+                // Merge fallback streamers that are not in the database
+                fallbackStreamers.forEach((fs: any) => {
+                    if (!streamersList.find(s => s.id === fs.id || (s.kick_username === fs.kick_username && fs.kick_username))) {
+                        streamersList.push(fs);
+                    }
+                });
+                
+                // Re-sort after merging
+                streamersList.sort((a, b) => (a.order_index || 0) - (b.order_index || 0));
+            }
+        } catch (fallbackErr) {
+            console.error("Error loading fallback streamers configuration:", fallbackErr);
+        }
+
+        try {
+            const { data: v } = await supabase.from('vods').select('*').order('created_at', { ascending: false });
+            if (v) vodsList = v;
+        } catch (e) {}
+
+        try {
+            const { data: g } = await supabase.from('gifts').select('*').order('order_index', { ascending: true });
+            if (g) giftsList = g;
+        } catch (e) {}
+
+        setStreamers(streamersList);
+        setVods(vodsList);
+        setGifts(giftsList);
         setLoading(false);
     };
 
     const handleSaveStreamer = async (s: Streamer) => {
         setSaving(true);
         try {
+            let errorObj = null;
+            let dbSaveSuccess = false;
+            let savedStreamer = { ...s };
+            
+            // Clean new_ prefix for DB insert
             if (s.id.startsWith('new_')) {
-                const { id, ...rest } = s;
-                await supabase.from('streamers').insert(rest);
+                savedStreamer = { ...s, id: `ch_${Date.now()}` };
+            }
+            
+            try {
+                if (s.id.startsWith('new_')) {
+                    const { id, ...rest } = s;
+                    const { error, data } = await supabase.from('streamers').insert(rest).select().single();
+                    errorObj = error;
+                    if (!error && data) {
+                        savedStreamer = data;
+                        dbSaveSuccess = true;
+                    }
+                } else {
+                    const { error } = await supabase.from('streamers').update(s).eq('id', s.id);
+                    errorObj = error;
+                    if (!error) {
+                        dbSaveSuccess = true;
+                    }
+                }
+            } catch (dbErr: any) {
+                errorObj = dbErr;
+            }
+
+            // Always update site_configs as a reliable backup
+            const updatedStreamers = streamers.map(st => {
+                if (st.id === s.id) {
+                    return savedStreamer;
+                }
+                return st;
+            });
+            // If new streamer wasn't in list yet, add it
+            if (s.id.startsWith('new_') && !updatedStreamers.find(st => st.id === savedStreamer.id)) {
+                updatedStreamers.push(savedStreamer);
+            }
+
+            const newConfig = {
+                isActive: true,
+                channels: updatedStreamers.map(st => ({
+                    id: st.id,
+                    name: st.name,
+                    slug: st.kick_username || 'channel',
+                    platform: st.platform_type,
+                    streamUrl: st.kick_username || '',
+                    thumbnailUrl: st.avatar_url || '',
+                    category: st.tags?.[0] || "CANLI YAYIN",
+                    isLive: st.is_live,
+                    isActive: st.is_live,
+                    order: st.order_index,
+                    sourceType: st.source_type,
+                    platformType: st.platform_type,
+                    platformUsername: st.kick_username,
+                    videoUrl: st.video_url,
+                    iframeUrl: st.iframe_url,
+                    isVip: st.is_vip,
+                    tags: st.tags,
+                    viewer_count: st.viewer_count,
+                    fallback_type: st.fallback_type,
+                    fallback_video_url: st.fallback_video_url,
+                    fallback_iframe_url: st.fallback_iframe_url
+                }))
+            };
+            
+            // Always save to site_configs as backup
+            await supabase
+                .from('site_configs')
+                .upsert({ key: 'site_tv_config', value: newConfig }, { onConflict: 'key' });
+            if (onSave) onSave(newConfig);
+
+            if (errorObj) {
+                console.error("Database operation failed, saved to site_configs as fallback:", errorObj);
+                alert('Yayıncı yedek sistem üzerinden kaydedildi. (DB hatası: ' + (errorObj.message || 'bilinmiyor') + ')');
             } else {
-                await supabase.from('streamers').update(s).eq('id', s.id);
+                alert('Yayıncı başarıyla güncellendi.');
             }
             await fetchData();
+        } catch (err: any) {
+            alert('Yayıncı kaydedilemedi: ' + err.message);
         } finally {
             setSaving(false);
         }
     };
 
+
     const handleDeleteStreamer = async (id: string) => {
         if (!confirm('Emin misiniz?')) return;
         setSaving(true);
         try {
-            if (!id.startsWith('new_')) {
-                await supabase.from('streamers').delete().eq('id', id);
-            }
+            let dbDeleteSuccess = false;
+            try {
+                if (!id.startsWith('new_')) {
+                    const { error } = await supabase.from('streamers').delete().eq('id', id);
+                    if (!error) dbDeleteSuccess = true;
+                }
+            } catch (e) {}
+
+            // If we are using fallback or db delete didn't run, update via site_configs fallback
+            const updatedStreamers = streamers.filter(st => st.id !== id);
+            const newConfig = {
+                isActive: true,
+                channels: updatedStreamers.map(st => ({
+                    id: st.id,
+                    name: st.name,
+                    slug: st.kick_username || 'channel',
+                    platform: st.platform_type,
+                    streamUrl: st.kick_username || '',
+                    thumbnailUrl: st.avatar_url || '',
+                    category: st.tags?.[0] || "CANLI YAYIN",
+                    isLive: st.is_live,
+                    isActive: st.is_live,
+                    order: st.order_index,
+                    sourceType: st.source_type,
+                    platformType: st.platform_type,
+                    platformUsername: st.kick_username,
+                    videoUrl: st.video_url,
+                    iframeUrl: st.iframe_url,
+                    isVip: st.is_vip,
+                    tags: st.tags,
+                    viewer_count: st.viewer_count,
+                    fallback_type: st.fallback_type,
+                    fallback_video_url: st.fallback_video_url,
+                    fallback_iframe_url: st.fallback_iframe_url
+                }))
+            };
+            
+            await supabase.from('site_configs').upsert({ key: 'site_tv_config', value: newConfig }, { onConflict: 'key' });
+            if (onSave) onSave(newConfig);
             await fetchData();
         } finally {
             setSaving(false);
@@ -128,6 +307,22 @@ const Admin724TVTab: React.FC = () => {
         setStreamers([...streamers, newStreamer]);
     };
 
+    const addYoutubeStream = () => {
+        const newStreamer: Streamer = {
+            id: `new_${Date.now()}`,
+            name: 'Yeni YouTube Yayını',
+            tags: ['CANLI YAYIN'],
+            is_live: false,
+            is_vip: false,
+            source_type: 'platform',
+            platform_type: 'youtube',
+            fallback_type: 'none',
+            viewer_count: 0,
+            order_index: streamers.length
+        };
+        setStreamers([...streamers, newStreamer]);
+    };
+
     const addVOD = () => {
         const newVOD: VOD = {
             id: `new_${Date.now()}`,
@@ -170,6 +365,7 @@ const Admin724TVTab: React.FC = () => {
             <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '1px solid #222', paddingBottom: '10px' }}>
                 {[
                     { id: 'streamers', label: 'YAYINCILAR', icon: <Tv size={16} /> },
+                    { id: 'youtube', label: 'YOUTUBE', icon: <Youtube size={16} /> },
                     { id: 'vods', label: 'VOD (GEÇMİŞ YAYINLAR)', icon: <Video size={16} /> },
                     { id: 'gifts', label: 'HEDİYELER', icon: <Gift size={16} /> }
                 ].map(tab => (
@@ -192,7 +388,7 @@ const Admin724TVTab: React.FC = () => {
             {/* STREAMERS TAB */}
             {activeTab === 'streamers' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {streamers.map(s => (
+                    {streamers.filter(s => s.platform_type !== 'youtube').map(s => (
                         <div key={s.id} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '16px', padding: '20px' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                                 <div>
@@ -243,6 +439,7 @@ const Admin724TVTab: React.FC = () => {
                                             >
                                                 <option value="kick">Kick</option>
                                                 <option value="twitch">Twitch</option>
+                                                <option value="youtube">YouTube</option>
                                             </select>
                                         </div>
                                         <div>
@@ -301,6 +498,76 @@ const Admin724TVTab: React.FC = () => {
                     ))}
                     <button onClick={addStreamer} style={{ padding: '16px', borderRadius: '16px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
                         <Plus size={18} /> YENİ YAYINCI EKLE
+                    </button>
+                </div>
+            )}
+
+            {/* YOUTUBE TAB */}
+            {activeTab === 'youtube' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {streamers.filter(s => s.platform_type === 'youtube').map(s => (
+                        <div key={s.id} style={{ background: '#0d0d0d', border: '1px solid #ff000033', borderRadius: '16px', padding: '20px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                                <div>
+                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>İsim (Başlık)</label>
+                                    <input
+                                        value={s.name}
+                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, name: e.target.value } : p))}
+                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>YouTube ID veya Link</label>
+                                    <input
+                                        value={s.kick_username || ''}
+                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, kick_username: e.target.value } : p))}
+                                        placeholder="UC... veya Video ID"
+                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Sıra (Order)</label>
+                                    <input
+                                        type="number"
+                                        value={s.order_index}
+                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, order_index: parseInt(e.target.value) } : p))}
+                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
+                                    />
+                                </div>
+                                <div style={{ gridColumn: 'span 3' }}>
+                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Thumbnail URL (Avatar)</label>
+                                    <input
+                                        value={s.avatar_url || ''}
+                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, avatar_url: e.target.value } : p))}
+                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                                <button
+                                    onClick={() => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, is_live: !p.is_live } : p))}
+                                    style={{ flex: 1, padding: '10px', borderRadius: '8px', background: s.is_live ? 'rgba(34,197,94,0.1)' : '#1a1a1a', color: s.is_live ? '#22c55e' : '#666', border: '1px solid', borderColor: s.is_live ? '#22c55e' : '#333', cursor: 'pointer' }}
+                                >
+                                    {s.is_live ? 'CANLI YAYINDA' : 'ÇEVRİMDIŞI'}
+                                </button>
+                                <button
+                                    onClick={() => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, is_vip: !p.is_vip } : p))}
+                                    style={{ flex: 1, padding: '10px', borderRadius: '8px', background: s.is_vip ? 'rgba(240,185,11,0.1)' : '#1a1a1a', color: s.is_vip ? '#f0b90b' : '#666', border: '1px solid', borderColor: s.is_vip ? '#f0b90b' : '#333', cursor: 'pointer' }}
+                                >
+                                    {s.is_vip ? 'VIP (ÖNE ÇIKAN)' : 'NORMAL YAYIN'}
+                                </button>
+                                <button onClick={() => handleSaveStreamer(s)} disabled={saving} style={{ padding: '10px 20px', borderRadius: '8px', background: '#22c55e', color: '#000', fontWeight: 800, border: 'none', cursor: 'pointer' }}>
+                                    {saving ? '...' : 'KAYDET'}
+                                </button>
+                                <button onClick={() => handleDeleteStreamer(s.id)} disabled={saving} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', cursor: 'pointer' }}>
+                                    <Trash2 size={16} />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                    <button onClick={addYoutubeStream} style={{ padding: '16px', borderRadius: '16px', border: '2px dashed #ff000066', background: 'transparent', color: '#ff0000', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                        <Plus size={18} /> YENİ YOUTUBE YAYINI EKLE
                     </button>
                 </div>
             )}

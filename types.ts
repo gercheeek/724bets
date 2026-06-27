@@ -824,3 +824,45 @@ export interface TrustedCompany {
   nextCommentAt: number;
   commentDripEnabled: boolean;
 }
+
+// ─── 724TV Types ─────────────────────────────────────────────────────────────
+export interface Streamer {
+  id: string;
+  name: string;
+  kick_username?: string;
+  avatar_url?: string;
+  tags?: string[];
+  is_live: boolean;
+  is_vip: boolean;
+  source_type: 'platform' | 'video' | 'iframe';
+  platform_type: 'kick' | 'twitch' | 'youtube';
+  video_url?: string;
+  iframe_url?: string;
+  fallback_type?: 'none' | 'video' | 'iframe';
+  fallback_video_url?: string;
+  fallback_iframe_url?: string;
+  viewer_count: number;
+  order_index: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface VOD {
+  id: string;
+  title: string;
+  video_url: string;
+  thumbnail_url?: string;
+  streamer_id?: string;
+  views: number;
+  created_at?: string;
+}
+
+export interface Gift {
+  id: string;
+  name: string;
+  emoji: string;
+  price: number;
+  order_index: number;
+  created_at?: string;
+}
+

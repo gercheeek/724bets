@@ -455,14 +455,7 @@ const TrustedSitesView: React.FC<TrustedSitesViewProps> = ({ companies, onSelect
   return (
     <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 20px 100px' }}>
 
-      {/* Featured Companies */}
-      {featured.length > 0 && (
-        <div style={{ marginBottom: 24, textAlign: 'center' }}>
-          <div style={{ display: 'inline-block', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.3)', padding: '6px 16px', borderRadius: 20, color: '#00e676', fontWeight: 800, fontSize: 13, letterSpacing: 1 }}>
-            GÜNÜN ÖNE ÇIKAN PROMOSYONLARI
-          </div>
-        </div>
-      )}
+
       {featured.map(company => (
         <FeaturedCard
           key={company.id}

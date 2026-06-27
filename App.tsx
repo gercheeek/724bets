@@ -404,7 +404,10 @@ const App: React.FC = () => {
           Promise.all([getGlobalConfig('site_featured_wheel'), getGlobalConfig('site_21com_wheel')]),
           getGlobalConfig('site_hero_slider'),
           getGlobalConfig('site_daily_kupon'),
-          getGlobalConfig('site_raffle_config')
+          getGlobalConfig('site_raffle_config'),
+          getGlobalConfig('site_popular_bets'),
+          getGlobalConfig('site_tv_config'),
+          getGlobalConfig('site_loader_config')
         ]);
 
         if (!isMounted) return;
@@ -452,6 +455,9 @@ const App: React.FC = () => {
         if (globalHeroSlider) setHeroSliderConfig(globalHeroSlider);
         if (globalDailyKupon) setDailyKuponConfig(globalDailyKupon);
         if (globalRaffle) setRaffleConfig(globalRaffle);
+        if (globalPopularBets) setPopularBetsConfig(globalPopularBets);
+        if (globalTvConfig) setTvConfig(globalTvConfig);
+        if (globalLoaderConfig) setLoaderConfig(globalLoaderConfig);
 
 
       } catch (err) {
@@ -763,6 +769,23 @@ const App: React.FC = () => {
     return dateStr;
   };
 
+  const parseTeamFlagAndName = (teamName: string) => {
+    if (!teamName) return { flag: null, name: '' };
+    // Regex to match regional indicator flag emojis at start
+    const flagRegex = /^([\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF])\s*(.*)$/;
+    const match = teamName.match(flagRegex);
+    if (match) {
+      return { flag: match[1], name: match[2].trim() };
+    }
+    // Also support any general emoji/symbol at start
+    const generalEmojiRegex = /^([\uD83C-\uDBFF\uDC00-\uDFFF\u2600-\u27BF])\s*(.*)$/;
+    const generalMatch = teamName.match(generalEmojiRegex);
+    if (generalMatch) {
+      return { flag: generalMatch[1], name: generalMatch[2].trim() };
+    }
+    return { flag: null, name: teamName.trim() };
+  };
+
   return (
     <ThemeProvider>
       {/* Auth Modal Overlay */}
@@ -914,11 +937,21 @@ const App: React.FC = () => {
  
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {nextThreeAnalyses.map((match) => {
-                      const homeFlag = getFlagUrl(match.homeTeam);
-                      const awayFlag = getFlagUrl(match.awayTeam);
+                      const homeParsed = parseTeamFlagAndName(match.homeTeam);
+                      const awayParsed = parseTeamFlagAndName(match.awayTeam);
+                      
+                      const rawHomeFlag = getFlagUrl(homeParsed.name);
+                      const rawAwayFlag = getFlagUrl(awayParsed.name);
+
+                      const homeFlag = homeParsed.flag || rawHomeFlag;
+                      const awayFlag = awayParsed.flag || rawAwayFlag;
+
+                      const isHomeFlagEmoji = homeFlag && homeFlag.length <= 4;
+                      const isAwayFlagEmoji = awayFlag && awayFlag.length <= 4;
+
                       const highestOdd = match.bookieOdds?.find(o => o.isHighest) || match.bookieOdds?.[0];
                       const oddVal = highestOdd ? highestOdd.odd1 : '1.50';
- 
+
                       return (
                         <div 
                           key={match.id}
@@ -967,15 +1000,34 @@ const App: React.FC = () => {
                             <div className="flex items-center justify-between my-4">
                               {/* Home Team */}
                               <div className="flex flex-col items-center w-[40%] text-center">
-                                <div className="w-10 h-7 rounded overflow-hidden border border-white/10 mb-2 shadow-sm shrink-0">
+                                <div style={{
+                                  width: '46px',
+                                  height: '32px',
+                                  borderRadius: '8px',
+                                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                                  border: '1px solid rgba(242, 169, 0, 0.35)',
+                                  boxShadow: '0 4px 10px rgba(0,0,0,0.6), inset 0 0 6px rgba(242, 169, 0, 0.05)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  marginBottom: '8px',
+                                  overflow: 'hidden',
+                                  flexShrink: 0
+                                }}>
                                   {homeFlag ? (
-                                    <img src={homeFlag} alt={match.homeTeam} className="w-full h-full object-cover" />
+                                    isHomeFlagEmoji ? (
+                                      <span style={{ fontSize: '20px', lineHeight: 1, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
+                                        {homeFlag}
+                                      </span>
+                                    ) : (
+                                      <img src={homeFlag} alt={homeParsed.name} className="w-full h-full object-cover" />
+                                    )
                                   ) : (
-                                    <div className="w-full h-full bg-[#0a0d14] flex items-center justify-center text-[10px]">⚽</div>
+                                    <div style={{ fontSize: '12px' }}>⚽</div>
                                   )}
                                 </div>
                                 <span className="text-[11px] font-black text-white truncate w-full">
-                                  {match.homeTeam}
+                                  {homeParsed.name}
                                 </span>
                               </div>
  
@@ -988,15 +1040,34 @@ const App: React.FC = () => {
  
                               {/* Away Team */}
                               <div className="flex flex-col items-center w-[40%] text-center">
-                                <div className="w-10 h-7 rounded overflow-hidden border border-white/10 mb-2 shadow-sm shrink-0">
+                                <div style={{
+                                  width: '46px',
+                                  height: '32px',
+                                  borderRadius: '8px',
+                                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                                  border: '1px solid rgba(242, 169, 0, 0.35)',
+                                  boxShadow: '0 4px 10px rgba(0,0,0,0.6), inset 0 0 6px rgba(242, 169, 0, 0.05)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  marginBottom: '8px',
+                                  overflow: 'hidden',
+                                  flexShrink: 0
+                                }}>
                                   {awayFlag ? (
-                                    <img src={awayFlag} alt={match.awayTeam} className="w-full h-full object-cover" />
+                                    isAwayFlagEmoji ? (
+                                      <span style={{ fontSize: '20px', lineHeight: 1, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
+                                        {awayFlag}
+                                      </span>
+                                    ) : (
+                                      <img src={awayFlag} alt={awayParsed.name} className="w-full h-full object-cover" />
+                                    )
                                   ) : (
-                                    <div className="w-full h-full bg-[#0a0d14] flex items-center justify-center text-[10px]">⚽</div>
+                                    <div style={{ fontSize: '12px' }}>⚽</div>
                                   )}
                                 </div>
                                 <span className="text-[11px] font-black text-white truncate w-full">
-                                  {match.awayTeam}
+                                  {awayParsed.name}
                                 </span>
                               </div>
                             </div>

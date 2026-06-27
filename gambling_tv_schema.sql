@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS streamers (
   is_live BOOLEAN DEFAULT false,
   is_vip BOOLEAN DEFAULT false, -- Kurucu kanalı ayırmak için
   source_type TEXT DEFAULT 'platform' CHECK (source_type IN ('platform','video','iframe')),
-  platform_type TEXT DEFAULT 'kick' CHECK (platform_type IN ('kick','twitch')),
+  platform_type TEXT DEFAULT 'kick' CHECK (platform_type IN ('kick','twitch','youtube')),
   video_url TEXT,
   iframe_url TEXT,
   fallback_type TEXT DEFAULT 'none' CHECK (fallback_type IN ('none','video','iframe')),

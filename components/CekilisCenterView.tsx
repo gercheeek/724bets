@@ -309,15 +309,7 @@ export default function CekilisCenterView({ userId, onNavigate }: CekilisCenterV
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 py-10 space-y-12">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight">
-            <span className="text-[#00E676]">ÇEKİLİŞ</span>{' '}
-            <span className="text-white">MERKEZİ</span>
-          </h1>
-          <p className="text-zinc-500 text-sm max-w-md mx-auto">
-            Coin kazan, bilet al, büyük ödülleri eve götür.
-          </p>
-        </div>
+
 
         <LiveCodeBox userId={userId} />
 
