@@ -60,10 +60,10 @@
 
 /* ── Dark Theme ── */
 [data-theme="dark"] {
-  --bg-main: #000000;
-  --bg-elevated: #111118;
-  --bg-card: #111118;
-  --bg-card-hover: #1a1a22;
+  --bg-main: #040507;
+  --bg-elevated: #040507;
+  --bg-card: #040507;
+  --bg-card-hover: #0c0d14;
   --bg-input: rgba(255, 255, 255, 0.04);
   --bg-overlay: rgba(0, 0, 0, 0.85);
 
@@ -279,6 +279,10 @@ body {
 .header-capsule--member:hover {
   background: rgba(16, 185, 129, 0.08);
   border-color: #34d399;
+}
+
+.header-center-nav {
+  display: flex;
 }
 
 /* ── Tier 2: Category Icon Bar ── */
@@ -875,6 +879,12 @@ body {
 }
 
 /* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .header-center-nav {
+    display: none !important;
+  }
+}
+
 @media (max-width: 768px) {
   .header-topbar {
     padding: 6px 12px;
@@ -1290,3 +1300,95 @@ body {
     padding-right: 470px !important;
   }
 }
+
+/* ==========================================================================
+   2026 Dünya Kupası Temalı Kart Stili
+   ========================================================================== */
+.mac-karti, .bonus-karti {
+    position: relative;
+    background: linear-gradient(145deg, rgba(10, 25, 47, 0.9), rgba(0, 0, 0, 0.8)) !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important; /* Altın rengi ince çerçeve */
+    backdrop-filter: blur(12px);
+    border-radius: 20px !important;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+/* Arka plana Dünya Kupası deseni (SVG/İkon efekti) */
+.mac-karti::before {
+    content: "";
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    width: 140px;
+    height: 140px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23ffffff' fill-opacity='0.08' d='M256 0a256 256 0 100 512 256 256 0 000-512zm0 40c21 0 41 3 60 10l-16 29a8 8 0 01-10 4l-42-14-42 14a8 8 0 01-10-4l-16-29c19-7 39-10 60-10zm-97 23l14 26a8 8 0 01-1 9l-26 32-38-19c14-18 31-34 51-48zm194 0c20 14 37 30 51 48l-38 19-26-32a8 8 0 01-1-9l14-26zm-268 96l38 19c6 3 13 1 17-4l27-32c2-2 5-3 8-3h120c3 0 6 1 8 3l27 32c4 5 11 7 17 4l38-19c21 21 38 47 48 76l-35 15a8 8 0 01-9-1l-34-23a8 8 0 01-2-10l12-32a8 8 0 00-6-11l-50 4-48-26a8 8 0 00-11 5l-19 32-44-18a8 8 0 00-10 4l-25 43-46-9a8 8 0 00-9 6l-11 39-35-15c10-29 27-55 48-76z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+.mac-karti:hover, .bonus-karti:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.2) !important;
+    border-color: rgba(255, 215, 0, 0.8) !important;
+}
+
+/* Başlık ve Buton Vurgusu */
+.mac-karti h3, .mac-karti .baslik, .bonus-karti h3, .bonus-karti .baslik {
+    color: #f8f9fa !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.detay-butonu, .brand-card-btn, .brand-card-bonus {
+    background: linear-gradient(90deg, #d4af37, #f7d967) !important;
+    color: #000 !important;
+    font-weight: bold !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+}
+
+/* İlk Maç Işıltı Stili */
+@keyframes goldPulseGlow {
+    0%, 100% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 215, 0, 0.2);
+        border-color: rgba(255, 215, 0, 0.4) !important;
+    }
+    50% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 215, 0, 0.6);
+        border-color: rgba(255, 215, 0, 0.9) !important;
+    }
+}
+
+.mac-karti-isiltili {
+    animation: goldPulseGlow 2.5s ease-in-out infinite !important;
+    background: linear-gradient(145deg, rgba(20, 45, 75, 0.95), rgba(0, 0, 0, 0.95)) !important;
+    border: 1px solid rgba(255, 215, 0, 0.6) !important;
+}
+
+.mac-karti-isiltili::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 215, 0, 0.1) 50%,
+        rgba(255, 255, 255, 0) 60%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: isiltiliSweep 6s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes isiltiliSweep {
+    0% { transform: translate(-30%, -30%) rotate(30deg); }
+    100% { transform: translate(30%, 30%) rotate(30deg); }
+}
+
+

@@ -166,7 +166,7 @@ const LuckyWheel: React.FC<LuckyWheelProps> = ({ onSpinComplete, config }) => {
                     <div className="relative group">
                         {/* Wheel Container */}
                         <div className="relative w-[340px] h-[340px] md:w-[500px] md:h-[500px] rounded-full p-4 bg-gradient-to-b from-amber-400 to-[#FFC107] shadow-[0_0_80px_rgba(255,193,7,0.2)] animate-float">
-                            <div className="absolute inset-2 md:inset-4 rounded-full bg-[#111118] border-8 border-[#0B0B0F]/50 flex items-center justify-center overflow-hidden">
+                            <div className="absolute inset-2 md:inset-4 rounded-full bg-[#040507] border-8 border-[#0B0B0F]/50 flex items-center justify-center overflow-hidden">
                                 {/* The Spinning Core */}
                                 <div
                                     className="relative w-full h-full transition-transform duration-[5000ms] cubic-bezier(0.15, 0, 0.15, 1)"
@@ -198,7 +198,7 @@ const LuckyWheel: React.FC<LuckyWheelProps> = ({ onSpinComplete, config }) => {
                             </div>
 
                             {/* Center Badge */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-28 md:h-28 rounded-full bg-[#111118] border-4 border-[#FFC107] shadow-[0_0_30px_rgba(255,193,7,0.5)] z-20 flex items-center justify-center">
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-28 md:h-28 rounded-full bg-[#040507] border-4 border-[#FFC107] shadow-[0_0_30px_rgba(255,193,7,0.5)] z-20 flex items-center justify-center">
                                 <div className="flex flex-col items-center">
                                     <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-[#FFC107] mb-1" />
                                     <span className="text-[8px] md:text-[10px] font-black text-white italic">724</span>
@@ -214,7 +214,7 @@ const LuckyWheel: React.FC<LuckyWheelProps> = ({ onSpinComplete, config }) => {
 
                         {/* Spin Controls */}
                         <div className="mt-16 flex flex-col items-center gap-6">
-                            <div className="flex items-center gap-4 bg-[#111118] border border-white/5 px-8 py-4 rounded-2xl shadow-xl">
+                            <div className="flex items-center gap-4 bg-[#040507] border border-white/5 px-8 py-4 rounded-2xl shadow-xl">
                                 <Timer className="w-5 h-5 text-[#FFC107]" />
                                 <div className="flex flex-col">
                                     <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">YENİ HAK İÇİN KALAN</span>

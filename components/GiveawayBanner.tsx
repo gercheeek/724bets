@@ -57,7 +57,7 @@ const GiveawayBanner: React.FC<GiveawayBannerProps> = ({ config, onViewChange })
           width: 100%;
           max-width: 1200px;
           margin: 15px auto;
-          background: linear-gradient(135deg, #111118 0%, #1a1a24 50%, #111118 100%);
+          background: linear-gradient(135deg, #040507 0%, #0c0d14 50%, #040507 100%);
           border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 12px;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -301,6 +301,12 @@ const GiveawayBanner: React.FC<GiveawayBannerProps> = ({ config, onViewChange })
           .gb-right {
             justify-content: space-between;
             gap: 16px;
+          }
+          /* Custom Mobile Styling for 21.com Aesthetic */
+          .gb-title {
+            color: #fff;
+            font-size: 20px !important;
+            font-weight: 900 !important;
           }
         }
       `}</style>
