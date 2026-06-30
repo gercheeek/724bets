@@ -5,7 +5,7 @@ interface SkyscraperAdsProps {
 }
 
 const SkyscraperAds: React.FC<SkyscraperAdsProps> = ({ activeView = 'home' }) => {
-  const isAnalysisView = activeView === 'trusted-sites' || activeView === 'analysis' || activeView === 'trusted-detail';
+  return null; // Temporarily disabled
 
   return (
     <>
