@@ -68,100 +68,60 @@ const PROMOS: Promo[] = [
 ];
 
 export const PromoSlider: React.FC = () => {
-  const sliderRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = React.useState(false);
-  const requestRef = useRef<number | null>(null);
-
-  const scrollLeft = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -326, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: 326, behavior: 'smooth' });
-    }
-  };
 
   const handleCardClick = () => {
     window.open('https://21.com', '_blank');
   };
-
-  // Continuous smooth auto-scrolling
-  const animate = () => {
-    if (sliderRef.current && !isPaused) {
-      const slider = sliderRef.current;
-      slider.scrollLeft += 0.8; // Slow continuous speed (pixels per frame)
-      
-      const halfWidth = slider.scrollWidth / 2;
-      if (slider.scrollLeft >= halfWidth) {
-        slider.scrollLeft -= halfWidth;
-      }
-    }
-    requestRef.current = requestAnimationFrame(animate);
-  };
-
-  React.useEffect(() => {
-    requestRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
-    };
-  }, [isPaused]);
 
   // Duplicate promos to create a seamless infinite loop
   const duplicatedPromos = [...PROMOS, ...PROMOS];
 
   return (
     <div 
-      className="relative w-full group/slider mb-6"
+      className="relative w-full overflow-hidden mb-6 select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Left Navigation Arrow (Visible on Hover) */}
-      <button 
-        onClick={scrollLeft}
-        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/70 hover:bg-black/90 flex items-center justify-center transition-all opacity-0 group-hover/slider:opacity-100 border border-white/10 hover:scale-105 active:scale-95 shadow-lg"
-      >
-        <ChevronLeft className="w-5 h-5 text-white" />
-      </button>
-
-      {/* Right Navigation Arrow (Visible on Hover) */}
-      <button 
-        onClick={scrollRight}
-        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/70 hover:bg-black/90 flex items-center justify-center transition-all opacity-0 group-hover/slider:opacity-100 border border-white/10 hover:scale-105 active:scale-95 shadow-lg"
-      >
-        <ChevronRight className="w-5 h-5 text-white" />
-      </button>
-
-      {/* Slider Container */}
-      <div 
-        ref={sliderRef}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 select-none"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        <style dangerouslySetInnerHTML={{__html: `
-          .promo-slider-container::-webkit-scrollbar { display: none; }
-          @keyframes logo-shine {
-            0% { transform: translateX(-150%) skewX(-25deg); }
-            12% { transform: translateX(150%) skewX(-25deg); }
-            18% { transform: translateX(-150%) skewX(-25deg); }
-            28% { transform: translateX(150%) skewX(-25deg); }
-            100% { transform: translateX(150%) skewX(-25deg); }
+      {/* CSS Styles for Seamless Marquee Loop */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes marquee-scroll {
+          0% {
+            transform: translate3d(0, 0, 0);
           }
-          @keyframes logo-pulse-glow {
-            0%, 100% { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.65)) drop-shadow(0 0 4px rgba(118, 225, 59, 0.2)); }
-            50% { filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 12px rgba(118, 225, 59, 0.6)); }
+          100% {
+            transform: translate3d(calc(-50% - 8px), 0, 0); /* Offset for half of the gap width */
           }
-        `}} />
-        
+        }
+        .animate-marquee-train {
+          display: flex;
+          gap: 16px;
+          width: max-content;
+          animation: marquee-scroll 35s linear infinite;
+        }
+        .animate-marquee-train.paused {
+          animation-play-state: paused;
+        }
+        @keyframes logo-shine {
+          0% { transform: translateX(-150%) skewX(-25deg); }
+          12% { transform: translateX(150%) skewX(-25deg); }
+          18% { transform: translateX(-150%) skewX(-25deg); }
+          28% { transform: translateX(150%) skewX(-25deg); }
+          100% { transform: translateX(150%) skewX(-25deg); }
+        }
+        @keyframes logo-pulse-glow {
+          0%, 100% { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.65)) drop-shadow(0 0 4px rgba(118, 225, 59, 0.2)); }
+          50% { filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 12px rgba(118, 225, 59, 0.6)); }
+        }
+      `}} />
+
+      {/* Marquee Train Wrapper */}
+      <div className={`animate-marquee-train ${isPaused ? 'paused' : ''}`}>
         {duplicatedPromos.map((promo, index) => (
           <div 
             key={`${promo.id}-${index}`}
             onClick={handleCardClick}
-            className="snap-start shrink-0 relative bg-[#1a1a1a] rounded-xl border border-[#333] overflow-hidden cursor-pointer group transition-all duration-300 hover:border-[#555] hover:-translate-y-1"
+            className="shrink-0 relative bg-[#1a1a1a] rounded-xl border border-[#333] overflow-hidden cursor-pointer group transition-all duration-300 hover:border-[#555] hover:-translate-y-1"
             style={{ width: '310px', height: '160px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}
           >
             {/* Background Glow */}
