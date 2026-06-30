@@ -1,0 +1,27 @@
+[
+  {
+    "id": "wc-2026-son32-1",
+    "league": "Dünya Kupası 2026 - Son 32 Turu",
+    "homeTeam": "🇹🇷 Türkiye",
+    "awayTeam": "🇮🇹 İtalya",
+    "matchTime": "22:00",
+    "matchDate": "2026-06-30",
+    "analysis": "Son 32 turunun en heyecanlı maçlarından biri. Türkiye'nin hücum gücü ile İtalya'nın katı savunması karşı karşıya geliyor.",
+    "tacticalSummary": "Türkiye, Arda ve Hakan liderliğinde topa sahip olarak boşluk arayacak. İtalya ise kontra ataklara bel bağlayacak.",
+    "breakingPoint": "İtalya'nın savunma kilidini açacak olası bir kanat organizasyonu maçın kaderini belirleyecek.",
+    "bettingScenario": "İki takımın da gol atma ihtimali yüksek. KG Var veya 2.5 Üst seçenekleri değerlendirilebilir.",
+    "prediction": "KG VAR",
+    "confidence": 85,
+    "modelScore": 8.5,
+    "bookieOdds": [
+      {
+        "name": "21.com",
+        "odd1": "1.85",
+        "odd2": "2.10",
+        "link": "https://prod.trk21.com/click?domain=21.com",
+        "isHighest": true
+      }
+    ],
+    "sport": "Futbol"
+  }
+]
