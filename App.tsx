@@ -41,7 +41,7 @@ import HeroSection from './components/HeroSection';
 import PopularBets from './components/PopularBets';
 import GameLobbyTeaser from './components/GameLobbyTeaser';
 import TV724View from './components/TV724View';
-import GiveawayBanner from './components/GiveawayBanner';
+
 import SkyscraperAds from './components/SkyscraperAds';
 import MatchResultsWidget from './components/MatchResultsWidget';
 import { PromoSlider } from './components/PromoSlider';
@@ -929,52 +929,56 @@ const App: React.FC = () => {
             <div className="animate-fade-in">
               {/* ═══ PORTAL BODY ═══ */}
               <div className="portal-body">
-                <GiveawayBanner config={giveawayConfig} onViewChange={handleViewChange} />
                 
-                <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
-
                 {/* ── World Cup 2026 Special Analysis Banner ── */}
                 <div 
                   onClick={() => handleViewChange('analysis')}
                   className="mb-6 rounded-2xl overflow-hidden relative cursor-pointer group" 
                   style={{ 
-                    background: 'linear-gradient(135deg, #040a04 0%, #050d08 40%, #040a04 100%)',
-                    border: '1px solid rgba(242, 169, 0, 0.2)',
-                    boxShadow: '0 0 40px rgba(242, 169, 0, 0.05), inset 0 1px 0 rgba(242, 169, 0, 0.1)',
-                    transition: 'all 0.3s ease'
+                    border: '1px solid rgba(242, 169, 0, 0.4)',
+                    boxShadow: '0 0 40px rgba(242, 169, 0, 0.15), inset 0 1px 0 rgba(242, 169, 0, 0.2)',
+                    transition: 'all 0.3s ease',
+                    backgroundImage: 'url("https://images.unsplash.com/photo-1518605368461-1e1e38ce7058?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
                   }}
                 >
+                  {/* Thematic Overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/95" />
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(242,169,0,0.25)_0%,transparent_60%)] pointer-events-none" />
+                  
                   {/* Neon glow background rings */}
-                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '2px solid rgba(242, 169, 0, 0.15)', boxShadow: '0 0 30px rgba(242, 169, 0, 0.1)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.25)', boxShadow: '0 0 20px rgba(242, 169, 0, 0.15)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 50%, rgba(242, 169, 0, 0.06) 0%, transparent 60%)', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '2px solid rgba(242, 169, 0, 0.2)', boxShadow: '0 0 30px rgba(242, 169, 0, 0.2)', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.4)', boxShadow: '0 0 20px rgba(242, 169, 0, 0.3)', pointerEvents: 'none' }} />
                   
                   <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative" style={{ zIndex: 10 }}>
                     <div className="flex items-center gap-4">
-                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(242, 169, 0, 0.08)', border: '1px solid rgba(242, 169, 0, 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 15px rgba(242, 169, 0, 0.1)' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(242, 169, 0, 0.15)', border: '1px solid rgba(242, 169, 0, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 20px rgba(242, 169, 0, 0.2)', backdropFilter: 'blur(5px)' }}>
                         <Trophy className="w-6 h-6" style={{ color: '#f2a900' }} />
                       </div>
                       <div>
-                        <div style={{ fontSize: '9px', fontWeight: 900, color: 'rgba(242, 169, 0, 0.75)', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '2px' }}>ÖZEL ANALİZLER</div>
+                        <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(242, 169, 0, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
                         <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>
-                          <span style={{ color: '#f2a900', textShadow: '0 0 20px rgba(242, 169, 0, 0.5), 0 0 40px rgba(242, 169, 0, 0.2)' }}>WORLD CUP </span>
-                          <span style={{ color: '#ffffff' }}>2026</span>
+                          <span style={{ color: '#f2a900', textShadow: '0 0 20px rgba(242, 169, 0, 0.6), 0 0 40px rgba(242, 169, 0, 0.3)' }}>WORLD CUP </span>
+                          <span style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>2026</span>
                         </h2>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-6 justify-between sm:justify-end">
                       <div className="text-left sm:text-right" style={{ flexShrink: 0 }}>
-                        <p style={{ fontSize: '9px', fontWeight: 700, color: '#444', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '2px' }}>En Yüksek Kazanç Oranları</p>
-                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#f2a900', textShadow: '0 0 10px rgba(242, 169, 0, 0.4)' }}>%88 Başarı Oranı</p>
+                        <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '2px' }}>En Yüksek Kazanç Oranları</p>
+                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#f2a900', textShadow: '0 0 15px rgba(242, 169, 0, 0.5)' }}>%88 Başarı Oranı</p>
                       </div>
-                      <button style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: '#f2a900', color: '#000000', fontWeight: 900, fontSize: '11px', borderRadius: '10px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', boxShadow: '0 0 20px rgba(242, 169, 0, 0.3)', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: 'linear-gradient(90deg, #f2a900, #ffc107)', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '10px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', boxShadow: '0 0 20px rgba(242, 169, 0, 0.4)', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                         <span>ANALİZLERE GİT</span>
-                        <span>→</span>
+                        <span className="group-hover:translate-x-1 transition-transform" style={{ display: 'inline-block' }}>→</span>
                       </button>
                     </div>
                   </div>
                 </div>
+
+                <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
                 {/* ── Promosyonlar Section ── */}
                 <PromoSlider />
                 
