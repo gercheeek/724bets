@@ -465,7 +465,7 @@ const GiveawayView: React.FC<GiveawayViewProps> = ({ config, onConfigChange, isA
                 </div>
             </section>
 
-            <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
+            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px' }}>
 
                 {/* ═══════════════ 2. PRIZES ═══════════════ */}
                 <section style={{ marginBottom: '60px' }}>

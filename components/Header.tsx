@@ -43,6 +43,7 @@ interface HeaderProps {
   userRole?: string | null;
   siteUser?: SiteUser | null;
   onMemberLoginClick?: () => void;
+  onMemberRegisterClick?: () => void;
   onMemberLogout?: () => void;
   onSearchClick?: () => void;
   navVisibility?: NavVisibility;
@@ -77,6 +78,7 @@ const Header: React.FC<HeaderProps> = ({
   userRole = null,
   siteUser = null,
   onMemberLoginClick,
+  onMemberRegisterClick,
   onMemberLogout,
   onSearchClick,
   navVisibility,
@@ -247,13 +249,22 @@ const Header: React.FC<HeaderProps> = ({
 
     // Guest - not logged in
     return (
-      <button
-        className="header-capsule header-capsule--login"
-        onClick={onMemberLoginClick}
-      >
-        <User className="w-4 h-4" />
-        Giriş Yap
-      </button>
+      <div className="header-guest-buttons">
+        <button
+          className="header-capsule header-capsule--login"
+          onClick={onMemberLoginClick}
+        >
+          <User className="w-4 h-4 hidden sm:block" />
+          <span className="sm:hidden">Giriş</span>
+          <span className="hidden sm:inline">Giriş Yap</span>
+        </button>
+        <button 
+          onClick={onMemberRegisterClick}
+          className="header-capsule header-capsule--register hidden"
+        >
+          Kayıt Ol
+        </button>
+      </div>
     );
   };
 
@@ -277,6 +288,38 @@ const Header: React.FC<HeaderProps> = ({
     <>
       <div className={`header-wrapper ${isScrolled ? 'scrolled' : ''}`}>
         <style>{`
+          .header-guest-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .header-capsule--register {
+            display: none;
+          }
+          @media (max-width: 768px) {
+            .header-capsule--register {
+              display: flex !important;
+              background: #f0b90b !important;
+              color: #000 !important;
+              border-color: transparent !important;
+              padding: 0 16px !important;
+              height: 32px !important;
+              font-weight: 800 !important;
+              text-decoration: none !important;
+            }
+            .header-guest-buttons .header-capsule--login {
+              background: #2A2A2A !important;
+              color: #fff !important;
+              border-color: transparent !important;
+              padding: 0 16px !important;
+              height: 32px !important;
+              font-weight: 700 !important;
+            }
+            .header-topbar-right .header-icon-btn {
+              display: none !important;
+            }
+
+          }
           @keyframes custom-marquee {
             0% { transform: translate3d(0, 0, 0); }
             100% { transform: translate3d(-50%, 0, 0); }
@@ -422,7 +465,7 @@ const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Center: Navigation Items */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '2px', flex: 1, justifyContent: 'center', overflow: 'auto', scrollbarWidth: 'none' }}>
+          <nav className="header-center-nav" style={{ alignItems: 'center', gap: '2px', flex: 1, justifyContent: 'center', overflow: 'auto', scrollbarWidth: 'none' }}>
             {categories.map((cat) => {
               if (cat.visKey && navVisibility?.[cat.visKey] === false) return null;
               if (cat.requireRole && !userRole) return null;
@@ -462,8 +505,8 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* ══════ TIER 2: Marquee Bar ══════ */}
-        {marqueeConfig?.isActive && activeView !== '724tv' && (
-          <div className="header-categories" style={{ justifyContent: 'center', padding: '10px 16px', background: '#08080C' }}>
+        {marqueeConfig?.isActive && (
+          <div className="header-categories header-marquee-bar" style={{ justifyContent: 'center', padding: '10px 16px', background: '#08080C' }}>
             <style>{`
               .marquee-container-hover-pause:hover .animate-custom-marquee {
                 animation-play-state: paused;

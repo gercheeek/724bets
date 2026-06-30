@@ -41,6 +41,7 @@ import HeroSection from './components/HeroSection';
 import PopularBets from './components/PopularBets';
 import GameLobbyTeaser from './components/GameLobbyTeaser';
 import TV724View from './components/TV724View';
+import LiveMatches from './components/LiveMatches';
 
 import SkyscraperAds from './components/SkyscraperAds';
 import MatchResultsWidget from './components/MatchResultsWidget';
@@ -917,8 +918,8 @@ const App: React.FC = () => {
           zIndex: 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingTop: view === '724tv' ? '65px' : (marqueeConfig?.isActive ? '115px' : '65px'),
-          '--header-height': view === '724tv' ? '65px' : (marqueeConfig?.isActive ? '115px' : '65px')
+          paddingTop: marqueeConfig?.isActive ? '115px' : '65px',
+          '--header-height': marqueeConfig?.isActive ? '115px' : '65px'
         } as React.CSSProperties}
       >
         <div style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
@@ -981,6 +982,9 @@ const App: React.FC = () => {
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
                 {/* ── Promosyonlar Section ── */}
                 <PromoSlider />
+                
+                {/* ── Canlı Oranlar Section ── */}
+                <LiveMatches />
                 
                 {/* ── Yaklaşan Maçlar Section ── */}
                 <div className="mb-6">

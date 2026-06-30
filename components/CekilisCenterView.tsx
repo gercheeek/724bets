@@ -308,7 +308,7 @@ export default function CekilisCenterView({ userId, onNavigate }: CekilisCenterV
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#00E676]/3 blur-[120px] rounded-full" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-4 py-10 space-y-12">
+      <div className="relative max-w-[900px] mx-auto px-4 py-10 space-y-12">
 
 
         <LiveCodeBox userId={userId} />
