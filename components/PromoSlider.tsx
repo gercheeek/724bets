@@ -97,7 +97,7 @@ export const PromoSlider: React.FC = () => {
           display: flex;
           gap: 16px;
           width: max-content;
-          animation: marquee-scroll 35s linear infinite;
+          animation: marquee-scroll 45s linear infinite;
         }
         .animate-marquee-train.paused {
           animation-play-state: paused;
