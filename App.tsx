@@ -44,8 +44,44 @@ import TV724View from './components/TV724View';
 import GiveawayBanner from './components/GiveawayBanner';
 import SkyscraperAds from './components/SkyscraperAds';
 import MatchResultsWidget from './components/MatchResultsWidget';
-
+import { PromoSlider } from './components/PromoSlider';
 const SITE_CACHE_VERSION = "2026.06.25_v1";
+
+const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateStr, timeStr }) => {
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    const target = new Date(`${dateStr}T${timeStr}:00+03:00`);
+    const update = () => {
+      const diff = target.getTime() - Date.now();
+      if (diff <= 0) {
+        setText('CANLI');
+        return;
+      }
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+
+      if (days > 0) {
+        setText(`${days}g ${hours}s ${mins}d`);
+      } else if (hours > 0) {
+        setText(`${hours}s ${mins}d ${secs}sn`);
+      } else {
+        setText(`${mins}d ${secs}sn`);
+      }
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [dateStr, timeStr]);
+
+  if (text === 'CANLI') {
+    return <span className="font-black" style={{ color: '#00E676', animation: 'pulse 1.5s infinite' }}>CANLI</span>;
+  }
+
+  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#f2a900' }}>{text}</span>;
+};
 
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('ready');
@@ -53,6 +89,12 @@ const App: React.FC = () => {
   const [showLoader, setShowLoader] = useState(false);
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail'>('home');
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Cache Version Control
   useEffect(() => {
@@ -207,7 +249,7 @@ const App: React.FC = () => {
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
   const [userRole, setUserRole] = useState<string | null>(null);
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
-  const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | null>(null);
+  const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
   const [brands, setBrands] = useState<Brand[]>([]);
 
   // ── Trusted Sites State ──────────────────────────────────────────────────────
@@ -249,7 +291,11 @@ const App: React.FC = () => {
       a.league.length < 80 && 
       a.matchDate >= '2026-04-09' && // START FRESH FROM TODAY
       !a.league.includes('Boluspor orta sıralarda') &&
-      !a.league.includes('Porto Dragao')
+      !a.league.includes('Porto Dragao') &&
+      !(a.homeTeam && a.homeTeam.includes('Hollanda')) &&
+      !(a.awayTeam && a.awayTeam.includes('Hollanda')) &&
+      !(a.homeTeam && a.homeTeam.includes('Fas')) &&
+      !(a.awayTeam && a.awayTeam.includes('Fas'))
     );
     if (parsed.length !== beforeCount) needsUpdate = true;
 
@@ -412,7 +458,7 @@ const App: React.FC = () => {
 
         if (!isMounted) return;
 
-        if (globalAnalyses && Array.isArray(globalAnalyses) && globalAnalyses.length > 0) {
+        if (globalAnalyses && Array.isArray(globalAnalyses)) {
           const cleaned = globalAnalyses.filter((a: any) => 
             a.homeTeam && a.awayTeam && a.homeTeam !== 'A' && a.awayTeam !== 'A' &&
             a.league && a.league.length < 80 && 
@@ -456,7 +502,16 @@ const App: React.FC = () => {
         if (globalDailyKupon) setDailyKuponConfig(globalDailyKupon);
         if (globalRaffle) setRaffleConfig(globalRaffle);
         if (globalPopularBets) setPopularBetsConfig(globalPopularBets);
-        if (globalTvConfig) setTvConfig(globalTvConfig);
+        if (globalTvConfig) {
+          const tipoChannels = DEFAULT_TV_CONFIG.channels.filter(c => c.id.startsWith('tipo-'));
+          const existingIds = new Set(globalTvConfig.channels.map((c: any) => c.id));
+          const toAdd = tipoChannels.filter(c => !existingIds.has(c.id));
+          if (toAdd.length > 0) {
+            globalTvConfig.channels = [...globalTvConfig.channels, ...toAdd];
+            updateGlobalConfig('site_tv_config', globalTvConfig);
+          }
+          setTvConfig(globalTvConfig);
+        }
         if (globalLoaderConfig) setLoaderConfig(globalLoaderConfig);
 
 
@@ -710,20 +765,16 @@ const App: React.FC = () => {
 
   const isMaintenanceActive = siteStatusConfig.isMaintenanceMode && userRole !== 'admin' && userRole !== 'editor';
 
-  // Get upcoming 3 matches for the homepage
   const getNextThreeAnalyses = () => {
-    const combined = [
-      ...analyses,
-      ...demoAnalyses.filter(demo => !analyses.some(a => a.id === demo.id))
-    ];
+    const combined = analyses.length > 0 ? analyses : demoAnalyses;
     
-    const now = new Date();
+    const now = currentTime;
     
     // Filter for future matches
     let upcoming = combined.filter(a => {
       try {
         const matchTime = a.matchTime || "00:00";
-        const matchDateTime = new Date(`${a.matchDate}T${matchTime}`);
+        const matchDateTime = new Date(`${a.matchDate}T${matchTime}:00+03:00`);
         return matchDateTime.getTime() >= now.getTime();
       } catch (e) {
         return false;
@@ -791,7 +842,8 @@ const App: React.FC = () => {
       {/* Auth Modal Overlay */}
       {authModalMode && (
         <AuthModal
-          mode={authModalMode}
+          mode={authModalMode === 'register' ? 'member' : authModalMode}
+          initialMemberMode={authModalMode === 'register' ? 'register' : 'login'}
           onMemberLogin={(user) => {
             setSiteUser(user);
             localStorage.setItem('site_current_member', JSON.stringify(user));
@@ -844,6 +896,7 @@ const App: React.FC = () => {
         userRole={userRole}
         siteUser={siteUser}
         onMemberLoginClick={() => setAuthModalMode('member')}
+        onMemberRegisterClick={() => setAuthModalMode('register')}
         onMemberLogout={() => {
           setSiteUser(null);
           setUserRole(null);
@@ -869,7 +922,7 @@ const App: React.FC = () => {
         } as React.CSSProperties}
       >
         <div style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
-          {view !== 'admin' && (
+          {view !== 'admin' && view !== '724tv' && (
             <SkyscraperAds activeView={view} />
           )}
           {view === 'home' && (
@@ -922,6 +975,8 @@ const App: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                {/* ── Promosyonlar Section ── */}
+                <PromoSlider />
                 
                 {/* ── Yaklaşan Maçlar Section ── */}
                 <div className="mb-6">
@@ -936,7 +991,7 @@ const App: React.FC = () => {
                   </div>
  
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {nextThreeAnalyses.map((match) => {
+                    {nextThreeAnalyses.map((match, idx) => {
                       const homeParsed = parseTeamFlagAndName(match.homeTeam);
                       const awayParsed = parseTeamFlagAndName(match.awayTeam);
                       
@@ -981,7 +1036,7 @@ const App: React.FC = () => {
                             (e.currentTarget as HTMLElement).style.border = '1px solid rgba(242, 169, 0, 0.15)';
                             (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(0,0,0,0.5)';
                           }}
-                          className="group"
+                          className={`group mac-karti ${idx === 0 ? 'mac-karti-isiltili' : ''}`}
                         >
                           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(242, 169, 0, 0.04) 0%, transparent 60%)', pointerEvents: 'none' }} />
                           <div>
@@ -992,85 +1047,105 @@ const App: React.FC = () => {
                               </span>
                               <span className="text-[9px] font-bold text-gray-500 flex items-center gap-1">
                                 <Clock className="w-3 h-3 text-gray-500" />
-                                {formatDateShort(match.matchDate)} - {match.matchTime}
+                                <MatchCountdown dateStr={match.matchDate} timeStr={match.matchTime} />
                               </span>
                             </div>
  
                             {/* Team Matchup */}
-                            <div className="flex items-center justify-between my-4">
-                              {/* Home Team */}
-                              <div className="flex flex-col items-center w-[40%] text-center">
-                                <div style={{
-                                  width: '46px',
-                                  height: '32px',
-                                  borderRadius: '8px',
-                                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
-                                  border: '1px solid rgba(242, 169, 0, 0.35)',
-                                  boxShadow: '0 4px 10px rgba(0,0,0,0.6), inset 0 0 6px rgba(242, 169, 0, 0.05)',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  marginBottom: '8px',
-                                  overflow: 'hidden',
-                                  flexShrink: 0
-                                }}>
-                                  {homeFlag ? (
-                                    isHomeFlagEmoji ? (
-                                      <span style={{ fontSize: '20px', lineHeight: 1, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
-                                        {homeFlag}
-                                      </span>
-                                    ) : (
-                                      <img src={homeFlag} alt={homeParsed.name} className="w-full h-full object-cover" />
-                                    )
-                                  ) : (
-                                    <div style={{ fontSize: '12px' }}>⚽</div>
-                                  )}
-                                </div>
-                                <span className="text-[11px] font-black text-white truncate w-full">
-                                  {homeParsed.name}
-                                </span>
-                              </div>
- 
-                              {/* VS badge */}
-                              <div className="w-[15%] flex justify-center">
-                                <span style={{ fontSize: '8px', fontWeight: 900, color: '#f2a900', background: 'rgba(242, 169, 0, 0.08)', border: '1px solid rgba(242, 169, 0, 0.2)', padding: '2px 8px', borderRadius: '6px' }}>
-                                  VS
-                                </span>
-                              </div>
- 
-                              {/* Away Team */}
-                              <div className="flex flex-col items-center w-[40%] text-center">
-                                <div style={{
-                                  width: '46px',
-                                  height: '32px',
-                                  borderRadius: '8px',
-                                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
-                                  border: '1px solid rgba(242, 169, 0, 0.35)',
-                                  boxShadow: '0 4px 10px rgba(0,0,0,0.6), inset 0 0 6px rgba(242, 169, 0, 0.05)',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  marginBottom: '8px',
-                                  overflow: 'hidden',
-                                  flexShrink: 0
-                                }}>
-                                  {awayFlag ? (
-                                    isAwayFlagEmoji ? (
-                                      <span style={{ fontSize: '20px', lineHeight: 1, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
-                                        {awayFlag}
-                                      </span>
-                                    ) : (
-                                      <img src={awayFlag} alt={awayParsed.name} className="w-full h-full object-cover" />
-                                    )
-                                  ) : (
-                                    <div style={{ fontSize: '12px' }}>⚽</div>
-                                  )}
-                                </div>
-                                <span className="text-[11px] font-black text-white truncate w-full">
-                                  {awayParsed.name}
-                                </span>
-                              </div>
-                            </div>
+                             <div className="flex items-center justify-between my-4 px-2">
+                               {/* Home Team */}
+                               <div className="flex flex-col items-center w-[40%] text-center">
+                                 <div style={{
+                                   width: '54px',
+                                   height: '38px',
+                                   borderRadius: '10px',
+                                   background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                                   border: '1.5px solid rgba(255, 215, 0, 0.35)',
+                                   boxShadow: '0 8px 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(255, 215, 0, 0.1)',
+                                   display: 'flex',
+                                   alignItems: 'center',
+                                   justifyContent: 'center',
+                                   marginBottom: '8px',
+                                   overflow: 'hidden',
+                                   flexShrink: 0,
+                                   transition: 'all 0.3s ease'
+                                 }}
+                                 className="group-hover:border-[#ffd700] group-hover:scale-105"
+                                 >
+                                   {homeFlag ? (
+                                     isHomeFlagEmoji ? (
+                                       <span style={{ fontSize: '24px', lineHeight: 1, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>
+                                         {homeFlag}
+                                       </span>
+                                     ) : (
+                                       <img src={homeFlag} alt={homeParsed.name} className="w-full h-full object-cover group-hover:scale-110" style={{ transition: 'all 0.5s ease' }} />
+                                     )
+                                   ) : (
+                                     <div style={{ fontSize: '14px' }}>⚽</div>
+                                   )}
+                                 </div>
+                                 <span className="text-[12px] font-black text-gray-100 truncate w-full tracking-wide uppercase" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+                                   {homeParsed.name}
+                                 </span>
+                               </div>
+  
+                               {/* VS badge */}
+                               <div className="w-[20%] flex justify-center">
+                                 <span style={{ 
+                                   fontSize: '9px', 
+                                   fontWeight: 950, 
+                                   color: '#000', 
+                                   background: 'linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fcf6ba 75%, #aa771c 100%)', 
+                                   border: '1px solid rgba(255, 215, 0, 0.8)', 
+                                   padding: '4px 10px', 
+                                   borderRadius: '8px',
+                                   boxShadow: '0 4px 15px rgba(255, 215, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.4)',
+                                   letterSpacing: '1px',
+                                   textShadow: '0 1px 1px rgba(255,255,255,0.5)',
+                                   transform: 'scale(1.1)'
+                                 }}
+                                 className="animate-pulse-slow"
+                                 >
+                                   VS
+                                 </span>
+                               </div>
+  
+                               {/* Away Team */}
+                               <div className="flex flex-col items-center w-[40%] text-center">
+                                 <div style={{
+                                   width: '54px',
+                                   height: '38px',
+                                   borderRadius: '10px',
+                                   background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                                   border: '1.5px solid rgba(255, 215, 0, 0.35)',
+                                   boxShadow: '0 8px 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(255, 215, 0, 0.1)',
+                                   display: 'flex',
+                                   alignItems: 'center',
+                                   justifyContent: 'center',
+                                   marginBottom: '8px',
+                                   overflow: 'hidden',
+                                   flexShrink: 0,
+                                   transition: 'all 0.3s ease'
+                                 }}
+                                 className="group-hover:border-[#ffd700] group-hover:scale-105"
+                                 >
+                                   {awayFlag ? (
+                                     isAwayFlagEmoji ? (
+                                       <span style={{ fontSize: '24px', lineHeight: 1, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>
+                                         {awayFlag}
+                                       </span>
+                                     ) : (
+                                       <img src={awayFlag} alt={awayParsed.name} className="w-full h-full object-cover group-hover:scale-110" style={{ transition: 'all 0.5s ease' }} />
+                                     )
+                                   ) : (
+                                     <div style={{ fontSize: '14px' }}>⚽</div>
+                                   )}
+                                 </div>
+                                 <span className="text-[12px] font-black text-gray-100 truncate w-full tracking-wide uppercase" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+                                   {awayParsed.name}
+                                 </span>
+                               </div>
+                             </div>
                           </div>
  
                           {/* Prediction / Stats Footer */}
@@ -1091,6 +1166,7 @@ const App: React.FC = () => {
                             </div>
                              
                             <button
+                              className="detay-butonu"
                               style={{ width: '100%', marginTop: '6px', padding: '8px 12px', background: 'rgba(242, 169, 0, 0.08)', border: '1px solid rgba(242, 169, 0, 0.2)', color: '#f2a900', fontWeight: 900, fontSize: '10px', borderRadius: '10px', textTransform: 'uppercase', letterSpacing: '2px', transition: 'all 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
                               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(242, 169, 0, 0.15)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 15px rgba(242, 169, 0, 0.15)'; }}
                               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(242, 169, 0, 0.08)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
@@ -1108,9 +1184,6 @@ const App: React.FC = () => {
                 {/* ── Enhanced Betting Section ── */}
                 <EnhancedBetting />
 
-                <div className="home-match-results">
-                  <MatchResultsWidget />
-                </div>
               </div>
 
               {/* ═══ PORTAL FOOTER ═══ */}
@@ -1124,8 +1197,6 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              {/* ═══ MOBILE BOTTOM NAV ═══ */}
-              <PortalMobileNav activeView={view} onViewChange={handleViewChange} />
             </div>
           )}
 
@@ -1180,6 +1251,7 @@ const App: React.FC = () => {
                   onGameComplete={handleGameComplete}
                   isLoggedIn={!!(siteUser || userRole)}
                   onLoginRequired={() => setAuthModalMode('member')}
+                  userRole={userRole}
                 />
               </div>
             ) : (
@@ -1267,6 +1339,7 @@ const App: React.FC = () => {
               username={siteUser?.username || 'Misafir'}
               isLoggedIn={!!(siteUser || userRole)}
               onLoginRequired={() => setAuthModalMode('member')}
+              userRole={userRole}
             />
           </div>
         )}
@@ -1311,6 +1384,7 @@ const App: React.FC = () => {
               siteUser={siteUser}
               userRole={userRole}
               onBack={() => handleViewChange('home')}
+              onLoginRequired={() => setAuthModalMode('member')}
             />
           </div>
         )}
@@ -1370,6 +1444,9 @@ const App: React.FC = () => {
           </button>
         </div>
       </footer>
+      {view !== 'admin' && (
+        <PortalMobileNav activeView={view} onViewChange={handleViewChange} />
+      )}
           </div>
 
       {/* ── 724BAHİS Welcome Popup (once per session) ── */}
