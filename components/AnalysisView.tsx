@@ -330,47 +330,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
         <div className="w-full min-h-screen font-sans pb-24 relative" style={{ background: '#000000', color: '#e2e8f0' }}>
             {/* Background patterns removed for clean solid theme */}
 
-            {/* ── COMPACT HORIZONTAL FILTER BAR ── */}
-            <div
-                className="sticky z-[99] border-b"
-                style={{
-                    top: 'var(--header-height, 65px)',
-                    background: 'rgba(0,0,0,0.97)',
-                    backdropFilter: 'blur(20px)',
-                    borderColor: '#1f2635',
-                }}
-            >
-                <div className="max-w-[900px] mx-auto px-4 py-3">
-                    <div className="flex items-center justify-start md:justify-center gap-2 overflow-x-auto scrollbar-none py-1">
-                        {dates.map((date, idx) => {
-                            const d = new Date(date);
-                            const isSelected = selectedDate === date;
-                            const isToday = idx === 0;
-                            return (
-                                <button
-                                    key={date}
-                                    onClick={() => setSelectedDate(selectedDate === date ? 'WEEKLY' : date)}
-                                    className={`flex flex-col items-center justify-center min-w-[80px] sm:min-w-[90px] py-2 px-3 rounded-xl transition-all duration-300 relative border ${
-                                        isSelected
-                                            ? 'bg-[#f2a900] text-[#0a0d14] border-[#f2a900] shadow-[0_0_20px_rgba(242,169,0,0.35)] font-black scale-105 z-10'
-                                            : 'bg-[#121620]/60 hover:bg-[#1a2030] text-gray-400 hover:text-white border-[#1f2635] hover:border-gray-700'
-                                    }`}
-                                >
-                                    {isToday && (
-                                        <span className={`absolute top-1 right-1.5 w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#0a0d14]' : 'bg-[#f2a900] animate-pulse'}`} />
-                                    )}
-                                    <span className="text-[9px] uppercase tracking-widest font-black opacity-80 mb-0.5">
-                                        {isToday ? 'Bugün' : d.toLocaleDateString('tr-TR', { weekday: 'short' })}
-                                    </span>
-                                    <span className="text-xs sm:text-sm font-black tracking-tight">
-                                        {d.getDate()} {d.toLocaleDateString('tr-TR', { month: 'short' })}
-                                    </span>
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
+            {/* ── COMPACT HORIZONTAL FILTER BAR REMOVED TO SAVE SPACE ── */}
 
             {/* ── MAIN CONTENT ── */}
             <div className="max-w-[900px] mx-auto px-4 py-4 relative z-10">

@@ -58,6 +58,7 @@ interface BlackjackGameProps {
     onGameComplete: (lastPlayTime: number) => void;
     isLoggedIn: boolean;
     onLoginRequired: () => void;
+    userRole?: string | null;
 }
 
 // ─────────────────────────── CARD COMPONENT ─────────────────────────────────
@@ -170,7 +171,7 @@ function pickReward(rewards: BlackjackReward[]): BlackjackReward {
     return pool[pool.length - 1];
 }
 
-const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, isLoggedIn, onLoginRequired }) => {
+const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, isLoggedIn, onLoginRequired, userRole }) => {
     const [deck, setDeck] = useState<Card[]>([]);
     const [playerHand, setPlayerHand] = useState<Card[]>([]);
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
@@ -185,6 +186,10 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
 
     // Cooldown check
     useEffect(() => {
+        if (userRole === 'admin') {
+            setCooldownLeft(0);
+            return;
+        }
         const tick = () => {
             const last = Number(localStorage.getItem('blackjack_last_play') || 0);
             const diff = Date.now() - last;
@@ -198,7 +203,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
         tick();
         const interval = setInterval(tick, 1000);
         return () => clearInterval(interval);
-    }, [cooldownHours]);
+    }, [cooldownHours, userRole]);
 
     const formatCooldown = (ms: number) => {
         const h = Math.floor(ms / 3600000);
@@ -230,8 +235,10 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
             setTimeout(() => endGame([...pHand], [...dHand], remaining, true), 600);
         }
 
-        localStorage.setItem('blackjack_last_play', String(Date.now()));
-        onGameComplete(Date.now());
+        if (userRole !== 'admin') {
+            localStorage.setItem('blackjack_last_play', String(Date.now()));
+            onGameComplete(Date.now());
+        }
     }, [isLoggedIn, cooldownLeft, onLoginRequired, onGameComplete]);
 
     const hit = () => {
@@ -403,7 +410,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                             <MoneyBag reward={reward} onOpen={() => setBagOpened(true)} opened={bagOpened} />
                             {bagOpened && (
                                 <button
-                                    onClick={() => { setPhase('waiting'); setResult(null); setBagOpened(false); setReward(null); setCooldownLeft(cooldownHours * 3600000); }}
+                                    onClick={() => { setPhase('waiting'); setResult(null); setBagOpened(false); setReward(null); setCooldownLeft(userRole === 'admin' ? 0 : cooldownHours * 3600000); }}
                                     className="mt-8 px-6 py-3 rounded-2xl font-black text-sm uppercase tracking-widest text-black transition-all hover:scale-105"
                                     style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 20px rgba(240,185,11,0.4)' }}>
                                     Masaya Dön

@@ -30,6 +30,7 @@ interface PoolGameProps {
     username: string;
     isLoggedIn: boolean;
     onLoginRequired: () => void;
+    userRole?: string | null;
 }
 
 /* ─── Analysis Panel Sub-Component ─────────────────────────────────────────── */
@@ -131,7 +132,7 @@ const MobileAnalysisSheet: React.FC<{ match: PoolMatch; onClose: () => void }> =
 };
 
 /* ─── Main PoolGame Component ──────────────────────────────────────────────── */
-const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLoginRequired }) => {
+const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLoginRequired, userRole }) => {
     const [pool, setPool] = useState<PoolConfig | null>(null);
     const [selections, setSelections] = useState<Record<number, '1' | 'X' | '2'>>({});
     const [submitted, setSubmitted] = useState(false);
@@ -456,7 +457,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                 {/* TRANSPARENT POOL TAB */}
                 {tab === 'pool' && (
                     <div className="space-y-2">
-                        {pool.status === 'open' ? (
+                        {pool.status === 'open' && userRole !== 'admin' ? (
                             <div className="text-center py-16">
                                 <Lock className="w-12 h-12 text-[var(--text-dim)] mx-auto mb-4" />
                                 <p className="text-[var(--text-muted)] font-bold">Tahminler, maçlar başladıktan sonra şeffaf havuzda görünecektir.</p>

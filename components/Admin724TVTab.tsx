@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Save, Tv, Video, Gift, ToggleRight, ToggleLeft, Edit3, Image as ImageIcon, Youtube } from 'lucide-react';
+import { Plus, Trash2, Save, Tv, Video, Gift, ToggleRight, ToggleLeft, Edit3, Image as ImageIcon, Youtube, ChevronDown, ChevronUp } from 'lucide-react';
 import { Streamer, VOD, Gift as GiftType } from '../types';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
@@ -17,6 +17,87 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
     
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+        'BEIN SPORTS Grubu': false,
+        'S SPORT Grubu': false,
+        'TRT KANALLARI': false,
+        'SMART SPOR Grubu': false,
+        'TIVIBU SPOR Grubu': false,
+        'TABII SPOR Grubu': false,
+        'Diğer Kanallar': false
+    });
+    const [editingStreamers, setEditingStreamers] = useState<Record<string, boolean>>({});
+    const [uploadingId, setUploadingId] = useState<string | null>(null);
+
+    const handleThumbnailUpload = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploadingId(id);
+        try {
+            const resizedBlob = await resizeImage(file, 640, 360);
+            const { url, error } = await uploadImageToSupabase(
+                resizedBlob,
+                'slider-images',
+                `vod-thumbnails/${id}-${Date.now()}.jpg`
+            );
+            if (url) {
+                setVods(prev => prev.map(p => p.id === id ? { ...p, thumbnail_url: url } : p));
+            } else {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                    setVods(prev => prev.map(p => p.id === id ? { ...p, thumbnail_url: reader.result as string } : p));
+                };
+            }
+        } catch (err) {
+            console.error('Image processing failed:', err);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setVods(prev => prev.map(p => p.id === id ? { ...p, thumbnail_url: reader.result as string } : p));
+            };
+        } finally {
+            setUploadingId(null);
+        }
+    };
+    const handleVideoUpload = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Visual warning if file is huge (e.g. > 50MB) before starting upload
+        if (file.size > 50 * 1024 * 1024) {
+            alert("Video Boyutu Çok Büyük:\nSeçtiğiniz video 50MB sınırından büyük. Supabase Storage limitini aşacağı için yüklenemeyebilir.\n\nLütfen videoyu sıkıştırıp (MP4 480p/720p) boyutunu küçültün veya YouTube'a yükleyerek linkini yapıştırın.");
+            return;
+        }
+
+        setUploadingId(id);
+        try {
+            const ext = file.name.split('.').pop() || 'mp4';
+            const { url, error } = await uploadImageToSupabase(
+                file,
+                'slider-images',
+                `vod-videos/${id}-${Date.now()}.${ext}`
+            );
+            if (url) {
+                setVods(prev => prev.map(p => p.id === id ? { ...p, video_url: url } : p));
+            } else {
+                if (error?.message?.includes('exceeded the maximum') || error?.message?.includes('size')) {
+                    alert("Yükleme Hatası:\nVideo dosya boyutu çok büyük (Supabase Storage limitini aşıyor).\n\nÖneri:\n1. Videonuzu daha küçük boyutlu / sıkıştırılmış (örneğin MP4 480p/720p) olarak yüklemeyi deneyin.\n2. Veya videoyu YouTube'a yükleyip linkini sol taraftaki URL alanına yapıştırın.");
+                } else {
+                    alert("Yükleme hatası: " + (error?.message || "Bilinmeyen hata"));
+                }
+            }
+        } catch (err) {
+            console.error('Video upload failed:', err);
+            alert("Video yükleme işlemi başarısız oldu.");
+        } finally {
+            setUploadingId(null);
+        }
+    };
+
+    const toggleGroup = (group: string) => setExpandedGroups(prev => ({ ...prev, [group]: !prev[group] }));
+    const toggleEdit = (id: string) => setEditingStreamers(prev => ({ ...prev, [id]: !prev[id] }));
 
     useEffect(() => {
         fetchData();
@@ -80,8 +161,23 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
 
         try {
             const { data: v } = await supabase.from('vods').select('*').order('created_at', { ascending: false });
-            if (v) vodsList = v;
+            if (v && v.length > 0) {
+                vodsList = v;
+            }
         } catch (e) {}
+
+        if (vodsList.length === 0) {
+            try {
+                const { data: configData } = await supabase
+                    .from('site_configs')
+                    .select('value')
+                    .eq('key', 'site_tv_config')
+                    .maybeSingle();
+                if (configData?.value?.vods) {
+                    vodsList = configData.value.vods;
+                }
+            } catch (e) {}
+        }
 
         try {
             const { data: g } = await supabase.from('gifts').select('*').order('order_index', { ascending: true });
@@ -138,7 +234,15 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                 updatedStreamers.push(savedStreamer);
             }
 
+            const { data: currentCfgData } = await supabase
+                .from('site_configs')
+                .select('value')
+                .eq('key', 'site_tv_config')
+                .maybeSingle();
+
+            const existingValue = currentCfgData?.value || {};
             const newConfig = {
+                ...existingValue,
                 isActive: true,
                 channels: updatedStreamers.map(st => ({
                     id: st.id,
@@ -200,7 +304,15 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
 
             // If we are using fallback or db delete didn't run, update via site_configs fallback
             const updatedStreamers = streamers.filter(st => st.id !== id);
+            const { data: currentCfgData } = await supabase
+                .from('site_configs')
+                .select('value')
+                .eq('key', 'site_tv_config')
+                .maybeSingle();
+
+            const existingValue = currentCfgData?.value || {};
             const newConfig = {
+                ...existingValue,
                 isActive: true,
                 channels: updatedStreamers.map(st => ({
                     id: st.id,
@@ -238,13 +350,52 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
     const handleSaveVOD = async (v: VOD) => {
         setSaving(true);
         try {
+            let savedVOD = { ...v };
             if (v.id.startsWith('new_')) {
-                const { id, ...rest } = v;
-                await supabase.from('vods').insert(rest);
-            } else {
-                await supabase.from('vods').update(v).eq('id', v.id);
+                savedVOD = { ...v, id: `vod_${Date.now()}` };
             }
+
+            // 1. Try DB Table write
+            try {
+                if (v.id.startsWith('new_')) {
+                    const { id, ...rest } = v;
+                    await supabase.from('vods').insert(rest);
+                } else {
+                    const { id, created_at, ...rest } = v;
+                    await supabase.from('vods').update(rest).eq('id', v.id);
+                }
+            } catch (dbErr) {
+                console.error("VOD table save failed, using config document fallback:", dbErr);
+            }
+
+            // 2. Always update site_configs tv_config document to persist VODs
+            const updatedVods = vods.map(p => p.id === v.id ? savedVOD : p);
+            if (v.id.startsWith('new_') && !updatedVods.find(p => p.id === savedVOD.id)) {
+                updatedVods.push(savedVOD);
+            }
+
+            const { data: configData } = await supabase
+                .from('site_configs')
+                .select('value')
+                .eq('key', 'site_tv_config')
+                .maybeSingle();
+
+            const existingValue = configData?.value || {};
+            const newConfig = {
+                ...existingValue,
+                isActive: true,
+                vods: updatedVods
+            };
+
+            await supabase
+                .from('site_configs')
+                .upsert({ key: 'site_tv_config', value: newConfig }, { onConflict: 'key' });
+
+            if (onSave) onSave(newConfig);
+            alert('Özet başarıyla kaydedildi.');
             await fetchData();
+        } catch (err: any) {
+            alert('Özet kaydedilemedi: ' + err.message);
         } finally {
             setSaving(false);
         }
@@ -254,10 +405,40 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
         if (!confirm('Emin misiniz?')) return;
         setSaving(true);
         try {
-            if (!id.startsWith('new_')) {
-                await supabase.from('vods').delete().eq('id', id);
+            // 1. Try DB Table delete
+            try {
+                if (!id.startsWith('new_')) {
+                    await supabase.from('vods').delete().eq('id', id);
+                }
+            } catch (dbErr) {
+                console.error("VOD table delete failed:", dbErr);
             }
+
+            // 2. Update via site_configs document
+            const updatedVods = vods.filter(p => p.id !== id);
+
+            const { data: configData } = await supabase
+                .from('site_configs')
+                .select('value')
+                .eq('key', 'site_tv_config')
+                .maybeSingle();
+
+            const existingValue = configData?.value || {};
+            const newConfig = {
+                ...existingValue,
+                isActive: true,
+                vods: updatedVods
+            };
+
+            await supabase
+                .from('site_configs')
+                .upsert({ key: 'site_tv_config', value: newConfig }, { onConflict: 'key' });
+
+            if (onSave) onSave(newConfig);
+            alert('Özet silindi.');
             await fetchData();
+        } catch (err: any) {
+            alert('Özet silinemedi: ' + err.message);
         } finally {
             setSaving(false);
         }
@@ -385,122 +566,182 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                 ))}
             </div>
 
-            {/* STREAMERS TAB */}
-            {activeTab === 'streamers' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {streamers.filter(s => s.platform_type !== 'youtube').map(s => (
-                        <div key={s.id} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '16px', padding: '20px' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                                <div>
-                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>İsim</label>
-                                    <input
-                                        value={s.name}
-                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, name: e.target.value } : p))}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                    />
-                                </div>
-                                <div>
-                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Avatar URL</label>
-                                    <input
-                                        value={s.avatar_url || ''}
-                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, avatar_url: e.target.value } : p))}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                    />
-                                </div>
-                                <div>
-                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Sıra (Order)</label>
-                                    <input
-                                        type="number"
-                                        value={s.order_index}
-                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, order_index: parseInt(e.target.value) } : p))}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                    />
-                                </div>
-                                <div>
-                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Kaynak Tipi</label>
-                                    <select
-                                        value={s.source_type}
-                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, source_type: e.target.value as any } : p))}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                    >
-                                        <option value="platform">Platform (Kick/Twitch)</option>
-                                        <option value="video">MP4 Video</option>
-                                        <option value="iframe">Iframe</option>
-                                    </select>
-                                </div>
-                                {s.source_type === 'platform' && (
-                                    <>
-                                        <div>
-                                            <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Platform</label>
-                                            <select
-                                                value={s.platform_type}
-                                                onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, platform_type: e.target.value as any } : p))}
-                                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                            >
-                                                <option value="kick">Kick</option>
-                                                <option value="twitch">Twitch</option>
-                                                <option value="youtube">YouTube</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Kullanıcı Adı</label>
-                                            <input
-                                                value={s.kick_username || ''}
-                                                onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, kick_username: e.target.value } : p))}
-                                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                            />
-                                        </div>
-                                    </>
-                                )}
-                                {s.source_type === 'video' && (
-                                    <div style={{ gridColumn: 'span 2' }}>
-                                        <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Video URL</label>
-                                        <input
-                                            value={s.video_url || ''}
-                                            onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, video_url: e.target.value } : p))}
-                                            style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                        />
-                                    </div>
-                                )}
-                                {s.source_type === 'iframe' && (
-                                    <div style={{ gridColumn: 'span 2' }}>
-                                        <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Iframe URL</label>
-                                        <input
-                                            value={s.iframe_url || ''}
-                                            onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, iframe_url: e.target.value } : p))}
-                                            style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                        />
-                                    </div>
-                                )}
-                            </div>
+            {activeTab === 'streamers' && (() => {
+                const groupedStreamers = {
+                    'BEIN SPORTS Grubu': streamers.filter(s => s.platform_type !== 'youtube' && s.name.toUpperCase().includes('BEIN')),
+                    'S SPORT Grubu': streamers.filter(s => s.platform_type !== 'youtube' && s.name.toUpperCase().includes('S SPORT')),
+                    'TRT KANALLARI': streamers.filter(s => s.platform_type !== 'youtube' && s.name.toUpperCase().includes('TRT')),
+                    'SMART SPOR Grubu': streamers.filter(s => s.platform_type !== 'youtube' && s.name.toUpperCase().includes('SMART')),
+                    'TIVIBU SPOR Grubu': streamers.filter(s => s.platform_type !== 'youtube' && s.name.toUpperCase().includes('TIVIBU')),
+                    'TABII SPOR Grubu': streamers.filter(s => s.platform_type !== 'youtube' && (s.name.toUpperCase().includes('TABII') || s.name.toUpperCase().includes('TABİİ'))),
+                    'Diğer Kanallar': streamers.filter(s => s.platform_type !== 'youtube' && !['BEIN', 'TRT', 'S SPORT', 'SMART', 'TIVIBU', 'TABII', 'TABİİ'].some(k => s.name.toUpperCase().includes(k)))
+                };
 
-                            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                                <button
-                                    onClick={() => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, is_live: !p.is_live } : p))}
-                                    style={{ flex: 1, padding: '10px', borderRadius: '8px', background: s.is_live ? 'rgba(34,197,94,0.1)' : '#1a1a1a', color: s.is_live ? '#22c55e' : '#666', border: '1px solid', borderColor: s.is_live ? '#22c55e' : '#333', cursor: 'pointer' }}
-                                >
-                                    {s.is_live ? 'CANLI YAYINDA' : 'ÇEVRİMDIŞI'}
-                                </button>
-                                <button
-                                    onClick={() => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, is_vip: !p.is_vip } : p))}
-                                    style={{ flex: 1, padding: '10px', borderRadius: '8px', background: s.is_vip ? 'rgba(240,185,11,0.1)' : '#1a1a1a', color: s.is_vip ? '#f0b90b' : '#666', border: '1px solid', borderColor: s.is_vip ? '#f0b90b' : '#333', cursor: 'pointer' }}
-                                >
-                                    {s.is_vip ? 'VIP (KURUCU)' : 'NORMAL YAYINCI'}
-                                </button>
-                                <button onClick={() => handleSaveStreamer(s)} disabled={saving} style={{ padding: '10px 20px', borderRadius: '8px', background: '#22c55e', color: '#000', fontWeight: 800, border: 'none', cursor: 'pointer' }}>
-                                    {saving ? '...' : 'KAYDET'}
-                                </button>
-                                <button onClick={() => handleDeleteStreamer(s.id)} disabled={saving} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', cursor: 'pointer' }}>
-                                    <Trash2 size={16} />
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                    <button onClick={addStreamer} style={{ padding: '16px', borderRadius: '16px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
-                        <Plus size={18} /> YENİ YAYINCI EKLE
-                    </button>
-                </div>
-            )}
+                return (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <button onClick={addStreamer} style={{ padding: '16px', borderRadius: '12px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}>
+                            <Plus size={18} /> YENİ YAYINCI EKLE
+                        </button>
+
+                        {Object.entries(groupedStreamers).map(([groupName, groupChannels]) => {
+                            if (groupChannels.length === 0) return null;
+                            const isExpanded = expandedGroups[groupName];
+                            
+                            return (
+                                <div key={groupName} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', overflow: 'hidden' }}>
+                                    {/* Accordion Header */}
+                                    <div 
+                                        onClick={() => toggleGroup(groupName)}
+                                        style={{ padding: '16px 20px', background: 'rgba(255,255,255,0.02)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', borderBottom: isExpanded ? '1px solid #1a1a1a' : 'none' }}
+                                    >
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            {isExpanded ? <ChevronUp size={18} color="#9ca3af" /> : <ChevronDown size={18} color="#9ca3af" />}
+                                            <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 900, color: '#e5e7eb' }}>{groupName} <span style={{ color: '#6b7280', fontWeight: 700, fontSize: '12px', marginLeft: '6px' }}>({groupChannels.length} Kanal)</span></h3>
+                                        </div>
+                                    </div>
+
+                                    {/* Accordion Content */}
+                                    {isExpanded && (
+                                        <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            {groupChannels.map(s => {
+                                                const isEditing = editingStreamers[s.id];
+                                                
+                                                return (
+                                                    <div key={s.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                                        {/* Inline Row */}
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                                            {/* Logo Preview */}
+                                                            <div style={{ width: '40px', height: '24px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', borderRadius: '4px', overflow: 'hidden' }}>
+                                                                {s.avatar_url ? (
+                                                                    <img src={s.avatar_url} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />
+                                                                ) : (
+                                                                    <Tv size={14} color="#555" />
+                                                                )}
+                                                            </div>
+
+                                                            {/* Core Inputs (Name, Order, Logo URL) */}
+                                                            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '2fr 1fr 3fr', gap: '10px' }}>
+                                                                <input
+                                                                    value={s.name}
+                                                                    onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, name: e.target.value } : p))}
+                                                                    placeholder="Kanal Adı"
+                                                                    style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #333', background: '#111', color: '#fff', fontSize: '12px', fontWeight: 700 }}
+                                                                />
+                                                                <input
+                                                                    type="number"
+                                                                    value={s.order_index}
+                                                                    onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, order_index: parseInt(e.target.value) } : p))}
+                                                                    placeholder="Sıra"
+                                                                    style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #333', background: '#111', color: '#fff', fontSize: '12px' }}
+                                                                />
+                                                                <input
+                                                                    value={s.avatar_url || ''}
+                                                                    onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, avatar_url: e.target.value } : p))}
+                                                                    placeholder="Logo URL"
+                                                                    style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #333', background: '#111', color: '#fff', fontSize: '12px' }}
+                                                                />
+                                                            </div>
+
+                                                            {/* Live Toggle */}
+                                                            <div 
+                                                                onClick={() => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, is_live: !p.is_live } : p))}
+                                                                style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '6px', flexShrink: 0 }}
+                                                            >
+                                                                {s.is_live ? (
+                                                                    <ToggleRight size={28} color="#22c55e" />
+                                                                ) : (
+                                                                    <ToggleLeft size={28} color="#555" />
+                                                                )}
+                                                                <span style={{ fontSize: '10px', fontWeight: 800, color: s.is_live ? '#22c55e' : '#666', width: '45px' }}>{s.is_live ? 'CANLI' : 'KAPALI'}</span>
+                                                            </div>
+
+                                                            {/* Actions */}
+                                                            <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                                                                <button onClick={() => toggleEdit(s.id)} style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', background: isEditing ? 'rgba(59,130,246,0.1)' : 'rgba(255,255,255,0.05)', color: isEditing ? '#3b82f6' : '#9ca3af', border: 'none', cursor: 'pointer' }}>
+                                                                    <Edit3 size={14} />
+                                                                </button>
+                                                                <button onClick={() => handleSaveStreamer(s)} disabled={saving} style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', background: 'rgba(34,197,94,0.1)', color: '#22c55e', border: 'none', cursor: 'pointer' }}>
+                                                                    <Save size={14} />
+                                                                </button>
+                                                                <button onClick={() => handleDeleteStreamer(s.id)} disabled={saving} style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: 'none', cursor: 'pointer' }}>
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Expandable Advanced Options */}
+                                                        {isEditing && (
+                                                            <div style={{ borderTop: '1px dashed #333', paddingTop: '12px', marginTop: '4px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                                                                <div>
+                                                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase', marginBottom: '4px', display: 'block' }}>Kaynak Tipi</label>
+                                                                    <select
+                                                                        value={s.source_type}
+                                                                        onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, source_type: e.target.value as any } : p))}
+                                                                        style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '11px' }}
+                                                                    >
+                                                                        <option value="platform">Platform (Kick/Twitch)</option>
+                                                                        <option value="video">MP4 Video</option>
+                                                                        <option value="iframe">Iframe</option>
+                                                                    </select>
+                                                                </div>
+                                                                
+                                                                {s.source_type === 'platform' && (
+                                                                    <>
+                                                                        <div>
+                                                                            <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase', marginBottom: '4px', display: 'block' }}>Platform</label>
+                                                                            <select
+                                                                                value={s.platform_type}
+                                                                                onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, platform_type: e.target.value as any } : p))}
+                                                                                style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '11px' }}
+                                                                            >
+                                                                                <option value="kick">Kick</option>
+                                                                                <option value="twitch">Twitch</option>
+                                                                                <option value="youtube">YouTube</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div>
+                                                                            <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase', marginBottom: '4px', display: 'block' }}>Kullanıcı Adı</label>
+                                                                            <input
+                                                                                value={s.kick_username || ''}
+                                                                                onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, kick_username: e.target.value } : p))}
+                                                                                style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '11px' }}
+                                                                            />
+                                                                        </div>
+                                                                    </>
+                                                                )}
+                                                                {s.source_type === 'video' && (
+                                                                    <div style={{ gridColumn: 'span 2' }}>
+                                                                        <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase', marginBottom: '4px', display: 'block' }}>Video URL</label>
+                                                                        <input
+                                                                            value={s.video_url || ''}
+                                                                            onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, video_url: e.target.value } : p))}
+                                                                            style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '11px' }}
+                                                                        />
+                                                                    </div>
+                                                                )}
+                                                                {s.source_type === 'iframe' && (
+                                                                    <div style={{ gridColumn: 'span 2' }}>
+                                                                        <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase', marginBottom: '4px', display: 'block' }}>Iframe URL</label>
+                                                                        <input
+                                                                            value={s.iframe_url || ''}
+                                                                            onChange={e => setStreamers(prev => prev.map(p => p.id === s.id ? { ...p, iframe_url: e.target.value } : p))}
+                                                                            style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '11px' }}
+                                                                        />
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            })()}
 
             {/* YOUTUBE TAB */}
             {activeTab === 'youtube' && (
@@ -588,19 +829,48 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                                 </div>
                                 <div>
                                     <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Thumbnail URL</label>
-                                    <input
-                                        value={v.thumbnail_url || ''}
-                                        onChange={e => setVods(prev => prev.map(p => p.id === v.id ? { ...p, thumbnail_url: e.target.value } : p))}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
-                                    />
+                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                        <input
+                                            value={v.thumbnail_url || ''}
+                                            onChange={e => setVods(prev => prev.map(p => p.id === v.id ? { ...p, thumbnail_url: e.target.value } : p))}
+                                            style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
+                                        />
+                                        <label style={{ padding: '10px 14px', borderRadius: '8px', background: '#f0b90b', color: '#000', fontSize: '11px', fontWeight: 900, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+                                            {uploadingId === v.id ? '...' : 'GÖRSEL SEÇ'}
+                                            <input 
+                                                type="file" 
+                                                accept="image/*" 
+                                                onChange={e => handleThumbnailUpload(v.id, e)} 
+                                                style={{ display: 'none' }} 
+                                            />
+                                        </label>
+                                    </div>
                                 </div>
-                                <div style={{ gridColumn: 'span 2' }}>
-                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Video URL (MP4)</label>
+                                <div>
+                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>Video URL Bağlantısı (YouTube / MP4 URL)</label>
                                     <input
                                         value={v.video_url}
                                         onChange={e => setVods(prev => prev.map(p => p.id === v.id ? { ...p, video_url: e.target.value } : p))}
+                                        placeholder="Örn: https://www.youtube.com/watch?v=..."
                                         style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: '#fff', fontSize: '12px' }}
                                     />
+                                </div>
+                                <div>
+                                    <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>Masaüstünden Video Yükle</label>
+                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                        <div style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #222', background: '#0a0a0a', color: v.video_url?.includes('vod-videos/') ? '#22c55e' : '#6b7280', fontSize: '11px', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                            {v.video_url?.includes('vod-videos/') ? `✓ Yüklenen Dosya: ${v.video_url.split('/').pop()}` : 'Henüz video yüklenmedi (dosya seçin)'}
+                                        </div>
+                                        <label style={{ padding: '10px 14px', borderRadius: '8px', background: '#f0b90b', color: '#000', fontSize: '11px', fontWeight: 900, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+                                            {uploadingId === v.id ? 'Yükleniyor...' : 'DOSYA SEÇ / YÜKLE'}
+                                            <input 
+                                                type="file" 
+                                                accept="video/mp4,video/quicktime,video/x-matroska,video/*" 
+                                                onChange={e => handleVideoUpload(v.id, e)} 
+                                                style={{ display: 'none' }} 
+                                            />
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div style={{ display: 'flex', gap: '10px' }}>

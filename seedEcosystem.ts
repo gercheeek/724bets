@@ -1,18 +1,19 @@
 import { PoolConfig } from './types';
 import { demoAnalyses, demoCoupons } from './demoData';
+import { updateGlobalConfig } from './utils/supabase';
 
-const SEED_FLAG = 'ecosystem_seeded_v8'; // Bumped to v8 to force fresh load of new World Cup 2026 analyses
+const SEED_FLAG = 'ecosystem_seeded_v11'; // Bumped to v11 to force fresh load of new World Cup 2026 analyses
 
 export async function seedEcosystemData() {
     if (localStorage.getItem(SEED_FLAG)) return;
 
-    console.log('🚀 Starting ecosystem synchronization v7 (15-day dynamic analyses)...');
+    console.log('🚀 Starting ecosystem synchronization v11 (15-day dynamic analyses)...');
 
     // ─── 1. SEED ANALYSES ──────────────────────────────────────────────────────
     try {
-        // Force refresh for v6 to ensure the user gets all the new European league matches
         localStorage.setItem('site_analyses', JSON.stringify(demoAnalyses));
-        console.log('✅ 15-day analyses successfully seeded in local storage.');
+        await updateGlobalConfig('site_analyses', demoAnalyses);
+        console.log('✅ 15-day analyses successfully seeded in local storage and Supabase.');
     } catch (e) {
         console.warn('Local Sync (Analyses) failed:', e);
     }

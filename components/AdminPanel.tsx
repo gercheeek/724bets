@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Image, Layout, Trophy, Users, Eye, EyeOff, Save, Plus, Sparkles, TrendingUp, AlertCircle, Clock, Box, Zap, Trash2, Search, Lock, Unlock, Timer, Gift, Ticket, RefreshCw, Activity, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, ChevronUp, ChevronDown, Layers, Camera, ShieldCheck, ShoppingCart } from 'lucide-react';
+import { Settings, Image, Layout, Trophy, Users, Eye, EyeOff, Save, Plus, Sparkles, TrendingUp, AlertCircle, Clock, Box, Zap, Trash2, Search, Lock, Unlock, Timer, Gift, Ticket, RefreshCw, Activity, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, ChevronUp, ChevronDown, Layers, Camera, ShieldCheck, ShoppingCart, Shield } from 'lucide-react';
 import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, LoyaltyConfig, EditorAccount, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, TVConfig, SportCategory, LoaderConfig, CasinoLobbyGame } from '../types';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
@@ -10,6 +10,7 @@ import Admin724TVTab from './Admin724TVTab';
 import AdminPremiumTab from './AdminPremiumTab';
 import AdminCasinoLobbyTab from './AdminCasinoLobbyTab';
 import AdminTrustedTab from './AdminTrustedTab';
+import AdminChatTab from './AdminChatTab';
 import { NavVisibility } from './Header';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
@@ -83,7 +84,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,
@@ -168,6 +169,36 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   // New Management Local State
   const [uploadingSlideId, setUploadingSlideId] = useState<string | null>(null);
+
+  const handleSlideImageUpload = async (slideId: string, idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingSlideId(slideId);
+    try {
+      const croppedBlob = await resizeImage(file, 1024, 576);
+      const { url, error } = await uploadImageToSupabase(
+        croppedBlob,
+        'slider-images',
+        `hero-slides/${slideId}-${Date.now()}.jpg`
+      );
+
+      if (url) {
+        const slides = [...localHeroSlider.slides];
+        slides[idx].imageUrl = url;
+        const updated = { ...localHeroSlider, slides };
+        setLocalHeroSlider(updated);
+        onSaveHeroSliderConfig?.(updated);
+      } else {
+        alert("Görsel yüklenemedi: " + (error?.message || "Bilinmeyen hata"));
+      }
+    } catch (err) {
+      console.error('Slider image crop/upload failed:', err);
+      alert("Görsel işlenirken bir hata oluştu.");
+    } finally {
+      setUploadingSlideId(null);
+    }
+  };
   const [localAnalyses, setLocalAnalyses] = useState<MatchAnalysis[]>(analyses || []);
   const [editingAnalysisId, setEditingAnalysisId] = useState<string | null>(null);
   const [editAnalysisTab, setEditAnalysisTab] = useState<'basic' | 'details' | 'stats'>('basic');
@@ -960,6 +991,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     </div>
                     {unreadCount > 0 && <span className="bg-rose-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">{unreadCount}</span>}
                   </button>
+                  <button
+                    onClick={() => setActiveTab('chatmanage')}
+                    className={`adm-nav-item ${activeTab === 'chatmanage' ? 'active' : ''}`}
+                  >
+                    <Shield className="w-4 h-4" /> SOHBET YÖNETİMİ
+                  </button>
                 </div>
               )}
             </div>
@@ -1221,70 +1258,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               )}
             </section>
 
-            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
-              <div className="flex items-center justify-between p-4">
-                <button 
-                  onClick={() => toggleContentSection('welcome')}
-                  className="flex items-center gap-3 group"
-                >
-                  <div className="w-1 h-5 bg-[#f0b90b] rounded-full shadow-[0_0_10px_rgba(240,185,11,0.4)]" />
-                  <div className="text-left">
-                    <h2 className="text-xs font-black uppercase tracking-tighter text-zinc-300 group-hover:text-white transition-colors">Açılış Pop-up Yönetimi</h2>
-                    <p className="text-zinc-600 text-[9px] font-bold">Hoş geldin reklamı ayarları</p>
-                  </div>
-                  {contentExpanded.welcome ? <ChevronUp className="w-3.5 h-3.5 text-zinc-500" /> : <ChevronDown className="w-3.5 h-3.5 text-zinc-500" />}
-                </button>
-                <div className="flex items-center gap-2 bg-black/40 p-1 rounded-xl border border-zinc-800/60">
-                   <button
-                    onClick={() => {
-                        const updated = { ...localWelcomePopup, isActive: true };
-                        setLocalWelcomePopup(updated);
-                        onSaveWelcomePopupConfig?.(updated);
-                    }}
-                    className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${localWelcomePopup.isActive ? 'bg-[#f0b90b] text-black shadow-[0_0_10px_rgba(240,185,11,0.3)]' : 'text-zinc-500'}`}
-                  >
-                    AKTİF
-                  </button>
-                  <button
-                    onClick={() => {
-                        const updated = { ...localWelcomePopup, isActive: false };
-                        setLocalWelcomePopup(updated);
-                        onSaveWelcomePopupConfig?.(updated);
-                    }}
-                    className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${!localWelcomePopup.isActive ? 'bg-red-500 text-white' : 'text-zinc-500'}`}
-                  >
-                    PASİF
-                  </button>
-                </div>
-              </div>
 
-              {contentExpanded.welcome && (
-                <div className="p-5 pt-0 border-t border-zinc-800/40 animate-fade-in">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-1">Popup Başlığı</label>
-                      <input value={localWelcomePopup.title} onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, title: e.target.value })} className="adm-input !py-2.5 !text-xs" placeholder="Örn: 724BAHİS.NET" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-1">Alt Başlık</label>
-                      <input value={localWelcomePopup.subtitle} onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, subtitle: e.target.value })} className="adm-input !py-2.5 !text-xs" placeholder="Alt Başlık" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-1">Ana Teklif</label>
-                      <input value={localWelcomePopup.offerMain} onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, offerMain: e.target.value })} className="adm-input !py-2.5 !text-xs text-[#f0b90b]" placeholder="Örn: %200 BONUS" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-1">Buton Yazısı</label>
-                      <input value={localWelcomePopup.buttonText} onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, buttonText: e.target.value })} className="adm-input !py-2.5 !text-xs" placeholder="KAYIT OL" />
-                    </div>
-                    <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-1">Buton Linki</label>
-                      <input value={localWelcomePopup.buttonLink} onChange={(e) => setLocalWelcomePopup({ ...localWelcomePopup, buttonLink: e.target.value })} className="adm-input !py-2.5 !text-xs" placeholder="https://..." />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </section>
 
             <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
               <div className="flex items-center justify-between p-4">
@@ -1399,16 +1373,27 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                           <input 
-                              value={slide.imageUrl} 
-                              onChange={(e) => {
-                                const slides = [...localHeroSlider.slides];
-                                slides[idx].imageUrl = e.target.value;
-                                setLocalHeroSlider({ ...localHeroSlider, slides });
-                              }}
-                              className="adm-input !py-2 !text-[10px]" 
-                              placeholder="Görsel URL" 
-                            />
+                           <div className="flex gap-2 items-center">
+                              <input 
+                                value={slide.imageUrl} 
+                                onChange={(e) => {
+                                  const slides = [...localHeroSlider.slides];
+                                  slides[idx].imageUrl = e.target.value;
+                                  setLocalHeroSlider({ ...localHeroSlider, slides });
+                                }}
+                                className="adm-input !py-2 !text-[10px] flex-1" 
+                                placeholder="Görsel URL" 
+                              />
+                              <label className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-[9px] font-black uppercase tracking-widest cursor-pointer whitespace-nowrap">
+                                {uploadingSlideId === slide.id ? '...' : 'GÖRSEL SEÇ'}
+                                <input 
+                                  type="file" 
+                                  accept="image/*" 
+                                  onChange={(e) => handleSlideImageUpload(slide.id, idx, e)} 
+                                  className="hidden" 
+                                />
+                              </label>
+                           </div>
                             <input 
                               value={slide.link} 
                               onChange={(e) => {
@@ -3345,7 +3330,8 @@ Maç Listesi: `}
                     { key: 'blackjack', label: 'Casino' },
                     { key: 'loyalty', label: 'Görevler' },
                     { key: 'raffle', label: 'Bilet' },
-                    { key: 'giveaway', label: 'Çekiliş' },
+                    { key: 'giveaway', label: 'Çekiliş Yönetim' },
+                    { key: 'cekilis', label: 'Çekiliş Sayfası' },
                   ] as const).map(item => {
                     const isActive = navVisibility?.[item.key] !== false;
                     return (
@@ -3555,6 +3541,12 @@ Maç Listesi: `}
                <AdminMembersTab coinName={localLoyaltyConfig.coinName || 'Coin'} />
             </div>
           </section>
+        </div>
+      )}
+
+      {activeTab === 'chatmanage' && (
+        <div className="space-y-4 animate-fade-in">
+          <AdminChatTab />
         </div>
       )}
 

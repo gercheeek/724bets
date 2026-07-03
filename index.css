@@ -150,9 +150,8 @@ body {
 /* ===== Header — Two-Tier Bilyoner Layout ===== */
 .header-wrapper {
   width: 100%;
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -513,7 +512,7 @@ body {
 .brands-section {
   width: 100%;
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 0;
   padding: 40px 24px 80px;
 }
 
@@ -824,7 +823,7 @@ body {
 .site-footer {
   width: 100%;
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 0;
   padding: 40px 24px 32px;
   border-top: 1px solid var(--border-subtle);
   display: flex;
@@ -875,7 +874,7 @@ body {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 /* ===== Responsive ===== */
@@ -928,13 +927,19 @@ body {
     justify-content: center;
   }
 
-  .brands-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
   .brand-card {
     padding: 24px 16px;
+  }
+
+  .brands-section {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 20px 12px 60px !important;
+  }
+
+  .brands-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .brand-card-offer-main {
@@ -1273,32 +1278,9 @@ body {
 }
 
 /* Responsive padding to prevent content overlap with skyscraper banner ads */
-@media (min-width: 1400px) {
-  .site-main-content:not(.admin-layout) {
-    padding-left: 240px !important;
-    padding-right: 240px !important;
-  }
-}
-
-@media (min-width: 1600px) {
-  .site-main-content:not(.admin-layout) {
-    padding-left: 310px !important;
-    padding-right: 310px !important;
-  }
-}
-
-@media (min-width: 1800px) {
-  .site-main-content:not(.admin-layout) {
-    padding-left: 385px !important;
-    padding-right: 385px !important;
-  }
-}
-
-@media (min-width: 2000px) {
-  .site-main-content:not(.admin-layout) {
-    padding-left: 470px !important;
-    padding-right: 470px !important;
-  }
+.site-main-content {
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* ==========================================================================
@@ -1388,7 +1370,15 @@ body {
 
 @keyframes isiltiliSweep {
     0% { transform: translate(-30%, -30%) rotate(30deg); }
-    100% { transform: translate(30%, 30%) rotate(30deg); }
 }
 
+/* Removed chat-push-active legacy margin-right for new flexbox layout */
 
+/* ===== CSS Grid Layout (Root App Container) ===== */
+.app-grid-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--chat-width);
+  transition: grid-template-columns 0.3s ease;
+  min-height: 100dvh;
+  width: 100%;
+}

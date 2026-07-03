@@ -254,11 +254,12 @@ html, body {
 /* ─── PORTAL BODY LAYOUT ─── */
 .portal-body {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 16px;
+  max-width: 1280px;
+  margin: 0;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   min-height: calc(100vh - 200px);
 }
 
@@ -893,6 +894,7 @@ html, body {
 /* ─── HERO SECTION WRAPPER (Slider + Kupon) ─── */
 .hero-section-wrapper {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   width: 100%;
   margin-bottom: 20px;
@@ -900,13 +902,13 @@ html, body {
 }
 
 .hero-section-slider {
-  flex: 7;
-  min-width: 0;
+  flex: 7 1 60%;
+  min-width: 320px;
 }
 
 .hero-section-kupon {
-  flex: 3;
-  min-width: 0;
+  flex: 3 1 300px;
+  min-width: 300px;
 }
 
 /* When inside hero-section, slider fills its container */
@@ -1658,7 +1660,10 @@ html, body {
 
 @media (max-width: 768px) {
   .portal-body {
-    grid-template-columns: 1fr;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
   }
 
   .portal-sidebar {
@@ -1883,6 +1888,7 @@ html, body {
 }
 
 .app-reveal-mask {
+    grid-column: 2;
     animation: revealMask 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -2354,8 +2360,16 @@ html, body {
 /* ─── Content layout ─── */
 .news-detail-content-wrap {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
   padding: 32px 20px 0;
+}
+
+@media (max-width: 768px) {
+  .news-detail-content-wrap {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 16px 12px 0 !important;
+  }
 }
 
 @media (min-width: 768px) {
@@ -2582,7 +2596,7 @@ html, body {
   gap: 16px;
   padding: 56px 24px;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .news-separator-line {
@@ -2641,7 +2655,7 @@ html, body {
   gap: 16px;
   padding: 48px 24px 16px;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .news-end-label {
@@ -2699,7 +2713,7 @@ html, body {
 
 .news-skeleton-body {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
   padding: 32px 20px;
 }
 

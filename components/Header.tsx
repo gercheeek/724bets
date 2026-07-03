@@ -19,6 +19,7 @@ export interface NavVisibility {
   raffle: boolean;
   giveaway: boolean;
   trustedSites: boolean;
+  cekilis: boolean;
 }
 
 export const DEFAULT_NAV_VISIBILITY: NavVisibility = {
@@ -33,6 +34,7 @@ export const DEFAULT_NAV_VISIBILITY: NavVisibility = {
   raffle: false,
   giveaway: false,
   trustedSites: true,
+  cekilis: true,
 };
 
 interface HeaderProps {
@@ -409,98 +411,185 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-        {/* ══════ TIER 1: Top Bar — Logo + Nav + Controls ══════ */}
-        <div className="header-topbar">
+        {/* ══════ SINGLE TIER: Logo + Controls ══════ */}
+        <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#000000', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px' }}>
           {/* Left: Logo Text */}
           <div
             className="logo-text-724 shrink-0"
             onClick={() => onViewChange?.('home')}
+            style={{ cursor: 'pointer' }}
           >
             <span style={{
               fontFamily: "'Inter', sans-serif",
-              fontWeight: 900,
-              fontSize: '24px',
+              fontWeight: 950,
+              fontSize: '26px',
               letterSpacing: '-1px',
               lineHeight: 1,
               display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0px'
+              alignItems: 'baseline',
+              gap: '0px',
+              color: '#adff2f',
+              textShadow: '0 0 12px rgba(173, 255, 47, 0.55), 0 0 24px rgba(173, 255, 47, 0.2)',
             }}>
+              <span>724FUTBOL</span>
               <span style={{
-                background: 'linear-gradient(135deg, #f0b90b 0%, #ffe566 40%, #f0b90b 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                fontSize: '12px',
                 fontWeight: 900,
-                filter: 'drop-shadow(0 0 10px rgba(240,185,11,0.6))'
-              }}>7</span>
-              <span style={{
-                background: 'linear-gradient(135deg, #f0b90b 0%, #ffe566 40%, #f0b90b 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontWeight: 900,
-                filter: 'drop-shadow(0 0 10px rgba(240,185,11,0.6))'
-              }}>2</span>
-              <span style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontWeight: 900,
-                filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
-              }}>4</span>
-              <span style={{
-                fontWeight: 800,
-                fontSize: '11px',
-                color: '#f0b90b',
-                WebkitTextFillColor: '#f0b90b',
-                letterSpacing: '2px',
-                marginLeft: '2px',
-                textTransform: 'uppercase',
-                alignSelf: 'flex-end',
-                marginBottom: '2px'
-              }}>BAHİS</span>
+                letterSpacing: '0.5px',
+                marginLeft: '1px',
+                opacity: 0.95
+              }}>.COM</span>
             </span>
           </div>
 
-          {/* Center: Navigation Items */}
-          <nav className="header-center-nav" style={{ alignItems: 'center', gap: '2px', flex: 1, justifyContent: 'center', overflow: 'auto', scrollbarWidth: 'none' }}>
-            {categories.map((cat) => {
-              if (cat.visKey && navVisibility?.[cat.visKey] === false) return null;
-              if (cat.requireRole && !userRole) return null;
-              const active = isCategoryActive(cat);
-              return (
-                <button
-                  key={cat.key}
-                  className={`header-cat-item ${active ? 'active' : ''}`}
-                  onClick={() => handleCategoryClick(cat)}
-                  style={{ padding: '8px 14px', flexDirection: 'row', gap: '6px' }}
+          {/* Right: Controls */}
+          <div className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            {siteUser ? (
+              <>
+                {/* Balance Capsule */}
+                <div
+                  className="flex items-center gap-1.5 cursor-pointer"
+                  onClick={() => onViewChange?.('loyalty')}
+                  title="Coin Bakiyesi"
+                  style={{
+                    background: '#232326',
+                    border: '1px solid rgba(255, 255, 255, 0.04)',
+                    borderRadius: '8px',
+                    padding: '6px 12px',
+                    height: '34px'
+                  }}
                 >
-                  <span className="header-cat-icon">{cat.icon}</span>
-                  <span className="header-cat-label" style={{ fontSize: '11px' }}>{cat.label}</span>
-                </button>
-              );
-            })}
-          </nav>
+                  <Diamond className="w-4 h-4 text-[#00f0ff] fill-[#00f0ff]/15" />
+                  <span className="text-white font-black text-xs tabular-nums" style={{ fontSize: '13px' }}>{getUserLoyalty(siteUser.id).coins.toLocaleString('tr')}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-500" style={{ marginLeft: '2px' }} />
+                </div>
 
-          {/* Right: Search + User */}
-          <div className="header-topbar-right">
-            <button
-              onClick={onSearchClick}
-              className="header-icon-btn"
-              title="Maç Ara"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onSupportClick}
-              className="header-icon-btn"
-              title="Canlı Destek"
-            >
-              <MessageSquare className="w-4 h-4" />
-            </button>
-            {renderUserStatus()}
+                {/* Yatırım Button */}
+                <button
+                  onClick={() => setShowDepositModal(true)}
+                  style={{
+                    background: '#adff2f',
+                    color: '#000000',
+                    fontWeight: 900,
+                    fontSize: '12px',
+                    padding: '6px 18px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 0 12px rgba(173, 255, 47, 0.25)',
+                    transition: 'all 0.2s',
+                    height: '34px'
+                  }}
+                  className="hover:scale-105 active:scale-95 font-black"
+                >
+                  Yatırım
+                </button>
+
+                {/* Search Button */}
+                <button
+                  onClick={onSearchClick}
+                  className="header-icon-btn hover:opacity-80 transition-opacity"
+                  title="Maç Ara"
+                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+
+                {/* Gift Button */}
+                <button
+                  onClick={() => onViewChange?.('loyalty')}
+                  className="header-icon-btn hover:opacity-80 transition-opacity"
+                  title="Ödüller ve Görevler"
+                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+                >
+                  <Gift className="w-5 h-5" />
+                </button>
+
+                {/* Chat Button */}
+                <button
+                  onClick={onSupportClick}
+                  className="header-icon-btn hover:opacity-80 transition-opacity"
+                  title="Canlı Destek"
+                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+                >
+                  <MessageSquare className="w-5 h-5" />
+                </button>
+
+                {/* Profile Button with Dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setDropdownOpen(prev => !prev)}
+                    className="hover:opacity-80 transition-opacity"
+                    style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+                  >
+                    <User className="w-5 h-5" />
+                  </button>
+                  {dropdownOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
+                      <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                        <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>Üye Hesabı</p>
+                        <p className="text-sm font-black truncate" style={{ color: 'var(--text-primary)' }}>{siteUser.username}</p>
+                      </div>
+                      <button
+                        onClick={() => { setDropdownOpen(false); setShowDepositModal(true); }}
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-blue-500 hover:bg-blue-500/5 text-xs font-bold transition-colors border-b border-black/5"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        Yatırım Bildir
+                      </button>
+                      <button
+                        onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-500/5 text-xs font-bold transition-colors"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        Çıkış Yap
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <button
+                  className="header-capsule header-capsule--login"
+                  onClick={onMemberLoginClick}
+                  style={{
+                    background: '#2A2A2A',
+                    color: '#fff',
+                    borderColor: 'transparent',
+                    padding: '0 16px',
+                    height: '32px',
+                    fontWeight: 700,
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <User className="w-4 h-4" />
+                  <span>Giriş Yap</span>
+                </button>
+                
+                <button
+                  onClick={onSearchClick}
+                  className="header-icon-btn hover:opacity-80 transition-opacity"
+                  title="Maç Ara"
+                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+
+                <button
+                  onClick={onSupportClick}
+                  className="header-icon-btn hover:opacity-80 transition-opacity"
+                  title="Canlı Destek"
+                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+                >
+                  <MessageSquare className="w-5 h-5" />
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -549,11 +638,11 @@ const Header: React.FC<HeaderProps> = ({
                           display: 'inline-block'
                         }}
                       >
-                        724BAHİS.NET
+                        724FUTBOL.COM
                       </span>
                     );
 
-                    const keyword = /724bahis\.net/gi;
+                    const keyword = /724futbol\.com/gi;
 
                     // CASE 1: Manual Placement via '724bahis.net' keyword
                     if (text.match(keyword)) {

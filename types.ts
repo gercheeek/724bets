@@ -685,6 +685,8 @@ export interface TVChannel {
     isActive: boolean;
     order: number;
     viewerCount?: number;
+    tags?: string[];
+    isVip?: boolean;
 
     // New Dynamic Fields
     sourceType?: 'platform' | 'video' | 'iframe';

@@ -122,26 +122,26 @@ export const PromoSlider: React.FC = () => {
             key={`${promo.id}-${index}`}
             onClick={handleCardClick}
             className="shrink-0 relative bg-[#1a1a1a] rounded-xl border border-[#333] overflow-hidden cursor-pointer group transition-all duration-300 hover:border-[#555] hover:-translate-y-1"
-            style={{ width: '310px', height: '160px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}
+            style={{ width: '250px', height: '125px', boxShadow: '0 5px 15px rgba(0,0,0,0.5)' }}
           >
             {/* Background Glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-transparent to-[#000000] pointer-events-none" />
             
-            <div className="relative z-10 p-5 h-full flex flex-col justify-between">
+            <div className="relative z-10 p-3 h-full flex flex-col justify-between">
               <div>
-                <h3 className="text-white font-black text-lg leading-tight uppercase" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                <h3 className="text-white font-black text-sm leading-tight uppercase" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                   {promo.title1}
                 </h3>
-                <h3 className="font-black text-[17px] leading-tight uppercase" style={{ color: promo.title2Color || '#76e13b', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                <h3 className="font-black text-[14px] leading-tight uppercase" style={{ color: promo.title2Color || '#76e13b', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                   {promo.title2}
                 </h3>
-                <p className="text-gray-300 text-[11px] mt-1.5 leading-snug whitespace-pre-line font-semibold">
+                <p className="text-gray-300 text-[10px] mt-1 leading-snug whitespace-pre-line font-semibold">
                   {promo.subtitle}
                 </p>
               </div>
               
               <div>
-                <button className="px-4 py-1.5 border border-[#444] rounded-md text-white text-[11px] font-bold bg-transparent group-hover:bg-[#333] transition-colors">
+                <button className="px-3 py-1 border border-[#444] rounded-md text-white text-[10px] font-bold bg-transparent group-hover:bg-[#333] transition-colors">
                   {promo.buttonText}
                 </button>
               </div>
@@ -149,7 +149,7 @@ export const PromoSlider: React.FC = () => {
 
             {/* 21.com Logo Representation */}
             <div 
-              className="absolute right-3.5 bottom-3.5 select-none pointer-events-none transition-transform duration-500"
+              className="absolute right-2 bottom-2 select-none pointer-events-none transition-transform duration-500 transform scale-75 origin-bottom-right"
             >
               <Logo21 />
             </div>

@@ -14,6 +14,7 @@ import BlackjackGame from './components/BlackjackGame';
 import PromoPopup from './components/PromoPopup';
 import MaintenanceScreen from './components/MaintenanceScreen';
 import ChatBot from './components/ChatBot';
+import ModernChat from './components/ModernChat';
 import PromoWheel from './components/PromoWheel';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
 import SearchModal from './components/SearchModal';
@@ -43,9 +44,9 @@ import GameLobbyTeaser from './components/GameLobbyTeaser';
 import TV724View from './components/TV724View';
 import LiveMatches from './components/LiveMatches';
 
-import SkyscraperAds from './components/SkyscraperAds';
 import MatchResultsWidget from './components/MatchResultsWidget';
 import { PromoSlider } from './components/PromoSlider';
+import Sidebar from './components/Sidebar';
 const SITE_CACHE_VERSION = "2026.06.25_v1";
 
 const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateStr, timeStr }) => {
@@ -91,6 +92,23 @@ const App: React.FC = () => {
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail'>('home');
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  
+  // Responsive sidebar state
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      const tablet = window.innerWidth < 1280;
+      setIsMobile(mobile);
+      if (tablet) {
+        setIsSidebarOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -308,17 +326,17 @@ const App: React.FC = () => {
 
     // 3. Branding Migration for Marquee & Popup
     const storedMarquee = localStorage.getItem('site_marquee_config');
-    if (storedMarquee && /betlivo/i.test(storedMarquee)) {
-      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724BAHİS.NET'));
+    if (storedMarquee && (/betlivo/i.test(storedMarquee) || /724bahis/i.test(storedMarquee))) {
+      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724FUTBOL.COM').replace(/724bahis\.net/gi, '724FUTBOL.COM'));
       localStorage.setItem('site_marquee_config', JSON.stringify(parsedMarquee));
       setMarqueeConfig(parsedMarquee);
     }
 
     const storedWelcome = localStorage.getItem('site_welcome_popup');
-    if (storedWelcome && /betlivo/i.test(storedWelcome)) {
-      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724BAHİS.NET'));
+    if (storedWelcome && (/betlivo/i.test(storedWelcome) || /724bahis/i.test(storedWelcome))) {
+      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724FUTBOL.COM').replace(/724bahis\.net/gi, '724FUTBOL.COM'));
       // Also catch the 'BETLIVOX' variant if it exists
-      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BAHİS.NETX/gi, '724BAHİS.NET'));
+      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BAHİS.NETX/gi, '724FUTBOL.COM').replace(/724FUTBOL.COMX/gi, '724FUTBOL.COM'));
       localStorage.setItem('site_welcome_popup', JSON.stringify(cleanedWelcome));
       setWelcomePopupConfig(cleanedWelcome);
     }
@@ -332,7 +350,8 @@ const App: React.FC = () => {
   });
   const [showWelcomePopup, setShowWelcomePopup] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(true);
+  const [globalTvPip, setGlobalTvPip] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
     return stored ? JSON.parse(stored) : DEFAULT_LOYALTY_CONFIG;
@@ -371,17 +390,9 @@ const App: React.FC = () => {
 
   // App Flow: Skip loader splash screen completely as requested by the user
   useEffect(() => {
-    setAppStage(siteStatusConfig.isMaintenanceMode ? 'ready' : (welcomePopupConfig.isActive ? 'popup' : 'ready'));
-    if (welcomePopupConfig.isActive && !siteStatusConfig.isMaintenanceMode) {
-      setShowWelcomePopup(true);
-    }
+    setAppStage('ready');
     setShowLoader(false);
-  }, [welcomePopupConfig.isActive, siteStatusConfig.isMaintenanceMode]);
-
-  const handleCloseWelcomePopup = () => {
-    setShowWelcomePopup(false);
-    setAppStage('ready'); // Stage 3: Unblock the site
-  };
+  }, []);
 
   // --- UNIFIED INITIALIZATION (Seed -> Local -> Supabase) ---
   useEffect(() => {
@@ -482,7 +493,7 @@ const App: React.FC = () => {
         if (globalGiveaway) setGiveawayConfig(globalGiveaway);
         
         if (globalMarquee) {
-          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724BAHİS.NET'));
+          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724FUTBOL.COM').replace(/724bahis\.net/gi, '724FUTBOL.COM'));
           setMarqueeConfig(cleaned);
         }
         
@@ -490,7 +501,7 @@ const App: React.FC = () => {
         if (globalWheel) setWheelConfig(globalWheel);
         
         if (globalWelcome) {
-          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724BAHİS.NET').replace(/724BAHİS.NETX/gi, '724BAHİS.NET'));
+          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724FUTBOL.COM').replace(/724bahis\.net/gi, '724FUTBOL.COM').replace(/724BAHİS.NETX/gi, '724FUTBOL.COM').replace(/724FUTBOL.COMX/gi, '724FUTBOL.COM'));
           setWelcomePopupConfig(cleaned);
         }
         
@@ -504,13 +515,6 @@ const App: React.FC = () => {
         if (globalRaffle) setRaffleConfig(globalRaffle);
         if (globalPopularBets) setPopularBetsConfig(globalPopularBets);
         if (globalTvConfig) {
-          const tipoChannels = DEFAULT_TV_CONFIG.channels.filter(c => c.id.startsWith('tipo-'));
-          const existingIds = new Set(globalTvConfig.channels.map((c: any) => c.id));
-          const toAdd = tipoChannels.filter(c => !existingIds.has(c.id));
-          if (toAdd.length > 0) {
-            globalTvConfig.channels = [...globalTvConfig.channels, ...toAdd];
-            updateGlobalConfig('site_tv_config', globalTvConfig);
-          }
           setTvConfig(globalTvConfig);
         }
         if (globalLoaderConfig) setLoaderConfig(globalLoaderConfig);
@@ -601,28 +605,29 @@ const App: React.FC = () => {
   useEffect(() => {
     const syncViewWithUrl = () => {
       const path = window.location.pathname;
-      if (path === '/raffles') {
+      const cleanPath = path.replace(/\/$/, '') || '/';
+      if (cleanPath === '/raffles') {
         setView('cekilis');
-      } else if (path === '/bilet') {
+      } else if (cleanPath === '/bilet') {
         setView('raffle');
-      } else if (path === '/admin') {
+      } else if (cleanPath === '/admin') {
         setView('admin');
-      } else if (path === '/') {
+      } else if (cleanPath === '/') {
         setView('home');
-      } else if (path === '/brands') {
-        setView('brands');
-      } else if (path === '/analysis') {
-        setView('analysis');
-      } else if (path === '/coupons') {
-        setView('coupons');
-      } else if (path === '/724tv') {
-        setView('724tv');
-      } else if (path === '/trusted-sites') {
+      } else if (cleanPath === '/brands') {
         setView('trusted-sites');
-      } else if (path === '/trusted-detail') {
+      } else if (cleanPath === '/analysis') {
+        setView('analysis');
+      } else if (cleanPath === '/coupons') {
+        setView('coupons');
+      } else if (cleanPath === '/724tv') {
+        setView('724tv');
+      } else if (cleanPath === '/trusted-sites') {
+        setView('trusted-sites');
+      } else if (cleanPath === '/trusted-detail') {
         setView('trusted-detail');
       } else {
-        const viewName = path.substring(1);
+        const viewName = cleanPath.substring(1);
         const validViews = ['blackjack', 'loyalty', 'pool', 'wheel', 'giveaway'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
@@ -728,7 +733,7 @@ const App: React.FC = () => {
     } else if (v === 'admin') {
       path = '/admin';
     } else if (v === 'brands') {
-      path = '/brands';
+      path = '/trusted-sites';
     } else if (v === 'analysis') {
       path = '/analysis';
     } else if (v === 'coupons') {
@@ -747,13 +752,10 @@ const App: React.FC = () => {
       window.history.pushState(null, '', path);
     }
 
-    if (v === 'trusted-sites') {
+    if (v === 'trusted-sites' || v === 'brands') {
       // Refresh company list from localStorage on navigate
       setTrustedCompanies(loadTrustedCompanies());
       setView('trusted-sites');
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    } else if (v === 'brands') {
-      setView('brands');
       window.scrollTo({ top: 0, behavior: 'auto' });
     } else if (v === 'home') {
       setView('home');
@@ -872,17 +874,33 @@ const App: React.FC = () => {
           onAdminLogin={() => setAuthModalMode('admin')}
         />
       ) : (
-        <div style={{
+        <div className="app-grid-layout" style={{
           visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
           height: (appStage === 'ready' || appStage === 'popup') ? 'auto' : '100dvh',
           minHeight: '100dvh',
           background: 'var(--bg-main)',
           color: 'var(--text-primary)',
           position: 'relative',
-          overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden'
-        }}>
+          overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden',
+          '--sidebar-width': !isMobile && isSidebarOpen ? '260px' : (!isMobile && !isSidebarOpen ? '72px' : '0px'),
+          '--chat-width': (view === 'admin') ? '0px' : (isChatOpen ? '380px' : '0px')
+        } as React.CSSProperties}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
-          <div className={appStage !== 'loading' ? 'app-reveal-mask' : 'app-hidden-initial'} style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
+          
+          {!isMobile && (
+            <div className="sidebar-wrapper" style={{ height: '100%', position: 'relative' }}>
+              <Sidebar
+                isOpen={isSidebarOpen}
+                onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+                activeView={view}
+                onViewChange={handleViewChange}
+                userRole={userRole}
+                navVisibility={navVisibility}
+              />
+            </div>
+          )}
+
+          <div className={appStage !== 'loading' ? 'app-reveal-mask' : 'app-hidden-initial'} style={{ display: 'flex', flexDirection: 'column', flex: '1 1 0px', minWidth: 0, width: '100%', overflowX: 'hidden', minHeight: '100dvh', position: 'relative' }}>
       <Header
         onAdminClick={() => {
           if (userRole) {
@@ -918,14 +936,12 @@ const App: React.FC = () => {
           zIndex: 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingTop: marqueeConfig?.isActive ? '115px' : '65px',
-          '--header-height': marqueeConfig?.isActive ? '115px' : '65px'
+          paddingTop: '60px',
+          '--header-height': '60px',
+          transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out'
         } as React.CSSProperties}
       >
         <div style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
-          {view !== 'admin' && view !== '724tv' && (
-            <SkyscraperAds activeView={view} />
-          )}
           {view === 'home' && (
             <div className="animate-fade-in">
               {/* ═══ PORTAL BODY ═══ */}
@@ -982,10 +998,6 @@ const App: React.FC = () => {
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
                 {/* ── Promosyonlar Section ── */}
                 <PromoSlider />
-                
-                {/* ── Canlı Oranlar Section ── */}
-                <LiveMatches />
-                
                 {/* ── Yaklaşan Maçlar Section ── */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-4">
@@ -997,7 +1009,7 @@ const App: React.FC = () => {
                     </h3>
                     <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(242, 169, 0, 0.2), transparent)' }} />
                   </div>
- 
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {nextThreeAnalyses.map((match, idx) => {
                       const homeParsed = parseTeamFlagAndName(match.homeTeam);
@@ -1058,7 +1070,7 @@ const App: React.FC = () => {
                                 <MatchCountdown dateStr={match.matchDate} timeStr={match.matchTime} />
                               </span>
                             </div>
- 
+
                             {/* Team Matchup */}
                              <div className="flex items-center justify-between my-4 px-2">
                                {/* Home Team */}
@@ -1189,6 +1201,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
 
+
                 {/* ── Enhanced Betting Section ── */}
                 <EnhancedBetting />
 
@@ -1196,7 +1209,7 @@ const App: React.FC = () => {
 
               {/* ═══ PORTAL FOOTER ═══ */}
               <div className="portal-footer">
-                <span className="portal-footer-copy">© 2026 724BAHİS.NET · Tüm hakları saklıdır.</span>
+                <span className="portal-footer-copy">© 2026 724FUTBOL.COM · Tüm hakları saklıdır.</span>
                 <div className="portal-footer-links">
                   <a href="#" onClick={(e) => e.preventDefault()}>Hakkımızda</a>
                   <a href="#" onClick={(e) => e.preventDefault()}>İletişim</a>
@@ -1384,18 +1397,7 @@ const App: React.FC = () => {
             />
           </div>
         )}
-
-        {view === '724tv' && (
-          <div className="animate-fade-in">
-            <TV724View
-              config={tvConfig}
-              siteUser={siteUser}
-              userRole={userRole}
-              onBack={() => handleViewChange('home')}
-              onLoginRequired={() => setAuthModalMode('member')}
-            />
-          </div>
-        )}
+        {/* TV724View is now globally mounted below to support mini player persistence */}
 
         {view === 'trusted-sites' && (
           <div className="animate-fade-in">
@@ -1457,13 +1459,17 @@ const App: React.FC = () => {
       )}
           </div>
 
-      {/* ── 724BAHİS Welcome Popup (once per session) ── */}
-      {showWelcomePopup && (
-        <PromoPopup
-          onClose={handleCloseWelcomePopup}
-          config={welcomePopupConfig}
-        />
-      )}
+
+
+      {/* ── Globally Mounted TV724View for Mini Player Persistence ── */}
+      <TV724View
+        config={tvConfig}
+        siteUser={siteUser}
+        userRole={userRole}
+        onBack={() => handleViewChange('home')}
+        onLoginRequired={() => setAuthModalMode('member')}
+        activeView={view}
+      />
 
       {/* ── Match Search Modal ── */}
       {showSearch && (
@@ -1474,8 +1480,26 @@ const App: React.FC = () => {
         />
       )}
 
-      {/* ── AI Chat Assistant ── */}
-      <ChatBot open={isChatOpen} onToggle={() => setIsChatOpen(!isChatOpen)} />
+      {/* ── Modern Chat Widget ── */}
+      {view !== 'admin' && isChatOpen && (
+        <div 
+          style={{ 
+            overflow: 'hidden', 
+            position: isMobile ? 'fixed' : 'sticky', 
+            right: 0, top: 0, zIndex: 9999, height: '100dvh',
+            width: '100%',
+            transition: 'width 0.3s ease'
+          }}
+        >
+          <ModernChat
+            open={true}
+            onClose={() => setIsChatOpen(false)}
+            siteUser={siteUser}
+            userRole={userRole}
+            isMobile={isMobile}
+          />
+        </div>
+      )}
 
     </div>
     )}

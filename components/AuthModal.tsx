@@ -9,6 +9,7 @@ interface AuthModalProps {
     onAdminLogin: (role: string) => void;
     onClose: () => void;
     hideMemberLogin?: boolean;
+    initialMemberMode?: 'login' | 'register';
 }
 
 const InputField: React.FC<{
@@ -26,9 +27,9 @@ const InputField: React.FC<{
     </div>
 );
 
-const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin, onClose, hideMemberLogin = false }) => {
+const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin, onClose, hideMemberLogin = false, initialMemberMode = 'login' }) => {
     const [activeTab, setActiveTab] = useState<'member' | 'admin'>(hideMemberLogin ? 'admin' : mode);
-    const [memberMode, setMemberMode] = useState<'login' | 'register'>('login');
+    const [memberMode, setMemberMode] = useState<'login' | 'register'>(initialMemberMode);
 
     const [mUsername, setMUsername] = useState('');
     const [mEmail, setMEmail] = useState('');
