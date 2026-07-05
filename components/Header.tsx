@@ -345,31 +345,7 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Controls */}
         <div className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {(userRole === 'admin' || userRole === 'editor') && (
-            <button
-              onClick={onAdminClick}
-              className="hover:scale-105 active:scale-95 transition-transform"
-              title="Yönetim Paneli"
-              style={{ 
-                background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)', 
-                border: 'none', 
-                color: '#000', 
-                cursor: 'pointer', 
-                padding: '0 14px', 
-                height: '32px',
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                gap: '6px',
-                borderRadius: '8px',
-                fontWeight: 900,
-                fontSize: '13px'
-              }}
-            >
-              <Shield className="w-4 h-4" />
-              <span>Yönetim Paneli</span>
-            </button>
-          )}
+
 
           {siteUser ? (
             <>
@@ -445,16 +421,32 @@ const Header: React.FC<HeaderProps> = ({
                 {dropdownOpen && (
                   <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
                     <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                      <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>Üye Hesabı</p>
+                      <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>
+                        {userRole === 'admin' || userRole === 'editor' ? 'Yönetici Hesabı' : 'Üye Hesabı'}
+                      </p>
                       <p className="text-sm font-black truncate" style={{ color: 'var(--text-primary)' }}>{siteUser.username}</p>
                     </div>
-                    <button
-                      onClick={() => { setDropdownOpen(false); setShowDepositModal(true); }}
-                      className="w-full flex items-center gap-2 px-4 py-2.5 text-blue-500 hover:bg-blue-500/5 text-xs font-bold transition-colors border-b border-black/5"
-                    >
-                      <MessageSquare className="w-3.5 h-3.5" />
-                      Yatırım Bildir
-                    </button>
+
+                    {(userRole === 'admin' || userRole === 'editor') && (
+                      <button
+                        onClick={() => { setDropdownOpen(false); onAdminClick?.(); }}
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-amber-500 hover:bg-amber-500/5 text-xs font-bold transition-colors border-b border-black/5"
+                      >
+                        <Shield className="w-3.5 h-3.5" />
+                        Yönetim Paneli
+                      </button>
+                    )}
+
+                    {!(userRole === 'admin' || userRole === 'editor') && (
+                      <button
+                        onClick={() => { setDropdownOpen(false); setShowDepositModal(true); }}
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-blue-500 hover:bg-blue-500/5 text-xs font-bold transition-colors border-b border-black/5"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        Yatırım Bildir
+                      </button>
+                    )}
+
                     <button
                       onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
                       className="w-full flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-500/5 text-xs font-bold transition-colors"

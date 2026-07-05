@@ -719,7 +719,9 @@ const App: React.FC = () => {
         onThemeChange={setThemeColor}
         hashtags={hashtags || ''}
         onLogout={() => {
+          setSiteUser(null);
           setUserRole(null);
+          localStorage.removeItem('site_current_member');
           localStorage.removeItem('site_user_role');
           setView('home');
         }}
@@ -904,6 +906,19 @@ const App: React.FC = () => {
           onAdminLogin={(role) => {
             setUserRole(role);
             localStorage.setItem('site_user_role', role);
+            
+            const adminUser: SiteUser = {
+              id: 'admin-session',
+              username: 'Yönetici',
+              password: '',
+              email: 'admin@724bahis.net',
+              phone: '',
+              createdAt: Date.now(),
+              role: role as any
+            };
+            setSiteUser(adminUser);
+            localStorage.setItem('site_current_member', JSON.stringify(adminUser));
+
             setAuthModalMode(null);
             setView('admin');
           }}
@@ -1295,15 +1310,9 @@ const App: React.FC = () => {
         </div>
         <div className="flex justify-center mt-6">
           <button 
-            onClick={() => {
-              if (userRole) {
-                setView('admin');
-              } else {
-                setAuthModalMode('admin');
-              }
-            }}
+            onClick={() => setAuthModalMode('admin')}
             className="text-zinc-800 hover:text-amber-500 transition-all duration-300 transform hover:scale-125"
-            title={userRole ? "Yönetim Paneline Dön" : "Sistem Girişi"}
+            title="Sistem Girişi"
           >
             <Crown size={20} />
           </button>
