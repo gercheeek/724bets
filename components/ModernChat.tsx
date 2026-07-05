@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Star, Shield, Trash2, Smile } from 'lucide-react';
+import { X, Send, Star, Shield, Trash2, Smile, MoreVertical } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { SiteUser } from '../types';
 
@@ -70,6 +70,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const [eventWidget, setEventWidget] = useState<{ show: boolean; title: string; brandName: string; promoName: string; prizeAmount: string; ctaText: string; ctaUrl: string; } | null>(null);
     const [activePoll, setActivePoll] = useState<{ question: string; options: string[]; votes: number[]; isActive: boolean; } | null>(null);
     const [hasVoted, setHasVoted] = useState(false);
+    const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const handleOutsideClick = () => {
+            setActiveMenuId(null);
+        };
+        document.addEventListener('click', handleOutsideClick);
+        return () => document.removeEventListener('click', handleOutsideClick);
+    }, []);
 
     useEffect(() => {
         if (activePoll) {
@@ -557,7 +566,17 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     </div>
                 ) : (
                     messages.map((msg, i) => (
-                        <div key={msg.id || i} className="bg-[#242427] border border-white/5 rounded-lg p-3 flex flex-col gap-1.5 relative group text-left">
+                        <div 
+                            key={msg.id || i} 
+                            className="bg-[#242427] border border-white/5 rounded-lg p-3 flex flex-col gap-1.5 relative group text-left cursor-default"
+                            onContextMenu={(e) => {
+                                if (isAdmin) {
+                                    e.preventDefault();
+                                    setActiveMenuId(activeMenuId === msg.id ? null : msg.id);
+                                    setActiveMutePopup(null);
+                                }
+                            }}
+                        >
                             <div className="flex items-center gap-2 flex-wrap">
                                 <span className="bg-white/10 px-1 py-0.5 rounded text-[9px] font-black text-gray-300 min-w-[16px] text-center">
                                     {msg.role === 'admin' ? '99' : (Math.abs((msg.username || 'User').split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0)) % 10) + 1}
@@ -568,20 +587,60 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                 >
                                     {getRoleBadge(msg.role)}{msg.username}
                                 </span>
-                                <span className="text-[9px] text-gray-500 ml-auto">
+                                <span className="text-[9px] text-gray-500 ml-auto mr-6">
                                     {formatTime(msg.created_at)}
                                 </span>
                             </div>
-                            <div className="text-xs text-gray-300 leading-relaxed break-words">
+                            <div className="text-xs text-gray-300 leading-relaxed break-words pr-4">
                                 {renderMessageText(msg.message)}
                             </div>
 
-                            {/* Admin actions block */}
+                            {/* Admin actions block (Three Dots / Context Menu) */}
                             {isAdmin && (
-                              <div className="opacity-0 group-hover:opacity-100 flex gap-2 text-[10px] absolute right-3 bottom-2 bg-[#242427] pl-2 transition-opacity duration-150">
-                                <button onClick={() => handlePinMessage(msg.message, msg.username, msg.role || 'member')} className="text-blue-400 font-bold hover:underline">SABİTLE</button>
-                                <button onClick={() => handleDeleteMessage(msg.id)} className="text-red-500 font-bold hover:underline">SİL</button>
-                                <button onClick={() => setActiveMutePopup(activeMutePopup === msg.id ? null : msg.id)} className="text-amber-500 font-bold hover:underline">CEZA</button>
+                              <div className="absolute right-2 top-2 z-50">
+                                <button 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveMenuId(activeMenuId === msg.id ? null : msg.id);
+                                    setActiveMutePopup(null);
+                                  }}
+                                  className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-white transition-opacity p-0.5 rounded hover:bg-white/5"
+                                  title="İşlemler"
+                                >
+                                  <MoreVertical className="w-4 h-4" />
+                                </button>
+
+                                {activeMenuId === msg.id && (
+                                  <div className="absolute right-0 mt-1 bg-[#18181b] border border-white/10 rounded-lg shadow-xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
+                                    <button 
+                                      onClick={() => {
+                                        handlePinMessage(msg.message, msg.username, msg.role || 'member');
+                                        setActiveMenuId(null);
+                                      }}
+                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-amber-400 transition-colors flex items-center gap-1.5"
+                                    >
+                                      📌 Sabitle
+                                    </button>
+                                    <button 
+                                      onClick={() => {
+                                        handleDeleteMessage(msg.id);
+                                        setActiveMenuId(null);
+                                      }}
+                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-red-400 transition-colors flex items-center gap-1.5"
+                                    >
+                                      🗑️ Sil
+                                    </button>
+                                    <button 
+                                      onClick={() => {
+                                        setActiveMutePopup(msg.id);
+                                        setActiveMenuId(null);
+                                      }}
+                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-yellow-400 transition-colors flex items-center gap-1.5"
+                                    >
+                                      🚫 Sustur
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                             )}
 
