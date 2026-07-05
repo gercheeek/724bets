@@ -361,14 +361,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
         <div id="modern-chat-inject" className="h-full w-full flex flex-col bg-[#1a1a1c] md:border-l border-white/5 shadow-2xl font-sans text-left">
             {/* Header */}
             <div className="bg-[#1a1a1c] p-4 text-white font-bold flex items-center gap-3 border-b border-white/5 flex-shrink-0">
-                {isMobile && (
-                    <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors" title="Kapat">
-                        <X className="w-5 h-5" />
-                    </button>
-                )}
                 <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-[10px] text-white">💬</span>
-                    <span className="text-sm font-semibold tracking-wide">Sohbet</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="text-xs uppercase tracking-widest text-emerald-400 font-black">CANLI</span>
                 </div>
             </div>
 

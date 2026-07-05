@@ -941,8 +941,8 @@ const App: React.FC = () => {
           color: 'var(--text-primary)',
           position: 'relative',
           overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden',
-          '--sidebar-width': !isMobile && isSidebarOpen ? '260px' : (!isMobile && !isSidebarOpen ? '72px' : '0px'),
-          '--chat-width': (view === 'admin') ? '0px' : (isChatOpen ? '380px' : '0px')
+           '--sidebar-width': !isMobile && isSidebarOpen ? '260px' : (!isMobile && !isSidebarOpen ? '72px' : '0px'),
+          '--chat-width': (view === 'admin') ? '0px' : '380px'
         } as React.CSSProperties}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
@@ -1342,14 +1342,14 @@ const App: React.FC = () => {
             position: 'fixed', 
             right: 0, top: 0, zIndex: 9999, height: '100dvh',
             width: isMobile ? '100%' : '380px',
-            transform: isChatOpen ? 'translateX(0)' : 'translateX(100%)',
-            visibility: isChatOpen ? 'visible' : 'hidden',
+            transform: 'translateX(0)',
+            visibility: 'visible',
             transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s'
           }}
         >
           <ModernChat
             open={true}
-            onClose={() => setIsChatOpen(false)}
+            onClose={() => {}}
             siteUser={siteUser}
             userRole={userRole}
             isMobile={isMobile}

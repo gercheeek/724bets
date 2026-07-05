@@ -458,27 +458,7 @@ const Header: React.FC<HeaderProps> = ({
                 )}
               </div>
 
-              {/* Vertical Separator */}
-              <div style={{ width: '1px', height: '22px', background: 'rgba(255,255,255,0.15)', margin: '0 8px' }} />
 
-              {/* Sohbet status toggler */}
-              {isChatOpen && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <button
-                    onClick={onSupportClick}
-                    style={{ background: 'transparent', border: 'none', color: '#a1a1a6', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '4px' }}
-                    title="Sohbeti Kapat"
-                  >
-                    <X className="w-4 h-4 text-zinc-400" />
-                  </button>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <MessageSquare className="w-3 h-3 text-white fill-white" />
-                    </div>
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>Sohbet</span>
-                  </div>
-                </div>
-              )}
             </>
           ) : (
               <>
