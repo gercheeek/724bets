@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../utils/supabase';
+import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 
 interface Bot {
   id: string;
@@ -11,7 +11,7 @@ const GLOBAL_CHANNEL_ID = '00000000-0000-0000-0000-000000000000';
 
 export default function AdminChatTab() {
   // Alt Sekme Yönetimi
-  const [activeSubTab, setActiveSubTab] = useState<'overview' | 'simulator' | 'punish' | 'logs'>('simulator');
+  const [activeSubTab, setActiveSubTab] = useState<'overview' | 'simulator' | 'punish' | 'logs' | 'interactives'>('simulator');
   
   // Bot & Simülatör State'leri
   const [bots, setBots] = useState<Bot[]>([]);
@@ -31,10 +31,70 @@ export default function AdminChatTab() {
   
   const autopilotTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Event Widget States
+  const [eventShow, setEventShow] = useState(true);
+  const [eventTitle, setEventTitle] = useState('Yeni Etkinlik');
+  const [eventBrand, setEventBrand] = useState('Gamdom');
+  const [eventPromo, setEventPromo] = useState('Kod Etkinliği');
+  const [eventPrize, setEventPrize] = useState('920.000 TL');
+  const [eventCtaText, setEventCtaText] = useState('Etkinliğe Katıl');
+  const [eventCtaUrl, setEventCtaUrl] = useState('https://gamdom.com');
+
+  // Poll States
+  const [pollQuestion, setPollQuestion] = useState('');
+  const [pollOptionsStr, setPollOptionsStr] = useState('');
+  const [pollIsActive, setPollIsActive] = useState(false);
+  const [pollVotes, setPollVotes] = useState<number[]>([]);
+
+  // Pinned Message States
+  const [pinText, setPinText] = useState('');
+  const [pinUsername, setPinUsername] = useState('Yönetici');
+  const [pinRole, setPinRole] = useState('admin');
+  const [pinIsActive, setPinIsActive] = useState(false);
+
   // Verileri İlk Açılışta Çek
   useEffect(() => {
     fetchBots();
+    loadChatSettingsAdmin();
   }, []);
+
+  const loadChatSettingsAdmin = async () => {
+    try {
+      const settings = await getGlobalConfig('chat_settings');
+      if (settings) {
+        // Event settings
+        if (settings.eventWidget) {
+          setEventShow(settings.eventWidget.show !== false);
+          setEventTitle(settings.eventWidget.title || 'Yeni Etkinlik');
+          setEventBrand(settings.eventWidget.brandName || 'Gamdom');
+          setEventPromo(settings.eventWidget.promoName || 'Kod Etkinliği');
+          setEventPrize(settings.eventWidget.prizeAmount || '920.000 TL');
+          setEventCtaText(settings.eventWidget.ctaText || 'Etkinliğe Katıl');
+          setEventCtaUrl(settings.eventWidget.ctaUrl || 'https://gamdom.com');
+        }
+
+        // Poll settings
+        if (settings.poll) {
+          setPollQuestion(settings.poll.question || '');
+          setPollOptionsStr(settings.poll.options ? settings.poll.options.join(', ') : '');
+          setPollIsActive(settings.poll.isActive !== false);
+          setPollVotes(settings.poll.votes || []);
+        }
+
+        // Pinned Message settings
+        if (settings.pinnedMessage) {
+          setPinText(settings.pinnedMessage.text || '');
+          setPinUsername(settings.pinnedMessage.username || 'Yönetici');
+          setPinRole(settings.pinnedMessage.role || 'admin');
+          setPinIsActive(true);
+        } else {
+          setPinIsActive(false);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load settings in admin:', e);
+    }
+  };
 
   // API Token'ı local storage'da sakla
   useEffect(() => {
@@ -335,6 +395,52 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
     setStatusMessage('⏹️ AI Oto-Pilot durduruldu.');
   };
 
+  const handleSaveInteractives = async () => {
+    try {
+      const currentSettings = await getGlobalConfig('chat_settings') || {};
+      
+      const newSettings = {
+        ...currentSettings,
+        eventWidget: {
+          show: eventShow,
+          title: eventTitle,
+          brandName: eventBrand,
+          promoName: eventPromo,
+          prizeAmount: eventPrize,
+          ctaText: eventCtaText,
+          ctaUrl: eventCtaUrl
+        },
+        poll: {
+          question: pollQuestion,
+          options: pollOptionsStr.split(',').map(o => o.trim()).filter(Boolean),
+          votes: pollVotes.length > 0 ? pollVotes : pollOptionsStr.split(',').map(o => o.trim()).filter(Boolean).map(() => 0),
+          isActive: pollIsActive
+        },
+        pinnedMessage: pinIsActive ? {
+          text: pinText,
+          username: pinUsername,
+          role: pinRole
+        } : null
+      };
+
+      const { error } = await updateGlobalConfig('chat_settings', newSettings);
+      if (error) {
+        alert('Ayarlar kaydedilirken bir hata oluştu: ' + error.message);
+      } else {
+        alert('🎉 Sohbet etkileşim ayarları başarıyla kaydedildi!');
+        loadChatSettingsAdmin();
+      }
+    } catch (err: any) {
+      alert('Hata: ' + err.message);
+    }
+  };
+
+  const handleResetPollVotes = () => {
+    const opts = pollOptionsStr.split(',').map(o => o.trim()).filter(Boolean);
+    setPollVotes(opts.map(() => 0));
+    alert('Oylar sıfırlandı. Değişikliğin geçerli olması için KAYDET butonuna basın.');
+  };
+
   // Unmount temizliği
   useEffect(() => {
     return () => {
@@ -361,6 +467,7 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
       <div className="flex gap-2 mb-6 bg-gray-900 p-1.5 rounded-xl border border-gray-800 w-max">
         <button onClick={() => setActiveSubTab('overview')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'overview' ? 'bg-gray-800 text-green-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>GENEL BAKIŞ</button>
         <button onClick={() => setActiveSubTab('simulator')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'simulator' ? 'bg-gray-800 text-green-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>SENARYO SİMÜLATÖRÜ</button>
+        <button onClick={() => setActiveSubTab('interactives')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'interactives' ? 'bg-gray-800 text-amber-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>ETKİNLİK & ANKET & SABİT</button>
         <button onClick={() => setActiveSubTab('punish')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'punish' ? 'bg-gray-800 text-red-400' : 'text-gray-400'}`}>CEZA YÖNETİMİ</button>
         <button onClick={() => setActiveSubTab('logs')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'logs' ? 'bg-gray-800 text-blue-400' : 'text-gray-400'}`}>CANLI LOG</button>
       </div>
@@ -479,6 +586,122 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
                 {isRunning ? `⏳ SİMÜLASYON CANLI AKIYOR (KALAN: ${remainingMessages} MESAJ)` : '🚀 SİMÜLASYONU BAŞLAT'}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* DİĞER SEKMELER */}
+      {activeSubTab === 'interactives' && (
+        <div className="space-y-6 animate-fade-in">
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-6">
+            
+            {/* ── YENİ ETKİNLİK PENCERESİ AYARLARI ── */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-gray-800 pb-2">
+                <h3 className="text-md font-bold text-amber-400 flex items-center gap-2">🎫 YENİ ETKİNLİK PENCERESİ AYARLARI</h3>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={eventShow} onChange={(e) => setEventShow(e.target.checked)} className="rounded border-gray-700 bg-gray-950 text-green-500 focus:ring-0" />
+                  <span className="text-xs text-gray-300 font-bold uppercase">Göster</span>
+                </label>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Pencere Başlığı</label>
+                  <input type="text" value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} placeholder="Yeni Etkinlik" className="w-full bg-gray-950 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Marka Adı</label>
+                  <input type="text" value={eventBrand} onChange={(e) => setEventBrand(e.target.value)} placeholder="Gamdom" className="w-full bg-gray-950 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Etkinlik Açıklaması</label>
+                  <input type="text" value={eventPromo} onChange={(e) => setEventPromo(e.target.value)} placeholder="Kod Etkinliği" className="w-full bg-gray-950 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Ödül Miktarı</label>
+                  <input type="text" value={eventPrize} onChange={(e) => setEventPrize(e.target.value)} placeholder="920.000 TL" className="w-full bg-gray-950 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Buton Metni</label>
+                  <input type="text" value={eventCtaText} onChange={(e) => setEventCtaText(e.target.value)} placeholder="Etkinliğe Katıl" className="w-full bg-gray-950 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Yönlendirme Linki (URL)</label>
+                  <input type="text" value={eventCtaUrl} onChange={(e) => setEventCtaUrl(e.target.value)} placeholder="https://..." className="w-full bg-gray-950 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+              </div>
+            </div>
+
+            {/* ── SOHBET ANKETİ AYARLARI ── */}
+            <div className="space-y-4 pt-4 border-t border-gray-800">
+              <div className="flex items-center justify-between border-b border-gray-800 pb-2">
+                <h3 className="text-md font-bold text-orange-400 flex items-center gap-2">📊 SOHBET ANKETİ AYARLARI</h3>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={pollIsActive} onChange={(e) => setPollIsActive(e.target.checked)} className="rounded border-gray-700 bg-gray-950 text-green-500 focus:ring-0" />
+                  <span className="text-xs text-gray-300 font-bold uppercase">Aktif</span>
+                </label>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Anket Sorusu</label>
+                  <input type="text" value={pollQuestion} onChange={(e) => setPollQuestion(e.target.value)} placeholder="Bu akşam kim kazanır?" className="w-full bg-gray-950 border border-gray-850 p-2.5 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Seçenekler (Virgülle ayırarak yazın)</label>
+                  <div className="flex gap-2">
+                    <input type="text" value={pollOptionsStr} onChange={(e) => setPollOptionsStr(e.target.value)} placeholder="Galatasaray, Fenerbahçe, Beraberlik" className="flex-1 bg-gray-950 border border-gray-850 p-2.5 rounded text-xs text-white outline-none focus:border-green-500" />
+                    <button onClick={handleResetPollVotes} className="bg-red-900/40 hover:bg-red-800 hover:text-white border border-red-700/30 text-red-400 px-3 py-2 rounded text-xs font-bold transition-all">
+                      Oyları Sıfırla
+                    </button>
+                  </div>
+                </div>
+                {pollVotes.length > 0 && (
+                  <div className="p-3 bg-gray-950 rounded-lg border border-gray-850 space-y-2">
+                    <p className="text-xs font-black text-gray-300">📊 Güncel Oylama Sonuçları:</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                      {pollOptionsStr.split(',').map((o, idx) => {
+                        const optName = o.trim();
+                        if (!optName) return null;
+                        const votes = pollVotes[idx] || 0;
+                        return (
+                          <div key={idx} className="bg-gray-900 p-2 rounded border border-gray-800 text-center">
+                            <p className="text-[10px] text-gray-400 font-bold truncate">{optName}</p>
+                            <p className="text-sm font-black text-white mt-1">{votes} Oy</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ── SABİTLENMİŞ MESAJ AYARLARI ── */}
+            <div className="space-y-4 pt-4 border-t border-gray-800">
+              <div className="flex items-center justify-between border-b border-gray-800 pb-2">
+                <h3 className="text-md font-bold text-green-400 flex items-center gap-2">📌 SABİTLENMİŞ MESAJ AYARLARI</h3>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={pinIsActive} onChange={(e) => setPinIsActive(e.target.checked)} className="rounded border-gray-700 bg-gray-950 text-green-500 focus:ring-0" />
+                  <span className="text-xs text-gray-300 font-bold uppercase">Aktif</span>
+                </label>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-xs text-gray-400 mb-1">Sabitlenecek Mesaj</label>
+                  <input type="text" value={pinText} onChange={(e) => setPinText(e.target.value)} placeholder="Tüm üyelere hoş geldiniz! Kodları kaçırmayın." className="w-full bg-gray-950 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Gönderen Adı</label>
+                  <input type="text" value={pinUsername} onChange={(e) => setPinUsername(e.target.value)} className="w-full bg-gray-950 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-green-500" />
+                </div>
+              </div>
+            </div>
+
+            {/* KAYDET BUTONU */}
+            <button onClick={handleSaveInteractives} className="w-full bg-green-500 hover:bg-green-400 text-gray-950 font-black py-4 rounded-xl text-md tracking-wider transition-all shadow-lg shadow-green-900/10">
+              💾 DEĞİŞİKLİKLERİ KAYDET VE UYGULA
+            </button>
+
           </div>
         </div>
       )}

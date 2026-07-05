@@ -65,6 +65,74 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const [rateLimitSec, setRateLimitSec] = useState(15);
     const chatContainerRef = useRef<HTMLDivElement>(null);
 
+    // Interactive States
+    const [pinnedMessage, setPinnedMessage] = useState<{ text: string; username: string; role: string; } | null>(null);
+    const [eventWidget, setEventWidget] = useState<{ show: boolean; title: string; brandName: string; promoName: string; prizeAmount: string; ctaText: string; ctaUrl: string; } | null>(null);
+    const [activePoll, setActivePoll] = useState<{ question: string; options: string[]; votes: number[]; isActive: boolean; } | null>(null);
+    const [hasVoted, setHasVoted] = useState(false);
+
+    useEffect(() => {
+        if (activePoll) {
+            const voted = localStorage.getItem(`poll_voted_${activePoll.question}`);
+            setHasVoted(!!voted);
+        }
+    }, [activePoll]);
+
+    const handlePinMessage = async (text: string, username: string, role: string) => {
+        const newPin = { text, username, role };
+        setPinnedMessage(newPin);
+        try {
+            const currentSettings = await getGlobalConfig('chat_settings') || {};
+            const updatedSettings = {
+                ...currentSettings,
+                pinnedMessage: newPin
+            };
+            await updateGlobalConfig('chat_settings', updatedSettings);
+        } catch (e) {
+            console.error("Failed to pin message:", e);
+        }
+    };
+
+    const handleUnpin = async () => {
+        setPinnedMessage(null);
+        try {
+            const currentSettings = await getGlobalConfig('chat_settings') || {};
+            const updatedSettings = {
+                ...currentSettings,
+                pinnedMessage: null
+            };
+            await updateGlobalConfig('chat_settings', updatedSettings);
+        } catch (e) {
+            console.error("Failed to unpin message:", e);
+        }
+    };
+
+    const handleVote = async (optionIdx: number) => {
+        if (!activePoll) return;
+        const updatedVotes = [...activePoll.votes];
+        updatedVotes[optionIdx] += 1;
+        
+        const newPoll = {
+            ...activePoll,
+            votes: updatedVotes
+        };
+        
+        setActivePoll(newPoll);
+        setHasVoted(true);
+        localStorage.setItem(`poll_voted_${activePoll.question}`, 'true');
+
+        try {
+            const currentSettings = await getGlobalConfig('chat_settings') || {};
+            const updatedSettings = {
+                ...currentSettings,
+                poll: newPoll
+            };
+            await updateGlobalConfig('chat_settings', updatedSettings);
+        } catch (e) {
+            console.error("Failed to submit vote:", e);
+        }
+    };
+
     // Fetch messages & subscribe to realtime updates
     useEffect(() => {
         if (!open) {
@@ -123,6 +191,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                 if (settings && isMounted) {
                     setChatEnabled(settings.chat_enabled !== false);
                     setRateLimitSec(settings.rate_limit_seconds || 15);
+                    setPinnedMessage(settings.pinnedMessage || null);
+                    setEventWidget(settings.eventWidget || null);
+                    setActivePoll(settings.poll || null);
                 }
             } catch (e) {
                 console.error('Chat settings load error:', e);
@@ -367,6 +438,33 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                 </div>
             </div>
 
+            {/* Pinned Message Bar */}
+            {pinnedMessage && pinnedMessage.text && (
+                <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2.5 flex items-center justify-between gap-3 text-left">
+                    <div className="flex items-start gap-2 min-w-0">
+                        <span className="text-[12px] mt-0.5 text-amber-400">📌</span>
+                        <div className="min-w-0">
+                            <div className="text-[10px] font-bold text-amber-400 flex items-center gap-1">
+                                <span>Sabitlendi</span>
+                                <span className="text-[8px] text-zinc-500">•</span>
+                                <span style={{ color: getRoleColor(pinnedMessage.role) }}>{pinnedMessage.username}</span>
+                            </div>
+                            <div className="text-xs text-gray-200 font-medium truncate max-w-[285px]" title={pinnedMessage.text}>
+                                {pinnedMessage.text}
+                            </div>
+                        </div>
+                    </div>
+                    {isAdmin && (
+                        <button 
+                            onClick={handleUnpin}
+                            className="text-[9px] font-black text-rose-400 hover:text-rose-500 uppercase tracking-wider flex-shrink-0"
+                        >
+                            Kaldır
+                        </button>
+                    )}
+                </div>
+            )}
+
             {/* Messages Area */}
             <div 
                 ref={chatContainerRef} 
@@ -375,23 +473,76 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                 style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}
             >
                 {/* Event Card */}
-                <div className="bg-[#242427] border border-white/5 rounded-lg p-3 flex flex-col gap-2.5">
-                    <div className="flex items-center gap-2 text-xs font-bold text-white border-b border-white/5 pb-2">
-                        <span className="text-[10px]">🎫</span>
-                        <span>Yeni Etkinlik</span>
+                {eventWidget && eventWidget.show && (
+                    <div className="bg-[#242427] border border-white/5 rounded-lg p-3 flex flex-col gap-2.5">
+                        <div className="flex items-center gap-2 text-xs font-bold text-white border-b border-white/5 pb-2">
+                            <span className="text-[10px]">🎫</span>
+                            <span>{eventWidget.title}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center text-xs">🛡️</span>
+                            <span className="text-xs font-bold text-white">{eventWidget.brandName}</span>
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                            <span className="text-[10px] text-gray-400 font-medium">{eventWidget.promoName}</span>
+                            <span className="text-sm font-black text-amber-400">{eventWidget.prizeAmount}</span>
+                        </div>
+                        {eventWidget.ctaUrl && (
+                            <a 
+                                href={eventWidget.ctaUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full bg-[#1a1a1a] hover:bg-emerald-500 hover:text-black text-white font-bold text-[10px] py-1.5 rounded transition-all text-center block"
+                            >
+                                {eventWidget.ctaText || 'Katıl'}
+                            </a>
+                        )}
                     </div>
-                    <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center text-xs">🛡️</span>
-                        <span className="text-xs font-bold text-white">Gamdom</span>
+                )}
+
+                {/* Poll Card */}
+                {activePoll && activePoll.isActive && (
+                    <div className="bg-[#242427] border border-orange-500/10 rounded-lg p-3 flex flex-col gap-2.5">
+                        <div className="flex items-center gap-2 text-xs font-bold text-orange-400 border-b border-white/5 pb-2">
+                            <span className="text-[10px]">📊</span>
+                            <span>Sohbet Anketi</span>
+                        </div>
+                        <div className="text-xs font-bold text-white mb-1">
+                            {activePoll.question}
+                        </div>
+                        {hasVoted ? (
+                            <div className="space-y-2">
+                                {activePoll.options.map((opt: string, idx: number) => {
+                                    const totalVotes = activePoll.votes.reduce((a: number, b: number) => a + b, 0) || 1;
+                                    const percentage = Math.round((activePoll.votes[idx] / totalVotes) * 100);
+                                    return (
+                                        <div key={idx} className="space-y-1">
+                                            <div className="flex justify-between text-[10px] text-gray-300 font-bold">
+                                                <span>{opt}</span>
+                                                <span>%{percentage} ({activePoll.votes[idx]} Oy)</span>
+                                            </div>
+                                            <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                                <div className="bg-orange-500 h-1.5 rounded-full" style={{ width: `${percentage}%` }}></div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-1.5">
+                                {activePoll.options.map((opt: string, idx: number) => (
+                                    <button 
+                                        key={idx}
+                                        onClick={() => handleVote(idx)}
+                                        className="w-full bg-[#1a1a1a] hover:bg-orange-500 hover:text-black text-gray-300 font-bold text-[10px] py-1.5 px-3 rounded text-left transition-all border border-white/5"
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                    <div className="flex flex-col gap-0.5">
-                        <span className="text-[10px] text-gray-400 font-medium">Kod Etkinliği</span>
-                        <span className="text-sm font-black text-amber-400">920.000 TL</span>
-                    </div>
-                    <button className="w-full bg-[#1a1a1a] hover:bg-[#1a1a1a]/80 text-white font-bold text-[10px] py-1.5 rounded transition-all">
-                        Etkinliğe Katıl
-                    </button>
-                </div>
+                )}
 
                 {!isConnected ? (
                     <div className="flex items-center justify-center py-8">
@@ -428,6 +579,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             {/* Admin actions block */}
                             {isAdmin && (
                               <div className="opacity-0 group-hover:opacity-100 flex gap-2 text-[10px] absolute right-3 bottom-2 bg-[#242427] pl-2 transition-opacity duration-150">
+                                <button onClick={() => handlePinMessage(msg.message, msg.username, msg.role || 'member')} className="text-blue-400 font-bold hover:underline">SABİTLE</button>
                                 <button onClick={() => handleDeleteMessage(msg.id)} className="text-red-500 font-bold hover:underline">SİL</button>
                                 <button onClick={() => setActiveMutePopup(activeMutePopup === msg.id ? null : msg.id)} className="text-amber-500 font-bold hover:underline">CEZA</button>
                               </div>
