@@ -310,7 +310,7 @@ const Header: React.FC<HeaderProps> = ({
             cursor: 'pointer',
             position: 'fixed',
             top: '16px',
-            left: isSidebarOpen ? '276px' : '64px',
+            left: isSidebarOpen ? '276px' : '88px',
             zIndex: 1000,
             transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
           }}

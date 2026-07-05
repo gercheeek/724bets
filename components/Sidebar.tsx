@@ -266,7 +266,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               display: 'flex',
               alignItems: 'center',
               cursor: 'pointer',
-              marginLeft: '-4px',
+              marginLeft: '12px',
               userSelect: 'none'
             }} onClick={() => onViewChange('home')}>
               724BAHİS
