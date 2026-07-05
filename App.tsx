@@ -1295,9 +1295,15 @@ const App: React.FC = () => {
         </div>
         <div className="flex justify-center mt-6">
           <button 
-            onClick={() => setAuthModalMode('admin')}
+            onClick={() => {
+              if (userRole) {
+                setView('admin');
+              } else {
+                setAuthModalMode('admin');
+              }
+            }}
             className="text-zinc-800 hover:text-amber-500 transition-all duration-300 transform hover:scale-125"
-            title="Sistem Girişi"
+            title={userRole ? "Yönetim Paneline Dön" : "Sistem Girişi"}
           >
             <Crown size={20} />
           </button>

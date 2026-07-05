@@ -39,6 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const mainCategories: CategoryItem[] = [
     { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
+    { key: 'admin', view: 'admin', label: 'Yönetim Paneli', icon: <Shield className={ICON_SIZE} />, requireRole: true },
     { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
     { key: 'analysis', view: 'analysis', label: 'Analizler', icon: <BarChart3 className={ICON_SIZE} />, visKey: 'analysis' },
     { key: 'pool', view: 'pool', label: '724TOTO', icon: <Target className={ICON_SIZE} />, visKey: 'pool' },

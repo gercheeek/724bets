@@ -345,6 +345,32 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Controls */}
         <div className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {(userRole === 'admin' || userRole === 'editor') && (
+            <button
+              onClick={onAdminClick}
+              className="hover:scale-105 active:scale-95 transition-transform"
+              title="Yönetim Paneli"
+              style={{ 
+                background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)', 
+                border: 'none', 
+                color: '#000', 
+                cursor: 'pointer', 
+                padding: '0 14px', 
+                height: '32px',
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                gap: '6px',
+                borderRadius: '8px',
+                fontWeight: 900,
+                fontSize: '13px'
+              }}
+            >
+              <Shield className="w-4 h-4" />
+              <span>Yönetim Paneli</span>
+            </button>
+          )}
+
           {siteUser ? (
             <>
 
