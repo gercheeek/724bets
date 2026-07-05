@@ -84,7 +84,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'premium' | 'payment' | 'leagues'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,

@@ -59,6 +59,7 @@ const getChannelLogo = (channelName: string, avatarUrl?: string) => {
     if (nameLower.includes('s sport')) return 'https://upload.wikimedia.org/wikipedia/tr/d/d7/S_Sport_logo.png';
     if (nameLower.includes('trt spor')) return 'https://upload.wikimedia.org/wikipedia/commons/e/ee/TRT_Spor_logo.svg';
     if (nameLower.includes('trt 1') || nameLower.includes('trt1')) return 'https://upload.wikimedia.org/wikipedia/commons/5/5f/TRT_1_logo.svg';
+    if (nameLower.includes('tabii') || nameLower.includes('tabıı')) return 'https://upload.wikimedia.org/wikipedia/commons/0/07/Tabii_logo.png';
     if (nameLower.includes('a spor')) return 'https://upload.wikimedia.org/wikipedia/tr/b/bf/A_spor_logo.png';
     if (nameLower.includes('tivibu')) return 'https://upload.wikimedia.org/wikipedia/tr/2/23/Tivibu_logo.png';
     if (nameLower.includes('exxen')) return 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Exxen_logo.png';
@@ -86,15 +87,25 @@ const getStreamerStats = (streamer: Streamer) => {
     };
 };
 
+const GROUP_ORDER = [
+  '⚽ BEIN SPORTS GRUBU',
+  '🏀 TİVİBU SPOR GRUBU',
+  '🏆 TRT GRUBU',
+  '📺 TABİİ SPOR GRUBU',
+  '🏎️ S SPORT GRUBU',
+  '🎾 SMART SPOR GRUBU',
+  '🌍 DİĞER SPOR VE ULUSAL KANALLAR'
+];
+
 const getChannelGroup = (name: string): string => {
     const n = name.toLowerCase().replace(/\s+/g, '');
-    if (n.includes('bein')) return 'beIN SPORTS';
-    if (n.includes('ssport')) return 'S Sport';
-    if (n.includes('smartspor')) return 'Smart Spor';
-    if (n.includes('tivibu')) return 'Tivibu Spor';
-    if (n.includes('trt')) return 'TRT';
-    if (n.includes('atv') || n.includes('tv8') || n.includes('tv8,5') || n.includes('tv8.5')) return 'Ulusal';
-    return 'Diğer';
+    if (n.includes('bein') || n.includes('lig tv')) return '⚽ BEIN SPORTS GRUBU';
+    if (n.includes('tivibu')) return '🏀 TİVİBU SPOR GRUBU';
+    if (n.includes('trt')) return '🏆 TRT GRUBU';
+    if (n.includes('tabii') || n.includes('tabıı')) return '📺 TABİİ SPOR GRUBU';
+    if (n.includes('ssport') || n.includes('s sport')) return '🏎️ S SPORT GRUBU';
+    if (n.includes('smartspor') || n.includes('smart spor')) return '🎾 SMART SPOR GRUBU';
+    return '🌍 DİĞER SPOR VE ULUSAL KANALLAR';
 };
 
 const FLAG_CODES: Record<string, string> = {
@@ -501,7 +512,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             const currentMutes = mutesData && Array.isArray(mutesData.mutedUsers) ? mutesData.mutedUsers : [];
             setMutedUsers(currentMutes);
             
-            const myUserId = siteUser.id || siteUser.username;
+            const myUserId = siteUser?.id || siteUser?.username || 'admin-user';
             const muteRecord = currentMutes.find((m: any) => m.userId === myUserId);
             if (muteRecord) {
                 const now = Date.now();
@@ -704,36 +715,11 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     const nextThreeAnalyses = getNextThreeAnalyses();
 
     if (!isTVActive) {
-        return (
-            <>
-                <style>{`
-                    .player-hover:hover .ctrl-bar { opacity:1!important; }
-                `}</style>
-                {isMiniPlayer && activeChannel && (
-                    <div ref={playerContainerRef} className="player-hover" style={{ position: 'fixed', bottom: '84px', right: '24px', width: '320px', height: '180px', background: '#000', borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(173,255,47,.3)', boxShadow: '0 20px 60px rgba(0,0,0,.8),0 0 30px rgba(173,255,47,.12)', zIndex: 99999 }}>
-                        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                            {getStreamEmbed()}
-                            <div style={{ position: 'absolute', inset: 0, background: 'transparent', zIndex: 10, pointerEvents: 'auto' }} onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }} />
-                            <div className="ctrl-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to top,rgba(0,0,0,.95),transparent)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 10px', zIndex: 45, opacity: 0, transition: 'opacity .25s' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <button onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>{isPlaying ? <Pause style={{ width: 12, height: 12 }} /> : <Play style={{ width: 12, height: 12 }} />}</button>
-                                    <span style={{ fontSize: '9px', fontWeight: 800, color: '#fff' }}>{activeChannel.name.toUpperCase()}</span>
-                                </div>
-                                <div style={{ display: 'flex', gap: '4px' }}>
-                                    <button onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>{isMuted ? <VolumeX style={{ width: 12, height: 12, color: '#ef4444' }} /> : <Volume2 style={{ width: 12, height: 12, color: '#adff2f' }} />}</button>
-                                    <button onClick={(e) => { e.stopPropagation(); setIsMiniPlayer(false); }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}><Maximize style={{ width: 12, height: 12 }} /></button>
-                                </div>
-                            </div>
-                            <button onClick={(e) => { e.stopPropagation(); setIsMiniPlayer(false); }} style={{ position: 'absolute', top: '8px', right: '8px', width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(0,0,0,.8)', border: '1px solid rgba(255,255,255,.15)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 100 }}><X style={{ width: 10, height: 10 }} /></button>
-                        </div>
-                    </div>
-                )}
-            </>
-        );
+        return null;
     }
 
     return (
-        <div ref={wrapperRef} style={{ minHeight: '100vh', background: '#040507', fontFamily: "'Inter', sans-serif", paddingBottom: '80px' }}>
+        <div ref={wrapperRef} style={{ width: '100%', height: '100%', fontFamily: "'Inter', sans-serif" }}>
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Outfit:wght@700;800;900&display=swap');
 
@@ -907,7 +893,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', letterSpacing: '0.5px' }}>{activeChannel.name.toUpperCase()}</span>
                                             </div>
                                             <div style={{ display: 'flex', gap: '8px' }}>
-                                                <button onClick={(e) => { e.stopPropagation(); setIsMiniPlayer(true); }} style={{ background: 'transparent', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }} title="Mini Player"><Maximize style={{ width: 14, height: 14 }} /></button>
+                                                {/* Mini Player button removed */}
                                             </div>
                                         </div>
                                     )}
@@ -928,8 +914,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     </div>
                     
                     {/* Right Column: Channels List */}
-                    <div style={{ width: isMobile ? '100%' : '340px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px', padding: '16px', flexShrink: 0, height: isMobile ? '380px' : 'auto' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <div style={{ width: isMobile ? '100%' : '340px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px', padding: '16px', flexShrink: 0, height: isMobile ? '380px' : 'auto', position: 'relative' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexShrink: 0 }}>
                             <span style={{ fontSize: '11px', fontWeight: 900, color: '#6b7280', letterSpacing: '1px' }}>CANLI KANALLAR</span>
                             <div style={{ position: 'relative', width: '150px' }}>
                                 <input 
@@ -944,57 +930,82 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                         </div>
                         
                         {/* Scrollable list of channels */}
-                        <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: isMobile ? '320px' : '420px', paddingRight: '4px' }}>
-                            {(() => {
-                                const filtered = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
-                                if (filtered.length === 0) {
-                                    return <div style={{ textAlign: 'center', padding: '20px 0', color: '#6b7280', fontSize: '12px' }}>Kanal bulunamadı.</div>;
-                                }
-                                return filtered.map(s => {
-                                    const isLive = s.is_live;
-                                    const isActive = activeChannel?.id === s.id;
-                                    return (
-                                        <div 
-                                            key={s.id}
-                                            onClick={() => {
-                                                setActiveChannel({
-                                                    id: s.id, name: s.name, slug: s.kick_username || '', platform: s.platform_type,
-                                                    streamUrl: s.kick_username || '', thumbnailUrl: s.avatar_url || '',
-                                                    category: s.tags?.[0] || 'CANLI YAYIN', isLive: s.is_live, isActive: true,
-                                                    order: s.order_index, sourceType: s.source_type, platformType: s.platform_type,
-                                                    platformUsername: s.kick_username, videoUrl: s.video_url, iframeUrl: s.iframe_url,
-                                                    fallbackType: s.fallback_type, fallbackVideoUrl: s.fallback_video_url,
-                                                    fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
-                                                } as any);
-                                            }}
-                                            style={{
-                                                background: isActive ? 'linear-gradient(135deg, rgba(240, 185, 11, 0.15), rgba(240, 185, 11, 0.03))' : 'rgba(255,255,255,0.01)',
-                                                border: '1px solid ' + (isActive ? '#F0B90B' : 'rgba(255,255,255,0.04)'),
-                                                borderRadius: '12px', padding: '10px 12px', cursor: 'pointer', transition: 'all 0.2s ease',
-                                                display: 'flex', alignItems: 'center', gap: '10px'
-                                            }}
-                                            onMouseEnter={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
-                                            onMouseLeave={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; }}
-                                        >
-                                            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                                                <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                        <div style={{ flex: 1, position: 'relative', minHeight: isMobile ? '320px' : 0 }}>
+                            <div className="custom-scrollbar" style={{ position: 'absolute', inset: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '4px' }}>
+                                {(() => {
+                                    const filtered = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+                                    if (filtered.length === 0) {
+                                        return <div style={{ textAlign: 'center', padding: '20px 0', color: '#6b7280', fontSize: '12px' }}>Kanal bulunamadı.</div>;
+                                    }
+
+                                    // Group channels
+                                    const groups: Record<string, Streamer[]> = {};
+                                    filtered.forEach(s => {
+                                        const grp = getChannelGroup(s.name);
+                                        if (!groups[grp]) groups[grp] = [];
+                                        groups[grp].push(s);
+                                    });
+
+                                    // Sort group keys based on GROUP_ORDER
+                                    const sortedGroupNames = Object.keys(groups).sort((a, b) => {
+                                        const idxA = GROUP_ORDER.indexOf(a);
+                                        const idxB = GROUP_ORDER.indexOf(b);
+                                        return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+                                    });
+
+                                    return sortedGroupNames.map(groupName => (
+                                        <div key={groupName} style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                                            <div style={{ fontSize: '11px', fontWeight: 900, color: '#f0b90b', padding: '6px 4px 2px 4px', borderBottom: '1px solid rgba(240, 185, 11, 0.15)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                {groupName}
                                             </div>
-                                            <div style={{ flex: 1, minWidth: 0 }}>
-                                                <div style={{ fontSize: '12px', fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
-                                                <div style={{ fontSize: '9px', color: '#6b7280', textTransform: 'uppercase' }}>{s.platform_type}</div>
-                                            </div>
-                                            {isLive ? (
-                                                <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '12px', padding: '1px 5px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                                                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#ef4444', animation: 'pulse 1.5s infinite' }} />
-                                                    <span style={{ fontSize: '7px', fontWeight: 900, color: '#ef4444' }}>CANLI</span>
-                                                </div>
-                                            ) : (
-                                                <span style={{ fontSize: '8px', color: '#4b5563' }}>OFFLINE</span>
-                                            )}
+                                            {groups[groupName].map(s => {
+                                                const isLive = s.is_live;
+                                                const isActive = activeChannel?.id === s.id;
+                                                return (
+                                                    <div 
+                                                        key={s.id}
+                                                        onClick={() => {
+                                                            setActiveChannel({
+                                                                id: s.id, name: s.name, slug: s.kick_username || '', platform: s.platform_type,
+                                                                streamUrl: s.kick_username || '', thumbnailUrl: s.avatar_url || '',
+                                                                category: s.tags?.[0] || 'CANLI YAYIN', isLive: s.is_live, isActive: true,
+                                                                order: s.order_index, sourceType: s.source_type, platformType: s.platform_type,
+                                                                platformUsername: s.kick_username, videoUrl: s.video_url, iframeUrl: s.iframe_url,
+                                                                fallbackType: s.fallback_type, fallbackVideoUrl: s.fallback_video_url,
+                                                                fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
+                                                            } as any);
+                                                        }}
+                                                        style={{
+                                                            background: isActive ? 'linear-gradient(135deg, rgba(240, 185, 11, 0.15), rgba(240, 185, 11, 0.03))' : 'rgba(255,255,255,0.01)',
+                                                            border: '1px solid ' + (isActive ? '#F0B90B' : 'rgba(255,255,255,0.04)'),
+                                                            borderRadius: '12px', padding: '10px 12px', cursor: 'pointer', transition: 'all 0.2s ease',
+                                                            display: 'flex', alignItems: 'center', gap: '10px'
+                                                        }}
+                                                        onMouseEnter={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+                                                        onMouseLeave={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; }}
+                                                    >
+                                                        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: '2px' }}>
+                                                            <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                                        </div>
+                                                        <div style={{ flex: 1, minWidth: 0, marginLeft: '4px' }}>
+                                                            <div style={{ fontSize: '14px', fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
+                                                            <div style={{ fontSize: '10px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.platform_type}</div>
+                                                        </div>
+                                                        {isLive ? (
+                                                            <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '12px', padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#ef4444', animation: 'pulse 1.5s infinite' }} />
+                                                                <span style={{ fontSize: '8px', fontWeight: 900, color: '#ef4444' }}>CANLI</span>
+                                                            </div>
+                                                        ) : (
+                                                            <span style={{ fontSize: '9px', color: '#4b5563', fontWeight: 800 }}>OFFLINE</span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
-                                    );
-                                });
-                            })()}
+                                    ));
+                                })()}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1061,26 +1072,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     </div>
                 )}
 
-            </div>            {/* ══ FLOATING MINI PLAYER ══════════════════════════════════════ */}
-            {isMiniPlayer && activeChannel && (
-                <div ref={playerContainerRef} className="player-hover" style={{ position: 'fixed', bottom: '84px', right: '24px', width: '320px', height: '180px', background: '#000', borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(173,255,47,.3)', boxShadow: '0 20px 60px rgba(0,0,0,.8),0 0 30px rgba(173,255,47,.12)', zIndex: 99999 }}>
-                    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                        {getStreamEmbed()}
-                        <div style={{ position: 'absolute', inset: 0, background: 'transparent', zIndex: 10, pointerEvents: 'auto' }} onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }} />
-                        <div className="ctrl-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to top,rgba(0,0,0,.95),transparent)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 10px', zIndex: 45, opacity: 0, transition: 'opacity .25s' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <button onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>{isPlaying ? <Pause style={{ width: 12, height: 12 }} /> : <Play style={{ width: 12, height: 12 }} />}</button>
-                                <span style={{ fontSize: '9px', fontWeight: 800, color: '#fff' }}>{activeChannel.name.toUpperCase()}</span>
-                            </div>
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <button onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>{isMuted ? <VolumeX style={{ width: 12, height: 12, color: '#ef4444' }} /> : <Volume2 style={{ width: 12, height: 12, color: '#adff2f' }} />}</button>
-                                <button onClick={(e) => { e.stopPropagation(); setIsMiniPlayer(false); }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}><Maximize style={{ width: 12, height: 12 }} /></button>
-                            </div>
-                        </div>
-                        <button onClick={(e) => { e.stopPropagation(); setIsMiniPlayer(false); }} style={{ position: 'absolute', top: '8px', right: '8px', width: '22px', height: '22px', borderRadius: '50%', background: 'rgba(0,0,0,.8)', border: '1px solid rgba(255,255,255,.15)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 100 }}><X style={{ width: 10, height: 10 }} /></button>
-                    </div>
-                </div>
-            )}
+            </div>
         </div>
     );
 };

@@ -51,12 +51,27 @@ interface HeaderProps {
   navVisibility?: NavVisibility;
   marqueeConfig?: MarqueeConfig;
   onSupportClick?: () => void;
+  isChatOpen?: boolean;
+  isSidebarOpen?: boolean;
 }
 
 function getUserLoyalty(userId: string): UserLoyalty {
-  const stored = localStorage.getItem(`loyalty_${userId}`);
-  if (stored) return JSON.parse(stored);
-  return { userId, coins: 0, tickets: 0, pendingTickets: 0, totalEarned: 0, transactions: [], lastVolumeResetDate: '', dailyVolumeAccumulated: 0 };
+  const defaultLoyalty: UserLoyalty = { userId, coins: 0, tickets: 0, pendingTickets: 0, totalEarned: 0, transactions: [], lastVolumeResetDate: '', dailyVolumeAccumulated: 0 };
+  try {
+    const stored = localStorage.getItem(`loyalty_${userId}`);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed && typeof parsed === 'object') {
+        return {
+          ...defaultLoyalty,
+          ...parsed
+        };
+      }
+    }
+  } catch (e) {
+    console.error("Error reading user loyalty:", e);
+  }
+  return defaultLoyalty;
 }
 
 /* ── Category definitions ── */
@@ -86,6 +101,8 @@ const Header: React.FC<HeaderProps> = ({
   navVisibility,
   marqueeConfig,
   onSupportClick,
+  isChatOpen = false,
+  isSidebarOpen = false,
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -166,109 +183,7 @@ const Header: React.FC<HeaderProps> = ({
   const isAdmin = userRole === 'admin';
   const isEditor = userRole && userRole !== 'admin';
 
-  /* ── User status area (capsule buttons) ── */
-  const renderUserStatus = () => {
-    // Admin logged in
-    if (isAdmin) {
-      return (
-        <button
-          onClick={onAdminClick}
-          className="header-capsule header-capsule--admin"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#f0b90b] animate-pulse" />
-          <Settings className="w-3.5 h-3.5" />
-          YÖNETİCİ
-        </button>
-      );
-    }
 
-    // Editor logged in
-    if (isEditor) {
-      return (
-        <button
-          onClick={onAdminClick}
-          className="header-capsule header-capsule--editor"
-        >
-          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-          <Pen className="w-3.5 h-3.5" />
-          EDİTÖR
-        </button>
-      );
-    }
-
-    // Site member logged in
-    if (siteUser) {
-      const loyalty = getUserLoyalty(siteUser.id);
-      return (
-        <div className="flex items-center gap-2">
-          {/* Coin Balance */}
-          <div
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-pointer"
-            onClick={() => onViewChange?.('loyalty')}
-            title="Coin Bakiyesi"
-            style={{ background: 'rgba(240, 185, 11, 0.12)', border: '1px solid rgba(240, 185, 11, 0.25)' }}
-          >
-            <Coins className="w-3.5 h-3.5 text-[#f0b90b]" />
-            <span className="text-[#f0b90b] font-black text-xs tabular-nums">{loyalty.coins.toLocaleString('tr')}</span>
-          </div>
-
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setDropdownOpen(prev => !prev)}
-              className="header-capsule header-capsule--member"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <User className="w-3.5 h-3.5" />
-              <span className="max-w-[80px] truncate">{siteUser.username}</span>
-              <ChevronDown className={`w-3 h-3 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {dropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
-                <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                  <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>Üye Hesabı</p>
-                  <p className="text-sm font-black truncate" style={{ color: 'var(--text-primary)' }}>{siteUser.username}</p>
-                </div>
-                <button
-                  onClick={() => { setDropdownOpen(false); setShowDepositModal(true); }}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-blue-500 hover:bg-blue-500/5 text-xs font-bold transition-colors border-b border-black/5"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  Yatırım Bildir
-                </button>
-                <button
-                  onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-500/5 text-xs font-bold transition-colors"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  Çıkış Yap
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    // Guest - not logged in
-    return (
-      <div className="header-guest-buttons">
-        <button
-          className="header-capsule header-capsule--login"
-          onClick={onMemberLoginClick}
-        >
-          <User className="w-4 h-4 hidden sm:block" />
-          <span className="sm:hidden">Giriş</span>
-          <span className="hidden sm:inline">Giriş Yap</span>
-        </button>
-        <button 
-          onClick={onMemberRegisterClick}
-          className="header-capsule header-capsule--register hidden"
-        >
-          Kayıt Ol
-        </button>
-      </div>
-    );
-  };
 
   /* ── Handle category click ── */
   const handleCategoryClick = (cat: CategoryItem) => {
@@ -290,37 +205,10 @@ const Header: React.FC<HeaderProps> = ({
     <>
       <div className={`header-wrapper ${isScrolled ? 'scrolled' : ''}`}>
         <style>{`
-          .header-guest-buttons {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          }
-          .header-capsule--register {
-            display: none;
-          }
           @media (max-width: 768px) {
-            .header-capsule--register {
-              display: flex !important;
-              background: #f0b90b !important;
-              color: #000 !important;
-              border-color: transparent !important;
-              padding: 0 16px !important;
-              height: 32px !important;
-              font-weight: 800 !important;
-              text-decoration: none !important;
-            }
-            .header-guest-buttons .header-capsule--login {
-              background: #2A2A2A !important;
-              color: #fff !important;
-              border-color: transparent !important;
-              padding: 0 16px !important;
-              height: 32px !important;
-              font-weight: 700 !important;
-            }
             .header-topbar-right .header-icon-btn {
               display: none !important;
             }
-
           }
           @keyframes custom-marquee {
             0% { transform: translate3d(0, 0, 0); }
@@ -341,7 +229,10 @@ const Header: React.FC<HeaderProps> = ({
             50% { text-shadow: 0 0 15px rgba(240,185,11,0.5), 0 0 30px rgba(240,185,11,0.2), 0 0 45px rgba(240,185,11,0.1); }
           }
           .logo-text-724 {
-            position: relative;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 10000;
             display: inline-flex;
             align-items: center;
             gap: 0;
@@ -400,176 +291,224 @@ const Header: React.FC<HeaderProps> = ({
             opacity: 1;
             animation: logoShimmer 2s ease-in-out infinite;
           }
-          .header-wrapper {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
+          .header-topbar {
+            transition: padding-left 0.3s ease-in-out;
+          }
+          .header-icon-btn:hover {
+            color: #adff2f !important;
           }
         `}</style>
 
-        {/* ══════ SINGLE TIER: Logo + Controls ══════ */}
-        <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#000000', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px' }}>
-          {/* Left: Logo Text */}
-          <div
-            className="logo-text-724 shrink-0"
-            onClick={() => onViewChange?.('home')}
-            style={{ cursor: 'pointer' }}
-          >
+      {/* ══════ SINGLE TIER: Logo + Controls ══════ */}
+      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#000000', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', paddingLeft: 'calc(var(--sidebar-width, 260px) + 24px)', minHeight: '60px' }}>
+        {/* Left: Logo Text (FIXED POSITION) */}
+        <div
+          className="logo-text-724"
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            cursor: 'pointer',
+            position: 'fixed',
+            top: '16px',
+            left: isSidebarOpen ? '276px' : '64px',
+            zIndex: 1000,
+            transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
+          onClick={() => onViewChange?.('home')}
+        >
+          <span style={{
+            fontSize: '20px',
+            fontFamily: "'Outfit', sans-serif",
+            fontWeight: 900,
+            letterSpacing: '-1px',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            724BAHİS
             <span style={{
+              background: 'linear-gradient(135deg, #adff2f 0%, #adff2f 100%)',
+              color: '#000',
+              fontSize: '11px',
+              fontWeight: 900,
+              padding: '2px 6px',
+              borderRadius: '4px',
+              marginLeft: '4px',
               fontFamily: "'Inter', sans-serif",
-              fontWeight: 950,
-              fontSize: '26px',
-              letterSpacing: '-1px',
-              lineHeight: 1,
-              display: 'inline-flex',
-              alignItems: 'baseline',
-              gap: '0px',
-              color: '#adff2f',
-              textShadow: '0 0 12px rgba(173, 255, 47, 0.55), 0 0 24px rgba(173, 255, 47, 0.2)',
-            }}>
-              <span>724FUTBOL</span>
-              <span style={{
-                fontSize: '12px',
-                fontWeight: 900,
-                letterSpacing: '0.5px',
-                marginLeft: '1px',
-                opacity: 0.95
-              }}>.COM</span>
-            </span>
-          </div>
+              opacity: 0.95
+            }}>.COM</span>
+          </span>
+        </div>
+        
+        {/* Placeholder for fixed logo to keep flex spacing */}
+        <div style={{ width: '150px' }} className="shrink-0" />
 
-          {/* Right: Controls */}
-          <div className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            {siteUser ? (
-              <>
-                {/* Balance Capsule */}
-                <div
-                  className="flex items-center gap-1.5 cursor-pointer"
-                  onClick={() => onViewChange?.('loyalty')}
-                  title="Coin Bakiyesi"
-                  style={{
-                    background: '#232326',
-                    border: '1px solid rgba(255, 255, 255, 0.04)',
-                    borderRadius: '8px',
-                    padding: '6px 12px',
-                    height: '34px'
-                  }}
-                >
-                  <Diamond className="w-4 h-4 text-[#00f0ff] fill-[#00f0ff]/15" />
-                  <span className="text-white font-black text-xs tabular-nums" style={{ fontSize: '13px' }}>{getUserLoyalty(siteUser.id).coins.toLocaleString('tr')}</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-gray-500" style={{ marginLeft: '2px' }} />
-                </div>
+        {/* Right: Controls */}
+        <div className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {siteUser ? (
+            <>
 
-                {/* Yatırım Button */}
+
+              {/* Yatırım Button */}
+              <button
+                onClick={() => setShowDepositModal(true)}
+                style={{
+                  background: '#c6ff00',
+                  color: '#000000',
+                  fontWeight: 800,
+                  fontSize: '12.5px',
+                  padding: '0 16px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  height: '34px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'system-ui, sans-serif'
+                }}
+                className="hover:scale-105 active:scale-95 font-black"
+              >
+                Yatırım
+              </button>
+
+              {/* Search Button */}
+              <button
+                onClick={onSearchClick}
+                className="header-icon-btn hover:opacity-80 transition-opacity"
+                title="Maç Ara"
+                style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+              >
+                <Search className="w-5 h-5 text-zinc-400" />
+              </button>
+
+              {/* 724TV Button */}
+              <button
+                onClick={() => onViewChange?.('724tv')}
+                className="hover:scale-105 active:scale-95 transition-transform"
+                title="724TV İzle"
+                style={{ 
+                  background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', 
+                  border: 'none', 
+                  color: '#fff', 
+                  cursor: 'pointer', 
+                  padding: '0 12px', 
+                  height: '32px',
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  gap: '6px',
+                  borderRadius: '8px',
+                  fontWeight: 800,
+                  fontSize: '13px'
+                }}
+              >
+                <Tv className="w-4 h-4" />
+                <span className="hidden sm:inline">724TV</span>
+              </button>
+
+              {/* Profile Button with Dropdown */}
+              <div className="relative" ref={dropdownRef}>
                 <button
-                  onClick={() => setShowDepositModal(true)}
-                  style={{
-                    background: '#adff2f',
-                    color: '#000000',
-                    fontWeight: 900,
-                    fontSize: '12px',
-                    padding: '6px 18px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    boxShadow: '0 0 12px rgba(173, 255, 47, 0.25)',
-                    transition: 'all 0.2s',
-                    height: '34px'
-                  }}
-                  className="hover:scale-105 active:scale-95 font-black"
-                >
-                  Yatırım
-                </button>
-
-                {/* Search Button */}
-                <button
-                  onClick={onSearchClick}
-                  className="header-icon-btn hover:opacity-80 transition-opacity"
-                  title="Maç Ara"
+                  onClick={() => setDropdownOpen(prev => !prev)}
+                  className="hover:opacity-80 transition-opacity"
                   style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
                 >
-                  <Search className="w-5 h-5" />
+                  <User className="w-5 h-5 text-zinc-400" />
                 </button>
-
-                {/* Gift Button */}
-                <button
-                  onClick={() => onViewChange?.('loyalty')}
-                  className="header-icon-btn hover:opacity-80 transition-opacity"
-                  title="Ödüller ve Görevler"
-                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
-                >
-                  <Gift className="w-5 h-5" />
-                </button>
-
-                {/* Chat Button */}
-                <button
-                  onClick={onSupportClick}
-                  className="header-icon-btn hover:opacity-80 transition-opacity"
-                  title="Canlı Destek"
-                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
-                >
-                  <MessageSquare className="w-5 h-5" />
-                </button>
-
-                {/* Profile Button with Dropdown */}
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => setDropdownOpen(prev => !prev)}
-                    className="hover:opacity-80 transition-opacity"
-                    style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
-                  >
-                    <User className="w-5 h-5" />
-                  </button>
-                  {dropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
-                      <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                        <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>Üye Hesabı</p>
-                        <p className="text-sm font-black truncate" style={{ color: 'var(--text-primary)' }}>{siteUser.username}</p>
-                      </div>
-                      <button
-                        onClick={() => { setDropdownOpen(false); setShowDepositModal(true); }}
-                        className="w-full flex items-center gap-2 px-4 py-2.5 text-blue-500 hover:bg-blue-500/5 text-xs font-bold transition-colors border-b border-black/5"
-                      >
-                        <MessageSquare className="w-3.5 h-3.5" />
-                        Yatırım Bildir
-                      </button>
-                      <button
-                        onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
-                        className="w-full flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-500/5 text-xs font-bold transition-colors"
-                      >
-                        <LogOut className="w-3.5 h-3.5" />
-                        Çıkış Yap
-                      </button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
+                    <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                      <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>Üye Hesabı</p>
+                      <p className="text-sm font-black truncate" style={{ color: 'var(--text-primary)' }}>{siteUser.username}</p>
                     </div>
-                  )}
+                    <button
+                      onClick={() => { setDropdownOpen(false); setShowDepositModal(true); }}
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-blue-500 hover:bg-blue-500/5 text-xs font-bold transition-colors border-b border-black/5"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      Yatırım Bildir
+                    </button>
+                    <button
+                      onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-500/5 text-xs font-bold transition-colors"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      Çıkış Yap
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Vertical Separator */}
+              <div style={{ width: '1px', height: '22px', background: 'rgba(255,255,255,0.15)', margin: '0 8px' }} />
+
+              {/* Sohbet status toggler */}
+              {isChatOpen && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <button
+                    onClick={onSupportClick}
+                    style={{ background: 'transparent', border: 'none', color: '#a1a1a6', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '4px' }}
+                    title="Sohbeti Kapat"
+                  >
+                    <X className="w-4 h-4 text-zinc-400" />
+                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <MessageSquare className="w-3 h-3 text-white fill-white" />
+                    </div>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#ffffff' }}>Sohbet</span>
+                  </div>
                 </div>
-              </>
-            ) : (
+              )}
+            </>
+          ) : (
               <>
-                <button
-                  className="header-capsule header-capsule--login"
-                  onClick={onMemberLoginClick}
-                  style={{
-                    background: '#2A2A2A',
-                    color: '#fff',
-                    borderColor: 'transparent',
-                    padding: '0 16px',
-                    height: '32px',
-                    fontWeight: 700,
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <User className="w-4 h-4" />
-                  <span>Giriş Yap</span>
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <button
+                    onClick={onMemberLoginClick}
+                    style={{
+                      background: 'transparent',
+                      color: '#fff',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      padding: '0 12px',
+                      height: '32px',
+                      fontWeight: 700,
+                      fontSize: '12px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      whiteSpace: 'nowrap'
+                    }}
+                    className="hover:bg-white/5 transition-colors"
+                  >
+                    Giriş Yap
+                  </button>
+                  <button
+                    onClick={onMemberRegisterClick}
+                    style={{
+                      background: '#c6ff00',
+                      color: '#000',
+                      border: 'none',
+                      padding: '0 12px',
+                      height: '32px',
+                      fontWeight: 800,
+                      fontSize: '12px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      whiteSpace: 'nowrap',
+                      boxShadow: '0 0 10px rgba(198, 255, 0, 0.2)'
+                    }}
+                    className="hover:scale-105 active:scale-95 transition-transform"
+                  >
+                    Üye Ol
+                  </button>
+                </div>
                 
                 <button
                   onClick={onSearchClick}
@@ -578,15 +517,6 @@ const Header: React.FC<HeaderProps> = ({
                   style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
                 >
                   <Search className="w-5 h-5" />
-                </button>
-
-                <button
-                  onClick={onSupportClick}
-                  className="header-icon-btn hover:opacity-80 transition-opacity"
-                  title="Canlı Destek"
-                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
-                >
-                  <MessageSquare className="w-5 h-5" />
                 </button>
               </>
             )}
@@ -689,6 +619,8 @@ const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
         )}
+
+
       </div>
 
       {/* DEPOSIT MODAL */}

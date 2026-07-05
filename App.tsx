@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import Header from './components/Header';
-import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight } from 'lucide-react';
+import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield } from 'lucide-react';
 import { getFlagUrl } from './components/MatchResultsWidget';
 import AppLoader from './components/AppLoader';
 import BrandCard from './components/BrandCard';
@@ -24,7 +23,7 @@ import CekilisCenterView from './components/CekilisCenterView';
 import PoolGame from './components/PoolGame';
 import EnhancedBetting from './components/EnhancedBetting';
 import { seedEcosystemData } from './seedEcosystem';
-import { getGlobalConfig, updateGlobalConfig } from './utils/supabase';
+import { getGlobalConfig, updateGlobalConfig, supabase } from './utils/supabase';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
 import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany } from './types';
@@ -35,8 +34,6 @@ import TrustedDetailView from './components/TrustedDetailView';
 import { initTrustedEngine, loadTrustedCompanies, processDripComments, processAutoReplies } from './utils/trustedEngine';
 
 // Portal Components
-import PortalMobileNav from './components/PortalMobileNav';
-import PortalCouponsTeaser from './components/PortalCouponsTeaser';
 import CouponsView from './components/CouponsView';
 import HeroSection from './components/HeroSection';
 import PopularBets from './components/PopularBets';
@@ -87,6 +84,7 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
 
 const App: React.FC = () => {
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('ready');
+  const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail'>('home');
@@ -112,7 +110,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-    return () => clearInterval(timer);
+    return () => clearInterval(timer as any);
   }, []);
 
   // Cache Version Control
@@ -131,6 +129,38 @@ const App: React.FC = () => {
       keysToClear.forEach(key => localStorage.removeItem(key));
       localStorage.setItem('site_cache_version', SITE_CACHE_VERSION);
     }
+  }, []);
+
+  // IP Families & Security Check
+  useEffect(() => {
+    async function checkIpAccess() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        if (!res.ok) return;
+        const data = await res.json();
+        const userIp = data.ip;
+        
+        if (!userIp) return;
+
+        // Fetch IP rules from Supabase
+        const { data: rules, error } = await supabase.from('ip_rules').select('*');
+        if (error || !rules) return;
+
+        for (const rule of rules) {
+          if (rule.is_blocked === true && rule.ip_pattern) {
+            // Support exact match or prefix match (e.g. 192.168.1. for family)
+            if (userIp === rule.ip_pattern || userIp.startsWith(rule.ip_pattern)) {
+              setIpBlocked(true);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.error('IP Access Check Error:', e);
+      }
+    }
+    
+    checkIpAccess();
   }, []);
 
   // Promo Wheel Config
@@ -643,6 +673,20 @@ const App: React.FC = () => {
     return () => window.removeEventListener('popstate', syncViewWithUrl);
   }, []);
 
+  if (ipBlocked) {
+    return (
+      <div style={{ width: '100vw', height: '100dvh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(239, 68, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+          <Shield style={{ width: 40, height: 40, color: '#ef4444' }} />
+        </div>
+        <h1 style={{ fontSize: '32px', fontWeight: 900, color: '#ef4444', marginBottom: '16px', letterSpacing: '-1px' }}>Erişim Engellendi</h1>
+        <p style={{ color: '#9ca3af', fontSize: '15px', maxWidth: '400px', textAlign: 'center', lineHeight: 1.6 }}>
+          Güvenlik kuralları gereği IP adresinizin sisteme erişimi kısıtlanmıştır.
+        </p>
+      </div>
+    );
+  }
+
   if (view === 'admin') return (
     <ErrorBoundary>
       <AdminPanel
@@ -887,18 +931,16 @@ const App: React.FC = () => {
         } as React.CSSProperties}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
-          {!isMobile && (
-            <div className="sidebar-wrapper" style={{ height: '100%', position: 'relative' }}>
-              <Sidebar
-                isOpen={isSidebarOpen}
-                onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-                activeView={view}
-                onViewChange={handleViewChange}
-                userRole={userRole}
-                navVisibility={navVisibility}
-              />
-            </div>
-          )}
+          <div className="sidebar-wrapper" style={{ height: '100%', position: 'relative' }}>
+            <Sidebar
+              isOpen={isSidebarOpen}
+              onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+              activeView={view}
+              onViewChange={handleViewChange}
+              userRole={userRole}
+              navVisibility={navVisibility}
+            />
+          </div>
 
           <div className={appStage !== 'loading' ? 'app-reveal-mask' : 'app-hidden-initial'} style={{ display: 'flex', flexDirection: 'column', flex: '1 1 0px', minWidth: 0, width: '100%', overflowX: 'hidden', minHeight: '100dvh', position: 'relative' }}>
       <Header
@@ -927,6 +969,8 @@ const App: React.FC = () => {
         onSupportClick={() => setIsChatOpen(!isChatOpen)}
         navVisibility={navVisibility}
         marqueeConfig={marqueeConfig}
+        isChatOpen={isChatOpen}
+        isSidebarOpen={isSidebarOpen}
       />
 
       <main 
@@ -936,8 +980,7 @@ const App: React.FC = () => {
           zIndex: 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingTop: '60px',
-          '--header-height': '60px',
+          paddingTop: '0px',
           transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out'
         } as React.CSSProperties}
       >
@@ -998,209 +1041,6 @@ const App: React.FC = () => {
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
                 {/* ── Promosyonlar Section ── */}
                 <PromoSlider />
-                {/* ── Yaklaşan Maçlar Section ── */}
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(242, 169, 0, 0.08)', border: '1px solid rgba(242, 169, 0, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(242, 169, 0, 0.1)' }}>
-                      <Calendar className="w-4 h-4" style={{ color: '#f2a900' }} />
-                    </div>
-                    <h3 className="font-black text-sm uppercase tracking-wider italic" style={{ color: '#e0e0e0' }}>
-                      YAKLAŞAN MAÇLAR
-                    </h3>
-                    <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(242, 169, 0, 0.2), transparent)' }} />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {nextThreeAnalyses.map((match, idx) => {
-                      const homeParsed = parseTeamFlagAndName(match.homeTeam);
-                      const awayParsed = parseTeamFlagAndName(match.awayTeam);
-                      
-                      const rawHomeFlag = getFlagUrl(homeParsed.name);
-                      const rawAwayFlag = getFlagUrl(awayParsed.name);
-
-                      const homeFlag = homeParsed.flag || rawHomeFlag;
-                      const awayFlag = awayParsed.flag || rawAwayFlag;
-
-                      const isHomeFlagEmoji = homeFlag && homeFlag.length <= 4;
-                      const isAwayFlagEmoji = awayFlag && awayFlag.length <= 4;
-
-                      const highestOdd = match.bookieOdds?.find(o => o.isHighest) || match.bookieOdds?.[0];
-                      const oddVal = highestOdd ? highestOdd.odd1 : '1.50';
-
-                      return (
-                        <div 
-                          key={match.id}
-                          onClick={() => {
-                            setActiveAnalysisId(match.id);
-                            handleViewChange('analysis');
-                          }}
-                          style={{
-                            background: 'linear-gradient(160deg, #050a05 0%, #080f08 100%)',
-                            border: '1px solid rgba(242, 169, 0, 0.15)',
-                            borderRadius: '16px',
-                            padding: '16px',
-                            transition: 'all 0.3s ease',
-                            cursor: 'pointer',
-                            boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                            position: 'relative',
-                            overflow: 'hidden'
-                          }}
-                          onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.border = '1px solid rgba(242, 169, 0, 0.35)';
-                            (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(242, 169, 0, 0.1), 0 0 0 1px rgba(242, 169, 0, 0.1)';
-                          }}
-                          onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.border = '1px solid rgba(242, 169, 0, 0.15)';
-                            (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(0,0,0,0.5)';
-                          }}
-                          className={`group mac-karti ${idx === 0 ? 'mac-karti-isiltili' : ''}`}
-                        >
-                          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(242, 169, 0, 0.04) 0%, transparent 60%)', pointerEvents: 'none' }} />
-                          <div>
-                            {/* Card Header */}
-                            <div className="flex items-center justify-between pb-2.5 mb-3" style={{ borderBottom: '1px solid rgba(242, 169, 0, 0.1)' }}>
-                              <span style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(242, 169, 0, 0.75)', textTransform: 'uppercase', letterSpacing: '0.5px' }} className="truncate max-w-[65%]">
-                                {match.league}
-                              </span>
-                              <span className="text-[9px] font-bold text-gray-500 flex items-center gap-1">
-                                <Clock className="w-3 h-3 text-gray-500" />
-                                <MatchCountdown dateStr={match.matchDate} timeStr={match.matchTime} />
-                              </span>
-                            </div>
-
-                            {/* Team Matchup */}
-                             <div className="flex items-center justify-between my-4 px-2">
-                               {/* Home Team */}
-                               <div className="flex flex-col items-center w-[40%] text-center">
-                                 <div style={{
-                                   width: '54px',
-                                   height: '38px',
-                                   borderRadius: '10px',
-                                   background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                                   border: '1.5px solid rgba(255, 215, 0, 0.35)',
-                                   boxShadow: '0 8px 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(255, 215, 0, 0.1)',
-                                   display: 'flex',
-                                   alignItems: 'center',
-                                   justifyContent: 'center',
-                                   marginBottom: '8px',
-                                   overflow: 'hidden',
-                                   flexShrink: 0,
-                                   transition: 'all 0.3s ease'
-                                 }}
-                                 className="group-hover:border-[#ffd700] group-hover:scale-105"
-                                 >
-                                   {homeFlag ? (
-                                     isHomeFlagEmoji ? (
-                                       <span style={{ fontSize: '24px', lineHeight: 1, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>
-                                         {homeFlag}
-                                       </span>
-                                     ) : (
-                                       <img src={homeFlag} alt={homeParsed.name} className="w-full h-full object-cover group-hover:scale-110" style={{ transition: 'all 0.5s ease' }} />
-                                     )
-                                   ) : (
-                                     <div style={{ fontSize: '14px' }}>⚽</div>
-                                   )}
-                                 </div>
-                                 <span className="text-[12px] font-black text-gray-100 truncate w-full tracking-wide uppercase" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
-                                   {homeParsed.name}
-                                 </span>
-                               </div>
-  
-                               {/* VS badge */}
-                               <div className="w-[20%] flex justify-center">
-                                 <span style={{ 
-                                   fontSize: '9px', 
-                                   fontWeight: 950, 
-                                   color: '#000', 
-                                   background: 'linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fcf6ba 75%, #aa771c 100%)', 
-                                   border: '1px solid rgba(255, 215, 0, 0.8)', 
-                                   padding: '4px 10px', 
-                                   borderRadius: '8px',
-                                   boxShadow: '0 4px 15px rgba(255, 215, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.4)',
-                                   letterSpacing: '1px',
-                                   textShadow: '0 1px 1px rgba(255,255,255,0.5)',
-                                   transform: 'scale(1.1)'
-                                 }}
-                                 className="animate-pulse-slow"
-                                 >
-                                   VS
-                                 </span>
-                               </div>
-  
-                               {/* Away Team */}
-                               <div className="flex flex-col items-center w-[40%] text-center">
-                                 <div style={{
-                                   width: '54px',
-                                   height: '38px',
-                                   borderRadius: '10px',
-                                   background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                                   border: '1.5px solid rgba(255, 215, 0, 0.35)',
-                                   boxShadow: '0 8px 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(255, 215, 0, 0.1)',
-                                   display: 'flex',
-                                   alignItems: 'center',
-                                   justifyContent: 'center',
-                                   marginBottom: '8px',
-                                   overflow: 'hidden',
-                                   flexShrink: 0,
-                                   transition: 'all 0.3s ease'
-                                 }}
-                                 className="group-hover:border-[#ffd700] group-hover:scale-105"
-                                 >
-                                   {awayFlag ? (
-                                     isAwayFlagEmoji ? (
-                                       <span style={{ fontSize: '24px', lineHeight: 1, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>
-                                         {awayFlag}
-                                       </span>
-                                     ) : (
-                                       <img src={awayFlag} alt={awayParsed.name} className="w-full h-full object-cover group-hover:scale-110" style={{ transition: 'all 0.5s ease' }} />
-                                     )
-                                   ) : (
-                                     <div style={{ fontSize: '14px' }}>⚽</div>
-                                   )}
-                                 </div>
-                                 <span className="text-[12px] font-black text-gray-100 truncate w-full tracking-wide uppercase" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
-                                   {awayParsed.name}
-                                 </span>
-                               </div>
-                             </div>
-                          </div>
- 
-                          {/* Prediction / Stats Footer */}
-                          <div className="mt-2 pt-3 border-t border-[#1f2635] flex flex-col gap-2.5">
-                            <div className="flex items-center justify-between text-xs font-bold">
-                              <div className="flex flex-col">
-                                <span className="text-[9px] text-gray-500 uppercase font-black">TAHMİN</span>
-                                <span className="font-black text-[11px] mt-0.5" style={{ color: '#f2a900' }}>{match.prediction}</span>
-                              </div>
-                              <div className="flex flex-col items-center">
-                                <span className="text-[9px] text-gray-500 uppercase font-black">ORAN</span>
-                                <span className="font-black text-[11px] mt-0.5" style={{ color: '#f2a900' }}>{oddVal}</span>
-                              </div>
-                              <div className="flex flex-col items-end">
-                                <span className="text-[9px] text-gray-500 uppercase font-black">GÜVEN</span>
-                                <span className="font-black text-[11px] mt-0.5" style={{ color: '#f2a900' }}>%{match.confidence}</span>
-                              </div>
-                            </div>
-                             
-                            <button
-                              className="detay-butonu"
-                              style={{ width: '100%', marginTop: '6px', padding: '8px 12px', background: 'rgba(242, 169, 0, 0.08)', border: '1px solid rgba(242, 169, 0, 0.2)', color: '#f2a900', fontWeight: 900, fontSize: '10px', borderRadius: '10px', textTransform: 'uppercase', letterSpacing: '2px', transition: 'all 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
-                              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(242, 169, 0, 0.15)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 0 15px rgba(242, 169, 0, 0.15)'; }}
-                              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(242, 169, 0, 0.08)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
-                            >
-                              <span>DETAYLI ANALİZ</span>
-                              <ArrowRight className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
 
                 {/* ── Enhanced Betting Section ── */}
                 <EnhancedBetting />
@@ -1397,7 +1237,6 @@ const App: React.FC = () => {
             />
           </div>
         )}
-        {/* TV724View is now globally mounted below to support mini player persistence */}
 
         {view === 'trusted-sites' && (
           <div className="animate-fade-in">
@@ -1427,6 +1266,16 @@ const App: React.FC = () => {
             </div>
           );
         })()}
+        {view === '724tv' && (
+          <TV724View
+            config={tvConfig}
+            siteUser={siteUser}
+            userRole={userRole}
+            onBack={() => handleViewChange('home')}
+            onLoginRequired={() => setAuthModalMode('member')}
+            activeView={view}
+          />
+        )}
       </div>
       </main>
 
@@ -1454,22 +1303,12 @@ const App: React.FC = () => {
           </button>
         </div>
       </footer>
-      {view !== 'admin' && (
-        <PortalMobileNav activeView={view} onViewChange={handleViewChange} />
-      )}
+      {/* PortalMobileNav is removed as requested by the user to move it to the top */}
           </div>
 
 
 
-      {/* ── Globally Mounted TV724View for Mini Player Persistence ── */}
-      <TV724View
-        config={tvConfig}
-        siteUser={siteUser}
-        userRole={userRole}
-        onBack={() => handleViewChange('home')}
-        onLoginRequired={() => setAuthModalMode('member')}
-        activeView={view}
-      />
+
 
       {/* ── Match Search Modal ── */}
       {showSearch && (
@@ -1481,14 +1320,16 @@ const App: React.FC = () => {
       )}
 
       {/* ── Modern Chat Widget ── */}
-      {view !== 'admin' && isChatOpen && (
+      {view !== 'admin' && (
         <div 
           style={{ 
             overflow: 'hidden', 
-            position: isMobile ? 'fixed' : 'sticky', 
+            position: 'fixed', 
             right: 0, top: 0, zIndex: 9999, height: '100dvh',
-            width: '100%',
-            transition: 'width 0.3s ease'
+            width: isMobile ? '100%' : '380px',
+            transform: isChatOpen ? 'translateX(0)' : 'translateX(100%)',
+            visibility: isChatOpen ? 'visible' : 'hidden',
+            transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s'
           }}
         >
           <ModernChat

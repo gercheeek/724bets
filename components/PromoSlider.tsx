@@ -74,8 +74,8 @@ export const PromoSlider: React.FC = () => {
     window.open('https://21.com', '_blank');
   };
 
-  // Duplicate promos to create a seamless infinite loop
-  const duplicatedPromos = [...PROMOS, ...PROMOS];
+  // Use distinct items without explicit duplication for infinite scroll
+  const duplicatedPromos = [...PROMOS];
 
   return (
     <div 

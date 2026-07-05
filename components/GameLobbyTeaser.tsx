@@ -100,7 +100,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
       <div style={sectionStyle}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 20% 50%, rgba(242, 169, 0, 0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-        <div style={{ display: 'flex', alignItems: 'center', justifycontent: 'space-between', marginBottom: '16px', position: 'relative', zIndex: 2 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', position: 'relative', zIndex: 2 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '4px', height: '20px', background: siteGold, borderRadius: '2px', boxShadow: `0 0 8px ${siteGold}` }} />
             <span style={{ fontSize: '13px', fontWeight: 900, color: '#e0e0e0', textTransform: 'uppercase', letterSpacing: '2px' }}>OYUNLAR</span>
@@ -214,7 +214,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
                   <span style={{ fontSize: '7px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>{game.provider}</span>
                 </div>
                 <div className="game-hover-overlay">
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#FFC107', display: 'flex', alignItems: 'center', justifycontent: 'center', boxShadow: '0 0 15px rgba(255,193,7,0.4)' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#FFC107', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 15px rgba(255,193,7,0.4)' }}>
                     <Play style={{ width: '14px', height: '14px', color: '#000', fill: '#000' }} />
                   </div>
                   <span style={{ fontSize: '7px', fontWeight: 900, color: '#fff', textTransform: 'uppercase', letterSpacing: '1px' }}>HEMEN OYNA</span>
@@ -273,7 +273,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
                   <span style={{ fontSize: '7px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>{game.provider}</span>
                 </div>
                 <div className="game-hover-overlay">
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: siteGold, display: 'flex', alignItems: 'center', justifycontent: 'center', boxShadow: `0 0 15px ${siteGold}66` }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: siteGold, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 15px ${siteGold}66` }}>
                     <Play style={{ width: '14px', height: '14px', color: '#000', fill: '#000' }} />
                   </div>
                   <span style={{ fontSize: '7px', fontWeight: 900, color: '#fff', textTransform: 'uppercase', letterSpacing: '1px' }}>HEMEN OYNA</span>

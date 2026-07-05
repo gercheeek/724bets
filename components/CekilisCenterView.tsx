@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { createBrowserClient } from '../lib/supabase';
 import type { Raffle } from '../types';
 import CountdownTimer from './CountdownTimer';
@@ -52,7 +52,7 @@ const NeonBolt = () => (
   </svg>
 );
 
-function SideRaffleCard({ raffle, onBuy }: { raffle: RaffleWithMeta; onBuy: (id: string, price: number) => void }) {
+const SideRaffleCard: React.FC<{ raffle: RaffleWithMeta; onBuy: (id: string, price: number) => void | Promise<void> }> = ({ raffle, onBuy }) => {
   const isFull = raffle.total_tickets >= raffle.max_tickets;
   const pct = Math.min((raffle.total_tickets / raffle.max_tickets) * 100, 100);
 

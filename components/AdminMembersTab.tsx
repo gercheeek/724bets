@@ -199,10 +199,14 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                                         onChange={(e) => setEditRole(e.target.value as any)}
                                         className="flex-1 bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg px-3 py-1.5 outline-none focus:border-[#f0b90b]/50"
                                     >
-                                        <option value="member">Normal Üye</option>
+                                        <option value="UYE">Normal Üye (UYE)</option>
+                                        <option value="MODERATOR">Moderatör (MODERATOR)</option>
+                                        <option value="ADMIN">Yönetici (ADMIN)</option>
+                                        <option value="PATRON">Patron (PATRON)</option>
+                                        <option value="KRAL">Kral (KRAL)</option>
+                                        <option value="BOT">Sohbet Botu (BOT)</option>
                                         <option value="author">Yazar (Haber Düzenler)</option>
                                         <option value="editor">Editör (Haber+Kupon+Analiz)</option>
-                                        <option value="admin">Full Yönetici (Her Şey)</option>
                                     </select>
                                     <button
                                         onClick={handleSaveRole}
