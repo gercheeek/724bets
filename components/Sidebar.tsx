@@ -251,11 +251,37 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="sidebar-overlay" onClick={onToggle} />
 
       <div className="sidebar-container">
-        {/* Toggle Button */}
-        <div style={{ display: 'flex', justifyContent: isOpen ? 'flex-start' : 'center', width: '100%' }}>
+        {/* Toggle Button with Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
           <button className="sidebar-toggle-btn" onClick={onToggle}>
             <Menu className="w-5 h-5" />
           </button>
+          {isOpen && (
+            <span style={{
+              fontSize: '18px',
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 900,
+              letterSpacing: '-1.5px',
+              color: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              marginLeft: '-4px',
+              userSelect: 'none'
+            }} onClick={() => onViewChange('home')}>
+              724BAHİS
+              <span style={{
+                background: 'linear-gradient(135deg, #adff2f 0%, #adff2f 100%)',
+                color: '#000',
+                fontSize: '10px',
+                fontWeight: 900,
+                padding: '1px 5px',
+                borderRadius: '4px',
+                marginLeft: '4px',
+                fontFamily: "'Inter', sans-serif"
+              }}>.COM</span>
+            </span>
+          )}
         </div>
 
         {/* Main Categories Group */}

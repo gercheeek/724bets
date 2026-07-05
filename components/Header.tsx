@@ -305,7 +305,7 @@ const Header: React.FC<HeaderProps> = ({
         <div
           className="logo-text-724"
           style={{ 
-            display: 'flex', 
+            display: isSidebarOpen ? 'none' : 'flex', 
             alignItems: 'center', 
             cursor: 'pointer',
             position: 'fixed',
