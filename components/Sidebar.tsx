@@ -81,13 +81,13 @@ const Sidebar: React.FC<SidebarProps> = ({
     <>
       <style>{`
         .sidebar-container {
-          width: 100%;
+          width: var(--sidebar-width);
           background-color: #1a1a1c;
           border-right: 1px solid rgba(255, 255, 255, 0.05);
           display: flex;
           flex-direction: column;
           height: 100vh;
-          position: sticky;
+          position: fixed;
           top: 0;
           left: 0;
           z-index: 999;

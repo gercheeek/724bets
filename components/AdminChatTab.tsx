@@ -9,6 +9,200 @@ interface Bot {
 
 const GLOBAL_CHANNEL_ID = '00000000-0000-0000-0000-000000000000';
 
+declare global {
+  interface Window {
+    globalSimulation?: {
+      isRunning: boolean;
+      scenarioText: string;
+      delaySeconds: number;
+      remainingMessages: number;
+      statusMessage: string;
+      onStateChange?: (state: { isRunning: boolean; remainingMessages: number; statusMessage: string }) => void;
+      abortSimulation: () => void;
+      startSimulation: (text: string, delay: number, botsList: any[], fetchBots: () => void) => void;
+    };
+  }
+}
+
+if (typeof window !== 'undefined' && !window.globalSimulation) {
+  let isRunning = false;
+  let scenarioText = localStorage.getItem('admin_scenario_text') || '';
+  let delaySeconds = Number(localStorage.getItem('admin_scenario_delay') || '15');
+  let remainingMessages = 0;
+  let statusMessage = '';
+  let timeoutId: any = null;
+
+  const abortSimulation = () => {
+    isRunning = false;
+    remainingMessages = 0;
+    statusMessage = '⏹️ Senaryo simülasyonu durduruldu.';
+    if (timeoutId) clearTimeout(timeoutId);
+    if (window.globalSimulation) {
+      window.globalSimulation.isRunning = false;
+      window.globalSimulation.remainingMessages = 0;
+      window.globalSimulation.statusMessage = statusMessage;
+      if (window.globalSimulation.onStateChange) {
+        window.globalSimulation.onStateChange({ isRunning, remainingMessages, statusMessage });
+      }
+    }
+  };
+
+  const startSimulation = async (text: string, delay: number, botsList: any[], fetchBots: () => void) => {
+    if (isRunning) return;
+    isRunning = true;
+    scenarioText = text;
+    delaySeconds = delay;
+    localStorage.setItem('admin_scenario_text', text);
+    localStorage.setItem('admin_scenario_delay', String(delay));
+
+    statusMessage = '⌛ Senaryo işleniyor, lütfen bekleyin...';
+    if (window.globalSimulation) {
+      window.globalSimulation.isRunning = true;
+      window.globalSimulation.scenarioText = text;
+      window.globalSimulation.delaySeconds = delay;
+      window.globalSimulation.statusMessage = statusMessage;
+      if (window.globalSimulation.onStateChange) {
+        window.globalSimulation.onStateChange({ isRunning, remainingMessages, statusMessage });
+      }
+    }
+
+    const lines = text.split('\n').filter(line => line.includes(':'));
+    const parsedMessages = lines.map(line => {
+      const colonIdx = line.indexOf(':');
+      const username = line.substring(0, colonIdx).trim();
+      let message = line.substring(colonIdx + 1).trim();
+      message = message.replace(/\[.*?\]|\(.*?\)/g, '').trim();
+      return { username, message };
+    });
+
+    remainingMessages = parsedMessages.length;
+    if (window.globalSimulation) {
+      window.globalSimulation.remainingMessages = remainingMessages;
+      if (window.globalSimulation.onStateChange) {
+        window.globalSimulation.onStateChange({ isRunning, remainingMessages, statusMessage });
+      }
+    }
+
+    const updatedBots = [...botsList];
+    for (const msg of parsedMessages) {
+      if (!isRunning) return;
+      const exists = updatedBots.some(b => b.username.toLowerCase() === msg.username.toLowerCase());
+      if (!exists) {
+        try {
+          const { data } = await supabase
+            .from('members')
+            .insert([{ 
+              username: msg.username, 
+              is_bot: true, 
+              role: 'member',
+              email: `${msg.username.replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@724bahis.com`,
+              password: 'bot_placeholder_pwd',
+              status: 'active'
+            }])
+            .select();
+          if (data && data.length > 0) {
+            updatedBots.push(data[0]);
+          }
+        } catch (e) {
+          console.error('Oto bot üretimi hatası:', e);
+        }
+      }
+    }
+
+    fetchBots();
+
+    const runStep = async (index: number) => {
+      if (!isRunning) return;
+      if (index >= parsedMessages.length) {
+        isRunning = false;
+        statusMessage = '✅ Senaryo simülasyonu başarıyla tamamlandı!';
+        remainingMessages = 0;
+        if (window.globalSimulation) {
+          window.globalSimulation.isRunning = false;
+          window.globalSimulation.remainingMessages = 0;
+          window.globalSimulation.statusMessage = statusMessage;
+          if (window.globalSimulation.onStateChange) {
+            window.globalSimulation.onStateChange({ isRunning, remainingMessages, statusMessage });
+          }
+        }
+        return;
+      }
+
+      const currentMsg = parsedMessages[index];
+      const botUser = updatedBots.find(b => b.username.toLowerCase() === currentMsg.username.toLowerCase());
+      
+      if (!botUser) {
+        runStep(index + 1);
+        return;
+      }
+
+      statusMessage = `💬 ${currentMsg.username} yazıyor...`;
+      remainingMessages = parsedMessages.length - index;
+      if (window.globalSimulation) {
+        window.globalSimulation.statusMessage = statusMessage;
+        window.globalSimulation.remainingMessages = remainingMessages;
+        if (window.globalSimulation.onStateChange) {
+          window.globalSimulation.onStateChange({ isRunning, remainingMessages, statusMessage });
+        }
+      }
+
+      const typingChannel = supabase.channel('global-chat-room');
+      typingChannel.send({
+        type: 'broadcast',
+        event: 'user_typing',
+        payload: { username: currentMsg.username }
+      });
+
+      timeoutId = setTimeout(async () => {
+        if (!isRunning) return;
+        try {
+          await supabase.from('tv_chat').insert([
+            {
+              channel_id: GLOBAL_CHANNEL_ID,
+              user_id: botUser.id,
+              username: botUser.username,
+              role: botUser.role || 'member',
+              message: currentMsg.message
+            }
+          ]);
+        } catch (dbErr) {
+          console.error('Mesaj gönderilemedi:', dbErr);
+        }
+
+        remainingMessages = parsedMessages.length - (index + 1);
+        statusMessage = `⏱️ Sıradaki mesaj bekleniyor...`;
+        if (window.globalSimulation) {
+          window.globalSimulation.statusMessage = statusMessage;
+          window.globalSimulation.remainingMessages = remainingMessages;
+          if (window.globalSimulation.onStateChange) {
+            window.globalSimulation.onStateChange({ isRunning, remainingMessages, statusMessage });
+          }
+        }
+
+        const randomMultiplier = 0.8 + Math.random() * 0.4;
+        const finalDelay = Math.max(0, (delaySeconds * 1000 * randomMultiplier) - 3000);
+        
+        timeoutId = setTimeout(() => {
+          runStep(index + 1);
+        }, finalDelay);
+
+      }, 3000);
+    };
+
+    runStep(0);
+  };
+
+  window.globalSimulation = {
+    isRunning,
+    scenarioText,
+    delaySeconds,
+    remainingMessages,
+    statusMessage,
+    abortSimulation,
+    startSimulation
+  };
+}
+
 export default function AdminChatTab() {
   // Alt Sekme Yönetimi
   const [activeSubTab, setActiveSubTab] = useState<'overview' | 'simulator' | 'punish' | 'logs' | 'interactives'>('simulator');
@@ -56,6 +250,26 @@ export default function AdminChatTab() {
   useEffect(() => {
     fetchBots();
     loadChatSettingsAdmin();
+
+    if (window.globalSimulation) {
+      setScenarioText(window.globalSimulation.scenarioText || localStorage.getItem('admin_scenario_text') || '');
+      setDelaySeconds(window.globalSimulation.delaySeconds || Number(localStorage.getItem('admin_scenario_delay') || '15'));
+      setIsRunning(window.globalSimulation.isRunning);
+      setRemainingMessages(window.globalSimulation.remainingMessages);
+      setStatusMessage(window.globalSimulation.statusMessage);
+
+      window.globalSimulation.onStateChange = (state) => {
+        setIsRunning(state.isRunning);
+        setRemainingMessages(state.remainingMessages);
+        setStatusMessage(state.statusMessage);
+      };
+    }
+
+    return () => {
+      if (window.globalSimulation) {
+        window.globalSimulation.onStateChange = undefined;
+      }
+    };
   }, []);
 
   const loadChatSettingsAdmin = async () => {
@@ -144,105 +358,37 @@ export default function AdminChatTab() {
     }
   };
 
-  // 🚀 AKILLI SENARYO SİMÜLATÖRÜ
-  const handleStartSimulation = async () => {
+  // 🚀 AKILLI SENARYO SİMÜLATÖRÜ KONTROLLERİ
+  const handleScenarioChange = (text: string) => {
+    setScenarioText(text);
+    localStorage.setItem('admin_scenario_text', text);
+    if (window.globalSimulation) {
+      window.globalSimulation.scenarioText = text;
+    }
+  };
+
+  const handleDelayChange = (delay: number) => {
+    setDelaySeconds(delay);
+    localStorage.setItem('admin_scenario_delay', String(delay));
+    if (window.globalSimulation) {
+      window.globalSimulation.delaySeconds = delay;
+    }
+  };
+
+  const handleStartSimulation = () => {
     if (!scenarioText.trim()) {
       alert('Lütfen senaryo metni girin!');
       return;
     }
-
-    setIsRunning(true);
-    setStatusMessage('⌛ Senaryo işleniyor, lütfen bekleyin...');
-
-    // Satır satır parse etme ve direktif temizleme (Regex)
-    const lines = scenarioText.split('\n').filter(line => line.includes(':'));
-    const parsedMessages = lines.map(line => {
-      const colonIdx = line.indexOf(':');
-      const username = line.substring(0, colonIdx).trim();
-      let message = line.substring(colonIdx + 1).trim();
-      
-      // Parantez içi senaryo notlarını temizle: [Gülerek], (Heyecanlı)
-      message = message.replace(/\[.*?\]|\(.*?\)/g, '').trim();
-      return { username, message };
-    });
-
-    setRemainingMessages(parsedMessages.length);
-
-    // Olmayan botları otomatik yarat
-    const updatedBots = [...bots];
-    for (const msg of parsedMessages) {
-      const exists = updatedBots.some(b => b.username.toLowerCase() === msg.username.toLowerCase());
-      if (!exists) {
-        try {
-          const { data } = await supabase
-            .from('members')
-            .insert([{ 
-              username: msg.username, 
-              is_bot: true, 
-              role: 'member',
-              email: `${msg.username.replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@724bahis.com`,
-              password: 'bot_placeholder_pwd',
-              status: 'active'
-            }])
-            .select();
-          if (data && data.length > 0) {
-            updatedBots.push(data[0]);
-          }
-        } catch (e) {
-          console.error('Oto bot üretimi hatası:', e);
-        }
-      }
+    if (window.globalSimulation) {
+      window.globalSimulation.startSimulation(scenarioText, delaySeconds, bots, fetchBots);
     }
-    setBots(updatedBots);
+  };
 
-    // Gecikmeli Gönderim
-    for (let i = 0; i < parsedMessages.length; i++) {
-      const currentMsg = parsedMessages[i];
-      const botUser = updatedBots.find(b => b.username.toLowerCase() === currentMsg.username.toLowerCase());
-      
-      if (!botUser) continue;
-
-      setStatusMessage(`💬 ${currentMsg.username} yazıyor...`);
-      
-      // "Yazıyor..." Broadcast
-      const typingChannel = supabase.channel('global-chat-room');
-      typingChannel.send({
-        type: 'broadcast',
-        event: 'user_typing',
-        payload: { username: currentMsg.username }
-      });
-
-      await new Promise(res => setTimeout(res, 3000));
-
-      // Mesajı tv_chat'e yaz
-      try {
-        await supabase.from('tv_chat').insert([
-          {
-            channel_id: GLOBAL_CHANNEL_ID,
-            user_id: botUser.id,
-            username: botUser.username,
-            role: botUser.role || 'member',
-            message: currentMsg.message
-          }
-        ]);
-      } catch (dbErr) {
-        console.error('Mesaj gönderilemedi:', dbErr);
-      }
-
-      setRemainingMessages(parsedMessages.length - (i + 1));
-
-      // İnsansı Rastgele Gecikme
-      if (i < parsedMessages.length - 1) {
-        const randomMultiplier = 0.8 + Math.random() * 0.4;
-        const finalDelay = Math.max(0, (delaySeconds * 1000 * randomMultiplier) - 3000);
-        setStatusMessage(`⏱️ Sıradaki mesaj bekleniyor...`);
-        await new Promise(res => setTimeout(res, finalDelay));
-      }
+  const handleStopSimulation = () => {
+    if (window.globalSimulation) {
+      window.globalSimulation.abortSimulation();
     }
-
-    setIsRunning(false);
-    setStatusMessage('✅ Senaryo simülasyonu başarıyla tamamlandı!');
-    setTimeout(() => setStatusMessage(''), 5000);
   };
 
   // 🎯 ANLIK KONU DEĞİŞTİRİCİ (SOBOTAJ) EMİR GÖNDERİMİ
@@ -532,7 +678,7 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
                   <input
                     type="number"
                     value={delaySeconds}
-                    onChange={(e) => setDelaySeconds(Number(e.target.value))}
+                    onChange={(e) => handleDelayChange(Number(e.target.value))}
                     className="w-full bg-gray-900 border border-gray-850 p-2 rounded text-white outline-none focus:border-green-500 text-center"
                   />
                 </div>
@@ -579,11 +725,15 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
 
               <div>
                 <label className="block text-xs text-gray-400 mb-1.5 font-medium">Diyalog Geçmişi (Format: KullanıcıAdı: Mesaj)</label>
-                <textarea value={scenarioText} onChange={(e) => setScenarioText(e.target.value)} placeholder="İrfan: Beyler Tayland Phuket'te hava efsane...&#10;KuponcuDayi: Biz de burada Temmuz sıcağında kupon kovalayalım [Gülerek]&#10;Kral_Analiz: Gamdom oranları açtı çökün beyler" className="w-full h-56 bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm text-gray-200 focus:border-green-500 outline-none font-mono leading-relaxed" disabled={isRunning || isAutopilotRunning} />
+                <textarea value={scenarioText} onChange={(e) => handleScenarioChange(e.target.value)} placeholder="İrfan: Beyler Tayland Phuket'te hava efsane...&#10;KuponcuDayi: Biz de burada Temmuz sıcağında kupon kovalayalım [Gülerek]&#10;Kral_Analiz: Gamdom oranları açtı çökün beyler" className="w-full h-56 bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm text-gray-200 focus:border-green-500 outline-none font-mono leading-relaxed" disabled={isRunning || isAutopilotRunning} />
               </div>
 
-              <button onClick={handleStartSimulation} disabled={isRunning || isAutopilotRunning || !scenarioText.trim()} className={`w-full py-3.5 rounded-xl font-black text-md tracking-wider transition-all shadow-lg ${isRunning ? 'bg-orange-600 text-white animate-pulse shadow-orange-900/20 cursor-wait' : 'bg-green-500 hover:bg-green-400 text-gray-950 shadow-green-900/10'}`}>
-                {isRunning ? `⏳ SİMÜLASYON CANLI AKIYOR (KALAN: ${remainingMessages} MESAJ)` : '🚀 SİMÜLASYONU BAŞLAT'}
+              <button 
+                onClick={isRunning ? handleStopSimulation : handleStartSimulation} 
+                disabled={isAutopilotRunning || (!isRunning && !scenarioText.trim())} 
+                className={`w-full py-3.5 rounded-xl font-black text-md tracking-wider transition-all shadow-lg ${isRunning ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse shadow-red-900/20' : 'bg-green-500 hover:bg-green-400 text-gray-950 shadow-green-900/10'}`}
+              >
+                {isRunning ? `⏹️ SİMÜLASYONU DURDUR (KALAN: ${remainingMessages} MESAJ)` : '🚀 SİMÜLASYONU BAŞLAT'}
               </button>
             </div>
           </div>

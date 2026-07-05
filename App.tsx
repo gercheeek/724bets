@@ -995,8 +995,8 @@ const App: React.FC = () => {
           zIndex: 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingTop: '0px',
-          transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out'
+          paddingTop: (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '60px',
+          transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out, padding-top 0.3s ease-in-out'
         } as React.CSSProperties}
       >
         <div style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
