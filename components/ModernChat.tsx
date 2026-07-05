@@ -71,6 +71,8 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const [activePoll, setActivePoll] = useState<{ question: string; options: string[]; votes: number[]; isActive: boolean; } | null>(null);
     const [hasVoted, setHasVoted] = useState(false);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+    const [isEventCollapsed, setIsEventCollapsed] = useState(false);
+    const [isPollCollapsed, setIsPollCollapsed] = useState(false);
 
     useEffect(() => {
         const handleOutsideClick = () => {
@@ -473,7 +475,110 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     )}
                 </div>
             )}
+            {/* Sticky Widgets Area (Event, Poll) */}
+            {((eventWidget && eventWidget.show) || (activePoll && activePoll.isActive)) && (
+                <div className="bg-[#1a1a1c] border-b border-white/5 p-3 space-y-2 flex-shrink-0">
+                    {/* Event Card */}
+                    {eventWidget && eventWidget.show && (
+                        <div className="bg-[#242427] border border-white/5 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                            <div 
+                                onClick={() => setIsEventCollapsed(!isEventCollapsed)}
+                                className="flex items-center justify-between text-xs font-bold text-white cursor-pointer select-none"
+                            >
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-[10px]">🎫</span>
+                                    <span>{eventWidget.title}</span>
+                                </div>
+                                <span className="text-[9px] text-gray-400 hover:text-white">
+                                    {isEventCollapsed ? 'Göster ▼' : 'Gizle ▲'}
+                                </span>
+                            </div>
+                            
+                            {!isEventCollapsed && (
+                                <div className="space-y-2 pt-1.5 border-t border-white/5 mt-1">
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-5 h-5 rounded bg-emerald-500/20 flex items-center justify-center text-[10px]">🛡️</span>
+                                        <span className="text-xs font-bold text-white">{eventWidget.brandName}</span>
+                                    </div>
+                                    <div className="flex justify-between items-end">
+                                        <div className="flex flex-col">
+                                            <span className="text-[9px] text-gray-400 font-medium">{eventWidget.promoName}</span>
+                                            <span className="text-xs font-black text-amber-400">{eventWidget.prizeAmount}</span>
+                                        </div>
+                                        {eventWidget.ctaUrl && (
+                                            <a 
+                                                href={eventWidget.ctaUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="bg-[#1a1a1a] hover:bg-emerald-500 hover:text-black text-white font-bold text-[9px] py-1.5 px-3 rounded transition-all text-center"
+                                            >
+                                                {eventWidget.ctaText || 'Katıl'}
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
+                    {/* Poll Card */}
+                    {activePoll && activePoll.isActive && (
+                         <div className="bg-[#242427] border border-orange-500/10 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                             <div 
+                                 onClick={() => setIsPollCollapsed(!isPollCollapsed)}
+                                 className="flex items-center justify-between text-xs font-bold text-orange-400 cursor-pointer select-none"
+                             >
+                                 <div className="flex items-center gap-1.5">
+                                     <span className="text-[10px]">📊</span>
+                                     <span>Sohbet Anketi</span>
+                                 </div>
+                                 <span className="text-[9px] text-gray-400 hover:text-white">
+                                     {isPollCollapsed ? 'Göster ▼' : 'Gizle ▲'}
+                                 </span>
+                             </div>
+
+                             {!isPollCollapsed && (
+                                 <div className="space-y-2 pt-1.5 border-t border-white/5 mt-1">
+                                     <div className="text-xs font-bold text-white">
+                                         {activePoll.question}
+                                     </div>
+                                     {hasVoted ? (
+                                         <div className="space-y-1.5">
+                                             {activePoll.options.map((opt: string, idx: number) => {
+                                                 const totalVotes = activePoll.votes.reduce((a: number, b: number) => a + b, 0) || 1;
+                                                 const percentage = Math.round((activePoll.votes[idx] / totalVotes) * 100);
+                                                 return (
+                                                     <div key={idx} className="space-y-0.5">
+                                                         <div className="flex justify-between text-[9px] text-gray-300 font-bold">
+                                                             <span>{opt}</span>
+                                                             <span>%{percentage} ({activePoll.votes[idx]} Oy)</span>
+                                                         </div>
+                                                         <div className="w-full bg-zinc-800 rounded-full h-1 overflow-hidden">
+                                                             <div className="bg-orange-500 h-1 rounded-full" style={{ width: `${percentage}%` }}></div>
+                                                         </div>
+                                                     </div>
+                                                 );
+                                             })}
+                                         </div>
+                                     ) : (
+                                         <div className="flex flex-col gap-1">
+                                             {activePoll.options.map((opt: string, idx: number) => (
+                                                 <button 
+                                                     key={idx}
+                                                     onClick={() => handleVote(idx)}
+                                                     className="w-full bg-[#1a1a1a] hover:bg-orange-500 hover:text-black text-gray-300 font-bold text-[9px] py-1.5 px-3 rounded text-left transition-all border border-white/5"
+                                                 >
+                                                     {opt}
+                                                 </button>
+                                             ))}
+                                         </div>
+                                     )}
+                                 </div>
+                             )}
+                         </div>
+                     )}
+                </div>
+            )}
             {/* Messages Area */}
             <div 
                 ref={chatContainerRef} 
@@ -481,77 +586,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                 className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"
                 style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}
             >
-                {/* Event Card */}
-                {eventWidget && eventWidget.show && (
-                    <div className="bg-[#242427] border border-white/5 rounded-lg p-3 flex flex-col gap-2.5">
-                        <div className="flex items-center gap-2 text-xs font-bold text-white border-b border-white/5 pb-2">
-                            <span className="text-[10px]">🎫</span>
-                            <span>{eventWidget.title}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span className="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center text-xs">🛡️</span>
-                            <span className="text-xs font-bold text-white">{eventWidget.brandName}</span>
-                        </div>
-                        <div className="flex flex-col gap-0.5">
-                            <span className="text-[10px] text-gray-400 font-medium">{eventWidget.promoName}</span>
-                            <span className="text-sm font-black text-amber-400">{eventWidget.prizeAmount}</span>
-                        </div>
-                        {eventWidget.ctaUrl && (
-                            <a 
-                                href={eventWidget.ctaUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full bg-[#1a1a1a] hover:bg-emerald-500 hover:text-black text-white font-bold text-[10px] py-1.5 rounded transition-all text-center block"
-                            >
-                                {eventWidget.ctaText || 'Katıl'}
-                            </a>
-                        )}
-                    </div>
-                )}
 
-                {/* Poll Card */}
-                {activePoll && activePoll.isActive && (
-                    <div className="bg-[#242427] border border-orange-500/10 rounded-lg p-3 flex flex-col gap-2.5">
-                        <div className="flex items-center gap-2 text-xs font-bold text-orange-400 border-b border-white/5 pb-2">
-                            <span className="text-[10px]">📊</span>
-                            <span>Sohbet Anketi</span>
-                        </div>
-                        <div className="text-xs font-bold text-white mb-1">
-                            {activePoll.question}
-                        </div>
-                        {hasVoted ? (
-                            <div className="space-y-2">
-                                {activePoll.options.map((opt: string, idx: number) => {
-                                    const totalVotes = activePoll.votes.reduce((a: number, b: number) => a + b, 0) || 1;
-                                    const percentage = Math.round((activePoll.votes[idx] / totalVotes) * 100);
-                                    return (
-                                        <div key={idx} className="space-y-1">
-                                            <div className="flex justify-between text-[10px] text-gray-300 font-bold">
-                                                <span>{opt}</span>
-                                                <span>%{percentage} ({activePoll.votes[idx]} Oy)</span>
-                                            </div>
-                                            <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
-                                                <div className="bg-orange-500 h-1.5 rounded-full" style={{ width: `${percentage}%` }}></div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <div className="flex flex-col gap-1.5">
-                                {activePoll.options.map((opt: string, idx: number) => (
-                                    <button 
-                                        key={idx}
-                                        onClick={() => handleVote(idx)}
-                                        className="w-full bg-[#1a1a1a] hover:bg-orange-500 hover:text-black text-gray-300 font-bold text-[10px] py-1.5 px-3 rounded text-left transition-all border border-white/5"
-                                    >
-                                        {opt}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
 
                 {!isConnected ? (
                     <div className="flex items-center justify-center py-8">
