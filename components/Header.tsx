@@ -304,7 +304,7 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       {/* ══════ SINGLE TIER: Logo + Categories + Controls ══════ */}
-      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', minHeight: '60px' }}>
+      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', height: '60px' }}>
         
         {/* Left: Menu & Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -552,7 +552,7 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* ══════ TIER 2: Marquee Bar ══════ */}
         {marqueeConfig?.isActive && (
-          <div className="header-categories header-marquee-bar" style={{ justifyContent: 'center', padding: '10px 16px', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+          <div className="header-categories header-marquee-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', height: '36px', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
             <style>{`
               .marquee-container-hover-pause:hover .animate-custom-marquee {
                 animation-play-state: paused;

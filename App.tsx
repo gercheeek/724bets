@@ -943,7 +943,7 @@ const App: React.FC = () => {
           overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden',
            '--sidebar-width': !isMobile && isSidebarOpen ? '260px' : (!isMobile && !isSidebarOpen ? '72px' : '0px'),
           '--chat-width': (view === 'admin') ? '0px' : '380px',
-          '--header-height': (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '64px'
+          '--header-height': (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '60px'
         } as React.CSSProperties}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
