@@ -304,7 +304,7 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       {/* ══════ SINGLE TIER: Logo + Categories + Controls ══════ */}
-      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', paddingLeft: 'calc(var(--sidebar-width, 260px) + 24px)', minHeight: '60px' }}>
+      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', minHeight: '60px' }}>
         
         {/* Left: Menu & Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -316,7 +316,7 @@ const Header: React.FC<HeaderProps> = ({
           <div
             className="logo-text-724"
             style={{ 
-              display: isSidebarOpen ? 'none' : 'flex', 
+              display: 'flex', 
               alignItems: 'center', 
               cursor: 'pointer',
               position: 'relative'

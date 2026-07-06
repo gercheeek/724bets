@@ -86,9 +86,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           border-right: 1px solid rgba(255, 255, 255, 0.05);
           display: flex;
           flex-direction: column;
-          height: 100vh;
+          height: calc(100vh - var(--header-height, 64px));
           position: fixed;
-          top: 0;
+          top: var(--header-height, 64px);
           left: 0;
           z-index: 999;
           overflow: hidden;
@@ -250,40 +250,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Overlay for mobile */}
       <div className="sidebar-overlay" onClick={onToggle} />
 
-      <div className="sidebar-container">
-        {/* Toggle Button with Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-          <button className="sidebar-toggle-btn" onClick={onToggle}>
-            <Menu className="w-5 h-5" />
-          </button>
-          {isOpen && (
-            <span style={{
-              fontSize: '18px',
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 900,
-              letterSpacing: '-1.5px',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              cursor: 'pointer',
-              marginLeft: '12px',
-              userSelect: 'none'
-            }} onClick={() => onViewChange('home')}>
-              724BAHİS
-              <span style={{
-                background: 'linear-gradient(135deg, #adff2f 0%, #adff2f 100%)',
-                color: '#000',
-                fontSize: '10px',
-                fontWeight: 900,
-                padding: '1px 5px',
-                borderRadius: '4px',
-                marginLeft: '4px',
-                fontFamily: "'Inter', sans-serif"
-              }}>.COM</span>
-            </span>
-          )}
-        </div>
-
+      <div className="sidebar-container" style={{ padding: '12px 0' }}>
         {/* Main Categories Group */}
         <div className="sidebar-group" style={{ marginTop: '4px' }}>
           {renderNavItems(mainCategories)}

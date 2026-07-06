@@ -942,7 +942,8 @@ const App: React.FC = () => {
           position: 'relative',
           overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden',
            '--sidebar-width': !isMobile && isSidebarOpen ? '260px' : (!isMobile && !isSidebarOpen ? '72px' : '0px'),
-          '--chat-width': (view === 'admin') ? '0px' : '380px'
+          '--chat-width': (view === 'admin') ? '0px' : '380px',
+          '--header-height': (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '64px'
         } as React.CSSProperties}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
@@ -996,7 +997,7 @@ const App: React.FC = () => {
           zIndex: 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingTop: (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '64px',
+          paddingTop: 'var(--header-height)',
           transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out, padding-top 0.3s ease-in-out'
         } as React.CSSProperties}
       >
