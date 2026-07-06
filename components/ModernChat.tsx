@@ -414,10 +414,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
         return new Date(isoString).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    const getRoleColor = (role: string) => {
+    const getRoleColor = (role: string, username?: string) => {
         if (role === 'admin') return '#FFD700';
         if (role === 'vip') return '#00BFFF';
-        return '#f3f4f6';
+        
+        // Generate a pastel color based on username hash
+        if (!username) return '#e2e8f0';
+        const hash = username.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const hue = hash % 360;
+        return `hsl(${hue}, 70%, 75%)`;
     };
 
     const getRoleBadge = (role: string) => {
@@ -603,7 +608,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className="bg-[#242427] border border-white/5 rounded-lg p-3 flex flex-col gap-1.5 relative group text-left cursor-default"
+                            className="bg-[#2a2a2e] border border-white/5 rounded-2xl rounded-tl-sm p-3 flex flex-col gap-1.5 relative group text-left cursor-default shadow-sm mb-2"
                             onContextMenu={(e) => {
                                 if (isAdmin) {
                                     e.preventDefault();
@@ -618,7 +623,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                 </span>
                                 <span 
                                     className="text-xs font-bold" 
-                                    style={{ color: getRoleColor(msg.role) }}
+                                    style={{ color: getRoleColor(msg.role, msg.username) }}
                                 >
                                     {getRoleBadge(msg.role)}{msg.username}
                                 </span>

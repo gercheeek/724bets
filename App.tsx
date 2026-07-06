@@ -995,7 +995,7 @@ const App: React.FC = () => {
           zIndex: 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingTop: (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '60px',
+          paddingTop: (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '64px',
           transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out, padding-top 0.3s ease-in-out'
         } as React.CSSProperties}
       >
@@ -1008,10 +1008,10 @@ const App: React.FC = () => {
                 {/* ── World Cup 2026 Special Analysis Banner ── */}
                 <div 
                   onClick={() => handleViewChange('analysis')}
-                  className="mb-6 rounded-2xl overflow-hidden relative cursor-pointer group" 
+                  className="mb-6 rounded-xl overflow-hidden relative cursor-pointer group" 
                   style={{ 
-                    border: '1px solid rgba(242, 169, 0, 0.4)',
-                    boxShadow: '0 0 40px rgba(242, 169, 0, 0.15), inset 0 1px 0 rgba(242, 169, 0, 0.2)',
+                    border: '1px solid rgba(242, 169, 0, 0.2)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)',
                     transition: 'all 0.3s ease',
                     backgroundImage: 'url("https://images.unsplash.com/photo-1518605368461-1e1e38ce7058?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")',
                     backgroundSize: 'cover',
@@ -1019,16 +1019,15 @@ const App: React.FC = () => {
                   }}
                 >
                   {/* Thematic Overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/95" />
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(242,169,0,0.25)_0%,transparent_60%)] pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/95" />
                   
-                  {/* Neon glow background rings */}
-                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '2px solid rgba(242, 169, 0, 0.2)', boxShadow: '0 0 30px rgba(242, 169, 0, 0.2)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.4)', boxShadow: '0 0 20px rgba(242, 169, 0, 0.3)', pointerEvents: 'none' }} />
+                  {/* Subtle background rings */}
+                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.1)', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.15)', pointerEvents: 'none' }} />
                   
-                  <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative" style={{ zIndex: 10 }}>
+                  <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative" style={{ zIndex: 10 }}>
                     <div className="flex items-center gap-4">
-                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(242, 169, 0, 0.15)', border: '1px solid rgba(242, 169, 0, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 20px rgba(242, 169, 0, 0.2)', backdropFilter: 'blur(5px)' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(242, 169, 0, 0.1)', border: '1px solid rgba(242, 169, 0, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
                         <Trophy className="w-6 h-6" style={{ color: '#f2a900' }} />
                       </div>
                       <div>
@@ -1042,10 +1041,10 @@ const App: React.FC = () => {
                     
                     <div className="flex items-center gap-6 justify-between sm:justify-end">
                       <div className="text-left sm:text-right" style={{ flexShrink: 0 }}>
-                        <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '2px' }}>En Yüksek Kazanç Oranları</p>
-                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#f2a900', textShadow: '0 0 15px rgba(242, 169, 0, 0.5)' }}>%88 Başarı Oranı</p>
+                        <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>En Yüksek Kazanç Oranları</p>
+                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#f2a900' }}>%88 Başarı Oranı</p>
                       </div>
-                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 20px', background: 'linear-gradient(90deg, #f2a900, #ffc107)', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '10px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', boxShadow: '0 0 20px rgba(242, 169, 0, 0.4)', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: 'linear-gradient(90deg, #f2a900, #ffc107)', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                         <span>ANALİZLERE GİT</span>
                         <span className="group-hover:translate-x-1 transition-transform" style={{ display: 'inline-block' }}>→</span>
                       </button>

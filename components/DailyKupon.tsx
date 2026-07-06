@@ -89,22 +89,22 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
     <div style={{
       background: 'linear-gradient(160deg, #060c06 0%, #08110a 50%, #060c06 100%)',
       border: '1px solid rgba(242, 169, 0, 0.2)',
-      borderRadius: '14px',
-      padding: '14px',
+      borderRadius: '12px',
+      padding: '16px',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
       height: '100%',
       position: 'relative',
       overflow: 'hidden',
-      boxShadow: '0 0 40px rgba(242, 169, 0, 0.05), inset 0 1px 0 rgba(242, 169, 0, 0.08)'
+      boxShadow: '0 0 24px rgba(242, 169, 0, 0.05), inset 0 1px 0 rgba(242, 169, 0, 0.08)'
     }}>
       {/* Ambient glow */}
-      <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.1)', boxShadow: '0 0 40px rgba(242, 169, 0, 0.08)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.1)', boxShadow: '0 0 32px rgba(242, 169, 0, 0.08)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(242, 169, 0, 0.05) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingBottom: '12px', borderBottom: '1px solid rgba(242, 169, 0, 0.12)', position: 'relative', zIndex: 2 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '16px', borderBottom: '1px solid rgba(242, 169, 0, 0.12)', position: 'relative', zIndex: 2 }}>
         <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(242, 169, 0, 0.08)', border: '1px solid rgba(242, 169, 0, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <Trophy style={{ width: '16px', height: '16px', color: '#f2a900' }} />
         </div>
@@ -162,7 +162,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
       </div>
 
       {/* Footer */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px', paddingTop: '10px', borderTop: '1px solid rgba(242, 169, 0, 0.1)', position: 'relative', zIndex: 2 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(242, 169, 0, 0.1)', position: 'relative', zIndex: 2 }}>
         <div>
           <div style={{ fontSize: '8px', fontWeight: 700, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>TOPLAM ORAN</div>
           <div style={{ fontSize: '22px', fontWeight: 900, color: '#f2a900', lineHeight: 1, textShadow: '0 0 20px rgba(242, 169, 0, 0.4)', fontStyle: 'italic', letterSpacing: '-0.5px' }}>
@@ -177,10 +177,10 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '6px',
+            gap: '8px',
             backgroundColor: '#f2a900',
             color: '#000',
-            padding: '10px 18px',
+            padding: '8px 16px',
             borderRadius: '8px',
             fontWeight: 900,
             fontSize: '12px',

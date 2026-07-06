@@ -87,6 +87,51 @@ interface CategoryItem {
 
 const ICON_SIZE = 'w-5 h-5';
 
+const BreakingNewsWidget: React.FC<{ text: string }> = ({ text }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  const newsItems = React.useMemo(() => {
+    if (!text) return [];
+    if (text.toLowerCase().includes('724futbol.com')) {
+      return text.split(/724futbol\.com/i).map(t => t.trim()).filter(t => t.length > 0);
+    }
+    const chunks = text.split(/ - | \| /).map(t => t.trim()).filter(t => t.length > 0);
+    return chunks.length > 0 ? chunks : [text];
+  }, [text]);
+
+  useEffect(() => {
+    if (newsItems.length <= 1) return;
+    const interval = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setCurrentIndex(prev => (prev + 1) % newsItems.length);
+        setFade(true);
+      }, 500);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [newsItems]);
+
+  if (newsItems.length === 0) return null;
+
+  return (
+    <div className="flex items-center gap-3 text-white text-[13px] font-medium w-full max-w-4xl mx-auto overflow-hidden">
+      <div className="bg-red-600 text-white font-black px-2 py-0.5 rounded shadow-[0_0_10px_rgba(220,38,38,0.5)] shrink-0 flex items-center gap-1.5 tracking-wider text-[11px]">
+        <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+        SON DAKİKA
+      </div>
+      <div className="flex-1 relative h-6 flex items-center">
+        <div 
+          className="absolute inset-0 flex items-center transition-opacity duration-500 ease-in-out whitespace-nowrap overflow-hidden text-ellipsis"
+          style={{ opacity: fade ? 1 : 0 }}
+        >
+          {newsItems[currentIndex]}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Header: React.FC<HeaderProps> = ({
   onAdminClick,
   onViewChange,
@@ -521,100 +566,10 @@ const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* ══════ TIER 2: Marquee Bar ══════ */}
+        {/* ══════ TIER 2: Breaking News Bar ══════ */}
         {marqueeConfig?.isActive && (
-          <div className="header-categories header-marquee-bar" style={{ justifyContent: 'center', padding: '10px 16px', background: '#08080C' }}>
-            <style>{`
-              .marquee-container-hover-pause:hover .animate-custom-marquee {
-                animation-play-state: paused;
-              }
-              .marquee-fade-wrapper {
-                animation: marqueeFadeIn 0.8s ease forwards;
-              }
-              @keyframes marqueeFadeIn {
-                from { opacity: 0; transform: translateY(4px); }
-                to { opacity: 1; transform: translateY(0); }
-              }
-            `}</style>
-            <div className="flex-1 overflow-hidden marquee-container-hover-pause" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
-              <div key={marqueeConfig.text} className="marquee-fade-wrapper">
-                <div 
-                  className="whitespace-nowrap animate-custom-marquee inline-block"
-                  style={{ 
-                    color: '#FFF', 
-                    fontFamily: '"Inter", sans-serif',
-                    fontWeight: 500,
-                    fontSize: '13px',
-                    letterSpacing: '0.5px',
-                    '--speed': `${marqueeConfig.speed ?? 30}s` 
-                  } as React.CSSProperties}
-                >
-                  {/* 
-                    Smart Separator Density: 
-                    We use an EVEN number of loops (2 or 4) to ensure transform: translateX(-50%) is seamless.
-                  */}
-                  {(() => {
-                    const text = marqueeConfig.text || '';
-                    const separator = (
-                      <span 
-                        style={{ 
-                          color: '#FFD700', 
-                          margin: '0 30px', 
-                          textShadow: '0 0 8px rgba(255,215,0,0.6)',
-                          fontWeight: 900,
-                          letterSpacing: '1px',
-                          display: 'inline-block'
-                        }}
-                      >
-                        724FUTBOL.COM
-                      </span>
-                    );
-
-                    const keyword = /724futbol\.com/gi;
-
-                    // CASE 1: Manual Placement via '724bahis.net' keyword
-                    if (text.match(keyword)) {
-                      const parts = text.split(keyword);
-                      return [...Array(2)].map((_, i) => (
-                        <React.Fragment key={i}>
-                          {parts.map((p, j) => (
-                            <React.Fragment key={j}>
-                              <span style={{ whiteSpace: 'pre' }}>{p}</span>
-                              {j < parts.length - 1 && separator}
-                            </React.Fragment>
-                          ))}
-                          {/* Ensure a separator between marquee repetitions */}
-                          {separator}
-                        </React.Fragment>
-                      ));
-                    }
-
-                    // CASE 2: Fallback to Smart Density (for old or short text)
-                    if (text.length < 150) {
-                      return [...Array(4)].map((_, i) => (
-                        <span key={i} className="inline-flex items-center">
-                          <span>{text}</span>
-                          {separator}
-                        </span>
-                      ));
-                    }
-
-                    const chunks = text.match(/.{1,180}(?:\s|$)/g) || [text];
-                    return [...Array(2)].map((_, i) => ( 
-                      <React.Fragment key={i}>
-                        {chunks.map((chunk, j) => (
-                          <span key={j} className="inline-flex items-center">
-                            <span>{chunk.trim()}</span>
-                            {separator}
-                          </span>
-                        ))}
-                        {separator}
-                      </React.Fragment>
-                    ));
-                  })()}
-                </div>
-              </div>
-            </div>
+          <div className="header-categories" style={{ justifyContent: 'center', padding: '10px 16px', background: '#08080C', borderBottom: '1px solid rgba(255, 255, 255, 0.03)' }}>
+            <BreakingNewsWidget text={marqueeConfig.text || ''} />
           </div>
         )}
 
