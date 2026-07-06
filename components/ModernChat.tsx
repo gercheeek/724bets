@@ -445,9 +445,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="modern-chat-inject" className="h-full w-full flex flex-col bg-[#1a1a1c] md:border-l border-white/5 shadow-2xl font-sans text-left">
+        <div id="modern-chat-inject" className="h-full w-full flex flex-col bg-[#0F172A] md:border-l border-white/5 shadow-2xl font-sans text-left">
             {/* Header */}
-            <div className="bg-[#1a1a1c] p-4 text-white font-bold flex items-center gap-3 border-b border-white/5 flex-shrink-0">
+            <div className="bg-[#0F172A] p-4 text-white font-bold flex items-center gap-3 border-b border-white/5 flex-shrink-0">
                 <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span className="text-xs uppercase tracking-widest text-emerald-400 font-black">CANLI</span>
@@ -482,10 +482,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             )}
             {/* Sticky Widgets Area (Event, Poll) */}
             {((eventWidget && eventWidget.show) || (activePoll && activePoll.isActive)) && (
-                <div className="bg-[#1a1a1c] border-b border-white/5 p-3 space-y-2 flex-shrink-0">
+                <div className="bg-[#0F172A] border-b border-white/5 p-3 space-y-2 flex-shrink-0">
                     {/* Event Card */}
                     {eventWidget && eventWidget.show && (
-                        <div className="bg-[#242427] border border-white/5 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                        <div className="bg-[#1E293B] border border-white/5 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
                             <div 
                                 onClick={() => setIsEventCollapsed(!isEventCollapsed)}
                                 className="flex items-center justify-between text-xs font-bold text-white cursor-pointer select-none"
@@ -515,7 +515,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                                 href={eventWidget.ctaUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="bg-[#1a1a1a] hover:bg-emerald-500 hover:text-black text-white font-bold text-[9px] py-1.5 px-3 rounded transition-all text-center"
+                                                className="bg-[#0F172A] hover:bg-emerald-500 hover:text-black text-white font-bold text-[9px] py-1.5 px-3 rounded transition-all text-center"
                                             >
                                                 {eventWidget.ctaText || 'Katıl'}
                                             </a>
@@ -528,7 +528,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
 
                     {/* Poll Card */}
                     {activePoll && activePoll.isActive && (
-                         <div className="bg-[#242427] border border-orange-500/10 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                         <div className="bg-[#1E293B] border border-orange-500/10 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
                              <div 
                                  onClick={() => setIsPollCollapsed(!isPollCollapsed)}
                                  className="flex items-center justify-between text-xs font-bold text-orange-400 cursor-pointer select-none"
@@ -571,7 +571,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                                  <button 
                                                      key={idx}
                                                      onClick={() => handleVote(idx)}
-                                                     className="w-full bg-[#1a1a1a] hover:bg-orange-500 hover:text-black text-gray-300 font-bold text-[9px] py-1.5 px-3 rounded text-left transition-all border border-white/5"
+                                                     className="w-full bg-[#0F172A] hover:bg-orange-500 hover:text-black text-gray-300 font-bold text-[9px] py-1.5 px-3 rounded text-left transition-all border border-white/5"
                                                  >
                                                      {opt}
                                                  </button>
@@ -608,7 +608,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className="bg-[#2a2a2e] border border-white/5 rounded-2xl rounded-tl-sm p-3 flex flex-col gap-1.5 relative group text-left cursor-default shadow-sm mb-2"
+                            className="bg-[#1E293B] border border-white/5 rounded-2xl rounded-tl-sm p-3 flex flex-col gap-1.5 relative group text-left cursor-default shadow-sm mb-2"
                             onContextMenu={(e) => {
                                 if (isAdmin) {
                                     e.preventDefault();
@@ -651,7 +651,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                 </button>
 
                                 {activeMenuId === msg.id && (
-                                  <div className="absolute right-0 mt-1 bg-[#18181b] border border-white/10 rounded-lg shadow-xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
+                                  <div className="absolute right-0 mt-1 bg-[#162032] border border-white/10 rounded-lg shadow-xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
                                     <button 
                                       onClick={() => {
                                         handlePinMessage(msg.message, msg.username, msg.role || 'member');
@@ -685,7 +685,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             )}
 
                             {activeMutePopup === msg.id && (
-                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#111116', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '12px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', minWidth: '220px' }}>
+                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#0F172A', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '12px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', minWidth: '220px' }}>
                                     <div style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                         <input value={muteReason} onChange={(e) => setMuteReason(e.target.value)} placeholder="Ceza nedeni (zorunlu)" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 8px', fontSize: '10px', color: '#fff', outline: 'none' }} />
                                     </div>
@@ -702,20 +702,20 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             </div>
 
             {/* Input Footer Area */}
-            <div className="p-4 bg-[#1a1a1a] border-t border-white/5 flex flex-col gap-3 flex-shrink-0">
+            <div className="p-4 bg-[#0F172A] border-t border-white/5 flex flex-col gap-3 flex-shrink-0">
                 {/* Message Input */}
                 {!siteUser ? (
-                    <div className="p-3 border-t border-white/5 bg-[#111116] flex flex-col items-center justify-center gap-2">
+                    <div className="p-3 border-t border-white/5 bg-[#0F172A] flex flex-col items-center justify-center gap-2">
                         <input 
                             type="text"
                             disabled
                             placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
-                            className="w-full bg-[#1a1a24]/50 text-[11px] font-bold text-center text-gray-500 rounded-lg px-3 py-2 border border-white/5 cursor-not-allowed"
+                            className="w-full bg-[#0F172A]/50 text-[11px] font-bold text-center text-gray-500 rounded-lg px-3 py-2 border border-white/5 cursor-not-allowed"
                         />
                     </div>
                 ) : (
                     <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
-                        <div className="relative flex items-center bg-[#242427] border border-white/5 rounded-lg overflow-hidden px-3 py-2">
+                        <div className="relative flex items-center bg-[#1E293B] border border-white/5 rounded-lg overflow-hidden px-3 py-2">
                             <input
                                 type="text"
                                 value={newMessage}
@@ -730,7 +730,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                         <button
                             type="submit"
                             disabled={!newMessage.trim()}
-                            className="self-end px-5 py-1.5 rounded bg-[#adff2f] hover:bg-[#c6ff00] disabled:opacity-30 disabled:hover:bg-[#adff2f] text-xs font-bold text-black transition-all active:scale-95 uppercase tracking-wider"
+                            className="self-end px-5 py-1.5 rounded bg-slate-700 hover:bg-slate-600 disabled:opacity-30 disabled:hover:bg-slate-700 text-amber-400 text-xs font-bold transition-all active:scale-95 uppercase tracking-wider"
                         >
                             Gönder
                         </button>

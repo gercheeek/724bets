@@ -79,7 +79,7 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
     return <span className="font-black" style={{ color: '#00E676', animation: 'pulse 1.5s infinite' }}>CANLI</span>;
   }
 
-  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#f2a900' }}>{text}</span>;
+  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#F59E0B' }}>{text}</span>;
 };
 
 const App: React.FC = () => {
@@ -1010,8 +1010,8 @@ const App: React.FC = () => {
                   onClick={() => handleViewChange('analysis')}
                   className="mb-6 rounded-xl overflow-hidden relative cursor-pointer group" 
                   style={{ 
-                    border: '1px solid rgba(242, 169, 0, 0.2)',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)',
+                    border: '1px solid rgba(245, 158, 11, 0.15)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
                     transition: 'all 0.3s ease',
                     backgroundImage: 'url("https://images.unsplash.com/photo-1518605368461-1e1e38ce7058?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")',
                     backgroundSize: 'cover',
@@ -1019,21 +1019,21 @@ const App: React.FC = () => {
                   }}
                 >
                   {/* Thematic Overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/95" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/98 via-[#0F172A]/90 to-[#0F172A]/98" />
                   
                   {/* Subtle background rings */}
-                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.1)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(242, 169, 0, 0.15)', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(245, 158, 11, 0.1)', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(245, 158, 11, 0.15)', pointerEvents: 'none' }} />
                   
                   <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative" style={{ zIndex: 10 }}>
                     <div className="flex items-center gap-4">
-                      <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(242, 169, 0, 0.1)', border: '1px solid rgba(242, 169, 0, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
-                        <Trophy className="w-6 h-6" style={{ color: '#f2a900' }} />
+                      <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
+                        <Trophy className="w-6 h-6" style={{ color: '#F59E0B' }} />
                       </div>
                       <div>
-                        <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(242, 169, 0, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
+                        <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(245, 158, 11, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
                         <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>
-                          <span style={{ color: '#f2a900', textShadow: '0 0 20px rgba(242, 169, 0, 0.6), 0 0 40px rgba(242, 169, 0, 0.3)' }}>WORLD CUP </span>
+                          <span style={{ color: '#F59E0B', textShadow: '0 0 20px rgba(245, 158, 11, 0.6), 0 0 40px rgba(245, 158, 11, 0.3)' }}>WORLD CUP </span>
                           <span style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>2026</span>
                         </h2>
                       </div>
@@ -1042,9 +1042,9 @@ const App: React.FC = () => {
                     <div className="flex items-center gap-6 justify-between sm:justify-end">
                       <div className="text-left sm:text-right" style={{ flexShrink: 0 }}>
                         <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>En Yüksek Kazanç Oranları</p>
-                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#f2a900' }}>%88 Başarı Oranı</p>
+                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#F59E0B' }}>%88 Başarı Oranı</p>
                       </div>
-                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: 'linear-gradient(90deg, #f2a900, #ffc107)', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#F59E0B', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                         <span>ANALİZLERE GİT</span>
                         <span className="group-hover:translate-x-1 transition-transform" style={{ display: 'inline-block' }}>→</span>
                       </button>

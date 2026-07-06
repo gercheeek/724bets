@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <style>{`
         .sidebar-container {
           width: var(--sidebar-width);
-          background-color: #1a1a1c;
+          background-color: #0F172A;
           border-right: 1px solid rgba(255, 255, 255, 0.05);
           display: flex;
           flex-direction: column;
@@ -113,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #2a2a2c;
+          background: #1E293B;
           border: 1px solid rgba(255, 255, 255, 0.05);
           border-radius: 8px;
           color: #a0a0a0;
@@ -124,11 +124,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         }
         .sidebar-toggle-btn:hover {
           color: #fff;
-          background: #333336;
+          background: rgba(255,255,255,0.08);
         }
 
         .sidebar-group {
-          background: #222224;
+          background: #1E293B;
           border-radius: 12px;
           margin: 0 12px 12px 12px;
           padding: 8px 0;
@@ -156,9 +156,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         }
         
         .sidebar-nav-item.active {
-          color: #c6ff00;
-          background: rgba(198, 255, 0, 0.05);
-          border-left: 3px solid #c6ff00;
+          color: #F59E0B;
+          background: rgba(255, 255, 255, 0.1);
+          border-left: 3px solid #F59E0B;
           padding-left: 13px;
         }
 
@@ -187,7 +187,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           width: 100%;
           padding: 12px 16px;
           color: #fff;
-          background: #2a2a2c;
+          background: #1E293B;
           border: none;
           cursor: pointer;
           font-size: 14px;
@@ -195,7 +195,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           transition: all 0.2s;
         }
         .sidebar-dropdown-btn:hover {
-          background: #333336;
+          background: rgba(255,255,255,0.08);
         }
         .sidebar-dropdown-icon {
           display: flex;
@@ -204,7 +204,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         }
         .sidebar-dropdown-arrow {
           transition: transform 0.3s;
-          background: #333;
+          background: #334155;
           border-radius: 4px;
           padding: 2px;
         }
@@ -232,8 +232,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           background: rgba(255, 255, 255, 0.03);
         }
         .sidebar-action-highlight {
-          color: #c6ff00 !important;
-          background: rgba(198, 255, 0, 0.05) !important;
+          color: #F59E0B !important;
+          background: rgba(245, 158, 11, 0.08) !important;
         }
 
         /* Mobile specific styles */
@@ -303,7 +303,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {isOpen && <ChevronDown className={`w-4 h-4 sidebar-dropdown-arrow ${casinoOpen ? 'open' : ''}`} />}
           </button>
           {casinoOpen && (
-            <div style={{ background: '#1e1e20', padding: '4px 0' }}>
+            <div style={{ background: '#162032', padding: '4px 0' }}>
               {renderNavItems(casinoCategories)}
             </div>
           )}
@@ -323,7 +323,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {isOpen && <ChevronDown className={`w-4 h-4 sidebar-dropdown-arrow ${sporOpen ? 'open' : ''}`} />}
           </button>
           {sporOpen && (
-            <div style={{ background: '#1e1e20', padding: '4px 0' }}>
+            <div style={{ background: '#162032', padding: '4px 0' }}>
               {renderNavItems(sporCategories)}
             </div>
           )}
@@ -336,7 +336,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {isOpen && <span>Kodu Kullan</span>}
           </button>
           <button className="sidebar-action-btn sidebar-action-highlight" title={!isOpen ? "Arkadaşını Davet Et" : undefined}>
-            <span className="sidebar-nav-icon"><Users className={ICON_SIZE} style={{ color: '#c6ff00' }} /></span>
+            <span className="sidebar-nav-icon"><Users className={ICON_SIZE} style={{ color: '#F59E0B' }} /></span>
             {isOpen && <span>Arkadaşını Davet Et</span>}
           </button>
           <button className="sidebar-action-btn" title={!isOpen ? "Telegram" : undefined}>

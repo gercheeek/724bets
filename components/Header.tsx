@@ -87,50 +87,7 @@ interface CategoryItem {
 
 const ICON_SIZE = 'w-5 h-5';
 
-const BreakingNewsWidget: React.FC<{ text: string }> = ({ text }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [fade, setFade] = useState(true);
 
-  const newsItems = React.useMemo(() => {
-    if (!text) return [];
-    if (text.toLowerCase().includes('724futbol.com')) {
-      return text.split(/724futbol\.com/i).map(t => t.trim()).filter(t => t.length > 0);
-    }
-    const chunks = text.split(/ - | \| /).map(t => t.trim()).filter(t => t.length > 0);
-    return chunks.length > 0 ? chunks : [text];
-  }, [text]);
-
-  useEffect(() => {
-    if (newsItems.length <= 1) return;
-    const interval = setInterval(() => {
-      setFade(false);
-      setTimeout(() => {
-        setCurrentIndex(prev => (prev + 1) % newsItems.length);
-        setFade(true);
-      }, 500);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [newsItems]);
-
-  if (newsItems.length === 0) return null;
-
-  return (
-    <div className="flex items-center gap-3 text-white text-[13px] font-medium w-full max-w-4xl mx-auto overflow-hidden">
-      <div className="bg-red-600 text-white font-black px-2 py-0.5 rounded shadow-[0_0_10px_rgba(220,38,38,0.5)] shrink-0 flex items-center gap-1.5 tracking-wider text-[11px]">
-        <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-        SON DAKİKA
-      </div>
-      <div className="flex-1 relative h-6 flex items-center">
-        <div 
-          className="absolute inset-0 flex items-center transition-opacity duration-500 ease-in-out whitespace-nowrap overflow-hidden text-ellipsis"
-          style={{ opacity: fade ? 1 : 0 }}
-        >
-          {newsItems[currentIndex]}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const Header: React.FC<HeaderProps> = ({
   onAdminClick,
@@ -340,12 +297,12 @@ const Header: React.FC<HeaderProps> = ({
             transition: padding-left 0.3s ease-in-out;
           }
           .header-icon-btn:hover {
-            color: #adff2f !important;
+            color: #F59E0B !important;
           }
         `}</style>
 
       {/* ══════ SINGLE TIER: Logo + Controls ══════ */}
-      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#000000', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', paddingLeft: 'calc(var(--sidebar-width, 260px) + 24px)', minHeight: '60px' }}>
+      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', paddingLeft: 'calc(var(--sidebar-width, 260px) + 24px)', minHeight: '60px' }}>
         {/* Left: Logo Text (FIXED POSITION) */}
         <div
           className="logo-text-724"
@@ -400,7 +357,7 @@ const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => setShowDepositModal(true)}
                 style={{
-                  background: '#c6ff00',
+                  background: '#F59E0B',
                   color: '#000000',
                   fontWeight: 800,
                   fontSize: '12.5px',
@@ -532,7 +489,7 @@ const Header: React.FC<HeaderProps> = ({
                   <button
                     onClick={onMemberRegisterClick}
                     style={{
-                      background: '#c6ff00',
+                      background: '#F59E0B',
                       color: '#000',
                       border: 'none',
                       padding: '0 12px',
@@ -545,7 +502,7 @@ const Header: React.FC<HeaderProps> = ({
                       alignItems: 'center',
                       justifyContent: 'center',
                       whiteSpace: 'nowrap',
-                      boxShadow: '0 0 10px rgba(198, 255, 0, 0.2)'
+                      boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)'
                     }}
                     className="hover:scale-105 active:scale-95 transition-transform"
                   >
@@ -566,10 +523,92 @@ const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* ══════ TIER 2: Breaking News Bar ══════ */}
+        {/* ══════ TIER 2: Marquee Bar ══════ */}
         {marqueeConfig?.isActive && (
-          <div className="header-categories" style={{ justifyContent: 'center', padding: '10px 16px', background: '#08080C', borderBottom: '1px solid rgba(255, 255, 255, 0.03)' }}>
-            <BreakingNewsWidget text={marqueeConfig.text || ''} />
+          <div className="header-categories header-marquee-bar" style={{ justifyContent: 'center', padding: '10px 16px', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+            <style>{`
+              .marquee-container-hover-pause:hover .animate-custom-marquee {
+                animation-play-state: paused;
+              }
+              .marquee-fade-wrapper {
+                animation: marqueeFadeIn 0.8s ease forwards;
+              }
+              @keyframes marqueeFadeIn {
+                from { opacity: 0; transform: translateY(4px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+            `}</style>
+            <div className="flex-1 overflow-hidden marquee-container-hover-pause" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
+              <div key={marqueeConfig.text} className="marquee-fade-wrapper">
+                <div 
+                  className="whitespace-nowrap animate-custom-marquee inline-block"
+                  style={{ 
+                    color: '#FFF', 
+                    fontFamily: '"Inter", sans-serif',
+                    fontWeight: 500,
+                    fontSize: '13px',
+                    letterSpacing: '0.5px',
+                    '--speed': `${marqueeConfig.speed ?? 30}s` 
+                  } as React.CSSProperties}
+                >
+                  {(() => {
+                    const text = marqueeConfig.text || '';
+                    const separator = (
+                      <span 
+                        style={{ 
+                          color: '#F59E0B', 
+                          margin: '0 30px', 
+                          fontWeight: 900,
+                          letterSpacing: '1px',
+                          display: 'inline-block'
+                        }}
+                      >
+                        724FUTBOL.COM
+                      </span>
+                    );
+
+                    const keyword = /724futbol\.com/gi;
+
+                    if (text.match(keyword)) {
+                      const parts = text.split(keyword);
+                      return [...Array(2)].map((_, i) => (
+                        <React.Fragment key={i}>
+                          {parts.map((p, j) => (
+                            <React.Fragment key={j}>
+                              <span style={{ whiteSpace: 'pre' }}>{p}</span>
+                              {j < parts.length - 1 && separator}
+                            </React.Fragment>
+                          ))}
+                          {separator}
+                        </React.Fragment>
+                      ));
+                    }
+
+                    if (text.length < 150) {
+                      return [...Array(4)].map((_, i) => (
+                        <span key={i} className="inline-flex items-center">
+                          <span>{text}</span>
+                          {separator}
+                        </span>
+                      ));
+                    }
+
+                    const chunks = text.match(/.{1,180}(?:\s|$)/g) || [text];
+                    return [...Array(2)].map((_, i) => ( 
+                      <React.Fragment key={i}>
+                        {chunks.map((chunk, j) => (
+                          <span key={j} className="inline-flex items-center">
+                            <span>{chunk.trim()}</span>
+                            {separator}
+                          </span>
+                        ))}
+                        {separator}
+                      </React.Fragment>
+                    ));
+                  })()}
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
