@@ -236,6 +236,65 @@ const Sidebar: React.FC<SidebarProps> = ({
           background: rgba(245, 158, 11, 0.08) !important;
         }
 
+        /* Collapsed Sidebar CSS overrides to match Slotra design */
+        .sidebar-collapsed .sidebar-group {
+          padding: 6px 0 !important;
+          margin: 0 12px 12px 12px !important;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          border-radius: 16px;
+        }
+
+        .sidebar-collapsed .sidebar-nav-item,
+        .sidebar-collapsed .sidebar-dropdown-btn,
+        .sidebar-collapsed .sidebar-action-btn {
+          width: 44px;
+          height: 44px;
+          min-height: 44px;
+          padding: 0 !important;
+          margin: 0 auto !important;
+          border-radius: 12px !important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+        }
+
+        .sidebar-collapsed .sidebar-nav-item:hover,
+        .sidebar-collapsed .sidebar-dropdown-btn:hover,
+        .sidebar-collapsed .sidebar-action-btn:hover {
+          background: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .sidebar-collapsed .sidebar-nav-item.active {
+          background: rgba(255, 255, 255, 0.1) !important;
+          border-left: none !important;
+          padding-left: 0 !important;
+          color: #F59E0B !important;
+        }
+
+        .sidebar-collapsed .sidebar-action-highlight {
+          color: #F59E0B !important;
+          background: rgba(245, 158, 11, 0.08) !important;
+        }
+
+        .sidebar-collapsed .sidebar-nav-icon,
+        .sidebar-collapsed .sidebar-dropdown-icon {
+          margin: 0 !important;
+          padding: 0 !important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+        }
+
+        .sidebar-collapsed .sidebar-dropdown-arrow {
+          display: none !important;
+        }
+
         /* Mobile specific styles */
         @media (max-width: 767px) {
           .sidebar-container {
@@ -250,13 +309,13 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Overlay for mobile */}
       <div className="sidebar-overlay" onClick={onToggle} />
 
-      <div className="sidebar-container" style={{ padding: '12px 0' }}>
+      <div className={`sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`} style={{ padding: '12px 0' }}>
         {/* Main Categories Group */}
         <div className="sidebar-group" style={{ marginTop: '4px' }}>
           {renderNavItems(mainCategories)}
         </div>
 
-        {/* Casino Dropdown Group */}
+        {/* Casino & Spor Dropdown Group */}
         <div className="sidebar-group" style={{ padding: 0 }}>
           <button 
             className="sidebar-dropdown-btn"
@@ -274,10 +333,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               {renderNavItems(casinoCategories)}
             </div>
           )}
-        </div>
 
-        {/* Spor Dropdown Group */}
-        <div className="sidebar-group" style={{ padding: 0 }}>
           <button 
             className="sidebar-dropdown-btn"
             onClick={() => setSporOpen(!sporOpen)}
