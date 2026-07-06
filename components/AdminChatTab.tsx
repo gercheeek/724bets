@@ -358,6 +358,43 @@ export default function AdminChatTab() {
     }
   };
 
+  // 🗑️ HAYALET BOT SİLİCİ
+  const handleDeleteBot = async (id: string) => {
+    if (!confirm('Bu bot hesabını silmek istediğinize emin misiniz?')) return;
+    try {
+      const { error } = await supabase
+        .from('members')
+        .delete()
+        .eq('id', id);
+      if (error) {
+        alert('Bot silinirken hata oluştu: ' + error.message);
+      } else {
+        setBots(prev => prev.filter(b => b.id !== id));
+        alert('🤖 Bot başarıyla silindi!');
+      }
+    } catch (err: any) {
+      alert('Hata: ' + err.message);
+    }
+  };
+
+  // 🚨 TÜM SOHBETİ TEMİZLE
+  const handleClearChat = async () => {
+    if (!confirm('Tüm sohbet geçmişini silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')) return;
+    try {
+      const { error } = await supabase
+        .from('tv_chat')
+        .delete()
+        .neq('id', GLOBAL_CHANNEL_ID); // UUID null-like comparison to delete all rows
+      if (error) {
+        alert('Sohbet temizlenirken hata oluştu: ' + error.message);
+      } else {
+        alert('🚨 Tüm sohbet geçmişi başarıyla temizlendi!');
+      }
+    } catch (err: any) {
+      alert('Hata: ' + err.message);
+    }
+  };
+
   // 🚀 AKILLI SENARYO SİMÜLATÖRÜ KONTROLLERİ
   const handleScenarioChange = (text: string) => {
     setScenarioText(text);
@@ -602,11 +639,19 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
           <h1 className="text-2xl font-black text-green-400 tracking-wide">👑 SOHBET YÖNETİM MERKEZİ</h1>
           <p className="text-xs text-gray-400 mt-1">MODERASYON VE AI SENARYO KONTROLLERİ</p>
         </div>
-        {statusMessage && (
-          <div className="bg-gray-900 border border-gray-800 px-4 py-2 rounded-lg text-sm text-yellow-400 animate-pulse font-medium">
-            {statusMessage}
-          </div>
-        )}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleClearChat}
+            className="bg-red-600 hover:bg-red-500 hover:scale-105 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-lg transition-all tracking-wide uppercase shadow-lg shadow-red-900/10"
+          >
+            🚨 Sohbeti Temizle (Tümü)
+          </button>
+          {statusMessage && (
+            <div className="bg-gray-900 border border-gray-800 px-4 py-2 rounded-lg text-sm text-yellow-400 animate-pulse font-medium">
+              {statusMessage}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Yönetici Sekmeleri */}
@@ -637,8 +682,17 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
                   <p className="text-xs text-gray-600 p-4 text-center italic">Henüz bot hesap üretilmemiş.</p>
                 ) : (
                   bots.map(b => (
-                    <div key={b.id} className="text-xs p-2 bg-gray-900/50 rounded border border-gray-800 text-gray-300 flex items-center gap-2 font-mono">
-                      <span className="text-green-500 text-[8px]">●</span> {b.username}
+                    <div key={b.id} className="text-xs p-2 bg-gray-900/50 rounded border border-gray-800 text-gray-300 flex items-center justify-between font-mono">
+                      <div className="flex items-center gap-2">
+                        <span className="text-green-500 text-[8px]">●</span> {b.username}
+                      </div>
+                      <button
+                        onClick={() => handleDeleteBot(b.id)}
+                        className="text-red-500 hover:text-red-400 font-bold text-[10px] uppercase transition-colors"
+                        title="Botu Sil"
+                      >
+                        Sil
+                      </button>
                     </div>
                     ))
                 )}
