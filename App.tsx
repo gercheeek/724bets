@@ -986,6 +986,7 @@ const App: React.FC = () => {
         marqueeConfig={marqueeConfig}
         isChatOpen={isChatOpen}
         isSidebarOpen={isSidebarOpen}
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
       <main 

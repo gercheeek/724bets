@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Settings, User, Pen, LogOut, ChevronDown, Search, Coins, Send, X,
-  MessageSquare, Home, Ticket, BarChart3, Shield,
+  MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
   Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
@@ -53,6 +53,7 @@ interface HeaderProps {
   onSupportClick?: () => void;
   isChatOpen?: boolean;
   isSidebarOpen?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 function getUserLoyalty(userId: string): UserLoyalty {
@@ -301,49 +302,69 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      {/* ══════ SINGLE TIER: Logo + Controls ══════ */}
+      {/* ══════ SINGLE TIER: Logo + Categories + Controls ══════ */}
       <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F172A', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', paddingLeft: 'calc(var(--sidebar-width, 260px) + 24px)', minHeight: '60px' }}>
-        {/* Left: Logo Text (FIXED POSITION) */}
-        <div
-          className="logo-text-724"
-          style={{ 
-            display: isSidebarOpen ? 'none' : 'flex', 
-            alignItems: 'center', 
-            cursor: 'pointer',
-            position: 'fixed',
-            top: '16px',
-            left: isSidebarOpen ? '276px' : '88px',
-            zIndex: 1000,
-            transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-          }}
-          onClick={() => onViewChange?.('home')}
-        >
-          <span style={{
-            fontSize: '20px',
-            fontFamily: "'Outfit', sans-serif",
-            fontWeight: 900,
-            letterSpacing: '-1px',
-            color: '#fff',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
-            724BAHİS
-            <span style={{
-              background: 'linear-gradient(135deg, #adff2f 0%, #adff2f 100%)',
-              color: '#000',
-              fontSize: '11px',
-              fontWeight: 900,
-              padding: '2px 6px',
-              borderRadius: '4px',
-              marginLeft: '4px',
-              fontFamily: "'Inter', sans-serif",
-              opacity: 0.95
-            }}>.COM</span>
-          </span>
-        </div>
         
-        {/* Placeholder for fixed logo to keep flex spacing */}
-        <div style={{ width: '150px' }} className="shrink-0" />
+        {/* Left: Menu & Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          {onToggleSidebar && (
+            <button onClick={onToggleSidebar} className="text-white hover:text-amber-500 transition-colors hidden md:block">
+              <Menu className="w-6 h-6" />
+            </button>
+          )}
+          <div
+            className="logo-text-724"
+            style={{ 
+              display: isSidebarOpen ? 'none' : 'flex', 
+              alignItems: 'center', 
+              cursor: 'pointer',
+              position: 'relative'
+            }}
+            onClick={() => onViewChange?.('home')}
+          >
+            <span style={{
+              fontSize: '20px',
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 900,
+              letterSpacing: '-1px',
+              color: '#fff',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              724BAHİS
+              <span style={{
+                background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+                color: '#000',
+                fontSize: '11px',
+                fontWeight: 900,
+                padding: '2px 6px',
+                borderRadius: '4px',
+                marginLeft: '4px',
+                fontFamily: "'Inter', sans-serif",
+                opacity: 0.95
+              }}>.COM</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Center: Category Pill */}
+        <div className="hidden lg:flex items-center bg-[#1E293B] rounded-full p-1 border border-white/5">
+           {[
+             { id: 'blackjack', label: 'Casino', icon: <Spade className="w-4 h-4" /> },
+             { id: 'live-casino', label: 'Canlı Casino', icon: <Target className="w-4 h-4" /> },
+             { id: 'home', label: 'Spor', icon: <Trophy className="w-4 h-4" /> },
+             { id: 'esports', label: 'E-spor', icon: <Gamepad2 className="w-4 h-4" /> }
+           ].map(cat => (
+             <button
+               key={cat.id}
+               onClick={() => onViewChange?.(cat.id)}
+               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${activeView === cat.id ? 'bg-amber-500 text-black shadow-md' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}
+             >
+               {cat.icon}
+               {cat.label}
+             </button>
+           ))}
+        </div>
 
         {/* Right: Controls */}
         <div className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -359,19 +380,19 @@ const Header: React.FC<HeaderProps> = ({
                 style={{
                   background: '#F59E0B',
                   color: '#000000',
-                  fontWeight: 800,
-                  fontSize: '12.5px',
+                  fontWeight: 900,
+                  fontSize: '13px',
                   padding: '0 16px',
-                  borderRadius: '8px',
+                  borderRadius: '9999px',
                   border: 'none',
                   cursor: 'pointer',
-                  height: '34px',
+                  height: '36px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontFamily: 'system-ui, sans-serif'
                 }}
-                className="hover:scale-105 active:scale-95 font-black"
+                className="hover:scale-105 active:scale-95 transition-transform shadow-md"
               >
                 Yatırım
               </button>
@@ -379,30 +400,29 @@ const Header: React.FC<HeaderProps> = ({
               {/* Search Button */}
               <button
                 onClick={onSearchClick}
-                className="header-icon-btn hover:opacity-80 transition-opacity"
+                className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
                 title="Maç Ara"
-                style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
               >
-                <Search className="w-5 h-5 text-zinc-400" />
+                <Search className="w-4 h-4 text-slate-300" />
               </button>
 
               {/* 724TV Button */}
               <button
                 onClick={() => onViewChange?.('724tv')}
-                className="hover:scale-105 active:scale-95 transition-transform"
+                className="hover:scale-105 active:scale-95 transition-transform shadow-md"
                 title="724TV İzle"
                 style={{ 
                   background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', 
                   border: 'none', 
                   color: '#fff', 
                   cursor: 'pointer', 
-                  padding: '0 12px', 
-                  height: '32px',
+                  padding: '0 16px', 
+                  height: '36px',
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'center',
                   gap: '6px',
-                  borderRadius: '8px',
+                  borderRadius: '9999px',
                   fontWeight: 800,
                   fontSize: '13px'
                 }}
@@ -415,10 +435,9 @@ const Header: React.FC<HeaderProps> = ({
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(prev => !prev)}
-                  className="hover:opacity-80 transition-opacity"
-                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+                  className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
                 >
-                  <User className="w-5 h-5 text-zinc-400" />
+                  <User className="w-4 h-4 text-slate-300" />
                 </button>
                 {dropdownOpen && (
                   <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
@@ -469,22 +488,22 @@ const Header: React.FC<HeaderProps> = ({
                     onClick={onMemberLoginClick}
                     style={{
                       background: 'transparent',
-                      color: '#fff',
-                      border: '1px solid rgba(255, 255, 255, 0.2)',
-                      padding: '0 12px',
-                      height: '32px',
-                      fontWeight: 700,
-                      fontSize: '12px',
-                      borderRadius: '8px',
+                      color: '#0EA5E9',
+                      border: '1px solid rgba(14, 165, 233, 0.5)',
+                      padding: '0 16px',
+                      height: '36px',
+                      fontWeight: 800,
+                      fontSize: '13px',
+                      borderRadius: '9999px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       whiteSpace: 'nowrap'
                     }}
-                    className="hover:bg-white/5 transition-colors"
+                    className="hover:bg-sky-500/10 transition-colors"
                   >
-                    Giriş Yap
+                    Giriş yap
                   </button>
                   <button
                     onClick={onMemberRegisterClick}
@@ -492,11 +511,11 @@ const Header: React.FC<HeaderProps> = ({
                       background: '#F59E0B',
                       color: '#000',
                       border: 'none',
-                      padding: '0 12px',
-                      height: '32px',
-                      fontWeight: 800,
-                      fontSize: '12px',
-                      borderRadius: '8px',
+                      padding: '0 16px',
+                      height: '36px',
+                      fontWeight: 900,
+                      fontSize: '13px',
+                      borderRadius: '9999px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
@@ -506,17 +525,24 @@ const Header: React.FC<HeaderProps> = ({
                     }}
                     className="hover:scale-105 active:scale-95 transition-transform"
                   >
-                    Üye Ol
+                    Şimdi kayıt ol
                   </button>
                 </div>
                 
                 <button
-                  onClick={onSearchClick}
-                  className="header-icon-btn hover:opacity-80 transition-opacity"
-                  title="Maç Ara"
-                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}
+                  onClick={onSupportClick}
+                  className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
+                  title="Sohbet"
                 >
-                  <Search className="w-5 h-5" />
+                  <MessageSquare className="w-4 h-4 text-slate-300" />
+                </button>
+                
+                <button
+                  onClick={onSearchClick}
+                  className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
+                  title="Maç Ara"
+                >
+                  <Search className="w-4 h-4 text-slate-300" />
                 </button>
               </>
             )}
