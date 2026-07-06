@@ -415,14 +415,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     };
 
     const getRoleColor = (role: string, username?: string) => {
-        if (role === 'admin') return '#FFD700';
-        if (role === 'vip') return '#00BFFF';
-        
-        // Generate a pastel color based on username hash
-        if (!username) return '#e2e8f0';
-        const hash = username.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        const hue = hash % 360;
-        return `hsl(${hue}, 70%, 75%)`;
+        if (role === 'admin') return '#F59E0B'; // Amber for admin
+        if (role === 'vip') return '#38BDF8'; // Sky for VIP
+        return '#38BDF8'; // Sky-400 for all normal users
     };
 
     const getRoleBadge = (role: string) => {
@@ -528,10 +523,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
 
                     {/* Poll Card */}
                     {activePoll && activePoll.isActive && (
-                         <div className="bg-[#1E293B] border border-orange-500/10 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                         <div className="bg-[#1E293B] border border-sky-500/15 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
                              <div 
                                  onClick={() => setIsPollCollapsed(!isPollCollapsed)}
-                                 className="flex items-center justify-between text-xs font-bold text-orange-400 cursor-pointer select-none"
+                                 className="flex items-center justify-between text-xs font-bold text-sky-400 cursor-pointer select-none"
                              >
                                  <div className="flex items-center gap-1.5">
                                      <span className="text-[10px]">📊</span>
@@ -558,8 +553,8 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                                              <span>{opt}</span>
                                                              <span>%{percentage} ({activePoll.votes[idx]} Oy)</span>
                                                          </div>
-                                                         <div className="w-full bg-zinc-800 rounded-full h-1 overflow-hidden">
-                                                             <div className="bg-orange-500 h-1 rounded-full" style={{ width: `${percentage}%` }}></div>
+                                                         <div className="w-full bg-slate-800 rounded-full h-1 overflow-hidden border border-white/5">
+                                                             <div className="bg-sky-500 h-1 rounded-full" style={{ width: `${percentage}%` }}></div>
                                                          </div>
                                                      </div>
                                                  );
@@ -571,7 +566,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                                  <button 
                                                      key={idx}
                                                      onClick={() => handleVote(idx)}
-                                                     className="w-full bg-[#0F172A] hover:bg-orange-500 hover:text-black text-gray-300 font-bold text-[9px] py-1.5 px-3 rounded text-left transition-all border border-white/5"
+                                                     className="w-full bg-[#0F172A] hover:bg-sky-500 hover:text-white text-slate-300 font-bold text-[9px] py-1.5 px-3 rounded text-left transition-all border border-sky-500/20"
                                                  >
                                                      {opt}
                                                  </button>
@@ -627,11 +622,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                 >
                                     {getRoleBadge(msg.role)}{msg.username}
                                 </span>
-                                <span className="text-[9px] text-gray-500 ml-auto mr-6">
+                                <span className="text-[9px] text-slate-500 opacity-70 ml-auto mr-6">
                                     {formatTime(msg.created_at)}
                                 </span>
                             </div>
-                            <div className="text-xs text-gray-300 leading-relaxed break-words pr-4">
+                            <div className="text-[13px] text-slate-200 leading-relaxed break-words pr-4">
                                 {renderMessageText(msg.message)}
                             </div>
 

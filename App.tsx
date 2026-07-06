@@ -1019,6 +1019,7 @@ const App: React.FC = () => {
                   }}
                 >
                   {/* Thematic Overlays */}
+                  <div className="absolute inset-0 bg-slate-950/50" />
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/98 via-[#0F172A]/90 to-[#0F172A]/98" />
                   
                   {/* Subtle background rings */}

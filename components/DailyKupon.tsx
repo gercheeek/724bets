@@ -87,8 +87,8 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
 
   return (
     <div style={{
-      background: 'linear-gradient(160deg, #0F172A 0%, #162032 50%, #0F172A 100%)',
-      border: '1px solid rgba(245, 158, 11, 0.15)',
+      background: '#1E293B',
+      border: 'none',
       borderRadius: '12px',
       padding: '16px',
       display: 'flex',
@@ -97,7 +97,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
       height: '100%',
       position: 'relative',
       overflow: 'hidden',
-      boxShadow: '0 0 24px rgba(245, 158, 11, 0.05), inset 0 1px 0 rgba(245, 158, 11, 0.08)'
+      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05)'
     }}>
       {/* Ambient glow */}
       <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(245, 158, 11, 0.1)', boxShadow: '0 0 32px rgba(245, 158, 11, 0.08)', pointerEvents: 'none' }} />
@@ -119,9 +119,9 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
             onClick={() => setActiveTab(tab)}
             style={{
               flex: 1,
-              background: activeTab === tab ? 'rgba(245, 158, 11, 0.12)' : 'transparent',
-              border: activeTab === tab ? '1px solid rgba(245, 158, 11, 0.35)' : '1px solid transparent',
-              color: activeTab === tab ? '#F59E0B' : '#555',
+              background: activeTab === tab ? 'rgba(14, 165, 233, 0.15)' : 'transparent',
+              border: activeTab === tab ? '1px solid rgba(14, 165, 233, 0.4)' : '1px solid transparent',
+              color: activeTab === tab ? '#0EA5E9' : '#94A3B8',
               fontSize: '8px',
               fontWeight: 900,
               textTransform: 'uppercase',
@@ -130,7 +130,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
               borderRadius: '5px',
               cursor: 'pointer',
               transition: 'all 0.25s ease',
-              boxShadow: activeTab === tab ? '0 0 10px rgba(245, 158, 11, 0.15)' : 'none'
+              boxShadow: activeTab === tab ? '0 0 10px rgba(14, 165, 233, 0.2)' : 'none'
             }}
           >
             {tab === 'low' ? 'Az Risk' : tab === 'medium' ? 'Orta Risk' : 'Yüksek'}
