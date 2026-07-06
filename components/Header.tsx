@@ -106,6 +106,7 @@ const Header: React.FC<HeaderProps> = ({
   onSupportClick,
   isChatOpen = false,
   isSidebarOpen = false,
+  onToggleSidebar,
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
