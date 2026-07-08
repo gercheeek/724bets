@@ -1396,20 +1396,6 @@ const App: React.FC = () => {
                 </div>
 
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
-                {/* ── Promosyonlar Section ── */}
-                <PromoSlider />
-
-                {/* ── User Uploaded Image Banner ── */}
-                <div className="my-6 relative overflow-hidden rounded-xl shadow-[0_0_25px_rgba(245,158,11,0.3)] border border-amber-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
-                  <img src="/banners/yeni-ince-banner.png" alt="Promo Banner" className="w-full h-auto block group-hover:scale-102 transition-transform duration-700" />
-                  
-                  {/* Animasyonlu Parıltı (Shine) Efekti */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-150%] animate-[shimmer_3s_infinite_linear] skew-x-[-20deg]"></div>
-                  
-                  {/* Sürekli yanan kenar glow efekti */}
-                  <div className="absolute inset-0 border-[2px] border-transparent rounded-xl group-hover:border-amber-400/50 transition-colors duration-500"></div>
-                  <div className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                </div>
 
                 {/* ── Today's Matches Analyses Section ── */}
                 {(() => {
@@ -1519,6 +1505,21 @@ const App: React.FC = () => {
                     </div>
                   );
                 })()}
+
+                {/* ── Promosyonlar Section ── */}
+                <PromoSlider />
+
+                {/* ── User Uploaded Image Banner ── */}
+                <div className="my-6 relative overflow-hidden rounded-xl shadow-[0_0_25px_rgba(245,158,11,0.3)] border border-amber-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
+                  <img src="/banners/yeni-ince-banner.png" alt="Promo Banner" className="w-full h-auto block group-hover:scale-102 transition-transform duration-700" />
+                  
+                  {/* Animasyonlu Parıltı (Shine) Efekti */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-150%] animate-[shimmer_3s_infinite_linear] skew-x-[-20deg]"></div>
+                  
+                  {/* Sürekli yanan kenar glow efekti */}
+                  <div className="absolute inset-0 border-[2px] border-transparent rounded-xl group-hover:border-amber-400/50 transition-colors duration-500"></div>
+                  <div className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                </div>
 
                 {/* ── Enhanced Betting Section ── */}
                 <EnhancedBetting />
