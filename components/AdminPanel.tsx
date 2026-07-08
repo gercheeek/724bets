@@ -90,7 +90,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'premium' | 'payment' | 'leagues'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'premium' | 'payment' | 'leagues'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,
@@ -331,6 +331,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [newEditorName, setNewEditorName] = useState('');
   const [newEditorUsername, setNewEditorUsername] = useState('');
   const [newEditorPassword, setNewEditorPassword] = useState('');
+
+  const [guestAccounts, setGuestAccounts] = useState<any[]>(() => {
+    try { return JSON.parse(localStorage.getItem('site_guests') || '[]'); } catch { return []; }
+  });
+  const [newGuestUsername, setNewGuestUsername] = useState('');
+  const [newGuestPassword, setNewGuestPassword] = useState('');
+  const [guestSaveMsg, setGuestSaveMsg] = useState('');
+  const [guestErrorMsg, setGuestErrorMsg] = useState('');
   const [showEditorPassword, setShowEditorPassword] = useState(false);
   const [editorSaveMsg, setEditorSaveMsg] = useState('');
   const [editorError, setEditorError] = useState('');
@@ -996,6 +1004,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   </button>
                   <button onClick={() => setActiveTab('editors')} className={`adm-nav-item ${activeTab === 'editors' ? 'active' : ''}`}>
                     <User className="w-4 h-4" /> EDİTÖRLER
+                  </button>
+                  <button onClick={() => setActiveTab('guests')} className={`adm-nav-item ${activeTab === 'guests' ? 'active' : ''}`}>
+                    <Lock className="w-4 h-4" /> MİSAFİR HESAPLARI
                   </button>
                   <button
                     onClick={() => setActiveTab('messages')}
@@ -2549,6 +2560,148 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 className="flex-1 w-full bg-[#0a0a0a] border border-zinc-800 rounded-2xl p-6 text-emerald-400 font-mono text-[13px] resize-none focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b] transition-all outline-none leading-relaxed"
                 placeholder="{ ... }"
               />
+            </div>
+          </div>
+        )}
+
+        {/* ===== GUEST MANAGEMENT TAB ===== */}
+        {activeTab === 'guests' && (
+          <div className="space-y-4 animate-fade-in-up">
+            <div>
+              <h2 className="text-xl font-black text-white flex items-center gap-3">
+                <Lock className="text-[#f0b90b]" /> MİSAFİR HESAPLARI
+              </h2>
+              <p className="text-zinc-500 text-xs font-bold uppercase mt-1">Sadece ziyaretçi yetkisi olan misafir hesapları oluşturun</p>
+            </div>
+
+            {/* Create New Guest */}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5">
+              <h3 className="text-sm font-black text-white flex items-center gap-2">
+                <Plus className="w-4 h-4 text-[#f0b90b]" /> YENİ MİSAFİR OLUŞTUR
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Kullanıcı Adı</label>
+                  <input
+                    type="text"
+                    value={newGuestUsername}
+                    onChange={(e) => setNewGuestUsername(e.target.value)}
+                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#f0b90b] transition-all outline-none"
+                    placeholder="misafir123"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Şifre</label>
+                  <input
+                    type="text"
+                    value={newGuestPassword}
+                    onChange={(e) => setNewGuestPassword(e.target.value)}
+                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#f0b90b] transition-all outline-none"
+                    placeholder="123456"
+                  />
+                </div>
+              </div>
+
+              {guestErrorMsg && <p className="text-red-500 text-xs font-bold">{guestErrorMsg}</p>}
+              {guestSaveMsg && <p className="text-emerald-500 text-xs font-bold">{guestSaveMsg}</p>}
+
+              <button
+                onClick={() => {
+                  setGuestErrorMsg(''); setGuestSaveMsg('');
+                  if (!newGuestUsername.trim() || !newGuestPassword.trim()) {
+                    setGuestErrorMsg('Lütfen kullanıcı adı ve şifre girin.');
+                    return;
+                  }
+                  if (newGuestUsername.toLowerCase() === 'mersobahis' || newGuestUsername.toLowerCase() === 'admin') {
+                    setGuestErrorMsg('Bu kullanıcı adı sistem tarafından rezerve edilmiştir.');
+                    return;
+                  }
+                  const existing = guestAccounts.find(g => g.username.toLowerCase() === newGuestUsername.toLowerCase());
+                  if (existing) {
+                    setGuestErrorMsg('Bu kullanıcı adıyla zaten bir misafir var.');
+                    return;
+                  }
+                  
+                  const newGuest = {
+                    id: Date.now().toString(),
+                    username: newGuestUsername.trim(),
+                    password: newGuestPassword.trim(),
+                    createdAt: Date.now()
+                  };
+                  
+                  const updated = [...guestAccounts, newGuest];
+                  setGuestAccounts(updated);
+                  localStorage.setItem('site_guests', JSON.stringify(updated));
+                  setGuestSaveMsg(`"${newGuest.username}" misafiri başarıyla oluşturuldu!`);
+                  setNewGuestUsername(''); setNewGuestPassword('');
+                  setTimeout(() => setGuestSaveMsg(''), 3000);
+                }}
+                className="w-full bg-[#f0b90b] hover:bg-[#f0b90b]/90 text-black font-black py-3.5 rounded-xl transition-all text-sm tracking-widest uppercase flex items-center justify-center gap-2"
+              >
+                <Save className="w-4 h-4" /> OLUŞTUR
+              </button>
+            </div>
+
+            {/* List Existing Guests */}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
+              <div className="p-4 border-b border-zinc-800 bg-zinc-900/50">
+                <h3 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                  <Lock className="w-3.5 h-3.5 text-[#f0b90b]" /> MEVCUT MİSAFİRLER
+                </h3>
+              </div>
+              
+              <div className="divide-y divide-zinc-800">
+                <div className="p-4 flex items-center justify-between hover:bg-zinc-800/30 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400">
+                      <Lock className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                        mersobahis <span className="bg-emerald-500/20 text-emerald-400 text-[9px] px-1.5 py-0.5 rounded font-black">SİSTEM</span>
+                      </h4>
+                      <p className="text-[11px] text-zinc-500 font-mono mt-0.5">Şifre: 123456</p>
+                    </div>
+                  </div>
+                  <div className="px-3 py-1 bg-zinc-800 rounded text-xs text-zinc-500">Silinemez</div>
+                </div>
+
+                {guestAccounts.map(g => (
+                  <div key={g.id} className="p-4 flex items-center justify-between hover:bg-zinc-800/30 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400">
+                        <Lock className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                          {g.username} <span className="bg-zinc-700 text-zinc-300 text-[9px] px-1.5 py-0.5 rounded font-black">MİSAFİR</span>
+                        </h4>
+                        <p className="text-[11px] text-zinc-500 font-mono mt-0.5">Şifre: {g.password}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        if (confirm(`'${g.username}' misafirini silmek istediğinize emin misiniz?`)) {
+                          const updated = guestAccounts.filter(x => x.id !== g.id);
+                          setGuestAccounts(updated);
+                          localStorage.setItem('site_guests', JSON.stringify(updated));
+                        }
+                      }}
+                      className="p-2 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                      title="Misafiri Sil"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                
+                {guestAccounts.length === 0 && (
+                  <div className="p-8 text-center text-zinc-500 text-xs">
+                    Henüz özel oluşturulmuş bir misafir hesabı bulunmuyor.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

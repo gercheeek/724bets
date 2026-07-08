@@ -55,6 +55,13 @@ export interface EditorAccount {
   createdAt: number;
 }
 
+export interface GuestAccount {
+  id: string;
+  username: string;
+  password: string;
+  createdAt: number;
+}
+
 
 export interface Brand {
   id: string;

@@ -28,7 +28,7 @@ const InputField: React.FC<{
 );
 
 const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin, onClose, hideMemberLogin = false, initialMemberMode = 'login' }) => {
-    const [activeTab, setActiveTab] = useState<'member' | 'admin'>(hideMemberLogin ? 'admin' : mode);
+    const [activeTab, setActiveTab] = useState<'member' | 'admin' | 'guest'>(hideMemberLogin ? 'admin' : mode);
     const [memberMode, setMemberMode] = useState<'login' | 'register'>(initialMemberMode);
 
     const [mUsername, setMUsername] = useState('');
@@ -43,6 +43,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
     const [aUsername, setAUsername] = useState('');
     const [aPassword, setAPassword] = useState('');
     const [aError, setAError] = useState('');
+
+    const [gUsername, setGUsername] = useState('');
+    const [gPassword, setGPassword] = useState('');
+    const [gError, setGError] = useState('');
 
     const [loading, setLoading] = useState(false);
 
@@ -170,7 +174,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         e.preventDefault();
         setAError('');
         const uname = aUsername.trim().toLowerCase();
-        if (uname === 'mersobahis' && aPassword === '123456') { onAdminLogin('guest_bypass'); return; }
         if (uname === 'admin' && aPassword === '123456') { onAdminLogin('admin'); return; }
         const editors = getEditors();
         const editor = editors.find(ed => ed.username.toLowerCase() === uname && ed.password === aPassword);
@@ -186,6 +189,19 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         setAError('Kullanıcı adı veya şifre hatalı!');
     };
 
+    const handleGuestSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setGError('');
+        const uname = gUsername.trim().toLowerCase();
+        if (uname === 'mersobahis' && gPassword === '123456') { onAdminLogin('guest_bypass_mersobahis'); return; }
+        try {
+            const guests = JSON.parse(localStorage.getItem('site_guests') || '[]');
+            const guest = guests.find((g: any) => g.username.toLowerCase() === uname && g.password === gPassword);
+            if (guest) { onAdminLogin(`guest_bypass_${guest.username}`); return; }
+        } catch { /* ignore */ }
+        setGError('Misafir kullanıcı adı veya şifre hatalı!');
+    };
+
     return (
         <div className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
             <div className="w-full max-w-md bg-[#0a0a0a] border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl relative">
@@ -197,12 +213,16 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 {!hideMemberLogin && (
                     <div className="flex border-b border-zinc-800">
                         <button onClick={() => { setActiveTab('member'); setMError(''); }}
-                            className={`flex-1 py-4 text-sm font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2 ${activeTab === 'member' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
-                            <User className="w-4 h-4" /> Üye Girişi
+                            className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'member' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                            <User className="w-4 h-4" /> <span className="hidden sm:inline">Üye</span> Girişi
                         </button>
                         <button onClick={() => { setActiveTab('admin'); setAError(''); }}
-                            className={`flex-1 py-4 text-sm font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2 ${activeTab === 'admin' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
-                            <Shield className="w-4 h-4" /> Yönetici / Editör
+                            className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'admin' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                            <Shield className="w-4 h-4" /> <span className="hidden sm:inline">Yönetici / Editör</span>
+                        </button>
+                        <button onClick={() => { setActiveTab('guest'); setGError(''); }}
+                            className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'guest' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                            <Lock className="w-4 h-4" /> Misafir <span className="hidden sm:inline">Girişi</span>
                         </button>
                     </div>
                 )}
@@ -324,6 +344,35 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                             </form>
                             <div className="mt-4 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-center">
                                 <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">🔐 Sadece yetkili personel için</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Guest Tab */}
+                    {activeTab === 'guest' && (
+                        <div>
+                            <div className="flex items-center justify-center gap-3 mb-6">
+                                <div className="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/20">
+                                    <Lock className="w-7 h-7 text-emerald-500" />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-black text-white">MİSAFİR GİRİŞİ</h2>
+                                    <p className="text-xs text-zinc-500">Sadece ziyaretçi yetkisi</p>
+                                </div>
+                            </div>
+                            <form onSubmit={handleGuestSubmit} className="space-y-4">
+                                <InputField icon={<User className="w-4 h-4" />} type="text" value={gUsername}
+                                    onChange={setGUsername} placeholder="Kullanıcı adı" required />
+                                <InputField icon={<Lock className="w-4 h-4" />} type="password" value={gPassword}
+                                    onChange={setGPassword} placeholder="Şifre" required />
+                                {gError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">{gError}</p>}
+                                <button type="submit"
+                                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3.5 rounded-xl transition-all text-sm tracking-widest uppercase mt-2 shadow-lg shadow-emerald-500/20">
+                                    MİSAFİR OLARAK GİR
+                                </button>
+                            </form>
+                            <div className="mt-4 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-center">
+                                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">👀 Panele giriş izni yoktur</p>
                             </div>
                         </div>
                     )}

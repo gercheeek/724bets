@@ -1095,7 +1095,7 @@ const App: React.FC = () => {
     }
   };
 
-  const isMaintenanceActive = siteStatusConfig.isMaintenanceMode && userRole !== 'admin' && userRole !== 'editor' && userRole !== 'guest_bypass';
+  const isMaintenanceActive = siteStatusConfig.isMaintenanceMode && userRole !== 'admin' && userRole !== 'editor' && !userRole?.startsWith('guest_bypass');
 
   const getNextThreeAnalyses = () => {
     const combined = analyses.length > 0 ? analyses : demoAnalyses;
@@ -1201,21 +1201,24 @@ const App: React.FC = () => {
               } catch (e) {}
             }
 
+            const isGuest = role.startsWith('guest_bypass');
+            const guestUsername = isGuest ? role.replace('guest_bypass_', '') || 'misafir' : '';
+
             const adminUser: SiteUser = {
-              id: role === 'guest_bypass' ? 'guest_mersobahis' : 'admin-session',
-              username: role === 'guest_bypass' ? 'mersobahis' : 'Yönetici',
+              id: isGuest ? `guest_${guestUsername}` : 'admin-session',
+              username: isGuest ? guestUsername : 'Yönetici',
               password: '',
-              email: role === 'guest_bypass' ? 'guest@724bahis.com' : 'admin@724bahis.net',
+              email: isGuest ? `guest@724bahis.com` : 'admin@724bahis.net',
               phone: '',
               createdAt: Date.now(),
               role: role as any,
-              balance: role === 'guest_bypass' ? 1000 : existingBalance
+              balance: isGuest ? 1000 : existingBalance
             };
             setSiteUser(adminUser);
             localStorage.setItem('site_current_member', JSON.stringify(adminUser));
 
             setAuthModalMode(null);
-            if (role === 'guest_bypass') {
+            if (isGuest) {
               setView('home');
             } else {
               setView('admin');
