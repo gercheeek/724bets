@@ -210,22 +210,23 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 </button>
 
                 {/* Tabs */}
-                {!hideMemberLogin && (
-                    <div className="flex border-b border-zinc-800">
+                {/* Tabs */}
+                <div className="flex border-b border-zinc-800">
+                    {!hideMemberLogin && (
                         <button onClick={() => { setActiveTab('member'); setMError(''); }}
                             className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'member' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
                             <User className="w-4 h-4" /> <span className="hidden sm:inline">Üye</span> Girişi
                         </button>
-                        <button onClick={() => { setActiveTab('admin'); setAError(''); }}
-                            className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'admin' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
-                            <Shield className="w-4 h-4" /> <span className="hidden sm:inline">Yönetici / Editör</span>
-                        </button>
-                        <button onClick={() => { setActiveTab('guest'); setGError(''); }}
-                            className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'guest' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
-                            <Lock className="w-4 h-4" /> Misafir <span className="hidden sm:inline">Girişi</span>
-                        </button>
-                    </div>
-                )}
+                    )}
+                    <button onClick={() => { setActiveTab('admin'); setAError(''); }}
+                        className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'admin' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                        <Shield className="w-4 h-4" /> <span className="hidden sm:inline">Yönetici / Editör</span>
+                    </button>
+                    <button onClick={() => { setActiveTab('guest'); setGError(''); }}
+                        className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'guest' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                        <Lock className="w-4 h-4" /> Misafir <span className="hidden sm:inline">Girişi</span>
+                    </button>
+                </div>
 
                 <div className="p-8">
                     {/* Member Tab */}
