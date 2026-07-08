@@ -358,6 +358,111 @@ export default function AdminChatTab() {
     }
   };
 
+  // 🎲 RASTGELE HAYALET BOT ÜRETİCİLERİ
+  const handleCreateRandomBot = async () => {
+    const pool = [
+      'KuponcuReis', 'BahisCanavari', 'TekMacYatan', 'KasaKatlama', 'AltUstUstasi',
+      'SlotKrali', 'RuletUstasi', 'BlackjackPro', 'BonusAvcisi', 'IddaaAnaliz',
+      'BankoKuponcu', 'SistemciAga', 'CanliBahisci', 'SansliYusuf', 'KazananTayfa',
+      'GolcuSaban', 'KuponUstasi', 'BahisDoktoru', 'SlotSever', 'CanliCanavari',
+      'BahisGurmesi', 'KuponAnalizci', 'KasaKatlayici', 'GununBankosu', 'GolBekleyen',
+      'KornerciReis', 'KartBahiscisi', 'CanliFatihi', 'SlotPrensi', 'RuletFatihi',
+      'Aslan1905', 'Kanarya1907', 'Kartal1903', 'Firtina1967', 'SampiyonTayfa'
+    ];
+    
+    const existingNames = new Set(bots.map(b => b.username.toLowerCase()));
+    const availableNames = pool.filter(name => !existingNames.has(name.toLowerCase()));
+    
+    if (availableNames.length === 0) {
+      alert('Tüm hazır takma adlar kullanıldı!');
+      return;
+    }
+    
+    const randomName = availableNames[Math.floor(Math.random() * availableNames.length)];
+    
+    try {
+      setStatusMessage(`🤖 ${randomName} hayalet üyesi ekleniyor...`);
+      const { data, error } = await supabase
+        .from('members')
+        .insert([{ 
+          username: randomName, 
+          is_bot: true, 
+          role: 'member',
+          email: `${randomName.toLowerCase()}_bot_${Date.now()}@724bahis.com`,
+          password: 'bot_placeholder_pwd',
+          status: 'active'
+        }])
+        .select();
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        setBots(prev => [...prev, data[0]]);
+        setStatusMessage(`🤖 ${randomName} başarıyla hayalet üye olarak eklendi!`);
+        setTimeout(() => setStatusMessage(''), 3000);
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert('Bot eklenirken hata: ' + err.message);
+      setStatusMessage('');
+    }
+  };
+
+  const handleCreate5RandomBots = async () => {
+    const pool = [
+      'KuponcuReis', 'BahisCanavari', 'TekMacYatan', 'KasaKatlama', 'AltUstUstasi',
+      'SlotKrali', 'RuletUstasi', 'BlackjackPro', 'BonusAvcisi', 'IddaaAnaliz',
+      'BankoKuponcu', 'SistemciAga', 'CanliBahisci', 'SansliYusuf', 'KazananTayfa',
+      'GolcuSaban', 'KuponUstasi', 'BahisDoktoru', 'SlotSever', 'CanliCanavari',
+      'BahisGurmesi', 'KuponAnalizci', 'KasaKatlayici', 'GununBankosu', 'GolBekleyen',
+      'KornerciReis', 'KartBahiscisi', 'CanliFatihi', 'SlotPrensi', 'RuletFatihi',
+      'Aslan1905', 'Kanarya1907', 'Kartal1903', 'Firtina1967', 'SampiyonTayfa'
+    ];
+    
+    const existingNames = new Set(bots.map(b => b.username.toLowerCase()));
+    const availableNames = pool.filter(name => !existingNames.has(name.toLowerCase()));
+    
+    if (availableNames.length < 5) {
+      alert('Yeterli benzersiz takma ad kalmadı!');
+      return;
+    }
+    
+    const selected: string[] = [];
+    const tempPool = [...availableNames];
+    for (let i = 0; i < 5; i++) {
+      const idx = Math.floor(Math.random() * tempPool.length);
+      selected.push(tempPool.splice(idx, 1)[0]);
+    }
+    
+    try {
+      setStatusMessage('🤖 5 adet hayalet üye oluşturuluyor...');
+      const { data, error } = await supabase
+        .from('members')
+        .insert(selected.map(name => ({
+          username: name,
+          is_bot: true,
+          role: 'member',
+          email: `${name.toLowerCase()}_bot_${Date.now()}_${Math.floor(Math.random()*1000)}@724bahis.com`,
+          password: 'bot_placeholder_pwd',
+          status: 'active'
+        })))
+        .select();
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        setBots(prev => [...prev, ...data]);
+        setStatusMessage('🤖 5 adet hayalet üye başarıyla eklendi!');
+        setTimeout(() => setStatusMessage(''), 3000);
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert('Toplu bot eklenirken hata: ' + err.message);
+      setStatusMessage('');
+    }
+  };
+
+
   // 🗑️ HAYALET BOT SİLİCİ
   const handleDeleteBot = async (id: string) => {
     if (!confirm('Bu bot hesabını silmek istediğinize emin misiniz?')) return;
@@ -376,6 +481,36 @@ export default function AdminChatTab() {
       alert('Hata: ' + err.message);
     }
   };
+
+  // 🗑️ TÜM HAYALET BOTLARI SİL
+  const handleDeleteAllBots = async () => {
+    if (bots.length === 0) {
+      alert('Sistemde silinecek bot bulunamadı.');
+      return;
+    }
+    if (!confirm(`Sistemdeki TÜM (${bots.length}) botları silmek istediğinize emin misiniz?`)) return;
+    
+    try {
+      setStatusMessage('🤖 Tüm botlar siliniyor...');
+      const { error } = await supabase
+        .from('members')
+        .delete()
+        .eq('is_bot', true);
+        
+      if (error) {
+        alert('Botlar toplu silinirken hata oluştu: ' + error.message);
+      } else {
+        setBots([]);
+        setStatusMessage('🤖 Tüm botlar başarıyla silindi!');
+        setTimeout(() => setStatusMessage(''), 3000);
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert('Toplu silme hatası: ' + err.message);
+      setStatusMessage('');
+    }
+  };
+
 
   // 🚨 TÜM SOHBETİ TEMİZLE
   const handleClearChat = async () => {
@@ -674,9 +809,33 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
                 <input type="text" value={newBotName} onChange={(e) => setNewBotName(e.target.value)} placeholder="Kullanıcı Adı" className="flex-1 bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-sm text-white outline-none focus:border-blue-500 transition-colors" />
                 <button type="submit" className="bg-blue-600 hover:bg-blue-500 px-4 rounded-lg font-bold text-sm transition-colors text-white">EKLE</button>
               </form>
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={handleCreateRandomBot}
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-xs font-bold py-2 px-3 rounded-lg border border-zinc-700 transition-colors text-gray-200"
+                >
+                  🎲 Rastgele Bot
+                </button>
+                <button
+                  onClick={handleCreate5RandomBots}
+                  className="flex-1 bg-green-950/45 hover:bg-green-950/65 text-xs font-bold py-2 px-3 rounded-lg border border-green-900/60 transition-colors text-green-400"
+                >
+                  👥 Toplu Üret (5x)
+                </button>
+              </div>
             </div>
             <div>
-              <h3 className="text-xs font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Sistemdeki Hayalet Üyeler ({bots.length})</h3>
+              <div className="flex justify-between items-center mb-2.5">
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Sistemdeki Hayalet Üyeler ({bots.length})</h3>
+                {bots.length > 0 && (
+                  <button
+                    onClick={handleDeleteAllBots}
+                    className="text-red-500 hover:text-red-400 font-bold text-[10px] uppercase tracking-wider transition-colors"
+                  >
+                    🚨 Tümünü Sil
+                  </button>
+                )}
+              </div>
               <div className="bg-gray-950 p-2 rounded-lg border border-gray-800 h-64 overflow-y-auto space-y-1">
                 {bots.length === 0 ? (
                   <p className="text-xs text-gray-600 p-4 text-center italic">Henüz bot hesap üretilmemiş.</p>

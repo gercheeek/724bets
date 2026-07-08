@@ -12,6 +12,7 @@ export interface SiteUser {
   status?: 'pending' | 'active' | 'suspended';
   notes?: string;
   role?: 'admin' | 'editor' | 'author' | 'member';
+  balance?: number;
 }
 
 export interface UserMessage {
@@ -142,6 +143,16 @@ export interface MatchAnalysis {
   createdAt: number;
   sport?: SportCategory;
   editorId?: string;
+  // Detailed Odds for Bulletin (Result, Total, Double Chance)
+  odds1?: string;
+  oddsX?: string;
+  odds2?: string;
+  oddsOver?: string;
+  oddsUnder?: string;
+  odds1X?: string;
+  odds12?: string;
+  oddsX2?: string;
+  isActive?: boolean;
 }
 
 export interface CouponMatch {
@@ -956,4 +967,16 @@ export interface ClaimCodeResult {
   error_code?: 'CODE_NOT_FOUND' | 'ALREADY_CLAIMED' | 'LIMIT_REACHED';
 }
 
-
+export interface BettingMatch {
+  id: string;
+  league: string;
+  homeTeam: string;
+  awayTeam: string;
+  matchTime: string;
+  odds: {
+    home: string;
+    draw: string;
+    away: string;
+  };
+  isActive: boolean;
+}

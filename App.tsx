@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import Header from './components/Header';
-import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield } from 'lucide-react';
+import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock } from 'lucide-react';
 import { getFlagUrl } from './components/MatchResultsWidget';
 import AppLoader from './components/AppLoader';
 import BrandCard from './components/BrandCard';
 import AdminPanel from './components/AdminPanel';
 import ErrorBoundary from './components/ErrorBoundary';
 import AuthModal from './components/AuthModal';
+import FakeBetModal from './components/FakeBetModal';
+import MobileBottomNav from './components/MobileBottomNav';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
-import PromoPopup from './components/PromoPopup';
+
 import MaintenanceScreen from './components/MaintenanceScreen';
 import ChatBot from './components/ChatBot';
 import ModernChat from './components/ModernChat';
@@ -32,6 +34,8 @@ import { demoAnalyses, demoCoupons } from './demoData';
 import TrustedSitesView from './components/TrustedSitesView';
 import TrustedDetailView from './components/TrustedDetailView';
 import { initTrustedEngine, loadTrustedCompanies, processDripComments, processAutoReplies } from './utils/trustedEngine';
+import DemoGames from './components/DemoGames';
+import MyBetsModal from './components/MyBetsModal';
 
 // Portal Components
 import CouponsView from './components/CouponsView';
@@ -45,6 +49,40 @@ import MatchResultsWidget from './components/MatchResultsWidget';
 import { PromoSlider } from './components/PromoSlider';
 import Sidebar from './components/Sidebar';
 const SITE_CACHE_VERSION = "2026.06.25_v1";
+
+const formatDateTR = (dateStr: string) => {
+    const d = new Date(dateStr);
+    const days = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+    const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} - ${days[d.getDay()]}`;
+};
+
+const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 85) return { text: 'text-[#00E676]', bg: 'bg-[#00E676]/10', border: 'border-[#00E676]/30' };
+    if (confidence >= 70) return { text: 'text-[#f2a900]', bg: 'bg-[#f2a900]/10', border: 'border-[#f2a900]/30' };
+    return { text: 'text-[#ff3d00]', bg: 'bg-[#ff3d00]/10', border: 'border-[#ff3d00]/30' };
+};
+
+const getLeagueFlag = (league: string): string => {
+    const l = league.toLowerCase();
+    if (l.includes('premier') || l.includes('championship') || l.includes('ingiltere')) return '🏴󠁧󠁢󠁥󠁮󠁧󠁿';
+    if (l.includes('la liga') || l.includes('ispanya')) return '🇪🇸';
+    if (l.includes('serie a') || l.includes('italya')) return '🇮🇹';
+    if (l.includes('bundesliga') || l.includes('almanya')) return '🇩🇪';
+    if (l.includes('ligue 1') || l.includes('fransa')) return '🇫🇷';
+    if (l.includes('süper lig') || l.includes('türkiye') || l.includes('1. lig')) return '🇹🇷';
+    if (l.includes('eredivisie') || l.includes('hollanda')) return '🇳🇱';
+    if (l.includes('primeira') || l.includes('portekiz')) return '🇵🇹';
+    if (l.includes('mls') || l.includes('nba') || l.includes('abd')) return '🇺🇸';
+    if (l.includes('brasileirao') || l.includes('brezilya')) return '🇧🇷';
+    if (l.includes('şampiyonlar') || l.includes('avrupa ligi') || l.includes('konferans') || l.includes('euroleague') || l.includes('uefa')) return '🇪🇺';
+    if (l.includes('nba') || l.includes('basket') || l.includes('euroleague')) return '🏀';
+    if (l.includes('formula') || l.includes('f1')) return '🏎️';
+    if (l.includes('motogp') || l.includes('superbike')) return '🏍️';
+    if (l.includes('wimbledon') || l.includes('roland') || l.includes('tenis')) return '🎾';
+    return '🌍';
+};
+
 
 const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateStr, timeStr }) => {
   const [text, setText] = useState('');
@@ -79,7 +117,7 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
     return <span className="font-black" style={{ color: '#00E676', animation: 'pulse 1.5s infinite' }}>CANLI</span>;
   }
 
-  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#F59E0B' }}>{text}</span>;
+  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#F5A623' }}>{text}</span>;
 };
 
 const App: React.FC = () => {
@@ -87,13 +125,42 @@ const App: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail'>('home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo'>('home');
+  const [iframeLoading, setIframeLoading] = useState(false);
+  const [isContentReady, setIsContentReady] = useState(false);
+  const [loadId, setLoadId] = useState(0);
+
+  // Trigger load when view changes
+  useEffect(() => {
+    setLoadId(prev => prev + 1);
+  }, [view]);
+
+  // Trigger load when iframe loading starts
+  useEffect(() => {
+    if (iframeLoading) {
+      setLoadId(prev => prev + 1);
+    }
+  }, [iframeLoading]);
+
+  // Asynchronous Loading Orchestrator Logic (Central 3-second loader timer)
+  useEffect(() => {
+    if (loadId > 0) {
+      setIsContentReady(false);
+      const timer = setTimeout(() => {
+        setIsContentReady(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [loadId]);
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   
-  // Responsive sidebar state
+  // Custom URL for Sports2 iframe (to handle custom header navigation)
+  const [sports2Url, setSports2Url] = useState("https://bahisbey7195.com/tr/sport/sports/football/flt-1-1239-52530/");
+  
+  // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
 
   useEffect(() => {
     const handleResize = () => {
@@ -102,9 +169,12 @@ const App: React.FC = () => {
       setIsMobile(mobile);
       if (tablet) {
         setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
       }
     };
     window.addEventListener('resize', handleResize);
+    handleResize(); // Run on mount to ensure correct initial state
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -295,11 +365,124 @@ const App: React.FC = () => {
     updateGlobalConfig('site_loader_config', cfg);
   };
 
+  // Discord Config
+  const [discordConfig, setDiscordConfig] = useState<any>(() => {
+    const stored = localStorage.getItem('site_discord_config');
+    return stored ? JSON.parse(stored) : { enabled: false, webhookUrl: '' };
+  });
+
+  const handleDiscordConfigChange = (cfg: any) => {
+    setDiscordConfig(cfg);
+    localStorage.setItem('site_discord_config', JSON.stringify(cfg));
+    updateGlobalConfig('site_discord_config', cfg);
+  };
+
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
   const [userRole, setUserRole] = useState<string | null>(null);
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
+  const [showFakeBetModal, setShowFakeBetModal] = useState(false);
+  const [showLiveScoreModal, setShowLiveScoreModal] = useState(false);
   const [brands, setBrands] = useState<Brand[]>([]);
+  const [showMyBetsModal, setShowMyBetsModal] = useState(false);
+  const [currentPendingBet, setCurrentPendingBet] = useState<any>(null);
+
+  const sendDiscordNotification = async (bet: any) => {
+    let cfg = discordConfig;
+    if (!cfg || !cfg.webhookUrl) {
+      try {
+        cfg = await getGlobalConfig('site_discord_config');
+        if (cfg) {
+          setDiscordConfig(cfg);
+          localStorage.setItem('site_discord_config', JSON.stringify(cfg));
+        }
+      } catch (e) {
+        console.error('Failed to load fallback discord config:', e);
+      }
+    }
+
+    if (!cfg || !cfg.enabled || !cfg.webhookUrl) {
+      return;
+    }
+
+    try {
+      const selectionsText = bet.selections.map((sel: any, idx: number) => {
+        return `${idx + 1}. 🏟️ **${sel.mac_adi}**\n   👉 Bahis: ${sel.bahis} | Oran: \`${sel.oran.toFixed(2)}\``;
+      }).join('\n\n');
+
+      const payload = {
+        embeds: [
+          {
+            title: "🔔 YENİ KUPON YATIRILDI!",
+            color: 16750848, // Orange (#FFA500)
+            fields: [
+              { name: "👤 Kullanıcı", value: siteUser?.username || 'Bilinmeyen Kullanıcı', inline: true },
+              { name: "💵 Kupon Tutarı", value: `${bet.amount.toFixed(2)} ₺`, inline: true },
+              { name: "📈 Toplam Oran", value: bet.totalOdds.toFixed(2), inline: true },
+              { name: "💰 Olası Kazanç", value: `${bet.potentialPayout.toFixed(2)} ₺`, inline: true }
+            ],
+            description: `⚽ **Bahis Detayları:**\n\n${selectionsText}`,
+            timestamp: new Date().toISOString(),
+            footer: {
+              text: "724BAHİS | Canlı Kupon Bildirim Sistemi"
+            }
+          }
+        ]
+      };
+
+      await fetch('/api/send-discord', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          webhookUrl: cfg.webhookUrl,
+          payload: payload
+        })
+      });
+      console.log('Discord notification proxy request sent.');
+    } catch (err) {
+      console.error('Error sending Discord notification:', err);
+    }
+  };
+
+  const handleFakeBetSubmit = async (amount: number) => {
+    if (!siteUser) throw new Error('Oturum kapalı.');
+    const newBalance = (siteUser.balance || 0) - amount;
+    
+    if (siteUser.id !== 'admin-session') {
+      const { error } = await supabase.from('members').update({ balance: newBalance }).eq('id', siteUser.id);
+      if (error) throw new Error('Veritabanı bağlantı hatası: ' + error.message);
+    }
+
+    const totalOdds = currentPendingBet?.toplam_oran || 516.56;
+    const selections = currentPendingBet?.secilen_maclar || [
+      { mac_adi: "Apejes Academy 1 : 0 Elecsport Limbe", bahis: "Maç Sonucu : 1", oran: 1.15 },
+      { mac_adi: "Drukpa 0 : 0 Thimphu FC", bahis: "Maç Sonucu : X", oran: 2.48 },
+      { mac_adi: "Radnicki Kragujevas 2 : 0 Buducnost Podgorica", bahis: "Maç Sonucu : 1", oran: 1.15 },
+      { mac_adi: "Hubei Istar U20 1 : 2 Henan Songshan Longmen U20", bahis: "Maç Sonucu : 1", oran: 25.00 }
+    ];
+
+    const newBet = {
+      id: Date.now().toString(),
+      timestamp: Date.now(),
+      amount: amount,
+      selections: selections,
+      totalOdds: totalOdds,
+      potentialPayout: amount * totalOdds,
+      status: 'PENDING'
+    };
+
+    const existingBets = JSON.parse(localStorage.getItem('site_my_bets') || '[]');
+    localStorage.setItem('site_my_bets', JSON.stringify([newBet, ...existingBets]));
+    setCurrentPendingBet(null);
+
+    // Send Discord Notification asynchronously
+    sendDiscordNotification(newBet);
+
+    const updatedUser = { ...siteUser, balance: newBalance };
+    setSiteUser(updatedUser);
+    localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+    localStorage.setItem('site_member', JSON.stringify(updatedUser));
+  };
 
   // ── Trusted Sites State ──────────────────────────────────────────────────────
   const [trustedCompanies, setTrustedCompanies] = useState<TrustedCompany[]>([]);
@@ -371,7 +554,7 @@ const App: React.FC = () => {
       setWelcomePopupConfig(cleanedWelcome);
     }
   }, []);
-  const [themeColor, setThemeColor] = useState('#eab308');
+  const [themeColor, setThemeColor] = useState('#F5A623');
   const [activeAnalysisId, setActiveAnalysisId] = useState<string | null>(null);
   const [hashtags, setHashtags] = useState('');
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
@@ -464,7 +647,20 @@ const App: React.FC = () => {
         if (savedBj) setBjConfig(JSON.parse(savedBj));
         if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
         if (savedRole) setUserRole(savedRole as string);
-        if (savedMember) setSiteUser(JSON.parse(savedMember));
+        if (savedMember) {
+          const parsedUser = JSON.parse(savedMember);
+          if (parsedUser.id !== 'admin-session') {
+            // Fetch latest balance from DB
+            const { data: latestUser } = await supabase.from('members').select('balance, role, status').eq('id', parsedUser.id).single();
+            if (latestUser) {
+              parsedUser.balance = latestUser.balance || 0;
+              parsedUser.role = latestUser.role || parsedUser.role;
+              parsedUser.status = latestUser.status || parsedUser.status;
+              localStorage.setItem('site_member', JSON.stringify(parsedUser));
+            }
+          }
+          setSiteUser(parsedUser);
+        }
 
 
         // 3. Load Global Data from Supabase (Overrides Local) - PARALLEL FETCH
@@ -473,7 +669,7 @@ const App: React.FC = () => {
           globalColor, globalBj, globalLoyalty, globalGiveaway, globalMarquee,
           globalNav, globalWheel, globalWelcome, globalSiteStatus,
           globalPromoWheel, globalHeroSlider, globalDailyKupon, globalRaffle,
-          globalPopularBets, globalTvConfig, globalLoaderConfig
+          globalPopularBets, globalTvConfig, globalLoaderConfig, globalDiscordConfig
         ] = await Promise.all([
           getGlobalConfig('site_analyses'),
           getGlobalConfig('site_coupons'),
@@ -495,7 +691,8 @@ const App: React.FC = () => {
           getGlobalConfig('site_raffle_config'),
           getGlobalConfig('site_popular_bets'),
           getGlobalConfig('site_tv_config'),
-          getGlobalConfig('site_loader_config')
+          getGlobalConfig('site_loader_config'),
+          getGlobalConfig('site_discord_config')
         ]);
 
         if (!isMounted) return;
@@ -548,6 +745,10 @@ const App: React.FC = () => {
           setTvConfig(globalTvConfig);
         }
         if (globalLoaderConfig) setLoaderConfig(globalLoaderConfig);
+        if (globalDiscordConfig) {
+          setDiscordConfig(globalDiscordConfig);
+          localStorage.setItem('site_discord_config', JSON.stringify(globalDiscordConfig));
+        }
 
 
       } catch (err) {
@@ -636,7 +837,9 @@ const App: React.FC = () => {
     const syncViewWithUrl = () => {
       const path = window.location.pathname;
       const cleanPath = path.replace(/\/$/, '') || '/';
-      if (cleanPath === '/raffles') {
+      if (cleanPath === '/demo-oyunlar' || cleanPath === '/casino/demo' || cleanPath === '/demo') {
+        setView('demo');
+      } else if (cleanPath === '/raffles') {
         setView('cekilis');
       } else if (cleanPath === '/bilet') {
         setView('raffle');
@@ -658,7 +861,7 @@ const App: React.FC = () => {
         setView('trusted-detail');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['blackjack', 'loyalty', 'pool', 'wheel', 'giveaway'];
+        const validViews = ['blackjack', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -672,6 +875,73 @@ const App: React.FC = () => {
 
     return () => window.removeEventListener('popstate', syncViewWithUrl);
   }, []);
+
+  // SEO noindex logic for demo view
+  useEffect(() => {
+    let meta = document.querySelector('meta[name="robots"]');
+    if (view === 'demo') {
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'robots');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', 'noindex, nofollow');
+    } else {
+      if (meta) {
+        meta.remove();
+      }
+    }
+  }, [view]);
+
+  // Hook to handle Kuponu Onayla tracking for sports2 view
+  useEffect(() => {
+    if (view === 'sports2') {
+      const timer = setTimeout(() => {
+        const onayButonlari = Array.from(document.querySelectorAll('button, a, div'));
+        const kuponOnayButonu = onayButonlari.find(el => el.textContent?.trim() === 'KUPONU ONAYLA' || el.textContent?.trim() === 'ONAYLA');
+
+        if (kuponOnayButonu) {
+          const handleOnayClick = () => {
+            console.log('Kupon Onay Tetiklendi! Veriler toplanıyor...');
+
+            const aktifSekme = document.querySelector('.active-tab')?.textContent?.trim() || 'Kombine';
+
+            const kuponData = {
+              kupon_turu: aktifSekme,
+              secilen_maclar: [
+                { mac_adi: "Apejes Academy 1 : 0 Elecsport Limbe", bahis: "Maç Sonucu : 1", oran: 1.15 },
+                { mac_adi: "Drukpa 0 : 0 Thimphu FC", bahis: "Maç Sonucu : X", oran: 2.48 },
+                { mac_adi: "Radnicki Kragujevas 2 : 0 Buducnost Podgorica", bahis: "Maç Sonucu : 1", oran: 1.15 },
+                { mac_adi: "Hubei Istar U20 1 : 2 Henan Songshan Longmen U20", bahis: "Maç Sonucu : 1", oran: 25.00 }
+              ],
+              toplam_oran: 516.56,
+              toplam_kazanc: 0.00
+            };
+
+            setCurrentPendingBet(kuponData);
+            console.log('Yakalanan Kupon Verisi:', kuponData);
+
+            fetch('/api/save-coupon', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(kuponData)
+            })
+            .then(res => res.json())
+            .then(data => console.log('Kupon başarıyla kaydedildi:', data))
+            .catch(err => console.error('Kupon kaydedilirken hata oluştu:', err));
+          };
+
+          kuponOnayButonu.addEventListener('click', handleOnayClick);
+
+          return () => {
+            kuponOnayButonu.removeEventListener('click', handleOnayClick);
+          };
+        }
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [view]);
 
   if (ipBlocked) {
     return (
@@ -698,6 +968,11 @@ const App: React.FC = () => {
         loyaltyConfig={loyaltyConfig}
         analyses={analyses}
         coupons={coupons}
+        siteUser={siteUser}
+        onUpdateUser={(updated) => {
+          setSiteUser(updated);
+          localStorage.setItem('site_current_member', JSON.stringify(updated));
+        }}
         onSaveBrands={saveBrands}
         onSaveHero={saveHero}
         onSaveAnalyses={saveAnalyses}
@@ -751,11 +1026,19 @@ const App: React.FC = () => {
         onSaveTvConfig={handleTvConfigChange}
         loaderConfig={loaderConfig}
         onSaveLoaderConfig={handleLoaderConfigChange}
+        discordConfig={discordConfig}
+        onSaveDiscordConfig={handleDiscordConfigChange}
       />
     </ErrorBoundary>
   );
 
   const handleViewChange = (v: string) => {
+    if (v === 'sports' || v === 'sports2' || v === 'sports3' || v === 'sports4' || v === 'sports5') {
+      setIframeLoading(true);
+      setTimeout(() => {
+        setIframeLoading(false);
+      }, 2500);
+    }
     if (v !== 'analysis') {
       setActiveAnalysisId(null);
     }
@@ -907,6 +1190,17 @@ const App: React.FC = () => {
             setUserRole(role);
             localStorage.setItem('site_user_role', role);
             
+            const savedMember = localStorage.getItem('site_current_member');
+            let existingBalance = 10000;
+            if (savedMember) {
+              try {
+                const parsed = JSON.parse(savedMember);
+                if (parsed.username === 'Yönetici' && typeof parsed.balance === 'number') {
+                  existingBalance = parsed.balance;
+                }
+              } catch (e) {}
+            }
+
             const adminUser: SiteUser = {
               id: 'admin-session',
               username: 'Yönetici',
@@ -914,7 +1208,8 @@ const App: React.FC = () => {
               email: 'admin@724bahis.net',
               phone: '',
               createdAt: Date.now(),
-              role: role as any
+              role: role as any,
+              balance: existingBalance
             };
             setSiteUser(adminUser);
             localStorage.setItem('site_current_member', JSON.stringify(adminUser));
@@ -941,13 +1236,17 @@ const App: React.FC = () => {
           color: 'var(--text-primary)',
           position: 'relative',
           overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden',
-           '--sidebar-width': !isMobile && isSidebarOpen ? '260px' : (!isMobile && !isSidebarOpen ? '72px' : '0px'),
-          '--chat-width': (view === 'admin') ? '0px' : '380px',
+          '--sidebar-width': (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') ? '0px' : (!isMobile && isSidebarOpen ? '260px' : (!isMobile && !isSidebarOpen ? '72px' : '0px')),
+          '--chat-width': (view === 'admin' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') ? '0px' : (isChatOpen ? '380px' : (isMobile ? '0px' : '48px')),
           '--header-height': (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '60px'
         } as React.CSSProperties}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
-          <div className="sidebar-wrapper" style={{ height: '100%', position: 'relative' }}>
+          <div className="sidebar-wrapper" style={{ 
+            height: '100%', 
+            position: 'relative',
+            display: (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') ? 'none' : 'block'
+          }}>
             <Sidebar
               isOpen={isSidebarOpen}
               onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -988,6 +1287,12 @@ const App: React.FC = () => {
         isChatOpen={isChatOpen}
         isSidebarOpen={isSidebarOpen}
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        showFakeBetButton={view === 'sports2'}
+        onFakeBetClick={() => {
+           if (!siteUser) setAuthModalMode('member');
+           else setShowFakeBetModal(true);
+        }}
+        onMyBetsClick={() => setShowMyBetsModal(true)}
       />
 
       <main 
@@ -998,10 +1303,19 @@ const App: React.FC = () => {
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
           paddingTop: 'var(--header-height)',
-          transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out, padding-top 0.3s ease-in-out'
+          paddingBottom: 'env(safe-area-inset-bottom, 0)',
+          transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out, padding-top 0.3s ease-in-out',
+          paddingLeft: (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') ? '0px' : '16px',
+          paddingRight: (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') ? '0px' : '16px'
         } as React.CSSProperties}
       >
-        <div style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
+        {/* Loading Orchestrator Overlay */}
+        <div className={`loading-orchestrator-overlay ${isContentReady ? 'fade-out' : ''}`}>
+          <div className="orchestrator-spinner"></div>
+          <div className="orchestrator-text">Yükleniyor...</div>
+        </div>
+
+        <div className={`orchestrator-content ${isContentReady ? 'content-ready' : ''}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
           {view === 'home' && (
             <div className="animate-fade-in">
               {/* ═══ PORTAL BODY ═══ */}
@@ -1031,12 +1345,12 @@ const App: React.FC = () => {
                   <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative" style={{ zIndex: 10 }}>
                     <div className="flex items-center gap-4">
                       <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
-                        <Trophy className="w-6 h-6" style={{ color: '#F59E0B' }} />
+                        <Trophy className="w-6 h-6" style={{ color: '#F5A623' }} />
                       </div>
                       <div>
                         <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(245, 158, 11, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
                         <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>
-                          <span style={{ color: '#F59E0B', textShadow: '0 0 20px rgba(245, 158, 11, 0.6), 0 0 40px rgba(245, 158, 11, 0.3)' }}>WORLD CUP </span>
+                          <span style={{ color: '#F5A623', textShadow: '0 0 20px rgba(245, 158, 11, 0.6), 0 0 40px rgba(245, 158, 11, 0.3)' }}>WORLD CUP </span>
                           <span style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>2026</span>
                         </h2>
                       </div>
@@ -1045,9 +1359,9 @@ const App: React.FC = () => {
                     <div className="flex items-center gap-6 justify-between sm:justify-end">
                       <div className="text-left sm:text-right" style={{ flexShrink: 0 }}>
                         <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>En Yüksek Kazanç Oranları</p>
-                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#F59E0B' }}>%88 Başarı Oranı</p>
+                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#F5A623' }}>%88 Başarı Oranı</p>
                       </div>
-                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#F59E0B', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#F5A623', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                         <span>ANALİZLERE GİT</span>
                         <span className="group-hover:translate-x-1 transition-transform" style={{ display: 'inline-block' }}>→</span>
                       </button>
@@ -1055,9 +1369,149 @@ const App: React.FC = () => {
                   </div>
                 </div>
 
+                {/* ── Canlı Skor & Maç Sonuçları Section ── */}
+                <div className="mb-6 p-6 rounded-xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-zinc-800/80 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
+                      <Target className="w-5 h-5 text-amber-500" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-black text-sm uppercase tracking-wider italic">MAÇ SONUÇLARI & CANLI SKOR</h3>
+                      <p className="text-gray-400 text-xs font-medium mt-0.5">Dünya genelindeki tüm maçların anlık skorlarını ve sonuçlarını canlı takip edin.</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setShowLiveScoreModal(true)}
+                    className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black text-sm font-black rounded-lg shadow-[0_4px_20px_rgba(245,158,11,0.25)] transition-all hover:scale-105 active:scale-95 uppercase tracking-wider"
+                  >
+                    Maç Sonuçları & Canlı Skor
+                  </button>
+                </div>
+
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
                 {/* ── Promosyonlar Section ── */}
                 <PromoSlider />
+
+                {/* ── User Uploaded Image Banner ── */}
+                <div className="my-6 relative overflow-hidden rounded-xl shadow-[0_0_25px_rgba(245,158,11,0.3)] border border-amber-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
+                  <img src="/banners/yeni-ince-banner.png" alt="Promo Banner" className="w-full h-auto block group-hover:scale-102 transition-transform duration-700" />
+                  
+                  {/* Animasyonlu Parıltı (Shine) Efekti */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-150%] animate-[shimmer_3s_infinite_linear] skew-x-[-20deg]"></div>
+                  
+                  {/* Sürekli yanan kenar glow efekti */}
+                  <div className="absolute inset-0 border-[2px] border-transparent rounded-xl group-hover:border-amber-400/50 transition-colors duration-500"></div>
+                  <div className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                </div>
+
+                {/* ── Today's Matches Analyses Section ── */}
+                {(() => {
+                  const combined = analyses.length > 0 ? analyses : demoAnalyses;
+                  const todayStr = new Date().toISOString().split('T')[0];
+                  const todayMatches = combined.filter(a => a.matchDate === todayStr);
+                  const matchesToDisplay = todayMatches.length > 0 
+                    ? todayMatches 
+                    : (() => {
+                        const sorted = [...combined].sort((a, b) => a.matchDate.localeCompare(b.matchDate));
+                        if (sorted.length === 0) return [];
+                        const firstDate = sorted[0].matchDate;
+                        return sorted.filter(a => a.matchDate === firstDate);
+                      })();
+                  
+                  if (matchesToDisplay.length === 0) return null;
+                  const displayDate = matchesToDisplay[0].matchDate;
+
+                  return (
+                    <div className="mb-6 p-5 rounded-2xl border border-zinc-800 bg-[#0F172A]/70 backdrop-blur-md shadow-2xl relative">
+                      {/* Header */}
+                      <div className="flex items-center gap-2 text-xs font-black text-[#f2a900] tracking-wider uppercase mb-4 px-1">
+                        <Calendar className="w-4 h-4 text-[#f2a900]" />
+                        <span>{formatDateTR(displayDate)}</span>
+                        <span className="text-gray-500 font-bold normal-case">({matchesToDisplay.length} analiz)</span>
+                      </div>
+
+                      {/* List */}
+                      <div className="space-y-2.5">
+                        {matchesToDisplay.map((analysis, idx) => {
+                          const isFree = !!(siteUser || userRole) || idx < 2;
+                          const confColor = getConfidenceColor(analysis.confidence);
+                          const highestOdds = analysis.bookieOdds?.find(b => b.isHighest) || analysis.bookieOdds?.[0];
+
+                          return (
+                            <div
+                              key={analysis.id}
+                              onClick={() => {
+                                setActiveAnalysisId(analysis.id);
+                                setView('analysis');
+                              }}
+                              className="relative rounded-xl overflow-hidden border border-zinc-800/80 bg-[#07090e] hover:border-amber-500/40 hover:bg-[#121620] shadow-[0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 cursor-pointer group flex flex-col md:flex-row md:items-center justify-between p-3.5 gap-3"
+                            >
+                              {/* Blur for premium if locked */}
+                              <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 flex-1 min-w-0 ${!isFree ? 'blur-[3px] select-none pointer-events-none' : ''}`}>
+                                {/* Left info */}
+                                <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
+                                  <span className="text-[11px] font-bold text-gray-400 px-2.5 py-1 rounded bg-[#030407] border border-zinc-800/60 flex items-center gap-1">
+                                    🕐 {analysis.matchTime}
+                                  </span>
+                                  <span className="text-[10px] font-black text-[#f2a900] uppercase px-2 py-0.5 rounded bg-amber-500/5 border border-amber-500/10">
+                                    {getLeagueFlag(analysis.league)} {analysis.league}
+                                  </span>
+                                  <div className="text-sm font-black text-white flex items-center gap-2 truncate">
+                                    <span>{analysis.homeTeam}</span>
+                                    <span className="text-xs text-gray-500 font-medium">vs</span>
+                                    <span>{analysis.awayTeam}</span>
+                                  </div>
+                                </div>
+
+                                {/* Right badges */}
+                                <div className="flex items-center gap-2 shrink-0">
+                                  <div className="px-3 py-1.5 rounded-lg text-center min-w-[70px] bg-[#030407] border border-zinc-800/60">
+                                    <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">TAHMİN</span>
+                                    <span className="text-[11px] font-black text-[#00E676]">{analysis.prediction}</span>
+                                  </div>
+                                  <div className="px-3 py-1.5 rounded-lg text-center min-w-[55px] bg-[#030407] border border-zinc-800/60">
+                                    <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">ORAN</span>
+                                    <span className="text-[11px] font-black text-[#f2a900]">{highestOdds?.odd1 || '—'}</span>
+                                  </div>
+                                  <div className={`px-3 py-1.5 rounded-lg text-center min-w-[55px] border ${confColor.border} ${confColor.bg}`}>
+                                    <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">GÜVEN</span>
+                                    <span className={`text-[11px] font-black ${confColor.text}`}>%{analysis.confidence}</span>
+                                  </div>
+                                  <span className="flex items-center gap-1 text-[10px] font-extrabold px-2.5 py-1.5 rounded-lg uppercase tracking-wider bg-[#00E676]/10 border border-[#00E676]/30 text-[#00E676]">
+                                    <CheckCircle2 className="w-3 h-3" /> ANALİZ AÇIK
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Lock overlay if locked */}
+                              {!isFree && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px] z-10">
+                                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#f2a900] text-[#0a0d14] font-black text-[10px] rounded-lg uppercase tracking-wider hover:bg-yellow-400 transition shadow-[0_0_15px_rgba(242,169,0,0.3)]">
+                                    <Lock className="w-3.5 h-3.5" /> Üye Ol, Tüm Analizleri Gör
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Daha Fazlası İçin Analizler Button */}
+                      <div className="mt-5 flex justify-center">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setView('analysis');
+                          }}
+                          className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black text-xs font-black rounded-xl shadow-[0_4px_20px_rgba(245,158,11,0.2)] transition-all hover:scale-105 active:scale-95 uppercase tracking-widest flex items-center justify-center gap-2 group border-none"
+                        >
+                          <span>Daha Fazlası İçin Analizler</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* ── Enhanced Betting Section ── */}
                 <EnhancedBetting />
@@ -1083,9 +1537,9 @@ const App: React.FC = () => {
             <section id="brands-section" className="brands-section relative z-10">
               <div className="brands-header mb-12 animate-fade-in-up">
                 <h2 className="text-[40px] md:text-[48px] font-black italic uppercase tracking-tighter" style={{ color: 'var(--text-primary)' }}>
-                  GÜVENİLİR <span className="text-[#FFC107]">FİRMALAR</span>
+                  GÜVENİLİR <span className="text-[#F5A623]">FİRMALAR</span>
                 </h2>
-                <div className="h-1 w-20 bg-[#FFC107] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
+                <div className="h-1 w-20 bg-[#F5A623] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
                 <p className="font-bold uppercase text-[11px] tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
                   Sizin için test ettiğimiz, ödemesini yapan lisanslı siteler.
                 </p>
@@ -1097,6 +1551,357 @@ const App: React.FC = () => {
                 ))}
               </div>
             </section>
+          </div>
+        )}
+
+        {view === 'sports' && (
+          <div className="animate-fade-in relative">
+            {iframeLoading && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl border border-zinc-800/50" style={{ height: 'calc(100vh - var(--header-height) - 10px)' }}>
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                </div>
+              </div>
+            )}
+            <div className="w-full rounded-2xl overflow-hidden border border-zinc-800/50 shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))', minHeight: '850px' }}>
+              <iframe 
+                src="https://sport.7yrrerfcet.com/SportsBook/Home"
+                frameBorder="0"
+                allowFullScreen
+                title="Canlı Spor Bahisleri"
+                className="relative z-0"
+                style={{
+                  position: 'absolute',
+                  top: '0',
+                  left: '0',
+                  width: '100%',
+                  height: '100%'
+                }}
+              />
+
+              {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
+              {/* Only covers the right side so the user can click the left side to open the betslip */}
+              {!isMobile && (
+                <div 
+                  className="absolute z-30 cursor-pointer"
+                  style={{
+                    bottom: '0',
+                    right: '0',
+                    width: '140px',
+                    height: '60px',
+                    backgroundColor: 'transparent'
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowFakeBetModal(true);
+                  }}
+                  title="Bahis Yap (Sağ Tarafa Tıklayın)"
+                />
+              )}
+
+              {/* Site theme color overlay (tinting the grey background to slate) */}
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" />
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0F172A]/20" />
+            </div>
+          </div>
+        )}
+
+        {view === 'sports2' && (
+          <div className="animate-fade-in w-full relative flex flex-col" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            
+            {/* Custom Sports2 Header */}
+            <div className="w-full bg-[#161c28] border-x border-t border-[#222b3c] rounded-t-2xl overflow-hidden shrink-0 shadow-lg relative z-20">
+               {/* Top Menu */}
+               <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-hide px-2 py-1">
+                  {([
+                    { label: 'SPOR', icon: <Dribbble size={18} />, url: 'https://bahisbey7195.com/tr/sport' },
+                    { label: 'CANLI BAHİS', icon: <PlayCircle size={18} />, url: 'https://bahisbey7195.com/tr/sport/live/football/' },
+                    { label: 'E-SPOR', icon: <Gamepad2 size={18} />, url: 'https://bahisbey7195.com/tr/esport' },
+                    { label: '3D SLOT SALONU', icon: <Diamond size={18} />, url: 'https://bahisbey7195.com/tr/lobby/casino' },
+                    { label: 'CANLI CASINO', icon: <Dices size={18} />, url: 'https://bahisbey7195.com/tr/lobby/livecasino' },
+                    { label: 'SANAL SPORLAR', icon: <MonitorPlay size={18} />, url: 'https://bahisbey7195.com/tr/lobby/virtualsport/main' }
+                  ] as { label: string; icon: React.ReactNode; url: string; badge?: string }[]).map(item => (
+                    <button 
+                      key={item.label}
+                      onClick={() => { setIframeLoading(true); setSports2Url(item.url); }}
+                      className={`flex items-center gap-2 px-3 py-2 transition-colors rounded-lg group shrink-0 ${sports2Url.includes(item.url) ? 'bg-white/10 text-white' : 'text-zinc-300 hover:text-white hover:bg-white/5'}`}
+                    >
+                      <span className="text-emerald-500 group-hover:text-emerald-400">{item.icon}</span>
+                      <span className="text-[13px] font-bold">{item.label}</span>
+                      {item.badge && (
+                        <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded ml-1 animate-pulse">{item.badge}</span>
+                      )}
+                    </button>
+                  ))}
+               </div>
+               {/* Sub Menu */}
+               <div className="flex items-center justify-between bg-[#222b3c] px-4 py-2 border-t border-zinc-700/50">
+                 <div className="flex items-center gap-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                    {[
+                      { label: 'Sonuçlar', url: 'https://bahisbey7195.com/tr/sport/results/' },
+                      { label: 'Bahis Yarışı', badge: 'YENİ', url: 'https://bahisbey7195.com/tr/sport/betrace/' },
+                      { label: 'SPOR TURNUVASI', url: 'https://bahisbey7195.com/tr/sport/tournament/' },
+                      { label: 'İstatistikler', url: 'https://bahisbey7195.com/tr/sport/statistics/' },
+                      { label: 'Canlı Skor', url: 'https://bahisbey7195.com/tr/sport/livescore/' },
+                      { label: 'Grup Aşaması', badge: 'YENİ', url: 'https://bahisbey7195.com/tr/sport/groupstage/' }
+                    ].map((item, idx, arr) => (
+                      <React.Fragment key={item.label}>
+                        <button 
+                          onClick={() => { setIframeLoading(true); setSports2Url(item.url); }}
+                          className="text-[12px] text-zinc-400 hover:text-zinc-200 transition-colors flex items-center gap-1.5 font-medium shrink-0"
+                        >
+                          {item.label}
+                          {item.badge && (
+                            <span className="bg-red-600 text-white text-[9px] font-black px-1 rounded">{item.badge}</span>
+                          )}
+                        </button>
+                        {idx < arr.length - 1 && <span className="text-zinc-600 text-xs shrink-0">•</span>}
+                      </React.Fragment>
+                    ))}
+                 </div>
+                 <div className="shrink-0 pl-4 border-l border-zinc-600 ml-4">
+                    <button className="text-[12px] text-zinc-400 hover:text-zinc-200 flex items-center gap-1 font-medium">
+                      Ondalık <ChevronDown size={14} />
+                    </button>
+                 </div>
+               </div>
+            </div>
+
+            {/* Iframe Container */}
+            <div className="w-full flex-1 overflow-hidden shadow-2xl bg-[#0F172A] relative rounded-b-2xl border-x border-b border-zinc-800/50 z-10">
+              {iframeLoading && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                  </div>
+                </div>
+              )}
+              <iframe 
+                src={sports2Url}
+                onLoad={() => setIframeLoading(false)}
+                frameBorder="0"
+                allowFullScreen
+                title="Spor 2"
+                className="relative z-0"
+                style={{
+                  position: 'absolute',
+                  top: '-165px',
+                  left: '0',
+                  width: '100%',
+                  height: 'calc(100% + 165px)'
+                }}
+              />
+              
+              {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
+              {!isMobile && (
+                <div 
+                  className="absolute z-30 cursor-pointer"
+                  style={{
+                    bottom: '0',
+                    right: '0',
+                    width: '140px',
+                    height: '60px',
+                    backgroundColor: 'transparent'
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowFakeBetModal(true);
+                  }}
+                  title="Bahis Yap (Sağ Tarafa Tıklayın)"
+                />
+              )}
+
+              {/* Site theme color overlay (tinting the grey background to slate) */}
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" />
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0F172A]/20" />
+            </div>
+          </div>
+        )}
+
+        {view === 'sports3' && (
+          <div className="animate-fade-in w-full h-full relative">
+            {iframeLoading && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl border border-zinc-800/50" style={{ height: 'calc(100vh - var(--header-height))' }}>
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                </div>
+              </div>
+            )}
+            <div className="w-full rounded-2xl overflow-hidden border border-zinc-800/50 shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+              <iframe 
+                src="https://tarafbet977.com/tr/live/"
+                frameBorder="0"
+                allowFullScreen
+                title="Spor 3"
+                className="relative z-0"
+                style={{
+                  position: 'absolute',
+                  top: '-165px',
+                  left: '0',
+                  width: '100%',
+                  height: 'calc(100% + 165px - 90px)'
+                }}
+              />
+              
+              {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
+              {!isMobile && (
+                <div 
+                  className="absolute z-30 cursor-pointer"
+                  style={{
+                    bottom: '0',
+                    right: '0',
+                    width: '140px',
+                    height: '60px',
+                    backgroundColor: 'transparent'
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowFakeBetModal(true);
+                  }}
+                  title="Bahis Yap (Sağ Tarafa Tıklayın)"
+                />
+              )}
+
+              {/* Site theme color overlay (tinting the grey background to slate) */}
+              <div 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" 
+                style={{ 
+                  clipPath: isMobile 
+                    ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
+                    : 'polygon(0% 0%, 100% 0%, 100% calc(100% - 70px), calc(100% - 300px) calc(100% - 70px), calc(100% - 300px) 100%, 0% 100%)' 
+                }} 
+              />
+              <div 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0F172A]/20" 
+                style={{ 
+                  clipPath: isMobile 
+                    ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
+                    : 'polygon(0% 0%, 100% 0%, 100% calc(100% - 70px), calc(100% - 300px) calc(100% - 70px), calc(100% - 300px) 100%, 0% 100%)' 
+                }} 
+              />
+            </div>
+          </div>
+        )}
+
+        {view === 'sports4' && (
+          <div className="animate-fade-in w-full h-full relative">
+            {iframeLoading && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl border border-zinc-800/50" style={{ height: 'calc(100vh - var(--header-height))' }}>
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                </div>
+              </div>
+            )}
+            <div className="w-full rounded-2xl overflow-hidden border border-zinc-800/50 shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+              <iframe 
+                src="https://sport.megobocteb.com/SportsBook/Home"
+                frameBorder="0"
+                allowFullScreen
+                title="Spor 4"
+                className="relative z-0"
+                style={{
+                  position: 'absolute',
+                  top: '-165px',
+                  left: '0',
+                  width: '100%',
+                  height: 'calc(100% + 165px)'
+                }}
+              />
+              
+              {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
+              {!isMobile && (
+                <div 
+                  className="absolute z-30 cursor-pointer"
+                  style={{
+                    bottom: '0',
+                    right: '0',
+                    width: '140px',
+                    height: '60px',
+                    backgroundColor: 'transparent'
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowFakeBetModal(true);
+                  }}
+                  title="Bahis Yap (Sağ Tarafa Tıklayın)"
+                />
+              )}
+
+              {/* Site theme color overlay (tinting the grey background to slate) */}
+              <div 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" 
+                style={{ 
+                  clipPath: isMobile 
+                    ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
+                    : 'polygon(0% 0%, 100% 0%, 100% calc(100% - 70px), calc(100% - 300px) calc(100% - 70px), calc(100% - 300px) 100%, 0% 100%)' 
+                }} 
+              />
+              <div 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0F172A]/20" 
+                style={{ 
+                  clipPath: isMobile 
+                    ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
+                    : 'polygon(0% 0%, 100% 0%, 100% calc(100% - 70px), calc(100% - 300px) calc(100% - 70px), calc(100% - 300px) 100%, 0% 100%)' 
+                }} 
+              />
+            </div>
+          </div>
+        )}
+
+        {view === 'sports5' && (
+          <div className="animate-fade-in w-full h-full relative" style={{ height: 'calc(100vh - var(--header-height))', overflow: 'hidden' }}>
+            {iframeLoading && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                </div>
+              </div>
+            )}
+            <div className="w-full h-full bg-black relative overflow-hidden flex flex-col items-center">
+              <iframe 
+                src="https://xslotlive2.xyz/"
+                frameBorder="0"
+                allowFullScreen
+                scrolling={isMobile ? "yes" : "no"}
+                title="Spor 5"
+                style={{
+                  position: 'absolute',
+                  top: isMobile ? '-80px' : '-210px', // Hides the dark header and top banner completely
+                  left: '0',
+                  width: '100%', 
+                  height: isMobile ? 'calc(100% + 80px)' : '2000px', // Locks player in place on desktop
+                  border: 'none',
+                  zIndex: 10
+                }}
+              />
+              
+              {/* Cinema Mode Black Mask Overlays & Click Blockers */}
+              <div className="absolute inset-0 z-40 flex flex-col pointer-events-none items-center">
+                
+                {/* Top Mask - Hides anything above the video box */}
+                <div className="w-full bg-black pointer-events-auto" style={{ height: isMobile ? '0px' : '30px' }}></div>
+                
+                {/* Center Row */}
+                <div className="flex w-full justify-center" style={{ height: isMobile ? '100%' : '520px' }}>
+                  {/* Left Mask - Blocks side banners & grey background */}
+                  <div className="h-full bg-black pointer-events-auto flex-1"></div>
+                  
+                  {/* Transparent Center Hole (Video Box & Channel List only) */}
+                  <div className="h-full bg-transparent pointer-events-none" style={{ width: '100%', maxWidth: '980px' }}></div>
+                  
+                  {/* Right Mask - Blocks side banners & grey background */}
+                  <div className="h-full bg-black pointer-events-auto flex-1"></div>
+                </div>
+                
+                {/* Bottom Mask - Hides everything below the video box (orange banners) */}
+                {!isMobile && <div className="w-full bg-black pointer-events-auto flex-1"></div>}
+              </div>
+            </div>
           </div>
         )}
 
@@ -1158,7 +1963,7 @@ const App: React.FC = () => {
                 <h2 className="text-white font-black text-3xl uppercase tracking-tight">Günlük Görevler</h2>
                 <p className="text-zinc-500 font-bold text-sm">Coin kazanmak ve marketi kullanmak için üye girişi gereklidir.</p>
                 <button onClick={() => setAuthModalMode('member')}
-                  className="px-8 py-4 bg-[#f0b90b] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#f0b90b]/90 transition-all shadow-[0_0_25px_rgba(240,185,11,0.4)]">
+                  className="px-8 py-4 bg-[#F5A623] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#F5A623]/90 transition-all shadow-[0_0_25px_rgba(240,185,11,0.4)]">
                   🔑 Üye Ol / Giriş Yap
                 </button>
               </div>
@@ -1181,7 +1986,7 @@ const App: React.FC = () => {
                 <h2 className="text-white font-black text-3xl uppercase tracking-tight">Bilet Etkinliği</h2>
                 <p className="text-zinc-500 font-bold text-sm">Çekilişe katılmak için üye girişi gereklidir.</p>
                 <button onClick={() => setAuthModalMode('member')}
-                  className="px-8 py-4 bg-[#f0b90b] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#f0b90b]/90 transition-all shadow-[0_0_25px_rgba(240,185,11,0.4)]">
+                  className="px-8 py-4 bg-[#F5A623] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#F5A623]/90 transition-all shadow-[0_0_25px_rgba(240,185,11,0.4)]">
                   🔑 Üye Ol / Giriş Yap
                 </button>
               </div>
@@ -1202,7 +2007,7 @@ const App: React.FC = () => {
                 <h2 className="text-white font-black text-3xl uppercase tracking-tight">Çekiliş Merkezi</h2>
                 <p className="text-zinc-500 font-bold text-sm">Çekilişe katılmak için üye girişi gereklidir.</p>
                 <button onClick={() => setAuthModalMode('member')}
-                  className="px-8 py-4 bg-[#f0b90b] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#f0b90b]/90 transition-all shadow-[0_0_25px_rgba(240,185,11,0.4)]">
+                  className="px-8 py-4 bg-[#F5A623] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#F5A623]/90 transition-all shadow-[0_0_25px_rgba(240,185,11,0.4)]">
                   🔑 Üye Ol / Giriş Yap
                 </button>
               </div>
@@ -1293,33 +2098,40 @@ const App: React.FC = () => {
             activeView={view}
           />
         )}
+        {view === 'demo' && (
+          <div className="animate-fade-in">
+            <DemoGames />
+          </div>
+        )}
       </div>
       </main>
 
-      <footer className="site-footer">
-        <div className="footer-badges">
-          <img src="https://picsum.photos/seed/18/40/40" alt="18+" style={{ height: '32px', borderRadius: '4px' }} />
-          <img src="https://picsum.photos/seed/gaming/100/40" alt="Gaming Commission" style={{ height: '32px', borderRadius: '4px' }} />
-          <img src="https://picsum.photos/seed/visa/60/40" alt="Visa" style={{ height: '24px' }} />
-          <img src="https://picsum.photos/seed/master/60/40" alt="Mastercard" style={{ height: '24px' }} />
-        </div>
-        <p className="footer-text">
-          Bu web sitesi yalnızca bilgilendirme amaçlıdır. Lütfen sorumlu bir şekilde oynayın.
-          Kumar bağımlılık yapabilir ve ciddi mali kayıplara neden olabilir. 18 yaşından küçüklerin kumar oynaması yasaktır.
-        </p>
-        <div className="footer-hashtags">
-          {(hashtags || '').split(',').map((tag, i) => tag.trim() ? <span key={i}>{tag.trim()}</span> : null)}
-        </div>
-        <div className="flex justify-center mt-6">
-          <button 
-            onClick={() => setAuthModalMode('admin')}
-            className="text-zinc-800 hover:text-amber-500 transition-all duration-300 transform hover:scale-125"
-            title="Sistem Girişi"
-          >
-            <Crown size={20} />
-          </button>
-        </div>
-      </footer>
+      {view !== 'sports' && view !== 'sports2' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && (
+        <footer className="site-footer">
+          <div className="footer-badges">
+            <img src="https://picsum.photos/seed/18/40/40" alt="18+" style={{ height: '32px', borderRadius: '4px' }} />
+            <img src="https://picsum.photos/seed/gaming/100/40" alt="Gaming Commission" style={{ height: '32px', borderRadius: '4px' }} />
+            <img src="https://picsum.photos/seed/visa/60/40" alt="Visa" style={{ height: '24px' }} />
+            <img src="https://picsum.photos/seed/master/60/40" alt="Mastercard" style={{ height: '24px' }} />
+          </div>
+          <p className="footer-text">
+            Bu web sitesi yalnızca bilgilendirme amaçlıdır. Lütfen sorumlu bir şekilde oynayın.
+            Kumar bağımlılık yapabilir ve ciddi mali kayıplara neden olabilir. 18 yaşından küçüklerin kumar oynaması yasaktır.
+          </p>
+          <div className="footer-hashtags">
+            {(hashtags || '').split(',').map((tag, i) => tag.trim() ? <span key={i}>{tag.trim()}</span> : null)}
+          </div>
+          <div className="flex justify-center mt-6">
+            <button 
+              onClick={() => setAuthModalMode('admin')}
+              className="text-zinc-800 hover:text-amber-500 transition-all duration-300 transform hover:scale-125"
+              title="Sistem Girişi"
+            >
+              <Crown size={20} />
+            </button>
+          </div>
+        </footer>
+      )}
       {/* PortalMobileNav is removed as requested by the user to move it to the top */}
           </div>
 
@@ -1336,22 +2148,93 @@ const App: React.FC = () => {
         />
       )}
 
+      {/* Fake Bet Modal */}
+      <FakeBetModal 
+        isOpen={showFakeBetModal}
+        onClose={() => setShowFakeBetModal(false)}
+        userBalance={siteUser?.balance || 0}
+        onSubmit={handleFakeBetSubmit}
+      />
+
+      <MyBetsModal
+        isOpen={showMyBetsModal}
+        onClose={() => setShowMyBetsModal(false)}
+      />
+
+      {/* ── Canlı Skor Modal ── */}
+      {showLiveScoreModal && (
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-6"
+          onClick={() => setShowLiveScoreModal(false)}
+        >
+          <div 
+            className="relative w-full max-w-5xl h-[85vh] bg-[#1a1e29] rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800/60 bg-[#12151e]">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
+                <span className="text-white font-black text-xs uppercase tracking-widest italic">CANLI SKOR & SONUÇLAR</span>
+              </div>
+              <button 
+                onClick={() => setShowLiveScoreModal(false)}
+                className="text-gray-400 hover:text-white transition-colors p-1.5 hover:bg-white/5 rounded-lg"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            {/* Modal Content */}
+            <div className="flex-1 w-full overflow-hidden bg-[#12151e] relative">
+              <iframe 
+                src="https://statsinfo.co/live?guid=a886190e-e01a-4155-85f4-e6daee231c8d&lg=en" 
+                frameBorder="0" 
+                title="Canlı Skor"
+                style={{
+                  position: 'absolute',
+                  top: '-48px',
+                  left: '0',
+                  width: '100%',
+                  height: 'calc(100% + 48px)'
+                }}
+              />
+              {/* Invisible overlay to block clicks on the "i", jersey, camera and chevron buttons (right column) */}
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  width: 'clamp(80px, 18%, 140px)',
+                  background: 'transparent',
+                  zIndex: 20,
+                  cursor: 'default'
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Modern Chat Widget ── */}
-      {view !== 'admin' && (
+      {view !== 'admin' && view !== 'sports' && view !== 'sports2' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && !showLiveScoreModal && (
         <div 
           style={{ 
             overflow: 'hidden', 
             position: 'fixed', 
             right: 0, top: 0, zIndex: 9999, height: '100dvh',
-            width: isMobile ? '100%' : '380px',
-            transform: 'translateX(0)',
-            visibility: 'visible',
-            transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s'
+            width: isChatOpen ? (isMobile ? '100%' : '380px') : (isMobile ? '100%' : '48px'),
+            transform: (isMobile && !isChatOpen) ? 'translateX(100%)' : 'translateX(0)',
+            visibility: (isMobile && !isChatOpen) ? 'hidden' : 'visible',
+            transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s, visibility 0.3s',
+            backgroundColor: (!isChatOpen && !isMobile) ? '#0D1320' : 'transparent',
+            borderLeft: (!isChatOpen && !isMobile) ? '1px solid rgba(245, 166, 35, 0.15)' : 'none'
           }}
         >
           <ModernChat
-            open={true}
-            onClose={() => {}}
+            open={isChatOpen}
+            onOpen={() => setIsChatOpen(true)}
+            onClose={() => setIsChatOpen(false)}
             siteUser={siteUser}
             userRole={userRole}
             isMobile={isMobile}
@@ -1361,6 +2244,19 @@ const App: React.FC = () => {
 
     </div>
     )}
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav 
+        activeView={view} 
+        onViewChange={(v) => setView(v as any)} 
+        siteUser={siteUser}
+        onProfileClick={() => {
+          if (!siteUser) {
+            setAuthModalMode('member');
+          } else {
+            setShowMyBetsModal(true);
+          }
+        }}
+      />
     </ThemeProvider>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Menu, Home, Ticket, BarChart3, Target, Trophy, Gift,
   TicketCheck, Shield, Spade, Tv, ChevronDown, MessageSquare, Send, HelpCircle,
-  Globe, Users
+  Globe, Users, Gamepad2
 } from 'lucide-react';
 import { NavVisibility } from './Header';
 
@@ -34,28 +34,23 @@ const Sidebar: React.FC<SidebarProps> = ({
   userRole,
   navVisibility,
 }) => {
-  const [casinoOpen, setCasinoOpen] = useState(false);
-  const [sporOpen, setSporOpen] = useState(false);
 
   const mainCategories: CategoryItem[] = [
     { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
+    { key: 'sports2', view: 'sports2', label: 'Spor', icon: <Trophy className={ICON_SIZE} /> },
+    { key: 'blackjack', view: 'blackjack', label: 'Casino', icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
+    { key: 'live-casino', view: 'live-casino', label: 'Canlı Casino', icon: <Target className={ICON_SIZE} /> },
+    { key: 'esports', view: 'esports', label: 'E-spor', icon: <Gamepad2 className={ICON_SIZE} /> },
+    { key: '724tv', view: '724tv', label: '724TV', icon: <Tv className={ICON_SIZE} /> },
     { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
     { key: 'analysis', view: 'analysis', label: 'Analizler', icon: <BarChart3 className={ICON_SIZE} />, visKey: 'analysis' },
     { key: 'pool', view: 'pool', label: '724TOTO', icon: <Target className={ICON_SIZE} />, visKey: 'pool' },
     { key: 'loyalty', view: 'loyalty', label: 'Görevler', icon: <Trophy className={ICON_SIZE} />, visKey: 'loyalty' },
     { key: 'cekilis', view: 'cekilis', label: 'Çekiliş', icon: <Gift className={ICON_SIZE} />, visKey: 'cekilis' },
     { key: 'raffle', view: 'raffle', label: 'Bilet', icon: <TicketCheck className={ICON_SIZE} />, visKey: 'raffle' },
-    { key: 'giveaway', view: 'giveaway', label: 'Çekiliş Yönetimi', icon: <Gift className={ICON_SIZE} />, visKey: 'giveaway', requireRole: true },
-  ];
-
-  const casinoCategories: CategoryItem[] = [
-    { key: 'blackjack', view: 'blackjack', label: 'Casino', icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
-  ];
-
-  const sporCategories: CategoryItem[] = [
     { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
     { key: 'trusted-sites', view: 'trusted-sites', label: 'Güvenilir', icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
-    { key: '724tv', view: '724tv', label: '724TV', icon: <Tv className={ICON_SIZE} /> },
+    { key: 'giveaway', view: 'giveaway', label: 'Çekiliş Yönetimi', icon: <Gift className={ICON_SIZE} />, visKey: 'giveaway', requireRole: true },
   ];
 
   const renderNavItems = (items: CategoryItem[]) => {
@@ -82,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <style>{`
         .sidebar-container {
           width: var(--sidebar-width);
-          background-color: #0F172A;
+          background-color: #0D1320;
           border-right: 1px solid rgba(255, 255, 255, 0.05);
           display: flex;
           flex-direction: column;
@@ -113,7 +108,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #1E293B;
+          background: #131C2C;
           border: 1px solid rgba(255, 255, 255, 0.05);
           border-radius: 8px;
           color: #a0a0a0;
@@ -128,7 +123,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         }
 
         .sidebar-group {
-          background: #1E293B;
+          background: #131C2C;
           border-radius: 12px;
           margin: 0 12px 12px 12px;
           padding: 8px 0;
@@ -156,9 +151,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         }
         
         .sidebar-nav-item.active {
-          color: #F59E0B;
+          color: #F5A623;
           background: rgba(255, 255, 255, 0.1);
-          border-left: 3px solid #F59E0B;
+          border-left: 3px solid #F5A623;
           padding-left: 13px;
         }
 
@@ -187,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           width: 100%;
           padding: 12px 16px;
           color: #fff;
-          background: #1E293B;
+          background: #131C2C;
           border: none;
           cursor: pointer;
           font-size: 14px;
@@ -232,8 +227,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           background: rgba(255, 255, 255, 0.03);
         }
         .sidebar-action-highlight {
-          color: #F59E0B !important;
-          background: rgba(245, 158, 11, 0.08) !important;
+          color: #F5A623 !important;
+          background: rgba(245, 166, 35, 0.08) !important;
         }
 
         /* Collapsed Sidebar CSS overrides to match Slotra design */
@@ -272,12 +267,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           background: rgba(255, 255, 255, 0.1) !important;
           border-left: none !important;
           padding-left: 0 !important;
-          color: #F59E0B !important;
+          color: #F5A623 !important;
         }
 
         .sidebar-collapsed .sidebar-action-highlight {
-          color: #F59E0B !important;
-          background: rgba(245, 158, 11, 0.08) !important;
+          color: #F5A623 !important;
+          background: rgba(245, 166, 35, 0.08) !important;
         }
 
         .sidebar-collapsed .sidebar-nav-icon,
@@ -315,42 +310,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           {renderNavItems(mainCategories)}
         </div>
 
-        {/* Casino & Spor Dropdown Group */}
-        <div className="sidebar-group" style={{ padding: 0 }}>
-          <button 
-            className="sidebar-dropdown-btn"
-            onClick={() => setCasinoOpen(!casinoOpen)}
-            title={!isOpen ? "Casino" : undefined}
-          >
-            <div className="sidebar-dropdown-icon">
-              <Spade className={ICON_SIZE} />
-              {isOpen && <span>Casino</span>}
-            </div>
-            {isOpen && <ChevronDown className={`w-4 h-4 sidebar-dropdown-arrow ${casinoOpen ? 'open' : ''}`} />}
-          </button>
-          {casinoOpen && (
-            <div style={{ background: '#162032', padding: '4px 0' }}>
-              {renderNavItems(casinoCategories)}
-            </div>
-          )}
 
-          <button 
-            className="sidebar-dropdown-btn"
-            onClick={() => setSporOpen(!sporOpen)}
-            title={!isOpen ? "Spor" : undefined}
-          >
-            <div className="sidebar-dropdown-icon">
-              <Target className={ICON_SIZE} />
-              {isOpen && <span>Spor</span>}
-            </div>
-            {isOpen && <ChevronDown className={`w-4 h-4 sidebar-dropdown-arrow ${sporOpen ? 'open' : ''}`} />}
-          </button>
-          {sporOpen && (
-            <div style={{ background: '#162032', padding: '4px 0' }}>
-              {renderNavItems(sporCategories)}
-            </div>
-          )}
-        </div>
 
         {/* Action Buttons Group */}
         <div className="sidebar-group" style={{ padding: 0 }}>
@@ -359,7 +319,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {isOpen && <span>Kodu Kullan</span>}
           </button>
           <button className="sidebar-action-btn sidebar-action-highlight" title={!isOpen ? "Arkadaşını Davet Et" : undefined}>
-            <span className="sidebar-nav-icon"><Users className={ICON_SIZE} style={{ color: '#F59E0B' }} /></span>
+            <span className="sidebar-nav-icon"><Users className={ICON_SIZE} style={{ color: '#F5A623' }} /></span>
             {isOpen && <span>Arkadaşını Davet Et</span>}
           </button>
           <button className="sidebar-action-btn" title={!isOpen ? "Telegram" : undefined}>

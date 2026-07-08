@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SiteUser, UserLoyalty } from '../types';
 import { Search, Trash2, Ban, CheckCircle2, Coins, Ticket,
-    Mail, Phone, ChevronDown, ChevronUp, Save, Plus, Loader2, Shield
+    Mail, Phone, ChevronDown, ChevronUp, Save, Plus, Loader2, Shield, Wallet, Key, Eye, EyeOff
 } from 'lucide-react';
 import { supabase } from '../utils/supabase';
 
@@ -18,6 +18,9 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
     const [manualCoins, setManualCoins] = useState('');
     const [manualTickets, setManualTickets] = useState('');
     const [editRole, setEditRole] = useState<SiteUser['role']>(member.role || 'member');
+    const [editBalance, setEditBalance] = useState(member.balance?.toString() || '0');
+    const [editPassword, setEditPassword] = useState(member.password || '');
+    const [showPassword, setShowPassword] = useState(false);
     const [msg, setMsg] = useState('');
 
     useEffect(() => {
@@ -62,8 +65,17 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
 
     const handleDeleteMember = async () => {
         if (!window.confirm(`"${member.username}" üyesini silmek istediğinizden emin misiniz?`)) return;
-        const { error } = await supabase.from('members').delete().eq('id', member.id);
-        if (!error) onRefresh();
+        const { data, error } = await supabase.from('members').delete().eq('id', member.id).select();
+        
+        if (error) {
+            console.error('Delete member error:', error);
+            alert(`Üye silinemedi (Veritabanı Hatası): ${error.message}`);
+        } else if (!data || data.length === 0) {
+            alert('Üye silinemedi. Supabase RLS delete politikalarının (üyeyi silme izninin) SQL Editor üzerinden tanımlandığından emin olun.');
+        } else {
+            showMsg('✅ Üye başarıyla silindi.');
+            onRefresh();
+        }
     };
 
     const handleSaveNotes = async () => {
@@ -81,6 +93,31 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
             showMsg('❌ Yetki güncellenemedi (Veritabanı hatası).');
         } else {
             showMsg(`✅ Yetki '${editRole}' olarak güncellendi.`);
+            onRefresh();
+        }
+    };
+
+    const handleSaveBalance = async () => {
+        const numBalance = parseFloat(editBalance);
+        if (isNaN(numBalance)) return;
+        const { error } = await supabase.from('members').update({ balance: numBalance }).eq('id', member.id);
+        if (error) {
+            console.error('Update balance error:', error);
+            alert(`Bakiye güncellenemedi (Veritabanı Hatası): ${error.message}`);
+        } else {
+            showMsg(`✅ Bakiye ${numBalance} ₺ olarak güncellendi.`);
+            onRefresh();
+        }
+    };
+
+    const handleSavePassword = async () => {
+        if (!editPassword.trim()) return;
+        const { error } = await supabase.from('members').update({ password: editPassword.trim() }).eq('id', member.id);
+        if (error) {
+            console.error('Update password error:', error);
+            alert(`Şifre güncellenemedi (Veritabanı Hatası): ${error.message}`);
+        } else {
+            showMsg('✅ Şifre başarıyla güncellendi.');
             onRefresh();
         }
     };
@@ -149,14 +186,15 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                         <span className="text-zinc-600 text-[10px] flex items-center gap-1"><Phone className="w-3 h-3" />{member.phone || '—'}</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-4 flex-shrink-0">
-                    <div className="text-right">
-                        <div className="flex items-center gap-1 text-[#f0b90b] font-black text-xs justify-end"><Coins className="w-3 h-3" />{loyalty?.coins || 0}</div>
-                        <div className="flex items-center gap-1 text-purple-400 font-black text-[10px] justify-end"><Ticket className="w-3 h-3" />{loyalty?.tickets || 0} bilet</div>
-                    </div>
-                    <span className="text-zinc-700 text-[10px] font-bold hidden md:block">{new Date(member.createdAt).toLocaleDateString('tr-TR')}</span>
-                    {expanded ? <ChevronUp className="w-4 h-4 text-zinc-600" /> : <ChevronDown className="w-4 h-4 text-zinc-600" />}
+                <div className="flex items-center gap-3 w-40 shrink-0">
+                <div className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+                    {member.balance?.toFixed(2) || '0.00'} ₺
                 </div>
+                {member.status === 'active' && <div className="text-emerald-500 flex items-center gap-1 text-[10px] font-black tracking-wider bg-emerald-500/10 px-2 py-1 rounded"><CheckCircle2 className="w-3 h-3"/> AKTİF</div>}
+                {member.status === 'suspended' && <div className="text-red-500 flex items-center gap-1 text-[10px] font-black tracking-wider bg-red-500/10 px-2 py-1 rounded"><Ban className="w-3 h-3"/> ASKIYA ALINDI</div>}
+                {member.status === 'pending' && <div className="text-amber-500 flex items-center gap-1 text-[10px] font-black tracking-wider bg-amber-500/10 px-2 py-1 rounded">BEKLİYOR</div>}
+            </div>        
+            {expanded ? <ChevronUp className="w-4 h-4 text-zinc-600" /> : <ChevronDown className="w-4 h-4 text-zinc-600" />}
             </div>
 
             {/* Expanded Detail */}
@@ -187,39 +225,6 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                                 </div>
                             </div>
 
-                            {/* Role Management Section */}
-                            <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(255,185,11,0.03)', border: '1px solid rgba(240,185,11,0.1)' }}>
-                                <div className="flex items-center gap-2 mb-1">
-                                    <Shield className="w-3.5 h-3.5 text-[#f0b90b]" />
-                                    <span className="text-white font-black text-[11px] uppercase tracking-wider">Yetki Yönetimi</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <select 
-                                        value={editRole}
-                                        onChange={(e) => setEditRole(e.target.value as any)}
-                                        className="flex-1 bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg px-3 py-1.5 outline-none focus:border-[#f0b90b]/50"
-                                    >
-                                        <option value="UYE">Normal Üye (UYE)</option>
-                                        <option value="MODERATOR">Moderatör (MODERATOR)</option>
-                                        <option value="ADMIN">Yönetici (ADMIN)</option>
-                                        <option value="PATRON">Patron (PATRON)</option>
-                                        <option value="KRAL">Kral (KRAL)</option>
-                                        <option value="BOT">Sohbet Botu (BOT)</option>
-                                        <option value="author">Yazar (Haber Düzenler)</option>
-                                        <option value="editor">Editör (Haber+Kupon+Analiz)</option>
-                                    </select>
-                                    <button
-                                        onClick={handleSaveRole}
-                                        className="px-4 py-1.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all flex items-center gap-1.5"
-                                    >
-                                        <Save className="w-3 h-3" /> Güncelle
-                                    </button>
-                                </div>
-                                <p className="text-zinc-600 text-[9px] font-medium leading-relaxed italic">
-                                    * Üyeye verdiğiniz yetki, bir sonraki girişinde aktif olacaktır.
-                                </p>
-                            </div>
-
                             {/* Ticket history */}
                             {loyalty.transactions.filter(t => t.tickets && t.tickets > 0).length > 0 && (
                                 <div className="p-3 rounded-xl" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.04)' }}>
@@ -234,6 +239,95 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                             )}
                         </>
                     )}
+
+                    {/* Balance Management Section (Always Available) */}
+                    <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
+                        <div className="flex items-center gap-2 mb-1">
+                            <Wallet className="w-3.5 h-3.5 text-emerald-500" />
+                            <span className="text-white font-black text-[11px] uppercase tracking-wider">Bakiye Yönetimi (TL)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input 
+                                type="number"
+                                step="0.01"
+                                value={editBalance}
+                                onChange={(e) => setEditBalance(e.target.value)}
+                                className="flex-1 bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg px-3 py-1.5 outline-none focus:border-emerald-500/50"
+                                placeholder="0.00"
+                            />
+                            <button
+                                onClick={handleSaveBalance}
+                                className="px-4 py-1.5 bg-emerald-500 text-white font-black text-xs rounded-lg hover:bg-emerald-400 transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-500/20"
+                            >
+                                <Save className="w-3 h-3" /> Güncelle
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Password Management Section (Always Available) */}
+                    <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)' }}>
+                        <div className="flex items-center gap-2 mb-1">
+                            <Key className="w-3.5 h-3.5 text-blue-500" />
+                            <span className="text-white font-black text-[11px] uppercase tracking-wider">Şifre Yönetimi</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="relative flex-1">
+                                <input 
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={editPassword}
+                                    onChange={(e) => setEditPassword(e.target.value)}
+                                    className="w-full bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg pl-3 pr-8 py-1.5 outline-none focus:border-blue-500/50"
+                                    placeholder="Yeni Şifre"
+                                />
+                                <button 
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                                >
+                                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                                </button>
+                            </div>
+                            <button
+                                onClick={handleSavePassword}
+                                className="px-4 py-1.5 bg-blue-500 text-white font-black text-xs rounded-lg hover:bg-blue-400 transition-all flex items-center gap-1.5 shadow-lg shadow-blue-500/20"
+                            >
+                                <Save className="w-3 h-3" /> Güncelle
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Role Management Section (Always Available) */}
+                    <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(255,185,11,0.03)', border: '1px solid rgba(240,185,11,0.1)' }}>
+                        <div className="flex items-center gap-2 mb-1">
+                            <Shield className="w-3.5 h-3.5 text-[#f0b90b]" />
+                            <span className="text-white font-black text-[11px] uppercase tracking-wider">Yetki Yönetimi</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <select 
+                                value={editRole}
+                                onChange={(e) => setEditRole(e.target.value as any)}
+                                className="flex-1 bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg px-3 py-1.5 outline-none focus:border-[#f0b90b]/50"
+                            >
+                                <option value="UYE">Normal Üye (UYE)</option>
+                                <option value="MODERATOR">Moderatör (MODERATOR)</option>
+                                <option value="ADMIN">Yönetici (ADMIN)</option>
+                                <option value="PATRON">Patron (PATRON)</option>
+                                <option value="KRAL">Kral (KRAL)</option>
+                                <option value="BOT">Sohbet Botu (BOT)</option>
+                                <option value="author">Yazar (Haber Düzenler)</option>
+                                <option value="editor">Editör (Haber+Kupon+Analiz)</option>
+                            </select>
+                            <button
+                                onClick={handleSaveRole}
+                                className="px-4 py-1.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all flex items-center gap-1.5"
+                            >
+                                <Save className="w-3 h-3" /> Güncelle
+                            </button>
+                        </div>
+                        <p className="text-zinc-600 text-[9px] font-medium leading-relaxed italic">
+                            * Üyeye verdiğiniz yetki, bir sonraki girişinde aktif olacaktır.
+                        </p>
+                    </div>
 
                     {/* Notes */}
                     <div className="flex gap-2">
@@ -282,6 +376,7 @@ const AdminMembersTab: React.FC<AdminMembersTabProps> = ({ coinName = 'Coin' }) 
         const { data, error } = await supabase
             .from('members')
             .select('*')
+            .or('is_bot.eq.false,is_bot.is.null')
             .order('created_at', { ascending: false });
         
         if (data) {
@@ -294,7 +389,9 @@ const AdminMembersTab: React.FC<AdminMembersTabProps> = ({ coinName = 'Coin' }) 
                 phone: m.phone || '',
                 createdAt: new Date(m.created_at).getTime(),
                 status: m.status || 'active',
-                notes: m.notes || ''
+                notes: m.notes || '',
+                balance: m.balance || 0,
+                role: m.role || 'member'
             }));
             setMembers(mapped);
         }

@@ -9,186 +9,148 @@ const getFutureDate = (offsetDays: number): string => {
 
 const wcMatchesRaw = [
   {
-    dateOffset: 0,
-    time: '22:00',
-    group: '32. Tur',
-    home: '🇪🇸 İspanya',
-    away: '🇦🇹 Avusturya',
-    pred: 'KG Var',
-    conf: 85,
-    score: 8.5,
-    odd: '1.80',
-    tactical: "İspanya, klasik 4-3-3 dizilişiyle topa sahip olma oranını %65'in üzerine çıkarıp seti rakip yarı sahaya yıkmayı hedefleyecek. Avusturya ise Ralf Rangnick ekolünün getirdiği agresif 4-4-2 şok presiyle İspanya'nın geriden oyun kurmasını engellemeye çalışacak.",
-    breaking: "İspanya merkez orta sahasının, Avusturya'nın ilk bölgedeki yoğun presini kırdığı veya Avusturya'nın kaptığı toplarla İspanya savunma arkasındaki boşlukları yakaladığı an maçın yönünü belirler.",
-    scenario: "Avusturya'nın tempolu ve fiziksel oyunu İspanya savunmasını hataya zorlar ancak İspanya'nın hücum yaratıcılığı da golü bulacaktır. Skor Tahmini: 2 - 1."
+    exactDate: '2026-07-07', time: '19:00',
+    home: '🇦🇷 Arjantin', away: '🇪🇬 Mısır',
+    odds1: '1.38', oddsX: '4.90', odds2: '9.50',
+    oddsOver: '2.06', oddsUnder: '1.83',
+    odds1X: '1.07', odds12: '1.21', oddsX2: '3.15'
   },
   {
-    dateOffset: 1,
-    time: '02:00',
-    group: '32. Tur',
-    home: '🇵🇹 Portekiz',
-    away: '🇭🇷 Hırvatistan',
-    pred: 'MS 1',
-    conf: 75,
-    score: 7.5,
-    odd: '1.85',
-    tactical: "Portekiz, 4-2-3-1 dizilişiyle kanat varyasyonlarını ve merkezdeki dinamizmi birleştirmek isteyecektir. Hırvatistan ise yaşlanan ama hala elit seviyedeki 4-3-3 merkez üçlüsüyle oyunun temposunu düşürüp Portekiz'in coşkusunu baltalamayı amaçlıyor.",
-    breaking: "Maçın temposunun Hırvatistan'ın istediği gibi düşük mü kalacağı, yoksa Portekiz'in geçiş hücumlarıyla oyunu kaosa mı sürükleyeceği kritik eşiktir.",
-    scenario: "Portekiz'in geniş ve kaliteli kadro derinliği ikinci yarıda ağırlığını hissettirir. Skor Tahmini: 2 - 0."
+    exactDate: '2026-07-07', time: '19:00',
+    home: '🇦🇲 Ararat-Ermenistan', away: '🇱🇻 Riga FC',
+    odds1: '2.80', oddsX: '3.10', odds2: '2.40',
+    oddsOver: '2.00', oddsUnder: '1.72',
+    odds1X: '1.48', odds12: '1.29', oddsX2: '1.36'
   },
   {
-    dateOffset: 1,
-    time: '06:00',
-    group: '32. Tur',
-    home: '🇨🇭 İsviçre',
-    away: '🇩🇿 Cezayir',
-    pred: '2.5 Alt',
-    conf: 80,
-    score: 8.0,
-    odd: '1.95',
-    tactical: "İsviçre, disiplinli 3-4-2-1 yapısıyla savunma güvenliğini ön planda tutan, katı bir turnuva takımı görüntüsünde. Cezayir ise 4-3-3 dizilişiyle kanatlardaki bireysel yeteneklerine güveniyor.",
-    breaking: "Cezayir'in sabırsız hücumlarında kaptıracağı toplar sonrası, İsviçre'nin kanat bekleriyle yapacağı hızlı kontrataklar maçın kilidini açar.",
-    scenario: "İki takımın da kontrollü başlayacağı, hata payının düşük olduğu bir taktik savaş bizi bekliyor. Skor Tahmini: 1 - 0."
+    exactDate: '2026-07-07', time: '19:00',
+    home: '🇱🇹 FK Kauno Zalgiris', away: '🇽🇰 Drita (KOS)',
+    odds1: '1.84', oddsX: '3.30', odds2: '3.90',
+    oddsOver: '2.00', oddsUnder: '1.70',
+    odds1X: '1.19', odds12: '1.25', oddsX2: '1.82'
   },
   {
-    dateOffset: 1,
-    time: '21:00',
-    group: '32. Tur',
-    home: '🇦🇺 Avustralya',
-    away: '🇪🇬 Mısır',
-    pred: '2.5 Alt',
-    conf: 85,
-    score: 8.5,
-    odd: '2.91',
-    tactical: "Avustralya, fiziksel üstünlüğe dayalı, duran toplarda etkili olan düz bir 4-4-2 tercih edecektir. Mısır ise tamamen kompakt bir 4-5-1 düzeniyle alanı daraltıp, ilerideki süper starının yaratacağı bireysel deha anlarına bel bağlayacak.",
-    breaking: "Avustralya'nın duran top organizasyonlarında Mısır savunmasının yapacağı tek bir adam paylaşım hatası veya Mısır'ın kontra atakta Avustralya'nın ağır savunmasını eksik yakalaması.",
-    scenario: "Mısır savunmayı sert tutacaktır, Avustralya ise kilidi açmakta zorlanır. Skor Tahmini: 1 - 1."
+    exactDate: '2026-07-07', time: '20:00',
+    home: '🇲🇰 Vardar Skopje', away: '🇫🇮 KuPS',
+    odds1: '2.30', oddsX: '3.30', odds2: '2.80',
+    oddsOver: '1.94', oddsUnder: '1.78',
+    odds1X: '1.36', odds12: '1.27', oddsX2: '1.50'
   },
   {
-    dateOffset: 2,
-    time: '01:00',
-    group: '32. Tur',
-    home: '🇦🇷 Arjantin',
-    away: '🇨🇻 Cape Verde',
-    pred: 'İlk Yarı 1',
-    conf: 90,
-    score: 9.0,
-    odd: '1.70',
-    tactical: "Arjantin, 4-3-3 asimetrik dizilişiyle tam saha pres yapıp maçı ilk 30 dakikada koparmak isteyecektir. Cape Verde ise derin bir 5-4-1 blok yerleşimiyle tamamen kendi ceza sahası çevresini savunup tarihi bir direniş göstermeye çalışacak.",
-    breaking: "Arjantin'in erken bulacağı bir gol Cape Verde'nin tüm planını yıkar ve farka yol açar; gol geciktikçe Cape Verde'nin direnci ve özgüveni artar.",
-    scenario: "Kalite farkı çok bariz. Arjantin ilk yarıdan fişi çeker. Skor Tahmini: 3 - 0."
+    exactDate: '2026-07-07', time: '20:15',
+    home: '🇱🇺 UNA Strassen', away: '🇸🇲 La Fiorita',
+    odds1: '1.26', oddsX: '5.00', odds2: '9.50',
+    oddsOver: '1.72', oddsUnder: '2.00',
+    odds1X: '1.01', odds12: '1.11', oddsX2: '3.30'
   },
   {
-    dateOffset: 2,
-    time: '04:30',
-    group: '32. Tur',
-    home: '🇨🇴 Kolombiya',
-    away: '🇬🇭 Gana',
-    pred: 'MS 1',
-    conf: 75,
-    score: 7.5,
-    odd: '1.90',
-    tactical: "Kolombiya, 4-2-3-1 dizilişiyle Güney Amerika agresifliğini ve teknik becerisini sahaya yansıtacak. Gana ise atletik 4-3-3 dizilişiyle fiziksel ikili mücadelelerde üstünlük kurup, Kolombiya'nın yaratıcı ayaklarına sert baskı uygulayacaktır.",
-    breaking: "Gana orta sahasının yapacağı sert fauller sonrası oyunun gerilmesi ve Kolombiya'nın duran top/serbest vuruş yeteneğiyle bu sertliği cezalandırdığı an.",
-    scenario: "İki takımın da fiziksel gücü yüksek ancak Kolombiya taktiksel olgunluk ve bitiricilik konusunda bir adım önde. Skor Tahmini: 2 - 1."
+    exactDate: '2026-07-07', time: '20:30',
+    home: '🇲🇹 Floriana', away: '🇮🇪 Shamrock Rovers',
+    odds1: '2.95', oddsX: '3.20', odds2: '2.25',
+    oddsOver: '2.05', oddsUnder: '1.68',
+    odds1X: '1.54', odds12: '1.28', oddsX2: '1.32'
   },
   {
-    dateOffset: 2,
-    time: '20:00',
-    group: '16. Tur',
-    home: '🇨🇦 Kanada',
-    away: '🇲🇦 Fas',
-    pred: 'MS 2',
-    conf: 80,
-    score: 8.0,
-    odd: '1.65',
-    tactical: "Kanada, Alphonso Davies önderliğinde tamamen hıza dayalı bir sol kanat hücum planı uyguluyor. Fas ise meşhur disiplinli 4-1-4-1 yerleşimiyle alan kapatmada usta.",
-    breaking: "Fas'ın katı savunma hattının Kanada'nın patlayıcı atletizmine karşı vereceği esneklik sınavı. Hakimi-Davies eşleşmesinden kimin galip çıkacağı maçı çözer.",
-    scenario: "Fas bu tarz eleme turlarında gol yemesi çok zor bir takıma dönüşüyor. Skor Tahmini: 0 - 1."
+    exactDate: '2026-07-07', time: '21:30',
+    home: '🇧🇦 Borac Banja Luka', away: '🇧🇬 Levski Sofia',
+    odds1: '3.20', oddsX: '3.00', odds2: '2.20',
+    oddsOver: '1.68', oddsUnder: '2.05',
+    odds1X: '1.56', odds12: '1.31', oddsX2: '1.28'
   },
   {
-    dateOffset: 3,
-    time: '00:00',
-    group: '16. Tur',
-    home: '🇵🇾 Paraguay',
-    away: '🇫🇷 Fransa',
-    pred: 'MS 2',
-    conf: 85,
-    score: 8.5,
-    odd: '1.60',
-    tactical: "Paraguay, geleneksel 4-4-2 katı savunma anlayışıyla Fransa'yı durdurup maçı uzatmalara/penaltılara taşımak isteyecek. Fransa ise akışkan hücum hattıyla Paraguay'ın savunma duvarını yıkmaya çalışacak.",
-    breaking: "Paraguay'ın ceza sahası yayında yapacağı bir anlık kademe hatası veya Fransa'nın bireysel yeteneklerinin yaratacağı 1v1 çalımlar.",
-    scenario: "Paraguay ne kadar dirense de Fransa'nın hücum gücü bu kilidi açacaktır. Skor Tahmini: 0 - 2."
+    exactDate: '2026-07-07', time: '21:45',
+    home: '🇫🇴 Klaksvik', away: '🇱🇺 FC Atert Bissen',
+    odds1: '1.46', oddsX: '4.00', odds2: '6.00',
+    oddsOver: '1.84', oddsUnder: '1.86',
+    odds1X: '1.07', odds12: '1.18', oddsX2: '2.45'
   },
   {
-    dateOffset: 3,
-    time: '23:00',
-    group: '16. Tur',
-    home: '🇧🇷 Brezilya',
-    away: '🇳🇴 Norveç',
-    pred: 'KG Var',
-    conf: 80,
-    score: 8.0,
-    odd: '1.72',
-    tactical: "Brezilya, saf yetenek dolu 4-2-3-1 dizilişiyle Norveç savunmasını sürekli dengesiz yakalamaya çalışacak. Norveç ise Haaland'ı beslemek adına 4-4-2 oynayacak.",
-    breaking: "Brezilya'nın hücum ederken arkada bıraktığı boşluklarda Haaland'ın topla buluşup kaleciyle karşı karşıya kaldığı anlar maçın kaderini çizer.",
-    scenario: "Norveç'in hücum efektifliği savunma zaaflarını dengeler. Bol gollü bir maç bizi bekler. Skor Tahmini: 3 - 2."
+    exactDate: '2026-07-07', time: '22:00',
+    home: '🇮🇸 Vikingur Reykjavik', away: '🇭🇺 Gyori ETO',
+    odds1: '2.55', oddsX: '3.30', odds2: '2.45',
+    oddsOver: '1.72', oddsUnder: '2.00',
+    odds1X: '1.45', odds12: '1.26', oddsX2: '1.42'
   },
   {
-    dateOffset: 4,
-    time: '03:00',
-    group: '16. Tur',
-    home: '🇲🇽 Meksika',
-    away: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 İngiltere',
-    pred: 'MS 2',
-    conf: 75,
-    score: 7.5,
-    odd: '1.68',
-    tactical: "Meksika, yüksek enerjili 4-3-3 şok presiyle İngiltere'nin geriden pasla çıkmasını bozmak isteyecek. İngiltere ise sabırlı dizilişiyle topu kontrol edip pozisyon arayacak.",
-    breaking: "Meksika'nın coşkulu presinin kırıldığı an, İngiltere'nin orta saha kalitesi dönen topları toplayıp Meksika'yı kendi yarı sahasına hapsedecektir.",
-    scenario: "Meksika turnuva takımıdır ve İngiltere'yi çok zorlar ancak İngiltere daha soğukkanlı kalıp maçı kazanmayı bilir. Skor Tahmini: 0 - 1."
+    exactDate: '2026-07-07', time: '23:00',
+    home: '🇨🇭 İsviçre', away: '🇨🇴 Kolombiya',
+    odds1: '3.65', oddsX: '3.15', odds2: '2.27',
+    oddsOver: '1.72', oddsUnder: '2.22',
+    odds1X: '1.73', odds12: '1.35', oddsX2: '1.34'
   },
   {
-    dateOffset: 5,
-    time: '03:00',
-    group: '16. Tur',
-    home: '🇺🇸 ABD',
-    away: '🇧🇪 Belçika',
-    pred: 'KG Var',
-    conf: 80,
-    score: 8.0,
-    odd: '1.88',
-    tactical: "ABD, genç ve dinamik dizilişiyle sahayı çok geniş kullanıp, Belçika'nın ağır savunma hattını yıpratmak isteyecek. Belçika ise De Bruyne'ün pas istasyonlarıyla oyun zekasını konuşturup ABD'nin tecrübesizlik alanlarını cezalandırmayı hedefliyor.",
-    breaking: "ABD'nin yüksek temposuna Belçika orta sahasının fiziksel olarak yanıt verip veremeyeceği. De Bruyne'e yapılacak presin kırıldığı an Belçika tehlike yaratır.",
-    scenario: "ABD atletizmle üstünlük kurabilir, Belçika ise tecrübeyle karşılık verir. Karşılıklı goller olası. Skor Tahmini: 2 - 2."
+    exactDate: '2026-07-08', time: '18:00',
+    home: '🇰🇿 Kairat Almaty', away: '🇲🇪 Sutjeska',
+    odds1: '1.29', oddsX: '4.80', odds2: '9.00',
+    oddsOver: '1.76', oddsUnder: '1.96',
+    odds1X: '1.02', odds12: '1.12', oddsX2: '3.10'
+  },
+  {
+    exactDate: '2026-07-08', time: '20:00',
+    home: '🇧🇾 ML Vitebsk', away: '🇷🇴 Univ. Craiova',
+    odds1: '3.40', oddsX: '3.10', odds2: '2.05',
+    oddsOver: '2.05', oddsUnder: '1.68',
+    odds1X: '1.64', odds12: '1.29', oddsX2: '1.24'
+  },
+  {
+    exactDate: '2026-07-08', time: '21:00',
+    home: '🇺🇦 Ukrayna U19', away: '🇩🇪 Almanya U19',
+    odds1: '3.60', oddsX: '3.60', odds2: '1.95',
+    oddsOver: '1.74', oddsUnder: '2.02',
+    odds1X: '1.79', odds12: '1.26', oddsX2: '1.26'
+  },
+  {
+    exactDate: '2026-07-09', time: '20:00',
+    home: '🇺🇦 Dinamo Kiev', away: '🇷🇴 Univ. Cluj',
+    odds1: '1.58', oddsX: '3.80', odds2: '5.00',
+    oddsOver: '1.72', oddsUnder: '2.00',
+    odds1X: '1.12', odds12: '1.20', oddsX2: '2.15'
+  },
+  {
+    exactDate: '2026-07-09', time: '21:00',
+    home: '🇷🇸 Vojvodina', away: '🇭🇺 Ferencvaros',
+    odds1: '2.85', oddsX: '3.30', odds2: '2.25',
+    oddsOver: '1.68', oddsUnder: '2.05',
+    odds1X: '1.52', odds12: '1.26', oddsX2: '1.35'
+  },
+  {
+    exactDate: '2026-07-09', time: '23:00',
+    home: '🇫🇷 Fransa', away: '🇲🇦 Fas',
+    odds1: '1.60', oddsX: '3.85', odds2: '6.55',
+    oddsOver: '2.05', oddsUnder: '1.84',
+    odds1X: '1.13', odds12: '1.29', oddsX2: '2.42'
   }
 ];
 
 const generateDemoAnalyses = (): MatchAnalysis[] => {
   return wcMatchesRaw.map((m, index) => {
-    const matchDate = getFutureDate(m.dateOffset);
-    const odd2 = (parseFloat(m.odd) * 1.6).toFixed(2);
     return {
-      id: `wc-2026-${index}-${m.home.replace(/[^a-zA-Z0-9]/g, '')}`,
-      league: `Dünya Kupası 2026 - ${m.group}`,
+      id: `analysis-${index}-${m.home.replace(/[^a-zA-Z0-9]/g, '')}`,
+      league: `Öne Çıkan Maçlar`,
       homeTeam: m.home,
       awayTeam: m.away,
       matchTime: m.time,
-      matchDate,
-      analysis: `Dünya Kupası 2026 - Son 32 mücadelesi! ${m.home} ile ${m.away} çeyrek final biletini kapmak için sahaya çıkıyor. Telafisi olmayan bu eleme maçında iki takım da tüm gücüyle savaşacak.`,
-      tacticalSummary: m.tactical,
-      breakingPoint: m.breaking,
-      bettingScenario: m.scenario,
-      prediction: m.pred,
-      confidence: m.conf,
-      modelScore: m.score,
-      recentHistory: `Eleme aşamasının bu kritik turunda sürprizlere yer yok.`,
-      expectedGoals: '2.10 - 1.10',
-      bookieOdds: [
-        { name: '21.com', odd1: m.odd, odd2, link: 'https://prod.trk21.com/click?domain=21.com', isHighest: true }
-      ],
-      createdAt: Date.now(),
-      sport: 'Futbol'
+      matchDate: m.exactDate,
+      analysis: `${m.home} ile ${m.away} karşı karşıya geliyor. Uzman ekibimizin detaylı istatistiksel analizine göre bu maçta dikkat çeken fırsatlar var.`,
+      tacticalSummary: "Her iki takımın da son maçlarındaki form durumları ve taktiksel dizilişleri bu karşılaşmanın yüksek tempoda geçeceğine işaret ediyor.",
+      breakingPoint: "Orta sahadaki ikili mücadeleler ve kanat organizasyonları maçın kilidini çözecek olan en önemli faktörler.",
+      bettingScenario: `Taraf bahsinde ${m.odds1 < m.odds2 ? 'ev sahibi' : 'deplasman'} takım bir adım önde. Gol beklentisi oranlara da yansımış durumda.`,
+      prediction: parseFloat(m.odds1) < parseFloat(m.odds2) ? 'MS 1' : 'MS 2',
+      confidence: 85,
+      modelScore: 8.5,
+      recentHistory: 'İki takım arasındaki rekabette son dönemdeki istatistikler ve mevcut kadro kaliteleri.',
+      expectedGoals: '1.80 - 1.20',
+      bookieOdds: [],
+      createdAt: Date.now() - (index * 3600000),
+      sport: 'Futbol',
+      odds1: m.odds1,
+      oddsX: m.oddsX,
+      odds2: m.odds2,
+      oddsOver: m.oddsOver,
+      oddsUnder: m.oddsUnder,
+      odds1X: m.odds1X,
+      odds12: m.odds12,
+      oddsX2: m.oddsX2
     };
   });
 };

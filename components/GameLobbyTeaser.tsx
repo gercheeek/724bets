@@ -15,7 +15,7 @@ const DEFAULT_CASINO_GAMES: CasinoLobbyGame[] = [
   { id: 'sugar_rush', name: 'Sugar Rush', provider: 'Pragmatic Play', type: 'slot', themeColor: 'from-[#E040FB] to-[#FF4081]', image: '', link: 'https://gamdom.com/r/724bahis', isActive: true, order: 2 },
   { id: 'shining_crown', name: 'Shining Crown', provider: 'Amusnet', type: 'slot', themeColor: 'from-[#FFD54F] to-[#8D6E63]', image: '', link: 'https://gamdom.com/r/724bahis', isActive: true, order: 3 },
   { id: 'big_bass', name: 'Big Bass Bonanza', provider: 'Reel Kingdom', type: 'slot', themeColor: 'from-[#00E5FF] to-[#1A237E]', image: '', link: 'https://gamdom.com/r/724bahis', isActive: true, order: 4 },
-  { id: 'gates_olympus', name: 'Gates of Olympus', provider: 'Pragmatic Play', type: 'slot', themeColor: 'from-[#FFC107] to-[#3E2723]', image: '', link: 'https://gamdom.com/r/724bahis', isActive: true, order: 5 },
+  { id: 'gates_olympus', name: 'Gates of Olympus', provider: 'Pragmatic Play', type: 'slot', themeColor: 'from-[#F5A623] to-[#3E2723]', image: '', link: 'https://gamdom.com/r/724bahis', isActive: true, order: 5 },
   { id: 'le_bandit', name: 'Le Bandit', provider: 'Hacksaw Gaming', type: 'slot', themeColor: 'from-[#78909C] to-[#263238]', image: '', link: 'https://gamdom.com/r/724bahis', isActive: true, order: 6 },
   { id: 'rip_city', name: 'R.I.P. City', provider: 'Hacksaw Gaming', type: 'slot', themeColor: 'from-[#37474F] to-[#000000]', image: '', link: 'https://gamdom.com/r/724bahis', isActive: true, order: 7 },
   { id: 'sweet_candyland', name: 'Sweet Bonanza Candyland', provider: 'Pragmatic Play', type: 'live', themeColor: 'from-[#F50057] to-[#F50057]/40', image: '', link: 'https://gamdom.com/r/724bahis', isActive: true, order: 8 },
@@ -176,7 +176,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', position: 'relative', zIndex: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '4px', height: '20px', background: '#FFC107', borderRadius: '2px', boxShadow: '0 0 8px rgba(255,193,7,0.5)' }} />
+              <div style={{ width: '4px', height: '20px', background: '#F5A623', borderRadius: '2px', boxShadow: '0 0 8px rgba(255,193,7,0.5)' }} />
               <div>
                 <span style={{ fontSize: '13px', fontWeight: 900, color: '#e0e0e0', textTransform: 'uppercase', letterSpacing: '2px' }}>SLOT OYUNLARI</span>
                 <p style={{ fontSize: '9px', color: '#444', textTransform: 'uppercase', letterSpacing: '1px', margin: '2px 0 0' }}>En çok kazandıran slotlar</p>
@@ -214,7 +214,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
                   <span style={{ fontSize: '7px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>{game.provider}</span>
                 </div>
                 <div className="game-hover-overlay">
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#FFC107', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 15px rgba(255,193,7,0.4)' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#F5A623', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 15px rgba(255,193,7,0.4)' }}>
                     <Play style={{ width: '14px', height: '14px', color: '#000', fill: '#000' }} />
                   </div>
                   <span style={{ fontSize: '7px', fontWeight: 900, color: '#fff', textTransform: 'uppercase', letterSpacing: '1px' }}>HEMEN OYNA</span>

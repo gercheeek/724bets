@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Star, Shield, Trash2, Smile, MoreVertical } from 'lucide-react';
+import { X, Send, Star, Shield, Trash2, Smile, MoreVertical, Menu } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { SiteUser } from '../types';
 
 interface ModernChatProps {
     open: boolean;
+    onOpen?: () => void;
     onClose: () => void;
     siteUser: SiteUser | null;
     userRole: string | null;
@@ -53,7 +54,7 @@ const renderMessageText = (text: string) => {
 };
 
 
-const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRole, isMobile }) => {
+const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser, userRole, isMobile }) => {
     const [messages, setMessages] = useState<any[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isConnected, setIsConnected] = useState(false);
@@ -302,11 +303,24 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
 
         setNewMessage('');
 
-        const { error } = await supabase.from('tv_chat').insert(msgObj);
-        if (error) {
-            console.error("Global chat insert error:", error);
-        } else {
-            setLastMsgTime(Date.now());
+        try {
+            const { data, error } = await supabase.from('tv_chat').insert(msgObj).select();
+            if (error) {
+                console.error("Global chat insert error:", error);
+            } else if (data && data[0]) {
+                setLastMsgTime(Date.now());
+                setMessages(prev => {
+                    if (prev.some(msg => msg.id === data[0].id)) return prev;
+                    return [...prev, data[0]];
+                });
+                setTimeout(() => {
+                    if (chatContainerRef.current) {
+                        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+                    }
+                }, 50);
+            }
+        } catch (err) {
+            console.error("Global chat send error:", err);
         }
     };
 
@@ -415,9 +429,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     };
 
     const getRoleColor = (role: string, username?: string) => {
-        if (role === 'admin') return '#F59E0B'; // Amber for admin
-        if (role === 'vip') return '#38BDF8'; // Sky for VIP
-        return '#38BDF8'; // Sky-400 for all normal users
+        if (role === 'admin') return '#EF4444'; // Kırmızı admin
+        if (role === 'vip') return '#38BDF8'; // Mavi VIP
+        return '#F5A623'; // Sarı/Turuncu (Ana Konsept Rengi) normal üyeler için
     };
 
     const getRoleBadge = (role: string) => {
@@ -434,19 +448,42 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
         return null;
     };
 
-    if (!open) return null;
-
     const isLoggedIn = !!(siteUser || userRole);
+
+    if (!open && !isMobile) {
+        return (
+            <div 
+                className="w-full h-full bg-[#0D1320] flex flex-col items-center justify-center cursor-pointer hover:bg-[#131C2C] transition-colors border-l border-[#F5A623]/10"
+                onClick={onOpen}
+            >
+                <div 
+                    style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                    className="text-[#F5A623] font-black text-sm tracking-[0.3em] uppercase flex items-center gap-4"
+                >
+                    <span className="w-2 h-2 rounded-full bg-[#F5A623] animate-pulse"></span>
+                    CANLI SOHBET
+                </div>
+            </div>
+        );
+    }
+
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="modern-chat-inject" className="h-full w-full flex flex-col bg-[#0F172A] md:border-l border-white/5 shadow-2xl font-sans text-left">
+        <div id="modern-chat-inject" className="h-full w-full flex flex-col bg-[#0D1320] md:border-l border-white/5 shadow-2xl font-sans text-left">
             {/* Header */}
-            <div className="bg-[#0F172A] p-4 text-white font-bold flex items-center gap-3 border-b border-white/5 flex-shrink-0">
+            <div className="bg-[#0D1320] p-4 text-white font-bold flex items-center justify-between border-b border-white/5 flex-shrink-0">
                 <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span className="text-xs uppercase tracking-widest text-emerald-400 font-black">CANLI</span>
+                    <span className="text-xs uppercase tracking-widest text-emerald-400 font-black">CANLI SOHBET</span>
                 </div>
+                <button 
+                    onClick={onClose} 
+                    className="p-1 hover:bg-white/5 active:scale-95 transition-all rounded-md text-zinc-400 hover:text-white"
+                    title="Kapat"
+                >
+                    <Menu className="w-4 h-4" />
+                </button>
             </div>
 
             {/* Pinned Message Bar */}
@@ -477,10 +514,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             )}
             {/* Sticky Widgets Area (Event, Poll) */}
             {((eventWidget && eventWidget.show) || (activePoll && activePoll.isActive)) && (
-                <div className="bg-[#0F172A] border-b border-white/5 p-3 space-y-2 flex-shrink-0">
+                <div className="bg-[#0D1320] border-b border-white/5 p-3 space-y-2 flex-shrink-0">
                     {/* Event Card */}
                     {eventWidget && eventWidget.show && (
-                        <div className="bg-[#1E293B] border border-white/5 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                        <div className="bg-[#131C2C] border border-white/5 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
                             <div 
                                 onClick={() => setIsEventCollapsed(!isEventCollapsed)}
                                 className="flex items-center justify-between text-xs font-bold text-white cursor-pointer select-none"
@@ -510,7 +547,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                                 href={eventWidget.ctaUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="bg-[#0F172A] hover:bg-emerald-500 hover:text-black text-white font-bold text-[9px] py-1.5 px-3 rounded transition-all text-center"
+                                                className="bg-[#0D1320] hover:bg-emerald-500 hover:text-black text-white font-bold text-[9px] py-1.5 px-3 rounded transition-all text-center"
                                             >
                                                 {eventWidget.ctaText || 'Katıl'}
                                             </a>
@@ -523,7 +560,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
 
                     {/* Poll Card */}
                     {activePoll && activePoll.isActive && (
-                         <div className="bg-[#1E293B] border border-sky-500/15 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                         <div className="bg-[#131C2C] border border-sky-500/15 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
                              <div 
                                  onClick={() => setIsPollCollapsed(!isPollCollapsed)}
                                  className="flex items-center justify-between text-xs font-bold text-sky-400 cursor-pointer select-none"
@@ -566,7 +603,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                                  <button 
                                                      key={idx}
                                                      onClick={() => handleVote(idx)}
-                                                     className="w-full bg-[#0F172A] hover:bg-sky-500 hover:text-white text-slate-300 font-bold text-[9px] py-1.5 px-3 rounded text-left transition-all border border-sky-500/20"
+                                                     className="w-full bg-[#0D1320] hover:bg-sky-500 hover:text-white text-slate-300 font-bold text-[9px] py-1.5 px-3 rounded text-left transition-all border border-sky-500/20"
                                                  >
                                                      {opt}
                                                  </button>
@@ -584,7 +621,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                 ref={chatContainerRef} 
                 id="new-chat-container" 
                 className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"
-                style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}
+                style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(245,166,35,0.12) transparent' }}
             >
 
 
@@ -603,7 +640,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className="bg-[#1E293B] border border-white/5 rounded-2xl rounded-tl-sm p-3 flex flex-col gap-1.5 relative group text-left cursor-default shadow-sm mb-2"
+                            className="bg-[#131C2C] border border-white/5 border-b-black/40 rounded-2xl rounded-tl-sm p-3 flex flex-col gap-1.5 relative group text-left cursor-default shadow-sm mb-3"
                             onContextMenu={(e) => {
                                 if (isAdmin) {
                                     e.preventDefault();
@@ -612,15 +649,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                 }
                             }}
                         >
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <span className="bg-white/10 px-1 py-0.5 rounded text-[9px] font-black text-gray-300 min-w-[16px] text-center">
-                                    {msg.role === 'admin' ? '99' : (Math.abs((msg.username || 'User').split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0)) % 10) + 1}
+                            <div className="flex items-center gap-2 flex-wrap mb-1">
+                                <span className="bg-gradient-to-br from-[#F5A623] to-[#D4900A] text-black px-1.5 py-0.5 rounded-full text-[9px] font-black min-w-[20px] text-center shadow-[0_0_12px_rgba(245,166,35,0.4)] border border-amber-300/30">
+                                    {msg.role === 'admin' ? '99' : (Math.abs((msg.username || 'Misafir').split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0)) % 40) + 1}
                                 </span>
                                 <span 
-                                    className="text-xs font-bold" 
+                                    className="text-xs font-bold tracking-wide" 
                                     style={{ color: getRoleColor(msg.role, msg.username) }}
                                 >
-                                    {getRoleBadge(msg.role)}{msg.username}
+                                    {getRoleBadge(msg.role)}{msg.username || 'Misafir'}
                                 </span>
                                 <span className="text-[9px] text-slate-500 opacity-70 ml-auto mr-6">
                                     {formatTime(msg.created_at)}
@@ -646,7 +683,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                 </button>
 
                                 {activeMenuId === msg.id && (
-                                  <div className="absolute right-0 mt-1 bg-[#162032] border border-white/10 rounded-lg shadow-xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
+                                  <div className="absolute right-0 mt-1 bg-[#131C2C] border border-white/10 rounded-lg shadow-xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
                                     <button 
                                       onClick={() => {
                                         handlePinMessage(msg.message, msg.username, msg.role || 'member');
@@ -680,7 +717,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             )}
 
                             {activeMutePopup === msg.id && (
-                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#0F172A', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '12px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', minWidth: '220px' }}>
+                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#0D1320', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '12px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', minWidth: '220px' }}>
                                     <div style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                         <input value={muteReason} onChange={(e) => setMuteReason(e.target.value)} placeholder="Ceza nedeni (zorunlu)" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 8px', fontSize: '10px', color: '#fff', outline: 'none' }} />
                                     </div>
@@ -697,20 +734,20 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             </div>
 
             {/* Input Footer Area */}
-            <div className="p-4 bg-[#0F172A] border-t border-white/5 flex flex-col gap-3 flex-shrink-0">
+            <div className="p-4 bg-[#0D1320] border-t border-white/5 flex flex-col gap-3 flex-shrink-0">
                 {/* Message Input */}
                 {!siteUser ? (
-                    <div className="p-3 border-t border-white/5 bg-[#0F172A] flex flex-col items-center justify-center gap-2">
+                    <div className="p-3 border-t border-white/5 bg-[#0D1320] flex flex-col items-center justify-center gap-2">
                         <input 
                             type="text"
                             disabled
                             placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
-                            className="w-full bg-[#0F172A]/50 text-[11px] font-bold text-center text-gray-500 rounded-lg px-3 py-2 border border-white/5 cursor-not-allowed"
+                            className="w-full bg-[#0D1320]/50 text-[11px] font-bold text-center text-gray-500 rounded-lg px-3 py-2 border border-white/5 cursor-not-allowed"
                         />
                     </div>
                 ) : (
                     <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
-                        <div className="relative flex items-center bg-[#1E293B] border border-white/5 rounded-lg overflow-hidden px-3 py-2">
+                        <div className="relative flex items-center bg-[#131C2C] border border-white/5 focus-within:border-[#F5A623]/30 rounded-lg overflow-hidden px-3 py-2 transition-colors">
                             <input
                                 type="text"
                                 value={newMessage}
@@ -725,7 +762,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                         <button
                             type="submit"
                             disabled={!newMessage.trim()}
-                            className="self-end px-5 py-1.5 rounded bg-slate-700 hover:bg-slate-600 disabled:opacity-30 disabled:hover:bg-slate-700 text-amber-400 text-xs font-bold transition-all active:scale-95 uppercase tracking-wider"
+                            className="self-end px-5 py-1.5 rounded bg-gradient-to-r from-[#F5A623] to-[#D4900A] text-black hover:from-[#FFB84D] hover:to-[#F5A623] disabled:opacity-30 text-xs font-bold transition-all active:scale-95 uppercase tracking-wider"
                         >
                             Gönder
                         </button>

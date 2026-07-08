@@ -63,6 +63,10 @@ interface AdminPanelProps {
   onSaveLoaderConfig?: (config: LoaderConfig) => void;
   casinoLobbyGames?: CasinoLobbyGame[];
   onSaveCasinoLobbyGames?: (games: CasinoLobbyGame[]) => void;
+  siteUser?: SiteUser | null;
+  onUpdateUser?: (user: SiteUser) => void;
+  discordConfig?: any;
+  onSaveDiscordConfig?: (config: any) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -80,7 +84,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   popularBetsConfig, onSavePopularBetsConfig,
   tvConfig, onSaveTvConfig,
   loaderConfig, onSaveLoaderConfig,
-  casinoLobbyGames, onSaveCasinoLobbyGames
+  casinoLobbyGames, onSaveCasinoLobbyGames,
+  siteUser, onUpdateUser,
+  discordConfig, onSaveDiscordConfig,
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
@@ -167,6 +173,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     loaderConfig || { isActive: true }
   );
 
+  const [localDiscordConfig, setLocalDiscordConfig] = useState<any>(
+    discordConfig || { enabled: false, webhookUrl: '' }
+  );
+
   // New Management Local State
   const [uploadingSlideId, setUploadingSlideId] = useState<string | null>(null);
 
@@ -235,6 +245,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     visibility_marquee: false,
     system_maintenance: false,
     system_loader: false,
+    system_discord: false,
     casino_general: false,
     casino_rewards: false,
     loyalty_general: false,
@@ -509,6 +520,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   useEffect(() => {
     if (loaderConfig) setLocalLoaderConfig(loaderConfig);
   }, [loaderConfig]);
+
+  useEffect(() => {
+    if (discordConfig) setLocalDiscordConfig(discordConfig);
+  }, [discordConfig]);
 
   const handleBrandChange = (index: number, field: keyof Brand, value: string) => {
     const updated = [...localBrands];
@@ -1120,6 +1135,53 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     >
                       BİLGİLERİ KAYDET
                     </button>
+                  </div>
+                </section>
+
+                {/* YÖNETİCİ BAKİYE YÜKLEME */}
+                <section className="bg-zinc-900 border border-zinc-800 rounded-[30px] p-6 space-y-6">
+                  <h4 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2">
+                    <CreditCard className="w-4 h-4 text-zinc-500" /> YÖNETİCİ BAKİYE YÜKLEME
+                  </h4>
+                  
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-black/40 p-5 rounded-2xl border border-zinc-800/40">
+                    <div>
+                      <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">Mevcut Bakiye</span>
+                      <span className="text-2xl font-black text-emerald-400 font-mono">
+                        {siteUser?.balance?.toFixed(2) || '0.00'} ₺
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-end gap-3 flex-1 max-w-md">
+                      <div className="space-y-2 flex-1">
+                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Yatırmak İstediğiniz Tutar (₺)</label>
+                        <input 
+                          type="number" 
+                          placeholder="Örn: 1000"
+                          id="admin-balance-input"
+                          className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white font-bold focus:border-emerald-500 outline-none transition-all"
+                        />
+                      </div>
+                      <button
+                        onClick={() => {
+                          const input = document.getElementById('admin-balance-input') as HTMLInputElement;
+                          const amount = parseFloat(input?.value);
+                          if (isNaN(amount) || amount <= 0) {
+                            alert('Lütfen geçerli bir tutar girin.');
+                            return;
+                          }
+                          if (siteUser && onUpdateUser) {
+                            const newBalance = (siteUser.balance || 0) + amount;
+                            onUpdateUser({ ...siteUser, balance: newBalance });
+                            alert(`${amount.toFixed(2)} ₺ başarıyla hesabınıza yüklendi.`);
+                            if (input) input.value = '';
+                          }
+                        }}
+                        className="px-6 py-3 bg-emerald-500 text-black font-black text-xs uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                      >
+                        Bakiye Yükle
+                      </button>
+                    </div>
                   </div>
                 </section>
 
@@ -3714,6 +3776,64 @@ Maç Listesi: `}
                     className="adm-btn-primary px-10 bg-amber-500 hover:bg-amber-400 text-black"
                   >
                     LOADER KAYDET
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+
+          {/* DISCORD SETTINGS SECTION */}
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+            <button 
+              onClick={() => setContentExpanded(prev => ({ ...prev, system_discord: !prev.system_discord }))}
+              className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                  <MessageSquare className="w-5 h-5 text-indigo-400" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-white font-black text-sm uppercase tracking-tight italic">DISCORD KUPON BİLDİRİMLERİ</h3>
+                  <p className="text-zinc-500 text-[10px] font-bold uppercase mt-0.5">Kuponlar yatırıldığında Discord kanalına Webhook ile bildirim gönderin</p>
+                </div>
+              </div>
+              {contentExpanded.system_discord ? <ChevronUp className="w-5 h-5 text-zinc-600" /> : <ChevronDown className="w-5 h-5 text-zinc-600" />}
+            </button>
+
+            {contentExpanded.system_discord && (
+              <div className="p-6 pt-0 animate-fade-in space-y-6">
+                <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-2xl flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setLocalDiscordConfig({ ...localDiscordConfig, enabled: !localDiscordConfig.enabled })}
+                      className={`relative w-14 h-7 rounded-full transition-all flex-shrink-0 flex items-center p-1 ${localDiscordConfig.enabled ? 'bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-zinc-800'}`}
+                    >
+                      <div className={`w-5 h-5 rounded-full bg-white transition-all ${localDiscordConfig.enabled ? 'translate-x-7' : 'translate-x-0'}`} />
+                    </button>
+                    <div>
+                      <h4 className={`text-xs font-black uppercase tracking-widest ${localDiscordConfig.enabled ? 'text-indigo-400' : 'text-white'}`}>DISCORD BİLDİRİMLERİ: {localDiscordConfig.enabled ? 'AKTİF' : 'PASİF'}</h4>
+                      <p className="text-zinc-500 text-[10px] font-bold uppercase mt-0.5">Aktif edildiğinde yeni kuponlar Discord'a anlık iletilir</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest pl-1">DISCORD WEBHOOK URL</label>
+                  <input
+                    type="password"
+                    value={localDiscordConfig.webhookUrl || ''}
+                    onChange={(e) => setLocalDiscordConfig({ ...localDiscordConfig, webhookUrl: e.target.value })}
+                    className="w-full bg-black border border-zinc-800 rounded-xl px-5 py-4 text-sm font-black text-white focus:outline-none focus:border-indigo-500/50"
+                    placeholder="Örn: https://discord.com/api/webhooks/..."
+                  />
+                </div>
+
+                <div className="flex justify-end">
+                  <button 
+                    onClick={() => { onSaveDiscordConfig?.(localDiscordConfig); alert('Discord ayarları güncellendi!'); }} 
+                    className="adm-btn-primary px-10 bg-indigo-500 hover:bg-indigo-400 text-white font-black uppercase"
+                  >
+                    DISCORD AYARLARINI KAYDET
                   </button>
                 </div>
               </div>

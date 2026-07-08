@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { TVConfig, TVChannel, TVChatMessage, Streamer, VOD, Gift } from '../types';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
+import { DEFAULT_TV_CONFIG } from '../constants';
 import {
     Send, Users, MessageSquare, Tv, Zap, Crown, Star, Shield, X, Lock, Unlock, Search,
     Flame, Award, Play, Pause, Volume2, VolumeX, Maximize, Minimize2,
@@ -52,6 +53,7 @@ const MATCHES_DATA = [
 ];
 
 const getChannelLogo = (channelName: string, avatarUrl?: string) => {
+    if (avatarUrl && avatarUrl.trim()) return avatarUrl;
     const nameLower = channelName.toLowerCase();
     // Check known channel names FIRST to always show proper logos
     if (nameLower.includes('724tv') || nameLower.includes('7/24')) return 'https://img.icons8.com/color/96/television.png';
@@ -65,7 +67,6 @@ const getChannelLogo = (channelName: string, avatarUrl?: string) => {
     if (nameLower.includes('exxen')) return 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Exxen_logo.png';
     if (nameLower.includes('tv8.5') || nameLower.includes('tv8')) return 'https://upload.wikimedia.org/wikipedia/commons/d/de/TV8_logo.svg';
     if (nameLower.includes('mac') || nameLower.includes('maç') || nameLower.includes('futbol') || nameLower.includes('taraftar')) return 'https://img.icons8.com/color/96/football.png';
-    if (avatarUrl && avatarUrl.trim()) return avatarUrl;
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(channelName)}&background=1a2035&color=fff`;
 };
 
@@ -88,24 +89,16 @@ const getStreamerStats = (streamer: Streamer) => {
 };
 
 const GROUP_ORDER = [
-  '⚽ BEIN SPORTS GRUBU',
-  '🏀 TİVİBU SPOR GRUBU',
-  '🏆 TRT GRUBU',
-  '📺 TABİİ SPOR GRUBU',
-  '🏎️ S SPORT GRUBU',
-  '🎾 SMART SPOR GRUBU',
-  '🌍 DİĞER SPOR VE ULUSAL KANALLAR'
+  '🏆 SPOR KANALLARI',
+  '📺 ULUSAL KANALLAR'
 ];
 
 const getChannelGroup = (name: string): string => {
-    const n = name.toLowerCase().replace(/\s+/g, '');
-    if (n.includes('bein') || n.includes('lig tv')) return '⚽ BEIN SPORTS GRUBU';
-    if (n.includes('tivibu')) return '🏀 TİVİBU SPOR GRUBU';
-    if (n.includes('trt')) return '🏆 TRT GRUBU';
-    if (n.includes('tabii') || n.includes('tabıı')) return '📺 TABİİ SPOR GRUBU';
-    if (n.includes('ssport') || n.includes('s sport')) return '🏎️ S SPORT GRUBU';
-    if (n.includes('smartspor') || n.includes('smart spor')) return '🎾 SMART SPOR GRUBU';
-    return '🌍 DİĞER SPOR VE ULUSAL KANALLAR';
+    const n = name.toLowerCase();
+    if (n.includes('trt 1') || n.includes('atv') || n.includes('tv 8') || n.includes('tv 8,5') || n.includes('tv8')) {
+        return '📺 ULUSAL KANALLAR';
+    }
+    return '🏆 SPOR KANALLARI';
 };
 
 const FLAG_CODES: Record<string, string> = {
@@ -347,15 +340,22 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
         const fetchData = async () => {
             setIsDataLoading(true);
             const { data: configData } = await supabase.from('site_configs').select('value').eq('key', 'site_tv_config').maybeSingle();
-            if (configData?.value) setCurrentConfig(configData.value);
+            if (configData?.value) {
+                setCurrentConfig({
+                    ...configData.value,
+                    channels: DEFAULT_TV_CONFIG.channels
+                });
+            } else {
+                setCurrentConfig(DEFAULT_TV_CONFIG);
+            }
 
             let mergedStreamers: any[] = [];
             const { data: streamersData } = await supabase.from('streamers').select('*').order('order_index', { ascending: true });
             if (streamersData) mergedStreamers = [...streamersData];
 
-            if (configData?.value?.channels) {
-                configData.value.channels.forEach((ch: any) => {
-                    const ms = { id: ch.id, name: ch.name, kick_username: ch.platformUsername || ch.slug || ch.streamUrl, platform_type: ch.platformType || ch.platform, avatar_url: ch.thumbnailUrl, tags: ch.tags || [ch.category], is_live: ch.isLive, is_vip: ch.isVip, source_type: ch.sourceType, video_url: ch.videoUrl, iframe_url: ch.iframeUrl, order_index: ch.order, fallback_type: ch.fallback_type, fallback_video_url: ch.fallback_video_url, fallback_iframe_url: ch.fallback_iframe_url };
+            if (DEFAULT_TV_CONFIG.channels) {
+                DEFAULT_TV_CONFIG.channels.forEach((ch: any) => {
+                    const ms = { id: ch.id, name: ch.name, kick_username: ch.platformUsername || ch.slug || ch.streamUrl, platform_type: ch.platformType || ch.platform, avatar_url: ch.thumbnailUrl, tags: ch.tags || [ch.category], is_live: ch.isLive, is_vip: ch.isVip, source_type: ch.sourceType || 'iframe', video_url: ch.videoUrl, iframe_url: ch.iframeUrl, order_index: ch.order, fallback_type: ch.fallback_type, fallback_video_url: ch.fallback_video_url, fallback_iframe_url: ch.fallback_iframe_url };
                     if (!mergedStreamers.find(s => s.id === ch.id || (s.kick_username === ms.kick_username && ms.kick_username))) mergedStreamers.push(ms);
                 });
             }
