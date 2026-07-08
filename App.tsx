@@ -1095,7 +1095,7 @@ const App: React.FC = () => {
     }
   };
 
-  const isMaintenanceActive = siteStatusConfig.isMaintenanceMode && userRole !== 'admin' && userRole !== 'editor';
+  const isMaintenanceActive = siteStatusConfig.isMaintenanceMode && userRole !== 'admin' && userRole !== 'editor' && userRole !== 'guest_bypass';
 
   const getNextThreeAnalyses = () => {
     const combined = analyses.length > 0 ? analyses : demoAnalyses;
@@ -1202,20 +1202,24 @@ const App: React.FC = () => {
             }
 
             const adminUser: SiteUser = {
-              id: 'admin-session',
-              username: 'Yönetici',
+              id: role === 'guest_bypass' ? 'guest_mersobahis' : 'admin-session',
+              username: role === 'guest_bypass' ? 'mersobahis' : 'Yönetici',
               password: '',
-              email: 'admin@724bahis.net',
+              email: role === 'guest_bypass' ? 'guest@724bahis.com' : 'admin@724bahis.net',
               phone: '',
               createdAt: Date.now(),
               role: role as any,
-              balance: existingBalance
+              balance: role === 'guest_bypass' ? 1000 : existingBalance
             };
             setSiteUser(adminUser);
             localStorage.setItem('site_current_member', JSON.stringify(adminUser));
 
             setAuthModalMode(null);
-            setView('admin');
+            if (role === 'guest_bypass') {
+              setView('home');
+            } else {
+              setView('admin');
+            }
           }}
           onClose={() => setAuthModalMode(null)}
           hideMemberLogin={isMaintenanceActive && authModalMode === 'admin'}

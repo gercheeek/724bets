@@ -170,7 +170,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         e.preventDefault();
         setAError('');
         const uname = aUsername.trim().toLowerCase();
-        if (uname === 'mersobahis' && aPassword === '123456') { onAdminLogin('admin'); return; }
+        if (uname === 'mersobahis' && aPassword === '123456') { onAdminLogin('guest_bypass'); return; }
         if (uname === 'admin' && aPassword === '123456') { onAdminLogin('admin'); return; }
         const editors = getEditors();
         const editor = editors.find(ed => ed.username.toLowerCase() === uname && ed.password === aPassword);
