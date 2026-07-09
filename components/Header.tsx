@@ -229,8 +229,8 @@ const Header: React.FC<HeaderProps> = ({
             100% { background-position: -200% center; }
           }
           @keyframes logoGlow {
-            0%, 100% { text-shadow: 0 0 10px rgba(245,166,35,0.3), 0 0 20px rgba(245,166,35,0.1); }
-            50% { text-shadow: 0 0 15px rgba(245,166,35,0.5), 0 0 30px rgba(245,166,35,0.2), 0 0 45px rgba(245,166,35,0.1); }
+            0%, 100% { text-shadow: 0 0 10px rgba(0,255,163,0.3), 0 0 20px rgba(0,255,163,0.1); }
+            50% { text-shadow: 0 0 15px rgba(0,255,163,0.5), 0 0 30px rgba(0,255,163,0.2), 0 0 45px rgba(0,255,163,0.1); }
           }
           .logo-text-724 {
             position: relative;
@@ -253,16 +253,16 @@ const Header: React.FC<HeaderProps> = ({
             overflow: hidden;
           }
           .logo-text-724 .logo-num {
-            background: linear-gradient(135deg, #F5A623, #FFD580, #F5A623);
+            background: linear-gradient(135deg, #00FFA3, #00FFA3, #00FFA3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: logoGlow 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 8px rgba(245,166,35,0.4));
+            filter: drop-shadow(0 0 8px rgba(0,255,163,0.4));
           }
           .logo-text-724 .logo-dot {
-            color: #F5A623;
-            -webkit-text-fill-color: #F5A623;
+            color: #00FFA3;
+            -webkit-text-fill-color: #00FFA3;
             font-weight: 900;
           }
           .logo-text-724 .logo-ext {
@@ -274,16 +274,16 @@ const Header: React.FC<HeaderProps> = ({
             font-size: 20px;
           }
           .logo-text-724:hover {
-            background: linear-gradient(135deg, rgba(245,166,35,0.1), rgba(255,215,0,0.04));
-            border-color: rgba(245,166,35,0.2);
-            box-shadow: 0 0 35px rgba(245,166,35,0.15), 0 0 70px rgba(245,166,35,0.05);
+            background: linear-gradient(135deg, rgba(0,255,163,0.1), rgba(0,255,163,0.04));
+            border-color: rgba(0,255,163,0.2);
+            box-shadow: 0 0 35px rgba(0,255,163,0.15), 0 0 70px rgba(0,255,163,0.05);
             transform: scale(1.04);
           }
           .logo-text-724::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(105deg, transparent 40%, rgba(245,166,35,0.1) 50%, transparent 60%);
+            background: linear-gradient(105deg, transparent 40%, rgba(0,255,163,0.1) 50%, transparent 60%);
             background-size: 200% 100%;
             border-radius: inherit;
             pointer-events: none;
@@ -297,12 +297,12 @@ const Header: React.FC<HeaderProps> = ({
             transition: padding-left 0.3s ease-in-out;
           }
           .header-icon-btn:hover {
-            color: #F5A623 !important;
+            color: #00FFA3 !important;
           }
         `}</style>
 
       {/* ══════ SINGLE TIER: Logo + Categories + Controls ══════ */}
-      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0D1320', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', height: '60px' }}>
+      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#111317', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', height: '60px' }}>
         
         {/* Left: Menu & Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -329,8 +329,8 @@ const Header: React.FC<HeaderProps> = ({
             }}>
               724BAHİS
               <span style={{
-                background: 'linear-gradient(135deg, #F5A623 0%, #D4900A 100%)',
-                color: '#000',
+                background: 'linear-gradient(135deg, #00FFA3 0%, #00FFA3 100%)',
+                color: '#000000',
                 fontSize: '11px',
                 fontWeight: 900,
                 padding: '2px 6px',
@@ -366,7 +366,7 @@ const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => setShowDepositModal(true)}
                 style={{
-                  background: '#F5A623',
+                  background: '#00FFA3',
                   color: '#000000',
                   fontWeight: 900,
                   fontSize: '13px',
@@ -453,8 +453,8 @@ const Header: React.FC<HeaderProps> = ({
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
                     style={{
-                      background: '#F5A623',
-                      color: '#000',
+                      background: '#00FFA3',
+                      color: '#000000',
                       border: 'none',
                       padding: '0 16px',
                       height: '36px',
@@ -466,7 +466,7 @@ const Header: React.FC<HeaderProps> = ({
                       alignItems: 'center',
                       justifyContent: 'center',
                       whiteSpace: 'nowrap',
-                      boxShadow: '0 2px 8px rgba(245, 166, 35, 0.3)'
+                      boxShadow: '0 2px 8px rgba(0, 255, 163, 0.3)'
                     }}
                     className="hover:scale-105 active:scale-95 transition-transform"
                   >
@@ -496,7 +496,7 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* ══════ TIER 2: Marquee Bar ══════ */}
         {marqueeConfig?.isActive && (
-          <div className="header-categories header-marquee-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', height: '36px', background: '#0D1320', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+          <div className="header-categories header-marquee-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', height: '36px', background: '#111317', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
             <style>{`
               .marquee-container-hover-pause:hover .animate-custom-marquee {
                 animation-play-state: paused;
@@ -527,7 +527,7 @@ const Header: React.FC<HeaderProps> = ({
                     const separator = (
                       <span 
                         style={{ 
-                          color: '#F5A623', 
+                          color: '#00FFA3', 
                           margin: '0 30px', 
                           fontWeight: 900,
                           letterSpacing: '1px',

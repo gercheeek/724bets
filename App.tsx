@@ -15,6 +15,7 @@ import FakeBetModal from './components/FakeBetModal';
 import MobileBottomNav from './components/MobileBottomNav';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
+import GlobalToaster from './components/GlobalToaster';
 
 import MaintenanceScreen from './components/MaintenanceScreen';
 import ChatBot from './components/ChatBot';
@@ -32,7 +33,7 @@ import { seedEcosystemData } from './seedEcosystem';
 import { getGlobalConfig, updateGlobalConfig, supabase } from './utils/supabase';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany } from './types';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany, ChatBotConfig } from './types';
 import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG, DEFAULT_POPULAR_BETS_CONFIG, DEFAULT_TV_CONFIG, DEFAULT_LOADER_CONFIG } from './constants';
 import { demoAnalyses, demoCoupons } from './demoData';
 import TrustedSitesView from './components/TrustedSitesView';
@@ -121,7 +122,7 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
     return <span className="font-black" style={{ color: '#00E676', animation: 'pulse 1.5s infinite' }}>CANLI</span>;
   }
 
-  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#F5A623' }}>{text}</span>;
+  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#00FFA3' }}>{text}</span>;
 };
 
 const App: React.FC = () => {
@@ -284,6 +285,15 @@ const App: React.FC = () => {
     setSiteStatusConfig(cfg);
     localStorage.setItem('site_status', JSON.stringify(cfg));
     updateGlobalConfig('site_status', cfg);
+  };
+
+  // Chat Bots Config
+  const [botsConfig, setBotsConfig] = useState<ChatBotConfig[]>([]);
+
+  const handleBotsConfigChange = (cfg: ChatBotConfig[]) => {
+    setBotsConfig(cfg);
+    localStorage.setItem('site_bots_config', JSON.stringify(cfg));
+    updateGlobalConfig('site_bots_config', cfg);
   };
 
   // Hero Slider Config - Safe Initialization (No Storage Flash)
@@ -537,7 +547,7 @@ const App: React.FC = () => {
       setWelcomePopupConfig(cleanedWelcome);
     }
   }, []);
-  const [themeColor, setThemeColor] = useState('#F5A623');
+  const [themeColor, setThemeColor] = useState('#00FFA3');
   const [activeAnalysisId, setActiveAnalysisId] = useState<string | null>(null);
   const [welcomePopupConfig, setWelcomePopupConfig] = useState<WelcomePopupConfig>(() => {
     try {
@@ -696,7 +706,8 @@ const App: React.FC = () => {
           globalColor, globalBj, globalLoyalty, globalGiveaway, globalMarquee,
           globalNav, globalWheel, globalWelcome, globalSiteStatus,
           globalPromoWheel, globalHeroSlider, globalDailyKupon, globalRaffle,
-          globalPopularBets, globalTvConfig, globalLoaderConfig, globalDiscordConfig
+          globalPopularBets, globalTvConfig, globalLoaderConfig, globalDiscordConfig,
+          globalBotsConfig
         ] = await Promise.all([
           getGlobalConfig('site_analyses'),
           getGlobalConfig('site_coupons'),
@@ -719,7 +730,8 @@ const App: React.FC = () => {
           getGlobalConfig('site_popular_bets'),
           getGlobalConfig('site_tv_config'),
           getGlobalConfig('site_loader_config'),
-          getGlobalConfig('site_discord_config')
+          getGlobalConfig('site_discord_config'),
+          getGlobalConfig('site_bots_config')
         ]);
 
         if (!isMounted) return;
@@ -776,7 +788,10 @@ const App: React.FC = () => {
           setDiscordConfig(globalDiscordConfig);
           localStorage.setItem('site_discord_config', JSON.stringify(globalDiscordConfig));
         }
-
+        if (globalBotsConfig && Array.isArray(globalBotsConfig)) {
+          setBotsConfig(globalBotsConfig);
+          localStorage.setItem('site_bots_config', JSON.stringify(globalBotsConfig));
+        }
 
       } catch (err) {
         console.error('Initialization error:', err);
@@ -1055,6 +1070,8 @@ const App: React.FC = () => {
         onSaveLoaderConfig={handleLoaderConfigChange}
         discordConfig={discordConfig}
         onSaveDiscordConfig={handleDiscordConfigChange}
+        botsConfig={botsConfig}
+        onSaveBotsConfig={handleBotsConfigChange}
       />
     </ErrorBoundary>
   );
@@ -1280,7 +1297,7 @@ const App: React.FC = () => {
           onAdminLogin={() => setAuthModalMode('admin')}
         />
       ) : (
-        <div className="relative flex h-[100dvh] w-full bg-[#0a0f1c] text-white overflow-hidden" style={{
+        <div className="relative flex h-[100dvh] w-full bg-[#111317] text-white overflow-hidden" style={{
           visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
           '--header-height': '60px'
         } as React.CSSProperties}>
@@ -1288,7 +1305,7 @@ const App: React.FC = () => {
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
-            <aside className={`hidden lg:flex flex-col border-r border-gray-800 bg-[#111727] h-full overflow-y-auto flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
+            <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-y-auto flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen}
                 onToggle={() => setIsSidebarOpen(!isSidebarOpen)} 
@@ -1305,7 +1322,7 @@ const App: React.FC = () => {
           {isMobileMenuOpen && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
               <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
-              <aside className="w-[280px] bg-[#111727] h-full shadow-2xl flex-shrink-0 relative z-10 transform transition-transform">
+              <aside className="w-[280px] bg-[#111317] h-full shadow-2xl flex-shrink-0 relative z-10 transform transition-transform">
                 <Sidebar
                   isOpen={true}
                   onToggle={() => setIsMobileMenuOpen(false)}
@@ -1323,11 +1340,11 @@ const App: React.FC = () => {
           <main className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}>
             
             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
-            <header className="flex lg:hidden items-center justify-between p-4 bg-[#111727] border-b border-gray-800 shrink-0 sticky top-0 z-40">
+            <header className="flex lg:hidden items-center justify-between p-4 bg-[#111317] shrink-0 sticky top-0 z-40">
               <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-300 hover:text-white transition-colors">
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               </button>
-              <div className="font-bold text-xl text-[#f3ca58]">724BAHİS</div>
+              <div className="font-bold text-xl text-[#00FFA3]">724BAHİS</div>
               <button onClick={() => setIsMobileChatOpen(true)} className="text-gray-300 hover:text-white transition-colors">
                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
               </button>
@@ -1414,18 +1431,18 @@ const App: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/98 via-[#0F172A]/90 to-[#0F172A]/98" />
                   
                   {/* Subtle background rings */}
-                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(245, 158, 11, 0.1)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(245, 158, 11, 0.15)', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.1)', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.15)', pointerEvents: 'none' }} />
                   
                   <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative" style={{ zIndex: 10 }}>
                     <div className="flex items-center gap-4">
-                      <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
-                        <Trophy className="w-6 h-6" style={{ color: '#F5A623' }} />
+                      <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.1)', border: '1px solid rgba(0, 255, 163, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
+                        <Trophy className="w-6 h-6" style={{ color: '#00FFA3' }} />
                       </div>
                       <div>
-                        <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(245, 158, 11, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
+                        <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(0, 255, 163, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
                         <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>
-                          <span style={{ color: '#F5A623', textShadow: '0 0 20px rgba(245, 158, 11, 0.6), 0 0 40px rgba(245, 158, 11, 0.3)' }}>WORLD CUP </span>
+                          <span style={{ color: '#00FFA3', textShadow: '0 0 20px rgba(0, 255, 163, 0.6), 0 0 40px rgba(0, 255, 163, 0.3)' }}>WORLD CUP </span>
                           <span style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>2026</span>
                         </h2>
                       </div>
@@ -1434,9 +1451,9 @@ const App: React.FC = () => {
                     <div className="flex items-center gap-6 justify-between sm:justify-end">
                       <div className="text-left sm:text-right" style={{ flexShrink: 0 }}>
                         <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>En Yüksek Kazanç Oranları</p>
-                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#F5A623' }}>%88 Başarı Oranı</p>
+                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#00FFA3' }}>%88 Başarı Oranı</p>
                       </div>
-                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#F5A623', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#00FFA3', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                         <span>ANALİZLERE GİT</span>
                         <span className="group-hover:translate-x-1 transition-transform" style={{ display: 'inline-block' }}>→</span>
                       </button>
@@ -1447,8 +1464,8 @@ const App: React.FC = () => {
                 {/* ── Canlı Skor & Maç Sonuçları Section ── */}
                 <div className="mb-6 p-6 rounded-xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-zinc-800/80 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
-                      <Target className="w-5 h-5 text-amber-500" />
+                    <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                      <Target className="w-5 h-5 text-emerald-500" />
                     </div>
                     <div>
                       <h3 className="text-white font-black text-sm uppercase tracking-wider italic">MAÇ SONUÇLARI & CANLI SKOR</h3>
@@ -1457,7 +1474,7 @@ const App: React.FC = () => {
                   </div>
                   <button 
                     onClick={() => setShowLiveScoreModal(true)}
-                    className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black text-sm font-black rounded-lg shadow-[0_4px_20px_rgba(245,158,11,0.25)] transition-all hover:scale-105 active:scale-95 uppercase tracking-wider"
+                    className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black text-sm font-black rounded-lg shadow-[0_4px_20px_rgba(16,185,129,0.25)] transition-all hover:scale-105 active:scale-95 uppercase tracking-wider"
                   >
                     Maç Sonuçları & Canlı Skor
                   </button>
@@ -1485,8 +1502,8 @@ const App: React.FC = () => {
                   return (
                     <div className="mb-6 p-5 rounded-2xl border border-zinc-800 bg-[#0F172A]/70 backdrop-blur-md shadow-2xl relative">
                       {/* Header */}
-                      <div className="flex items-center gap-2 text-xs font-black text-[#f2a900] tracking-wider uppercase mb-4 px-1">
-                        <Calendar className="w-4 h-4 text-[#f2a900]" />
+                      <div className="flex items-center gap-2 text-xs font-black text-[#00FFA3] tracking-wider uppercase mb-4 px-1">
+                        <Calendar className="w-4 h-4 text-[#00FFA3]" />
                         <span>{formatDateTR(displayDate)}</span>
                         <span className="text-gray-500 font-bold normal-case">({matchesToDisplay.length} analiz)</span>
                       </div>
@@ -1505,7 +1522,7 @@ const App: React.FC = () => {
                                 setActiveAnalysisId(analysis.id);
                                 setView('analysis');
                               }}
-                              className="relative rounded-xl overflow-hidden border border-zinc-800/80 bg-[#07090e] hover:border-amber-500/40 hover:bg-[#121620] shadow-[0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 cursor-pointer group flex flex-col md:flex-row md:items-center justify-between p-3.5 gap-3"
+                              className="relative rounded-xl overflow-hidden border border-zinc-800/80 bg-[#07090e] hover:border-emerald-500/40 hover:bg-[#121620] shadow-[0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 cursor-pointer group flex flex-col md:flex-row md:items-center justify-between p-3.5 gap-3"
                             >
                               {/* Blur for premium if locked */}
                               <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 flex-1 min-w-0 ${!isFree ? 'blur-[3px] select-none pointer-events-none' : ''}`}>
@@ -1514,7 +1531,7 @@ const App: React.FC = () => {
                                   <span className="text-[11px] font-bold text-gray-400 px-2.5 py-1 rounded bg-[#030407] border border-zinc-800/60 flex items-center gap-1">
                                     🕐 {analysis.matchTime}
                                   </span>
-                                  <span className="text-[10px] font-black text-[#f2a900] uppercase px-2 py-0.5 rounded bg-amber-500/5 border border-amber-500/10">
+                                  <span className="text-[10px] font-black text-[#00FFA3] uppercase px-2 py-0.5 rounded bg-emerald-500/5 border border-emerald-500/10">
                                     {getLeagueFlag(analysis.league)} {analysis.league}
                                   </span>
                                   <div className="text-sm font-black text-white flex items-center gap-2 truncate">
@@ -1532,7 +1549,7 @@ const App: React.FC = () => {
                                   </div>
                                   <div className="px-3 py-1.5 rounded-lg text-center min-w-[55px] bg-[#030407] border border-zinc-800/60">
                                     <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">ORAN</span>
-                                    <span className="text-[11px] font-black text-[#f2a900]">{highestOdds?.odd1 || '—'}</span>
+                                    <span className="text-[11px] font-black text-[#00FFA3]">{highestOdds?.odd1 || '—'}</span>
                                   </div>
                                   <div className={`px-3 py-1.5 rounded-lg text-center min-w-[55px] border ${confColor.border} ${confColor.bg}`}>
                                     <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">GÜVEN</span>
@@ -1547,7 +1564,7 @@ const App: React.FC = () => {
                               {/* Lock overlay if locked */}
                               {!isFree && (
                                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px] z-10">
-                                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#f2a900] text-[#0a0d14] font-black text-[10px] rounded-lg uppercase tracking-wider hover:bg-yellow-400 transition shadow-[0_0_15px_rgba(242,169,0,0.3)]">
+                                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00FFA3] text-[#0a0d14] font-black text-[10px] rounded-lg uppercase tracking-wider hover:bg-emerald-400 transition shadow-[0_0_15px_rgba(0,255,163,0.3)]">
                                     <Lock className="w-3.5 h-3.5" /> Üye Ol, Tüm Analizleri Gör
                                   </div>
                                 </div>
@@ -1564,7 +1581,7 @@ const App: React.FC = () => {
                             e.stopPropagation();
                             setView('analysis');
                           }}
-                          className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black text-xs font-black rounded-xl shadow-[0_4px_20px_rgba(245,158,11,0.2)] transition-all hover:scale-105 active:scale-95 uppercase tracking-widest flex items-center justify-center gap-2 group border-none"
+                          className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black text-xs font-black rounded-xl shadow-[0_4px_20px_rgba(16,185,129,0.2)] transition-all hover:scale-105 active:scale-95 uppercase tracking-widest flex items-center justify-center gap-2 group border-none"
                         >
                           <span>Daha Fazlası İçin Analizler</span>
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -1578,15 +1595,15 @@ const App: React.FC = () => {
                 <PromoSlider />
 
                 {/* ── User Uploaded Image Banner ── */}
-                <div className="my-6 relative overflow-hidden rounded-xl shadow-[0_0_25px_rgba(245,158,11,0.3)] border border-amber-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
+                <div className="my-6 relative overflow-hidden rounded-xl shadow-[0_0_25px_rgba(0,255,163,0.3)] border border-emerald-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
                   <img src="/banners/yeni-ince-banner.png" alt="Promo Banner" className="w-full h-auto block group-hover:scale-102 transition-transform duration-700" />
                   
                   {/* Animasyonlu Parıltı (Shine) Efekti */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-150%] animate-[shimmer_3s_infinite_linear] skew-x-[-20deg]"></div>
                   
                   {/* Sürekli yanan kenar glow efekti */}
-                  <div className="absolute inset-0 border-[2px] border-transparent rounded-xl group-hover:border-amber-400/50 transition-colors duration-500"></div>
-                  <div className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                  <div className="absolute inset-0 border-[2px] border-transparent rounded-xl group-hover:border-emerald-400/50 transition-colors duration-500"></div>
+                  <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                 </div>
 
                 {/* ── Enhanced Betting Section ── */}
@@ -1613,9 +1630,9 @@ const App: React.FC = () => {
             <section id="brands-section" className="brands-section relative z-10">
               <div className="brands-header mb-12 animate-fade-in-up">
                 <h2 className="text-[40px] md:text-[48px] font-black italic uppercase tracking-tighter" style={{ color: 'var(--text-primary)' }}>
-                  GÜVENİLİR <span className="text-[#F5A623]">FİRMALAR</span>
+                  GÜVENİLİR <span className="text-[#00FFA3]">FİRMALAR</span>
                 </h2>
-                <div className="h-1 w-20 bg-[#F5A623] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(255,193,7,0.4)]" />
+                <div className="h-1 w-20 bg-[#00FFA3] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(0,255,163,0.4)]" />
                 <p className="font-bold uppercase text-[11px] tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
                   Sizin için test ettiğimiz, ödemesini yapan lisanslı siteler.
                 </p>
@@ -1633,14 +1650,14 @@ const App: React.FC = () => {
         {view === 'sports' && (
           <div className="animate-fade-in relative">
             {iframeLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl border border-zinc-800/50" style={{ height: 'calc(100vh - var(--header-height) - 10px)' }}>
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl" style={{ height: 'calc(100vh - var(--header-height) - 10px)' }}>
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                   <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                 </div>
               </div>
             )}
-            <div className="w-full rounded-2xl overflow-hidden border border-zinc-800/50 shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))', minHeight: '850px' }}>
+            <div className="w-full rounded-2xl overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))', minHeight: '850px' }}>
               <iframe 
                 src="https://sport.7yrrerfcet.com/SportsBook/Home"
                 frameBorder="0"
@@ -1687,7 +1704,7 @@ const App: React.FC = () => {
           <div className="animate-fade-in w-full relative flex flex-col" style={{ height: 'calc(100vh - var(--header-height))' }}>
             
             {/* Custom Sports2 Header */}
-            <div className="w-full bg-[#161c28] border-x border-t border-[#222b3c] rounded-t-2xl overflow-hidden shrink-0 shadow-lg relative z-20">
+            <div className="w-full bg-[#161c28] rounded-t-2xl overflow-hidden shrink-0 shadow-lg relative z-20">
                {/* Top Menu */}
                <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-hide px-2 py-1">
                   {([
@@ -1712,7 +1729,7 @@ const App: React.FC = () => {
                   ))}
                </div>
                {/* Sub Menu */}
-               <div className="flex items-center justify-between bg-[#222b3c] px-4 py-2 border-t border-zinc-700/50">
+               <div className="flex items-center justify-between bg-[#222b3c] px-4 py-2">
                  <div className="flex items-center gap-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
                     {[
                       { label: 'Sonuçlar', url: 'https://bahisbey7195.com/tr/sport/results/' },
@@ -1745,7 +1762,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Iframe Container */}
-            <div className="w-full flex-1 overflow-hidden shadow-2xl bg-[#0F172A] relative rounded-b-2xl border-x border-b border-zinc-800/50 z-10">
+            <div className="w-full flex-1 overflow-hidden shadow-2xl bg-[#0F172A] relative rounded-b-2xl z-10">
               {iframeLoading && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
                   <div className="flex flex-col items-center gap-4">
@@ -1799,14 +1816,14 @@ const App: React.FC = () => {
         {view === 'sports3' && (
           <div className="animate-fade-in w-full h-full relative">
             {iframeLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl border border-zinc-800/50" style={{ height: 'calc(100vh - var(--header-height))' }}>
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl" style={{ height: 'calc(100vh - var(--header-height))' }}>
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                   <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                 </div>
               </div>
             )}
-            <div className="w-full rounded-2xl overflow-hidden border border-zinc-800/50 shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            <div className="w-full rounded-2xl overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
               <iframe 
                 src="https://tarafbet977.com/tr/live/"
                 frameBorder="0"
@@ -1865,14 +1882,14 @@ const App: React.FC = () => {
         {view === 'sports4' && (
           <div className="animate-fade-in w-full h-full relative">
             {iframeLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl border border-zinc-800/50" style={{ height: 'calc(100vh - var(--header-height))' }}>
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl" style={{ height: 'calc(100vh - var(--header-height))' }}>
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                   <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                 </div>
               </div>
             )}
-            <div className="w-full rounded-2xl overflow-hidden border border-zinc-800/50 shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            <div className="w-full rounded-2xl overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
               <iframe 
                 src="https://sport.megobocteb.com/SportsBook/Home"
                 frameBorder="0"
@@ -2001,7 +2018,7 @@ const App: React.FC = () => {
               <div className="portal-body">
                 <button
                   onClick={() => setActiveCasinoGame(null)}
-                  className="mb-4 flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-all text-xs font-black uppercase tracking-wider w-fit"
+                  className="mb-4 flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 text-zinc-400 hover:text-white transition-all text-xs font-black uppercase tracking-wider w-fit"
                 >
                   ← Lobiye Dön
                 </button>
@@ -2039,7 +2056,7 @@ const App: React.FC = () => {
                 <h2 className="text-white font-black text-3xl uppercase tracking-tight">Günlük Görevler</h2>
                 <p className="text-zinc-500 font-bold text-sm">Coin kazanmak ve marketi kullanmak için üye girişi gereklidir.</p>
                 <button onClick={() => setAuthModalMode('member')}
-                  className="px-8 py-4 bg-[#F5A623] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#F5A623]/90 transition-all shadow-[0_0_25px_rgba(240,185,11,0.4)]">
+                  className="px-8 py-4 bg-[#00FFA3] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#00FFA3]/90 transition-all shadow-[0_0_25px_rgba(0,255,163,0.4)]">
                   🔑 Üye Ol / Giriş Yap
                 </button>
               </div>
@@ -2192,7 +2209,6 @@ const App: React.FC = () => {
           </div>
         </footer>
       )}
-      {/* PortalMobileNav is removed as requested by the user to move it to the top */}
           </main>
 
 
@@ -2228,11 +2244,11 @@ const App: React.FC = () => {
           onClick={() => setShowLiveScoreModal(false)}
         >
           <div 
-            className="relative w-full max-w-5xl h-[85vh] bg-[#1a1e29] rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-5xl h-[85vh] bg-[#1a1e29] rounded-2xl shadow-2xl overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800/60 bg-[#12151e]">
+            <div className="flex items-center justify-between px-6 py-4 bg-[#12151e]">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
                 <span className="text-white font-black text-xs uppercase tracking-widest italic">CANLI SKOR & SONUÇLAR</span>
@@ -2278,7 +2294,7 @@ const App: React.FC = () => {
 
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
       {view !== 'admin' && view !== 'sports' && view !== 'sports2' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && !showLiveScoreModal && (
-        <aside className={`hidden xl:flex flex-col border-l border-gray-800 bg-[#111727] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-[48px]'} transition-all duration-300`}>
+        <aside className={`hidden xl:flex flex-col border-l border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-[48px]'} transition-all duration-300`}>
           <ModernChat
             open={isChatOpen}
             onOpen={() => setIsChatOpen(true)}
@@ -2294,7 +2310,7 @@ const App: React.FC = () => {
       {isMobileChatOpen && (
         <div className="fixed inset-0 z-50 flex xl:hidden justify-end">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileChatOpen(false)}></div>
-          <aside className="w-full sm:w-[380px] bg-[#111727] h-full shadow-2xl flex-shrink-0 relative z-10 transform transition-transform">
+          <aside className="w-full sm:w-[380px] bg-[#1A1D24] h-full shadow-2xl flex-shrink-0 relative z-10 transform transition-transform">
             <ModernChat
               open={true}
               onOpen={() => {}}
@@ -2302,6 +2318,7 @@ const App: React.FC = () => {
               siteUser={siteUser}
               userRole={userRole}
               isMobile={isMobile}
+              botsConfig={botsConfig}
             />
           </aside>
         </div>
@@ -2322,6 +2339,7 @@ const App: React.FC = () => {
           }
         }}
       />
+      <GlobalToaster />
     </ThemeProvider>
   );
 };

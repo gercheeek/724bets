@@ -24,6 +24,22 @@ export interface UserMessage {
   createdAt: number;
 }
 
+export interface BotScenario {
+  id: string;
+  text: string;
+  intervalMinutes: number; // e.g. every 30 minutes
+  isActive: boolean;
+}
+
+export interface ChatBotConfig {
+  id: string;
+  name: string;
+  role: 'SYSTEM' | 'ADMIN' | 'VIP'; // label like SYSTEM, ADM
+  color: string; // hex code like #F5A623
+  isActive: boolean;
+  scenarios: BotScenario[];
+}
+
 export interface PaymentRequest {
   id: string;
   userId: string;

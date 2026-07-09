@@ -10,6 +10,7 @@ interface ModernChatProps {
     siteUser: SiteUser | null;
     userRole: string | null;
     isMobile?: boolean;
+    botsConfig?: any[]; // ChatBotConfig[]
 }
 
 const GLOBAL_CHANNEL_ID = '00000000-0000-0000-0000-000000000000';
@@ -54,7 +55,7 @@ const renderMessageText = (text: string) => {
 };
 
 
-const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser, userRole, isMobile }) => {
+const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser, userRole, isMobile, botsConfig }) => {
     const [messages, setMessages] = useState<any[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isConnected, setIsConnected] = useState(false);
@@ -244,6 +245,52 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         };
     }, [open]);
 
+    // Gelişmiş Bot Yönetimi Simülasyonu
+    useEffect(() => {
+        if (!open || !botsConfig || botsConfig.length === 0) return;
+        
+        const intervals: NodeJS.Timeout[] = [];
+
+        botsConfig.forEach(bot => {
+            if (!bot.isActive) return;
+            
+            bot.scenarios.forEach((scen: any) => {
+                if (!scen.isActive) return;
+                
+                // Interval dk -> milisaniye
+                const ms = (scen.intervalMinutes || 1) * 60 * 1000;
+                
+                const interval = setInterval(() => {
+                    const newBotMsg = {
+                        id: `bot_${Date.now()}_${Math.random().toString(36).substr(2,9)}`,
+                        username: bot.name,
+                        role: bot.role,
+                        message: scen.text,
+                        botColor: bot.color, // Özel rengini mesaja ekliyoruz
+                        created_at: new Date().toISOString(),
+                        channel_id: GLOBAL_CHANNEL_ID
+                    };
+                    
+                    setMessages(prev => {
+                        const updated = [...prev, newBotMsg];
+                        setTimeout(() => {
+                            if (chatContainerRef.current) {
+                                chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+                            }
+                        }, 50);
+                        return updated;
+                    });
+                }, ms);
+                
+                intervals.push(interval);
+            });
+        });
+
+        return () => {
+            intervals.forEach(clearInterval);
+        };
+    }, [open, botsConfig]);
+
     const handleSendMessage = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!newMessage.trim()) return;
@@ -428,21 +475,41 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         return new Date(isoString).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    const getRoleColor = (role: string, username?: string) => {
-        if (role === 'admin') return '#EF4444'; // Kırmızı admin
-        if (role === 'vip') return '#38BDF8'; // Mavi VIP
-        return '#F5A623'; // Sarı/Turuncu (Ana Konsept Rengi) normal üyeler için
+    const getRoleColor = (role: string, username?: string, msgObj?: any) => {
+        if (msgObj && msgObj.botColor) return msgObj.botColor;
+        const r = role?.toUpperCase();
+        if (r === 'ADMIN') return '#EF4444'; // Kırmızı admin
+        if (r === 'VIP') return '#38BDF8'; // Mavi VIP
+        if (r === 'SYSTEM' || r === 'BOT') return '#00FFA3'; // Neon yeşil bot
+        return '#00FFA3'; // Neon yeşil normal üyeler için
     };
 
-    const getRoleBadge = (role: string) => {
-        if (role === 'admin') {
+    const getRoleBadge = (role: string, msgObj?: any) => {
+        const r = role?.toUpperCase();
+        
+        if (r === 'ADMIN') {
+            const color = msgObj?.botColor || '#00FFA3';
             return (
-                <span className="bg-gradient-to-r from-amber-400 to-amber-600 px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase">
+                <span 
+                    className="px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase"
+                    style={{ background: `linear-gradient(to right, ${color}, #fff)` }}
+                >
                     ADMIN
                 </span>
             );
         }
-        if (role === 'vip') {
+        if (r === 'SYSTEM' || r === 'BOT') {
+            const color = msgObj?.botColor || '#00FFA3';
+            return (
+                <span 
+                    className="px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase"
+                    style={{ background: `linear-gradient(to right, ${color}, #fff)` }}
+                >
+                    SİSTEM
+                </span>
+            );
+        }
+        if (r === 'VIP') {
             return <Star className="w-2.5 h-2.5 text-sky-400 mr-1 flex-shrink-0 fill-sky-400" />;
         }
         return null;
@@ -453,14 +520,14 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     if (!open && !isMobile) {
         return (
             <div 
-                className="w-full h-full bg-[#0D1320] flex flex-col items-center justify-center cursor-pointer hover:bg-[#131C2C] transition-colors border-l border-[#F5A623]/10"
+                className="w-full h-full bg-[#111317] flex flex-col items-center justify-center cursor-pointer hover:bg-[#1A1D24] transition-colors"
                 onClick={onOpen}
             >
                 <div 
                     style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-                    className="text-[#F5A623] font-black text-sm tracking-[0.3em] uppercase flex items-center gap-4"
+                    className="text-[#00FFA3] font-black text-sm tracking-[0.3em] uppercase flex items-center gap-4"
                 >
-                    <span className="w-2 h-2 rounded-full bg-[#F5A623] animate-pulse"></span>
+                    <span className="w-2 h-2 rounded-full bg-[#00FFA3] animate-pulse"></span>
                     CANLI SOHBET
                 </div>
             </div>
@@ -470,9 +537,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0D1320] md:border-l border-white/5 shadow-2xl font-sans text-left">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#111317] shadow-2xl font-sans text-left">
             {/* Header */}
-            <div className="bg-[#0D1320] p-4 text-white font-bold flex items-center justify-between border-b border-white/5 flex-shrink-0">
+            <div className="bg-[#111317] p-4 text-white font-bold flex items-center justify-between flex-shrink-0">
                 <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span className="text-xs uppercase tracking-widest text-emerald-400 font-black">CANLI SOHBET</span>
@@ -488,11 +555,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
             {/* Pinned Message Bar */}
             {pinnedMessage && pinnedMessage.text && (
-                <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2.5 flex items-center justify-between gap-3 text-left">
+                <div className="bg-[#00FFA3]/10 px-4 py-3 flex items-center justify-between gap-3 text-left">
                     <div className="flex items-start gap-2 min-w-0">
-                        <span className="text-[12px] mt-0.5 text-amber-400">📌</span>
+                        <span className="text-[12px] mt-0.5 text-[#00FFA3]">📌</span>
                         <div className="min-w-0">
-                            <div className="text-[10px] font-bold text-amber-400 flex items-center gap-1">
+                            <div className="text-[10px] font-bold text-[#00FFA3] flex items-center gap-1">
                                 <span>Sabitlendi</span>
                                 <span className="text-[8px] text-zinc-500">•</span>
                                 <span style={{ color: getRoleColor(pinnedMessage.role) }}>{pinnedMessage.username}</span>
@@ -514,10 +581,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             )}
             {/* Sticky Widgets Area (Event, Poll) */}
             {((eventWidget && eventWidget.show) || (activePoll && activePoll.isActive)) && (
-                <div className="bg-[#0D1320] border-b border-white/5 p-3 space-y-2 flex-shrink-0">
+                <div className="bg-[#111317] p-3 space-y-3 flex-shrink-0">
                     {/* Event Card */}
                     {eventWidget && eventWidget.show && (
-                        <div className="bg-[#131C2C] border border-white/5 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                        <div className="bg-[#1A1D24] rounded-lg p-3 flex flex-col gap-2 transition-all">
                             <div 
                                 onClick={() => setIsEventCollapsed(!isEventCollapsed)}
                                 className="flex items-center justify-between text-xs font-bold text-white cursor-pointer select-none"
@@ -532,7 +599,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             </div>
                             
                             {!isEventCollapsed && (
-                                <div className="space-y-2 pt-1.5 border-t border-white/5 mt-1">
+                                <div className="space-y-2 pt-2 mt-2">
                                     <div className="flex items-center gap-2">
                                         <span className="w-5 h-5 rounded bg-emerald-500/20 flex items-center justify-center text-[10px]">🛡️</span>
                                         <span className="text-xs font-bold text-white">{eventWidget.brandName}</span>
@@ -540,14 +607,14 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                     <div className="flex justify-between items-end">
                                         <div className="flex flex-col">
                                             <span className="text-[9px] text-gray-400 font-medium">{eventWidget.promoName}</span>
-                                            <span className="text-xs font-black text-amber-400">{eventWidget.prizeAmount}</span>
+                                            <span className="text-xs font-black text-[#00FFA3]">{eventWidget.prizeAmount}</span>
                                         </div>
                                         {eventWidget.ctaUrl && (
                                             <a 
                                                 href={eventWidget.ctaUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="bg-[#0D1320] hover:bg-emerald-500 hover:text-black text-white font-bold text-[9px] py-1.5 px-3 rounded transition-all text-center"
+                                                className="bg-[#111317] hover:bg-emerald-500 hover:text-black text-white font-bold text-[9px] py-1.5 px-3 rounded transition-all text-center"
                                             >
                                                 {eventWidget.ctaText || 'Katıl'}
                                             </a>
@@ -560,7 +627,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
                     {/* Poll Card */}
                     {activePoll && activePoll.isActive && (
-                         <div className="bg-[#131C2C] border border-sky-500/15 rounded-lg p-2.5 flex flex-col gap-2 transition-all">
+                         <div className="bg-[#1A1D24] rounded-lg p-3 flex flex-col gap-2 transition-all">
                              <div 
                                  onClick={() => setIsPollCollapsed(!isPollCollapsed)}
                                  className="flex items-center justify-between text-xs font-bold text-sky-400 cursor-pointer select-none"
@@ -575,7 +642,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                              </div>
 
                              {!isPollCollapsed && (
-                                 <div className="space-y-2 pt-1.5 border-t border-white/5 mt-1">
+                                 <div className="space-y-2 pt-2 mt-2">
                                      <div className="text-xs font-bold text-white">
                                          {activePoll.question}
                                      </div>
@@ -590,7 +657,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                                              <span>{opt}</span>
                                                              <span>%{percentage} ({activePoll.votes[idx]} Oy)</span>
                                                          </div>
-                                                         <div className="w-full bg-slate-800 rounded-full h-1 overflow-hidden border border-white/5">
+                                                         <div className="w-full bg-slate-800 rounded-full h-1 overflow-hidden">
                                                              <div className="bg-sky-500 h-1 rounded-full" style={{ width: `${percentage}%` }}></div>
                                                          </div>
                                                      </div>
@@ -598,12 +665,12 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                              })}
                                          </div>
                                      ) : (
-                                         <div className="flex flex-col gap-1">
+                                         <div className="flex flex-col gap-1.5">
                                              {activePoll.options.map((opt: string, idx: number) => (
                                                  <button 
                                                      key={idx}
                                                      onClick={() => handleVote(idx)}
-                                                     className="w-full bg-[#0D1320] hover:bg-sky-500 hover:text-white text-slate-300 font-bold text-[9px] py-1.5 px-3 rounded text-left transition-all border border-sky-500/20"
+                                                     className="w-full bg-[#111317] hover:bg-sky-500 hover:text-white text-slate-300 font-bold text-[9px] py-2 px-3 rounded text-left transition-all"
                                                  >
                                                      {opt}
                                                  </button>
@@ -621,7 +688,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                 ref={chatContainerRef} 
                 id="new-chat-container" 
                 className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"
-                style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(245,166,35,0.12) transparent' }}
+                style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(0,255,163,0.12) transparent' }}
             >
 
 
@@ -640,7 +707,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className={`rounded-2xl rounded-tl-sm p-3 flex flex-col gap-1.5 relative group text-left cursor-default mb-3 ${msg.role === 'admin' ? 'bg-[#1a1608] border border-[#F5A623]/40 shadow-[0_0_12px_rgba(245,166,35,0.12)]' : 'bg-[#131C2C] border border-white/5 shadow-sm'}`}
+                            className={`rounded-2xl rounded-tl-sm p-3.5 flex flex-col gap-1.5 relative group text-left cursor-default mb-4 ${
+                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19] shadow-[0_4px_12px_rgba(0,255,163,0.08)]' : 
+                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-gradient-to-r from-[#092b19] to-[#1A1D24] shadow-[0_4px_12px_rgba(0,255,163,0.15)]' : 
+                                'bg-[#1A1D24] shadow-sm hover:bg-[#20252E] transition-colors'
+                            }`}
                             onContextMenu={(e) => {
                                 if (isAdmin) {
                                     e.preventDefault();
@@ -650,22 +721,24 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             }}
                         >
                             <div className="flex items-center gap-2 flex-wrap mb-1">
-                                {msg.role === 'admin' && (
-                                    <span className="bg-gradient-to-br from-[#F5A623] to-[#D4900A] text-black px-1.5 py-0.5 rounded-full text-[9px] font-black min-w-[20px] text-center shadow-[0_0_12px_rgba(245,166,35,0.4)] border border-amber-300/30">
+                                {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
+                                    <span className="bg-gradient-to-br from-[#00FFA3] to-[#00CC82] text-black px-1.5 py-0.5 rounded-full text-[9px] font-black min-w-[20px] text-center shadow-[0_4px_12px_rgba(0,255,163,0.3)]">
                                         ADM
                                     </span>
                                 )}
                                 <span 
                                     className="text-xs font-bold tracking-wide" 
-                                    style={{ color: getRoleColor(msg.role, msg.username) }}
+                                    style={{ color: getRoleColor(msg.role, msg.username, msg) }}
                                 >
-                                    {getRoleBadge(msg.role)}{msg.username || 'Misafir'}
+                                    {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
                                 </span>
                                 <span className="text-[9px] text-slate-500 opacity-70 ml-auto mr-6">
                                     {formatTime(msg.created_at)}
                                 </span>
                             </div>
-                            <div className="text-[12.5px] text-slate-300 leading-relaxed break-words pr-4 font-normal antialiased">
+                            <div className={`text-[12.5px] leading-relaxed break-words pr-4 antialiased ${
+                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-slate-300 font-normal'
+                            }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#00FFA3') : undefined }}>
                                 {renderMessageText(msg.message)}
                             </div>
 
@@ -685,13 +758,13 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 </button>
 
                                 {activeMenuId === msg.id && (
-                                  <div className="absolute right-0 mt-1 bg-[#131C2C] border border-white/10 rounded-lg shadow-xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
+                                  <div className="absolute right-0 mt-1 bg-[#1A1D24] rounded-lg shadow-2xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
                                     <button 
                                       onClick={() => {
                                         handlePinMessage(msg.message, msg.username, msg.role || 'member');
                                         setActiveMenuId(null);
                                       }}
-                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-amber-400 transition-colors flex items-center gap-1.5"
+                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-[#00FFA3] transition-colors flex items-center gap-1.5"
                                     >
                                       📌 Sabitle
                                     </button>
@@ -719,15 +792,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             )}
 
                             {activeMutePopup === msg.id && (
-                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#0D1320', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '12px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', minWidth: '220px' }}>
-                                    <div style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                        <input value={muteReason} onChange={(e) => setMuteReason(e.target.value)} placeholder="Ceza nedeni (zorunlu)" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 8px', fontSize: '10px', color: '#fff', outline: 'none' }} />
+                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#111317', borderRadius: '12px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', minWidth: '220px' }}>
+                                    <div style={{ padding: '12px' }}>
+                                        <input value={muteReason} onChange={(e) => setMuteReason(e.target.value)} placeholder="Ceza nedeni (zorunlu)" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', padding: '8px 10px', fontSize: '10px', color: '#fff', outline: 'none', border: 'none' }} />
                                     </div>
                                     <button onClick={() => handleMuteUser(msg.user_id, msg.username, 7)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#fff', fontSize: '11px', textAlign: 'left', cursor: 'pointer' }}>1 Hafta Sustur</button>
                                     <button onClick={() => handleMuteUser(msg.user_id, msg.username, 30)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#fff', fontSize: '11px', textAlign: 'left', cursor: 'pointer' }}>1 Ay Sustur</button>
                                     <button onClick={() => handleMuteUser(msg.user_id, msg.username, 60)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#fff', fontSize: '11px', textAlign: 'left', cursor: 'pointer' }}>2 Ay Sustur</button>
                                     <button onClick={() => handleMuteUser(msg.user_id, msg.username, -1)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#ef4444', fontSize: '11px', textAlign: 'left', cursor: 'pointer' }}>Kalıcı Sustur</button>
-                                    <button onClick={() => handleUnmuteUser(msg.user_id)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#10b981', fontSize: '11px', textAlign: 'left', cursor: 'pointer', borderTop: '1px solid rgba(255,255,255,0.05)' }}>Cezayı Kaldır</button>
+                                    <button onClick={() => handleUnmuteUser(msg.user_id)} style={{ padding: '10px 12px', background: 'rgba(255,255,255,0.02)', border: 'none', color: '#10b981', fontSize: '11px', textAlign: 'left', cursor: 'pointer', marginTop: '4px' }}>Cezayı Kaldır</button>
                                 </div>
                             )}
                         </div>
@@ -736,20 +809,20 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             </div>
 
             {/* Input Footer Area */}
-            <div className="p-4 bg-[#0D1320] border-t border-white/5 flex flex-col gap-3 flex-shrink-0">
+            <div className="p-4 bg-[#111317] flex flex-col gap-3 flex-shrink-0 mt-2">
                 {/* Message Input */}
                 {!siteUser ? (
-                    <div className="p-3 border-t border-white/5 bg-[#0D1320] flex flex-col items-center justify-center gap-2">
+                    <div className="p-3 bg-[#111317] flex flex-col items-center justify-center gap-2">
                         <input 
                             type="text"
                             disabled
                             placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
-                            className="w-full bg-[#0D1320]/50 text-[11px] font-bold text-center text-gray-500 rounded-lg px-3 py-2 border border-white/5 cursor-not-allowed"
+                            className="w-full bg-[#1A1D24] text-[11px] font-bold text-center text-gray-500 rounded-lg px-4 py-3 cursor-not-allowed"
                         />
                     </div>
                 ) : (
                     <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
-                        <div className="relative flex items-center bg-[#131C2C] border border-white/5 focus-within:border-[#F5A623]/30 rounded-lg overflow-hidden px-3 py-2 transition-colors">
+                        <div className="relative flex items-center bg-[#1A1D24] focus-within:bg-[#242933] rounded-lg overflow-hidden px-4 py-2.5 transition-colors">
                             <input
                                 type="text"
                                 value={newMessage}
@@ -764,7 +837,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         <button
                             type="submit"
                             disabled={!newMessage.trim()}
-                            className="self-end px-5 py-1.5 rounded bg-gradient-to-r from-[#F5A623] to-[#D4900A] text-black hover:from-[#FFB84D] hover:to-[#F5A623] disabled:opacity-30 text-xs font-bold transition-all active:scale-95 uppercase tracking-wider"
+                            className="self-end px-5 py-1.5 rounded bg-gradient-to-r from-[#00FFA3] to-[#00CC82] text-black hover:from-[#33FFB5] hover:to-[#00FFA3] disabled:opacity-30 text-xs font-bold transition-all active:scale-95 uppercase tracking-wider"
                         >
                             Gönder
                         </button>

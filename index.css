@@ -36,12 +36,12 @@
   --glass-bg: rgba(0, 0, 0, 0.02);
   --glass-border: rgba(0, 0, 0, 0.06);
 
-  /* Gold / Accent */
-  --gold-primary: #F5A623;
-  --gold-hover: #FFB84D;
-  --gold-glow: rgba(245, 166, 35, 0.25);
-  --gold-subtle: rgba(245, 166, 35, 0.08);
-  --gold-border: rgba(245, 166, 35, 0.15);
+  /* Gamdom Neon Green / Accent */
+  --gold-primary: #00FFA3;
+  --gold-hover: #14E564;
+  --gold-glow: rgba(0, 255, 163, 0.25);
+  --gold-subtle: rgba(0, 255, 163, 0.08);
+  --gold-border: rgba(0, 255, 163, 0.15);
 
   --radius-sm: 4px;
   --radius-base: 8px;
@@ -71,10 +71,10 @@
 
 /* ── Dark Theme ── */
 [data-theme="dark"] {
-  --bg-main: #0D1320;
-  --bg-elevated: #1E293B;
-  --bg-card: #131C2C;
-  --bg-card-hover: #1A2540;
+  --bg-main: #111317;
+  --bg-elevated: #1A1D24;
+  --bg-card: #1A1D24;
+  --bg-card-hover: #22262F;
   --bg-input: rgba(255, 255, 255, 0.04);
   --bg-overlay: rgba(0, 0, 0, 0.85);
 
@@ -95,12 +95,12 @@
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
 
-  /* Gold / Accent (dark) */
-  --gold-primary: #F5A623;
-  --gold-hover: #FFB84D;
-  --gold-glow: rgba(245, 166, 35, 0.25);
-  --gold-subtle: rgba(245, 166, 35, 0.08);
-  --gold-border: rgba(245, 166, 35, 0.15);
+  /* Gamdom Neon Green / Accent (dark) */
+  --gold-primary: #00FFA3;
+  --gold-hover: #14E564;
+  --gold-glow: rgba(0, 255, 163, 0.25);
+  --gold-subtle: rgba(0, 255, 163, 0.08);
+  --gold-border: rgba(0, 255, 163, 0.15);
 
   /* Header Custom Variables (Dark) */
   --header-bg: transparent;

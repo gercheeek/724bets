@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Image, Layout, Trophy, Users, Eye, EyeOff, Save, Plus, Sparkles, TrendingUp, AlertCircle, Clock, Box, Zap, Trash2, Search, Lock, Unlock, Timer, Gift, Ticket, RefreshCw, Activity, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, ChevronUp, ChevronDown, Layers, Camera, ShieldCheck, ShoppingCart, Shield } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, LoyaltyConfig, EditorAccount, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, TVConfig, SportCategory, LoaderConfig, CasinoLobbyGame } from '../types';
+import { Settings, Image, Layout, Trophy, Users, Eye, EyeOff, Save, Plus, Sparkles, TrendingUp, AlertCircle, Clock, Box, Zap, Trash2, Search, Lock, Unlock, Timer, Gift, Ticket, RefreshCw, Activity, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, ChevronUp, ChevronDown, Layers, Camera, ShieldCheck, ShoppingCart, Shield, Bell } from 'lucide-react';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, LoyaltyConfig, EditorAccount, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, TVConfig, SportCategory, LoaderConfig, CasinoLobbyGame, ChatBotConfig } from '../types';
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
 import AdminGiveawayTab from './AdminGiveawayTab';
@@ -11,6 +11,7 @@ import AdminPremiumTab from './AdminPremiumTab';
 import AdminCasinoLobbyTab from './AdminCasinoLobbyTab';
 import AdminTrustedTab from './AdminTrustedTab';
 import AdminChatTab from './AdminChatTab';
+import AdminNotificationTab from './AdminNotificationTab';
 import { NavVisibility } from './Header';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
@@ -67,6 +68,8 @@ interface AdminPanelProps {
   onUpdateUser?: (user: SiteUser) => void;
   discordConfig?: any;
   onSaveDiscordConfig?: (config: any) => void;
+  botsConfig?: ChatBotConfig[];
+  onSaveBotsConfig?: (config: ChatBotConfig[]) => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -87,10 +90,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   casinoLobbyGames, onSaveCasinoLobbyGames,
   siteUser, onUpdateUser,
   discordConfig, onSaveDiscordConfig,
+  botsConfig, onSaveBotsConfig,
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'premium' | 'payment' | 'leagues'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,
@@ -1022,6 +1026,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     className={`adm-nav-item ${activeTab === 'chatmanage' ? 'active' : ''}`}
                   >
                     <Shield className="w-4 h-4" /> SOHBET YÖNETİMİ
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('notifications')}
+                    className={`adm-nav-item ${activeTab === 'notifications' ? 'active' : ''}`}
+                  >
+                    <Bell className="w-4 h-4" /> BİLDİRİM MERKEZİ
                   </button>
                 </div>
               )}
@@ -3451,7 +3461,6 @@ Maç Listesi: `}
       )}
 
 
-
       {activeTab === 'pool' && (
         <AdminPoolTab />
       )}
@@ -3762,6 +3771,15 @@ Maç Listesi: `}
       {activeTab === 'chatmanage' && (
         <div className="space-y-4 animate-fade-in">
           <AdminChatTab />
+        </div>
+      )}
+
+      {activeTab === 'notifications' && (
+        <div className="space-y-4 animate-fade-in">
+          <AdminNotificationTab 
+            botsConfig={botsConfig || []}
+            onSaveBotsConfig={onSaveBotsConfig}
+          />
         </div>
       )}
 

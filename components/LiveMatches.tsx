@@ -80,7 +80,7 @@ const LiveMatches: React.FC = () => {
     if (!odd) return '#888';
     if (odd < 1.5) return '#ff6b6b';
     if (odd < 2.0) return '#ffa726';
-    if (odd < 3.0) return '#f2a900';
+    if (odd < 3.0) return '#00FFA3';
     return '#66bb6a';
   };
 
@@ -93,22 +93,21 @@ const LiveMatches: React.FC = () => {
     return (
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-4">
-          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 200, 83, 0.08)', border: '1px solid rgba(0, 200, 83, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(0, 200, 83, 0.1)' }}>
-            <Zap className="w-4 h-4" style={{ color: '#00c853' }} />
+          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(0, 255, 163, 0.1)' }}>
+            <Zap className="w-4 h-4" style={{ color: '#00FFA3' }} />
           </div>
           <h3 className="font-black text-sm uppercase tracking-wider italic" style={{ color: '#e0e0e0' }}>
             CANLI ORANLAR
           </h3>
-          <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(0, 200, 83, 0.2), transparent)' }} />
+          <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(0, 255, 163, 0.2), transparent)' }} />
         </div>
         {/* Loading skeleton */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {[1, 2, 3].map(i => (
             <div key={i} style={{
-              background: 'linear-gradient(160deg, #050a05 0%, #080f08 100%)',
-              border: '1px solid rgba(0, 200, 83, 0.1)',
+              background: '#1A1D24',
               borderRadius: '16px',
-              padding: '16px',
+              padding: '20px',
               animation: 'pulse 1.5s infinite'
             }}>
               <div style={{ height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', width: '60%', marginBottom: '12px' }} />
@@ -132,17 +131,17 @@ const LiveMatches: React.FC = () => {
     <div className="mb-6">
       {/* Section Header */}
       <div className="flex items-center gap-2 mb-4">
-        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 200, 83, 0.08)', border: '1px solid rgba(0, 200, 83, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(0, 200, 83, 0.1)' }}>
-          <Zap className="w-4 h-4" style={{ color: '#00c853' }} />
+        <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(0, 255, 163, 0.1)' }}>
+          <Zap className="w-4 h-4" style={{ color: '#00FFA3' }} />
         </div>
         <h3 className="font-black text-sm uppercase tracking-wider italic" style={{ color: '#e0e0e0' }}>
           CANLI ORANLAR
         </h3>
         <div className="flex items-center gap-1.5 ml-1">
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00c853', boxShadow: '0 0 8px #00c853', animation: 'live-pulse 2s infinite' }} />
-          <span style={{ fontSize: '9px', fontWeight: 900, color: '#00c853', textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00FFA3', boxShadow: '0 0 8px #00FFA3', animation: 'live-pulse 2s infinite' }} />
+          <span style={{ fontSize: '9px', fontWeight: 900, color: '#00FFA3', textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
         </div>
-        <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(0, 200, 83, 0.2), transparent)' }} />
+        <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(0, 255, 163, 0.2), transparent)' }} />
         <div className="flex items-center gap-2">
           {lastUpdated && (
             <span style={{ fontSize: '9px', color: '#555', fontWeight: 700 }}>{lastUpdated}</span>
@@ -153,10 +152,9 @@ const LiveMatches: React.FC = () => {
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               width: '28px', height: '28px', borderRadius: '8px',
-              background: 'rgba(0, 200, 83, 0.06)',
-              border: '1px solid rgba(0, 200, 83, 0.15)',
+              background: 'rgba(0, 255, 163, 0.06)',
               cursor: 'pointer', transition: 'all 0.3s',
-              color: '#00c853'
+              color: '#00FFA3'
             }}
             title="Yenile"
           >
@@ -171,10 +169,9 @@ const LiveMatches: React.FC = () => {
           <div
             key={match.mac_id}
             style={{
-              background: 'linear-gradient(160deg, #040804 0%, #060d06 100%)',
-              border: '1px solid rgba(0, 200, 83, 0.1)',
+              background: '#1A1D24',
               borderRadius: '14px',
-              padding: '14px',
+              padding: '20px',
               position: 'relative',
               overflow: 'hidden',
               transition: 'all 0.3s ease',
@@ -182,26 +179,26 @@ const LiveMatches: React.FC = () => {
               animation: `fadeInUp 0.4s ease ${idx * 0.05}s both`
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.border = '1px solid rgba(0, 200, 83, 0.25)';
-              (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(0, 200, 83, 0.08)';
+              (e.currentTarget as HTMLElement).style.background = '#22262F';
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(0, 255, 163, 0.08)';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.border = '1px solid rgba(0, 200, 83, 0.1)';
+              (e.currentTarget as HTMLElement).style.background = '#1A1D24';
               (e.currentTarget as HTMLElement).style.boxShadow = 'none';
             }}
           >
             {/* Glow effect */}
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(0, 200, 83, 0.03) 0%, transparent 60%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(0, 255, 163, 0.03) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
             {/* Live indicator */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
               <div className="flex items-center gap-1.5">
-                <Wifi className="w-3 h-3" style={{ color: '#00c853' }} />
-                <span style={{ fontSize: '9px', fontWeight: 900, color: 'rgba(0, 200, 83, 0.7)', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+                <Wifi className="w-3 h-3" style={{ color: '#00FFA3' }} />
+                <span style={{ fontSize: '9px', fontWeight: 900, color: 'rgba(0, 255, 163, 0.7)', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
                   Canlı Bahis
                 </span>
               </div>
-              <TrendingUp className="w-3.5 h-3.5" style={{ color: 'rgba(0, 200, 83, 0.3)' }} />
+              <TrendingUp className="w-3.5 h-3.5" style={{ color: 'rgba(0, 255, 163, 0.3)' }} />
             </div>
 
             {/* Team Names */}
@@ -209,8 +206,8 @@ const LiveMatches: React.FC = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <div style={{
                   width: '4px', height: '16px', borderRadius: '2px',
-                  background: 'linear-gradient(180deg, #00c853, #00e676)',
-                  boxShadow: '0 0 6px rgba(0, 200, 83, 0.4)'
+                  background: 'linear-gradient(180deg, #00FFA3, #00FFA3)',
+                  boxShadow: '0 0 6px rgba(0, 255, 163, 0.4)'
                 }} />
                 <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff', letterSpacing: '-0.3px' }}>
                   {match.ev_sahibi}
@@ -231,9 +228,8 @@ const LiveMatches: React.FC = () => {
             <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
               {/* 1 */}
               <div style={{
-                flex: 1, textAlign: 'center', padding: '8px 4px',
-                background: 'rgba(0, 200, 83, 0.04)',
-                border: '1px solid rgba(0, 200, 83, 0.1)',
+                flex: 1, textAlign: 'center', padding: '10px 4px',
+                background: 'rgba(0, 255, 163, 0.04)',
                 borderRadius: '10px',
                 transition: 'all 0.2s'
               }}>
@@ -244,9 +240,8 @@ const LiveMatches: React.FC = () => {
               </div>
               {/* X */}
               <div style={{
-                flex: 1, textAlign: 'center', padding: '8px 4px',
-                background: 'rgba(0, 200, 83, 0.04)',
-                border: '1px solid rgba(0, 200, 83, 0.1)',
+                flex: 1, textAlign: 'center', padding: '10px 4px',
+                background: 'rgba(0, 255, 163, 0.04)',
                 borderRadius: '10px',
                 transition: 'all 0.2s'
               }}>
@@ -257,9 +252,8 @@ const LiveMatches: React.FC = () => {
               </div>
               {/* 2 */}
               <div style={{
-                flex: 1, textAlign: 'center', padding: '8px 4px',
-                background: 'rgba(0, 200, 83, 0.04)',
-                border: '1px solid rgba(0, 200, 83, 0.1)',
+                flex: 1, textAlign: 'center', padding: '10px 4px',
+                background: 'rgba(0, 255, 163, 0.04)',
                 borderRadius: '10px',
                 transition: 'all 0.2s'
               }}>
@@ -278,20 +272,20 @@ const LiveMatches: React.FC = () => {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                 width: '100%', padding: '9px 12px',
-                background: 'linear-gradient(135deg, #00c853 0%, #00e676 100%)',
+                background: 'linear-gradient(135deg, #00FFA3 0%, #00FFA3 100%)',
                 color: '#000', fontWeight: 900, fontSize: '10px',
                 borderRadius: '10px', textTransform: 'uppercase',
                 letterSpacing: '1.5px', textDecoration: 'none',
                 transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(0, 200, 83, 0.25)',
+                boxShadow: '0 4px 15px rgba(0, 255, 163, 0.25)',
                 border: 'none', cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 25px rgba(0, 200, 83, 0.4)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 25px rgba(0, 255, 163, 0.4)';
                 (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 15px rgba(0, 200, 83, 0.25)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 15px rgba(0, 255, 163, 0.25)';
                 (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
               }}
             >

@@ -113,8 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #131C2C;
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: #111317;
           border-radius: 8px;
           color: #a0a0a0;
           cursor: pointer;
@@ -128,11 +127,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         }
 
         .sidebar-group {
-          background: #131C2C;
+          background: #111317;
           border-radius: 12px;
           margin: 0 12px 12px 12px;
           padding: 8px 0;
-          border: 1px solid rgba(255, 255, 255, 0.03);
+          border: none;
           overflow: hidden;
         }
 
@@ -156,10 +155,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         }
         
         .sidebar-nav-item.active {
-          color: #F5A623;
-          background: rgba(255, 255, 255, 0.1);
-          border-left: 3px solid #F5A623;
-          padding-left: 13px;
+          color: #000000;
+          background: #00FFA3;
+          font-weight: 700;
         }
 
         .sidebar-nav-icon {
@@ -187,7 +185,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           width: 100%;
           padding: 12px 16px;
           color: #fff;
-          background: #131C2C;
+          background: #1A1D24;
           border: none;
           cursor: pointer;
           font-size: 14px;
@@ -232,8 +230,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           background: rgba(255, 255, 255, 0.03);
         }
         .sidebar-action-highlight {
-          color: #F5A623 !important;
-          background: rgba(245, 166, 35, 0.08) !important;
+          color: #00FFA3 !important;
+          background: rgba(0, 255, 163, 0.08) !important;
         }
 
         /* Collapsed Sidebar CSS overrides to match Slotra design */
@@ -269,15 +267,15 @@ const Sidebar: React.FC<SidebarProps> = ({
         }
 
         .sidebar-collapsed .sidebar-nav-item.active {
-          background: rgba(255, 255, 255, 0.1) !important;
+          background: #00FFA3 !important;
           border-left: none !important;
           padding-left: 0 !important;
-          color: #F5A623 !important;
+          color: #000000 !important;
         }
 
         .sidebar-collapsed .sidebar-action-highlight {
-          color: #F5A623 !important;
-          background: rgba(245, 166, 35, 0.08) !important;
+          color: #00FFA3 !important;
+          background: rgba(0, 255, 163, 0.08) !important;
         }
 
         .sidebar-collapsed .sidebar-nav-icon,
@@ -313,7 +311,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         
         {/* Toggle Button / Header of Sidebar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: isOpen ? 'space-between' : 'center', padding: isOpen ? '0 16px' : '0', marginBottom: '16px' }}>
-          <button onClick={onToggle} className="text-white hover:text-[#F5A623] transition-colors p-2 rounded-lg hover:bg-white/5 flex items-center justify-center">
+          <button onClick={onToggle} className="text-white hover:text-[#00FFA3] transition-colors p-2 rounded-lg hover:bg-white/5 flex items-center justify-center">
             <Menu className="w-6 h-6" />
           </button>
         </div>
@@ -323,7 +321,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           {renderNavItems(mainCategories)}
           
           {/* 724Casino Group */}
-          <div style={{ marginTop: '4px', borderTop: '1px solid rgba(255, 255, 255, 0.03)' }}>
+          <div style={{ marginTop: '8px' }}>
             <button 
               className="sidebar-dropdown-btn" 
               onClick={() => isOpen && setIsCasinoDropdownOpen(!isCasinoDropdownOpen)}
@@ -331,7 +329,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               title={!isOpen ? "724Casino" : undefined}
             >
               <div className="sidebar-dropdown-icon" style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Spade className={ICON_SIZE} style={{ color: '#F5A623' }} />
+                <Spade className={ICON_SIZE} style={{ color: '#00FFA3' }} />
                 {isOpen && <span style={{ fontWeight: '800', letterSpacing: '0.5px' }}>724Casino</span>}
               </div>
               {isOpen && <ChevronDown className={`w-4 h-4 sidebar-dropdown-arrow ${isCasinoDropdownOpen ? 'open' : ''}`} />}
@@ -346,7 +344,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
           
           {/* Other Categories */}
-          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.03)', paddingTop: '4px', marginTop: '4px' }}>
+          <div style={{ paddingTop: '8px', marginTop: '8px' }}>
             {renderNavItems(otherCategories)}
           </div>
         </div>
@@ -360,7 +358,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {isOpen && <span>Kodu Kullan</span>}
           </button>
           <button className="sidebar-action-btn sidebar-action-highlight" title={!isOpen ? "Arkadaşını Davet Et" : undefined}>
-            <span className="sidebar-nav-icon"><Users className={ICON_SIZE} style={{ color: '#F5A623' }} /></span>
+            <span className="sidebar-nav-icon"><Users className={ICON_SIZE} style={{ color: '#00FFA3' }} /></span>
             {isOpen && <span>Arkadaşını Davet Et</span>}
           </button>
            <button className="sidebar-action-btn" title={!isOpen ? "Telegram" : undefined}>
