@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './ThemeContext';
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 import Header from './components/Header';
 import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock } from 'lucide-react';
 import { getFlagUrl } from './components/MatchResultsWidget';
@@ -8,6 +10,7 @@ import BrandCard from './components/BrandCard';
 import AdminPanel from './components/AdminPanel';
 import ErrorBoundary from './components/ErrorBoundary';
 import AuthModal from './components/AuthModal';
+import OnboardingPopup from './components/OnboardingPopup';
 import FakeBetModal from './components/FakeBetModal';
 import MobileBottomNav from './components/MobileBottomNav';
 import AnalysisView from './components/AnalysisView';
@@ -558,12 +561,20 @@ const App: React.FC = () => {
   }, []);
   const [themeColor, setThemeColor] = useState('#F5A623');
   const [activeAnalysisId, setActiveAnalysisId] = useState<string | null>(null);
+  const [welcomePopupConfig, setWelcomePopupConfig] = useState<WelcomePopupConfig>(() => {
+    try {
+      const stored = localStorage.getItem('site_welcome_popup');
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return DEFAULT_WELCOME_POPUP_CONFIG;
+  });
+  const [showWelcomePopup, setShowWelcomePopup] = useState<boolean>(false);
+  const [showOnboardingPopup, setShowOnboardingPopup] = useState<boolean>(false);
   const [hashtags, setHashtags] = useState('');
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
     const stored = localStorage.getItem('site_coupons');
     return stored ? JSON.parse(stored) : demoCoupons;
   });
-  const [showWelcomePopup, setShowWelcomePopup] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(true);
   const [globalTvPip, setGlobalTvPip] = useState(false);
@@ -583,11 +594,6 @@ const App: React.FC = () => {
     return stored ? JSON.parse(stored) : DEFAULT_WHEEL_CONFIG;
   });
 
-  // Welcome Popup Config
-  const [welcomePopupConfig, setWelcomePopupConfig] = useState<WelcomePopupConfig>(() => {
-    const stored = localStorage.getItem('site_welcome_popup');
-    return stored ? JSON.parse(stored) : DEFAULT_WELCOME_POPUP_CONFIG;
-  });
 
   const handleWelcomePopupConfigChange = (cfg: WelcomePopupConfig) => {
     setWelcomePopupConfig(cfg);
@@ -620,13 +626,10 @@ const App: React.FC = () => {
       },
       steps: [
         { popover: { title: "724BAHİS'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
-        { element: '#tour-sidebar', popover: { title: 'Kategoriler & Spor Dalları', description: 'Sol menüden tüm spor bahisleri, casino lobileri ve TV yayınına hızlıca erişebilirsiniz.', side: "right", align: 'start' }},
-        { element: '#tour-analysis', popover: { title: 'Özel Analizler', description: 'Dünya Kupası 2026 başta olmak üzere günün en popüler analitik verileri burada yayınlanır.', side: "bottom", align: 'center' }},
-        { element: '#tour-live-scores', popover: { title: 'Canlı Skorlar', description: 'Dünya genelindeki tüm maçların anlık skorlarını ve canlı sonuçlarını anlık takip edebilirsiniz.', side: "bottom", align: 'center' }},
-        { element: '#tour-hero', popover: { title: 'Günün Öne Çıkanları', description: 'Editörlerimizin hazırladığı günün hazır kuponunu ve popüler maç oranlarını buradan inceleyebilirsiniz.', side: "bottom", align: 'center' }},
-        { element: '#tour-analyses', popover: { title: 'Detaylı Maç Tahminleri', description: 'Yapay zeka ve uzman analistlerimizin hazırladığı tahminleri, oranları ve güven endekslerini buradan görebilirsiniz.', side: "top", align: 'center' }},
-        { element: '#tour-chat', popover: { title: 'Canlı Sohbet & Hediyeler', description: 'Sağ panelden diğer oyuncularla sohbet edin ve paylaşılan özel hediye kodlarını yakalayın!', side: "left", align: 'start' }},
-        { element: '#tour-register-btn', popover: { title: 'Hemen Üye Olun! 🎁', description: 'Kayıt olarak tüm bu tahminlere, özel analizlere ve kazandıran oranlara sınırsız erişim sağlayın!', side: "bottom", align: 'end' }}
+        { element: '#tour-sidebar', popover: { title: 'Kategoriler & Spor Dalları', description: 'Buradan spor bahisleri, casino ve diğer popüler oyunlara tek tıkla ulaşabilirsiniz.', side: "right", align: 'start' }},
+        { element: '#tour-user-panel', popover: { title: 'Bakiye & Kullanıcı İşlemleri', description: 'Güncel bakiyenizi takip edebilir, saniyeler içinde yatırım ve çekim yapabilirsiniz.', side: "bottom", align: 'center' }},
+        { element: '#tour-chat', popover: { title: 'Canlı Sohbet', description: 'Sağ panelden diğer üyelerimizle sohbet edebilir, özel etkinlik kodlarını (gift) yakalayabilirsiniz!', side: "left", align: 'start' }},
+        { element: '#tour-main', popover: { title: 'Oyun Vitrini (Orta Alan)', description: 'En güncel spor karşılaşmaları ve yüksek oranlı bahisler bu alanda listelenmektedir. Bol şanslar!', side: "top", align: 'center' }}
       ]
     });
     driverObj.drive();
@@ -647,7 +650,7 @@ const App: React.FC = () => {
 
     if (!tourCompleted && !isUserLoggedIn && view === 'home') {
       const timer = setTimeout(() => {
-        handleStartTour();
+        setShowOnboardingPopup(true);
       }, 1500);
       return () => clearTimeout(timer);
     }
@@ -1217,6 +1220,20 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider>
+      {/* Onboarding Popup Overlay */}
+      {showOnboardingPopup && (
+        <OnboardingPopup 
+          onStartTour={() => {
+            setShowOnboardingPopup(false);
+            handleStartTour();
+          }}
+          onClose={() => {
+            setShowOnboardingPopup(false);
+            localStorage.setItem('tour_completed', 'true');
+          }}
+        />
+      )}
+
       {/* Auth Modal Overlay */}
       {authModalMode && (
         <AuthModal
@@ -1375,6 +1392,7 @@ const App: React.FC = () => {
             </div>
 
       <div 
+        id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
           (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
             ? 'p-0 w-full max-w-full' 
