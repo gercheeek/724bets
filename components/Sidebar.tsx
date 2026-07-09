@@ -36,13 +36,20 @@ const Sidebar: React.FC<SidebarProps> = ({
   navVisibility,
   onStartTour,
 }) => {
+  const [isCasinoDropdownOpen, setIsCasinoDropdownOpen] = useState(true);
 
   const mainCategories: CategoryItem[] = [
     { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
+  ];
+
+  const casinoCategories: CategoryItem[] = [
     { key: 'sports2', view: 'sports2', label: 'Spor', icon: <Trophy className={ICON_SIZE} /> },
     { key: 'blackjack', view: 'blackjack', label: 'Casino', icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
     { key: 'live-casino', view: 'live-casino', label: 'Canlı Casino', icon: <Target className={ICON_SIZE} /> },
     { key: 'esports', view: 'esports', label: 'E-spor', icon: <Gamepad2 className={ICON_SIZE} /> },
+  ];
+
+  const otherCategories: CategoryItem[] = [
     { key: '724tv', view: '724tv', label: '724TV', icon: <Tv className={ICON_SIZE} /> },
     { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
     { key: 'analysis', view: 'analysis', label: 'Analizler', icon: <BarChart3 className={ICON_SIZE} />, visKey: 'analysis' },
@@ -314,6 +321,34 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Main Categories Group */}
         <div className="sidebar-group" style={{ marginTop: '4px' }}>
           {renderNavItems(mainCategories)}
+          
+          {/* 724Casino Group */}
+          <div style={{ marginTop: '4px', borderTop: '1px solid rgba(255, 255, 255, 0.03)' }}>
+            <button 
+              className="sidebar-dropdown-btn" 
+              onClick={() => isOpen && setIsCasinoDropdownOpen(!isCasinoDropdownOpen)}
+              style={{ background: 'transparent', padding: '12px 16px' }}
+              title={!isOpen ? "724Casino" : undefined}
+            >
+              <div className="sidebar-dropdown-icon" style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <Spade className={ICON_SIZE} style={{ color: '#F5A623' }} />
+                {isOpen && <span style={{ fontWeight: '800', letterSpacing: '0.5px' }}>724Casino</span>}
+              </div>
+              {isOpen && <ChevronDown className={`w-4 h-4 sidebar-dropdown-arrow ${isCasinoDropdownOpen ? 'open' : ''}`} />}
+            </button>
+            
+            {/* If open or if sidebar is collapsed, we render the sub-items */}
+            {(!isOpen || isCasinoDropdownOpen) && (
+              <div style={{ paddingLeft: isOpen ? '12px' : '0', display: 'flex', flexDirection: 'column' }}>
+                {renderNavItems(casinoCategories)}
+              </div>
+            )}
+          </div>
+          
+          {/* Other Categories */}
+          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.03)', paddingTop: '4px', marginTop: '4px' }}>
+            {renderNavItems(otherCategories)}
+          </div>
         </div>
 
 
