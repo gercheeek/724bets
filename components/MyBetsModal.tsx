@@ -36,7 +36,7 @@ const MyBetsModal: React.FC<MyBetsModalProps> = ({ isOpen, onClose }) => {
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-2xl bg-[#0F172A] border border-zinc-800/80 rounded-3xl shadow-2xl overflow-hidden animate-fade-in flex flex-col max-h-[85vh]">
+      <div className="relative w-full max-w-2xl bg-[#0F172A] border border-zinc-800/80 rounded-lg shadow-2xl overflow-hidden animate-fade-in flex flex-col max-h-[85vh]">
         {/* Header */}
         <div className="bg-slate-900/50 px-6 py-4 border-b border-zinc-800/50 flex justify-between items-center relative z-10">
           <h3 className="text-white font-black uppercase tracking-wider text-sm flex items-center gap-2">
@@ -67,7 +67,7 @@ const MyBetsModal: React.FC<MyBetsModalProps> = ({ isOpen, onClose }) => {
             bets.map((bet) => (
               <div 
                 key={bet.id} 
-                className="bg-slate-900/40 border border-zinc-800/80 rounded-2xl p-4 space-y-3 hover:border-zinc-700/80 transition-all"
+                className="bg-slate-900/40 border border-zinc-800/80 rounded-lg p-4 space-y-3 hover:border-zinc-700/80 transition-all"
               >
                 {/* Bet Metadata Header */}
                 <div className="flex justify-between items-start border-b border-zinc-800/50 pb-2.5">
@@ -99,7 +99,7 @@ const MyBetsModal: React.FC<MyBetsModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Bet Summary Footer */}
-                <div className="bg-slate-950/40 rounded-xl p-3 border border-zinc-800/30 flex justify-between items-center text-xs font-bold">
+                <div className="bg-slate-950/40 rounded-lg p-3 border border-zinc-800/30 flex justify-between items-center text-xs font-bold">
                   <div className="space-y-1">
                     <span className="text-zinc-500 block">Yatırılan Tutar:</span>
                     <span className="text-white font-mono">{bet.amount.toFixed(2)} ₺</span>

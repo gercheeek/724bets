@@ -546,7 +546,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                 </div>
                 <button 
                     onClick={onClose} 
-                    className="p-1 hover:bg-white/5 active:scale-95 transition-all rounded-md text-zinc-400 hover:text-white"
+                    className="p-1 hover:bg-white/5 active:scale-95 transition-all rounded-lg text-zinc-400 hover:text-white"
                     title="Kapat"
                 >
                     <Menu className="w-4 h-4" />
@@ -657,8 +657,8 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                                              <span>{opt}</span>
                                                              <span>%{percentage} ({activePoll.votes[idx]} Oy)</span>
                                                          </div>
-                                                         <div className="w-full bg-slate-800 rounded-full h-1 overflow-hidden">
-                                                             <div className="bg-sky-500 h-1 rounded-full" style={{ width: `${percentage}%` }}></div>
+                                                         <div className="w-full bg-[#111317] rounded-full h-1 overflow-hidden">
+                                                             <div className="bg-[#00FFA3] h-1 rounded-full" style={{ width: `${percentage}%` }}></div>
                                                          </div>
                                                      </div>
                                                  );
@@ -670,7 +670,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                                  <button 
                                                      key={idx}
                                                      onClick={() => handleVote(idx)}
-                                                     className="w-full bg-[#111317] hover:bg-sky-500 hover:text-white text-slate-300 font-bold text-[9px] py-2 px-3 rounded text-left transition-all"
+                                                     className="w-full bg-[#22262F] hover:bg-[#00FFA3] hover:text-black text-slate-300 font-bold text-[9px] py-2 px-3 rounded-lg text-left transition-all border-none"
                                                  >
                                                      {opt}
                                                  </button>
@@ -707,7 +707,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className={`rounded-2xl rounded-tl-sm p-3.5 flex flex-col gap-1.5 relative group text-left cursor-default mb-4 ${
+                            className={`rounded-lg rounded-tl-sm p-3.5 flex flex-col gap-1.5 relative group text-left cursor-default mb-4 ${
                                 msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19] shadow-[0_4px_12px_rgba(0,255,163,0.08)]' : 
                                 (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-gradient-to-r from-[#092b19] to-[#1A1D24] shadow-[0_4px_12px_rgba(0,255,163,0.15)]' : 
                                 'bg-[#1A1D24] shadow-sm hover:bg-[#20252E] transition-colors'
@@ -792,7 +792,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             )}
 
                             {activeMutePopup === msg.id && (
-                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#111317', borderRadius: '12px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', minWidth: '220px' }}>
+                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#111317', borderRadius: '8px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', minWidth: '220px' }}>
                                     <div style={{ padding: '12px' }}>
                                         <input value={muteReason} onChange={(e) => setMuteReason(e.target.value)} placeholder="Ceza nedeni (zorunlu)" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', padding: '8px 10px', fontSize: '10px', color: '#fff', outline: 'none', border: 'none' }} />
                                     </div>

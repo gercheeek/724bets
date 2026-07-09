@@ -24,7 +24,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({ onStartTour, onClose 
     <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose} />
       
-      <div className={`relative bg-[#111727] border border-gray-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl transition-all duration-300 ${isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
+      <div className={`relative bg-[#111727] border border-gray-800 rounded-lg w-full max-w-md overflow-hidden shadow-2xl transition-all duration-300 ${isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
         <button 
           onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
@@ -51,7 +51,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({ onStartTour, onClose 
                 setIsVisible(false);
                 setTimeout(onStartTour, 300);
               }}
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20"
+              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20"
             >
               <PlayCircle className="group-hover:scale-110 transition-transform" />
               <span>Site Turuna Başla</span>
@@ -59,7 +59,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({ onStartTour, onClose 
             
             <button
               onClick={handleClose}
-              className="w-full bg-[#1a2235] hover:bg-[#232d45] text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 border border-gray-700"
+              className="w-full bg-[#1a2235] hover:bg-[#232d45] text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-2 border border-gray-700"
             >
               <LogIn size={20} />
               <span>Normal Giriş Yap</span>

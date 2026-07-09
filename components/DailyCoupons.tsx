@@ -34,7 +34,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
     });
 
     return (
-        <section id="daily-coupons" className="relative w-full bg-zinc-900/40 backdrop-blur-md rounded-2xl p-4 md:p-6 h-full flex flex-col">
+        <section id="daily-coupons" className="relative w-full bg-zinc-900/40 backdrop-blur-md rounded-lg p-4 md:p-6 h-full flex flex-col">
             {!hideHeading && (
                 <div className="flex items-center justify-between mb-4 pb-2">
                     <div className="flex items-center gap-2">
@@ -93,7 +93,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
             </div>
 
             {displayCoupons.length === 0 && (
-                <div className="text-center py-12 rounded-2xl animate-fade-in bg-[#1A1D24]">
+                <div className="text-center py-12 rounded-lg animate-fade-in bg-[#1A1D24]">
                     <Lock className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--text-dim)' }} />
                     <h3 className="text-sm font-black mb-1 uppercase" style={{ color: 'var(--text-primary)' }}>BULUNAMADI</h3>
                     <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>Bu tarihte kupon yok.</p>
@@ -110,7 +110,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                         return (
                                 <div key={coupon.id} className="relative group" style={{ animationDelay: `${index * 0.1}s` }}>
                                     {/* Blurred Card Preview */}
-                                    <div className="rounded-[16px] p-5 pointer-events-none bg-[#1A1D24]" style={{ filter: 'blur(4px)', userSelect: 'none', boxShadow: 'var(--shadow-card)' }}>
+                                    <div className="rounded-lg p-5 pointer-events-none bg-[#1A1D24]" style={{ filter: 'blur(4px)', userSelect: 'none', boxShadow: 'var(--shadow-card)' }}>
                                         <div className="flex items-center justify-between mb-3">
                                             <div className="flex gap-1.5 flex-wrap">
                                                 <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' : isHigh ? 'bg-rose-500/10 text-rose-500' : 'bg-[#00FFA3]/10 text-[#00FFA3]'}`}>
@@ -137,7 +137,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                         </div>
                                     </div>
                                     {/* Lock Overlay */}
-                                    <div className="absolute inset-0 rounded-[16px] flex flex-col items-center justify-center backdrop-blur-[2px]" style={{ background: 'color-mix(in srgb, var(--bg-card) 60%, transparent)' }}>
+                                    <div className="absolute inset-0 rounded-lg flex flex-col items-center justify-center backdrop-blur-[2px]" style={{ background: 'color-mix(in srgb, var(--bg-card) 60%, transparent)' }}>
                                         <button
                                             onClick={onLoginRequired}
                                             className="flex items-center gap-2 px-5 py-2.5 bg-[#00FFA3] text-black font-black text-xs rounded-full uppercase tracking-widest hover:bg-[#00FFA3]/90 transition-all shadow-[0_0_20px_rgba(0,255,163,0.3)] hover:shadow-[0_0_30px_rgba(0,255,163,0.5)]"
@@ -154,13 +154,13 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                             <div
                                 key={coupon.id}
                                 onClick={() => setSelectedCoupon(coupon)}
-                                className="group relative rounded-[16px] p-5 transition-all duration-500 hover:scale-[1.03] animate-fade-in-up cursor-pointer bg-[#1A1D24] hover:bg-[#22262F]"
+                                className="group relative rounded-lg p-5 transition-all duration-500 hover:scale-[1.03] animate-fade-in-up cursor-pointer bg-[#1A1D24] hover:bg-[#22262F]"
                                 style={{ boxShadow: 'var(--shadow-card)', animationDelay: `${index * 0.1}s` }}
                             >
                                 {/* Card Header / Badge */}
                                 <div className="flex items-center justify-between mb-3 px-1">
                                     <div className="flex items-center gap-1.5 flex-wrap">
-                                        <div className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' :
+                                        <div className={`px-2 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' :
                                             isHigh ? 'bg-rose-500/10 text-rose-500' :
                                                 'bg-[#00FFA3]/10 text-[#00FFA3]'
                                             }`}>
@@ -170,7 +170,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                             {isLow ? 'BANKO' : isHigh ? 'YÜKSEK RİSK' : 'ÖNERİ'}
                                         </div>
                                         {coupon.category && (
-                                            <div className="px-3 py-1 rounded-md bg-zinc-800/80 text-[8px] font-black uppercase text-zinc-300">
+                                            <div className="px-3 py-1 rounded-lg bg-zinc-800/80 text-[8px] font-black uppercase text-zinc-300">
                                                 {coupon.category}
                                             </div>
                                         )}
@@ -255,10 +255,10 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
 
                 {/* Section Bottom CTA */}
                 <div className="mt-6 flex flex-col gap-3 animate-fade-in-up animate-delay-3">
-                    <button className="w-full py-3 bg-[#00FFA3] text-black rounded-xl font-black text-[10px] uppercase tracking-widest hover:shadow-[0_8px_30px_rgba(0,255,163,0.3)] transition-all">
+                    <button className="w-full py-3 bg-[#00FFA3] text-black rounded-lg font-black text-[10px] uppercase tracking-widest hover:shadow-[0_8px_30px_rgba(0,255,163,0.3)] transition-all">
                         TÜM KUPONLARI GÖR
                     </button>
-                    <button className="w-full py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:text-[#00FFA3] transition-all text-zinc-400 bg-zinc-800/30 hover:bg-zinc-800/60">
+                    <button className="w-full py-3 rounded-lg font-black text-[10px] uppercase tracking-widest hover:text-[#00FFA3] transition-all text-zinc-400 bg-zinc-800/30 hover:bg-zinc-800/60">
                         CANLI ANALİZLERE GİT
                     </button>
                 </div>
@@ -267,7 +267,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
             {selectedCoupon && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedCoupon(null)} />
-                    <div className="relative w-full max-w-xl rounded-xl overflow-hidden shadow-2xl animate-fade-in-up bg-[#1A1D24]">
+                    <div className="relative w-full max-w-xl rounded-lg overflow-hidden shadow-2xl animate-fade-in-up bg-[#1A1D24]">
 
                         {/* Modal Header */}
                         <div className="flex items-center justify-between px-6 py-4 bg-[#22262F]">

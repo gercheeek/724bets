@@ -532,7 +532,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Tv style={{ width: 20, height: 20, color: '#000' }} />
                     </div>
                     <div>
@@ -579,7 +579,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
 
                 return (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <button onClick={addStreamer} style={{ padding: '16px', borderRadius: '12px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}>
+                        <button onClick={addStreamer} style={{ padding: '16px', borderRadius: '8px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}>
                             <Plus size={18} /> YENİ YAYINCI EKLE
                         </button>
 
@@ -588,7 +588,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                             const isExpanded = expandedGroups[groupName];
                             
                             return (
-                                <div key={groupName} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', overflow: 'hidden' }}>
+                                <div key={groupName} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '8px', overflow: 'hidden' }}>
                                     {/* Accordion Header */}
                                     <div 
                                         onClick={() => toggleGroup(groupName)}
@@ -607,7 +607,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                                                 const isEditing = editingStreamers[s.id];
                                                 
                                                 return (
-                                                    <div key={s.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                                    <div key={s.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                                         {/* Inline Row */}
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                                             {/* Logo Preview */}
@@ -747,7 +747,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
             {activeTab === 'youtube' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {streamers.filter(s => s.platform_type === 'youtube').map(s => (
-                        <div key={s.id} style={{ background: '#0d0d0d', border: '1px solid #ff000033', borderRadius: '16px', padding: '20px' }}>
+                        <div key={s.id} style={{ background: '#0d0d0d', border: '1px solid #ff000033', borderRadius: '8px', padding: '20px' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                                 <div>
                                     <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>İsim (Başlık)</label>
@@ -807,7 +807,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                             </div>
                         </div>
                     ))}
-                    <button onClick={addYoutubeStream} style={{ padding: '16px', borderRadius: '16px', border: '2px dashed #ff000066', background: 'transparent', color: '#ff0000', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                    <button onClick={addYoutubeStream} style={{ padding: '16px', borderRadius: '8px', border: '2px dashed #ff000066', background: 'transparent', color: '#ff0000', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
                         <Plus size={18} /> YENİ YOUTUBE YAYINI EKLE
                     </button>
                 </div>
@@ -817,7 +817,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
             {activeTab === 'vods' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {vods.map(v => (
-                        <div key={v.id} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '16px', padding: '20px' }}>
+                        <div key={v.id} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '8px', padding: '20px' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                                 <div>
                                     <label style={{ fontSize: '9px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Başlık</label>
@@ -883,7 +883,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                             </div>
                         </div>
                     ))}
-                    <button onClick={addVOD} style={{ padding: '16px', borderRadius: '16px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                    <button onClick={addVOD} style={{ padding: '16px', borderRadius: '8px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
                         <Plus size={18} /> YENİ VOD EKLE
                     </button>
                 </div>
@@ -893,7 +893,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
             {activeTab === 'gifts' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {gifts.map(g => (
-                        <div key={g.id} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '16px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+                        <div key={g.id} style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '8px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'center' }}>
                             <div style={{ fontSize: '40px' }}>{g.emoji}</div>
                             <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px' }}>
                                 <div>
@@ -941,7 +941,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                             </div>
                         </div>
                     ))}
-                    <button onClick={addGift} style={{ padding: '16px', borderRadius: '16px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                    <button onClick={addGift} style={{ padding: '16px', borderRadius: '8px', border: '2px dashed #333', background: 'transparent', color: '#666', fontWeight: 800, cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '8px' }}>
                         <Plus size={18} /> YENİ HEDİYE EKLE
                     </button>
                 </div>

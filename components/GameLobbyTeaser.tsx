@@ -62,7 +62,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
   const sectionStyle: React.CSSProperties = {
     background: 'linear-gradient(160deg, #040a04 0%, #060e06 100%)',
     border: '1px solid rgba(242, 169, 0, 0.15)',
-    borderRadius: '16px',
+    borderRadius: '8px',
     padding: '20px',
     marginBottom: '16px',
     position: 'relative',
@@ -125,7 +125,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
               style={{
                 background: game.gradient,
                 border: `1px solid ${game.color}33`,
-                borderRadius: '14px',
+                borderRadius: '8px',
                 padding: '16px 8px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -151,7 +151,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
             style={{
               background: 'rgba(242, 169, 0, 0.05)',
               border: '1px solid rgba(242, 169, 0, 0.2)',
-              borderRadius: '14px',
+              borderRadius: '8px',
               padding: '16px 8px',
               display: 'flex',
               flexDirection: 'column',
@@ -199,7 +199,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
                 onClick={() => handleCardClick(game)}
                 className="game-card-hover"
                 style={{
-                  minWidth: '130px', width: '130px', height: '100px', borderRadius: '12px', overflow: 'hidden', cursor: 'pointer',
+                  minWidth: '130px', width: '130px', height: '100px', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer',
                   background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,193,7,0.1)', position: 'relative',
                   boxShadow: '0 6px 20px rgba(0,0,0,0.4)', flexShrink: 0,
                 }}
@@ -258,7 +258,7 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
                 onClick={() => handleCardClick(game)}
                 className="game-card-hover"
                 style={{
-                  minWidth: '130px', width: '130px', height: '100px', borderRadius: '12px', overflow: 'hidden', cursor: 'pointer',
+                  minWidth: '130px', width: '130px', height: '100px', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer',
                   background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(242, 169, 0, 0.1)', position: 'relative',
                   boxShadow: '0 6px 20px rgba(0,0,0,0.4)', flexShrink: 0,
                 }}

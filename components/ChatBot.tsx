@@ -148,7 +148,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
         <>
             {/* Chat panel */}
             <div
-                className="fixed top-20 right-6 z-[8999] w-[340px] max-w-[calc(100vw-2rem)] rounded-3xl overflow-hidden flex flex-col"
+                className="fixed top-20 right-6 z-[8999] w-[340px] max-w-[calc(100vw-2rem)] rounded-lg overflow-hidden flex flex-col"
                 style={{
                     background: 'var(--bg-card)',
                     border: '1.5px solid var(--border-card)',
@@ -162,7 +162,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
                 {/* Header */}
                 <div className="flex-shrink-0 flex items-center gap-3 px-4 py-3"
                     style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                         style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 12px rgba(240,185,11,0.4)' }}>
                         <span className="text-black font-black text-[8px] leading-tight uppercase text-center">724<br />BETS</span>
                     </div>
@@ -184,7 +184,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
                         <div key={i} className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}>
                             <div className="max-w-[85%]">
                                 <div
-                                    className="px-3.5 py-2.5 rounded-2xl text-sm whitespace-pre-line"
+                                    className="px-3.5 py-2.5 rounded-lg text-sm whitespace-pre-line"
                                     style={msg.from === 'bot'
                                         ? {
                                             background: 'rgba(240,185,11,0.06)',
@@ -208,7 +208,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
                                                 href={WHATSAPP_LINK}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-1.5 mt-2 px-3 py-2 rounded-xl font-black text-xs uppercase tracking-wider text-black"
+                                                className="inline-flex items-center gap-1.5 mt-2 px-3 py-2 rounded-lg font-black text-xs uppercase tracking-wider text-black"
                                                 style={{ background: 'linear-gradient(135deg, #25d366, #128c7e)', textDecoration: 'none' }}
                                             >
                                                 💬 WhatsApp Desteği Aç
@@ -223,7 +223,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
 
                     {typing && (
                         <div className="flex justify-start">
-                            <div className="px-4 py-3 rounded-2xl flex items-center gap-1.5"
+                            <div className="px-4 py-3 rounded-lg flex items-center gap-1.5"
                                 style={{ background: 'rgba(240,185,11,0.05)', border: '1px solid rgba(240,185,11,0.12)', borderRadius: '4px 18px 18px 18px' }}>
                                 {[0, 1, 2].map(i => (
                                     <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#f0b90b]"
@@ -257,7 +257,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
                         onChange={e => setInput(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && send()}
                         placeholder="Mesajınızı yazın..."
-                        className="flex-1 px-4 py-2.5 rounded-xl text-sm placeholder-[#9CA3AF] outline-none transition-all"
+                        className="flex-1 px-4 py-2.5 rounded-lg text-sm placeholder-[#9CA3AF] outline-none transition-all"
                         style={{
                             background: 'var(--bg-elevated)',
                             border: '1px solid var(--border-card)',
@@ -269,7 +269,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
                     <button
                         onClick={() => send()}
                         disabled={!input.trim()}
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all hover:scale-105 disabled:opacity-30"
+                        className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all hover:scale-105 disabled:opacity-30"
                         style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 12px rgba(240,185,11,0.3)' }}
                     >
                         <Send className="w-4 h-4 text-black" />

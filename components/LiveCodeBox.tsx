@@ -84,7 +84,7 @@ export default function LiveCodeBox({ userId }: { userId?: string }) {
 
   return (
     <div className="
-      relative rounded-2xl border border-zinc-700/50 bg-[#111111]
+      relative rounded-lg border border-zinc-700/50 bg-[#111111]
       overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.4)]
     ">
       {/* Header */}
@@ -110,7 +110,7 @@ export default function LiveCodeBox({ userId }: { userId?: string }) {
           maxLength={20}
           disabled={status === 'loading' || status === 'success'}
           className="
-            flex-1 bg-zinc-900 border border-zinc-700/60 rounded-xl
+            flex-1 bg-zinc-900 border border-zinc-700/60 rounded-lg
             px-5 py-3.5 text-white font-mono font-bold text-base
             placeholder:text-zinc-600 tracking-widest
             focus:outline-none focus:border-[#F5A623]/50
@@ -124,7 +124,7 @@ export default function LiveCodeBox({ userId }: { userId?: string }) {
           disabled={!code.trim() || status === 'loading' || status === 'success'}
           className="
             flex items-center justify-center gap-2.5
-            px-7 py-3.5 rounded-xl font-black text-sm uppercase tracking-widest
+            px-7 py-3.5 rounded-lg font-black text-sm uppercase tracking-widest
             transition-all duration-200
             disabled:cursor-not-allowed
             bg-[#F5A623] text-black
@@ -151,7 +151,7 @@ export default function LiveCodeBox({ userId }: { userId?: string }) {
       {result && (
         <div
           className={`
-            mx-5 mb-5 flex items-start gap-3 rounded-xl px-4 py-3 border
+            mx-5 mb-5 flex items-start gap-3 rounded-lg px-4 py-3 border
             animate-in fade-in slide-in-from-top-2 duration-300
             ${result.success
               ? 'bg-[#F5A623]/5 border-[#F5A623]/20'

@@ -268,7 +268,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                 </div>
 
                 {/* Prize Pool Banner */}
-                <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-xl p-4 mb-5 text-center relative overflow-hidden">
+                <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-lg p-4 mb-5 text-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#f0b90b]/5 to-transparent pointer-events-none" />
                     <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-widest mb-0.5 relative z-10">TOPLAM ÖDÜL HAVUZU</p>
                     <p className="text-2xl font-black text-[#f0b90b] relative z-10">{pool.prizePool.toLocaleString('tr-TR')} ₺</p>
@@ -307,7 +307,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                                 return (
                                     <div key={match.id}>
                                         <div
-                                            className={`pool-row bg-[var(--bg-card)] border border-[var(--border-subtle)] py-2 px-3 flex items-center gap-2 transition-all duration-300 ${hasSelection ? 'pool-row-selected' : ''} ${isExpanded ? 'rounded-t-[10px] rounded-b-none' : 'rounded-[10px]'}`}
+                                            className={`pool-row bg-[var(--bg-card)] border border-[var(--border-subtle)] py-2 px-3 flex items-center gap-2 transition-all duration-300 ${hasSelection ? 'pool-row-selected' : ''} ${isExpanded ? 'rounded-t-[10px] rounded-b-none' : 'rounded-lg'}`}
                                             onClick={() => handleRowClick(idx, match)}
                                         >
                                             <span className="text-[var(--text-dim)] text-[10px] font-black w-5 text-center shrink-0">{idx + 1}</span>
@@ -380,7 +380,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                                                 <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-auto">
                                                     <button 
                                                         onClick={onLoginRequired}
-                                                        className="bg-gradient-to-r from-[#f0b90b] to-yellow-500 text-black font-black px-4 sm:px-6 py-3 sm:py-4 rounded-xl shadow-2xl hover:scale-105 transition-transform uppercase tracking-wider text-[11px] sm:text-sm flex items-center gap-2"
+                                                        className="bg-gradient-to-r from-[#f0b90b] to-yellow-500 text-black font-black px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-2xl hover:scale-105 transition-transform uppercase tracking-wider text-[11px] sm:text-sm flex items-center gap-2"
                                                     >
                                                         <Trophy className="w-5 h-5 shrink-0" />
                                                         Kuponu Tamamlamak ve 25.000 ₺ Büyük Ödülü Kazanmak İçin Şimdi Kayıt Ol!
@@ -399,14 +399,14 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                             <button
                                 onClick={handleSubmit}
                                 disabled={!allSelected}
-                                className={`w-full py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 mt-1 ${allSelected ? 'bg-[#f0b90b] text-black hover:shadow-[0_0_30px_rgba(240,185,11,0.4)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-subtle)] cursor-not-allowed'}`}
+                                className={`w-full py-3 rounded-lg font-black text-xs uppercase tracking-widest transition-all duration-300 mt-1 ${allSelected ? 'bg-[#f0b90b] text-black hover:shadow-[0_0_30px_rgba(240,185,11,0.4)]' : 'bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-subtle)] cursor-not-allowed'}`}
                             >
                                 {allSelected ? (isFreeAvailable ? '🎯 ÜCRETSİZ GÖNDER' : '🎯 1000 COİN İLE GÖNDER') : `${Object.keys(selections).length}/15 MAÇ SEÇİLDİ`}
                             </button>
                         )}
 
                         {submitted && (
-                            <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4 text-center">
+                            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-center">
                                 <CheckCircle2 className="w-8 h-8 text-green-400 mx-auto mb-2" />
                                 <p className="text-green-400 font-black text-sm uppercase">Tahmininiz Kaydedildi!</p>
                                 <p className="text-[var(--text-muted)] text-[10px] font-bold mt-1">Maçlar başladığında Şeffaf Havuz sekmesinden tüm tahminleri görebilirsiniz.</p>
@@ -427,17 +427,17 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                             <>
                                 {prizeInfo && (
                                     <div className="grid grid-cols-3 gap-3 mb-6">
-                                        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 text-center">
+                                        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-center">
                                             <p className="text-[10px] text-[var(--text-muted)] font-black uppercase">15 Bilen</p>
                                             <p className="text-xl font-black text-[#f0b90b]">{prizeInfo.winners15} kişi</p>
                                             <p className="text-xs text-[var(--text-secondary)] font-bold mt-1">Kişi başı: {prizeInfo.share15.toLocaleString('tr-TR')} ₺</p>
                                         </div>
-                                        <div className="bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl p-4 text-center">
+                                        <div className="bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg p-4 text-center">
                                             <p className="text-[10px] text-[var(--text-muted)] font-black uppercase">14 Bilen</p>
                                             <p className="text-xl font-black text-[var(--text-primary)]">{prizeInfo.winners14} kişi</p>
                                             <p className="text-xs text-[var(--text-secondary)] font-bold mt-1">Kişi başı: {prizeInfo.share14.toLocaleString('tr-TR')} ₺</p>
                                         </div>
-                                        <div className="bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl p-4 text-center">
+                                        <div className="bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg p-4 text-center">
                                             <p className="text-[10px] text-[var(--text-muted)] font-black uppercase">13 Bilen</p>
                                             <p className="text-xl font-black text-[var(--text-secondary)]">{prizeInfo.winners13} kişi</p>
                                             <p className="text-xs text-[var(--text-secondary)] font-bold mt-1">Kişi başı: {prizeInfo.share13.toLocaleString('tr-TR')} ₺</p>

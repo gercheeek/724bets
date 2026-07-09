@@ -54,7 +54,7 @@ const AdminPopularBetsTab: React.FC<AdminPopularBetsTabProps> = ({ config, onSav
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Flame style={{ width: 20, height: 20, color: '#000' }} />
                     </div>
                     <div>
@@ -69,7 +69,7 @@ const AdminPopularBetsTab: React.FC<AdminPopularBetsTabProps> = ({ config, onSav
                         onClick={handleToggleActive}
                         style={{
                             display: 'flex', alignItems: 'center', gap: '6px',
-                            padding: '8px 14px', borderRadius: '10px', cursor: 'pointer',
+                            padding: '8px 14px', borderRadius: '8px', cursor: 'pointer',
                             border: '1px solid', fontSize: '11px', fontWeight: 800,
                             background: localConfig.isActive ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)',
                             borderColor: localConfig.isActive ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)',
@@ -85,7 +85,7 @@ const AdminPopularBetsTab: React.FC<AdminPopularBetsTabProps> = ({ config, onSav
                         onClick={handleSave}
                         style={{
                             display: 'flex', alignItems: 'center', gap: '6px',
-                            padding: '10px 20px', borderRadius: '10px', cursor: 'pointer',
+                            padding: '10px 20px', borderRadius: '8px', cursor: 'pointer',
                             border: 'none', fontSize: '11px', fontWeight: 900,
                             background: saved ? 'linear-gradient(135deg, #22c55e, #16a34a)' : 'linear-gradient(135deg, #FFD700, #FFA500)',
                             color: '#000', textTransform: 'uppercase', letterSpacing: '1px',
@@ -100,15 +100,15 @@ const AdminPopularBetsTab: React.FC<AdminPopularBetsTabProps> = ({ config, onSav
 
             {/* Stats Bar */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
-                <div style={{ background: '#111', border: '1px solid #222', borderRadius: '12px', padding: '14px', textAlign: 'center' }}>
+                <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '14px', textAlign: 'center' }}>
                     <div style={{ fontSize: '22px', fontWeight: 900, color: '#FFD700' }}>{localConfig.bets.length}</div>
                     <div style={{ fontSize: '9px', fontWeight: 800, color: '#666', textTransform: 'uppercase', letterSpacing: '1px' }}>Toplam Bahis</div>
                 </div>
-                <div style={{ background: '#111', border: '1px solid #222', borderRadius: '12px', padding: '14px', textAlign: 'center' }}>
+                <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '14px', textAlign: 'center' }}>
                     <div style={{ fontSize: '22px', fontWeight: 900, color: '#ef4444' }}>{localConfig.bets.filter(b => b.isHot).length}</div>
                     <div style={{ fontSize: '9px', fontWeight: 800, color: '#666', textTransform: 'uppercase', letterSpacing: '1px' }}>Hot Bahis</div>
                 </div>
-                <div style={{ background: '#111', border: '1px solid #222', borderRadius: '12px', padding: '14px', textAlign: 'center' }}>
+                <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '14px', textAlign: 'center' }}>
                     <div style={{ fontSize: '22px', fontWeight: 900, color: localConfig.isActive ? '#22c55e' : '#ef4444' }}>{localConfig.isActive ? 'ON' : 'OFF'}</div>
                     <div style={{ fontSize: '9px', fontWeight: 800, color: '#666', textTransform: 'uppercase', letterSpacing: '1px' }}>Durum</div>
                 </div>
@@ -118,7 +118,7 @@ const AdminPopularBetsTab: React.FC<AdminPopularBetsTabProps> = ({ config, onSav
             <button
                 onClick={addBet}
                 style={{
-                    width: '100%', padding: '12px', borderRadius: '12px', cursor: 'pointer',
+                    width: '100%', padding: '12px', borderRadius: '8px', cursor: 'pointer',
                     border: '2px dashed rgba(255,215,0,0.3)', background: 'rgba(255,215,0,0.03)',
                     color: '#FFD700', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase',
                     letterSpacing: '1px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
@@ -134,7 +134,7 @@ const AdminPopularBetsTab: React.FC<AdminPopularBetsTabProps> = ({ config, onSav
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {localConfig.bets.map((bet, idx) => (
                     <div key={bet.id} style={{
-                        background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '16px',
+                        background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '8px',
                         padding: '16px', position: 'relative',
                     }}>
                         {/* Card Header */}

@@ -119,7 +119,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
   const inputStyle: React.CSSProperties = {
     background: '#0D1117',
     border: '1px solid rgba(255,193,7,0.15)',
-    borderRadius: '14px',
+    borderRadius: '8px',
     padding: '14px 18px',
     color: '#E6EDF3',
     fontWeight: 600,
@@ -130,7 +130,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
   const cardStyle: React.CSSProperties = {
     background: '#161B22',
     border: '1px solid rgba(255,255,255,0.05)',
-    borderRadius: '20px',
+    borderRadius: '8px',
     padding: '24px',
   };
 
@@ -139,7 +139,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-5">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(255,193,7,0.1)', border: '1px solid rgba(255,193,7,0.2)' }}>
+          <div className="w-14 h-14 rounded-lg flex items-center justify-center" style={{ background: 'rgba(255,193,7,0.1)', border: '1px solid rgba(255,193,7,0.2)' }}>
             <Diamond className="w-7 h-7" style={{ color: '#FFC107' }} />
           </div>
           <div>
@@ -147,7 +147,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
             <p className="text-[11px] font-bold" style={{ color: '#757575' }}>Analizler, ödemeler ve iade yönetimi</p>
           </div>
         </div>
-        <button onClick={loadData} className="p-3 rounded-xl hover:bg-white/5 transition-all">
+        <button onClick={loadData} className="p-3 rounded-lg hover:bg-white/5 transition-all">
           <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} style={{ color: '#757575' }} />
         </button>
       </div>
@@ -155,7 +155,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
       {/* Tabs */}
       <div className="flex gap-3">
         <button onClick={() => setTab('analyses')}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl text-[12px] font-black uppercase tracking-wider transition-all"
+          className="flex items-center gap-2 px-6 py-3 rounded-lg text-[12px] font-black uppercase tracking-wider transition-all"
           style={{
             background: tab === 'analyses' ? 'linear-gradient(135deg, #FFC107, #FF8F00)' : '#1E1E1E',
             color: tab === 'analyses' ? '#000' : '#757575',
@@ -164,7 +164,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
           <TrendingUp className="w-4 h-4" /> ANALİZLER ({analyses.length})
         </button>
         <button onClick={() => setTab('payments')}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl text-[12px] font-black uppercase tracking-wider transition-all"
+          className="flex items-center gap-2 px-6 py-3 rounded-lg text-[12px] font-black uppercase tracking-wider transition-all"
           style={{
             background: tab === 'payments' ? 'linear-gradient(135deg, #FFC107, #FF8F00)' : '#1E1E1E',
             color: tab === 'payments' ? '#000' : '#757575',
@@ -179,7 +179,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
         <div className="space-y-6">
           {/* Add Button */}
           <button onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl font-black text-[12px] uppercase tracking-wider transition-all hover:shadow-[0_8px_30px_rgba(255,193,7,0.2)]"
+            className="flex items-center gap-2 px-6 py-3 rounded-lg font-black text-[12px] uppercase tracking-wider transition-all hover:shadow-[0_8px_30px_rgba(255,193,7,0.2)]"
             style={{ background: 'linear-gradient(135deg, #FFC107, #FF8F00)', color: '#000' }}
           >
             <Plus className="w-4 h-4" /> {showForm ? 'FORMU KAPAT' : 'YENİ ANALİZ EKLE'}
@@ -231,7 +231,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
                   <input type="number" value={form.price || ''} onChange={e => setForm({...form, price: parseFloat(e.target.value)})} style={{...inputStyle, color: '#FFC107'}} />
                 </div>
                 <div className="space-y-2 flex flex-col justify-end">
-                  <label className="flex items-center gap-3 cursor-pointer p-4 rounded-2xl transition-all"
+                  <label className="flex items-center gap-3 cursor-pointer p-4 rounded-lg transition-all"
                     style={{ background: form.isGuaranteed ? 'rgba(255,193,7,0.1)' : '#0D1117', border: `1px solid ${form.isGuaranteed ? 'rgba(255,193,7,0.3)' : 'rgba(255,255,255,0.05)'}` }}
                   >
                     <input type="checkbox" checked={form.isGuaranteed} onChange={e => setForm({...form, isGuaranteed: e.target.checked})} className="hidden" />
@@ -257,7 +257,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
               <button 
                 onClick={handleCreateAnalysis}
                 disabled={isSubmitting}
-                className="flex items-center gap-2 px-8 py-3.5 rounded-2xl font-black text-[12px] uppercase tracking-wider transition-all hover:shadow-[0_8px_30px_rgba(255,193,7,0.3)] disabled:opacity-50"
+                className="flex items-center gap-2 px-8 py-3.5 rounded-lg font-black text-[12px] uppercase tracking-wider transition-all hover:shadow-[0_8px_30px_rgba(255,193,7,0.3)] disabled:opacity-50"
                 style={{ background: 'linear-gradient(135deg, #FFC107, #FF8F00)', color: '#000' }}
               >
                 {isSubmitting ? (
@@ -326,7 +326,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
               </div>
             ))}
             {analyses.length === 0 && !loading && (
-              <div className="py-12 text-center rounded-3xl" style={{ background: '#1E1E1E', border: '1px dashed rgba(255,255,255,0.1)' }}>
+              <div className="py-12 text-center rounded-lg" style={{ background: '#1E1E1E', border: '1px dashed rgba(255,255,255,0.1)' }}>
                 <AlertCircle className="w-8 h-8 mx-auto mb-3" style={{ color: '#757575' }} />
                 <p className="text-sm font-bold" style={{ color: '#757575' }}>Henüz premium analiz eklenmemiş.</p>
               </div>
@@ -362,13 +362,13 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
               {payment.status === 'pending' && (
                 <div className="flex items-center gap-2 shrink-0">
                   <button onClick={() => handleConfirmPayment(payment.id)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-[11px] font-black uppercase transition-all"
                     style={{ background: 'rgba(0,230,118,0.1)', color: '#00E676', border: '1px solid rgba(0,230,118,0.2)' }}
                   >
                     <CheckCircle2 className="w-4 h-4" /> ONAYLA
                   </button>
                   <button onClick={() => handleRejectPayment(payment.id)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-[11px] font-black uppercase transition-all"
                     style={{ background: 'rgba(255,82,82,0.1)', color: '#FF5252', border: '1px solid rgba(255,82,82,0.2)' }}
                   >
                     <XCircle className="w-4 h-4" /> REDDET
@@ -377,7 +377,7 @@ const AdminPremiumTab: React.FC<AdminPremiumTabProps> = ({ initialTab = 'analyse
               )}
             </div>
           )) : (
-            <div className="py-12 text-center rounded-3xl" style={{ background: '#1E1E1E', border: '1px dashed rgba(255,255,255,0.1)' }}>
+            <div className="py-12 text-center rounded-lg" style={{ background: '#1E1E1E', border: '1px dashed rgba(255,255,255,0.1)' }}>
               <CreditCard className="w-8 h-8 mx-auto mb-3" style={{ color: '#757575' }} />
               <p className="text-sm font-bold" style={{ color: '#757575' }}>Henüz ödeme kaydı yok.</p>
             </div>

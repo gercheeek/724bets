@@ -79,8 +79,8 @@ function saveUserLoyalty(loyalty: UserLoyalty) {
 
 // ─── Sub-components ────────────────────────────────────────────────────────
 const StatCard: React.FC<{ label: string; value: string | number; icon: React.ReactNode; color: string; sub?: string }> = ({ label, value, icon, color, sub }) => (
-    <div className="flex items-center gap-3 p-4 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-        <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${color}18` }}>
+    <div className="flex items-center gap-3 p-4 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+        <div className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${color}18` }}>
             <div style={{ color }}>{icon}</div>
         </div>
         <div>
@@ -94,18 +94,18 @@ const StatCard: React.FC<{ label: string; value: string | number; icon: React.Re
 // ─── Market Exchange Confirm ────────────────────────────────────────────────
 const ConfirmModal: React.FC<{ item: MarketItem; onConfirm: () => void; onCancel: () => void; coinName: string }> = ({ item, onConfirm, onCancel, coinName }) => (
     <div className="fixed inset-0 z-[9600] flex items-center justify-center px-4 bg-[var(--bg-overlay)] backdrop-blur-md">
-        <div className="w-full max-w-sm rounded-3xl p-6 text-center bg-[var(--bg-elevated)] border-[1.5px] border-[#f0b90b]/30 shadow-[0_30px_80px_rgba(0,0,0,0.3)]">
+        <div className="w-full max-w-sm rounded-lg p-6 text-center bg-[var(--bg-elevated)] border-[1.5px] border-[#f0b90b]/30 shadow-[0_30px_80px_rgba(0,0,0,0.3)]">
             <div className="text-6xl mb-3 animate-bounce">{item.emoji}</div>
             <h3 className="text-[var(--text-primary)] font-black text-xl mb-1">{item.name}</h3>
             <p className="text-[var(--text-muted)] text-sm mb-4">{item.description}</p>
-            <div className="flex items-center justify-center gap-2 mb-6 px-4 py-2 rounded-xl" style={{ background: 'rgba(240,185,11,0.08)', border: '1px solid rgba(240,185,11,0.2)' }}>
+            <div className="flex items-center justify-center gap-2 mb-6 px-4 py-2 rounded-lg" style={{ background: 'rgba(240,185,11,0.08)', border: '1px solid rgba(240,185,11,0.2)' }}>
                 <Coins className="w-4 h-4 text-[#f0b90b]" />
                 <span className="text-[#f0b90b] font-black text-lg">{item.coinCost} {coinName}</span>
                 <span className="text-[var(--text-muted)] text-sm">karşılığında</span>
             </div>
             <div className="flex gap-3">
-                <button onClick={onCancel} className="flex-1 py-3 rounded-2xl font-black text-sm text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:border-[var(--border-hover)] hover:text-[var(--text-primary)] transition-all">İptal</button>
-                <button onClick={onConfirm} className="flex-1 py-3 rounded-2xl font-black text-sm text-black transition-all hover:scale-105"
+                <button onClick={onCancel} className="flex-1 py-3 rounded-lg font-black text-sm text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:border-[var(--border-hover)] hover:text-[var(--text-primary)] transition-all">İptal</button>
+                <button onClick={onConfirm} className="flex-1 py-3 rounded-lg font-black text-sm text-black transition-all hover:scale-105"
                     style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 20px rgba(240,185,11,0.4)' }}>
                     Onayla & Al
                 </button>
@@ -200,7 +200,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
         <div className="min-h-screen transition-colors duration-500 pb-20">
             {/* Success notification */}
             {successMsg && (
-                <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9700] px-6 py-3 rounded-2xl font-black text-sm text-[var(--text-primary)] shadow-[var(--shadow-modal)] bg-[var(--bg-elevated)] border border-[#f0b90b]/40 transition-all"
+                <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9700] px-6 py-3 rounded-lg font-black text-sm text-[var(--text-primary)] shadow-[var(--shadow-modal)] bg-[var(--bg-elevated)] border border-[#f0b90b]/40 transition-all"
                     style={{ animation: 'slideDown 0.3s ease' }}>
                     {successMsg}
                 </div>
@@ -237,10 +237,10 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-1 p-1 rounded-2xl mb-5 bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                <div className="flex gap-1 p-1 rounded-lg mb-5 bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                     {tabs.map(t => (
                         <button key={t.key} onClick={() => setActiveTab(t.key)}
-                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-wider transition-all"
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-wider transition-all"
                             style={activeTab === t.key
                                 ? { background: 'linear-gradient(135deg, #f0b90b, #d4a017)', color: '#000' }
                                 : { color: 'var(--text-muted)' }}>
@@ -254,7 +254,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                     <div className="space-y-4">
                         {/* Deposit request form */}
                         {/* Redirect to Bilet Etkinliği */}
-                        <div className="p-5 rounded-2xl space-y-3 bg-purple-500/5 border border-purple-500/15 text-center">
+                        <div className="p-5 rounded-lg space-y-3 bg-purple-500/5 border border-purple-500/15 text-center">
                             <div className="flex flex-col items-center gap-2 mb-2">
                                 <Ticket className="w-8 h-8 text-purple-400" />
                                 <div className="text-[var(--text-primary)] font-black text-sm uppercase">Bilet Etkinliği Talebi</div>
@@ -263,7 +263,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                                 </p>
                             </div>
                             <button onClick={() => { onNavigate('raffle'); if (onClose) onClose(); }}
-                                className="w-full py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-white transition-all hover:scale-[1.02]"
+                                className="w-full py-3 rounded-lg font-black text-[10px] uppercase tracking-widest text-white transition-all hover:scale-[1.02]"
                                 style={{ background: 'linear-gradient(135deg, #a78bfa, #7c3aed)' }}>
                                 Bilet Sayfasına Git
                             </button>
@@ -271,10 +271,10 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
 
                         {/* Volume progress */}
                         {volumeRule && volumeRule.isActive && (
-                            <div className="p-4 rounded-2xl space-y-3 bg-indigo-500/5 border border-indigo-500/15">
+                            <div className="p-4 rounded-lg space-y-3 bg-indigo-500/5 border border-indigo-500/15">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center"><Zap className="w-4 h-4 text-indigo-400" /></div>
+                                        <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center"><Zap className="w-4 h-4 text-indigo-400" /></div>
                                         <div>
                                             <div className="text-[var(--text-primary)] font-black text-sm">Günlük Slot Hacim</div>
                                             <div className="text-[var(--text-muted)] text-[10px]">Bugünkü ilerleme</div>
@@ -300,7 +300,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
 
                         {/* Quick market shortcut */}
                         <button onClick={() => setActiveTab('market')}
-                            className="w-full flex items-center justify-between px-4 py-3 rounded-2xl group transition-all hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)]">
+                            className="w-full flex items-center justify-between px-4 py-3 rounded-lg group transition-all hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)]">
                             <div className="flex items-center gap-3">
                                 <ShoppingBag className="w-5 h-5 text-[#f0b90b]" />
                                 <div className="text-left">
@@ -317,9 +317,9 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                 {activeTab === 'tasks' && (
                     <div className="space-y-3">
                         {cfg.rules.map(rule => (
-                            <div key={rule.id} className={`p-4 rounded-2xl bg-[var(--bg-card)] border ${rule.isActive ? 'border-[#f0b90b]/30' : 'border-[var(--border-subtle)]'}`}>
+                            <div key={rule.id} className={`p-4 rounded-lg bg-[var(--bg-card)] border ${rule.isActive ? 'border-[#f0b90b]/30' : 'border-[var(--border-subtle)]'}`}>
                                 <div className="flex items-start gap-3">
-                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
                                         style={{ background: rule.triggerType === 'deposit' ? 'rgba(240,185,11,0.1)' : 'rgba(99,102,241,0.1)' }}>
                                         {rule.triggerType === 'deposit' ? <Coins className="w-5 h-5 text-[#f0b90b]" /> : <Zap className="w-5 h-5 text-indigo-400" />}
                                     </div>
@@ -341,7 +341,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                             </div>
                         ))}
 
-                        <div className="px-4 py-3 rounded-xl text-center bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                        <div className="px-4 py-3 rounded-lg text-center bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                             <p className="text-[var(--text-dim)] text-xs font-bold">Görevler otomatik olarak tetiklenir. "Cüzdan" sekmesinden simüle edebilirsiniz.</p>
                         </div>
                     </div>
@@ -360,8 +360,8 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                         {cfg.marketItems.filter(i => i.isActive).map(item => {
                             const canAfford = loyalty.coins >= item.coinCost;
                             return (
-                                <div key={item.id} className={`flex items-center gap-4 p-4 rounded-2xl transition-all bg-[var(--bg-card)] border ${canAfford ? 'border-[var(--border-hover)]' : 'border-[var(--border-subtle)]'}`} style={{ opacity: canAfford ? 1 : 0.6 }}>
-                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: `${item.color}15` }}>
+                                <div key={item.id} className={`flex items-center gap-4 p-4 rounded-lg transition-all bg-[var(--bg-card)] border ${canAfford ? 'border-[var(--border-hover)]' : 'border-[var(--border-subtle)]'}`} style={{ opacity: canAfford ? 1 : 0.6 }}>
+                                    <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0" style={{ background: `${item.color}15` }}>
                                         {item.emoji}
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -376,7 +376,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                                         </div>
                                         <button
                                             onClick={() => canAfford ? setConfirmItem(item) : showSuccess('❌ Yeterli Coin yok!')}
-                                            className={`px-3 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-wider transition-all ${canAfford ? 'hover:scale-105' : 'cursor-not-allowed'}`}
+                                            className={`px-3 py-1.5 rounded-lg font-black text-[10px] uppercase tracking-wider transition-all ${canAfford ? 'hover:scale-105' : 'cursor-not-allowed'}`}
                                             style={canAfford
                                                 ? { background: 'linear-gradient(135deg, #f0b90b, #d4a017)', color: '#000' }
                                                 : { background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
@@ -398,8 +398,8 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                                 <p className="text-[var(--text-muted)] font-bold text-sm">Henüz işlem yok</p>
                             </div>
                         ) : loyalty.transactions.map(tx => (
-                            <div key={tx.id} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)]">
-                                <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                            <div key={tx.id} className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                                     style={{ background: tx.type === 'earn' ? 'rgba(16,185,129,0.1)' : 'rgba(240,185,11,0.1)' }}>
                                     {tx.type === 'earn' ? <TrendingUp className="w-4 h-4 text-green-500" /> : <ShoppingBag className="w-4 h-4 text-[#f0b90b]" />}
                                 </div>

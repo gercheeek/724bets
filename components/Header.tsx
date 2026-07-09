@@ -302,16 +302,15 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       {/* ══════ SINGLE TIER: Logo + Categories + Controls ══════ */}
-      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#111317', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '6px 24px', height: '60px' }}>
+      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F1219', borderBottom: '1px solid rgba(255, 255, 255, 0.03)', padding: '6px 24px', height: '60px' }}>
         
-        {/* Left: Menu & Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        {/* Left: Logo & Navigation */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
 
           <div
             id="tour-logo"
             className="logo-text-724"
             style={{ 
-              display: 'flex', 
               alignItems: 'center', 
               cursor: 'pointer',
               position: 'relative'
@@ -341,60 +340,80 @@ const Header: React.FC<HeaderProps> = ({
               }}>.COM</span>
             </span>
           </div>
+
+          {/* Gamdom Style Main Menu (Desktop) */}
+          <div className="hidden lg:flex items-center gap-6 ml-2">
+            <button className="text-[#94A3B8] font-semibold hover:text-white transition-colors text-sm tracking-wide">Originals</button>
+            <button className="text-[#94A3B8] font-semibold hover:text-white transition-colors text-sm tracking-wide">Casino</button>
+            <button className="bg-[#12231A] text-[#00FFA3] font-bold px-3.5 py-1.5 rounded-lg text-sm tracking-wide">Spor</button>
+            <button className="text-[#94A3B8] font-semibold hover:text-white transition-colors text-sm tracking-wide">Ödüller</button>
+            <button className="text-[#94A3B8] font-semibold hover:text-white transition-colors text-sm tracking-wide">Katılımlar</button>
+          </div>
         </div>
 
-
-
         {/* Right: Controls */}
-        <div id="tour-user-panel" className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div id="tour-user-panel" className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
 
 
           {siteUser ? (
             <>
-              {/* Bakiye Göstergesi */}
-              <div
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.15)] animate-fade-in"
-                title="Güncel Bakiyeniz"
+              {/* Gamdom Style Wallet */}
+              <div 
+                className="hidden sm:flex items-center bg-[#151A23] rounded-md px-2.5 py-1.5 cursor-pointer hover:bg-[#1A212D] transition-colors border border-white/5"
+                onClick={() => setShowDepositModal(true)}
               >
-                <span className="text-[11px] font-black uppercase text-emerald-500 tracking-widest hidden sm:inline-block">BAKİYE</span>
-                <span className="text-emerald-400 font-mono font-bold text-sm">
-                  {siteUser.balance?.toFixed(2) || '0.00'} <span className="text-emerald-500">₺</span>
-                </span>
+                <div className="w-5 h-5 rounded-sm bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2">
+                  <span className="text-[11px]">$</span>
+                </div>
+                <span className="text-white font-bold text-sm mr-2">{siteUser.balance?.toFixed(2) || '0.03'}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
               </div>
 
-              {/* Yatırım Button */}
+              {/* Deposit Button (Cüzdan) */}
               <button
                 onClick={() => setShowDepositModal(true)}
-                style={{
-                  background: '#00FFA3',
-                  color: '#000000',
-                  fontWeight: 900,
-                  fontSize: '13px',
-                  padding: '0 16px',
-                  borderRadius: '9999px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  height: '36px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'Inter, sans-serif'
-                }}
-                className="hover:scale-105 active:scale-95 transition-transform shadow-md"
+                className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-4 py-1.5 rounded-md text-sm transition-colors shadow-[0_0_15px_rgba(0,255,163,0.15)]"
+                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.3px' }}
               >
-                Yatırım
+                Cüzdan
               </button>
 
               {/* Profile Button with Dropdown */}
               <div className="relative" ref={dropdownRef}>
+                <div
+                  onClick={() => setDropdownOpen(prev => !prev)}
+                  className="hidden sm:flex items-center gap-2 bg-[#151A23] rounded-md p-1 pr-1.5 cursor-pointer border border-white/5 hover:bg-[#1A212D] transition-colors ml-1"
+                >
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-8 h-8 rounded bg-[#2A3441]" />
+                  <div className="flex flex-col justify-center">
+                    <span className="text-white font-bold text-[11px] leading-tight truncate max-w-[80px]">{siteUser.username}</span>
+                    <div className="flex items-center gap-1">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#D97706]">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
+                      </svg>
+                      <span className="text-[#D97706] text-[9px] font-extrabold uppercase tracking-wider leading-none">Bronz 2</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col ml-0.5 opacity-60">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-zinc-400 mb-[1px]">
+                      <path d="M18 15l-6-6-6 6"/>
+                    </svg>
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-zinc-400">
+                      <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                  </div>
+                </div>
+                
+                {/* Mobile avatar fallback */}
                 <button
                   onClick={() => setDropdownOpen(prev => !prev)}
-                  className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
+                  className="sm:hidden header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
                 >
-                  <User className="w-4 h-4 text-slate-300" />
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-full h-full rounded-full" />
                 </button>
+
                 {dropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
+                  <div className="absolute right-0 top-full mt-2 w-44 rounded-lg py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
                     <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
                       <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>
                         {userRole === 'admin' || userRole === 'editor' ? 'Yönetici Hesabı' : 'Üye Hesabı'}
@@ -405,7 +424,7 @@ const Header: React.FC<HeaderProps> = ({
                     {(userRole === 'admin' || userRole === 'editor') && (
                       <button
                         onClick={() => { setDropdownOpen(false); onAdminClick?.(); }}
-                        className="w-full flex items-center gap-2 px-4 py-2.5 text-amber-500 hover:bg-amber-500/5 text-xs font-bold transition-colors border-b border-black/5"
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-[#00FFA3] hover:bg-[#00FFA3]/5 text-xs font-bold transition-colors border-b border-black/5"
                       >
                         <Shield className="w-3.5 h-3.5" />
                         Yönetim Paneli
@@ -422,8 +441,6 @@ const Header: React.FC<HeaderProps> = ({
                   </div>
                 )}
               </div>
-
-
             </>
           ) : (
               <>
@@ -590,7 +607,7 @@ const Header: React.FC<HeaderProps> = ({
       {showDepositModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
           <div 
-            className="rounded-3xl w-full max-w-sm overflow-hidden shadow-modal relative" 
+            className="rounded-lg w-full max-w-sm overflow-hidden shadow-modal relative" 
             style={{ 
               background: 'var(--bg-card)', 
               border: '1px solid var(--border-card)' 
@@ -604,7 +621,7 @@ const Header: React.FC<HeaderProps> = ({
             </button>
 
             <div className="p-6">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4">
                 <Send className="w-6 h-6 text-blue-400" />
               </div>
 
@@ -621,7 +638,7 @@ const Header: React.FC<HeaderProps> = ({
                     value={depositUsername}
                     onChange={(e) => setDepositUsername(e.target.value)}
                     placeholder="Kullanıcı adınızı girin"
-                    className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors"
                     style={{ 
                       background: 'var(--bg-elevated)', 
                       borderColor: 'var(--border-subtle)',
@@ -631,14 +648,14 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 {depositMsg.text && (
-                  <div className={`p-3 rounded-xl text-sm font-bold ${depositMsg.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
+                  <div className={`p-3 rounded-lg text-sm font-bold ${depositMsg.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
                     {depositMsg.text}
                   </div>
                 )}
 
                 <button
                   onClick={handleDepositSubmit}
-                  className="w-full bg-blue-500 hover:bg-blue-400 text-white font-black py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-blue-500 hover:bg-blue-400 text-white font-black py-3 rounded-lg transition-all flex items-center justify-center gap-2"
                 >
                   <Send className="w-4 h-4" /> BİLDİRİM GÖNDER
                 </button>

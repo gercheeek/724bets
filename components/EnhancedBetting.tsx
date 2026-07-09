@@ -22,7 +22,7 @@ const EnhancedBetting: React.FC = () => {
           href={gamdomLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative rounded-2xl overflow-hidden group cursor-pointer border border-[#f2a900]/20 hover:border-[#f2a900]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(242,169,0,0.15)] aspect-[21/9] bg-[#0a0d14]"
+          className="relative rounded-lg overflow-hidden group cursor-pointer border border-[#f2a900]/20 hover:border-[#f2a900]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(242,169,0,0.15)] aspect-[21/9] bg-[#0a0d14]"
         >
           {/* Gamdom Logo Watermark */}
           <div className="absolute -right-4 -bottom-4 opacity-5 rotate-12 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-0">
@@ -58,7 +58,7 @@ const EnhancedBetting: React.FC = () => {
           href={gamdomLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative rounded-2xl overflow-hidden group cursor-pointer border border-[#f2a900]/20 hover:border-[#f2a900]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(242,169,0,0.15)] aspect-[21/9] bg-[#0a0d14]"
+          className="relative rounded-lg overflow-hidden group cursor-pointer border border-[#f2a900]/20 hover:border-[#f2a900]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(242,169,0,0.15)] aspect-[21/9] bg-[#0a0d14]"
         >
           {/* Gamdom Logo Watermark */}
           <div className="absolute -right-4 -bottom-4 opacity-5 rotate-12 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-0">

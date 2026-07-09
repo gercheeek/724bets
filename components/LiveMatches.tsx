@@ -106,7 +106,7 @@ const LiveMatches: React.FC = () => {
           {[1, 2, 3].map(i => (
             <div key={i} style={{
               background: '#1A1D24',
-              borderRadius: '16px',
+              borderRadius: '8px',
               padding: '20px',
               animation: 'pulse 1.5s infinite'
             }}>
@@ -170,7 +170,7 @@ const LiveMatches: React.FC = () => {
             key={match.mac_id}
             style={{
               background: '#1A1D24',
-              borderRadius: '14px',
+              borderRadius: '8px',
               padding: '20px',
               position: 'relative',
               overflow: 'hidden',
@@ -230,7 +230,7 @@ const LiveMatches: React.FC = () => {
               <div style={{
                 flex: 1, textAlign: 'center', padding: '10px 4px',
                 background: 'rgba(0, 255, 163, 0.04)',
-                borderRadius: '10px',
+                borderRadius: '8px',
                 transition: 'all 0.2s'
               }}>
                 <div style={{ fontSize: '8px', fontWeight: 900, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>1</div>
@@ -242,7 +242,7 @@ const LiveMatches: React.FC = () => {
               <div style={{
                 flex: 1, textAlign: 'center', padding: '10px 4px',
                 background: 'rgba(0, 255, 163, 0.04)',
-                borderRadius: '10px',
+                borderRadius: '8px',
                 transition: 'all 0.2s'
               }}>
                 <div style={{ fontSize: '8px', fontWeight: 900, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>X</div>
@@ -254,7 +254,7 @@ const LiveMatches: React.FC = () => {
               <div style={{
                 flex: 1, textAlign: 'center', padding: '10px 4px',
                 background: 'rgba(0, 255, 163, 0.04)',
-                borderRadius: '10px',
+                borderRadius: '8px',
                 transition: 'all 0.2s'
               }}>
                 <div style={{ fontSize: '8px', fontWeight: 900, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>2</div>
@@ -274,7 +274,7 @@ const LiveMatches: React.FC = () => {
                 width: '100%', padding: '9px 12px',
                 background: 'linear-gradient(135deg, #00FFA3 0%, #00FFA3 100%)',
                 color: '#000', fontWeight: 900, fontSize: '10px',
-                borderRadius: '10px', textTransform: 'uppercase',
+                borderRadius: '8px', textTransform: 'uppercase',
                 letterSpacing: '1.5px', textDecoration: 'none',
                 transition: 'all 0.3s ease',
                 boxShadow: '0 4px 15px rgba(0, 255, 163, 0.25)',

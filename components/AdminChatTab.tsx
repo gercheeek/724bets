@@ -790,7 +790,7 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
       </div>
 
       {/* Yönetici Sekmeleri */}
-      <div className="flex gap-2 mb-6 bg-gray-900 p-1.5 rounded-xl border border-gray-800 w-max">
+      <div className="flex gap-2 mb-6 bg-gray-900 p-1.5 rounded-lg border border-gray-800 w-max">
         <button onClick={() => setActiveSubTab('overview')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'overview' ? 'bg-gray-800 text-green-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>GENEL BAKIŞ</button>
         <button onClick={() => setActiveSubTab('simulator')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'simulator' ? 'bg-gray-800 text-green-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>SENARYO SİMÜLATÖRÜ</button>
         <button onClick={() => setActiveSubTab('interactives')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'interactives' ? 'bg-gray-800 text-amber-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>ETKİNLİK & ANKET & SABİT</button>
@@ -802,7 +802,7 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
       {activeSubTab === 'simulator' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Sol Kolon: Manuel Bot Ekleme & Listesi */}
-          <div className="bg-gray-900 p-5 rounded-xl border border-gray-800 space-y-5 h-max">
+          <div className="bg-gray-900 p-5 rounded-lg border border-gray-800 space-y-5 h-max">
             <div>
               <h3 className="text-md font-bold mb-3 text-green-400 flex items-center gap-2">🤖 Yeni Hayalet Üye (Bot)</h3>
               <form onSubmit={handleCreateBot} className="flex gap-2">
@@ -860,9 +860,9 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
           </div>
 
           {/* Sağ Kolon: Büyük Senaryo Giriş Alanı & AI Oto-Pilot */}
-          <div className="lg:col-span-2 bg-gray-900 p-5 rounded-xl border border-gray-800 space-y-5">
+          <div className="lg:col-span-2 bg-gray-900 p-5 rounded-lg border border-gray-800 space-y-5">
             {/* AI OTO-PILOT AYARLARI */}
-            <div className="p-4 bg-gray-950 rounded-xl border border-gray-800 space-y-3">
+            <div className="p-4 bg-gray-950 rounded-lg border border-gray-800 space-y-3">
               <div className="flex justify-between items-center">
                 <h3 className="text-sm font-bold text-green-400">🤖 AI OTO-PILOT (SONSUZ SOHBET)</h3>
                 <button
@@ -944,7 +944,7 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
               <button 
                 onClick={isRunning ? handleStopSimulation : handleStartSimulation} 
                 disabled={isAutopilotRunning || (!isRunning && !scenarioText.trim())} 
-                className={`w-full py-3.5 rounded-xl font-black text-md tracking-wider transition-all shadow-lg ${isRunning ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse shadow-red-900/20' : 'bg-green-500 hover:bg-green-400 text-gray-950 shadow-green-900/10'}`}
+                className={`w-full py-3.5 rounded-lg font-black text-md tracking-wider transition-all shadow-lg ${isRunning ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse shadow-red-900/20' : 'bg-green-500 hover:bg-green-400 text-gray-950 shadow-green-900/10'}`}
               >
                 {isRunning ? `⏹️ SİMÜLASYONU DURDUR (KALAN: ${remainingMessages} MESAJ)` : '🚀 SİMÜLASYONU BAŞLAT'}
               </button>
@@ -956,7 +956,7 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
       {/* DİĞER SEKMELER */}
       {activeSubTab === 'interactives' && (
         <div className="space-y-6 animate-fade-in">
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-6">
+          <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 space-y-6">
             
             {/* ── YENİ ETKİNLİK PENCERESİ AYARLARI ── */}
             <div className="space-y-4">
@@ -1061,7 +1061,7 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
             </div>
 
             {/* KAYDET BUTONU */}
-            <button onClick={handleSaveInteractives} className="w-full bg-green-500 hover:bg-green-400 text-gray-950 font-black py-4 rounded-xl text-md tracking-wider transition-all shadow-lg shadow-green-900/10">
+            <button onClick={handleSaveInteractives} className="w-full bg-green-500 hover:bg-green-400 text-gray-950 font-black py-4 rounded-lg text-md tracking-wider transition-all shadow-lg shadow-green-900/10">
               💾 DEĞİŞİKLİKLERİ KAYDET VE UYGULA
             </button>
 
@@ -1071,15 +1071,15 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
 
       {/* DİĞER SEKMELER */}
       {activeSubTab === 'overview' && (
-        <div className="p-12 text-center text-gray-500 bg-gray-900 rounded-xl border border-gray-800">
+        <div className="p-12 text-center text-gray-500 bg-gray-900 rounded-lg border border-gray-800">
           Sohbet yönetim merkezine hoş geldiniz. Kanallar ve Simülatör sekmelerini kullanarak sistemi anlık yönetebilirsiniz.
         </div>
       )}
       {activeSubTab === 'punish' && (
-        <div className="p-12 text-center text-gray-500 bg-gray-900 rounded-xl border border-gray-800">Susturulan ve uzaklaştırılan kullanıcıların listesi burada yer alır.</div>
+        <div className="p-12 text-center text-gray-500 bg-gray-900 rounded-lg border border-gray-800">Susturulan ve uzaklaştırılan kullanıcıların listesi burada yer alır.</div>
       )}
       {activeSubTab === 'logs' && (
-        <div className="p-12 text-center text-gray-500 bg-gray-900 rounded-xl border border-gray-800">Tüm sohbet akışı ve admin temizlik logları canlı olarak buraya düşer.</div>
+        <div className="p-12 text-center text-gray-500 bg-gray-900 rounded-lg border border-gray-800">Tüm sohbet akışı ve admin temizlik logları canlı olarak buraya düşer.</div>
       )}
     </div>
   );

@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import {
-  Menu, Home, Ticket, BarChart3, Target, Trophy, Gift,
-  TicketCheck, Shield, Spade, Tv, ChevronDown, MessageSquare, Send, HelpCircle,
-  Globe, Users, Gamepad2
+  Menu, Home, Trophy, Star, Gamepad2, Plus, Minus,
+  HelpCircle, ShieldCheck, Globe, PlayCircle, List,
+  Activity, Target, Circle, Dribbble, Monitor, 
+  Crosshair, Tv, Gift, Shield, Ticket, Users, MessageSquare, Send, ChevronLeft,
+  BarChart3
 } from 'lucide-react';
 import { NavVisibility } from './Header';
 
-interface CategoryItem {
-  key: string;
-  view: string;
+interface MenuItem {
+  id: string;
   label: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
+  view?: string;
   visKey?: keyof NavVisibility;
   requireRole?: boolean;
+  subItems?: MenuItem[];
 }
 
 interface SidebarProps {
@@ -25,8 +28,6 @@ interface SidebarProps {
   onStartTour?: () => void;
 }
 
-const ICON_SIZE = 'w-5 h-5';
-
 const Sidebar: React.FC<SidebarProps> = ({
   isOpen,
   onToggle,
@@ -36,47 +37,171 @@ const Sidebar: React.FC<SidebarProps> = ({
   navVisibility,
   onStartTour,
 }) => {
-  const [isCasinoDropdownOpen, setIsCasinoDropdownOpen] = useState(true);
+  // Track open state of accordions
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
 
-  const mainCategories: CategoryItem[] = [
-    { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
+  const topGrid = [
+    { id: 'lobi', label: 'LOBİ', icon: <Home className="w-5 h-5 mb-1" />, view: 'home' },
+    { id: 'esports', label: 'E-SPORLAR', icon: <Gamepad2 className="w-5 h-5 mb-1" />, view: 'esports' },
+    { id: 'canli', label: 'CANLI', icon: <PlayCircle className="w-5 h-5 mb-1" />, view: 'sports2' },
+    { id: 'bahislerim', label: 'BAHİSLERİM', icon: <List className="w-5 h-5 mb-1" />, view: 'coupons' },
   ];
 
-  const casinoCategories: CategoryItem[] = [
-    { key: 'sports2', view: 'sports2', label: 'Spor', icon: <Trophy className={ICON_SIZE} /> },
-    { key: 'blackjack', view: 'blackjack', label: 'Casino', icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
-    { key: 'live-casino', view: 'live-casino', label: 'Canlı Casino', icon: <Target className={ICON_SIZE} /> },
-    { key: 'esports', view: 'esports', label: 'E-spor', icon: <Gamepad2 className={ICON_SIZE} /> },
+  const menuConfig: MenuItem[] = [
+    { id: 'tv', label: '724TV', icon: <Tv className="w-4 h-4 text-zinc-400" />, view: '724tv' },
+    { id: 'analysis', label: 'ANALİZLER', icon: <BarChart3 className="w-4 h-4 text-zinc-400" />, view: 'analysis', visKey: 'analysis' },
+    { id: 'cekilis', label: 'ÇEKİLİŞ', icon: <Gift className="w-4 h-4 text-zinc-400" />, view: 'cekilis', visKey: 'cekilis' },
+    { id: 'raffle', label: 'BİLET', icon: <Ticket className="w-4 h-4 text-zinc-400" />, view: 'raffle', visKey: 'raffle' },
+    { id: 'fifa', label: 'FIFA DÜNYA KUPASI', icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+    { 
+      id: 'senin-icin', 
+      label: 'SENİN İÇİN SEÇİLDİ', 
+      icon: <Star className="w-4 h-4 text-zinc-400" />,
+      subItems: [
+        { id: 'fifa-sub', label: 'FIFA Dünya Kupası', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
+        { id: 'uefa', label: 'UEFA Avrupa Ligi', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
+        { id: 'wimbledon-w', label: 'Wimbledon Kadınlar Tenisi', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
+        { id: 'wimbledon-m', label: 'Wimbledon Tek Erkekler', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
+        { id: 'conference', label: 'UEFA Conference League', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
+      ]
+    },
+    {
+      id: 'ana-sporlar',
+      label: 'ANA SPORLAR',
+      icon: <Trophy className="w-4 h-4 text-zinc-400" />,
+      subItems: [
+        { id: 'futbol', label: 'Futbol', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'tenis', label: 'Tenis', icon: <Circle className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'basketbol', label: 'Basketbol', icon: <Dribbble className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'beyzbol', label: 'Beyzbol', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'mma', label: 'MMA', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' }
+      ]
+    },
+    {
+      id: 'tum-sporlar',
+      label: 'TÜM SPORLAR',
+      icon: <List className="w-4 h-4 text-zinc-400" />,
+      subItems: [
+        { id: 'ragbi', label: 'Ragbi', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'avustralya', label: 'Avustralya Futbolu', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'hentbol', label: 'Hentbol', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'kriket', label: 'Kriket', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'voleybol', label: 'Voleybol', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'dart', label: 'Dart', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'boks', label: 'Boks', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'buz-hokeyi', label: 'Buz Hokeyi', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'masa-tenisi', label: 'Masa Tenisi', icon: <Circle className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+      ]
+    },
+    {
+      id: 'tum-esporlar',
+      label: 'TÜM E-SPORLAR',
+      icon: <Gamepad2 className="w-4 h-4 text-zinc-400" />,
+      subItems: [
+        { id: 'efutbol', label: 'eFutbol', icon: <Globe className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'nba2k', label: 'NBA2K', icon: <Dribbble className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'cs2', label: 'CS2', icon: <Crosshair className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'dota2', label: 'Dota 2', icon: <Monitor className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'valorant', label: 'Valorant', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'lol', label: 'League of Legends', icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+      ]
+    },
+    { id: 'at-yarisi', label: 'AT YARIŞI', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+    { id: 'sss', label: 'SSS', icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
+    { id: 'kurallar', label: 'BAHİS KURALLARI', icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },
+    { id: 'oran', label: 'ORAN FORMATI', icon: <Globe className="w-4 h-4 text-zinc-400" />, subItems: [] },
   ];
 
-  const otherCategories: CategoryItem[] = [
-    { key: '724tv', view: '724tv', label: '724TV', icon: <Tv className={ICON_SIZE} /> },
-    { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
-    { key: 'analysis', view: 'analysis', label: 'Analizler', icon: <BarChart3 className={ICON_SIZE} />, visKey: 'analysis' },
-    { key: 'pool', view: 'pool', label: '724TOTO', icon: <Target className={ICON_SIZE} />, visKey: 'pool' },
-    { key: 'loyalty', view: 'loyalty', label: 'Görevler', icon: <Trophy className={ICON_SIZE} />, visKey: 'loyalty' },
-    { key: 'cekilis', view: 'cekilis', label: 'Çekiliş', icon: <Gift className={ICON_SIZE} />, visKey: 'cekilis' },
-    { key: 'raffle', view: 'raffle', label: 'Bilet', icon: <TicketCheck className={ICON_SIZE} />, visKey: 'raffle' },
-    { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
-    { key: 'trusted-sites', view: 'trusted-sites', label: 'Güvenilir', icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
-    { key: 'giveaway', view: 'giveaway', label: 'Çekiliş Yönetimi', icon: <Gift className={ICON_SIZE} />, visKey: 'giveaway', requireRole: true },
+  const extrasConfig: MenuItem[] = [
+    {
+      id: 'diger',
+      label: 'DİĞER OYUNLAR',
+      icon: <Target className="w-4 h-4 text-zinc-400" />,
+      subItems: [
+        { id: 'casino', label: '724Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'blackjack', visKey: 'blackjack' },
+        { id: 'live-casino', label: 'Canlı Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'live-casino' },
+        { id: 'toto', label: '724TOTO', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'pool', visKey: 'pool' },
+        { id: 'loyalty', label: 'Görevler', icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'loyalty', visKey: 'loyalty' },
+        { id: 'trusted-sites', label: 'Güvenilir Siteler', icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'trusted-sites', visKey: 'trustedSites' },
+        { id: 'giveaway', label: 'Çekiliş Yönetimi', icon: <Gift className="w-4 h-4 text-zinc-400" />, view: 'giveaway', requireRole: true },
+      ]
+    }
   ];
 
-  const renderNavItems = (items: CategoryItem[]) => {
-    return items.map((cat) => {
-      if (cat.visKey && navVisibility?.[cat.visKey] === false) return null;
-      if (cat.requireRole && !userRole) return null;
-      const active = activeView === cat.view;
+  const filterItems = (items: MenuItem[]) => {
+    return items.filter((item) => {
+      if (item.visKey && navVisibility?.[item.visKey] === false) return false;
+      if (item.requireRole && !userRole) return false;
+      return true;
+    });
+  };
+
+  const renderNavList = (items: MenuItem[]) => {
+    return filterItems(items).map((item) => {
+      const hasSubItems = item.subItems && item.subItems.length > 0;
+      const isOpenAccordion = openGroups[item.id];
+      const isItemActive = item.view === activeView;
+      
       return (
-        <button
-          key={cat.key}
-          className={`sidebar-nav-item ${active ? 'active' : ''}`}
-          onClick={() => onViewChange(cat.view)}
-          title={!isOpen ? cat.label : undefined}
-        >
-          <span className="sidebar-nav-icon">{cat.icon}</span>
-          {isOpen && <span className="sidebar-nav-label">{cat.label}</span>}
-        </button>
+        <div key={item.id} className="flex flex-col">
+          <div 
+            onClick={() => {
+              if (item.subItems) {
+                setOpenGroups(prev => ({ ...prev, [item.id]: !prev[item.id] }));
+              } else if (item.view) {
+                onViewChange(item.view);
+              }
+            }}
+            className={isOpen 
+              ? `flex items-center justify-between px-4 py-3 cursor-pointer transition-all ${!item.subItems && isItemActive ? 'bg-[#1A253A] text-white border-l-2 border-[#00FFA3]' : 'hover:bg-white/5 text-[#A0A0A0] border-l-2 border-transparent'} mx-0`
+              : `flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto mb-1 cursor-pointer ${!item.subItems && isItemActive ? 'bg-[#00FFA3] text-black' : 'text-zinc-400 hover:bg-[#1A253A] hover:text-white'}`
+            }
+            title={!isOpen ? item.label : undefined}
+          >
+            {isOpen ? (
+              <>
+                <div className="flex items-center gap-3">
+                  <span className={`flex-shrink-0 ${!item.subItems && isItemActive ? 'text-[#00FFA3]' : 'text-zinc-400'}`}>
+                    {item.icon}
+                  </span>
+                  <span className={`text-[12px] font-bold tracking-wider ${!item.subItems && isItemActive ? 'text-white' : 'text-[#A0A0A0]'}`}>
+                    {item.label}
+                  </span>
+                </div>
+                {item.subItems && (
+                  <div className="flex items-center justify-center w-5 h-5 rounded bg-[#1A253A] text-[#00FFA3] shadow-sm shadow-black/20 hover:scale-105 transition-transform">
+                    {isOpenAccordion ? <Minus className="w-3.5 h-3.5 stroke-[3]" /> : <Plus className="w-3.5 h-3.5 stroke-[3]" />}
+                  </div>
+                )}
+              </>
+            ) : (
+              item.icon
+            )}
+          </div>
+
+          {/* SubItems Render */}
+          {isOpen && item.subItems && isOpenAccordion && (
+            <div className="flex flex-col mt-0.5 mb-1 bg-[#090C12]/50 py-1 border-l-2 border-transparent">
+              {filterItems(item.subItems).map(sub => {
+                const isSubActive = sub.view === activeView;
+                return (
+                  <div
+                    key={sub.id}
+                    onClick={() => sub.view && onViewChange(sub.view)}
+                    className={`flex items-center gap-3 py-2 px-4 pl-12 cursor-pointer transition-all ${
+                      isSubActive ? 'text-[#00FFA3]' : 'text-[#888] hover:bg-white/5 hover:text-zinc-200'
+                    }`}
+                  >
+                    <span className="flex-shrink-0 opacity-80">{sub.icon}</span>
+                    <span className="text-[13px] font-medium tracking-wide truncate">
+                      {sub.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       );
     });
   };
@@ -84,310 +209,111 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       <style>{`
-        .sidebar-container {
+        .gamdom-sidebar-container {
           width: 100%;
-          background-color: transparent;
+          background-color: #0F1219;
           display: flex;
           flex-direction: column;
           height: 100%;
           position: relative;
           z-index: 10;
-          overflow: hidden;
-          white-space: nowrap;
         }
         @media (max-width: 767px) {
-          .sidebar-container {
+          .gamdom-sidebar-container {
             display: none !important;
           }
         }
-        .sidebar-container:hover {
+        .gamdom-sidebar-inner {
+          width: 100%;
+          height: 100%;
+          overflow-x: hidden;
           overflow-y: auto;
-        }
-        .sidebar-container::-webkit-scrollbar {
-          display: none; /* Chrome/Safari */
-        }
-        
-        .sidebar-toggle-btn {
-          width: 44px;
-          height: 44px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #111317;
-          border-radius: 8px;
-          color: #a0a0a0;
-          cursor: pointer;
-          margin: 16px;
-          transition: all 0.2s;
-          flex-shrink: 0;
-        }
-        .sidebar-toggle-btn:hover {
-          color: #fff;
-          background: rgba(255,255,255,0.08);
-        }
-
-        .sidebar-group {
-          background: #111317;
-          border-radius: 12px;
-          margin: 0 12px 12px 12px;
-          padding: 8px 0;
-          border: none;
-          overflow: hidden;
-        }
-
-        .sidebar-nav-item {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          padding: 10px 16px;
-          color: #a0a0a0;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-          transition: all 0.2s;
-          text-align: left;
-          min-height: 44px;
-        }
-        
-        .sidebar-nav-item:hover {
-          color: #fff;
-          background: rgba(255, 255, 255, 0.03);
-        }
-        
-        .sidebar-nav-item.active {
-          color: #000000;
-          background: #00FFA3;
-          font-weight: 700;
-        }
-
-        .sidebar-nav-icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 24px;
-          margin-right: ${isOpen ? '14px' : '0'};
-          flex-shrink: 0;
-        }
-        
-        .sidebar-nav-label {
-          font-size: 14px;
-          font-weight: 600;
-          white-space: nowrap;
-          opacity: ${isOpen ? 1 : 0};
-          transition: opacity 0.2s;
-        }
-
-        /* Dropdown Button */
-        .sidebar-dropdown-btn {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-          padding: 12px 16px;
-          color: #fff;
-          background: #1A1D24;
-          border: none;
-          cursor: pointer;
-          font-size: 14px;
-          font-weight: 700;
-          transition: all 0.2s;
-        }
-        .sidebar-dropdown-btn:hover {
-          background: rgba(255,255,255,0.08);
-        }
-        .sidebar-dropdown-icon {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        .sidebar-dropdown-arrow {
-          transition: transform 0.3s;
-          background: #334155;
-          border-radius: 4px;
-          padding: 2px;
-        }
-        .sidebar-dropdown-arrow.open {
-          transform: rotate(180deg);
-        }
-
-        /* Action Buttons */
-        .sidebar-action-btn {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          padding: 12px 16px;
-          color: #a0a0a0;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-          font-size: 14px;
-          font-weight: 600;
-          transition: all 0.2s;
-          text-align: left;
-        }
-        .sidebar-action-btn:hover {
-          color: #fff;
-          background: rgba(255, 255, 255, 0.03);
-        }
-        .sidebar-action-highlight {
-          color: #00FFA3 !important;
-          background: rgba(0, 255, 163, 0.08) !important;
-        }
-
-        /* Collapsed Sidebar CSS overrides to match Slotra design */
-        .sidebar-collapsed .sidebar-group {
-          padding: 6px 0 !important;
-          margin: 0 12px 12px 12px !important;
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 6px;
-          border-radius: 16px;
+          scrollbar-width: none; /* Hide scrollbar for Firefox */
+          -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
         }
-
-        .sidebar-collapsed .sidebar-nav-item,
-        .sidebar-collapsed .sidebar-dropdown-btn,
-        .sidebar-collapsed .sidebar-action-btn {
-          width: 44px;
-          height: 44px;
-          min-height: 44px;
-          padding: 0 !important;
-          margin: 0 auto !important;
-          border-radius: 12px !important;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: transparent;
-        }
-
-        .sidebar-collapsed .sidebar-nav-item:hover,
-        .sidebar-collapsed .sidebar-dropdown-btn:hover,
-        .sidebar-collapsed .sidebar-action-btn:hover {
-          background: rgba(255, 255, 255, 0.05) !important;
-        }
-
-        .sidebar-collapsed .sidebar-nav-item.active {
-          background: #00FFA3 !important;
-          border-left: none !important;
-          padding-left: 0 !important;
-          color: #000000 !important;
-        }
-
-        .sidebar-collapsed .sidebar-action-highlight {
-          color: #00FFA3 !important;
-          background: rgba(0, 255, 163, 0.08) !important;
-        }
-
-        .sidebar-collapsed .sidebar-nav-icon,
-        .sidebar-collapsed .sidebar-dropdown-icon {
-          margin: 0 !important;
-          padding: 0 !important;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 24px;
-          height: 24px;
-        }
-
-        .sidebar-collapsed .sidebar-dropdown-arrow {
-          display: none !important;
-        }
-
-        /* Mobile specific styles */
-        @media (max-width: 767px) {
-          .sidebar-container {
-            display: none !important;
-          }
-          .sidebar-overlay {
-            display: none !important;
-          }
+        .gamdom-sidebar-inner::-webkit-scrollbar {
+          display: none; /* Hide scrollbar for Chrome/Safari/Opera */
         }
       `}</style>
 
       {/* Overlay for mobile */}
-      <div className="sidebar-overlay" onClick={onToggle} />
+      <div className="sidebar-overlay" onClick={onToggle} style={{ display: 'none' }} />
 
-      <div id="tour-sidebar" className={`sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`} style={{ padding: '12px 0' }}>
+      <div className={`gamdom-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
         
-        {/* Toggle Button / Header of Sidebar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: isOpen ? 'space-between' : 'center', padding: isOpen ? '0 16px' : '0', marginBottom: '16px' }}>
-          <button onClick={onToggle} className="text-white hover:text-[#00FFA3] transition-colors p-2 rounded-lg hover:bg-white/5 flex items-center justify-center">
-            <Menu className="w-6 h-6" />
-          </button>
+        {/* Toggle / Expand Button overlay */}
+        <div className="absolute top-[85px] right-0 z-50 overflow-visible pointer-events-none">
+           <button 
+             onClick={onToggle} 
+             className="w-7 h-10 bg-[#161C28] hover:bg-[#1C2333] border border-l-0 border-[#2A3441]/40 flex items-center justify-center text-zinc-400 hover:text-white rounded-r-md cursor-pointer pointer-events-auto transition-all shadow-md transform translate-x-full"
+           >
+             {isOpen ? <ChevronLeft className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+           </button>
         </div>
 
-        {/* Main Categories Group */}
-        <div className="sidebar-group" style={{ marginTop: '4px' }}>
-          {renderNavItems(mainCategories)}
+        <div className="gamdom-sidebar-inner pb-20">
           
-          {/* 724Casino Group */}
-          <div style={{ marginTop: '8px' }}>
-            <button 
-              className="sidebar-dropdown-btn" 
-              onClick={() => isOpen && setIsCasinoDropdownOpen(!isCasinoDropdownOpen)}
-              style={{ background: 'transparent', padding: '12px 16px' }}
-              title={!isOpen ? "724Casino" : undefined}
-            >
-              <div className="sidebar-dropdown-icon" style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Spade className={ICON_SIZE} style={{ color: '#00FFA3' }} />
-                {isOpen && <span style={{ fontWeight: '800', letterSpacing: '0.5px' }}>724Casino</span>}
-              </div>
-              {isOpen && <ChevronDown className={`w-4 h-4 sidebar-dropdown-arrow ${isCasinoDropdownOpen ? 'open' : ''}`} />}
-            </button>
-            
-            {/* If open or if sidebar is collapsed, we render the sub-items */}
-            {(!isOpen || isCasinoDropdownOpen) && (
-              <div style={{ paddingLeft: isOpen ? '12px' : '0', display: 'flex', flexDirection: 'column' }}>
-                {renderNavItems(casinoCategories)}
-              </div>
-            )}
-          </div>
+          {/* Spacer to align sidebar content below Header */}
+          <div className="h-[60px] w-full shrink-0 border-b border-white/5 bg-[#0F1219]"></div>
+
           
-          {/* Other Categories */}
-          <div style={{ paddingTop: '8px', marginTop: '8px' }}>
-            {renderNavItems(otherCategories)}
-          </div>
-        </div>
-
-
-
-        {/* Action Buttons Group */}
-        <div className="sidebar-group" style={{ padding: 0 }}>
-          <button className="sidebar-action-btn" title={!isOpen ? "Kodu Kullan" : undefined}>
-            <span className="sidebar-nav-icon"><Gift className={ICON_SIZE} /></span>
-            {isOpen && <span>Kodu Kullan</span>}
-          </button>
-          <button className="sidebar-action-btn sidebar-action-highlight" title={!isOpen ? "Arkadaşını Davet Et" : undefined}>
-            <span className="sidebar-nav-icon"><Users className={ICON_SIZE} style={{ color: '#00FFA3' }} /></span>
-            {isOpen && <span>Arkadaşını Davet Et</span>}
-          </button>
-           <button className="sidebar-action-btn" title={!isOpen ? "Telegram" : undefined}>
-            <span className="sidebar-nav-icon"><Send className={ICON_SIZE} /></span>
-            {isOpen && <span>Telegram</span>}
-          </button>
-          {onStartTour && (
-            <button onClick={onStartTour} className="sidebar-action-btn" title={!isOpen ? "Site Turu" : undefined}>
-              <span className="sidebar-nav-icon"><HelpCircle className={ICON_SIZE} /></span>
-              {isOpen && <span>Site Turu</span>}
-            </button>
-          )}
-        </div>
-
-        {/* Footer Support Group */}
-        <div className="sidebar-group" style={{ padding: 0 }}>
-          <button className="sidebar-action-btn" title={!isOpen ? "Canlı Destek" : undefined}>
-            <span className="sidebar-nav-icon"><MessageSquare className={ICON_SIZE} /></span>
-            {isOpen && <span>Canlı Destek</span>}
-          </button>
-          <button className="sidebar-dropdown-btn" style={{ background: 'transparent' }} title={!isOpen ? "Türkçe" : undefined}>
-            <div className="sidebar-dropdown-icon" style={{ color: '#a0a0a0' }}>
-              <Globe className={ICON_SIZE} />
-              {isOpen && <span>Türkçe</span>}
+          {/* Top 2x2 Grid */}
+          {isOpen ? (
+            <div className="grid grid-cols-2 gap-2 p-3 border-b border-white/5 bg-[#0F1219]">
+              {topGrid.map(item => {
+                const isActive = activeView === item.view;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => item.view && onViewChange(item.view)}
+                    className={`flex flex-col items-center justify-center py-3 rounded-lg transition-all ${
+                      isActive 
+                        ? 'bg-[#00FFA3] text-black font-black' 
+                        : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white font-bold'
+                    }`}
+                  >
+                    {item.icon}
+                    <span className="text-[11px] tracking-wider uppercase mt-1">{item.label}</span>
+                  </button>
+                );
+              })}
             </div>
-            {isOpen && <ChevronDown className="w-4 h-4 sidebar-dropdown-arrow" />}
-          </button>
-        </div>
+          ) : (
+            <div className="flex flex-col gap-2 p-2 pb-1 border-b border-white/5 bg-[#0F1219]">
+              {topGrid.map(item => {
+                const isActive = activeView === item.view;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => item.view && onViewChange(item.view)}
+                    className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto ${
+                      isActive 
+                        ? 'bg-[#00FFA3] text-black' 
+                        : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white'
+                    }`}
+                  >
+                    {item.icon}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
+          {/* Main Menu List */}
+          <div className="flex flex-col bg-[#0F1219] pt-2">
+            {renderNavList(menuConfig)}
+          </div>
+
+          <div className="w-full h-px bg-white/5 my-2"></div>
+
+          {/* Extras / Other Games */}
+          <div className="flex flex-col bg-[#0F1219]">
+            {renderNavList(extrasConfig)}
+          </div>
+
+        </div>
       </div>
     </>
   );

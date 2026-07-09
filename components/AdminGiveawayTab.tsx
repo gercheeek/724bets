@@ -176,7 +176,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
     const inputStyle: React.CSSProperties = {
         width: '100%', padding: '10px 14px',
         background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: '12px', color: '#fff', fontSize: '13px',
+        borderRadius: '8px', color: '#fff', fontSize: '13px',
         outline: 'none',
     };
 
@@ -188,7 +188,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
 
     const cardStyle: React.CSSProperties = {
         background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: '20px', padding: '20px',
+        borderRadius: '8px', padding: '20px',
     };
 
     return (
@@ -207,7 +207,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
                     onChange={e => setSelectedGiveawayId(e.target.value)}
                     style={{
                         padding: '10px 16px', background: '#111', border: '1px solid rgba(255,255,255,0.15)',
-                        borderRadius: '12px', color: '#fff', fontSize: '13px', fontWeight: 700,
+                        borderRadius: '8px', color: '#fff', fontSize: '13px', fontWeight: 700,
                         outline: 'none', minWidth: '200px',
                     }}
                 >
@@ -235,7 +235,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
                     <button
                         key={key}
                         onClick={() => setSubTab(key)}
-                        className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${subTab === key ? 'bg-[#f0b90b] text-black' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}
+                        className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${subTab === key ? 'bg-[#f0b90b] text-black' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}
                     >
                         {label}
                     </button>
@@ -243,7 +243,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
             </div>
 
             {importMsg && (
-                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-bold">
+                <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-bold">
                     ✅ {importMsg}
                 </div>
             )}
@@ -251,7 +251,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
             {/* ═══ GIVEAWAYS TAB ═══ */}
             {subTab === 'giveaways' && (
                 <div className="space-y-4">
-                    <button onClick={addGiveaway} className="flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-xl hover:bg-[#f0b90b]/90 transition-all">
+                    <button onClick={addGiveaway} className="flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all">
                         <Plus className="w-4 h-4" /> YENİ ÇEKİLİŞ OLUŞTUR
                     </button>
 
@@ -325,7 +325,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
             {/* ═══ PRIZES TAB ═══ */}
             {subTab === 'prizes' && (
                 <div className="space-y-4">
-                    <button onClick={addPrize} className="flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-xl hover:bg-[#f0b90b]/90 transition-all">
+                    <button onClick={addPrize} className="flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all">
                         <Plus className="w-4 h-4" /> ÖDÜL EKLE
                     </button>
 
@@ -384,7 +384,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
                                     (document.getElementById('newPartName') as HTMLInputElement).value = '';
                                     (document.getElementById('newPartIG') as HTMLInputElement).value = '';
                                 }}
-                                className="px-4 py-2 bg-[#f0b90b] text-black font-black text-xs rounded-xl hover:bg-[#f0b90b]/90 transition-all whitespace-nowrap"
+                                className="px-4 py-2 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all whitespace-nowrap"
                             >
                                 <Plus className="w-4 h-4 inline" /> EKLE
                             </button>
@@ -398,7 +398,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
 
                     <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="space-y-2">
                         {selectedParticipants.map(p => (
-                            <div key={p.id} className="flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+                            <div key={p.id} className="flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-lg">
                                 <div className="w-8 h-8 rounded-lg bg-[#f0b90b]/10 border border-[#f0b90b]/20 flex items-center justify-center text-xs font-black text-[#f0b90b]">
                                     {p.name.charAt(0).toUpperCase()}
                                 </div>
@@ -441,7 +441,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
                         />
                         <button
                             onClick={handleBulkImport}
-                            className="mt-3 flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-xl hover:bg-[#f0b90b]/90 transition-all"
+                            className="mt-3 flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all"
                         >
                             <Upload className="w-4 h-4" /> İÇE AKTAR ({bulkInput.split('\n').filter(l => l.trim()).length} satır)
                         </button>
@@ -464,7 +464,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
                         />
                         <button
                             onClick={handleCsvImport}
-                            className="mt-3 flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-xl hover:bg-[#f0b90b]/90 transition-all"
+                            className="mt-3 flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all"
                         >
                             <Upload className="w-4 h-4" /> CSV İÇE AKTAR
                         </button>
@@ -475,7 +475,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
             {/* ═══ RULES TAB ═══ */}
             {subTab === 'rules' && (
                 <div className="space-y-4">
-                    <button onClick={addRule} className="flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-xl hover:bg-[#f0b90b]/90 transition-all">
+                    <button onClick={addRule} className="flex items-center gap-2 px-4 py-2.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all">
                         <Plus className="w-4 h-4" /> KURAL EKLE
                     </button>
 
@@ -525,7 +525,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
                     ) : (
                         selectedWinners.map((w, i) => (
                             <div key={w.id} style={cardStyle} className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-[#f0b90b]/10 border border-[#f0b90b]/20 flex items-center justify-center">
+                                <div className="w-10 h-10 rounded-lg bg-[#f0b90b]/10 border border-[#f0b90b]/20 flex items-center justify-center">
                                     <Trophy className="w-5 h-5 text-[#f0b90b]" />
                                 </div>
                                 <div className="flex-1">

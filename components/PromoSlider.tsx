@@ -121,7 +121,7 @@ export const PromoSlider: React.FC = () => {
           <div 
             key={`${promo.id}-${index}`}
             onClick={handleCardClick}
-            className="shrink-0 relative bg-[#1a1a1a] rounded-xl border border-[#333] overflow-hidden cursor-pointer group transition-all duration-300 hover:border-[#555] hover:-translate-y-1"
+            className="shrink-0 relative bg-[#1a1a1a] rounded-lg border border-[#333] overflow-hidden cursor-pointer group transition-all duration-300 hover:border-[#555] hover:-translate-y-1"
             style={{ width: '250px', height: '125px', boxShadow: '0 5px 15px rgba(0,0,0,0.5)' }}
           >
             {/* Background Glow */}
@@ -141,7 +141,7 @@ export const PromoSlider: React.FC = () => {
               </div>
               
               <div>
-                <button className="px-3 py-1 border border-[#444] rounded-md text-white text-[10px] font-bold bg-transparent group-hover:bg-[#333] transition-colors">
+                <button className="px-3 py-1 border border-[#444] rounded-lg text-white text-[10px] font-bold bg-transparent group-hover:bg-[#333] transition-colors">
                   {promo.buttonText}
                 </button>
               </div>

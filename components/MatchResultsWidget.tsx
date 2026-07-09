@@ -154,7 +154,7 @@ const MatchResultsWidget: React.FC = () => {
       >
         {Object.entries(groupedMatches).map(([date, dayMatches]) => (
           <React.Fragment key={date}>
-            <div className="flex flex-col items-center justify-center shrink-0 min-w-[55px] bg-[#1A1D24]/80 backdrop-blur-md rounded-xl snap-center h-[90px] self-center shadow-lg">
+            <div className="flex flex-col items-center justify-center shrink-0 min-w-[55px] bg-[#1A1D24]/80 backdrop-blur-md rounded-lg snap-center h-[90px] self-center shadow-lg">
               <span className="text-[10px] font-bold text-gray-500 mb-1">{getDayShort(date)}</span>
               <span className="text-xs font-black text-white text-center leading-tight">{date.split(' ')[0]}<br/>{date.split(' ')[1]}</span>
             </div>
@@ -163,7 +163,7 @@ const MatchResultsWidget: React.FC = () => {
             {dayMatches.map((m, idx) => (
               <div 
                 key={`${date}-${idx}`} 
-                className="flex flex-col items-center p-5 bg-[#1A1D24] rounded-xl min-w-[270px] max-w-[270px] shrink-0 snap-center shadow-lg shadow-black/40 hover:bg-[#22262F] transition-colors cursor-pointer"
+                className="flex flex-col items-center p-5 bg-[#1A1D24] rounded-lg min-w-[270px] max-w-[270px] shrink-0 snap-center shadow-lg shadow-black/40 hover:bg-[#22262F] transition-colors cursor-pointer"
               >
                 {/* Top Info */}
                 <div className="text-[9px] font-bold text-gray-500 mb-3 uppercase tracking-wider">

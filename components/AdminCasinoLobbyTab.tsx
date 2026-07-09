@@ -120,7 +120,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
       {/* ═══ Header ═══ */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#FFD700] to-[#FFA500] flex items-center justify-center shadow-lg shadow-amber-500/10">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#FFD700] to-[#FFA500] flex items-center justify-center shadow-lg shadow-amber-500/10">
             <Layout className="w-5 h-5 text-black" />
           </div>
           <div>
@@ -131,7 +131,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
 
         <button
           onClick={handleSave}
-          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 ${
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-black text-xs uppercase tracking-wider transition-all duration-300 ${
             saved 
               ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-green-500/20' 
               : 'bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black shadow-lg shadow-amber-500/20 hover:scale-[1.02]'
@@ -173,7 +173,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
         {currentCategoryGames.map((game, index) => (
           <div 
             key={game.id} 
-            className="bg-zinc-900/40 border border-zinc-800/80 rounded-2xl p-5 hover:border-zinc-700/50 transition-all duration-300"
+            className="bg-zinc-900/40 border border-zinc-800/80 rounded-lg p-5 hover:border-zinc-700/50 transition-all duration-300"
           >
             <div className="flex flex-col lg:flex-row gap-6">
               
@@ -183,7 +183,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                 
                 {/* Live Card Replica */}
                 <div 
-                  className="relative w-full h-[110px] rounded-xl overflow-hidden border border-white/5 select-none"
+                  className="relative w-full h-[110px] rounded-lg overflow-hidden border border-white/5 select-none"
                   style={{
                     background: 'radial-gradient(circle, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0.9) 100%)'
                   }}
@@ -236,7 +236,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.name}
                     onChange={(e) => updateGame(game.id, 'name', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                     placeholder="Örn: Fruit Party"
                   />
                 </div>
@@ -248,7 +248,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.provider}
                     onChange={(e) => updateGame(game.id, 'provider', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                     placeholder="Örn: PRAGMATIC PLAY"
                   />
                 </div>
@@ -263,7 +263,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.link}
                     onChange={(e) => updateGame(game.id, 'link', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-xl px-4 py-3 text-xs text-emerald-400 font-mono outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-emerald-400 font-mono outline-none focus:border-amber-500/50 transition-all"
                     placeholder="https://gidecegi-sponsor-site.com/..."
                   />
                 </div>
@@ -275,7 +275,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.image.startsWith('data:') ? '' : game.image}
                     onChange={(e) => updateGame(game.id, 'image', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                     placeholder="https://resimler.com/afis.jpg"
                   />
                 </div>
@@ -286,7 +286,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                   <select
                     value={game.themeColor}
                     onChange={(e) => updateGame(game.id, 'themeColor', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                   >
                     {GRADIENT_THEMES.map(theme => (
                       <option key={theme.value} value={theme.value}>{theme.name}</option>
@@ -302,7 +302,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                 {/* Active Toggle */}
                 <button
                   onClick={() => updateGame(game.id, 'isActive', !game.isActive)}
-                  className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider border transition-all ${
+                  className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider border transition-all ${
                     game.isActive 
                       ? 'bg-emerald-500/10 border-emerald-500/20 text-[#00E676]' 
                       : 'bg-zinc-800 border-zinc-700 text-zinc-500'
@@ -332,7 +332,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                 {/* Trash Icon */}
                 <button
                   onClick={() => removeGame(game.id)}
-                  className="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all duration-300"
+                  className="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all duration-300"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -344,7 +344,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
         ))}
 
         {currentCategoryGames.length === 0 && (
-          <div className="text-center py-12 bg-zinc-950/20 border border-dashed border-zinc-800/80 rounded-2xl">
+          <div className="text-center py-12 bg-zinc-950/20 border border-dashed border-zinc-800/80 rounded-lg">
             <Layout className="w-8 h-8 text-zinc-600 mx-auto mb-2 opacity-40" />
             <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">BU KATEGORİDE HENÜZ OYUN EKLENMEDİ</p>
           </div>
@@ -353,7 +353,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
         {/* Add New Game Trigger */}
         <button
           onClick={addGame}
-          className="w-full py-4 border-2 border-dashed border-zinc-800 hover:border-amber-500/30 rounded-2xl bg-transparent hover:bg-amber-400/5 text-zinc-500 hover:text-[#FFC107] font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300"
+          className="w-full py-4 border-2 border-dashed border-zinc-800 hover:border-amber-500/30 rounded-lg bg-transparent hover:bg-amber-400/5 text-zinc-500 hover:text-[#FFC107] font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300"
         >
           <Plus className="w-4 h-4" />
           YENİ {activeSubTab === 'slot' ? 'SLOT OYUNU' : 'CANLI CASINO MASASI'} EKLE

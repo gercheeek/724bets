@@ -68,14 +68,14 @@ export default function AdminDepositsTab() {
         </div>
         <button 
           onClick={fetchDeposits}
-          className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 rounded-xl transition-colors"
+          className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 rounded-lg transition-colors"
           title="Yenile"
         >
           <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
         </button>
       </div>
 
-      <div className="bg-black/20 border border-zinc-800/50 rounded-2xl overflow-hidden">
+      <div className="bg-black/20 border border-zinc-800/50 rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -108,7 +108,7 @@ export default function AdminDepositsTab() {
                       {deposit.username}
                     </td>
                     <td className="p-4">
-                      <div className="flex items-center gap-1.5 text-zinc-300 bg-zinc-800/50 px-2 py-1 rounded-md inline-flex text-xs font-medium">
+                      <div className="flex items-center gap-1.5 text-zinc-300 bg-zinc-800/50 px-2 py-1 rounded-lg inline-flex text-xs font-medium">
                         {deposit.method === 'bank' ? <Building2 className="w-3.5 h-3.5 text-blue-400" /> : <QrCode className="w-3.5 h-3.5 text-orange-400" />}
                         {deposit.method === 'bank' ? 'Havale/EFT' : 'Kripto'}
                       </div>
@@ -121,17 +121,17 @@ export default function AdminDepositsTab() {
                     </td>
                     <td className="p-4">
                       {deposit.status === 'pending' && (
-                        <span className="flex items-center gap-1.5 text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md text-xs font-bold inline-flex">
+                        <span className="flex items-center gap-1.5 text-amber-500 bg-amber-500/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
                           <Clock className="w-3.5 h-3.5" /> Bekliyor
                         </span>
                       )}
                       {deposit.status === 'approved' && (
-                        <span className="flex items-center gap-1.5 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md text-xs font-bold inline-flex">
+                        <span className="flex items-center gap-1.5 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
                           <CheckCircle2 className="w-3.5 h-3.5" /> Onaylandı
                         </span>
                       )}
                       {deposit.status === 'rejected' && (
-                        <span className="flex items-center gap-1.5 text-red-500 bg-red-500/10 px-2 py-1 rounded-md text-xs font-bold inline-flex">
+                        <span className="flex items-center gap-1.5 text-red-500 bg-red-500/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
                           <XCircle className="w-3.5 h-3.5" /> Reddedildi
                         </span>
                       )}

@@ -21,7 +21,7 @@ const InputField: React.FC<{
         <input
             type={type} value={value} onChange={e => onChange(e.target.value)}
             required={required}
-            className="w-full bg-black border border-zinc-800 rounded-xl py-3.5 pl-11 pr-4 text-white text-sm focus:border-[#f0b90b] transition-colors outline-none placeholder-zinc-600"
+            className="w-full bg-black border border-zinc-800 rounded-lg py-3.5 pl-11 pr-4 text-white text-sm focus:border-[#f0b90b] transition-colors outline-none placeholder-zinc-600"
             placeholder={placeholder}
         />
     </div>
@@ -204,7 +204,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
 
     return (
         <div className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
-            <div className="w-full max-w-md bg-[#0a0a0a] border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl relative">
+            <div className="w-full max-w-md bg-[#0a0a0a] border border-zinc-800 rounded-lg overflow-hidden shadow-2xl relative">
                 <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-red-600 transition-colors z-10">
                     <X className="w-4 h-4" />
                 </button>
@@ -254,13 +254,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                         Onaylandıktan sonra giriş yapabilirsiniz.
                                     </p>
                                     <button onClick={onClose}
-                                        className="mt-6 w-full py-3.5 bg-zinc-800 hover:bg-zinc-700 text-white font-black text-sm rounded-xl transition-all">
+                                        className="mt-6 w-full py-3.5 bg-zinc-800 hover:bg-zinc-700 text-white font-black text-sm rounded-lg transition-all">
                                         ANLADIM
                                     </button>
                                 </div>
                             ) : (
                                 <>
-                                    <div className="flex bg-zinc-900 rounded-xl p-1 mb-5">
+                                    <div className="flex bg-zinc-900 rounded-lg p-1 mb-5">
                                         <button onClick={() => { setMemberMode('login'); setMError(''); setMSuccess(''); }}
                                             className={`flex-1 py-2 text-xs font-black rounded-lg transition-all ${memberMode === 'login' ? 'bg-[#f0b90b] text-black' : 'text-zinc-500 hover:text-zinc-300'}`}>
                                             GİRİŞ YAP
@@ -296,7 +296,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                         {mSuccess && <p className="text-emerald-500 text-xs font-bold text-center bg-emerald-500/10 py-2 rounded-lg border border-emerald-500/20">{mSuccess}</p>}
 
                                         <button type="submit" disabled={loading}
-                                            className="w-full bg-[#f0b90b] hover:bg-[#f0b90b]/90 text-black font-black py-3.5 rounded-xl transition-all text-sm tracking-widest uppercase mt-1 flex items-center justify-center gap-2">
+                                            className="w-full bg-[#f0b90b] hover:bg-[#f0b90b]/90 text-black font-black py-3.5 rounded-lg transition-all text-sm tracking-widest uppercase mt-1 flex items-center justify-center gap-2">
                                             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (memberMode === 'login' ? 'GİRİŞ YAP' : 'KAYIT OL')}
                                         </button>
                                     </form>
@@ -339,11 +339,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                     onChange={setAPassword} placeholder="Şifre" required />
                                 {aError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">{aError}</p>}
                                 <button type="submit"
-                                    className="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-black py-3.5 rounded-xl transition-all text-sm tracking-widest uppercase mt-2 border border-zinc-700">
+                                    className="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-black py-3.5 rounded-lg transition-all text-sm tracking-widest uppercase mt-2 border border-zinc-700">
                                     GİRİŞ YAP
                                 </button>
                             </form>
-                            <div className="mt-4 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-center">
+                            <div className="mt-4 p-3 bg-zinc-900/50 rounded-lg border border-zinc-800 text-center">
                                 <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">🔐 Sadece yetkili personel için</p>
                             </div>
                         </div>
@@ -368,11 +368,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                     onChange={setGPassword} placeholder="Şifre" required />
                                 {gError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">{gError}</p>}
                                 <button type="submit"
-                                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3.5 rounded-xl transition-all text-sm tracking-widest uppercase mt-2 shadow-lg shadow-emerald-500/20">
+                                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3.5 rounded-lg transition-all text-sm tracking-widest uppercase mt-2 shadow-lg shadow-emerald-500/20">
                                     MİSAFİR OLARAK GİR
                                 </button>
                             </form>
-                            <div className="mt-4 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-center">
+                            <div className="mt-4 p-3 bg-zinc-900/50 rounded-lg border border-zinc-800 text-center">
                                 <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">👀 Panele giriş izni yoktur</p>
                             </div>
                         </div>

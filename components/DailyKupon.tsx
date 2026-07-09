@@ -87,9 +87,9 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
 
   return (
     <div style={{
-      background: '#1E293B',
+      background: '#1A1D24',
       border: 'none',
-      borderRadius: '12px',
+      borderRadius: '8px',
       padding: '16px',
       display: 'flex',
       flexDirection: 'column',
@@ -100,37 +100,38 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
       boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05)'
     }}>
       {/* Ambient glow */}
-      <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(245, 158, 11, 0.1)', boxShadow: '0 0 32px rgba(245, 158, 11, 0.08)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 60%)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.1)', boxShadow: '0 0 32px rgba(0, 255, 163, 0.08)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(0, 255, 163, 0.05) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '16px', borderBottom: '1px solid rgba(245, 158, 11, 0.12)', position: 'relative', zIndex: 2 }}>
-        <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Trophy style={{ width: '16px', height: '16px', color: '#F59E0B' }} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '16px', borderBottom: '1px solid rgba(0, 255, 163, 0.12)', position: 'relative', zIndex: 2 }}>
+        <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.08)', border: '1px solid rgba(0, 255, 163, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Trophy style={{ width: '16px', height: '16px', color: '#00FFA3' }} />
         </div>
-        <h3 style={{ margin: 0, fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', color: '#F59E0B' }}>{coupon.title}</h3>
+        <h3 style={{ margin: 0, fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', color: '#00FFA3' }}>{coupon.title}</h3>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '3px', background: 'rgba(15, 23, 42, 0.7)', padding: '3px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', margin: '10px 0', position: 'relative', zIndex: 2 }}>
+      <div style={{ display: 'flex', gap: '8px', margin: '10px 0', position: 'relative', zIndex: 2 }}>
         {(['low', 'medium', 'high'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             style={{
               flex: 1,
-              background: activeTab === tab ? 'rgba(14, 165, 233, 0.15)' : 'transparent',
-              border: activeTab === tab ? '1px solid rgba(14, 165, 233, 0.4)' : '1px solid transparent',
-              color: activeTab === tab ? '#0EA5E9' : '#94A3B8',
-              fontSize: '8px',
+              background: activeTab === tab ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+              border: 'none',
+              borderBottom: activeTab === tab ? '2px solid #00FFA3' : '2px solid transparent',
+              color: activeTab === tab ? '#00FFA3' : '#94A3B8',
+              fontSize: '10px',
               fontWeight: 900,
               textTransform: 'uppercase',
               letterSpacing: '0.5px',
-              padding: '5px 2px',
-              borderRadius: '5px',
+              padding: '8px 4px',
+              borderRadius: '8px 8px 0 0',
               cursor: 'pointer',
-              transition: 'all 0.25s ease',
-              boxShadow: activeTab === tab ? '0 0 10px rgba(14, 165, 233, 0.2)' : 'none'
+              transition: 'all 0.2s ease',
+              boxShadow: 'none'
             }}
           >
             {tab === 'low' ? 'Az Risk' : tab === 'medium' ? 'Orta Risk' : 'Yüksek'}
@@ -141,7 +142,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
       {/* Matches */}
       <div style={{ minHeight: '130px', display: 'flex', flexDirection: 'column', gap: '5px', position: 'relative', zIndex: 2 }}>
         {coupon.matches.map((match, idx) => (
-          <div key={match.id || idx} style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(245, 158, 11, 0.08)', borderRadius: '8px', padding: '8px 10px' }}>
+          <div key={match.id || idx} style={{ background: 'rgba(17, 19, 23, 0.6)', border: '1px solid rgba(0, 255, 163, 0.08)', borderRadius: '8px', padding: '8px 10px' }}>
             {match.league && (
               <span style={{ display: 'block', fontSize: '8px', fontWeight: 700, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '3px' }}>{match.league}</span>
             )}
@@ -151,23 +152,23 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
                 <span style={{ color: '#444', fontSize: '10px', margin: '0 4px' }}>vs</span>
                 <span style={{ fontWeight: 900 }}>{match.awayTeam}</span>
               </span>
-              <span style={{ fontSize: '15px', fontWeight: 900, color: '#F59E0B', textShadow: 'none', flexShrink: 0, marginLeft: '8px' }}>{match.odd}</span>
+              <span style={{ fontSize: '15px', fontWeight: 900, color: '#00FFA3', textShadow: 'none', flexShrink: 0, marginLeft: '8px' }}>{match.odd}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '3px' }}>
-              <TrendingUp style={{ width: '10px', height: '10px', color: '#F59E0B' }} />
-              <span style={{ fontSize: '9px', fontWeight: 700, color: '#F59E0B', opacity: 0.8 }}>{match.prediction}</span>
+              <TrendingUp style={{ width: '10px', height: '10px', color: '#00FFA3' }} />
+              <span style={{ fontSize: '9px', fontWeight: 700, color: '#00FFA3', opacity: 0.8 }}>{match.prediction}</span>
             </div>
           </div>
         ))}
       </div>
 
       {/* Footer */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(245, 158, 11, 0.1)', position: 'relative', zIndex: 2 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(0, 255, 163, 0.1)', position: 'relative', zIndex: 2 }}>
         <div>
           <div style={{ fontSize: '8px', fontWeight: 700, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>TOPLAM ORAN</div>
-          <div style={{ fontSize: '22px', fontWeight: 900, color: '#F59E0B', lineHeight: 1, textShadow: 'none', fontStyle: 'italic', letterSpacing: '-0.5px' }}>
+          <div style={{ fontSize: '22px', fontWeight: 900, color: '#00FFA3', lineHeight: 1, textShadow: 'none', fontStyle: 'italic', letterSpacing: '-0.5px' }}>
             {parseFloat(coupon.totalOdd).toFixed(2)}
-            <span style={{ fontSize: '13px', color: '#F59E0B', marginLeft: '1px', fontStyle: 'normal', opacity: 0.7 }}>x</span>
+            <span style={{ fontSize: '13px', color: '#00FFA3', marginLeft: '1px', fontStyle: 'normal', opacity: 0.7 }}>x</span>
           </div>
         </div>
         <a 
@@ -178,7 +179,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            backgroundColor: '#F59E0B',
+            backgroundColor: '#00FFA3',
             color: '#000',
             padding: '8px 16px',
             borderRadius: '8px',
@@ -187,19 +188,16 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
             textDecoration: 'none',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)',
-            transition: 'all 0.2s ease',
+            border: 'none',
+            boxShadow: 'none',
+            transition: 'background-color 0.2s ease',
             cursor: 'pointer'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#D97706';
-            e.currentTarget.style.transform = 'scale(1.04)';
-            e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.5)';
+            e.currentTarget.style.backgroundColor = '#33FFB5';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#F59E0B';
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.4)';
+            e.currentTarget.style.backgroundColor = '#00FFA3';
           }}
         >
           HEMEN OYNA

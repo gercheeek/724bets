@@ -91,7 +91,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavi
             onClick={handleClose}
         >
             <div
-                className="w-full max-w-2xl rounded-2xl overflow-hidden flex flex-col"
+                className="w-full max-w-2xl rounded-lg overflow-hidden flex flex-col"
                 style={{
                     background: 'linear-gradient(145deg, #0e0e0e, #141414)',
                     border: '1.5px solid rgba(240,185,11,0.3)',
@@ -138,12 +138,12 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavi
                                     <button
                                         key={i}
                                         onClick={r.action}
-                                        className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-left transition-all group hover:bg-white/[0.04]"
+                                        className="w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all group hover:bg-white/[0.04]"
                                         style={{ border: '1px solid transparent' }}
                                         onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(240,185,11,0.15)'; }}
                                         onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent'; }}
                                     >
-                                        <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center"
+                                        <div className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center"
                                             style={{ background: r.type === 'coupon' ? 'rgba(240,185,11,0.08)' : r.type === 'league' ? 'rgba(99,102,241,0.08)' : 'rgba(16,185,129,0.08)' }}>
                                             {r.icon}
                                         </div>
@@ -180,7 +180,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavi
                                     <button
                                         key={s}
                                         onClick={() => setQuery(s)}
-                                        className="px-4 py-2 rounded-xl text-sm font-black text-zinc-400 transition-all hover:text-[#f0b90b]"
+                                        className="px-4 py-2 rounded-lg text-sm font-black text-zinc-400 transition-all hover:text-[#f0b90b]"
                                         style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
                                         onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(240,185,11,0.2)'; }}
                                         onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.07)'; }}
@@ -195,7 +195,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavi
                                     { label: 'Analizler', icon: <BarChart2 className="w-4 h-4" />, action: () => { onNavigate?.('analysis'); handleClose(); } },
                                 ].map((item, i) => (
                                     <button key={i} onClick={item.action}
-                                        className="flex items-center justify-center gap-2 py-3 rounded-xl font-black text-xs text-zinc-500 transition-all hover:text-white"
+                                        className="flex items-center justify-center gap-2 py-3 rounded-lg font-black text-xs text-zinc-500 transition-all hover:text-white"
                                         style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                                         {item.icon}
                                         {item.label}

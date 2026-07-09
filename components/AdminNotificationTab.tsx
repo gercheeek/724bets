@@ -136,7 +136,7 @@ const AdminNotificationTab: React.FC<AdminNotificationTabProps> = ({ botsConfig,
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Sohbet Anonsu */}
-                <div className="bg-[#1A2332] p-6 rounded-xl border border-white/5">
+                <div className="bg-[#1A2332] p-6 rounded-lg border border-white/5">
                     <div className="flex items-center gap-2 mb-4">
                         <MessageSquare className="w-4 h-4 text-sky-400" />
                         <h4 className="text-md font-bold text-white">Sohbet Anonsu Gönder</h4>
@@ -183,7 +183,7 @@ const AdminNotificationTab: React.FC<AdminNotificationTabProps> = ({ botsConfig,
                 </div>
 
                 {/* Global Toast */}
-                <div className="bg-[#1A2332] p-6 rounded-xl border border-white/5">
+                <div className="bg-[#1A2332] p-6 rounded-lg border border-white/5">
                     <div className="flex items-center gap-2 mb-4">
                         <Zap className="w-4 h-4 text-emerald-400" />
                         <h4 className="text-md font-bold text-white">Global Pop-up (Toast) Fırlat</h4>
@@ -244,7 +244,7 @@ const AdminNotificationTab: React.FC<AdminNotificationTabProps> = ({ botsConfig,
             </div>
 
             {/* BOT MANAGER SECTION */}
-            <div className="bg-[#1A2332] p-6 rounded-xl border border-white/5">
+            <div className="bg-[#1A2332] p-6 rounded-lg border border-white/5">
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
                         <Bot className="w-5 h-5 text-indigo-400" />
@@ -268,13 +268,13 @@ const AdminNotificationTab: React.FC<AdminNotificationTabProps> = ({ botsConfig,
 
                 <div className="space-y-4">
                     {localBots.length === 0 ? (
-                        <div className="text-center py-10 bg-[#0D1320] rounded-xl border border-white/5 border-dashed">
+                        <div className="text-center py-10 bg-[#0D1320] rounded-lg border border-white/5 border-dashed">
                             <Bot className="w-10 h-10 text-gray-600 mx-auto mb-3" />
                             <p className="text-sm text-gray-400 font-medium">Henüz kayıtlı bir bot yok.</p>
                         </div>
                     ) : (
                         localBots.map((bot) => (
-                            <div key={bot.id} className={`bg-[#0D1320] border ${bot.isActive ? 'border-indigo-500/30' : 'border-white/5'} rounded-xl p-4 transition-all relative overflow-hidden`}>
+                            <div key={bot.id} className={`bg-[#0D1320] border ${bot.isActive ? 'border-indigo-500/30' : 'border-white/5'} rounded-lg p-4 transition-all relative overflow-hidden`}>
                                 {/* Header */}
                                 <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
                                     <div className="flex items-center gap-4 flex-1">
@@ -385,7 +385,7 @@ const AdminNotificationTab: React.FC<AdminNotificationTabProps> = ({ botsConfig,
                 </div>
             </div>
             
-            <div className="bg-[#1A2332] p-6 rounded-xl border border-white/5 mt-6">
+            <div className="bg-[#1A2332] p-6 rounded-lg border border-white/5 mt-6">
                <div className="flex items-center gap-2 mb-4">
                   <Gift className="w-4 h-4 text-purple-400" />
                   <h4 className="text-md font-bold text-white">Hedefli (Kişiye Özel) Bildirim</h4>

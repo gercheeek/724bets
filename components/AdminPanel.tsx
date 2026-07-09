@@ -821,7 +821,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
 
         {/* Cloud Sync Status Card - COMPACT */}
-        <div className="p-3 rounded-xl bg-black/40 border border-zinc-800 space-y-2">
+        <div className="p-3 rounded-lg bg-black/40 border border-zinc-800 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">BULUT DURUMU</span>
             <div className={`w-2 h-2 rounded-full ${
@@ -1049,7 +1049,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           <button onClick={handleSave} className="adm-btn-primary w-full flex items-center justify-center gap-2">
             <Save className="w-4 h-4" /> KAYDET
           </button>
-          <button onClick={onLogout} className="w-full flex items-center justify-center gap-2 bg-rose-600/10 text-rose-500 hover:bg-rose-600 hover:text-white font-black py-3.5 rounded-xl transition-all">
+          <button onClick={onLogout} className="w-full flex items-center justify-center gap-2 bg-rose-600/10 text-rose-500 hover:bg-rose-600 hover:text-white font-black py-3.5 rounded-lg transition-all">
             <LogOut className="w-4 h-4" /> ÇIKIŞ YAP
           </button>
         </div>
@@ -1072,7 +1072,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     window.location.reload();
                   }
                 }}
-                className="px-6 py-2.5 bg-rose-500/10 border border-rose-500/20 text-rose-500 font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-rose-500 hover:text-white transition-all flex items-center gap-2"
+                className="px-6 py-2.5 bg-rose-500/10 border border-rose-500/20 text-rose-500 font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-rose-500 hover:text-white transition-all flex items-center gap-2"
               >
                 <LogOut className="w-4 h-4" /> OTURUMU KAPAT
               </button>
@@ -1081,7 +1081,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* LEFT: AVATAR & BASIC INFO */}
               <div className="lg:col-span-1 space-y-6">
-                <section className="bg-zinc-900 border border-zinc-800 rounded-[30px] p-8 flex flex-col items-center text-center space-y-6 relative overflow-hidden group">
+                <section className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 flex flex-col items-center text-center space-y-6 relative overflow-hidden group">
                   <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#f0b90b]/10 to-transparent" />
                   
                   <div className="relative">
@@ -1118,7 +1118,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               {/* RIGHT: FORMS */}
               <div className="lg:col-span-2 space-y-6">
                 {/* GENERAL SETTINGS */}
-                <section className="bg-zinc-900 border border-zinc-800 rounded-[30px] p-6 space-y-6">
+                <section className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 space-y-6">
                   <h4 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2">
                     <Layout className="w-4 h-4 text-zinc-500" /> GENEL BİLGİLER
                   </h4>
@@ -1130,7 +1130,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         type="text" 
                         value={adminProfile.name}
                         onChange={e => setAdminProfile(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white font-bold focus:border-[#f0b90b] outline-none transition-all"
+                        className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-white font-bold focus:border-[#f0b90b] outline-none transition-all"
                         placeholder="Adınız"
                       />
                     </div>
@@ -1140,7 +1140,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         type="text" 
                         value={adminProfile.logoUrl}
                         onChange={e => setAdminProfile(prev => ({ ...prev, logoUrl: e.target.value }))}
-                        className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white font-bold focus:border-[#f0b90b] outline-none transition-all"
+                        className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-white font-bold focus:border-[#f0b90b] outline-none transition-all"
                         placeholder="https://example.com/logo.png"
                       />
                     </div>
@@ -1152,7 +1152,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         localStorage.setItem('admin_profile', JSON.stringify(adminProfile));
                         alert('Profil bilgileriniz güncellendi!');
                       }}
-                      className="px-10 py-3 bg-[#f0b90b] text-black font-black text-xs uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(240,185,11,0.2)]"
+                      className="px-10 py-3 bg-[#f0b90b] text-black font-black text-xs uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(240,185,11,0.2)]"
                     >
                       BİLGİLERİ KAYDET
                     </button>
@@ -1160,12 +1160,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </section>
 
                 {/* YÖNETİCİ BAKİYE YÜKLEME */}
-                <section className="bg-zinc-900 border border-zinc-800 rounded-[30px] p-6 space-y-6">
+                <section className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 space-y-6">
                   <h4 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2">
                     <CreditCard className="w-4 h-4 text-zinc-500" /> YÖNETİCİ BAKİYE YÜKLEME
                   </h4>
                   
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-black/40 p-5 rounded-2xl border border-zinc-800/40">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-black/40 p-5 rounded-lg border border-zinc-800/40">
                     <div>
                       <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block">Mevcut Bakiye</span>
                       <span className="text-2xl font-black text-emerald-400 font-mono">
@@ -1180,7 +1180,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           type="number" 
                           placeholder="Örn: 1000"
                           id="admin-balance-input"
-                          className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white font-bold focus:border-emerald-500 outline-none transition-all"
+                          className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-white font-bold focus:border-emerald-500 outline-none transition-all"
                         />
                       </div>
                       <button
@@ -1198,7 +1198,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             if (input) input.value = '';
                           }
                         }}
-                        className="px-6 py-3 bg-emerald-500 text-black font-black text-xs uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                        className="px-6 py-3 bg-emerald-500 text-black font-black text-xs uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]"
                       >
                         Bakiye Yükle
                       </button>
@@ -1207,7 +1207,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </section>
 
                 {/* SECURITY SETTINGS */}
-                <section className="bg-zinc-900 border border-zinc-800 rounded-[30px] p-6 space-y-6">
+                <section className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 space-y-6">
                   <h4 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-zinc-500" /> GÜVENLİK VE ŞİFRE
                   </h4>
@@ -1219,7 +1219,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         type="password" 
                         value={passwordForm.new}
                         onChange={e => setPasswordForm(prev => ({ ...prev, new: e.target.value }))}
-                        className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white font-bold focus:border-[#f0b90b] outline-none transition-all"
+                        className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-white font-bold focus:border-[#f0b90b] outline-none transition-all"
                         placeholder="••••••••"
                       />
                     </div>
@@ -1229,7 +1229,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         type="password" 
                         value={passwordForm.confirm}
                         onChange={e => setPasswordForm(prev => ({ ...prev, confirm: e.target.value }))}
-                        className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-white font-bold focus:border-[#f0b90b] outline-none transition-all"
+                        className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-white font-bold focus:border-[#f0b90b] outline-none transition-all"
                         placeholder="••••••••"
                       />
                     </div>
@@ -1257,7 +1257,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         alert('Şifreniz başarıyla güncellendi!');
                         setPasswordForm({ current: '', new: '', confirm: '' });
                       }}
-                      className="px-10 py-3 bg-zinc-800 text-white font-black text-xs uppercase tracking-widest rounded-xl hover:bg-zinc-700 transition-all border border-zinc-700"
+                      className="px-10 py-3 bg-zinc-800 text-white font-black text-xs uppercase tracking-widest rounded-lg hover:bg-zinc-700 transition-all border border-zinc-700"
                     >
                       ŞİFREYİ GÜNCELLE
                     </button>
@@ -1270,7 +1270,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {activeTab === 'content' && (
           <div className="space-y-8">
-            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
               <button 
                 onClick={() => toggleContentSection('hero')}
                 className="w-full flex items-center justify-between p-4 hover:bg-white/[0.02] transition-all group"
@@ -1306,7 +1306,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               )}
             </section>
 
-            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
               <div className="flex items-center justify-between p-4">
                 <button 
                   onClick={() => toggleContentSection('brands')}
@@ -1325,7 +1325,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div className="p-5 pt-0 border-t border-zinc-800/40 animate-fade-in">
                   <div className="grid grid-cols-1 gap-2.5 mt-4">
                     {localBrands.map((brand, idx) => (
-                      <div key={brand.id} className="bg-black/40 border border-zinc-800/40 p-2.5 rounded-xl flex items-center gap-3 hover:border-[#00FFC2]/30 transition-all group">
+                      <div key={brand.id} className="bg-black/40 border border-zinc-800/40 p-2.5 rounded-lg flex items-center gap-3 hover:border-[#00FFC2]/30 transition-all group">
                         <div className="w-10 h-10 bg-black rounded-lg overflow-hidden border border-zinc-800 shrink-0">
                           <img src={brand.logo} className="w-full h-full object-cover" />
                         </div>
@@ -1343,7 +1343,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
 
 
-            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
               <div className="flex items-center justify-between p-4">
                 <button 
                   onClick={() => toggleContentSection('slider')}
@@ -1356,7 +1356,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
                   {contentExpanded.slider ? <ChevronUp className="w-3.5 h-3.5 text-zinc-500" /> : <ChevronDown className="w-3.5 h-3.5 text-zinc-500" />}
                 </button>
-                <div className="flex bg-black/40 p-1 rounded-xl border border-zinc-800/60">
+                <div className="flex bg-black/40 p-1 rounded-lg border border-zinc-800/60">
                   <button
                     onClick={() => {
                       const u = { ...localHeroSlider, isActive: true };
@@ -1378,7 +1378,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {contentExpanded.slider && (
                 <div className="p-5 pt-0 border-t border-zinc-800/40 animate-fade-in">
-                  <div className="mt-4 flex items-center justify-between bg-black/20 p-3 rounded-xl border border-zinc-800/30">
+                  <div className="mt-4 flex items-center justify-between bg-black/20 p-3 rounded-lg border border-zinc-800/30">
                     <div className="flex items-center gap-4">
                       <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest shrink-0">Otomatik Geçiş (ms)</label>
                       <input
@@ -1412,7 +1412,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     {localHeroSlider.slides
                       .sort((a, b) => a.order - b.order)
                       .map((slide, idx) => (
-                      <div key={slide.id} className={`bg-black/30 border rounded-xl p-3 space-y-3 transition-all ${slide.isActive ? 'border-purple-500/20' : 'border-zinc-800 opacity-50'}`}>
+                      <div key={slide.id} className={`bg-black/30 border rounded-lg p-3 space-y-3 transition-all ${slide.isActive ? 'border-purple-500/20' : 'border-zinc-800 opacity-50'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <span className="w-6 h-6 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400 font-black text-[10px]">{idx + 1}</span>
@@ -1495,7 +1495,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               )}
             </section>
 
-            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
               <div className="flex items-center justify-between p-4">
                 <button 
                   onClick={() => toggleContentSection('daily')}
@@ -1508,7 +1508,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
                   {contentExpanded.daily ? <ChevronUp className="w-3.5 h-3.5 text-zinc-500" /> : <ChevronDown className="w-3.5 h-3.5 text-zinc-500" />}
                 </button>
-                <div className="flex bg-black/40 p-1 rounded-xl border border-zinc-800/60">
+                <div className="flex bg-black/40 p-1 rounded-lg border border-zinc-800/60">
                   <button
                     onClick={() => {
                       const u = { ...localDailyKupon, isActive: true };
@@ -1530,7 +1530,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {contentExpanded.daily && (
                 <div className="p-5 pt-0 border-t border-zinc-800/40 animate-fade-in">
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-black/20 p-3 rounded-xl border border-zinc-800/30">
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-black/20 p-3 rounded-lg border border-zinc-800/30">
                     <div className="space-y-1.5">
                       <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-1">Kupon Başlığı</label>
                       <input value={localDailyKupon.title} onChange={(e) => setLocalDailyKupon({ ...localDailyKupon, title: e.target.value })} className="adm-input !py-2 !text-xs" placeholder="Günün Banko Kuponu" />
@@ -1543,7 +1543,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                   <div className="mt-4 space-y-2.5">
                     {localDailyKupon.matches.map((match, idx) => (
-                      <div key={match.id} className="bg-black/40 border border-zinc-800/40 p-2.5 rounded-xl flex items-center gap-3 group">
+                      <div key={match.id} className="bg-black/40 border border-zinc-800/40 p-2.5 rounded-lg flex items-center gap-3 group">
                         <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-2">
                           <input value={match.time} onChange={(e) => {
                             const matches = [...localDailyKupon.matches];
@@ -1575,7 +1575,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     <button onClick={() => {
                       const newMatch = { id: Date.now().toString(), time: '20:00', homeTeam: '', awayTeam: '', prediction: '', odd: '1.50', league: '' };
                       setLocalDailyKupon({ ...localDailyKupon, matches: [...localDailyKupon.matches, newMatch] });
-                    }} className="w-full py-2 border border-dashed border-zinc-800 rounded-xl text-zinc-500 hover:text-white hover:border-zinc-600 transition-all text-[10px] font-black uppercase">
+                    }} className="w-full py-2 border border-dashed border-zinc-800 rounded-lg text-zinc-500 hover:text-white hover:border-zinc-600 transition-all text-[10px] font-black uppercase">
                       + YENİ MAÇ EKLE
                     </button>
                   </div>
@@ -1588,7 +1588,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     onSaveDailyKuponConfig?.(localDailyKupon);
                     alert('Banko Kupon ayarları kaydedildi!');
                   }}
-                  className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-[10px] rounded-xl uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-[10px] rounded-lg uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-center gap-2"
                 >
                   <Save className="w-3.5 h-3.5" /> BANKO KUPON KAYDET
                 </button>
@@ -1601,13 +1601,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         {/* ═══ LIVE ODDS MANAGEMENT ═══ */}
         {activeTab === 'liveodds' && (
           <div className="space-y-4 animate-fade-in">
-            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
               <button 
                 onClick={() => setContentExpanded(prev => ({ ...prev, liveodds_main: !prev.liveodds_main }))}
                 className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
+                  <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center border border-emerald-500/20">
                     <Activity className="w-5 h-5 text-emerald-500" />
                   </div>
                   <div className="text-left">
@@ -1620,9 +1620,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {contentExpanded.liveodds_main && (
                 <div className="p-6 pt-0 animate-fade-in space-y-6">
-                  <div className="flex items-center justify-between bg-black/40 border border-zinc-800/50 p-5 rounded-2xl">
+                  <div className="flex items-center justify-between bg-black/40 border border-zinc-800/50 p-5 rounded-lg">
                     <div className="flex items-center gap-4">
-                       <div className="flex bg-zinc-900 border border-zinc-800 p-1 rounded-xl">
+                       <div className="flex bg-zinc-900 border border-zinc-800 p-1 rounded-lg">
                          <button onClick={() => { const u = { ...localLiveOdds, isActive: true }; setLocalLiveOdds(u); onSaveLiveOddsConfig?.(u); }}
                            className={`px-4 py-2 rounded-lg text-[10px] font-black transition-all ${localLiveOdds.isActive ? 'bg-emerald-500 text-black' : 'text-zinc-500'}`}>AKTİF</button>
                          <button onClick={() => { const u = { ...localLiveOdds, isActive: false }; setLocalLiveOdds(u); onSaveLiveOddsConfig?.(u); }}
@@ -1640,7 +1640,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                   <div className="space-y-3">
                     {localLiveOdds.matches.map((match, idx) => (
-                      <div key={match.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-2xl flex items-center gap-4 group">
+                      <div key={match.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-lg flex items-center gap-4 group">
                         <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-3">
                           <input value={match.homeTeam} onChange={e => {
                             const u = { ...localLiveOdds, matches: localLiveOdds.matches.map(m => m.id === match.id ? { ...m, homeTeam: e.target.value } : m) }; setLocalLiveOdds(u);
@@ -1674,7 +1674,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         {/* Live Odds Bulk Modal */}
         {showLiveOddsBulkModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-            <div className="bg-zinc-950 border border-blue-500/20 p-5 rounded-3xl max-w-2xl w-full shadow-[0_0_50px_rgba(59,130,246,0.1)] relative">
+            <div className="bg-zinc-950 border border-blue-500/20 p-5 rounded-lg max-w-2xl w-full shadow-[0_0_50px_rgba(59,130,246,0.1)] relative">
               <button
                 onClick={() => setShowLiveOddsBulkModal(false)}
                 className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800"
@@ -1683,7 +1683,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
 
               <div className="flex items-center gap-4 mb-5">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+                <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)]">
                   <Layers className="w-8 h-8 text-white" />
                 </div>
                 <div>
@@ -1693,7 +1693,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div className="space-y-6">
-                <div className="bg-blue-500/5 border border-blue-500/10 p-4 rounded-2xl">
+                <div className="bg-blue-500/5 border border-blue-500/10 p-4 rounded-lg">
                   <h4 className="text-[10px] font-black text-blue-400 uppercase mb-2 tracking-widest">Beklenen Format:</h4>
                   <p className="text-[11px] text-zinc-500 font-mono">
                     Ev Sahibi - Deplasman | Lig | Saat | 1 | X | 2 | Link
@@ -1707,19 +1707,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   value={liveOddsBulkInput}
                   onChange={(e) => setLiveOddsBulkInput(e.target.value)}
                   placeholder="Maçları buraya yapıştırın..."
-                  className="w-full h-48 bg-black border border-zinc-800 rounded-3xl p-6 text-white text-sm focus:border-blue-500/50 transition-all outline-none resize-none"
+                  className="w-full h-48 bg-black border border-zinc-800 rounded-lg p-6 text-white text-sm focus:border-blue-500/50 transition-all outline-none resize-none"
                 />
 
                 <div className="flex gap-4">
                   <button
                     onClick={() => setShowLiveOddsBulkModal(false)}
-                    className="flex-1 py-4 rounded-2xl border border-zinc-800 text-zinc-400 font-black text-xs uppercase tracking-widest hover:bg-zinc-900 transition-all"
+                    className="flex-1 py-4 rounded-lg border border-zinc-800 text-zinc-400 font-black text-xs uppercase tracking-widest hover:bg-zinc-900 transition-all"
                   >
                     İptal
                   </button>
                   <button
                     onClick={handleLiveOddsBulkParse}
-                    className="flex-[2] py-4 rounded-2xl bg-blue-600 text-white font-black text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-[0_10px_20px_rgba(37,99,235,0.2)]"
+                    className="flex-[2] py-4 rounded-lg bg-blue-600 text-white font-black text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-[0_10px_20px_rgba(37,99,235,0.2)]"
                   >
                     Maçları Sisteme Ekle
                   </button>
@@ -1732,7 +1732,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         {/* AI Coupon Modal */}
         {showCouponAiModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-            <div className="bg-zinc-950 border border-[#f0b90b]/20 p-5 rounded-3xl max-w-2xl w-full shadow-[0_0_50px_rgba(240,185,11,0.1)] relative">
+            <div className="bg-zinc-950 border border-[#f0b90b]/20 p-5 rounded-lg max-w-2xl w-full shadow-[0_0_50px_rgba(240,185,11,0.1)] relative">
               <button
                 onClick={() => setShowCouponAiModal(false)}
                 className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800"
@@ -1741,7 +1741,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
 
               <div className="flex items-center gap-4 mb-5">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#f0b90b] to-yellow-600 flex items-center justify-center shadow-[0_0_30px_rgba(240,185,11,0.3)]">
+                <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-[#f0b90b] to-yellow-600 flex items-center justify-center shadow-[0_0_30px_rgba(240,185,11,0.3)]">
                   <Zap className="w-8 h-8 text-black" />
                 </div>
                 <div>
@@ -1759,19 +1759,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     <div className="grid grid-cols-3 gap-3">
                       <button
                         onClick={() => setCouponRiskLevel('LOW')}
-                        className={`py-3 rounded-xl border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'LOW' ? 'bg-green-500/20 text-green-500 border-green-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                        className={`py-3 rounded-lg border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'LOW' ? 'bg-green-500/20 text-green-500 border-green-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
                       >
                         <span className="text-xs">DÜŞÜK</span><span className="text-[8px] opacity-70">(KASA)</span>
                       </button>
                       <button
                         onClick={() => setCouponRiskLevel('MEDIUM')}
-                        className={`py-3 rounded-xl border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                        className={`py-3 rounded-lg border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
                       >
                         <span className="text-xs">ORTA</span><span className="text-[8px] opacity-70">(İDEAL)</span>
                       </button>
                       <button
                         onClick={() => setCouponRiskLevel('HIGH')}
-                        className={`py-3 rounded-xl border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'HIGH' ? 'bg-red-500/20 text-red-500 border-red-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                        className={`py-3 rounded-lg border font-black text-[10px] transition-all flex flex-col items-center justify-center gap-1 ${couponRiskLevel === 'HIGH' ? 'bg-red-500/20 text-red-500 border-red-500/50' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
                       >
                         <span className="text-xs">YÜKSEK</span><span className="text-[8px] opacity-70">(SÜRPRİZ)</span>
                       </button>
@@ -1785,7 +1785,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     <select
                       value={couponAiCategory}
                       onChange={(e) => setCouponAiCategory(e.target.value as any)}
-                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-[14px] text-sm focus:border-[#f0b90b] transition-all outline-none"
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-[14px] text-sm focus:border-[#f0b90b] transition-all outline-none"
                     >
                       <option value="Tümü">Karışık (Belirtilmemiş)</option>
                       <option value="Futbol">Futbol</option>
@@ -1806,7 +1806,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="date"
                     value={couponAiDate}
                     onChange={(e) => setCouponAiDate(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-white font-bold tracking-widest focus:outline-none focus:border-[#f0b90b]/50 transition-colors"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-white font-bold tracking-widest focus:outline-none focus:border-[#f0b90b]/50 transition-colors"
                   />
                 </div>
 
@@ -1818,13 +1818,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     value={couponAiInput}
                     onChange={(e) => setCouponAiInput(e.target.value)}
                     placeholder="Örnek: Galatasaray - Fenerbahçe&#10;Arsenal - Chelsea"
-                    className="w-full h-48 bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 text-zinc-300 font-mono text-sm leading-relaxed resize-none focus:outline-none focus:border-[#f0b90b]/50 placeholder:text-zinc-700 transition-colors"
+                    className="w-full h-48 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5 text-zinc-300 font-mono text-sm leading-relaxed resize-none focus:outline-none focus:border-[#f0b90b]/50 placeholder:text-zinc-700 transition-colors"
                   />
                 </div>
 
                 <button
                   onClick={handleCouponAiParse}
-                  className="w-full bg-gradient-to-r from-[#f0b90b] to-yellow-500 text-black font-black py-4 rounded-2xl uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(240,185,11,0.2)]"
+                  className="w-full bg-gradient-to-r from-[#f0b90b] to-yellow-500 text-black font-black py-4 rounded-lg uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(240,185,11,0.2)]"
                 >
                   <Ticket className="w-5 h-5" /> KUPONU ÜRET VE KAYDET
                 </button>
@@ -1838,13 +1838,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             {!editingCouponId ? (
               <>
                 {/* AI COUPON WIZARD SECTION */}
-                <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+                <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
                   <button 
                     onClick={() => setContentExpanded(prev => ({ ...prev, coupons_wizard: !prev.coupons_wizard }))}
                     className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20">
+                      <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center border border-amber-500/20">
                         <Sparkles className="w-5 h-5 text-amber-500" />
                       </div>
                       <div className="text-left">
@@ -1857,7 +1857,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                   {contentExpanded.coupons_wizard && (
                     <div className="p-6 pt-0 animate-fade-in">
-                      <div className="bg-black/40 border border-zinc-800/50 p-6 rounded-2xl flex items-center justify-between">
+                      <div className="bg-black/40 border border-zinc-800/50 p-6 rounded-lg flex items-center justify-between">
                          <button onClick={() => setShowCouponAiModal(true)} className="adm-btn-primary bg-amber-500 hover:bg-amber-400 text-black px-8 py-3">SİHİRBAZI BAŞLAT</button>
                          <p className="text-zinc-500 text-[10px] font-bold uppercase max-w-xs text-right italic">YÜZLERCE MAÇI SANİYELER İÇERİSİNDE ANALİZ EDİP KUPONA DÖNÜŞTÜRÜN.</p>
                       </div>
@@ -1866,13 +1866,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </section>
 
                 {/* COUPON LIST SECTION */}
-                <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+                <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
                   <button 
                     onClick={() => setContentExpanded(prev => ({ ...prev, coupons_list: !prev.coupons_list }))}
                     className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
+                      <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center border border-emerald-500/20">
                         <Ticket className="w-5 h-5 text-emerald-500" />
                       </div>
                       <div className="text-left">
@@ -1894,7 +1894,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {localCoupons.map(coupon => (
-                          <div key={coupon.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-2xl flex items-center justify-between group hover:border-emerald-500/30 transition-all">
+                          <div key={coupon.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-lg flex items-center justify-between group hover:border-emerald-500/30 transition-all">
                             <div>
                                <div className="flex items-center gap-2 mb-1">
                                  <span className={`text-[8px] font-black px-1.5 py-0.5 rounded uppercase ${coupon.riskLevel === 'LOW' ? 'bg-green-500/20 text-green-500' : 'bg-rose-500/20 text-rose-500'}`}>{coupon.riskLevel}</span>
@@ -1903,8 +1903,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                <h4 className="text-white font-black text-xs uppercase italic">{coupon.title}</h4>
                             </div>
                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                               <button onClick={() => setEditingCouponId(coupon.id)} className="p-2 bg-zinc-900 rounded-xl text-zinc-500 hover:text-white transition-all"><Edit3 className="w-4 h-4" /></button>
-                               <button onClick={() => { if(confirm('Silmek istediğine emin misin?')) { const u = localCoupons.filter(c => c.id !== coupon.id); setLocalCoupons(u); onSaveCoupons(u); } }} className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"><Trash2 className="w-4 h-4" /></button>
+                               <button onClick={() => setEditingCouponId(coupon.id)} className="p-2 bg-zinc-900 rounded-lg text-zinc-500 hover:text-white transition-all"><Edit3 className="w-4 h-4" /></button>
+                               <button onClick={() => { if(confirm('Silmek istediğine emin misin?')) { const u = localCoupons.filter(c => c.id !== coupon.id); setLocalCoupons(u); onSaveCoupons(u); } }} className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all"><Trash2 className="w-4 h-4" /></button>
                             </div>
                           </div>
                         ))}
@@ -1927,7 +1927,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         <div className="flex items-center gap-4">
                           <button
                             onClick={() => setEditingCouponId(null)}
-                            className="flex items-center gap-2 text-zinc-400 hover:text-white font-bold text-xs transition-colors bg-zinc-800/50 px-4 py-2 rounded-xl border border-zinc-700/50"
+                            className="flex items-center gap-2 text-zinc-400 hover:text-white font-bold text-xs transition-colors bg-zinc-800/50 px-4 py-2 rounded-lg border border-zinc-700/50"
                           >
                             <ChevronLeft className="w-4 h-4" /> GERİ DÖN
                           </button>
@@ -1939,7 +1939,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               localStorage.setItem('site_coupons', JSON.stringify(sorted));
                               alert('Kupon başarıyla güncellendi ve tarihe göre sıralandı!');
                             }}
-                            className="flex items-center gap-2 bg-[#f0b90b] text-black font-black px-5 py-2 rounded-xl text-xs uppercase shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_#f0b90b] transition-all active:scale-95"
+                            className="flex items-center gap-2 bg-[#f0b90b] text-black font-black px-5 py-2 rounded-lg text-xs uppercase shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_#f0b90b] transition-all active:scale-95"
                           >
                             <Save className="w-3.5 h-3.5" /> DEĞİŞİKLİKLERİ UYGULA
                           </button>
@@ -1949,13 +1949,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         </div>
                       </div>
 
-                      <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl space-y-10">
+                      <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-lg space-y-10">
                         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                           <div className="space-y-2">
                             <label className="text-[9px] font-black text-zinc-500 uppercase">KUPON BAŞLIĞI</label>
                             <input value={coupon.title} onChange={(e) => {
                               const updated = [...localCoupons]; updated[idx].title = e.target.value; setLocalCoupons(updated);
-                            }} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none" />
+                            }} className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-[#f0b90b] transition-all outline-none" />
                           </div>
                           <div className="space-y-2">
                             <label className="text-[9px] font-black text-zinc-500 uppercase">RİSK SEVİYESİ</label>
@@ -1964,7 +1964,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               onChange={(e) => {
                                 const updated = [...localCoupons]; updated[idx].riskLevel = e.target.value as any; setLocalCoupons(updated);
                               }}
-                              className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none"
+                              className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-[#f0b90b] transition-all outline-none"
                             >
                               <option value="LOW">DÜŞÜK</option>
                               <option value="MEDIUM">ORTA</option>
@@ -1975,7 +1975,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             <label className="text-[9px] font-black text-zinc-500 uppercase">TOPLAM ORAN</label>
                             <input value={coupon.totalOdd} onChange={(e) => {
                               const updated = [...localCoupons]; updated[idx].totalOdd = e.target.value; setLocalCoupons(updated);
-                            }} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-[#f0b90b] font-black focus:border-[#f0b90b] transition-all outline-none" placeholder="1.50" />
+                            }} className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm text-[#f0b90b] font-black focus:border-[#f0b90b] transition-all outline-none" placeholder="1.50" />
                           </div>
                           <div className="space-y-2">
                             <label className="text-[9px] font-black text-zinc-500 uppercase">KATEGORİ</label>
@@ -1986,7 +1986,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                 updated[idx].category = e.target.value === 'Tümü' ? undefined : (e.target.value as SportCategory);
                                 setLocalCoupons(updated);
                               }}
-                              className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none"
+                              className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-[#f0b90b] transition-all outline-none"
                             >
                               <option value="Tümü">Karışık / Belirtilmemiş</option>
                               <option value="Futbol">Futbol</option>
@@ -2007,7 +2007,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               onChange={(e) => {
                                 const updated = [...localCoupons]; updated[idx].date = e.target.value; setLocalCoupons(updated);
                               }} 
-                              className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm focus:border-[#f0b90b] transition-all outline-none text-white [color-scheme:dark]" 
+                              className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-[#f0b90b] transition-all outline-none text-white [color-scheme:dark]" 
                             />
                           </div>
                         </div>
@@ -2028,26 +2028,26 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           </div>
                           <div className="space-y-3">
                             {coupon.matches.map((match, midx) => (
-                              <div key={midx} className="grid grid-cols-1 md:grid-cols-5 gap-3 bg-black/50 p-4 rounded-2xl border border-zinc-800/50 relative group">
+                              <div key={midx} className="grid grid-cols-1 md:grid-cols-5 gap-3 bg-black/50 p-4 rounded-lg border border-zinc-800/50 relative group">
                                 <input value={match.homeTeam} onChange={(e) => {
                                   const updated = [...localCoupons]; updated[idx].matches[midx].homeTeam = e.target.value; setLocalCoupons(updated);
-                                }} className="bg-black border border-zinc-800 rounded-xl p-2 text-xs" placeholder="Ev Sahibi" />
+                                }} className="bg-black border border-zinc-800 rounded-lg p-2 text-xs" placeholder="Ev Sahibi" />
                                 <input value={match.awayTeam} onChange={(e) => {
                                   const updated = [...localCoupons]; updated[idx].matches[midx].awayTeam = e.target.value; setLocalCoupons(updated);
-                                }} className="bg-black border border-zinc-800 rounded-xl p-2 text-xs" placeholder="Deplasman" />
+                                }} className="bg-black border border-zinc-800 rounded-lg p-2 text-xs" placeholder="Deplasman" />
                                 <input value={match.prediction} onChange={(e) => {
                                   const updated = [...localCoupons]; updated[idx].matches[midx].prediction = e.target.value; setLocalCoupons(updated);
-                                }} className="bg-black border border-zinc-800 rounded-xl p-2 text-xs font-bold text-[#f0b90b]" placeholder="Tahmin" />
+                                }} className="bg-black border border-zinc-800 rounded-lg p-2 text-xs font-bold text-[#f0b90b]" placeholder="Tahmin" />
                                 <input value={match.odd} onChange={(e) => {
                                   const updated = [...localCoupons]; updated[idx].matches[midx].odd = e.target.value; setLocalCoupons(updated);
-                                }} className="bg-black border border-zinc-800 rounded-xl p-2 text-xs text-center" placeholder="Oran" />
+                                }} className="bg-black border border-zinc-800 rounded-lg p-2 text-xs text-center" placeholder="Oran" />
                                 <button
                                   onClick={() => {
                                     const updated = [...localCoupons];
                                     updated[idx].matches = updated[idx].matches.filter((_, i) => i !== midx);
                                     setLocalCoupons(updated);
                                   }}
-                                  className="text-rose-500 hover:bg-rose-500/10 p-2 rounded-xl transition-all flex items-center justify-center"
+                                  className="text-rose-500 hover:bg-rose-500/10 p-2 rounded-lg transition-all flex items-center justify-center"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
@@ -2059,7 +2059,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         <div className="pt-6 border-t border-zinc-800 flex justify-end">
                           <button
                             onClick={() => setEditingCouponId(null)}
-                            className="px-8 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-750 text-white font-black text-xs uppercase"
+                            className="px-8 py-3 rounded-lg bg-zinc-800 hover:bg-zinc-750 text-white font-black text-xs uppercase"
                           >
                             DÜZENLEMEYİ SONLANDIR
                           </button>
@@ -2077,13 +2077,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           {!editingAnalysisId ? (
             <>
               {/* AI ANALYSIS GENERATOR SECTION */}
-              <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+              <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
                 <button 
                   onClick={() => setContentExpanded(prev => ({ ...prev, analysis_add: !prev.analysis_add }))}
                   className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                    <div className="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20">
                       <Sparkles className="w-5 h-5 text-indigo-500" />
                     </div>
                     <div className="text-left">
@@ -2096,7 +2096,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
                 {contentExpanded.analysis_add && (
                   <div className="p-6 pt-0 animate-fade-in">
-                    <div className="bg-black/40 border border-zinc-800/50 p-6 rounded-2xl flex items-center justify-between">
+                    <div className="bg-black/40 border border-zinc-800/50 p-6 rounded-lg flex items-center justify-between">
                        <div className="flex gap-3">
                          <button onClick={() => setShowAiModal(true)} className="adm-btn-primary bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3">AI SMART PASTE</button>
                          <button onClick={() => {
@@ -2112,13 +2112,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </section>
 
               {/* ANALYSIS LIST SECTION */}
-              <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+              <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
                 <button 
                   onClick={() => setContentExpanded(prev => ({ ...prev, analysis_list: !prev.analysis_list }))}
                   className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center border border-blue-500/20">
+                    <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20">
                       <TrendingUp className="w-5 h-5 text-blue-500" />
                     </div>
                     <div className="text-left">
@@ -2132,7 +2132,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 {contentExpanded.analysis_list && (
                   <div className="p-6 pt-0 animate-fade-in space-y-3">
                     {localAnalyses.map(analysis => (
-                      <div key={analysis.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-2xl flex items-center justify-between group hover:border-blue-500/30 transition-all">
+                      <div key={analysis.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-lg flex items-center justify-between group hover:border-blue-500/30 transition-all">
                          <div>
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-[8px] font-black px-1.5 py-0.5 rounded uppercase bg-zinc-800 text-zinc-400">{analysis.league}</span>
@@ -2141,8 +2141,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             <h4 className="text-white font-black text-xs uppercase italic">{analysis.homeTeam} - {analysis.awayTeam}</h4>
                          </div>
                          <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => setEditingAnalysisId(analysis.id)} className="p-2 bg-zinc-900 rounded-xl text-zinc-500 hover:text-white transition-all"><Edit3 className="w-4 h-4" /></button>
-                            <button onClick={() => { if(confirm('Sileyim mi?')) { const u = localAnalyses.filter(a => a.id !== analysis.id); setLocalAnalyses(u); onSaveAnalyses(u); } }} className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"><Trash2 className="w-4 h-4" /></button>
+                            <button onClick={() => setEditingAnalysisId(analysis.id)} className="p-2 bg-zinc-900 rounded-lg text-zinc-500 hover:text-white transition-all"><Edit3 className="w-4 h-4" /></button>
+                            <button onClick={() => { if(confirm('Sileyim mi?')) { const u = localAnalyses.filter(a => a.id !== analysis.id); setLocalAnalyses(u); onSaveAnalyses(u); } }} className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all"><Trash2 className="w-4 h-4" /></button>
                          </div>
                       </div>
                     ))}
@@ -2164,7 +2164,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       <div className="flex items-center gap-4">
                         <button
                           onClick={() => setEditingAnalysisId(null)}
-                          className="flex items-center gap-2 text-zinc-400 hover:text-white font-bold text-xs transition-colors bg-zinc-800/50 px-4 py-2 rounded-xl border border-zinc-700/50"
+                          className="flex items-center gap-2 text-zinc-400 hover:text-white font-bold text-xs transition-colors bg-zinc-800/50 px-4 py-2 rounded-lg border border-zinc-700/50"
                         >
                           <ChevronLeft className="w-4 h-4" /> GERİ DÖN
                         </button>
@@ -2174,7 +2174,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             handleSave();
                             alert('Analiz başarıyla güncellendi!');
                           }}
-                          className="flex items-center gap-2 bg-[#f0b90b] text-black font-black px-5 py-2 rounded-xl text-xs uppercase shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_#f0b90b] transition-all active:scale-95"
+                          className="flex items-center gap-2 bg-[#f0b90b] text-black font-black px-5 py-2 rounded-lg text-xs uppercase shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_#f0b90b] transition-all active:scale-95"
                         >
                           <Save className="w-3.5 h-3.5" /> DEĞİŞİKLİKLERİ UYGULA
                         </button>
@@ -2188,12 +2188,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       </div>
                     </div>
 
-                    <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl relative flex flex-col">
+                    <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden shadow-2xl relative flex flex-col">
                       {/* Compact Tab Header */}
                       <div className="flex items-center bg-zinc-800/30 border-b border-zinc-800 p-2 gap-2 overflow-x-auto hide-scrollbar">
-                        <button onClick={() => setEditAnalysisTab('basic')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-xl transition-all flex justify-center ${editAnalysisTab === 'basic' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>1. Temel Bilgiler</button>
-                        <button onClick={() => setEditAnalysisTab('details')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-xl transition-all flex justify-center ${editAnalysisTab === 'details' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>2. Detaylı Analiz</button>
-                        <button onClick={() => setEditAnalysisTab('stats')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-xl transition-all flex justify-center ${editAnalysisTab === 'stats' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>3. Oranlar & İstatistik</button>
+                        <button onClick={() => setEditAnalysisTab('basic')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-lg transition-all flex justify-center ${editAnalysisTab === 'basic' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>1. Temel Bilgiler</button>
+                        <button onClick={() => setEditAnalysisTab('details')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-lg transition-all flex justify-center ${editAnalysisTab === 'details' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>2. Detaylı Analiz</button>
+                        <button onClick={() => setEditAnalysisTab('stats')} className={`flex-1 min-w-[120px] py-3 px-4 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-lg transition-all flex justify-center ${editAnalysisTab === 'stats' ? 'bg-[#f0b90b] text-black shadow-lg shadow-black/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'}`}>3. Oranlar & İstatistik</button>
                       </div>
 
                       {/* Tab Content */}
@@ -2206,43 +2206,43 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                 <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Layout className="w-3 h-3" /> LİG / TURNUVA</label>
                                 <input value={analysis.league} onChange={(e) => {
                                   const updated = [...localAnalyses]; updated[idx].league = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" placeholder="Örn: La Liga" />
+                                }} className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" placeholder="Örn: La Liga" />
                               </div>
                               <div className="space-y-2">
                                 <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Calendar className="w-3 h-3" /> MAÇ TARİHİ</label>
                                 <input type="date" value={analysis.matchDate} onChange={(e) => {
                                   const updated = [...localAnalyses]; updated[idx].matchDate = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" />
+                                }} className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" />
                               </div>
                               <div className="space-y-2">
                                 <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Clock className="w-3 h-3" /> MAÇ SAATİ</label>
                                 <input value={analysis.matchTime} onChange={(e) => {
                                   const updated = [...localAnalyses]; updated[idx].matchTime = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none text-white font-bold" placeholder="22:00" />
+                                }} className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-sm focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none text-white font-bold" placeholder="22:00" />
                               </div>
                               <div className="space-y-2">
                                 <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Zap className="w-3 h-3" /> GÜVEN ORANI (%)</label>
                                 <input type="number" value={analysis.confidence} onChange={(e) => {
                                   const updated = [...localAnalyses]; updated[idx].confidence = parseInt(e.target.value); setLocalAnalyses(updated);
-                                }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm text-[#f0b90b] font-black focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" />
+                                }} className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3 text-sm text-[#f0b90b] font-black focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none" />
                               </div>
                             </div>
                             
                             {/* Grid 2: Teams VS Layout */}
-                            <div className="bg-black/40 border border-zinc-800/80 rounded-2xl p-5 md:p-6 shadow-inner">
+                            <div className="bg-black/40 border border-zinc-800/80 rounded-lg p-5 md:p-6 shadow-inner">
                               <div className="flex flex-col md:flex-row items-center gap-6">
                                 <div className="flex-1 w-full space-y-2">
                                   <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest italic md:pl-2">EV SAHİBİ</label>
                                   <input value={analysis.homeTeam} onChange={(e) => {
                                     const updated = [...localAnalyses]; updated[idx].homeTeam = e.target.value; setLocalAnalyses(updated);
-                                  }} className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl px-5 py-4 text-white font-black uppercase italic text-base text-center md:text-left focus:bg-black focus:border-[#f0b90b] transition-all outline-none" placeholder="EV SAHİBİ" />
+                                  }} className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-5 py-4 text-white font-black uppercase italic text-base text-center md:text-left focus:bg-black focus:border-[#f0b90b] transition-all outline-none" placeholder="EV SAHİBİ" />
                                 </div>
                                 <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center font-black text-[12px] text-zinc-400 shrink-0 shadow-inner z-10 border-4 border-zinc-900">VS</div>
                                 <div className="flex-1 w-full space-y-2">
                                   <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest italic text-right block md:pr-2">DEPLASMAN</label>
                                   <input value={analysis.awayTeam} onChange={(e) => {
                                     const updated = [...localAnalyses]; updated[idx].awayTeam = e.target.value; setLocalAnalyses(updated);
-                                  }} className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl px-5 py-4 text-white font-black uppercase italic text-base text-center md:text-right focus:bg-black focus:border-[#f0b90b] transition-all outline-none" placeholder="DEPLASMAN" />
+                                  }} className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-5 py-4 text-white font-black uppercase italic text-base text-center md:text-right focus:bg-black focus:border-[#f0b90b] transition-all outline-none" placeholder="DEPLASMAN" />
                                 </div>
                               </div>
                             </div>
@@ -2252,7 +2252,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               <label className="text-[9px] font-black text-[#f0b90b] uppercase tracking-widest italic">NET TAHMİN MOTTOSU</label>
                               <input value={analysis.prediction} onChange={(e) => {
                                 const updated = [...localAnalyses]; updated[idx].prediction = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full bg-[#f0b90b]/5 border border-[#f0b90b]/30 rounded-xl px-5 py-4 text-[#f0b90b] font-black uppercase italic text-lg focus:bg-[#f0b90b]/10 focus:border-[#f0b90b] transition-all outline-none shadow-[0_0_15px_rgba(240,185,11,0.05)]" placeholder="Örn: KG VAR / 2.5 ÜST" />
+                              }} className="w-full bg-[#f0b90b]/5 border border-[#f0b90b]/30 rounded-lg px-5 py-4 text-[#f0b90b] font-black uppercase italic text-lg focus:bg-[#f0b90b]/10 focus:border-[#f0b90b] transition-all outline-none shadow-[0_0_15px_rgba(240,185,11,0.05)]" placeholder="Örn: KG VAR / 2.5 ÜST" />
                             </div>
                           </div>
                         )}
@@ -2263,14 +2263,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><ClipboardList className="w-4 h-4 text-[#f0b90b]" /> GENEL ANALİZ METNİ</label>
                               <textarea value={analysis.analysis} onChange={(e) => {
                                 const updated = [...localAnalyses]; updated[idx].analysis = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full h-32 bg-black border border-zinc-800 rounded-2xl px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed italic" placeholder="Bu maça ait genel düşüncelerinizi, takım durumlarını buraya yazın..." />
+                              }} className="w-full h-32 bg-black border border-zinc-800 rounded-lg px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed italic" placeholder="Bu maça ait genel düşüncelerinizi, takım durumlarını buraya yazın..." />
                             </div>
 
                             <div className="space-y-2">
                               <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Search className="w-4 h-4 text-blue-400" /> TAKTİK ÖZET</label>
                               <textarea value={analysis.tacticalSummary} onChange={(e) => {
                                 const updated = [...localAnalyses]; updated[idx].tacticalSummary = e.target.value; setLocalAnalyses(updated);
-                              }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="Takımların taktiksel dizilişleri, eksikleri veya oyun tarzları..." />
+                              }} className="w-full h-24 bg-black border border-zinc-800 rounded-lg px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="Takımların taktiksel dizilişleri, eksikleri veya oyun tarzları..." />
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -2278,13 +2278,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Zap className="w-4 h-4 text-orange-400" /> KIRILMA ANI</label>
                                 <textarea value={analysis.breakingPoint} onChange={(e) => {
                                   const updated = [...localAnalyses]; updated[idx].breakingPoint = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="Maçta işlerin değişebileceği an (örneğin ilk golü kim atar)..." />
+                                }} className="w-full h-24 bg-black border border-zinc-800 rounded-lg px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="Maçta işlerin değişebileceği an (örneğin ilk golü kim atar)..." />
                               </div>
                               <div className="space-y-2">
                                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Target className="w-4 h-4 text-emerald-400" /> BAHİS SENARYOSU</label>
                                 <textarea value={analysis.bettingScenario} onChange={(e) => {
                                   const updated = [...localAnalyses]; updated[idx].bettingScenario = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full h-24 bg-black border border-zinc-800 rounded-2xl px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="İdeal bahis akışı (örneğin: İlk yarı 0.5 üst mantıklı)..." />
+                                }} className="w-full h-24 bg-black border border-zinc-800 rounded-lg px-5 py-4 text-[14px] text-zinc-300 resize-y focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b]/50 transition-all outline-none leading-relaxed" placeholder="İdeal bahis akışı (örneğin: İlk yarı 0.5 üst mantıklı)..." />
                               </div>
                             </div>
                           </div>
@@ -2293,10 +2293,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         {editAnalysisTab === 'stats' && (
                           <div className="space-y-4 animate-fade-in-up">
                             {/* İstatistik Satırı */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-black/30 p-6 rounded-2xl border border-zinc-800/80">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-black/30 p-6 rounded-lg border border-zinc-800/80">
                               <div className="space-y-2">
                                 <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5 text-[#f0b90b]" /> MODEL SKORU</label>
-                                <div className="flex items-center gap-4 bg-black border border-zinc-800 p-2 rounded-xl">
+                                <div className="flex items-center gap-4 bg-black border border-zinc-800 p-2 rounded-lg">
                                   <input type="number" value={analysis.modelScore} onChange={(e) => {
                                     const updated = [...localAnalyses]; updated[idx].modelScore = parseInt(e.target.value); setLocalAnalyses(updated);
                                   }} className="w-16 bg-transparent px-2 py-1 text-[#f0b90b] font-black text-lg text-center outline-none" />
@@ -2309,13 +2309,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                 <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><Trophy className="w-3.5 h-3.5 text-[#f0b90b]" /> SON 10 TAHMİN</label>
                                 <input value={analysis.recentHistory} onChange={(e) => {
                                   const updated = [...localAnalyses]; updated[idx].recentHistory = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-white font-black text-sm outline-none focus:border-[#f0b90b]" placeholder="Örn: 8 Kazanç, 2 Kayıp" />
+                                }} className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3.5 text-white font-black text-sm outline-none focus:border-[#f0b90b]" placeholder="Örn: 8 Kazanç, 2 Kayıp" />
                               </div>
                               <div className="space-y-2">
                                 <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-1.5"><AlertCircle className="w-3.5 h-3.5 text-[#f0b90b]" /> LİG xG BEKLENTİSİ</label>
                                 <input value={analysis.expectedGoals} onChange={(e) => {
                                   const updated = [...localAnalyses]; updated[idx].expectedGoals = e.target.value; setLocalAnalyses(updated);
-                                }} className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-white font-black text-sm outline-none focus:border-[#f0b90b]" placeholder="Örn: 3.1" />
+                                }} className="w-full bg-black border border-zinc-800 rounded-lg px-4 py-3.5 text-white font-black text-sm outline-none focus:border-[#f0b90b]" placeholder="Örn: 3.1" />
                               </div>
                             </div>
                             
@@ -2330,7 +2330,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               
                               <div className="space-y-3">
                                 {analysis.bookieOdds.map((bookie, bidx) => (
-                                  <div key={bidx} className={`flex flex-col lg:flex-row items-center gap-4 bg-black border ${bookie.isHighest ? 'border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.1)]' : 'border-zinc-800'} rounded-2xl p-4 relative overflow-hidden transition-all duration-300`}>
+                                  <div key={bidx} className={`flex flex-col lg:flex-row items-center gap-4 bg-black border ${bookie.isHighest ? 'border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.1)]' : 'border-zinc-800'} rounded-lg p-4 relative overflow-hidden transition-all duration-300`}>
                                     
                                     {/* Left Indicator for Highest Odd */}
                                     {bookie.isHighest && <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 shadow-[0_0_10px_#22c55e]"></div>}
@@ -2347,14 +2347,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                         <label className="text-[9px] font-black text-zinc-500 uppercase mb-1.5 block text-center">KG VAR</label>
                                         <input value={bookie.odd1} onChange={(e) => {
                                           const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].odd1 = e.target.value; setLocalAnalyses(updated);
-                                        }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2 py-2 text-[15px] text-[#f0b90b] font-black text-center outline-none focus:bg-black focus:border-[#f0b90b] transition-all" />
+                                        }} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-2 text-[15px] text-[#f0b90b] font-black text-center outline-none focus:bg-black focus:border-[#f0b90b] transition-all" />
                                       </div>
 
                                       <div className="w-full lg:w-24">
                                         <label className="text-[9px] font-black text-zinc-500 uppercase mb-1.5 block text-center">2.5 ÜST</label>
                                         <input value={bookie.odd2} onChange={(e) => {
                                           const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].odd2 = e.target.value; setLocalAnalyses(updated);
-                                        }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2 py-2 text-[15px] text-[#f0b90b] font-black text-center outline-none focus:bg-black focus:border-[#f0b90b] transition-all" />
+                                        }} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-2 text-[15px] text-[#f0b90b] font-black text-center outline-none focus:bg-black focus:border-[#f0b90b] transition-all" />
                                       </div>
                                     </div>
 
@@ -2362,10 +2362,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                       <label className="text-[9px] font-black text-zinc-500 uppercase mb-1.5 block">AFFILIATE YÖNLENDİRME LİNKİ</label>
                                       <input value={bookie.link} onChange={(e) => {
                                         const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].link = e.target.value; setLocalAnalyses(updated);
-                                      }} className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-[11px] text-zinc-400 font-mono outline-none focus:bg-black focus:border-blue-500 transition-all" placeholder="https://..." />
+                                      }} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2.5 text-[11px] text-zinc-400 font-mono outline-none focus:bg-black focus:border-blue-500 transition-all" placeholder="https://..." />
                                     </div>
 
-                                    <label className="w-full lg:w-[160px] flex-shrink-0 flex items-center justify-between lg:justify-end gap-3 cursor-pointer select-none bg-zinc-900/50 hover:bg-zinc-800/80 px-4 py-2.5 rounded-xl border border-zinc-800/50 transition-colors">
+                                    <label className="w-full lg:w-[160px] flex-shrink-0 flex items-center justify-between lg:justify-end gap-3 cursor-pointer select-none bg-zinc-900/50 hover:bg-zinc-800/80 px-4 py-2.5 rounded-lg border border-zinc-800/50 transition-colors">
                                       <span className={`text-[10px] font-black uppercase tracking-widest ${bookie.isHighest ? 'text-green-500 drop-shadow-[0_0_5px_rgba(34,197,94,0.4)]' : 'text-zinc-500'}`}>ZİRVE ORAN</span>
                                       <div className="relative">
                                         <input type="checkbox" checked={bookie.isHighest} onChange={(e) => {
@@ -2402,7 +2402,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         <div className="flex items-center gap-3 w-full sm:w-auto">
                           <button
                             onClick={() => setEditingAnalysisId(null)}
-                            className="flex-1 sm:flex-none px-6 py-3.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-black text-[11px] uppercase tracking-widest transition-all active:scale-95"
+                            className="flex-1 sm:flex-none px-6 py-3.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-black text-[11px] uppercase tracking-widest transition-all active:scale-95"
                           >
                             İPTAL
                           </button>
@@ -2411,7 +2411,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                               handleSave();
                               setEditingAnalysisId(null); // Return to list view directly
                             }}
-                            className="flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-[#f0b90b] text-black font-black text-[11px] uppercase tracking-widest shadow-[0_0_20px_rgba(240,185,11,0.2)] hover:shadow-[0_0_30px_rgba(240,185,11,0.4)] hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2"
+                            className="flex-1 sm:flex-none px-8 py-3.5 rounded-lg bg-[#f0b90b] text-black font-black text-[11px] uppercase tracking-widest shadow-[0_0_20px_rgba(240,185,11,0.2)] hover:shadow-[0_0_30px_rgba(240,185,11,0.4)] hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2"
                           >
                             <Save className="w-4 h-4" /> KAYDET VE DÖN
                           </button>
@@ -2431,13 +2431,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         {/* Previous style and seo tabs remain same logic but kept for consistency */}
         {activeTab === 'style' && (
           <div className="space-y-4 animate-fade-in">
-            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
               <button 
                 onClick={() => setContentExpanded(prev => ({ ...prev, style_main: !prev.style_main }))}
                 className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                  <div className="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20">
                     <Palette className="w-5 h-5 text-indigo-500" />
                   </div>
                   <div className="text-left">
@@ -2450,7 +2450,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {contentExpanded.style_main && (
                 <div className="p-6 pt-0 animate-fade-in">
-                  <div className="bg-black/40 border border-zinc-800/50 rounded-2xl p-6 flex items-center justify-between">
+                  <div className="bg-black/40 border border-zinc-800/50 rounded-lg p-6 flex items-center justify-between">
                     <div>
                       <h4 className="text-white font-black text-xs uppercase tracking-widest mb-1">Marka Vurgu Rengi</h4>
                       <p className="text-zinc-500 text-[10px]">Butonlar, ikonlar ve önemli vurgular için kullanılır.</p>
@@ -2461,7 +2461,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         type="color" 
                         value={themeColor} 
                         onChange={(e) => onThemeChange(e.target.value)} 
-                        className="w-14 h-14 bg-transparent cursor-pointer rounded-xl overflow-hidden border-2 border-zinc-800" 
+                        className="w-14 h-14 bg-transparent cursor-pointer rounded-lg overflow-hidden border-2 border-zinc-800" 
                       />
                     </div>
                   </div>
@@ -2476,13 +2476,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {activeTab === 'seo' && (
           <div className="space-y-4 animate-fade-in">
-            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
               <button 
                 onClick={() => setContentExpanded(prev => ({ ...prev, seo_main: !prev.seo_main }))}
                 className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center border border-blue-500/20">
+                  <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20">
                     <Search className="w-5 h-5 text-blue-500" />
                   </div>
                   <div className="text-left">
@@ -2495,13 +2495,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {contentExpanded.seo_main && (
                 <div className="p-6 pt-0 animate-fade-in">
-                  <div className="bg-black/40 border border-zinc-800/50 rounded-2xl p-6 space-y-4">
+                  <div className="bg-black/40 border border-zinc-800/50 rounded-lg p-6 space-y-4">
                     <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block pl-1">Hashtagler (Virgülle ayırın)</label>
                     <textarea 
                       value={localHashtags} 
                       onChange={(e) => setLocalHashtags(e.target.value)} 
                       placeholder="#bahis #canlıbahis #724bets..."
-                      className="w-full h-48 bg-black border border-zinc-800 rounded-xl p-5 outline-none focus:border-blue-500/50 text-zinc-300 font-mono text-sm resize-none leading-relaxed" 
+                      className="w-full h-48 bg-black border border-zinc-800 rounded-lg p-5 outline-none focus:border-blue-500/50 text-zinc-300 font-mono text-sm resize-none leading-relaxed" 
                     />
                   </div>
                   <div className="mt-4 flex justify-end">
@@ -2536,13 +2536,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       setJsonError('Formatlanamıyor: Geçersiz JSON syntaxı.');
                     }
                   }}
-                  className="bg-indigo-600 text-white font-black px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-indigo-500 transition-all active:scale-95 text-xs uppercase"
+                  className="bg-indigo-600 text-white font-black px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-indigo-500 transition-all active:scale-95 text-xs uppercase"
                 >
                   <Box className="w-4 h-4" /> FORMATLA
                 </button>
                 <button
                   onClick={handleSave}
-                  className="bg-[#f0b90b] text-black font-black px-6 py-3 rounded-2xl flex items-center gap-2 hover:shadow-[0_0_20px_rgba(240,185,11,0.3)] transition-all active:scale-95 text-xs uppercase"
+                  className="bg-[#f0b90b] text-black font-black px-6 py-3 rounded-lg flex items-center gap-2 hover:shadow-[0_0_20px_rgba(240,185,11,0.3)] transition-all active:scale-95 text-xs uppercase"
                 >
                   <Save className="w-4 h-4" /> JSON'U KAYDET
                 </button>
@@ -2550,13 +2550,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {jsonError && (
-              <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-2xl flex items-center gap-3 text-red-500 font-bold text-sm">
+              <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-3 text-red-500 font-bold text-sm">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                 <p>{jsonError}</p>
               </div>
             )}
 
-            <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 h-[70vh] flex flex-col">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 h-[70vh] flex flex-col">
               <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                 <Layout className="w-3 h-3" /> GELİŞMİŞ JSON EDİTÖRÜ (DİKKATLİ DÜZENLEYİN)
               </label>
@@ -2567,7 +2567,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   setJsonError('');
                 }}
                 spellCheck="false"
-                className="flex-1 w-full bg-[#0a0a0a] border border-zinc-800 rounded-2xl p-6 text-emerald-400 font-mono text-[13px] resize-none focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b] transition-all outline-none leading-relaxed"
+                className="flex-1 w-full bg-[#0a0a0a] border border-zinc-800 rounded-lg p-6 text-emerald-400 font-mono text-[13px] resize-none focus:border-[#f0b90b] focus:ring-1 focus:ring-[#f0b90b] transition-all outline-none leading-relaxed"
                 placeholder="{ ... }"
               />
             </div>
@@ -2585,7 +2585,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* Create New Guest */}
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 space-y-5">
               <h3 className="text-sm font-black text-white flex items-center gap-2">
                 <Plus className="w-4 h-4 text-[#f0b90b]" /> YENİ MİSAFİR OLUŞTUR
               </h3>
@@ -2597,7 +2597,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="text"
                     value={newGuestUsername}
                     onChange={(e) => setNewGuestUsername(e.target.value)}
-                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#f0b90b] transition-all outline-none"
+                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-lg px-4 py-3 text-white text-sm focus:border-[#f0b90b] transition-all outline-none"
                     placeholder="misafir123"
                   />
                 </div>
@@ -2607,7 +2607,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="text"
                     value={newGuestPassword}
                     onChange={(e) => setNewGuestPassword(e.target.value)}
-                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl px-4 py-3 text-white text-sm focus:border-[#f0b90b] transition-all outline-none"
+                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-lg px-4 py-3 text-white text-sm focus:border-[#f0b90b] transition-all outline-none"
                     placeholder="123456"
                   />
                 </div>
@@ -2647,14 +2647,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   setNewGuestUsername(''); setNewGuestPassword('');
                   setTimeout(() => setGuestSaveMsg(''), 3000);
                 }}
-                className="w-full bg-[#f0b90b] hover:bg-[#f0b90b]/90 text-black font-black py-3.5 rounded-xl transition-all text-sm tracking-widest uppercase flex items-center justify-center gap-2"
+                className="w-full bg-[#f0b90b] hover:bg-[#f0b90b]/90 text-black font-black py-3.5 rounded-lg transition-all text-sm tracking-widest uppercase flex items-center justify-center gap-2"
               >
                 <Save className="w-4 h-4" /> OLUŞTUR
               </button>
             </div>
 
             {/* List Existing Guests */}
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
               <div className="p-4 border-b border-zinc-800 bg-zinc-900/50">
                 <h3 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
                   <Lock className="w-3.5 h-3.5 text-[#f0b90b]" /> MEVCUT MİSAFİRLER
@@ -2727,7 +2727,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* Create New Editor */}
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 space-y-5">
               <h3 className="text-white font-black text-sm flex items-center gap-2">
                 <Plus className="w-4 h-4 text-[#f0b90b]" /> YENİ EDİTÖR OLUŞTUR
               </h3>
@@ -2739,7 +2739,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="text"
                     value={newEditorName}
                     onChange={e => setNewEditorName(e.target.value)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl py-3 px-4 text-white text-sm focus:border-[#f0b90b] outline-none"
+                    className="w-full bg-black border border-zinc-800 rounded-lg py-3 px-4 text-white text-sm focus:border-[#f0b90b] outline-none"
                     placeholder="Ahmet Editör"
                   />
                 </div>
@@ -2749,7 +2749,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="text"
                     value={newEditorUsername}
                     onChange={e => setNewEditorUsername(e.target.value)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl py-3 px-4 text-white text-sm focus:border-[#f0b90b] outline-none"
+                    className="w-full bg-black border border-zinc-800 rounded-lg py-3 px-4 text-white text-sm focus:border-[#f0b90b] outline-none"
                     placeholder="ahmet_editor"
                   />
                 </div>
@@ -2760,7 +2760,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       type={showEditorPassword ? 'text' : 'password'}
                       value={newEditorPassword}
                       onChange={e => setNewEditorPassword(e.target.value)}
-                      className="w-full bg-black border border-zinc-800 rounded-xl py-3 pl-4 pr-10 text-white text-sm focus:border-[#f0b90b] outline-none"
+                      className="w-full bg-black border border-zinc-800 rounded-lg py-3 pl-4 pr-10 text-white text-sm focus:border-[#f0b90b] outline-none"
                       placeholder="••••••••"
                     />
                     <button type="button" onClick={() => setShowEditorPassword(p => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white">
@@ -2802,14 +2802,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   setEditorSaveMsg(`"${newEditor.name}" editörü başarıyla oluşturuldu!`);
                   setTimeout(() => setEditorSaveMsg(''), 3000);
                 }}
-                className="px-6 py-3 bg-[#f0b90b] text-black font-black text-xs rounded-xl uppercase tracking-widest hover:bg-[#f0b90b]/90 transition-all"
+                className="px-6 py-3 bg-[#f0b90b] text-black font-black text-xs rounded-lg uppercase tracking-widest hover:bg-[#f0b90b]/90 transition-all"
               >
                 EDİTÖR OLUŞTUR
               </button>
             </div>
 
             {/* Existing Editors */}
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
               <h3 className="text-white font-black text-sm mb-5 flex items-center gap-2">
                 <Users className="w-4 h-4 text-zinc-400" /> MEVCUT EDİTÖRLER
                 <span className="ml-auto text-xs text-zinc-500 font-bold">({editorAccounts.length} editör)</span>
@@ -2819,7 +2819,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               ) : (
                 <div className="space-y-3">
                   {editorAccounts.map(editor => (
-                    <div key={editor.id} className="flex items-center justify-between bg-black border border-zinc-800 rounded-xl px-4 py-3">
+                    <div key={editor.id} className="flex items-center justify-between bg-black border border-zinc-800 rounded-lg px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
                           <User className="w-4 h-4 text-blue-400" />
@@ -2851,7 +2851,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* Hardcoded legacy editors info */}
-            <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-xl p-4">
+            <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-lg p-4">
               <p className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest mb-2">Sistem Editörleri (Sabit)</p>
               <div className="flex flex-wrap gap-2">
                 {['editor1', 'editor2', 'editor3'].map(e => (
@@ -2871,7 +2871,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </h2>
                 <p className="text-zinc-500 text-xs font-bold uppercase mt-1">Ödülleri, oranları ve bekleme süresini buradan ayarlayın</p>
               </div>
-              <div className="flex items-center gap-4 bg-zinc-900 p-4 rounded-2xl border border-zinc-800">
+              <div className="flex items-center gap-4 bg-zinc-900 p-4 rounded-lg border border-zinc-800">
                 <Timer className="w-5 h-5 text-amber-400" />
                 <div className="flex flex-col">
                   <label className="text-[10px] font-black text-zinc-600 uppercase">Yenileme Süresi (Saat)</label>
@@ -2887,9 +2887,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {localWheelConfig.rewards.map((reward, idx) => (
-                <div key={reward.id} className="bg-zinc-900 border border-zinc-800 p-6 rounded-[30px] space-y-4 hover:border-amber-400/50 transition-all group">
+                <div key={reward.id} className="bg-zinc-900 border border-zinc-800 p-6 rounded-lg space-y-4 hover:border-amber-400/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-black border border-zinc-800 group-hover:border-amber-400/30">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-black border border-zinc-800 group-hover:border-amber-400/30">
                       <Gift className="w-5 h-5 text-amber-400" />
                     </div>
                     <input
@@ -2914,7 +2914,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           newRewards[idx].label = e.target.value;
                           setLocalWheelConfig({ ...localWheelConfig, rewards: newRewards });
                         }}
-                        className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-xs font-black uppercase italic"
+                        className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-xs font-black uppercase italic"
                       />
                     </div>
 
@@ -2929,7 +2929,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             newRewards[idx].weight = parseInt(e.target.value);
                             setLocalWheelConfig({ ...localWheelConfig, rewards: newRewards });
                           }}
-                          className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-xs text-amber-400 font-black"
+                          className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-xs text-amber-400 font-black"
                         />
                       </div>
                       <div className="space-y-1">
@@ -2941,7 +2941,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                             newRewards[idx].type = e.target.value as any;
                             setLocalWheelConfig({ ...localWheelConfig, rewards: newRewards });
                           }}
-                          className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-[10px] font-bold"
+                          className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-[10px] font-bold"
                         >
                           <option value="nakit">NAKİT</option>
                           <option value="freespin">FREESPIN</option>
@@ -2969,7 +2969,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   };
                   setLocalWheelConfig({ ...localWheelConfig, rewards: [...localWheelConfig.rewards, newReward] });
                 }}
-                className="bg-zinc-900 border-2 border-dashed border-zinc-800 rounded-[30px] flex flex-col items-center justify-center gap-4 hover:border-amber-400/50 hover:bg-amber-400/5 transition-all py-12"
+                className="bg-zinc-900 border-2 border-dashed border-zinc-800 rounded-lg flex flex-col items-center justify-center gap-4 hover:border-amber-400/50 hover:bg-amber-400/5 transition-all py-12"
               >
                 <Plus className="w-10 h-10 text-zinc-700" />
                 <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">YENİ ÖDÜL EKLE</span>
@@ -2982,12 +2982,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       {showAiModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-fade-in">
           <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setShowAiModal(false)} />
-          <div className="relative bg-zinc-900 w-full max-w-5xl p-5 rounded-3xl border border-[#f0b90b]/30 shadow-[0_0_50px_rgba(240,185,11,0.15)] animate-scale-in flex flex-col md:flex-row gap-8">
+          <div className="relative bg-zinc-900 w-full max-w-5xl p-5 rounded-lg border border-[#f0b90b]/30 shadow-[0_0_50px_rgba(240,185,11,0.15)] animate-scale-in flex flex-col md:flex-row gap-8">
             
             {/* Prompt Generator Side */}
             <div className="flex-1 space-y-4">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-[#f0b90b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#f0b90b]/20">
+                <div className="w-12 h-12 bg-[#f0b90b] rounded-lg flex items-center justify-center shadow-lg shadow-[#f0b90b]/20">
                   <Sparkles className="text-black w-6 h-6" />
                 </div>
                 <div>
@@ -2996,7 +2996,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
               
-              <div className="bg-black border border-zinc-800 rounded-2xl p-5 relative group">
+              <div className="bg-black border border-zinc-800 rounded-lg p-5 relative group">
                 <button 
                   onClick={() => {
                     const prompt = `Aşağıdaki maçlar için analiz yaz ve SADECE aşağıdaki JSON dizisi formatında çıktı ver. Başka hiçbir açıklama yazma:
@@ -3056,7 +3056,7 @@ Maç Listesi: `}
             {/* Paste Side */}
             <div className="flex-1 flex flex-col mt-8 md:mt-0">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
+                <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/20">
                   <Zap className="text-white w-6 h-6" />
                 </div>
                 <div>
@@ -3069,19 +3069,19 @@ Maç Listesi: `}
                 value={aiInput}
                 onChange={(e) => setAiInput(e.target.value)}
                 placeholder={'[\\n  {\\n    "league": "...", \\n    ...\\n  }\\n]'}
-                className="w-full h-full min-h-[150px] md:min-h-[250px] flex-1 bg-black border border-indigo-500/30 rounded-3xl p-6 text-emerald-400 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none font-mono mb-6 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] custom-scrollbar"
+                className="w-full h-full min-h-[150px] md:min-h-[250px] flex-1 bg-black border border-indigo-500/30 rounded-lg p-6 text-emerald-400 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none font-mono mb-6 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] custom-scrollbar"
               />
 
               <div className="flex items-center gap-4 mt-auto">
                 <button
                   onClick={() => setShowAiModal(false)}
-                  className="flex-1 py-4 rounded-2xl bg-zinc-800 text-white font-black text-xs uppercase hover:bg-zinc-750 transition-all"
+                  className="flex-1 py-4 rounded-lg bg-zinc-800 text-white font-black text-xs uppercase hover:bg-zinc-750 transition-all"
                 >
                   İPTAL
                 </button>
                 <button
                   onClick={handleAiParse}
-                  className="flex-[2] py-4 rounded-2xl bg-[#f0b90b] text-black font-black text-xs uppercase shadow-[0_0_20px_rgba(240,185,11,0.2)] hover:shadow-[0_0_30px_rgba(240,185,11,0.4)] transition-all active:scale-95 flex justify-center items-center gap-2"
+                  className="flex-[2] py-4 rounded-lg bg-[#f0b90b] text-black font-black text-xs uppercase shadow-[0_0_20px_rgba(240,185,11,0.2)] hover:shadow-[0_0_30px_rgba(240,185,11,0.4)] transition-all active:scale-95 flex justify-center items-center gap-2"
                 >
                   <Plus className="w-4 h-4" /> VERİLERİ SİSTEME EKLE
                 </button>
@@ -3095,13 +3095,13 @@ Maç Listesi: `}
       {activeTab === 'blackjack' && (
         <div className="space-y-4 animate-fade-in">
           {/* CASINO GENERAL SETTINGS */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, casino_general: !prev.casino_general }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20">
+                <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center border border-amber-500/20">
                   <Zap className="w-5 h-5 text-amber-500" />
                 </div>
                 <div className="text-left">
@@ -3115,17 +3115,17 @@ Maç Listesi: `}
             {contentExpanded.casino_general && (
               <div className="p-6 pt-0 animate-fade-in space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-2xl space-y-2">
+                  <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-lg space-y-2">
                     <label className="text-zinc-400 text-[10px] font-black uppercase tracking-widest ml-1">EL ARASI BEKLEME (SAAT)</label>
                     <input
                       type="number" min={1} max={24}
                       value={localBjConfig.cooldownHours}
                       onChange={e => setLocalBjConfig(c => ({ ...c, cooldownHours: Number(e.target.value) }))}
-                      className="w-full px-4 py-3 rounded-xl text-white bg-black border border-zinc-800 font-black text-lg outline-none focus:border-amber-500/40"
+                      className="w-full px-4 py-3 rounded-lg text-white bg-black border border-zinc-800 font-black text-lg outline-none focus:border-amber-500/40"
                     />
                     <p className="text-zinc-600 text-[9px] font-bold uppercase mt-1">Oyuncular kaç saatte bir el oynayabilir?</p>
                   </div>
-                  <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-2xl flex flex-col justify-center">
+                  <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-lg flex flex-col justify-center">
                     <label className="text-zinc-400 text-[10px] font-black uppercase tracking-widest ml-1 mb-3">KRUPİYE SOFT-17 KURALI</label>
                     <div className="flex items-center gap-4">
                       <button
@@ -3148,13 +3148,13 @@ Maç Listesi: `}
           </section>
 
           {/* CASINO REWARDS */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, casino_rewards: !prev.casino_rewards }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center border border-emerald-500/20">
                   <Gift className="w-5 h-5 text-emerald-500" />
                 </div>
                 <div className="text-left">
@@ -3181,13 +3181,13 @@ Maç Listesi: `}
 
                 <div className="grid grid-cols-1 gap-3">
                   {(localBjConfig.rewards.length === 0 ? [] : localBjConfig.rewards).map((reward, idx) => (
-                    <div key={reward.id} className="flex items-center gap-4 p-4 bg-black/40 border border-zinc-800/50 rounded-2xl group transition-all hover:border-emerald-500/30">
+                    <div key={reward.id} className="flex items-center gap-4 p-4 bg-black/40 border border-zinc-800/50 rounded-lg group transition-all hover:border-emerald-500/30">
                       <div className="flex items-center gap-3 flex-1">
                         <input
                           type="text" maxLength={2}
                           value={reward.emoji}
                           onChange={e => setLocalBjConfig(c => ({ ...c, rewards: c.rewards.map((r, i) => i === idx ? { ...r, emoji: e.target.value } : r) }))}
-                          className="w-12 h-12 text-center bg-black rounded-xl border border-zinc-800 text-xl outline-none"
+                          className="w-12 h-12 text-center bg-black rounded-lg border border-zinc-800 text-xl outline-none"
                         />
                         <div className="flex-1">
                           <label className="text-zinc-500 text-[8px] font-black uppercase tracking-widest mb-1 block ml-1">ÖDÜL ADI</label>
@@ -3215,7 +3215,7 @@ Maç Listesi: `}
                           type="color"
                           value={reward.color}
                           onChange={e => setLocalBjConfig(c => ({ ...c, rewards: c.rewards.map((r, i) => i === idx ? { ...r, color: e.target.value } : r) }))}
-                          className="w-10 h-10 rounded-xl cursor-pointer border-2 border-zinc-800"
+                          className="w-10 h-10 rounded-lg cursor-pointer border-2 border-zinc-800"
                         />
                         <button
                           onClick={() => {
@@ -3242,13 +3242,13 @@ Maç Listesi: `}
       {activeTab === 'loyalty' && (
         <div className="space-y-4 animate-fade-in">
           {/* LOYALTY GENERAL */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, loyalty_general: !prev.loyalty_general }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center border border-emerald-500/20">
                   <Star className="w-5 h-5 text-emerald-500" />
                 </div>
                 <div className="text-left">
@@ -3262,20 +3262,20 @@ Maç Listesi: `}
             {contentExpanded.loyalty_general && (
               <div className="p-6 pt-0 animate-fade-in space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-2xl space-y-2">
+                  <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-lg space-y-2">
                     <label className="text-zinc-500 text-[9px] font-black uppercase tracking-widest ml-1">PROGRAM ADI</label>
                     <input type="text" value={localLoyaltyConfig.programName}
                       onChange={e => setLocalLoyaltyConfig(c => ({ ...c, programName: e.target.value }))}
-                      className="w-full px-4 py-3 rounded-xl bg-black border border-zinc-800 text-white font-black text-sm outline-none focus:border-emerald-500/40" />
+                      className="w-full px-4 py-3 rounded-lg bg-black border border-zinc-800 text-white font-black text-sm outline-none focus:border-emerald-500/40" />
                   </div>
-                  <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-2xl space-y-2">
+                  <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-lg space-y-2">
                     <label className="text-zinc-500 text-[9px] font-black uppercase tracking-widest ml-1">COIN BİRİM ADI</label>
                     <input type="text" value={localLoyaltyConfig.coinName}
                       onChange={e => setLocalLoyaltyConfig(c => ({ ...c, coinName: e.target.value }))}
-                      className="w-full px-4 py-3 rounded-xl bg-black border border-zinc-800 text-white font-black text-sm outline-none focus:border-emerald-500/40" />
+                      className="w-full px-4 py-3 rounded-lg bg-black border border-zinc-800 text-white font-black text-sm outline-none focus:border-emerald-500/40" />
                   </div>
                 </div>
-                <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-2xl flex items-center justify-between">
+                <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-lg flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <button onClick={() => setLocalLoyaltyConfig(c => ({ ...c, isActive: !c.isActive }))}
                       className={`relative w-14 h-7 rounded-full transition-all flex items-center p-1 ${localLoyaltyConfig.isActive ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-zinc-800'}`}>
@@ -3294,13 +3294,13 @@ Maç Listesi: `}
           </section>
 
           {/* LOYALTY RULES */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, loyalty_rules: !prev.loyalty_rules }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center border border-blue-500/20">
+                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20">
                   <Zap className="w-5 h-5 text-blue-500" />
                 </div>
                 <div className="text-left">
@@ -3326,7 +3326,7 @@ Maç Listesi: `}
                 </div>
 
                 {localLoyaltyConfig.rules.map((rule, idx) => (
-                  <div key={rule.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-2xl space-y-4 group transition-all hover:border-blue-500/30">
+                  <div key={rule.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-lg space-y-4 group transition-all hover:border-blue-500/30">
                     <div className="flex items-center gap-3">
                       <div className="flex-1">
                         <label className="text-zinc-500 text-[8px] font-black uppercase tracking-widest mb-1 block ml-1">KURAL ADI</label>
@@ -3350,19 +3350,19 @@ Maç Listesi: `}
                       </button>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
-                      <div className="bg-zinc-900/50 p-3 rounded-xl border border-zinc-800/50">
+                      <div className="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/50">
                         <label className="text-zinc-600 text-[8px] font-black uppercase block text-center mb-1">EŞİK (TL)</label>
                         <input type="number" value={rule.thresholdAmount}
                           onChange={e => setLocalLoyaltyConfig(c => ({ ...c, rules: c.rules.map((r, i) => i === idx ? { ...r, thresholdAmount: Number(e.target.value) } : r) }))}
                           className="w-full bg-transparent text-white font-black text-xs outline-none text-center" />
                       </div>
-                      <div className="bg-zinc-900/50 p-3 rounded-xl border border-zinc-800/50">
+                      <div className="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/50">
                         <label className="text-zinc-600 text-[8px] font-black uppercase block text-center mb-1">COIN ÖDÜL</label>
                         <input type="number" value={rule.coinsAwarded}
                           onChange={e => setLocalLoyaltyConfig(c => ({ ...c, rules: c.rules.map((r, i) => i === idx ? { ...r, coinsAwarded: Number(e.target.value) } : r) }))}
                           className="w-full bg-transparent text-white font-black text-xs outline-none text-center" />
                       </div>
-                      <div className="bg-zinc-900/50 p-3 rounded-xl border border-zinc-800/50">
+                      <div className="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/50">
                         <label className="text-zinc-600 text-[8px] font-black uppercase block text-center mb-1">BİLET ÖDÜL</label>
                         <input type="number" value={rule.ticketsAwarded}
                           onChange={e => setLocalLoyaltyConfig(c => ({ ...c, rules: c.rules.map((r, i) => i === idx ? { ...r, ticketsAwarded: Number(e.target.value) } : r) }))}
@@ -3379,13 +3379,13 @@ Maç Listesi: `}
           </section>
 
           {/* LOYALTY MARKET */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, loyalty_market: !prev.loyalty_market }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20">
+                <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center border border-amber-500/20">
                   <ShoppingCart className="w-5 h-5 text-amber-500" />
                 </div>
                 <div className="text-left">
@@ -3412,10 +3412,10 @@ Maç Listesi: `}
 
                 <div className="grid grid-cols-1 gap-3">
                   {localLoyaltyConfig.marketItems.map((item, idx) => (
-                    <div key={item.id} className="flex items-center gap-4 p-4 bg-black/40 border border-zinc-800/50 rounded-2xl group transition-all hover:border-amber-500/30">
+                    <div key={item.id} className="flex items-center gap-4 p-4 bg-black/40 border border-zinc-800/50 rounded-lg group transition-all hover:border-amber-500/30">
                       <input type="text" maxLength={2} value={item.emoji}
                         onChange={e => setLocalLoyaltyConfig(c => ({ ...c, marketItems: c.marketItems.map((m, i) => i === idx ? { ...m, emoji: e.target.value } : m) }))}
-                        className="w-12 h-12 text-center bg-black rounded-xl border border-zinc-800 text-xl outline-none" />
+                        className="w-12 h-12 text-center bg-black rounded-lg border border-zinc-800 text-xl outline-none" />
                       
                       <div className="flex-1">
                         <label className="text-zinc-500 text-[8px] font-black uppercase tracking-widest mb-1 block ml-1">ÜRÜN ADI</label>
@@ -3439,7 +3439,7 @@ Maç Listesi: `}
                         </div>
                         <input type="color" value={item.color}
                           onChange={e => setLocalLoyaltyConfig(c => ({ ...c, marketItems: c.marketItems.map((m, i) => i === idx ? { ...m, color: e.target.value } : m) }))}
-                          className="w-10 h-10 rounded-xl cursor-pointer border-2 border-zinc-800" />
+                          className="w-10 h-10 rounded-lg cursor-pointer border-2 border-zinc-800" />
                         <button onClick={() => setLocalLoyaltyConfig(c => ({ ...c, marketItems: c.marketItems.map((m, i) => i === idx ? { ...m, isActive: !m.isActive } : m) }))}
                           className={`px-3 py-2 rounded-lg font-black text-[9px] uppercase tracking-wider ${item.isActive ? 'bg-green-500/20 text-green-400' : 'bg-zinc-800 text-zinc-500'}`}>
                           {item.isActive ? 'AKTİF' : 'OFF'}
@@ -3526,13 +3526,13 @@ Maç Listesi: `}
       {activeTab === 'visibility' && (
         <div className="space-y-4 animate-fade-in">
           {/* PAGE VISIBILITY SECTION */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, visibility_pages: !prev.visibility_pages }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
                   <Eye className="w-5 h-5 text-primary" />
                 </div>
                 <div className="text-left">
@@ -3559,7 +3559,7 @@ Maç Listesi: `}
                   ] as const).map(item => {
                     const isActive = navVisibility?.[item.key] !== false;
                     return (
-                      <div key={item.key} className="bg-black/40 border border-zinc-800/50 rounded-2xl p-4 flex items-center justify-between group hover:border-primary/30 transition-all">
+                      <div key={item.key} className="bg-black/40 border border-zinc-800/50 rounded-lg p-4 flex items-center justify-between group hover:border-primary/30 transition-all">
                         <span className={`text-[11px] font-black uppercase tracking-wider ${isActive ? 'text-white' : 'text-zinc-500'}`}>{item.label}</span>
                         <button
                           onClick={() => {
@@ -3580,13 +3580,13 @@ Maç Listesi: `}
           </section>
 
           {/* MARQUEE SECTION */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, visibility_marquee: !prev.visibility_marquee }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                <div className="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20">
                   <RefreshCw className="w-5 h-5 text-indigo-500" />
                 </div>
                 <div className="text-left">
@@ -3599,7 +3599,7 @@ Maç Listesi: `}
 
             {contentExpanded.visibility_marquee && (
               <div className="p-6 pt-0 animate-fade-in space-y-6">
-                <div className="flex items-center justify-between bg-black/40 border border-zinc-800/50 p-5 rounded-2xl">
+                <div className="flex items-center justify-between bg-black/40 border border-zinc-800/50 p-5 rounded-lg">
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => setLocalMarquee({ ...localMarquee, isActive: !localMarquee.isActive })}
@@ -3614,7 +3614,7 @@ Maç Listesi: `}
                   </div>
                   <button
                     onClick={() => setShowAiMarqueeParser(true)}
-                    className="flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-400 text-black rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20"
+                    className="flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-400 text-black rounded-lg font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20"
                   >
                     <Sparkles className="w-4 h-4" /> AI HABER SİHİRBAZI
                   </button>
@@ -3627,13 +3627,13 @@ Maç Listesi: `}
                       type="text" 
                       value={localMarquee.text} 
                       onChange={(e) => setLocalMarquee({ ...localMarquee, text: e.target.value })}
-                      className="w-full bg-black border border-zinc-800 rounded-xl px-5 py-4 text-sm font-black text-white focus:outline-none focus:border-indigo-500/50"
+                      className="w-full bg-black border border-zinc-800 rounded-lg px-5 py-4 text-sm font-black text-white focus:outline-none focus:border-indigo-500/50"
                       placeholder="🦁 Şampiyon Galatasaray... 💰 Yatırımlara %50 Bonus..."
                     />
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-2xl space-y-3">
+                    <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-lg space-y-3">
                       <div className="flex justify-between items-center px-1">
                         <label className="text-[9px] font-black text-zinc-500 uppercase">AKIF HIZI</label>
                         <span className="text-[10px] font-black text-indigo-400">{localMarquee.speed}s</span>
@@ -3645,14 +3645,14 @@ Maç Listesi: `}
                         className="w-full accent-indigo-500 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer"
                       />
                     </div>
-                    <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-2xl space-y-2">
+                    <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-lg space-y-2">
                       <label className="text-[9px] font-black text-zinc-500 uppercase block">YAZI RENGİ</label>
                       <div className="flex items-center gap-3">
                         <input 
                           type="color" 
                           value={localMarquee.color} 
                           onChange={(e) => setLocalMarquee({ ...localMarquee, color: e.target.value })}
-                          className="w-10 h-10 bg-transparent cursor-pointer rounded-xl overflow-hidden border-2 border-zinc-800"
+                          className="w-10 h-10 bg-transparent cursor-pointer rounded-lg overflow-hidden border-2 border-zinc-800"
                         />
                         <input 
                           type="text" 
@@ -3662,7 +3662,7 @@ Maç Listesi: `}
                         />
                       </div>
                     </div>
-                    <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-2xl flex flex-col justify-center gap-2">
+                    <div className="bg-black/40 border border-zinc-800/50 p-4 rounded-lg flex flex-col justify-center gap-2">
                        <label className="text-[9px] font-black text-zinc-500 uppercase block">YAZI STİLİ</label>
                        <button
                         onClick={() => setLocalMarquee({ ...localMarquee, isBold: !localMarquee.isBold })}
@@ -3691,10 +3691,10 @@ Maç Listesi: `}
       {/* AI Marquee Parser Modal */}
       {showAiMarqueeParser && (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
-              <div className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
+              <div className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden shadow-2xl">
                 <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center text-primary">
+                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
                       <Sparkles className="w-5 h-5" />
                     </div>
                     <div>
@@ -3702,7 +3702,7 @@ Maç Listesi: `}
                       <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Ham haber metnini kışkırtıcı bir akışa çevirir</p>
                     </div>
                   </div>
-                  <button onClick={() => setShowAiMarqueeParser(false)} className="w-10 h-10 bg-zinc-800 rounded-xl flex items-center justify-center text-zinc-400 hover:bg-red-500 hover:text-white transition-all">
+                  <button onClick={() => setShowAiMarqueeParser(false)} className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400 hover:bg-red-500 hover:text-white transition-all">
                     <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
@@ -3712,20 +3712,20 @@ Maç Listesi: `}
                     <textarea
                       value={aiMarqueeRawText}
                       onChange={(e) => setAiMarqueeRawText(e.target.value)}
-                      className="w-full h-80 bg-black border border-zinc-800 rounded-2xl p-5 text-sm font-medium text-zinc-300 focus:border-primary/50 transition-all resize-none leading-relaxed"
+                      className="w-full h-80 bg-black border border-zinc-800 rounded-lg p-5 text-sm font-medium text-zinc-300 focus:border-primary/50 transition-all resize-none leading-relaxed"
                       placeholder="🦁 Galatasaray Gündemi...&#10;Hakan Çalhanoğlu Bombası: ..."
                     />
                   </div>
                   <div className="flex gap-4 pt-2">
                     <button
                       onClick={() => setShowAiMarqueeParser(false)}
-                      className="flex-1 px-6 py-4 bg-zinc-800 text-zinc-400 font-black text-xs rounded-2xl uppercase tracking-widest hover:bg-zinc-700 transition-all"
+                      className="flex-1 px-6 py-4 bg-zinc-800 text-zinc-400 font-black text-xs rounded-lg uppercase tracking-widest hover:bg-zinc-700 transition-all"
                     >
                       VAZGEÇ
                     </button>
                     <button
                       onClick={handleAiMarqueeParse}
-                      className="flex-[2] px-6 py-4 bg-primary text-black font-black text-xs rounded-2xl uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+                      className="flex-[2] px-6 py-4 bg-primary text-black font-black text-xs rounded-lg uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
                     >
                       <Zap className="w-4 h-4" /> HABERLERİ DÜZENLE VE UYGULA
                     </button>
@@ -3749,10 +3749,10 @@ Maç Listesi: `}
 
       {activeTab === 'members' && (
         <div className="space-y-4 animate-fade-in">
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <div className="p-5 flex items-center justify-between border-b border-zinc-800/50 bg-white/[0.02]">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center border border-blue-500/20">
+                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20">
                   <Users className="w-5 h-5 text-blue-500" />
                 </div>
                 <div className="text-left">
@@ -3785,13 +3785,13 @@ Maç Listesi: `}
 
       {activeTab === 'messages' && (
         <div className="space-y-4 animate-fade-in">
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, messages_main: !prev.messages_main }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                <div className="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20">
                   <MessageSquare className="w-5 h-5 text-indigo-500" />
                 </div>
                 <div className="text-left">
@@ -3809,7 +3809,7 @@ Maç Listesi: `}
                 ) : (
                   <div className="grid grid-cols-1 gap-3">
                     {messages.sort((a,b)=>b.createdAt - a.createdAt).map(msg => (
-                      <div key={msg.id} className={`p-4 rounded-2xl border ${msg.isRead ? 'bg-black/20 border-zinc-800' : 'bg-indigo-500/5 border-indigo-500/20'} transition-all`}>
+                      <div key={msg.id} className={`p-4 rounded-lg border ${msg.isRead ? 'bg-black/20 border-zinc-800' : 'bg-indigo-500/5 border-indigo-500/20'} transition-all`}>
                         <div className="flex items-center justify-between mb-3">
                            <div className="flex items-center gap-3">
                               <div className="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center"><User className="w-4 h-4 text-zinc-500" /></div>
@@ -3829,7 +3829,7 @@ Maç Listesi: `}
                               }} className="p-2 bg-rose-500/10 text-rose-500 rounded-lg"><Trash2 className="w-3.5 h-3.5" /></button>
                            </div>
                         </div>
-                        <div className="p-3 bg-black/40 rounded-xl text-xs text-zinc-400 italic border border-zinc-800/50">{msg.content}</div>
+                        <div className="p-3 bg-black/40 rounded-lg text-xs text-zinc-400 italic border border-zinc-800/50">{msg.content}</div>
                       </div>
                     ))}
                   </div>
@@ -3844,13 +3844,13 @@ Maç Listesi: `}
       {activeTab === 'system' && (
         <div className="space-y-4 animate-fade-in">
           {/* MAINTENANCE MODE SECTION */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, system_maintenance: !prev.system_maintenance }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center border border-rose-500/20">
+                <div className="w-10 h-10 bg-rose-500/10 rounded-lg flex items-center justify-center border border-rose-500/20">
                   <AlertCircle className="w-5 h-5 text-rose-500" />
                 </div>
                 <div className="text-left">
@@ -3863,7 +3863,7 @@ Maç Listesi: `}
 
             {contentExpanded.system_maintenance && (
               <div className="p-6 pt-0 animate-fade-in space-y-6">
-                <div className="flex items-center justify-between bg-black/40 border border-zinc-800/50 p-5 rounded-2xl">
+                <div className="flex items-center justify-between bg-black/40 border border-zinc-800/50 p-5 rounded-lg">
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => setLocalSiteStatus({...localSiteStatus, isMaintenanceMode: !localSiteStatus.isMaintenanceMode})}
@@ -3883,7 +3883,7 @@ Maç Listesi: `}
                   <textarea
                     value={localSiteStatus.maintenanceMessage}
                     onChange={(e) => setLocalSiteStatus({...localSiteStatus, maintenanceMessage: e.target.value})}
-                    className="w-full h-24 bg-black border border-zinc-800 rounded-xl px-5 py-4 text-sm font-medium text-zinc-300 focus:border-rose-500/50 transition-all outline-none resize-none"
+                    className="w-full h-24 bg-black border border-zinc-800 rounded-lg px-5 py-4 text-sm font-medium text-zinc-300 focus:border-rose-500/50 transition-all outline-none resize-none"
                     placeholder="Şu an bakımdayız, kısa süre sonra döneceğiz..."
                   />
                 </div>
@@ -3896,13 +3896,13 @@ Maç Listesi: `}
           </section>
 
           {/* LOADER SETTINGS SECTION */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, system_loader: !prev.system_loader }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20">
+                <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center border border-amber-500/20">
                   <RefreshCw className="w-5 h-5 text-amber-500" />
                 </div>
                 <div className="text-left">
@@ -3915,7 +3915,7 @@ Maç Listesi: `}
 
             {contentExpanded.system_loader && (
               <div className="p-6 pt-0 animate-fade-in space-y-6">
-                <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-2xl flex items-center justify-between">
+                <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-lg flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => setLocalLoaderConfig({ ...localLoaderConfig, isActive: !localLoaderConfig.isActive })}
@@ -3936,7 +3936,7 @@ Maç Listesi: `}
                     type="text"
                     value={localLoaderConfig.text}
                     onChange={(e) => setLocalLoaderConfig({ ...localLoaderConfig, text: e.target.value })}
-                    className="w-full bg-black border border-zinc-800 rounded-xl px-5 py-4 text-sm font-black text-white focus:outline-none focus:border-amber-500/50"
+                    className="w-full bg-black border border-zinc-800 rounded-lg px-5 py-4 text-sm font-black text-white focus:outline-none focus:border-amber-500/50"
                     placeholder="Sistem Yükleniyor..."
                   />
                 </div>
@@ -3954,13 +3954,13 @@ Maç Listesi: `}
           </section>
 
           {/* DISCORD SETTINGS SECTION */}
-          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-[22px] overflow-hidden transition-all duration-300">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setContentExpanded(prev => ({ ...prev, system_discord: !prev.system_discord }))}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                <div className="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20">
                   <MessageSquare className="w-5 h-5 text-indigo-400" />
                 </div>
                 <div className="text-left">
@@ -3973,7 +3973,7 @@ Maç Listesi: `}
 
             {contentExpanded.system_discord && (
               <div className="p-6 pt-0 animate-fade-in space-y-6">
-                <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-2xl flex items-center justify-between">
+                <div className="bg-black/40 border border-zinc-800/50 p-5 rounded-lg flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => setLocalDiscordConfig({ ...localDiscordConfig, enabled: !localDiscordConfig.enabled })}
@@ -3994,7 +3994,7 @@ Maç Listesi: `}
                     type="password"
                     value={localDiscordConfig.webhookUrl || ''}
                     onChange={(e) => setLocalDiscordConfig({ ...localDiscordConfig, webhookUrl: e.target.value })}
-                    className="w-full bg-black border border-zinc-800 rounded-xl px-5 py-4 text-sm font-black text-white focus:outline-none focus:border-indigo-500/50"
+                    className="w-full bg-black border border-zinc-800 rounded-lg px-5 py-4 text-sm font-black text-white focus:outline-none focus:border-indigo-500/50"
                     placeholder="Örn: https://discord.com/api/webhooks/..."
                   />
                 </div>
@@ -4016,7 +4016,7 @@ Maç Listesi: `}
       {/* PROFILE SETTINGS MODAL */}
       {showProfileModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-zinc-950 border border-zinc-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl relative">
+          <div className="bg-zinc-950 border border-zinc-800 rounded-lg w-full max-w-md overflow-hidden shadow-2xl relative">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00FFC2] to-emerald-500" />
             
             <div className="p-6">
@@ -4027,7 +4027,7 @@ Maç Listesi: `}
                 </div>
                 <button 
                   onClick={() => setShowProfileModal(false)}
-                  className="w-8 h-8 bg-zinc-900 hover:bg-red-500/20 text-zinc-500 hover:text-red-500 rounded-xl flex items-center justify-center transition-all"
+                  className="w-8 h-8 bg-zinc-900 hover:bg-red-500/20 text-zinc-500 hover:text-red-500 rounded-lg flex items-center justify-center transition-all"
                 >
                   <Trash2 className="w-4 h-4 rotate-45" /> {/* Close Icon Simulation */}
                 </button>
@@ -4039,7 +4039,7 @@ Maç Listesi: `}
                   <h3 className="text-[10px] font-black text-[#00FFC2] uppercase tracking-widest border-b border-zinc-800 pb-2">GENEL BİLGİLER</h3>
                   
                   <div className="flex items-center gap-4">
-                     <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
+                     <div className="w-16 h-16 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
                         {adminProfile.logoUrl ? (
                           <img src={adminProfile.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                         ) : (
@@ -4051,7 +4051,7 @@ Maç Listesi: `}
                         <input 
                           value={adminProfile.logoUrl}
                           onChange={(e) => setAdminProfile({ ...adminProfile, logoUrl: e.target.value })}
-                          className="w-full bg-black border border-zinc-800 rounded-xl p-2.5 text-xs font-bold focus:border-[#00FFC2]/50 transition-all text-white"
+                          className="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-xs font-bold focus:border-[#00FFC2]/50 transition-all text-white"
                           placeholder="https://.../logo.png"
                         />
                      </div>
@@ -4062,7 +4062,7 @@ Maç Listesi: `}
                     <input 
                       value={adminProfile.name}
                       onChange={(e) => setAdminProfile({ ...adminProfile, name: e.target.value })}
-                      className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm font-black focus:border-[#00FFC2]/50 transition-all text-white"
+                      className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm font-black focus:border-[#00FFC2]/50 transition-all text-white"
                       placeholder="Profil Adınız"
                     />
                   </div>
@@ -4079,21 +4079,21 @@ Maç Listesi: `}
                       type="password"
                       value={passwordForm.current}
                       onChange={(e) => setPasswordForm({ ...passwordForm, current: e.target.value })}
-                      className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm font-bold focus:border-rose-500/50 transition-all text-white placeholder-zinc-700"
+                      className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm font-bold focus:border-rose-500/50 transition-all text-white placeholder-zinc-700"
                       placeholder="Mevcut Şifre"
                     />
                     <input 
                       type="password"
                       value={passwordForm.new}
                       onChange={(e) => setPasswordForm({ ...passwordForm, new: e.target.value })}
-                      className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm font-bold focus:border-rose-500/50 transition-all text-white placeholder-zinc-700"
+                      className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm font-bold focus:border-rose-500/50 transition-all text-white placeholder-zinc-700"
                       placeholder="Yeni Şifre Oluştur"
                     />
                     <input 
                       type="password"
                       value={passwordForm.confirm}
                       onChange={(e) => setPasswordForm({ ...passwordForm, confirm: e.target.value })}
-                      className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm font-bold focus:border-rose-500/50 transition-all text-white placeholder-zinc-700"
+                      className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm font-bold focus:border-rose-500/50 transition-all text-white placeholder-zinc-700"
                       placeholder="Yeni Şifreyi Doğrula"
                     />
                   </div>
@@ -4103,7 +4103,7 @@ Maç Listesi: `}
               <div className="mt-8 flex gap-3">
                 <button 
                   onClick={() => setShowProfileModal(false)}
-                  className="flex-1 py-3 bg-zinc-900 hover:bg-zinc-800 text-white font-black text-[10px] rounded-xl uppercase tracking-widest transition-all"
+                  className="flex-1 py-3 bg-zinc-900 hover:bg-zinc-800 text-white font-black text-[10px] rounded-lg uppercase tracking-widest transition-all"
                 >
                   İPTAL
                 </button>
@@ -4126,7 +4126,7 @@ Maç Listesi: `}
                     setPasswordForm({ current: '', new: '', confirm: '' });
                     setShowProfileModal(false);
                   }}
-                  className="flex-1 py-3 bg-[#00FFC2] hover:bg-emerald-400 text-black font-black text-[10px] rounded-xl uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(0,255,194,0.3)]"
+                  className="flex-1 py-3 bg-[#00FFC2] hover:bg-emerald-400 text-black font-black text-[10px] rounded-lg uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(0,255,194,0.3)]"
                 >
                   KAYDET
                 </button>

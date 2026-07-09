@@ -28,7 +28,6 @@ import RaffleView from './components/RaffleView';
 import RaffleLanding from './components/RaffleLanding';
 import CekilisCenterView from './components/CekilisCenterView';
 import PoolGame from './components/PoolGame';
-import EnhancedBetting from './components/EnhancedBetting';
 import { seedEcosystemData } from './seedEcosystem';
 import { getGlobalConfig, updateGlobalConfig, supabase } from './utils/supabase';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
@@ -1305,7 +1304,7 @@ const App: React.FC = () => {
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
-            <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-y-auto flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
+            <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen}
                 onToggle={() => setIsSidebarOpen(!isSidebarOpen)} 
@@ -1321,8 +1320,9 @@ const App: React.FC = () => {
           {/* MOBİL DRAWER - SOL MENÜ */}
           {isMobileMenuOpen && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
-              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
-              <aside className="w-[280px] bg-[#111317] h-full shadow-2xl flex-shrink-0 relative z-10 transform transition-transform">
+              <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
+              <aside className="w-[280px] bg-[#111317] border-r border-[#1A1D24] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 transform transition-transform animate-slide-in-left">
+                <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#111317] border border-[#1A1D24] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
                 <Sidebar
                   isOpen={true}
                   onToggle={() => setIsMobileMenuOpen(false)}
@@ -1340,13 +1340,14 @@ const App: React.FC = () => {
           <main className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}>
             
             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
-            <header className="flex lg:hidden items-center justify-between p-4 bg-[#111317] shrink-0 sticky top-0 z-40">
-              <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-300 hover:text-white transition-colors">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            <header className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/85 backdrop-blur-xl border-b border-[#00FFA3]/10 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+              <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-300 hover:text-[#00FFA3] transition-colors p-1.5 rounded-lg bg-white/5 active:scale-95">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               </button>
-              <div className="font-bold text-xl text-[#00FFA3]">724BAHİS</div>
-              <button onClick={() => setIsMobileChatOpen(true)} className="text-gray-300 hover:text-white transition-colors">
-                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+              <div className="font-black text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#00FFA3] to-[#00E676] tracking-tight">724BAHİS</div>
+              <button onClick={() => setIsMobileChatOpen(true)} className="text-gray-300 hover:text-[#00FFA3] transition-colors p-1.5 rounded-lg bg-white/5 active:scale-95 relative">
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                 <span className="absolute top-1 right-1 w-2 h-2 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]"></span>
               </button>
             </header>
 
@@ -1394,8 +1395,8 @@ const App: React.FC = () => {
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
           (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
-            ? 'p-0 w-full max-w-full' 
-            : 'p-4 md:p-6 w-full max-w-full'
+            ? 'p-0 w-full max-w-full pb-[70px] md:pb-0' 
+            : 'px-2 py-4 md:p-6 w-full max-w-full pb-[80px] md:pb-6'
         }`}
         style={{ 
           position: 'relative', 
@@ -1413,71 +1414,74 @@ const App: React.FC = () => {
               {/* ═══ PORTAL BODY ═══ */}
               <div className="portal-body">
                 
-                {/* ── World Cup 2026 Special Analysis Banner ── */}
-                <div 
-                  onClick={() => handleViewChange('analysis')}
-                  className="mb-6 rounded-xl overflow-hidden relative cursor-pointer group" 
-                  style={{ 
-                    border: '1px solid rgba(245, 158, 11, 0.15)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
-                    transition: 'all 0.3s ease',
-                    backgroundImage: 'url("https://images.unsplash.com/photo-1518605368461-1e1e38ce7058?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  }}
-                >
-                  {/* Thematic Overlays */}
-                  <div className="absolute inset-0 bg-slate-950/50" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/98 via-[#0F172A]/90 to-[#0F172A]/98" />
-                  
-                  {/* Subtle background rings */}
-                  <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.1)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.15)', pointerEvents: 'none' }} />
-                  
-                  <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative" style={{ zIndex: 10 }}>
-                    <div className="flex items-center gap-4">
-                      <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.1)', border: '1px solid rgba(0, 255, 163, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
-                        <Trophy className="w-6 h-6" style={{ color: '#00FFA3' }} />
+                {/* ── Combined Banners Section ── */}
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-6">
+                  {/* ── Özel Analizler Banner ── */}
+                  <div 
+                    onClick={() => handleViewChange('analysis')}
+                    className="rounded-lg overflow-hidden relative cursor-pointer group h-full flex flex-col" 
+                    style={{ 
+                      border: '1px solid rgba(245, 158, 11, 0.15)',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+                      transition: 'all 0.3s ease',
+                      backgroundImage: 'url("https://images.unsplash.com/photo-1518605368461-1e1e38ce7058?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                  >
+                    {/* Thematic Overlays */}
+                    <div className="absolute inset-0 bg-slate-950/50" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/98 via-[#0F172A]/90 to-[#0F172A]/98" />
+                    
+                    {/* Subtle background rings */}
+                    <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.1)', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.15)', pointerEvents: 'none' }} />
+                    
+                    <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative h-full" style={{ zIndex: 10 }}>
+                      <div className="flex items-center gap-4">
+                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.1)', border: '1px solid rgba(0, 255, 163, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
+                          <Trophy className="w-6 h-6" style={{ color: '#00FFA3' }} />
+                        </div>
+                        <div>
+                          <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(0, 255, 163, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
+                          <h2 style={{ fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>
+                            <span style={{ color: '#00FFA3', textShadow: '0 0 20px rgba(0, 255, 163, 0.6), 0 0 40px rgba(0, 255, 163, 0.3)' }}>WORLD CUP </span>
+                            <span style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>2026</span>
+                          </h2>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-4 justify-between sm:justify-end mt-auto sm:mt-0">
+                        <div className="text-left sm:text-right hidden sm:block" style={{ flexShrink: 0 }}>
+                          <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>En Yüksek Kazanç Oranları</p>
+                          <p style={{ fontSize: '12px', fontWeight: 900, color: '#00FFA3' }}>%88 Başarı Oranı</p>
+                        </div>
+                        <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', background: '#00FFA3', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                          <span>GİT</span>
+                          <span className="group-hover:translate-x-1 transition-transform" style={{ display: 'inline-block' }}>→</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+  
+                  {/* ── Canlı Skor & Maç Sonuçları Section ── */}
+                  <div className="p-4 sm:p-6 rounded-lg bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-zinc-800/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 h-full">
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                      <div className="w-10 h-10 rounded-lg bg-[#00FFA3]/10 flex items-center justify-center border border-[#00FFA3]/20 shrink-0">
+                        <Target className="w-5 h-5 text-[#00FFA3]" />
                       </div>
                       <div>
-                        <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(0, 255, 163, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
-                        <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>
-                          <span style={{ color: '#00FFA3', textShadow: '0 0 20px rgba(0, 255, 163, 0.6), 0 0 40px rgba(0, 255, 163, 0.3)' }}>WORLD CUP </span>
-                          <span style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>2026</span>
-                        </h2>
+                        <h3 className="text-white font-black text-sm uppercase tracking-wider italic">MAÇ SONUÇLARI & CANLI SKOR</h3>
+                        <p className="text-gray-400 text-xs font-medium mt-0.5 line-clamp-1 sm:line-clamp-none">Dünya genelindeki tüm maçların anlık skorlarını takip edin.</p>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-6 justify-between sm:justify-end">
-                      <div className="text-left sm:text-right" style={{ flexShrink: 0 }}>
-                        <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>En Yüksek Kazanç Oranları</p>
-                        <p style={{ fontSize: '12px', fontWeight: 900, color: '#00FFA3' }}>%88 Başarı Oranı</p>
-                      </div>
-                      <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#00FFA3', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                        <span>ANALİZLERE GİT</span>
-                        <span className="group-hover:translate-x-1 transition-transform" style={{ display: 'inline-block' }}>→</span>
-                      </button>
-                    </div>
+                    <button 
+                      onClick={() => setShowLiveScoreModal(true)}
+                      className="w-full sm:w-auto px-6 py-3 bg-[#00FFA3] hover:bg-[#33FFB5] text-black text-xs sm:text-sm font-black rounded-lg transition-all hover:scale-105 active:scale-95 uppercase tracking-wider shrink-0 mt-2 sm:mt-0"
+                    >
+                      Canlı Skor
+                    </button>
                   </div>
-                </div>
-
-                {/* ── Canlı Skor & Maç Sonuçları Section ── */}
-                <div className="mb-6 p-6 rounded-xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-zinc-800/80 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                      <Target className="w-5 h-5 text-emerald-500" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-black text-sm uppercase tracking-wider italic">MAÇ SONUÇLARI & CANLI SKOR</h3>
-                      <p className="text-gray-400 text-xs font-medium mt-0.5">Dünya genelindeki tüm maçların anlık skorlarını ve sonuçlarını canlı takip edin.</p>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => setShowLiveScoreModal(true)}
-                    className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black text-sm font-black rounded-lg shadow-[0_4px_20px_rgba(16,185,129,0.25)] transition-all hover:scale-105 active:scale-95 uppercase tracking-wider"
-                  >
-                    Maç Sonuçları & Canlı Skor
-                  </button>
                 </div>
 
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
@@ -1500,7 +1504,7 @@ const App: React.FC = () => {
                   const displayDate = matchesToDisplay[0].matchDate;
 
                   return (
-                    <div className="mb-6 p-5 rounded-2xl border border-zinc-800 bg-[#0F172A]/70 backdrop-blur-md shadow-2xl relative">
+                    <div className="mb-6 p-5 rounded-lg border border-zinc-800 bg-[#0F172A]/70 backdrop-blur-md shadow-2xl relative">
                       {/* Header */}
                       <div className="flex items-center gap-2 text-xs font-black text-[#00FFA3] tracking-wider uppercase mb-4 px-1">
                         <Calendar className="w-4 h-4 text-[#00FFA3]" />
@@ -1522,7 +1526,7 @@ const App: React.FC = () => {
                                 setActiveAnalysisId(analysis.id);
                                 setView('analysis');
                               }}
-                              className="relative rounded-xl overflow-hidden border border-zinc-800/80 bg-[#07090e] hover:border-emerald-500/40 hover:bg-[#121620] shadow-[0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 cursor-pointer group flex flex-col md:flex-row md:items-center justify-between p-3.5 gap-3"
+                              className="relative rounded-lg overflow-hidden border border-zinc-800/80 bg-[#07090e] hover:border-emerald-500/40 hover:bg-[#121620] shadow-[0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 cursor-pointer group flex flex-col md:flex-row md:items-center justify-between p-3.5 gap-3"
                             >
                               {/* Blur for premium if locked */}
                               <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 flex-1 min-w-0 ${!isFree ? 'blur-[3px] select-none pointer-events-none' : ''}`}>
@@ -1581,7 +1585,7 @@ const App: React.FC = () => {
                             e.stopPropagation();
                             setView('analysis');
                           }}
-                          className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black text-xs font-black rounded-xl shadow-[0_4px_20px_rgba(16,185,129,0.2)] transition-all hover:scale-105 active:scale-95 uppercase tracking-widest flex items-center justify-center gap-2 group border-none"
+                          className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black text-xs font-black rounded-lg shadow-[0_4px_20px_rgba(16,185,129,0.2)] transition-all hover:scale-105 active:scale-95 uppercase tracking-widest flex items-center justify-center gap-2 group border-none"
                         >
                           <span>Daha Fazlası İçin Analizler</span>
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -1595,19 +1599,16 @@ const App: React.FC = () => {
                 <PromoSlider />
 
                 {/* ── User Uploaded Image Banner ── */}
-                <div className="my-6 relative overflow-hidden rounded-xl shadow-[0_0_25px_rgba(0,255,163,0.3)] border border-emerald-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
+                <div className="my-6 relative overflow-hidden rounded-lg shadow-[0_0_25px_rgba(0,255,163,0.3)] border border-emerald-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
                   <img src="/banners/yeni-ince-banner.png" alt="Promo Banner" className="w-full h-auto block group-hover:scale-102 transition-transform duration-700" />
                   
                   {/* Animasyonlu Parıltı (Shine) Efekti */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-150%] animate-[shimmer_3s_infinite_linear] skew-x-[-20deg]"></div>
                   
                   {/* Sürekli yanan kenar glow efekti */}
-                  <div className="absolute inset-0 border-[2px] border-transparent rounded-xl group-hover:border-emerald-400/50 transition-colors duration-500"></div>
+                  <div className="absolute inset-0 border-[2px] border-transparent rounded-lg group-hover:border-emerald-400/50 transition-colors duration-500"></div>
                   <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                 </div>
-
-                {/* ── Enhanced Betting Section ── */}
-                <EnhancedBetting />
 
               </div>
 
@@ -1650,14 +1651,14 @@ const App: React.FC = () => {
         {view === 'sports' && (
           <div className="animate-fade-in relative">
             {iframeLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl" style={{ height: 'calc(100vh - var(--header-height) - 10px)' }}>
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-lg" style={{ height: 'calc(100vh - var(--header-height) - 10px)' }}>
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                   <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                 </div>
               </div>
             )}
-            <div className="w-full rounded-2xl overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))', minHeight: '850px' }}>
+            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))', minHeight: '850px' }}>
               <iframe 
                 src="https://sport.7yrrerfcet.com/SportsBook/Home"
                 frameBorder="0"
@@ -1816,14 +1817,14 @@ const App: React.FC = () => {
         {view === 'sports3' && (
           <div className="animate-fade-in w-full h-full relative">
             {iframeLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl" style={{ height: 'calc(100vh - var(--header-height))' }}>
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-lg" style={{ height: 'calc(100vh - var(--header-height))' }}>
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                   <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                 </div>
               </div>
             )}
-            <div className="w-full rounded-2xl overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
               <iframe 
                 src="https://tarafbet977.com/tr/live/"
                 frameBorder="0"
@@ -1882,14 +1883,14 @@ const App: React.FC = () => {
         {view === 'sports4' && (
           <div className="animate-fade-in w-full h-full relative">
             {iframeLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-2xl" style={{ height: 'calc(100vh - var(--header-height))' }}>
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-lg" style={{ height: 'calc(100vh - var(--header-height))' }}>
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                   <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                 </div>
               </div>
             )}
-            <div className="w-full rounded-2xl overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
               <iframe 
                 src="https://sport.megobocteb.com/SportsBook/Home"
                 frameBorder="0"
@@ -2018,7 +2019,7 @@ const App: React.FC = () => {
               <div className="portal-body">
                 <button
                   onClick={() => setActiveCasinoGame(null)}
-                  className="mb-4 flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 text-zinc-400 hover:text-white transition-all text-xs font-black uppercase tracking-wider w-fit"
+                  className="mb-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white transition-all text-xs font-black uppercase tracking-wider w-fit"
                 >
                   ← Lobiye Dön
                 </button>
@@ -2056,7 +2057,7 @@ const App: React.FC = () => {
                 <h2 className="text-white font-black text-3xl uppercase tracking-tight">Günlük Görevler</h2>
                 <p className="text-zinc-500 font-bold text-sm">Coin kazanmak ve marketi kullanmak için üye girişi gereklidir.</p>
                 <button onClick={() => setAuthModalMode('member')}
-                  className="px-8 py-4 bg-[#00FFA3] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#00FFA3]/90 transition-all shadow-[0_0_25px_rgba(0,255,163,0.4)]">
+                  className="px-8 py-4 bg-[#00FFA3] text-black font-black text-sm rounded-lg uppercase tracking-widest hover:bg-[#00FFA3]/90 transition-all shadow-[0_0_25px_rgba(0,255,163,0.4)]">
                   🔑 Üye Ol / Giriş Yap
                 </button>
               </div>
@@ -2244,7 +2245,7 @@ const App: React.FC = () => {
           onClick={() => setShowLiveScoreModal(false)}
         >
           <div 
-            className="relative w-full max-w-5xl h-[85vh] bg-[#1a1e29] rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-5xl h-[85vh] bg-[#1a1e29] rounded-lg shadow-2xl overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
@@ -2308,9 +2309,10 @@ const App: React.FC = () => {
 
       {/* MOBİL DRAWER - SOHBET */}
       {isMobileChatOpen && (
-        <div className="fixed inset-0 z-50 flex xl:hidden justify-end">
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileChatOpen(false)}></div>
-          <aside className="w-full sm:w-[380px] bg-[#1A1D24] h-full shadow-2xl flex-shrink-0 relative z-10 transform transition-transform">
+        <div className="fixed inset-0 z-[110] flex xl:hidden justify-end">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileChatOpen(false)}></div>
+          <aside className="w-[90%] sm:w-[380px] max-w-[420px] bg-[#111317] border-l border-[#1A1D24] h-full shadow-[-10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 transform transition-transform animate-slide-in-right">
+             <button onClick={() => setIsMobileChatOpen(false)} className="absolute top-4 -left-12 w-10 h-10 bg-[#111317] border border-[#1A1D24] rounded-l-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[-5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
             <ModernChat
               open={true}
               onOpen={() => {}}

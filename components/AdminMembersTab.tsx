@@ -159,10 +159,10 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
     };
 
     return (
-        <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${member.status === 'suspended' ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.06)'}` }}>
+        <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${member.status === 'suspended' ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.06)'}` }}>
             {/* Row Summary */}
             <div className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-white/[0.02] transition-all" onClick={() => setExpanded(e => !e)}>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 font-black text-sm"
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 font-black text-sm"
                     style={{ background: member.status === 'suspended' ? 'rgba(239,68,68,0.1)' : 'rgba(240,185,11,0.1)', color: member.status === 'suspended' ? '#ef4444' : '#f0b90b' }}>
                     {member.username[0].toUpperCase()}
                 </div>
@@ -201,13 +201,13 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
             {expanded && (
                 <div className="px-4 pb-4 border-t border-zinc-800/50 pt-3 space-y-3">
                     {loadingLoyalty && <div className="flex items-center gap-2 text-zinc-500 text-[10px]"><Loader2 className="w-3 h-3 animate-spin"/> Veriler yükleniyor...</div>}
-                    {msg && <div className="px-3 py-2 rounded-xl text-xs font-bold text-white bg-green-500/10 border border-green-500/20">{msg}</div>}
+                    {msg && <div className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-green-500/10 border border-green-500/20">{msg}</div>}
 
                     {loyalty && (
                         <>
                             {/* Manual coins/tickets */}
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(240,185,11,0.05)', border: '1px solid rgba(240,185,11,0.12)' }}>
+                                <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(240,185,11,0.05)', border: '1px solid rgba(240,185,11,0.12)' }}>
                                     <label className="text-zinc-500 text-[10px] font-black">Manuel Coin Ekle</label>
                                     <div className="flex gap-2">
                                         <input type="number" min={1} value={manualCoins} onChange={e => setManualCoins(e.target.value)}
@@ -215,7 +215,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                                         <button onClick={handleAddCoins} className="px-3 py-1.5 rounded-lg font-black text-[10px] text-black bg-[#f0b90b] hover:bg-[#f0b90b]/80 transition-all"><Plus className="w-3 h-3" /></button>
                                     </div>
                                 </div>
-                                <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(124,58,237,0.05)', border: '1px solid rgba(124,58,237,0.15)' }}>
+                                <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(124,58,237,0.05)', border: '1px solid rgba(124,58,237,0.15)' }}>
                                     <label className="text-zinc-500 text-[10px] font-black">Manuel Bilet Ekle</label>
                                     <div className="flex gap-2">
                                         <input type="number" min={1} value={manualTickets} onChange={e => setManualTickets(e.target.value)}
@@ -227,7 +227,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
 
                             {/* Ticket history */}
                             {loyalty.transactions.filter(t => t.tickets && t.tickets > 0).length > 0 && (
-                                <div className="p-3 rounded-xl" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                                <div className="p-3 rounded-lg" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.04)' }}>
                                     <div className="text-zinc-600 text-[10px] font-black uppercase mb-2">Bilet Geçmişi</div>
                                     {loyalty.transactions.filter(t => t.tickets && t.tickets > 0).slice(0, 5).map(tx => (
                                         <div key={tx.id} className="flex items-center justify-between py-1 border-b border-zinc-800/30 last:border-0">
@@ -241,7 +241,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                     )}
 
                     {/* Balance Management Section (Always Available) */}
-                    <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
+                    <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
                         <div className="flex items-center gap-2 mb-1">
                             <Wallet className="w-3.5 h-3.5 text-emerald-500" />
                             <span className="text-white font-black text-[11px] uppercase tracking-wider">Bakiye Yönetimi (TL)</span>
@@ -265,7 +265,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                     </div>
 
                     {/* Password Management Section (Always Available) */}
-                    <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)' }}>
+                    <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)' }}>
                         <div className="flex items-center gap-2 mb-1">
                             <Key className="w-3.5 h-3.5 text-blue-500" />
                             <span className="text-white font-black text-[11px] uppercase tracking-wider">Şifre Yönetimi</span>
@@ -297,7 +297,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                     </div>
 
                     {/* Role Management Section (Always Available) */}
-                    <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(255,185,11,0.03)', border: '1px solid rgba(240,185,11,0.1)' }}>
+                    <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(255,185,11,0.03)', border: '1px solid rgba(240,185,11,0.1)' }}>
                         <div className="flex items-center gap-2 mb-1">
                             <Shield className="w-3.5 h-3.5 text-[#f0b90b]" />
                             <span className="text-white font-black text-[11px] uppercase tracking-wider">Yetki Yönetimi</span>
@@ -332,8 +332,8 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                     {/* Notes */}
                     <div className="flex gap-2">
                         <input type="text" value={editNotes} onChange={e => setEditNotes(e.target.value)}
-                            placeholder="Yönetici notu..." className="flex-1 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-xs font-bold outline-none" />
-                        <button onClick={handleSaveNotes} className="px-3 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white transition-all"><Save className="w-3.5 h-3.5" /></button>
+                            placeholder="Yönetici notu..." className="flex-1 px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-white text-xs font-bold outline-none" />
+                        <button onClick={handleSaveNotes} className="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white transition-all"><Save className="w-3.5 h-3.5" /></button>
                     </div>
 
                     {/* Actions */}
@@ -343,17 +343,17 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                                 const { error } = await supabase.from('members').update({ status: 'active' }).eq('id', member.id);
                                 if (!error) { showMsg('✅ Üye onaylandı.'); onRefresh(); }
                             }}
-                                className="flex items-center gap-1.5 px-3 py-2 rounded-xl font-black text-[10px] uppercase transition-all bg-[#f0b90b] text-black hover:bg-[#f0b90b]/90 hover:scale-105">
+                                className="flex items-center gap-1.5 px-3 py-2 rounded-lg font-black text-[10px] uppercase transition-all bg-[#f0b90b] text-black hover:bg-[#f0b90b]/90 hover:scale-105">
                                 <CheckCircle2 className="w-3.5 h-3.5" /> Onayla
                             </button>
                         ) : (
                             <button onClick={handleToggleStatus}
-                                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl font-black text-[10px] uppercase transition-all ${member.status === 'suspended' ? 'bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20'}`}>
+                                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black text-[10px] uppercase transition-all ${member.status === 'suspended' ? 'bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20'}`}>
                                 {member.status === 'suspended' ? <><CheckCircle2 className="w-3.5 h-3.5" /> Aktifleştir</> : <><Ban className="w-3.5 h-3.5" /> Askıya Al</>}
                             </button>
                         )}
                         <button onClick={handleDeleteMember}
-                            className="flex items-center gap-1.5 px-3 py-2 rounded-xl font-black text-[10px] uppercase text-red-400 border border-red-500/20 hover:bg-red-500/10 transition-all">
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg font-black text-[10px] uppercase text-red-400 border border-red-500/20 hover:bg-red-500/10 transition-all">
                             <Trash2 className="w-3.5 h-3.5" /> Sil
                         </button>
                     </div>
@@ -419,7 +419,7 @@ const AdminMembersTab: React.FC<AdminMembersTabProps> = ({ coinName = 'Coin' }) 
                         <p className="text-zinc-500 text-xs font-bold">Gerçek zamanlı veritabanı bağlantısı</p>
                     </div>
                 </div>
-                <button onClick={refresh} className={`p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-all ${loading ? 'animate-spin-slow' : ''}`}>
+                <button onClick={refresh} className={`p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-all ${loading ? 'animate-spin-slow' : ''}`}>
                     <Loader2 className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
                 </button>
             </div>
@@ -431,7 +431,7 @@ const AdminMembersTab: React.FC<AdminMembersTabProps> = ({ coinName = 'Coin' }) 
                     { label: `Onaylı Üye`, value: members.filter(m => m.status === 'active').length, color: '#f0b90b' },
                     { label: 'Bekleyen Üye', value: members.filter(m => m.status === 'pending').length, color: '#f0b90b' },
                 ].map((s, i) => (
-                    <div key={i} className="p-3 rounded-2xl text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div key={i} className="p-3 rounded-lg text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
                         <div className="font-black text-xl" style={{ color: s.color }}>{s.value}</div>
                         <div className="text-zinc-600 text-[10px] font-black uppercase tracking-widest mt-0.5">{s.label}</div>
                     </div>
@@ -443,7 +443,7 @@ const AdminMembersTab: React.FC<AdminMembersTabProps> = ({ coinName = 'Coin' }) 
                 <div className="flex-1 relative min-w-40">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
                     <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-                        placeholder="Kullanıcı adı, e-posta, telefon..." className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-xs font-bold outline-none focus:border-zinc-700" />
+                        placeholder="Kullanıcı adı, e-posta, telefon..." className="w-full pl-9 pr-3 py-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-white text-xs font-bold outline-none focus:border-zinc-700" />
                 </div>
                 {(['all', 'pending', 'active', 'suspended'] as const).map(f => {
                     const count = f === 'all' ? members.length
@@ -452,7 +452,7 @@ const AdminMembersTab: React.FC<AdminMembersTabProps> = ({ coinName = 'Coin' }) 
 
                     return (
                         <button key={f} onClick={() => setFilter(f)}
-                            className={`px-3 py-2 rounded-xl font-black text-[10px] uppercase transition-all ${filter === f ? 'bg-[#f0b90b] text-black' : 'bg-zinc-900 text-zinc-500 border border-zinc-800 hover:border-zinc-700'}`}>
+                            className={`px-3 py-2 rounded-lg font-black text-[10px] uppercase transition-all ${filter === f ? 'bg-[#f0b90b] text-black' : 'bg-zinc-900 text-zinc-500 border border-zinc-800 hover:border-zinc-700'}`}>
                             {f === 'all' ? 'Tümü' : f === 'pending' ? 'Bekleyen' : f === 'active' ? 'Aktif' : 'Askıda'} ({count})
                         </button>
                     )

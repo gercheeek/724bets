@@ -12,7 +12,7 @@ const BettingBulletin: React.FC<BettingBulletinProps> = ({ matches }) => {
   return (
     <div className="mb-8 animate-fade-in-up">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.3)]">
           <Trophy className="w-5 h-5 text-black" />
         </div>
         <div>
@@ -24,7 +24,7 @@ const BettingBulletin: React.FC<BettingBulletinProps> = ({ matches }) => {
       </div>
 
       {activeMatches.length === 0 ? (
-        <div className="text-center py-12 bg-[#0F172A] rounded-xl border border-white/5">
+        <div className="text-center py-12 bg-[#0F172A] rounded-lg border border-white/5">
           <p className="text-gray-400 font-bold">Şu an aktif maç bulunmamaktadır.</p>
         </div>
       ) : (
@@ -58,15 +58,15 @@ const BettingBulletin: React.FC<BettingBulletinProps> = ({ matches }) => {
 
               {/* Odds */}
               <div className="flex items-center gap-1.5 w-full md:w-auto mt-2 md:mt-0 shrink-0">
-                <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-between md:justify-center bg-[#1E293B] border border-white/5 rounded-md w-auto md:w-16 px-2 py-1 md:py-1 hover:bg-[#F59E0B] hover:border-[#F59E0B] group/odd transition-all cursor-pointer">
+                <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-between md:justify-center bg-[#1E293B] border border-white/5 rounded-lg w-auto md:w-16 px-2 py-1 md:py-1 hover:bg-[#F59E0B] hover:border-[#F59E0B] group/odd transition-all cursor-pointer">
                   <span className="text-[9px] font-black text-gray-400 group-hover/odd:text-black/60 md:mb-0.5">1</span>
                   <span className="text-sm font-black text-white group-hover/odd:text-black">{match.odds1 || '-'}</span>
                 </button>
-                <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-between md:justify-center bg-[#1E293B] border border-white/5 rounded-md w-auto md:w-16 px-2 py-1 md:py-1 hover:bg-[#F59E0B] hover:border-[#F59E0B] group/odd transition-all cursor-pointer">
+                <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-between md:justify-center bg-[#1E293B] border border-white/5 rounded-lg w-auto md:w-16 px-2 py-1 md:py-1 hover:bg-[#F59E0B] hover:border-[#F59E0B] group/odd transition-all cursor-pointer">
                   <span className="text-[9px] font-black text-gray-400 group-hover/odd:text-black/60 md:mb-0.5">X</span>
                   <span className="text-sm font-black text-white group-hover/odd:text-black">{match.oddsX || '-'}</span>
                 </button>
-                <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-between md:justify-center bg-[#1E293B] border border-white/5 rounded-md w-auto md:w-16 px-2 py-1 md:py-1 hover:bg-[#F59E0B] hover:border-[#F59E0B] group/odd transition-all cursor-pointer">
+                <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-between md:justify-center bg-[#1E293B] border border-white/5 rounded-lg w-auto md:w-16 px-2 py-1 md:py-1 hover:bg-[#F59E0B] hover:border-[#F59E0B] group/odd transition-all cursor-pointer">
                   <span className="text-[9px] font-black text-gray-400 group-hover/odd:text-black/60 md:mb-0.5">2</span>
                   <span className="text-sm font-black text-white group-hover/odd:text-black">{match.odds2 || '-'}</span>
                 </button>

@@ -76,7 +76,7 @@ const PortalCouponsTeaser: React.FC<PortalCouponsTeaserProps> = ({ coupons, onVi
                             style={{ 
                                 background: 'rgba(13, 13, 13, 0.6)', 
                                 border: '1px solid #1a1a1a', 
-                                borderRadius: '10px', 
+                                borderRadius: '8px', 
                                 padding: '10px 12px', 
                                 cursor: 'pointer', 
                                 transition: 'all 0.3s',

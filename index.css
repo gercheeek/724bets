@@ -1080,13 +1080,13 @@ body {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(245, 166, 35, 0.12);
+  background: rgba(0, 255, 163, 0.12);
   border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 166, 35, 0.25);
+  background: rgba(0, 255, 163, 0.25);
 }
-* { scrollbar-width: thin; scrollbar-color: rgba(245,166,35,0.12) transparent; }
+* { scrollbar-width: thin; scrollbar-color: rgba(0, 255, 163, 0.12) transparent; }
 
 /* ===== Premium Card ===== */
 .premium-card {
@@ -1480,4 +1480,28 @@ body {
   letter-spacing: 2px;
   text-transform: uppercase;
   animation: pulse-slow 2s infinite;
+}
+
+/* Animations for Mobile Drawers */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-slide-in-right {
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

@@ -75,7 +75,7 @@ const DemoGames: React.FC = () => {
             <button
               key={game.id}
               onClick={() => handleGameSelect(game)}
-              className={`relative overflow-hidden rounded-2xl border-2 aspect-[4/3] group transition-all duration-300 flex flex-col justify-end p-3 ${
+              className={`relative overflow-hidden rounded-lg border-2 aspect-[4/3] group transition-all duration-300 flex flex-col justify-end p-3 ${
                 isSelected
                   ? 'border-[#F5A623] shadow-[0_0_20px_rgba(245,166,35,0.4)] scale-[1.05] z-10'
                   : 'border-zinc-800/80 hover:border-[#F5A623]/50 bg-zinc-900/40 opacity-80 hover:opacity-100 hover:shadow-[0_0_15px_rgba(245,166,35,0.2)]'
@@ -115,7 +115,7 @@ const DemoGames: React.FC = () => {
       </div>
 
       {/* Game Window Container */}
-      <div className="w-full relative rounded-3xl overflow-hidden bg-zinc-950 shadow-[0_0_40px_rgba(0,0,0,0.8)] border border-white/5 flex flex-col z-10 group">
+      <div className="w-full relative rounded-lg overflow-hidden bg-zinc-950 shadow-[0_0_40px_rgba(0,0,0,0.8)] border border-white/5 flex flex-col z-10 group">
         {/* Animated Neon Border */}
         <div className="absolute -inset-[1px] bg-gradient-to-r from-[#F5A623]/0 via-[#F5A623]/50 to-[#F5A623]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 blur-sm pointer-events-none z-0" />
         

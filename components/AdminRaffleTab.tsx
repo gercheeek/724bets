@@ -85,10 +85,10 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                     <Ticket className="w-6 h-6 text-[#f0b90b]" /> BİLET HAVUZU YÖNETİMİ
                 </h2>
                 <div className="flex gap-2">
-                    <button onClick={handlePickWinner} className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-xl text-xs font-bold border border-purple-500/30 hover:bg-purple-500/30 transition-all">
+                    <button onClick={handlePickWinner} className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg text-xs font-bold border border-purple-500/30 hover:bg-purple-500/30 transition-all">
                         <Sparkles className="w-4 h-4" /> ÇEKİLİŞ YAP
                     </button>
-                    <button onClick={handleSaveConfig} className="flex items-center gap-2 px-6 py-2 bg-[#f0b90b] text-black rounded-xl text-xs font-black hover:shadow-[0_0_20px_rgba(240,185,11,0.3)] transition-all">
+                    <button onClick={handleSaveConfig} className="flex items-center gap-2 px-6 py-2 bg-[#f0b90b] text-black rounded-lg text-xs font-black hover:shadow-[0_0_20px_rgba(240,185,11,0.3)] transition-all">
                         <Save className="w-4 h-4" /> AYARLARI KAYDET
                     </button>
                 </div>
@@ -98,7 +98,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                 
                 {/* LEFT: General Settings & Prizes */}
                 <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                    <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
                         <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-4 flex items-center gap-2"><Clock size={14}/> GENEL AYARLAR</h3>
                         <div className="space-y-4">
                             <div>
@@ -107,10 +107,10 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                                     type="datetime-local" 
                                     value={localConfig.drawDate.slice(0, 16)} 
                                     onChange={e => setLocalConfig({...localConfig, drawDate: e.target.value})}
-                                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-white focus:border-[#f0b90b]/50 outline-none" 
+                                    className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm text-white focus:border-[#f0b90b]/50 outline-none" 
                                 />
                             </div>
-                            <div className="flex items-center justify-between p-3 bg-black/40 rounded-xl border border-zinc-800">
+                            <div className="flex items-center justify-between p-3 bg-black/40 rounded-lg border border-zinc-800">
                                 <span className="text-xs font-bold text-zinc-300">Sistem Aktif mi?</span>
                                 <button 
                                     onClick={() => setLocalConfig({...localConfig, isActive: !localConfig.isActive})}
@@ -122,7 +122,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                         </div>
                     </div>
 
-                    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                    <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Trophy size={14}/> ÖDÜLLER</h3>
                             <button 
@@ -134,7 +134,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                         </div>
                         <div className="space-y-3">
                             {localConfig.prizes.map((p, idx) => (
-                                <div key={p.id} className="flex gap-2 items-center bg-black/30 p-2 rounded-xl border border-zinc-800/50">
+                                <div key={p.id} className="flex gap-2 items-center bg-black/30 p-2 rounded-lg border border-zinc-800/50">
                                     <input value={p.rank} onChange={e => {
                                         const updated = [...localConfig.prizes];
                                         updated[idx].rank = e.target.value;
@@ -156,7 +156,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
 
                 {/* CENTER: Bilet Havuzu (Slot Management) */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                    <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
                         <div className="flex items-center justify-between mb-6">
                             <div>
                                 <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2"><Grid size={14}/> BİLET HAVUZU SLOTLARI</h3>
@@ -189,14 +189,14 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
 
                     {/* FAQ & Rules Management */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                         <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><HelpCircle size={14}/> S.S.S.</h3>
                                 <button onClick={() => setLocalConfig({...localConfig, faqs: [...localConfig.faqs, { q: '', a: '' }]})} className="p-1 bg-zinc-800 rounded text-zinc-400"><Plus size={12}/></button>
                             </div>
                             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                                 {localConfig.faqs.map((faq, idx) => (
-                                    <div key={idx} className="space-y-2 p-3 bg-black/40 rounded-xl border border-zinc-800">
+                                    <div key={idx} className="space-y-2 p-3 bg-black/40 rounded-lg border border-zinc-800">
                                         <input value={faq.q} onChange={e => {
                                             const updated = [...localConfig.faqs];
                                             updated[idx].q = e.target.value;
@@ -213,14 +213,14 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                             </div>
                          </div>
 
-                         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                         <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Shield size={14}/> KURALLAR</h3>
                                 <button onClick={() => setLocalConfig({...localConfig, rules: [...localConfig.rules, { icon: 'Info', text: '' }]})} className="p-1 bg-zinc-800 rounded text-zinc-400"><Plus size={12}/></button>
                             </div>
                             <div className="space-y-3">
                                 {localConfig.rules.map((rule, idx) => (
-                                    <div key={idx} className="flex gap-2 items-start bg-black/40 p-2 rounded-xl border border-zinc-800">
+                                    <div key={idx} className="flex gap-2 items-start bg-black/40 p-2 rounded-lg border border-zinc-800">
                                         <div className="mt-1 text-[#f0b90b]">{renderIcon(rule.icon)}</div>
                                         <textarea value={rule.text} onChange={e => {
                                             const updated = [...localConfig.rules];
@@ -239,11 +239,11 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
             {/* SLOT EDIT MODAL */}
             {editingSlot !== null && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-                    <div className="bg-zinc-950 border border-zinc-800 p-5 rounded-2xl max-w-md w-full shadow-2xl relative">
+                    <div className="bg-zinc-950 border border-zinc-800 p-5 rounded-lg max-w-md w-full shadow-2xl relative">
                         <button onClick={() => setEditingSlot(null)} className="absolute top-6 right-6 text-zinc-500 hover:text-white">✕</button>
                         
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="w-12 h-12 rounded-2xl bg-[#f0b90b]/10 border border-[#f0b90b]/20 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-lg bg-[#f0b90b]/10 border border-[#f0b90b]/20 flex items-center justify-center">
                                 <Ticket className="text-[#f0b90b]" />
                             </div>
                             <div>
@@ -254,7 +254,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
 
                         <div className="space-y-4">
                             {ticketPool.find(t => t.slot === editingSlot) ? (
-                                <div className="p-4 bg-zinc-900 rounded-2xl border border-zinc-800 mb-4">
+                                <div className="p-4 bg-zinc-900 rounded-lg border border-zinc-800 mb-4">
                                     <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">ŞU ANKİ SAHİBİ</p>
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
@@ -274,9 +274,9 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                                             value={assignUserId} 
                                             onChange={e => setAssignUserId(e.target.value)}
                                             placeholder="User ID veya Kullanıcı Adı" 
-                                            className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm text-white" 
+                                            className="flex-1 bg-zinc-900 border border-zinc-800 rounded-lg p-3 text-sm text-white" 
                                         />
-                                        <button onClick={handleAssignTicket} className="bg-[#f0b90b] text-black px-4 rounded-xl flex items-center justify-center">
+                                        <button onClick={handleAssignTicket} className="bg-[#f0b90b] text-black px-4 rounded-lg flex items-center justify-center">
                                             <UserPlus size={18} />
                                         </button>
                                     </div>
@@ -284,7 +284,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                                 </div>
                             )}
 
-                            <button onClick={() => setEditingSlot(null)} className="w-full py-3 bg-zinc-800 text-white rounded-xl text-xs font-bold mt-4 hover:bg-zinc-700">
+                            <button onClick={() => setEditingSlot(null)} className="w-full py-3 bg-zinc-800 text-white rounded-lg text-xs font-bold mt-4 hover:bg-zinc-700">
                                 KAPAT
                             </button>
                         </div>

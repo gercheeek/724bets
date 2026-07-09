@@ -64,7 +64,7 @@ export default function CountdownTimer({ endDate }: CountdownTimerProps) {
           <div className="flex flex-col items-center">
             <div
               className="
-                w-14 h-14 rounded-xl flex items-center justify-center
+                w-14 h-14 rounded-lg flex items-center justify-center
                 bg-black/60 border border-zinc-700/60
                 font-black text-2xl text-white tabular-nums
                 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]

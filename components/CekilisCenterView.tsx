@@ -58,7 +58,7 @@ const SideRaffleCard: React.FC<{ raffle: RaffleWithMeta; onBuy: (id: string, pri
 
   return (
     <div className={`
-      relative flex flex-col rounded-2xl border overflow-hidden
+      relative flex flex-col rounded-lg border overflow-hidden
       transition-all duration-300 group
       ${isFull
         ? 'border-zinc-700/40 bg-zinc-900/60 opacity-60 cursor-not-allowed'
@@ -107,7 +107,7 @@ const SideRaffleCard: React.FC<{ raffle: RaffleWithMeta; onBuy: (id: string, pri
           disabled={isFull}
           onClick={() => onBuy(raffle.id, raffle.ticket_price)}
           className={`
-            w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-widest
+            w-full py-2.5 rounded-lg text-xs font-black uppercase tracking-widest
             flex items-center justify-center gap-2 transition-all
             ${isFull
               ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
@@ -140,7 +140,7 @@ function FeaturedRaffleCard({
   }, [ticketCount, onTicketCountChange]);
 
   return (
-    <div className="relative rounded-3xl border border-[#F5A623]/25 bg-gradient-to-br from-[#1E2530] to-[#141B25] overflow-hidden shadow-[0_0_60px_rgba(245,166,35,0.08)]">
+    <div className="relative rounded-lg border border-[#F5A623]/25 bg-gradient-to-br from-[#1E2530] to-[#141B25] overflow-hidden shadow-[0_0_60px_rgba(245,166,35,0.08)]">
       <div className="absolute top-0 right-0 w-[380px] h-[380px] rounded-full bg-[#F5A623]/5 blur-3xl pointer-events-none" />
 
       <div className="relative flex flex-col md:flex-row gap-6 p-6 md:p-10">
@@ -179,7 +179,7 @@ function FeaturedRaffleCard({
             onClick={() => onBuy(raffle.id, raffle.ticket_price)}
             className="
               group flex items-center justify-center gap-3 w-full md:w-auto
-              px-8 py-4 rounded-2xl font-black text-base uppercase tracking-widest
+              px-8 py-4 rounded-lg font-black text-base uppercase tracking-widest
               bg-[linear-gradient(135deg,#F5A623_0%,#D4900A_100%)] text-black border-none
               hover:shadow-[0_0_40px_rgba(245,166,35,0.5)] hover:scale-[1.02]
               active:scale-[0.98] transition-all duration-200

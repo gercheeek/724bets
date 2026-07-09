@@ -12,13 +12,13 @@ import {
 // ─── STATIC DATA ─────────────────────────────────────────────────────────────
 const HERO_SLIDES = [
     { id: 'live', tag: 'CANLI YAYIN', tagColor: '#ef4444', title: 'TÜRKİYE\'NİN İLK KUMAR TV\'Sİ', subtitle: '7/24 Canlı Bahis & Spor Analizi', cta: 'YAYINI İZLE', ctaColor: '#ef4444', bg: 'linear-gradient(135deg, #0a0000 0%, #1a0000 40%, #0d0407 100%)', accent: '#ef4444', emoji: '📺', imageUrl: null },
-    { id: 'tournament', tag: 'BÜYÜK TURNUVA', tagColor: '#F0B90B', title: '₺500.000 ÖDÜL HAVUZU', subtitle: 'Özel Turnuvaya Katıl — Her Cuma Çekiliş', cta: 'HEMEN KATIL', ctaColor: '#F0B90B', bg: 'linear-gradient(135deg, #0a0800 0%, #1a1000 40%, #0d0a00 100%)', accent: '#F0B90B', emoji: '🏆', imageUrl: null },
+    { id: 'tournament', tag: 'BÜYÜK TURNUVA', tagColor: '#00FFA3', title: '₺500.000 ÖDÜL HAVUZU', subtitle: 'Özel Turnuvaya Katıl — Her Cuma Çekiliş', cta: 'HEMEN KATIL', ctaColor: '#00FFA3', bg: 'linear-gradient(135deg, #0a0800 0%, #1a1000 40%, #0d0a00 100%)', accent: '#00FFA3', emoji: '🏆', imageUrl: null },
 ];
 
 
 
 const FLASH_EVENTS = [
-    { type: 'bonus', icon: '🎰', title: 'BONUS KODU!', description: 'Bu yayına özel anlık bonus!', code: 'TV724BONUS', reward: '%100 İlk Yatırım Bonusu', color: '#F0B90B', duration: 60 },
+    { type: 'bonus', icon: '🎰', title: 'BONUS KODU!', description: 'Bu yayına özel anlık bonus!', code: 'TV724BONUS', reward: '%100 İlk Yatırım Bonusu', color: '#00FFA3', duration: 60 },
     { type: 'quiz', icon: '⚡', title: 'FLASH QUIZ!', description: 'Bu yarı kaç gol atılacak?', options: ['0-1 GOL', '2-3 GOL', '4+ GOL'], reward: '200 Coin Kazan!', color: '#00D4FF', duration: 30 },
     { type: 'spin', icon: '🎡', title: 'ŞANS ÇEVİRMECESİ!', description: 'Çarkı çevir, bedava bahis kazan!', reward: 'Bedava Bahis Hakkı', color: '#ADFF2F', duration: 45 },
 ];
@@ -659,14 +659,14 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             }
         }
         if (sourceType === 'video') return <div style={{ width: '100%', height: '100%', background: '#000' }}><video ref={videoRef} src={activeChannel.videoUrl || activeChannel.streamUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
-        if (sourceType === 'iframe') return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{!isIframeLoaded && <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', zIndex: 10 }}><div style={{ width: '32px', height: '32px', border: '2px solid rgba(240,185,11,0.3)', borderTopColor: '#F0B90B', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /></div>}<iframe src={activeChannel.iframeUrl || activeChannel.streamUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={() => setIsIframeLoaded(true)} title={activeChannel.name} /></div>;
+        if (sourceType === 'iframe') return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{!isIframeLoaded && <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', zIndex: 10 }}><div style={{ width: '32px', height: '32px', border: '2px solid rgba(0, 255, 163,0.3)', borderTopColor: '#00FFA3', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /></div>}<iframe src={activeChannel.iframeUrl || activeChannel.streamUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={() => setIsIframeLoaded(true)} title={activeChannel.name} /></div>;
         if (activeChannel.fallbackType === 'video' && activeChannel.fallbackVideoUrl) return <div style={{ width: '100%', height: '100%', background: '#000' }}><video ref={videoRef} src={activeChannel.fallbackVideoUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
         if (activeChannel.fallbackType === 'iframe' && activeChannel.fallbackIframeUrl) return <div style={{ width: '100%', height: '100%', position: 'relative' }}><iframe src={activeChannel.fallbackIframeUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={() => setIsIframeLoaded(true)} title={activeChannel.name} /></div>;
 
         return (
-            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#F0B90B', gap: '12px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(240,185,11,0.06)', border: '1px solid rgba(240,185,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse-slow 3s infinite' }}>
-                    <Tv style={{ width: 24, height: 24, color: '#F0B90B', opacity: 0.8 }} />
+            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#00FFA3', gap: '12px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(0, 255, 163,0.06)', border: '1px solid rgba(0, 255, 163,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse-slow 3s infinite' }}>
+                    <Tv style={{ width: 24, height: 24, color: '#00FFA3', opacity: 0.8 }} />
                 </div>
                 <p style={{ fontSize: '12px', color: '#6b7280', fontWeight: 600, letterSpacing: '0.5px' }}>YAYIN YAKINDA BAŞLAYACAK</p>
             </div>
@@ -726,7 +726,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 @keyframes floatUp { 0%{transform:translateY(20px) scale(0.5);opacity:0} 15%{opacity:1;transform:translateY(0) scale(1.2)} 80%{opacity:.8} 100%{transform:translateY(-240px) scale(.6);opacity:0} }
                 @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
                 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-                @keyframes pulse-slow { 0%,100%{opacity:.9;box-shadow:0 0 10px rgba(240,185,11,.05)} 50%{opacity:.6;box-shadow:0 0 25px rgba(240,185,11,.2)} }
+                @keyframes pulse-slow { 0%,100%{opacity:.9;box-shadow:0 0 10px rgba(0, 255, 163,.05)} 50%{opacity:.6;box-shadow:0 0 25px rgba(0, 255, 163,.2)} }
                 @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
                 @keyframes glow-live { 0%,100%{box-shadow:0 0 8px rgba(239,68,68,.4),0 0 20px rgba(239,68,68,.1)} 50%{box-shadow:0 0 20px rgba(239,68,68,.8),0 0 40px rgba(239,68,68,.3)} }
                 @keyframes card-active-glow { 0%{box-shadow:0 0 8px rgba(173,255,47,.3)} 100%{box-shadow:0 0 30px rgba(173,255,47,.9)} }
@@ -748,18 +748,18 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 .fifa-card { transition:all .3s cubic-bezier(.25,.8,.25,1); }
                 .fifa-card:hover { transform:translateY(-10px) scale(1.05); filter:brightness(1.1); }
                 .fifa-card-active { animation:card-active-glow 2s ease-in-out infinite alternate; }
-                .vod-card:hover { transform:translateY(-4px)!important; border-color:rgba(240,185,11,.4)!important; box-shadow:0 8px 20px rgba(240,185,11,.1)!important; }
+                .vod-card:hover { transform:translateY(-4px)!important; border-color:rgba(0, 255, 163,.4)!important; box-shadow:0 8px 20px rgba(0, 255, 163,.1)!important; }
                 .hero-arrow:hover { background:rgba(255,255,255,.2)!important; transform:scale(1.1); }
                 .program-card:hover { border-color:rgba(255,255,255,.15)!important; transform:translateY(-2px); }
                 .chat-input-wrap:focus-within { border-color:rgba(173,255,47,.5)!important; }
                 .odds-btn:hover { filter:brightness(1.15); transform:scale(1.03); }
-                .odds-btn-selected { box-shadow:0 0 0 2px #F0B90B, 0 0 12px rgba(240,185,11,.3)!important; }
+                .odds-btn-selected { box-shadow:0 0 0 2px #00FFA3, 0 0 12px rgba(0, 255, 163,.3)!important; }
                 .section-label { font-size:11px; font-weight:900; color:#6b7280; text-transform:uppercase; letter-spacing:2px; display:flex; align-items:center; gap:8px; }
                 .section-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(255,255,255,.06),transparent); }
 
                 .custom-scrollbar::-webkit-scrollbar { height:4px; width:4px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background:rgba(255,255,255,.01); border-radius:99px; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background:rgba(240,185,11,.2); border-radius:99px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background:rgba(0, 255, 163,.2); border-radius:99px; }
                 .chat-message-row:hover .admin-msg-controls { display:flex!important; }
 
                 /* ── Mobile ── */
@@ -784,7 +784,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             {flashEvent && flashCountdown > 0 && (
                 <div style={{ position: 'fixed', inset: 0, zIndex: 99998, background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
                     onClick={(e) => { if (e.target === e.currentTarget) { setFlashEvent(null); } }}>
-                    <div style={{ background: 'linear-gradient(135deg, #0d0d14 0%, #111120 100%)', border: `1px solid ${flashEvent.color}44`, borderRadius: '24px', padding: '32px', maxWidth: '400px', width: '100%', position: 'relative', boxShadow: `0 0 60px ${flashEvent.color}22`, animation: 'flash-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
+                    <div style={{ background: 'linear-gradient(135deg, #0d0d14 0%, #111120 100%)', border: `1px solid ${flashEvent.color}44`, borderRadius: '8px', padding: '32px', maxWidth: '400px', width: '100%', position: 'relative', boxShadow: `0 0 60px ${flashEvent.color}22`, animation: 'flash-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
                         {/* Countdown ring */}
                         <div style={{ position: 'absolute', top: '16px', right: '16px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <div style={{ width: '36px', height: '36px', borderRadius: '50%', border: `2px solid ${flashEvent.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 900, color: flashEvent.color }}>{userRole === 'admin' ? '∞' : flashCountdown}</div>
@@ -793,7 +793,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                         <div style={{ textAlign: 'center', marginTop: '8px' }}>
                             <div style={{ fontSize: '48px', marginBottom: '12px' }}>{flashEvent.icon}</div>
-                            <div style={{ display: 'inline-block', background: `${flashEvent.color}22`, border: `1px solid ${flashEvent.color}44`, borderRadius: '20px', padding: '4px 14px', fontSize: '10px', fontWeight: 900, color: flashEvent.color, letterSpacing: '1px', marginBottom: '12px', animation: 'badge-pulse 1.5s infinite' }}>
+                            <div style={{ display: 'inline-block', background: `${flashEvent.color}22`, border: `1px solid ${flashEvent.color}44`, borderRadius: '8px', padding: '4px 14px', fontSize: '10px', fontWeight: 900, color: flashEvent.color, letterSpacing: '1px', marginBottom: '12px', animation: 'badge-pulse 1.5s infinite' }}>
                                 {flashEvent.type === 'quiz' ? '⚡ FLASH QUIZ' : flashEvent.type === 'bonus' ? '🎁 BONUS FIRSAT' : '🎡 ŞANS ÇEVİRMECESİ'}
                             </div>
                             <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#fff', marginBottom: '8px', fontFamily: "'Outfit', sans-serif" }}>{flashEvent.title}</h2>
@@ -801,11 +801,11 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                             {flashEvent.type === 'bonus' && (
                                 <div>
-                                    <div style={{ background: '#111116', border: `1px dashed ${flashEvent.color}88`, borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+                                    <div style={{ background: '#111116', border: `1px dashed ${flashEvent.color}88`, borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
                                         <div style={{ fontSize: '11px', color: '#6b7280', marginBottom: '6px', fontWeight: 700 }}>BONUS KODU</div>
                                         <div style={{ fontSize: '22px', fontWeight: 900, color: flashEvent.color, letterSpacing: '3px', fontFamily: "'Outfit', sans-serif" }}>{flashEvent.code}</div>
                                     </div>
-                                    <button style={{ width: '100%', padding: '14px', borderRadius: '12px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}aa)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '14px', cursor: 'pointer', letterSpacing: '0.5px' }}>
+                                    <button style={{ width: '100%', padding: '14px', borderRadius: '8px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}aa)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '14px', cursor: 'pointer', letterSpacing: '0.5px' }}>
                                         KODU KOPYALA & KULLAN
                                     </button>
                                 </div>
@@ -815,13 +815,13 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
                                     {flashEvent.options.map((opt, i) => (
                                         <button key={i} onClick={() => setQuizAnswer(opt)}
-                                            style={{ padding: '12px', borderRadius: '10px', border: `1px solid ${quizAnswer === opt ? flashEvent.color : 'rgba(255,255,255,0.1)'}`, background: quizAnswer === opt ? `${flashEvent.color}22` : 'rgba(255,255,255,0.03)', color: quizAnswer === opt ? flashEvent.color : '#e5e7eb', fontWeight: 800, fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            style={{ padding: '12px', borderRadius: '8px', border: `1px solid ${quizAnswer === opt ? flashEvent.color : 'rgba(255,255,255,0.1)'}`, background: quizAnswer === opt ? `${flashEvent.color}22` : 'rgba(255,255,255,0.03)', color: quizAnswer === opt ? flashEvent.color : '#e5e7eb', fontWeight: 800, fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '10px' }}>
                                             <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: `2px solid ${quizAnswer === opt ? flashEvent.color : 'rgba(255,255,255,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900, color: quizAnswer === opt ? flashEvent.color : '#6b7280' }}>{i + 1}</div>
                                             {opt}
                                         </button>
                                     ))}
                                     {quizAnswer && (
-                                        <button style={{ padding: '13px', borderRadius: '10px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}bb)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '13px', cursor: 'pointer', marginTop: '4px' }}>
+                                        <button style={{ padding: '13px', borderRadius: '8px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}bb)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '13px', cursor: 'pointer', marginTop: '4px' }}>
                                             {flashEvent.reward} — YANITI GÖNDER
                                         </button>
                                     )}
@@ -829,7 +829,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                             )}
 
                             {flashEvent.type === 'spin' && (
-                                <button onClick={() => setFlashEvent(null)} style={{ width: '100%', padding: '14px', borderRadius: '12px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}99)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '14px', cursor: 'pointer' }}>
+                                <button onClick={() => setFlashEvent(null)} style={{ width: '100%', padding: '14px', borderRadius: '8px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}99)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '14px', cursor: 'pointer' }}>
                                     🎡 ÇARKI ÇEVİR — {flashEvent.reward}
                                 </button>
                             )}
@@ -858,15 +858,15 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     {/* Left Column: Video Player */}
                     <div style={{ flex: 1.8, minWidth: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {!isMiniPlayer ? (
-                            <div ref={playerContainerRef} className="player-hover" style={{ width: '100%', aspectRatio: '16/9', position: 'relative', background: '#000', borderRadius: '20px', overflow: 'hidden', border: activeChannel?.isLive ? '1.5px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.7)', transition: 'all 0.3s ease' }}>
+                            <div ref={playerContainerRef} className="player-hover" style={{ width: '100%', aspectRatio: '16/9', position: 'relative', background: '#000', borderRadius: '8px', overflow: 'hidden', border: activeChannel?.isLive ? '1.5px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.7)', transition: 'all 0.3s ease' }}>
                                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                                     <div style={{ width: '100%', height: '100%', filter: showPaywall ? 'blur(8px)' : 'none', transition: 'filter 0.5s', pointerEvents: showPaywall ? 'none' : 'auto' }}>
                                         {activeChannel ? (
                                             getStreamEmbed()
                                         ) : (
-                                            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#F0B90B', gap: '16px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
-                                                <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(240, 185, 11, 0.06)', border: '1px solid rgba(240, 185, 11, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse-slow 3s infinite' }}>
-                                                    <Tv style={{ width: 32, height: 32, color: '#F0B90B', opacity: 0.8 }} />
+                                            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#00FFA3', gap: '16px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
+                                                <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(0, 255, 163, 0.06)', border: '1px solid rgba(0, 255, 163, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse-slow 3s infinite' }}>
+                                                    <Tv style={{ width: 32, height: 32, color: '#00FFA3', opacity: 0.8 }} />
                                                 </div>
                                                 <p style={{ fontSize: '15px', color: '#9ca3af', fontWeight: 700, letterSpacing: '0.5px' }}>Lütfen bir kanal veya maç seçiniz</p>
                                             </div>
@@ -875,11 +875,11 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     
                                     {showPaywall && (
                                         <div style={{ position: 'absolute', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
-                                            <div style={{ background: 'rgba(15, 17, 26, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '30px 40px', borderRadius: '20px', textAlign: 'center', maxWidth: '400px', boxShadow: '0 20px 45px rgba(0,0,0,0.6)' }}>
+                                            <div style={{ background: 'rgba(15, 17, 26, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '30px 40px', borderRadius: '8px', textAlign: 'center', maxWidth: '400px', boxShadow: '0 20px 45px rgba(0,0,0,0.6)' }}>
                                                 <h2 style={{ fontSize: '24px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Heyecanı Kaçırma!</h2>
                                                 <p style={{ fontSize: '14px', color: '#d1d5db', marginBottom: '24px', lineHeight: 1.5 }}>15 saniyelik önizleme süren doldu. Ücretsiz üye ol, tüm canlı yayınlara ve özel sohbet odalarına anında erişim sağla.</p>
                                                 <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-                                                    <button onClick={onLoginRequired} style={{ background: '#F0B90B', color: '#000', fontWeight: 900, padding: '12px 24px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s' }} className="hover:scale-105">ÜYE GİRİŞİ</button>
+                                                    <button onClick={onLoginRequired} style={{ background: '#00FFA3', color: '#000', fontWeight: 900, padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s' }} className="hover:scale-105">ÜYE GİRİŞİ</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -900,21 +900,21 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                 </div>
                             </div>
                         ) : (
-                            <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(240, 185, 11, 0.3)', borderRadius: '20px', background: 'rgba(240, 185, 11, 0.02)', gap: '16px', padding: '24px', textAlign: 'center' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(240, 185, 11, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Tv style={{ width: 20, height: 20, color: '#F0B90B' }} />
+                            <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(0, 255, 163, 0.3)', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.02)', gap: '16px', padding: '24px', textAlign: 'center' }}>
+                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(0, 255, 163, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Tv style={{ width: 20, height: 20, color: '#00FFA3' }} />
                                 </div>
                                 <div>
                                     <h4 style={{ fontSize: '14px', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>Mini Oynatıcı Aktif</h4>
                                     <p style={{ fontSize: '11px', color: '#6b7280' }}>Yayın ekranın sağ alt köşesinde ufak pencerede oynamaya devam ediyor.</p>
                                 </div>
-                                <button onClick={() => setIsMiniPlayer(false)} style={{ background: 'rgba(240, 185, 11, 0.1)', border: '1px solid rgba(240, 185, 11, 0.2)', borderRadius: '8px', color: '#F0B90B', fontSize: '12px', fontWeight: 800, padding: '8px 16px', cursor: 'pointer', transition: 'all 0.2s' }}>Oynatıcıyı Geri Getir</button>
+                                <button onClick={() => setIsMiniPlayer(false)} style={{ background: 'rgba(0, 255, 163, 0.1)', border: '1px solid rgba(0, 255, 163, 0.2)', borderRadius: '8px', color: '#00FFA3', fontSize: '12px', fontWeight: 800, padding: '8px 16px', cursor: 'pointer', transition: 'all 0.2s' }}>Oynatıcıyı Geri Getir</button>
                             </div>
                         )}
                     </div>
                     
                     {/* Right Column: Channels List */}
-                    <div style={{ width: isMobile ? '100%' : '340px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '20px', padding: '16px', flexShrink: 0, height: isMobile ? '380px' : 'auto', position: 'relative' }}>
+                    <div style={{ width: isMobile ? '100%' : '340px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '16px', flexShrink: 0, height: isMobile ? '380px' : 'auto', position: 'relative' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexShrink: 0 }}>
                             <span style={{ fontSize: '11px', fontWeight: 900, color: '#6b7280', letterSpacing: '1px' }}>CANLI KANALLAR</span>
                             <div style={{ position: 'relative', width: '150px' }}>
@@ -955,7 +955,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                                     return sortedGroupNames.map(groupName => (
                                         <div key={groupName} style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
-                                            <div style={{ fontSize: '11px', fontWeight: 900, color: '#f0b90b', padding: '6px 4px 2px 4px', borderBottom: '1px solid rgba(240, 185, 11, 0.15)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                            <div style={{ fontSize: '11px', fontWeight: 900, color: '#00FFA3', padding: '6px 4px 2px 4px', borderBottom: '1px solid rgba(0, 255, 163, 0.15)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                                                 {groupName}
                                             </div>
                                             {groups[groupName].map(s => {
@@ -976,9 +976,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                             } as any);
                                                         }}
                                                         style={{
-                                                            background: isActive ? 'linear-gradient(135deg, rgba(240, 185, 11, 0.15), rgba(240, 185, 11, 0.03))' : 'rgba(255,255,255,0.01)',
-                                                            border: '1px solid ' + (isActive ? '#F0B90B' : 'rgba(255,255,255,0.04)'),
-                                                            borderRadius: '12px', padding: '10px 12px', cursor: 'pointer', transition: 'all 0.2s ease',
+                                                            background: isActive ? 'linear-gradient(135deg, rgba(0, 255, 163, 0.15), rgba(0, 255, 163, 0.03))' : 'rgba(255,255,255,0.01)',
+                                                            border: '1px solid ' + (isActive ? '#00FFA3' : 'rgba(255,255,255,0.04)'),
+                                                            borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', transition: 'all 0.2s ease',
                                                             display: 'flex', alignItems: 'center', gap: '10px'
                                                         }}
                                                         onMouseEnter={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
@@ -992,7 +992,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                             <div style={{ fontSize: '10px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.platform_type}</div>
                                                         </div>
                                                         {isLive ? (
-                                                            <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '12px', padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                            <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '8px', padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                                 <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#ef4444', animation: 'pulse 1.5s infinite' }} />
                                                                 <span style={{ fontSize: '8px', fontWeight: 900, color: '#ef4444' }}>CANLI</span>
                                                             </div>
@@ -1029,9 +1029,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     style={{
                                         background: 'rgba(255,255,255,0.02)',
                                         border: '1px solid rgba(255,255,255,0.06)',
-                                        borderRadius: '16px', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.2s ease'
+                                        borderRadius: '8px', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.2s ease'
                                     }}
-                                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(240, 185, 11, 0.4)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0, 255, 163, 0.4)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                                     onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                                 >
                                     <div style={{ width: '100%', height: '124px', background: '#080a10', position: 'relative' }}>
@@ -1061,13 +1061,13 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                 {/* ── TICKER ─────────────────────────────────────────── */}
                 {currentConfig.tickerText && (
-                    <div style={{ padding: '10px 0', background: '#050507', borderRadius: '10px', border: '1px solid rgba(240,185,11,.1)', overflow: 'hidden', position: 'relative', marginTop: '16px' }}>
-                        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg,transparent,#f0b90b,transparent)', opacity: .4 }} />
+                    <div style={{ padding: '10px 0', background: '#050507', borderRadius: '8px', border: '1px solid rgba(0, 255, 163,.1)', overflow: 'hidden', position: 'relative', marginTop: '16px' }}>
+                        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg,transparent,#00FFA3,transparent)', opacity: .4 }} />
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', animation: 'marquee 30s linear infinite', whiteSpace: 'nowrap' }}>
-                            <Zap style={{ width: 10, height: 10, color: '#f0b90b', flexShrink: 0 }} />
-                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#f0b90b', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{currentConfig.tickerText}</span>
+                            <Zap style={{ width: 10, height: 10, color: '#00FFA3', flexShrink: 0 }} />
+                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#00FFA3', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{currentConfig.tickerText}</span>
                             <span style={{ color: '#1a1a1a', margin: '0 20px' }}>|</span>
-                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#f0b90b', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{currentConfig.tickerText}</span>
+                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#00FFA3', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{currentConfig.tickerText}</span>
                         </div>
                     </div>
                 )}

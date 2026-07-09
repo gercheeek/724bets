@@ -219,7 +219,7 @@ const AnalysisDrawer: React.FC<{
                                     </div>
                                 ))}
                             </div>
-                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl bg-black/30 backdrop-blur-[2px]">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-lg bg-black/30 backdrop-blur-[2px]">
                                 <Lock className="w-6 h-6 text-[#00FFA3]" />
                                 <button onClick={onLoginRequired}
                                     className="flex items-center gap-2 px-5 py-2 bg-[#00FFA3] text-[#000000] font-black text-xs rounded uppercase tracking-widest hover:bg-[#00cc82] transition shadow-[0_0_20px_rgba(0,255,163,0.3)]">
@@ -349,7 +349,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                 <button
                                     key={date}
                                     onClick={() => setSelectedDate(selectedDate === date ? 'WEEKLY' : date)}
-                                    className={`flex flex-col items-center justify-center min-w-[80px] sm:min-w-[90px] py-3 px-4 rounded-xl transition-all duration-300 relative ${
+                                    className={`flex flex-col items-center justify-center min-w-[80px] sm:min-w-[90px] py-3 px-4 rounded-lg transition-all duration-300 relative ${
                                         isSelected
                                             ? 'bg-[#00FFA3] text-[#000000] shadow-[0_0_20px_rgba(0,255,163,0.35)] font-black scale-105 z-10'
                                             : 'bg-[#1A1D24] hover:bg-[#22262F] text-gray-400 hover:text-white'
@@ -374,7 +374,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
             {/* ── MAIN CONTENT ── */}
             <div className="max-w-[900px] mx-auto px-4 py-4 relative z-10">
                 {/* World Cup 2026 Branding Header */}
-                <div className="mb-6 rounded-2xl overflow-hidden relative shadow-[0_0_30px_rgba(0,255,163,0.05)]" style={{ background: 'linear-gradient(135deg, rgba(26,21,0,0.8) 0%, rgba(10,13,20,0.9) 100%)' }}>
+                <div className="mb-6 rounded-lg overflow-hidden relative shadow-[0_0_30px_rgba(0,255,163,0.05)]" style={{ background: 'linear-gradient(135deg, rgba(26,21,0,0.8) 0%, rgba(10,13,20,0.9) 100%)' }}>
                     <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 bg-no-repeat bg-right-bottom" style={{ backgroundImage: 'radial-gradient(circle at right, #00FFA3 0%, transparent 70%)' }}></div>
                     <div className="p-4 sm:p-5 flex items-center justify-between relative z-10">
                         <div>
@@ -422,7 +422,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                             return (
                                                 <div
                                                     key={analysis.id}
-                                                    className="relative rounded-xl overflow-hidden transition-all duration-150 shadow-[0_0_15px_rgba(0,255,163,0.02)]"
+                                                    className="relative rounded-lg overflow-hidden transition-all duration-150 shadow-[0_0_15px_rgba(0,255,163,0.02)]"
                                                     style={{ background: '#1A1D24' }}
                                                 >
                                                     {/* Blurred preview */}
@@ -466,7 +466,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                         return (
                                             <div
                                                 key={analysis.id}
-                                                className={`relative rounded-xl overflow-hidden transition-all duration-200 ${isExpanded ? 'bg-[#22262F] shadow-[0_0_25px_rgba(0,255,163,0.1)]' : 'bg-[#1A1D24] hover:bg-[#22262F] shadow-[0_0_15px_rgba(0,255,163,0.03)]'}`}
+                                                className={`relative rounded-lg overflow-hidden transition-all duration-200 ${isExpanded ? 'bg-[#22262F] shadow-[0_0_25px_rgba(0,255,163,0.1)]' : 'bg-[#1A1D24] hover:bg-[#22262F] shadow-[0_0_15px_rgba(0,255,163,0.03)]'}`}
                                             >
                                                 {/* Main Row */}
                                                 <div
