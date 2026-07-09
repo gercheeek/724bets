@@ -1352,7 +1352,7 @@ const App: React.FC = () => {
             </header>
 
             {/* Masaüstü Header (Mobilde Gizli) */}
-            <div className="hidden lg:block shrink-0 relative z-30">
+            <div className="hidden lg:block shrink-0 sticky top-0 z-30">
       <Header
         onAdminClick={() => {
           if (userRole) {
