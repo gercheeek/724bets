@@ -308,6 +308,7 @@ const Header: React.FC<HeaderProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
 
           <div
+            id="tour-logo"
             className="logo-text-724"
             style={{ 
               display: 'flex', 
@@ -345,7 +346,7 @@ const Header: React.FC<HeaderProps> = ({
 
 
         {/* Right: Controls */}
-        <div className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div id="tour-user-panel" className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
 
 
           {siteUser ? (
@@ -449,6 +450,7 @@ const Header: React.FC<HeaderProps> = ({
                     Giriş yap
                   </button>
                   <button
+                    id="tour-register-btn"
                     onClick={onMemberRegisterClick}
                     style={{
                       background: '#F5A623',

@@ -1253,6 +1253,7 @@ const App: React.FC = () => {
                 onViewChange={handleViewChange}
                 userRole={userRole}
                 navVisibility={navVisibility}
+                onStartTour={handleStartTour}
               />
             </aside>
           )}
@@ -1269,6 +1270,7 @@ const App: React.FC = () => {
                   onViewChange={(v) => { handleViewChange(v); setIsMobileMenuOpen(false); }}
                   userRole={userRole}
                   navVisibility={navVisibility}
+                  onStartTour={handleStartTour}
                 />
               </aside>
             </div>

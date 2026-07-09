@@ -470,7 +470,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="modern-chat-inject" className="h-full w-full flex flex-col bg-[#0D1320] md:border-l border-white/5 shadow-2xl font-sans text-left">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0D1320] md:border-l border-white/5 shadow-2xl font-sans text-left">
             {/* Header */}
             <div className="bg-[#0D1320] p-4 text-white font-bold flex items-center justify-between border-b border-white/5 flex-shrink-0">
                 <div className="flex items-center gap-2">

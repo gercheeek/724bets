@@ -22,6 +22,7 @@ interface SidebarProps {
   onViewChange: (view: string) => void;
   userRole?: string | null;
   navVisibility?: NavVisibility;
+  onStartTour?: () => void;
 }
 
 const ICON_SIZE = 'w-5 h-5';
@@ -33,6 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onViewChange,
   userRole,
   navVisibility,
+  onStartTour,
 }) => {
 
   const mainCategories: CategoryItem[] = [
@@ -300,7 +302,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Overlay for mobile */}
       <div className="sidebar-overlay" onClick={onToggle} />
 
-      <div className={`sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`} style={{ padding: '12px 0' }}>
+      <div id="tour-sidebar" className={`sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`} style={{ padding: '12px 0' }}>
         
         {/* Toggle Button / Header of Sidebar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: isOpen ? 'space-between' : 'center', padding: isOpen ? '0 16px' : '0', marginBottom: '16px' }}>
@@ -326,10 +328,16 @@ const Sidebar: React.FC<SidebarProps> = ({
             <span className="sidebar-nav-icon"><Users className={ICON_SIZE} style={{ color: '#F5A623' }} /></span>
             {isOpen && <span>Arkadaşını Davet Et</span>}
           </button>
-          <button className="sidebar-action-btn" title={!isOpen ? "Telegram" : undefined}>
+           <button className="sidebar-action-btn" title={!isOpen ? "Telegram" : undefined}>
             <span className="sidebar-nav-icon"><Send className={ICON_SIZE} /></span>
             {isOpen && <span>Telegram</span>}
           </button>
+          {onStartTour && (
+            <button onClick={onStartTour} className="sidebar-action-btn" title={!isOpen ? "Site Turu" : undefined}>
+              <span className="sidebar-nav-icon"><HelpCircle className={ICON_SIZE} /></span>
+              {isOpen && <span>Site Turu</span>}
+            </button>
+          )}
         </div>
 
         {/* Footer Support Group */}
