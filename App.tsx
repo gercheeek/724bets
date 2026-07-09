@@ -2091,22 +2091,10 @@ const App: React.FC = () => {
 
         {view === 'cekilis' && (
           <div className="animate-fade-in">
-            {(siteUser || userRole) ? (
-              <CekilisCenterView
-                userId={siteUser?.id || userRole || 'guest'}
-                onNavigate={(v: string) => setView(v as any)}
-              />
-            ) : (
-              <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-black">
-                <div className="text-7xl">🎟️</div>
-                <h2 className="text-white font-black text-3xl uppercase tracking-tight">Çekiliş Merkezi</h2>
-                <p className="text-zinc-500 font-bold text-sm">Çekilişe katılmak için üye girişi gereklidir.</p>
-                <button onClick={() => setAuthModalMode('member')}
-                  className="px-8 py-4 bg-[#F5A623] text-black font-black text-sm rounded-2xl uppercase tracking-widest hover:bg-[#F5A623]/90 transition-all shadow-[0_0_25px_rgba(240,185,11,0.4)]">
-                  🔑 Üye Ol / Giriş Yap
-                </button>
-              </div>
-            )}
+            <CekilisCenterView
+              userId={siteUser?.id || userRole || 'guest'}
+              onNavigate={(v: string) => setView(v as any)}
+            />
           </div>
         )}
 
