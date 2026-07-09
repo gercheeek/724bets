@@ -904,9 +904,6 @@ body {
 }
 
 @media (max-width: 768px) {
-  .app-grid-layout {
-    --chat-width: 0px !important;
-  }
   .header-topbar {
     padding: 6px 12px;
   }
@@ -1425,13 +1422,6 @@ body {
 
 /* Removed chat-push-active legacy margin-right for new flexbox layout */
 
-.app-grid-layout {
-  display: grid;
-  grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--chat-width);
-  transition: grid-template-columns 0.3s ease;
-  min-height: 100dvh;
-  width: 100%;
-}
 
 /* Mobile Bottom Navigation Display Configuration */
 @media (min-width: 768px) {

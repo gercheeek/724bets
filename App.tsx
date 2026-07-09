@@ -161,6 +161,8 @@ const App: React.FC = () => {
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -1235,36 +1237,58 @@ const App: React.FC = () => {
           onAdminLogin={() => setAuthModalMode('admin')}
         />
       ) : (
-        <div className="app-grid-layout" style={{
+        <div className="relative flex h-[100dvh] w-full bg-[#0a0f1c] text-white overflow-hidden" style={{
           visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
-          height: (appStage === 'ready' || appStage === 'popup') ? 'auto' : '100dvh',
-          minHeight: '100dvh',
-          background: 'var(--bg-main)',
-          color: 'var(--text-primary)',
-          position: 'relative',
-          overflow: (appStage === 'ready' || appStage === 'popup') ? 'visible' : 'hidden',
-          '--sidebar-width': (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') ? '0px' : (!isMobile && isSidebarOpen ? '260px' : (!isMobile && !isSidebarOpen ? '72px' : '0px')),
-          '--chat-width': (view === 'admin' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') ? '0px' : (isChatOpen ? '380px' : (isMobile ? '0px' : '48px')),
-          '--header-height': (marqueeConfig?.isActive && view !== 'admin') ? '96px' : '60px'
-        } as React.CSSProperties}>
+        }}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
-          <div className="sidebar-wrapper" style={{ 
-            height: '100%', 
-            position: 'relative',
-            display: (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') ? 'none' : 'block'
-          }}>
-            <Sidebar
-              isOpen={isSidebarOpen}
-              onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-              activeView={view}
-              onViewChange={handleViewChange}
-              userRole={userRole}
-              navVisibility={navVisibility}
-            />
-          </div>
+          {/* 1. SOL MENÜ (Masaüstünde 250px sabit, mobilde gizli) */}
+          {!(view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
+            <aside className="hidden lg:flex w-[250px] flex-col border-r border-gray-800 bg-[#111727] h-full overflow-y-auto flex-shrink-0 relative z-20">
+              <Sidebar
+                isOpen={true} // Sabit genişlik
+                onToggle={() => {}} 
+                activeView={view}
+                onViewChange={handleViewChange}
+                userRole={userRole}
+                navVisibility={navVisibility}
+              />
+            </aside>
+          )}
 
-          <div className={appStage !== 'loading' ? 'app-reveal-mask' : 'app-hidden-initial'} style={{ display: 'flex', flexDirection: 'column', flex: '1 1 0px', minWidth: 0, width: '100%', overflowX: 'hidden', minHeight: '100dvh', position: 'relative' }}>
+          {/* MOBİL DRAWER - SOL MENÜ */}
+          {isMobileMenuOpen && (
+            <div className="fixed inset-0 z-50 flex lg:hidden">
+              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
+              <aside className="w-[280px] bg-[#111727] h-full shadow-2xl flex-shrink-0 relative z-10 transform transition-transform">
+                <Sidebar
+                  isOpen={true}
+                  onToggle={() => setIsMobileMenuOpen(false)}
+                  activeView={view}
+                  onViewChange={(v) => { handleViewChange(v); setIsMobileMenuOpen(false); }}
+                  userRole={userRole}
+                  navVisibility={navVisibility}
+                />
+              </aside>
+            </div>
+          )}
+
+          {/* 2. ORTA ANA İÇERİK (Mobilde tam ekran, masaüstünde kalan alanı kaplar) */}
+          <main className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}>
+            
+            {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
+            <header className="flex lg:hidden items-center justify-between p-4 bg-[#111727] border-b border-gray-800 shrink-0 sticky top-0 z-40">
+              <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-300 hover:text-white transition-colors">
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+              </button>
+              <div className="font-bold text-xl text-[#f3ca58]">724BAHİS</div>
+              <button onClick={() => setIsMobileChatOpen(true)} className="text-gray-300 hover:text-white transition-colors">
+                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+              </button>
+            </header>
+
+            {/* Masaüstü Header (Mobilde Gizli) */}
+            <div className="hidden lg:block shrink-0 relative z-30">
       <Header
         onAdminClick={() => {
           if (userRole) {
@@ -1301,19 +1325,20 @@ const App: React.FC = () => {
         }}
         onMyBetsClick={() => setShowMyBetsModal(true)}
       />
+            </div>
 
-      <main 
-        className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''}`}
+      <div 
+        className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
+            ? 'p-0 w-full max-w-full' 
+            : 'p-4 md:p-6 w-full max-w-full'
+        }`}
         style={{ 
           position: 'relative', 
           zIndex: 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingTop: 'var(--header-height)',
-          paddingBottom: 'env(safe-area-inset-bottom, 0)',
-          transition: 'margin-right 0.3s ease-in-out, width 0.3s ease-in-out, padding-top 0.3s ease-in-out',
-          paddingLeft: (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') ? '0px' : '16px',
-          paddingRight: (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') ? '0px' : '16px'
+          paddingBottom: 'env(safe-area-inset-bottom, 0)'
         } as React.CSSProperties}
       >
         {/* Loading Orchestrator Overlay */}
@@ -2112,7 +2137,7 @@ const App: React.FC = () => {
           </div>
         )}
       </div>
-      </main>
+      </div>
 
       {view !== 'sports' && view !== 'sports2' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && (
         <footer className="site-footer">
@@ -2141,7 +2166,7 @@ const App: React.FC = () => {
         </footer>
       )}
       {/* PortalMobileNav is removed as requested by the user to move it to the top */}
-          </div>
+          </main>
 
 
 
@@ -2224,29 +2249,34 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* ── Modern Chat Widget ── */}
+      {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
       {view !== 'admin' && view !== 'sports' && view !== 'sports2' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && !showLiveScoreModal && (
-        <div 
-          style={{ 
-            overflow: 'hidden', 
-            position: 'fixed', 
-            right: 0, top: 0, zIndex: 9999, height: '100dvh',
-            width: isChatOpen ? (isMobile ? '100%' : '380px') : (isMobile ? '100%' : '48px'),
-            transform: (isMobile && !isChatOpen) ? 'translateX(100%)' : 'translateX(0)',
-            visibility: (isMobile && !isChatOpen) ? 'hidden' : 'visible',
-            transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s, visibility 0.3s',
-            backgroundColor: (!isChatOpen && !isMobile) ? '#0D1320' : 'transparent',
-            borderLeft: (!isChatOpen && !isMobile) ? '1px solid rgba(245, 166, 35, 0.15)' : 'none'
-          }}
-        >
+        <aside className={`hidden xl:flex flex-col border-l border-gray-800 bg-[#111727] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-[48px]'} transition-all duration-300`}>
           <ModernChat
             open={isChatOpen}
             onOpen={() => setIsChatOpen(true)}
             onClose={() => setIsChatOpen(false)}
             siteUser={siteUser}
             userRole={userRole}
-            isMobile={isMobile}
+            isMobile={false} // Force desktop mode in this slot
           />
+        </aside>
+      )}
+
+      {/* MOBİL DRAWER - SOHBET */}
+      {isMobileChatOpen && (
+        <div className="fixed inset-0 z-50 flex xl:hidden justify-end">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileChatOpen(false)}></div>
+          <aside className="w-full sm:w-[380px] bg-[#111727] h-full shadow-2xl flex-shrink-0 relative z-10 transform transition-transform">
+            <ModernChat
+              open={true}
+              onOpen={() => {}}
+              onClose={() => setIsMobileChatOpen(false)}
+              siteUser={siteUser}
+              userRole={userRole}
+              isMobile={isMobile}
+            />
+          </aside>
         </div>
       )}
 
