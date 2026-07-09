@@ -1242,12 +1242,12 @@ const App: React.FC = () => {
         }}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
-          {/* 1. SOL MENÜ (Masaüstünde 250px sabit, mobilde gizli) */}
+          {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
-            <aside className="hidden lg:flex w-[250px] flex-col border-r border-gray-800 bg-[#111727] h-full overflow-y-auto flex-shrink-0 relative z-20">
+            <aside className={`hidden lg:flex flex-col border-r border-gray-800 bg-[#111727] h-full overflow-y-auto flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
-                isOpen={true} // Sabit genişlik
-                onToggle={() => {}} 
+                isOpen={isSidebarOpen}
+                onToggle={() => setIsSidebarOpen(!isSidebarOpen)} 
                 activeView={view}
                 onViewChange={handleViewChange}
                 userRole={userRole}

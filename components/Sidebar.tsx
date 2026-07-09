@@ -76,19 +76,15 @@ const Sidebar: React.FC<SidebarProps> = ({
     <>
       <style>{`
         .sidebar-container {
-          width: var(--sidebar-width);
-          background-color: #0D1320;
-          border-right: 1px solid rgba(255, 255, 255, 0.05);
+          width: 100%;
+          background-color: transparent;
           display: flex;
           flex-direction: column;
-          height: calc(100vh - var(--header-height, 64px));
-          position: fixed;
-          top: var(--header-height, 64px);
-          left: 0;
-          z-index: 999;
+          height: 100%;
+          position: relative;
+          z-index: 10;
           overflow: hidden;
           white-space: nowrap;
-          transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         @media (max-width: 767px) {
           .sidebar-container {
@@ -305,6 +301,14 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="sidebar-overlay" onClick={onToggle} />
 
       <div className={`sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`} style={{ padding: '12px 0' }}>
+        
+        {/* Toggle Button / Header of Sidebar */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: isOpen ? 'space-between' : 'center', padding: isOpen ? '0 16px' : '0', marginBottom: '16px' }}>
+          <button onClick={onToggle} className="text-white hover:text-[#F5A623] transition-colors p-2 rounded-lg hover:bg-white/5 flex items-center justify-center">
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
+
         {/* Main Categories Group */}
         <div className="sidebar-group" style={{ marginTop: '4px' }}>
           {renderNavItems(mainCategories)}

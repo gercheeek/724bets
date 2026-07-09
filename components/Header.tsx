@@ -306,11 +306,7 @@ const Header: React.FC<HeaderProps> = ({
         
         {/* Left: Menu & Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          {onToggleSidebar && (
-            <button onClick={onToggleSidebar} className="text-white hover:text-amber-500 transition-colors hidden md:block">
-              <Menu className="w-6 h-6" />
-            </button>
-          )}
+
           <div
             className="logo-text-724"
             style={{ 
