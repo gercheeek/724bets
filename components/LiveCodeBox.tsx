@@ -19,7 +19,7 @@ const SendIcon = () => (
 );
 
 const CheckIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="#00E676" strokeWidth={2.5} className="w-5 h-5">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#F5A623" strokeWidth={2.5} className="w-5 h-5">
     <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
@@ -113,7 +113,7 @@ export default function LiveCodeBox({ userId }: { userId?: string }) {
             flex-1 bg-zinc-900 border border-zinc-700/60 rounded-xl
             px-5 py-3.5 text-white font-mono font-bold text-base
             placeholder:text-zinc-600 tracking-widest
-            focus:outline-none focus:border-[#00E676]/50
+            focus:outline-none focus:border-[#F5A623]/50
             focus:shadow-[0_0_0_2px_rgba(0,230,118,0.1)]
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-all duration-200
@@ -127,7 +127,7 @@ export default function LiveCodeBox({ userId }: { userId?: string }) {
             px-7 py-3.5 rounded-xl font-black text-sm uppercase tracking-widest
             transition-all duration-200
             disabled:cursor-not-allowed
-            bg-[#00E676] text-black
+            bg-[#F5A623] text-black
             hover:shadow-[0_0_24px_rgba(0,230,118,0.4)] hover:scale-[1.02]
             active:scale-[0.98]
             disabled:bg-zinc-800 disabled:text-zinc-600 disabled:shadow-none disabled:scale-100
@@ -154,21 +154,21 @@ export default function LiveCodeBox({ userId }: { userId?: string }) {
             mx-5 mb-5 flex items-start gap-3 rounded-xl px-4 py-3 border
             animate-in fade-in slide-in-from-top-2 duration-300
             ${result.success
-              ? 'bg-[#00E676]/5 border-[#00E676]/20'
+              ? 'bg-[#F5A623]/5 border-[#F5A623]/20'
               : 'bg-orange-500/5 border-orange-500/20'
             }
           `}
         >
           {result.success ? <CheckIcon /> : <ErrorIcon />}
           <div className="flex-1">
-            <p className={`text-sm font-bold ${result.success ? 'text-[#00E676]' : 'text-orange-400'}`}>
+            <p className={`text-sm font-bold ${result.success ? 'text-[#F5A623]' : 'text-orange-400'}`}>
               {result.message}
             </p>
             {result.success && result.reward_coin && (
               <p className="text-xs text-zinc-400 mt-0.5">
                 +{result.reward_coin.toLocaleString('tr-TR')} Coin hesabınıza eklendi.
                 Yeni bakiye:{' '}
-                <span className="text-[#00E676] font-black">
+                <span className="text-[#F5A623] font-black">
                   {result.new_balance?.toLocaleString('tr-TR')} Coin
                 </span>
               </p>

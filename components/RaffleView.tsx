@@ -53,8 +53,8 @@ const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
                 <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div style={{
                         width: '100%', height: 36,
-                        background: '#0d0d0d',
-                        border: '1px solid rgba(212,175,55,0.2)',
+                        background: '#141B25',
+                        border: '1px solid rgba(245,166,35,0.2)',
                         borderRadius: 8,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         fontSize: 16, fontWeight: 800, color: '#fff',
@@ -74,42 +74,50 @@ const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
 // OPTIMIZATION 2: Memoize individual Ticket Slots to stop re-rendering 200 elements
 // --------------------------------------------------------------------------------
 const TicketSlot = React.memo(({ index, isSold, isMe, username, onSelect }: { index: number, isSold: boolean, isMe: boolean, username: string, onSelect: (idx: number) => void }) => {
+    const [isHovered, setIsHovered] = useState(false);
     return (
         <div
             title={isSold ? (isMe ? 'Sizin' : username) : `Bilet ${index + 1} (Boş)`}
             onClick={() => !isSold && onSelect(index)}
-            className={`raffle-slot ${isSold ? '' : 'raffle-slot-empty'}`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             style={{
-                height: 20, borderRadius: 2,
-                display: 'flex', justifyContent: 'center', alignItems: 'center',
+                background: isSold 
+                  ? (isMe ? 'linear-gradient(135deg,rgba(100,180,255,0.1),rgba(100,180,255,0.05))' : 'linear-gradient(135deg,#1a1000,#0d0800)') 
+                  : 'rgba(255,255,255,0.02)',
+                border: `1px solid ${isSold ? (isMe ? 'rgba(100,180,255,0.5)' : 'rgba(245,166,35,0.4)') : isHovered ? 'rgba(245,166,35,0.3)' : 'rgba(255,255,255,0.06)'}`,
+                borderRadius: 8,
+                padding: '8px 4px',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
                 cursor: isSold ? 'default' : 'pointer',
-                transition: 'transform 0.2s, background-color 0.2s, border-color 0.2s',
-                ...(isSold
-                    ? (isMe
-                        ? {
-                            background: 'rgba(59,130,246,0.25)',
-                            border: '1px solid #3b82f6',
-                            color: '#3b82f6'
-                        }
-                        : {
-                            background: '#D4AF37',
-                            border: '1px solid #D4AF37',
-                            color: '#000',
-                            boxShadow: '0 0 6px rgba(212,175,55,0.2)'
-                        })
-                    : {
-                        background: '#121212',
-                        border: '1px solid #202020',
-                        color: '#444'
-                    })
+                position: 'relative', overflow: 'hidden',
+                transition: 'all 0.2s ease',
+                transform: isHovered && !isSold ? 'translateY(-2px) scale(1.02)' : 'none',
+                boxShadow: isSold ? (isMe ? '0 0 10px rgba(100,180,255,0.15)' : '0 0 10px rgba(245,166,35,0.15)') : isHovered ? '0 0 10px rgba(245,166,35,0.1)' : 'none',
+                minHeight: 56,
+                zIndex: isHovered ? 10 : 1,
             }}
         >
-            <span style={{
-                fontSize: 6, fontWeight: isSold && !isMe ? 800 : 600,
-                lineHeight: 1
-            }}>
-                #{String(index + 1).padStart(3, '0')}
-            </span>
+            {isHovered && !isSold && (
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg, transparent 30%, rgba(245,166,35,0.04) 50%, transparent 70%)', animation: 'shimmerLine 1.5s ease-in-out infinite' }} />
+            )}
+            
+            {isSold ? (
+                <>
+                    <div style={{ fontSize: 14 }}>🎫</div>
+                    <div style={{ color: isMe ? '#64b4ff' : '#F5A623', fontWeight: 900, fontSize: 8, textAlign: 'center', letterSpacing: '0.05em' }}>
+                        {isMe ? 'SİZİN' : username.substring(0,6)}
+                    </div>
+                    <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 7, fontFamily: 'monospace' }}>#{String(index + 1).padStart(3, '0')}</div>
+                </>
+            ) : (
+                <>
+                    <div style={{ fontSize: 14, filter: 'grayscale(0.5)', opacity: 0.6 }}>🎫</div>
+                    <div style={{ color: 'rgba(255,255,255,0.2)', fontSize: 8, fontWeight: 700, textAlign: 'center' }}>
+                        AL
+                    </div>
+                </>
+            )}
         </div>
     );
 });
@@ -260,13 +268,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
     const totalSold = ticketPool.length;
 
     return (
-        <div style={{ minHeight: '100vh', background: '#0d0d0d', padding: '0 0 60px', fontFamily: "'Inter', sans-serif", color: '#fff' }}>
+        <div style={{ minHeight: '100vh', background: '#141B25', padding: '0 0 60px', fontFamily: "'Inter', sans-serif", color: '#fff' }}>
             {successMsg && (
                 <div style={{
                     position: 'fixed', top: 80, left: '50%', transform: 'translate3d(-50%, 0, 0)', zIndex: 50,
                     padding: '8px 16px', borderRadius: 10, background: 'rgba(13,13,13,0.95)',
-                    backdropFilter: 'blur(20px)', fontSize: 12, color: '#D4AF37',
-                    border: '1px solid rgba(212,175,55,0.4)', boxShadow: '0 6px 20px rgba(212,175,55,0.15)',
+                    backdropFilter: 'blur(20px)', fontSize: 12, color: '#F5A623',
+                    border: '1px solid rgba(245,166,35,0.4)', boxShadow: '0 6px 20px rgba(245,166,35,0.15)',
                     animation: 'slideDown 0.3s ease', willChange: 'transform, opacity'
                 }}>
                     {successMsg}
@@ -280,7 +288,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                         
                         {/* 1. Countdown & VIP Cards Component */}
                         <div style={{
-                            background: '#161616', border: '1px solid rgba(212,175,55,0.15)',
+                            background: '#1E2530', border: '1px solid rgba(245,166,35,0.15)',
                             borderRadius: 12, padding: 12, overflow: 'hidden', position: 'relative',
                             flex: '0 0 auto', display: 'flex', flexDirection: 'column', gap: 10
                         }}>
@@ -291,7 +299,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 <span style={{ color: '#fff', fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                                     HESAP DURUMU & SÜRE
                                 </span>
-                                {collapsed.stats ? <ChevronDown size={14} color="#D4AF37" /> : <ChevronUp size={14} color="#D4AF37" />}
+                                {collapsed.stats ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                             </div>
 
                             {!collapsed.stats && (
@@ -304,13 +312,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                         {/* Biletleriniz Small */}
                                         <div style={{
                                             borderRadius: 8,
-                                            background: 'linear-gradient(135deg, rgba(212,175,55,0.05) 0%, rgba(13,13,13,0.95) 50%, rgba(212,175,55,0.03) 100%)',
-                                            border: '1px solid rgba(212,175,55,0.2)',
+                                            background: 'linear-gradient(135deg, rgba(245,166,35,0.05) 0%, rgba(13,13,13,0.95) 50%, rgba(245,166,35,0.03) 100%)',
+                                            border: '1px solid rgba(245,166,35,0.2)',
                                             padding: '8px 10px',
                                             boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
                                         }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
-                                                <Ticket size={10} style={{ color: '#D4AF37' }} />
+                                                <Ticket size={10} style={{ color: '#F5A623' }} />
                                                 <span style={{ color: '#888', fontSize: 7, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                                     BİLETLERİNİZ
                                                 </span>
@@ -325,13 +333,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                         {/* Mevcut Coin Small */}
                                         <div style={{
                                             borderRadius: 8,
-                                            background: 'linear-gradient(135deg, rgba(212,175,55,0.05) 0%, rgba(13,13,13,0.95) 50%, rgba(212,175,55,0.03) 100%)',
-                                            border: '1px solid rgba(212,175,55,0.2)',
+                                            background: 'linear-gradient(135deg, rgba(245,166,35,0.05) 0%, rgba(13,13,13,0.95) 50%, rgba(245,166,35,0.03) 100%)',
+                                            border: '1px solid rgba(245,166,35,0.2)',
                                             padding: '8px 10px',
                                             boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
                                         }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
-                                                <Coins size={10} style={{ color: '#D4AF37' }} />
+                                                <Coins size={10} style={{ color: '#F5A623' }} />
                                                 <span style={{ color: '#888', fontSize: 7, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                                     COIN
                                                 </span>
@@ -347,7 +355,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                     {/* Buy Button inside Sidebar */}
                                     <div style={{ position: 'relative', zIndex: 10 }}>
                                         {buyMsg && (
-                                            <div style={{ fontSize: 9, fontWeight: 600, color: buyMsg.includes('✅') ? '#D4AF37' : '#ef4444', textAlign: 'center', marginBottom: 4 }}>
+                                            <div style={{ fontSize: 9, fontWeight: 600, color: buyMsg.includes('✅') ? '#F5A623' : '#ef4444', textAlign: 'center', marginBottom: 4 }}>
                                                 {buyMsg}
                                             </div>
                                         )}
@@ -360,13 +368,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                                 transition: 'all 0.2s ease', letterSpacing: '0.05em',
                                                 ...(loyalty.coins >= TICKET_PRICE
                                                     ? {
-                                                        background: 'linear-gradient(180deg, #D4AF37 0%, #996515 100%)',
-                                                        color: '#0d0d0d',
-                                                        boxShadow: '0 2px 10px rgba(212,175,55,0.2)'
+                                                        background: 'linear-gradient(180deg, #F5A623 0%, #996515 100%)',
+                                                        color: '#141B25',
+                                                        boxShadow: '0 2px 10px rgba(245,166,35,0.2)'
                                                     }
                                                     : {
-                                                        background: '#1a1a1a', color: '#555',
-                                                        border: '1px solid #2a2a2a'
+                                                        background: '#050C18', color: '#555',
+                                                        border: '1px solid #0A1428'
                                                     })
                                             }}
                                         >
@@ -374,22 +382,22 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                         </button>
                                     </div>
 
-                                    <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent)', margin: '2px 0', position: 'relative', zIndex: 10 }} />
+                                    <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(245,166,35,0.15), transparent)', margin: '2px 0', position: 'relative', zIndex: 10 }} />
 
                                     <div style={{ position: 'relative', zIndex: 10 }}>
                                         <div style={{
-                                            color: '#D4AF37', fontSize: 8, fontWeight: 800,
+                                            color: '#F5A623', fontSize: 8, fontWeight: 800,
                                             textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6,
                                             display: 'flex', alignItems: 'center', gap: 4
                                         }}>
-                                            <Clock size={10} style={{ color: '#D4AF37' }} />
+                                            <Clock size={10} style={{ color: '#F5A623' }} />
                                             SONRAKİ ÇEKİLİŞ
                                         </div>
                                         <div style={{
                                             fontSize: 11, fontWeight: 700, color: '#fff', marginBottom: 8,
                                             padding: '4px 8px', borderRadius: 6,
-                                            border: '1px solid rgba(212,175,55,0.2)',
-                                            background: 'rgba(212,175,55,0.03)',
+                                            border: '1px solid rgba(245,166,35,0.2)',
+                                            background: 'rgba(245,166,35,0.03)',
                                             display: 'inline-block'
                                         }}>
                                             {new Date(config.drawDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
@@ -403,7 +411,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
                         {/* 2. Bilet Talep Formu */}
                         <div style={{
-                            background: '#161616', border: '1px solid #222',
+                            background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
                             borderRadius: 12, padding: 12, flex: '1 1 auto',
                             display: 'flex', flexDirection: 'column', gap: 10
                         }}>
@@ -416,13 +424,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 </span>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                                     <span style={{
-                                        color: '#D4AF37', fontSize: 7, fontWeight: 700,
-                                        border: '1px solid rgba(212,175,55,0.2)', padding: '2px 6px',
+                                        color: '#F5A623', fontSize: 7, fontWeight: 700,
+                                        border: '1px solid rgba(245,166,35,0.2)', padding: '2px 6px',
                                         borderRadius: 4, letterSpacing: '0.05em'
                                     }}>
                                         500 TL = 1 B
                                     </span>
-                                    {collapsed.form ? <ChevronDown size={14} color="#D4AF37" /> : <ChevronUp size={14} color="#D4AF37" />}
+                                    {collapsed.form ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                                 </div>
                             </div>
                             
@@ -431,8 +439,8 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                     <input type="text" placeholder="Kullanıcı Adı" value={depositUsername}
                                         onChange={e => setDepositUsername(e.target.value)}
                                         style={{
-                                            width: '100%', padding: '8px 10px', background: '#0d0d0d',
-                                            border: '1px solid #222', borderRadius: 8, color: '#fff',
+                                            width: '100%', padding: '8px 10px', background: '#141B25',
+                                            border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, color: '#fff',
                                             fontSize: 10, outline: 'none'
                                         }}
                                     />
@@ -440,16 +448,16 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                         <input type="number" placeholder="Tutar (TL)" value={depositAmount}
                                             onChange={e => setDepositAmount(e.target.value)}
                                             style={{
-                                                width: '100%', padding: '8px 10px', background: '#0d0d0d',
-                                                border: '1px solid #222', borderRadius: 8, color: '#fff',
+                                                width: '100%', padding: '8px 10px', background: '#141B25',
+                                                border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, color: '#fff',
                                                 fontSize: 10, outline: 'none'
                                             }}
                                         />
                                         <input type="number" placeholder="Bilet No" value={depositTicket}
                                             onChange={e => setDepositTicket(e.target.value)}
                                             style={{
-                                                width: '100%', padding: '8px 10px', background: '#0d0d0d',
-                                                border: '1px solid #222', borderRadius: 8, color: '#fff',
+                                                width: '100%', padding: '8px 10px', background: '#141B25',
+                                                border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, color: '#fff',
                                                 fontSize: 10, outline: 'none'
                                             }}
                                         />
@@ -457,8 +465,8 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                     <input type="datetime-local" value={depositDate}
                                         onChange={e => setDepositDate(e.target.value)}
                                         style={{
-                                            width: '100%', padding: '8px 10px', background: '#0d0d0d',
-                                            border: '1px solid #222', borderRadius: 8, color: '#fff',
+                                            width: '100%', padding: '8px 10px', background: '#141B25',
+                                            border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, color: '#fff',
                                             fontSize: 10, outline: 'none', colorScheme: 'dark'
                                         }}
                                     />
@@ -466,9 +474,9 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                         style={{
                                             width: '100%', marginTop: 4, padding: '10px 0', borderRadius: 8,
                                             fontWeight: 900, fontSize: 10, letterSpacing: '0.05em',
-                                            color: '#0d0d0d', border: 'none', cursor: 'pointer',
-                                            background: 'linear-gradient(180deg, #D4AF37 0%, #B8860B 50%, #996515 100%)',
-                                            boxShadow: '0 2px 10px rgba(212,175,55,0.2)',
+                                            color: '#141B25', border: 'none', cursor: 'pointer',
+                                            background: 'linear-gradient(180deg, #F5A623 0%, #B8860B 50%, #996515 100%)',
+                                            boxShadow: '0 2px 10px rgba(245,166,35,0.2)',
                                             transition: 'all 0.2s', textTransform: 'uppercase'
                                         }}
                                     >
@@ -480,7 +488,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
                         {/* 3. Legend */}
                         <div style={{
-                            background: '#161616', border: '1px solid #222',
+                            background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
                             borderRadius: 12, padding: 10,
                             flex: '0 0 auto'
                         }}>
@@ -491,14 +499,14 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 <span style={{ color: '#fff', fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                                     AÇIKLAMA (RENKLER)
                                 </span>
-                                {collapsed.legend ? <ChevronDown size={14} color="#D4AF37" /> : <ChevronUp size={14} color="#D4AF37" />}
+                                {collapsed.legend ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                             </div>
 
                             {!collapsed.legend && (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                         <div style={{
-                                            width: 10, height: 10, background: '#D4AF37', borderRadius: 2, boxShadow: '0 0 4px rgba(212,175,55,0.3)'
+                                            width: 10, height: 10, background: '#F5A623', borderRadius: 2, boxShadow: '0 0 4px rgba(245,166,35,0.3)'
                                         }} />
                                         <span style={{ color: '#888', fontSize: 8, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                             DOLU BİLET
@@ -514,7 +522,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                         <div style={{
-                                            width: 10, height: 10, background: '#1a1a1a', border: '1px solid #333', borderRadius: 2
+                                            width: 10, height: 10, background: '#050C18', border: '1px solid #333', borderRadius: 2
                                         }} />
                                         <span style={{ color: '#888', fontSize: 8, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                             BOŞ SLOT
@@ -528,14 +536,14 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                     {/* ═══ RIGHT: Bilet Havuzu WITH VIRTUALIZATION-LIKE MEMO ═══ */}
                     <div style={{
                         width: '66.667%', minWidth: 0,
-                        background: '#161616', border: '1px solid #222',
+                        background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
                         borderRadius: 12, overflow: 'hidden',
                         display: 'flex', flexDirection: 'column'
                     }}>
                         <div 
                             style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                padding: 12, borderBottom: '1px solid #222', background: '#161616'
+                                padding: 12, borderBottom: '1px solid #222', background: '#1E2530'
                             }}
                         >
                             <h3 style={{ color: '#fff', fontSize: 11, fontWeight: 850, letterSpacing: '0.05em', margin: 0, textTransform: 'uppercase' }}>
@@ -544,7 +552,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                 <div style={{
                                     color: '#999', fontSize: 9, fontWeight: 700,
-                                    border: '1px solid #222', background: '#0d0d0d', padding: '2px 8px',
+                                    border: '1px solid rgba(255,255,255,0.05)', background: '#141B25', padding: '2px 8px',
                                     borderRadius: 6
                                 }}>
                                     {totalSold} / {TOTAL_POOL_SIZE}
@@ -558,8 +566,8 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                         }}>
                             <div style={{
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(10, 1fr)',
-                                gap: 2, width: '100%',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(56px, 1fr))',
+                                gap: 6, width: '100%',
                                 maxWidth: '100%'
                             }}>
                                 {useMemo(() => {
@@ -584,19 +592,19 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
                 {/* ═══ POOL RULES ═══ */}
                 <div style={{
-                    background: '#161616', border: '1px solid rgba(212,175,55,0.15)',
+                    background: '#1E2530', border: '1px solid rgba(245,166,35,0.15)',
                     borderRadius: 12, padding: 12, marginBottom: 12
                 }}>
                     <div 
                         onClick={() => toggleSection('rules')}
                         style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', borderBottom: collapsed.rules ? 'none' : '1px solid #222', paddingBottom: collapsed.rules ? 0 : 8, marginBottom: collapsed.rules ? 0 : 8 }}
                     >
-                        <Shield size={12} style={{ color: '#D4AF37' }} />
+                        <Shield size={12} style={{ color: '#F5A623' }} />
                         <h3 style={{ color: '#fff', fontSize: 10, fontWeight: 900, margin: 0, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                             BİLET HAVUZU KURALLARI
                         </h3>
                         <div style={{ flex: 1 }} />
-                        {collapsed.rules ? <ChevronDown size={14} color="#D4AF37" /> : <ChevronUp size={14} color="#D4AF37" />}
+                        {collapsed.rules ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                     </div>
 
                     {!collapsed.rules && (
@@ -605,12 +613,12 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 <div key={idx} style={{
                                     display: 'flex', alignItems: 'flex-start', gap: 8,
                                     padding: '10px 12px', background: 'rgba(13,13,13,0.6)',
-                                    borderRadius: 8, border: '1px solid #222'
+                                    borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)'
                                 }}>
                                     <div style={{
                                         flexShrink: 0, width: 22, height: 22, borderRadius: 6,
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid rgba(212,175,55,0.15)'
+                                        background: 'rgba(245,166,35,0.1)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.15)'
                                     }}>
                                         {renderRuleIcon(rule.icon)}
                                     </div>
@@ -625,7 +633,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
                 {/* ═══ NASIL ÇALIŞIR ═══ */}
                 <div style={{
-                    background: '#161616', border: '1px solid #222',
+                    background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
                     borderRadius: 12, padding: 12, marginBottom: 12
                 }}>
                     <div 
@@ -635,7 +643,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                         <h3 style={{ color: '#fff', fontSize: 10, fontWeight: 900, letterSpacing: '0.05em', margin: 0, textTransform: 'uppercase' }}>
                             NASIL ÇALIŞIR?
                         </h3>
-                        {collapsed.howItWorks ? <ChevronDown size={14} color="#D4AF37" /> : <ChevronUp size={14} color="#D4AF37" />}
+                        {collapsed.howItWorks ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                     </div>
 
                     {!collapsed.howItWorks && (
@@ -646,7 +654,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 { emoji: '✅', step: 'Adım 3', label: 'Onay Bekle' },
                                 { emoji: '🎁', step: 'Adım 4', label: 'Katıl' }
                             ].map((item, idx) => (
-                                <div key={idx} style={{ background: '#0d0d0d', border: '1px solid #222', padding: 10, borderRadius: 8, display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <div key={idx} style={{ background: '#141B25', border: '1px solid rgba(255,255,255,0.05)', padding: 10, borderRadius: 8, display: 'flex', alignItems: 'center', gap: 10 }}>
                                     <span style={{ fontSize: 18 }}>{item.emoji}</span>
                                     <div>
                                         <div style={{ fontSize: 7, color: '#888', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.step}</div>
@@ -660,7 +668,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
                 {/* ═══ SSS (FAQ) ═══ */}
                 <div style={{
-                    background: '#161616', border: '1px solid #222',
+                    background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
                     borderRadius: 12, padding: 12, marginBottom: 20
                 }}>
                     <div 
@@ -670,13 +678,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                         <h3 style={{ color: '#fff', fontSize: 10, fontWeight: 900, letterSpacing: '0.05em', margin: 0, textTransform: 'uppercase' }}>
                             S.S.S. (SIKÇA SORULAN SORULAR)
                         </h3>
-                        {collapsed.faq ? <ChevronDown size={14} color="#D4AF37" /> : <ChevronUp size={14} color="#D4AF37" />}
+                        {collapsed.faq ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                     </div>
 
                     {!collapsed.faq && (
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                             {config.faqs.map((faq, idx) => (
-                                <div key={idx} style={{ background: '#0d0d0d', border: '1px solid #222', borderRadius: 8, overflow: 'hidden' }}>
+                                <div key={idx} style={{ background: '#141B25', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, overflow: 'hidden' }}>
                                     <button
                                         onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                                         style={{
@@ -718,17 +726,17 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                     position: absolute;
                     inset: -1px;
                     border-radius: 2px;
-                    box-shadow: 0 0 4px rgba(212,175,55,0.06);
+                    box-shadow: 0 0 4px rgba(245,166,35,0.06);
                     opacity: 1;
                     pointer-events: none;
                     will-change: opacity;
                     animation: slotGlowGpu 3s ease-in-out infinite;
                 }
                 .raffle-slot-empty:hover {
-                    background-color: #1a1a1a !important;
-                    border-color: rgba(212,175,55,0.3) !important;
-                    color: #D4AF37 !important;
-                    box-shadow: 0 0 10px rgba(212,175,55,0.2) !important;
+                    background-color: #050C18 !important;
+                    border-color: rgba(245,166,35,0.3) !important;
+                    color: #F5A623 !important;
+                    box-shadow: 0 0 10px rgba(245,166,35,0.2) !important;
                     transform: scale(1.06) translate3d(0, 0, 0) !important;
                     z-index: 10;
                 }

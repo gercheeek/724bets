@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { createBrowserClient } from '../lib/supabase';
 import type { Raffle } from '../types';
 import CountdownTimer from './CountdownTimer';
@@ -47,7 +47,7 @@ const SIDE_RAFFLES: RaffleWithMeta[] = [
 ];
 
 const NeonBolt = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 animate-pulse" stroke="#00E676" strokeWidth={2}>
+  <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 animate-pulse" stroke="currentColor" strokeWidth={2}>
     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
@@ -62,10 +62,10 @@ const SideRaffleCard: React.FC<{ raffle: RaffleWithMeta; onBuy: (id: string, pri
       transition-all duration-300 group
       ${isFull
         ? 'border-zinc-700/40 bg-zinc-900/60 opacity-60 cursor-not-allowed'
-        : 'border-zinc-700/60 bg-[#111111] hover:border-[#00E676]/30 hover:shadow-[0_0_24px_rgba(0,230,118,0.08)]'
+        : 'border-zinc-700/60 bg-[#1E2530] hover:border-[#F5A623]/30 hover:shadow-[0_0_24px_rgba(245,166,35,0.08)]'
       }
     `}>
-      <div className="relative h-40 bg-zinc-900 flex items-center justify-center overflow-hidden">
+      <div className="relative h-40 bg-black/40 flex items-center justify-center overflow-hidden">
         <img
           src={raffle.image_url}
           alt={raffle.title}
@@ -92,12 +92,12 @@ const SideRaffleCard: React.FC<{ raffle: RaffleWithMeta; onBuy: (id: string, pri
             <span>{raffle.total_tickets.toLocaleString('tr-TR')} bilet</span>
             <span>{raffle.max_tickets.toLocaleString('tr-TR')} max</span>
           </div>
-          <div className="h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+          <div className="h-1.5 rounded-full bg-zinc-800 overflow-hidden border border-white/5">
             <div
               className="h-full rounded-full transition-all duration-700"
               style={{
                 width: `${pct}%`,
-                background: isFull ? '#f97316' : 'linear-gradient(90deg, #00E676, #00c853)',
+                background: isFull ? '#f97316' : 'linear-gradient(90deg, #F5A623, #FFD580)',
               }}
             />
           </div>
@@ -111,7 +111,7 @@ const SideRaffleCard: React.FC<{ raffle: RaffleWithMeta; onBuy: (id: string, pri
             flex items-center justify-center gap-2 transition-all
             ${isFull
               ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
-              : 'bg-[#00E676]/10 text-[#00E676] border border-[#00E676]/30 hover:bg-[#00E676] hover:text-black hover:shadow-[0_0_16px_rgba(0,230,118,0.4)]'
+              : 'bg-[linear-gradient(135deg,#F5A623,#D4900A)] text-black border-none hover:shadow-[0_0_16px_rgba(245,166,35,0.4)]'
             }
           `}
         >
@@ -140,13 +140,13 @@ function FeaturedRaffleCard({
   }, [ticketCount, onTicketCountChange]);
 
   return (
-    <div className="relative rounded-3xl border border-[#00E676]/25 bg-gradient-to-br from-[#0a180e] to-[#0d0d0d] overflow-hidden shadow-[0_0_60px_rgba(0,230,118,0.08)]">
-      <div className="absolute top-0 right-0 w-[380px] h-[380px] rounded-full bg-[#00E676]/5 blur-3xl pointer-events-none" />
+    <div className="relative rounded-3xl border border-[#F5A623]/25 bg-gradient-to-br from-[#1E2530] to-[#141B25] overflow-hidden shadow-[0_0_60px_rgba(245,166,35,0.08)]">
+      <div className="absolute top-0 right-0 w-[380px] h-[380px] rounded-full bg-[#F5A623]/5 blur-3xl pointer-events-none" />
 
       <div className="relative flex flex-col md:flex-row gap-6 p-6 md:p-10">
         <div className="flex-1 flex flex-col gap-5">
           <div>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#00E676] mb-2 block">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F5A623] mb-2 block">
               🏆 Öne Çıkan Çekiliş
             </span>
             <h2 className="text-3xl md:text-4xl font-black text-white leading-tight">
@@ -160,16 +160,16 @@ function FeaturedRaffleCard({
           <div>
             <div className="flex justify-between text-xs font-bold mb-2 text-zinc-400">
               <span>
-                <span className="text-[#00E676] text-sm font-black">{ticketCount.toLocaleString('tr-TR')}</span> bilet satıldı
+                <span className="text-[#F5A623] text-sm font-black">{ticketCount.toLocaleString('tr-TR')}</span> bilet satıldı
               </span>
               <span>{raffle.max_tickets.toLocaleString('tr-TR')} max</span>
             </div>
-            <div className="h-2.5 rounded-full bg-zinc-800/80 overflow-hidden">
+            <div className="h-2.5 rounded-full bg-black/40 overflow-hidden border border-white/5">
               <div
-                className="h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(0,230,118,0.5)]"
+                className="h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(245,166,35,0.5)]"
                 style={{
                   width: `${pct}%`,
-                  background: 'linear-gradient(90deg, #00E676 0%, #00c853 100%)',
+                  background: 'linear-gradient(90deg, #F5A623 0%, #FFD580 100%)',
                 }}
               />
             </div>
@@ -180,8 +180,8 @@ function FeaturedRaffleCard({
             className="
               group flex items-center justify-center gap-3 w-full md:w-auto
               px-8 py-4 rounded-2xl font-black text-base uppercase tracking-widest
-              bg-[#00E676] text-black
-              hover:shadow-[0_0_40px_rgba(0,230,118,0.5)] hover:scale-[1.02]
+              bg-[linear-gradient(135deg,#F5A623_0%,#D4900A_100%)] text-black border-none
+              hover:shadow-[0_0_40px_rgba(245,166,35,0.5)] hover:scale-[1.02]
               active:scale-[0.98] transition-all duration-200
             "
           >
@@ -195,7 +195,7 @@ function FeaturedRaffleCard({
             src={raffle.image_url}
             alt={raffle.title}
             className="object-contain w-full h-full drop-shadow-2xl"
-            onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/280x280/0d1a10/00E676?text=🚗'; }}
+            onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/280x280/1a1000/F5A623?text=🚗'; }}
           />
         </div>
       </div>
@@ -303,14 +303,12 @@ export default function CekilisCenterView({ userId, onNavigate }: CekilisCenterV
   }, [supabase]);
 
   return (
-    <main className="min-h-screen bg-[#0d0d0d] text-white font-sans">
+    <main className="min-h-screen font-sans" style={{ background: 'linear-gradient(135deg, #050C18 0%, #0A1428 50%, #050C18 100%)' }}>
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#00E676]/3 blur-[120px] rounded-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#F5A623]/5 blur-[120px] rounded-full" />
       </div>
 
       <div className="relative max-w-[900px] mx-auto px-4 py-10 space-y-12">
-
-
         <LiveCodeBox userId={userId} />
 
         <FeaturedRaffleCard
