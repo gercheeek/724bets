@@ -603,11 +603,55 @@ const App: React.FC = () => {
   });
 
 
+  const handleStartTour = () => {
+    localStorage.removeItem('tour_completed');
+    const driverObj = driver({
+      showProgress: true,
+      nextBtnText: 'İleri',
+      prevBtnText: 'Geri',
+      doneBtnText: 'Bitti',
+      progressText: '{{current}} / {{total}}',
+      allowClose: true,
+      onDestroyStarted: () => {
+        if (!driverObj.hasNextStep() || window.confirm("Turu kapatmak istediğinize emin misiniz?")) {
+          localStorage.setItem('tour_completed', 'true');
+          driverObj.destroy();
+        }
+      },
+      steps: [
+        { popover: { title: "724BAHİS'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
+        { element: '#tour-sidebar', popover: { title: 'Kategoriler & Spor Dalları', description: 'Sol menüden tüm spor bahisleri, casino lobileri ve TV yayınına hızlıca erişebilirsiniz.', side: "right", align: 'start' }},
+        { element: '#tour-analysis', popover: { title: 'Özel Analizler', description: 'Dünya Kupası 2026 başta olmak üzere günün en popüler analitik verileri burada yayınlanır.', side: "bottom", align: 'center' }},
+        { element: '#tour-live-scores', popover: { title: 'Canlı Skorlar', description: 'Dünya genelindeki tüm maçların anlık skorlarını ve canlı sonuçlarını anlık takip edebilirsiniz.', side: "bottom", align: 'center' }},
+        { element: '#tour-hero', popover: { title: 'Günün Öne Çıkanları', description: 'Editörlerimizin hazırladığı günün hazır kuponunu ve popüler maç oranlarını buradan inceleyebilirsiniz.', side: "bottom", align: 'center' }},
+        { element: '#tour-analyses', popover: { title: 'Detaylı Maç Tahminleri', description: 'Yapay zeka ve uzman analistlerimizin hazırladığı tahminleri, oranları ve güven endekslerini buradan görebilirsiniz.', side: "top", align: 'center' }},
+        { element: '#tour-chat', popover: { title: 'Canlı Sohbet & Hediyeler', description: 'Sağ panelden diğer oyuncularla sohbet edin ve paylaşılan özel hediye kodlarını yakalayın!', side: "left", align: 'start' }},
+        { element: '#tour-register-btn', popover: { title: 'Hemen Üye Olun! 🎁', description: 'Kayıt olarak tüm bu tahminlere, özel analizlere ve kazandıran oranlara sınırsız erişim sağlayın!', side: "bottom", align: 'end' }}
+      ]
+    });
+    driverObj.drive();
+  };
+
   // App Flow: Skip loader splash screen completely as requested by the user
   useEffect(() => {
     setAppStage('ready');
     setShowLoader(false);
   }, []);
+
+  // Run Driver.js Product Tour if not completed, user is not logged in, and is on homepage
+  useEffect(() => {
+    if (appStage !== 'ready') return;
+    
+    const tourCompleted = localStorage.getItem('tour_completed');
+    const isUserLoggedIn = !!(siteUser || userRole);
+
+    if (!tourCompleted && !isUserLoggedIn && view === 'home') {
+      const timer = setTimeout(() => {
+        handleStartTour();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [appStage, siteUser, userRole, view]);
 
   // --- UNIFIED INITIALIZATION (Seed -> Local -> Supabase) ---
   useEffect(() => {
