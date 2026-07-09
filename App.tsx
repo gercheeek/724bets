@@ -1239,7 +1239,8 @@ const App: React.FC = () => {
       ) : (
         <div className="relative flex h-[100dvh] w-full bg-[#0a0f1c] text-white overflow-hidden" style={{
           visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
-        }}>
+          '--header-height': '60px'
+        } as React.CSSProperties}>
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
