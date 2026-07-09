@@ -640,7 +640,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className="bg-[#131C2C] border border-white/5 border-b-black/40 rounded-2xl rounded-tl-sm p-3 flex flex-col gap-1.5 relative group text-left cursor-default shadow-sm mb-3"
+                            className={`rounded-2xl rounded-tl-sm p-3 flex flex-col gap-1.5 relative group text-left cursor-default mb-3 ${msg.role === 'admin' ? 'bg-[#1a1608] border border-[#F5A623]/40 shadow-[0_0_12px_rgba(245,166,35,0.12)]' : 'bg-[#131C2C] border border-white/5 shadow-sm'}`}
                             onContextMenu={(e) => {
                                 if (isAdmin) {
                                     e.preventDefault();
@@ -650,9 +650,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             }}
                         >
                             <div className="flex items-center gap-2 flex-wrap mb-1">
-                                <span className="bg-gradient-to-br from-[#F5A623] to-[#D4900A] text-black px-1.5 py-0.5 rounded-full text-[9px] font-black min-w-[20px] text-center shadow-[0_0_12px_rgba(245,166,35,0.4)] border border-amber-300/30">
-                                    {msg.role === 'admin' ? '99' : (Math.abs((msg.username || 'Misafir').split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0)) % 40) + 1}
-                                </span>
+                                {msg.role === 'admin' && (
+                                    <span className="bg-gradient-to-br from-[#F5A623] to-[#D4900A] text-black px-1.5 py-0.5 rounded-full text-[9px] font-black min-w-[20px] text-center shadow-[0_0_12px_rgba(245,166,35,0.4)] border border-amber-300/30">
+                                        ADM
+                                    </span>
+                                )}
                                 <span 
                                     className="text-xs font-bold tracking-wide" 
                                     style={{ color: getRoleColor(msg.role, msg.username) }}
@@ -663,7 +665,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                     {formatTime(msg.created_at)}
                                 </span>
                             </div>
-                            <div className="text-[13px] text-slate-200 leading-relaxed break-words pr-4">
+                            <div className="text-[12.5px] text-slate-300 leading-relaxed break-words pr-4 font-normal antialiased">
                                 {renderMessageText(msg.message)}
                             </div>
 
