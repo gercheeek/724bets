@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PoolConfig, PoolEntry, PoolMatch } from '../types';
-import { Users, CheckCircle2, XCircle, Clock, ChevronDown, ChevronUp, Lock, Coins, AlertTriangle, MessageSquare, X, Activity } from 'lucide-react';
+import { Users, CheckCircle2, XCircle, Clock, ChevronDown, ChevronUp, Lock, Coins, AlertTriangle, MessageSquare, X, Activity, Trophy } from 'lucide-react';
 
 const POOL_STORAGE_KEY = 'site_pool_config';
 
@@ -298,74 +298,102 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                             </div>
                         )}
 
-                        {pool.matches.map((match, idx) => {
-                            const hasSelection = !!selections[idx];
-                            const isExpanded = expandedMatch === idx;
-                            const hasAnalysis = !!match.analysis;
+                        {(() => {
+                            const renderMatchRow = (match: PoolMatch, idx: number) => {
+                                const hasSelection = !!selections[idx];
+                                const isExpanded = expandedMatch === idx;
+                                const hasAnalysis = !!match.analysis;
 
-                            return (
-                                <div key={match.id}>
-                                    <div
-                                        className={`pool-row bg-[var(--bg-card)] border border-[var(--border-subtle)] py-2 px-3 flex items-center gap-2 transition-all duration-300 ${hasSelection ? 'pool-row-selected' : ''} ${isExpanded ? 'rounded-t-[10px] rounded-b-none' : 'rounded-[10px]'}`}
-                                        onClick={() => handleRowClick(idx, match)}
-                                    >
-                                        <span className="text-[var(--text-dim)] text-[10px] font-black w-5 text-center shrink-0">{idx + 1}</span>
-                                        <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between pr-2 min-w-0">
-                                            <div className="flex items-center gap-1.5">
-                                                <p className="text-[var(--text-primary)] font-black text-[11px] leading-tight truncate">
-                                                    {match.homeTeam} <span className="text-[var(--text-dim)] mx-0.5 font-bold text-[9px]">vs</span> {match.awayTeam}
-                                                </p>
-                                                {hasAnalysis && (
-                                                    <Activity className="w-3 h-3 text-[#ffcc00]/60 shrink-0" />
-                                                )}
+                                return (
+                                    <div key={match.id}>
+                                        <div
+                                            className={`pool-row bg-[var(--bg-card)] border border-[var(--border-subtle)] py-2 px-3 flex items-center gap-2 transition-all duration-300 ${hasSelection ? 'pool-row-selected' : ''} ${isExpanded ? 'rounded-t-[10px] rounded-b-none' : 'rounded-[10px]'}`}
+                                            onClick={() => handleRowClick(idx, match)}
+                                        >
+                                            <span className="text-[var(--text-dim)] text-[10px] font-black w-5 text-center shrink-0">{idx + 1}</span>
+                                            <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between pr-2 min-w-0">
+                                                <div className="flex items-center gap-1.5">
+                                                    <p className="text-[var(--text-primary)] font-black text-[11px] leading-tight truncate">
+                                                        {match.homeTeam} <span className="text-[var(--text-dim)] mx-0.5 font-bold text-[9px]">vs</span> {match.awayTeam}
+                                                    </p>
+                                                    {hasAnalysis && (
+                                                        <Activity className="w-3 h-3 text-[#ffcc00]/60 shrink-0" />
+                                                    )}
+                                                </div>
+                                                <p className="text-[var(--text-muted)] text-[9px] font-bold shrink-0">{match.league} · {match.matchDate}</p>
                                             </div>
-                                            <p className="text-[var(--text-muted)] text-[9px] font-bold shrink-0">{match.league} · {match.matchDate}</p>
+                                            <div className="flex gap-1 shrink-0" onClick={e => e.stopPropagation()}>
+                                                {(['1', 'X', '2'] as const).map(pick => {
+                                                    const isSelected = selections[idx] === pick;
+                                                    const isResult = pool.status === 'completed' && match.result === pick;
+                                                    const userPick = userEntry?.predictions[idx];
+                                                    const isUserPick = userPick === pick;
+                                                    return (
+                                                        <button
+                                                            key={pick}
+                                                            onClick={() => handleSelect(idx, pick)}
+                                                            disabled={submitted || pool.status !== 'open'}
+                                                            className={`w-7 h-6 rounded text-[11px] font-black border transition-all duration-300 ${isResult ? 'bg-green-500/20 border-green-500 text-green-400' :
+                                                                isSelected ? 'bg-[#ffcc00]/20 border-[#ffcc00] text-[#ffcc00] pool-btn-glow' :
+                                                                    isUserPick && pool.status !== 'open' ? 'bg-blue-500/20 border-blue-500/50 text-blue-400' :
+                                                                        'bg-[var(--bg-input)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-hover)]'
+                                                                } ${submitted || pool.status !== 'open' ? 'cursor-default' : 'cursor-pointer'}`}
+                                                        >
+                                                            {pick}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                            {pool.status === 'completed' && match.result && userEntry && (
+                                                <div className="w-4 shrink-0 flex justify-end">
+                                                    {userEntry.predictions[idx] === match.result
+                                                        ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
+                                                        : <XCircle className="w-3.5 h-3.5 text-red-500" />}
+                                                </div>
+                                            )}
+                                            {hasAnalysis && (
+                                                <div className="shrink-0">
+                                                    {isExpanded
+                                                        ? <ChevronUp className="w-3.5 h-3.5 text-[#ffcc00]" />
+                                                        : <ChevronDown className="w-3.5 h-3.5 text-[var(--text-dim)]" />}
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="flex gap-1 shrink-0" onClick={e => e.stopPropagation()}>
-                                            {(['1', 'X', '2'] as const).map(pick => {
-                                                const isSelected = selections[idx] === pick;
-                                                const isResult = pool.status === 'completed' && match.result === pick;
-                                                const userPick = userEntry?.predictions[idx];
-                                                const isUserPick = userPick === pick;
-                                                return (
-                                                    <button
-                                                        key={pick}
-                                                        onClick={() => handleSelect(idx, pick)}
-                                                        disabled={submitted || pool.status !== 'open'}
-                                                        className={`w-7 h-6 rounded text-[11px] font-black border transition-all duration-300 ${isResult ? 'bg-green-500/20 border-green-500 text-green-400' :
-                                                            isSelected ? 'bg-[#ffcc00]/20 border-[#ffcc00] text-[#ffcc00] pool-btn-glow' :
-                                                                isUserPick && pool.status !== 'open' ? 'bg-blue-500/20 border-blue-500/50 text-blue-400' :
-                                                                    'bg-[var(--bg-input)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-hover)]'
-                                                            } ${submitted || pool.status !== 'open' ? 'cursor-default' : 'cursor-pointer'}`}
-                                                    >
-                                                        {pick}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                        {pool.status === 'completed' && match.result && userEntry && (
-                                            <div className="w-4 shrink-0 flex justify-end">
-                                                {userEntry.predictions[idx] === match.result
-                                                    ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
-                                                    : <XCircle className="w-3.5 h-3.5 text-red-500" />}
-                                            </div>
-                                        )}
-                                        {hasAnalysis && (
-                                            <div className="shrink-0">
-                                                {isExpanded
-                                                    ? <ChevronUp className="w-3.5 h-3.5 text-[#ffcc00]" />
-                                                    : <ChevronDown className="w-3.5 h-3.5 text-[var(--text-dim)]" />}
-                                            </div>
+
+                                        {/* Desktop Accordion Analysis */}
+                                        {isExpanded && !isMobile && (
+                                            <AnalysisPanel match={match} onClose={() => setExpandedMatch(null)} />
                                         )}
                                     </div>
+                                );
+                            };
 
-                                    {/* Desktop Accordion Analysis */}
-                                    {isExpanded && !isMobile && (
-                                        <AnalysisPanel match={match} onClose={() => setExpandedMatch(null)} />
-                                    )}
-                                </div>
-                            );
-                        })}
+                            if (!isLoggedIn) {
+                                return (
+                                    <>
+                                        {pool.matches.slice(0, 3).map((match, idx) => renderMatchRow(match, idx))}
+                                        {pool.matches.length > 3 && (
+                                            <div className="relative mt-2">
+                                                <div className="flex flex-col blur-sm opacity-50 pointer-events-none select-none" style={{ gap: '8px' }}>
+                                                    {pool.matches.slice(3).map((match, idx) => renderMatchRow(match, idx + 3))}
+                                                </div>
+                                                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-auto">
+                                                    <button 
+                                                        onClick={onLoginRequired}
+                                                        className="bg-gradient-to-r from-[#f0b90b] to-yellow-500 text-black font-black px-4 sm:px-6 py-3 sm:py-4 rounded-xl shadow-2xl hover:scale-105 transition-transform uppercase tracking-wider text-[11px] sm:text-sm flex items-center gap-2"
+                                                    >
+                                                        <Trophy className="w-5 h-5 shrink-0" />
+                                                        Kuponu Tamamlamak ve 25.000 ₺ Büyük Ödülü Kazanmak İçin Şimdi Kayıt Ol!
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                );
+                            }
+
+                            return pool.matches.map((match, idx) => renderMatchRow(match, idx));
+                        })()}
 
                         {!submitted && pool.status === 'open' && (
                             <button

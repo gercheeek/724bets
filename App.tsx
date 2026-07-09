@@ -1083,9 +1083,13 @@ const App: React.FC = () => {
 
   const handleViewChange = (v: string) => {
     if (v === 'sports' || v === 'sports2' || v === 'sports3' || v === 'sports4' || v === 'sports5') {
+      setShowLoader(true);
+      setFadeOutLoader(false);
       setIframeLoading(true);
       setTimeout(() => {
+        setFadeOutLoader(true);
         setIframeLoading(false);
+        setTimeout(() => setShowLoader(false), 500);
       }, 2500);
     }
     if (v !== 'analysis') {
