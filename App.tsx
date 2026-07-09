@@ -2091,10 +2091,14 @@ const App: React.FC = () => {
 
         {view === 'cekilis' && (
           <div className="animate-fade-in">
-            <CekilisCenterView
-              userId={siteUser?.id || userRole || 'guest'}
-              onNavigate={(v: string) => setView(v as any)}
-            />
+            {(siteUser || userRole) ? (
+              <CekilisCenterView
+                userId={siteUser?.id || userRole || 'guest'}
+                onNavigate={(v: string) => setView(v as any)}
+              />
+            ) : (
+              <RaffleLanding onLoginRequired={() => setAuthModalMode('member')} />
+            )}
           </div>
         )}
 
