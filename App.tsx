@@ -131,31 +131,8 @@ const App: React.FC = () => {
   const [showLoader, setShowLoader] = useState(false);
   const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo'>('home');
   const [iframeLoading, setIframeLoading] = useState(false);
-  const [isContentReady, setIsContentReady] = useState(false);
+  const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
-
-  // Trigger load when view changes
-  useEffect(() => {
-    setLoadId(prev => prev + 1);
-  }, [view]);
-
-  // Trigger load when iframe loading starts
-  useEffect(() => {
-    if (iframeLoading) {
-      setLoadId(prev => prev + 1);
-    }
-  }, [iframeLoading]);
-
-  // Asynchronous Loading Orchestrator Logic (Central 3-second loader timer)
-  useEffect(() => {
-    if (loadId > 0) {
-      setIsContentReady(false);
-      const timer = setTimeout(() => {
-        setIsContentReady(true);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [loadId]);
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   
@@ -1411,11 +1388,7 @@ const App: React.FC = () => {
           paddingBottom: 'env(safe-area-inset-bottom, 0)'
         } as React.CSSProperties}
       >
-        {/* Loading Orchestrator Overlay */}
-        <div className={`loading-orchestrator-overlay ${isContentReady ? 'fade-out' : ''}`}>
-          <div className="orchestrator-spinner"></div>
-          <div className="orchestrator-text">Yükleniyor...</div>
-        </div>
+
 
         <div className={`orchestrator-content ${isContentReady ? 'content-ready' : ''}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
           {view === 'home' && (

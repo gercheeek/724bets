@@ -140,12 +140,7 @@ const DemoGames: React.FC = () => {
 
         {/* The Game Iframe */}
         <div className="relative w-full aspect-video min-height-[400px] md:min-height-[600px] bg-black">
-        <div className={`loading-orchestrator-overlay ${!loading ? 'fade-out' : ''}`}>
-          <div className="orchestrator-spinner"></div>
-          <div className="orchestrator-text">Oyun Yükleniyor...</div>
-        </div>
-
-        <div className={`w-full h-full orchestrator-content ${!loading ? 'content-ready' : ''}`}>
+        <div className="w-full h-full">
           <iframe
             key={iframeSrc}
             src={iframeSrc}
