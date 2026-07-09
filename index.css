@@ -167,10 +167,7 @@ body {
 
 /* ===== Header — Two-Tier Bilyoner Layout ===== */
 .header-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: var(--chat-width);
+  position: relative;
   z-index: 1010;
   display: flex;
   flex-direction: column;

@@ -233,9 +233,7 @@ const Header: React.FC<HeaderProps> = ({
             50% { text-shadow: 0 0 15px rgba(245,166,35,0.5), 0 0 30px rgba(245,166,35,0.2), 0 0 45px rgba(245,166,35,0.1); }
           }
           .logo-text-724 {
-            position: fixed;
-            top: 16px;
-            left: 16px;
+            position: relative;
             z-index: 10000;
             display: inline-flex;
             align-items: center;
