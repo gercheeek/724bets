@@ -16,26 +16,9 @@ const PROVIDERS = [
   { id: 'aviatrix', name: 'Aviatrix' }
 ];
 
-const REAL_IMAGES = [
-  'https://www.pragmaticplay.com/wp-content/uploads/2021/02/Gates-of-Olympus-200x200.jpg',
-  'https://www.pragmaticplay.com/wp-content/uploads/2019/06/sweet-bonanza-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2021/08/Starlight-Princess_Game_Thumb-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2020/07/The-Dog-House-Megaways-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2021/04/Big-Bass-Bonanza-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2020/01/Release-the-Kraken-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2021/03/Fruit-Party-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2021/11/Bigger-Bass-Bonanza_200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2020/02/Aztec-Bonanza-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2020/04/Great-Rhino-Megaways-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2021/05/Gems-Bonanza-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2022/01/Wild-West-Gold-Megaways-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2021/02/Juicy-Fruits-200x200.png',
-  'https://www.pragmaticplay.com/wp-content/uploads/2021/10/Day-of-Dead-200x200.png',
-];
-
 const GAMES = {
-  popular: Array(14).fill(null).map((_, i) => ({ id: i, img: REAL_IMAGES[i % REAL_IMAGES.length], badge: i%2===0 ? 'PİYANGO' : 'EN İYİ', badgeColor: i%2===0 ? 'bg-blue-500' : 'bg-purple-600' })),
-  pragmatic: Array(14).fill(null).map((_, i) => ({ id: i, img: REAL_IMAGES[(i + 3) % REAL_IMAGES.length], badge: 'EN İYİ', badgeColor: 'bg-purple-600' })),
+  popular: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/1e1e2d/fff?text=Populer+${i+1}`, badge: i%2===0 ? 'PİYANGO' : 'EN İYİ', badgeColor: i%2===0 ? 'bg-blue-500' : 'bg-purple-600' })),
+  pragmatic: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/2d1e1e/fff?text=Pragmatic+${i+1}`, badge: 'EN İYİ', badgeColor: 'bg-purple-600' })),
   jackpots: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/300x200/1e2d1e/fff?text=Jackpot+${i+1}`, badge: 'PİYANGO', badgeColor: 'bg-blue-500' })),
   amusnet: Array(12).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/203a43/fff?text=Amusnet+${i+1}`, badge: 'PİYANGO', badgeColor: 'bg-blue-500' })),
   egtBannerGames: Array(5).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/3a0ca3/fff?text=EGT+${i+1}`, badge: i%2===0 ? 'PİYANGO' : 'EN İYİ', badgeColor: i%2===0 ? 'bg-blue-500' : 'bg-purple-600' })),
