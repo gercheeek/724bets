@@ -31,6 +31,17 @@ const sportGames: GameItem[] = [
   { id: 'sp8', title: 'BADMINTON', image: 'https://picsum.photos/seed/sp8/300/400' },
 ];
 
+const liveCasinoGames: GameItem[] = [
+  { id: 'c1', title: 'LIVE ROULETTE', image: 'https://picsum.photos/seed/casino1/300/400', players: 1205 },
+  { id: 'c2', title: 'GOLD BLACKJACK', image: 'https://picsum.photos/seed/casino2/300/400', players: 850 },
+  { id: 'c3', title: 'SWEET BONANZA CANDYLAND', image: 'https://picsum.photos/seed/casino3/300/400', players: 2341 },
+  { id: 'c4', title: 'BACCARAT', image: 'https://picsum.photos/seed/casino6/300/400', players: 540 },
+  { id: 'c5', title: 'CRAZY TIME', image: 'https://picsum.photos/seed/casino4/300/400', players: 4100 },
+  { id: 'c6', title: 'MONOPOLY LIVE', image: 'https://picsum.photos/seed/casino5/300/400', players: 1800 },
+  { id: 'c7', title: 'MEGA WHEEL', image: 'https://picsum.photos/seed/casino7/300/400', players: 900 },
+  { id: 'c8', title: 'CASINO HOLDEM', image: 'https://picsum.photos/seed/casino8/300/400', players: 300 },
+];
+
 const bigWins = [
   { id: 'w1', user: 'Wynn3658', amount: '6,4 Mn TRY', game: 'https://picsum.photos/seed/w1/200/300' },
   { id: 'w2', user: 'Gizli', amount: '2 Mn TRY', game: 'https://picsum.photos/seed/w2/200/300' },
@@ -191,6 +202,15 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
       }))
     : sportGames;
 
+  const live = activeCustomGames.filter(g => g.type === 'live').length > 0
+    ? activeCustomGames.filter(g => g.type === 'live').map((g, idx) => ({
+        id: g.id,
+        title: g.name.toUpperCase(),
+        image: g.image || 'https://picsum.photos/seed/' + g.id + '/400/300',
+        players: 500 + (idx * 83) % 2000, // Simulated player count
+      }))
+    : liveCasinoGames;
+
   return (
     <div className="w-full bg-transparent p-0 my-8">
       {/* 1. Popüler Oyunlar */}
@@ -209,7 +229,15 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         showPlayers={false}
       />
       
-      {/* 3. Son Büyük Kazançlar */}
+      {/* 3. Canlı Casino */}
+      <GameBlock 
+        title="Canlı Casino" 
+        icon={<span className="w-4 h-4 rounded-full bg-[#00E676] animate-pulse inline-block" />} 
+        games={live} 
+        showPlayers={true}
+      />
+
+      {/* 4. Son Büyük Kazançlar */}
       <BigWinsBlock />
     </div>
   );
