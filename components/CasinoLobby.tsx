@@ -337,6 +337,64 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [], isLoggedIn 
            </div>
         </div>
 
+      {selectedGame && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity" onClick={() => setSelectedGame(null)} />
+          <div className="relative z-10 bg-[#161821] rounded-2xl border border-white/10 w-full max-w-4xl overflow-hidden flex flex-col md:flex-row shadow-2xl animate-fade-in-up">
+            {/* Close Button */}
+            <button onClick={() => setSelectedGame(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-black rounded-full text-white z-20 transition-colors">✕</button>
+            
+            {/* Left Panel: Demo Preview */}
+            <div className="w-full md:w-3/5 bg-black relative min-h-[300px] flex items-center justify-center overflow-hidden">
+              <img src={selectedGame.img} alt="Game Thumbnail" className="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm scale-110" />
+              <div className="relative z-10 flex flex-col items-center gap-4 text-center p-6">
+                 <div className="w-24 h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/20">
+                   <img src={selectedGame.img} alt="Game Icon" className="w-full h-full object-cover" />
+                 </div>
+                 <div>
+                   <h3 className="text-2xl font-black text-white drop-shadow-md">DEMO OYUN</h3>
+                   <p className="text-zinc-400 font-semibold mt-1">Oyun önizlemesi yükleniyor...</p>
+                 </div>
+                 <div className="mt-4 flex gap-2">
+                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '150ms' }}></div>
+                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '300ms' }}></div>
+                 </div>
+              </div>
+            </div>
+
+            {/* Right Panel: CTA */}
+            <div className="w-full md:w-2/5 p-8 flex flex-col justify-center relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl -mr-16 -mt-16" />
+               <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -ml-16 -mb-16" />
+               
+               <h3 className="text-3xl font-black text-white mb-2 leading-tight">
+                 {isLoggedIn ? 'Şansını Dene!' : 'Maceraya Katıl!'}
+               </h3>
+               <p className="text-zinc-400 text-sm mb-8 leading-relaxed relative z-10">
+                 {isLoggedIn 
+                   ? 'Oynamaya başlamak için hemen bakiyeni yenile ve heyecana kaldığın yerden devam et.'
+                   : 'Gerçek parayla oynamak, büyük ödülleri kazanmak ve en iyi oyun deneyimini yaşamak için hemen üye ol!'}
+               </p>
+
+               <button 
+                 onClick={() => {
+                   setSelectedGame(null);
+                   handleAction();
+                 }}
+                 className={`w-full py-4 rounded-xl font-black text-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg relative z-10 ${
+                   isLoggedIn 
+                     ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-black shadow-green-500/25 hover:shadow-green-500/40'
+                     : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-blue-500/25 hover:shadow-blue-500/40'
+                 }`}
+               >
+                 {isLoggedIn ? 'Bakiye Yükle (Cüzdan)' : 'Giriş Yap / Üye Ol'}
+               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       </div>
     </div>
   );
