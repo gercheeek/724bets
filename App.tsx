@@ -1983,8 +1983,15 @@ const App: React.FC = () => {
             )}
             <iframe 
               src="https://bahisbey1438.com/tr/lobby/casino/?btag=59649488_330539" 
-              className="flex-1 border-none max-w-none"
-              style={{ minHeight: '100%', width: 'calc(100% + 45px)' }}
+              className="border-none max-w-none"
+              style={{ 
+                position: 'absolute',
+                top: isMobile ? '-100px' : '-135px',
+                left: '0',
+                width: 'calc(100% + 45px)', 
+                height: isMobile ? 'calc(100% + 100px)' : 'calc(100% + 135px)',
+                zIndex: 10
+              }}
               onLoad={() => setIframeLoading(false)}
             />
           </div>
