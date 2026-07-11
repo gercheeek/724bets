@@ -1986,10 +1986,10 @@ const App: React.FC = () => {
               className="border-none max-w-none"
               style={{ 
                 position: 'absolute',
-                top: isMobile ? '-100px' : '-135px',
+                top: isMobile ? '-80px' : '-115px',
                 left: '0',
                 width: 'calc(100% + 45px)', 
-                height: isMobile ? 'calc(100% + 100px)' : 'calc(100% + 135px)',
+                height: isMobile ? 'calc(100% + 80px)' : 'calc(100% + 115px)',
                 zIndex: 10
               }}
               onLoad={() => setIframeLoading(false)}
