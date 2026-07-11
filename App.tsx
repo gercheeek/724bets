@@ -42,6 +42,7 @@ import DemoGames from './components/DemoGames';
 import MyBetsModal from './components/MyBetsModal';
 import KralView from './components/KralView';
 import WorldCupTeaser from './components/WorldCupTeaser';
+import SportsDashboard from './components/SportsDashboard';
 
 // Portal Components
 import CouponsView from './components/CouponsView';
@@ -1478,6 +1479,7 @@ const App: React.FC = () => {
                     setActiveAnalysisId(matchId);
                     handleViewChange('kral');
                   }} />
+                  <SportsDashboard />
                 </div>
 
                 <GameLobbyGrid customGames={casinoLobbyGames} />
