@@ -48,17 +48,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const menuConfig: MenuItem[] = [
-    { id: 'tv', label: '724TV', icon: <Tv className="w-4 h-4 text-zinc-400" />, view: '724tv' },
-    { id: 'analysis', label: 'ANALİZLER', icon: <BarChart3 className="w-4 h-4 text-zinc-400" />, view: 'analysis', visKey: 'analysis' },
-    { id: 'cekilis', label: 'ÇEKİLİŞ', icon: <Gift className="w-4 h-4 text-zinc-400" />, view: 'cekilis', visKey: 'cekilis' },
-    { id: 'raffle', label: 'BİLET', icon: <Ticket className="w-4 h-4 text-zinc-400" />, view: 'raffle', visKey: 'raffle' },
-    { id: 'fifa', label: 'FIFA DÜNYA KUPASI', icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'sports' },
     { 
       id: 'senin-icin', 
       label: 'SENİN İÇİN SEÇİLDİ', 
       icon: <Star className="w-4 h-4 text-zinc-400" />,
       subItems: [
-        { id: 'fifa-sub', label: 'FIFA Dünya Kupası', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
         { id: 'uefa', label: 'UEFA Avrupa Ligi', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
         { id: 'wimbledon-w', label: 'Wimbledon Kadınlar Tenisi', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
         { id: 'wimbledon-m', label: 'Wimbledon Tek Erkekler', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
@@ -106,6 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         { id: 'lol', label: 'League of Legends', icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'esports' },
       ]
     },
+    { id: 'analiz', label: 'BAHİSBEY ANALİZ & CANLI BÜLTEN', icon: <BarChart3 className="w-4 h-4 text-[#00FFA3]" />, view: 'analysis' },
     { id: 'at-yarisi', label: 'AT YARIŞI', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
     { id: 'sss', label: 'SSS', icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
     { id: 'kurallar', label: 'BAHİS KURALLARI', icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },
@@ -260,58 +255,106 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           
           {/* Top 2x2 Grid */}
-          {isOpen ? (
-            <div className="grid grid-cols-2 gap-2 p-3 border-b border-white/5 bg-[#0F1219]">
-              {topGrid.map(item => {
-                const isActive = activeView === item.view;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => item.view && onViewChange(item.view)}
-                    className={`flex flex-col items-center justify-center py-3 rounded-lg transition-all ${
-                      isActive 
-                        ? 'bg-[#00FFA3] text-black font-black' 
-                        : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white font-bold'
-                    }`}
-                  >
-                    {item.icon}
-                    <span className="text-[11px] tracking-wider uppercase mt-1">{item.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2 p-2 pb-1 border-b border-white/5 bg-[#0F1219]">
-              {topGrid.map(item => {
-                const isActive = activeView === item.view;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => item.view && onViewChange(item.view)}
-                    className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto ${
-                      isActive 
-                        ? 'bg-[#00FFA3] text-black' 
-                        : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white'
-                    }`}
-                  >
-                    {item.icon}
-                  </button>
-                );
-              })}
-            </div>
+          {activeView !== 'kral' && (
+            isOpen ? (
+              <div className="grid grid-cols-2 gap-2 p-3 border-b border-white/5 bg-[#0F1219]">
+                {topGrid.map(item => {
+                  const isActive = activeView === item.view;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => item.view && onViewChange(item.view)}
+                      className={`flex flex-col items-center justify-center py-3 rounded-lg transition-all ${
+                        isActive 
+                          ? 'bg-[#00FFA3] text-black font-black' 
+                          : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white font-bold'
+                      }`}
+                    >
+                      {item.icon}
+                      <span className="text-[11px] tracking-wider uppercase mt-1">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2 p-2 pb-1 border-b border-white/5 bg-[#0F1219]">
+                {topGrid.map(item => {
+                  const isActive = activeView === item.view;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => item.view && onViewChange(item.view)}
+                      className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto ${
+                        isActive 
+                          ? 'bg-[#00FFA3] text-black' 
+                          : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white'
+                      }`}
+                    >
+                      {item.icon}
+                    </button>
+                  );
+                })}
+              </div>
+            )
           )}
 
           {/* Main Menu List */}
-          <div className="flex flex-col bg-[#0F1219] pt-2">
-            {renderNavList(menuConfig)}
-          </div>
+          {activeView !== 'kral' && (
+            <div className="flex flex-col bg-[#0F1219] pt-2">
+              {renderNavList(menuConfig)}
+            </div>
+          )}
 
-          <div className="w-full h-px bg-white/5 my-2"></div>
+          {activeView !== 'kral' && <div className="w-full h-px bg-white/5 my-2"></div>}
+
+          {/* User Requested Panels (Kodu Kullan & Canlı Destek) */}
+          {activeView !== 'kral' && (
+            <div className={`flex flex-col gap-3 px-3 py-2 ${!isOpen ? 'items-center' : ''}`}>
+              {/* Panel 1: Kodu Kullan etc. */}
+              <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                  <Ticket className="w-5 h-5 text-zinc-300 shrink-0" />
+                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Kodu Kullan</span>}
+                </div>
+                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                  <Users className="w-5 h-5 text-zinc-300 shrink-0" />
+                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Arkadaşını Davet Et</span>}
+                </div>
+                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                  <Send className="w-5 h-5 text-zinc-300 shrink-0" />
+                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Telegram</span>}
+                </div>
+                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                  <div className="w-5 h-5 text-zinc-300 shrink-0 flex items-center justify-center border border-zinc-300 rounded-sm">
+                    <span className="text-[10px] font-black leading-none">↓</span>
+                  </div>
+                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Uygulamayı İndir</span>}
+                </div>
+              </div>
+
+              {/* Panel 2: Canlı Destek & Türkçe */}
+              <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                  <MessageSquare className="w-5 h-5 text-zinc-300 shrink-0 fill-current" />
+                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Canlı Destek</span>}
+                </div>
+                <div className={`flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                  <div className="flex items-center gap-3">
+                    <Globe className="w-5 h-5 text-zinc-300 shrink-0" />
+                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Türkçe</span>}
+                  </div>
+                  {isOpen && <ChevronLeft className="w-4 h-4 text-zinc-400 -rotate-90" />}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Extras / Other Games */}
-          <div className="flex flex-col bg-[#0F1219]">
-            {renderNavList(extrasConfig)}
-          </div>
+          {activeView === 'kral' && (
+            <div className="flex flex-col bg-[#0F1219]">
+              {renderNavList(extrasConfig)}
+            </div>
+          )}
 
         </div>
       </div>

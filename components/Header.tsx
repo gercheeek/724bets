@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
+import WalletModal from './WalletModal';
 
 export interface NavVisibility {
   coupons: boolean;
@@ -123,16 +124,11 @@ const Header: React.FC<HeaderProps> = ({
   const categories: CategoryItem[] = [
     { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
     { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
-    { key: 'analysis', view: 'analysis', label: 'Analizler', icon: <BarChart3 className={ICON_SIZE} />, visKey: 'analysis' },
     { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
     { key: 'trusted-sites', view: 'trusted-sites', label: 'Güvenilir', icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
     { key: 'pool', view: 'pool', label: '724TOTO', icon: <Target className={ICON_SIZE} />, visKey: 'pool' },
     { key: 'blackjack', view: 'blackjack', label: 'Casino', icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
     { key: 'loyalty', view: 'loyalty', label: 'Görevler', icon: <Trophy className={ICON_SIZE} />, visKey: 'loyalty' },
-    { key: 'raffle', view: 'raffle', label: 'Bilet', icon: <TicketCheck className={ICON_SIZE} />, visKey: 'raffle' },
-    { key: 'cekilis', view: 'cekilis', label: 'Çekiliş', icon: <Gift className={ICON_SIZE} /> },
-    {key: 'giveaway', view: 'giveaway', label: 'Çekiliş Yönetimi', icon: <Gift className={ICON_SIZE} />, visKey: 'giveaway', requireRole: true},
-    { key: '724tv', view: '724tv', label: '724TV', icon: <Tv className={ICON_SIZE} /> },
   ];
 
   const handleDepositSubmit = () => {
@@ -148,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({
         id: Date.now().toString(),
         userId: siteUser.id,
         username: siteUser.username,
-        content: `724BAHİS.NET Yatırım Bildirimi:\n724BAHİS.NET Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
+        content: `BAHİSBEY Yatırım Bildirimi:\nBAHİSBEY Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
         isRead: false,
         createdAt: Date.now()
       };
@@ -326,7 +322,7 @@ const Header: React.FC<HeaderProps> = ({
               display: 'flex',
               alignItems: 'center'
             }}>
-              724BAHİS
+              BAHİSBEY
               <span style={{
                 background: 'linear-gradient(135deg, #00FFA3 0%, #00FFA3 100%)',
                 color: '#000000',
@@ -341,14 +337,7 @@ const Header: React.FC<HeaderProps> = ({
             </span>
           </div>
 
-          {/* Gamdom Style Main Menu (Desktop) */}
-          <div className="hidden lg:flex items-center gap-6 ml-2">
-            <button className="text-[#94A3B8] font-semibold hover:text-white transition-colors text-sm tracking-wide">Originals</button>
-            <button className="text-[#94A3B8] font-semibold hover:text-white transition-colors text-sm tracking-wide">Casino</button>
-            <button className="bg-[#12231A] text-[#00FFA3] font-bold px-3.5 py-1.5 rounded-lg text-sm tracking-wide">Spor</button>
-            <button className="text-[#94A3B8] font-semibold hover:text-white transition-colors text-sm tracking-wide">Ödüller</button>
-            <button className="text-[#94A3B8] font-semibold hover:text-white transition-colors text-sm tracking-wide">Katılımlar</button>
-          </div>
+          {/* Gamdom Style Main Menu (Desktop) - Removed */}
         </div>
 
         {/* Right: Controls */}
@@ -551,11 +540,11 @@ const Header: React.FC<HeaderProps> = ({
                           display: 'inline-block'
                         }}
                       >
-                        724FUTBOL.COM
+                        BAHİSBEY
                       </span>
                     );
 
-                    const keyword = /724futbol\.com/gi;
+                    const keyword = /bahisbey/gi;
 
                     if (text.match(keyword)) {
                       const parts = text.split(keyword);
@@ -605,64 +594,7 @@ const Header: React.FC<HeaderProps> = ({
 
       {/* DEPOSIT MODAL */}
       {showDepositModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
-          <div 
-            className="rounded-lg w-full max-w-sm overflow-hidden shadow-modal relative" 
-            style={{ 
-              background: 'var(--bg-card)', 
-              border: '1px solid var(--border-card)' 
-            }}
-          >
-            <button
-              onClick={() => setShowDepositModal(false)}
-              className="absolute top-4 right-4 text-[#9CA3AF] hover:text-[#1A1A1A] transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="p-6">
-              <div className="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4">
-                <Send className="w-6 h-6 text-blue-400" />
-              </div>
-
-              <h3 className="text-xl font-black mb-2" style={{ color: 'var(--text-primary)' }}>Yatırım Bildirimi</h3>
-              <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-                724BAHİS.NET'e yaptığınız yatırımların onaylanması ve <strong>Coin / Bilet</strong> tanımlamalarınızın yapılması için 724BAHİS.NET kullanıcı adınızı bize iletin.
-              </p>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="text-xs font-bold uppercase ml-1 block mb-1" style={{ color: 'var(--text-dim)' }}>724BAHİS.NET Kullanıcı Adınız</label>
-                  <input
-                    type="text"
-                    value={depositUsername}
-                    onChange={(e) => setDepositUsername(e.target.value)}
-                    placeholder="Kullanıcı adınızı girin"
-                    className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                    style={{ 
-                      background: 'var(--bg-elevated)', 
-                      borderColor: 'var(--border-subtle)',
-                      color: 'var(--text-primary)'
-                    }}
-                  />
-                </div>
-
-                {depositMsg.text && (
-                  <div className={`p-3 rounded-lg text-sm font-bold ${depositMsg.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
-                    {depositMsg.text}
-                  </div>
-                )}
-
-                <button
-                  onClick={handleDepositSubmit}
-                  className="w-full bg-blue-500 hover:bg-blue-400 text-white font-black py-3 rounded-lg transition-all flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" /> BİLDİRİM GÖNDER
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <WalletModal onClose={() => setShowDepositModal(false)} />
       )}
     </>
   );

@@ -3,7 +3,7 @@ import { ThemeProvider } from './ThemeContext';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import Header from './components/Header';
-import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock } from 'lucide-react';
+import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock, ShieldCheck } from 'lucide-react';
 import { getFlagUrl } from './components/MatchResultsWidget';
 import AppLoader from './components/AppLoader';
 import BrandCard from './components/BrandCard';
@@ -32,7 +32,7 @@ import { seedEcosystemData } from './seedEcosystem';
 import { getGlobalConfig, updateGlobalConfig, supabase } from './utils/supabase';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany, ChatBotConfig } from './types';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, Slider2Config, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany, ChatBotConfig } from './types';
 import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG, DEFAULT_POPULAR_BETS_CONFIG, DEFAULT_TV_CONFIG, DEFAULT_LOADER_CONFIG } from './constants';
 import { demoAnalyses, demoCoupons } from './demoData';
 import TrustedSitesView from './components/TrustedSitesView';
@@ -40,10 +40,13 @@ import TrustedDetailView from './components/TrustedDetailView';
 import { initTrustedEngine, loadTrustedCompanies, processDripComments, processAutoReplies } from './utils/trustedEngine';
 import DemoGames from './components/DemoGames';
 import MyBetsModal from './components/MyBetsModal';
+import KralView from './components/KralView';
 
 // Portal Components
 import CouponsView from './components/CouponsView';
 import HeroSection from './components/HeroSection';
+import Slider2 from './components/Slider2';
+import MatchHighlights from './components/MatchHighlights';
 import PopularBets from './components/PopularBets';
 import GameLobbyTeaser from './components/GameLobbyTeaser';
 import TV724View from './components/TV724View';
@@ -51,6 +54,7 @@ import LiveMatches from './components/LiveMatches';
 
 import MatchResultsWidget from './components/MatchResultsWidget';
 import { PromoSlider } from './components/PromoSlider';
+import GameLobbyGrid from './components/GameLobbyGrid';
 import Sidebar from './components/Sidebar';
 const SITE_CACHE_VERSION = "2026.06.25_v1";
 
@@ -129,15 +133,30 @@ const App: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo'>('home');
-  const [iframeLoading, setIframeLoading] = useState(false);
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral'>('home');
+  const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   // Custom URL for Sports2 iframe (to handle custom header navigation)
-  const [sports2Url, setSports2Url] = useState("https://bahisbey7195.com/tr/sport/sports/football/flt-1-1239-52530/");
+  const [sports2Url, setSports2Url] = useState("https://bahisbey1438.com/tr/sport/sports/football/flt-1-1239-52530/?btag=59649488_330539");
+  const [showAgeWarning, setShowAgeWarning] = useState(false);
+
+  useEffect(() => {
+    const handleInternalNavigate = (e: CustomEvent<{ url: string }>) => {
+      setIframeLoading(true);
+      setSports2Url(e.detail.url);
+      setView('sports2');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener('internal-navigate', handleInternalNavigate as EventListener);
+    return () => {
+      window.removeEventListener('internal-navigate', handleInternalNavigate as EventListener);
+    };
+  }, []);
   
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -304,6 +323,15 @@ const App: React.FC = () => {
     updateGlobalConfig('site_hero_slider', cfg);
   };
 
+  // Slider 2 Config - Safe Initialization (No Storage Flash)
+  const [slider2Config, setSlider2Config] = useState<Slider2Config>({ isActive: true, autoPlayInterval: 5000, slides: [] });
+
+  const handleSlider2ConfigChange = (cfg: Slider2Config) => {
+    setSlider2Config(cfg);
+    localStorage.setItem('site_slider2_config', JSON.stringify(cfg));
+    updateGlobalConfig('site_slider2_config', cfg);
+  };
+
   // Daily Kupon Config - Safe Initialization (No Storage Flash)
   const [dailyKuponConfig, setDailyKuponConfig] = useState<DailyKuponConfig>({ isActive: true, title: 'GÜNÜN BANKO KUPONU', matches: [] });
 
@@ -416,7 +444,7 @@ const App: React.FC = () => {
             description: `⚽ **Bahis Detayları:**\n\n${selectionsText}`,
             timestamp: new Date().toISOString(),
             footer: {
-              text: "724BAHİS | Canlı Kupon Bildirim Sistemi"
+              text: "BAHİSBEY | Canlı Kupon Bildirim Sistemi"
             }
           }
         ]
@@ -531,17 +559,17 @@ const App: React.FC = () => {
 
     // 3. Branding Migration for Marquee & Popup
     const storedMarquee = localStorage.getItem('site_marquee_config');
-    if (storedMarquee && (/betlivo/i.test(storedMarquee) || /724bahis/i.test(storedMarquee))) {
-      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724FUTBOL.COM').replace(/724bahis\.net/gi, '724FUTBOL.COM'));
+    if (storedMarquee && (/betlivo/i.test(storedMarquee) || /724bahis/i.test(storedMarquee) || /724FUTBOL/i.test(storedMarquee))) {
+      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, 'BAHİSBEY').replace(/724bahis\.net/gi, 'BAHİSBEY').replace(/724FUTBOL\.COM/gi, 'BAHİSBEY'));
       localStorage.setItem('site_marquee_config', JSON.stringify(parsedMarquee));
       setMarqueeConfig(parsedMarquee);
     }
 
     const storedWelcome = localStorage.getItem('site_welcome_popup');
-    if (storedWelcome && (/betlivo/i.test(storedWelcome) || /724bahis/i.test(storedWelcome))) {
-      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724FUTBOL.COM').replace(/724bahis\.net/gi, '724FUTBOL.COM'));
+    if (storedWelcome && (/betlivo/i.test(storedWelcome) || /724bahis/i.test(storedWelcome) || /724FUTBOL/i.test(storedWelcome))) {
+      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, 'BAHİSBEY').replace(/724bahis\.net/gi, 'BAHİSBEY').replace(/724FUTBOL\.COM/gi, 'BAHİSBEY'));
       // Also catch the 'BETLIVOX' variant if it exists
-      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BAHİS.NETX/gi, '724FUTBOL.COM').replace(/724FUTBOL.COMX/gi, '724FUTBOL.COM'));
+      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BAHİS.NETX/gi, 'BAHİSBEY').replace(/724FUTBOL.COMX/gi, 'BAHİSBEY'));
       localStorage.setItem('site_welcome_popup', JSON.stringify(cleanedWelcome));
       setWelcomePopupConfig(cleanedWelcome);
     }
@@ -612,7 +640,7 @@ const App: React.FC = () => {
         }
       },
       steps: [
-        { popover: { title: "724BAHİS'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
+        { popover: { title: "Bahisbey'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
         { element: '#tour-sidebar', popover: { title: 'Kategoriler & Spor Dalları', description: 'Buradan spor bahisleri, casino ve diğer popüler oyunlara tek tıkla ulaşabilirsiniz.', side: "right", align: 'start' }},
         { element: '#tour-user-panel', popover: { title: 'Bakiye & Kullanıcı İşlemleri', description: 'Güncel bakiyenizi takip edebilir, saniyeler içinde yatırım ve çekim yapabilirsiniz.', side: "bottom", align: 'center' }},
         { element: '#tour-chat', popover: { title: 'Canlı Sohbet', description: 'Sağ panelden diğer üyelerimizle sohbet edebilir, özel etkinlik kodlarını (gift) yakalayabilirsiniz!', side: "left", align: 'start' }},
@@ -758,7 +786,7 @@ const App: React.FC = () => {
         if (globalGiveaway) setGiveawayConfig(globalGiveaway);
         
         if (globalMarquee) {
-          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724FUTBOL.COM').replace(/724bahis\.net/gi, '724FUTBOL.COM'));
+          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, 'BAHİSBEY').replace(/724bahis\.net/gi, 'BAHİSBEY'));
           setMarqueeConfig(cleaned);
         }
         
@@ -766,7 +794,7 @@ const App: React.FC = () => {
         if (globalWheel) setWheelConfig(globalWheel);
         
         if (globalWelcome) {
-          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724FUTBOL.COM').replace(/724bahis\.net/gi, '724FUTBOL.COM').replace(/724BAHİS.NETX/gi, '724FUTBOL.COM').replace(/724FUTBOL.COMX/gi, '724FUTBOL.COM'));
+          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, 'BAHİSBEY').replace(/724bahis\.net/gi, 'BAHİSBEY').replace(/724BAHİS.NETX/gi, 'BAHİSBEY').replace(/724FUTBOL\.COMX/gi, 'BAHİSBEY'));
           setWelcomePopupConfig(cleaned);
         }
         
@@ -776,6 +804,10 @@ const App: React.FC = () => {
         if (resolvedPromoWheel) setPromoWheelConfig(resolvedPromoWheel);
         
         if (globalHeroSlider) setHeroSliderConfig(globalHeroSlider);
+        
+        const globalSlider2Config = await getGlobalConfig('site_slider2_config');
+        if (globalSlider2Config) setSlider2Config(globalSlider2Config);
+
         if (globalDailyKupon) setDailyKuponConfig(globalDailyKupon);
         if (globalRaffle) setRaffleConfig(globalRaffle);
         if (globalPopularBets) setPopularBetsConfig(globalPopularBets);
@@ -850,9 +882,9 @@ const App: React.FC = () => {
 
   // Hero brand for admin (keep backward compatibility)
   const heroDefault: Brand = {
-    id: '724bahis', name: '724BAHİS', subtitle: 'CASINO & CANLI BAHİS',
+    id: 'bahisbey', name: 'BAHİSBEY', subtitle: 'CASINO & CANLI BAHİS',
     offerMain: '%280', offerSub: 'HOŞGELDİN BONUSU !!!',
-    logo: 'https://picsum.photos/seed/724bahis/400/400', link: 'https://724bahis.net', isSponsor: true,
+    logo: 'https://picsum.photos/seed/bahisbey/400/400', link: 'https://bahisbey1438.com/?btag=59649488_330539', isSponsor: true,
   };
   const [hero, setHero] = useState<Brand>(heroDefault);
 
@@ -1057,6 +1089,8 @@ const App: React.FC = () => {
         onSaveSiteStatusConfig={handleSiteStatusConfigChange}
         heroSliderConfig={heroSliderConfig}
         onSaveHeroSliderConfig={handleHeroSliderConfigChange}
+        slider2Config={slider2Config}
+        onSaveSlider2Config={handleSlider2ConfigChange}
         dailyKuponConfig={dailyKuponConfig}
         onSaveDailyKuponConfig={handleDailyKuponConfigChange}
         raffleConfig={raffleConfig}
@@ -1269,7 +1303,7 @@ const App: React.FC = () => {
               id: isGuest ? `guest_${guestUsername}` : 'admin-session',
               username: isGuest ? guestUsername : 'Yönetici',
               password: '',
-              email: isGuest ? `guest@724bahis.com` : 'admin@724bahis.net',
+              email: isGuest ? `guest@bahisbey.com` : 'admin@bahisbey.com',
               phone: '',
               createdAt: Date.now(),
               role: role as any,
@@ -1340,19 +1374,22 @@ const App: React.FC = () => {
           <main className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}>
             
             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
-            <header className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/85 backdrop-blur-xl border-b border-[#00FFA3]/10 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
-              <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-300 hover:text-[#00FFA3] transition-colors p-1.5 rounded-lg bg-white/5 active:scale-95">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
-              </button>
-              <div className="font-black text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#00FFA3] to-[#00E676] tracking-tight">724BAHİS</div>
-              <button onClick={() => setIsMobileChatOpen(true)} className="text-gray-300 hover:text-[#00FFA3] transition-colors p-1.5 rounded-lg bg-white/5 active:scale-95 relative">
-                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-                 <span className="absolute top-1 right-1 w-2 h-2 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]"></span>
-              </button>
-            </header>
+            {view !== 'kral' && (
+              <header className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/85 backdrop-blur-xl border-b border-[#00FFA3]/10 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+                <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-300 hover:text-[#00FFA3] transition-colors p-1.5 rounded-lg bg-white/5 active:scale-95">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+                </button>
+                <div className="font-black text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#00FFA3] to-[#00E676] tracking-tight">BAHİSBEY</div>
+                <button onClick={() => setIsMobileChatOpen(true)} className="text-gray-300 hover:text-[#00FFA3] transition-colors p-1.5 rounded-lg bg-white/5 active:scale-95 relative">
+                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                   <span className="absolute top-1 right-1 w-2 h-2 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]"></span>
+                </button>
+              </header>
+            )}
 
             {/* Masaüstü Header (Mobilde Gizli) */}
-            <div className="hidden lg:block shrink-0 sticky top-0 z-30">
+            {view !== 'kral' && (
+              <div className="hidden lg:block shrink-0 sticky top-0 z-30">
       <Header
         onAdminClick={() => {
           if (userRole) {
@@ -1389,7 +1426,8 @@ const App: React.FC = () => {
         }}
         onMyBetsClick={() => setShowMyBetsModal(true)}
       />
-            </div>
+              </div>
+            )}
 
       <div 
         id="tour-main"
@@ -1414,193 +1452,19 @@ const App: React.FC = () => {
               {/* ═══ PORTAL BODY ═══ */}
               <div className="portal-body">
                 
-                {/* ── Combined Banners Section ── */}
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-6">
-                  {/* ── Özel Analizler Banner ── */}
-                  <div 
-                    onClick={() => handleViewChange('analysis')}
-                    className="rounded-lg overflow-hidden relative cursor-pointer group h-full flex flex-col" 
-                    style={{ 
-                      border: '1px solid rgba(245, 158, 11, 0.15)',
-                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
-                      transition: 'all 0.3s ease',
-                      backgroundImage: 'url("https://images.unsplash.com/photo-1518605368461-1e1e38ce7058?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")',
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    }}
-                  >
-                    {/* Thematic Overlays */}
-                    <div className="absolute inset-0 bg-slate-950/50" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/98 via-[#0F172A]/90 to-[#0F172A]/98" />
-                    
-                    {/* Subtle background rings */}
-                    <div style={{ position: 'absolute', top: '-30px', right: '10%', width: '140px', height: '140px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.1)', pointerEvents: 'none' }} />
-                    <div style={{ position: 'absolute', top: '-10px', right: '12%', width: '90px', height: '90px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.15)', pointerEvents: 'none' }} />
-                    
-                    <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative h-full" style={{ zIndex: 10 }}>
-                      <div className="flex items-center gap-4">
-                        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.1)', border: '1px solid rgba(0, 255, 163, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: 'blur(5px)' }}>
-                          <Trophy className="w-6 h-6" style={{ color: '#00FFA3' }} />
-                        </div>
-                        <div>
-                          <div style={{ fontSize: '10px', fontWeight: 900, color: 'rgba(0, 255, 163, 0.9)', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '2px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🏆 ÖZEL ANALİZLER</div>
-                          <h2 style={{ fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 900, fontStyle: 'italic', letterSpacing: '-1px', margin: 0, lineHeight: 1 }}>
-                            <span style={{ color: '#00FFA3', textShadow: '0 0 20px rgba(0, 255, 163, 0.6), 0 0 40px rgba(0, 255, 163, 0.3)' }}>WORLD CUP </span>
-                            <span style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>2026</span>
-                          </h2>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-4 justify-between sm:justify-end mt-auto sm:mt-0">
-                        <div className="text-left sm:text-right hidden sm:block" style={{ flexShrink: 0 }}>
-                          <p style={{ fontSize: '9px', fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>En Yüksek Kazanç Oranları</p>
-                          <p style={{ fontSize: '12px', fontWeight: 900, color: '#00FFA3' }}>%88 Başarı Oranı</p>
-                        </div>
-                        <button className="group-hover:scale-105" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', background: '#00FFA3', color: '#000', fontWeight: 900, fontSize: '12px', borderRadius: '8px', textTransform: 'uppercase', letterSpacing: '1px', transition: 'all 0.3s', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                          <span>GİT</span>
-                          <span className="group-hover:translate-x-1 transition-transform" style={{ display: 'inline-block' }}>→</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-  
-                  {/* ── Canlı Skor & Maç Sonuçları Section ── */}
-                  <div className="p-4 sm:p-6 rounded-lg bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-zinc-800/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 h-full">
-                    <div className="flex items-center gap-3 w-full sm:w-auto">
-                      <div className="w-10 h-10 rounded-lg bg-[#00FFA3]/10 flex items-center justify-center border border-[#00FFA3]/20 shrink-0">
-                        <Target className="w-5 h-5 text-[#00FFA3]" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-black text-sm uppercase tracking-wider italic">MAÇ SONUÇLARI & CANLI SKOR</h3>
-                        <p className="text-gray-400 text-xs font-medium mt-0.5 line-clamp-1 sm:line-clamp-none">Dünya genelindeki tüm maçların anlık skorlarını takip edin.</p>
-                      </div>
-                    </div>
-                    <button 
-                      onClick={() => setShowLiveScoreModal(true)}
-                      className="w-full sm:w-auto px-6 py-3 bg-[#00FFA3] hover:bg-[#33FFB5] text-black text-xs sm:text-sm font-black rounded-lg transition-all hover:scale-105 active:scale-95 uppercase tracking-wider shrink-0 mt-2 sm:mt-0"
-                    >
-                      Canlı Skor
-                    </button>
-                  </div>
-                </div>
-
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
-
-                {/* ── Today's Matches Analyses Section ── */}
-                {(() => {
-                  const combined = analyses.length > 0 ? analyses : demoAnalyses;
-                  const todayStr = new Date().toISOString().split('T')[0];
-                  const todayMatches = combined.filter(a => a.matchDate === todayStr);
-                  const matchesToDisplay = todayMatches.length > 0 
-                    ? todayMatches 
-                    : (() => {
-                        const sorted = [...combined].sort((a, b) => a.matchDate.localeCompare(b.matchDate));
-                        if (sorted.length === 0) return [];
-                        const firstDate = sorted[0].matchDate;
-                        return sorted.filter(a => a.matchDate === firstDate);
-                      })();
-                  
-                  if (matchesToDisplay.length === 0) return null;
-                  const displayDate = matchesToDisplay[0].matchDate;
-
-                  return (
-                    <div className="mb-6 p-5 rounded-lg border border-zinc-800 bg-[#0F172A]/70 backdrop-blur-md shadow-2xl relative">
-                      {/* Header */}
-                      <div className="flex items-center gap-2 text-xs font-black text-[#00FFA3] tracking-wider uppercase mb-4 px-1">
-                        <Calendar className="w-4 h-4 text-[#00FFA3]" />
-                        <span>{formatDateTR(displayDate)}</span>
-                        <span className="text-gray-500 font-bold normal-case">({matchesToDisplay.length} analiz)</span>
-                      </div>
-
-                      {/* List */}
-                      <div className="space-y-2.5">
-                        {matchesToDisplay.map((analysis, idx) => {
-                          const isFree = !!(siteUser || userRole) || idx < 2;
-                          const confColor = getConfidenceColor(analysis.confidence);
-                          const highestOdds = analysis.bookieOdds?.find(b => b.isHighest) || analysis.bookieOdds?.[0];
-
-                          return (
-                            <div
-                              key={analysis.id}
-                              onClick={() => {
-                                setActiveAnalysisId(analysis.id);
-                                setView('analysis');
-                              }}
-                              className="relative rounded-lg overflow-hidden border border-zinc-800/80 bg-[#07090e] hover:border-emerald-500/40 hover:bg-[#121620] shadow-[0_4px_15px_rgba(0,0,0,0.3)] transition-all duration-300 cursor-pointer group flex flex-col md:flex-row md:items-center justify-between p-3.5 gap-3"
-                            >
-                              {/* Blur for premium if locked */}
-                              <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 flex-1 min-w-0 ${!isFree ? 'blur-[3px] select-none pointer-events-none' : ''}`}>
-                                {/* Left info */}
-                                <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
-                                  <span className="text-[11px] font-bold text-gray-400 px-2.5 py-1 rounded bg-[#030407] border border-zinc-800/60 flex items-center gap-1">
-                                    🕐 {analysis.matchTime}
-                                  </span>
-                                  <span className="text-[10px] font-black text-[#00FFA3] uppercase px-2 py-0.5 rounded bg-emerald-500/5 border border-emerald-500/10">
-                                    {getLeagueFlag(analysis.league)} {analysis.league}
-                                  </span>
-                                  <div className="text-sm font-black text-white flex items-center gap-2 truncate">
-                                    <span>{analysis.homeTeam}</span>
-                                    <span className="text-xs text-gray-500 font-medium">vs</span>
-                                    <span>{analysis.awayTeam}</span>
-                                  </div>
-                                </div>
-
-                                {/* Right badges */}
-                                <div className="flex items-center gap-2 shrink-0">
-                                  <div className="px-3 py-1.5 rounded-lg text-center min-w-[70px] bg-[#030407] border border-zinc-800/60">
-                                    <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">TAHMİN</span>
-                                    <span className="text-[11px] font-black text-[#00E676]">{analysis.prediction}</span>
-                                  </div>
-                                  <div className="px-3 py-1.5 rounded-lg text-center min-w-[55px] bg-[#030407] border border-zinc-800/60">
-                                    <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">ORAN</span>
-                                    <span className="text-[11px] font-black text-[#00FFA3]">{highestOdds?.odd1 || '—'}</span>
-                                  </div>
-                                  <div className={`px-3 py-1.5 rounded-lg text-center min-w-[55px] border ${confColor.border} ${confColor.bg}`}>
-                                    <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">GÜVEN</span>
-                                    <span className={`text-[11px] font-black ${confColor.text}`}>%{analysis.confidence}</span>
-                                  </div>
-                                  <span className="flex items-center gap-1 text-[10px] font-extrabold px-2.5 py-1.5 rounded-lg uppercase tracking-wider bg-[#00E676]/10 border border-[#00E676]/30 text-[#00E676]">
-                                    <CheckCircle2 className="w-3 h-3" /> ANALİZ AÇIK
-                                  </span>
-                                </div>
-                              </div>
-
-                              {/* Lock overlay if locked */}
-                              {!isFree && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px] z-10">
-                                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00FFA3] text-[#0a0d14] font-black text-[10px] rounded-lg uppercase tracking-wider hover:bg-emerald-400 transition shadow-[0_0_15px_rgba(0,255,163,0.3)]">
-                                    <Lock className="w-3.5 h-3.5" /> Üye Ol, Tüm Analizleri Gör
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {/* Daha Fazlası İçin Analizler Button */}
-                      <div className="mt-5 flex justify-center">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setView('analysis');
-                          }}
-                          className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black text-xs font-black rounded-lg shadow-[0_4px_20px_rgba(16,185,129,0.2)] transition-all hover:scale-105 active:scale-95 uppercase tracking-widest flex items-center justify-center gap-2 group border-none"
-                        >
-                          <span>Daha Fazlası İçin Analizler</span>
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })()}
-
-                {/* ── Promosyonlar Section ── */}
-                <PromoSlider />
+                
+                <GameLobbyGrid />
 
                 {/* ── User Uploaded Image Banner ── */}
                 <div className="my-6 relative overflow-hidden rounded-lg shadow-[0_0_25px_rgba(0,255,163,0.3)] border border-emerald-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
-                  <img src="/banners/yeni-ince-banner.png" alt="Promo Banner" className="w-full h-auto block group-hover:scale-102 transition-transform duration-700" />
+                  <Slider2 
+                    config={slider2Config} 
+                    onInternalNavigate={(url) => {
+                      const event = new CustomEvent('internal-navigate', { detail: { url } });
+                      window.dispatchEvent(event);
+                    }}
+                  />
                   
                   {/* Animasyonlu Parıltı (Shine) Efekti */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-150%] animate-[shimmer_3s_infinite_linear] skew-x-[-20deg]"></div>
@@ -1614,7 +1478,24 @@ const App: React.FC = () => {
 
               {/* ═══ PORTAL FOOTER ═══ */}
               <div className="portal-footer">
-                <span className="portal-footer-copy">© 2026 724FUTBOL.COM · Tüm hakları saklıdır.</span>
+                <span className="portal-footer-copy">
+                  © 2026 BAHISBEY.COM · Tüm hakları saklıdır.
+                  <a href="/index-analiz.html" target="_self" onClick={(e) => { e.preventDefault(); window.location.href = '/index-analiz.html'; }} style={{ display: 'inline-block', width: '25px', height: '25px', cursor: 'pointer', background: 'transparent' }}></a>
+                  <button 
+                    onClick={() => setView('kral')} 
+                    className="ml-4 px-6 py-2 rounded font-black uppercase tracking-widest transition-all hover:scale-110 active:scale-95"
+                    style={{ 
+                      background: 'linear-gradient(to right, #FFD700, #FDB931)', 
+                      border: '2px solid #FFF', 
+                      color: '#000', 
+                      fontSize: '18px', 
+                      cursor: 'pointer',
+                      boxShadow: '0 0 20px rgba(255, 215, 0, 0.6)'
+                    }}
+                  >
+                    👑 KRAL BENİM
+                  </button>
+                </span>
                 <div className="portal-footer-links">
                   <a href="#" onClick={(e) => e.preventDefault()}>Hakkımızda</a>
                   <a href="#" onClick={(e) => e.preventDefault()}>İletişim</a>
@@ -1704,17 +1585,22 @@ const App: React.FC = () => {
         {view === 'sports2' && (
           <div className="animate-fade-in w-full relative flex flex-col" style={{ height: 'calc(100vh - var(--header-height))' }}>
             
+            {/* ── LIVE BULLETIN (Bot Data) ── */}
+            <div className="w-full shrink-0">
+              <LiveMatches />
+            </div>
+
             {/* Custom Sports2 Header */}
             <div className="w-full bg-[#161c28] rounded-t-2xl overflow-hidden shrink-0 shadow-lg relative z-20">
                {/* Top Menu */}
                <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-hide px-2 py-1">
                   {([
-                    { label: 'SPOR', icon: <Dribbble size={18} />, url: 'https://bahisbey7195.com/tr/sport' },
-                    { label: 'CANLI BAHİS', icon: <PlayCircle size={18} />, url: 'https://bahisbey7195.com/tr/sport/live/football/' },
-                    { label: 'E-SPOR', icon: <Gamepad2 size={18} />, url: 'https://bahisbey7195.com/tr/esport' },
-                    { label: '3D SLOT SALONU', icon: <Diamond size={18} />, url: 'https://bahisbey7195.com/tr/lobby/casino' },
-                    { label: 'CANLI CASINO', icon: <Dices size={18} />, url: 'https://bahisbey7195.com/tr/lobby/livecasino' },
-                    { label: 'SANAL SPORLAR', icon: <MonitorPlay size={18} />, url: 'https://bahisbey7195.com/tr/lobby/virtualsport/main' }
+                    { label: 'SPOR', icon: <Dribbble size={18} />, url: 'https://bahisbey1438.com/tr/sport/?btag=59649488_330539' },
+                    { label: 'CANLI BAHİS', icon: <PlayCircle size={18} />, url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' },
+                    { label: 'E-SPOR', icon: <Gamepad2 size={18} />, url: 'https://bahisbey1438.com/tr/esport/?btag=59649488_330539' },
+                    { label: '3D SLOT SALONU', icon: <Diamond size={18} />, url: 'https://bahisbey1438.com/tr/lobby/casino/?btag=59649488_330539' },
+                    { label: 'CANLI CASINO', icon: <Dices size={18} />, url: 'https://bahisbey1438.com/tr/lobby/livecasino/?btag=59649488_330539' },
+                    { label: 'SANAL SPORLAR', icon: <MonitorPlay size={18} />, url: 'https://bahisbey1438.com/tr/lobby/virtualsport/main/?btag=59649488_330539' }
                   ] as { label: string; icon: React.ReactNode; url: string; badge?: string }[]).map(item => (
                     <button 
                       key={item.label}
@@ -1733,12 +1619,12 @@ const App: React.FC = () => {
                <div className="flex items-center justify-between bg-[#222b3c] px-4 py-2">
                  <div className="flex items-center gap-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
                     {[
-                      { label: 'Sonuçlar', url: 'https://bahisbey7195.com/tr/sport/results/' },
-                      { label: 'Bahis Yarışı', badge: 'YENİ', url: 'https://bahisbey7195.com/tr/sport/betrace/' },
-                      { label: 'SPOR TURNUVASI', url: 'https://bahisbey7195.com/tr/sport/tournament/' },
-                      { label: 'İstatistikler', url: 'https://bahisbey7195.com/tr/sport/statistics/' },
-                      { label: 'Canlı Skor', url: 'https://bahisbey7195.com/tr/sport/livescore/' },
-                      { label: 'Grup Aşaması', badge: 'YENİ', url: 'https://bahisbey7195.com/tr/sport/groupstage/' }
+                      { label: 'Sonuçlar', url: 'https://bahisbey1438.com/tr/sport/results/?btag=59649488_330539' },
+                      { label: 'Bahis Yarışı', badge: 'YENİ', url: 'https://bahisbey1438.com/tr/sport/betrace/?btag=59649488_330539' },
+                      { label: 'SPOR TURNUVASI', url: 'https://bahisbey1438.com/tr/sport/tournament/?btag=59649488_330539' },
+                      { label: 'İstatistikler', url: 'https://bahisbey1438.com/tr/sport/statistics/?btag=59649488_330539' },
+                      { label: 'Canlı Skor', url: 'https://bahisbey1438.com/tr/sport/livescore/?btag=59649488_330539' },
+                      { label: 'Grup Aşaması', badge: 'YENİ', url: 'https://bahisbey1438.com/tr/sport/groupstage/?btag=59649488_330539' }
                     ].map((item, idx, arr) => (
                       <React.Fragment key={item.label}>
                         <button 
@@ -1788,6 +1674,38 @@ const App: React.FC = () => {
                 }}
               />
               
+              {/* BAHISBEY OVERLAY FOOTER */}
+              <div className="absolute bottom-0 left-0 w-full z-40 bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex flex-col md:flex-row items-center justify-between px-4 py-3 pointer-events-auto">
+                <div className="flex items-center gap-3">
+                  <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: '18px', color: '#fff', letterSpacing: '-1px' }}>
+                    BAHİSBEY
+                  </span>
+                  <div className="h-4 w-px bg-zinc-700 hidden md:block"></div>
+                  <span className="text-zinc-500 text-[10px] hidden md:block max-w-[400px] leading-tight">
+                    Bahisbey, Curaçao yasalarına göre lisanslanmış profesyonel ve güvenilir bahis platformudur. Tüm hakları saklıdır.
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-3 mt-2 md:mt-0">
+                   <div className="flex items-center gap-1.5 mr-2 opacity-80 overflow-x-auto max-w-[200px] md:max-w-none scrollbar-hide">
+                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAPARA</div>
+                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">HAVALE</div>
+                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAYCO</div>
+                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">MASTERCARD</div>
+                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">VISA</div>
+                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">BITCOIN</div>
+                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">TETHER</div>
+                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAY</div>
+                   </div>
+                   <button 
+                     onClick={() => alert('Lisans belgeleri yakında eklenecek.')}
+                     className="px-3 py-1.5 bg-[#00FFA3]/10 border border-[#00FFA3]/30 text-[#00FFA3] rounded text-[10px] font-bold hover:bg-[#00FFA3]/20 transition-colors flex items-center gap-1 shrink-0"
+                   >
+                     <ShieldCheck className="w-3 h-3" />
+                     LİSANS BELGELERİ
+                   </button>
+                </div>
+              </div>
               {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
               {!isMobile && (
                 <div 
@@ -2179,6 +2097,11 @@ const App: React.FC = () => {
         {view === 'demo' && (
           <div className="animate-fade-in">
             <DemoGames />
+          </div>
+        )}
+        {view === 'kral' && (
+          <div className="animate-fade-in">
+            <KralView onBack={() => setView('home')} onShowLiveScore={() => setShowLiveScoreModal(true)} />
           </div>
         )}
       </div>

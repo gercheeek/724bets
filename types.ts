@@ -621,9 +621,15 @@ export interface HeroSlide {
 }
 
 export interface HeroSliderConfig {
-    isActive: boolean;
-    autoPlayInterval: number; // ms
-    slides: HeroSlide[];
+  isActive: boolean;
+  autoPlayInterval?: number;
+  slides: HeroSlide[];
+}
+
+export interface Slider2Config {
+  isActive: boolean;
+  autoPlayInterval?: number;
+  slides: HeroSlide[]; // We can reuse HeroSlide for the individual slide type
 }
 
 // ─── Daily Banko Kupon (Hero Section) ────────────────────────────────────────

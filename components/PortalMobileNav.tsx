@@ -21,9 +21,7 @@ interface NavItem {
 const PortalMobileNav: React.FC<PortalMobileNavProps> = ({ activeView, onViewChange }) => {
   const items: NavItem[] = [
     { view: 'home', label: 'Ana Sayfa', icon: <HomeOutlined style={{ fontSize: '20px' }} /> },
-    { view: 'analysis', label: 'Analizler', icon: <BarChartOutlined style={{ fontSize: '20px' }} /> },
     { view: 'trusted-sites', label: 'Siteler', icon: <SafetyOutlined style={{ fontSize: '20px' }} /> },
-    { view: '724tv', label: '724TV', icon: <PlayCircleOutlined style={{ fontSize: '20px' }} /> },
   ];
 
   return (

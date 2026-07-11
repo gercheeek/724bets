@@ -26,35 +26,41 @@ const LiveMatches: React.FC = () => {
       if (isRefresh) setRefreshing(true);
       else setLoading(true);
 
-      const response = await fetch("https://prod20522-194534354.fssb.io/api/pulse/snapshot/events?lang=TR");
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
-      const data = await response.json();
-      
-      if (data && data.length > 0) {
-        // Filter Futbol (SportId: "1") or Basketbol (SportId: "6")
-        const filtered = data.filter((e: any) => e.SportId === "1" || e.SportId === "6");
+        // Öncelikle Supabase'den deniyoruz, başarısız olursa botun oluşturduğu JSON dosyasına dönüyoruz.
+        let matchData: any[] = [];
         
-        const mappedMatches: MacData[] = filtered.slice(0, 12).map((mac: any) => {
-          const homeParticipant = mac.Participants?.find((p: any) => p.VenueRole === "Home");
-          const awayParticipant = mac.Participants?.find((p: any) => p.VenueRole === "Away");
-          
-          const evSahibi = homeParticipant?.Name || mac.EventName?.split(' karşı ')?.[0] || 'Ev Sahibi';
-          const deplasman = awayParticipant?.Name || mac.EventName?.split(' karşı ')?.[1] || 'Deplasman';
-          
-          return {
-            mac_id: mac._id,
-            ev_sahibi: evSahibi,
-            deplasman: deplasman,
-            oranlar: {
-              "1": Number((Math.random() * 2 + 1.2).toFixed(2)),
-              "X": Number((Math.random() * 1.5 + 2.5).toFixed(2)),
-              "2": Number((Math.random() * 3 + 1.5).toFixed(2))
+        try {
+            // Option A: Try Supabase
+            const { data, error } = await supabase.from('live_matches').select('*').order('last_updated', { ascending: false }).limit(20);
+            if (!error && data && data.length > 0) {
+                matchData = data;
+            } else {
+                throw new Error("Supabase boş veya bağlı değil");
             }
-          };
-        });
-
-        setMatches(mappedMatches);
+        } catch (supaErr) {
+            // Option B: Fallback to local JSON (written by bot)
+            const response = await fetch("/live_matches.json?" + new Date().getTime());
+            if (response.ok) {
+                matchData = await response.json();
+            }
+        }
+        
+        if (matchData && matchData.length > 0) {
+          const mappedMatches: MacData[] = matchData.slice(0, 15).map((mac: any, index: number) => {
+            return {
+              mac_id: mac.id || `match-${index}`,
+              ev_sahibi: mac.home_team || 'Ev Sahibi',
+              deplasman: mac.away_team || 'Deplasman',
+              oranlar: {
+                "1": mac.home_odd,
+                "X": mac.draw_odd,
+                "2": mac.away_odd
+              },
+              status: mac.status || mac.match_time
+            };
+          });
+  
+          setMatches(mappedMatches);
         setLastUpdated(new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }));
         setError(null);
       } else {
@@ -190,12 +196,12 @@ const LiveMatches: React.FC = () => {
             {/* Glow effect */}
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(0, 255, 163, 0.03) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
-            {/* Live indicator */}
+            {/* Live indicator / Status */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
               <div className="flex items-center gap-1.5">
                 <Wifi className="w-3 h-3" style={{ color: '#00FFA3' }} />
-                <span style={{ fontSize: '9px', fontWeight: 900, color: 'rgba(0, 255, 163, 0.7)', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
-                  Canlı Bahis
+                <span style={{ fontSize: '9px', fontWeight: 900, color: 'rgba(0, 255, 163, 0.9)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  {match.status || 'Canlı Bahis'}
                 </span>
               </div>
               <TrendingUp className="w-3.5 h-3.5" style={{ color: 'rgba(0, 255, 163, 0.3)' }} />

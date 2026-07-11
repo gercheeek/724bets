@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings, Image, Layout, Trophy, Users, Eye, EyeOff, Save, Plus, Sparkles, TrendingUp, AlertCircle, Clock, Box, Zap, Trash2, Search, Lock, Unlock, Timer, Gift, Ticket, RefreshCw, Activity, Check, MessageSquare, Palette, Star, CreditCard, ChevronLeft, LogOut, Calendar, ClipboardList, Edit3, Target, CheckCircle2, User, ChevronUp, ChevronDown, Layers, Camera, ShieldCheck, ShoppingCart, Shield, Bell } from 'lucide-react';
-import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, LoyaltyConfig, EditorAccount, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, TVConfig, SportCategory, LoaderConfig, CasinoLobbyGame, ChatBotConfig } from '../types';
+import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, BlackjackConfig, LoyaltyConfig, EditorAccount, UserMessage, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, LiveOddsConfig, LiveOddsMatch, SiteStatusConfig, HeroSliderConfig, Slider2Config, HeroSlide, DailyKuponConfig, DailyKuponMatch, RaffleConfig, PopularBetsConfig, TVConfig, SportCategory, LoaderConfig, CasinoLobbyGame, SiteUser, ChatBotConfig } from '../types';
+
+
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
 import AdminGiveawayTab from './AdminGiveawayTab';
@@ -52,6 +54,8 @@ interface AdminPanelProps {
   onSaveSiteStatusConfig?: (config: SiteStatusConfig) => void;
   heroSliderConfig?: HeroSliderConfig;
   onSaveHeroSliderConfig?: (config: HeroSliderConfig) => void;
+  slider2Config?: Slider2Config;
+  onSaveSlider2Config?: (config: Slider2Config) => void;
   dailyKuponConfig?: DailyKuponConfig;
   onSaveDailyKuponConfig?: (config: DailyKuponConfig) => void;
   raffleConfig?: RaffleConfig;
@@ -82,6 +86,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   analyses, coupons, onSaveAnalyses, onSaveCoupons,
   siteStatusConfig, onSaveSiteStatusConfig,
   heroSliderConfig, onSaveHeroSliderConfig,
+  slider2Config, onSaveSlider2Config,
   dailyKuponConfig, onSaveDailyKuponConfig,
   raffleConfig, onSaveRaffleConfig,
   popularBetsConfig, onSavePopularBetsConfig,
@@ -94,7 +99,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues' | 'wallet'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,
@@ -156,6 +161,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     heroSliderConfig || { isActive: true, autoPlayInterval: 5000, slides: [] }
   );
 
+  const [localSlider2, setLocalSlider2] = useState<Slider2Config>(
+    slider2Config || { isActive: true, autoPlayInterval: 5000, slides: [] }
+  );
+
   // Daily Kupon Local State
   const [localDailyKupon, setLocalDailyKupon] = useState<DailyKuponConfig>(
     dailyKuponConfig || { isActive: true, title: 'GÜNÜN BANKO KUPONU', matches: [] }
@@ -184,27 +193,48 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   // New Management Local State
   const [uploadingSlideId, setUploadingSlideId] = useState<string | null>(null);
 
-  const handleSlideImageUpload = async (slideId: string, idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSlideImageUpload = async (slideId: string, idx: number, e: React.ChangeEvent<HTMLInputElement>, sliderType: 'hero' | 'slider2' = 'hero') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploadingSlideId(slideId);
     try {
-      const croppedBlob = await resizeImage(file, 1024, 576);
-      const { url, error } = await uploadImageToSupabase(
-        croppedBlob,
-        'slider-images',
-        `hero-slides/${slideId}-${Date.now()}.jpg`
-      );
-
-      if (url) {
-        const slides = [...localHeroSlider.slides];
-        slides[idx].imageUrl = url;
-        const updated = { ...localHeroSlider, slides };
-        setLocalHeroSlider(updated);
-        onSaveHeroSliderConfig?.(updated);
+      let finalUrl = '';
+      if (sliderType === 'hero') {
+        const croppedBlob = await resizeImage(file, 1024, 576);
+        const { url, error } = await uploadImageToSupabase(
+          croppedBlob,
+          'slider-images',
+          `hero-slides/${slideId}-${Date.now()}.jpg`
+        );
+        if (error) { alert("Görsel yüklenemedi: " + error.message); return; }
+        finalUrl = url;
       } else {
-        alert("Görsel yüklenemedi: " + (error?.message || "Bilinmeyen hata"));
+        const { url, error } = await uploadImageToSupabase(
+          file,
+          'slider-images',
+          `slider2/${slideId}-${Date.now()}.jpg`
+        );
+        if (error) { alert("Görsel yüklenemedi: " + error.message); return; }
+        finalUrl = url;
+      }
+
+      if (finalUrl) {
+        if (sliderType === 'hero') {
+          const slides = [...(localHeroSlider.slides || [])];
+          if (slides[idx]) {
+            slides[idx].imageUrl = finalUrl;
+            setLocalHeroSlider({ ...localHeroSlider, slides });
+            onSaveHeroSliderConfig?.({ ...localHeroSlider, slides });
+          }
+        } else if (sliderType === 'slider2') {
+          const slides = [...(localSlider2.slides || [])];
+          if (slides[idx]) {
+            slides[idx].imageUrl = finalUrl;
+            setLocalSlider2({ ...localSlider2, slides });
+            onSaveSlider2Config?.({ ...localSlider2, slides });
+          }
+        }
       }
     } catch (err) {
       console.error('Slider image crop/upload failed:', err);
@@ -239,6 +269,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   // Content Sections Visibility - Default all closed
   const [contentExpanded, setContentExpanded] = useState<Record<string, boolean>>({
     hero: false,
+    slider2: false,
     brands: false,
     welcome: false,
     slider: false,
@@ -514,6 +545,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   }, [heroSliderConfig]);
 
   useEffect(() => {
+    if (slider2Config) setLocalSlider2(slider2Config);
+  }, [slider2Config]);
+
+  useEffect(() => {
     if (dailyKuponConfig) setLocalDailyKupon(dailyKuponConfig);
   }, [dailyKuponConfig]);
 
@@ -573,6 +608,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     if (onSaveMarqueeConfig) onSaveMarqueeConfig(localMarquee);
     if (onSaveLiveOddsConfig) onSaveLiveOddsConfig(localLiveOdds);
     if (onSaveHeroSliderConfig) onSaveHeroSliderConfig(localHeroSlider);
+    if (onSaveSlider2Config) onSaveSlider2Config(localSlider2);
     if (onSaveDailyKuponConfig) onSaveDailyKuponConfig(localDailyKupon);
     if (onSavePopularBetsConfig) onSavePopularBetsConfig(localPopularBetsConfig);
     if (onSaveTvConfig) onSaveTvConfig(localTvConfig);
@@ -1006,6 +1042,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   <button onClick={() => setActiveTab('payment')} className={`adm-nav-item ${activeTab === 'payment' ? 'active' : ''}`}>
                     <CreditCard className="w-4 h-4" /> ÖDEMELER
                   </button>
+                  <button onClick={() => setActiveTab('wallet')} className={`adm-nav-item ${activeTab === 'wallet' ? 'active' : ''}`}>
+                    <CreditCard className="w-4 h-4" /> CÜZDAN AYARLARI
+                  </button>
                   <button onClick={() => setActiveTab('editors')} className={`adm-nav-item ${activeTab === 'editors' ? 'active' : ''}`}>
                     <User className="w-4 h-4" /> EDİTÖRLER
                   </button>
@@ -1398,9 +1437,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           link: '',
                           title: 'Yeni Slide',
                           isActive: true,
-                          order: localHeroSlider.slides.length
+                          order: (localHeroSlider.slides || []).length
                         };
-                        setLocalHeroSlider({ ...localHeroSlider, slides: [...localHeroSlider.slides, newSlide] });
+                        setLocalHeroSlider({ ...localHeroSlider, slides: [...(localHeroSlider.slides || []), newSlide] });
                       }}
                       className="flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-purple-500 hover:text-white transition-all"
                     >
@@ -1409,7 +1448,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
 
                   <div className="mt-4 space-y-3">
-                    {localHeroSlider.slides
+                    {(localHeroSlider.slides || [])
                       .sort((a, b) => a.order - b.order)
                       .map((slide, idx) => (
                       <div key={slide.id} className={`bg-black/30 border rounded-lg p-3 space-y-3 transition-all ${slide.isActive ? 'border-purple-500/20' : 'border-zinc-800 opacity-50'}`}>
@@ -1483,6 +1522,158 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                 const slides = [...localHeroSlider.slides];
                                 slides[idx].link = e.target.value;
                                 setLocalHeroSlider({ ...localHeroSlider, slides });
+                              }}
+                              className="adm-input !py-2 !text-[10px]" 
+                              placeholder="Yönlendirme Linki" 
+                            />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </section>
+
+            <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
+              <div className="flex items-center justify-between p-4">
+                <button 
+                  onClick={() => toggleContentSection('slider2')}
+                  className="flex items-center gap-3 group"
+                >
+                  <div className="w-1 h-5 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.4)]" />
+                  <div className="text-left">
+                    <h2 className="text-xs font-black uppercase tracking-tighter text-zinc-300 group-hover:text-white transition-colors">Slider 2 Yönetimi</h2>
+                    <p className="text-zinc-600 text-[9px] font-bold">İnce banner slider ayarları</p>
+                  </div>
+                  {contentExpanded.slider2 ? <ChevronUp className="w-3.5 h-3.5 text-zinc-500" /> : <ChevronDown className="w-3.5 h-3.5 text-zinc-500" />}
+                </button>
+                <div className="flex bg-black/40 p-1 rounded-lg border border-zinc-800/60">
+                  <button
+                    onClick={() => {
+                      const u = { ...localSlider2, isActive: true };
+                      setLocalSlider2(u);
+                      onSaveSlider2Config?.(u);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${localSlider2.isActive ? 'bg-green-500 text-black shadow-[0_0_10px_rgba(34,197,94,0.3)]' : 'text-zinc-500'}`}
+                  >AKTİF</button>
+                  <button
+                    onClick={() => {
+                      const u = { ...localSlider2, isActive: false };
+                      setLocalSlider2(u);
+                      onSaveSlider2Config?.(u);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${!localSlider2.isActive ? 'bg-red-500 text-white' : 'text-zinc-500'}`}
+                  >PASİF</button>
+                </div>
+              </div>
+
+              {contentExpanded.slider2 && (
+                <div className="p-5 pt-0 border-t border-zinc-800/40 animate-fade-in">
+                  <div className="mt-4 flex items-center justify-between bg-black/20 p-3 rounded-lg border border-zinc-800/30">
+                    <div className="flex items-center gap-4">
+                      <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest shrink-0">Otomatik Geçiş (ms)</label>
+                      <input
+                        type="number"
+                        value={localSlider2.autoPlayInterval}
+                        onChange={(e) => setLocalSlider2({ ...localSlider2, autoPlayInterval: parseInt(e.target.value) || 5000 })}
+                        className="bg-black border border-zinc-800/60 rounded-lg px-3 py-1.5 w-24 text-xs font-bold focus:border-purple-500 outline-none transition-all"
+                        min={1000}
+                        step={500}
+                      />
+                    </div>
+                    <button
+                      onClick={() => {
+                        const newSlide: HeroSlide = {
+                          id: Date.now().toString(),
+                          imageUrl: '',
+                          link: '',
+                          title: 'Yeni Slide',
+                          isActive: true,
+                          order: (localSlider2.slides || []).length
+                        };
+                        setLocalSlider2({ ...localSlider2, slides: [...(localSlider2.slides || []), newSlide] });
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-purple-500 hover:text-white transition-all"
+                    >
+                      <Plus className="w-3.5 h-3.5" /> YENİ SLİDE EKLE
+                    </button>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    {(localSlider2.slides || [])
+                      .sort((a, b) => a.order - b.order)
+                      .map((slide, idx) => (
+                      <div key={slide.id} className={`bg-black/30 border rounded-lg p-3 space-y-3 transition-all ${slide.isActive ? 'border-purple-500/20' : 'border-zinc-800 opacity-50'}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <span className="w-6 h-6 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400 font-black text-[10px]">{idx + 1}</span>
+                            <input 
+                              value={slide.title} 
+                              onChange={(e) => {
+                                const slides = [...localSlider2.slides];
+                                slides[idx].title = e.target.value;
+                                setLocalSlider2({ ...localSlider2, slides });
+                              }}
+                              className="bg-transparent border-none text-xs font-black text-white focus:outline-none w-48"
+                              placeholder="Slide Başlığı"
+                            />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => {
+                                const slides = [...localSlider2.slides];
+                                slides[idx].isActive = !slides[idx].isActive;
+                                setLocalSlider2({ ...localSlider2, slides });
+                              }}
+                              className={`p-1.5 rounded-lg transition-all ${slide.isActive ? 'text-emerald-500 bg-emerald-500/10' : 'text-zinc-500 bg-zinc-800'}`}
+                            >
+                              {slide.isActive ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (idx === 0) return;
+                                const slides = [...localSlider2.slides].sort((a, b) => a.order - b.order);
+                                const temp = slides[idx].order;
+                                slides[idx].order = slides[idx - 1].order;
+                                slides[idx - 1].order = temp;
+                                setLocalSlider2({ ...localSlider2, slides });
+                              }}
+                              className="p-1.5 text-zinc-500 hover:text-white"
+                            ><ChevronUp className="w-3.5 h-3.5" /></button>
+                            <button
+                              onClick={() => setLocalSlider2({ ...localSlider2, slides: localSlider2.slides.filter(s => s.id !== slide.id) })}
+                              className="p-1.5 text-rose-500/50 hover:text-rose-500"
+                            ><Trash2 className="w-3.5 h-3.5" /></button>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                           <div className="flex gap-2 items-center">
+                              <input 
+                                value={slide.imageUrl} 
+                                onChange={(e) => {
+                                  const slides = [...localSlider2.slides];
+                                  slides[idx].imageUrl = e.target.value;
+                                  setLocalSlider2({ ...localSlider2, slides });
+                                }}
+                                className="adm-input !py-2 !text-[10px] flex-1" 
+                                placeholder="Görsel URL" 
+                              />
+                              <label className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-[9px] font-black uppercase tracking-widest cursor-pointer whitespace-nowrap">
+                                {uploadingSlideId === slide.id ? '...' : 'GÖRSEL SEÇ'}
+                                <input 
+                                  type="file" 
+                                  accept="image/*" 
+                                  onChange={(e) => handleSlideImageUpload(slide.id, idx, e, 'slider2')} 
+                                  className="hidden" 
+                                />
+                              </label>
+                           </div>
+                            <input 
+                              value={slide.link} 
+                              onChange={(e) => {
+                                const slides = [...localSlider2.slides];
+                                slides[idx].link = e.target.value;
+                                setLocalSlider2({ ...localSlider2, slides });
                               }}
                               className="adm-input !py-2 !text-[10px]" 
                               placeholder="Yönlendirme Linki" 
@@ -3744,6 +3935,46 @@ Maç Listesi: `}
       {activeTab === 'payment' && (
         <div className="space-y-4 animate-fade-in">
           <AdminPremiumTab initialTab="payments" />
+        </div>
+      )}
+
+      {activeTab === 'wallet' && (
+        <div className="space-y-4 animate-fade-in">
+          <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
+            <div className="p-5 flex items-center justify-between border-b border-zinc-800/50 bg-white/[0.02]">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center border border-emerald-500/20">
+                  <CreditCard className="w-5 h-5 text-emerald-500" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-white font-black text-sm uppercase tracking-tight italic">CÜZDAN YÖNETİMİ</h3>
+                  <p className="text-zinc-500 text-[10px] font-bold uppercase mt-0.5">Yatırım ve Çekim Seçeneklerini Yönetin</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {['Bitcoin', 'Ethereum', 'USDT', 'Binance', 'Banka Havalesi', 'Papara'].map((method) => (
+                  <div key={method} className="bg-[#151A23] p-4 rounded-xl border border-white/5 flex items-center justify-between">
+                    <div>
+                      <div className="font-bold text-white text-sm">{method}</div>
+                      <div className="text-xs text-zinc-500 mt-1">Komisyon: %0</div>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" className="sr-only peer" defaultChecked />
+                      <div className="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end">
+                 <button className="px-6 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-lg transition-colors">
+                   Ayarları Kaydet
+                 </button>
+              </div>
+            </div>
+          </section>
         </div>
       )}
 

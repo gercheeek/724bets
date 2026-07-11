@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { MatchAnalysis, Coupon, SiteUser, SportCategory } from '../types';
 import { ChevronDown, ChevronUp, Lock, Shield, Zap, Search, Target, Flame, User, AlertCircle, CheckCircle2, RotateCcw, Trophy, Calendar } from 'lucide-react';
 import { demoAnalyses } from '../demoData';
+import LiveMatches from './LiveMatches';
 
 interface AnalysisViewProps {
     onNavigate?: (view: string) => void;
@@ -373,6 +374,9 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
             {/* ── MAIN CONTENT ── */}
             <div className="max-w-[900px] mx-auto px-4 py-4 relative z-10">
+                {/* ── LIVE BULLETIN ── */}
+                <LiveMatches />
+
                 {/* World Cup 2026 Branding Header */}
                 <div className="mb-6 rounded-lg overflow-hidden relative shadow-[0_0_30px_rgba(0,255,163,0.05)]" style={{ background: 'linear-gradient(135deg, rgba(26,21,0,0.8) 0%, rgba(10,13,20,0.9) 100%)' }}>
                     <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 bg-no-repeat bg-right-bottom" style={{ backgroundImage: 'radial-gradient(circle at right, #00FFA3 0%, transparent 70%)' }}></div>

@@ -218,12 +218,21 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                   )}
                 </div>
 
-                {/* Upload Button */}
-                <label className="flex items-center justify-center gap-1.5 w-full py-2 bg-zinc-800 hover:bg-zinc-755 border border-zinc-700 text-[9px] font-black text-white rounded-lg cursor-pointer transition-all">
-                  <ImageIcon className="w-3.5 h-3.5 text-zinc-400" />
-                  GÖRSEL YÜKLE
-                  <input type="file" hidden accept="image/*" onChange={(e) => handleImageUpload(game.id, e)} />
-                </label>
+                {/* Upload Section */}
+                <div className="flex flex-col gap-2 w-full">
+                  <label className="flex items-center justify-center gap-1.5 w-full py-2 bg-zinc-800 hover:bg-zinc-755 border border-zinc-700 text-[9px] font-black text-white rounded-lg cursor-pointer transition-all">
+                    <ImageIcon className="w-3.5 h-3.5 text-zinc-400" />
+                    Masaüstünden Yükle
+                    <input type="file" hidden accept="image/*" onChange={(e) => handleImageUpload(game.id, e)} />
+                  </label>
+                  <input
+                    type="text"
+                    value={game.image}
+                    onChange={(e) => updateGame(game.id, 'image', e.target.value)}
+                    className="w-full bg-black border border-zinc-850 rounded-lg px-3 py-2 text-[10px] text-white outline-none focus:border-amber-500/50 transition-all"
+                    placeholder="Veya Görsel URL Linki Girin"
+                  />
+                </div>
               </div>
 
               {/* Data Settings Form */}

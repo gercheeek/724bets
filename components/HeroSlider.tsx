@@ -5,9 +5,10 @@ import { HeroSliderConfig } from '../types';
 interface HeroSliderProps {
   config: HeroSliderConfig;
   onSlideChange?: (index: number) => void;
+  onInternalNavigate?: (url: string) => void;
 }
 
-const HeroSlider: React.FC<HeroSliderProps> = ({ config, onSlideChange }) => {
+const HeroSlider: React.FC<HeroSliderProps> = ({ config, onSlideChange, onInternalNavigate }) => {
   const activeSlides = config.slides
     .filter(s => s.isActive)
     .sort((a, b) => a.order - b.order);
@@ -95,11 +96,13 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ config, onSlideChange }) => {
           transition: 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         }}
       >
-        {activeSlides.map((slide) => (
+        {activeSlides.map((slide) => {
+          const isInternal = slide.link && slide.link.includes('bahisbey7195.com');
+          return (
           <a
             key={slide.id}
             href={slide.link || '#'}
-            target={slide.link ? '_blank' : undefined}
+            target={slide.link && !isInternal ? '_blank' : undefined}
             rel="noopener noreferrer"
             className="hero-slider-slide"
             style={{ 
@@ -113,7 +116,14 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ config, onSlideChange }) => {
               background: '#111',
               overflow: 'hidden'
             }}
-            onClick={(e) => { if (!slide.link) e.preventDefault(); }}
+            onClick={(e) => { 
+              if (!slide.link) {
+                e.preventDefault(); 
+              } else if (isInternal && onInternalNavigate) {
+                e.preventDefault();
+                onInternalNavigate(slide.link);
+              }
+            }}
           >
             <img
               src={slide.imageUrl}
@@ -133,7 +143,8 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ config, onSlideChange }) => {
             {/* Gradient overlay for readability */}
             <div className="hero-slider-overlay" />
           </a>
-        ))}
+          );
+        })}
       </div>
 
       {/* Navigation arrows */}
