@@ -91,9 +91,9 @@ const WINNERS = [
   { id: 6, user: 'T***5', img: 'https://placehold.co/50x50/111/fff?text=T5', amount: '8,755.5 TRY', date: '11 Tem, 2026 00:46' },
 ];
 
-const GameCard: React.FC<{ game: any, aspectRatio?: string, className?: string }> = ({ game, aspectRatio = "aspect-[2/3]", className = "" }) => {
+const GameCard: React.FC<{ game: any, aspectRatio?: string, className?: string, onClick?: () => void }> = ({ game, aspectRatio = "aspect-[2/3]", className = "", onClick }) => {
   return (
-    <div className={`relative group rounded-xl overflow-hidden cursor-pointer ${aspectRatio} bg-[#1A1C24] shrink-0 transition-transform hover:scale-105 ${className}`}>
+    <div onClick={onClick} className={`relative group rounded-xl overflow-hidden cursor-pointer ${aspectRatio} bg-[#1A1C24] shrink-0 transition-transform hover:scale-105 ${className}`}>
       <img src={game.img} alt="Game" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
       {game.badge && (
         <div className={`absolute top-1.5 left-1.5 px-2 py-0.5 rounded text-[8px] font-black tracking-widest text-white shadow-md z-10 ${game.badgeColor}`}>
@@ -128,9 +128,20 @@ const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
 
 interface CasinoLobbyProps {
   customGames?: CasinoLobbyGame[];
+  isLoggedIn?: boolean;
 }
 
-const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
+const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [], isLoggedIn = false }) => {
+  const [selectedGame, setSelectedGame] = useState<any | null>(null);
+
+  const handleAction = () => {
+    if (isLoggedIn) {
+      window.dispatchEvent(new Event('openDepositModal'));
+    } else {
+      window.dispatchEvent(new Event('openLoginModal'));
+    }
+  };
+
   const getGamesForCategory = (category: string, fallback: any[]) => {
     const matched = customGames.filter(g => g.lobbyCategory === category && g.isActive);
     if (matched.length > 0) {
@@ -180,13 +191,13 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
         {/* POPULAR GAMES */}
         <SectionHeader title="Popüler" />
         <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-2">
-          {GAMES.popular.map(game => <GameCard key={game.id} game={game} className="w-32 md:w-40" />)}
+          {GAMES.popular.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-32 md:w-40" />)}
         </div>
 
         {/* PRAGMATIC GAMES */}
         <SectionHeader title="Pragmatic" />
         <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-2">
-          {GAMES.pragmatic.map(game => <GameCard key={game.id} game={game} className="w-32 md:w-40" />)}
+          {GAMES.pragmatic.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-32 md:w-40" />)}
         </div>
 
         {/* EN COK KAZANANLAR ROW */}
@@ -222,7 +233,7 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
         {/* JACKPOTLAR */}
         <SectionHeader title="Jackpotlar" />
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-2">
-          {GAMES.jackpots.map(game => <GameCard key={game.id} game={game} aspectRatio="aspect-video" className="w-full" />)}
+          {GAMES.jackpots.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} aspectRatio="aspect-video" className="w-full" />)}
         </div>
 
         {/* AMUSNET WIDGET */}
@@ -259,7 +270,7 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
           
           <div className="relative pb-4 px-4 flex items-center gap-2 overflow-x-auto hide-scrollbar z-10">
              <button className="absolute left-2 z-20 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/80 hidden md:flex"><ChevronLeft size={14}/></button>
-             {GAMES.amusnet.map(game => <GameCard key={game.id} game={game} className="w-24 md:w-28 shrink-0" />)}
+             {GAMES.amusnet.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-24 md:w-28 shrink-0" />)}
              <button className="absolute right-2 z-20 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/80 hidden md:flex"><ChevronRight size={14}/></button>
           </div>
         </div>
@@ -275,7 +286,7 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
                <h3 className="text-white font-black text-2xl z-20 drop-shadow-md">EGT Digital Oyunları</h3>
             </div>
             <div className="grid grid-cols-5 gap-2">
-               {GAMES.egtBannerGames.map(game => <GameCard key={game.id} game={game} className="w-full" />)}
+               {GAMES.egtBannerGames.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-full" />)}
             </div>
           </div>
 
@@ -287,7 +298,7 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
                <h3 className="text-white font-black text-2xl z-20 drop-shadow-md">Amusnet Oyunları</h3>
             </div>
             <div className="grid grid-cols-5 gap-2">
-               {GAMES.amusnetBannerGames.map(game => <GameCard key={game.id} game={game} className="w-full" />)}
+               {GAMES.amusnetBannerGames.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-full" />)}
             </div>
           </div>
 
@@ -296,13 +307,13 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
         {/* YENI GAMES */}
         <SectionHeader title="Yeni" />
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-2">
-          {GAMES.yeni.map(game => <GameCard key={game.id} game={game} aspectRatio="aspect-[4/3]" className="w-full" />)}
+          {GAMES.yeni.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} aspectRatio="aspect-[4/3]" className="w-full" />)}
         </div>
 
         {/* HIZLI OYUNLAR */}
         <SectionHeader title="Hızlı oyunlar" />
         <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-2">
-          {GAMES.hizli.map(game => <GameCard key={game.id} game={game} className="w-24 md:w-32 shrink-0" />)}
+          {GAMES.hizli.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-24 md:w-32 shrink-0" />)}
         </div>
 
         {/* GALAXSYS OYUNLARI */}
@@ -320,7 +331,7 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
            <div className="w-full md:w-2/3 p-4 md:p-8 flex items-center justify-end z-10">
               <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar w-full md:w-auto">
                  <button className="w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/80 shrink-0"><ChevronLeft size={16}/></button>
-                 {GAMES.galaxsys.map(game => <GameCard key={game.id} game={game} className="w-32 md:w-40 shrink-0 shadow-2xl border-white/10" />)}
+                 {GAMES.galaxsys.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-32 md:w-40 shrink-0 shadow-2xl border-white/10" />)}
                  <button className="w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/80 shrink-0"><ChevronRight size={16}/></button>
               </div>
            </div>

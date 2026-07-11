@@ -117,6 +117,12 @@ const Header: React.FC<HeaderProps> = ({
 
   // Deposit Modal State
   const [showDepositModal, setShowDepositModal] = useState(false);
+
+  useEffect(() => {
+    const handleOpenDeposit = () => setShowDepositModal(true);
+    window.addEventListener('openDepositModal', handleOpenDeposit);
+    return () => window.removeEventListener('openDepositModal', handleOpenDeposit);
+  }, []);
   const [depositUsername, setDepositUsername] = useState('');
   const [depositMsg, setDepositMsg] = useState({ type: '', text: '' });
 

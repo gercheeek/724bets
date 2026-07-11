@@ -402,13 +402,18 @@ const App: React.FC = () => {
   };
 
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
   const [showFakeBetModal, setShowFakeBetModal] = useState(false);
   const [showLiveScoreModal, setShowLiveScoreModal] = useState(false);
-  const [brands, setBrands] = useState<Brand[]>([]);
   const [showMyBetsModal, setShowMyBetsModal] = useState(false);
+
+  useEffect(() => {
+    const handleOpenLogin = () => setAuthModalMode('member');
+    window.addEventListener('openLoginModal', handleOpenLogin);
+    return () => window.removeEventListener('openLoginModal', handleOpenLogin);
+  }, []);
+
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [currentPendingBet, setCurrentPendingBet] = useState<any>(null);
 
   const sendDiscordNotification = async (bet: any) => {
@@ -1968,7 +1973,7 @@ const App: React.FC = () => {
 
         {view === 'blackjack' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
-            <CasinoLobby customGames={casinoLobbyGames} />
+            <CasinoLobby customGames={casinoLobbyGames} isLoggedIn={!!(siteUser || userRole)} />
           </div>
         )}
 
