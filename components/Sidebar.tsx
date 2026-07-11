@@ -337,6 +337,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar</span>
                     </div>
+                    <div onClick={() => onViewChange('casino2')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+                      <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar 2</span>
+                    </div>
                     <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">Canlı Casino</span>
                     </div>
