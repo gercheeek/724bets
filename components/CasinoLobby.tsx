@@ -3,30 +3,83 @@ import { Search, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { CasinoLobbyGame } from '../types';
 
 const PROVIDERS = [
-  { id: 'pragmatic', name: 'Pragmatic Play', icon: 'https://cdn-icons-png.flaticon.com/512/732/732230.png' },
-  { id: 'egtdigital', name: 'EGT Digital', badge: 'YENİ', badgeColor: 'bg-red-500' },
-  { id: 'amusnet', name: 'Amusnet', badge: 'YENİ', badgeColor: 'bg-red-500' },
-  { id: 'playson', name: 'Playson', badge: 'YENİ', badgeColor: 'bg-red-500' },
-  { id: '3oaks', name: '3Oaks (Booongo)' },
-  { id: 'wazdan', name: 'Wazdan (Volient)' },
-  { id: 'betsoft', name: 'BetSoft' },
-  { id: 'egypt', name: 'Egypt Quest', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
-  { id: 'galaxsys', name: 'Galaxsys' },
-  { id: 'pateplay', name: 'PatePlay', badge: 'YENİ', badgeColor: 'bg-red-500' },
-  { id: 'yggdrasil', name: 'Yggdrasil', badge: 'YENİ', badgeColor: 'bg-red-500' },
-  { id: 'aviatrix', name: 'Aviatrix' }
+  { id: 'pragmatic', name: 'Pragmatic Play', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Pragmatic/Favicon_20251117112756861.webp' },
+  { id: 'egtdigital', name: 'EGT Digital', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/EGT%20Digital/Favicon_20251117125448105.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+  { id: 'amusnet', name: 'Amusnet', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Amusnet/Favicon_20260624202653148.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+  { id: 'playson', name: 'Playson', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Playson/Favicon_20251114155644459.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+  { id: '3oaks', name: '3Oaks', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/3OAKs/Favicon_20260606153019588.webp' },
+  { id: 'wazdan', name: 'Wazdan', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Wazdan/Favicon_20251225162751345.webp' },
+  { id: 'betsoft', name: 'BetSoft', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/BetSoft/Favicon_20251125125828310.webp' },
+  { id: 'egypt', name: 'Egypt Quest', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/EGT_EQ/Favicon_20251117130118522.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+  { id: 'galaxsys', name: 'Galaxsys', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Galaxsys/Favicon_20251114160103112.webp' },
+  { id: 'pateplay', name: 'PatePlay', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/PatePlay/Favicon_20260507192704724.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+  { id: 'yggdrasil', name: 'Yggdrasil', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Yggdrasil/Favicon_20251114162117718.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+  { id: 'aviatrix', name: 'Aviatrix', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Aviatrix/Favicon_20251126171740131.webp' }
 ];
 
 const DEFAULT_GAMES = {
-  popular: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/1e1e2d/fff?text=Populer+${i+1}`, badge: i%2===0 ? 'PİYANGO' : 'EN İYİ', badgeColor: i%2===0 ? 'bg-blue-500' : 'bg-purple-600' })),
-  pragmatic: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/2d1e1e/fff?text=Pragmatic+${i+1}`, badge: 'EN İYİ', badgeColor: 'bg-purple-600' })),
-  jackpots: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/300x200/1e2d1e/fff?text=Jackpot+${i+1}`, badge: 'PİYANGO', badgeColor: 'bg-blue-500' })),
-  amusnet: Array(12).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/203a43/fff?text=Amusnet+${i+1}`, badge: 'PİYANGO', badgeColor: 'bg-blue-500' })),
-  egtBannerGames: Array(5).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/3a0ca3/fff?text=EGT+${i+1}`, badge: i%2===0 ? 'PİYANGO' : 'EN İYİ', badgeColor: i%2===0 ? 'bg-blue-500' : 'bg-purple-600' })),
-  amusnetBannerGames: Array(5).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/1a5f7a/fff?text=Amusnet+${i+1}`, badge: 'PİYANGO', badgeColor: 'bg-blue-500' })),
-  yeni: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/300x200/4a235a/fff?text=Yeni+${i+1}`, badge: i===4?'YENİ':'PİYANGO', badgeColor: i===4?'bg-orange-500':'bg-blue-500' })),
-  hizli: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/154360/fff?text=Hizli+${i+1}` })),
-  galaxsys: Array(4).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/000/fff?text=Galaxsys+${i+1}`, badge: 'YENİ', badgeColor: 'bg-blue-500' })),
+  popular: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Gates-of-Olympus-PragmaticPlay/Vertical/GatesofOlympus_20250328152430427.webp', badge: 'EN İYİ', badgeColor: 'bg-purple-600' },
+    { id: 2, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Sweet-Bonanza-PragmaticPlay/VerticalSweetBonanza_20251014122142773.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+    { id: 3, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Starlight-Princess-1000-Pragmatic-Play/Vertical/StarlightPrincess1000_20250312174636784.webp', badge: 'EN İYİ', badgeColor: 'bg-purple-600' },
+    { id: 4, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Sugar-Rush-1000-Pragmatic/Vertical/SugarRush1000_20250328152633077.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+    { id: 5, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/Vertical/40BurningHotBellLink.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+    { id: 6, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Big-Bass-Splash-Pragmatic/Vertical/BigBassSplash_20250312175247779.webp', badge: 'EN İYİ', badgeColor: 'bg-purple-600' },
+    { id: 7, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/Vertical/40ShiningCrownBellLink.webp' },
+    { id: 8, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/Vertical/40SuperHotBellLink.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+  ],
+  pragmatic: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Gates-of-Olympus-1000-Pragmatic/Vertical/GatesofOlympus1000_20250328152450882.webp', badge: 'EN İYİ', badgeColor: 'bg-purple-600' },
+    { id: 2, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Sweet-Bonanza-1000-Pragmatic/Vertical/SweetBonanza1000_20250328152800162.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+    { id: 3, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Sugar-Rush-Pragmatic/Vertical/SugarRush_20250328152608905.webp' },
+    { id: 4, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Gates-of-Hades-Pragmatic-Play/Vertical/GatesofHades_20260702172543247.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+    { id: 5, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Sweet-Bonanza-Xmas-PragmaticPlay/Vertical/SweetBonanzaXmas.webp' },
+    { id: 6, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Pragmatic/Vertical/SweetBonanzaDice.webp' },
+    { id: 7, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Wild-Wild-Riches-Megaways-Pragmatic/Vertical/WildWildRichesMegaways_20250131120736369.webp' },
+  ],
+  jackpots: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/40BurningHotBellLink.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+    { id: 2, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/40ShiningCrownBellLink.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+    { id: 3, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/FlamingHotExtremeBellLink.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+    { id: 4, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/40SuperHotBellLink.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+  ],
+  amusnet: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Fruits-Kingdom-EGT/FruitsKingdom_20250219182409618.webp' },
+    { id: 2, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Game-of-Luck-EGT/GameofLuck_20250219182420042.webp' },
+    { id: 3, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Grace-of-Cleopatra-EGT/GraceofCleopatra_20250219182439200.webp' },
+    { id: 4, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Great-27-EGT/Great27_20250219182449089.webp' },
+    { id: 5, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Halloween-EGT/Halloween_20250219182929022.webp' },
+    { id: 6, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Hot-Cash-EGT/HotCash_20250219182939367.webp' },
+  ],
+  egtBannerGames: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/20SuperHotBellLink.webp', badge: 'PİYANGO', badgeColor: 'bg-blue-500' },
+    { id: 2, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/VampireNightBellLink.webp', badge: 'EN İYİ', badgeColor: 'bg-purple-600' },
+    { id: 3, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/5DazzlingHotBellLink.webp' },
+    { id: 4, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/FlamingHotBellLink.webp' },
+    { id: 5, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/ShiningCrownBellLink.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+  ],
+  amusnetBannerGames: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Amazing-Amazonia-EGT/AmazingAmazonia_20250219190939987.webp' },
+    { id: 2, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Amazons-Battle-EGT/AmazonsBattle_20250219190949601.webp' },
+    { id: 3, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Dragon-Hot-EGT/DragonHot_20250116165238119.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+    { id: 4, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Flaming-Hot-6-Reel-EGT/FlamingHot6Reel_20250219194906479.webp' },
+    { id: 5, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Hot-Deco-Egt/HotDeco_20250219191018834.webp' },
+  ],
+  yeni: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+    { id: 2, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/30-Coins-Santas-Jackpots-Wazdan/Vertical/30CoinsSantasJackpots.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+    { id: 3, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/16-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/16CoinsGrandGoldEditionSantasJackpots.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+    { id: 4, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/20-Coins-Grand-Gold-Edition-Wazdan/Vertical/20CoinsGrandGoldEdition.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+    { id: 5, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Super-Santa-Link-RUNNING-WINS-Fugaso/Vertical/SuperSantaLinkRUNNINGWINS.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+  ],
+  hizli: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Playson/RoyalJokerHoldandWin.webp' },
+    { id: 2, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Playson/RoyalFortunatorHoldandWin.webp' },
+    { id: 3, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Coin-Strike-XXL-Hold-and-Win-Playson/Vertical/CoinStrikeXXLHoldandWin_20260129125612110.webp' },
+  ],
+  galaxsys: [
+    { id: 1, img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Gangsta-Piggy-Hold-and-Win-Galaxsys/GangstaPiggy_20260211175949323.webp', badge: 'YENİ', badgeColor: 'bg-blue-500' },
+  ],
 };
 
 const WINNERS = [
@@ -216,10 +269,10 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
           
           {/* EGT Section */}
           <div className="flex flex-col gap-2">
-            <div className="relative rounded-xl overflow-hidden h-40 bg-[#0F2027] border border-[#2C2F3D] flex items-center justify-between p-6">
-               <div className="absolute inset-0 bg-gradient-to-r from-green-900/40 to-transparent z-0" />
-               <h3 className="text-white font-black text-2xl z-10 drop-shadow-md">EGT Digital Oyunları</h3>
-               <img src="https://placehold.co/200x200/transparent/fff?text=CROWN" className="h-full object-contain z-10 opacity-80" alt="Crown" />
+            <div className="relative rounded-xl overflow-hidden h-40 bg-[#0F2027] border border-[#2C2F3D] flex items-center justify-between p-6 group cursor-pointer">
+               <img src="https://cdn.bahisbey1438.com/plat/prd//WidgetBasedHompageImages/1217/EGT%20Digital%20Banner%20Desktop_20260324154457473.webp" className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-105 transition-transform duration-700" alt="EGT Banner" />
+               <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
+               <h3 className="text-white font-black text-2xl z-20 drop-shadow-md">EGT Digital Oyunları</h3>
             </div>
             <div className="grid grid-cols-5 gap-2">
                {GAMES.egtBannerGames.map(game => <GameCard key={game.id} game={game} className="w-full" />)}
@@ -228,10 +281,10 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
 
           {/* Amusnet Section */}
           <div className="flex flex-col gap-2">
-            <div className="relative rounded-xl overflow-hidden h-40 bg-[#16222A] border border-[#2C2F3D] flex items-center justify-between p-6">
-               <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/40 to-transparent z-0" />
-               <h3 className="text-white font-black text-2xl z-10 drop-shadow-md">Amusnet Oyunları</h3>
-               <img src="https://placehold.co/200x200/transparent/fff?text=CLOVER" className="h-full object-contain z-10 opacity-80" alt="Clover" />
+            <div className="relative rounded-xl overflow-hidden h-40 bg-[#16222A] border border-[#2C2F3D] flex items-center justify-between p-6 group cursor-pointer">
+               <img src="https://cdn.bahisbey1438.com/plat/prd//WidgetBasedHompageImages/1217/Amusnet%20Banner%20Desktop_20260324150630846.webp" className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-105 transition-transform duration-700" alt="Amusnet Banner" />
+               <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
+               <h3 className="text-white font-black text-2xl z-20 drop-shadow-md">Amusnet Oyunları</h3>
             </div>
             <div className="grid grid-cols-5 gap-2">
                {GAMES.amusnetBannerGames.map(game => <GameCard key={game.id} game={game} className="w-full" />)}
@@ -259,8 +312,8 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
              <h2 className="text-white font-black text-2xl mt-1">Galaxsys Oyunları</h2>
            </div>
            
-           <div className="w-full md:w-1/3 relative min-h-[300px]">
-             <img src="https://placehold.co/600x800/0a1128/fff?text=Poseidon" className="absolute inset-0 w-full h-full object-cover object-left opacity-80 mix-blend-screen" alt="Galaxsys" />
+           <div className="w-full md:w-1/3 relative min-h-[300px] overflow-hidden group">
+             <img src="https://cdn.bahisbey1438.com/plat/prd/CMS/1217/Web_Content/Banners/web%20tr_20250418101957697.jpg" className="absolute inset-0 w-full h-full object-cover object-left opacity-80 group-hover:scale-105 transition-transform duration-700" alt="Galaxsys" />
              <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0a1128] via-transparent to-transparent" />
            </div>
 
