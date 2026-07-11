@@ -104,7 +104,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, tabs, games }) => {
               <img 
                 src={game.image} 
                 alt={game.title}
-                className="absolute inset-0 !w-full !h-full !object-cover !object-center block transition-transform duration-700 group-hover:scale-110"
+                className="absolute inset-0 !w-full !h-full !object-contain !object-center block transition-transform duration-700 group-hover:scale-110"
               />
               
               {/* Dark Overlay on Hover */}
