@@ -2,8 +2,32 @@ import React from 'react';
 import { ArrowLeft, Target, Activity, Shield, Trophy } from 'lucide-react';
 import { PromoSlider } from './PromoSlider';
 import CategoryNav from './CategoryNav';
+import AnalysisView from './AnalysisView';
+import { MatchAnalysis, Coupon, SiteUser } from '../types';
 
-const KralView = ({ onBack, onShowLiveScore }: { onBack: () => void, onShowLiveScore?: () => void }) => {
+interface KralViewProps {
+  onBack: () => void;
+  onShowLiveScore?: () => void;
+  onNavigate?: (view: string) => void;
+  analyses?: MatchAnalysis[];
+  coupons?: Coupon[];
+  siteUser?: SiteUser | null;
+  isLoggedIn?: boolean;
+  onLoginRequired?: () => void;
+  initialExpandedId?: string | null;
+}
+
+const KralView = ({ 
+  onBack, 
+  onShowLiveScore,
+  onNavigate,
+  analyses,
+  coupons,
+  siteUser,
+  isLoggedIn,
+  onLoginRequired,
+  initialExpandedId
+}: KralViewProps) => {
   return (
     <div className="min-h-screen bg-[#07090E] text-white flex flex-col relative overflow-hidden">
       {/* Dynamic Background */}
@@ -55,8 +79,21 @@ const KralView = ({ onBack, onShowLiveScore }: { onBack: () => void, onShowLiveS
             </div>
 
             {/* ── Promosyonlar Section ── */}
-            <div className="w-full">
+            <div className="w-full mb-8">
               <PromoSlider />
+            </div>
+
+            {/* ── Analizler Section ── */}
+            <div className="w-full">
+              <AnalysisView 
+                onNavigate={onNavigate}
+                analyses={analyses}
+                coupons={coupons}
+                siteUser={siteUser}
+                isLoggedIn={isLoggedIn}
+                onLoginRequired={onLoginRequired}
+                initialExpandedId={initialExpandedId}
+              />
             </div>
         </div>
       </div>

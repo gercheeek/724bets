@@ -2118,7 +2118,17 @@ const App: React.FC = () => {
         )}
         {view === 'kral' && (
           <div className="animate-fade-in">
-            <KralView onBack={() => setView('home')} onShowLiveScore={() => setShowLiveScoreModal(true)} />
+            <KralView 
+              onBack={() => setView('home')} 
+              onShowLiveScore={() => setShowLiveScoreModal(true)} 
+              onNavigate={handleViewChange}
+              analyses={analyses}
+              coupons={coupons}
+              siteUser={siteUser}
+              isLoggedIn={!!(siteUser || userRole)}
+              onLoginRequired={() => setAuthModalMode('member')}
+              initialExpandedId={activeAnalysisId}
+            />
           </div>
         )}
       </div>
