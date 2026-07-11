@@ -230,11 +230,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           position: relative;
           z-index: 10;
         }
-        @media (max-width: 767px) {
-          .gamdom-sidebar-container {
-            display: none !important;
-          }
-        }
         .gamdom-sidebar-inner {
           width: 100%;
           height: 100%;
