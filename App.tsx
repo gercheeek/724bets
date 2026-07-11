@@ -402,6 +402,8 @@ const App: React.FC = () => {
   };
 
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
   const [showFakeBetModal, setShowFakeBetModal] = useState(false);
   const [showLiveScoreModal, setShowLiveScoreModal] = useState(false);
