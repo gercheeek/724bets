@@ -6,7 +6,7 @@ interface Bet {
   game: string;
   user: string;
   betAmount: number;
-  currency: 'TRY' | 'USD' | 'EUR' | 'USDT' | 'ARS';
+  currency: 'TRY' | 'USD' | 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'LTC' | 'TRX';
   multiplier: number;
   payout: number;
 }
@@ -27,16 +27,21 @@ const USERS = [
   'Yilmaz_1905', 'Kral_1907', 'Kartal_1903', 'Efsane_X', 'Shadow_Hunter'
 ];
 
-const CURRENCIES: ('TRY' | 'USD' | 'EUR' | 'USDT' | 'ARS')[] = ['TRY', 'USD', 'EUR', 'USDT', 'ARS'];
+type CurrencyType = 'TRY' | 'USD' | 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'LTC' | 'TRX';
+const CURRENCIES: CurrencyType[] = ['TRY', 'USD', 'BTC', 'ETH', 'USDT', 'USDC', 'LTC', 'TRX'];
 
 const generateRandomBet = (isBigBet = false, currentUsers: string[] = []): Bet => {
   const currency = CURRENCIES[Math.floor(Math.random() * CURRENCIES.length)];
   
-  let baseBet = Math.random() * 100;
-  if (isBigBet) baseBet = baseBet * 50 + 1000;
-  else if (currency === 'TRY') baseBet = baseBet * 10 + 50;
+  let baseBet = 10;
+  if (currency === 'BTC') baseBet = isBigBet ? Math.random() * 0.5 + 0.1 : Math.random() * 0.05 + 0.001;
+  else if (currency === 'ETH') baseBet = isBigBet ? Math.random() * 5 + 1 : Math.random() * 0.5 + 0.01;
+  else if (currency === 'LTC') baseBet = isBigBet ? Math.random() * 50 + 5 : Math.random() * 2 + 0.1;
+  else if (currency === 'TRY' || currency === 'TRX') baseBet = isBigBet ? Math.random() * 50000 + 5000 : Math.random() * 500 + 50;
+  else baseBet = isBigBet ? Math.random() * 2000 + 500 : Math.random() * 50 + 10;
   
-  const betAmount = Number(baseBet.toFixed(2));
+  const isCrypto = currency === 'BTC' || currency === 'ETH';
+  const betAmount = isCrypto ? Number(baseBet.toFixed(4)) : Number(baseBet.toFixed(2));
   
   // 30% chance of losing (0x multiplier), otherwise 0.1x to 100x
   const isLoss = Math.random() < 0.3 && !isBigBet;
@@ -47,7 +52,7 @@ const generateRandomBet = (isBigBet = false, currentUsers: string[] = []): Bet =
     else multiplier = Number((Math.random() * 15 + 0.1).toFixed(2));
   }
   
-  const payout = isLoss ? -betAmount : Number((betAmount * multiplier).toFixed(2));
+  const payout = isLoss ? -betAmount : Number((betAmount * multiplier).toFixed(isCrypto ? 4 : 2));
 
   let availableUsers = USERS.filter(u => !currentUsers.includes(u));
   if (availableUsers.length === 0) availableUsers = USERS;
@@ -65,14 +70,15 @@ const generateRandomBet = (isBigBet = false, currentUsers: string[] = []): Bet =
 };
 
 const formatCurrency = (amount: number, currency: string) => {
-  const absAmount = Math.abs(amount).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const isCrypto = currency === 'BTC' || currency === 'ETH';
+  const absAmount = Math.abs(amount).toLocaleString('tr-TR', { 
+    minimumFractionDigits: isCrypto ? 4 : 2, 
+    maximumFractionDigits: isCrypto ? 4 : 2 
+  });
   
   switch (currency) {
     case 'TRY': return `₺${absAmount}`;
     case 'USD': return `$${absAmount}`;
-    case 'EUR': return `€${absAmount}`;
-    case 'ARS': return `AR$${absAmount}`;
-    case 'USDT': return `${absAmount}`;
     default: return absAmount;
   }
 };
@@ -81,10 +87,13 @@ const CurrencyBadge: React.FC<{ currency: string }> = ({ currency }) => {
   const getBadgeStyle = () => {
     switch (currency) {
       case 'TRY': return 'bg-red-600 text-white';
-      case 'USD': return 'bg-blue-600 text-white';
-      case 'EUR': return 'bg-blue-500 text-white';
+      case 'USD': return 'bg-green-600 text-white';
+      case 'BTC': return 'bg-[#F7931A] text-white';
+      case 'ETH': return 'bg-[#627EEA] text-white';
       case 'USDT': return 'bg-[#26A17B] text-white';
-      case 'ARS': return 'bg-sky-400 text-white';
+      case 'USDC': return 'bg-[#2775CA] text-white';
+      case 'LTC': return 'bg-[#A6A9AA] text-white';
+      case 'TRX': return 'bg-[#FF0013] text-white';
       default: return 'bg-gray-500 text-white';
     }
   };
@@ -93,15 +102,18 @@ const CurrencyBadge: React.FC<{ currency: string }> = ({ currency }) => {
     switch (currency) {
       case 'TRY': return '₺';
       case 'USD': return '$';
-      case 'EUR': return '€';
+      case 'BTC': return '₿';
+      case 'ETH': return 'Ξ';
       case 'USDT': return '₮';
-      case 'ARS': return 'ARS';
+      case 'USDC': return '$';
+      case 'LTC': return 'Ł';
+      case 'TRX': return 'T';
       default: return '$';
     }
   };
 
   return (
-    <span className={`inline-flex items-center justify-center w-[18px] h-[18px] rounded-full text-[9px] font-bold ml-1.5 shadow-sm ${getBadgeStyle()}`}>
+    <span className={`inline-flex items-center justify-center w-[20px] h-[20px] rounded-md text-[11px] font-bold ml-1.5 shadow-sm ${getBadgeStyle()}`}>
       {getSymbol()}
     </span>
   );
