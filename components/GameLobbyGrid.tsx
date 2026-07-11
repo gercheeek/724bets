@@ -183,6 +183,14 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
       }))
     : slotGames;
 
+  const sports = activeCustomGames.filter(g => g.type === 'sport').length > 0
+    ? activeCustomGames.filter(g => g.type === 'sport').map((g) => ({
+        id: g.id,
+        title: g.name.toUpperCase(),
+        image: g.image || 'https://picsum.photos/seed/' + g.id + '/400/300',
+      }))
+    : sportGames;
+
   return (
     <div className="w-full bg-transparent p-0 my-8">
       {/* 1. Popüler Oyunlar */}
@@ -197,7 +205,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
       <GameBlock 
         title="Popüler Sporlar" 
         icon={<Target className="w-5 h-5 text-white" />} 
-        games={sportGames} 
+        games={sports} 
         showPlayers={false}
       />
       

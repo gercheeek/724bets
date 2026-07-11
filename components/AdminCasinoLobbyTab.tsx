@@ -20,7 +20,7 @@ const GRADIENT_THEMES = [
 
 const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], onSave }) => {
   const [localGames, setLocalGames] = useState<CasinoLobbyGame[]>([...games]);
-  const [activeSubTab, setActiveSubTab] = useState<'slot' | 'live'>('slot');
+  const [activeSubTab, setActiveSubTab] = useState<'slot' | 'live' | 'sport'>('slot');
   const [saved, setSaved] = useState(false);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
 
@@ -32,10 +32,10 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
   const addGame = () => {
     const newGame: CasinoLobbyGame = {
       id: Date.now().toString(),
-      name: activeSubTab === 'slot' ? 'Yeni Slot Oyunu' : 'Yeni Canlı Masa',
+      name: activeSubTab === 'slot' ? 'Yeni Slot Oyunu' : activeSubTab === 'live' ? 'Yeni Canlı Masa' : 'Yeni Spor',
       provider: 'PRAGMATIC PLAY',
       type: activeSubTab,
-      themeColor: activeSubTab === 'slot' ? 'from-[#FFC107] to-[#3E2723]' : 'from-[#00E676] to-[#1B5E20]',
+      themeColor: activeSubTab === 'slot' ? 'from-[#FFC107] to-[#3E2723]' : activeSubTab === 'live' ? 'from-[#00E676] to-[#1B5E20]' : 'from-[#00E5FF] to-[#1A237E]',
       image: '',
       link: 'https://724bahis.net',
       isActive: true,
@@ -162,6 +162,17 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#00E676] animate-pulse" />
           CANLI CASINO ({localGames.filter(g => g.type === 'live').length})
+        </button>
+        <button
+          onClick={() => setActiveSubTab('sport')}
+          className={`px-6 py-3 font-black text-xs uppercase tracking-widest border-b-2 transition-all flex items-center gap-2 ${
+            activeSubTab === 'sport' 
+              ? 'border-[#00E5FF] text-[#00E5FF]' 
+              : 'border-transparent text-zinc-500 hover:text-white'
+          }`}
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          POPÜLER SPORLAR ({localGames.filter(g => g.type === 'sport').length})
         </button>
       </div>
 

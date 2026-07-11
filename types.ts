@@ -804,7 +804,7 @@ export interface CasinoLobbyGame {
   id: string;
   name: string;
   provider: string;
-  type: 'slot' | 'live';
+  type: 'slot' | 'live' | 'sport';
   themeColor: string;
   image: string; // Base64 or Image URL
   link: string;  // Redirect Affiliate link
