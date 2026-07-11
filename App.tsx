@@ -1469,7 +1469,7 @@ const App: React.FC = () => {
           zIndex: 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingBottom: 'env(safe-area-inset-bottom, 0)'
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)'
         } as React.CSSProperties}
       >
 

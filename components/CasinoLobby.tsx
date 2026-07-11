@@ -285,7 +285,7 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [], isLoggedIn 
                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
                <h3 className="text-white font-black text-2xl z-20 drop-shadow-md">EGT Digital Oyunları</h3>
             </div>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                {GAMES.egtBannerGames.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-full" />)}
             </div>
           </div>
@@ -297,7 +297,7 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [], isLoggedIn 
                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
                <h3 className="text-white font-black text-2xl z-20 drop-shadow-md">Amusnet Oyunları</h3>
             </div>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                {GAMES.amusnetBannerGames.map(game => <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} className="w-full" />)}
             </div>
           </div>

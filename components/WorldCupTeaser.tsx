@@ -47,7 +47,7 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
             {/* MATCH CARD 1 */}
             <div 
               onClick={() => onMatchClick('m1')}
-              className="bg-[#1E202B] rounded-xl p-4 min-w-[320px] shrink-0 border border-[#2C2F3D] cursor-pointer hover:border-[#00FFA3]/50 transition-colors"
+              className="bg-[#1E202B] rounded-xl p-4 min-w-[280px] sm:min-w-[320px] shrink-0 border border-[#2C2F3D] cursor-pointer hover:border-[#00FFA3]/50 transition-colors"
             >
               <div className="flex items-center justify-between mb-4">
                 <span className="text-white text-[13px] font-bold">12.07 0:00</span>
@@ -97,7 +97,7 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
             {/* MATCH CARD 2 */}
             <div 
               onClick={() => onMatchClick('m2')}
-              className="bg-[#1E202B] rounded-xl p-4 min-w-[320px] shrink-0 border border-[#2C2F3D] cursor-pointer hover:border-[#00FFA3]/50 transition-colors"
+              className="bg-[#1E202B] rounded-xl p-4 min-w-[280px] sm:min-w-[320px] shrink-0 border border-[#2C2F3D] cursor-pointer hover:border-[#00FFA3]/50 transition-colors"
             >
               <div className="flex items-center justify-between mb-4">
                 <span className="text-white text-[13px] font-bold">12.07 4:00</span>

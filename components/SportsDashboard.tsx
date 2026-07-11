@@ -174,7 +174,7 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
       </div>
 
       {/* ── JACKPOTS ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6 mb-8">
         <div className="bg-gradient-to-r from-[#181D2B] to-[#12141A] rounded-lg p-3 border border-[#2C2F3D] flex justify-between items-center cursor-pointer hover:border-blue-500/50 transition-colors relative overflow-hidden">
           <div className="z-10">
             <div className="flex items-center gap-2 mb-1">
@@ -243,6 +243,8 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
 
         {/* Table Container */}
         <div className="bg-[#16181F] rounded-lg border border-[#2C2F3D] overflow-hidden">
+          <div className="w-full overflow-x-auto hide-scrollbar">
+            <div className="min-w-[800px]">
           
           {/* Table Headers */}
           <div className="flex items-center text-[10px] text-gray-400 font-semibold uppercase tracking-wider px-4 py-3 bg-[#1A1D24] border-b border-[#2C2F3D]">
@@ -337,6 +339,8 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
                 
               </div>
             ))}
+          </div>
+          </div>
           </div>
 
           <div className="w-full bg-[#1A1D24] text-center py-3 border-t border-[#2C2F3D]">
