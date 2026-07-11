@@ -805,6 +805,9 @@ export interface CasinoLobbyGame {
   name: string;
   provider: string;
   type: 'slot' | 'live' | 'sport';
+  lobbyCategory?: 'popular' | 'pragmatic' | 'jackpots' | 'amusnet' | 'egtBannerGames' | 'amusnetBannerGames' | 'yeni' | 'hizli' | 'galaxsys';
+  badgeText?: string;
+  badgeColor?: string;
   themeColor: string;
   image: string; // Base64 or Image URL
   link: string;  // Redirect Affiliate link

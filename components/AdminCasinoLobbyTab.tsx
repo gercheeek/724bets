@@ -35,6 +35,9 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
       name: activeSubTab === 'slot' ? 'Yeni Slot Oyunu' : activeSubTab === 'live' ? 'Yeni Canlı Masa' : 'Yeni Spor',
       provider: 'PRAGMATIC PLAY',
       type: activeSubTab,
+      lobbyCategory: 'popular',
+      badgeText: '',
+      badgeColor: 'bg-purple-600',
       themeColor: activeSubTab === 'slot' ? 'from-[#FFC107] to-[#3E2723]' : activeSubTab === 'live' ? 'from-[#00E676] to-[#1B5E20]' : 'from-[#00E5FF] to-[#1A237E]',
       image: '',
       link: 'https://724bahis.net',
@@ -309,6 +312,54 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                       <option key={theme.value} value={theme.value}>{theme.name}</option>
                     ))}
                   </select>
+                </div>
+
+                {/* Lobi Kategorisi */}
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Kategori (Hangi Bölümde Görünecek)</label>
+                  <select
+                    value={game.lobbyCategory || 'popular'}
+                    onChange={(e) => updateGame(game.id, 'lobbyCategory', e.target.value)}
+                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                  >
+                    <option value="popular">Popüler (Ana Vitrin)</option>
+                    <option value="pragmatic">Pragmatic Play Serisi</option>
+                    <option value="jackpots">Jackpotlar Gridi</option>
+                    <option value="amusnet">Amusnet Casino Gridi</option>
+                    <option value="yeni">Yeni Çıkanlar</option>
+                    <option value="hizli">Hızlı Oyunlar</option>
+                    <option value="galaxsys">Galaxsys</option>
+                    <option value="amusnetBannerGames">Amusnet (Özel 5'li Bölüm)</option>
+                    <option value="egtBannerGames">EGT (Özel 5'li Bölüm)</option>
+                  </select>
+                </div>
+
+                {/* Badge (Etiket) */}
+                <div className="flex gap-3 md:col-span-2">
+                  <div className="flex-1 space-y-1.5">
+                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Köşe Etiketi Yazısı (Boş bırakılabilir)</label>
+                    <input
+                      type="text"
+                      value={game.badgeText || ''}
+                      onChange={(e) => updateGame(game.id, 'badgeText', e.target.value)}
+                      className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                      placeholder="Örn: EN İYİ, PİYANGO, YENİ"
+                    />
+                  </div>
+                  <div className="w-[140px] space-y-1.5">
+                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Etiket Rengi</label>
+                    <select
+                      value={game.badgeColor || 'bg-purple-600'}
+                      onChange={(e) => updateGame(game.id, 'badgeColor', e.target.value)}
+                      className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    >
+                      <option value="bg-purple-600">Mor</option>
+                      <option value="bg-blue-500">Mavi</option>
+                      <option value="bg-orange-500">Turuncu</option>
+                      <option value="bg-emerald-500">Yeşil</option>
+                      <option value="bg-red-500">Kırmızı</option>
+                    </select>
+                  </div>
                 </div>
 
               </div>

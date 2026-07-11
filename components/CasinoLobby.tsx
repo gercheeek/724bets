@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { CasinoLobbyGame } from '../types';
 
 const PROVIDERS = [
   { id: 'pragmatic', name: 'Pragmatic Play', icon: 'https://cdn-icons-png.flaticon.com/512/732/732230.png' },
@@ -16,7 +17,7 @@ const PROVIDERS = [
   { id: 'aviatrix', name: 'Aviatrix' }
 ];
 
-const GAMES = {
+const DEFAULT_GAMES = {
   popular: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/1e1e2d/fff?text=Populer+${i+1}`, badge: i%2===0 ? 'PİYANGO' : 'EN İYİ', badgeColor: i%2===0 ? 'bg-blue-500' : 'bg-purple-600' })),
   pragmatic: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/200x300/2d1e1e/fff?text=Pragmatic+${i+1}`, badge: 'EN İYİ', badgeColor: 'bg-purple-600' })),
   jackpots: Array(14).fill(null).map((_, i) => ({ id: i, img: `https://placehold.co/300x200/1e2d1e/fff?text=Jackpot+${i+1}`, badge: 'PİYANGO', badgeColor: 'bg-blue-500' })),
@@ -72,7 +73,36 @@ const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
   </div>
 );
 
-const CasinoLobby: React.FC = () => {
+interface CasinoLobbyProps {
+  customGames?: CasinoLobbyGame[];
+}
+
+const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [] }) => {
+  const getGamesForCategory = (category: string, fallback: any[]) => {
+    const matched = customGames.filter(g => g.lobbyCategory === category && g.isActive);
+    if (matched.length > 0) {
+      return matched.sort((a, b) => (a.order || 0) - (b.order || 0)).map(g => ({
+        id: g.id,
+        img: g.image,
+        badge: g.badgeText,
+        badgeColor: g.badgeColor
+      }));
+    }
+    return fallback;
+  };
+
+  const GAMES = {
+    popular: getGamesForCategory('popular', DEFAULT_GAMES.popular),
+    pragmatic: getGamesForCategory('pragmatic', DEFAULT_GAMES.pragmatic),
+    jackpots: getGamesForCategory('jackpots', DEFAULT_GAMES.jackpots),
+    amusnet: getGamesForCategory('amusnet', DEFAULT_GAMES.amusnet),
+    egtBannerGames: getGamesForCategory('egtBannerGames', DEFAULT_GAMES.egtBannerGames),
+    amusnetBannerGames: getGamesForCategory('amusnetBannerGames', DEFAULT_GAMES.amusnetBannerGames),
+    yeni: getGamesForCategory('yeni', DEFAULT_GAMES.yeni),
+    hizli: getGamesForCategory('hizli', DEFAULT_GAMES.hizli),
+    galaxsys: getGamesForCategory('galaxsys', DEFAULT_GAMES.galaxsys),
+  };
+
   return (
     <div className="w-full min-h-screen bg-[#111319] font-sans pb-20 overflow-x-hidden">
       

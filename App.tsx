@@ -1968,7 +1968,7 @@ const App: React.FC = () => {
 
         {view === 'blackjack' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
-            <CasinoLobby />
+            <CasinoLobby customGames={casinoLobbyGames} />
           </div>
         )}
 
