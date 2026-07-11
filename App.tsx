@@ -44,6 +44,7 @@ import KralView from './components/KralView';
 import WorldCupTeaser from './components/WorldCupTeaser';
 import SportsDashboard from './components/SportsDashboard';
 import LiveBetsFeed from './components/LiveBetsFeed';
+import CasinoLobby from './components/CasinoLobby';
 
 // Portal Components
 import CouponsView from './components/CouponsView';
@@ -1966,31 +1967,8 @@ const App: React.FC = () => {
         )}
 
         {view === 'blackjack' && (
-          <div className="animate-fade-in">
-            {activeCasinoGame === 'blackjack' ? (
-              <div className="portal-body">
-                <button
-                  onClick={() => setActiveCasinoGame(null)}
-                  className="mb-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white transition-all text-xs font-black uppercase tracking-wider w-fit"
-                >
-                  ← Lobiye Dön
-                </button>
-                <BlackjackGame
-                  config={bjConfig}
-                  onGameComplete={handleGameComplete}
-                  isLoggedIn={!!(siteUser || userRole)}
-                  onLoginRequired={() => setAuthModalMode('member')}
-                  userRole={userRole}
-                />
-              </div>
-            ) : (
-              <div className="portal-body animate-fade-in">
-                <GameLobbyTeaser
-                  onViewChange={handleViewChange}
-                  onPlayGame={(gameId) => setActiveCasinoGame(gameId)}
-                />
-              </div>
-            )}
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <CasinoLobby />
           </div>
         )}
 
