@@ -189,34 +189,6 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
           </div>
         </div>
 
-        {/* TOP GOAL SCORERS */}
-        <div>
-          <h3 className="text-white font-bold text-[14px] uppercase tracking-wider mb-8">Top Goal Scorers</h3>
-          <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar pt-4">
-            
-            {[
-              { name: 'Kylian Mbappe', odds: '2', img: 'https://cdn-icons-png.flaticon.com/512/3253/3253457.png', color: 'border-[#1E3A8A]' },
-              { name: 'Lionel Andres Messi', odds: '2.5', img: 'https://cdn-icons-png.flaticon.com/512/3253/3253453.png', color: 'border-[#38BDF8]' },
-              { name: 'Erling Haaland', odds: '8.5', img: 'https://cdn-icons-png.flaticon.com/512/3253/3253444.png', color: 'border-[#EF4444]' },
-              { name: 'Harry Kane', odds: '9.5', img: 'https://cdn-icons-png.flaticon.com/512/3253/3253460.png', color: 'border-[#F1F5F9]' },
-              { name: 'Ousmane Dembele', odds: '35', img: 'https://cdn-icons-png.flaticon.com/512/3253/3253457.png', color: 'border-[#1E3A8A]' },
-              { name: 'Mikel Oyarzabal', odds: '40', img: 'https://cdn-icons-png.flaticon.com/512/3253/3253472.png', color: 'border-[#EF4444]' },
-            ].map((player, idx) => (
-              <div key={idx} className={`relative bg-[#1A1C24] border border-[#2C2F3D] rounded-xl flex flex-col items-center min-w-[140px] shrink-0 pt-8 pb-4 border-t-2 ${player.color.replace('border-', 'border-t-')}`}>
-                <div className="absolute -top-6 w-12 h-12 bg-[#1A1C24] rounded-full p-1 border border-[#2C2F3D]">
-                  <img src={player.img} alt="Jersey" className="w-full h-full object-contain filter drop-shadow-md brightness-90" />
-                </div>
-                <span className="text-[#A0A5BB] text-[12px] font-semibold text-center leading-tight h-8 px-2 flex items-center justify-center">
-                  {player.name}
-                </span>
-                <div className="w-full h-px bg-[#2C2F3D] my-3"></div>
-                <span className="text-white font-bold text-lg">{player.odds}</span>
-              </div>
-            ))}
-
-          </div>
-        </div>
-
       </div>
     </div>
   );
