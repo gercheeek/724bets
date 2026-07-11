@@ -32,7 +32,7 @@ import { seedEcosystemData } from './seedEcosystem';
 import { getGlobalConfig, updateGlobalConfig, supabase } from './utils/supabase';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, Slider2Config, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany, ChatBotConfig } from './types';
+import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, Slider2Config, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany, ChatBotConfig, CasinoLobbyGame } from './types';
 import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG, DEFAULT_POPULAR_BETS_CONFIG, DEFAULT_TV_CONFIG, DEFAULT_LOADER_CONFIG } from './constants';
 import { demoAnalyses, demoCoupons } from './demoData';
 import TrustedSitesView from './components/TrustedSitesView';
@@ -623,6 +623,14 @@ const App: React.FC = () => {
     lastPlayTime: 0,
   });
 
+  const [casinoLobbyGames, setCasinoLobbyGames] = useState<CasinoLobbyGame[]>([]);
+
+  const handleCasinoLobbyGamesChange = (games: CasinoLobbyGame[]) => {
+    setCasinoLobbyGames(games);
+    localStorage.setItem('site_casino_lobby_games', JSON.stringify(games));
+    updateGlobalConfig('site_casino_lobby_games', games);
+  };
+
 
   const handleStartTour = () => {
     localStorage.removeItem('tour_completed');
@@ -690,6 +698,7 @@ const App: React.FC = () => {
         const savedBj = localStorage.getItem('site_bj_config');
         const savedRole = localStorage.getItem('site_user_role');
         const savedMember = localStorage.getItem('site_current_member');
+        const savedCasinoLobby = localStorage.getItem('site_casino_lobby_games');
 
         setBrands(savedBrands ? JSON.parse(savedBrands) : INITIAL_BRANDS);
         if (savedHashtags) setHashtags(savedHashtags);
@@ -709,6 +718,7 @@ const App: React.FC = () => {
           setAnalyses(cleaned.length > 0 ? cleaned : demoAnalyses);
         }
         if (savedBj) setBjConfig(JSON.parse(savedBj));
+        if (savedCasinoLobby) setCasinoLobbyGames(JSON.parse(savedCasinoLobby));
         if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
         if (savedRole) setUserRole(savedRole as string);
         if (savedMember) {
@@ -734,7 +744,7 @@ const App: React.FC = () => {
           globalNav, globalWheel, globalWelcome, globalSiteStatus,
           globalPromoWheel, globalHeroSlider, globalDailyKupon, globalRaffle,
           globalPopularBets, globalTvConfig, globalLoaderConfig, globalDiscordConfig,
-          globalBotsConfig
+          globalBotsConfig, globalCasinoLobby
         ] = await Promise.all([
           getGlobalConfig('site_analyses'),
           getGlobalConfig('site_coupons'),
@@ -758,7 +768,8 @@ const App: React.FC = () => {
           getGlobalConfig('site_tv_config'),
           getGlobalConfig('site_loader_config'),
           getGlobalConfig('site_discord_config'),
-          getGlobalConfig('site_bots_config')
+          getGlobalConfig('site_bots_config'),
+          getGlobalConfig('site_casino_lobby_games')
         ]);
 
         if (!isMounted) return;
@@ -822,6 +833,10 @@ const App: React.FC = () => {
         if (globalBotsConfig && Array.isArray(globalBotsConfig)) {
           setBotsConfig(globalBotsConfig);
           localStorage.setItem('site_bots_config', JSON.stringify(globalBotsConfig));
+        }
+        if (globalCasinoLobby && Array.isArray(globalCasinoLobby)) {
+          setCasinoLobbyGames(globalCasinoLobby);
+          localStorage.setItem('site_casino_lobby_games', JSON.stringify(globalCasinoLobby));
         }
 
       } catch (err) {
@@ -1105,6 +1120,8 @@ const App: React.FC = () => {
         onSaveDiscordConfig={handleDiscordConfigChange}
         botsConfig={botsConfig}
         onSaveBotsConfig={handleBotsConfigChange}
+        casinoLobbyGames={casinoLobbyGames}
+        onSaveCasinoLobbyGames={handleCasinoLobbyGamesChange}
       />
     </ErrorBoundary>
   );
@@ -1454,7 +1471,7 @@ const App: React.FC = () => {
                 
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
                 
-                <GameLobbyGrid />
+                <GameLobbyGrid customGames={casinoLobbyGames} />
 
                 {/* ── User Uploaded Image Banner ── */}
                 <div className="my-6 relative overflow-hidden rounded-lg shadow-[0_0_25px_rgba(0,255,163,0.3)] border border-emerald-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">

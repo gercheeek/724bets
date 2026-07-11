@@ -58,14 +58,11 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
 
     setUploadingId(id);
     try {
-      // 1. Resize/Crop image to exact card aspect ratio (340x230 banner dimensions)
-      const resizedBlob = await resizeImage(file, 340, 230);
-      
-      // 2. Try uploading to Supabase Storage
+      // Upload the raw file directly without cropping/resizing
       const { url, error } = await uploadImageToSupabase(
-        resizedBlob, 
+        file, 
         'slider-images', 
-        `casino-lobby/${id}-${Date.now()}.jpg`
+        `casino-lobby/${id}-${Date.now()}.${file.name.split('.').pop() || 'jpg'}`
       );
 
       if (url) {

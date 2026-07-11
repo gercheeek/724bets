@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { CasinoLobbyGame } from '../types';
 
 interface GameItem {
   id: string;
@@ -151,13 +152,40 @@ const GameBlock: React.FC<BlockProps> = ({ title, tabs, games }) => {
   );
 };
 
-const GameLobbyGrid: React.FC = () => {
+interface GameLobbyGridProps {
+  customGames?: CasinoLobbyGame[];
+}
+
+const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
+  const activeCustomGames = customGames.filter(g => g.isActive);
+  
+  const slots = activeCustomGames.length > 0
+    ? activeCustomGames.filter(g => g.type === 'slot').map(g => ({
+        id: g.id,
+        title: g.name.toUpperCase(),
+        image: g.image || 'https://picsum.photos/seed/' + g.id + '/400/300',
+        provider: g.provider,
+        badge: g.order % 2 === 0 ? 'EN İYİ' : undefined,
+        badgeColor: g.order % 2 === 0 ? 'red' as const : 'blue' as const,
+      }))
+    : slotGames;
+
+  const live = activeCustomGames.length > 0
+    ? activeCustomGames.filter(g => g.type === 'live').map(g => ({
+        id: g.id,
+        title: g.name.toUpperCase(),
+        image: g.image || 'https://picsum.photos/seed/' + g.id + '/400/300',
+        provider: g.provider,
+        limits: '10-100K TRY',
+      }))
+    : liveCasinoGames;
+
   return (
     <div className="w-full bg-[#1A1D24] rounded-2xl p-4 md:p-6 shadow-2xl border border-white/5 my-8">
       <GameBlock 
         title="Slot Oyunları" 
         tabs={['EN POPÜLER', 'Yeni Slotlar']} 
-        games={slotGames} 
+        games={slots} 
       />
       
       {/* Decorative divider */}
@@ -166,7 +194,7 @@ const GameLobbyGrid: React.FC = () => {
       <GameBlock 
         title="Canlı Casino" 
         tabs={['EN POPÜLER', 'Blackjack', 'Roulette']} 
-        games={liveCasinoGames} 
+        games={live} 
       />
     </div>
   );
