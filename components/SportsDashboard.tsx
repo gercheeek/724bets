@@ -1,7 +1,11 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, BarChart2, Star, MessageSquare } from 'lucide-react';
 
-const SportsDashboard: React.FC = () => {
+interface SportsDashboardProps {
+  onNavigate: () => void;
+}
+
+const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
   return (
     <div className="w-full bg-[#12141A] font-sans text-white pb-10 mt-6 rounded-xl overflow-hidden shadow-2xl">
       
@@ -161,7 +165,11 @@ const SportsDashboard: React.FC = () => {
           <div className="flex items-center gap-2 bg-[#1A1D24] rounded-lg px-2 py-1 shrink-0">
             <button className="text-gray-400 hover:text-white px-2"><ChevronLeft size={14} /></button>
             {['⚽','🏀','🎾','🏐','🏓','🎮','🎯'].map((icon, i) => (
-              <button key={i} className={`p-1.5 rounded-md ${i === 0 ? 'bg-[#2C2F3D] text-white' : 'text-gray-400 hover:bg-white/5'}`}>
+              <button 
+                key={i} 
+                onClick={onNavigate}
+                className={`p-1.5 rounded-md ${i === 0 ? 'bg-[#2C2F3D] text-white' : 'text-gray-400 hover:bg-white/5'}`}
+              >
                 <span className="text-[13px]">{icon}</span>
               </button>
             ))}
@@ -223,7 +231,7 @@ const SportsDashboard: React.FC = () => {
                     {['s1', 'sX', 's2'].map((key, i) => {
                       const val = (match as any)[key];
                       return (
-                        <button key={i} className={`flex-1 flex justify-center items-center py-2 ${val !== '-' ? 'hover:bg-white/10 cursor-pointer' : 'cursor-default'} ${i < 2 ? 'border-r border-[#2C2F3D]' : ''}`}>
+                        <button key={i} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 ${val !== '-' ? 'hover:bg-white/10 cursor-pointer' : 'cursor-default'} ${i < 2 ? 'border-r border-[#2C2F3D]' : ''}`}>
                           <span className={`text-[12px] ${val !== '-' ? 'text-[#00FFA3] font-bold' : 'text-gray-600'}`}>{val}</span>
                         </button>
                       )
@@ -234,11 +242,11 @@ const SportsDashboard: React.FC = () => {
                 {/* Toplam (Over/Under) */}
                 <div className="flex-1 flex justify-center px-2">
                   <div className="flex w-full max-w-[200px] bg-[#12141A] rounded overflow-hidden border border-[#2C2F3D]">
-                    <button className="flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer border-r border-[#2C2F3D]">
+                    <button onClick={onNavigate} className="flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer border-r border-[#2C2F3D]">
                       <span className="text-[10px] text-gray-500">Üst</span>
                       <span className="text-[12px] text-[#00FFA3] font-bold">{match.tU}</span>
                     </button>
-                    <button className="flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer border-r border-[#2C2F3D]">
+                    <button onClick={onNavigate} className="flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer border-r border-[#2C2F3D]">
                       <span className="text-[10px] text-gray-500">Alt</span>
                       <span className="text-[12px] text-[#00FFA3] font-bold">{match.tA}</span>
                     </button>
@@ -251,7 +259,7 @@ const SportsDashboard: React.FC = () => {
                     {['cs1X', 'cs12', 'csX2'].map((key, i) => {
                       const val = (match as any)[key];
                       return (
-                        <button key={i} className={`flex-1 flex justify-center items-center py-2 ${val !== '-' ? 'hover:bg-white/10 cursor-pointer' : 'cursor-default'} ${i < 2 ? 'border-r border-[#2C2F3D]' : ''}`}>
+                        <button key={i} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 ${val !== '-' ? 'hover:bg-white/10 cursor-pointer' : 'cursor-default'} ${i < 2 ? 'border-r border-[#2C2F3D]' : ''}`}>
                           <span className={`text-[12px] ${val !== '-' ? 'text-[#00FFA3] font-bold' : 'text-gray-600'}`}>{val}</span>
                         </button>
                       )

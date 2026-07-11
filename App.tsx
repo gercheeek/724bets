@@ -1479,7 +1479,7 @@ const App: React.FC = () => {
                     setActiveAnalysisId(matchId);
                     handleViewChange('kral');
                   }} />
-                  <SportsDashboard />
+                  <SportsDashboard onNavigate={() => handleViewChange('sports2')} />
                 </div>
 
                 <GameLobbyGrid customGames={casinoLobbyGames} />
