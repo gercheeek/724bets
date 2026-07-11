@@ -14,17 +14,22 @@ interface Bet {
 const GAMES = [
   'The Dog House Multihold™', 'Insurance Baccarat', 'Sweet Bonanza 1000',
   'VIP Flaming Hot Extreme', 'Big Bass Splash 1000', 'Gates of Olympus',
-  'Lightning Roulette', 'Aviator', 'Crazy Time', 'Sugar Rush'
+  'Lightning Roulette', 'Aviator', 'Crazy Time', 'Sugar Rush',
+  'Starlight Princess', 'Fruit Party', 'Gonzo\'s Quest', 'Reactoonz'
 ];
 
 const USERS = [
   'AndiH95', 'FrostGladiator7725', 'Kuba', 'Bekir42', 'Ruzzojona', 
-  'Caner_34', 'AhmetX', 'Mehmet_Pro', 'ZeynepK', 'GamerTurk'
+  'Caner_34', 'AhmetX', 'Mehmet_Pro', 'ZeynepK', 'GamerTurk',
+  'AliVeli44', 'Winner_01', 'LuckyStar', 'JackpotHunter', 'CasinoKing',
+  'Veli_Pro', 'CrazyBettor', 'SweetBonanzaFan', 'RouletteMaster', 'Aviator_Pro',
+  'HighRoller', 'BetNinja', 'CryptoWhale', 'TR_Gamer', 'Baskan_06',
+  'Yilmaz_1905', 'Kral_1907', 'Kartal_1903', 'Efsane_X', 'Shadow_Hunter'
 ];
 
 const CURRENCIES: ('TRY' | 'USD' | 'EUR' | 'USDT' | 'ARS')[] = ['TRY', 'USD', 'EUR', 'USDT', 'ARS'];
 
-const generateRandomBet = (isBigBet = false): Bet => {
+const generateRandomBet = (isBigBet = false, currentUsers: string[] = []): Bet => {
   const currency = CURRENCIES[Math.floor(Math.random() * CURRENCIES.length)];
   
   let baseBet = Math.random() * 100;
@@ -44,10 +49,14 @@ const generateRandomBet = (isBigBet = false): Bet => {
   
   const payout = isLoss ? -betAmount : Number((betAmount * multiplier).toFixed(2));
 
+  let availableUsers = USERS.filter(u => !currentUsers.includes(u));
+  if (availableUsers.length === 0) availableUsers = USERS;
+  const user = availableUsers[Math.floor(Math.random() * availableUsers.length)];
+
   return {
     id: Math.random().toString(36).substr(2, 9),
     game: GAMES[Math.floor(Math.random() * GAMES.length)],
-    user: USERS[Math.floor(Math.random() * USERS.length)],
+    user,
     betAmount,
     currency,
     multiplier,
@@ -105,8 +114,20 @@ const LiveBetsFeed: React.FC = () => {
 
   // Initial Data Load
   useEffect(() => {
-    const initialRecent = Array.from({ length: 8 }, () => generateRandomBet(false));
-    const initialBig = Array.from({ length: 8 }, () => generateRandomBet(true));
+    let currentRecent: string[] = [];
+    const initialRecent = Array.from({ length: 8 }, () => {
+      const b = generateRandomBet(false, currentRecent);
+      currentRecent.push(b.user);
+      return b;
+    });
+
+    let currentBig: string[] = [];
+    const initialBig = Array.from({ length: 8 }, () => {
+      const b = generateRandomBet(true, currentBig);
+      currentBig.push(b.user);
+      return b;
+    });
+
     setRecentBets(initialRecent);
     setBigBets(initialBig);
   }, []);
@@ -115,13 +136,19 @@ const LiveBetsFeed: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (activeTab === 'recent') {
-        const newBet = generateRandomBet(false);
-        setRecentBets(prev => [newBet, ...prev].slice(0, 8));
+        setRecentBets(prev => {
+          const currentUsers = prev.map(b => b.user);
+          const newBet = generateRandomBet(false, currentUsers);
+          return [newBet, ...prev].slice(0, 8);
+        });
       } else {
         // Big bets happen less frequently, simulate by only adding sometimes
         if (Math.random() > 0.5) {
-          const newBet = generateRandomBet(true);
-          setBigBets(prev => [newBet, ...prev].slice(0, 8));
+          setBigBets(prev => {
+            const currentUsers = prev.map(b => b.user);
+            const newBet = generateRandomBet(true, currentUsers);
+            return [newBet, ...prev].slice(0, 8);
+          });
         }
       }
     }, 2500);
