@@ -122,60 +122,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers }) =>
   );
 };
 
-const BigWinsBlock = () => {
-  const [activeTab, setActiveTab] = useState('Tümü');
-  const tabs = ['Tümü', 'Slotlar', 'Canlı Casino'];
-  const scrollRef = useRef<HTMLDivElement>(null);
 
-  return (
-    <div className="mb-8 w-full">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4 px-2">
-        <div className="flex items-center gap-4 lg:gap-8">
-          <div className="flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-white" />
-            <h2 className="text-white text-lg md:text-xl font-bold">Son Büyük Kazançlar</h2>
-          </div>
-          <div className="flex items-center gap-4 mt-2 md:mt-0 overflow-x-auto hide-scrollbar">
-            {tabs.map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`text-sm font-semibold transition-colors pb-1 border-b-2 whitespace-nowrap ${
-                  activeTab === tab 
-                    ? 'text-[#00FFA3] border-[#00FFA3]' 
-                    : 'text-gray-400 border-transparent hover:text-white'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div ref={scrollRef} className="overflow-x-auto hide-scrollbar -mx-2 px-2" style={{ scrollSnapType: 'x mandatory' }}>
-        <div className="flex gap-2.5 min-w-max pb-4">
-          {bigWins.map((win, idx) => (
-            <div key={idx} className="flex flex-col gap-1 cursor-pointer group w-[100px] md:w-[120px]" style={{ scrollSnapAlign: 'start' }}>
-              <div className="relative rounded-xl overflow-hidden aspect-[3/4] bg-zinc-900 border border-white/5">
-                <img src={win.game} alt="Game" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              </div>
-              <div className="flex flex-col items-center justify-center bg-[#1E2027] rounded-md py-1.5 px-1 mt-1 border border-white/5 group-hover:bg-[#2A2D35] transition-colors">
-                <div className="flex items-center gap-1 text-[10px] text-gray-300">
-                  <div className="w-3 h-3 rounded-md bg-white/20 flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-sm bg-white"></div>
-                  </div>
-                  <span className="truncate max-w-[70px]">{win.user}</span>
-                </div>
-                <div className="text-[#00FFA3] font-bold text-[11px] mt-0.5">{win.amount}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 interface GameLobbyGridProps {
   customGames?: CasinoLobbyGame[];
@@ -237,8 +184,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         showPlayers={true}
       />
 
-      {/* 4. Son Büyük Kazançlar */}
-      <BigWinsBlock />
+
     </div>
   );
 };
