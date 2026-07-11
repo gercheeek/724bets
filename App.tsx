@@ -1967,12 +1967,6 @@ const App: React.FC = () => {
         )}
 
         {view === 'blackjack' && (
-          <div className="animate-fade-in w-full h-full relative z-[50]">
-            <CasinoLobby />
-          </div>
-        )}
-
-        {view === 'casino2' && (
           <div className="animate-fade-in w-full h-full relative">
             {iframeLoading && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]">
@@ -1987,6 +1981,12 @@ const App: React.FC = () => {
               className="w-full h-full border-none"
               onLoad={() => setIframeLoading(false)}
             />
+          </div>
+        )}
+
+        {view === 'casino2' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <CasinoLobby />
           </div>
         )}
 
