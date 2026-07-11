@@ -275,7 +275,12 @@ const Sidebar: React.FC<SidebarProps> = ({
                   return (
                     <button
                       key={item.id}
-                      onClick={() => item.view && onViewChange(item.view)}
+                      onClick={() => {
+                        if (item.id === 'canli') {
+                          window.dispatchEvent(new CustomEvent('internal-navigate', { detail: { url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' } }));
+                        }
+                        if (item.view) onViewChange(item.view);
+                      }}
                       className={`flex flex-col items-center justify-center py-3 rounded-lg transition-all ${
                         isActive 
                           ? 'bg-[#00FFA3] text-black font-black' 
@@ -295,10 +300,15 @@ const Sidebar: React.FC<SidebarProps> = ({
                   return (
                     <button
                       key={item.id}
-                      onClick={() => item.view && onViewChange(item.view)}
+                      onClick={() => {
+                        if (item.id === 'canli') {
+                          window.dispatchEvent(new CustomEvent('internal-navigate', { detail: { url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' } }));
+                        }
+                        if (item.view) onViewChange(item.view);
+                      }}
                       className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto ${
                         isActive 
-                          ? 'bg-[#00FFA3] text-black' 
+                          ? 'bg-[#00FFA3] text-black shadow-[0_0_15px_rgba(0,255,163,0.3)]' 
                           : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white'
                       }`}
                     >

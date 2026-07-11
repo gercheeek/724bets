@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -49,6 +49,7 @@ import CasinoLobby from './components/CasinoLobby';
 // Portal Components
 import CouponsView from './components/CouponsView';
 import HeroSection from './components/HeroSection';
+import MobileQuickLinks from './components/MobileQuickLinks';
 import Slider2 from './components/Slider2';
 import MatchHighlights from './components/MatchHighlights';
 import PopularBets from './components/PopularBets';
@@ -135,6 +136,7 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
 };
 
 const App: React.FC = () => {
+  const sports2ContainerRef = useRef<HTMLDivElement>(null);
   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('ready');
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
@@ -1462,7 +1464,7 @@ const App: React.FC = () => {
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
             ? 'p-0 w-full max-w-full pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-full pb-[80px] md:pb-6'
         }`}
@@ -1483,6 +1485,7 @@ const App: React.FC = () => {
               <div className="portal-body">
                 
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
+                <MobileQuickLinks onSearchClick={() => setShowSearch(true)} onViewChange={(v) => setView(v as any)} />
                 
 
                 <GameLobbyGrid customGames={casinoLobbyGames} />
@@ -1650,80 +1653,66 @@ const App: React.FC = () => {
                       )}
                     </button>
                   ))}
-               </div>
-               {/* Sub Menu */}
-               <div className="flex items-center justify-between bg-[#222b3c] px-4 py-2">
-                 <div className="flex items-center gap-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
-                    {[
-                      { label: 'Sonuçlar', url: 'https://bahisbey1438.com/tr/sport/results/?btag=59649488_330539' },
-                      { label: 'Bahis Yarışı', badge: 'YENİ', url: 'https://bahisbey1438.com/tr/sport/betrace/?btag=59649488_330539' },
-                      { label: 'SPOR TURNUVASI', url: 'https://bahisbey1438.com/tr/sport/tournament/?btag=59649488_330539' },
-                      { label: 'İstatistikler', url: 'https://bahisbey1438.com/tr/sport/statistics/?btag=59649488_330539' },
-                      { label: 'Canlı Skor', url: 'https://bahisbey1438.com/tr/sport/livescore/?btag=59649488_330539' },
-                      { label: 'Grup Aşaması', badge: 'YENİ', url: 'https://bahisbey1438.com/tr/sport/groupstage/?btag=59649488_330539' }
-                    ].map((item, idx, arr) => (
-                      <React.Fragment key={item.label}>
-                        <button 
-                          onClick={() => { setIframeLoading(true); setSports2Url(item.url); }}
-                          className="text-[12px] text-zinc-400 hover:text-zinc-200 transition-colors flex items-center gap-1.5 font-medium shrink-0"
-                        >
-                          {item.label}
-                          {item.badge && (
-                            <span className="bg-red-600 text-white text-[9px] font-black px-1 rounded">{item.badge}</span>
-                          )}
-                        </button>
-                        {idx < arr.length - 1 && <span className="text-zinc-600 text-xs shrink-0">•</span>}
-                      </React.Fragment>
-                    ))}
-                 </div>
-                 <div className="shrink-0 pl-4 border-l border-zinc-600 ml-4">
-                    <button className="text-[12px] text-zinc-400 hover:text-zinc-200 flex items-center gap-1 font-medium">
-                      Ondalık <ChevronDown size={14} />
-                    </button>
-                 </div>
-               </div>
             </div>
+          </div>
 
             {/* Iframe Container */}
-            <div className="w-full flex-1 overflow-hidden shadow-2xl bg-[#0F172A] relative rounded-b-2xl z-10">
-              {iframeLoading && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                    <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+            <div 
+              ref={sports2ContainerRef}
+              className="w-full flex-1 shadow-2xl bg-[#0F172A] relative rounded-b-2xl z-10"
+              style={{
+                overflowX: isMobile ? 'auto' : 'hidden',
+                overflowY: 'hidden',
+                WebkitOverflowScrolling: 'touch'
+              }}
+            >
+              <div style={{ width: isMobile ? '768px' : '100%', height: '100%', position: 'relative' }}>
+                {iframeLoading && (
+                  <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                      <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                    </div>
                   </div>
-                </div>
-              )}
-              <iframe 
-                src={sports2Url}
-                onLoad={() => setIframeLoading(false)}
-                frameBorder="0"
-                allowFullScreen
-                title="Spor 2"
-                className="relative z-0"
-                style={{
-                  position: 'absolute',
-                  top: '-165px',
-                  left: '0',
-                  width: '100%',
-                  height: 'calc(100% + 165px)'
-                }}
-              />
-              
-              {/* BAHISBEY OVERLAY FOOTER */}
+                )}
+                <iframe 
+                  src={sports2Url}
+                  onLoad={() => {
+                     setIframeLoading(false);
+                     // Allow a slight delay for the iframe to render before setting scroll
+                     if (isMobile && sports2ContainerRef.current) {
+                        setTimeout(() => {
+                          if (sports2ContainerRef.current) sports2ContainerRef.current.scrollLeft = 210;
+                        }, 100);
+                     }
+                  }}
+                  frameBorder="0"
+                  allowFullScreen
+                  title="Spor 2"
+                  className="relative z-0"
+                  style={{
+                    position: 'absolute',
+                    top: '-165px',
+                    left: '0',
+                    width: '100%',
+                    height: 'calc(100% + 165px + 2000px)'
+                  }}
+                />
+                
+                {/* BAHISBEY OVERLAY FOOTER */}
               <div className="absolute bottom-0 left-0 w-full z-40 bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex flex-col md:flex-row items-center justify-between px-4 py-3 pointer-events-auto">
                 <div className="flex items-center gap-3">
-                  <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: '18px', color: '#fff', letterSpacing: '-1px' }}>
+                  <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: '20px', color: '#fff', letterSpacing: '-1px' }}>
                     BAHİSBEY
                   </span>
-                  <div className="h-4 w-px bg-zinc-700 hidden md:block"></div>
-                  <span className="text-zinc-500 text-[10px] hidden md:block max-w-[400px] leading-tight">
+                  <div className="h-5 w-px bg-zinc-700 hidden md:block"></div>
+                  <span className="text-zinc-400 text-[11px] hidden md:block max-w-[450px] leading-snug">
                     Bahisbey, Curaçao yasalarına göre lisanslanmış profesyonel ve güvenilir bahis platformudur. Tüm hakları saklıdır.
                   </span>
                 </div>
                 
                 <div className="flex items-center gap-3 mt-2 md:mt-0">
-                   <div className="flex items-center gap-1.5 mr-2 opacity-80 overflow-x-auto max-w-[200px] md:max-w-none scrollbar-hide">
+                   <div className="hidden lg:flex items-center gap-2 mr-2 opacity-80 overflow-x-auto max-w-[200px] md:max-w-none scrollbar-hide">
                       <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAPARA</div>
                       <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">HAVALE</div>
                       <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAYCO</div>
@@ -1731,16 +1720,16 @@ const App: React.FC = () => {
                       <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">VISA</div>
                       <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">BITCOIN</div>
                       <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">TETHER</div>
-                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAY</div>
                    </div>
                    <button 
                      onClick={() => alert('Lisans belgeleri yakında eklenecek.')}
-                     className="px-3 py-1.5 bg-[#00FFA3]/10 border border-[#00FFA3]/30 text-[#00FFA3] rounded text-[10px] font-bold hover:bg-[#00FFA3]/20 transition-colors flex items-center gap-1 shrink-0"
+                     className="px-3 py-1.5 bg-[#00FFA3]/10 border border-[#00FFA3]/30 text-[#00FFA3] rounded text-[10px] font-bold hover:bg-[#00FFA3]/20 transition-colors flex items-center gap-1.5 shrink-0"
                    >
-                     <ShieldCheck className="w-3 h-3" />
+                     <ShieldCheck className="w-3.5 h-3.5" />
                      LİSANS BELGELERİ
                    </button>
                 </div>
+              </div>
               </div>
               {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
               {!isMobile && (
@@ -1790,7 +1779,7 @@ const App: React.FC = () => {
                   top: '-165px',
                   left: '0',
                   width: '100%',
-                  height: 'calc(100% + 165px - 90px)'
+                  height: 'calc(100% + 165px - 90px + 2000px)'
                 }}
               />
               
@@ -1856,7 +1845,7 @@ const App: React.FC = () => {
                   top: '-165px',
                   left: '0',
                   width: '100%',
-                  height: 'calc(100% + 165px)'
+                  height: 'calc(100% + 165px + 2000px)'
                 }}
               />
               
@@ -2168,32 +2157,7 @@ const App: React.FC = () => {
       </div>
       </div>
 
-      {view !== 'sports' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && (
-        <footer className="site-footer">
-          <div className="footer-badges">
-            <img src="https://picsum.photos/seed/18/40/40" alt="18+" style={{ height: '32px', borderRadius: '4px' }} />
-            <img src="https://picsum.photos/seed/gaming/100/40" alt="Gaming Commission" style={{ height: '32px', borderRadius: '4px' }} />
-            <img src="https://picsum.photos/seed/visa/60/40" alt="Visa" style={{ height: '24px' }} />
-            <img src="https://picsum.photos/seed/master/60/40" alt="Mastercard" style={{ height: '24px' }} />
-          </div>
-          <p className="footer-text">
-            Bu web sitesi yalnızca bilgilendirme amaçlıdır. Lütfen sorumlu bir şekilde oynayın.
-            Kumar bağımlılık yapabilir ve ciddi mali kayıplara neden olabilir. 18 yaşından küçüklerin kumar oynaması yasaktır.
-          </p>
-          <div className="footer-hashtags">
-            {(hashtags || '').split(',').map((tag, i) => tag.trim() ? <span key={i}>{tag.trim()}</span> : null)}
-          </div>
-          <div className="flex justify-center mt-6">
-            <button 
-              onClick={() => setAuthModalMode('admin')}
-              className="text-zinc-800 hover:text-amber-500 transition-all duration-300 transform hover:scale-125"
-              title="Sistem Girişi"
-            >
-              <Crown size={20} />
-            </button>
-          </div>
-        </footer>
-      )}
+
           </main>
 
 
@@ -2278,7 +2242,7 @@ const App: React.FC = () => {
       )}
 
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
-      {view !== 'admin' && view !== 'sports' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && !showLiveScoreModal && (
+      {view !== 'admin' && view !== 'sports' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && !showLiveScoreModal && !isMobile && (
         <aside className={`hidden xl:flex flex-col border-l border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-[48px]'} transition-all duration-300`}>
           <ModernChat
             open={isChatOpen}
