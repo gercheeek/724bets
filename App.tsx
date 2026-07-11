@@ -1482,12 +1482,7 @@ const App: React.FC = () => {
                 
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
                 
-                {/* ── World Cup Teaser Section ── */}
                 <div className="w-full max-w-[1200px] mx-auto px-2 sm:px-0">
-                  <WorldCupTeaser onMatchClick={(matchId) => {
-                    setActiveAnalysisId(matchId);
-                    handleViewChange('kral');
-                  }} />
                   <SportsDashboard onNavigate={() => handleViewChange('sports2')} />
                 </div>
 
