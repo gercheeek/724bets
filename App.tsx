@@ -1365,7 +1365,7 @@ const App: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
+          {!(view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen}
@@ -1460,7 +1460,7 @@ const App: React.FC = () => {
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
+          (view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
             ? 'p-0 w-full max-w-full pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-full pb-[80px] md:pb-6'
         }`}
@@ -2155,7 +2155,7 @@ const App: React.FC = () => {
       </div>
       </div>
 
-      {view !== 'sports' && view !== 'sports2' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && (
+      {view !== 'sports' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && (
         <footer className="site-footer">
           <div className="footer-badges">
             <img src="https://picsum.photos/seed/18/40/40" alt="18+" style={{ height: '32px', borderRadius: '4px' }} />
@@ -2265,7 +2265,7 @@ const App: React.FC = () => {
       )}
 
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
-      {view !== 'admin' && view !== 'sports' && view !== 'sports2' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && !showLiveScoreModal && (
+      {view !== 'admin' && view !== 'sports' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && !showLiveScoreModal && (
         <aside className={`hidden xl:flex flex-col border-l border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-[48px]'} transition-all duration-300`}>
           <ModernChat
             open={isChatOpen}
