@@ -39,12 +39,50 @@ export default function AdminDepositsTab() {
 
   const handleUpdateStatus = async (id: string, newStatus: 'approved' | 'rejected') => {
     try {
+      const deposit = deposits.find(d => d.id === id);
+      if (!deposit) return;
+
       const { error } = await supabase
         .from('deposits')
         .update({ status: newStatus })
         .eq('id', id);
 
       if (error) throw error;
+
+      // Handle Referral Bonus on First Deposit
+      if (newStatus === 'approved') {
+        const { data: member } = await supabase.from('members').select('referred_by, balance').eq('username', deposit.username).single();
+        if (member && member.referred_by) {
+          // Check if it's their FIRST approved deposit (other than this one we just approved)
+          const { data: otherDeposits } = await supabase
+            .from('deposits')
+            .select('id')
+            .eq('username', deposit.username)
+            .eq('status', 'approved')
+            .neq('id', id);
+          
+          if (!otherDeposits || otherDeposits.length === 0) {
+            // First deposit! Give 10% bonus
+            const bonusAmount = Number(deposit.amount) * 0.10;
+            
+            // Insert history
+            await supabase.from('referral_history').insert([{
+              referrer_username: member.referred_by,
+              referred_username: deposit.username,
+              deposit_status: 'completed',
+              bonus_amount: bonusAmount
+            }]);
+
+            // Add balance to referrer
+            const { data: referrer } = await supabase.from('members').select('id, balance').eq('referral_code', member.referred_by).single();
+            if (referrer) {
+              await supabase.from('members').update({
+                balance: (Number(referrer.balance) || 0) + bonusAmount
+              }).eq('id', referrer.id);
+            }
+          }
+        }
+      }
 
       // Update local state
       setDeposits(prev => prev.map(d => d.id === id ? { ...d, status: newStatus } : d));

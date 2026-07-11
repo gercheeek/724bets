@@ -14,6 +14,8 @@ import AdminCasinoLobbyTab from './AdminCasinoLobbyTab';
 import AdminTrustedTab from './AdminTrustedTab';
 import AdminChatTab from './AdminChatTab';
 import AdminNotificationTab from './AdminNotificationTab';
+import AdminPromoTab from './AdminPromoTab';
+import AdminReferralTab from './AdminReferralTab';
 import { NavVisibility } from './Header';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
@@ -99,7 +101,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues' | 'wallet'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues' | 'wallet' | 'promocodes' | 'referrals'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,
@@ -1038,6 +1040,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div className="space-y-1">
                   <button onClick={() => setActiveTab('members')} className={`adm-nav-item ${activeTab === 'members' ? 'active' : ''}`}>
                     <Users className="w-4 h-4" /> ÜYELER
+                  </button>
+                  <button onClick={() => setActiveTab('promocodes')} className={`adm-nav-item ${activeTab === 'promocodes' ? 'active' : ''}`}>
+                    <Ticket className="w-4 h-4" /> PROMOSYON KODLARI
+                  </button>
+                  <button onClick={() => setActiveTab('referrals')} className={`adm-nav-item ${activeTab === 'referrals' ? 'active' : ''}`}>
+                    <Users className="w-4 h-4" /> DAVET GEÇMİŞİ
                   </button>
                   <button onClick={() => setActiveTab('payment')} className={`adm-nav-item ${activeTab === 'payment' ? 'active' : ''}`}>
                     <CreditCard className="w-4 h-4" /> ÖDEMELER
@@ -2212,7 +2220,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                 updated[idx].matches.push({ matchId: Date.now().toString(), homeTeam: '', awayTeam: '', prediction: '', odd: '1.50' });
                                 setLocalCoupons(updated);
                               }}
-                              className="text-[10px] bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-lg border border-zinc-700 transition-all font-bold"
+                              className="text-[10px] bg-zinc-800 hover:bg-zinc-750 text-white px-3 py-1.5 rounded-lg border border-zinc-700 transition-all font-bold"
                             >
                               + MAÇ EKLE
                             </button>
@@ -3683,6 +3691,14 @@ Maç Listesi: `}
             if (onSaveCasinoLobbyGames) onSaveCasinoLobbyGames(updatedGames);
           }}
         />
+      )}
+
+      {activeTab === 'promocodes' && (
+        <AdminPromoTab />
+      )}
+
+      {activeTab === 'referrals' && (
+        <AdminReferralTab />
       )}
 
       {activeTab === 'trusted' && (

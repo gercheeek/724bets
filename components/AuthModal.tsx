@@ -36,6 +36,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
     const [mPhone, setMPhone] = useState('');
     const [mPassword, setMPassword] = useState('');
     const [mPasswordConfirm, setMPasswordConfirm] = useState('');
+    const [mTcNo, setMTcNo] = useState('');
+    const [mReferralCode, setMReferralCode] = useState('');
     const [mError, setMError] = useState('');
     const [mSuccess, setMSuccess] = useState('');
     const [registrationPending, setRegistrationPending] = useState(false);
@@ -120,18 +122,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
             if (uname.length < 3) { setMError('Kullanıcı adı en az 3 karakter olmalı.'); setLoading(false); return; }
             if (!mEmail.includes('@')) { setMError('Geçerli bir e-posta adresi girin.'); setLoading(false); return; }
             if (mPhone.replace(/\D/g, '').length < 10) { setMError('Geçerli bir telefon numarası girin.'); setLoading(false); return; }
+            if (mTcNo.replace(/\D/g, '').length !== 11) { setMError('T.C. Kimlik Numarası 11 haneli olmalıdır.'); setLoading(false); return; }
             if (mPassword.length < 6) { setMError('Şifre en az 6 karakter olmalı.'); setLoading(false); return; }
             if (mPassword !== mPasswordConfirm) { setMError('Şifreler eşleşmiyor.'); setLoading(false); return; }
 
             // Check existing
             const { data: existing } = await supabase
                 .from('members')
-                .select('username, email')
-                .or(`username.eq.${mUsername.trim()},email.eq.${mEmail.trim().toLowerCase()}`);
+                .select('username, email, tc_no')
+                .or(`username.eq.${mUsername.trim()},email.eq.${mEmail.trim().toLowerCase()},tc_no.eq.${mTcNo.trim()}`);
             
             if (existing && existing.length > 0) {
                 if (existing.some(u => u.username.toLowerCase() === uname)) {
                     setMError('Bu kullanıcı adı zaten alınmış!');
+                } else if (existing.some(u => u.tc_no === mTcNo.trim())) {
+                    setMError('Bu T.C. Kimlik Numarası zaten sistemde kayıtlı!');
                 } else {
                     setMError('Bu e-posta zaten kayıtlı!');
                 }
@@ -144,7 +149,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 email: mEmail.trim().toLowerCase(),
                 phone: mPhone.trim(),
                 password: mPassword,
-                status: 'pending'
+                status: 'pending',
+                tc_no: mTcNo.trim(),
+                referral_code: mUsername.trim(),
+                referred_by: mReferralCode.trim() || null
             }]).select().single();
 
             if (insertError || !newUser) {
@@ -281,6 +289,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                                     onChange={setMEmail} placeholder="E-posta adresi (zorunlu)" required />
                                                 <InputField icon={<Phone className="w-4 h-4" />} type="tel" value={mPhone}
                                                     onChange={setMPhone} placeholder="Telefon numarası (zorunlu)" required />
+                                                <InputField icon={<Shield className="w-4 h-4" />} type="text" value={mTcNo}
+                                                    onChange={setMTcNo} placeholder="T.C. Kimlik Numarası (zorunlu)" required />
+                                                <InputField icon={<UserPlus className="w-4 h-4" />} type="text" value={mReferralCode}
+                                                    onChange={setMReferralCode} placeholder="Davet Kodu (opsiyonel)" />
                                             </>
                                         )}
 

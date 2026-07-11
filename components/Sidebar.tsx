@@ -390,11 +390,11 @@ const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Block 3: Kodu Kullan etc. */}
               <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                <div onClick={() => onViewChange('promo')} className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
                   <Ticket className="w-5 h-5 text-zinc-300 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Kodu Kullan</span>}
                 </div>
-                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                <div onClick={() => onViewChange('referral')} className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
                   <Users className="w-5 h-5 text-zinc-300 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Arkadaşını Davet Et</span>}
                 </div>
