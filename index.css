@@ -1505,3 +1505,19 @@ body {
 .animate-slide-in-right {
   animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Kartların Ana Kapsayıcı Div'i */
+.casino-card-wrapper, .slot-card-inner {
+    overflow: hidden !important;
+    position: relative;
+    border-radius: 12px; /* Mevcut köşe ovalliğini korumak için */
+}
+
+/* Yönetim Panelinden Yüklenen Kart Resimleri */
+.casino-card-wrapper img, .slot-card-inner img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block;
+}

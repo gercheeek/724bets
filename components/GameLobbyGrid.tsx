@@ -93,7 +93,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, tabs, games }) => {
             <div 
               key={game.id} 
               className={`
-                relative rounded-xl overflow-hidden group cursor-pointer bg-zinc-900 border border-white/5
+                casino-card-wrapper slot-card-inner relative rounded-xl overflow-hidden group cursor-pointer bg-zinc-900 border border-white/5
                 ${game.isLarge ? 'col-span-2 row-span-2 h-full' : 'col-span-1 aspect-[4/3]'}
                 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-1
               `}
@@ -103,7 +103,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, tabs, games }) => {
               <img 
                 src={game.image} 
                 alt={game.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="absolute inset-0 !w-full !h-full !object-cover !object-center block transition-transform duration-700 group-hover:scale-110"
               />
               
               {/* Dark Overlay on Hover */}
