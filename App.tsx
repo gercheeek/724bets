@@ -1482,9 +1482,6 @@ const App: React.FC = () => {
                 
                 <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
                 
-                <div className="w-full max-w-[1200px] mx-auto px-2 sm:px-0">
-                  <SportsDashboard onNavigate={() => handleViewChange('sports2')} />
-                </div>
 
                 <GameLobbyGrid customGames={casinoLobbyGames} />
 
