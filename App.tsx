@@ -1973,7 +1973,7 @@ const App: React.FC = () => {
         )}
 
         {view === 'casino2' && (
-          <div className="animate-fade-in w-full relative flex flex-col" style={{ minHeight: 'calc(100vh - 85px)', height: 'calc(100vh - 85px)' }}>
+          <div className="animate-fade-in w-full relative flex flex-col overflow-hidden" style={{ minHeight: 'calc(100vh - 85px)', height: 'calc(100vh - 85px)' }}>
             {iframeLoading && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]">
                 <div className="flex flex-col items-center gap-4">
@@ -1984,8 +1984,8 @@ const App: React.FC = () => {
             )}
             <iframe 
               src="https://bahisbey1438.com/tr/lobby/casino/?btag=59649488_330539" 
-              className="w-full flex-1 border-none"
-              style={{ minHeight: '100%' }}
+              className="flex-1 border-none max-w-none"
+              style={{ minHeight: '100%', width: 'calc(100% + 45px)' }}
               onLoad={() => setIframeLoading(false)}
             />
           </div>
