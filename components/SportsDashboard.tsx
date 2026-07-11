@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, BarChart2, Star, MessageSquare } from 'lucide-react';
 
 interface SportsDashboardProps {
@@ -6,6 +6,70 @@ interface SportsDashboardProps {
 }
 
 const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
+  const [liveMatches, setLiveMatches] = useState([
+    { id: 1, minute: 60, time: "2. Yarı 60'", team1: "Canberra Croatia", team2: "Brindabella Blues", score1: 2, score2: 0, s1: 1.05, sX: 8.50, s2: 22.0, tU: 1.66, tA: 2.09, cs1X: 1.01, cs12: 1.03, csX2: 5.50 },
+    { id: 2, minute: 87, time: "2. Yarı 87'", team1: "Canberra Olympic", team2: "Canberra White Eagles", score1: 2, score2: 1, s1: 1.10, sX: 6.45, s2: 28.0, tU: 2.80, tA: 1.38, cs1X: 1.01, cs12: 1.09, csX2: 5.95 },
+    { id: 3, minute: 65, time: "2. Yarı 65'", team1: "Canberra Juventus", team2: "O'Connor Knights", score1: 1, score2: 0, s1: 1.19, sX: 5.25, s2: 17.5, tU: 1.85, tA: 1.85, cs1X: 1.01, cs12: 1.14, csX2: 4.45 },
+    { id: 4, minute: 61, time: "2. Yarı 61'", team1: "Tuggeranong Utd", team2: "Belconnen Utd", score1: 1, score2: 0, s1: 1.43, sX: 3.80, s2: 8.40, tU: 2.25, tA: 1.57, cs1X: 1.04, cs12: 1.24, csX2: 2.79 },
+    { id: 5, minute: 0, time: "Başla...", team1: "Northern Tigers", team2: "Newcastle Jets NPL", score1: 0, score2: 0, s1: 1.49, sX: 4.65, s2: 5.20, tU: 2.01, tA: 1.71, cs1X: 1.14, cs12: 1.18, csX2: 2.61 },
+    { id: 6, minute: 31, time: "1. Yarı 31'", team1: "Moreton City Excelsior", team2: "Magic United U23", score1: 2, score2: 1, s1: 1.20, sX: 4.50, s2: 10.5, tU: 1.99, tA: 1.73, cs1X: 1.02, cs12: 1.10, csX2: 3.50 }
+  ]);
+  
+  const [changedOdds, setChangedOdds] = useState<{[key: string]: 'up' | 'down'}>({});
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveMatches(prev => {
+        const next = [...prev];
+        const newChangedOdds: {[key: string]: 'up' | 'down'} = {};
+        
+        let hasChanges = false;
+        
+        for (let i = 0; i < next.length; i++) {
+          if (Math.random() > 0.4) continue; // Only update some matches
+          
+          hasChanges = true;
+          const match = { ...next[i] };
+          
+          // Randomly tick minute
+          if (match.minute > 0 && match.minute < 90 && Math.random() > 0.5) {
+             match.minute += 1;
+             const half = match.minute > 45 ? "2. Yarı" : "1. Yarı";
+             match.time = `${half} ${match.minute}'`;
+          }
+
+          // Randomly update odds
+          const oddsKeys = ['s1', 'sX', 's2', 'tU', 'tA', 'cs1X', 'cs12', 'csX2'] as const;
+          oddsKeys.forEach(key => {
+            if (Math.random() > 0.7) {
+              const diff = (Math.random() * 0.2 - 0.1);
+              const oldVal = match[key];
+              const newVal = Math.max(1.01, oldVal + diff);
+              match[key] = Number(newVal.toFixed(2));
+              newChangedOdds[`${match.id}-${key}`] = newVal > oldVal ? 'up' : 'down';
+            }
+          });
+          
+          next[i] = match;
+        }
+        
+        if (hasChanges) {
+          setChangedOdds(curr => ({ ...curr, ...newChangedOdds }));
+          setTimeout(() => {
+             setChangedOdds(curr => {
+                const cleaned = { ...curr };
+                Object.keys(newChangedOdds).forEach(k => delete cleaned[k]);
+                return cleaned;
+             });
+          }, 2000);
+        }
+        
+        return next;
+      });
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="w-full bg-[#12141A] font-sans text-white pb-10 mt-6 rounded-xl overflow-hidden shadow-2xl">
       
@@ -192,15 +256,8 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
           {/* TABLE ROWS */}
           <div className="flex flex-col">
             
-            {[
-              { time: "2. Yarı 60'", team1: "Canberra Croatia", team2: "Brindabella Blues", score1: 2, score2: 0, s1: "-", sX: "-", s2: "-", tU: "1.66", tA: "2.09", cs1X: "-", cs12: "-", csX2: "-" },
-              { time: "2. Yarı 87'", team1: "Canberra Olympic", team2: "Canberra White Eagles", score1: 2, score2: 1, s1: "1.1", sX: "6.45", s2: "28", tU: "2.8", tA: "1.38", cs1X: "-", cs12: "1.09", csX2: "5.95" },
-              { time: "2. Yarı 65'", team1: "Canberra Juventus", team2: "O'Connor Knights", score1: 1, score2: 0, s1: "1.19", sX: "5.25", s2: "17.5", tU: "1.85", tA: "1.85", cs1X: "-", cs12: "1.14", csX2: "4.45" },
-              { time: "2. Yarı 61'", team1: "Tuggeranong Utd", team2: "Belconnen Utd", score1: 1, score2: 0, s1: "1.43", sX: "3.8", s2: "8.4", tU: "2.25", tA: "1.57", cs1X: "1.04", cs12: "1.24", csX2: "2.79" },
-              { time: "Başla...", team1: "Northern Tigers", team2: "Newcastle Jets NPL", score1: 0, score2: 0, s1: "1.49", sX: "4.65", s2: "5.2", tU: "2.01", tA: "1.71", cs1X: "1.14", cs12: "1.18", csX2: "2.61" },
-              { time: "1. Yarı 31'", team1: "Moreton City Excelsior", team2: "Magic United U23", score1: 2, score2: 1, s1: "-", sX: "-", s2: "-", tU: "1.99", tA: "1.73", cs1X: "-", cs12: "-", csX2: "-" }
-            ].map((match, idx) => (
-              <div key={idx} className="flex items-center px-4 py-3 border-b border-[#2C2F3D] hover:bg-[#1A1D24] transition-colors group">
+            {liveMatches.map((match, idx) => (
+              <div key={match.id} className="flex items-center px-4 py-3 border-b border-[#2C2F3D] hover:bg-[#1A1D24] transition-colors group">
                 
                 {/* Match Info */}
                 <div className="w-[30%] min-w-[200px] flex items-center gap-3">
@@ -228,11 +285,12 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
                 {/* Sonuç (1X2) */}
                 <div className="flex-1 flex justify-center px-2">
                   <div className="flex w-full max-w-[200px] bg-[#12141A] rounded overflow-hidden border border-[#2C2F3D]">
-                    {['s1', 'sX', 's2'].map((key, i) => {
-                      const val = (match as any)[key];
+                    {(['s1', 'sX', 's2'] as const).map((key, i) => {
+                      const val = match[key];
+                      const status = changedOdds[`${match.id}-${key}`];
                       return (
-                        <button key={i} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 ${val !== '-' ? 'hover:bg-white/10 cursor-pointer' : 'cursor-default'} ${i < 2 ? 'border-r border-[#2C2F3D]' : ''}`}>
-                          <span className={`text-[12px] ${val !== '-' ? 'text-[#00FFA3] font-bold' : 'text-gray-600'}`}>{val}</span>
+                        <button key={i} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 hover:bg-white/10 cursor-pointer ${i < 2 ? 'border-r border-[#2C2F3D]' : ''} transition-colors duration-300 ${status === 'up' ? 'bg-green-500/20' : status === 'down' ? 'bg-red-500/20' : ''}`}>
+                          <span className={`text-[12px] font-bold ${status === 'up' ? 'text-green-400' : status === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>{typeof val === 'number' ? val.toFixed(2) : val}</span>
                         </button>
                       )
                     })}
@@ -242,38 +300,39 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
                 {/* Toplam (Over/Under) */}
                 <div className="flex-1 flex justify-center px-2">
                   <div className="flex w-full max-w-[200px] bg-[#12141A] rounded overflow-hidden border border-[#2C2F3D]">
-                    <button onClick={onNavigate} className="flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer border-r border-[#2C2F3D]">
+                    <button onClick={onNavigate} className={`flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer border-r border-[#2C2F3D] transition-colors duration-300 ${changedOdds[`${match.id}-tU`] === 'up' ? 'bg-green-500/20' : changedOdds[`${match.id}-tU`] === 'down' ? 'bg-red-500/20' : ''}`}>
                       <span className="text-[10px] text-gray-500">Üst</span>
-                      <span className="text-[12px] text-[#00FFA3] font-bold">{match.tU}</span>
+                      <span className={`text-[12px] font-bold ${changedOdds[`${match.id}-tU`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-tU`] === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>{match.tU.toFixed(2)}</span>
                     </button>
-                    <button onClick={onNavigate} className="flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer border-r border-[#2C2F3D]">
+                    <button onClick={onNavigate} className={`flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer transition-colors duration-300 ${changedOdds[`${match.id}-tA`] === 'up' ? 'bg-green-500/20' : changedOdds[`${match.id}-tA`] === 'down' ? 'bg-red-500/20' : ''}`}>
                       <span className="text-[10px] text-gray-500">Alt</span>
-                      <span className="text-[12px] text-[#00FFA3] font-bold">{match.tA}</span>
+                      <span className={`text-[12px] font-bold ${changedOdds[`${match.id}-tA`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-tA`] === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>{match.tA.toFixed(2)}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Çifte Şans (1X, 12, X2) */}
+                {/* Çifte Şans */}
                 <div className="flex-1 flex justify-center px-2">
                   <div className="flex w-full max-w-[200px] bg-[#12141A] rounded overflow-hidden border border-[#2C2F3D]">
-                    {['cs1X', 'cs12', 'csX2'].map((key, i) => {
-                      const val = (match as any)[key];
+                    {(['cs1X', 'cs12', 'csX2'] as const).map((key, i) => {
+                      const val = match[key];
+                      const status = changedOdds[`${match.id}-${key}`];
                       return (
-                        <button key={i} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 ${val !== '-' ? 'hover:bg-white/10 cursor-pointer' : 'cursor-default'} ${i < 2 ? 'border-r border-[#2C2F3D]' : ''}`}>
-                          <span className={`text-[12px] ${val !== '-' ? 'text-[#00FFA3] font-bold' : 'text-gray-600'}`}>{val}</span>
+                        <button key={i} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 hover:bg-white/10 cursor-pointer ${i < 2 ? 'border-r border-[#2C2F3D]' : ''} transition-colors duration-300 ${status === 'up' ? 'bg-green-500/20' : status === 'down' ? 'bg-red-500/20' : ''}`}>
+                          <span className={`text-[12px] font-bold ${status === 'up' ? 'text-green-400' : status === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>{typeof val === 'number' ? val.toFixed(2) : val}</span>
                         </button>
                       )
                     })}
                   </div>
                 </div>
 
-                {/* Icons */}
-                <div className="w-[50px] flex flex-col items-center gap-1.5">
-                  <div className="flex gap-2 text-gray-500 group-hover:text-gray-300">
-                    <BarChart2 size={13} className="cursor-pointer hover:text-white" />
-                    <Star size={13} className="cursor-pointer hover:text-white" />
+                {/* Stats / Video Icon */}
+                <div className="w-[50px] flex flex-col items-center justify-center gap-2">
+                  <div className="flex items-center gap-2">
+                    <button onClick={onNavigate} className="text-gray-500 hover:text-white transition-colors"><BarChart2 size={14}/></button>
+                    <button onClick={onNavigate} className="text-gray-500 hover:text-white transition-colors"><Star size={14}/></button>
                   </div>
-                  <MessageSquare size={13} className="text-gray-500 group-hover:text-gray-300 cursor-pointer hover:text-white" />
+                  <button onClick={onNavigate} className="text-gray-500 hover:text-white transition-colors"><MessageSquare size={14}/></button>
                 </div>
                 
               </div>
