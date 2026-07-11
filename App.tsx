@@ -137,7 +137,7 @@ const App: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral'>('home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral'>('home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -953,7 +953,7 @@ const App: React.FC = () => {
         setView('trusted-detail');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['blackjack', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo'];
+        const validViews = ['blackjack', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -1969,6 +1969,24 @@ const App: React.FC = () => {
         {view === 'blackjack' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
             <CasinoLobby />
+          </div>
+        )}
+
+        {view === 'casino2' && (
+          <div className="animate-fade-in w-full h-full relative">
+            {iframeLoading && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+                  <div className="text-emerald-500 font-black text-sm uppercase tracking-widest animate-pulse">Lobi Yükleniyor...</div>
+                </div>
+              </div>
+            )}
+            <iframe 
+              src="https://bahisbey1438.com/tr/lobby/casino/?btag=59649488_330539" 
+              className="w-full h-full border-none"
+              onLoad={() => setIframeLoading(false)}
+            />
           </div>
         )}
 

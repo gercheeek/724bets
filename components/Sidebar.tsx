@@ -117,6 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       icon: <Target className="w-4 h-4 text-zinc-400" />,
       subItems: [
         { id: 'casino', label: '724Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'blackjack', visKey: 'blackjack' },
+        { id: 'casino2', label: '724Casino / Slotlar 2', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'casino2' },
         { id: 'live-casino', label: 'Canlı Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'live-casino' },
         { id: 'toto', label: '724TOTO', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'pool', visKey: 'pool' },
         { id: 'loyalty', label: 'Görevler', icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'loyalty', visKey: 'loyalty' },
