@@ -1141,6 +1141,15 @@ html, body {
     gap: 12px;
   }
 
+  .hero-section-kupon {
+    display: none;
+  }
+
+  .hero-section-slider {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
   .hero-section-slider .hero-slider {
     aspect-ratio: 16 / 7;
     height: auto;
