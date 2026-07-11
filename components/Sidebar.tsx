@@ -141,7 +141,14 @@ const Sidebar: React.FC<SidebarProps> = ({
       const isItemActive = item.view === activeView;
       
       return (
-        <div key={item.id} className="flex flex-col">
+        <div 
+          key={item.id} 
+          className={`group mb-2 transition-all duration-300 rounded-lg ${
+            item.subItems && isOpenAccordion 
+              ? 'border border-[#00FFA3]/50 shadow-[0_0_15px_rgba(0,255,163,0.15)] bg-[#1A1D24]' 
+              : 'border border-transparent hover:border-[#00FFA3]/30 hover:shadow-[0_0_15px_rgba(0,255,163,0.1)]'
+          }`}
+        >
           <div 
             onClick={() => {
               if (item.subItems) {
@@ -151,7 +158,13 @@ const Sidebar: React.FC<SidebarProps> = ({
               }
             }}
             className={isOpen 
-              ? `flex items-center justify-between px-4 py-3 cursor-pointer transition-all ${!item.subItems && isItemActive ? 'bg-[#1A253A] text-white border-l-2 border-[#00FFA3]' : 'hover:bg-white/5 text-[#A0A0A0] border-l-2 border-transparent'} mx-0`
+              ? `flex items-center justify-between px-4 py-3 cursor-pointer transition-all ${
+                  item.subItems 
+                    ? `bg-[#1A1D24] text-white rounded-t-lg border-b border-white/5` 
+                    : isItemActive 
+                      ? 'bg-[#1A253A] text-white border-l-2 border-[#00FFA3]' 
+                      : 'hover:bg-white/5 text-zinc-300 border-l-2 border-transparent'
+                }`
               : `flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto mb-1 cursor-pointer ${!item.subItems && isItemActive ? 'bg-[#00FFA3] text-black' : 'text-zinc-400 hover:bg-[#1A253A] hover:text-white'}`
             }
             title={!isOpen ? item.label : undefined}
@@ -159,16 +172,16 @@ const Sidebar: React.FC<SidebarProps> = ({
             {isOpen ? (
               <>
                 <div className="flex items-center gap-3">
-                  <span className={`flex-shrink-0 ${!item.subItems && isItemActive ? 'text-[#00FFA3]' : 'text-zinc-400'}`}>
+                  <span className={`flex-shrink-0 ${item.subItems || isItemActive ? 'text-white' : 'text-zinc-400'}`}>
                     {item.icon}
                   </span>
-                  <span className={`text-[12px] font-bold tracking-wider ${!item.subItems && isItemActive ? 'text-white' : 'text-[#A0A0A0]'}`}>
+                  <span className={`text-[15px] font-bold tracking-wide ${item.subItems || isItemActive ? 'text-white' : 'text-zinc-300'}`}>
                     {item.label}
                   </span>
                 </div>
                 {item.subItems && (
-                  <div className="flex items-center justify-center w-5 h-5 rounded bg-[#1A253A] text-[#00FFA3] shadow-sm shadow-black/20 hover:scale-105 transition-transform">
-                    {isOpenAccordion ? <Minus className="w-3.5 h-3.5 stroke-[3]" /> : <Plus className="w-3.5 h-3.5 stroke-[3]" />}
+                  <div className="flex items-center justify-center w-6 h-6 rounded bg-white/10 text-white hover:bg-white/20 transition-colors">
+                    {isOpenAccordion ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </div>
                 )}
               </>
@@ -179,19 +192,19 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           {/* SubItems Render */}
           {isOpen && item.subItems && isOpenAccordion && (
-            <div className="flex flex-col mt-0.5 mb-1 bg-[#090C12]/50 py-1 border-l-2 border-transparent">
+            <div className="flex flex-col py-3 bg-[#161920] rounded-b-lg">
               {filterItems(item.subItems).map(sub => {
                 const isSubActive = sub.view === activeView;
                 return (
                   <div
                     key={sub.id}
                     onClick={() => sub.view && onViewChange(sub.view)}
-                    className={`flex items-center gap-3 py-2 px-4 pl-12 cursor-pointer transition-all ${
-                      isSubActive ? 'text-[#00FFA3]' : 'text-[#888] hover:bg-white/5 hover:text-zinc-200'
+                    className={`flex items-center gap-3 py-2.5 px-4 cursor-pointer transition-all ${
+                      isSubActive ? 'text-[#00FFA3]' : 'text-zinc-200 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <span className="flex-shrink-0 opacity-80">{sub.icon}</span>
-                    <span className="text-[13px] font-medium tracking-wide truncate">
+                    <span className={`flex-shrink-0 ${isSubActive ? 'text-[#00FFA3]' : 'text-zinc-400'}`}>{sub.icon}</span>
+                    <span className="text-[14px] font-bold tracking-wide truncate">
                       {sub.label}
                     </span>
                   </div>
