@@ -43,6 +43,7 @@ import MyBetsModal from './components/MyBetsModal';
 import KralView from './components/KralView';
 import WorldCupTeaser from './components/WorldCupTeaser';
 import SportsDashboard from './components/SportsDashboard';
+import LiveBetsFeed from './components/LiveBetsFeed';
 
 // Portal Components
 import CouponsView from './components/CouponsView';
@@ -1483,6 +1484,11 @@ const App: React.FC = () => {
                 </div>
 
                 <GameLobbyGrid customGames={casinoLobbyGames} />
+
+                {/* ── LIVE BETS FEED (Son Bahisler) ── */}
+                <div className="w-full max-w-[1200px] mx-auto px-2 sm:px-0">
+                  <LiveBetsFeed />
+                </div>
 
                 {/* ── User Uploaded Image Banner ── */}
                 <div className="my-6 relative overflow-hidden rounded-lg shadow-[0_0_25px_rgba(0,255,163,0.3)] border border-emerald-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
