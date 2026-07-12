@@ -10,48 +10,48 @@ interface GameItem {
 }
 
 const slotGames: GameItem[] = [
-  { id: 's1', title: 'SUGAR RUSH SUPER SCATTER', image: 'https://picsum.photos/seed/slot1/300/400', players: 375 },
-  { id: 's2', title: 'GATES OF OLYMPUS SUPER SCATTER', image: 'https://picsum.photos/seed/slot2/300/400', players: 632 },
-  { id: 's3', title: 'WANTED DEAD OR A WILD', image: 'https://picsum.photos/seed/slot3/300/400', players: 320 },
-  { id: 's4', title: 'SWEET BONANZA 1000', image: 'https://picsum.photos/seed/slot4/300/400', players: 610 },
-  { id: 's5', title: 'SUGAR RUSH 1000', image: 'https://picsum.photos/seed/slot5/300/400', players: 621 },
-  { id: 's6', title: 'LE BANDIT', image: 'https://picsum.photos/seed/slot6/300/400', players: 226 },
-  { id: 's7', title: 'GATES OF OLYMPUS 1000', image: 'https://picsum.photos/seed/slot7/300/400', players: 625 },
-  { id: 's8', title: 'LE FISHERMAN', image: 'https://picsum.photos/seed/slot8/300/400', players: 188 },
+  { id: 's1', title: 'SUGAR RUSH SUPER SCATTER', image: '/games/game_1.jpg', players: 375 },
+  { id: 's2', title: 'GATES OF OLYMPUS SUPER SCATTER', image: '/games/game_2.jpg', players: 632 },
+  { id: 's3', title: 'WANTED DEAD OR A WILD', image: '/games/game_3.jpg', players: 320 },
+  { id: 's4', title: 'SWEET BONANZA 1000', image: '/games/game_4.jpg', players: 610 },
+  { id: 's5', title: 'SUGAR RUSH 1000', image: '/games/game_5.jpg', players: 621 },
+  { id: 's6', title: 'LE BANDIT', image: '/games/game_6.jpg', players: 226 },
+  { id: 's7', title: 'GATES OF OLYMPUS 1000', image: '/games/game_7.jpg', players: 625 },
+  { id: 's8', title: 'LE FISHERMAN', image: '/games/game_8.jpg', players: 188 },
 ];
 
 const sportGames: GameItem[] = [
-  { id: 'sp1', title: 'FOOTBALL', image: 'https://picsum.photos/seed/sp1/300/400' },
-  { id: 'sp2', title: 'BASKETBALL', image: 'https://picsum.photos/seed/sp2/300/400' },
-  { id: 'sp3', title: 'BASEBALL', image: 'https://picsum.photos/seed/sp3/300/400' },
-  { id: 'sp4', title: 'HOCKEY', image: 'https://picsum.photos/seed/sp4/300/400' },
-  { id: 'sp5', title: 'VOLLEYBALL', image: 'https://picsum.photos/seed/sp5/300/400' },
-  { id: 'sp6', title: 'NFL', image: 'https://picsum.photos/seed/sp6/300/400' },
-  { id: 'sp7', title: 'E-SPORTS', image: 'https://picsum.photos/seed/sp7/300/400' },
-  { id: 'sp8', title: 'BADMINTON', image: 'https://picsum.photos/seed/sp8/300/400' },
+  { id: 'sp1', title: 'FOOTBALL', image: '/games/game_9.jpg' },
+  { id: 'sp2', title: 'BASKETBALL', image: '/games/game_10.jpg' },
+  { id: 'sp3', title: 'BASEBALL', image: '/games/game_11.jpg' },
+  { id: 'sp4', title: 'HOCKEY', image: '/games/game_12.jpg' },
+  { id: 'sp5', title: 'VOLLEYBALL', image: '/games/game_13.jpg' },
+  { id: 'sp6', title: 'NFL', image: '/games/game_14.jpg' },
+  { id: 'sp7', title: 'E-SPORTS', image: '/games/game_15.jpg' },
+  { id: 'sp8', title: 'BADMINTON', image: '/games/game_16.jpg' },
 ];
 
 const liveCasinoGames: GameItem[] = [
-  { id: 'c1', title: 'LIVE ROULETTE', image: 'https://picsum.photos/seed/casino1/300/400', players: 1205 },
-  { id: 'c2', title: 'GOLD BLACKJACK', image: 'https://picsum.photos/seed/casino2/300/400', players: 850 },
-  { id: 'c3', title: 'SWEET BONANZA CANDYLAND', image: 'https://picsum.photos/seed/casino3/300/400', players: 2341 },
-  { id: 'c4', title: 'BACCARAT', image: 'https://picsum.photos/seed/casino6/300/400', players: 540 },
-  { id: 'c5', title: 'CRAZY TIME', image: 'https://picsum.photos/seed/casino4/300/400', players: 4100 },
-  { id: 'c6', title: 'MONOPOLY LIVE', image: 'https://picsum.photos/seed/casino5/300/400', players: 1800 },
-  { id: 'c7', title: 'MEGA WHEEL', image: 'https://picsum.photos/seed/casino7/300/400', players: 900 },
-  { id: 'c8', title: 'CASINO HOLDEM', image: 'https://picsum.photos/seed/casino8/300/400', players: 300 },
+  { id: 'c1', title: 'LIVE ROULETTE', image: '/games/game_41.jpg', players: 1205 },
+  { id: 'c2', title: 'GOLD BLACKJACK', image: '/games/game_42.jpg', players: 850 },
+  { id: 'c3', title: 'SWEET BONANZA CANDYLAND', image: '/games/game_43.jpg', players: 2341 },
+  { id: 'c4', title: 'BACCARAT', image: '/games/game_44.jpg', players: 540 },
+  { id: 'c5', title: 'CRAZY TIME', image: '/games/game_45.jpg', players: 4100 },
+  { id: 'c6', title: 'MONOPOLY LIVE', image: '/games/game_46.jpg', players: 1800 },
+  { id: 'c7', title: 'MEGA WHEEL', image: '/games/game_47.jpg', players: 900 },
+  { id: 'c8', title: 'CASINO HOLDEM', image: '/games/game_48.jpg', players: 300 },
 ];
 
 const bigWins = [
-  { id: 'w1', user: 'Wynn3658', amount: '6,4 Mn TRY', game: 'https://picsum.photos/seed/w1/200/300' },
-  { id: 'w2', user: 'Gizli', amount: '2 Mn TRY', game: 'https://picsum.photos/seed/w2/200/300' },
-  { id: 'w3', user: 'Gizli', amount: '48,1 B USDT', game: 'https://picsum.photos/seed/w3/200/300' },
-  { id: 'w4', user: 'Gizli', amount: '1,2 BTC', game: 'https://picsum.photos/seed/w4/200/300' },
-  { id: 'w5', user: 'Gizli', amount: '48,7 B USDT', game: 'https://picsum.photos/seed/w5/200/300' },
-  { id: 'w6', user: 'Gizli', amount: '78,6 B USDT', game: 'https://picsum.photos/seed/w6/200/300' },
-  { id: 'w7', user: 'Gizli', amount: '3,2 BTC', game: 'https://picsum.photos/seed/w7/200/300' },
-  { id: 'w8', user: 'Finley1652', amount: '322 B USDT', game: 'https://picsum.photos/seed/w8/200/300' },
-  { id: 'w9', user: 'Rowan2', amount: '56,7 B USDT', game: 'https://picsum.photos/seed/w9/200/300' },
+  { id: 'w1', user: 'Wynn3658', amount: '6,4 Mn TRY', game: '/games/game_25.jpg' },
+  { id: 'w2', user: 'Gizli', amount: '2 Mn TRY', game: '/games/game_26.jpg' },
+  { id: 'w3', user: 'Gizli', amount: '48,1 B USDT', game: '/games/game_27.jpg' },
+  { id: 'w4', user: 'Gizli', amount: '1,2 BTC', game: '/games/game_28.jpg' },
+  { id: 'w5', user: 'Gizli', amount: '48,7 B USDT', game: '/games/game_29.jpg' },
+  { id: 'w6', user: 'Gizli', amount: '78,6 B USDT', game: '/games/game_30.jpg' },
+  { id: 'w7', user: 'Gizli', amount: '3,2 BTC', game: '/games/game_31.jpg' },
+  { id: 'w8', user: 'Finley1652', amount: '322 B USDT', game: '/games/game_32.jpg' },
+  { id: 'w9', user: 'Rowan2', amount: '56,7 B USDT', game: '/games/game_33.jpg' },
 ];
 
 interface BlockProps {
@@ -225,15 +225,6 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         showPlayers={false}
       />
       
-      {/* 3. Canlı Casino */}
-      <GameBlock 
-        title="Canlı Casino" 
-        icon={<span className="w-4 h-4 rounded-full bg-[#00E676] animate-pulse inline-block" />} 
-        games={live} 
-        showPlayers={true}
-      />
-
-
     </div>
   );
 };

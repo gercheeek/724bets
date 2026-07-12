@@ -54,8 +54,8 @@ import CouponsView from './components/CouponsView';
 
 import MobileQuickLinks from './components/MobileQuickLinks';
 import Slider2 from './components/Slider2';
-import MatchHighlights from './components/MatchHighlights';
 import PopularBets from './components/PopularBets';
+import ProfileDashboard from './components/ProfileDashboard';
 import GameLobbyTeaser from './components/GameLobbyTeaser';
 import TV724View from './components/TV724View';
 import LiveMatches from './components/LiveMatches';
@@ -152,7 +152,7 @@ const App: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral'>('home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2'>('home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -195,6 +195,7 @@ const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -433,6 +434,17 @@ const App: React.FC = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
+
+  // Automatically toggle sidebar when login state changes (for desktop)
+  useEffect(() => {
+    if (window.innerWidth >= 1280) {
+      if (siteUser) {
+        setIsSidebarOpen(false); // Close left menu when logged in
+      } else {
+        setIsSidebarOpen(true); // Open left menu when logged out
+      }
+    }
+  }, [siteUser]);
   const [showDepositModal, setShowDepositModal] = useState(false);
 
   useEffect(() => {
@@ -637,7 +649,7 @@ const App: React.FC = () => {
     return stored ? JSON.parse(stored) : demoCoupons;
   });
   const [showSearch, setShowSearch] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(window.innerWidth >= 1280);
   const [globalTvPip, setGlobalTvPip] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
@@ -752,6 +764,16 @@ const App: React.FC = () => {
           const parsed = JSON.parse(savedCoupons);
           setCoupons(parsed.length > 0 ? parsed : demoCoupons);
         }
+        
+        // Check if old picsum images are in localStorage, if so, ignore and clear them to force defaults
+        if (savedCasinoLobby) {
+          if (savedCasinoLobby.includes('picsum.photos')) {
+            localStorage.removeItem('site_casino_lobby_games');
+          } else {
+            setCasinoLobbyGames(JSON.parse(savedCasinoLobby));
+          }
+        }
+
         if (savedAnalyses) {
           const parsed = JSON.parse(savedAnalyses);
           const cleaned = parsed.filter((a: any) => 
@@ -764,7 +786,6 @@ const App: React.FC = () => {
           setAnalyses(cleaned.length > 0 ? cleaned : demoAnalyses);
         }
         if (savedBj) setBjConfig(JSON.parse(savedBj));
-        if (savedCasinoLobby) setCasinoLobbyGames(JSON.parse(savedCasinoLobby));
         if (savedColor && savedColor.startsWith('#')) setThemeColor(savedColor);
         if (savedRole) setUserRole(savedRole as string);
         if (savedMember) {
@@ -881,8 +902,11 @@ const App: React.FC = () => {
           localStorage.setItem('site_bots_config', JSON.stringify(globalBotsConfig));
         }
         if (globalCasinoLobby && Array.isArray(globalCasinoLobby)) {
-          setCasinoLobbyGames(globalCasinoLobby);
-          localStorage.setItem('site_casino_lobby_games', JSON.stringify(globalCasinoLobby));
+          const hasOldPicsum = globalCasinoLobby.some(g => g.image && g.image.includes('picsum.photos'));
+          if (!hasOldPicsum) {
+            setCasinoLobbyGames(globalCasinoLobby);
+            localStorage.setItem('site_casino_lobby_games', JSON.stringify(globalCasinoLobby));
+          }
         }
 
       } catch (err) {
@@ -1572,17 +1596,16 @@ const App: React.FC = () => {
         <div className={`orchestrator-content ${isContentReady ? 'content-ready' : ''}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
 
           {view === 'home' && (
-            <div className="animate-fade-in" style={{ height: '100%' }}>
-              <GuestLanding
-                siteUser={siteUser}
-                onSearchClick={() => setShowSearch(true)}
-                onViewChange={(v) => setView(v as any)}
-                onMemberLoginClick={() => setAuthModalMode('member')}
-                onMemberRegisterClick={() => setAuthModalMode('register')}
-                customGames={casinoLobbyGames}
-              />
-              <MobileQuickLinks onSearchClick={() => setShowSearch(true)} onViewChange={(v) => setView(v as any)} />
-            </div>
+          <div className="animate-fade-in w-full h-full min-h-screen">
+            <GuestLanding
+              siteUser={siteUser}
+              onSearchClick={() => setShowSearch(true)}
+              onViewChange={(v) => setView(v as any)}
+              onMemberLoginClick={() => setAuthModalMode('member')}
+              onMemberRegisterClick={() => setAuthModalMode('register')}
+              customGames={casinoLobbyGames}
+            />
+          </div>
           )}
 
         {view === 'brands' && (
@@ -2055,12 +2078,8 @@ const App: React.FC = () => {
         )}
 
         {view === 'profile' && siteUser && (
-          <div className="animate-fade-in" style={{ padding: '0', minHeight: '100vh' }}>
-            <UserDashboard 
-              siteUser={siteUser} 
-              onUpdateUser={setSiteUser} 
-              onNavigate={handleViewChange} 
-            />
+          <div className="animate-fade-in w-full max-w-6xl mx-auto px-4 py-8" style={{ minHeight: '100vh' }}>
+            <ProfileDashboard siteUser={siteUser} setSiteUser={setSiteUser} />
           </div>
         )}
 
@@ -2117,6 +2136,8 @@ const App: React.FC = () => {
             </div>
           );
         })()}
+
+
         {view === '724tv' && (
           <TV724View
             config={tvConfig}

@@ -4,7 +4,7 @@ import {
   HelpCircle, ShieldCheck, Globe, PlayCircle, List,
   Activity, Target, Circle, Dribbble, Monitor, 
   Crosshair, Tv, Gift, Shield, Ticket, Users, MessageSquare, Send, ChevronLeft,
-  BarChart3, Crown, Dices
+  BarChart3, Crown, Dices, Flame, ChevronUp, ChevronDown
 } from 'lucide-react';
 import { NavVisibility } from './Header';
 
@@ -44,8 +44,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [isSporOpen, setIsSporOpen] = useState(false);
   const [isSponsorlukOpen, setIsSponsorlukOpen] = useState(false);
 
-  const topGrid = [
-    { id: 'slotra', label: 'GERÇEK', icon: <Target className="w-5 h-5 mb-1" />, view: 'slotra' },
+  const topGrid: MenuItem[] = [
+    { id: 'canli', label: 'CANLI', icon: <Flame className="w-5 h-5 mb-1" />, view: 'sports' },
+    { id: 'casino', label: 'CASINO', icon: <Target className="w-5 h-5 mb-1" />, view: 'blackjack' },
   ];
 
   const menuConfig: MenuItem[] = [
@@ -163,19 +164,19 @@ const Sidebar: React.FC<SidebarProps> = ({
                     ? `bg-[#1A1D24] text-white rounded-t-lg border-b border-white/5` 
                     : isItemActive 
                       ? 'bg-[#1A253A] text-white border-l-2 border-[#00FFA3]' 
-                      : 'hover:bg-white/5 text-zinc-300 border-l-2 border-transparent'
+                      : 'hover:bg-[#00FFA3]/10 hover:text-white text-white/70 border-l-2 border-transparent'
                 }`
-              : `flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto mb-1 cursor-pointer ${!item.subItems && isItemActive ? 'bg-[#00FFA3] text-black' : 'text-zinc-400 hover:bg-[#1A253A] hover:text-white'}`
+              : `flex items-center justify-center w-12 h-12 rounded-xl transition-all mx-auto mb-1 cursor-pointer ${!item.subItems && isItemActive ? 'bg-[#00FFA3] text-black' : 'text-white/70 hover:bg-[#1A253A] hover:text-white'}`
             }
             title={!isOpen ? item.label : undefined}
           >
             {isOpen ? (
               <>
                 <div className="flex items-center gap-3">
-                  <span className={`flex-shrink-0 ${item.subItems || isItemActive ? 'text-white' : 'text-zinc-400'}`}>
+                  <span className={`flex-shrink-0 ${item.subItems || isItemActive ? 'text-white' : 'text-white/70'}`}>
                     {item.icon}
                   </span>
-                  <span className={`text-[15px] font-bold tracking-wide ${item.subItems || isItemActive ? 'text-white' : 'text-zinc-300'}`}>
+                  <span className={`text-[15px] font-bold tracking-wide ${item.subItems || isItemActive ? 'text-white' : 'text-white/70'}`}>
                     {item.label}
                   </span>
                 </div>
@@ -200,10 +201,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                     key={sub.id}
                     onClick={() => sub.view && onViewChange(sub.view)}
                     className={`flex items-center gap-3 py-2.5 px-4 cursor-pointer transition-all ${
-                      isSubActive ? 'text-[#00FFA3]' : 'text-zinc-200 hover:text-white hover:bg-white/5'
+                      isSubActive ? 'text-[#00FFA3]' : 'text-zinc-200 hover:text-white hover:bg-[#00FFA3]/10 hover:text-white'
                     }`}
                   >
-                    <span className={`flex-shrink-0 ${isSubActive ? 'text-[#00FFA3]' : 'text-zinc-400'}`}>{sub.icon}</span>
+                    <span className={`flex-shrink-0 ${isSubActive ? 'text-[#00FFA3]' : 'text-white/70'}`}>{sub.icon}</span>
                     <span className="text-[14px] font-bold tracking-wide truncate">
                       {sub.label}
                     </span>
@@ -253,7 +254,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="absolute top-[85px] right-0 z-50 overflow-visible pointer-events-none">
            <button 
              onClick={onToggle} 
-             className="w-7 h-10 bg-[#161C28] hover:bg-[#1C2333] border border-l-0 border-[#2A3441]/40 flex items-center justify-center text-zinc-400 hover:text-white rounded-r-md cursor-pointer pointer-events-auto transition-all shadow-md transform translate-x-full"
+             className="w-7 h-10 bg-[#0F1219] hover:bg-[#1C2028] border border-l-0 border-white/5 flex items-center justify-center text-white/70 hover:text-white rounded-r-md cursor-pointer pointer-events-auto transition-all shadow-md transform translate-x-full"
            >
              {isOpen ? <ChevronLeft className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
            </button>
@@ -262,13 +263,21 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="gamdom-sidebar-inner pb-20">
           
           {/* Spacer to align sidebar content below Header */}
-          <div className="h-[60px] w-full shrink-0 border-b border-white/5 bg-[#0F1219]"></div>
+          <div className="h-[70px] w-full shrink-0 flex items-center px-4 pt-2">
+             {isOpen && (
+               <div className="flex items-center gap-1 ml-2 select-none">
+                 <span className="text-white font-black text-2xl tracking-tighter" style={{ fontFamily: 'Inter, sans-serif' }}>
+                   724<span className="text-[#00FFA3]">BETS</span>
+                 </span>
+               </div>
+             )}
+          </div>
 
           
           {/* Top 2x2 Grid */}
           {activeView !== 'kral' && (
             isOpen ? (
-              <div className="grid grid-cols-2 gap-2 p-3 border-b border-white/5 bg-[#0F1219]">
+              <div className="grid grid-cols-2 gap-2 px-3 pb-3">
                 {topGrid.map(item => {
                   const isActive = activeView === item.view;
                   return (
@@ -284,10 +293,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                           onViewChange(item.view);
                         }
                       }}
-                      className={`flex flex-col items-center justify-center py-3 rounded-lg transition-all ${
+                      className={`flex flex-col items-center justify-center py-3 rounded-xl transition-all ${
                         isActive 
                           ? 'bg-[#00FFA3] text-black font-black' 
-                          : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white font-bold'
+                          : 'bg-[#131C28] text-white/70 hover:bg-[#1A253A] hover:text-white font-bold'
                       }`}
                     >
                       {item.icon}
@@ -297,7 +306,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 })}
               </div>
             ) : (
-              <div className="flex flex-col gap-2 p-2 pb-1 border-b border-white/5 bg-[#0F1219]">
+              <div className="flex flex-col gap-2 p-2 pb-3">
                 {topGrid.map(item => {
                   const isActive = activeView === item.view;
                   return (
@@ -313,10 +322,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                           onViewChange(item.view);
                         }
                       }}
-                      className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto ${
+                      className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all mx-auto ${
                         isActive 
                           ? 'bg-[#00FFA3] text-black shadow-[0_0_15px_rgba(0,255,163,0.3)]' 
-                          : 'bg-[#131C28] text-zinc-400 hover:bg-[#1A253A] hover:text-white'
+                          : 'bg-[#131C28] text-white/70 hover:bg-[#1A253A] hover:text-white'
                       }`}
                     >
                       {item.icon}
@@ -329,27 +338,27 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Unified 5 Menu Blocks (Casino, Spor, Kodu Kullan etc, Sponsorluk, Support) */}
           {activeView !== 'kral' && (
-            <div className={`flex flex-col gap-3 px-3 py-2 ${!isOpen ? 'items-center' : ''}`}>
+            <div className={`flex flex-col gap-1 px-3 py-2 ${!isOpen ? 'items-center' : ''}`}>
               
               {/* Block 1: Casino Accordion */}
-              <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+              <div className={`flex flex-col ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div 
                   onClick={() => setIsCasinoOpen(!isCasinoOpen)}
-                  className={`flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}
+                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
                 >
                   <div className="flex items-center gap-3">
-                    <Dices className="w-5 h-5 text-zinc-300 shrink-0" />
+                    <Dices className="w-5 h-5 text-white/70 shrink-0" />
                     {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Casino</span>}
                   </div>
-                  {isOpen && <ChevronLeft className={`w-4 h-4 text-zinc-400 transition-transform ${isCasinoOpen ? '-rotate-90' : ''}`} />}
+                  {isOpen && <ChevronLeft className={`w-4 h-4 text-white/70 transition-transform ${isCasinoOpen ? '-rotate-90' : ''}`} />}
                 </div>
                 
                 {isOpen && isCasinoOpen && (
-                  <div className="flex flex-col border-t border-white/5 bg-black/20 py-2">
-                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+                  <div className="flex flex-col py-1">
+                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar</span>
                     </div>
-                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">Canlı Casino</span>
                     </div>
                   </div>
@@ -357,50 +366,54 @@ const Sidebar: React.FC<SidebarProps> = ({
               </div>
 
               {/* Block 2: Spor Link */}
-              <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div onClick={() => onViewChange('sports')} className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
-                  <Activity className="w-5 h-5 text-zinc-300 shrink-0" />
+              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+                <div onClick={() => onViewChange('sports')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Activity className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}
                 </div>
               </div>
 
+              <div className="w-full h-px bg-white/5 my-2"></div>
+
               {/* Block 3: Kodu Kullan etc. */}
-              <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div onClick={() => onViewChange('promo')} className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
-                  <Ticket className="w-5 h-5 text-zinc-300 shrink-0" />
+              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+                <div onClick={() => onViewChange('promo')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Ticket className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Kodu Kullan</span>}
                 </div>
-                <div onClick={() => onViewChange('referral')} className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
-                  <Users className="w-5 h-5 text-zinc-300 shrink-0" />
+                <div onClick={() => onViewChange('referral')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Users className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Arkadaşını Davet Et</span>}
                 </div>
-                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
-                  <Send className="w-5 h-5 text-zinc-300 shrink-0" />
+                <div className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Send className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Telegram</span>}
                 </div>
-                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
-                  <div className="w-5 h-5 text-zinc-300 shrink-0 flex items-center justify-center border border-zinc-300 rounded-sm">
+                <div className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <div className="w-5 h-5 text-white/70 shrink-0 flex items-center justify-center border border-zinc-300 rounded-sm">
                     <span className="text-[10px] font-black leading-none">↓</span>
                   </div>
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Uygulamayı İndir</span>}
                 </div>
               </div>
 
+              <div className="w-full h-px bg-white/5 my-2"></div>
+
               {/* Block 4: Sponsorluk Accordion */}
-              <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div 
                   onClick={() => setIsSponsorlukOpen(!isSponsorlukOpen)}
-                  className={`flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}
+                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
                 >
                   <div className="flex items-center gap-3">
-                    <Crown className="w-5 h-5 text-zinc-300 shrink-0" />
+                    <Crown className="w-5 h-5 text-white/70 shrink-0" />
                     {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Sponsorluk</span>}
                   </div>
-                  {isOpen && <ChevronLeft className={`w-4 h-4 text-zinc-400 transition-transform ${isSponsorlukOpen ? '-rotate-90' : ''}`} />}
+                  {isOpen && <ChevronLeft className={`w-4 h-4 text-white/70 transition-transform ${isSponsorlukOpen ? '-rotate-90' : ''}`} />}
                 </div>
                 
                 {isOpen && isSponsorlukOpen && (
-                  <div className="flex flex-col border-t border-white/5 bg-black/20 py-2">
+                  <div className="flex flex-col py-1">
                     <div className="flex items-center gap-3 py-2.5 px-4 pl-12 text-[#888] text-[13px] font-medium">
                       <span>Sponsorluk Anlaşmaları Yakında...</span>
                     </div>
@@ -408,21 +421,23 @@ const Sidebar: React.FC<SidebarProps> = ({
                 )}
               </div>
 
+              <div className="w-full h-px bg-white/5 my-2"></div>
+
               {/* Block 5: Canlı Destek & Türkçe */}
-              <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div 
                   onClick={() => window.dispatchEvent(new Event('openSupportChat'))}
-                  className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}
+                  className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
                 >
-                  <MessageSquare className="w-5 h-5 text-zinc-300 shrink-0 fill-current" />
+                  <MessageSquare className="w-5 h-5 text-white/70 shrink-0 fill-current" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Canlı Destek</span>}
                 </div>
-                <div className={`flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                <div className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <div className="flex items-center gap-3">
-                    <Globe className="w-5 h-5 text-zinc-300 shrink-0" />
+                    <Globe className="w-5 h-5 text-white/70 shrink-0" />
                     {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Türkçe</span>}
                   </div>
-                  {isOpen && <ChevronLeft className="w-4 h-4 text-zinc-400 -rotate-90" />}
+                  {isOpen && <ChevronLeft className="w-4 h-4 text-white/70 -rotate-90" />}
                 </div>
               </div>
 

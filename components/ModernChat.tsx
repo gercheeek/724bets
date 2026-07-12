@@ -524,9 +524,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#141517] shadow-2xl font-sans text-left">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0F1219] shadow-2xl font-sans text-left">
             {/* Header */}
-            <div className="bg-[#1C1F26] px-4 py-3 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5">
+            <div className="bg-[#0F1219] px-4 py-3 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5">
                 <div className="flex items-center gap-3">
                     <div className="flex items-center gap-2 bg-[#252A33] px-3 py-1.5 rounded text-xs font-bold hover:bg-[#2C323D] cursor-pointer transition-colors">
                         <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-3 rounded-sm object-cover" />
@@ -577,10 +577,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             )}
             {/* Sticky Widgets Area (Event, Poll) */}
             {((eventWidget && eventWidget.show) || (activePoll && activePoll.isActive)) && (
-                <div className="bg-[#111317] p-3 space-y-3 flex-shrink-0">
+                <div className="bg-[#0F1219] p-3 space-y-3 flex-shrink-0">
                     {/* Event Card */}
                     {eventWidget && eventWidget.show && (
-                        <div className="bg-[#1A1D24] rounded-lg p-3 flex flex-col gap-2 transition-all">
+                        <div className="bg-[#131C28] rounded-xl border-l-4 border-[#00FFA3] p-3 flex flex-col gap-2 transition-all">
                             <div 
                                 onClick={() => setIsEventCollapsed(!isEventCollapsed)}
                                 className="flex items-center justify-between text-xs font-bold text-white cursor-pointer select-none"
@@ -623,7 +623,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
                     {/* Poll Card */}
                     {activePoll && activePoll.isActive && (
-                         <div className="bg-[#1A1D24] rounded-lg p-3 flex flex-col gap-2 transition-all">
+                         <div className="bg-[#131C28] rounded-xl border-l-4 border-[#00FFA3] p-3 flex flex-col gap-2 transition-all">
                              <div 
                                  onClick={() => setIsPollCollapsed(!isPollCollapsed)}
                                  className="flex items-center justify-between text-xs font-bold text-sky-400 cursor-pointer select-none"
@@ -666,7 +666,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                                  <button 
                                                      key={idx}
                                                      onClick={() => handleVote(idx)}
-                                                     className="w-full bg-[#22262F] hover:bg-[#00FFA3] hover:text-black text-slate-300 font-bold text-[9px] py-2 px-3 rounded-lg text-left transition-all border-none"
+                                                     className="w-full bg-[#0F1219] hover:bg-[#00FFA3]/10 hover:text-white text-slate-300 font-bold text-[9px] py-2 px-3 rounded-xl text-left transition-all border-none"
                                                  >
                                                      {opt}
                                                  </button>
@@ -703,9 +703,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className={`p-3 flex flex-row gap-3 relative group text-left cursor-default border-b border-white/5 hover:bg-white/[0.02] transition-colors ${
+                            className={`p-3 flex flex-row gap-3 relative group text-left cursor-default border-b border-white/5 hover:bg-[#00FFA3]/5 transition-colors ${
                                 msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19]/20' : 
-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-gradient-to-r from-[#092b19]/20 to-transparent' : 
+                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-transparent' : 
                                 'bg-transparent'
                             }`}
                             onContextMenu={(e) => {
@@ -812,7 +812,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             </div>
 
             {/* Input Footer Area */}
-            <div className="p-3 bg-[#141517] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5">
+            <div className="p-3 bg-[#0F1219] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5">
                 {/* Message Input */}
                 {!siteUser ? (
                     <div className="p-2 flex flex-col items-center justify-center gap-2">

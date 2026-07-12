@@ -304,26 +304,46 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       {/* ══════ SINGLE TIER: Logo + Categories + Controls ══════ */}
-      <div className="header-topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F1219', borderBottom: '1px solid rgba(255, 255, 255, 0.03)', padding: '6px 24px', height: '60px' }}>
+      <div className="header-topbar relative" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: '#0F1219', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', padding: '6px 20px', height: '64px' }}>
         
-        {/* Left: Logo & Navigation */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+        {/* Left: Hamburger & Casino/Spor Tabs */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 10 }}>
+          <button onClick={onToggleSidebar} className="text-zinc-400 hover:text-white transition-colors p-2">
+            <Menu className="w-5 h-5" />
+          </button>
+          
+          <div className="hidden sm:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner">
+            <button 
+              onClick={() => onViewChange?.('home')}
+              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'home' || activeView === 'blackjack' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+            >
+              Casino
+            </button>
+            <button 
+              onClick={() => onViewChange?.('sports')}
+              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'sports' || activeView === 'sports2' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+            >
+              Spor
+            </button>
+          </div>
+        </div>
 
+        {/* Center: Absolute Logo */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ zIndex: 10 }}>
           <div
             id="tour-logo"
             className="logo-text-724 group"
             style={{ 
               alignItems: 'center', 
               cursor: 'pointer',
-              position: 'relative',
               display: 'flex'
             }}
             onClick={() => onViewChange?.('home')}
           >
-            <Club className="w-7 h-7 text-[#00FFA3] mr-2 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_10px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
+            <Club className="w-6 h-6 text-[#00FFA3] mr-1 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_10px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
             <span className="logo-text-intro">
               <span style={{
-                fontSize: '22px',
+                fontSize: '20px',
                 fontFamily: "'Outfit', sans-serif",
                 fontWeight: 900,
                 letterSpacing: '-1.5px',
@@ -333,149 +353,86 @@ const Header: React.FC<HeaderProps> = ({
                 transition: 'all 0.3s ease'
               }} className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#00FFA3]">
                 724bets
-                <span style={{
-                  background: 'rgba(0, 255, 163, 0.08)',
-                  color: '#00FFA3',
-                  border: '1px solid rgba(0, 255, 163, 0.3)',
-                  fontSize: '9px',
-                  fontWeight: 800,
-                  letterSpacing: '0.5px',
-                  padding: '2px 5px',
-                  borderRadius: '12px',
-                  marginLeft: '6px',
-                  transform: 'translateY(-6px)',
-                  fontFamily: "'Inter', sans-serif",
-                  transition: 'all 0.3s ease'
-                }} className="group-hover:border-[#00FFA3] group-hover:shadow-[0_0_12px_rgba(0,255,163,0.3)]">BETA</span>
               </span>
             </span>
           </div>
-
-          {/* Gamdom Style Main Menu (Desktop) - Removed */}
         </div>
 
         {/* Right: Controls */}
-        <div id="tour-user-panel" className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-
+        <div id="tour-user-panel" className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 10 }}>
 
           {siteUser ? (
             <>
-              <div className="flex items-center gap-2">
-                {/* 21.com Style Balance Dropdown */}
-                <div className="relative" ref={walletDropdownRef}>
+              <div className="flex items-center gap-3">
+                {/* Balance Dropdown */}
+                <div className="relative hidden md:block" ref={walletDropdownRef}>
                   <div 
-                    className="flex items-center bg-[#1C2028] rounded-md pl-1 pr-3 py-1 cursor-pointer hover:bg-[#252A34] transition-colors border border-white/5"
+                    className="flex items-center bg-[#151921] rounded-xl p-1 cursor-pointer hover:bg-[#1C2028] transition-colors border border-white/5"
                     onClick={() => setWalletDropdownOpen(prev => !prev)}
                   >
-                    <div className="w-8 h-8 rounded bg-[#ef3434] text-white flex items-center justify-center mr-3 font-bold text-lg">
-                      ₺
+                    <div className="w-8 h-8 rounded-lg bg-[#00FFA3] flex items-center justify-center mr-3">
+                      <span className="text-black font-black text-sm">$</span>
                     </div>
-                    <span className="text-white font-black text-[15px] tracking-tight mr-2">₺{siteUser.balance?.toFixed(2) || '0.00'}</span>
-                    <ChevronUp className={`w-4 h-4 text-[#00FFA3] transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
+                    <span className="text-white font-bold text-[15px] tracking-tight mr-4">{siteUser.balance?.toFixed(2) || '0.00'}</span>
+                    <ChevronDown className={`w-4 h-4 text-zinc-500 mr-2 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
 
                   {walletDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-64 rounded-xl py-2 z-50 bg-[#161a22] border border-[#2A2E38] shadow-2xl">
+                    <div className="absolute right-0 top-full mt-2 w-64 rounded-xl py-2 z-50 bg-[#1A1D24] border border-white/5 shadow-2xl">
                       <div className="flex flex-col">
-                        {[
-                          { symbol: '₺', code: 'TRY', name: 'Turkish Lira', color: 'bg-[#ef3434]' },
-                          { symbol: '₿', code: 'BTC', name: 'Bitcoin', color: 'bg-[#f7931a]' },
-                          { symbol: '♦', code: 'ETH', name: 'Ethereum', color: 'bg-[#627eea]' },
-                          { symbol: 'Ł', code: 'LTC', name: 'Litecoin', color: 'bg-[#d3d3d3]' },
-                          { symbol: 'T', code: 'TRX', name: 'Tron', color: 'bg-[#ef3434]' },
-                          { symbol: '✕', code: 'XRP', name: 'Ripple', color: 'bg-[#23292f]' },
-                          { symbol: 'Ð', code: 'DOGE', name: 'Dogecoin', color: 'bg-[#f8b245]' },
-                        ].map(crypto => (
-                          <div key={crypto.code} className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors">
-                            <div className="flex items-center gap-3">
-                              <div className={`w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold ${crypto.color}`}>
-                                {crypto.symbol}
-                              </div>
-                              <span className="text-zinc-300 font-bold text-sm">{crypto.code}</span>
-                            </div>
-                            <span className="text-zinc-400 font-bold text-sm">₺0.00</span>
-                          </div>
-                        ))}
-
                         <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors bg-[#1C2028]/50">
                           <div className="flex items-center gap-3">
-                            <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#14f195]">
-                              ≡
-                            </div>
-                            <span className="text-white font-bold text-sm">SOL</span>
+                            <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#ef3434]">₺</div>
+                            <span className="text-white font-bold text-sm">TRY</span>
                           </div>
-                          <span className="text-white font-bold text-sm">0.00000000</span>
+                          <span className="text-white font-bold text-sm">{siteUser.balance?.toFixed(2)}</span>
                         </div>
-
-                        <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors border-b border-[#2A2E38]">
-                          <div className="flex items-center gap-3">
-                            <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#f3ba2f]">
-                              ⬡
-                            </div>
-                            <span className="text-zinc-300 font-bold text-sm">BNB</span>
-                          </div>
-                          <span className="text-zinc-400 font-bold text-sm">₺0.00</span>
-                        </div>
-
-                        <button className="w-full text-center py-4 text-zinc-400 hover:text-white font-bold text-sm transition-colors">
-                          Wallet settings
+                        <button className="w-full text-center py-4 text-zinc-400 hover:text-white font-bold text-sm transition-colors border-t border-white/5 mt-2">
+                          Cüzdan Ayarları
                         </button>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* 21.com Style Deposit Button (Cüzdan) */}
+                {/* Deposit Button (Cüzdan) */}
                 <button
                   onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                  className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-6 py-2 rounded-md text-[15px] transition-colors"
+                  className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-black px-6 py-2 rounded-xl text-[15px] transition-colors shadow-[0_0_15px_rgba(0,255,163,0.2)] hidden md:block"
                 >
                   Cüzdan
                 </button>
 
-                {/* Chat Toggle Button */}
+                {/* Search Icon */}
                 <button
-                  onClick={onSupportClick}
-                  className="bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 flex items-center justify-center relative"
-                  title="Canlı Sohbet"
+                  onClick={onSearchClick}
+                  className="text-zinc-400 hover:text-white transition-colors p-2 hidden sm:flex items-center justify-center"
                 >
-                  <MessageSquare className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
-                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse"></span>
+                  <Search className="w-5 h-5" />
                 </button>
 
-                {/* 21.com Style Profile Button and Dropdown Container */}
+                {/* User Profile Icon */}
                 <div className="relative" ref={dropdownRef}>
-                  {/* The Trigger Button */}
-                  <div 
+                  <button 
                     onClick={() => setDropdownOpen(prev => !prev)}
-                    className="flex items-center gap-3 bg-[#1C2028] rounded-md p-1 pr-3 cursor-pointer border border-white/5 hover:bg-[#252A34] transition-colors"
+                    className="flex items-center bg-[#161822] rounded-xl p-1 hover:bg-[#1C2028] transition-colors border border-white/5 shadow-inner"
                   >
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ecem" alt="Avatar" className="w-8 h-8 rounded" />
-                    <div className="flex flex-col justify-center">
-                      <span className="text-white font-bold text-[13px] leading-tight">{siteUser.username}</span>
+                    <img 
+                      src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
+                      className="w-10 h-10 rounded-lg object-cover bg-[#1F232B]" 
+                      alt="avatar" 
+                    />
+                    <div className="flex flex-col items-start ml-3 mr-4">
+                      <span className="text-white font-bold text-sm">{siteUser.username || 'Üye'}</span>
                       <div className="flex items-center gap-1 mt-0.5">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-[#D97706]">
-                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                        </svg>
-                        <span className="text-[#D97706] text-[10px] font-black uppercase tracking-wider leading-none">BRONZ 2</span>
+                        <svg className="w-3 h-3 text-[#FF9500]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                        <span className="text-[#FF9500] font-black text-[10px] tracking-wider uppercase">{(siteUser as any).loyaltyLevel || 'BRONZ 2'}</span>
                       </div>
                     </div>
-                    <div className="flex flex-col ml-1 opacity-50 justify-center gap-0.5">
-                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white">
-                        <path d="M18 15l-6-6-6 6"/>
-                      </svg>
-                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white">
-                        <path d="M6 9l6 6 6-6"/>
-                      </svg>
+                    <div className="flex flex-col text-zinc-500 ml-1 mr-2 opacity-50">
+                      <ChevronDown className="w-3 h-3 rotate-180 -mb-1" />
+                      <ChevronDown className="w-3 h-3" />
                     </div>
-                  </div>
-                  
-                  {/* Mobile avatar fallback */}
-                  <button
-                    onClick={() => setDropdownOpen(prev => !prev)}
-                    className="sm:hidden header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5 absolute inset-0 opacity-0 z-10"
-                  >
-                    <span className="sr-only">Open Profile</span>
                   </button>
 
                   {/* Dropdown Menu */}
@@ -516,6 +473,22 @@ const Header: React.FC<HeaderProps> = ({
                     </div>
                   )}
                 </div>
+
+                {/* Notifications Icon */}
+                <button className="text-zinc-400 hover:text-white transition-colors p-2 hidden sm:flex items-center justify-center relative">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                  <span className="absolute top-2 right-2 w-2 h-2 bg-[#ef3434] rounded-full"></span>
+                </button>
+
+                {/* Chat Toggle Button */}
+                <button
+                  onClick={onSupportClick}
+                  className="text-zinc-400 hover:text-white transition-colors p-2 flex items-center justify-center relative bg-[#0F1219] hover:bg-[#1C2028] border border-white/5 rounded-md shadow-inner"
+                  title="Canlı Sohbet"
+                >
+                  <MessageSquare className="w-5 h-5" />
+                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse"></span>
+                </button>
               </div>
             </>
           ) : (

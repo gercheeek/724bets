@@ -228,8 +228,8 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 6px 24px;
-  background: #0D1320;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: #0F1219;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   transition: background-color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 }
 
@@ -1123,13 +1123,13 @@ html, body {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 255, 163, 0.12);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 255, 163, 0.25);
+  background: rgba(255, 255, 255, 0.2);
 }
-* { scrollbar-width: thin; scrollbar-color: rgba(0, 255, 163, 0.12) transparent; }
+* { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.1) transparent; }
 
 /* ===== Premium Card ===== */
 .premium-card {

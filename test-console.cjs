@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer');
   page.on('requestfailed', request => console.log('REQUEST FAILED:', request.url(), request.failure().errorText));
 
   try {
-    await page.goto('http://localhost:3002/sports2', { waitUntil: 'networkidle0' });
+    await page.goto('http://localhost:3002/', { waitUntil: 'networkidle0' });
   } catch (e) {
     console.error('Goto error:', e);
   }
