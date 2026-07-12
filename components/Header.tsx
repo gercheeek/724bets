@@ -393,16 +393,16 @@ const Header: React.FC<HeaderProps> = ({
             <>
               <div className="flex items-center gap-3">
                 {/* Balance Dropdown */}
-                <div className="relative hidden md:block" ref={walletDropdownRef}>
+                <div className="relative flex" ref={walletDropdownRef}>
                   <div 
-                    className="flex items-center bg-[#151921] rounded-xl p-1 cursor-pointer hover:bg-[#1C2028] transition-colors border border-white/5"
+                    className="flex items-center bg-[#151921] rounded-lg md:rounded-xl p-1 cursor-pointer hover:bg-[#1C2028] transition-colors border border-white/5"
                     onClick={() => setWalletDropdownOpen(prev => !prev)}
                   >
-                    <div className="w-8 h-8 rounded-lg bg-[#00FFA3] flex items-center justify-center mr-3">
-                      <span className="text-black font-black text-sm">$</span>
+                    <div className="w-6 h-6 md:w-8 md:h-8 rounded md:rounded-lg bg-[#00FFA3] flex items-center justify-center mr-1.5 md:mr-3">
+                      <span className="text-black font-black text-[10px] md:text-sm">$</span>
                     </div>
-                    <span className="text-white font-bold text-[15px] tracking-tight mr-4">{siteUser.balance?.toFixed(2) || '0.00'}</span>
-                    <ChevronDown className={`w-4 h-4 text-zinc-500 mr-2 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
+                    <span className="text-white font-bold text-xs md:text-[15px] tracking-tight mr-1.5 md:mr-4">{siteUser.balance?.toFixed(2) || '0.00'}</span>
+                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-500 mr-1 md:mr-2 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
 
                   {walletDropdownOpen && (
@@ -426,9 +426,10 @@ const Header: React.FC<HeaderProps> = ({
                 {/* Deposit Button (Cüzdan) */}
                 <button
                   onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                  className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-black px-6 py-2 rounded-xl text-[15px] transition-colors shadow-[0_0_15px_rgba(0,255,163,0.2)] hidden md:block"
+                  className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-black p-1.5 md:px-6 md:py-2 rounded-lg md:rounded-xl text-[15px] transition-colors shadow-[0_0_15px_rgba(0,255,163,0.2)] flex items-center justify-center"
                 >
-                  Cüzdan
+                  <Wallet className="w-4 h-4 md:hidden" />
+                  <span className="hidden md:block">Cüzdan</span>
                 </button>
 
                 {/* Search Icon */}
@@ -443,11 +444,11 @@ const Header: React.FC<HeaderProps> = ({
                 <div className="relative" ref={dropdownRef}>
                   <button 
                     onClick={() => setDropdownOpen(prev => !prev)}
-                    className="flex items-center bg-[#161822] rounded-xl p-1 hover:bg-[#1C2028] transition-colors border border-white/5 shadow-inner"
+                    className="flex items-center bg-[#161822] rounded-lg md:rounded-xl p-0.5 md:p-1 hover:bg-[#1C2028] transition-colors border border-white/5 shadow-inner"
                   >
                     <img 
                       src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
-                      className="w-10 h-10 rounded-lg object-cover bg-[#1F232B]" 
+                      className="w-7 h-7 md:w-10 md:h-10 rounded-md md:rounded-lg object-cover bg-[#1F232B]" 
                       alt="avatar" 
                     />
                     <div className="flex flex-col items-start ml-3 mr-4">
