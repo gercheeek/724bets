@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Video } from 'lucide-react';
 import { CasinoLobbyGame } from '../types';
 
 interface GameItem {
@@ -60,10 +59,10 @@ interface BlockProps {
   icon: React.ReactNode;
   games: GameItem[];
   showPlayers?: boolean;
-  onClickGame?: (game: GameItem) => void;
+  onGameClick?: (game: GameItem) => void;
 }
 
-const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, onClickGame }) => {
+const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, onGameClick }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -102,7 +101,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, onCl
       >
         <div className="flex gap-3 min-w-max pb-4">
           {games.map((game) => (
-            <div key={game.id} onClick={() => onClickGame?.(game)} className="flex flex-col gap-2 group cursor-pointer" style={{ width: 'calc(100vw / 2.5 - 12px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
+            <div key={game.id} onClick={() => onGameClick?.(game)} className="flex flex-col gap-2 group cursor-pointer" style={{ width: 'calc(100vw / 2.5 - 12px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
               <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-zinc-900 shadow-md group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:-translate-y-1">
                 <img 
                   src={game.image} 
@@ -136,9 +135,9 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
   const [selectedGame, setSelectedGame] = useState<GameItem | null>(null);
   const [showDemoIframe, setShowDemoIframe] = useState(false);
 
-  const getDemoUrl = (game: any): string | null => {
+  const getDemoUrl = (game: GameItem | null): string | null => {
     if (!game) return null;
-    const nameString = (game.title || game.name || game.img || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
     let symbol = '';
     
     if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
@@ -147,7 +146,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
     else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
     else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
     else return null;
-
+  
     return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
   };
 
@@ -227,27 +226,35 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
       }));
 
   return (
-    <div className="w-full bg-transparent p-0 my-8 relative">
-      {/* 1. Popüler Oyunlar */}
+    <div className="w-full bg-transparent p-0 my-8">
       <GameBlock 
         title="Popüler Oyunlar" 
         icon={<Flame className="w-5 h-5 text-white" fill="white" />} 
         games={slots} 
         showPlayers={true}
-        onClickGame={(game) => setSelectedGame(game)}
+        onGameClick={(game) => setSelectedGame(game)}
       />
       
       {/* 2. Popüler Sporlar */}
       <GameBlock 
         title="Popüler Sporlar" 
-        icon={<Target className="w-5 h-5 text-white" />} 
+        icon={<Trophy className="w-5 h-5 text-white" />} 
         games={sports} 
         showPlayers={false}
-        onClickGame={(game) => setSelectedGame(game)}
+        onGameClick={(game) => setSelectedGame(game)}
+      />
+
+      {/* 3. Canlı Casino */}
+      <GameBlock 
+        title="Canlı Casino" 
+        icon={<Video className="w-5 h-5 text-white" />} 
+        games={live} 
+        showPlayers={true}
+        onGameClick={(game) => setSelectedGame(game)}
       />
 
       {/* GAME MODAL */}
-      {selectedGame && createPortal(
+      {selectedGame && (
         <div 
           className="fixed inset-0 z-[99999] flex p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
           onClick={(e) => {
@@ -309,21 +316,20 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
                 <div className="w-full flex flex-col gap-3">
                   <button 
                      onClick={() => {
-                       setSelectedGame(null);
-                       setShowDemoIframe(false);
+                        window.dispatchEvent(new CustomEvent('openLoginModal'));
                      }}
-                     className="w-full py-3.5 rounded-lg font-black text-sm transition-all bg-[#00FFA3] text-black hover:bg-[#00E676] shadow-[0_0_15px_rgba(0,255,163,0.3)]"
-                   >
+                     className="w-full flex items-center justify-center gap-2 bg-[#00FFA3] hover:bg-[#00E676] text-black font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.3)] uppercase tracking-wider text-sm"
+                  >
+                     <Flame className="w-4 h-4" />
                      Gerçek Parayla Oyna
-                   </button>
-
+                  </button>
+                  
                   {getDemoUrl(selectedGame) && (
-                    <button 
+                     <button 
                        onClick={() => setShowDemoIframe(true)}
-                       className="w-full py-3.5 rounded-lg font-bold text-sm transition-all bg-[#2A2E3D] text-white hover:bg-[#3A3F54] flex items-center justify-center gap-2"
+                       className="w-full bg-[#1F2331] hover:bg-[#2A2E3D] border border-[#2A2E3D] text-white font-bold py-3.5 rounded-xl transition-colors text-sm"
                      >
-                       <Play size={16} className="text-[#00FFA3]" fill="currentColor" />
-                       Eğlencesine Oyna
+                       Eğlencesine Oyna (Demo)
                      </button>
                   )}
                 </div>
@@ -331,7 +337,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
             </div>
           )}
         </div>
-      , document.body)}
+      )}
     </div>
   );
 };
