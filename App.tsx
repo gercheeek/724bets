@@ -1597,14 +1597,64 @@ const App: React.FC = () => {
 
           {view === 'home' && (
           <div className="animate-fade-in w-full h-full min-h-screen">
-            <GuestLanding
-              siteUser={siteUser}
-              onSearchClick={() => setShowSearch(true)}
-              onViewChange={(v) => setView(v as any)}
-              onMemberLoginClick={() => setAuthModalMode('member')}
-              onMemberRegisterClick={() => setAuthModalMode('register')}
-              customGames={casinoLobbyGames}
-            />
+            {!siteUser ? (
+              <GuestLanding
+                siteUser={siteUser}
+                onSearchClick={() => setShowSearch(true)}
+                onViewChange={(v) => setView(v as any)}
+                onMemberLoginClick={() => setAuthModalMode('member')}
+                onMemberRegisterClick={() => setAuthModalMode('register')}
+                customGames={casinoLobbyGames}
+              />
+            ) : (
+              <div className="animate-fade-in" style={{ height: '100%' }}>
+                <div className="portal-body">
+                  <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
+                  <MobileQuickLinks onSearchClick={() => setShowSearch(true)} onViewChange={(v) => setView(v as any)} />
+                  <GameLobbyGrid customGames={casinoLobbyGames} />
+                  <div className="w-full max-w-[1200px] mx-auto px-2 sm:px-0">
+                    <LiveBetsFeed />
+                  </div>
+                  <div className="my-6 relative overflow-hidden rounded-lg shadow-[0_0_25px_rgba(0,255,163,0.3)] border border-emerald-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
+                    <Slider2 
+                      config={slider2Config} 
+                      onInternalNavigate={(url) => {
+                        const event = new CustomEvent('internal-navigate', { detail: { url } });
+                        window.dispatchEvent(event);
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-150%] animate-[shimmer_3s_infinite_linear] skew-x-[-20deg]"></div>
+                    <div className="absolute inset-0 border-[2px] border-transparent rounded-lg group-hover:border-emerald-400/50 transition-colors duration-500"></div>
+                    <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                  </div>
+                </div>
+                <div className="portal-footer">
+                  <span className="portal-footer-copy">
+                    © 2026 BAHISBEY.COM · Tüm hakları saklıdır.
+                    <a href="/index-analiz.html" target="_self" onClick={(e) => { e.preventDefault(); window.location.href = '/index-analiz.html'; }} style={{ display: 'inline-block', width: '25px', height: '25px', cursor: 'pointer', background: 'transparent' }}></a>
+                    <button 
+                      onClick={() => setView('kral')} 
+                      className="ml-4 px-6 py-2 rounded font-black uppercase tracking-widest transition-all hover:scale-110 active:scale-95"
+                      style={{ 
+                        background: 'linear-gradient(to right, #FFD700, #FDB931)', 
+                        border: '2px solid #FFF', 
+                        color: '#000', 
+                        fontSize: '18px', 
+                        cursor: 'pointer',
+                        boxShadow: '0 0 20px rgba(255, 215, 0, 0.6)'
+                      }}
+                    >
+                      👑 KRAL BENİM
+                    </button>
+                  </span>
+                  <div className="portal-footer-links">
+                    <a href="#" onClick={(e) => e.preventDefault()}>Hakkımızda</a>
+                    <a href="#" onClick={(e) => e.preventDefault()}>İletişim</a>
+                    <a href="#" onClick={(e) => e.preventDefault()}>Gizlilik</a>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           )}
 

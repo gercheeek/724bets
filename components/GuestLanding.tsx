@@ -1,8 +1,7 @@
 import React from 'react';
-import { Search, ChevronRight, Target } from 'lucide-react';
+import { Search, Trophy, Shield, Target, ChevronRight } from 'lucide-react';
 import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
-import LiveBetsFeed from './LiveBetsFeed';
 
 interface GuestLandingProps {
   siteUser?: SiteUser | null;
@@ -22,68 +21,78 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   customGames = []
 }) => {
   return (
-    <div className="w-full h-full flex flex-col bg-[#111317]">
-      <div className="w-full px-4 pt-6 pb-6">
-        <div className="relative overflow-hidden rounded-xl bg-[#0d0d12] w-full h-[180px] md:h-[240px] shadow-2xl group cursor-pointer">
-          <img 
-            src="/images/bitcoin_hero_banner.jpg" 
-            alt="Hero Banner" 
-            className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
-          />
-          {/* Overlay & Text */}
-          <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-center z-20 pointer-events-none">
-            <h2 className="text-3xl md:text-5xl font-black text-white italic tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-4 max-w-lg leading-tight">
-              724Bets'e <span className="text-[#00FFA3]">Hoşgeldiniz!</span>
-            </h2>
-            <div className="flex items-center gap-3 pointer-events-auto">
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onMemberRegisterClick();
-                }}
-                className="bg-[#00FFA3] hover:bg-[#00E690] text-black font-black px-6 py-2.5 rounded-md transition-colors shadow-lg text-sm"
-              >
-                Hemen Oyna
-              </button>
-              <button 
-                onClick={(e) => e.stopPropagation()}
-                className="bg-zinc-800/80 hover:bg-zinc-700/80 backdrop-blur-md border border-white/5 text-gray-300 font-bold px-4 py-2.5 rounded-md transition-colors text-sm shadow-lg"
-              >
-                12,405,853 Toplam Bahis
-              </button>
-            </div>
+    <div className="w-full h-full flex flex-col bg-[#0a0b0e] min-h-screen">
+      
+      {/* 3 Top Promo Cards */}
+      <div className="w-full px-4 pt-6 pb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Card 1 */}
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg group cursor-pointer transition-transform hover:-translate-y-1">
+          <div className="flex flex-col z-10 w-2/3">
+            <span className="text-white font-black text-2xl tracking-tight leading-none mb-1">$500k Bankada!</span>
+            <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Liderlik tablosunda yerini al</span>
+          </div>
+          <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+            <Trophy className="w-32 h-32 text-yellow-500/40 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
+          </div>
+        </div>
+
+        {/* Card 2 */}
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg group cursor-pointer transition-transform hover:-translate-y-1">
+          <div className="flex flex-col z-10 w-2/3">
+            <span className="text-white font-black text-xl tracking-tight leading-tight mb-1">Yeniden tasarlandı.<br/>Daha hızlı.</span>
+            <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Yepyeni bir deneyim</span>
+          </div>
+          <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+            <Shield className="w-32 h-32 text-red-500/30 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
+          </div>
+        </div>
+
+        {/* Card 3 */}
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg group cursor-pointer transition-transform hover:-translate-y-1">
+          <div className="flex flex-col z-10 w-2/3">
+            <span className="text-white font-black text-xl tracking-tight leading-tight mb-1">Piyasadaki En İyi Oranlar</span>
+            <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Kazancını Katla</span>
+          </div>
+          <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+            <Target className="w-32 h-32 text-[#00FFA3]/30 drop-shadow-[0_0_15px_rgba(0,255,163,0.5)]" />
           </div>
         </div>
       </div>
 
-      {/* Search Bar */}
-      <div className="w-full px-4 py-2 flex justify-end mb-4">
+      {/* Welcome & Search Bar Inline */}
+      <div className="w-full px-4 py-4 flex flex-col md:flex-row justify-between items-center mb-2">
+        <h2 className="text-2xl md:text-[28px] font-black text-white tracking-tight mb-4 md:mb-0">
+          Tekrar hoş geldiniz, <span className="text-[#00FFA3]">724bahisnet!</span>
+        </h2>
         <div 
           onClick={onSearchClick}
-          className="flex items-center bg-[#1A1D24] border border-white/5 rounded-md px-4 py-3 w-full md:w-[350px] cursor-pointer hover:bg-[#222730] transition-colors"
+          className="flex items-center bg-[#151821] rounded-md px-4 py-3 w-full md:w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5"
         >
-          <Search className="w-4 h-4 text-gray-500 mr-3" />
-          <span className="text-gray-500 text-sm font-medium">Search games...</span>
+          <Search className="w-4 h-4 text-gray-400 mr-3" />
+          <span className="text-gray-400 text-sm font-medium">Oyunları ara...</span>
         </div>
       </div>
 
       {/* 2 Big Cards: Casino & Sports */}
-      <div className="w-full px-4 pb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="w-full px-4 pb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Kumarhane Card */}
         <div 
           onClick={() => onViewChange('blackjack')}
-          className="relative w-full h-[220px] md:h-[280px] rounded-xl overflow-hidden cursor-pointer group shadow-2xl bg-[#0d0d12]"
+          className="relative w-full h-[260px] md:h-[300px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
         >
-          <img 
-            src="/images/purple_casino_card.jpg" 
-            alt="Casino" 
-            className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
-          />
-          <div className="absolute bottom-0 left-0 right-0 p-6 flex items-center justify-between z-20">
-            <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+          <div className="w-full h-[75%] relative overflow-hidden">
+             <img 
+               src="/images/purple_casino_card.jpg" 
+               alt="Casino" 
+               className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+             />
+          </div>
+          {/* Solid Bottom Band */}
+          <div className="w-full h-[25%] bg-gradient-to-r from-[#811850] to-[#59103a] p-4 md:px-6 flex items-center justify-between z-20 border-t border-white/10">
+            <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
               Kumarhane
             </h3>
-            <button className="bg-fuchsia-900/60 hover:bg-fuchsia-800/80 backdrop-blur-md border border-white/20 text-white font-bold px-4 py-2 text-sm rounded-lg transition-colors shadow-lg">
+            <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-sm rounded transition-colors">
               Ziyaret et Casino
             </button>
           </div>
@@ -92,18 +101,21 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         {/* Spor Bahisleri Card */}
         <div 
           onClick={() => onViewChange('sports')}
-          className="relative w-full h-[220px] md:h-[280px] rounded-xl overflow-hidden cursor-pointer group shadow-2xl bg-[#0d0d12]"
+          className="relative w-full h-[260px] md:h-[300px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
         >
-          <img 
-            src="/images/green_sports_card.jpg" 
-            alt="Sports Betting" 
-            className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
-          />
-          <div className="absolute bottom-0 left-0 right-0 p-6 flex items-center justify-between z-20">
-            <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+          <div className="w-full h-[75%] relative overflow-hidden">
+            <img 
+              src="/images/green_sports_card.jpg" 
+              alt="Sports Betting" 
+              className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          {/* Solid Bottom Band */}
+          <div className="w-full h-[25%] bg-gradient-to-r from-[#216115] to-[#15420d] p-4 md:px-6 flex items-center justify-between z-20 border-t border-white/10">
+            <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
               Spor Bahisleri
             </h3>
-            <button className="bg-green-900/60 hover:bg-green-800/80 backdrop-blur-md border border-white/20 text-white font-bold px-4 py-2 text-sm rounded-lg transition-colors shadow-lg">
+            <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-sm rounded transition-colors">
               Ziyaret et Sports
             </button>
           </div>
@@ -112,13 +124,14 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
       {/* Gamdom Originals / Game Grid */}
       <div className="w-full px-4 pb-4">
+        <div className="flex items-center gap-2 mb-4">
+           <img src="/icons/gamdom-icon.png" alt="" className="w-6 h-6 hidden" /> 
+           <h3 className="text-white text-xl font-bold">Gamdom Originals</h3>
+        </div>
         <GameLobbyGrid 
           customGames={customGames}
         />
       </div>
-
-      {/* Live Bets Feed Component */}
-      <LiveBetsFeed />
 
     </div>
   );
