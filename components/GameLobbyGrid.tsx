@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Flame, Trophy, Target } from 'lucide-react';
 import { CasinoLobbyGame } from '../types';
 
@@ -130,16 +130,62 @@ interface GameLobbyGridProps {
 
 const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
   const activeCustomGames = customGames.filter(g => g.isActive);
-  
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick(prev => prev + 1);
+    }, 2000); // Daha sık güncellenmesi için 2 saniyede bir
+    return () => clearInterval(interval);
+  }, []);
+
+  const getDynamicPlayers = (gameId: string) => {
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const timeFraction = (hour + minute / 60) / 24;
+
+    // Gece 22:00 zirve, Gündüz 10:00 dip noktası olsun.
+    const peakFraction = 22 / 24;
+    const timeFactor = Math.cos(2 * Math.PI * (timeFraction - peakFraction)); // -1 ile 1 arası
+    const timeMultiplier = (timeFactor + 1) / 2; // 0 ile 1 arası
+
+    // Oyunlara özel sabit bir sayı varyasyonu (seed ile)
+    let seed = 0;
+    for (let i = 0; i < gameId.length; i++) {
+      seed += gameId.charCodeAt(i);
+    }
+    const gameVariation = (seed % 61) - 30; // -30 ile +30 arası
+
+    // Her saniye değiştiğini hissettirmek için birden fazla sinüs dalgası
+    // tick değeri saniyede bir veya belirlenen interval'da artıyor.
+    const fluctuation = Math.sin((tick * 1.3) + seed) * 12 + Math.cos((tick * 0.8) + seed * 2) * 8; 
+
+    // Gündüzleri daha az, geceleri daha fazla:
+    // Minimum 140, Maksimum 350 olacak şekilde base ayarlıyoruz.
+    const basePlayers = 150 + timeMultiplier * 180; // 150 ile 330 arası değişir
+
+    let finalPlayers = Math.round(basePlayers + gameVariation + fluctuation);
+
+    // Kesin sınırlar: En az 120, En fazla 370
+    if (finalPlayers < 120) finalPlayers = 120;
+    if (finalPlayers > 370) finalPlayers = 370;
+
+    return finalPlayers;
+  };
+
   // Mix custom slots if provided, else use default visual data
   const slots = activeCustomGames.length > 0
     ? activeCustomGames.filter(g => g.type === 'slot').map((g, idx) => ({
         id: g.id,
         title: g.name.toUpperCase(),
         image: g.image || 'https://picsum.photos/seed/' + g.id + '/400/300',
-        players: 300 + (idx * 47) % 500, // Simulated player count for custom games
+        players: getDynamicPlayers(g.id),
       }))
-    : slotGames;
+    : slotGames.map(g => ({
+        ...g,
+        players: getDynamicPlayers(g.id)
+      }));
 
   const sports = activeCustomGames.filter(g => g.type === 'sport').length > 0
     ? activeCustomGames.filter(g => g.type === 'sport').map((g) => ({
@@ -154,9 +200,12 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         id: g.id,
         title: g.name.toUpperCase(),
         image: g.image || 'https://picsum.photos/seed/' + g.id + '/400/300',
-        players: 500 + (idx * 83) % 2000, // Simulated player count
+        players: getDynamicPlayers(g.id),
       }))
-    : liveCasinoGames;
+    : liveCasinoGames.map(g => ({
+        ...g,
+        players: getDynamicPlayers(g.id)
+      }));
 
   return (
     <div className="w-full bg-transparent p-0 my-8">

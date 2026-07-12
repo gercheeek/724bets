@@ -518,39 +518,35 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     const isLoggedIn = !!(siteUser || userRole);
 
     if (!open && !isMobile) {
-        return (
-            <div 
-                className="w-full h-full bg-[#111317] flex flex-col items-center justify-center cursor-pointer hover:bg-[#1A1D24] transition-colors"
-                onClick={onOpen}
-            >
-                <div 
-                    style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-                    className="text-[#00FFA3] font-black text-sm tracking-[0.3em] uppercase flex items-center gap-4"
-                >
-                    <span className="w-2 h-2 rounded-full bg-[#00FFA3] animate-pulse"></span>
-                    CANLI SOHBET
-                </div>
-            </div>
-        );
+        return null;
     }
 
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#111317] shadow-2xl font-sans text-left">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#141517] shadow-2xl font-sans text-left">
             {/* Header */}
-            <div className="bg-[#111317] p-4 text-white font-bold flex items-center justify-between flex-shrink-0">
-                <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span className="text-xs uppercase tracking-widest text-emerald-400 font-black">CANLI SOHBET</span>
+            <div className="bg-[#1C1F26] px-4 py-3 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5">
+                <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 bg-[#252A33] px-3 py-1.5 rounded text-xs font-bold hover:bg-[#2C323D] cursor-pointer transition-colors">
+                        <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-3 rounded-sm object-cover" />
+                        <span>Türkçe</span>
+                        <span className="text-[10px] ml-1">▼</span>
+                    </div>
                 </div>
-                <button 
-                    onClick={onClose} 
-                    className="p-1 hover:bg-white/5 active:scale-95 transition-all rounded-lg text-zinc-400 hover:text-white"
-                    title="Kapat"
-                >
-                    <Menu className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-3 text-zinc-400">
+                    <div className="flex items-center gap-1.5 text-xs font-bold hover:text-white transition-colors cursor-pointer">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <span>2.485</span>
+                    </div>
+                    <button 
+                        onClick={onClose} 
+                        className="p-1 hover:bg-white/5 active:scale-95 transition-all rounded text-zinc-400 hover:text-white"
+                        title="Kapat"
+                    >
+                        <X className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
 
             {/* Pinned Message Bar */}
@@ -707,10 +703,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className={`rounded-lg rounded-tl-sm p-3.5 flex flex-col gap-1.5 relative group text-left cursor-default mb-4 ${
-                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19] shadow-[0_4px_12px_rgba(0,255,163,0.08)]' : 
-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-gradient-to-r from-[#092b19] to-[#1A1D24] shadow-[0_4px_12px_rgba(0,255,163,0.15)]' : 
-                                'bg-[#1A1D24] shadow-sm hover:bg-[#20252E] transition-colors'
+                            className={`p-3 flex flex-row gap-3 relative group text-left cursor-default border-b border-white/5 hover:bg-white/[0.02] transition-colors ${
+                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19]/20' : 
+                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-gradient-to-r from-[#092b19]/20 to-transparent' : 
+                                'bg-transparent'
                             }`}
                             onContextMenu={(e) => {
                                 if (isAdmin) {
@@ -720,26 +716,33 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 }
                             }}
                         >
-                            <div className="flex items-center gap-2 flex-wrap mb-1">
-                                {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
-                                    <span className="bg-gradient-to-br from-[#00FFA3] to-[#00CC82] text-black px-1.5 py-0.5 rounded-full text-[9px] font-black min-w-[20px] text-center shadow-[0_4px_12px_rgba(0,255,163,0.3)]">
-                                        ADM
-                                    </span>
-                                )}
-                                <span 
-                                    className="text-xs font-bold tracking-wide" 
-                                    style={{ color: getRoleColor(msg.role, msg.username, msg) }}
-                                >
-                                    {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
-                                </span>
-                                <span className="text-[9px] text-slate-500 opacity-70 ml-auto mr-6">
-                                    {formatTime(msg.created_at)}
-                                </span>
+                            {/* Avatar placeholder - using DiceBear for now based on username */}
+                            <div className="w-8 h-8 rounded-full bg-zinc-800 flex-shrink-0 overflow-hidden mt-1 border border-white/10">
+                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.username}`} alt={msg.username} className="w-full h-full object-cover" />
                             </div>
-                            <div className={`text-[12.5px] leading-relaxed break-words pr-4 antialiased ${
-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-slate-300 font-normal'
-                            }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#00FFA3') : undefined }}>
-                                {renderMessageText(msg.message)}
+
+                            <div className="flex flex-col flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                                    <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap">
+                                        {formatTime(msg.created_at)}
+                                    </span>
+                                    {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
+                                        <span className="bg-gradient-to-br from-[#00FFA3] to-[#00CC82] text-black px-1.5 py-0.5 rounded-sm text-[9px] font-black leading-none text-center shadow-[0_4px_12px_rgba(0,255,163,0.3)]">
+                                            ADM
+                                        </span>
+                                    )}
+                                    <span 
+                                        className="text-xs font-bold tracking-wide" 
+                                        style={{ color: getRoleColor(msg.role, msg.username, msg) }}
+                                    >
+                                        {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
+                                    </span>
+                                </div>
+                                <div className={`text-[12px] leading-relaxed break-words pr-4 antialiased ${
+                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-zinc-300 font-normal'
+                                }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#00FFA3') : undefined }}>
+                                    {renderMessageText(msg.message)}
+                                </div>
                             </div>
 
                             {/* Admin actions block (Three Dots / Context Menu) */}
@@ -809,38 +812,40 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             </div>
 
             {/* Input Footer Area */}
-            <div className="p-4 bg-[#111317] flex flex-col gap-3 flex-shrink-0 mt-2">
+            <div className="p-3 bg-[#141517] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5">
                 {/* Message Input */}
                 {!siteUser ? (
-                    <div className="p-3 bg-[#111317] flex flex-col items-center justify-center gap-2">
+                    <div className="p-2 flex flex-col items-center justify-center gap-2">
                         <input 
                             type="text"
                             disabled
                             placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
-                            className="w-full bg-[#1A1D24] text-[11px] font-bold text-center text-gray-500 rounded-lg px-4 py-3 cursor-not-allowed"
+                            className="w-full bg-[#1C1F26] border border-white/5 text-[11px] font-bold text-center text-gray-500 rounded px-4 py-3 cursor-not-allowed"
                         />
                     </div>
                 ) : (
                     <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
-                        <div className="relative flex items-center bg-[#1A1D24] focus-within:bg-[#242933] rounded-lg overflow-hidden px-4 py-2.5 transition-colors">
+                        <div className="relative flex items-center bg-[#1C1F26] border border-transparent focus-within:border-emerald-500 rounded overflow-hidden transition-all duration-300">
                             <input
                                 type="text"
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
-                                placeholder="Bir mesaj yazın..."
-                                className="flex-1 bg-transparent text-sm text-gray-200 focus:outline-none placeholder-gray-500"
+                                placeholder="Start typing.."
+                                className="flex-1 bg-transparent text-sm text-gray-200 focus:outline-none placeholder-zinc-500 px-4 py-3"
                             />
-                            <button type="button" className="text-gray-400 hover:text-white transition-colors px-1" title="Emoji">
-                                <Smile className="w-4 h-4" />
-                            </button>
+                            <div className="flex items-center pr-2 gap-1 h-full">
+                                <button type="button" className="text-zinc-500 hover:text-white transition-colors p-1.5 rounded hover:bg-white/5" title="Emoji">
+                                    <Smile className="w-4 h-4" />
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={!newMessage.trim()}
+                                    className="text-emerald-500 hover:text-emerald-400 disabled:opacity-30 disabled:hover:text-emerald-500 transition-colors p-1.5 rounded hover:bg-emerald-500/10 ml-1"
+                                >
+                                    <Send className="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
-                        <button
-                            type="submit"
-                            disabled={!newMessage.trim()}
-                            className="self-end px-5 py-1.5 rounded bg-gradient-to-r from-[#00FFA3] to-[#00CC82] text-black hover:from-[#33FFB5] hover:to-[#00FFA3] disabled:opacity-30 text-xs font-bold transition-all active:scale-95 uppercase tracking-wider"
-                        >
-                            Gönder
-                        </button>
                     </form>
                 )}
             </div>

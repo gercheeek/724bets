@@ -1,0 +1,3117 @@
+diff --git a/App.tsx b/App.tsx
+index e8c707e..b581c4f 100644
+--- a/App.tsx
++++ b/App.tsx
+@@ -3,7 +3,7 @@ import { ThemeProvider } from './ThemeContext';
+ import { driver } from "driver.js";
+ import "driver.js/dist/driver.css";
+ import Header from './components/Header';
+-import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock, ShieldCheck } from 'lucide-react';
++import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock, ShieldCheck, Wallet, Club, Search } from 'lucide-react';
+ import { getFlagUrl } from './components/MatchResultsWidget';
+ import AppLoader from './components/AppLoader';
+ import BrandCard from './components/BrandCard';
+@@ -13,6 +13,7 @@ import AuthModal from './components/AuthModal';
+ import OnboardingPopup from './components/OnboardingPopup';
+ import FakeBetModal from './components/FakeBetModal';
+ import MobileBottomNav from './components/MobileBottomNav';
++import WalletModal from './components/WalletModal';
+ import AnalysisView from './components/AnalysisView';
+ import BlackjackGame from './components/BlackjackGame';
+ import GlobalToaster from './components/GlobalToaster';
+@@ -45,10 +46,12 @@ import WorldCupTeaser from './components/WorldCupTeaser';
+ import SportsDashboard from './components/SportsDashboard';
+ import LiveBetsFeed from './components/LiveBetsFeed';
+ import CasinoLobby from './components/CasinoLobby';
++// removed UserBets
++// removed UserDashboard
+ 
+ // Portal Components
+ import CouponsView from './components/CouponsView';
+-import HeroSection from './components/HeroSection';
++
+ import MobileQuickLinks from './components/MobileQuickLinks';
+ import Slider2 from './components/Slider2';
+ import MatchHighlights from './components/MatchHighlights';
+@@ -61,6 +64,8 @@ import MatchResultsWidget from './components/MatchResultsWidget';
+ import { PromoSlider } from './components/PromoSlider';
+ import GameLobbyGrid from './components/GameLobbyGrid';
+ import Sidebar from './components/Sidebar';
++import GuestLanding from './components/GuestLanding';
++import HeroSection from './components/HeroSection';
+ import PromoCodeView from './components/PromoCodeView';
+ import ReferralView from './components/ReferralView';
+ const SITE_CACHE_VERSION = "2026.06.25_v1";
+@@ -137,6 +142,12 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
+ 
+ const App: React.FC = () => {
+   const sports2ContainerRef = useRef<HTMLDivElement>(null);
++  const sportsContainerRef = useRef<HTMLDivElement>(null);
++  const sports3ContainerRef = useRef<HTMLDivElement>(null);
++  const sports4ContainerRef = useRef<HTMLDivElement>(null);
++  const sports5ContainerRef = useRef<HTMLDivElement>(null);
++  const casino2ContainerRef = useRef<HTMLDivElement>(null);
++  const demoContainerRef = useRef<HTMLDivElement>(null);
+   const [appStage, setAppStage] = useState<'loading' | 'popup' | 'ready'>('ready');
+   const [ipBlocked, setIpBlocked] = useState(false);
+   const [fadeOutLoader, setFadeOutLoader] = useState(false);
+@@ -161,8 +172,21 @@ const App: React.FC = () => {
+     };
+ 
+     window.addEventListener('internal-navigate', handleInternalNavigate as EventListener);
++    
++    const handleOpenSupportChat = () => {
++      // Open mobile chat overlay for all screens when clicked from sidebar if !siteUser, else normal toggle
++      const member = localStorage.getItem('site_current_member');
++      if (!member) {
++         setIsMobileChatOpen(true);
++      } else {
++         setIsChatOpen(prev => !prev);
++      }
++    };
++    window.addEventListener('openSupportChat', handleOpenSupportChat);
++
+     return () => {
+       window.removeEventListener('internal-navigate', handleInternalNavigate as EventListener);
++      window.removeEventListener('openSupportChat', handleOpenSupportChat);
+     };
+   }, []);
+   
+@@ -409,6 +433,13 @@ const App: React.FC = () => {
+   const [userRole, setUserRole] = useState<string | null>(null);
+   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
+   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
++  const [showDepositModal, setShowDepositModal] = useState(false);
++
++  useEffect(() => {
++    const handleOpenDeposit = () => setShowDepositModal(true);
++    window.addEventListener('openDepositModal', handleOpenDeposit);
++    return () => window.removeEventListener('openDepositModal', handleOpenDeposit);
++  }, []);
+   const [showFakeBetModal, setShowFakeBetModal] = useState(false);
+   const [showLiveScoreModal, setShowLiveScoreModal] = useState(false);
+   const [showMyBetsModal, setShowMyBetsModal] = useState(false);
+@@ -606,7 +637,7 @@ const App: React.FC = () => {
+     return stored ? JSON.parse(stored) : demoCoupons;
+   });
+   const [showSearch, setShowSearch] = useState(false);
+-  const [isChatOpen, setIsChatOpen] = useState(true);
++  const [isChatOpen, setIsChatOpen] = useState(false);
+   const [globalTvPip, setGlobalTvPip] = useState(false);
+   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
+     const stored = localStorage.getItem('site_loyalty_config');
+@@ -964,7 +995,7 @@ const App: React.FC = () => {
+         setView('trusted-detail');
+       } else {
+         const viewName = cleanPath.substring(1);
+-        const validViews = ['blackjack', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo'];
++        const validViews = ['blackjack', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis'];
+         if (validViews.includes(viewName)) {
+           setView(viewName as any);
+         } else {
+@@ -1356,6 +1387,10 @@ const App: React.FC = () => {
+         />
+       )}
+ 
++      {showDepositModal && (
++        <WalletModal onClose={() => setShowDepositModal(false)} />
++      )}
++
+       {isMaintenanceActive && view !== 'admin' ? (
+         <MaintenanceScreen 
+           message={siteStatusConfig.maintenanceMessage} 
+@@ -1407,15 +1442,71 @@ const App: React.FC = () => {
+             
+             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
+             {view !== 'kral' && (
+-              <header className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/85 backdrop-blur-xl border-b border-[#00FFA3]/10 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+-                <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-300 hover:text-[#00FFA3] transition-colors p-1.5 rounded-lg bg-white/5 active:scale-95">
+-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+-                </button>
+-                <div className="font-black text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#00FFA3] to-[#00E676] tracking-tight">BAHİSBEY</div>
+-                <button onClick={() => setIsMobileChatOpen(true)} className="text-gray-300 hover:text-[#00FFA3] transition-colors p-1.5 rounded-lg bg-white/5 active:scale-95 relative">
+-                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+-                   <span className="absolute top-1 right-1 w-2 h-2 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]"></span>
++              <header className="flex lg:hidden items-center justify-between p-2 px-3 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1">
++                <button onClick={() => setIsMobileMenuOpen(true)} className="flex items-center justify-center w-8 h-8 text-gray-300 hover:text-white transition-colors rounded-md bg-[#1A1D24] border border-white/5 active:scale-95 shrink-0">
++                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+                 </button>
++                
++                <div className="font-black text-xl text-white tracking-tight shrink px-1 flex items-center group cursor-pointer" onClick={() => window.location.href = '/'}>
++                  <Club className="w-6 h-6 text-[#00FFA3] mr-1.5 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_8px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
++                  <span className="logo-text-intro">
++                    <span className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#00FFA3] transition-colors duration-300">
++                      724bets
++                    </span>
++                    <span className="bg-[#00FFA3]/10 text-[#00FFA3] border border-[#00FFA3]/30 text-[8px] font-extrabold px-1.5 py-[1px] rounded-full ml-1.5 tracking-wider -translate-y-1.5 group-hover:border-[#00FFA3] group-hover:shadow-[0_0_8px_rgba(0,255,163,0.3)] transition-all duration-300">BETA</span>
++                  </span>
++                </div>
++                
++                <div className="flex items-center shrink-0">
++                  {siteUser ? (
++                    <>
++                      {/* 1. Gamdom Style Wallet (Pill) */}
++                      <div 
++                        className="flex items-center bg-[#1A1F29] rounded-lg p-1 pr-2 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
++                        onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
++                      >
++                        <div className="w-6 h-6 rounded bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
++                          <span className="text-[13px]">$</span>
++                        </div>
++                        <span className="text-white font-bold text-[13px] tracking-tight mr-1.5">${siteUser.balance?.toFixed(2) || '0.00'}</span>
++                        <svg className="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
++                          <path d="M7 10l5 5 5-5z" />
++                        </svg>
++                      </div>
++                      
++                      {/* 2. Cüzdan Butonu (Sadece İkon) */}
++                      <button 
++                        onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
++                        className="flex items-center justify-center w-8 h-8 bg-[#00FFA3] hover:bg-[#00e693] rounded-lg transition-colors ml-1.5 shadow-[0_0_15px_rgba(0,255,163,0.2)] active:scale-95"
++                      >
++                        <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="currentColor">
++                          <path d="M21 7.5C21 5.567 19.433 4 17.5 4H6.5C4.567 4 3 5.567 3 7.5v9C3 18.433 4.567 20 6.5 20h11c1.933 0 3.5-1.567 3.5-3.5v-9zm-3.5 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
++                        </svg>
++                      </button>
++                      
++                      {/* 3. Profil Avatarı */}
++                      <button onClick={() => setIsMobileMenuOpen(true)} className="w-8 h-8 rounded-full border border-white/10 bg-[#1A1D24] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95">
++                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} alt="Avatar" className="w-full h-full object-cover" />
++                      </button>
++                    </>
++                  ) : (
++                    <>
++                      {/* Giriş Yap / Cüzdan (Logged out) */}
++                      <button
++                        onClick={() => setAuthModalMode('member')}
++                        className="flex items-center justify-center h-8 bg-[#151A23] hover:bg-[#1A212D] text-white transition-colors px-2.5 rounded-md border border-white/5 shadow-sm"
++                      >
++                        <Wallet className="w-3.5 h-3.5 text-[#00FFA3] mr-1.5" />
++                        <span className="text-[11px] font-bold">Giriş Yap</span>
++                      </button>
++                      
++                      <button onClick={() => setIsMobileChatOpen(true)} className="flex items-center justify-center h-8 w-8 text-gray-400 hover:text-white transition-colors rounded-md bg-[#1A1D24] border border-white/5 relative active:scale-95">
++                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
++                         <span className="absolute top-[6px] right-[6px] w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]"></span>
++                      </button>
++                    </>
++                  )}
++                </div>
+               </header>
+             )}
+ 
+@@ -1479,70 +1570,18 @@ const App: React.FC = () => {
+ 
+ 
+         <div className={`orchestrator-content ${isContentReady ? 'content-ready' : ''}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
+-          {view === 'home' && (
+-            <div className="animate-fade-in">
+-              {/* ═══ PORTAL BODY ═══ */}
+-              <div className="portal-body">
+-                
+-                <HeroSection heroSliderConfig={heroSliderConfig} dailyKuponConfig={dailyKuponConfig} />
+-                <MobileQuickLinks onSearchClick={() => setShowSearch(true)} onViewChange={(v) => setView(v as any)} />
+-                
+-
+-                <GameLobbyGrid customGames={casinoLobbyGames} />
+-
+-                {/* ── LIVE BETS FEED (Son Bahisler) ── */}
+-                <div className="w-full max-w-[1200px] mx-auto px-2 sm:px-0">
+-                  <LiveBetsFeed />
+-                </div>
+-
+-                {/* ── User Uploaded Image Banner ── */}
+-                <div className="my-6 relative overflow-hidden rounded-lg shadow-[0_0_25px_rgba(0,255,163,0.3)] border border-emerald-400/60 cursor-pointer group hover:scale-[1.02] transition-all duration-500">
+-                  <Slider2 
+-                    config={slider2Config} 
+-                    onInternalNavigate={(url) => {
+-                      const event = new CustomEvent('internal-navigate', { detail: { url } });
+-                      window.dispatchEvent(event);
+-                    }}
+-                  />
+-                  
+-                  {/* Animasyonlu Parıltı (Shine) Efekti */}
+-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-150%] animate-[shimmer_3s_infinite_linear] skew-x-[-20deg]"></div>
+-                  
+-                  {/* Sürekli yanan kenar glow efekti */}
+-                  <div className="absolute inset-0 border-[2px] border-transparent rounded-lg group-hover:border-emerald-400/50 transition-colors duration-500"></div>
+-                  <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+-                </div>
+-
+-              </div>
+-
+-              {/* ═══ PORTAL FOOTER ═══ */}
+-              <div className="portal-footer">
+-                <span className="portal-footer-copy">
+-                  © 2026 BAHISBEY.COM · Tüm hakları saklıdır.
+-                  <a href="/index-analiz.html" target="_self" onClick={(e) => { e.preventDefault(); window.location.href = '/index-analiz.html'; }} style={{ display: 'inline-block', width: '25px', height: '25px', cursor: 'pointer', background: 'transparent' }}></a>
+-                  <button 
+-                    onClick={() => setView('kral')} 
+-                    className="ml-4 px-6 py-2 rounded font-black uppercase tracking-widest transition-all hover:scale-110 active:scale-95"
+-                    style={{ 
+-                      background: 'linear-gradient(to right, #FFD700, #FDB931)', 
+-                      border: '2px solid #FFF', 
+-                      color: '#000', 
+-                      fontSize: '18px', 
+-                      cursor: 'pointer',
+-                      boxShadow: '0 0 20px rgba(255, 215, 0, 0.6)'
+-                    }}
+-                  >
+-                    👑 KRAL BENİM
+-                  </button>
+-                </span>
+-                <div className="portal-footer-links">
+-                  <a href="#" onClick={(e) => e.preventDefault()}>Hakkımızda</a>
+-                  <a href="#" onClick={(e) => e.preventDefault()}>İletişim</a>
+-                  <a href="#" onClick={(e) => e.preventDefault()}>Gizlilik</a>
+-                  <a href="#" onClick={(e) => e.preventDefault()}>Kullanım Koşulları</a>
+-                </div>
+-              </div>
+ 
++          {view === 'home' && (
++            <div className="animate-fade-in" style={{ height: '100%' }}>
++              <GuestLanding
++                siteUser={siteUser}
++                onSearchClick={() => setShowSearch(true)}
++                onViewChange={(v) => setView(v as any)}
++                onMemberLoginClick={() => setAuthModalMode('member')}
++                onMemberRegisterClick={() => setAuthModalMode('register')}
++                customGames={casinoLobbyGames}
++              />
++              <MobileQuickLinks onSearchClick={() => setShowSearch(true)} onViewChange={(v) => setView(v as any)} />
+             </div>
+           )}
+ 
+@@ -1569,7 +1608,7 @@ const App: React.FC = () => {
+         )}
+ 
+         {view === 'sports' && (
+-          <div className="animate-fade-in relative">
++          <div className="animate-fade-in relative h-full w-full">
+             {iframeLoading && (
+               <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-lg" style={{ height: 'calc(100vh - var(--header-height) - 10px)' }}>
+                 <div className="flex flex-col items-center gap-4">
+@@ -1578,41 +1617,42 @@ const App: React.FC = () => {
+                 </div>
+               </div>
+             )}
+-            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))', minHeight: '850px' }}>
+-              <iframe 
+-                src="https://sport.7yrrerfcet.com/SportsBook/Home"
+-                frameBorder="0"
+-                allowFullScreen
+-                title="Canlı Spor Bahisleri"
+-                className="relative z-0"
+-                style={{
+-                  position: 'absolute',
+-                  top: '0',
+-                  left: '0',
+-                  width: '100%',
+-                  height: '100%'
+-                }}
+-              />
+-
+-              {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
+-              {/* Only covers the right side so the user can click the left side to open the betslip */}
+-              {!isMobile && (
+-                <div 
+-                  className="absolute z-30 cursor-pointer"
+-                  style={{
+-                    bottom: '0',
+-                    right: '0',
+-                    width: '140px',
+-                    height: '60px',
+-                    backgroundColor: 'transparent'
++            <div 
++              ref={sportsContainerRef}
++              className="w-full rounded-lg shadow-2xl bg-[#09090b] relative" 
++              style={{ 
++                height: '100%', 
++                overflowX: isMobile ? 'auto' : 'hidden',
++                overflowY: 'hidden',
++                WebkitOverflowScrolling: 'touch'
++              }}
++            >
++              <div style={{ width: isMobile ? '768px' : '100%', height: '100%', position: 'relative' }}>
++                <iframe 
++                  src="https://sport.7yrrerfcet.com/SportsBook/Home"
++                  onLoad={() => {
++                     if (isMobile && sportsContainerRef.current) {
++                        setTimeout(() => {
++                          if (sportsContainerRef.current) sportsContainerRef.current.scrollLeft = 210;
++                        }, 100);
++                     }
+                   }}
+-                  onClick={(e) => {
+-                    e.stopPropagation();
+-                    setShowFakeBetModal(true);
++                  frameBorder="0"
++                  allowFullScreen
++                  title="Canlı Spor Bahisleri"
++                  className="relative z-0"
++                  style={{
++                    position: 'absolute',
++                    top: '0',
++                    left: '0',
++                    width: '100%',
++                    height: '100%',
++                    filter: 'contrast(1.05) brightness(0.9) grayscale(0.2)'
+                   }}
+-                  title="Bahis Yap (Sağ Tarafa Tıklayın)"
+                 />
+-              )}
++
++
++              </div>
+ 
+               {/* Site theme color overlay (tinting the grey background to slate) */}
+               <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" />
+@@ -1692,63 +1732,16 @@ const App: React.FC = () => {
+                   className="relative z-0"
+                   style={{
+                     position: 'absolute',
+-                    top: '-165px',
++                    top: '-230px',
+                     left: '0',
+                     width: '100%',
+-                    height: 'calc(100% + 165px + 2000px)'
++                    height: 'calc(100% + 230px)'
+                   }}
+                 />
+                 
+-                {/* BAHISBEY OVERLAY FOOTER */}
+-              <div className="absolute bottom-0 left-0 w-full z-40 bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex flex-col md:flex-row items-center justify-between px-4 py-3 pointer-events-auto">
+-                <div className="flex items-center gap-3">
+-                  <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: '20px', color: '#fff', letterSpacing: '-1px' }}>
+-                    BAHİSBEY
+-                  </span>
+-                  <div className="h-5 w-px bg-zinc-700 hidden md:block"></div>
+-                  <span className="text-zinc-400 text-[11px] hidden md:block max-w-[450px] leading-snug">
+-                    Bahisbey, Curaçao yasalarına göre lisanslanmış profesyonel ve güvenilir bahis platformudur. Tüm hakları saklıdır.
+-                  </span>
+-                </div>
+-                
+-                <div className="flex items-center gap-3 mt-2 md:mt-0">
+-                   <div className="hidden lg:flex items-center gap-2 mr-2 opacity-80 overflow-x-auto max-w-[200px] md:max-w-none scrollbar-hide">
+-                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAPARA</div>
+-                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">HAVALE</div>
+-                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAYCO</div>
+-                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">MASTERCARD</div>
+-                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">VISA</div>
+-                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">BITCOIN</div>
+-                      <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">TETHER</div>
+-                   </div>
+-                   <button 
+-                     onClick={() => alert('Lisans belgeleri yakında eklenecek.')}
+-                     className="px-3 py-1.5 bg-[#00FFA3]/10 border border-[#00FFA3]/30 text-[#00FFA3] rounded text-[10px] font-bold hover:bg-[#00FFA3]/20 transition-colors flex items-center gap-1.5 shrink-0"
+-                   >
+-                     <ShieldCheck className="w-3.5 h-3.5" />
+-                     LİSANS BELGELERİ
+-                   </button>
+-                </div>
+-              </div>
+               </div>
+-              {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
+-              {!isMobile && (
+-                <div 
+-                  className="absolute z-30 cursor-pointer"
+-                  style={{
+-                    bottom: '0',
+-                    right: '0',
+-                    width: '140px',
+-                    height: '60px',
+-                    backgroundColor: 'transparent'
+-                  }}
+-                  onClick={(e) => {
+-                    e.stopPropagation();
+-                    setShowFakeBetModal(true);
+-                  }}
+-                  title="Bahis Yap (Sağ Tarafa Tıklayın)"
+-                />
+-              )}
++
++
+ 
+               {/* Site theme color overlay (tinting the grey background to slate) */}
+               <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" />
+@@ -1767,40 +1760,41 @@ const App: React.FC = () => {
+                 </div>
+               </div>
+             )}
+-            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+-              <iframe 
+-                src="https://tarafbet977.com/tr/live/"
+-                frameBorder="0"
+-                allowFullScreen
+-                title="Spor 3"
+-                className="relative z-0"
+-                style={{
+-                  position: 'absolute',
+-                  top: '-165px',
+-                  left: '0',
+-                  width: '100%',
+-                  height: 'calc(100% + 165px - 90px + 2000px)'
+-                }}
+-              />
+-              
+-              {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
+-              {!isMobile && (
+-                <div 
+-                  className="absolute z-30 cursor-pointer"
+-                  style={{
+-                    bottom: '0',
+-                    right: '0',
+-                    width: '140px',
+-                    height: '60px',
+-                    backgroundColor: 'transparent'
++            <div 
++              ref={sports3ContainerRef}
++              className="w-full rounded-lg shadow-2xl bg-[#0F172A] relative" 
++              style={{ 
++                height: 'calc(100vh - var(--header-height))',
++                overflowX: isMobile ? 'auto' : 'hidden',
++                overflowY: 'hidden',
++                WebkitOverflowScrolling: 'touch'
++              }}
++            >
++              <div style={{ width: isMobile ? '768px' : '100%', height: '100%', position: 'relative' }}>
++                <iframe 
++                  src="https://tarafbet977.com/tr/live/"
++                  onLoad={() => {
++                     if (isMobile && sports3ContainerRef.current) {
++                        setTimeout(() => {
++                          if (sports3ContainerRef.current) sports3ContainerRef.current.scrollLeft = 210;
++                        }, 100);
++                     }
+                   }}
+-                  onClick={(e) => {
+-                    e.stopPropagation();
+-                    setShowFakeBetModal(true);
++                  frameBorder="0"
++                  allowFullScreen
++                  title="Spor 3"
++                  className="relative z-0"
++                  style={{
++                    position: 'absolute',
++                    top: '0',
++                    left: '0',
++                    width: '100%',
++                    height: '100%'
+                   }}
+-                  title="Bahis Yap (Sağ Tarafa Tıklayın)"
+                 />
+-              )}
++                
++
++              </div>
+ 
+               {/* Site theme color overlay (tinting the grey background to slate) */}
+               <div 
+@@ -1845,28 +1839,11 @@ const App: React.FC = () => {
+                   top: '-165px',
+                   left: '0',
+                   width: '100%',
+-                  height: 'calc(100% + 165px + 2000px)'
++                  height: 'calc(100% + 165px)'
+                 }}
+               />
+               
+-              {/* FAKE BET BUTTON CATCHER (Transparent overlay on bottom right, HALF WIDTH) */}
+-              {!isMobile && (
+-                <div 
+-                  className="absolute z-30 cursor-pointer"
+-                  style={{
+-                    bottom: '0',
+-                    right: '0',
+-                    width: '140px',
+-                    height: '60px',
+-                    backgroundColor: 'transparent'
+-                  }}
+-                  onClick={(e) => {
+-                    e.stopPropagation();
+-                    setShowFakeBetModal(true);
+-                  }}
+-                  title="Bahis Yap (Sağ Tarafa Tıklayın)"
+-                />
+-              )}
++
+ 
+               {/* Site theme color overlay (tinting the grey background to slate) */}
+               <div 
+@@ -1911,7 +1888,7 @@ const App: React.FC = () => {
+                   top: isMobile ? '-80px' : '-210px', // Hides the dark header and top banner completely
+                   left: '0',
+                   width: '100%', 
+-                  height: isMobile ? 'calc(100% + 80px)' : '2000px', // Locks player in place on desktop
++                  height: isMobile ? 'calc(100% + 80px)' : 'calc(100% + 210px)', // Locks player in place on desktop
+                   border: 'none',
+                   zIndex: 10
+                 }}
+@@ -2071,6 +2048,22 @@ const App: React.FC = () => {
+           </div>
+         )}
+ 
++        {view === 'coupons' && (
++          <div className="animate-fade-in" style={{ padding: '0', minHeight: '100vh' }}>
++            <div className="text-white p-8">User Bets placeholder</div>
++          </div>
++        )}
++
++        {view === 'profile' && siteUser && (
++          <div className="animate-fade-in" style={{ padding: '0', minHeight: '100vh' }}>
++            <UserDashboard 
++              siteUser={siteUser} 
++              onUpdateUser={setSiteUser} 
++              onNavigate={handleViewChange} 
++            />
++          </div>
++        )}
++
+         {view === 'promo' && (
+           <div className="animate-fade-in">
+             <PromoCodeView siteUser={siteUser} onNavigate={handleViewChange} />
+@@ -2139,6 +2132,16 @@ const App: React.FC = () => {
+             <DemoGames />
+           </div>
+         )}
++        {view === 'slotra' && (
++          <div className="animate-fade-in w-full h-full min-h-screen">
++            <iframe 
++              src="/api/proxy?url=https://slotra.com/sports/" 
++              className="w-full h-full min-h-screen border-none"
++              title="Gerçek Sports"
++            />
++          </div>
++        )}
++
+         {view === 'kral' && (
+           <div className="animate-fade-in">
+             <KralView 
+@@ -2242,17 +2245,68 @@ const App: React.FC = () => {
+       )}
+ 
+       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
+-      {view !== 'admin' && view !== 'sports' && view !== 'sports3' && view !== 'sports4' && view !== 'sports5' && !showLiveScoreModal && !isMobile && (
+-        <aside className={`hidden xl:flex flex-col border-l border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-[48px]'} transition-all duration-300`}>
+-          <ModernChat
+-            open={isChatOpen}
+-            onOpen={() => setIsChatOpen(true)}
+-            onClose={() => setIsChatOpen(false)}
+-            siteUser={siteUser}
+-            userRole={userRole}
+-            isMobile={false} // Force desktop mode in this slot
+-          />
+-        </aside>
++      {view !== 'admin' && !showLiveScoreModal && !isMobile && (
++        <>
++          <aside className={`hidden xl:flex flex-col border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px] border-l' : 'w-0 border-l-0 overflow-hidden'} transition-all duration-300`}>
++            <ModernChat
++              open={isChatOpen}
++              onOpen={() => setIsChatOpen(true)}
++              onClose={() => setIsChatOpen(false)}
++              siteUser={siteUser}
++              userRole={userRole}
++              isMobile={false} // Force desktop mode in this slot
++            />
++          </aside>
++
++          {/* Gamdom-style Floating Action Buttons (Desktop Only) */}
++          {!isChatOpen && (
++            <div className="hidden xl:flex fixed bottom-6 right-6 flex-col gap-2 z-50">
++              <button 
++                onClick={() => setIsChatOpen(true)}
++                className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
++                title="Canlı Sohbet"
++              >
++                <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#111317] rounded-full"></div>
++                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
++              </button>
++              <button 
++                onClick={() => setShowSearch(true)}
++                className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
++                title="Arama"
++              >
++                <Search className="w-5 h-5 group-hover:text-white transition-colors" />
++              </button>
++              <button 
++                onClick={() => setIsChatOpen(true)}
++                className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
++                title="Canlı Destek"
++              >
++                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
++              </button>
++            </div>
++          )}
++        </>
++      )}
++
++      {/* Gamdom-style Floating Action Buttons (Mobile Only) */}
++      {view !== 'admin' && !showLiveScoreModal && isMobile && !isMobileChatOpen && (
++        <div className="flex xl:hidden fixed bottom-20 right-4 flex-col gap-2 z-50">
++          <button 
++            onClick={() => setIsMobileChatOpen(true)}
++            className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
++            title="Canlı Sohbet"
++          >
++            <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#111317] rounded-full"></div>
++            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
++          </button>
++          <button 
++            onClick={() => setShowSearch(true)}
++            className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
++            title="Arama"
++          >
++            <Search className="w-5 h-5 group-hover:text-white transition-colors" />
++          </button>
++        </div>
+       )}
+ 
+       {/* MOBİL DRAWER - SOHBET */}
+@@ -2276,6 +2330,41 @@ const App: React.FC = () => {
+ 
+     </div>
+     )}
++
++      {/* BAHISBEY OVERLAY FOOTER */}
++      {['sports', 'sports2', 'sports3', 'sports4', 'sports5'].includes(view) && (
++        <div className="fixed bottom-16 md:bottom-0 left-0 w-full z-[90] bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex flex-col md:flex-row items-center justify-between px-4 py-3 pointer-events-auto">
++          <div className="flex items-center gap-3">
++            <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: '20px', color: '#fff', letterSpacing: '-1px' }}>
++              724bets
++            </span>
++            <div className="h-5 w-px bg-zinc-700 hidden md:block"></div>
++            <span className="text-zinc-400 text-[11px] hidden md:block max-w-[450px] leading-snug">
++              724bets, Curaçao yasalarına göre lisanslanmış profesyonel ve güvenilir bahis platformudur. Tüm hakları saklıdır.
++            </span>
++          </div>
++          
++          <div className="flex items-center gap-3 mt-2 md:mt-0">
++             <div className="hidden lg:flex items-center gap-2 mr-2 opacity-80 overflow-x-auto max-w-[200px] md:max-w-none scrollbar-hide">
++                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAPARA</div>
++                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">HAVALE</div>
++                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAYCO</div>
++                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">MASTERCARD</div>
++                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">VISA</div>
++                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">BITCOIN</div>
++                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">TETHER</div>
++             </div>
++             <button 
++               onClick={() => alert('Lisans belgeleri yakında eklenecek.')}
++               className="px-3 py-1.5 bg-[#00FFA3]/10 border border-[#00FFA3]/30 text-[#00FFA3] rounded text-[10px] font-bold hover:bg-[#00FFA3]/20 transition-colors flex items-center gap-1.5 shrink-0"
++             >
++               <ShieldCheck className="w-3.5 h-3.5" />
++               LİSANS BELGELERİ
++             </button>
++          </div>
++        </div>
++      )}
++
+       {/* Mobile Bottom Navigation */}
+       <MobileBottomNav 
+         activeView={view} 
+diff --git a/components/AdminPanel.tsx b/components/AdminPanel.tsx
+index 9a7f58e..da35d25 100644
+--- a/components/AdminPanel.tsx
++++ b/components/AdminPanel.tsx
+@@ -16,6 +16,7 @@ import AdminChatTab from './AdminChatTab';
+ import AdminNotificationTab from './AdminNotificationTab';
+ import AdminPromoTab from './AdminPromoTab';
+ import AdminReferralTab from './AdminReferralTab';
++import { AdminBackupTab } from './AdminBackupTab';
+ import { NavVisibility } from './Header';
+ import { supabase } from '../utils/supabase';
+ import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
+@@ -926,6 +927,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
+                     <button onClick={() => setActiveTab('system')} className={`adm-nav-item ${activeTab === 'system' ? 'active' : ''}`}>
+                       <Settings className="w-4 h-4" /> SİSTEM AYARLARI
+                     </button>
++                    <button onClick={() => setActiveTab('backup')} className={`adm-nav-item ${activeTab === 'backup' ? 'active' : ''}`}>
++                      <Save className="w-4 h-4" /> YEDEKLE & YÜKLE
++                    </button>
+                   </div>
+                 )}
+               </div>
+@@ -2916,6 +2920,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
+         )}
+ 
+         {/* ===== EDITOR MANAGEMENT TAB ===== */}
++        {activeTab === 'backup' && (
++          <div>Backup Tab Placeholder</div>
++        )}
++
+         {activeTab === 'editors' && (
+           <div className="space-y-4 animate-fade-in-up">
+             <div>
+diff --git a/components/AuthModal.tsx b/components/AuthModal.tsx
+index 57ef979..04c34e7 100644
+--- a/components/AuthModal.tsx
++++ b/components/AuthModal.tsx
+@@ -1,5 +1,5 @@
+ import React, { useState } from 'react';
+-import { Lock, User, X, LogIn, UserPlus, Shield, Mail, Phone, Clock, Loader2 } from 'lucide-react';
++import { Lock, User, X, LogIn, UserPlus, Shield, Mail, Phone, Clock, Loader2, Club } from 'lucide-react';
+ import { SiteUser, EditorAccount } from '../types';
+ import { supabase } from '../utils/supabase';
+ 
+@@ -119,40 +119,30 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
+                 balance: found.balance || 0
+             });
+         } else {
+-            if (uname.length < 3) { setMError('Kullanıcı adı en az 3 karakter olmalı.'); setLoading(false); return; }
+-            if (!mEmail.includes('@')) { setMError('Geçerli bir e-posta adresi girin.'); setLoading(false); return; }
+-            if (mPhone.replace(/\D/g, '').length < 10) { setMError('Geçerli bir telefon numarası girin.'); setLoading(false); return; }
+-            if (mTcNo.replace(/\D/g, '').length !== 11) { setMError('T.C. Kimlik Numarası 11 haneli olmalıdır.'); setLoading(false); return; }
++            if (uname.length < 3) { setMError('Kullanıcı adı/E-posta en az 3 karakter olmalı.'); setLoading(false); return; }
+             if (mPassword.length < 6) { setMError('Şifre en az 6 karakter olmalı.'); setLoading(false); return; }
+-            if (mPassword !== mPasswordConfirm) { setMError('Şifreler eşleşmiyor.'); setLoading(false); return; }
+ 
+             // Check existing
+             const { data: existing } = await supabase
+                 .from('members')
+-                .select('username, email, tc_no')
+-                .or(`username.eq.${mUsername.trim()},email.eq.${mEmail.trim().toLowerCase()},tc_no.eq.${mTcNo.trim()}`);
++                .select('username')
++                .eq('username', mUsername.trim());
+             
+             if (existing && existing.length > 0) {
+-                if (existing.some(u => u.username.toLowerCase() === uname)) {
+-                    setMError('Bu kullanıcı adı zaten alınmış!');
+-                } else if (existing.some(u => u.tc_no === mTcNo.trim())) {
+-                    setMError('Bu T.C. Kimlik Numarası zaten sistemde kayıtlı!');
+-                } else {
+-                    setMError('Bu e-posta zaten kayıtlı!');
+-                }
++                setMError('Bu kullanıcı zaten kayıtlı!');
+                 setLoading(false);
+                 return;
+             }
+ 
+             const { data: newUser, error: insertError } = await supabase.from('members').insert([{
+                 username: mUsername.trim(),
+-                email: mEmail.trim().toLowerCase(),
+-                phone: mPhone.trim(),
++                email: mUsername.trim().includes('@') ? mUsername.trim() : `${mUsername.trim().replace(/[^a-zA-Z0-9]/g, '')}@724bets.com`,
++                phone: mUsername.trim().replace(/[^0-9]/g, '') || '05555555555',
+                 password: mPassword,
+                 status: 'pending',
+-                tc_no: mTcNo.trim(),
+-                referral_code: mUsername.trim(),
+-                referred_by: mReferralCode.trim() || null
++                tc_no: '11111111111',
++                referral_code: mUsername.trim().substring(0,8),
++                referred_by: null
+             }]).select().single();
+ 
+             if (insertError || !newUser) {
+@@ -212,184 +202,197 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
+ 
+     return (
+         <div className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+-            <div className="w-full max-w-md bg-[#0a0a0a] border border-zinc-800 rounded-lg overflow-hidden shadow-2xl relative">
+-                <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-red-600 transition-colors z-10">
+-                    <X className="w-4 h-4" />
++            <div className="w-full max-w-md bg-[#161616] rounded-xl overflow-hidden shadow-2xl relative p-6 border border-white/5">
++                <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded bg-[#2A2A2A] flex items-center justify-center text-zinc-400 hover:text-white transition-colors z-10">
++                    <X className="w-5 h-5" />
+                 </button>
+ 
+-                {/* Tabs */}
+-                {/* Tabs */}
+-                <div className="flex border-b border-zinc-800">
+-                    {!hideMemberLogin && (
+-                        <button onClick={() => { setActiveTab('member'); setMError(''); }}
+-                            className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'member' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
+-                            <User className="w-4 h-4" /> <span className="hidden sm:inline">Üye</span> Girişi
+-                        </button>
++                {/* Logo */}
++                <div className="mb-6 flex items-center justify-center flex-col">
++                    <div className="flex items-center">
++                        <Club className="w-8 h-8 text-[#00FFA3] mr-2 drop-shadow-[0_0_10px_rgba(0,255,163,0.5)]" strokeWidth={2.5} />
++                        <span style={{ fontSize: '24px', fontFamily: "'Outfit', sans-serif", fontWeight: 900, letterSpacing: '-1.5px', color: '#fff' }}>
++                            724bets
++                        </span>
++                    </div>
++                    {activeTab !== 'member' && (
++                        <div className="mt-2 text-xs font-bold text-[#00FFA3] tracking-widest uppercase">
++                            {activeTab === 'admin' ? 'YÖNETİCİ GİRİŞİ' : 'MİSAFİR GİRİŞİ'}
++                        </div>
+                     )}
+-                    <button onClick={() => { setActiveTab('admin'); setAError(''); }}
+-                        className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'admin' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
+-                        <Shield className="w-4 h-4" /> <span className="hidden sm:inline">Yönetici / Editör</span>
+-                    </button>
+-                    <button onClick={() => { setActiveTab('guest'); setGError(''); }}
+-                        className={`flex-1 py-4 text-xs font-black uppercase tracking-widest transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${activeTab === 'guest' ? 'text-[#f0b90b] bg-[#f0b90b]/5 border-b-2 border-[#f0b90b]' : 'text-zinc-500 hover:text-zinc-300'}`}>
+-                        <Lock className="w-4 h-4" /> Misafir <span className="hidden sm:inline">Girişi</span>
+-                    </button>
+                 </div>
+ 
+-                <div className="p-8">
+-                    {/* Member Tab */}
+-                    {activeTab === 'member' && (
+-                        <div>
+-                            <div className="flex items-center justify-center gap-3 mb-6">
+-                                <div className="w-14 h-14 bg-[#f0b90b]/10 rounded-full flex items-center justify-center border border-[#f0b90b]/20">
+-                                    {memberMode === 'login' ? <LogIn className="w-7 h-7 text-[#f0b90b]" /> : <UserPlus className="w-7 h-7 text-[#f0b90b]" />}
+-                                </div>
+-                                <div>
+-                                    <h2 className="text-xl font-black text-white">{memberMode === 'login' ? 'TEKRAR HOŞGELDİN' : 'HEMEN KATIL'}</h2>
+-                                    <p className="text-xs text-zinc-500">{memberMode === 'login' ? 'Hesabınla giriş yap' : 'Ücretsiz üye ol, analizlere eriş'}</p>
++                {activeTab === 'member' && (
++                    <>
++                        {registrationPending ? (
++                            <div className="text-center py-8 space-y-4">
++                                <div className="w-20 h-20 mx-auto bg-[#00FFA3]/10 rounded-full flex items-center justify-center mb-4">
++                                    <Clock className="w-10 h-10 text-[#00FFA3] animate-pulse" />
+                                 </div>
++                                <h3 className="text-white font-black text-xl">Kayıt Alındı!</h3>
++                                <p className="text-zinc-400 text-sm leading-relaxed">
++                                    Üyeliğiniz başarıyla oluşturuldu.<br />
++                                    <strong className="text-white">Ekibimiz en kısa sürede onaylayacaktır.</strong><br />
++                                    Onaylandıktan sonra giriş yapabilirsiniz.
++                                </p>
++                                <button onClick={onClose}
++                                    className="mt-6 w-full py-3.5 bg-zinc-800 hover:bg-zinc-700 text-white font-black text-sm rounded-lg transition-all">
++                                    ANLADIM
++                                </button>
+                             </div>
+-
+-                            {registrationPending ? (
+-                                <div className="text-center py-8 space-y-4">
+-                                    <div className="w-20 h-20 mx-auto bg-[#f0b90b]/10 rounded-full flex items-center justify-center mb-4">
+-                                        <Clock className="w-10 h-10 text-[#f0b90b] animate-pulse" />
++                        ) : (
++                            <>
++                                <form onSubmit={handleMemberSubmit} className="space-y-4">
++                                    <div className="relative">
++                                        <input
++                                            type="text" value={mUsername} onChange={e => setMUsername(e.target.value)} required
++                                            className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
++                                            placeholder={memberMode === 'register' ? "E-posta / Telefon Numarası" : "Kullanıcı adı / E-posta"}
++                                        />
+                                     </div>
+-                                    <h3 className="text-white font-black text-xl">Kayıt Alındı!</h3>
+-                                    <p className="text-zinc-400 text-sm leading-relaxed">
+-                                        Üyeliğiniz başarıyla oluşturuldu.<br />
+-                                        <strong className="text-white">Ekibimiz en kısa sürede onaylayacaktır.</strong><br />
+-                                        Onaylandıktan sonra giriş yapabilirsiniz.
+-                                    </p>
+-                                    <button onClick={onClose}
+-                                        className="mt-6 w-full py-3.5 bg-zinc-800 hover:bg-zinc-700 text-white font-black text-sm rounded-lg transition-all">
+-                                        ANLADIM
+-                                    </button>
+-                                </div>
+-                            ) : (
+-                                <>
+-                                    <div className="flex bg-zinc-900 rounded-lg p-1 mb-5">
+-                                        <button onClick={() => { setMemberMode('login'); setMError(''); setMSuccess(''); }}
+-                                            className={`flex-1 py-2 text-xs font-black rounded-lg transition-all ${memberMode === 'login' ? 'bg-[#f0b90b] text-black' : 'text-zinc-500 hover:text-zinc-300'}`}>
+-                                            GİRİŞ YAP
+-                                        </button>
+-                                        <button onClick={() => { setMemberMode('register'); setMError(''); setMSuccess(''); }}
+-                                            className={`flex-1 py-2 text-xs font-black rounded-lg transition-all ${memberMode === 'register' ? 'bg-[#f0b90b] text-black' : 'text-zinc-500 hover:text-zinc-300'}`}>
+-                                            KAYIT OL
+-                                        </button>
+-                                    </div>
+-
+-                                    <form onSubmit={handleMemberSubmit} className="space-y-3">
+-                                        <InputField icon={<User className="w-4 h-4" />} type="text" value={mUsername}
+-                                            onChange={setMUsername} placeholder="Kullanıcı adı" required />
+-
+-                                        {memberMode === 'register' && (
+-                                            <>
+-                                                <InputField icon={<Mail className="w-4 h-4" />} type="email" value={mEmail}
+-                                                    onChange={setMEmail} placeholder="E-posta adresi (zorunlu)" required />
+-                                                <InputField icon={<Phone className="w-4 h-4" />} type="tel" value={mPhone}
+-                                                    onChange={setMPhone} placeholder="Telefon numarası (zorunlu)" required />
+-                                                <InputField icon={<Shield className="w-4 h-4" />} type="text" value={mTcNo}
+-                                                    onChange={setMTcNo} placeholder="T.C. Kimlik Numarası (zorunlu)" required />
+-                                                <InputField icon={<UserPlus className="w-4 h-4" />} type="text" value={mReferralCode}
+-                                                    onChange={setMReferralCode} placeholder="Davet Kodu (opsiyonel)" />
+-                                            </>
+-                                        )}
+-
+-                                        <InputField icon={<Lock className="w-4 h-4" />} type="password" value={mPassword}
+-                                            onChange={setMPassword} placeholder="Şifre" required />
+-
+-                                        {memberMode === 'register' && (
+-                                            <InputField icon={<Lock className="w-4 h-4" />} type="password" value={mPasswordConfirm}
+-                                                onChange={setMPasswordConfirm} placeholder="Şifreyi tekrarla" required />
+-                                        )}
+-
+-                                        {mError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">{mError}</p>}
+-                                        {mSuccess && <p className="text-emerald-500 text-xs font-bold text-center bg-emerald-500/10 py-2 rounded-lg border border-emerald-500/20">{mSuccess}</p>}
+-
+-                                        <button type="submit" disabled={loading}
+-                                            className="w-full bg-[#f0b90b] hover:bg-[#f0b90b]/90 text-black font-black py-3.5 rounded-lg transition-all text-sm tracking-widest uppercase mt-1 flex items-center justify-center gap-2">
+-                                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (memberMode === 'login' ? 'GİRİŞ YAP' : 'KAYIT OL')}
+-                                        </button>
+-                                    </form>
+ 
+                                     {memberMode === 'register' && (
+-                                        <p className="text-center text-[10px] text-zinc-700 mt-3 font-bold">
+-                                            📧 E-posta ve telefon numarası güvenlik doğrulaması için zorunludur.
+-                                        </p>
++                                        <div className="bg-[#2A2A2A] rounded p-3 mt-1">
++                                            <p className="text-[11px] text-zinc-300 font-medium leading-relaxed">
++                                                Bonuslardan yararlanmak için e-posta adresinizin veya telefon numaranızın doğru olduğundan emin olun
++                                            </p>
++                                        </div>
+                                     )}
+ 
+-                                    {memberMode === 'login' && (
+-                                        <p className="text-center text-xs text-zinc-600 mt-4">
+-                                            Hesabın yok mu?{' '}
+-                                            <button onClick={() => setMemberMode('register')} className="text-[#f0b90b] font-bold hover:underline">
+-                                                Hemen kayıt ol
+-                                            </button>
+-                                        </p>
++                                    <div className="relative mt-2">
++                                        <input
++                                            type="password" value={mPassword} onChange={e => setMPassword(e.target.value)} required
++                                            className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
++                                            placeholder="Şifrenizi Girin"
++                                        />
++                                        <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white">
++                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
++                                        </button>
++                                    </div>
++                                    
++                                    {memberMode === 'register' && (
++                                        <>
++                                            {/* Password strength bars */}
++                                            <div className="flex gap-1.5 mt-2">
++                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 0 ? 'bg-[#00FFA3]' : 'bg-zinc-800'}`}></div>
++                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 3 ? 'bg-[#00FFA3]' : 'bg-zinc-800'}`}></div>
++                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 5 ? 'bg-[#00FFA3]' : 'bg-zinc-800'}`}></div>
++                                            </div>
++
++                                            <label className="flex items-start gap-3 mt-4 cursor-pointer group">
++                                                <div className="relative flex items-center justify-center w-5 h-5 rounded bg-[#00FFA3] shrink-0 mt-0.5">
++                                                    <svg className="w-3.5 h-3.5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
++                                                </div>
++                                                <p className="text-[13px] text-zinc-300 font-medium">
++                                                    18 yaşından büyüğüm, Kullanım Şartlarını okudum ve kabul ediyorum <a href="#" className="text-[#00FFA3] hover:underline">Şartlar ve Koşullar</a>
++                                                </p>
++                                            </label>
++                                        </>
+                                     )}
+-                                </>
+-                            )}
+-                        </div>
+-                    )}
+ 
+-                    {/* Admin Tab */}
+-                    {activeTab === 'admin' && (
+-                        <div>
+-                            <div className="flex items-center justify-center gap-3 mb-6">
+-                                <div className="w-14 h-14 bg-zinc-800 rounded-full flex items-center justify-center border border-zinc-700">
+-                                    <Shield className="w-7 h-7 text-zinc-300" />
+-                                </div>
+-                                <div>
+-                                    <h2 className="text-xl font-black text-white">YÖNETİCİ/EDİTÖR</h2>
+-                                    <p className="text-xs text-zinc-500">Yetkili personel girişi</p>
+-                                </div>
+-                            </div>
+-                            <form onSubmit={handleAdminSubmit} className="space-y-4">
+-                                <InputField icon={<User className="w-4 h-4" />} type="text" value={aUsername}
+-                                    onChange={setAUsername} placeholder="Kullanıcı adı" required />
+-                                <InputField icon={<Lock className="w-4 h-4" />} type="password" value={aPassword}
+-                                    onChange={setAPassword} placeholder="Şifre" required />
+-                                {aError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">{aError}</p>}
+-                                <button type="submit"
+-                                    className="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-black py-3.5 rounded-lg transition-all text-sm tracking-widest uppercase mt-2 border border-zinc-700">
+-                                    GİRİŞ YAP
+-                                </button>
+-                            </form>
+-                            <div className="mt-4 p-3 bg-zinc-900/50 rounded-lg border border-zinc-800 text-center">
+-                                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">🔐 Sadece yetkili personel için</p>
+-                            </div>
+-                        </div>
+-                    )}
++                                    {mError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded border border-red-500/20">{mError}</p>}
++                                    {mSuccess && <p className="text-[#00FFA3] text-xs font-bold text-center bg-[#00FFA3]/10 py-2 rounded border border-[#00FFA3]/20">{mSuccess}</p>}
+ 
+-                    {/* Guest Tab */}
+-                    {activeTab === 'guest' && (
+-                        <div>
+-                            <div className="flex items-center justify-center gap-3 mb-6">
+-                                <div className="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/20">
+-                                    <Lock className="w-7 h-7 text-emerald-500" />
+-                                </div>
+-                                <div>
+-                                    <h2 className="text-xl font-black text-white">MİSAFİR GİRİŞİ</h2>
+-                                    <p className="text-xs text-zinc-500">Sadece ziyaretçi yetkisi</p>
++                                    <button type="submit" disabled={loading}
++                                        className="w-full bg-[#00FFA3] hover:bg-[#00e693] text-black font-black py-4 rounded transition-all text-base tracking-wide mt-4">
++                                        {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : (memberMode === 'register' ? 'Kayıt Ol' : 'Giriş Yap')}
++                                    </button>
++                                </form>
++
++                                {memberMode === 'register' && (
++                                    <>
++                                        <div className="flex items-center gap-4 my-6">
++                                            <div className="h-px bg-zinc-800 flex-1"></div>
++                                            <span className="text-zinc-400 text-[13px] font-medium tracking-widest">VEYA</span>
++                                            <div className="h-px bg-zinc-800 flex-1"></div>
++                                        </div>
++
++                                        <button className="w-full bg-[#2A2A2A] hover:bg-[#333333] text-white font-bold py-3.5 rounded transition-all text-[15px] flex items-center justify-center gap-3">
++                                            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
++                                            Google'a kaydolun
++                                        </button>
++                                    </>
++                                )}
++
++                                <div className="mt-6 text-center">
++                                    <p className="text-[14px] text-zinc-300 font-medium">
++                                        {memberMode === 'register' ? 'Zaten bir hesabınız var' : 'Hesabın yok mu?'}
++                                        <button 
++                                            onClick={() => { setMemberMode(memberMode === 'register' ? 'login' : 'register'); setMError(''); }} 
++                                            className="text-[#00FFA3] font-bold ml-1 hover:underline"
++                                        >
++                                            {memberMode === 'register' ? 'Giriş Yap' : 'Hemen Kayıt Ol'}
++                                        </button>
++                                    </p>
+                                 </div>
+-                            </div>
+-                            <form onSubmit={handleGuestSubmit} className="space-y-4">
+-                                <InputField icon={<User className="w-4 h-4" />} type="text" value={gUsername}
+-                                    onChange={setGUsername} placeholder="Kullanıcı adı" required />
+-                                <InputField icon={<Lock className="w-4 h-4" />} type="password" value={gPassword}
+-                                    onChange={setGPassword} placeholder="Şifre" required />
+-                                {gError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">{gError}</p>}
+-                                <button type="submit"
+-                                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3.5 rounded-lg transition-all text-sm tracking-widest uppercase mt-2 shadow-lg shadow-emerald-500/20">
+-                                    MİSAFİR OLARAK GİR
+-                                </button>
+-                            </form>
+-                            <div className="mt-4 p-3 bg-zinc-900/50 rounded-lg border border-zinc-800 text-center">
+-                                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">👀 Panele giriş izni yoktur</p>
+-                            </div>
++                            </>
++                        )}
++                    </>
++                )}
++
++                {activeTab === 'admin' && (
++                    <form onSubmit={handleAdminSubmit} className="space-y-4">
++                        <div className="relative">
++                            <input
++                                type="text" value={aUsername} onChange={e => setAUsername(e.target.value)} required
++                                className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
++                                placeholder="Kullanıcı adı"
++                            />
+                         </div>
+-                    )}
++                        <div className="relative mt-2">
++                            <input
++                                type="password" value={aPassword} onChange={e => setAPassword(e.target.value)} required
++                                className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
++                                placeholder="Şifrenizi Girin"
++                            />
++                        </div>
++                        {aError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded border border-red-500/20">{aError}</p>}
++                        <button type="submit"
++                            className="w-full bg-[#00FFA3] hover:bg-[#00e693] text-black font-black py-4 rounded transition-all text-base tracking-wide mt-4">
++                            Yönetici Girişi Yap
++                        </button>
++                    </form>
++                )}
++
++                {activeTab === 'guest' && (
++                    <form onSubmit={handleGuestSubmit} className="space-y-4">
++                        <div className="relative">
++                            <input
++                                type="text" value={gUsername} onChange={e => setGUsername(e.target.value)} required
++                                className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
++                                placeholder="Kullanıcı adı"
++                            />
++                        </div>
++                        <div className="relative mt-2">
++                            <input
++                                type="password" value={gPassword} onChange={e => setGPassword(e.target.value)} required
++                                className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
++                                placeholder="Şifrenizi Girin"
++                            />
++                        </div>
++                        {gError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded border border-red-500/20">{gError}</p>}
++                        <button type="submit"
++                            className="w-full bg-[#00FFA3] hover:bg-[#00e693] text-black font-black py-4 rounded transition-all text-base tracking-wide mt-4">
++                            Misafir Girişi Yap
++                        </button>
++                    </form>
++                )}
++
++                {/* Bottom Links */}
++                <div className="mt-8 text-center pb-2 flex items-center justify-center gap-4 border-t border-white/5 pt-4">
++                    <button onClick={() => setActiveTab('member')} className={`font-medium text-[12px] transition-colors ${activeTab === 'member' ? 'text-[#00FFA3]' : 'text-zinc-500 hover:text-zinc-300'}`}>
++                        Üye
++                    </button>
++                    <span className="text-zinc-800">|</span>
++                    <button onClick={() => setActiveTab('admin')} className={`font-medium text-[12px] transition-colors ${activeTab === 'admin' ? 'text-[#00FFA3]' : 'text-zinc-500 hover:text-zinc-300'}`}>
++                        Yönetici
++                    </button>
++                    <span className="text-zinc-800">|</span>
++                    <button onClick={() => setActiveTab('guest')} className={`font-medium text-[12px] transition-colors ${activeTab === 'guest' ? 'text-[#00FFA3]' : 'text-zinc-500 hover:text-zinc-300'}`}>
++                        Misafir
++                    </button>
+                 </div>
++
+             </div>
+         </div>
+     );
+diff --git a/components/CasinoLobby.tsx b/components/CasinoLobby.tsx
+index dd96acc..1c51b83 100644
+--- a/components/CasinoLobby.tsx
++++ b/components/CasinoLobby.tsx
+@@ -1,7 +1,27 @@
+ import React, { useState } from 'react';
+-import { Search, ChevronLeft, ChevronRight, Play } from 'lucide-react';
++import { Search, ChevronLeft, ChevronRight, Play, X, AlertTriangle } from 'lucide-react';
++import { createPortal } from 'react-dom';
+ import { CasinoLobbyGame } from '../types';
+ 
++// Helper to map game names to Pragmatic Play demo symbols
++const getDemoUrl = (game: any): string | null => {
++  if (!game) return null;
++  const nameString = (game.name || game.img || '').toLowerCase().replace(/[^a-z0-9]/g, '');
++  let symbol = '';
++  
++  // Maps
++  if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
++  else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
++  else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
++  else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
++  else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
++  else if (nameString.includes('fruitparty')) symbol = 'vs20fruitparty';
++  else if (nameString.includes('doghouse')) symbol = 'vs20doghouse';
++  else return null; // Default to null if no demo found
++
++  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
++};
++
+ const PROVIDERS = [
+   { id: 'pragmatic', name: 'Pragmatic Play', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Pragmatic/Favicon_20251117112756861.webp' },
+   { id: 'egtdigital', name: 'EGT Digital', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/EGT%20Digital/Favicon_20251117125448105.webp', badge: 'YENİ', badgeColor: 'bg-red-500' },
+@@ -126,19 +146,15 @@ const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
+   </div>
+ );
+ 
+-interface CasinoLobbyProps {
+-  customGames?: CasinoLobbyGame[];
+-  isLoggedIn?: boolean;
+-}
+-
+-const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [], isLoggedIn = false }) => {
+-  const [selectedGame, setSelectedGame] = useState<any | null>(null);
++const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: boolean }> = ({ customGames = [], isLoggedIn = false }) => {
++  const [selectedGame, setSelectedGame] = useState<any>(null);
++  const [showDemoIframe, setShowDemoIframe] = useState<boolean>(false);
+ 
+   const handleAction = () => {
+     if (isLoggedIn) {
+       window.dispatchEvent(new Event('openDepositModal'));
+     } else {
+-      window.dispatchEvent(new Event('openLoginModal'));
++      window.dispatchEvent(new CustomEvent('open-auth-modal'));
+     }
+   };
+ 
+@@ -337,62 +353,98 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [], isLoggedIn
+            </div>
+         </div>
+ 
+-      {selectedGame && (
+-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+-          <div className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity" onClick={() => setSelectedGame(null)} />
+-          <div className="relative z-10 bg-[#161821] rounded-2xl border border-white/10 w-full max-w-4xl overflow-hidden flex flex-col md:flex-row shadow-2xl animate-fade-in-up">
+-            {/* Close Button */}
+-            <button onClick={() => setSelectedGame(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-black rounded-full text-white z-20 transition-colors">✕</button>
+-            
+-            {/* Left Panel: Demo Preview */}
+-            <div className="w-full md:w-3/5 bg-black relative min-h-[300px] flex items-center justify-center overflow-hidden">
+-              <img src={selectedGame.img} alt="Game Thumbnail" className="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm scale-110" />
+-              <div className="relative z-10 flex flex-col items-center gap-4 text-center p-6">
+-                 <div className="w-24 h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/20">
+-                   <img src={selectedGame.img} alt="Game Icon" className="w-full h-full object-cover" />
+-                 </div>
+-                 <div>
+-                   <h3 className="text-2xl font-black text-white drop-shadow-md">DEMO OYUN</h3>
+-                   <p className="text-zinc-400 font-semibold mt-1">Oyun önizlemesi yükleniyor...</p>
+-                 </div>
+-                 <div className="mt-4 flex gap-2">
+-                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+-                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '150ms' }}></div>
+-                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '300ms' }}></div>
+-                 </div>
++      {selectedGame && createPortal(
++        <div 
++          className="fixed inset-0 z-[99999] flex p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
++          onClick={(e) => {
++            if (e.target === e.currentTarget) {
++              setSelectedGame(null);
++              setShowDemoIframe(false);
++            }
++          }}
++        >
++          {showDemoIframe && getDemoUrl(selectedGame) ? (
++            <div className="relative m-auto z-10 w-full max-w-4xl h-[70vh] bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 animate-fade-in flex flex-col">
++              <div className="flex items-center justify-between p-3 bg-[#0F1115] border-b border-white/10">
++                <div className="flex items-center gap-2">
++                   <div className="w-2 h-2 rounded-full bg-[#00FFA3] animate-pulse" />
++                   <span className="text-white font-bold text-sm">{selectedGame.name || 'Demo Oyun'}</span>
++                   <span className="bg-[#00FFA3]/20 text-[#00FFA3] text-[10px] px-2 py-0.5 rounded font-black tracking-widest uppercase ml-2">Sanal Bakiye</span>
++                </div>
++                <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-white hover:text-black rounded-full text-white/70 transition-all">✕</button>
++              </div>
++              <div className="flex-1 w-full bg-black relative">
++                <iframe 
++                  src={getDemoUrl(selectedGame)!}
++                  className="absolute inset-0 w-full h-full border-0"
++                  allowFullScreen
++                  title={selectedGame.name || 'Demo Game'}
++                />
+               </div>
+             </div>
++          ) : (
++            <div className="relative m-auto z-10 bg-[#0F1115] rounded-3xl border border-white/5 w-full max-w-[380px] shadow-2xl shadow-black/50 overflow-hidden animate-fade-in">
++              {/* Close Button */}
++              <button onClick={() => { setSelectedGame(null); setShowDemoIframe(false); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-white hover:text-black rounded-full text-white/70 transition-all z-20">✕</button>
++              
++              {/* Top Image Section */}
++              <div className="relative h-48 w-full flex flex-col items-center justify-center pt-8">
++                <div className="absolute inset-0 bg-black">
++                  <img src={selectedGame.img} className="w-full h-full object-cover opacity-40" />
++                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F1115] via-[#0F1115]/80 to-transparent" />
++                </div>
++                
++                {/* Game Icon Center */}
++                <div className="relative z-10 w-24 h-24 rounded-2xl overflow-hidden border-2 border-white/10 shadow-[0_0_30px_rgba(0,255,163,0.15)] transition-all">
++                  <img src={selectedGame.img} className="w-full h-full object-cover" />
++                </div>
++              </div>
++
++              {/* Content Section */}
++              <div className="relative z-10 px-6 pb-8 pt-2 text-center flex flex-col items-center">
++                <h3 className="text-2xl font-black text-white mb-1 tracking-tight">{selectedGame.name || 'Pragmatic Play Slot'}</h3>
++                <p className="text-zinc-400 text-xs uppercase tracking-widest mb-6 font-bold">{getDemoUrl(selectedGame) ? 'Gerçek veya Sanal Oyna' : 'Gerçek Parayla Oyna'}</p>
++
++                <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
++
++                <h4 className="text-lg font-bold text-white mb-2">{isLoggedIn ? 'Şansını Dene!' : 'Maceraya Katıl!'}</h4>
++                <p className="text-zinc-400 text-sm mb-8 leading-relaxed">
++                  {isLoggedIn 
++                    ? 'Kaldığın yerden devam et ve kazanmaya başla.'
++                    : 'Gerçek heyecan için hemen aramıza katıl!'}
++                </p>
+ 
+-            {/* Right Panel: CTA */}
+-            <div className="w-full md:w-2/5 p-8 flex flex-col justify-center relative overflow-hidden">
+-               <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl -mr-16 -mt-16" />
+-               <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -ml-16 -mb-16" />
+-               
+-               <h3 className="text-3xl font-black text-white mb-2 leading-tight">
+-                 {isLoggedIn ? 'Şansını Dene!' : 'Maceraya Katıl!'}
+-               </h3>
+-               <p className="text-zinc-400 text-sm mb-8 leading-relaxed relative z-10">
+-                 {isLoggedIn 
+-                   ? 'Oynamaya başlamak için hemen bakiyeni yenile ve heyecana kaldığın yerden devam et.'
+-                   : 'Gerçek parayla oynamak, büyük ödülleri kazanmak ve en iyi oyun deneyimini yaşamak için hemen üye ol!'}
+-               </p>
+-
+-               <button 
+-                 onClick={() => {
+-                   setSelectedGame(null);
+-                   handleAction();
+-                 }}
+-                 className={`w-full py-4 rounded-xl font-black text-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg relative z-10 ${
+-                   isLoggedIn 
+-                     ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-black shadow-green-500/25 hover:shadow-green-500/40'
+-                     : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-blue-500/25 hover:shadow-blue-500/40'
+-                 }`}
+-               >
+-                 {isLoggedIn ? 'Bakiye Yükle (Cüzdan)' : 'Giriş Yap / Üye Ol'}
+-               </button>
++                <div className="w-full flex flex-col gap-3">
++                  <button 
++                     onClick={() => {
++                       setSelectedGame(null);
++                       setShowDemoIframe(false);
++                       handleAction();
++                     }}
++                     className={`w-full py-3.5 rounded-xl font-black text-sm transition-all shadow-lg relative z-10 ${
++                       isLoggedIn 
++                         ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]'
++                         : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-[0_0_20px_rgba(79,70,229,0.4)]'
++                     }`}
++                   >
++                     Gerçek Parayla Oyna
++                   </button>
++
++                  {getDemoUrl(selectedGame) && (
++                    <button 
++                       onClick={() => setShowDemoIframe(true)}
++                       className="w-full py-3 rounded-xl font-bold text-sm transition-all shadow-lg relative z-10 bg-[#2A2D3A] text-white hover:bg-[#3A3D4A] border border-white/5 hover:border-white/20 flex items-center justify-center gap-2"
++                     >
++                       <Play size={16} className="text-[#00FFA3]" fill="currentColor" />
++                       Demo Oyna (Sanal Bakiye)
++                     </button>
++                  )}
++                </div>
++              </div>
+             </div>
+-          </div>
+-        </div>
++          )}
++        </div>,
++        document.body
+       )}
+ 
+       </div>
+diff --git a/components/CategoryNav.tsx b/components/CategoryNav.tsx
+index 4b7670d..1c41b96 100644
+--- a/components/CategoryNav.tsx
++++ b/components/CategoryNav.tsx
+@@ -1,11 +1,11 @@
+ import React from 'react';
+ 
+ const categories = [
+-  { id: 'spor', title: 'SPOR', image: '/menu-spor.webp' },
+-  { id: 'canli-bahis', title: 'CANLI BAHİS', image: '/menu-canli.webp' },
+-  { id: 'casino', title: 'CASINO', image: '/menu-casino.webp' },
+-  { id: 'canli-casino', title: 'CANLI CASINO', image: '/menu-canli-casino.png' },
+-  { id: 'haberler', title: 'HABERLER', image: '/menu-haberler.webp' },
++  { id: 'spor', title: 'SPOR', image: '/menu-spor.webp', url: 'https://bahisbey1438.com/tr/sport/?btag=59649488_330539' },
++  { id: 'canli-bahis', title: 'CANLI BAHİS', image: '/menu-canli.webp', url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' },
++  { id: 'casino', title: 'CASINO', image: '/menu-casino.webp', url: 'https://bahisbey1438.com/tr/lobby/casino/?btag=59649488_330539' },
++  { id: 'canli-casino', title: 'CANLI CASINO', image: '/menu-canli-casino.png', url: 'https://bahisbey1438.com/tr/lobby/livecasino/?btag=59649488_330539' },
++  { id: 'haberler', title: 'HABERLER', image: '/menu-haberler.webp', url: 'https://bahisbey1438.com/tr/sport/sports/football/flt-1-1239-52530/?btag=59649488_330539' },
+ ];
+ 
+ const CategoryNav: React.FC = () => {
+@@ -17,7 +17,7 @@ const CategoryNav: React.FC = () => {
+             key={cat.id} 
+             className="flex flex-col items-center gap-3 cursor-pointer group flex-shrink-0 w-[90px] sm:w-[100px] md:w-[120px]" 
+             onClick={() => {
+-              const event = new CustomEvent('internal-navigate', { detail: { url: `/${cat.id}` } });
++              const event = new CustomEvent('internal-navigate', { detail: { url: cat.url } });
+               window.dispatchEvent(event);
+             }}
+           >
+diff --git a/components/FakeBetModal.tsx b/components/FakeBetModal.tsx
+index f4602bc..d95856e 100644
+--- a/components/FakeBetModal.tsx
++++ b/components/FakeBetModal.tsx
+@@ -1,4 +1,4 @@
+-import React, { useState } from 'react';
++import React, { useState, useEffect } from 'react';
+ import { Loader2, CheckCircle2, Wallet, X } from 'lucide-react';
+ 
+ interface FakeBetModalProps {
+@@ -8,38 +8,84 @@ interface FakeBetModalProps {
+     onSubmit: (amount: number) => Promise<void>;
+ }
+ 
++type BetMatch = {
++  matchName: string;
++  market: string;
++  odds: number;
++};
++
++type BetSlipData = {
++  matches: BetMatch[];
++  totalOdds: number;
++  potentialWin?: number;
++};
++
++const DEFAULT_MOCK_DATA: BetSlipData = {
++  matches: [
++    { matchName: 'İspanya vs Belçika', market: 'Maç Sonucu: 1', odds: 1.66 },
++    { matchName: 'Fransa vs Fas', market: 'Maç Sonucu: 1', odds: 1.64 },
++    { matchName: 'Norveç vs İngiltere', market: 'Turu Kim Geçer ?: Takım 1', odds: 2.70 }
++  ],
++  totalOdds: 7.35
++};
++
+ const FakeBetModal: React.FC<FakeBetModalProps> = ({ isOpen, onClose, userBalance, onSubmit }) => {
+     const [amount, setAmount] = useState('');
+     const [loading, setLoading] = useState(false);
+     const [error, setError] = useState('');
+     const [success, setSuccess] = useState('');
++    const [betData, setBetData] = useState<BetSlipData | null>(null);
++
++    useEffect(() => {
++        if (!isOpen) return;
++
++        // Reset state on open
++        setAmount('');
++        setError('');
++        setSuccess('');
++        setBetData(DEFAULT_MOCK_DATA); // Start with mock data, override if message received
++
++        const handleMessage = (event: MessageEvent) => {
++            // Listen for postMessage from iframe
++            try {
++                if (event.data && event.data.type === 'BETSLIP_UPDATE') {
++                    setBetData(event.data.payload);
++                }
++            } catch (e) {
++                // Ignore parse errors
++            }
++        };
++
++        window.addEventListener('message', handleMessage);
++        return () => window.removeEventListener('message', handleMessage);
++    }, [isOpen]);
+ 
+     if (!isOpen) return null;
+ 
++    const parsedAmount = parseFloat(amount) || 0;
++    const potentialWin = betData ? (parsedAmount * betData.totalOdds) : 0;
++
+     const handleSubmit = async (e: React.FormEvent) => {
+         e.preventDefault();
+         setError('');
+         setSuccess('');
+ 
+-        const val = parseFloat(amount);
+-        if (isNaN(val) || val <= 0) {
++        if (parsedAmount <= 0) {
+             setError('Lütfen geçerli bir tutar giriniz.');
+             return;
+         }
+ 
+-        if (val > userBalance) {
++        if (parsedAmount > userBalance) {
+             setError('Bakiyeniz yetersiz.');
+             return;
+         }
+ 
+         setLoading(true);
+         try {
+-            await onSubmit(val);
+-            setSuccess(`✅ Bahisiniz başarıyla yatırılmıştır! (-${val.toFixed(2)} ₺)`);
++            await onSubmit(parsedAmount);
++            setSuccess(`✅ Bahisiniz başarıyla yatırılmıştır! (-${parsedAmount.toFixed(2)} ₺)`);
+             setTimeout(() => {
+                 onClose();
+-                setAmount('');
+-                setSuccess('');
+             }, 2000);
+         } catch (err: any) {
+             setError(err.message || 'Bahis işlemi başarısız.');
+@@ -65,40 +111,72 @@ const FakeBetModal: React.FC<FakeBetModalProps> = ({ isOpen, onClose, userBalanc
+                 </div>
+ 
+                 {/* Body */}
+-                <form onSubmit={handleSubmit} className="p-5 space-y-4">
+-                    <div className="flex items-center justify-between text-xs font-bold text-zinc-400 bg-slate-900/50 px-3 py-2 rounded-lg">
+-                        <span>Mevcut Bakiye:</span>
+-                        <span className="text-emerald-400 font-mono">{userBalance.toFixed(2)} ₺</span>
+-                    </div>
+-
+-                    <div className="space-y-1">
+-                        <label className="text-xs font-bold text-zinc-400">Yatırmak İstediğiniz Tutar (₺)</label>
+-                        <div className="relative">
+-                            <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
+-                            <input 
+-                                type="number" 
+-                                step="0.01"
+-                                value={amount}
+-                                onChange={(e) => setAmount(e.target.value)}
+-                                disabled={loading || !!success}
+-                                className="w-full bg-slate-900 border border-zinc-700 text-white font-bold text-sm rounded-lg pl-10 pr-4 py-3 outline-none focus:border-emerald-500/50 transition-all"
+-                                placeholder="0.00"
+-                                autoFocus
+-                            />
++                <div className="p-5 space-y-4">
++                    {/* Matches List */}
++                    {betData && betData.matches.length > 0 && (
++                        <div className="space-y-2 max-h-[220px] overflow-y-auto hide-scrollbar pr-1">
++                            {betData.matches.map((match, idx) => (
++                                <div key={idx} className="bg-black/40 border border-white/5 rounded-xl p-3 flex justify-between items-center group hover:bg-black/60 transition-colors">
++                                    <div className="flex flex-col gap-1 w-[70%]">
++                                        <span className="text-white text-xs font-bold truncate">{match.matchName}</span>
++                                        <span className="text-zinc-400 text-[10px] truncate">{match.market}</span>
++                                    </div>
++                                    <div className="w-[30%] text-right">
++                                        <span className="text-emerald-400 font-black text-sm">{match.odds.toFixed(2)}</span>
++                                    </div>
++                                </div>
++                            ))}
+                         </div>
+-                    </div>
++                    )}
+ 
+-                    {error && <div className="text-red-400 text-[11px] font-bold bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">{error}</div>}
+-                    {success && <div className="text-emerald-400 text-xs font-bold bg-emerald-500/10 px-3 py-2 rounded-lg border border-emerald-500/20 text-center">{success}</div>}
++                    {/* Odds & Win Info */}
++                    {betData && (
++                        <div className="flex items-center justify-between text-xs font-bold bg-slate-900/50 px-3 py-2 rounded-lg border border-white/5">
++                            <span className="text-zinc-400">Toplam Oran:</span>
++                            <span className="text-emerald-400 font-mono text-sm">{betData.totalOdds.toFixed(2)}</span>
++                        </div>
++                    )}
+ 
+-                    <button 
+-                        type="submit" 
+-                        disabled={loading || !!success}
+-                        className="w-full py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-black text-sm uppercase tracking-wider shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-50"
+-                    >
+-                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'BAHİS YAP'}
+-                    </button>
+-                </form>
++                    <form onSubmit={handleSubmit} className="space-y-4 pt-2">
++                        <div className="flex items-center justify-between text-xs font-bold text-zinc-400 bg-slate-900/50 px-3 py-2 rounded-lg">
++                            <span>Mevcut Bakiye:</span>
++                            <span className="text-emerald-400 font-mono">{userBalance.toFixed(2)} ₺</span>
++                        </div>
++
++                        <div className="space-y-1">
++                            <div className="flex justify-between items-center">
++                                <label className="text-xs font-bold text-zinc-400">Yatırmak İstediğiniz Tutar (₺)</label>
++                                {parsedAmount > 0 && betData && (
++                                    <span className="text-[10px] text-zinc-500 font-medium">Kazanç: <span className="text-emerald-400 font-bold">{potentialWin.toFixed(2)} ₺</span></span>
++                                )}
++                            </div>
++                            <div className="relative">
++                                <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
++                                <input 
++                                    type="number" 
++                                    step="0.01"
++                                    value={amount}
++                                    onChange={(e) => setAmount(e.target.value)}
++                                    disabled={loading || !!success}
++                                    className="w-full bg-slate-900 border border-zinc-700 text-white font-bold text-sm rounded-lg pl-10 pr-4 py-3 outline-none focus:border-emerald-500/50 transition-all"
++                                    placeholder="0.00"
++                                    autoFocus
++                                />
++                            </div>
++                        </div>
++
++                        {error && <div className="text-red-400 text-[11px] font-bold bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">{error}</div>}
++                        {success && <div className="text-emerald-400 text-xs font-bold bg-emerald-500/10 px-3 py-2 rounded-lg border border-emerald-500/20 text-center">{success}</div>}
++
++                        <button 
++                            type="submit" 
++                            disabled={loading || !!success}
++                            className="w-full py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-black text-sm uppercase tracking-wider shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-50"
++                        >
++                            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'BAHİS YAP'}
++                        </button>
++                    </form>
++                </div>
+ 
+             </div>
+         </div>
+diff --git a/components/GameLobbyGrid.tsx b/components/GameLobbyGrid.tsx
+index fcf9028..78d3aa0 100644
+--- a/components/GameLobbyGrid.tsx
++++ b/components/GameLobbyGrid.tsx
+@@ -1,4 +1,4 @@
+-import React, { useRef, useState } from 'react';
++import React, { useRef, useState, useEffect } from 'react';
+ import { ChevronLeft, ChevronRight, Flame, Trophy, Target } from 'lucide-react';
+ import { CasinoLobbyGame } from '../types';
+ 
+@@ -130,16 +130,62 @@ interface GameLobbyGridProps {
+ 
+ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
+   const activeCustomGames = customGames.filter(g => g.isActive);
+-  
++  const [tick, setTick] = useState(0);
++
++  useEffect(() => {
++    const interval = setInterval(() => {
++      setTick(prev => prev + 1);
++    }, 2000); // Daha sık güncellenmesi için 2 saniyede bir
++    return () => clearInterval(interval);
++  }, []);
++
++  const getDynamicPlayers = (gameId: string) => {
++    const now = new Date();
++    const hour = now.getHours();
++    const minute = now.getMinutes();
++    const timeFraction = (hour + minute / 60) / 24;
++
++    // Gece 22:00 zirve, Gündüz 10:00 dip noktası olsun.
++    const peakFraction = 22 / 24;
++    const timeFactor = Math.cos(2 * Math.PI * (timeFraction - peakFraction)); // -1 ile 1 arası
++    const timeMultiplier = (timeFactor + 1) / 2; // 0 ile 1 arası
++
++    // Oyunlara özel sabit bir sayı varyasyonu (seed ile)
++    let seed = 0;
++    for (let i = 0; i < gameId.length; i++) {
++      seed += gameId.charCodeAt(i);
++    }
++    const gameVariation = (seed % 61) - 30; // -30 ile +30 arası
++
++    // Her saniye değiştiğini hissettirmek için birden fazla sinüs dalgası
++    // tick değeri saniyede bir veya belirlenen interval'da artıyor.
++    const fluctuation = Math.sin((tick * 1.3) + seed) * 12 + Math.cos((tick * 0.8) + seed * 2) * 8; 
++
++    // Gündüzleri daha az, geceleri daha fazla:
++    // Minimum 140, Maksimum 350 olacak şekilde base ayarlıyoruz.
++    const basePlayers = 150 + timeMultiplier * 180; // 150 ile 330 arası değişir
++
++    let finalPlayers = Math.round(basePlayers + gameVariation + fluctuation);
++
++    // Kesin sınırlar: En az 120, En fazla 370
++    if (finalPlayers < 120) finalPlayers = 120;
++    if (finalPlayers > 370) finalPlayers = 370;
++
++    return finalPlayers;
++  };
++
+   // Mix custom slots if provided, else use default visual data
+   const slots = activeCustomGames.length > 0
+     ? activeCustomGames.filter(g => g.type === 'slot').map((g, idx) => ({
+         id: g.id,
+         title: g.name.toUpperCase(),
+         image: g.image || 'https://picsum.photos/seed/' + g.id + '/400/300',
+-        players: 300 + (idx * 47) % 500, // Simulated player count for custom games
++        players: getDynamicPlayers(g.id),
+       }))
+-    : slotGames;
++    : slotGames.map(g => ({
++        ...g,
++        players: getDynamicPlayers(g.id)
++      }));
+ 
+   const sports = activeCustomGames.filter(g => g.type === 'sport').length > 0
+     ? activeCustomGames.filter(g => g.type === 'sport').map((g) => ({
+@@ -154,9 +200,12 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
+         id: g.id,
+         title: g.name.toUpperCase(),
+         image: g.image || 'https://picsum.photos/seed/' + g.id + '/400/300',
+-        players: 500 + (idx * 83) % 2000, // Simulated player count
++        players: getDynamicPlayers(g.id),
+       }))
+-    : liveCasinoGames;
++    : liveCasinoGames.map(g => ({
++        ...g,
++        players: getDynamicPlayers(g.id)
++      }));
+ 
+   return (
+     <div className="w-full bg-transparent p-0 my-8">
+diff --git a/components/Header.tsx b/components/Header.tsx
+index 0bdfc5c..6c0dfc3 100644
+--- a/components/Header.tsx
++++ b/components/Header.tsx
+@@ -1,12 +1,11 @@
+ import React, { useState, useRef, useEffect } from 'react';
+ import {
+-  Settings, User, Pen, LogOut, ChevronDown, Search, Coins, Send, X,
++  Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
+   MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
+-  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond
++  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club
+ } from 'lucide-react';
+ import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
+ import { useTheme } from '../ThemeContext';
+-import WalletModal from './WalletModal';
+ 
+ export interface NavVisibility {
+   coupons: boolean;
+@@ -84,6 +83,7 @@ interface CategoryItem {
+   icon: React.ReactNode;
+   visKey?: keyof NavVisibility;
+   scrollTo?: string; // if we should scroll to an element instead of switching view
++  href?: string;
+   requireRole?: boolean;
+ }
+ 
+@@ -111,24 +111,18 @@ const Header: React.FC<HeaderProps> = ({
+ }) => {
+   const [logoHovered, setLogoHovered] = useState(false);
+   const [dropdownOpen, setDropdownOpen] = useState(false);
++  const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
+   const [isScrolled, setIsScrolled] = useState(false);
+   const dropdownRef = useRef<HTMLDivElement>(null);
++  const walletDropdownRef = useRef<HTMLDivElement>(null);
+   const { theme } = useTheme();
+ 
+-  // Deposit Modal State
+-  const [showDepositModal, setShowDepositModal] = useState(false);
+-
+-  useEffect(() => {
+-    const handleOpenDeposit = () => setShowDepositModal(true);
+-    window.addEventListener('openDepositModal', handleOpenDeposit);
+-    return () => window.removeEventListener('openDepositModal', handleOpenDeposit);
+-  }, []);
+   const [depositUsername, setDepositUsername] = useState('');
+   const [depositMsg, setDepositMsg] = useState({ type: '', text: '' });
+ 
+   /* ── Category list ── */
+-  const categories: CategoryItem[] = [
+-    { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
++    const categories: CategoryItem[] = [
++    { key: 'slotra', view: 'slotra', label: 'Gerçek', icon: <Target className={ICON_SIZE} /> },
+     { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
+     { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
+     { key: 'trusted-sites', view: 'trusted-sites', label: 'Güvenilir', icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
+@@ -159,7 +153,6 @@ const Header: React.FC<HeaderProps> = ({
+ 
+       setDepositMsg({ type: 'success', text: 'Bildirim başarıyla gönderildi!' });
+       setTimeout(() => {
+-        setShowDepositModal(false);
+         setDepositUsername('');
+         setDepositMsg({ type: '', text: '' });
+       }, 2000);
+@@ -173,6 +166,9 @@ const Header: React.FC<HeaderProps> = ({
+       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+         setDropdownOpen(false);
+       }
++      if (walletDropdownRef.current && !walletDropdownRef.current.contains(e.target as Node)) {
++        setWalletDropdownOpen(false);
++      }
+     };
+     document.addEventListener('mousedown', handleClickOutside);
+     return () => document.removeEventListener('mousedown', handleClickOutside);
+@@ -193,6 +189,10 @@ const Header: React.FC<HeaderProps> = ({
+ 
+   /* ── Handle category click ── */
+   const handleCategoryClick = (cat: CategoryItem) => {
++    if (cat.href) {
++      window.open(cat.href, '_blank');
++      return;
++    }
+     if (cat.scrollTo) {
+       onViewChange?.(cat.view);
+       const el = document.getElementById(cat.scrollTo!);
+@@ -311,35 +311,43 @@ const Header: React.FC<HeaderProps> = ({
+ 
+           <div
+             id="tour-logo"
+-            className="logo-text-724"
++            className="logo-text-724 group"
+             style={{ 
+               alignItems: 'center', 
+               cursor: 'pointer',
+-              position: 'relative'
++              position: 'relative',
++              display: 'flex'
+             }}
+             onClick={() => onViewChange?.('home')}
+           >
+-            <span style={{
+-              fontSize: '20px',
+-              fontFamily: "'Outfit', sans-serif",
+-              fontWeight: 900,
+-              letterSpacing: '-1px',
+-              color: '#fff',
+-              display: 'flex',
+-              alignItems: 'center'
+-            }}>
+-              BAHİSBEY
++            <Club className="w-7 h-7 text-[#00FFA3] mr-2 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_10px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
++            <span className="logo-text-intro">
+               <span style={{
+-                background: 'linear-gradient(135deg, #00FFA3 0%, #00FFA3 100%)',
+-                color: '#000000',
+-                fontSize: '11px',
++                fontSize: '22px',
++                fontFamily: "'Outfit', sans-serif",
+                 fontWeight: 900,
+-                padding: '2px 6px',
+-                borderRadius: '4px',
+-                marginLeft: '4px',
+-                fontFamily: "'Inter', sans-serif",
+-                opacity: 0.95
+-              }}>.COM</span>
++                letterSpacing: '-1.5px',
++                color: '#fff',
++                display: 'flex',
++                alignItems: 'center',
++                transition: 'all 0.3s ease'
++              }} className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#00FFA3]">
++                724bets
++                <span style={{
++                  background: 'rgba(0, 255, 163, 0.08)',
++                  color: '#00FFA3',
++                  border: '1px solid rgba(0, 255, 163, 0.3)',
++                  fontSize: '9px',
++                  fontWeight: 800,
++                  letterSpacing: '0.5px',
++                  padding: '2px 5px',
++                  borderRadius: '12px',
++                  marginLeft: '6px',
++                  transform: 'translateY(-6px)',
++                  fontFamily: "'Inter', sans-serif",
++                  transition: 'all 0.3s ease'
++                }} className="group-hover:border-[#00FFA3] group-hover:shadow-[0_0_12px_rgba(0,255,163,0.3)]">BETA</span>
++              </span>
+             </span>
+           </div>
+ 
+@@ -352,89 +360,162 @@ const Header: React.FC<HeaderProps> = ({
+ 
+           {siteUser ? (
+             <>
+-              {/* Gamdom Style Wallet */}
+-              <div 
+-                className="hidden sm:flex items-center bg-[#151A23] rounded-md px-2.5 py-1.5 cursor-pointer hover:bg-[#1A212D] transition-colors border border-white/5"
+-                onClick={() => setShowDepositModal(true)}
+-              >
+-                <div className="w-5 h-5 rounded-sm bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2">
+-                  <span className="text-[11px]">$</span>
+-                </div>
+-                <span className="text-white font-bold text-sm mr-2">{siteUser.balance?.toFixed(2) || '0.03'}</span>
+-                <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
+-              </div>
+-
+-              {/* Deposit Button (Cüzdan) */}
+-              <button
+-                onClick={() => setShowDepositModal(true)}
+-                className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-4 py-1.5 rounded-md text-sm transition-colors shadow-[0_0_15px_rgba(0,255,163,0.15)]"
+-                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.3px' }}
+-              >
+-                Cüzdan
+-              </button>
+-
+-              {/* Profile Button with Dropdown */}
+-              <div className="relative" ref={dropdownRef}>
+-                <div
+-                  onClick={() => setDropdownOpen(prev => !prev)}
+-                  className="hidden sm:flex items-center gap-2 bg-[#151A23] rounded-md p-1 pr-1.5 cursor-pointer border border-white/5 hover:bg-[#1A212D] transition-colors ml-1"
+-                >
+-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-8 h-8 rounded bg-[#2A3441]" />
+-                  <div className="flex flex-col justify-center">
+-                    <span className="text-white font-bold text-[11px] leading-tight truncate max-w-[80px]">{siteUser.username}</span>
+-                    <div className="flex items-center gap-1">
+-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#D97706]">
+-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
+-                      </svg>
+-                      <span className="text-[#D97706] text-[9px] font-extrabold uppercase tracking-wider leading-none">Bronz 2</span>
++              <div className="flex items-center gap-2">
++                {/* 21.com Style Balance Dropdown */}
++                <div className="relative" ref={walletDropdownRef}>
++                  <div 
++                    className="flex items-center bg-[#1C2028] rounded-md pl-1 pr-3 py-1 cursor-pointer hover:bg-[#252A34] transition-colors border border-white/5"
++                    onClick={() => setWalletDropdownOpen(prev => !prev)}
++                  >
++                    <div className="w-8 h-8 rounded bg-[#ef3434] text-white flex items-center justify-center mr-3 font-bold text-lg">
++                      ₺
+                     </div>
++                    <span className="text-white font-black text-[15px] tracking-tight mr-2">₺{siteUser.balance?.toFixed(2) || '0.00'}</span>
++                    <ChevronUp className={`w-4 h-4 text-[#00FFA3] transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
+                   </div>
+-                  <div className="flex flex-col ml-0.5 opacity-60">
+-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-zinc-400 mb-[1px]">
+-                      <path d="M18 15l-6-6-6 6"/>
+-                    </svg>
+-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-zinc-400">
+-                      <path d="M6 9l6 6 6-6"/>
+-                    </svg>
+-                  </div>
++
++                  {walletDropdownOpen && (
++                    <div className="absolute right-0 top-full mt-2 w-64 rounded-xl py-2 z-50 bg-[#161a22] border border-[#2A2E38] shadow-2xl">
++                      <div className="flex flex-col">
++                        {[
++                          { symbol: '₺', code: 'TRY', name: 'Turkish Lira', color: 'bg-[#ef3434]' },
++                          { symbol: '₿', code: 'BTC', name: 'Bitcoin', color: 'bg-[#f7931a]' },
++                          { symbol: '♦', code: 'ETH', name: 'Ethereum', color: 'bg-[#627eea]' },
++                          { symbol: 'Ł', code: 'LTC', name: 'Litecoin', color: 'bg-[#d3d3d3]' },
++                          { symbol: 'T', code: 'TRX', name: 'Tron', color: 'bg-[#ef3434]' },
++                          { symbol: '✕', code: 'XRP', name: 'Ripple', color: 'bg-[#23292f]' },
++                          { symbol: 'Ð', code: 'DOGE', name: 'Dogecoin', color: 'bg-[#f8b245]' },
++                        ].map(crypto => (
++                          <div key={crypto.code} className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors">
++                            <div className="flex items-center gap-3">
++                              <div className={`w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold ${crypto.color}`}>
++                                {crypto.symbol}
++                              </div>
++                              <span className="text-zinc-300 font-bold text-sm">{crypto.code}</span>
++                            </div>
++                            <span className="text-zinc-400 font-bold text-sm">₺0.00</span>
++                          </div>
++                        ))}
++
++                        <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors bg-[#1C2028]/50">
++                          <div className="flex items-center gap-3">
++                            <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#14f195]">
++                              ≡
++                            </div>
++                            <span className="text-white font-bold text-sm">SOL</span>
++                          </div>
++                          <span className="text-white font-bold text-sm">0.00000000</span>
++                        </div>
++
++                        <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors border-b border-[#2A2E38]">
++                          <div className="flex items-center gap-3">
++                            <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#f3ba2f]">
++                              ⬡
++                            </div>
++                            <span className="text-zinc-300 font-bold text-sm">BNB</span>
++                          </div>
++                          <span className="text-zinc-400 font-bold text-sm">₺0.00</span>
++                        </div>
++
++                        <button className="w-full text-center py-4 text-zinc-400 hover:text-white font-bold text-sm transition-colors">
++                          Wallet settings
++                        </button>
++                      </div>
++                    </div>
++                  )}
+                 </div>
+-                
+-                {/* Mobile avatar fallback */}
++
++                {/* 21.com Style Deposit Button (Cüzdan) */}
+                 <button
+-                  onClick={() => setDropdownOpen(prev => !prev)}
+-                  className="sm:hidden header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
++                  onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
++                  className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-6 py-2 rounded-md text-[15px] transition-colors"
+                 >
+-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-full h-full rounded-full" />
++                  Cüzdan
+                 </button>
+ 
+-                {dropdownOpen && (
+-                  <div className="absolute right-0 top-full mt-2 w-44 rounded-lg py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
+-                    <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+-                      <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>
+-                        {userRole === 'admin' || userRole === 'editor' ? 'Yönetici Hesabı' : 'Üye Hesabı'}
+-                      </p>
+-                      <p className="text-sm font-black truncate" style={{ color: 'var(--text-primary)' }}>{siteUser.username}</p>
++                {/* Chat Toggle Button */}
++                <button
++                  onClick={onSupportClick}
++                  className="bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 flex items-center justify-center relative"
++                  title="Canlı Sohbet"
++                >
++                  <MessageSquare className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
++                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse"></span>
++                </button>
++
++                {/* 21.com Style Profile Button and Dropdown Container */}
++                <div className="relative" ref={dropdownRef}>
++                  {/* The Trigger Button */}
++                  <div 
++                    onClick={() => setDropdownOpen(prev => !prev)}
++                    className="flex items-center gap-3 bg-[#1C2028] rounded-md p-1 pr-3 cursor-pointer border border-white/5 hover:bg-[#252A34] transition-colors"
++                  >
++                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ecem" alt="Avatar" className="w-8 h-8 rounded" />
++                    <div className="flex flex-col justify-center">
++                      <span className="text-white font-bold text-[13px] leading-tight">{siteUser.username}</span>
++                      <div className="flex items-center gap-1 mt-0.5">
++                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-[#D97706]">
++                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
++                        </svg>
++                        <span className="text-[#D97706] text-[10px] font-black uppercase tracking-wider leading-none">BRONZ 2</span>
++                      </div>
++                    </div>
++                    <div className="flex flex-col ml-1 opacity-50 justify-center gap-0.5">
++                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white">
++                        <path d="M18 15l-6-6-6 6"/>
++                      </svg>
++                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white">
++                        <path d="M6 9l6 6 6-6"/>
++                      </svg>
+                     </div>
++                  </div>
++                  
++                  {/* Mobile avatar fallback */}
++                  <button
++                    onClick={() => setDropdownOpen(prev => !prev)}
++                    className="sm:hidden header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5 absolute inset-0 opacity-0 z-10"
++                  >
++                    <span className="sr-only">Open Profile</span>
++                  </button>
++
++                  {/* Dropdown Menu */}
++                  {dropdownOpen && (
++                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg py-2 z-50 bg-[#1C2028] border border-[#2A2E38] shadow-2xl">
++                      <div className="px-5 py-3 mb-1 border-b border-[#2A2E38]">
++                        <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-1">
++                          {userRole === 'admin' || userRole === 'editor' ? 'YÖNETİCİ HESABI' : 'ÜYE HESABI'}
++                        </p>
++                        <p className="text-xl font-black text-white truncate">{siteUser.username}</p>
++                      </div>
+ 
+-                    {(userRole === 'admin' || userRole === 'editor') && (
+                       <button
+-                        onClick={() => { setDropdownOpen(false); onAdminClick?.(); }}
+-                        className="w-full flex items-center gap-2 px-4 py-2.5 text-[#00FFA3] hover:bg-[#00FFA3]/5 text-xs font-bold transition-colors border-b border-black/5"
++                        onClick={() => { setDropdownOpen(false); onViewChange?.('profile'); }}
++                        className="w-full flex items-center gap-3 px-5 py-3 text-white hover:bg-[#252A34] text-sm font-bold transition-colors border-b border-[#2A2E38]"
+                       >
+-                        <Shield className="w-3.5 h-3.5" />
+-                        Yönetim Paneli
++                        <User className="w-4 h-4 text-zinc-400" />
++                        Profil & Bakiye
+                       </button>
+-                    )}
+-
+-                    <button
+-                      onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
+-                      className="w-full flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-500/5 text-xs font-bold transition-colors"
+-                    >
+-                      <LogOut className="w-3.5 h-3.5" />
+-                      Çıkış Yap
+-                    </button>
+-                  </div>
+-                )}
++
++                      {(userRole === 'admin' || userRole === 'editor') && (
++                        <button
++                          onClick={() => { setDropdownOpen(false); onAdminClick?.(); }}
++                          className="w-full flex items-center gap-3 px-5 py-3 text-[#00FFA3] hover:bg-[#252A34] text-sm font-bold transition-colors border-b border-[#2A2E38]"
++                        >
++                          <Shield className="w-4 h-4" />
++                          Yönetim Paneli
++                        </button>
++                      )}
++
++                      <button
++                        onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
++                        className="w-full flex items-center gap-3 px-5 py-3 text-[#EF4444] hover:bg-[#252A34] text-sm font-bold transition-colors"
++                      >
++                        <LogOut className="w-4 h-4" />
++                        Çıkış Yap
++                      </button>
++                    </div>
++                  )}
++                </div>
+               </div>
+             </>
+           ) : (
+@@ -461,6 +542,15 @@ const Header: React.FC<HeaderProps> = ({
+                   >
+                     Giriş yap
+                   </button>
++                  <button
++                    onClick={onSupportClick}
++                    className="bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 flex items-center justify-center relative"
++                    title="Canlı Sohbet"
++                    style={{ height: '36px', width: '36px' }}
++                  >
++                    <MessageSquare className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
++                  </button>
++
+                   <button
+                     id="tour-register-btn"
+                     onClick={onMemberRegisterClick}
+@@ -485,22 +575,7 @@ const Header: React.FC<HeaderProps> = ({
+                     Şimdi kayıt ol
+                   </button>
+                 </div>
+-                
+-                <button
+-                  onClick={onSupportClick}
+-                  className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
+-                  title="Sohbet"
+-                >
+-                  <MessageSquare className="w-4 h-4 text-slate-300" />
+-                </button>
+-                
+-                <button
+-                  onClick={onSearchClick}
+-                  className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
+-                  title="Maç Ara"
+-                >
+-                  <Search className="w-4 h-4 text-slate-300" />
+-                </button>
++
+               </>
+             )}
+           </div>
+@@ -597,11 +672,6 @@ const Header: React.FC<HeaderProps> = ({
+ 
+ 
+       </div>
+-
+-      {/* DEPOSIT MODAL */}
+-      {showDepositModal && (
+-        <WalletModal onClose={() => setShowDepositModal(false)} />
+-      )}
+     </>
+   );
+ };
+diff --git a/components/KralView.tsx b/components/KralView.tsx
+index 1b39539..1e4bbfa 100644
+--- a/components/KralView.tsx
++++ b/components/KralView.tsx
+@@ -59,6 +59,30 @@ const KralView = ({
+         <div className="max-w-4xl w-full flex flex-col items-center">
+             <CategoryNav />
+             
++            {/* ── Ekstra Oyunlar & Görevler ── */}
++            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full mt-6">
++              <button 
++                onClick={() => onNavigate?.('pool')} 
++                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
++              >
++                <Target className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
++                <span className="text-sm font-black text-white tracking-wider uppercase">724TOTO</span>
++              </button>
++              <button 
++                onClick={() => onNavigate?.('loyalty')} 
++                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
++              >
++                <Trophy className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
++                <span className="text-sm font-black text-white tracking-wider uppercase">Görevler</span>
++              </button>
++              <button 
++                onClick={() => onNavigate?.('wheel')} 
++                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
++              >
++                <Activity className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
++                <span className="text-sm font-black text-white tracking-wider uppercase">Çarkıfelek</span>
++              </button>
++            </div>
+             {/* ── Canlı Skor Section ── */}
+             <div className="p-4 sm:p-6 mb-6 rounded-lg bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-zinc-800/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 w-full text-left">
+               <div className="flex items-center gap-3 w-full sm:w-auto">
+diff --git a/components/MobileBottomNav.tsx b/components/MobileBottomNav.tsx
+index bf1d110..d4fd819 100644
+--- a/components/MobileBottomNav.tsx
++++ b/components/MobileBottomNav.tsx
+@@ -17,7 +17,7 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
+ }) => {
+   const items = [
+     { id: 'home', label: 'Ana Sayfa', icon: Home },
+-    { id: 'demo', label: 'Demo', icon: Play },
++    { id: 'blackjack', label: 'Slot', icon: Spade },
+     { id: 'sports2', label: 'Spor', icon: Target },
+     { id: 'cekilis', label: 'Çekiliş', icon: Gift },
+     { id: 'profile', label: siteUser ? 'Profil' : 'Giriş', icon: User, action: onProfileClick }
+diff --git a/components/ModernChat.tsx b/components/ModernChat.tsx
+index 61e0e81..6bfc9fd 100644
+--- a/components/ModernChat.tsx
++++ b/components/ModernChat.tsx
+@@ -518,39 +518,35 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
+     const isLoggedIn = !!(siteUser || userRole);
+ 
+     if (!open && !isMobile) {
+-        return (
+-            <div 
+-                className="w-full h-full bg-[#111317] flex flex-col items-center justify-center cursor-pointer hover:bg-[#1A1D24] transition-colors"
+-                onClick={onOpen}
+-            >
+-                <div 
+-                    style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+-                    className="text-[#00FFA3] font-black text-sm tracking-[0.3em] uppercase flex items-center gap-4"
+-                >
+-                    <span className="w-2 h-2 rounded-full bg-[#00FFA3] animate-pulse"></span>
+-                    CANLI SOHBET
+-                </div>
+-            </div>
+-        );
++        return null;
+     }
+ 
+     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
+     const isAdmin = isAuthorized(userRole);
+     return (
+-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#111317] shadow-2xl font-sans text-left">
++        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#141517] shadow-2xl font-sans text-left">
+             {/* Header */}
+-            <div className="bg-[#111317] p-4 text-white font-bold flex items-center justify-between flex-shrink-0">
+-                <div className="flex items-center gap-2">
+-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+-                    <span className="text-xs uppercase tracking-widest text-emerald-400 font-black">CANLI SOHBET</span>
++            <div className="bg-[#1C1F26] px-4 py-3 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5">
++                <div className="flex items-center gap-3">
++                    <div className="flex items-center gap-2 bg-[#252A33] px-3 py-1.5 rounded text-xs font-bold hover:bg-[#2C323D] cursor-pointer transition-colors">
++                        <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-3 rounded-sm object-cover" />
++                        <span>Türkçe</span>
++                        <span className="text-[10px] ml-1">▼</span>
++                    </div>
++                </div>
++                <div className="flex items-center gap-3 text-zinc-400">
++                    <div className="flex items-center gap-1.5 text-xs font-bold hover:text-white transition-colors cursor-pointer">
++                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
++                        <span>2.485</span>
++                    </div>
++                    <button 
++                        onClick={onClose} 
++                        className="p-1 hover:bg-white/5 active:scale-95 transition-all rounded text-zinc-400 hover:text-white"
++                        title="Kapat"
++                    >
++                        <X className="w-4 h-4" />
++                    </button>
+                 </div>
+-                <button 
+-                    onClick={onClose} 
+-                    className="p-1 hover:bg-white/5 active:scale-95 transition-all rounded-lg text-zinc-400 hover:text-white"
+-                    title="Kapat"
+-                >
+-                    <Menu className="w-4 h-4" />
+-                </button>
+             </div>
+ 
+             {/* Pinned Message Bar */}
+@@ -707,10 +703,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
+                     messages.map((msg, i) => (
+                         <div 
+                             key={msg.id || i} 
+-                            className={`rounded-lg rounded-tl-sm p-3.5 flex flex-col gap-1.5 relative group text-left cursor-default mb-4 ${
+-                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19] shadow-[0_4px_12px_rgba(0,255,163,0.08)]' : 
+-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-gradient-to-r from-[#092b19] to-[#1A1D24] shadow-[0_4px_12px_rgba(0,255,163,0.15)]' : 
+-                                'bg-[#1A1D24] shadow-sm hover:bg-[#20252E] transition-colors'
++                            className={`p-3 flex flex-row gap-3 relative group text-left cursor-default border-b border-white/5 hover:bg-white/[0.02] transition-colors ${
++                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19]/20' : 
++                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-gradient-to-r from-[#092b19]/20 to-transparent' : 
++                                'bg-transparent'
+                             }`}
+                             onContextMenu={(e) => {
+                                 if (isAdmin) {
+@@ -720,26 +716,33 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
+                                 }
+                             }}
+                         >
+-                            <div className="flex items-center gap-2 flex-wrap mb-1">
+-                                {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
+-                                    <span className="bg-gradient-to-br from-[#00FFA3] to-[#00CC82] text-black px-1.5 py-0.5 rounded-full text-[9px] font-black min-w-[20px] text-center shadow-[0_4px_12px_rgba(0,255,163,0.3)]">
+-                                        ADM
+-                                    </span>
+-                                )}
+-                                <span 
+-                                    className="text-xs font-bold tracking-wide" 
+-                                    style={{ color: getRoleColor(msg.role, msg.username, msg) }}
+-                                >
+-                                    {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
+-                                </span>
+-                                <span className="text-[9px] text-slate-500 opacity-70 ml-auto mr-6">
+-                                    {formatTime(msg.created_at)}
+-                                </span>
++                            {/* Avatar placeholder - using DiceBear for now based on username */}
++                            <div className="w-8 h-8 rounded-full bg-zinc-800 flex-shrink-0 overflow-hidden mt-1 border border-white/10">
++                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.username}`} alt={msg.username} className="w-full h-full object-cover" />
+                             </div>
+-                            <div className={`text-[12.5px] leading-relaxed break-words pr-4 antialiased ${
+-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-slate-300 font-normal'
+-                            }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#00FFA3') : undefined }}>
+-                                {renderMessageText(msg.message)}
++
++                            <div className="flex flex-col flex-1 min-w-0">
++                                <div className="flex items-center gap-2 flex-wrap mb-0.5">
++                                    <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap">
++                                        {formatTime(msg.created_at)}
++                                    </span>
++                                    {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
++                                        <span className="bg-gradient-to-br from-[#00FFA3] to-[#00CC82] text-black px-1.5 py-0.5 rounded-sm text-[9px] font-black leading-none text-center shadow-[0_4px_12px_rgba(0,255,163,0.3)]">
++                                            ADM
++                                        </span>
++                                    )}
++                                    <span 
++                                        className="text-xs font-bold tracking-wide" 
++                                        style={{ color: getRoleColor(msg.role, msg.username, msg) }}
++                                    >
++                                        {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
++                                    </span>
++                                </div>
++                                <div className={`text-[12px] leading-relaxed break-words pr-4 antialiased ${
++                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-zinc-300 font-normal'
++                                }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#00FFA3') : undefined }}>
++                                    {renderMessageText(msg.message)}
++                                </div>
+                             </div>
+ 
+                             {/* Admin actions block (Three Dots / Context Menu) */}
+@@ -809,38 +812,40 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
+             </div>
+ 
+             {/* Input Footer Area */}
+-            <div className="p-4 bg-[#111317] flex flex-col gap-3 flex-shrink-0 mt-2">
++            <div className="p-3 bg-[#141517] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5">
+                 {/* Message Input */}
+                 {!siteUser ? (
+-                    <div className="p-3 bg-[#111317] flex flex-col items-center justify-center gap-2">
++                    <div className="p-2 flex flex-col items-center justify-center gap-2">
+                         <input 
+                             type="text"
+                             disabled
+                             placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
+-                            className="w-full bg-[#1A1D24] text-[11px] font-bold text-center text-gray-500 rounded-lg px-4 py-3 cursor-not-allowed"
++                            className="w-full bg-[#1C1F26] border border-white/5 text-[11px] font-bold text-center text-gray-500 rounded px-4 py-3 cursor-not-allowed"
+                         />
+                     </div>
+                 ) : (
+                     <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
+-                        <div className="relative flex items-center bg-[#1A1D24] focus-within:bg-[#242933] rounded-lg overflow-hidden px-4 py-2.5 transition-colors">
++                        <div className="relative flex items-center bg-[#1C1F26] border border-transparent focus-within:border-emerald-500 rounded overflow-hidden transition-all duration-300">
+                             <input
+                                 type="text"
+                                 value={newMessage}
+                                 onChange={(e) => setNewMessage(e.target.value)}
+-                                placeholder="Bir mesaj yazın..."
+-                                className="flex-1 bg-transparent text-sm text-gray-200 focus:outline-none placeholder-gray-500"
++                                placeholder="Start typing.."
++                                className="flex-1 bg-transparent text-sm text-gray-200 focus:outline-none placeholder-zinc-500 px-4 py-3"
+                             />
+-                            <button type="button" className="text-gray-400 hover:text-white transition-colors px-1" title="Emoji">
+-                                <Smile className="w-4 h-4" />
+-                            </button>
++                            <div className="flex items-center pr-2 gap-1 h-full">
++                                <button type="button" className="text-zinc-500 hover:text-white transition-colors p-1.5 rounded hover:bg-white/5" title="Emoji">
++                                    <Smile className="w-4 h-4" />
++                                </button>
++                                <button
++                                    type="submit"
++                                    disabled={!newMessage.trim()}
++                                    className="text-emerald-500 hover:text-emerald-400 disabled:opacity-30 disabled:hover:text-emerald-500 transition-colors p-1.5 rounded hover:bg-emerald-500/10 ml-1"
++                                >
++                                    <Send className="w-4 h-4" />
++                                </button>
++                            </div>
+                         </div>
+-                        <button
+-                            type="submit"
+-                            disabled={!newMessage.trim()}
+-                            className="self-end px-5 py-1.5 rounded bg-gradient-to-r from-[#00FFA3] to-[#00CC82] text-black hover:from-[#33FFB5] hover:to-[#00FFA3] disabled:opacity-30 text-xs font-bold transition-all active:scale-95 uppercase tracking-wider"
+-                        >
+-                            Gönder
+-                        </button>
+                     </form>
+                 )}
+             </div>
+diff --git a/components/Sidebar.tsx b/components/Sidebar.tsx
+index f818533..2b3a09b 100644
+--- a/components/Sidebar.tsx
++++ b/components/Sidebar.tsx
+@@ -13,6 +13,7 @@ interface MenuItem {
+   label: string;
+   icon?: React.ReactNode;
+   view?: string;
++  href?: string;
+   visKey?: keyof NavVisibility;
+   requireRole?: boolean;
+   subItems?: MenuItem[];
+@@ -44,10 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({
+   const [isSponsorlukOpen, setIsSponsorlukOpen] = useState(false);
+ 
+   const topGrid = [
+-    { id: 'lobi', label: 'LOBİ', icon: <Home className="w-5 h-5 mb-1" />, view: 'home' },
+-    { id: 'esports', label: 'E-SPORLAR', icon: <Gamepad2 className="w-5 h-5 mb-1" />, view: 'esports' },
+-    { id: 'canli', label: 'CANLI', icon: <PlayCircle className="w-5 h-5 mb-1" />, view: 'sports2' },
+-    { id: 'bahislerim', label: 'BAHİSLERİM', icon: <List className="w-5 h-5 mb-1" />, view: 'coupons' },
++    { id: 'slotra', label: 'GERÇEK', icon: <Target className="w-5 h-5 mb-1" />, view: 'slotra' },
+   ];
+ 
+   const menuConfig: MenuItem[] = [
+@@ -117,7 +115,6 @@ const Sidebar: React.FC<SidebarProps> = ({
+       icon: <Target className="w-4 h-4 text-zinc-400" />,
+       subItems: [
+         { id: 'casino', label: '724Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'blackjack', visKey: 'blackjack' },
+-        { id: 'casino2', label: '724Casino / Slotlar 2', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'casino2' },
+         { id: 'live-casino', label: 'Canlı Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'live-casino' },
+         { id: 'toto', label: '724TOTO', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'pool', visKey: 'pool' },
+         { id: 'loyalty', label: 'Görevler', icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'loyalty', visKey: 'loyalty' },
+@@ -154,6 +151,8 @@ const Sidebar: React.FC<SidebarProps> = ({
+             onClick={() => {
+               if (item.subItems) {
+                 setOpenGroups(prev => ({ ...prev, [item.id]: !prev[item.id] }));
++              } else if (item.href) {
++                window.open(item.href, '_blank');
+               } else if (item.view) {
+                 onViewChange(item.view);
+               }
+@@ -279,7 +278,11 @@ const Sidebar: React.FC<SidebarProps> = ({
+                         if (item.id === 'canli') {
+                           window.dispatchEvent(new CustomEvent('internal-navigate', { detail: { url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' } }));
+                         }
+-                        if (item.view) onViewChange(item.view);
++                        if (item.href) {
++                          window.open(item.href, '_blank');
++                        } else if (item.view) {
++                          onViewChange(item.view);
++                        }
+                       }}
+                       className={`flex flex-col items-center justify-center py-3 rounded-lg transition-all ${
+                         isActive 
+@@ -304,7 +307,11 @@ const Sidebar: React.FC<SidebarProps> = ({
+                         if (item.id === 'canli') {
+                           window.dispatchEvent(new CustomEvent('internal-navigate', { detail: { url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' } }));
+                         }
+-                        if (item.view) onViewChange(item.view);
++                        if (item.href) {
++                          window.open(item.href, '_blank');
++                        } else if (item.view) {
++                          onViewChange(item.view);
++                        }
+                       }}
+                       className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto ${
+                         isActive 
+@@ -342,60 +349,19 @@ const Sidebar: React.FC<SidebarProps> = ({
+                     <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+                       <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar</span>
+                     </div>
+-                    <div onClick={() => onViewChange('casino2')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar 2</span>
+-                    </div>
+                     <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+                       <span className="text-[13px] font-medium tracking-wide">Canlı Casino</span>
+                     </div>
+-                    <div onClick={() => onViewChange('pool')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">724TOTO</span>
+-                    </div>
+-                    <div onClick={() => onViewChange('loyalty')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">Görevler</span>
+-                    </div>
+-                    <div onClick={() => onViewChange('wheel')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">Çarkıfelek</span>
+-                    </div>
+                   </div>
+                 )}
+               </div>
+ 
+-              {/* Block 2: Spor Accordion */}
++              {/* Block 2: Spor Link */}
+               <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+-                <div 
+-                  onClick={() => setIsSporOpen(!isSporOpen)}
+-                  className={`flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}
+-                >
+-                  <div className="flex items-center gap-3">
+-                    <Activity className="w-5 h-5 text-zinc-300 shrink-0" />
+-                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}
+-                  </div>
+-                  {isOpen && <ChevronLeft className={`w-4 h-4 text-zinc-400 transition-transform ${isSporOpen ? '-rotate-90' : ''}`} />}
++                <div onClick={() => onViewChange('sports')} className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
++                  <Activity className="w-5 h-5 text-zinc-300 shrink-0" />
++                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}
+                 </div>
+-                
+-                {isOpen && isSporOpen && (
+-                  <div className="flex flex-col border-t border-white/5 bg-black/20 py-2">
+-                    <div onClick={() => onViewChange('sports2')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">Canlı Bahis</span>
+-                    </div>
+-                    <div onClick={() => onViewChange('sports')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">Futbol</span>
+-                    </div>
+-                    <div onClick={() => onViewChange('sports')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">Basketbol</span>
+-                    </div>
+-                    <div onClick={() => onViewChange('sports')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">Tenis</span>
+-                    </div>
+-                    <div onClick={() => onViewChange('esports')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">E-Sporlar</span>
+-                    </div>
+-                    <div onClick={() => onViewChange('kral')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
+-                      <span className="text-[13px] font-medium tracking-wide">724Analiz Portalı</span>
+-                    </div>
+-                  </div>
+-                )}
+               </div>
+ 
+               {/* Block 3: Kodu Kullan etc. */}
+@@ -444,7 +410,10 @@ const Sidebar: React.FC<SidebarProps> = ({
+ 
+               {/* Block 5: Canlı Destek & Türkçe */}
+               <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+-                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
++                <div 
++                  onClick={() => window.dispatchEvent(new Event('openSupportChat'))}
++                  className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}
++                >
+                   <MessageSquare className="w-5 h-5 text-zinc-300 shrink-0 fill-current" />
+                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Canlı Destek</span>}
+                 </div>
+diff --git a/components/WalletModal.tsx b/components/WalletModal.tsx
+index 579e65b..3a86e8f 100644
+--- a/components/WalletModal.tsx
++++ b/components/WalletModal.tsx
+@@ -156,15 +156,25 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
+   );
+ 
+   return (
+-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={onClose}>
++    <div className="fixed inset-0 z-[200] flex items-center justify-center md:p-4 bg-black/95 md:bg-black/60 md:backdrop-blur-sm animate-fade-in" onClick={onClose}>
+       <div 
+-        className="flex w-full max-w-[850px] bg-[#1A1F29] rounded-[24px] overflow-hidden shadow-2xl relative"
+-        style={{ height: '80vh', maxHeight: '700px' }}
++        className="flex flex-col md:flex-row w-full h-full md:h-[85vh] md:max-w-[850px] bg-[#1A1F29] md:rounded-[24px] overflow-hidden shadow-2xl relative md:max-h-[700px]"
+         onClick={(e) => e.stopPropagation()}
+       >
++        {/* Mobile Header (Only visible on small screens) */}
++        <div className="md:hidden flex items-center justify-between p-4 bg-[#151A23] border-b border-white/5 shrink-0">
++          <h2 className="text-white font-bold text-lg tracking-tight">Cüzdan</h2>
++          <button 
++            onClick={onClose}
++            className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors active:scale-95"
++          >
++            <X className="w-5 h-5" />
++          </button>
++        </div>
++
+         {/* LEFT SIDEBAR */}
+-        <div className="w-[260px] flex flex-col border-r border-[#2A3441] bg-[#1A1F29] shrink-0">
+-          <div className="p-5 pb-2 flex items-center justify-between">
++        <div className="w-full md:w-[260px] flex md:flex-col border-b md:border-b-0 md:border-r border-[#2A3441] bg-[#1A1F29] shrink-0">
++          <div className="hidden md:flex p-5 pb-2 items-center justify-between">
+             <h2 className="text-white font-bold text-lg">Cüzdan</h2>
+             <div className="flex items-center gap-1 bg-[#12161D] px-2 py-1 rounded-md cursor-pointer border border-[#2A3441]/50">
+               <span className="text-sm">🇹🇭</span>
+@@ -172,11 +182,11 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
+             </div>
+           </div>
+ 
+-          <div className="flex-1 p-3 space-y-1 mt-2">
++          <div className="flex flex-row md:flex-col flex-1 p-2 md:p-3 space-x-2 md:space-x-0 md:space-y-1 mt-0 md:mt-2 overflow-x-auto custom-scrollbar">
+             {/* Deposit Tab */}
+             <button 
+               onClick={() => setActiveTab('deposit')}
+-              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-all ${
++              className={`flex-1 md:w-full flex items-center justify-center md:justify-between px-3 md:px-4 py-2.5 md:py-3.5 rounded-xl transition-all ${
+                 activeTab === 'deposit' ? 'bg-[#151A23] shadow-inner' : 'hover:bg-[#151A23]/50'
+               }`}
+             >
+@@ -185,14 +195,14 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
+                 <span className={`font-bold text-sm ${activeTab === 'deposit' ? 'text-white' : 'text-zinc-300'}`}>Para Yatır</span>
+               </div>
+               {activeTab === 'deposit' && (
+-                <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
++                <div className="hidden md:block w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
+               )}
+             </button>
+ 
+             {/* Withdraw Tab */}
+             <button 
+               onClick={() => setActiveTab('withdraw')}
+-              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-all ${
++              className={`flex-1 md:w-full flex items-center justify-center md:justify-between px-3 md:px-4 py-2.5 md:py-3.5 rounded-xl transition-all ${
+                 activeTab === 'withdraw' ? 'bg-[#151A23] shadow-inner' : 'hover:bg-[#151A23]/50'
+               }`}
+             >
+@@ -201,13 +211,13 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
+                 <span className={`font-bold text-sm ${activeTab === 'withdraw' ? 'text-white' : 'text-zinc-300'}`}>Para Çek</span>
+               </div>
+               {activeTab === 'withdraw' && (
+-                <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
++                <div className="hidden md:block w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
+               )}
+             </button>
+           </div>
+ 
+           {/* Bottom 2FA Section */}
+-          <div className="p-5 pt-0">
++          <div className="hidden md:block p-5 pt-0">
+             <div className="flex items-center gap-2 mb-3 text-zinc-400">
+               <Lock className="w-4 h-4" />
+               <span className="text-xs font-semibold">Şu anda 2FA etkin değil</span>
+@@ -220,19 +230,19 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
+ 
+         {/* RIGHT CONTENT */}
+         <div className="flex-1 flex flex-col bg-[#151A23] relative">
+-          <div className="p-6 pb-2 flex items-center justify-between sticky top-0 bg-[#151A23] z-10">
+-            <h2 className="text-white font-bold text-lg">
++          <div className="p-4 md:p-6 pb-2 flex items-center justify-between sticky top-0 bg-[#151A23] z-10 border-b md:border-none border-white/5">
++            <h2 className="text-white font-bold text-base md:text-lg">
+               {activeTab === 'deposit' ? 'Para Yatırma Seçenekleri' : 'Para Çekme Seçenekleri'}
+             </h2>
+             <button 
+               onClick={onClose}
+-              className="w-8 h-8 rounded-full bg-[#1A1F29] flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
++              className="hidden md:flex w-8 h-8 rounded-full bg-[#1A1F29] items-center justify-center text-zinc-400 hover:text-white transition-colors"
+             >
+               <X className="w-4 h-4" />
+             </button>
+           </div>
+ 
+-          <div className="flex-1 overflow-y-auto p-6 pt-4 custom-scrollbar">
++          <div className="flex-1 overflow-y-auto p-4 md:p-6 pt-4 custom-scrollbar">
+             {activeTab === 'deposit' && (
+               <div className="space-y-6">
+                 
+diff --git a/index.css b/index.css
+index 8b3c3b1..6d9920a 100644
+--- a/index.css
++++ b/index.css
+@@ -166,6 +166,48 @@ html, body {
+   animation: fade-in 0.5s ease-out forwards;
+ }
+ 
++/* ===== Logo Intro Animations ===== */
++@keyframes clover-intro-pulse {
++  0% { transform: scale(1) rotate(0deg); }
++  15% { transform: scale(0.7) rotate(-15deg); }
++  35% { transform: scale(1.2) rotate(15deg); }
++  50% { transform: scale(1) rotate(0deg); }
++  100% { transform: scale(1) rotate(0deg); }
++}
++
++@keyframes text-intro-collapse {
++  0% { max-width: 150px; opacity: 1; transform: scale(1) translateX(0); }
++  15% { transform: scale(0.7) translateX(0); max-width: 150px; opacity: 1; }
++  35% { transform: scale(1.2) translateX(0); max-width: 150px; opacity: 1; }
++  50% { transform: scale(1) translateX(0); max-width: 150px; opacity: 1; }
++  65% { max-width: 150px; opacity: 1; transform: scale(1) translateX(0); }
++  100% { max-width: 0px; opacity: 0; margin-left: 0; padding-left: 0; padding-right: 0; transform: scale(0.2) translateX(-50px); }
++}
++
++.logo-clover-intro {
++  animation: clover-intro-pulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
++}
++
++.logo-text-intro {
++  display: inline-flex;
++  align-items: center;
++  overflow: hidden;
++  white-space: nowrap;
++  transform-origin: left center;
++  animation: text-intro-collapse 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
++}
++
++@keyframes delayed-fade-in {
++  0% { opacity: 0; transform: translateX(30px) scale(0.9); }
++  100% { opacity: 1; transform: translateX(0) scale(1); }
++}
++
++.balance-intro-fade {
++  animation: delayed-fade-in 1s cubic-bezier(0.4, 0, 0.2, 1) 2.5s both;
++  transform-origin: right center;
++}
++
++
+ /* ===== Header — Two-Tier Bilyoner Layout ===== */
+ .header-wrapper {
+   position: relative;
+diff --git a/index.html b/index.html
+index 5f85586..3fbdfe2 100644
+--- a/index.html
++++ b/index.html
+@@ -4,7 +4,7 @@
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Bahisbey</title>
++    <title>724bets</title>
+     <meta name="description" content="Türkiye'nin en güvenilir bahis rehberi ve profesyonel analiz platformu. Güvenilir firmalar, günlük analizler.">
+     
+     <script src="https://cdn.tailwindcss.com"></script>
+diff --git a/package-lock.json b/package-lock.json
+index 52268f3..7052e5d 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -15,6 +15,7 @@
+         "driver.js": "^1.6.0",
+         "image-size": "^2.0.2",
+         "lucide-react": "^0.564.0",
++        "puppeteer": "^25.3.0",
+         "react": "^19.2.4",
+         "react-dom": "^19.2.4"
+       },
+@@ -845,6 +846,34 @@
+         "@jridgewell/sourcemap-codec": "^1.4.14"
+       }
+     },
++    "node_modules/@puppeteer/browsers": {
++      "version": "3.0.6",
++      "resolved": "https://registry.npmjs.org/@puppeteer/browsers/-/browsers-3.0.6.tgz",
++      "integrity": "sha512-B/gKoqlFkzhvzsI6jo9K1cZz9o5ypviVv/xu8CwA4grZzyVwN+XfkT+tu8T1zrauuEXv6VhS2oGX+6NL95WcKA==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "modern-tar": "^0.7.6",
++        "yargs": "^18.0.0"
++      },
++      "bin": {
++        "browsers": "lib/main-cli.js"
++      },
++      "engines": {
++        "node": ">=22.12.0"
++      },
++      "peerDependencies": {
++        "proxy-agent": ">=8.0.1",
++        "yauzl": "^2.10.0 || ^3.4.0"
++      },
++      "peerDependenciesMeta": {
++        "proxy-agent": {
++          "optional": true
++        },
++        "yauzl": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/@rc-component/util": {
+       "version": "1.11.1",
+       "resolved": "https://registry.npmjs.org/@rc-component/util/-/util-1.11.1.tgz",
+@@ -1410,6 +1439,30 @@
+         "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
+       }
+     },
++    "node_modules/ansi-regex": {
++      "version": "6.2.2",
++      "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-6.2.2.tgz",
++      "integrity": "sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=12"
++      },
++      "funding": {
++        "url": "https://github.com/chalk/ansi-regex?sponsor=1"
++      }
++    },
++    "node_modules/ansi-styles": {
++      "version": "6.2.3",
++      "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.3.tgz",
++      "integrity": "sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=12"
++      },
++      "funding": {
++        "url": "https://github.com/chalk/ansi-styles?sponsor=1"
++      }
++    },
+     "node_modules/baseline-browser-mapping": {
+       "version": "2.10.30",
+       "resolved": "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.10.30.tgz",
+@@ -1488,6 +1541,36 @@
+         "url": "https://www.paypal.me/kirilvatev"
+       }
+     },
++    "node_modules/chromium-bidi": {
++      "version": "16.0.1",
++      "resolved": "https://registry.npmjs.org/chromium-bidi/-/chromium-bidi-16.0.1.tgz",
++      "integrity": "sha512-J63PGu/9PpeCwLIcKYyzWP6yaVL5pxuBc0shlYCYM8BaAkmlwiQboXO1iNbOgSDbVklEyYFfNEcHD8oOAWacUA==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "mitt": "^3.0.1",
++        "zod": "^3.24.1"
++      },
++      "engines": {
++        "node": ">=20.19.0 <22.0.0 || >=22.12.0"
++      },
++      "peerDependencies": {
++        "devtools-protocol": "*"
++      }
++    },
++    "node_modules/cliui": {
++      "version": "9.0.1",
++      "resolved": "https://registry.npmjs.org/cliui/-/cliui-9.0.1.tgz",
++      "integrity": "sha512-k7ndgKhwoQveBL+/1tqGJYNz097I7WOvwbmmU2AR5+magtbjPWQTS1C5vzGkBC8Ym8UWRzfKUzUUqFLypY4Q+w==",
++      "license": "ISC",
++      "dependencies": {
++        "string-width": "^7.2.0",
++        "strip-ansi": "^7.1.0",
++        "wrap-ansi": "^9.0.0"
++      },
++      "engines": {
++        "node": ">=20"
++      }
++    },
+     "node_modules/clsx": {
+       "version": "2.1.1",
+       "resolved": "https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz",
+@@ -1529,6 +1612,12 @@
+         }
+       }
+     },
++    "node_modules/devtools-protocol": {
++      "version": "0.0.1638949",
++      "resolved": "https://registry.npmjs.org/devtools-protocol/-/devtools-protocol-0.0.1638949.tgz",
++      "integrity": "sha512-mXwg4Fqnv0WR4iuAT/gYUmctNkjILwXFHyZ+m7Ty1dfr0ezZt2U3gnrrJTfRobJTHoXf+IbuFvFITzLrLFjwJA==",
++      "license": "BSD-3-Clause"
++    },
+     "node_modules/dotenv": {
+       "version": "17.4.2",
+       "resolved": "https://registry.npmjs.org/dotenv/-/dotenv-17.4.2.tgz",
+@@ -1554,6 +1643,12 @@
+       "dev": true,
+       "license": "ISC"
+     },
++    "node_modules/emoji-regex": {
++      "version": "10.6.0",
++      "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.6.0.tgz",
++      "integrity": "sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==",
++      "license": "MIT"
++    },
+     "node_modules/esbuild": {
+       "version": "0.25.12",
+       "resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.25.12.tgz",
+@@ -1600,7 +1695,6 @@
+       "version": "3.2.0",
+       "resolved": "https://registry.npmjs.org/escalade/-/escalade-3.2.0.tgz",
+       "integrity": "sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==",
+-      "dev": true,
+       "license": "MIT",
+       "engines": {
+         "node": ">=6"
+@@ -1649,6 +1743,27 @@
+         "node": ">=6.9.0"
+       }
+     },
++    "node_modules/get-caller-file": {
++      "version": "2.0.5",
++      "resolved": "https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz",
++      "integrity": "sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==",
++      "license": "ISC",
++      "engines": {
++        "node": "6.* || 8.* || >= 10.*"
++      }
++    },
++    "node_modules/get-east-asian-width": {
++      "version": "1.6.0",
++      "resolved": "https://registry.npmjs.org/get-east-asian-width/-/get-east-asian-width-1.6.0.tgz",
++      "integrity": "sha512-QRbvDIbx6YklUe6RxeTeleMR0yv3cYH6PsPZHcnVn7xv7zO1BHN8r0XETu8n6Ye3Q+ahtSarc3WgtNWmehIBfA==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=18"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/sindresorhus"
++      }
++    },
+     "node_modules/iceberg-js": {
+       "version": "0.8.1",
+       "resolved": "https://registry.npmjs.org/iceberg-js/-/iceberg-js-0.8.1.tgz",
+@@ -1709,6 +1824,18 @@
+         "node": ">=6"
+       }
+     },
++    "node_modules/lilconfig": {
++      "version": "3.1.3",
++      "resolved": "https://registry.npmjs.org/lilconfig/-/lilconfig-3.1.3.tgz",
++      "integrity": "sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=14"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/antonk52"
++      }
++    },
+     "node_modules/lru-cache": {
+       "version": "5.1.1",
+       "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz",
+@@ -1728,6 +1855,21 @@
+         "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+       }
+     },
++    "node_modules/mitt": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/mitt/-/mitt-3.0.1.tgz",
++      "integrity": "sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==",
++      "license": "MIT"
++    },
++    "node_modules/modern-tar": {
++      "version": "0.7.6",
++      "resolved": "https://registry.npmjs.org/modern-tar/-/modern-tar-0.7.6.tgz",
++      "integrity": "sha512-sweCIVXzx1aIGTCdzcMlSZt1h8k5Tmk08VNAuRk3IU28XamGiOH5ypi11g6De2CH7PhYqSSnGy2A/EFhbWnVKg==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=18.0.0"
++      }
++    },
+     "node_modules/ms": {
+       "version": "2.1.3",
+       "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+@@ -1810,6 +1952,44 @@
+         "node": "^10 || ^12 || >=14"
+       }
+     },
++    "node_modules/puppeteer": {
++      "version": "25.3.0",
++      "resolved": "https://registry.npmjs.org/puppeteer/-/puppeteer-25.3.0.tgz",
++      "integrity": "sha512-O1tx8S315aw8eI99HZ5ZNcVEzJ9+jKF//eO5UvfZ3cXJ6okZ5sX3Y50u7DJaM+ewEK4LqXP068tBhfRaWikj+g==",
++      "hasInstallScript": true,
++      "license": "Apache-2.0",
++      "dependencies": {
++        "@puppeteer/browsers": "3.0.6",
++        "chromium-bidi": "16.0.1",
++        "devtools-protocol": "0.0.1638949",
++        "lilconfig": "^3.1.3",
++        "puppeteer-core": "25.3.0",
++        "typed-query-selector": "^2.12.2"
++      },
++      "bin": {
++        "puppeteer": "lib/puppeteer/node/cli.js"
++      },
++      "engines": {
++        "node": ">=22.12.0"
++      }
++    },
++    "node_modules/puppeteer-core": {
++      "version": "25.3.0",
++      "resolved": "https://registry.npmjs.org/puppeteer-core/-/puppeteer-core-25.3.0.tgz",
++      "integrity": "sha512-fm+wpUr2oigH1PXZvwgATrM2tYWHMDG8ASzTEe9uukCye4X5Ldx1K5BTHPFKITrIWvQQAQ256d1NpbEveBcKjA==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "@puppeteer/browsers": "3.0.6",
++        "chromium-bidi": "16.0.1",
++        "devtools-protocol": "0.0.1638949",
++        "typed-query-selector": "^2.12.2",
++        "webdriver-bidi-protocol": "0.4.2",
++        "ws": "^8.21.0"
++      },
++      "engines": {
++        "node": ">=22.12.0"
++      }
++    },
+     "node_modules/react": {
+       "version": "19.2.6",
+       "resolved": "https://registry.npmjs.org/react/-/react-19.2.6.tgz",
+@@ -1918,6 +2098,38 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/string-width": {
++      "version": "7.2.0",
++      "resolved": "https://registry.npmjs.org/string-width/-/string-width-7.2.0.tgz",
++      "integrity": "sha512-tsaTIkKW9b4N+AEj+SVA+WhJzV7/zMhcSu78mLKWSk7cXMOSHsBKFWUs0fWwq8QyK3MgJBQRX6Gbi4kYbdvGkQ==",
++      "license": "MIT",
++      "dependencies": {
++        "emoji-regex": "^10.3.0",
++        "get-east-asian-width": "^1.0.0",
++        "strip-ansi": "^7.1.0"
++      },
++      "engines": {
++        "node": ">=18"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/sindresorhus"
++      }
++    },
++    "node_modules/strip-ansi": {
++      "version": "7.2.0",
++      "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-7.2.0.tgz",
++      "integrity": "sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==",
++      "license": "MIT",
++      "dependencies": {
++        "ansi-regex": "^6.2.2"
++      },
++      "engines": {
++        "node": ">=12"
++      },
++      "funding": {
++        "url": "https://github.com/chalk/strip-ansi?sponsor=1"
++      }
++    },
+     "node_modules/tinyglobby": {
+       "version": "0.2.16",
+       "resolved": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.16.tgz",
+@@ -1941,6 +2153,12 @@
+       "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
+       "license": "0BSD"
+     },
++    "node_modules/typed-query-selector": {
++      "version": "2.12.2",
++      "resolved": "https://registry.npmjs.org/typed-query-selector/-/typed-query-selector-2.12.2.tgz",
++      "integrity": "sha512-EOPFbyIub4ngnEdqi2yOcNeDLaX/0jcE1JoAXQDDMIthap7FoN795lc/SHfIq2d416VufXpM8z/lD+WRm2gfOQ==",
++      "license": "MIT"
++    },
+     "node_modules/typescript": {
+       "version": "5.8.3",
+       "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz",
+@@ -2068,12 +2286,100 @@
+         }
+       }
+     },
++    "node_modules/webdriver-bidi-protocol": {
++      "version": "0.4.2",
++      "resolved": "https://registry.npmjs.org/webdriver-bidi-protocol/-/webdriver-bidi-protocol-0.4.2.tgz",
++      "integrity": "sha512-VSV+fzfChirL3e7jay2yUC7B4HQCGtEWEg/MSSQbK+qWbqeGlRLlXTzPpYr3XGUvbpDHumWZBJxgesg4N7dbtA==",
++      "license": "Apache-2.0"
++    },
++    "node_modules/wrap-ansi": {
++      "version": "9.0.2",
++      "resolved": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-9.0.2.tgz",
++      "integrity": "sha512-42AtmgqjV+X1VpdOfyTGOYRi0/zsoLqtXQckTmqTeybT+BDIbM/Guxo7x3pE2vtpr1ok6xRqM9OpBe+Jyoqyww==",
++      "license": "MIT",
++      "dependencies": {
++        "ansi-styles": "^6.2.1",
++        "string-width": "^7.0.0",
++        "strip-ansi": "^7.1.0"
++      },
++      "engines": {
++        "node": ">=18"
++      },
++      "funding": {
++        "url": "https://github.com/chalk/wrap-ansi?sponsor=1"
++      }
++    },
++    "node_modules/ws": {
++      "version": "8.21.0",
++      "resolved": "https://registry.npmjs.org/ws/-/ws-8.21.0.tgz",
++      "integrity": "sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=10.0.0"
++      },
++      "peerDependencies": {
++        "bufferutil": "^4.0.1",
++        "utf-8-validate": ">=5.0.2"
++      },
++      "peerDependenciesMeta": {
++        "bufferutil": {
++          "optional": true
++        },
++        "utf-8-validate": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/y18n": {
++      "version": "5.0.8",
++      "resolved": "https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz",
++      "integrity": "sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==",
++      "license": "ISC",
++      "engines": {
++        "node": ">=10"
++      }
++    },
+     "node_modules/yallist": {
+       "version": "3.1.1",
+       "resolved": "https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz",
+       "integrity": "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==",
+       "dev": true,
+       "license": "ISC"
++    },
++    "node_modules/yargs": {
++      "version": "18.0.0",
++      "resolved": "https://registry.npmjs.org/yargs/-/yargs-18.0.0.tgz",
++      "integrity": "sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg==",
++      "license": "MIT",
++      "dependencies": {
++        "cliui": "^9.0.1",
++        "escalade": "^3.1.1",
++        "get-caller-file": "^2.0.5",
++        "string-width": "^7.2.0",
++        "y18n": "^5.0.5",
++        "yargs-parser": "^22.0.0"
++      },
++      "engines": {
++        "node": "^20.19.0 || ^22.12.0 || >=23"
++      }
++    },
++    "node_modules/yargs-parser": {
++      "version": "22.0.0",
++      "resolved": "https://registry.npmjs.org/yargs-parser/-/yargs-parser-22.0.0.tgz",
++      "integrity": "sha512-rwu/ClNdSMpkSrUb+d6BRsSkLUq1fmfsY6TOpYzTwvwkg1/NRG85KBy3kq++A8LKQwX6lsu+aWad+2khvuXrqw==",
++      "license": "ISC",
++      "engines": {
++        "node": "^20.19.0 || ^22.12.0 || >=23"
++      }
++    },
++    "node_modules/zod": {
++      "version": "3.25.76",
++      "resolved": "https://registry.npmjs.org/zod/-/zod-3.25.76.tgz",
++      "integrity": "sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==",
++      "license": "MIT",
++      "funding": {
++        "url": "https://github.com/sponsors/colinhacks"
++      }
+     }
+   }
+ }
+diff --git a/package.json b/package.json
+index 496f828..4824de2 100644
+--- a/package.json
++++ b/package.json
+@@ -16,6 +16,7 @@
+     "driver.js": "^1.6.0",
+     "image-size": "^2.0.2",
+     "lucide-react": "^0.564.0",
++    "puppeteer": "^25.3.0",
+     "react": "^19.2.4",
+     "react-dom": "^19.2.4"
+   },

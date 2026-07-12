@@ -156,15 +156,25 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
   );
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={onClose}>
+    <div className="fixed inset-0 z-[200] flex items-center justify-center md:p-4 bg-black/95 md:bg-black/60 md:backdrop-blur-sm animate-fade-in" onClick={onClose}>
       <div 
-        className="flex w-full max-w-[850px] bg-[#1A1F29] rounded-[24px] overflow-hidden shadow-2xl relative"
-        style={{ height: '80vh', maxHeight: '700px' }}
+        className="flex flex-col md:flex-row w-full h-full md:h-[85vh] md:max-w-[850px] bg-[#1A1F29] md:rounded-[24px] overflow-hidden shadow-2xl relative md:max-h-[700px]"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Mobile Header (Only visible on small screens) */}
+        <div className="md:hidden flex items-center justify-between p-4 bg-[#151A23] border-b border-white/5 shrink-0">
+          <h2 className="text-white font-bold text-lg tracking-tight">Cüzdan</h2>
+          <button 
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors active:scale-95"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
         {/* LEFT SIDEBAR */}
-        <div className="w-[260px] flex flex-col border-r border-[#2A3441] bg-[#1A1F29] shrink-0">
-          <div className="p-5 pb-2 flex items-center justify-between">
+        <div className="w-full md:w-[260px] flex md:flex-col border-b md:border-b-0 md:border-r border-[#2A3441] bg-[#1A1F29] shrink-0">
+          <div className="hidden md:flex p-5 pb-2 items-center justify-between">
             <h2 className="text-white font-bold text-lg">Cüzdan</h2>
             <div className="flex items-center gap-1 bg-[#12161D] px-2 py-1 rounded-md cursor-pointer border border-[#2A3441]/50">
               <span className="text-sm">🇹🇭</span>
@@ -172,11 +182,11 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
             </div>
           </div>
 
-          <div className="flex-1 p-3 space-y-1 mt-2">
+          <div className="flex flex-row md:flex-col flex-1 p-2 md:p-3 space-x-2 md:space-x-0 md:space-y-1 mt-0 md:mt-2 overflow-x-auto custom-scrollbar">
             {/* Deposit Tab */}
             <button 
               onClick={() => setActiveTab('deposit')}
-              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-all ${
+              className={`flex-1 md:w-full flex items-center justify-center md:justify-between px-3 md:px-4 py-2.5 md:py-3.5 rounded-xl transition-all ${
                 activeTab === 'deposit' ? 'bg-[#151A23] shadow-inner' : 'hover:bg-[#151A23]/50'
               }`}
             >
@@ -185,14 +195,14 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                 <span className={`font-bold text-sm ${activeTab === 'deposit' ? 'text-white' : 'text-zinc-300'}`}>Para Yatır</span>
               </div>
               {activeTab === 'deposit' && (
-                <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
+                <div className="hidden md:block w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
               )}
             </button>
 
             {/* Withdraw Tab */}
             <button 
               onClick={() => setActiveTab('withdraw')}
-              className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-all ${
+              className={`flex-1 md:w-full flex items-center justify-center md:justify-between px-3 md:px-4 py-2.5 md:py-3.5 rounded-xl transition-all ${
                 activeTab === 'withdraw' ? 'bg-[#151A23] shadow-inner' : 'hover:bg-[#151A23]/50'
               }`}
             >
@@ -201,13 +211,13 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                 <span className={`font-bold text-sm ${activeTab === 'withdraw' ? 'text-white' : 'text-zinc-300'}`}>Para Çek</span>
               </div>
               {activeTab === 'withdraw' && (
-                <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
+                <div className="hidden md:block w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
               )}
             </button>
           </div>
 
           {/* Bottom 2FA Section */}
-          <div className="p-5 pt-0">
+          <div className="hidden md:block p-5 pt-0">
             <div className="flex items-center gap-2 mb-3 text-zinc-400">
               <Lock className="w-4 h-4" />
               <span className="text-xs font-semibold">Şu anda 2FA etkin değil</span>
@@ -220,19 +230,19 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
 
         {/* RIGHT CONTENT */}
         <div className="flex-1 flex flex-col bg-[#151A23] relative">
-          <div className="p-6 pb-2 flex items-center justify-between sticky top-0 bg-[#151A23] z-10">
-            <h2 className="text-white font-bold text-lg">
+          <div className="p-4 md:p-6 pb-2 flex items-center justify-between sticky top-0 bg-[#151A23] z-10 border-b md:border-none border-white/5">
+            <h2 className="text-white font-bold text-base md:text-lg">
               {activeTab === 'deposit' ? 'Para Yatırma Seçenekleri' : 'Para Çekme Seçenekleri'}
             </h2>
             <button 
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-[#1A1F29] flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+              className="hidden md:flex w-8 h-8 rounded-full bg-[#1A1F29] items-center justify-center text-zinc-400 hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 pt-4 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 pt-4 custom-scrollbar">
             {activeTab === 'deposit' && (
               <div className="space-y-6">
                 

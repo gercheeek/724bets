@@ -16,6 +16,7 @@ import AdminChatTab from './AdminChatTab';
 import AdminNotificationTab from './AdminNotificationTab';
 import AdminPromoTab from './AdminPromoTab';
 import AdminReferralTab from './AdminReferralTab';
+import { AdminBackupTab } from './AdminBackupTab';
 import { NavVisibility } from './Header';
 import { supabase } from '../utils/supabase';
 import { uploadImageToSupabase, resizeImage } from '../utils/imageUploader';
@@ -925,6 +926,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     </button>
                     <button onClick={() => setActiveTab('system')} className={`adm-nav-item ${activeTab === 'system' ? 'active' : ''}`}>
                       <Settings className="w-4 h-4" /> SİSTEM AYARLARI
+                    </button>
+                    <button onClick={() => setActiveTab('backup')} className={`adm-nav-item ${activeTab === 'backup' ? 'active' : ''}`}>
+                      <Save className="w-4 h-4" /> YEDEKLE & YÜKLE
                     </button>
                   </div>
                 )}
@@ -2916,6 +2920,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         )}
 
         {/* ===== EDITOR MANAGEMENT TAB ===== */}
+        {activeTab === 'backup' && (
+          <div>Backup Tab Placeholder</div>
+        )}
+
         {activeTab === 'editors' && (
           <div className="space-y-4 animate-fade-in-up">
             <div>

@@ -59,6 +59,30 @@ const KralView = ({
         <div className="max-w-4xl w-full flex flex-col items-center">
             <CategoryNav />
             
+            {/* ── Ekstra Oyunlar & Görevler ── */}
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full mt-6">
+              <button 
+                onClick={() => onNavigate?.('pool')} 
+                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
+              >
+                <Target className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
+                <span className="text-sm font-black text-white tracking-wider uppercase">724TOTO</span>
+              </button>
+              <button 
+                onClick={() => onNavigate?.('loyalty')} 
+                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
+              >
+                <Trophy className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
+                <span className="text-sm font-black text-white tracking-wider uppercase">Görevler</span>
+              </button>
+              <button 
+                onClick={() => onNavigate?.('wheel')} 
+                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
+              >
+                <Activity className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
+                <span className="text-sm font-black text-white tracking-wider uppercase">Çarkıfelek</span>
+              </button>
+            </div>
             {/* ── Canlı Skor Section ── */}
             <div className="p-4 sm:p-6 mb-6 rounded-lg bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-zinc-800/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 w-full text-left">
               <div className="flex items-center gap-3 w-full sm:w-auto">

@@ -1,11 +1,11 @@
 import React from 'react';
 
 const categories = [
-  { id: 'spor', title: 'SPOR', image: '/menu-spor.webp' },
-  { id: 'canli-bahis', title: 'CANLI BAHİS', image: '/menu-canli.webp' },
-  { id: 'casino', title: 'CASINO', image: '/menu-casino.webp' },
-  { id: 'canli-casino', title: 'CANLI CASINO', image: '/menu-canli-casino.png' },
-  { id: 'haberler', title: 'HABERLER', image: '/menu-haberler.webp' },
+  { id: 'spor', title: 'SPOR', image: '/menu-spor.webp', url: 'https://bahisbey1438.com/tr/sport/?btag=59649488_330539' },
+  { id: 'canli-bahis', title: 'CANLI BAHİS', image: '/menu-canli.webp', url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' },
+  { id: 'casino', title: 'CASINO', image: '/menu-casino.webp', url: 'https://bahisbey1438.com/tr/lobby/casino/?btag=59649488_330539' },
+  { id: 'canli-casino', title: 'CANLI CASINO', image: '/menu-canli-casino.png', url: 'https://bahisbey1438.com/tr/lobby/livecasino/?btag=59649488_330539' },
+  { id: 'haberler', title: 'HABERLER', image: '/menu-haberler.webp', url: 'https://bahisbey1438.com/tr/sport/sports/football/flt-1-1239-52530/?btag=59649488_330539' },
 ];
 
 const CategoryNav: React.FC = () => {
@@ -17,7 +17,7 @@ const CategoryNav: React.FC = () => {
             key={cat.id} 
             className="flex flex-col items-center gap-3 cursor-pointer group flex-shrink-0 w-[90px] sm:w-[100px] md:w-[120px]" 
             onClick={() => {
-              const event = new CustomEvent('internal-navigate', { detail: { url: `/${cat.id}` } });
+              const event = new CustomEvent('internal-navigate', { detail: { url: cat.url } });
               window.dispatchEvent(event);
             }}
           >

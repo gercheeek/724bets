@@ -1,6 +1,26 @@
 import React, { useState } from 'react';
-import { Search, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Play, X, AlertTriangle } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { CasinoLobbyGame } from '../types';
+
+// Helper to map game names to Pragmatic Play demo symbols
+const getDemoUrl = (game: any): string | null => {
+  if (!game) return null;
+  const nameString = (game.name || game.img || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  let symbol = '';
+  
+  // Maps
+  if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
+  else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
+  else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
+  else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
+  else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
+  else if (nameString.includes('fruitparty')) symbol = 'vs20fruitparty';
+  else if (nameString.includes('doghouse')) symbol = 'vs20doghouse';
+  else return null; // Default to null if no demo found
+
+  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+};
 
 const PROVIDERS = [
   { id: 'pragmatic', name: 'Pragmatic Play', icon: 'https://cdn.bahisbey1438.com/plat/prd//ProviderImages/Pragmatic/Favicon_20251117112756861.webp' },
@@ -126,19 +146,15 @@ const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
   </div>
 );
 
-interface CasinoLobbyProps {
-  customGames?: CasinoLobbyGame[];
-  isLoggedIn?: boolean;
-}
-
-const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [], isLoggedIn = false }) => {
-  const [selectedGame, setSelectedGame] = useState<any | null>(null);
+const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: boolean }> = ({ customGames = [], isLoggedIn = false }) => {
+  const [selectedGame, setSelectedGame] = useState<any>(null);
+  const [showDemoIframe, setShowDemoIframe] = useState<boolean>(false);
 
   const handleAction = () => {
     if (isLoggedIn) {
       window.dispatchEvent(new Event('openDepositModal'));
     } else {
-      window.dispatchEvent(new Event('openLoginModal'));
+      window.dispatchEvent(new CustomEvent('open-auth-modal'));
     }
   };
 
@@ -337,62 +353,98 @@ const CasinoLobby: React.FC<CasinoLobbyProps> = ({ customGames = [], isLoggedIn 
            </div>
         </div>
 
-      {selectedGame && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity" onClick={() => setSelectedGame(null)} />
-          <div className="relative z-10 bg-[#161821] rounded-2xl border border-white/10 w-full max-w-4xl overflow-hidden flex flex-col md:flex-row shadow-2xl animate-fade-in-up">
-            {/* Close Button */}
-            <button onClick={() => setSelectedGame(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-black rounded-full text-white z-20 transition-colors">✕</button>
-            
-            {/* Left Panel: Demo Preview */}
-            <div className="w-full md:w-3/5 bg-black relative min-h-[300px] flex items-center justify-center overflow-hidden">
-              <img src={selectedGame.img} alt="Game Thumbnail" className="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm scale-110" />
-              <div className="relative z-10 flex flex-col items-center gap-4 text-center p-6">
-                 <div className="w-24 h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/20">
-                   <img src={selectedGame.img} alt="Game Icon" className="w-full h-full object-cover" />
-                 </div>
-                 <div>
-                   <h3 className="text-2xl font-black text-white drop-shadow-md">DEMO OYUN</h3>
-                   <p className="text-zinc-400 font-semibold mt-1">Oyun önizlemesi yükleniyor...</p>
-                 </div>
-                 <div className="mt-4 flex gap-2">
-                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '150ms' }}></div>
-                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '300ms' }}></div>
-                 </div>
+      {selectedGame && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedGame(null);
+              setShowDemoIframe(false);
+            }
+          }}
+        >
+          {showDemoIframe && getDemoUrl(selectedGame) ? (
+            <div className="relative m-auto z-10 w-full max-w-4xl h-[70vh] bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 animate-fade-in flex flex-col">
+              <div className="flex items-center justify-between p-3 bg-[#0F1115] border-b border-white/10">
+                <div className="flex items-center gap-2">
+                   <div className="w-2 h-2 rounded-full bg-[#00FFA3] animate-pulse" />
+                   <span className="text-white font-bold text-sm">{selectedGame.name || 'Demo Oyun'}</span>
+                   <span className="bg-[#00FFA3]/20 text-[#00FFA3] text-[10px] px-2 py-0.5 rounded font-black tracking-widest uppercase ml-2">Sanal Bakiye</span>
+                </div>
+                <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-white hover:text-black rounded-full text-white/70 transition-all">✕</button>
+              </div>
+              <div className="flex-1 w-full bg-black relative">
+                <iframe 
+                  src={getDemoUrl(selectedGame)!}
+                  className="absolute inset-0 w-full h-full border-0"
+                  allowFullScreen
+                  title={selectedGame.name || 'Demo Game'}
+                />
               </div>
             </div>
+          ) : (
+            <div className="relative m-auto z-10 bg-[#0F1115] rounded-3xl border border-white/5 w-full max-w-[380px] shadow-2xl shadow-black/50 overflow-hidden animate-fade-in">
+              {/* Close Button */}
+              <button onClick={() => { setSelectedGame(null); setShowDemoIframe(false); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-white hover:text-black rounded-full text-white/70 transition-all z-20">✕</button>
+              
+              {/* Top Image Section */}
+              <div className="relative h-48 w-full flex flex-col items-center justify-center pt-8">
+                <div className="absolute inset-0 bg-black">
+                  <img src={selectedGame.img} className="w-full h-full object-cover opacity-40" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F1115] via-[#0F1115]/80 to-transparent" />
+                </div>
+                
+                {/* Game Icon Center */}
+                <div className="relative z-10 w-24 h-24 rounded-2xl overflow-hidden border-2 border-white/10 shadow-[0_0_30px_rgba(0,255,163,0.15)] transition-all">
+                  <img src={selectedGame.img} className="w-full h-full object-cover" />
+                </div>
+              </div>
 
-            {/* Right Panel: CTA */}
-            <div className="w-full md:w-2/5 p-8 flex flex-col justify-center relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl -mr-16 -mt-16" />
-               <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -ml-16 -mb-16" />
-               
-               <h3 className="text-3xl font-black text-white mb-2 leading-tight">
-                 {isLoggedIn ? 'Şansını Dene!' : 'Maceraya Katıl!'}
-               </h3>
-               <p className="text-zinc-400 text-sm mb-8 leading-relaxed relative z-10">
-                 {isLoggedIn 
-                   ? 'Oynamaya başlamak için hemen bakiyeni yenile ve heyecana kaldığın yerden devam et.'
-                   : 'Gerçek parayla oynamak, büyük ödülleri kazanmak ve en iyi oyun deneyimini yaşamak için hemen üye ol!'}
-               </p>
+              {/* Content Section */}
+              <div className="relative z-10 px-6 pb-8 pt-2 text-center flex flex-col items-center">
+                <h3 className="text-2xl font-black text-white mb-1 tracking-tight">{selectedGame.name || 'Pragmatic Play Slot'}</h3>
+                <p className="text-zinc-400 text-xs uppercase tracking-widest mb-6 font-bold">{getDemoUrl(selectedGame) ? 'Gerçek veya Sanal Oyna' : 'Gerçek Parayla Oyna'}</p>
 
-               <button 
-                 onClick={() => {
-                   setSelectedGame(null);
-                   handleAction();
-                 }}
-                 className={`w-full py-4 rounded-xl font-black text-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg relative z-10 ${
-                   isLoggedIn 
-                     ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-black shadow-green-500/25 hover:shadow-green-500/40'
-                     : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-blue-500/25 hover:shadow-blue-500/40'
-                 }`}
-               >
-                 {isLoggedIn ? 'Bakiye Yükle (Cüzdan)' : 'Giriş Yap / Üye Ol'}
-               </button>
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
+
+                <h4 className="text-lg font-bold text-white mb-2">{isLoggedIn ? 'Şansını Dene!' : 'Maceraya Katıl!'}</h4>
+                <p className="text-zinc-400 text-sm mb-8 leading-relaxed">
+                  {isLoggedIn 
+                    ? 'Kaldığın yerden devam et ve kazanmaya başla.'
+                    : 'Gerçek heyecan için hemen aramıza katıl!'}
+                </p>
+
+                <div className="w-full flex flex-col gap-3">
+                  <button 
+                     onClick={() => {
+                       setSelectedGame(null);
+                       setShowDemoIframe(false);
+                       handleAction();
+                     }}
+                     className={`w-full py-3.5 rounded-xl font-black text-sm transition-all shadow-lg relative z-10 ${
+                       isLoggedIn 
+                         ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]'
+                         : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-[0_0_20px_rgba(79,70,229,0.4)]'
+                     }`}
+                   >
+                     Gerçek Parayla Oyna
+                   </button>
+
+                  {getDemoUrl(selectedGame) && (
+                    <button 
+                       onClick={() => setShowDemoIframe(true)}
+                       className="w-full py-3 rounded-xl font-bold text-sm transition-all shadow-lg relative z-10 bg-[#2A2D3A] text-white hover:bg-[#3A3D4A] border border-white/5 hover:border-white/20 flex items-center justify-center gap-2"
+                     >
+                       <Play size={16} className="text-[#00FFA3]" fill="currentColor" />
+                       Demo Oyna (Sanal Bakiye)
+                     </button>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          )}
+        </div>,
+        document.body
       )}
 
       </div>

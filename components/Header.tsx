@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  Settings, User, Pen, LogOut, ChevronDown, Search, Coins, Send, X,
+  Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
   MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
-  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond
+  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
-import WalletModal from './WalletModal';
 
 export interface NavVisibility {
   coupons: boolean;
@@ -84,6 +83,7 @@ interface CategoryItem {
   icon: React.ReactNode;
   visKey?: keyof NavVisibility;
   scrollTo?: string; // if we should scroll to an element instead of switching view
+  href?: string;
   requireRole?: boolean;
 }
 
@@ -111,24 +111,18 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const walletDropdownRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
-  // Deposit Modal State
-  const [showDepositModal, setShowDepositModal] = useState(false);
-
-  useEffect(() => {
-    const handleOpenDeposit = () => setShowDepositModal(true);
-    window.addEventListener('openDepositModal', handleOpenDeposit);
-    return () => window.removeEventListener('openDepositModal', handleOpenDeposit);
-  }, []);
   const [depositUsername, setDepositUsername] = useState('');
   const [depositMsg, setDepositMsg] = useState({ type: '', text: '' });
 
   /* ── Category list ── */
-  const categories: CategoryItem[] = [
-    { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
+    const categories: CategoryItem[] = [
+    { key: 'slotra', view: 'slotra', label: 'Gerçek', icon: <Target className={ICON_SIZE} /> },
     { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
     { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
     { key: 'trusted-sites', view: 'trusted-sites', label: 'Güvenilir', icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
@@ -159,7 +153,6 @@ const Header: React.FC<HeaderProps> = ({
 
       setDepositMsg({ type: 'success', text: 'Bildirim başarıyla gönderildi!' });
       setTimeout(() => {
-        setShowDepositModal(false);
         setDepositUsername('');
         setDepositMsg({ type: '', text: '' });
       }, 2000);
@@ -172,6 +165,9 @@ const Header: React.FC<HeaderProps> = ({
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (walletDropdownRef.current && !walletDropdownRef.current.contains(e.target as Node)) {
+        setWalletDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -193,6 +189,10 @@ const Header: React.FC<HeaderProps> = ({
 
   /* ── Handle category click ── */
   const handleCategoryClick = (cat: CategoryItem) => {
+    if (cat.href) {
+      window.open(cat.href, '_blank');
+      return;
+    }
     if (cat.scrollTo) {
       onViewChange?.(cat.view);
       const el = document.getElementById(cat.scrollTo!);
@@ -311,35 +311,43 @@ const Header: React.FC<HeaderProps> = ({
 
           <div
             id="tour-logo"
-            className="logo-text-724"
+            className="logo-text-724 group"
             style={{ 
               alignItems: 'center', 
               cursor: 'pointer',
-              position: 'relative'
+              position: 'relative',
+              display: 'flex'
             }}
             onClick={() => onViewChange?.('home')}
           >
-            <span style={{
-              fontSize: '20px',
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 900,
-              letterSpacing: '-1px',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center'
-            }}>
-              BAHİSBEY
+            <Club className="w-7 h-7 text-[#00FFA3] mr-2 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_10px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
+            <span className="logo-text-intro">
               <span style={{
-                background: 'linear-gradient(135deg, #00FFA3 0%, #00FFA3 100%)',
-                color: '#000000',
-                fontSize: '11px',
+                fontSize: '22px',
+                fontFamily: "'Outfit', sans-serif",
                 fontWeight: 900,
-                padding: '2px 6px',
-                borderRadius: '4px',
-                marginLeft: '4px',
-                fontFamily: "'Inter', sans-serif",
-                opacity: 0.95
-              }}>.COM</span>
+                letterSpacing: '-1.5px',
+                color: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'all 0.3s ease'
+              }} className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#00FFA3]">
+                724bets
+                <span style={{
+                  background: 'rgba(0, 255, 163, 0.08)',
+                  color: '#00FFA3',
+                  border: '1px solid rgba(0, 255, 163, 0.3)',
+                  fontSize: '9px',
+                  fontWeight: 800,
+                  letterSpacing: '0.5px',
+                  padding: '2px 5px',
+                  borderRadius: '12px',
+                  marginLeft: '6px',
+                  transform: 'translateY(-6px)',
+                  fontFamily: "'Inter', sans-serif",
+                  transition: 'all 0.3s ease'
+                }} className="group-hover:border-[#00FFA3] group-hover:shadow-[0_0_12px_rgba(0,255,163,0.3)]">BETA</span>
+              </span>
             </span>
           </div>
 
@@ -352,89 +360,162 @@ const Header: React.FC<HeaderProps> = ({
 
           {siteUser ? (
             <>
-              {/* Gamdom Style Wallet */}
-              <div 
-                className="hidden sm:flex items-center bg-[#151A23] rounded-md px-2.5 py-1.5 cursor-pointer hover:bg-[#1A212D] transition-colors border border-white/5"
-                onClick={() => setShowDepositModal(true)}
-              >
-                <div className="w-5 h-5 rounded-sm bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2">
-                  <span className="text-[11px]">$</span>
-                </div>
-                <span className="text-white font-bold text-sm mr-2">{siteUser.balance?.toFixed(2) || '0.03'}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
-              </div>
-
-              {/* Deposit Button (Cüzdan) */}
-              <button
-                onClick={() => setShowDepositModal(true)}
-                className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-4 py-1.5 rounded-md text-sm transition-colors shadow-[0_0_15px_rgba(0,255,163,0.15)]"
-                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.3px' }}
-              >
-                Cüzdan
-              </button>
-
-              {/* Profile Button with Dropdown */}
-              <div className="relative" ref={dropdownRef}>
-                <div
-                  onClick={() => setDropdownOpen(prev => !prev)}
-                  className="hidden sm:flex items-center gap-2 bg-[#151A23] rounded-md p-1 pr-1.5 cursor-pointer border border-white/5 hover:bg-[#1A212D] transition-colors ml-1"
-                >
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-8 h-8 rounded bg-[#2A3441]" />
-                  <div className="flex flex-col justify-center">
-                    <span className="text-white font-bold text-[11px] leading-tight truncate max-w-[80px]">{siteUser.username}</span>
-                    <div className="flex items-center gap-1">
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#D97706]">
-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-                      </svg>
-                      <span className="text-[#D97706] text-[9px] font-extrabold uppercase tracking-wider leading-none">Bronz 2</span>
+              <div className="flex items-center gap-2">
+                {/* 21.com Style Balance Dropdown */}
+                <div className="relative" ref={walletDropdownRef}>
+                  <div 
+                    className="flex items-center bg-[#1C2028] rounded-md pl-1 pr-3 py-1 cursor-pointer hover:bg-[#252A34] transition-colors border border-white/5"
+                    onClick={() => setWalletDropdownOpen(prev => !prev)}
+                  >
+                    <div className="w-8 h-8 rounded bg-[#ef3434] text-white flex items-center justify-center mr-3 font-bold text-lg">
+                      ₺
                     </div>
+                    <span className="text-white font-black text-[15px] tracking-tight mr-2">₺{siteUser.balance?.toFixed(2) || '0.00'}</span>
+                    <ChevronUp className={`w-4 h-4 text-[#00FFA3] transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
-                  <div className="flex flex-col ml-0.5 opacity-60">
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-zinc-400 mb-[1px]">
-                      <path d="M18 15l-6-6-6 6"/>
-                    </svg>
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-zinc-400">
-                      <path d="M6 9l6 6 6-6"/>
-                    </svg>
-                  </div>
+
+                  {walletDropdownOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-64 rounded-xl py-2 z-50 bg-[#161a22] border border-[#2A2E38] shadow-2xl">
+                      <div className="flex flex-col">
+                        {[
+                          { symbol: '₺', code: 'TRY', name: 'Turkish Lira', color: 'bg-[#ef3434]' },
+                          { symbol: '₿', code: 'BTC', name: 'Bitcoin', color: 'bg-[#f7931a]' },
+                          { symbol: '♦', code: 'ETH', name: 'Ethereum', color: 'bg-[#627eea]' },
+                          { symbol: 'Ł', code: 'LTC', name: 'Litecoin', color: 'bg-[#d3d3d3]' },
+                          { symbol: 'T', code: 'TRX', name: 'Tron', color: 'bg-[#ef3434]' },
+                          { symbol: '✕', code: 'XRP', name: 'Ripple', color: 'bg-[#23292f]' },
+                          { symbol: 'Ð', code: 'DOGE', name: 'Dogecoin', color: 'bg-[#f8b245]' },
+                        ].map(crypto => (
+                          <div key={crypto.code} className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold ${crypto.color}`}>
+                                {crypto.symbol}
+                              </div>
+                              <span className="text-zinc-300 font-bold text-sm">{crypto.code}</span>
+                            </div>
+                            <span className="text-zinc-400 font-bold text-sm">₺0.00</span>
+                          </div>
+                        ))}
+
+                        <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors bg-[#1C2028]/50">
+                          <div className="flex items-center gap-3">
+                            <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#14f195]">
+                              ≡
+                            </div>
+                            <span className="text-white font-bold text-sm">SOL</span>
+                          </div>
+                          <span className="text-white font-bold text-sm">0.00000000</span>
+                        </div>
+
+                        <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors border-b border-[#2A2E38]">
+                          <div className="flex items-center gap-3">
+                            <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#f3ba2f]">
+                              ⬡
+                            </div>
+                            <span className="text-zinc-300 font-bold text-sm">BNB</span>
+                          </div>
+                          <span className="text-zinc-400 font-bold text-sm">₺0.00</span>
+                        </div>
+
+                        <button className="w-full text-center py-4 text-zinc-400 hover:text-white font-bold text-sm transition-colors">
+                          Wallet settings
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                
-                {/* Mobile avatar fallback */}
+
+                {/* 21.com Style Deposit Button (Cüzdan) */}
                 <button
-                  onClick={() => setDropdownOpen(prev => !prev)}
-                  className="sm:hidden header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
+                  onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
+                  className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-6 py-2 rounded-md text-[15px] transition-colors"
                 >
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-full h-full rounded-full" />
+                  Cüzdan
                 </button>
 
-                {dropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-44 rounded-lg py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
-                    <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                      <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>
-                        {userRole === 'admin' || userRole === 'editor' ? 'Yönetici Hesabı' : 'Üye Hesabı'}
-                      </p>
-                      <p className="text-sm font-black truncate" style={{ color: 'var(--text-primary)' }}>{siteUser.username}</p>
+                {/* Chat Toggle Button */}
+                <button
+                  onClick={onSupportClick}
+                  className="bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 flex items-center justify-center relative"
+                  title="Canlı Sohbet"
+                >
+                  <MessageSquare className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
+                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse"></span>
+                </button>
+
+                {/* 21.com Style Profile Button and Dropdown Container */}
+                <div className="relative" ref={dropdownRef}>
+                  {/* The Trigger Button */}
+                  <div 
+                    onClick={() => setDropdownOpen(prev => !prev)}
+                    className="flex items-center gap-3 bg-[#1C2028] rounded-md p-1 pr-3 cursor-pointer border border-white/5 hover:bg-[#252A34] transition-colors"
+                  >
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ecem" alt="Avatar" className="w-8 h-8 rounded" />
+                    <div className="flex flex-col justify-center">
+                      <span className="text-white font-bold text-[13px] leading-tight">{siteUser.username}</span>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-[#D97706]">
+                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                        <span className="text-[#D97706] text-[10px] font-black uppercase tracking-wider leading-none">BRONZ 2</span>
+                      </div>
                     </div>
-
-                    {(userRole === 'admin' || userRole === 'editor') && (
-                      <button
-                        onClick={() => { setDropdownOpen(false); onAdminClick?.(); }}
-                        className="w-full flex items-center gap-2 px-4 py-2.5 text-[#00FFA3] hover:bg-[#00FFA3]/5 text-xs font-bold transition-colors border-b border-black/5"
-                      >
-                        <Shield className="w-3.5 h-3.5" />
-                        Yönetim Paneli
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
-                      className="w-full flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-500/5 text-xs font-bold transition-colors"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      Çıkış Yap
-                    </button>
+                    <div className="flex flex-col ml-1 opacity-50 justify-center gap-0.5">
+                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white">
+                        <path d="M18 15l-6-6-6 6"/>
+                      </svg>
+                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white">
+                        <path d="M6 9l6 6 6-6"/>
+                      </svg>
+                    </div>
                   </div>
-                )}
+                  
+                  {/* Mobile avatar fallback */}
+                  <button
+                    onClick={() => setDropdownOpen(prev => !prev)}
+                    className="sm:hidden header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5 absolute inset-0 opacity-0 z-10"
+                  >
+                    <span className="sr-only">Open Profile</span>
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {dropdownOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg py-2 z-50 bg-[#1C2028] border border-[#2A2E38] shadow-2xl">
+                      <div className="px-5 py-3 mb-1 border-b border-[#2A2E38]">
+                        <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-1">
+                          {userRole === 'admin' || userRole === 'editor' ? 'YÖNETİCİ HESABI' : 'ÜYE HESABI'}
+                        </p>
+                        <p className="text-xl font-black text-white truncate">{siteUser.username}</p>
+                      </div>
+
+                      <button
+                        onClick={() => { setDropdownOpen(false); onViewChange?.('profile'); }}
+                        className="w-full flex items-center gap-3 px-5 py-3 text-white hover:bg-[#252A34] text-sm font-bold transition-colors border-b border-[#2A2E38]"
+                      >
+                        <User className="w-4 h-4 text-zinc-400" />
+                        Profil & Bakiye
+                      </button>
+
+                      {(userRole === 'admin' || userRole === 'editor') && (
+                        <button
+                          onClick={() => { setDropdownOpen(false); onAdminClick?.(); }}
+                          className="w-full flex items-center gap-3 px-5 py-3 text-[#00FFA3] hover:bg-[#252A34] text-sm font-bold transition-colors border-b border-[#2A2E38]"
+                        >
+                          <Shield className="w-4 h-4" />
+                          Yönetim Paneli
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
+                        className="w-full flex items-center gap-3 px-5 py-3 text-[#EF4444] hover:bg-[#252A34] text-sm font-bold transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Çıkış Yap
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </>
           ) : (
@@ -462,6 +543,15 @@ const Header: React.FC<HeaderProps> = ({
                     Giriş yap
                   </button>
                   <button
+                    onClick={onSupportClick}
+                    className="bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 flex items-center justify-center relative"
+                    title="Canlı Sohbet"
+                    style={{ height: '36px', width: '36px' }}
+                  >
+                    <MessageSquare className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
+                  </button>
+
+                  <button
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
                     style={{
@@ -485,22 +575,7 @@ const Header: React.FC<HeaderProps> = ({
                     Şimdi kayıt ol
                   </button>
                 </div>
-                
-                <button
-                  onClick={onSupportClick}
-                  className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
-                  title="Sohbet"
-                >
-                  <MessageSquare className="w-4 h-4 text-slate-300" />
-                </button>
-                
-                <button
-                  onClick={onSearchClick}
-                  className="header-icon-btn hover:opacity-80 transition-opacity bg-slate-800 rounded-full w-9 h-9 flex items-center justify-center border border-white/5"
-                  title="Maç Ara"
-                >
-                  <Search className="w-4 h-4 text-slate-300" />
-                </button>
+
               </>
             )}
           </div>
@@ -597,11 +672,6 @@ const Header: React.FC<HeaderProps> = ({
 
 
       </div>
-
-      {/* DEPOSIT MODAL */}
-      {showDepositModal && (
-        <WalletModal onClose={() => setShowDepositModal(false)} />
-      )}
     </>
   );
 };

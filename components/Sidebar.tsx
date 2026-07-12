@@ -13,6 +13,7 @@ interface MenuItem {
   label: string;
   icon?: React.ReactNode;
   view?: string;
+  href?: string;
   visKey?: keyof NavVisibility;
   requireRole?: boolean;
   subItems?: MenuItem[];
@@ -44,10 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [isSponsorlukOpen, setIsSponsorlukOpen] = useState(false);
 
   const topGrid = [
-    { id: 'lobi', label: 'LOBİ', icon: <Home className="w-5 h-5 mb-1" />, view: 'home' },
-    { id: 'esports', label: 'E-SPORLAR', icon: <Gamepad2 className="w-5 h-5 mb-1" />, view: 'esports' },
-    { id: 'canli', label: 'CANLI', icon: <PlayCircle className="w-5 h-5 mb-1" />, view: 'sports2' },
-    { id: 'bahislerim', label: 'BAHİSLERİM', icon: <List className="w-5 h-5 mb-1" />, view: 'coupons' },
+    { id: 'slotra', label: 'GERÇEK', icon: <Target className="w-5 h-5 mb-1" />, view: 'slotra' },
   ];
 
   const menuConfig: MenuItem[] = [
@@ -117,7 +115,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       icon: <Target className="w-4 h-4 text-zinc-400" />,
       subItems: [
         { id: 'casino', label: '724Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'blackjack', visKey: 'blackjack' },
-        { id: 'casino2', label: '724Casino / Slotlar 2', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'casino2' },
         { id: 'live-casino', label: 'Canlı Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'live-casino' },
         { id: 'toto', label: '724TOTO', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'pool', visKey: 'pool' },
         { id: 'loyalty', label: 'Görevler', icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'loyalty', visKey: 'loyalty' },
@@ -154,6 +151,8 @@ const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => {
               if (item.subItems) {
                 setOpenGroups(prev => ({ ...prev, [item.id]: !prev[item.id] }));
+              } else if (item.href) {
+                window.open(item.href, '_blank');
               } else if (item.view) {
                 onViewChange(item.view);
               }
@@ -279,7 +278,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                         if (item.id === 'canli') {
                           window.dispatchEvent(new CustomEvent('internal-navigate', { detail: { url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' } }));
                         }
-                        if (item.view) onViewChange(item.view);
+                        if (item.href) {
+                          window.open(item.href, '_blank');
+                        } else if (item.view) {
+                          onViewChange(item.view);
+                        }
                       }}
                       className={`flex flex-col items-center justify-center py-3 rounded-lg transition-all ${
                         isActive 
@@ -304,7 +307,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                         if (item.id === 'canli') {
                           window.dispatchEvent(new CustomEvent('internal-navigate', { detail: { url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' } }));
                         }
-                        if (item.view) onViewChange(item.view);
+                        if (item.href) {
+                          window.open(item.href, '_blank');
+                        } else if (item.view) {
+                          onViewChange(item.view);
+                        }
                       }}
                       className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all mx-auto ${
                         isActive 
@@ -342,60 +349,19 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar</span>
                     </div>
-                    <div onClick={() => onViewChange('casino2')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar 2</span>
-                    </div>
                     <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">Canlı Casino</span>
-                    </div>
-                    <div onClick={() => onViewChange('pool')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">724TOTO</span>
-                    </div>
-                    <div onClick={() => onViewChange('loyalty')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">Görevler</span>
-                    </div>
-                    <div onClick={() => onViewChange('wheel')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">Çarkıfelek</span>
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Block 2: Spor Accordion */}
+              {/* Block 2: Spor Link */}
               <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div 
-                  onClick={() => setIsSporOpen(!isSporOpen)}
-                  className={`flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Activity className="w-5 h-5 text-zinc-300 shrink-0" />
-                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}
-                  </div>
-                  {isOpen && <ChevronLeft className={`w-4 h-4 text-zinc-400 transition-transform ${isSporOpen ? '-rotate-90' : ''}`} />}
+                <div onClick={() => onViewChange('sports')} className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                  <Activity className="w-5 h-5 text-zinc-300 shrink-0" />
+                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}
                 </div>
-                
-                {isOpen && isSporOpen && (
-                  <div className="flex flex-col border-t border-white/5 bg-black/20 py-2">
-                    <div onClick={() => onViewChange('sports2')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">Canlı Bahis</span>
-                    </div>
-                    <div onClick={() => onViewChange('sports')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">Futbol</span>
-                    </div>
-                    <div onClick={() => onViewChange('sports')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">Basketbol</span>
-                    </div>
-                    <div onClick={() => onViewChange('sports')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">Tenis</span>
-                    </div>
-                    <div onClick={() => onViewChange('esports')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">E-Sporlar</span>
-                    </div>
-                    <div onClick={() => onViewChange('kral')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-white/5 text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">724Analiz Portalı</span>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Block 3: Kodu Kullan etc. */}
@@ -444,7 +410,10 @@ const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Block 5: Canlı Destek & Türkçe */}
               <div className={`flex flex-col rounded-xl border border-white/5 bg-[#1C1F26] overflow-hidden ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}>
+                <div 
+                  onClick={() => window.dispatchEvent(new Event('openSupportChat'))}
+                  className={`flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors ${isOpen ? 'p-4' : 'p-3 w-full justify-center'}`}
+                >
                   <MessageSquare className="w-5 h-5 text-zinc-300 shrink-0 fill-current" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Canlı Destek</span>}
                 </div>

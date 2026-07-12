@@ -17,7 +17,7 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 }) => {
   const items = [
     { id: 'home', label: 'Ana Sayfa', icon: Home },
-    { id: 'demo', label: 'Demo', icon: Play },
+    { id: 'blackjack', label: 'Slot', icon: Spade },
     { id: 'sports2', label: 'Spor', icon: Target },
     { id: 'cekilis', label: 'Çekiliş', icon: Gift },
     { id: 'profile', label: siteUser ? 'Profil' : 'Giriş', icon: User, action: onProfileClick }
