@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Club } from 'lucide-react';
 
 interface AppLoaderProps {
@@ -6,9 +7,17 @@ interface AppLoaderProps {
 }
 
 const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false }) => {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div 
-      className={`fixed inset-0 z-[999999] bg-black flex items-center justify-center transition-opacity duration-500 pointer-events-none ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
+      className={`fixed inset-0 z-[999999] bg-black flex items-center justify-center transition-opacity duration-500 ${fadeOut ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}
     >
       <div className="flex flex-col items-center justify-center animate-pulse">
         <div className="logo-text-724 group flex items-center overflow-hidden">
@@ -27,7 +36,8 @@ const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false }) => {
           <div className="h-full bg-[#00FFA3] w-1/2 rounded-full animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
