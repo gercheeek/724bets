@@ -26,12 +26,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       <div className="w-full px-4 pt-6 pb-6">
         <div className="relative overflow-hidden rounded-xl bg-[#0d0d12] w-full h-[180px] md:h-[240px] shadow-2xl group cursor-pointer">
           <img 
-            src="/images/gamdom_hero_banner.jpg" 
+            src="/images/bitcoin_hero_banner.jpg" 
             alt="Hero Banner" 
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
           />
           {/* Overlay & Text */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10 pointer-events-none" />
           <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-center z-20 pointer-events-none">
             <h2 className="text-3xl md:text-5xl font-black text-white italic tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-4 max-w-lg leading-tight">
               724Bets'e <span className="text-[#00FFA3]">Hoşgeldiniz!</span>
@@ -76,18 +75,16 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           className="relative w-full h-[220px] md:h-[280px] rounded-xl overflow-hidden cursor-pointer group shadow-2xl bg-[#0d0d12]"
         >
           <img 
-            src="/images/gamdom_casino_card.jpg" 
+            src="/images/purple_casino_card.jpg" 
             alt="Casino" 
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-10 pointer-events-none" />
-          
           <div className="absolute bottom-0 left-0 right-0 p-6 flex items-center justify-between z-20">
             <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              Casino
+              Kumarhane
             </h3>
             <button className="bg-fuchsia-900/60 hover:bg-fuchsia-800/80 backdrop-blur-md border border-white/20 text-white font-bold px-4 py-2 text-sm rounded-lg transition-colors shadow-lg">
-              Visit Casino
+              Ziyaret et Casino
             </button>
           </div>
         </div>
@@ -98,18 +95,16 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           className="relative w-full h-[220px] md:h-[280px] rounded-xl overflow-hidden cursor-pointer group shadow-2xl bg-[#0d0d12]"
         >
           <img 
-            src="/images/gamdom_sports_card.jpg" 
+            src="/images/green_sports_card.jpg" 
             alt="Sports Betting" 
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-10 pointer-events-none" />
-          
           <div className="absolute bottom-0 left-0 right-0 p-6 flex items-center justify-between z-20">
             <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              Sports Betting
+              Spor Bahisleri
             </h3>
             <button className="bg-green-900/60 hover:bg-green-800/80 backdrop-blur-md border border-white/20 text-white font-bold px-4 py-2 text-sm rounded-lg transition-colors shadow-lg">
-              Visit Sports
+              Ziyaret et Sports
             </button>
           </div>
         </div>
