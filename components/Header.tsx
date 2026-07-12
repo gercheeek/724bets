@@ -440,68 +440,6 @@ const Header: React.FC<HeaderProps> = ({
                   <Search className="w-5 h-5" />
                 </button>
 
-                {/* User Profile Icon */}
-                <div className="relative" ref={dropdownRef}>
-                  <button 
-                    onClick={() => setDropdownOpen(prev => !prev)}
-                    className="flex items-center bg-[#161822] rounded-lg md:rounded-xl p-0.5 md:p-1 hover:bg-[#1C2028] transition-colors border border-white/5 shadow-inner"
-                  >
-                    <img 
-                      src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
-                      className="w-7 h-7 md:w-10 md:h-10 rounded-md md:rounded-lg object-cover bg-[#1F232B]" 
-                      alt="avatar" 
-                    />
-                    <div className="flex flex-col items-start ml-3 mr-4">
-                      <span className="text-white font-bold text-sm">{siteUser.username || 'Üye'}</span>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <svg className="w-3 h-3 text-[#FF9500]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                        <span className="text-[#FF9500] font-black text-[10px] tracking-wider uppercase">{(siteUser as any).loyaltyLevel || 'BRONZ 2'}</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col text-zinc-500 ml-1 mr-2 opacity-50">
-                      <ChevronDown className="w-3 h-3 rotate-180 -mb-1" />
-                      <ChevronDown className="w-3 h-3" />
-                    </div>
-                  </button>
-
-                  {/* Dropdown Menu */}
-                  {dropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg py-2 z-50 bg-[#1C2028] border border-[#2A2E38] shadow-2xl">
-                      <div className="px-5 py-3 mb-1 border-b border-[#2A2E38]">
-                        <p className="text-[11px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-1">
-                          {userRole === 'admin' || userRole === 'editor' ? 'YÖNETİCİ HESABI' : 'ÜYE HESABI'}
-                        </p>
-                        <p className="text-xl font-black text-white truncate">{siteUser.username}</p>
-                      </div>
-
-                      <button
-                        onClick={() => { setDropdownOpen(false); onViewChange?.('profile'); }}
-                        className="w-full flex items-center gap-3 px-5 py-3 text-white hover:bg-[#252A34] text-sm font-bold transition-colors border-b border-[#2A2E38]"
-                      >
-                        <User className="w-4 h-4 text-zinc-400" />
-                        Profil & Bakiye
-                      </button>
-
-                      {(userRole === 'admin' || userRole === 'editor') && (
-                        <button
-                          onClick={() => { setDropdownOpen(false); onAdminClick?.(); }}
-                          className="w-full flex items-center gap-3 px-5 py-3 text-[#00FFA3] hover:bg-[#252A34] text-sm font-bold transition-colors border-b border-[#2A2E38]"
-                        >
-                          <Shield className="w-4 h-4" />
-                          Yönetim Paneli
-                        </button>
-                      )}
-
-                      <button
-                        onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
-                        className="w-full flex items-center gap-3 px-5 py-3 text-[#EF4444] hover:bg-[#252A34] text-sm font-bold transition-colors"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Çıkış Yap
-                      </button>
-                    </div>
-                  )}
-                </div>
 
                 {/* Notifications Icon */}
                 <button className="text-zinc-400 hover:text-white transition-colors p-2 hidden sm:flex items-center justify-center relative">
