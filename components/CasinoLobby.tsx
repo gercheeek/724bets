@@ -38,18 +38,16 @@ const DEMO_GAMES = [
   { id: 118, name: 'Shining Crown', provider: 'EGT Digital', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/ShiningCrownBellLink.webp', category: 'slots', rtp: '96.37%' },
 ];
 
-// Helper to map game names to Pragmatic Play demo symbols
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
   const nameString = (game.name || game.img || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  let symbol = '';
+  let symbol = 'vs10bbbonanza'; // Default to big bass bonanza so all games have a demo
   
   if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
   else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
   else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
   else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
-  else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
-  else return null;
+  else if (nameString.includes('lebandit')) symbol = 'vs20olympgate';
 
   return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
 };

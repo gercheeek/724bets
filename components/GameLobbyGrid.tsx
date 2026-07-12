@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Video } from 'lucide-react';
 import { CasinoLobbyGame } from '../types';
 
@@ -138,14 +139,13 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
   const getDemoUrl = (game: GameItem | null): string | null => {
     if (!game) return null;
     const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-    let symbol = '';
+    let symbol = 'vs10bbbonanza'; // Default to big bass bonanza so all games have a demo
     
     if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
     else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
     else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
     else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
-    else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
-    else return null;
+    else if (nameString.includes('lebandit')) symbol = 'vs20olympgate';
   
     return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
   };
@@ -254,7 +254,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
       />
 
       {/* GAME MODAL */}
-      {selectedGame && (
+      {selectedGame && typeof document !== 'undefined' && createPortal(
         <div 
           className="fixed inset-0 z-[99999] flex p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
           onClick={(e) => {
@@ -336,7 +336,8 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
               </div>
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
