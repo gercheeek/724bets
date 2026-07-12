@@ -458,6 +458,20 @@ const Header: React.FC<HeaderProps> = ({
                 <MessageSquare className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse"></span>
               </button>
+
+              {/* Quick Logout Button */}
+              <button
+                onClick={() => {
+                  localStorage.removeItem('site_current_member');
+                  localStorage.removeItem('site_member');
+                  localStorage.removeItem('site_user_role');
+                  window.location.reload();
+                }}
+                className="text-red-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1 md:p-2 flex items-center justify-center relative border border-white/5 rounded-md shadow-inner flex-shrink-0 ml-1"
+                title="Çıkış Yap"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
             </>
           ) : (
               <>

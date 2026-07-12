@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Lock, Wallet, ShieldCheck, Mail, Phone, Key, Save, AlertCircle } from 'lucide-react';
+import { User, Lock, Wallet, ShieldCheck, Mail, Phone, Key, Save, AlertCircle, LogOut } from 'lucide-react';
 import { SiteUser } from '../types';
 import { supabase } from '../utils/supabase';
 
@@ -65,6 +65,14 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('site_current_member');
+    localStorage.removeItem('site_member');
+    localStorage.removeItem('site_user_role');
+    setSiteUser(null);
+    window.location.reload(); // Hard reload to clear everything
   };
 
   return (
@@ -202,6 +210,14 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
               >
                 <Wallet className="w-4 h-4" />
                 Cüzdana Bakiye Ekle
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black py-4 px-6 rounded-xl text-sm transition-all border border-red-500/20 hover:border-red-500/40 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Hesaptan Çıkış Yap
               </button>
 
               <div className="p-4 rounded-xl border border-white/5 bg-[#0A0C10]/40 flex flex-col space-y-3">

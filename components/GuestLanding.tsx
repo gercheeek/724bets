@@ -77,57 +77,49 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
           </div>
 
-          {/* Middle Column: Casino Card */}
+          {/* Middle Column: Casino Card (Big Card Style) */}
           <div 
             onClick={() => onViewChange('blackjack')}
-            className="group relative w-full h-[220px] rounded-xl overflow-hidden cursor-pointer shadow-lg bg-[#111317] flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
+            className="relative w-full h-[220px] lg:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col transition-transform hover:-translate-y-1"
           >
-            <div className="w-full h-[78%] relative overflow-hidden bg-[#0A3D80]">
+            <div className="w-full h-[75%] relative overflow-hidden">
                <img 
-                 src="/images/vip_casino_card.jpg" 
+                 src="/images/purple_casino_card.jpg" 
                  alt="Casino" 
                  className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                />
-               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a1d26]/80" />
             </div>
-            <div className="w-full h-[22%] bg-[#1a1d26] px-4 flex items-center justify-between z-20">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 bg-white rounded-[2px] rotate-45" />
-                </div>
-                <span className="text-white font-bold text-sm">Casino</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]" />
-                <span className="text-gray-300 font-semibold text-xs">45.865</span>
-              </div>
+            {/* Solid Bottom Band */}
+            <div className="w-full h-[25%] bg-gradient-to-r from-[#811850] to-[#59103a] p-4 flex items-center justify-between z-20 border-t border-white/10">
+              <h3 className="text-xl font-black text-white tracking-tight">
+                Kumarhane
+              </h3>
+              <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 text-xs rounded transition-colors hidden sm:block lg:hidden xl:block">
+                Ziyaret et
+              </button>
             </div>
           </div>
 
-          {/* Right Column: Sports Card */}
+          {/* Right Column: Sports Card (Big Card Style) */}
           <div 
             onClick={() => onViewChange('sports')}
-            className="group relative w-full h-[220px] rounded-xl overflow-hidden cursor-pointer shadow-lg bg-[#111317] flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
+            className="relative w-full h-[220px] lg:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col transition-transform hover:-translate-y-1"
           >
-            <div className="w-full h-[78%] relative overflow-hidden bg-[#0A5C22]">
+            <div className="w-full h-[75%] relative overflow-hidden">
               <img 
-                src="/images/vip_sports_card.jpg" 
+                src="/images/green_sports_card.jpg" 
                 alt="Sports Betting" 
                 className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a1d26]/80" />
             </div>
-            <div className="w-full h-[22%] bg-[#1a1d26] px-4 flex items-center justify-between z-20">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center">
-                  <Target className="w-3.5 h-3.5 text-white" />
-                </div>
-                <span className="text-white font-bold text-sm">Spor</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]" />
-                <span className="text-gray-300 font-semibold text-xs">28.798</span>
-              </div>
+            {/* Solid Bottom Band */}
+            <div className="w-full h-[25%] bg-gradient-to-r from-[#216115] to-[#15420d] p-4 flex items-center justify-between z-20 border-t border-white/10">
+              <h3 className="text-xl font-black text-white tracking-tight">
+                Spor Bahisleri
+              </h3>
+              <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 text-xs rounded transition-colors hidden sm:block lg:hidden xl:block">
+                Ziyaret et
+              </button>
             </div>
           </div>
         </div>

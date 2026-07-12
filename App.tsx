@@ -1529,8 +1529,22 @@ const App: React.FC = () => {
                       </button>
                       
                       {/* 3. Profil Avatarı */}
-                      <button onClick={() => setIsMobileMenuOpen(true)} className="w-8 h-8 rounded-full border border-white/10 bg-[#1A1D24] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95">
+                      <button onClick={() => handleViewChange('profile')} className="w-8 h-8 rounded-full border border-white/10 bg-[#1A1D24] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
                         <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} alt="Avatar" className="w-full h-full object-cover" />
+                      </button>
+
+                      {/* 4. Çıkış Yap (Mobile) */}
+                      <button 
+                        onClick={() => {
+                          localStorage.removeItem('site_current_member');
+                          localStorage.removeItem('site_member');
+                          localStorage.removeItem('site_user_role');
+                          window.location.reload();
+                        }} 
+                        className="w-8 h-8 flex items-center justify-center rounded-md bg-red-500/10 text-red-500 border border-red-500/20 ml-1 active:scale-95"
+                        title="Çıkış Yap"
+                      >
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                       </button>
                     </>
                   ) : (
