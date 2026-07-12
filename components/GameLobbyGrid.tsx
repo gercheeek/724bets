@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Flame, Trophy, Target } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Play } from 'lucide-react';
 import { CasinoLobbyGame } from '../types';
 
 interface GameItem {
@@ -59,9 +60,10 @@ interface BlockProps {
   icon: React.ReactNode;
   games: GameItem[];
   showPlayers?: boolean;
+  onClickGame?: (game: GameItem) => void;
 }
 
-const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers }) => {
+const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, onClickGame }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -100,7 +102,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers }) =>
       >
         <div className="flex gap-3 min-w-max pb-4">
           {games.map((game) => (
-            <div key={game.id} className="flex flex-col gap-2 group cursor-pointer" style={{ width: 'calc(100vw / 2.5 - 12px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
+            <div key={game.id} onClick={() => onClickGame?.(game)} className="flex flex-col gap-2 group cursor-pointer" style={{ width: 'calc(100vw / 2.5 - 12px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
               <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-zinc-900 shadow-md group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:-translate-y-1">
                 <img 
                   src={game.image} 
@@ -131,6 +133,23 @@ interface GameLobbyGridProps {
 const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
   const activeCustomGames = customGames.filter(g => g.isActive);
   const [tick, setTick] = useState(0);
+  const [selectedGame, setSelectedGame] = useState<GameItem | null>(null);
+  const [showDemoIframe, setShowDemoIframe] = useState(false);
+
+  const getDemoUrl = (game: any): string | null => {
+    if (!game) return null;
+    const nameString = (game.title || game.name || game.img || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    let symbol = '';
+    
+    if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
+    else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
+    else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
+    else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
+    else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
+    else return null;
+
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -208,13 +227,14 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
       }));
 
   return (
-    <div className="w-full bg-transparent p-0 my-8">
+    <div className="w-full bg-transparent p-0 my-8 relative">
       {/* 1. Popüler Oyunlar */}
       <GameBlock 
         title="Popüler Oyunlar" 
         icon={<Flame className="w-5 h-5 text-white" fill="white" />} 
         games={slots} 
         showPlayers={true}
+        onClickGame={(game) => setSelectedGame(game)}
       />
       
       {/* 2. Popüler Sporlar */}
@@ -223,8 +243,95 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         icon={<Target className="w-5 h-5 text-white" />} 
         games={sports} 
         showPlayers={false}
+        onClickGame={(game) => setSelectedGame(game)}
       />
-      
+
+      {/* GAME MODAL */}
+      {selectedGame && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedGame(null);
+              setShowDemoIframe(false);
+            }
+          }}
+        >
+          {showDemoIframe && getDemoUrl(selectedGame) ? (
+            <div className="relative m-auto z-10 w-full max-w-5xl h-[80vh] bg-[#0F121A] rounded-xl overflow-hidden shadow-2xl border border-[#2A2E3D] animate-fade-in flex flex-col">
+              <div className="flex items-center justify-between p-4 bg-[#1A1D29] border-b border-[#2A2E3D]">
+                <div className="flex items-center gap-3">
+                   <div className="w-2.5 h-2.5 rounded-full bg-[#00FFA3] animate-pulse shadow-[0_0_10px_rgba(0,255,163,0.8)]" />
+                   <span className="text-white font-bold">{selectedGame.title || 'Demo Oyunu'}</span>
+                   <span className="bg-[#00FFA3]/10 text-[#00FFA3] border border-[#00FFA3]/20 text-[10px] px-2 py-0.5 rounded font-black tracking-widest uppercase ml-2">Eğlence Modu</span>
+                </div>
+                <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 flex items-center justify-center bg-[#2A2E3D] hover:bg-[#3A3F54] rounded-lg text-white transition-colors">✕</button>
+              </div>
+              <div className="flex-1 w-full bg-black relative">
+                <iframe 
+                  src={getDemoUrl(selectedGame)!}
+                  className="absolute inset-0 w-full h-full border-0"
+                  allowFullScreen
+                  title={selectedGame.title || 'Demo Game'}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="relative m-auto z-10 bg-[#1A1D29] rounded-2xl border border-[#2A2E3D] w-full max-w-[400px] shadow-2xl overflow-hidden animate-fade-in">
+              <button onClick={() => { setSelectedGame(null); setShowDemoIframe(false); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/40 hover:bg-black/60 rounded-full text-white transition-all z-20 backdrop-blur-sm">✕</button>
+              
+              <div className="relative aspect-video w-full flex flex-col items-center justify-center">
+                <div className="absolute inset-0 bg-[#0F121A]">
+                  <img src={selectedGame.image} className="w-full h-full object-cover opacity-50" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A1D29] to-transparent" />
+                </div>
+                
+                <div className="relative z-10 w-24 h-24 mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+                  <img src={selectedGame.image} className="w-full h-full object-cover" />
+                </div>
+              </div>
+
+              <div className="relative z-10 px-6 pb-8 pt-4 text-center flex flex-col items-center">
+                <h3 className="text-2xl font-black text-white mb-1">{selectedGame.title || 'Casino Slot'}</h3>
+                <p className="text-[#00FFA3] text-sm font-bold mb-6">Pragmatic Play</p>
+
+                <div className="w-full grid grid-cols-2 gap-3 mb-6 bg-[#0F121A] p-3 rounded-lg border border-[#2A2E3D]">
+                  <div className="flex flex-col items-center">
+                    <span className="text-[#848B9D] text-xs font-medium mb-1">RTP</span>
+                    <span className="text-white font-mono font-bold text-sm">96.50%</span>
+                  </div>
+                  <div className="flex flex-col items-center border-l border-[#2A2E3D]">
+                    <span className="text-[#848B9D] text-xs font-medium mb-1">Volatilite</span>
+                    <span className="text-white font-bold text-sm">Yüksek</span>
+                  </div>
+                </div>
+
+                <div className="w-full flex flex-col gap-3">
+                  <button 
+                     onClick={() => {
+                       setSelectedGame(null);
+                       setShowDemoIframe(false);
+                     }}
+                     className="w-full py-3.5 rounded-lg font-black text-sm transition-all bg-[#00FFA3] text-black hover:bg-[#00E676] shadow-[0_0_15px_rgba(0,255,163,0.3)]"
+                   >
+                     Gerçek Parayla Oyna
+                   </button>
+
+                  {getDemoUrl(selectedGame) && (
+                    <button 
+                       onClick={() => setShowDemoIframe(true)}
+                       className="w-full py-3.5 rounded-lg font-bold text-sm transition-all bg-[#2A2E3D] text-white hover:bg-[#3A3F54] flex items-center justify-center gap-2"
+                     >
+                       <Play size={16} className="text-[#00FFA3]" fill="currentColor" />
+                       Eğlencesine Oyna
+                     </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      , document.body)}
     </div>
   );
 };
