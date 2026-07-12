@@ -386,23 +386,34 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right: Controls */}
-        <div id="tour-user-panel" className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 10 }}>
+        <div id="tour-user-panel" className="header-topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '8px', zIndex: 10 }}>
 
           {siteUser ? (
             <>
-              <div className="flex items-center gap-3">
-                {/* Balance Dropdown */}
-                <div className="relative flex" ref={walletDropdownRef}>
+              <div className="flex items-center gap-1 sm:gap-3">
+                {/* Unified Wallet Pill */}
+                <div className="relative flex items-center bg-[#151921] rounded-lg md:rounded-xl pl-1 pr-0.5 py-0.5 border border-white/5 h-[36px] md:h-[44px] shadow-inner" ref={walletDropdownRef}>
+                  
+                  {/* Balance Section */}
                   <div 
-                    className="flex items-center bg-[#151921] rounded-lg md:rounded-xl p-1 cursor-pointer hover:bg-[#1C2028] transition-colors border border-white/5"
+                    className="flex items-center cursor-pointer hover:bg-[#1C2028] transition-colors rounded-lg py-1 px-1 mr-1"
                     onClick={() => setWalletDropdownOpen(prev => !prev)}
                   >
-                    <div className="w-6 h-6 md:w-8 md:h-8 rounded md:rounded-lg bg-[#00FFA3] flex items-center justify-center mr-1.5 md:mr-3">
-                      <span className="text-black font-black text-[10px] md:text-sm">$</span>
+                    <div className="w-6 h-6 md:w-8 md:h-8 rounded md:rounded-lg bg-[#00FFA3] flex items-center justify-center mr-1.5 md:mr-2">
+                      <span className="text-black font-black text-[12px] md:text-sm">$</span>
                     </div>
-                    <span className="text-white font-bold text-xs md:text-[15px] tracking-tight mr-1.5 md:mr-4">{siteUser.balance?.toFixed(2) || '0.00'}</span>
+                    <span className="text-white font-bold text-[13px] md:text-[15px] tracking-tight mr-1 md:mr-3">{siteUser.balance?.toFixed(2) || '0.00'}</span>
                     <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-500 mr-1 md:mr-2 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
+
+                  {/* Deposit Button attached to pill */}
+                  <button
+                    onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
+                    className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-black w-[32px] h-[32px] md:w-auto md:px-5 md:h-[36px] rounded-md md:rounded-lg text-[15px] transition-colors shadow-[0_0_10px_rgba(0,255,163,0.2)] flex items-center justify-center"
+                  >
+                    <Wallet className="w-4 h-4 md:hidden" />
+                    <span className="hidden md:block">Cüzdan</span>
+                  </button>
 
                   {walletDropdownOpen && (
                     <div className="absolute right-0 top-full mt-2 w-64 rounded-xl py-2 z-50 bg-[#1A1D24] border border-white/5 shadow-2xl">
@@ -422,14 +433,18 @@ const Header: React.FC<HeaderProps> = ({
                   )}
                 </div>
 
-                {/* Deposit Button (Cüzdan) */}
-                <button
-                  onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                  className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-black p-1.5 md:px-6 md:py-2 rounded-lg md:rounded-xl text-[15px] transition-colors shadow-[0_0_15px_rgba(0,255,163,0.2)] flex items-center justify-center"
+                {/* Profile Picture */}
+                <button 
+                  onClick={() => onViewChange?.('profile')}
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#00FFA3]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0 ml-1"
                 >
-                  <Wallet className="w-4 h-4 md:hidden" />
-                  <span className="hidden md:block">Cüzdan</span>
+                  <img 
+                    src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
+                    className="w-full h-full object-cover bg-[#1F232B]" 
+                    alt="avatar" 
+                  />
                 </button>
+              </div>
 
                 {/* Search Icon */}
                 <button
