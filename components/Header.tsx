@@ -113,7 +113,6 @@ const Header: React.FC<HeaderProps> = ({
   const [logoHovered, setLogoHovered] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [showClover, setShowClover] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
@@ -124,13 +123,6 @@ const Header: React.FC<HeaderProps> = ({
 
   const [depositUsername, setDepositUsername] = useState('');
   const [depositMsg, setDepositMsg] = useState({ type: '', text: '' });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShowClover(prev => !prev);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
   /* ── Category list ── */
     const categories: CategoryItem[] = [
@@ -276,6 +268,67 @@ const Header: React.FC<HeaderProps> = ({
           .clover-casino {
             animation: cloverCasinoPulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
           }
+          .logo-text-724 {
+            position: relative;
+            z-index: 10000;
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+            padding: 6px 16px;
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            border: 1px solid transparent;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+          .logo-text-724 .logo-num {
+            background: linear-gradient(135deg, #00FFA3, #00FFA3, #00FFA3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoGlow 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(0,255,163,0.4));
+          }
+          .logo-text-724 .logo-dot {
+            color: #00FFA3;
+            -webkit-text-fill-color: #00FFA3;
+            font-weight: 900;
+          }
+          .logo-text-724 .logo-ext {
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 20px;
+          }
+          .logo-text-724:hover {
+            background: linear-gradient(135deg, rgba(0,255,163,0.1), rgba(0,255,163,0.04));
+            border-color: rgba(0,255,163,0.2);
+            box-shadow: 0 0 35px rgba(0,255,163,0.15), 0 0 70px rgba(0,255,163,0.05);
+            transform: scale(1.04);
+          }
+          .logo-text-724::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 40%, rgba(0,255,163,0.1) 50%, transparent 60%);
+            background-size: 200% 100%;
+            border-radius: inherit;
+            pointer-events: none;
+            opacity: 0;
+          }
+          .logo-text-724:hover::after {
+            opacity: 1;
+            animation: logoShimmer 2s ease-in-out infinite;
+          }
           .header-topbar {
             transition: padding-left 0.3s ease-in-out;
           }
@@ -292,23 +345,22 @@ const Header: React.FC<HeaderProps> = ({
             <Menu className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           
-          <div 
+          <div
+            id="tour-logo"
+            className="group flex items-center cursor-pointer flex-shrink-0"
             onClick={() => onViewChange?.('home')}
-            className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-all duration-500 ml-0 lg:ml-2 w-[120px]"
           >
-            {showClover ? (
-              <Clover className="w-8 h-8 text-[#00FFA3] animate-in zoom-in duration-500 drop-shadow-[0_0_12px_rgba(0,255,163,0.8)]" />
-            ) : (
-              <span className="animate-in fade-in duration-500" style={{
-                fontSize: '24px',
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 900,
-                color: '#fff',
-              }}>
-                <span className="slot-text">724</span>
-                <span className="neon-text text-[#00FFA3] ml-[1px]">BETS</span>
+            {/* The Leaf Icon */}
+            <div className="relative z-10 bg-[#0F1219] flex items-center justify-center group-hover:drop-shadow-[0_0_15px_rgba(0,255,163,0.3)] transition-all duration-300">
+              <Clover className="w-8 h-8 md:w-10 md:h-10 text-[#009F4D]" fill="#009F4D" strokeWidth={1} />
+            </div>
+            
+            {/* Expanding Text */}
+            <div className="overflow-hidden whitespace-nowrap transition-[max-width,opacity,margin] duration-500 ease-in-out max-w-0 opacity-0 group-hover:max-w-[200px] group-hover:opacity-100 group-hover:ml-1 md:group-hover:ml-2 flex items-center">
+              <span className="flex items-center text-[20px] md:text-[22px] font-black font-['Inter'] tracking-tight text-white drop-shadow-[0_0_8px_rgba(0,255,163,0.3)]">
+                724<span className="text-[#00FFA3]">BETS</span>
               </span>
-            )}
+            </div>
           </div>
 
           <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
@@ -473,6 +525,15 @@ const Header: React.FC<HeaderProps> = ({
                   >
                     Giriş yap
                   </button>
+                  <button
+                    onClick={onSupportClick}
+                    className="bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 flex items-center justify-center relative"
+                    title="Canlı Sohbet"
+                    style={{ height: '36px', width: '36px' }}
+                  >
+                    <MessageSquare className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
+                  </button>
+
                   <button
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
