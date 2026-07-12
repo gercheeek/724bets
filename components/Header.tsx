@@ -234,6 +234,27 @@ const Header: React.FC<HeaderProps> = ({
             0%, 100% { text-shadow: 0 0 10px rgba(0,255,163,0.3), 0 0 20px rgba(0,255,163,0.1); }
             50% { text-shadow: 0 0 15px rgba(0,255,163,0.5), 0 0 30px rgba(0,255,163,0.2), 0 0 45px rgba(0,255,163,0.1); }
           }
+          @keyframes revealTextStylish {
+            0% { opacity: 0; max-width: 0; transform: translateX(-15px) scale(0.9); letter-spacing: -5px; filter: blur(4px); margin-left: 0; }
+            100% { opacity: 1; max-width: 150px; transform: translateX(0) scale(1); letter-spacing: -0.5px; filter: blur(0); margin-left: 4px; }
+          }
+          .logo-reveal-text {
+            opacity: 0;
+            max-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            animation: revealTextStylish 1.2s cubic-bezier(0.16, 1, 0.3, 1) 3s forwards;
+          }
+          @keyframes cloverFloatRotate {
+            0% { transform: translateY(0px) rotate(0deg); filter: drop-shadow(0 0 5px rgba(0,255,163,0.3)); }
+            50% { transform: translateY(-2px) rotate(180deg); filter: drop-shadow(0 0 15px rgba(0,255,163,0.8)); }
+            100% { transform: translateY(0px) rotate(360deg); filter: drop-shadow(0 0 5px rgba(0,255,163,0.3)); }
+          }
+          .clover-continuous {
+            animation: cloverFloatRotate 4s linear infinite;
+          }
           .logo-text-724 {
             position: relative;
             z-index: 10000;
@@ -340,17 +361,15 @@ const Header: React.FC<HeaderProps> = ({
             }}
             onClick={() => onViewChange?.('home')}
           >
-            <Club className="w-6 h-6 text-[#00FFA3] mr-1 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_10px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
-            <span className="logo-text-intro">
+            <Club className="w-7 h-7 text-[#00FFA3] clover-continuous group-hover:scale-110 transition-transform duration-500" strokeWidth={2.5} />
+            <span className="logo-reveal-text">
               <span style={{
                 fontSize: '22px',
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 900,
-                letterSpacing: '-0.5px',
                 color: '#fff',
                 display: 'flex',
                 alignItems: 'center',
-                transition: 'all 0.3s ease'
               }}>
                 724<span style={{ color: '#00FFA3' }}>BETS</span>
               </span>
