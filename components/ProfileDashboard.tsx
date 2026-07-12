@@ -16,6 +16,8 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
   const [activeTab, setActiveTab] = useState<'profile' | 'inbox' | 'affiliates' | 'verification' | 'settings' | 'privacy' | 'links' | 'transactions'>('profile');
   
   // Profile Form States
+  const [language, setLanguage] = useState('Turkish');
+  const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
   const [username, setUsername] = useState(siteUser.username || '');
   const [email, setEmail] = useState(siteUser.email || '');
   const [phone, setPhone] = useState(siteUser.phone || '');
@@ -341,12 +343,36 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="flex-1 flex flex-col gap-2">
                     <label className="text-zinc-500 font-bold text-xs uppercase">Dil</label>
-                    <div className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#00FFA3]/30 transition-colors">
-                      <div className="flex items-center gap-2">
-                        <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-5 h-auto rounded-sm" />
-                        <span className="text-white font-bold text-sm">Turkish</span>
+                    <div className="relative">
+                      <div 
+                        onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
+                        className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#00FFA3]/30 transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <img src={language === 'Turkish' ? "https://flagcdn.com/w20/tr.png" : "https://flagcdn.com/w20/gb.png"} alt={language === 'Turkish' ? 'TR' : 'EN'} className="w-5 h-auto rounded-sm" />
+                          <span className="text-white font-bold text-sm">{language}</span>
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${languageDropdownOpen ? 'rotate-180' : ''}`} />
                       </div>
-                      <ChevronDown className="w-4 h-4 text-zinc-500" />
+                      
+                      {languageDropdownOpen && (
+                        <div className="absolute top-full mt-2 w-full bg-[#12161E] border border-[#202532] rounded-xl shadow-xl overflow-hidden z-20">
+                          <div 
+                            onClick={() => { setLanguage('Turkish'); setLanguageDropdownOpen(false); }}
+                            className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-white/5 transition-colors"
+                          >
+                            <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-5 h-auto rounded-sm" />
+                            <span className="text-white font-bold text-sm">Turkish</span>
+                          </div>
+                          <div 
+                            onClick={() => { setLanguage('English'); setLanguageDropdownOpen(false); }}
+                            className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-white/5 transition-colors"
+                          >
+                            <img src="https://flagcdn.com/w20/gb.png" alt="EN" className="w-5 h-auto rounded-sm" />
+                            <span className="text-white font-bold text-sm">English</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="flex-1 flex flex-col gap-2">
