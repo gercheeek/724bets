@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   User, Bell, Users, ShieldCheck, Settings, Lock, Link as LinkIcon, FileText, LogOut,
   ChevronRight, Upload, HelpCircle, Info, ChevronDown, CheckCircle2, ChevronLeft,
@@ -15,8 +16,10 @@ interface ProfileDashboardProps {
 const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUser }) => {
   const [activeTab, setActiveTab] = useState<'profile' | 'inbox' | 'affiliates' | 'verification' | 'settings' | 'privacy' | 'links' | 'transactions'>('profile');
   
+  const { language: globalLang, setLanguage: setGlobalLang, setIsAnimating, t } = useLanguage();
+
   // Profile Form States
-  const [language, setLanguage] = useState('Turkish');
+  const [localLanguage, setLocalLanguage] = useState(globalLang === 'en' ? 'English' : 'Turkish');
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
   const [username, setUsername] = useState(siteUser.username || '');
   const [email, setEmail] = useState(siteUser.email || '');
@@ -206,26 +209,26 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
 
               {/* Verification Section */}
               <div className="pt-4">
-                <h2 className="text-xl font-black text-white mb-4">Doğrulama</h2>
+                <h2 className="text-xl font-black text-white mb-4">{t('verification')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
                     <div>
-                      <h4 className="text-white font-black text-lg mb-0.5">Seviye 1</h4>
-                      <p className="text-zinc-500 text-sm font-bold">Mevcut</p>
+                      <h4 className="text-white font-black text-lg mb-0.5">{t('level')} 1</h4>
+                      <p className="text-zinc-500 text-sm font-bold">{t('current')}</p>
                     </div>
                     <Lock className="w-6 h-6 text-zinc-500" />
                   </div>
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between opacity-70">
                     <div>
-                      <h4 className="text-white font-black text-lg mb-0.5">Seviye 2</h4>
-                      <p className="text-zinc-500 text-sm font-bold">Kilitli</p>
+                      <h4 className="text-white font-black text-lg mb-0.5">{t('level')} 2</h4>
+                      <p className="text-zinc-500 text-sm font-bold">{t('locked')}</p>
                     </div>
                     <Lock className="w-6 h-6 text-zinc-500" />
                   </div>
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between opacity-70">
                     <div>
-                      <h4 className="text-white font-black text-lg mb-0.5">Seviye 3</h4>
-                      <p className="text-zinc-500 text-sm font-bold">Kilitli</p>
+                      <h4 className="text-white font-black text-lg mb-0.5">{t('level')} 3</h4>
+                      <p className="text-zinc-500 text-sm font-bold">{t('locked')}</p>
                     </div>
                     <Lock className="w-6 h-6 text-zinc-500" />
                   </div>
@@ -343,36 +346,53 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="flex-1 flex flex-col gap-2">
                     <label className="text-zinc-500 font-bold text-xs uppercase">Dil</label>
-                    <div className="relative">
-                      <div 
-                        onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
-                        className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#00FFA3]/30 transition-colors"
-                      >
-                        <div className="flex items-center gap-2">
-                          <img src={language === 'Turkish' ? "https://flagcdn.com/w20/tr.png" : "https://flagcdn.com/w20/gb.png"} alt={language === 'Turkish' ? 'TR' : 'EN'} className="w-5 h-auto rounded-sm" />
-                          <span className="text-white font-bold text-sm">{language}</span>
+                    <div className="relative flex items-center gap-2">
+                      <div className="relative flex-1">
+                        <div 
+                          onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
+                          className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#00FFA3]/30 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <img src={localLanguage === 'Turkish' ? "https://flagcdn.com/w20/tr.png" : "https://flagcdn.com/w20/gb.png"} alt={localLanguage === 'Turkish' ? 'TR' : 'EN'} className="w-5 h-auto rounded-sm" />
+                            <span className="text-white font-bold text-sm">{localLanguage}</span>
+                          </div>
+                          <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${languageDropdownOpen ? 'rotate-180' : ''}`} />
                         </div>
-                        <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${languageDropdownOpen ? 'rotate-180' : ''}`} />
+                        
+                        {languageDropdownOpen && (
+                          <div className="absolute top-full mt-2 w-full bg-[#12161E] border border-[#202532] rounded-xl shadow-xl overflow-hidden z-20">
+                            <div 
+                              onClick={() => { setLocalLanguage('Turkish'); setLanguageDropdownOpen(false); }}
+                              className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-white/5 transition-colors"
+                            >
+                              <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-5 h-auto rounded-sm" />
+                              <span className="text-white font-bold text-sm">Turkish</span>
+                            </div>
+                            <div 
+                              onClick={() => { setLocalLanguage('English'); setLanguageDropdownOpen(false); }}
+                              className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-white/5 transition-colors"
+                            >
+                              <img src="https://flagcdn.com/w20/gb.png" alt="EN" className="w-5 h-auto rounded-sm" />
+                              <span className="text-white font-bold text-sm">English</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       
-                      {languageDropdownOpen && (
-                        <div className="absolute top-full mt-2 w-full bg-[#12161E] border border-[#202532] rounded-xl shadow-xl overflow-hidden z-20">
-                          <div 
-                            onClick={() => { setLanguage('Turkish'); setLanguageDropdownOpen(false); }}
-                            className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-white/5 transition-colors"
-                          >
-                            <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-5 h-auto rounded-sm" />
-                            <span className="text-white font-bold text-sm">Turkish</span>
-                          </div>
-                          <div 
-                            onClick={() => { setLanguage('English'); setLanguageDropdownOpen(false); }}
-                            className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-white/5 transition-colors"
-                          >
-                            <img src="https://flagcdn.com/w20/gb.png" alt="EN" className="w-5 h-auto rounded-sm" />
-                            <span className="text-white font-bold text-sm">English</span>
-                          </div>
-                        </div>
-                      )}
+                      <button 
+                        onClick={() => {
+                           const targetLang = localLanguage === 'English' ? 'en' : 'tr';
+                           if (targetLang !== globalLang) {
+                             setIsAnimating(true);
+                             setTimeout(() => {
+                               setGlobalLang(targetLang);
+                             }, 800);
+                           }
+                        }}
+                        className="bg-[#00FFA3] hover:bg-[#00E676] text-black font-black px-6 py-3 rounded-xl transition-colors h-full whitespace-nowrap"
+                      >
+                        Kaydet
+                      </button>
                     </div>
                   </div>
                   <div className="flex-1 flex flex-col gap-2">

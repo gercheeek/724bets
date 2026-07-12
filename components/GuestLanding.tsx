@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Trophy, Shield, Target, ChevronRight, Info } from 'lucide-react';
 import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface GuestLandingProps {
   siteUser?: SiteUser | null;
@@ -21,6 +22,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   customGames = []
 }) => {
   const [currentPromoSlide, setCurrentPromoSlide] = useState(0);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,18 +33,18 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
   const promoCards = [
     {
-      title: "$500k Bankada!",
-      subtitle: "LİDERLİK TABLOSUNDA YERİNİ AL",
+      title: t("promo_1_title"),
+      subtitle: t("promo_1_sub"),
       icon: <Trophy strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-yellow-600/20 group-hover:text-yellow-500/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(202,138,4,0.15)]" />
     },
     {
-      title: <>Yeniden<br/>tasarlandı.<br/>Daha hızlı.</>,
-      subtitle: "YEPYENİ BİR DENEYİM",
+      title: t("promo_2_title"),
+      subtitle: t("promo_2_sub"),
       icon: <Shield strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-red-600/20 group-hover:text-red-500/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(220,38,38,0.15)]" />
     },
     {
-      title: <>Piyasadaki En<br/>İyi Oranlar</>,
-      subtitle: "KAZANCINI KATLA",
+      title: t("promo_3_title"),
+      subtitle: t("promo_3_sub"),
       icon: <Target strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-[#00FFA3]/20 group-hover:text-[#00FFA3]/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(0,255,163,0.15)]" />
     }
   ];

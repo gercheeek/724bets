@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from './ThemeContext';
+import { LanguageProvider } from './contexts/LanguageContext';
+import LanguageTransition from './components/LanguageTransition';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import Header from './components/Header';
@@ -1358,7 +1360,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
       {/* Onboarding Popup Overlay */}
       {showOnboardingPopup && (
         <OnboardingPopup 
@@ -2434,7 +2437,9 @@ const App: React.FC = () => {
         }}
       />
       <GlobalToaster />
+      <LanguageTransition />
     </ThemeProvider>
+    </LanguageProvider>
   );
 };
 
