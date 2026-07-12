@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Trophy, Shield, Target, ChevronRight } from 'lucide-react';
 import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
@@ -20,43 +20,74 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   onMemberRegisterClick,
   customGames = []
 }) => {
+  const [currentPromoSlide, setCurrentPromoSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPromoSlide(prev => (prev + 1) % 3);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const promoCards = [
+    {
+      title: "$500k Bankada!",
+      subtitle: "Liderlik tablosunda yerini al",
+      icon: <Trophy className="w-32 h-32 text-yellow-500/40 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
+    },
+    {
+      title: <>Yeniden tasarlandı.<br/>Daha hızlı.</>,
+      subtitle: "Yepyeni bir deneyim",
+      icon: <Shield className="w-32 h-32 text-red-500/30 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
+    },
+    {
+      title: "Piyasadaki En İyi Oranlar",
+      subtitle: "Kazancını Katla",
+      icon: <Target className="w-32 h-32 text-[#00FFA3]/30 drop-shadow-[0_0_15px_rgba(0,255,163,0.5)]" />
+    }
+  ];
+
   return (
     <div className="w-full h-full flex flex-col bg-[#0a0b0e] min-h-screen">
       
       {/* 3 Top Promo Cards */}
-      <div className="w-full px-4 pt-6 pb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Card 1 */}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg group cursor-pointer transition-transform hover:-translate-y-1">
-          <div className="flex flex-col z-10 w-2/3">
-            <span className="text-white font-black text-2xl tracking-tight leading-none mb-1">$500k Bankada!</span>
-            <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Liderlik tablosunda yerini al</span>
-          </div>
-          <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-            <Trophy className="w-32 h-32 text-yellow-500/40 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
-          </div>
+      <div className="w-full px-4 pt-6 pb-4">
+        
+        {/* Desktop Grid */}
+        <div className="hidden md:grid grid-cols-3 gap-4">
+          {promoCards.map((card, idx) => (
+            <div key={idx} className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg group cursor-pointer transition-transform hover:-translate-y-1">
+              <div className="flex flex-col z-10 w-2/3">
+                <span className="text-white font-black text-xl lg:text-2xl tracking-tight leading-none mb-1">{card.title}</span>
+                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">{card.subtitle}</span>
+              </div>
+              <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                {card.icon}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Card 2 */}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg group cursor-pointer transition-transform hover:-translate-y-1">
-          <div className="flex flex-col z-10 w-2/3">
-            <span className="text-white font-black text-xl tracking-tight leading-tight mb-1">Yeniden tasarlandı.<br/>Daha hızlı.</span>
-            <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Yepyeni bir deneyim</span>
-          </div>
-          <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-            <Shield className="w-32 h-32 text-red-500/30 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
-          </div>
+        {/* Mobile Slider */}
+        <div className="md:hidden relative h-[140px] w-full">
+          {promoCards.map((card, idx) => (
+            <div 
+              key={idx} 
+              className={`absolute inset-0 w-full transition-opacity duration-700 ${currentPromoSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+            >
+              <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg cursor-pointer">
+                <div className="flex flex-col z-10 w-2/3">
+                  <span className="text-white font-black text-xl tracking-tight leading-none mb-1">{card.title}</span>
+                  <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">{card.subtitle}</span>
+                </div>
+                <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80">
+                  {card.icon}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Card 3 */}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg group cursor-pointer transition-transform hover:-translate-y-1">
-          <div className="flex flex-col z-10 w-2/3">
-            <span className="text-white font-black text-xl tracking-tight leading-tight mb-1">Piyasadaki En İyi Oranlar</span>
-            <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Kazancını Katla</span>
-          </div>
-          <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-            <Target className="w-32 h-32 text-[#00FFA3]/30 drop-shadow-[0_0_15px_rgba(0,255,163,0.5)]" />
-          </div>
-        </div>
       </div>
 
       {/* Welcome & Search Bar Inline */}
