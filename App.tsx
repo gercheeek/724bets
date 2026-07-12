@@ -163,6 +163,26 @@ const App: React.FC = () => {
   const [sports2Url, setSports2Url] = useState("https://bahisbey1438.com/tr/sport/sports/football/flt-1-1239-52530/?btag=59649488_330539");
   const [showAgeWarning, setShowAgeWarning] = useState(false);
 
+  // Global Loader Logic (Initial Load & Transitions)
+  useEffect(() => {
+    setShowLoader(true);
+    setFadeOutLoader(false);
+    
+    const timer1 = setTimeout(() => {
+      setFadeOutLoader(true);
+    }, 2500); // Start fading out at 2.5s
+    
+    const timer2 = setTimeout(() => {
+      setShowLoader(false);
+      setFadeOutLoader(false);
+    }, 3000); // Completely hide at 3s
+    
+    return () => { 
+      clearTimeout(timer1); 
+      clearTimeout(timer2); 
+    };
+  }, [view]);
+
   useEffect(() => {
     const handleInternalNavigate = (e: CustomEvent<{ url: string }>) => {
       setIframeLoading(true);
