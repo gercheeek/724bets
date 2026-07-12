@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Trophy, Shield, Target, ChevronRight } from 'lucide-react';
 import { CasinoLobbyGame, SiteUser } from '../types';
+import { Info, Target, Trophy, Shield, Search, ChevronRight } from 'lucide-react';
 import GameLobbyGrid from './GameLobbyGrid';
 
 interface GuestLandingProps {
@@ -104,54 +105,138 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         </div>
       </div>
 
-      {/* 2 Big Cards: Casino & Sports */}
-      <div className="w-full px-4 pb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Kumarhane Card */}
-        <div 
-          onClick={() => onViewChange('blackjack')}
-          className="relative w-full h-[260px] md:h-[300px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
-        >
-          <div className="w-full h-[75%] relative overflow-hidden">
-             <img 
-               src="/images/purple_casino_card.jpg" 
-               alt="Casino" 
-               className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-             />
-          </div>
-          {/* Solid Bottom Band */}
-          <div className="w-full h-[25%] bg-gradient-to-r from-[#811850] to-[#59103a] p-4 md:px-6 flex items-center justify-between z-20 border-t border-white/10">
-            <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-              Kumarhane
+      {/* Main Content Area (Conditional for Member vs Guest) */}
+      {siteUser ? (
+        // MEMBER VIP DASHBOARD (Stake style)
+        <div className="w-full px-4 pb-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Left Column: VIP Progress */}
+          <div className="bg-[#111317] rounded-xl border border-white/5 p-5 flex flex-col justify-center h-auto min-h-[200px] shadow-lg">
+            <h3 className="text-white text-[15px] font-bold mb-4 flex items-center">
+              VIP İlerlemeniz
             </h3>
-            <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-sm rounded transition-colors">
-              Ziyaret et Casino
-            </button>
+            <div className="border border-white/10 rounded-lg p-4 bg-[#151821] hover:bg-[#1a1d26] transition-colors cursor-pointer">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-white font-bold text-sm flex items-center group">
+                  {siteUser.username} <ChevronRight className="w-4 h-4 ml-1 text-gray-500 group-hover:text-white transition-colors" />
+                </span>
+              </div>
+              <div className="flex items-center gap-1 mb-2">
+                <span className="text-white font-black text-[15px]">%0,06</span>
+                <Info className="w-3.5 h-3.5 text-gray-400" />
+              </div>
+              <div className="w-full h-1.5 bg-[#0f1115] rounded-full overflow-hidden mb-2">
+                <div className="h-full bg-[#00FFA3] rounded-full shadow-[0_0_10px_rgba(0,255,163,0.5)]" style={{ width: '0.06%' }}></div>
+              </div>
+              <div className="text-gray-400 text-xs font-semibold">
+                Bir sonraki seviye: Bronz
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Spor Bahisleri Card */}
-        <div 
-          onClick={() => onViewChange('sports')}
-          className="relative w-full h-[260px] md:h-[300px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
-        >
-          <div className="w-full h-[75%] relative overflow-hidden">
-            <img 
-              src="/images/green_sports_card.jpg" 
-              alt="Sports Betting" 
-              className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-            />
+          {/* Middle Column: Casino Card */}
+          <div 
+            onClick={() => onViewChange('blackjack')}
+            className="group relative w-full h-[220px] rounded-xl overflow-hidden cursor-pointer shadow-lg bg-[#111317] flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
+          >
+            <div className="w-full h-[78%] relative overflow-hidden bg-[#0A3D80]">
+               <img 
+                 src="/images/vip_casino_card.jpg" 
+                 alt="Casino" 
+                 className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+               />
+               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a1d26]/80" />
+            </div>
+            <div className="w-full h-[22%] bg-[#1a1d26] px-4 flex items-center justify-between z-20">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center">
+                  <div className="w-2.5 h-2.5 bg-white rounded-[2px] rotate-45" />
+                </div>
+                <span className="text-white font-bold text-sm">Casino</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]" />
+                <span className="text-gray-300 font-semibold text-xs">45.865</span>
+              </div>
+            </div>
           </div>
-          {/* Solid Bottom Band */}
-          <div className="w-full h-[25%] bg-gradient-to-r from-[#216115] to-[#15420d] p-4 md:px-6 flex items-center justify-between z-20 border-t border-white/10">
-            <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-              Spor Bahisleri
-            </h3>
-            <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-sm rounded transition-colors">
-              Ziyaret et Sports
-            </button>
+
+          {/* Right Column: Sports Card */}
+          <div 
+            onClick={() => onViewChange('sports')}
+            className="group relative w-full h-[220px] rounded-xl overflow-hidden cursor-pointer shadow-lg bg-[#111317] flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
+          >
+            <div className="w-full h-[78%] relative overflow-hidden bg-[#0A5C22]">
+              <img 
+                src="/images/vip_sports_card.jpg" 
+                alt="Sports Betting" 
+                className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a1d26]/80" />
+            </div>
+            <div className="w-full h-[22%] bg-[#1a1d26] px-4 flex items-center justify-between z-20">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center">
+                  <Target className="w-3.5 h-3.5 text-white" />
+                </div>
+                <span className="text-white font-bold text-sm">Spor</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]" />
+                <span className="text-gray-300 font-semibold text-xs">28.798</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        // GUEST 2 BIG CARDS
+        <div className="w-full px-4 pb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Kumarhane Card */}
+          <div 
+            onClick={() => onViewChange('blackjack')}
+            className="relative w-full h-[260px] md:h-[300px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
+          >
+            <div className="w-full h-[75%] relative overflow-hidden">
+               <img 
+                 src="/images/purple_casino_card.jpg" 
+                 alt="Casino" 
+                 className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+               />
+            </div>
+            {/* Solid Bottom Band */}
+            <div className="w-full h-[25%] bg-gradient-to-r from-[#811850] to-[#59103a] p-4 md:px-6 flex items-center justify-between z-20 border-t border-white/10">
+              <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                Kumarhane
+              </h3>
+              <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-sm rounded transition-colors">
+                Ziyaret et Casino
+              </button>
+            </div>
+          </div>
+
+          {/* Spor Bahisleri Card */}
+          <div 
+            onClick={() => onViewChange('sports')}
+            className="relative w-full h-[260px] md:h-[300px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
+          >
+            <div className="w-full h-[75%] relative overflow-hidden">
+              <img 
+                src="/images/green_sports_card.jpg" 
+                alt="Sports Betting" 
+                className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+              />
+            </div>
+            {/* Solid Bottom Band */}
+            <div className="w-full h-[25%] bg-gradient-to-r from-[#216115] to-[#15420d] p-4 md:px-6 flex items-center justify-between z-20 border-t border-white/10">
+              <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                Spor Bahisleri
+              </h3>
+              <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-sm rounded transition-colors">
+                Ziyaret et Sports
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Gamdom Originals / Game Grid */}
       <div className="w-full px-4 pb-4">
