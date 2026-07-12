@@ -343,19 +343,8 @@ const Header: React.FC<HeaderProps> = ({
           
           <div
             id="tour-logo"
-            className="logo-text-724 group flex items-center cursor-pointer overflow-hidden flex-shrink-0"
-            onClick={() => onViewChange?.('home')}
+            className="hidden"
           >
-            <Club className="w-7 h-7 md:w-8 md:h-8 text-[#00FFA3] clover-casino transition-transform duration-500 mr-1.5" strokeWidth={2.5} />
-            <span className="hidden md:flex items-center" style={{
-              fontSize: '22px',
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 900,
-              color: '#fff',
-            }}>
-              <span className="slot-text">724</span>
-              <span className="neon-text text-[#00FFA3] ml-[1px]">BETS</span>
-            </span>
           </div>
 
           <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
