@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X, Ticket, BarChart2, ChevronRight } from 'lucide-react';
+import { Search, X, Ticket, BarChart2, ChevronRight, Play } from 'lucide-react';
 import { Coupon } from '../types';
+import { ALL_GAMES } from '../data/games';
 
 interface SearchModalProps {
     onClose: () => void;
@@ -9,7 +10,7 @@ interface SearchModalProps {
 }
 
 interface SearchResult {
-    type: 'coupon' | 'analysis' | 'league';
+    type: 'coupon' | 'analysis' | 'league' | 'game';
     title: string;
     subtitle: string;
     meta?: string;
@@ -72,12 +73,39 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavi
             }
         });
 
+        // Search Games
+        ALL_GAMES.forEach(game => {
+            if (game.name.toLowerCase().includes(q) || game.provider.toLowerCase().includes(q)) {
+                hits.push({
+                    type: 'game',
+                    title: game.name,
+                    subtitle: game.provider,
+                    meta: `Kategori: ${game.category.toUpperCase()} · RTP: ${game.rtp || '-'}`,
+                    icon: <Play className="w-4 h-4 text-[#00FFA3]" />,
+                    action: () => {
+                        onNavigate?.('casino');
+                        // In a real app we'd dispatch an event to open this specific game
+                        setTimeout(() => {
+                           window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }, 150);
+                        handleClose();
+                    },
+                });
+            }
+        });
+
+        // Sort by type (coupons first, then games)
+        hits.sort((a, b) => {
+            if (a.type === 'coupon' && b.type === 'game') return -1;
+            if (a.type === 'game' && b.type === 'coupon') return 1;
+            return 0;
+        });
 
         return hits.slice(0, 12); // max 12 results
     }, [query, coupons]);
 
     // Suggestions when query empty
-    const suggestions = ['Chelsea', 'Galatasaray', 'Real Madrid', 'NBA', 'Fenerbahçe', 'Manchester City', 'Bayern', 'PSG'];
+    const suggestions = ['Sweet Bonanza', 'Galatasaray', 'Gates of Olympus', 'NBA', 'Fenerbahçe', 'Lightning Roulette', 'Crazy Time'];
 
     return (
         <div
@@ -144,7 +172,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavi
                                         onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent'; }}
                                     >
                                         <div className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center"
-                                            style={{ background: r.type === 'coupon' ? 'rgba(240,185,11,0.08)' : r.type === 'league' ? 'rgba(99,102,241,0.08)' : 'rgba(16,185,129,0.08)' }}>
+                                            style={{ background: r.type === 'coupon' ? 'rgba(240,185,11,0.08)' : r.type === 'game' ? 'rgba(0,255,163,0.08)' : 'rgba(16,185,129,0.08)' }}>
                                             {r.icon}
                                         </div>
                                         <div className="flex-1 min-w-0">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, ChevronLeft, ChevronRight, Play, Filter, Grid2X2, Crown, MonitorPlay, Disc, Sparkles, Flame, Star, StarHalf } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { CasinoLobbyGame } from '../types';
+import { ALL_GAMES } from '../data/games';
 
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
@@ -35,13 +36,17 @@ const DEMO_GAMES = [
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%' },
   { id: 116, name: '30 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/30-Coins-Santas-Jackpots-Wazdan/Vertical/30CoinsSantasJackpots.webp', category: 'new', rtp: '96.18%' },
   { id: 117, name: 'Flaming Hot', provider: 'EGT Digital', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/FlamingHotExtremeBellLink.webp', category: 'slots', rtp: '95.96%' },
-  { id: 118, name: 'Shining Crown', provider: 'EGT Digital', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/ShiningCrownBellLink.webp', category: 'slots', rtp: '96.37%' },
 ];
+// End of Mock Data
 
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
+  if (game.demoSymbol) {
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+  }
+  
   const nameString = (game.name || game.img || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  let symbol = 'vs10bbbonanza'; // Default to big bass bonanza so all games have a demo
+  let symbol = 'vs10bbbonanza'; // Default to big bass bonanza so all slots have a demo
   
   if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
   else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
@@ -117,8 +122,8 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
     }
   };
 
-  // Combine custom games with demo games for a fuller experience if customGames is empty
-  const allGames = [...DEMO_GAMES, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
+  // Combine ALL_GAMES with customGames
+  const allGames = [...ALL_GAMES, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
 
   const filteredGames = allGames.filter(game => {
     const matchesTab = activeTab === 'all' || game.category === activeTab;
@@ -127,9 +132,9 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
   });
 
   // Group games for the 'all' view
-  const popularGames = allGames.slice(0, 6);
-  const liveGames = allGames.filter(g => g.category === 'live').slice(0, 6);
-  const newGames = allGames.filter(g => g.category === 'new' || g.id > 110).slice(0, 6);
+  const popularGames = allGames.filter(g => g.isPopular || g.players > 2000).slice(0, 18);
+  const liveGames = allGames.filter(g => g.category === 'live').slice(0, 12);
+  const newGames = allGames.filter(g => g.category === 'new' || g.isNew).slice(0, 12);
 
   return (
     <div className="w-full min-h-screen bg-[#0F121A] font-sans pb-24">
@@ -293,7 +298,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1A1D29] to-transparent" />
                 </div>
                 
-                <div className="relative z-10 w-24 h-24 mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+                <div className="relative z-10 w-24 h-24 mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">
                   <img src={selectedGame.img || selectedGame.image} className="w-full h-full object-cover" />
                 </div>
               </div>

@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Video } from 'lucide-react';
 import { CasinoLobbyGame } from '../types';
+import { ALL_GAMES } from '../data/games';
 
 interface GameItem {
   id: string;
@@ -10,16 +11,12 @@ interface GameItem {
   players?: number;
 }
 
-const slotGames: GameItem[] = [
-  { id: 's1', title: 'SUGAR RUSH SUPER SCATTER', image: '/games/game_1.jpg', players: 375 },
-  { id: 's2', title: 'GATES OF OLYMPUS SUPER SCATTER', image: '/games/game_2.jpg', players: 632 },
-  { id: 's3', title: 'WANTED DEAD OR A WILD', image: '/games/game_3.jpg', players: 320 },
-  { id: 's4', title: 'SWEET BONANZA 1000', image: '/games/game_4.jpg', players: 610 },
-  { id: 's5', title: 'SUGAR RUSH 1000', image: '/games/game_5.jpg', players: 621 },
-  { id: 's6', title: 'LE BANDIT', image: '/games/game_6.jpg', players: 226 },
-  { id: 's7', title: 'GATES OF OLYMPUS 1000', image: '/games/game_7.jpg', players: 625 },
-  { id: 's8', title: 'LE FISHERMAN', image: '/games/game_8.jpg', players: 188 },
-];
+const slotGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'slots' || g.category === 'new').map(g => ({
+  id: g.id.toString(),
+  title: g.name.toUpperCase(),
+  image: g.image,
+  players: g.players
+})).slice(0, 16);
 
 const sportGames: GameItem[] = [
   { id: 'sp1', title: 'FOOTBALL', image: '/games/game_9.jpg' },
@@ -32,16 +29,12 @@ const sportGames: GameItem[] = [
   { id: 'sp8', title: 'BADMINTON', image: '/games/game_16.jpg' },
 ];
 
-const liveCasinoGames: GameItem[] = [
-  { id: 'c1', title: 'LIVE ROULETTE', image: '/games/game_41.jpg', players: 1205 },
-  { id: 'c2', title: 'GOLD BLACKJACK', image: '/games/game_42.jpg', players: 850 },
-  { id: 'c3', title: 'SWEET BONANZA CANDYLAND', image: '/games/game_43.jpg', players: 2341 },
-  { id: 'c4', title: 'BACCARAT', image: '/games/game_44.jpg', players: 540 },
-  { id: 'c5', title: 'CRAZY TIME', image: '/games/game_45.jpg', players: 4100 },
-  { id: 'c6', title: 'MONOPOLY LIVE', image: '/games/game_46.jpg', players: 1800 },
-  { id: 'c7', title: 'MEGA WHEEL', image: '/games/game_47.jpg', players: 900 },
-  { id: 'c8', title: 'CASINO HOLDEM', image: '/games/game_48.jpg', players: 300 },
-];
+const liveCasinoGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'live').map(g => ({
+  id: g.id.toString(),
+  title: g.name.toUpperCase(),
+  image: g.image,
+  players: g.players
+})).slice(0, 16);
 
 const bigWins = [
   { id: 'w1', user: 'Wynn3658', amount: '6,4 Mn TRY', game: '/games/game_25.jpg' },
