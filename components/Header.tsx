@@ -234,35 +234,35 @@ const Header: React.FC<HeaderProps> = ({
             0%, 100% { text-shadow: 0 0 10px rgba(0,255,163,0.3), 0 0 20px rgba(0,255,163,0.1); }
             50% { text-shadow: 0 0 15px rgba(0,255,163,0.5), 0 0 30px rgba(0,255,163,0.2), 0 0 45px rgba(0,255,163,0.1); }
           }
-          @keyframes revealTextStylish {
-            0% { opacity: 0; max-width: 0; transform: translateX(-15px) scale(0.9); letter-spacing: -5px; filter: blur(4px); margin-left: 0; }
-            100% { opacity: 1; max-width: 150px; transform: translateX(0) scale(1); letter-spacing: -0.5px; filter: blur(0); margin-left: 4px; }
+          @keyframes slotMachineDrop {
+            0% { transform: translateY(-40px) scaleY(1.5); opacity: 0; filter: blur(4px); }
+            60% { transform: translateY(10px) scaleY(0.9); opacity: 1; filter: blur(0); }
+            80% { transform: translateY(-4px) scaleY(1.05); }
+            100% { transform: translateY(0) scaleY(1); opacity: 1; }
           }
-          .logo-reveal-text {
+          .slot-text {
+            display: inline-block;
             opacity: 0;
-            max-width: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            animation: revealTextStylish 1.2s cubic-bezier(0.16, 1, 0.3, 1) 3s forwards;
+            animation: slotMachineDrop 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
           }
-          @keyframes cloverFloatRotate {
-            0% { transform: translateY(0px) rotate(0deg); filter: drop-shadow(0 0 5px rgba(0,255,163,0.3)); }
-            50% { transform: translateY(-2px) rotate(180deg); filter: drop-shadow(0 0 15px rgba(0,255,163,0.8)); }
-            100% { transform: translateY(0px) rotate(360deg); filter: drop-shadow(0 0 5px rgba(0,255,163,0.3)); }
+
+          @keyframes neonFlickerDelay {
+            0%, 5%, 15%, 25% { opacity: 0; text-shadow: none; filter: brightness(0.2); }
+            10%, 20%, 30% { opacity: 0.8; text-shadow: 0 0 10px #00FFA3, 0 0 20px #00FFA3; filter: brightness(1.5); }
+            35%, 100% { opacity: 1; text-shadow: 0 0 5px rgba(0,255,163,0.5), 0 0 15px rgba(0,255,163,0.8); filter: brightness(1); }
           }
-          .clover-continuous {
-            animation: cloverFloatRotate 4s linear infinite;
+          .neon-text {
+            display: inline-block;
+            opacity: 0;
+            animation: neonFlickerDelay 2s ease-out 1.2s forwards;
           }
-          @keyframes hideBetsText {
-            0% { opacity: 1; max-width: 100px; transform: scale(1); margin-left: 0; }
-            100% { opacity: 0; max-width: 0; transform: scale(0.5); margin-left: -5px; padding: 0; }
+
+          @keyframes cloverCasinoPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 5px rgba(0,255,163,0.3)); }
+            50% { transform: scale(1.15) rotate(180deg); filter: drop-shadow(0 0 20px rgba(0,255,163,1)); }
           }
-          .bets-text-hide {
-            display: inline-flex;
-            overflow: hidden;
-            animation: hideBetsText 1s cubic-bezier(0.4, 0, 0.2, 1) 8s forwards;
+          .clover-casino {
+            animation: cloverCasinoPulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
           }
           .logo-text-724 {
             position: relative;
@@ -366,22 +366,22 @@ const Header: React.FC<HeaderProps> = ({
             style={{ 
               alignItems: 'center', 
               cursor: 'pointer',
-              display: 'flex'
+              display: 'flex',
+              overflow: 'hidden'
             }}
             onClick={() => onViewChange?.('home')}
           >
-            <Club className="w-7 h-7 text-[#00FFA3] clover-continuous group-hover:scale-110 transition-transform duration-500" strokeWidth={2.5} />
-            <span className="logo-reveal-text">
-              <span style={{
-                fontSize: '22px',
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 900,
-                color: '#fff',
-                display: 'flex',
-                alignItems: 'center',
-              }}>
-                724<span className="bets-text-hide" style={{ color: '#00FFA3' }}>BETS</span>
-              </span>
+            <Club className="w-7 h-7 text-[#00FFA3] clover-casino transition-transform duration-500 mr-1.5" strokeWidth={2.5} />
+            <span style={{
+              fontSize: '22px',
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 900,
+              color: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              <span className="slot-text">724</span>
+              <span className="neon-text" style={{ color: '#00FFA3', marginLeft: '1px' }}>BETS</span>
             </span>
           </div>
         </div>
