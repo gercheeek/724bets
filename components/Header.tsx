@@ -372,12 +372,11 @@ const Header: React.FC<HeaderProps> = ({
             onClick={() => onViewChange?.('home')}
           >
             <Club className="w-7 h-7 text-[#00FFA3] clover-casino transition-transform duration-500 mr-1.5" strokeWidth={2.5} />
-            <span style={{
+            <span className="hidden md:flex" style={{
               fontSize: '22px',
               fontFamily: "'Inter', sans-serif",
               fontWeight: 900,
               color: '#fff',
-              display: 'flex',
               alignItems: 'center',
             }}>
               <span className="slot-text">724</span>
