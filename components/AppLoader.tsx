@@ -21,7 +21,6 @@ const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false }) => {
     >
       <div className="flex flex-col items-center justify-center animate-pulse">
         <div className="logo-text-724 group flex items-center overflow-hidden">
-          <Club className="w-12 h-12 md:w-16 md:h-16 text-[#00FFA3] transition-transform duration-500 mr-2" strokeWidth={2.5} />
           <span className="flex items-center" style={{
             fontSize: '40px',
             fontFamily: "'Inter', sans-serif",
