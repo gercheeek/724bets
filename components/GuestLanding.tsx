@@ -32,18 +32,18 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   const promoCards = [
     {
       title: "$500k Bankada!",
-      subtitle: "Liderlik tablosunda yerini al",
-      icon: <Trophy className="w-32 h-32 text-yellow-500/40 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
+      subtitle: "LİDERLİK TABLOSUNDA YERİNİ AL",
+      icon: <Trophy strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-yellow-600/20 group-hover:text-yellow-500/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(202,138,4,0.15)]" />
     },
     {
-      title: <>Yeniden tasarlandı.<br/>Daha hızlı.</>,
-      subtitle: "Yepyeni bir deneyim",
-      icon: <Shield className="w-32 h-32 text-red-500/30 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
+      title: <>Yeniden<br/>tasarlandı.<br/>Daha hızlı.</>,
+      subtitle: "YEPYENİ BİR DENEYİM",
+      icon: <Shield strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-red-600/20 group-hover:text-red-500/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(220,38,38,0.15)]" />
     },
     {
-      title: "Piyasadaki En İyi Oranlar",
-      subtitle: "Kazancını Katla",
-      icon: <Target className="w-32 h-32 text-[#00FFA3]/30 drop-shadow-[0_0_15px_rgba(0,255,163,0.5)]" />
+      title: <>Piyasadaki En<br/>İyi Oranlar</>,
+      subtitle: "KAZANCINI KATLA",
+      icon: <Target strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-[#00FFA3]/20 group-hover:text-[#00FFA3]/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(0,255,163,0.15)]" />
     }
   ];
 
@@ -132,14 +132,14 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             {/* Desktop Grid */}
             <div className="hidden md:grid grid-cols-3 gap-4">
               {promoCards.map((card, idx) => (
-                <div key={idx} className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg group cursor-pointer transition-transform hover:-translate-y-1">
+                <div key={idx} className="relative overflow-hidden rounded-xl bg-[#12161E] border border-[#202532] hover:border-white/10 h-[140px] flex p-6 items-center shadow-2xl group cursor-pointer transition-all duration-300">
                   <div className="flex flex-col z-10 w-2/3">
-                    <span className="text-white font-black text-xl lg:text-2xl tracking-tight leading-none mb-1">{card.title}</span>
-                    <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">{card.subtitle}</span>
+                    <span className="text-white font-black text-xl lg:text-2xl tracking-tight leading-tight mb-2">{card.title}</span>
+                    <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">{card.subtitle}</span>
                   </div>
-                  <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                    {card.icon}
-                  </div>
+                  {card.icon}
+                  {/* Subtle inner gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 </div>
               ))}
             </div>
@@ -151,14 +151,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   key={idx} 
                   className={`absolute inset-0 w-full transition-opacity duration-700 ${currentPromoSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                 >
-                  <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#181d29] to-[#0a0b0e] border border-white/5 h-[140px] flex p-6 items-center shadow-lg cursor-pointer">
+                  <div className="relative overflow-hidden rounded-xl bg-[#12161E] border border-[#202532] h-[140px] flex p-6 items-center shadow-2xl cursor-pointer">
                     <div className="flex flex-col z-10 w-2/3">
-                      <span className="text-white font-black text-xl tracking-tight leading-none mb-1">{card.title}</span>
-                      <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">{card.subtitle}</span>
+                      <span className="text-white font-black text-xl tracking-tight leading-tight mb-2">{card.title}</span>
+                      <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">{card.subtitle}</span>
                     </div>
-                    <div className="absolute right-[-10px] top-1/2 transform -translate-y-1/2 opacity-80">
-                      {card.icon}
-                    </div>
+                    {card.icon}
                   </div>
                 </div>
               ))}
