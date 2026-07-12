@@ -490,7 +490,7 @@ const App: React.FC = () => {
             description: `⚽ **Bahis Detayları:**\n\n${selectionsText}`,
             timestamp: new Date().toISOString(),
             footer: {
-              text: "BAHİSBEY | Canlı Kupon Bildirim Sistemi"
+              text: "724BETS | Canlı Kupon Bildirim Sistemi"
             }
           }
         ]
@@ -606,16 +606,16 @@ const App: React.FC = () => {
     // 3. Branding Migration for Marquee & Popup
     const storedMarquee = localStorage.getItem('site_marquee_config');
     if (storedMarquee && (/betlivo/i.test(storedMarquee) || /724bahis/i.test(storedMarquee) || /724FUTBOL/i.test(storedMarquee))) {
-      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, 'BAHİSBEY').replace(/724bahis\.net/gi, 'BAHİSBEY').replace(/724FUTBOL\.COM/gi, 'BAHİSBEY'));
+      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724BETS').replace(/724bahis\.net/gi, '724BETS').replace(/724FUTBOL\.COM/gi, '724BETS'));
       localStorage.setItem('site_marquee_config', JSON.stringify(parsedMarquee));
       setMarqueeConfig(parsedMarquee);
     }
 
     const storedWelcome = localStorage.getItem('site_welcome_popup');
     if (storedWelcome && (/betlivo/i.test(storedWelcome) || /724bahis/i.test(storedWelcome) || /724FUTBOL/i.test(storedWelcome))) {
-      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, 'BAHİSBEY').replace(/724bahis\.net/gi, 'BAHİSBEY').replace(/724FUTBOL\.COM/gi, 'BAHİSBEY'));
+      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724BETS').replace(/724bahis\.net/gi, '724BETS').replace(/724FUTBOL\.COM/gi, '724BETS'));
       // Also catch the 'BETLIVOX' variant if it exists
-      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BAHİS.NETX/gi, 'BAHİSBEY').replace(/724FUTBOL.COMX/gi, 'BAHİSBEY'));
+      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BAHİS.NETX/gi, '724BETS').replace(/724FUTBOL.COMX/gi, '724BETS'));
       localStorage.setItem('site_welcome_popup', JSON.stringify(cleanedWelcome));
       setWelcomePopupConfig(cleanedWelcome);
     }
@@ -694,7 +694,7 @@ const App: React.FC = () => {
         }
       },
       steps: [
-        { popover: { title: "Bahisbey'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
+        { popover: { title: "724bets'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
         { element: '#tour-sidebar', popover: { title: 'Kategoriler & Spor Dalları', description: 'Buradan spor bahisleri, casino ve diğer popüler oyunlara tek tıkla ulaşabilirsiniz.', side: "right", align: 'start' }},
         { element: '#tour-user-panel', popover: { title: 'Bakiye & Kullanıcı İşlemleri', description: 'Güncel bakiyenizi takip edebilir, saniyeler içinde yatırım ve çekim yapabilirsiniz.', side: "bottom", align: 'center' }},
         { element: '#tour-chat', popover: { title: 'Canlı Sohbet', description: 'Sağ panelden diğer üyelerimizle sohbet edebilir, özel etkinlik kodlarını (gift) yakalayabilirsiniz!', side: "left", align: 'start' }},
@@ -843,7 +843,7 @@ const App: React.FC = () => {
         if (globalGiveaway) setGiveawayConfig(globalGiveaway);
         
         if (globalMarquee) {
-          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, 'BAHİSBEY').replace(/724bahis\.net/gi, 'BAHİSBEY'));
+          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724BETS').replace(/724bahis\.net/gi, '724BETS'));
           setMarqueeConfig(cleaned);
         }
         
@@ -851,7 +851,7 @@ const App: React.FC = () => {
         if (globalWheel) setWheelConfig(globalWheel);
         
         if (globalWelcome) {
-          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, 'BAHİSBEY').replace(/724bahis\.net/gi, 'BAHİSBEY').replace(/724BAHİS.NETX/gi, 'BAHİSBEY').replace(/724FUTBOL\.COMX/gi, 'BAHİSBEY'));
+          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724BETS').replace(/724bahis\.net/gi, '724BETS').replace(/724BAHİS.NETX/gi, '724BETS').replace(/724FUTBOL\.COMX/gi, '724BETS'));
           setWelcomePopupConfig(cleaned);
         }
         
@@ -943,7 +943,7 @@ const App: React.FC = () => {
 
   // Hero brand for admin (keep backward compatibility)
   const heroDefault: Brand = {
-    id: 'bahisbey', name: 'BAHİSBEY', subtitle: 'CASINO & CANLI BAHİS',
+    id: '724bets', name: '724BETS', subtitle: 'CASINO & CANLI BAHİS',
     offerMain: '%280', offerSub: 'HOŞGELDİN BONUSU !!!',
     logo: 'https://picsum.photos/seed/bahisbey/400/400', link: 'https://bahisbey1438.com/?btag=59649488_330539', isSponsor: true,
   };
@@ -1366,7 +1366,7 @@ const App: React.FC = () => {
               id: isGuest ? `guest_${guestUsername}` : 'admin-session',
               username: isGuest ? guestUsername : 'Yönetici',
               password: '',
-              email: isGuest ? `guest@bahisbey.com` : 'admin@bahisbey.com',
+              email: isGuest ? `guest@724bets.com` : 'admin@724bets.com',
               phone: '',
               createdAt: Date.now(),
               role: role as any,
@@ -2331,7 +2331,7 @@ const App: React.FC = () => {
     </div>
     )}
 
-      {/* BAHISBEY OVERLAY FOOTER */}
+      {/* 724BETS OVERLAY FOOTER */}
       {['sports', 'sports2', 'sports3', 'sports4', 'sports5'].includes(view) && (
         <div className="fixed bottom-16 md:bottom-0 left-0 w-full z-[90] bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex flex-col md:flex-row items-center justify-between px-4 py-3 pointer-events-auto">
           <div className="flex items-center gap-3">

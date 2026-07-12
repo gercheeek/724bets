@@ -101,7 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         { id: 'lol', label: 'League of Legends', icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'esports' },
       ]
     },
-    { id: 'analiz', label: 'BAHİSBEY ANALİZ & CANLI BÜLTEN', icon: <BarChart3 className="w-4 h-4 text-[#00FFA3]" />, view: 'analysis' },
+    { id: 'analiz', label: '724BETS ANALİZ & CANLI BÜLTEN', icon: <BarChart3 className="w-4 h-4 text-[#00FFA3]" />, view: 'analysis' },
     { id: 'at-yarisi', label: 'AT YARIŞI', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
     { id: 'sss', label: 'SSS', icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
     { id: 'kurallar', label: 'BAHİS KURALLARI', icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },

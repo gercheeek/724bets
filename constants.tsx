@@ -56,15 +56,15 @@ export const BRANDS: Brand[] = [
 
 export const DEFAULT_MARQUEE_CONFIG: MarqueeConfig = {
   isActive: true,
-  text: 'Hoş geldiniz! En yüksek oranlar ve anında ödeme BAHİSBEY güvencesiyle!',
+  text: 'Hoş geldiniz! En yüksek oranlar ve anında ödeme 724BETS güvencesiyle!',
   speed: 60,
-  color: '#FFC107', // BAHİSBEY Yellow
+  color: '#FFC107', // 724BETS Yellow
   isBold: true,
 };
 
 export const DEFAULT_WELCOME_POPUP_CONFIG: WelcomePopupConfig = {
   isActive: true,
-  title: 'BAHİSBEY',
+  title: '724BETS',
   subtitle: "Türkiye'nin En Dinamik ve Güvenilir Bahis Platformu",
   offerMain: '%200 HOŞGELDİN BONUSU',
   offerSub: 'İlk yatırımınıza özel · Anında hesabınıza yüklenir',
@@ -117,13 +117,13 @@ export const DEFAULT_RAFFLE_CONFIG: RaffleConfig = {
         { icon: 'Info', text: 'Bilet havuzundaki slot numaranız çekilişte kullanılır.' },
     ],
     faqs: [
-        { q: "Bilet nasıl kazanılır?", a: "Sponsor sitemiz BAHİSBEY'e yatırımlar yaparak veya Görevler sekmesindeki etkinlikleri tamamlayarak bilet kazanabilirsiniz." },
-        { q: "Bilet talebi nasıl oluşturulur?", a: "Görevler sayfasındaki form aracılığıyla BAHİSBEY kullanıcı adınızı, yatırım miktarınızı ve tarihini girerek talep oluşturabilirsiniz." },
+        { q: "Bilet nasıl kazanılır?", a: "Sponsor sitemiz 724BETS'e yatırımlar yaparak veya Görevler sekmesindeki etkinlikleri tamamlayarak bilet kazanabilirsiniz." },
+        { q: "Bilet talebi nasıl oluşturulur?", a: "Görevler sayfasındaki form aracılığıyla 724BETS kullanıcı adınızı, yatırım miktarınızı ve tarihini girerek talep oluşturabilirsiniz." },
         { q: "Yatırım tarihi ve saati neden isteniyor?", a: "Yatırımınızın sistem tarafından teyit edilebilmesi için talep edilmektedir." },
         { q: "Bilet talebim ne kadar sürede onaylanır?", a: "Talepleriniz uzman ekibimiz tarafından kontrol edilip en kısa sürede otomatik olarak onaylanır." },
         { q: "Bilet liderliği nasıl çalışır?", a: "Bilet havuzumuzdan, en fazla bilete sahip olan kullanıcıların biletleri sıralı olarak sergilenir." },
         { q: "Çekiliş nasıl yapılır?", a: "Çekiliş günlerinde bilet havuzundaki biletler arasından şeffaf bir bilgisayar algoritması ile kazananlar belirlenir." },
-        { q: "Sponsor bilgisi neden isteniyor?", a: "Çekilişlerimiz partnerimiz BAHİSBEY sponsorluğunda gerçekleştiği için oyuncu teyiti zorunludur." },
+        { q: "Sponsor bilgisi neden isteniyor?", a: "Çekilişlerimiz partnerimiz 724BETS sponsorluğunda gerçekleştiği için oyuncu teyiti zorunludur." },
         { q: "Telefon doğrulaması neden gerekli?", a: "Sadece gerçek kişilerin ödül alabilmesi ve multi hesapların engellenmesi için istenmektedir." }
     ]
 };

@@ -144,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({
         id: Date.now().toString(),
         userId: siteUser.id,
         username: siteUser.username,
-        content: `BAHİSBEY Yatırım Bildirimi:\nBAHİSBEY Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
+        content: `724BETS Yatırım Bildirimi:\n724BETS Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
         isRead: false,
         createdAt: Date.now()
       };
@@ -621,7 +621,7 @@ const Header: React.FC<HeaderProps> = ({
                           display: 'inline-block'
                         }}
                       >
-                        BAHİSBEY
+                        724BETS
                       </span>
                     );
 
