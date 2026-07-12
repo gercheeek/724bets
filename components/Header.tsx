@@ -444,7 +444,6 @@ const Header: React.FC<HeaderProps> = ({
                     alt="avatar" 
                   />
                 </button>
-              </div>
 
                 {/* Search Icon */}
                 <button
