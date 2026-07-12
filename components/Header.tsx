@@ -340,19 +340,18 @@ const Header: React.FC<HeaderProps> = ({
             }}
             onClick={() => onViewChange?.('home')}
           >
-            <Club className="w-6 h-6 text-[#00FFA3] mr-1 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_10px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
             <span className="logo-text-intro">
               <span style={{
-                fontSize: '20px',
-                fontFamily: "'Outfit', sans-serif",
+                fontSize: '22px',
+                fontFamily: "'Inter', sans-serif",
                 fontWeight: 900,
-                letterSpacing: '-1.5px',
+                letterSpacing: '-0.5px',
                 color: '#fff',
                 display: 'flex',
                 alignItems: 'center',
                 transition: 'all 0.3s ease'
-              }} className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#00FFA3]">
-                724bets
+              }}>
+                724<span style={{ color: '#00FFA3' }}>BETS</span>
               </span>
             </span>
           </div>
