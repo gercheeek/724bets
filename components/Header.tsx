@@ -255,6 +255,15 @@ const Header: React.FC<HeaderProps> = ({
           .clover-continuous {
             animation: cloverFloatRotate 4s linear infinite;
           }
+          @keyframes hideBetsText {
+            0% { opacity: 1; max-width: 100px; transform: scale(1); margin-left: 0; }
+            100% { opacity: 0; max-width: 0; transform: scale(0.5); margin-left: -5px; padding: 0; }
+          }
+          .bets-text-hide {
+            display: inline-flex;
+            overflow: hidden;
+            animation: hideBetsText 1s cubic-bezier(0.4, 0, 0.2, 1) 8s forwards;
+          }
           .logo-text-724 {
             position: relative;
             z-index: 10000;
@@ -371,7 +380,7 @@ const Header: React.FC<HeaderProps> = ({
                 display: 'flex',
                 alignItems: 'center',
               }}>
-                724<span style={{ color: '#00FFA3' }}>BETS</span>
+                724<span className="bets-text-hide" style={{ color: '#00FFA3' }}>BETS</span>
               </span>
             </span>
           </div>
