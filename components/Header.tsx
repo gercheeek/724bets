@@ -340,6 +340,7 @@ const Header: React.FC<HeaderProps> = ({
             }}
             onClick={() => onViewChange?.('home')}
           >
+            <Club className="w-6 h-6 text-[#00FFA3] mr-1 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_10px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
             <span className="logo-text-intro">
               <span style={{
                 fontSize: '22px',
