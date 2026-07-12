@@ -249,17 +249,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="sidebar-overlay" onClick={onToggle} style={{ display: 'none' }} />
 
       <div className={`gamdom-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
-        
-        {/* Toggle / Expand Button overlay */}
-        <div className="absolute top-[85px] right-0 z-50 overflow-visible pointer-events-none">
-           <button 
-             onClick={onToggle} 
-             className="w-7 h-10 bg-[#0F1219] hover:bg-[#1C2028] border border-l-0 border-white/5 flex items-center justify-center text-white/70 hover:text-white rounded-r-md cursor-pointer pointer-events-auto transition-all shadow-md transform translate-x-full"
-           >
-             {isOpen ? <ChevronLeft className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-           </button>
-        </div>
-
         <div className="gamdom-sidebar-inner pb-20">
           
           {/* Spacer to align sidebar content below Header */}

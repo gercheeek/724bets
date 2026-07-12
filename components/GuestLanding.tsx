@@ -26,7 +26,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       <div className="w-full px-4 pt-6 pb-6">
         <div className="relative overflow-hidden rounded-xl bg-[#0d0d12] w-full h-[180px] md:h-[240px] shadow-2xl group cursor-pointer">
           <img 
-            src="https://724bahis.net/images/guest_banner_image.jpg" 
+            src="https://images.unsplash.com/photo-1606167668584-78701c57f13d?q=80&w=2070&auto=format&fit=crop" 
             alt="Hero Banner" 
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
           />
@@ -76,7 +76,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           className="relative w-full h-[220px] md:h-[280px] rounded-xl overflow-hidden cursor-pointer group shadow-2xl bg-[#0d0d12]"
         >
           <img 
-            src="https://724bahis.net/images/guest_casino_card.jpg" 
+            src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop" 
             alt="Casino" 
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
           />
@@ -98,7 +98,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           className="relative w-full h-[220px] md:h-[280px] rounded-xl overflow-hidden cursor-pointer group shadow-2xl bg-[#0d0d12]"
         >
           <img 
-            src="https://724bahis.net/images/guest_sports_card.jpg" 
+            src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2605&auto=format&fit=crop" 
             alt="Sports Betting" 
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 z-0"
           />
