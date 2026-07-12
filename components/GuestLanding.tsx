@@ -232,10 +232,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
       {/* Gamdom Originals / Game Grid */}
       <div className="w-full px-4 pb-4">
-        <div className="flex items-center gap-2 mb-4">
-           <img src="/icons/gamdom-icon.png" alt="" className="w-6 h-6 hidden" /> 
-           <h3 className="text-white text-xl font-bold">Gamdom Originals</h3>
-        </div>
         <GameLobbyGrid 
           customGames={customGames}
         />

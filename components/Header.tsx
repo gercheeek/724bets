@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
   MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
-  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club
+  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club,
+  Bell, Users, ShieldCheck, Lock, Link, FileText
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
@@ -110,6 +111,9 @@ const Header: React.FC<HeaderProps> = ({
   onToggleSidebar,
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -423,55 +427,77 @@ const Header: React.FC<HeaderProps> = ({
         <div id="tour-user-panel" className="flex items-center justify-end flex-1 gap-1 md:gap-3 z-10">
           {siteUser ? (
             <>
-              {/* Profile Picture */}
-              <button 
-                onClick={() => onViewChange?.('profile')}
-                className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#00FFA3]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0"
-              >
-                <img 
-                  src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
-                  className="w-full h-full object-cover bg-[#1F232B]" 
-                  alt="avatar" 
-                />
-              </button>
+              {/* Profile Dropdown */}
+              <div className="relative" ref={profileRef}>
+                <button 
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#00FFA3]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0"
+                >
+                  <img 
+                    src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
+                    className="w-full h-full object-cover bg-[#1F232B]" 
+                    alt="avatar" 
+                  />
+                </button>
 
-              {/* Search Icon */}
-              <button
-                onClick={onSearchClick}
-                className="text-zinc-400 hover:text-white transition-colors p-1 md:p-2 hidden sm:flex items-center justify-center flex-shrink-0"
-              >
-                <Search className="w-5 h-5" />
-              </button>
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-[#1A1D24] border border-white/5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
+                    <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <User className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Profil</span>
+                    </button>
+                    
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Bell className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Gelen Kutusu</span>
+                    </button>
 
-              {/* Notifications Icon */}
-              <button className="text-zinc-400 hover:text-white transition-colors p-1 md:p-2 hidden sm:flex items-center justify-center relative flex-shrink-0">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                <span className="absolute top-2 right-2 w-2 h-2 bg-[#ef3434] rounded-full"></span>
-              </button>
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Users className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">İştirakler</span>
+                    </button>
 
-              {/* Chat Toggle Button */}
-              <button
-                onClick={onSupportClick}
-                className="text-zinc-400 hover:text-white transition-colors p-1 md:p-2 flex items-center justify-center relative bg-[#0F1219] hover:bg-[#1C2028] border border-white/5 rounded-md shadow-inner flex-shrink-0"
-                title="Canlı Sohbet"
-              >
-                <MessageSquare className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse"></span>
-              </button>
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <ShieldCheck className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Doğrulamalar</span>
+                    </button>
 
-              {/* Quick Logout Button */}
-              <button
-                onClick={() => {
-                  localStorage.removeItem('site_current_member');
-                  localStorage.removeItem('site_member');
-                  localStorage.removeItem('site_user_role');
-                  window.location.reload();
-                }}
-                className="text-red-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1 md:p-2 flex items-center justify-center relative border border-white/5 rounded-md shadow-inner flex-shrink-0 ml-1"
-                title="Çıkış Yap"
-              >
-                <LogOut className="w-5 h-5" />
-              </button>
+                    <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Settings className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Ayarlar</span>
+                    </button>
+
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Lock className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Gizlilik</span>
+                    </button>
+
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Link className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Bağlantılar</span>
+                    </button>
+
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <FileText className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">İşlemler</span>
+                    </button>
+
+                    <button 
+                      onClick={() => {
+                        setIsProfileOpen(false);
+                        localStorage.removeItem('site_current_member');
+                        localStorage.removeItem('site_member');
+                        localStorage.removeItem('site_user_role');
+                        window.location.reload();
+                      }}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-white/5 mt-1"
+                    >
+                      <LogOut className="w-5 h-5 text-zinc-400 group-hover:text-red-400" />
+                      <span className="font-semibold text-sm">Çıkış yap</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
               <>
