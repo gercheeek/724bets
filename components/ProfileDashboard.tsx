@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { User, Lock, Wallet, ShieldCheck, Mail, Phone, Key, Save, AlertCircle, LogOut } from 'lucide-react';
+import { 
+  User, Bell, Users, ShieldCheck, Settings, Lock, Link as LinkIcon, FileText, LogOut,
+  ChevronRight, Upload, HelpCircle, Info, ChevronDown, CheckCircle2, ChevronLeft,
+  Coins, Gamepad2, AlertCircle, Plus
+} from 'lucide-react';
 import { SiteUser } from '../types';
 import { supabase } from '../utils/supabase';
 
@@ -9,325 +13,482 @@ interface ProfileDashboardProps {
 }
 
 const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUser }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'profile' | 'inbox' | 'affiliates' | 'verification' | 'settings' | 'privacy' | 'links' | 'transactions'>('profile');
   
-  // Form States
+  // Profile Form States
+  const [username, setUsername] = useState(siteUser.username || '');
   const [email, setEmail] = useState(siteUser.email || '');
   const [phone, setPhone] = useState(siteUser.phone || '');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveMessage, setSaveMessage] = useState<{type: 'success'|'error', text: string} | null>(null);
 
-  const handleSaveSettings = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSaving(true);
-    setSaveMessage(null);
-    
-    try {
-      // Basic verification of old password before changing (simulated or real depending on backend)
-      if (newPassword && !currentPassword) {
-        throw new Error('Yeni şifre belirlemek için mevcut şifrenizi girmelisiniz.');
-      }
-      if (newPassword && currentPassword !== siteUser.password) {
-        throw new Error('Mevcut şifrenizi yanlış girdiniz.');
-      }
-      
-      const updates: Partial<SiteUser> = {
-        email,
-        phone,
-      };
-      
-      if (newPassword) {
-        updates.password = newPassword;
-      }
-      
-      // Update in Supabase
-      const { error } = await supabase
-        .from('members')
-        .update(updates)
-        .eq('id', siteUser.id);
-        
-      if (error) throw error;
-      
-      // Update local state
-      const updatedUser = { ...siteUser, ...updates };
-      setSiteUser(updatedUser);
-      localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
-      localStorage.setItem('site_member', JSON.stringify(updatedUser));
-      
-      setSaveMessage({ type: 'success', text: 'Profil ayarlarınız başarıyla güncellendi!' });
-      setCurrentPassword('');
-      setNewPassword('');
-    } catch (err: any) {
-      setSaveMessage({ type: 'error', text: err.message || 'Güncelleme sırasında bir hata oluştu.' });
-    } finally {
-      setIsSaving(false);
-    }
-  };
+  // Settings States
+  const [ambientMode, setAmbientMode] = useState(true);
+  const [newsletters, setNewsletters] = useState(false);
+
+  // Transactions States
+  const [txTab, setTxTab] = useState<'deposit'|'withdraw'|'tips'|'affiliate'>('deposit');
 
   const handleLogout = () => {
     localStorage.removeItem('site_current_member');
     localStorage.removeItem('site_member');
     localStorage.removeItem('site_user_role');
     setSiteUser(null);
-    window.location.reload(); // Hard reload to clear everything
+    window.location.reload();
   };
 
+  const menuItems = [
+    { id: 'profile', label: 'Profil', icon: <User className="w-5 h-5" /> },
+    { id: 'inbox', label: 'Gelen Kutusu', icon: <Bell className="w-5 h-5" /> },
+    { id: 'affiliates', label: 'İştirakler', icon: <Users className="w-5 h-5" /> },
+    { id: 'verification', label: 'Doğrulamalar', icon: <ShieldCheck className="w-5 h-5" /> },
+    { id: 'settings', label: 'Ayarlar', icon: <Settings className="w-5 h-5" /> },
+    { id: 'privacy', label: 'Gizlilik', icon: <Lock className="w-5 h-5" /> },
+    { id: 'links', label: 'Bağlantılar', icon: <LinkIcon className="w-5 h-5" /> },
+    { id: 'transactions', label: 'İşlemler', icon: <FileText className="w-5 h-5" /> },
+  ];
+
   return (
-    <div className="animate-fade-in w-full max-w-6xl mx-auto px-4 py-8 space-y-8" style={{ minHeight: '100vh' }}>
-      {/* Top Member Card Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#141822] to-[#0A0C10] w-full p-6 md:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.6)] flex flex-col md:flex-row items-center gap-6 border border-white/5">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#00FFA3]/10 via-transparent to-transparent pointer-events-none" />
+    <div className="w-full min-h-screen bg-[#0A0C10] flex justify-center py-10 px-4">
+      <div className="w-full max-w-[1200px] flex flex-col md:flex-row gap-8">
         
-        {/* Avatar & Info */}
-        <div className="flex items-center gap-5 z-10 w-full md:w-auto">
-          <div className="w-20 h-20 rounded-2xl bg-[#1A1D24] border-2 border-[#00FFA3] p-1 shadow-[0_0_20px_rgba(0,255,163,0.35)] flex-shrink-0">
-            <img src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} className="w-full h-full rounded-xl object-cover" />
-          </div>
-          <div>
-            <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight flex items-center gap-2">
-              {siteUser.username}
-              <span className="w-2.5 h-2.5 bg-[#00FFA3] rounded-full animate-ping" />
-            </h2>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="bg-gradient-to-r from-orange-400 to-amber-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider shadow-lg">
-                {(siteUser as any).loyaltyLevel || 'BRONZ 2'}
-              </span>
-              <span className="text-zinc-400 text-xs font-bold px-2 py-1 bg-white/5 rounded-md">ID: {siteUser.id?.substring(0,6).toUpperCase() || 'USER'}</span>
+        {/* LEFT SIDEBAR */}
+        <div className="w-full md:w-[280px] flex-shrink-0 flex flex-col gap-6">
+          
+          {/* User VIP Card */}
+          <div className="w-full rounded-2xl p-5 relative overflow-hidden bg-gradient-to-br from-[#E28859] via-[#D26535] to-[#A23D15] shadow-lg">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-10 -mt-10" />
+            <div className="flex items-center gap-4 mb-5 relative z-10">
+              <div className="w-14 h-14 rounded-lg bg-black/40 border-2 border-white/20 overflow-hidden shadow-inner flex-shrink-0">
+                <img src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h3 className="text-white font-black text-lg flex items-center gap-2">
+                  {siteUser.username}
+                  <div className="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full" />
+                  </div>
+                </h3>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                   <div className="w-3.5 h-3.5 bg-orange-300 rounded shadow-sm" />
+                   <span className="text-white/90 text-sm font-bold">Bronz 2</span>
+                </div>
+              </div>
             </div>
+            
+            <div className="relative z-10 w-full">
+              <div className="flex items-center justify-between text-white font-bold text-xs mb-1.5">
+                <span>69.85%</span>
+                <div className="flex items-center gap-1">
+                  <div className="w-3.5 h-3.5 bg-orange-500 rounded shadow-sm" />
+                  <span>Bronz 3</span>
+                </div>
+              </div>
+              <div className="w-full h-1.5 bg-black/30 rounded-full overflow-hidden">
+                <div className="h-full bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]" style={{ width: '69.85%' }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Menu */}
+          <div className="flex flex-col gap-1 w-full">
+            {menuItems.map(item => {
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id as any)}
+                  className={`flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-[#151A25] text-[#00FFA3] shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-white/5' 
+                      : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
+                  }`}
+                >
+                  <div className={isActive ? 'text-[#00FFA3]' : 'text-zinc-500'}>
+                    {item.icon}
+                  </div>
+                  {item.label}
+                </button>
+              );
+            })}
+            
+            <div className="w-full h-px bg-white/5 my-2" />
+            
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm text-zinc-400 hover:bg-white/5 hover:text-white transition-all duration-200"
+            >
+              <LogOut className="w-5 h-5 text-zinc-500" />
+              Çıkış yap
+            </button>
           </div>
         </div>
-        
-        {/* Balance & Stats */}
-        <div className="flex-1 w-full grid grid-cols-2 md:grid-cols-4 gap-4 z-10 mt-4 md:mt-0 md:ml-4">
-          <div className="bg-[#0A0C10]/80 backdrop-blur-md rounded-xl p-4 border border-white/5 shadow-inner hover:border-[#00FFA3]/20 transition-all duration-300">
-            <div className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-1.5">Cüzdan</div>
-            <div className="text-[#00FFA3] text-lg md:text-xl font-black font-mono">₺{(siteUser.balance || 0).toLocaleString('tr-TR')}</div>
-          </div>
-          <div className="bg-[#0A0C10]/80 backdrop-blur-md rounded-xl p-4 border border-white/5 shadow-inner hover:border-[#00FFA3]/20 transition-all duration-300">
-            <div className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-1.5">Sadakat Puanı</div>
-            <div className="text-white text-lg md:text-xl font-black font-mono">{(siteUser as any).loyaltyPoints || '1,450'} <span className="text-xs text-zinc-500 font-bold">XP</span></div>
-          </div>
-          <div className="bg-[#0A0C10]/80 backdrop-blur-md rounded-xl p-4 border border-white/5 shadow-inner col-span-2 flex flex-col justify-center">
-            <div className="flex justify-between items-center text-xs font-bold mb-2.5">
-              <span className="text-zinc-400 uppercase tracking-wider text-[10px]">Sonraki Seviye: <span className="text-white">GÜMÜŞ 1</span></span>
-              <span className="text-[#00FFA3] font-black">65%</span>
-            </div>
-            <div className="w-full h-2 bg-black rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-[#00FFA3] to-emerald-400 shadow-[0_0_10px_#00FFA3] rounded-full" style={{ width: '65%' }}></div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-white/5 pb-px">
-        <button
-          onClick={() => setActiveTab('overview')}
-          className={`px-6 py-3 font-black text-sm uppercase tracking-wider transition-all border-b-2 ${
-            activeTab === 'overview' 
-              ? 'border-[#00FFA3] text-[#00FFA3] bg-[#00FFA3]/5' 
-              : 'border-transparent text-zinc-500 hover:text-white hover:bg-white/5'
-          }`}
-        >
-          Genel Bakış
-        </button>
-        <button
-          onClick={() => setActiveTab('settings')}
-          className={`px-6 py-3 font-black text-sm uppercase tracking-wider transition-all border-b-2 ${
-            activeTab === 'settings' 
-              ? 'border-[#00FFA3] text-[#00FFA3] bg-[#00FFA3]/5' 
-              : 'border-transparent text-zinc-500 hover:text-white hover:bg-white/5'
-          }`}
-        >
-          Ayarlar
-        </button>
-      </div>
-
-      {/* Tab Content */}
-      {activeTab === 'overview' ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in">
-          {/* Account Information Card */}
-          <div className="lg:col-span-2 bg-[#161822]/40 backdrop-blur-md rounded-2xl p-6 border border-white/5 shadow-2xl flex flex-col space-y-6">
-            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-              <User className="w-5 h-5 text-[#00FFA3]" />
-              <h3 className="text-white text-lg font-black uppercase tracking-wider">Hesap Bilgileri</h3>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-1">
-                <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Kullanıcı Adı</span>
-                <div className="bg-[#0A0C10]/50 rounded-xl px-4 py-3 border border-white/5 text-white font-bold text-sm">{siteUser.username}</div>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">E-Posta</span>
-                <div className="bg-[#0A0C10]/50 rounded-xl px-4 py-3 border border-white/5 text-white font-bold text-sm truncate">{siteUser.email || '—'}</div>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Telefon Numarası</span>
-                <div className="bg-[#0A0C10]/50 rounded-xl px-4 py-3 border border-white/5 text-white font-bold text-sm">{siteUser.phone || '—'}</div>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Kayıt Tarihi</span>
-                <div className="bg-[#0A0C10]/50 rounded-xl px-4 py-3 border border-white/5 text-white font-bold text-sm">
-                  {new Date(siteUser.createdAt || Date.now()).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+        {/* RIGHT CONTENT AREA */}
+        <div className="flex-1 flex flex-col min-w-0">
+          
+          {/* PROFILE TAB */}
+          {activeTab === 'profile' && (
+            <div className="animate-fade-in flex flex-col w-full space-y-8">
+              <h1 className="text-2xl font-black text-white tracking-tight">Profil</h1>
+              
+              {/* Avatar Upload */}
+              <div className="flex flex-col gap-2">
+                <label className="text-zinc-400 font-bold text-sm">Avatar</label>
+                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-4 flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-xl bg-black overflow-hidden border-2 border-zinc-800">
+                    <img src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <button className="bg-[#00FFA3] hover:bg-[#00E676] text-black font-black text-sm px-6 py-2.5 rounded-lg w-max transition-colors">
+                      Yükle
+                    </button>
+                    <span className="text-zinc-500 text-xs">Desteklenen dosyalar: Tüm yaygın görüntü formatları (PNG, JPG, GIF, WebP, vb.)</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Üyelik Rolü</span>
-                <div className="bg-[#0A0C10]/50 rounded-xl px-4 py-3 border border-white/5 text-emerald-400 font-bold text-sm uppercase tracking-wider">
-                  {siteUser.role || 'MEMBER'}
+              {/* Form Fields */}
+              <div className="flex flex-col gap-6 w-full">
+                <div className="flex flex-col gap-2">
+                  <label className="text-zinc-400 font-bold text-sm">Kullanıcı adınız</label>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="text" 
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#00FFA3]/50 transition-colors"
+                    />
+                    <button className="bg-[#1A212D] text-zinc-500 font-bold px-6 py-3.5 rounded-xl cursor-not-allowed">
+                      Kaydet
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-zinc-400 font-bold text-sm">E-posta adresi</label>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="email" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#00FFA3]/50 transition-colors"
+                    />
+                    <button className="bg-[#1A212D] text-zinc-500 font-bold px-6 py-3.5 rounded-xl cursor-not-allowed">
+                      Kaydet
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-zinc-400 font-bold text-sm">Telefon numarası</label>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3.5 flex items-center gap-3 focus-within:border-[#00FFA3]/50 transition-colors">
+                      <div className="flex items-center gap-2 cursor-pointer border-r border-zinc-700 pr-3">
+                        <img src="https://flagcdn.com/w20/th.png" alt="TH" className="w-5 h-auto rounded-sm" />
+                        <span className="text-white font-bold">+66</span>
+                        <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
+                      </div>
+                      <input 
+                        type="text" 
+                        placeholder="Telefon numaranızı yazın"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="flex-1 bg-transparent border-none outline-none text-white font-bold placeholder:text-zinc-600"
+                      />
+                    </div>
+                    <button className="bg-[#1A212D] text-zinc-500 font-bold px-6 py-3.5 rounded-xl cursor-not-allowed">
+                      Kaydet
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Hesap Durumu</span>
-                <div className="bg-[#0A0C10]/50 rounded-xl px-4 py-3 border border-white/5 text-[#00FFA3] font-bold text-sm flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#00FFA3] animate-pulse" />
-                  AKTİF
+              {/* Verification Section */}
+              <div className="pt-4">
+                <h2 className="text-xl font-black text-white mb-4">Doğrulama</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
+                    <div>
+                      <h4 className="text-white font-black text-lg mb-0.5">Seviye 1</h4>
+                      <p className="text-zinc-500 text-sm font-bold">Mevcut</p>
+                    </div>
+                    <Lock className="w-6 h-6 text-zinc-500" />
+                  </div>
+                  <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between opacity-70">
+                    <div>
+                      <h4 className="text-white font-black text-lg mb-0.5">Seviye 2</h4>
+                      <p className="text-zinc-500 text-sm font-bold">Kilitli</p>
+                    </div>
+                    <Lock className="w-6 h-6 text-zinc-500" />
+                  </div>
+                  <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between opacity-70">
+                    <div>
+                      <h4 className="text-white font-black text-lg mb-0.5">Seviye 3</h4>
+                      <p className="text-zinc-500 text-sm font-bold">Kilitli</p>
+                    </div>
+                    <Lock className="w-6 h-6 text-zinc-500" />
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Quick Actions & Security */}
-          <div className="bg-[#161822]/40 backdrop-blur-md rounded-2xl p-6 border border-white/5 shadow-2xl flex flex-col space-y-6">
-            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-              <Lock className="w-5 h-5 text-[#00FFA3]" />
-              <h3 className="text-white text-lg font-black uppercase tracking-wider">Güvenlik & İşlemler</h3>
-            </div>
-
-            <div className="space-y-4">
-              <button
-                onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                className="w-full bg-[#1475E1] hover:bg-[#1a85ff] text-white font-black py-4 px-6 rounded-xl text-sm transition-all shadow-lg shadow-[#1475E1]/20 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
-              >
-                <Wallet className="w-4 h-4" />
-                Cüzdana Bakiye Ekle
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black py-4 px-6 rounded-xl text-sm transition-all border border-red-500/20 hover:border-red-500/40 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
-              >
-                <LogOut className="w-4 h-4" />
-                Hesaptan Çıkış Yap
-              </button>
-
-              <div className="p-4 rounded-xl border border-white/5 bg-[#0A0C10]/40 flex flex-col space-y-3">
-                <h4 className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Hesap Doğrulaması</h4>
-                <p className="text-zinc-500 text-xs leading-relaxed">Hesabınızın güvenliği ve hızlı ödeme alabilmeniz için kimlik doğrulamanız tamamlanmıştır.</p>
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-black">
-                  <ShieldCheck className="w-4 h-4" />
-                  DOĞRULANMIŞ HESAP
+              {/* Statistics Section */}
+              <div className="pt-4">
+                <h2 className="text-xl font-black text-white mb-4">İstatistikler</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
+                    <div>
+                      <h4 className="text-white font-black text-lg mb-0.5">3036</h4>
+                      <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Oynanan oyunlar</p>
+                    </div>
+                    <div className="w-10 h-10 bg-amber-900/30 rounded-lg flex items-center justify-center -rotate-12">
+                      <Gamepad2 className="w-6 h-6 text-amber-500" />
+                    </div>
+                  </div>
+                  <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
+                    <div>
+                      <h4 className="text-white font-black text-lg mb-0.5">$6,130.71</h4>
+                      <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Toplam Ücret</p>
+                    </div>
+                    <div className="w-10 h-10 bg-emerald-900/30 rounded-full flex items-center justify-center border border-emerald-500/20">
+                      <Coins className="w-5 h-5 text-emerald-500" />
+                    </div>
+                  </div>
+                  <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
+                    <div>
+                      <h4 className="text-white font-black text-lg mb-0.5">$0.00</h4>
+                      <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Bugün Bahis Yapılan<br/>Tutar</p>
+                    </div>
+                    <div className="w-10 h-10 bg-yellow-900/30 rounded-full flex items-center justify-center border border-yellow-500/20">
+                      <Coins className="w-5 h-5 text-yellow-500" />
+                    </div>
+                  </div>
+                  <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
+                    <div>
+                      <h4 className="text-white font-black text-lg mb-0.5">-$318.98</h4>
+                      <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider flex items-center gap-1">Net Kazanç <Info className="w-3.5 h-3.5" /></p>
+                    </div>
+                    <div className="w-10 h-10 bg-yellow-900/30 rounded-full flex items-center justify-center border border-yellow-500/20">
+                      <Coins className="w-5 h-5 text-yellow-500" />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <form onSubmit={handleSaveSettings} className="bg-[#161822]/40 backdrop-blur-md rounded-2xl p-6 md:p-10 border border-white/5 shadow-2xl animate-fade-in max-w-3xl">
-          <div className="flex items-center gap-3 border-b border-white/5 pb-6 mb-8">
-            <User className="w-6 h-6 text-[#00FFA3]" />
-            <div>
-              <h3 className="text-white text-xl font-black uppercase tracking-wider">Profili Düzenle</h3>
-              <p className="text-zinc-500 text-xs mt-1 font-medium">Kişisel bilgilerinizi ve güvenlik ayarlarınızı buradan güncelleyebilirsiniz.</p>
-            </div>
-          </div>
 
-          {saveMessage && (
-            <div className={`p-4 rounded-xl flex items-start gap-3 mb-8 ${saveMessage.type === 'success' ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-red-500/10 border border-red-500/20'}`}>
-              <AlertCircle className={`w-5 h-5 shrink-0 ${saveMessage.type === 'success' ? 'text-emerald-400' : 'text-red-400'}`} />
-              <p className={`text-sm font-bold ${saveMessage.type === 'success' ? 'text-emerald-400' : 'text-red-400'}`}>{saveMessage.text}</p>
             </div>
           )}
 
-          <div className="space-y-8">
-            {/* İletişim Bilgileri */}
-            <div className="space-y-4">
-              <h4 className="text-zinc-400 text-xs font-black uppercase tracking-widest border-b border-white/5 pb-2">İletişim Bilgileri</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                    <Mail className="w-3 h-3" /> E-Posta Adresi
-                  </label>
-                  <input 
-                    type="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-[#0A0C10] border border-zinc-800 focus:border-[#00FFA3]/50 text-white font-bold text-sm rounded-xl px-4 py-3 outline-none transition-all"
-                    placeholder="ornek@mail.com"
-                  />
+          {/* INBOX TAB */}
+          {activeTab === 'inbox' && (
+            <div className="animate-fade-in flex flex-col w-full space-y-6">
+              <h1 className="text-2xl font-black text-white tracking-tight">Gelen Kutusu</h1>
+              
+              <div className="flex flex-col gap-2">
+                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-[#161B24] transition-colors">
+                  <div className="flex flex-col">
+                    <span className="text-white font-bold text-sm">Royalty Up Adjustment</span>
+                    <span className="text-zinc-500 text-xs font-medium">1 ay önce</span>
+                  </div>
+                  <div className="w-7 h-7 rounded-full bg-[#1A212D] flex items-center justify-center">
+                    <Plus className="w-4 h-4 text-[#00FFA3]" />
+                  </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                    <Phone className="w-3 h-3" /> Telefon Numarası
-                  </label>
-                  <input 
-                    type="tel" 
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-[#0A0C10] border border-zinc-800 focus:border-[#00FFA3]/50 text-white font-bold text-sm rounded-xl px-4 py-3 outline-none transition-all"
-                    placeholder="5XX XXX XX XX"
-                  />
+                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-[#161B24] transition-colors">
+                  <div className="flex flex-col">
+                    <span className="text-white font-bold text-sm">Bonus</span>
+                    <span className="text-zinc-500 text-xs font-medium">1 ay önce</span>
+                  </div>
+                  <div className="w-7 h-7 rounded-full bg-[#1A212D] flex items-center justify-center">
+                    <Plus className="w-4 h-4 text-[#00FFA3]" />
+                  </div>
+                </div>
+
+                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-[#161B24] transition-colors">
+                  <div className="flex flex-col">
+                    <span className="text-white font-bold text-sm">Bonus</span>
+                    <span className="text-zinc-500 text-xs font-medium">2 ay önce</span>
+                  </div>
+                  <div className="w-7 h-7 rounded-full bg-[#1A212D] flex items-center justify-center">
+                    <Plus className="w-4 h-4 text-[#00FFA3]" />
+                  </div>
                 </div>
               </div>
             </div>
+          )}
 
-            {/* Güvenlik (Şifre) */}
-            <div className="space-y-4">
-              <h4 className="text-zinc-400 text-xs font-black uppercase tracking-widest border-b border-white/5 pb-2">Güvenlik (Şifre Değiştir)</h4>
-              <p className="text-zinc-600 text-xs font-medium italic mb-2">* Şifrenizi değiştirmek istemiyorsanız bu alanları boş bırakın.</p>
+          {/* SETTINGS TAB */}
+          {activeTab === 'settings' && (
+            <div className="animate-fade-in flex flex-col w-full space-y-8">
+              <h1 className="text-2xl font-black text-white tracking-tight">Ayarlar</h1>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                    <Key className="w-3 h-3 text-red-400" /> Mevcut Şifre
-                  </label>
-                  <input 
-                    type="password" 
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full bg-[#0A0C10] border border-zinc-800 focus:border-red-500/50 text-white font-bold text-sm rounded-xl px-4 py-3 outline-none transition-all"
-                    placeholder="Mevcut şifreniz"
-                  />
+              <div className="flex flex-col gap-1 bg-[#12161E] border border-[#202532] rounded-xl overflow-hidden">
+                <div className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setAmbientMode(!ambientMode)}>
+                  <span className="text-white font-bold text-sm">Casino oyunlarında amiyans modunu etkinleştirin</span>
+                  <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${ambientMode ? 'bg-[#00FFA3]' : 'bg-[#2A3143]'}`}>
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${ambientMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                  </div>
                 </div>
+                <div className="w-full h-px bg-[#202532]" />
+                <div className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setNewsletters(!newsletters)}>
+                  <span className="text-white font-bold text-sm">Haberler ve Teklifler Al</span>
+                  <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${newsletters ? 'bg-[#00FFA3]' : 'bg-[#2A3143]'}`}>
+                    <div className={`w-4 h-4 bg-zinc-400 rounded-full transition-transform ${newsletters ? 'translate-x-5 bg-white' : 'translate-x-0'}`} />
+                  </div>
+                </div>
+              </div>
 
-                <div className="space-y-2">
-                  <label className="text-zinc-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                    <Key className="w-3 h-3 text-emerald-400" /> Yeni Şifre
-                  </label>
-                  <input 
-                    type="password" 
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full bg-[#0A0C10] border border-zinc-800 focus:border-emerald-500/50 text-white font-bold text-sm rounded-xl px-4 py-3 outline-none transition-all"
-                    placeholder="Yeni şifreniz (min 6 karakter)"
-                  />
+              <div className="flex flex-col gap-4">
+                <h2 className="text-xl font-black text-white">Diğerleri</h2>
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex-1 flex flex-col gap-2">
+                    <label className="text-zinc-500 font-bold text-xs uppercase">Dil</label>
+                    <div className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#00FFA3]/30 transition-colors">
+                      <div className="flex items-center gap-2">
+                        <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-5 h-auto rounded-sm" />
+                        <span className="text-white font-bold text-sm">Turkish</span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-zinc-500" />
+                    </div>
+                  </div>
+                  <div className="flex-1 flex flex-col gap-2">
+                    <label className="text-zinc-500 font-bold text-xs uppercase">Sohbet Geçmişi Uzunluğu</label>
+                    <div className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#00FFA3]/30 transition-colors">
+                      <span className="text-white font-bold text-sm">50</span>
+                      <ChevronDown className="w-4 h-4 text-zinc-500" />
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#1F170D] border border-orange-500/20 rounded-xl p-4 flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-orange-500 text-black flex items-center justify-center font-black text-xs shrink-0">!</div>
+                  <span className="text-orange-500 font-bold text-xs">Daha uzun sohbet geçmişi çökme performansını önemli ölçüde etkiler</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <h2 className="text-xl font-black text-white">2FA</h2>
+                <button className="bg-[#00FFA3] hover:bg-[#00E676] text-black font-black text-sm px-6 py-3 rounded-xl w-max transition-colors">
+                  2FA Kimlik Doğrulayıcıyı Etkinleştir
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <h2 className="text-xl font-black text-white">Kendini Dışlama</h2>
+                <p className="text-zinc-500 text-sm font-medium leading-relaxed max-w-3xl">
+                  Bu özelliği, belirlediğiniz zaman dilimi içerisinde para yatırmanızı ve kumar oynamanızı engellemek ama aynı zamanda para çekme ve sohbet etme gibi diğer özellikleri kullanmaya devam etmek için kullanabilirsiniz.
+                </p>
+                <div className="bg-[#1F170D] border border-orange-500/20 rounded-xl p-4 flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-orange-500 text-black flex items-center justify-center font-black text-xs shrink-0 mt-0.5">!</div>
+                  <span className="text-orange-500 font-bold text-sm">Lütfen daha sonra fikrinizi değiştirseniz bile bu talebin HİÇBİR NEDENLE KALDIRILMAYACAĞINI unutmayın.</span>
+                </div>
+                <div className="flex items-center gap-3 mt-2">
+                  <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-6 py-2.5 rounded-lg text-sm transition-colors">1 gün</button>
+                  <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-6 py-2.5 rounded-lg text-sm transition-colors">5 gün</button>
+                  <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-6 py-2.5 rounded-lg text-sm transition-colors">8 gün</button>
                 </div>
               </div>
             </div>
+          )}
 
-            <div className="pt-4 flex justify-end">
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="bg-[#00FFA3] hover:bg-[#00E690] text-black font-black py-3 px-8 rounded-xl text-sm transition-all shadow-[0_0_20px_rgba(0,255,163,0.3)] hover:shadow-[0_0_30px_rgba(0,255,163,0.5)] hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Save className="w-4 h-4" />
-                {isSaving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
-              </button>
+          {/* TRANSACTIONS TAB */}
+          {activeTab === 'transactions' && (
+            <div className="animate-fade-in flex flex-col w-full space-y-6">
+              <h1 className="text-2xl font-black text-white tracking-tight">İşlemler</h1>
+              
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-[#202532] pb-4">
+                <div className="flex flex-wrap items-center gap-6">
+                  {['deposit', 'withdraw', 'tips', 'affiliate'].map(tab => (
+                    <button 
+                      key={tab}
+                      onClick={() => setTxTab(tab as any)}
+                      className={`text-sm font-bold pb-4 -mb-[17px] transition-colors border-b-2 ${
+                        txTab === tab 
+                          ? 'text-[#00FFA3] border-[#00FFA3]' 
+                          : 'text-zinc-500 border-transparent hover:text-zinc-300'
+                      }`}
+                    >
+                      {tab === 'deposit' && 'Mevduat'}
+                      {tab === 'withdraw' && 'Para Çekme'}
+                      {tab === 'tips' && 'İpuçları'}
+                      {tab === 'affiliate' && 'Affiliate Claims'}
+                    </button>
+                  ))}
+                </div>
+                <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-6 py-2 rounded-lg text-sm transition-colors">
+                  İhracat
+                </button>
+              </div>
+
+              {txTab === 'deposit' && (
+                <div className="w-full overflow-x-auto">
+                  <table className="w-full text-left border-collapse min-w-[800px]">
+                    <thead>
+                      <tr className="border-b border-[#202532]">
+                        <th className="py-4 px-4 text-zinc-500 text-[10px] font-black tracking-widest uppercase">KRİPTO DEĞERİ</th>
+                        <th className="py-4 px-4 text-zinc-500 text-[10px] font-black tracking-widest uppercase">FİAT DEĞERİ</th>
+                        <th className="py-4 px-4 text-zinc-500 text-[10px] font-black tracking-widest uppercase">TARİH</th>
+                        <th className="py-4 px-4 text-zinc-500 text-[10px] font-black tracking-widest uppercase">DURUM</th>
+                        <th className="py-4 px-4 text-zinc-500 text-[10px] font-black tracking-widest uppercase text-right">İŞLEM</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { crypto: '214.4', fiat: '214.35', date: '10.05.2026, 13:14', icon: 'T', color: 'bg-emerald-500' },
+                        { crypto: '285.5', fiat: '100.24', date: '09.05.2026, 16:44', icon: 'TRX', color: 'bg-red-500' },
+                        { crypto: '149.4', fiat: '149.37', date: '03.05.2026, 14:23', icon: 'T', color: 'bg-emerald-500' },
+                        { crypto: '24.4', fiat: '24.40', date: '02.05.2026, 20:35', icon: 'T', color: 'bg-emerald-500' },
+                        { crypto: '99.99', fiat: '99.94', date: '30.04.2026, 20:31', icon: 'T', color: 'bg-emerald-500' },
+                        { crypto: '99.99', fiat: '99.98', date: '28.04.2026, 14:31', icon: 'T', color: 'bg-emerald-500' },
+                        { crypto: '9.99', fiat: '9.99', date: '27.04.2026, 18:01', icon: 'T', color: 'bg-emerald-500' },
+                      ].map((tx, idx) => (
+                        <tr key={idx} className="border-b border-[#202532] hover:bg-white/[0.02] transition-colors">
+                          <td className="py-4 px-4">
+                            <div className="flex items-center gap-2">
+                              <div className={`w-5 h-5 rounded-full ${tx.color} flex items-center justify-center text-white text-[10px] font-black`}>
+                                {tx.icon}
+                              </div>
+                              <span className="text-white font-bold text-sm">{tx.crypto}</span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className="bg-emerald-500/10 text-emerald-500 text-xs font-bold px-2 py-0.5 rounded border border-emerald-500/20">
+                              $ {tx.fiat}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className="text-zinc-300 font-medium text-sm">{tx.date}</span>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className="bg-[#00FFA3]/10 text-[#00FFA3] border border-[#00FFA3]/20 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md">
+                              COMPLETE
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-4 py-1.5 rounded-lg text-xs transition-colors">
+                              Ayrıntılar
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="flex items-center justify-center gap-2 mt-6">
+                    <button className="w-8 h-8 rounded-lg bg-[#151A25] text-[#00FFA3] font-bold text-sm border border-[#00FFA3]/20 flex items-center justify-center shadow">1</button>
+                    <button className="w-8 h-8 rounded-lg bg-transparent text-zinc-500 hover:text-white font-bold text-sm flex items-center justify-center transition-colors">2</button>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        </form>
-      )}
+          )}
+
+          {/* OTHER TABS PLACEHOLDERS */}
+          {['affiliates', 'verification', 'privacy', 'links'].includes(activeTab) && (
+            <div className="animate-fade-in flex flex-col w-full h-[50vh] items-center justify-center space-y-4 opacity-50">
+               <AlertCircle className="w-12 h-12 text-zinc-600" />
+               <h2 className="text-xl font-bold text-zinc-500">Bu bölüm yapım aşamasındadır</h2>
+            </div>
+          )}
+
+        </div>
+      </div>
     </div>
   );
 };
