@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, User, X, LogIn, UserPlus, Shield, Mail, Phone, Clock, Loader2, Club } from 'lucide-react';
+import { Lock, User, X, LogIn, UserPlus, Shield, Mail, Phone, Clock, Loader2, Club, Eye, EyeOff } from 'lucide-react';
 import { SiteUser, EditorAccount } from '../types';
 import { supabase } from '../utils/supabase';
 
@@ -51,6 +51,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
     const [gError, setGError] = useState('');
 
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const getEditors = (): EditorAccount[] => {
         try { return JSON.parse(localStorage.getItem('site_editors') || '[]'); } catch { return []; }
@@ -261,12 +262,16 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
 
                                     <div className="relative mt-2">
                                         <input
-                                            type="password" value={mPassword} onChange={e => setMPassword(e.target.value)} required
+                                            type={showPassword ? "text" : "password"} value={mPassword} onChange={e => setMPassword(e.target.value)} required
                                             className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
                                             placeholder="Şifrenizi Girin"
                                         />
-                                        <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                         </button>
                                     </div>
                                     
@@ -341,10 +346,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         </div>
                         <div className="relative mt-2">
                             <input
-                                type="password" value={aPassword} onChange={e => setAPassword(e.target.value)} required
+                                type={showPassword ? "text" : "password"} value={aPassword} onChange={e => setAPassword(e.target.value)} required
                                 className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
                                 placeholder="Şifrenizi Girin"
                             />
+                            <button 
+                                type="button" 
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                            >
+                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </button>
                         </div>
                         {aError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded border border-red-500/20">{aError}</p>}
                         <button type="submit"
@@ -365,10 +377,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         </div>
                         <div className="relative mt-2">
                             <input
-                                type="password" value={gPassword} onChange={e => setGPassword(e.target.value)} required
+                                type={showPassword ? "text" : "password"} value={gPassword} onChange={e => setGPassword(e.target.value)} required
                                 className="w-full bg-black border border-zinc-800 rounded py-3.5 px-4 text-white text-[15px] focus:border-[#00FFA3] focus:ring-1 focus:ring-[#00FFA3] transition-all outline-none placeholder-zinc-500"
                                 placeholder="Şifrenizi Girin"
                             />
+                            <button 
+                                type="button" 
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                            >
+                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </button>
                         </div>
                         {gError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded border border-red-500/20">{gError}</p>}
                         <button type="submit"
