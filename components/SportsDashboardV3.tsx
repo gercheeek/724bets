@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Trophy, Globe, Target, Circle, Activity, Dribbble, MessageCircle, BarChart2, Info,
   ChevronDown, ChevronUp, Search, PlayCircle, Shield
@@ -16,6 +16,31 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
     'basketbol': true,
     'tenis': true
   });
+
+  const [matches, setMatches] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch('http://localhost:3000/api/maclar');
+        if (!res.ok) throw new Error('Sunucuya bağlanılamadı. Lütfen Node.js sunucusunun (server.js) çalıştığından emin olun.');
+        const json = await res.json();
+        if (json.success) {
+          setMatches(json.data);
+        } else {
+          throw new Error(json.message || 'API Hatası');
+        }
+      } catch (err: any) {
+        setError(err.message || 'Bilinmeyen bir hata oluştu.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMatches();
+  }, []);
 
   const toggleSport = (sport: string) => {
     setOpenSports(prev => ({ ...prev, [sport]: !prev[sport] }));
@@ -38,21 +63,9 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
     { name: 'NBA', icon: <Dribbble className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
   ];
 
-  const footballMatches = [
-    { id: 1, time: "47'", home: 'Chelyabinsk', away: 'SKA Khabarovsk', odds: ['2.38', '2.47', '4.1', '+194'], selected: 0, scoreHome: 1, scoreAway: 1 },
-    { id: 2, time: 'İlk Yarı', home: 'Ural', away: 'Torpedo Moskova', odds: ['2.39', '2.17', '5.6', '+241'], selected: null, scoreHome: 0, scoreAway: 0 },
-    { id: 3, time: "4'", home: 'Wolfsberger AC', away: 'Hradec Kralove', odds: ['2.39', '3.7', '2.63', '+265'], selected: null, scoreHome: 0, scoreAway: 0 },
-  ];
-
-  const basketballMatches = [
-    { id: 4, time: "10' 00\"", home: 'Belçika U20', away: 'Hırvatistan U20', odds: ['4.5', '1.16', '+223'], selected: null, scoreHome: 40, scoreAway: 45 },
-    { id: 5, time: "09' 29\"", home: 'Sırbistan U20', away: 'Letonya U20', odds: ['1.05', '6.6', '+150'], selected: null, scoreHome: 40, scoreAway: 37 },
-    { id: 6, time: "12' 00\"", home: 'Shanghai Fives', away: 'Kunming Monks', odds: ['1.46', '2.52', '+10'], selected: null, scoreHome: 76, scoreAway: 73 },
-  ];
-
-  const tennisMatches = [
-    { id: 7, time: '', home: 'Raphael Collignon', away: 'Timofey Skatov', odds: ['1.05', '10.9', '+204'], selected: null, scoreHome: 1, scoreAway: 1 },
-  ];
+  const footballMatches = matches.filter(m => m.sport === 'futbol');
+  const basketballMatches = matches.filter(m => m.sport === 'basketbol');
+  const tennisMatches = matches.filter(m => m.sport === 'tenis');
 
   return (
     <div className="flex w-full h-full bg-[#09090b] text-zinc-300 font-sans overflow-hidden">
@@ -133,18 +146,36 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
 
         <div className="p-4 flex flex-col gap-4">
           
-          {/* Football Group */}
-          <div className="bg-[#12161E] rounded-xl overflow-hidden border border-[#202532]">
-            <div 
-              className="flex items-center justify-between px-4 py-3 bg-[#1A1D24] cursor-pointer hover:bg-[#202532] transition-colors"
-              onClick={() => toggleSport('futbol')}
-            >
-              <div className="flex items-center gap-2">
-                {openSports['futbol'] ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
-                <span className="text-white text-sm font-bold tracking-wide">Futbol <span className="text-zinc-500 ml-1 font-normal">(12)</span></span>
-              </div>
-              <Activity className="w-4 h-4 text-zinc-400" />
+          {loading && (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div className="w-8 h-8 border-4 border-[#00FFA3] border-t-transparent rounded-full animate-spin"></div>
+              <div className="text-[#00FFA3] font-bold text-sm tracking-widest animate-pulse">BÜLTEN YÜKLENİYOR...</div>
             </div>
+          )}
+
+          {error && (
+            <div className="flex flex-col items-center justify-center py-20 gap-3 text-center px-4 bg-[#12161E] rounded-xl border border-red-500/20">
+              <div className="text-red-400 font-bold">⚠️ BAĞLANTI HATASI</div>
+              <div className="text-zinc-400 text-xs">{error}</div>
+              <button onClick={() => window.location.reload()} className="mt-2 px-4 py-1.5 bg-[#1A1D24] rounded-md text-xs text-[#00FFA3] border border-[#00FFA3]/30 hover:bg-[#00FFA3]/10 transition-colors">Tekrar Dene</button>
+            </div>
+          )}
+
+          {!loading && !error && (
+            <>
+              {/* Football Group */}
+              {footballMatches.length > 0 && (
+                <div className="bg-[#12161E] rounded-xl overflow-hidden border border-[#202532]">
+                  <div 
+                    className="flex items-center justify-between px-4 py-3 bg-[#1A1D24] cursor-pointer hover:bg-[#202532] transition-colors"
+                    onClick={() => toggleSport('futbol')}
+                  >
+                    <div className="flex items-center gap-2">
+                      {openSports['futbol'] ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
+                      <span className="text-white text-sm font-bold tracking-wide">Futbol <span className="text-zinc-500 ml-1 font-normal">({footballMatches.length})</span></span>
+                    </div>
+                    <Activity className="w-4 h-4 text-zinc-400" />
+                  </div>
 
             {openSports['futbol'] && (
               <div className="flex flex-col">
@@ -196,22 +227,23 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                     </div>
                   </div>
                 ))}
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* Basketball Group */}
-          <div className="bg-[#12161E] rounded-xl overflow-hidden border border-[#202532]">
-            <div 
-              className="flex items-center justify-between px-4 py-3 bg-[#1A1D24] cursor-pointer hover:bg-[#202532] transition-colors"
-              onClick={() => toggleSport('basketbol')}
-            >
-              <div className="flex items-center gap-2">
-                {openSports['basketbol'] ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
-                <span className="text-white text-sm font-bold tracking-wide">Basketbol <span className="text-zinc-500 ml-1 font-normal">(7)</span></span>
+          {basketballMatches.length > 0 && (
+            <div className="bg-[#12161E] rounded-xl overflow-hidden border border-[#202532]">
+              <div 
+                className="flex items-center justify-between px-4 py-3 bg-[#1A1D24] cursor-pointer hover:bg-[#202532] transition-colors"
+                onClick={() => toggleSport('basketbol')}
+              >
+                <div className="flex items-center gap-2">
+                  {openSports['basketbol'] ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
+                  <span className="text-white text-sm font-bold tracking-wide">Basketbol <span className="text-zinc-500 ml-1 font-normal">({basketballMatches.length})</span></span>
+                </div>
+                <Dribbble className="w-4 h-4 text-orange-500" />
               </div>
-              <Dribbble className="w-4 h-4 text-orange-500" />
-            </div>
 
             {openSports['basketbol'] && (
               <div className="flex flex-col">
@@ -262,22 +294,23 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                     </div>
                   </div>
                 ))}
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* Tennis Group */}
-          <div className="bg-[#12161E] rounded-xl overflow-hidden border border-[#202532] mb-10">
-            <div 
-              className="flex items-center justify-between px-4 py-3 bg-[#1A1D24] cursor-pointer hover:bg-[#202532] transition-colors"
-              onClick={() => toggleSport('tenis')}
-            >
-              <div className="flex items-center gap-2">
-                {openSports['tenis'] ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
-                <span className="text-white text-sm font-bold tracking-wide">Tenis <span className="text-zinc-500 ml-1 font-normal">(42)</span></span>
+          {tennisMatches.length > 0 && (
+            <div className="bg-[#12161E] rounded-xl overflow-hidden border border-[#202532] mb-10">
+              <div 
+                className="flex items-center justify-between px-4 py-3 bg-[#1A1D24] cursor-pointer hover:bg-[#202532] transition-colors"
+                onClick={() => toggleSport('tenis')}
+              >
+                <div className="flex items-center gap-2">
+                  {openSports['tenis'] ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
+                  <span className="text-white text-sm font-bold tracking-wide">Tenis <span className="text-zinc-500 ml-1 font-normal">({tennisMatches.length})</span></span>
+                </div>
+                <Circle className="w-4 h-4 text-yellow-400 fill-yellow-400" />
               </div>
-              <Circle className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-            </div>
 
             {openSports['tenis'] && (
               <div className="flex flex-col">
@@ -330,6 +363,9 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
               </div>
             )}
           </div>
+          )}
+            </>
+          )}
 
         </div>
       </div>
