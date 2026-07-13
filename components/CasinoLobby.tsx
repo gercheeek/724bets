@@ -61,13 +61,13 @@ const getDemoUrl = (game: any): string | null => {
 
 const getGameColor = (name: string) => {
   const n = name.toLowerCase();
-  if (n.includes('sweet') || n.includes('sugar') || n.includes('candy') || n.includes('fruit')) return 'linear-gradient(to bottom, #FF007A, #B30055)';
-  if (n.includes('zeus') || n.includes('olympus') || n.includes('thor') || n.includes('gods') || n.includes('kraken')) return 'linear-gradient(to bottom, #0044FF, #002299)';
-  if (n.includes('bass') || n.includes('splash') || n.includes('fisherman') || n.includes('catch')) return 'linear-gradient(to bottom, #00B633, #007A22)';
-  if (n.includes('party') || n.includes('fiesta') || n.includes('magic')) return 'linear-gradient(to bottom, #9D00FF, #550099)';
-  if (n.includes('gold') || n.includes('dog') || n.includes('rhino') || n.includes('buffalo') || n.includes('lion')) return 'linear-gradient(to bottom, #FF6B00, #B34A00)';
-  if (n.includes('gem') || n.includes('diamond') || n.includes('crystal')) return 'linear-gradient(to bottom, #00E5FF, #008899)';
-  return 'linear-gradient(to bottom, #1E88E5, #0D47A1)'; // Default vibrant blue
+  if (n.includes('sweet') || n.includes('sugar') || n.includes('candy') || n.includes('fruit')) return '#E91E63'; // Pink
+  if (n.includes('zeus') || n.includes('olympus') || n.includes('thor') || n.includes('gods') || n.includes('kraken')) return '#2962FF'; // Blue
+  if (n.includes('bass') || n.includes('splash') || n.includes('fisherman') || n.includes('catch')) return '#00C853'; // Green
+  if (n.includes('party') || n.includes('fiesta') || n.includes('magic')) return '#AA00FF'; // Purple
+  if (n.includes('gold') || n.includes('dog') || n.includes('rhino') || n.includes('buffalo') || n.includes('lion')) return '#FF6D00'; // Orange
+  if (n.includes('gem') || n.includes('diamond') || n.includes('crystal')) return '#00B8D4'; // Cyan
+  return '#1565C0'; // Default Blue
 };
 
 const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick }) => {
@@ -82,43 +82,34 @@ const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick 
         onClick={onClick}
         style={{ aspectRatio: '3/4', backgroundColor: '#111' }}
       >
-        {/* Drops & Wins Badge for Pragmatic Games */}
-        {game.provider === 'Pragmatic Play' && (
-          <div className="absolute -top-1 -left-1 bg-[#141414] rounded-full flex flex-col items-center justify-center shadow-[2px_2px_10px_rgba(0,0,0,0.8)] z-40 border border-white/10" style={{ width: '42px', height: '42px' }}>
-            <Crown size={12} className="text-[#f0b90b] mb-0.5" />
-            <span className="text-[5.5px] font-black text-white uppercase text-center leading-[1.1]">Drops<br/>& Wins</span>
-          </div>
-        )}
-
-        {/* Top Image Section */}
-        <div className="relative w-full h-[65%] overflow-hidden bg-[#1A1D29]">
-          <img 
-            src={game.img || game.image} 
-            alt={game.name} 
-            className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" 
-          />
-          {/* Play Overlay */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
-            <div className="w-12 h-12 bg-[#f0b90b] rounded-full flex items-center justify-center text-black shadow-[0_0_20px_rgba(240,185,11,0.6)] transform scale-75 group-hover:scale-100 transition-all duration-300">
-              <Play fill="currentColor" size={20} className="ml-1" />
-            </div>
-          </div>
-        </div>
+        {/* Full Image */}
+        <img 
+          src={game.img || game.image} 
+          alt={game.name} 
+          className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110 z-10" 
+        />
         
-        {/* Bottom Color Block */}
+        {/* Gradient Overlay for Text */}
         <div 
-          className="relative w-full h-[35%] flex flex-col items-center justify-center p-2 z-20"
-          style={{ background: cardColor }}
+          className="absolute bottom-0 left-0 w-full h-[60%] flex flex-col items-center justify-end p-2 pb-3 z-20"
+          style={{ background: `linear-gradient(to top, ${cardColor} 0%, ${cardColor}DD 40%, transparent 100%)` }}
         >
           <h3 
-            className="text-white text-[12px] sm:text-[13px] font-black uppercase tracking-tight leading-[1.1] text-center drop-shadow-md line-clamp-2"
+            className="text-white text-[12px] sm:text-[14px] font-black uppercase tracking-tight leading-[1.1] text-center drop-shadow-md line-clamp-2"
             style={{ fontFamily: "'Inter', sans-serif" }}
           >
             {game.name || 'Slot Oyunu'}
           </h3>
-          <span className="text-white/90 text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.1em] mt-1 drop-shadow-sm">
+          <span className="text-white/90 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] mt-1 drop-shadow-sm">
             {game.provider || 'Pragmatic Play'}
           </span>
+        </div>
+
+        {/* Play Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
+          <div className="w-12 h-12 bg-[#f0b90b] rounded-full flex items-center justify-center text-black shadow-[0_0_20px_rgba(240,185,11,0.6)] transform scale-75 group-hover:scale-100 transition-all duration-300">
+            <Play fill="currentColor" size={20} className="ml-1" />
+          </div>
         </div>
       </div>
 
