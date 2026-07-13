@@ -25,8 +25,11 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
     const fetchMatches = async () => {
       try {
         setLoading(true);
-        const res = await fetch('http://localhost:3000/api/maclar');
-        if (!res.ok) throw new Error('Sunucuya bağlanılamadı. Lütfen Node.js sunucusunun (server.js) çalıştığından emin olun.');
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const apiUrl = isLocal ? 'http://localhost:3000/api/maclar' : '/api/maclar';
+        
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error('Sunucuya bağlanılamadı. Lütfen sunucunun (server.js) çalıştığından emin olun.');
         const json = await res.json();
         if (json.success) {
           setMatches(json.data);
