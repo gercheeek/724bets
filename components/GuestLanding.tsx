@@ -57,7 +57,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         // MEMBER VIEW: Promo Cards + VIP Dashboard
         <>
           {/* 3 Top Promo Cards (Desktop Only) */}
-          <div className="w-full px-4 pt-6 pb-2 hidden md:block">
+          <div className="w-full px-4 pt-0 -mt-4 pb-2 hidden md:block">
             <div className="grid grid-cols-3 gap-4">
               {promoCards.map((card, idx) => (
                 <div key={idx} className="relative overflow-hidden rounded-xl bg-[#12161E] border border-[#202532] hover:border-white/10 h-[140px] flex p-6 items-center shadow-2xl group cursor-pointer transition-all duration-300">
