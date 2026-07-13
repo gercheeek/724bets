@@ -22,97 +22,57 @@ export const handler = async (event, context) => {
   }
 
   try {
-    // Simulated raw complex data from provider:
-    const simulatedRawData = [
-      {
-        fixture_id: "FX_98213",
-        sport_type: "soccer",
-        league_name: "Russian Division 2",
-        participants: { team_a: "Chelyabinsk", team_b: "SKA Khabarovsk" },
-        clock: { status: "live", match_time: "47'" },
-        score_data: { home_goals: 1, away_goals: 1 },
-        markets: { 
-          total_available: 72,
-          main_1x2: { home: "2.38", draw: "2.47", away: "4.1" },
-          extra_markets_count: 194
-        }
-      },
-      {
-        fixture_id: "FX_98214",
-        sport_type: "soccer",
-        league_name: "Russian Cup",
-        participants: { team_a: "Ural", team_b: "Torpedo Moskova" },
-        clock: { status: "halftime", match_time: "İlk Yarı" },
-        score_data: { home_goals: 0, away_goals: 0 },
-        markets: { 
-          total_available: 72,
-          main_1x2: { home: "2.39", draw: "2.17", away: "5.6" },
-          extra_markets_count: 241
-        }
-      },
-      {
-        fixture_id: "FX_98215",
-        sport_type: "soccer",
-        league_name: "Club Friendlies",
-        participants: { team_a: "Wolfsberger AC", team_b: "Hradec Kralove" },
-        clock: { status: "live", match_time: "4'" },
-        score_data: { home_goals: 0, away_goals: 0 },
-        markets: { 
-          total_available: 72,
-          main_1x2: { home: "2.39", draw: "3.7", away: "2.63" },
-          extra_markets_count: 265
-        }
-      },
-      {
-        fixture_id: "FX_BB_101",
-        sport_type: "basketball",
-        league_name: "U20 Eurobasket",
-        participants: { team_a: "Belçika U20", team_b: "Hırvatistan U20" },
-        clock: { status: "live", match_time: "10' 00\"" },
-        score_data: { home_goals: 40, away_goals: 45 },
-        markets: { 
-          total_available: 72,
-          main_1x2: { home: "4.5", draw: null, away: "1.16" },
-          extra_markets_count: 223
-        }
-      },
-      {
-        fixture_id: "FX_TN_505",
-        sport_type: "tennis",
-        league_name: "ATP Challenger",
-        participants: { team_a: "Raphael Collignon", team_b: "Timofey Skatov" },
-        clock: { status: "not_started", match_time: "" },
-        score_data: { home_goals: 1, away_goals: 1 },
-        markets: { 
-          total_available: 72,
-          main_1x2: { home: "1.05", draw: null, away: "10.9" },
-          extra_markets_count: 204
-        }
+    const SUPABASE_URL = "https://eaxtuvjcanakaqetuqlc.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_nzbN9-CrSawHUxEZNYZBzg_WOlgQ9X0";
+    
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/live_matches?select=*`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
       }
-    ];
+    });
+
+    if (!res.ok) {
+       throw new Error("Supabase API hatası: " + res.statusText);
+    }
+
+    const liveMatches = await res.json();
 
     // Data cleaning & mapping
-    const cleanedData = simulatedRawData.map(item => {
-      let mappedSport = 'futbol';
-      if (item.sport_type === 'basketball') mappedSport = 'basketbol';
-      if (item.sport_type === 'tennis') mappedSport = 'tenis';
-
-      const oddsArray = [];
-      if (item.markets.main_1x2.home) oddsArray.push(item.markets.main_1x2.home);
-      if (item.markets.main_1x2.draw) oddsArray.push(item.markets.main_1x2.draw);
-      if (item.markets.main_1x2.away) oddsArray.push(item.markets.main_1x2.away);
-      oddsArray.push(`+${item.markets.extra_markets_count}`);
+    const cleanedData = liveMatches.map(item => {
+      let scoreHome = 0;
+      let scoreAway = 0;
+      let displayTime = item.match_time || item.status || "Canlı";
+      
+      // Parse score and exact time from status: "Canlı: 0-0 (61)"
+      if (item.status && item.status.includes('Canlı:')) {
+         const scoreMatch = item.status.match(/Canlı: (\d+)-(\d+)/);
+         if (scoreMatch) {
+           scoreHome = parseInt(scoreMatch[1], 10);
+           scoreAway = parseInt(scoreMatch[2], 10);
+         }
+         const timeMatch = item.status.match(/\(([^)]+)\)/);
+         if (timeMatch) {
+           displayTime = timeMatch[1] + "'";
+         }
+      }
 
       return {
-        id: item.fixture_id,
-        sport: mappedSport,
-        time: item.clock.match_time,
-        home: item.participants.team_a,
-        away: item.participants.team_b,
-        scoreHome: item.score_data.home_goals,
-        scoreAway: item.score_data.away_goals,
-        odds: oddsArray,
-        marketsAvailable: item.markets.total_available
+        id: item.id || Math.random().toString(),
+        sport: 'futbol', 
+        time: displayTime,
+        home: item.home_team || "Ev Sahibi",
+        away: item.away_team || "Deplasman",
+        scoreHome: scoreHome,
+        scoreAway: scoreAway,
+        odds: [
+          item.home_odd ? String(item.home_odd) : "-",
+          item.draw_odd ? String(item.draw_odd) : "-",
+          item.away_odd ? String(item.away_odd) : "-",
+          "+72"
+        ],
+        marketsAvailable: 72
       };
     });
 
