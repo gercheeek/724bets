@@ -32,6 +32,36 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
   // Transactions States
   const [txTab, setTxTab] = useState<'deposit'|'withdraw'|'tips'|'affiliate'>('deposit');
 
+  // Inbox States
+  const [expandedMsg, setExpandedMsg] = useState<number | null>(null);
+
+  const defaultMessages = [
+    {
+      id: 1,
+      title: "724BETS'e Hoş Geldiniz! 🎉",
+      date: "Az önce",
+      content: "Aramıza katıldığınız için çok mutluyuz. Dünyanın en iyi oranları ve en popüler casino oyunlarıyla kazanmaya hazır olun! Herhangi bir sorunuz olursa Canlı Destek ekibimiz 7/24 hizmetinizdedir."
+    },
+    {
+      id: 2,
+      title: "🎁 İlk Yatırıma Özel %250 Bonus!",
+      date: "Az önce",
+      content: "Hemen cüzdanınıza gidin ve ilk yatırımınızı yapın. İlk yatırıma özel tam %250 bonus hesabınıza anında tanımlanacaktır! Kampanyalar sayfasından detaylara göz atmayı unutmayın."
+    },
+    {
+      id: 3,
+      title: "⚠️ Taklit Sitelere Dikkat Edin",
+      date: "Az önce",
+      content: "Değerli üyemiz, güvenliğiniz bizim için her şeyden önemli. Resmi sitemiz sadece 724bets.net ve 724bahis.net'tir. Bizi taklit eden dolandırıcı sitelere (phishing) karşı dikkatli olun ve şifrenizi asla başka yerlerde paylaşmayın."
+    },
+    {
+      id: 4,
+      title: "📱 Sosyal Medya ve Telegram",
+      date: "Az önce",
+      content: "En güncel adreslerimiz, bedava bonus kodları (promocode) ve sürpriz çekilişler için bizi Telegram ve resmi sosyal medya hesaplarımızdan takip etmeyi unutmayın. Sağ alttaki ikonlardan resmi kanallarımıza ulaşabilirsiniz!"
+    }
+  ];
+
   const handleLogout = () => {
     localStorage.removeItem('site_current_member');
     localStorage.removeItem('site_member');
@@ -110,7 +140,12 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                   <div className={isActive ? 'text-[#00FFA3]' : 'text-zinc-500'}>
                     {item.icon}
                   </div>
-                  {item.label}
+                  <span className="flex-1 text-left">{item.label}</span>
+                  {item.id === 'inbox' && (
+                    <span className="bg-[#00FFA3] text-black text-[10px] font-black px-2 py-0.5 rounded-full">
+                      4
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -286,36 +321,48 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
             <div className="animate-fade-in flex flex-col w-full space-y-6">
               <h1 className="text-2xl font-black text-white tracking-tight">Gelen Kutusu</h1>
               
-              <div className="flex flex-col gap-2">
-                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-[#161B24] transition-colors">
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold text-sm">Royalty Up Adjustment</span>
-                    <span className="text-zinc-500 text-xs font-medium">1 ay önce</span>
-                  </div>
-                  <div className="w-7 h-7 rounded-full bg-[#1A212D] flex items-center justify-center">
-                    <Plus className="w-4 h-4 text-[#00FFA3]" />
-                  </div>
-                </div>
-                
-                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-[#161B24] transition-colors">
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold text-sm">Bonus</span>
-                    <span className="text-zinc-500 text-xs font-medium">1 ay önce</span>
-                  </div>
-                  <div className="w-7 h-7 rounded-full bg-[#1A212D] flex items-center justify-center">
-                    <Plus className="w-4 h-4 text-[#00FFA3]" />
-                  </div>
-                </div>
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-start gap-3 mb-2">
+                <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                <p className="text-amber-500/90 text-sm font-medium leading-relaxed">
+                  Yeni mesajlarınız var! Yönetim ekibimizden veya sistemden gelen önemli duyuruları buradan takip edebilirsiniz.
+                </p>
+              </div>
 
-                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-[#161B24] transition-colors">
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold text-sm">Bonus</span>
-                    <span className="text-zinc-500 text-xs font-medium">2 ay önce</span>
-                  </div>
-                  <div className="w-7 h-7 rounded-full bg-[#1A212D] flex items-center justify-center">
-                    <Plus className="w-4 h-4 text-[#00FFA3]" />
-                  </div>
-                </div>
+              <div className="flex flex-col gap-3">
+                {defaultMessages.map((msg) => {
+                  const isExpanded = expandedMsg === msg.id;
+                  return (
+                    <div 
+                      key={msg.id}
+                      onClick={() => setExpandedMsg(isExpanded ? null : msg.id)}
+                      className={`border rounded-xl transition-all duration-200 overflow-hidden cursor-pointer ${
+                        isExpanded ? 'bg-[#161B24] border-[#00FFA3]/30' : 'bg-[#12161E] border-[#202532] hover:bg-[#161B24]'
+                      }`}
+                    >
+                      <div className="p-4 flex items-center justify-between">
+                        <div className="flex flex-col">
+                          <span className={`font-bold text-sm transition-colors ${isExpanded ? 'text-[#00FFA3]' : 'text-white'}`}>
+                            {msg.title}
+                          </span>
+                          <span className="text-zinc-500 text-xs font-medium mt-1">{msg.date}</span>
+                        </div>
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
+                          isExpanded ? 'bg-[#00FFA3]/10 rotate-45' : 'bg-[#1A212D]'
+                        }`}>
+                          <Plus className={`w-4 h-4 transition-colors ${isExpanded ? 'text-[#00FFA3]' : 'text-zinc-400'}`} />
+                        </div>
+                      </div>
+                      
+                      {isExpanded && (
+                        <div className="px-4 pb-5 pt-1 animate-fade-in">
+                          <p className="text-zinc-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+                            {msg.content}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
