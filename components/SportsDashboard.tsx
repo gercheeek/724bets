@@ -82,53 +82,56 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
   const formatOdds = (val: any) => typeof val === 'number' ? val.toFixed(2) : '-';
 
   return (
-    <div className="w-full bg-[#0f111a] font-sans text-[#A0A5BB] min-h-screen">
+    <div className="w-full bg-[#0F212E] font-sans text-[#B1BAD3] min-h-screen">
       
-      <div className="max-w-[1400px] mx-auto px-4 py-6 flex flex-col gap-8">
+      <div className="max-w-[1400px] mx-auto px-4 py-6 flex flex-col gap-6">
         
         {/* ── TOP BANNERS (Promos) ── */}
         <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x">
           
-          <div className="relative min-w-[320px] h-[140px] rounded-xl overflow-hidden shrink-0 group cursor-pointer bg-gradient-to-r from-[#172c23] to-[#111e18] border border-[#21352a] snap-start">
-            <div className="absolute right-0 top-0 bottom-0 w-[140px] opacity-80 pointer-events-none">
-               {/* Dummy Golden Shield Icon placeholder */}
-               <div className="w-full h-full bg-[#EAB308] opacity-20 rounded-full blur-2xl transform translate-x-10"></div>
+          <div className="relative min-w-[320px] h-[160px] rounded-lg overflow-hidden shrink-0 group cursor-pointer bg-[#14222D] border border-[#2F4553] snap-start">
+            <div className="absolute right-0 top-0 bottom-0 w-[180px] pointer-events-none flex justify-end items-center pr-4">
+               {/* Shield Image Simulation */}
+               <div className="w-[120px] h-[120px] bg-[#00E701] rounded-full blur-[40px] opacity-20 absolute right-6"></div>
+               <img src="https://cdn.iconscout.com/icon/free/png-256/free-shield-2652933-2202848.png" className="w-[100px] h-[100px] object-contain relative z-10 filter drop-shadow-lg" style={{ filter: 'hue-rotate(30deg) sepia(1) saturate(5)'}} alt="Shield"/>
             </div>
-            <div className="relative z-10 p-5 flex flex-col justify-between h-full">
+            <div className="relative z-10 p-5 flex flex-col justify-between h-full w-[60%]">
               <div>
-                <span className="text-[10px] font-bold bg-white/10 px-2 py-0.5 rounded text-white mb-2 inline-block">Dünya Kupası</span>
-                <h3 className="text-white font-black text-lg leading-tight">İlk Golü At,<br/>Kazan</h3>
-                <p className="text-[11px] mt-1 text-gray-400">Takımınız ilk golü mü attı? Ödemenizi alın.</p>
+                <span className="text-[10px] font-bold bg-[#FFFFFF] text-black px-2 py-0.5 rounded-full mb-3 inline-block shadow-sm">Dünya Kupası</span>
+                <h3 className="text-white font-black text-[18px] leading-tight">İlk Golü At,<br/>Kazan</h3>
+                <p className="text-[11px] mt-2 text-[#B1BAD3] leading-tight">Takımınız ilk golü mü<br/>attı? Ödemenizi alın.</p>
               </div>
-              <button className="bg-transparent border border-white/20 hover:bg-white/10 text-white text-xs font-bold py-1.5 px-4 rounded w-max transition-colors">Şimdi Bahis Yap</button>
+              <button className="bg-transparent border border-[#2F4553] hover:bg-[#2F4553] text-white text-[12px] font-bold py-2 px-4 rounded w-max transition-colors mt-2">Şimdi Bahis Yap</button>
             </div>
           </div>
 
-          <div className="relative min-w-[320px] h-[140px] rounded-xl overflow-hidden shrink-0 group cursor-pointer bg-gradient-to-r from-[#1b2b36] to-[#121c24] border border-[#233845] snap-start">
-            <div className="absolute right-0 top-0 bottom-0 w-[140px] opacity-80 pointer-events-none">
-               <div className="w-full h-full bg-[#38BDF8] opacity-20 rounded-full blur-2xl transform translate-x-10"></div>
+          <div className="relative min-w-[320px] h-[160px] rounded-lg overflow-hidden shrink-0 group cursor-pointer bg-[#14222D] border border-[#2F4553] snap-start">
+            <div className="absolute right-0 top-0 bottom-0 w-[180px] pointer-events-none flex justify-end items-center pr-4">
+               <div className="w-[120px] h-[120px] bg-[#00E701] rounded-full blur-[40px] opacity-20 absolute right-6"></div>
+               <img src="https://cdn-icons-png.flaticon.com/512/861/861512.png" className="w-[100px] h-[100px] object-contain relative z-10 filter drop-shadow-lg" alt="Football"/>
             </div>
-            <div className="relative z-10 p-5 flex flex-col justify-between h-full">
+            <div className="relative z-10 p-5 flex flex-col justify-between h-full w-[60%]">
               <div>
-                <span className="text-[10px] font-bold bg-white/10 px-2 py-0.5 rounded text-white mb-2 inline-block">Dünya Kupası</span>
-                <h3 className="text-white font-black text-lg leading-tight">Futbol Oran<br/>Artışları</h3>
-                <p className="text-[11px] mt-1 text-gray-400">Dünya Futbol Günlük Oran Artışları</p>
+                <span className="text-[10px] font-bold bg-[#FFFFFF] text-black px-2 py-0.5 rounded-full mb-3 inline-block shadow-sm">Dünya Kupası</span>
+                <h3 className="text-white font-black text-[18px] leading-tight">Futbol Oran<br/>Artışları</h3>
+                <p className="text-[11px] mt-2 text-[#B1BAD3] leading-tight">Dünya Futbol Günlük<br/>Oran Artışları</p>
               </div>
-              <button className="bg-transparent border border-white/20 hover:bg-white/10 text-white text-xs font-bold py-1.5 px-4 rounded w-max transition-colors">Şimdi Bahis Yap</button>
+              <button className="bg-transparent border border-[#2F4553] hover:bg-[#2F4553] text-white text-[12px] font-bold py-2 px-4 rounded w-max transition-colors mt-2">Şimdi bahis yap</button>
             </div>
           </div>
 
-          <div className="relative min-w-[320px] h-[140px] rounded-xl overflow-hidden shrink-0 group cursor-pointer bg-gradient-to-r from-[#2a1736] to-[#1c1024] border border-[#382145] snap-start">
-            <div className="absolute right-0 top-0 bottom-0 w-[140px] opacity-80 pointer-events-none">
-               <div className="w-full h-full bg-[#A855F7] opacity-20 rounded-full blur-2xl transform translate-x-10"></div>
+          <div className="relative min-w-[320px] h-[160px] rounded-lg overflow-hidden shrink-0 group cursor-pointer bg-[#14222D] border border-[#2F4553] snap-start">
+            <div className="absolute right-0 top-0 bottom-0 w-[180px] pointer-events-none flex justify-end items-center pr-4">
+               <div className="w-[120px] h-[120px] bg-[#00E701] rounded-full blur-[40px] opacity-20 absolute right-6"></div>
+               <img src="https://cdn-icons-png.flaticon.com/512/61/61121.png" className="w-[80px] h-[80px] object-contain relative z-10 filter drop-shadow-lg invert opacity-80" alt="Halftime"/>
             </div>
-            <div className="relative z-10 p-5 flex flex-col justify-between h-full">
+            <div className="relative z-10 p-5 flex flex-col justify-between h-full w-[60%]">
               <div>
-                <span className="text-[10px] font-bold bg-white/10 px-2 py-0.5 rounded text-white mb-2 inline-block">Dünya Kupası</span>
-                <h3 className="text-white font-black text-lg leading-tight">Devre Arası<br/>Heyecanı</h3>
-                <p className="text-[11px] mt-1 text-gray-400">Dünya Futbolu - DA Oran Artışları</p>
+                <span className="text-[10px] font-bold bg-[#FFFFFF] text-black px-2 py-0.5 rounded-full mb-3 inline-block shadow-sm">Dünya Kupası</span>
+                <h3 className="text-white font-black text-[18px] leading-tight">Devre Arası<br/>Heyecanı</h3>
+                <p className="text-[11px] mt-2 text-[#B1BAD3] leading-tight">Dünya Futbolu - DA<br/>Oran Artışları</p>
               </div>
-              <button className="bg-transparent border border-white/20 hover:bg-white/10 text-white text-xs font-bold py-1.5 px-4 rounded w-max transition-colors">Şimdi Bahis Yap</button>
+              <button className="bg-transparent border border-[#2F4553] hover:bg-[#2F4553] text-white text-[12px] font-bold py-2 px-4 rounded w-max transition-colors mt-2">Şimdi bahis yap</button>
             </div>
           </div>
 
@@ -136,26 +139,26 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
 
         {/* ── SEARCH BAR ── */}
         <div className="relative w-full">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#B1BAD3]" size={16} />
           <input 
             type="text" 
-            placeholder="Arama 724Bets.com" 
-            className="w-full bg-[#1A1D24] border border-[#2C2F3D] rounded-lg py-3 pl-12 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00FFA3] transition-colors"
+            placeholder="Arama Stake.com" 
+            className="w-full bg-[#0F212E] border border-[#2F4553] rounded py-2.5 pl-10 pr-4 text-[13px] font-medium text-white placeholder-[#B1BAD3] focus:outline-none focus:border-[#557086] transition-colors"
           />
         </div>
 
         {/* ── NAV TABS ── */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide py-1">
           {[
-            { id: 0, label: 'Spor Bahisleri Ana Sayfa', icon: <Trophy size={16}/> },
-            { id: 1, label: 'Canlı Bahis', icon: <Activity size={16}/> },
-            { id: 2, label: 'Gündemdeki', icon: <Flame size={16}/> },
-            { id: 3, label: 'Bahislerim', icon: <Clock size={16}/> }
+            { id: 0, label: 'Spor Bahisleri Ana Sayfa', icon: <Trophy size={14} className={activeTab === 0 ? "text-white" : "text-[#B1BAD3]"}/> },
+            { id: 1, label: 'Canlı Bahis', icon: <Activity size={14} className={activeTab === 1 ? "text-white" : "text-[#B1BAD3]"}/> },
+            { id: 2, label: 'Gündemdeki', icon: <Flame size={14} className={activeTab === 2 ? "text-white" : "text-[#B1BAD3]"}/> },
+            { id: 3, label: 'Bahislerim', icon: <Clock size={14} className={activeTab === 3 ? "text-white" : "text-[#B1BAD3]"}/> }
           ].map(tab => (
             <button 
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-colors shrink-0 ${activeTab === tab.id ? 'bg-[#1A1D24] text-white border border-[#2C2F3D]' : 'text-gray-400 hover:bg-[#1A1D24]/50'}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-bold whitespace-nowrap transition-colors shrink-0 ${activeTab === tab.id ? 'bg-[#2F4553] text-white shadow-sm' : 'bg-transparent text-[#B1BAD3] hover:bg-[#2F4553] hover:text-white'}`}
             >
               {tab.icon} {tab.label}
             </button>
@@ -163,65 +166,159 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
         </div>
 
         {/* ── EN İYİ MAÇLAR (Top Matches) ── */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center px-1">
-            <h2 className="text-white font-bold flex items-center gap-2"><Flame size={18} className="text-[#00FFA3]"/> En İyi Maçlar</h2>
+            <h2 className="text-white font-bold flex items-center gap-2 text-[15px]"><Trophy size={16} className="text-[#B1BAD3]"/> En İyi Maçlar</h2>
             <div className="flex gap-1">
-              <button className="p-1.5 rounded bg-[#1A1D24] hover:bg-[#2C2F3D] text-white transition-colors"><ChevronLeft size={16}/></button>
-              <button className="p-1.5 rounded bg-[#1A1D24] hover:bg-[#2C2F3D] text-white transition-colors"><ChevronRight size={16}/></button>
+              <button className="p-1.5 rounded border border-[#2F4553] bg-transparent hover:bg-[#2F4553] text-[#B1BAD3] hover:text-white transition-colors"><ChevronLeft size={14}/></button>
+              <button className="p-1.5 rounded border border-[#2F4553] bg-transparent hover:bg-[#2F4553] text-[#B1BAD3] hover:text-white transition-colors"><ChevronRight size={14}/></button>
             </div>
           </div>
           
           <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x pb-2">
             {liveMatches.slice(0, 5).map(match => (
-              <div key={match.id} className="min-w-[300px] w-[300px] bg-[#1A1D24] rounded-lg border border-[#2C2F3D] flex flex-col shrink-0 snap-start overflow-hidden">
-                <div className="p-3 border-b border-[#2C2F3D] flex justify-between items-center bg-[#13151A]">
-                  <span className="text-[11px] font-semibold text-gray-400">
-                    {new Date(match.match_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} {new Date(match.match_date).toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})}
-                  </span>
+              <div key={match.id} className="min-w-[340px] w-[340px] bg-[#1A2C38] rounded-lg flex flex-col shrink-0 snap-start overflow-hidden">
+                <div className="p-3 pb-2 flex justify-between items-center">
+                  <div className="flex items-center gap-2 text-[11px] font-medium text-[#B1BAD3]">
+                    <span>
+                      {new Date(match.match_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} {new Date(match.match_date).toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})}
+                    </span>
+                    <BarChart2 size={12}/>
+                    <Activity size={12}/>
+                  </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-gray-500 font-bold"><BarChart2 size={12} className="inline mr-1"/> 12.5k</span>
-                    <Star size={14} className="text-gray-500 hover:text-white cursor-pointer"/>
+                    <span className="text-[11px] text-[#B1BAD3] font-bold flex items-center gap-1"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" className="w-3 h-3 opacity-60 invert"/> 33.000</span>
+                    <Star size={14} className="text-yellow-500 fill-current"/>
                   </div>
                 </div>
                 
-                <div className="p-4 flex justify-between items-center">
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-center gap-3">
-                      <img src={`https://picsum.photos/seed/${match.team_home}/20/20`} className="w-5 h-5 rounded-full" />
-                      <span className="text-white font-bold text-[13px]">{match.team_home}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <img src={`https://picsum.photos/seed/${match.team_away}/20/20`} className="w-5 h-5 rounded-full" />
-                      <span className="text-white font-bold text-[13px]">{match.team_away}</span>
-                    </div>
+                <div className="px-3 py-1 flex items-center justify-between">
+                  <img src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${match.team_home.includes('Fransa') ? 'FR' : 'GB'}.svg`} className="w-6 h-4 rounded-sm object-cover" />
+                  
+                  <div className="flex flex-col items-center justify-center">
+                    <span className="text-white font-bold text-[13px]">{match.team_home}</span>
+                    <span className="text-white font-bold text-[13px]">{match.team_away}</span>
                   </div>
-                  {(match.score_home > 0 || match.score_away > 0 || match.is_live) && (
-                    <div className="flex flex-col gap-3 items-end">
-                      <span className="text-[#00FFA3] font-black text-[13px]">{match.score_home}</span>
-                      <span className="text-[#00FFA3] font-black text-[13px]">{match.score_away}</span>
-                    </div>
-                  )}
+
+                  <img src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${match.team_away.includes('İspanya') ? 'ES' : 'AR'}.svg`} className="w-6 h-4 rounded-sm object-cover" />
                 </div>
 
-                <div className="p-3 pt-0 flex gap-2">
-                  <button className="flex-1 bg-[#13151A] hover:bg-[#2C2F3D] rounded border border-[#2C2F3D] flex flex-col items-center py-2 transition-colors">
-                     <span className="text-[10px] text-gray-400 mb-0.5">1</span>
-                     <span className={`text-[13px] font-bold ${changedOdds[`${match.id}-1`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-1`] === 'down' ? 'text-red-400' : 'text-white'}`}>
-                       {formatOdds(match.odds?.['1'])}
-                     </span>
+                <div className="px-3 py-2 flex items-center gap-1">
+                  <Flame size={12} className="text-orange-500 fill-current" />
+                  <span className="text-[#B1BAD3] text-[10px] font-semibold">74% of 1x2 bets on {match.team_home}</span>
+                </div>
+
+                <div className="px-3 pb-3 flex gap-2">
+                  <button className="flex-1 bg-[#2F4553] hover:bg-[#3d5566] rounded flex flex-col items-start px-3 py-1.5 transition-colors">
+                     <span className="text-[11px] text-[#B1BAD3] mb-0.5">{match.team_home.slice(0,10)}</span>
+                     <span className="text-[13px] font-bold text-[#1FFFFF]">{formatOdds(match.odds?.['1'])}</span>
                   </button>
-                  <button className="flex-1 bg-[#13151A] hover:bg-[#2C2F3D] rounded border border-[#2C2F3D] flex flex-col items-center py-2 transition-colors">
-                     <span className="text-[10px] text-gray-400 mb-0.5">X</span>
-                     <span className={`text-[13px] font-bold ${changedOdds[`${match.id}-X`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-X`] === 'down' ? 'text-red-400' : 'text-white'}`}>
-                       {formatOdds(match.odds?.['X'])}
-                     </span>
+                  <button className="flex-1 bg-[#2F4553] hover:bg-[#3d5566] rounded flex flex-col items-start px-3 py-1.5 transition-colors">
+                     <span className="text-[11px] text-[#B1BAD3] mb-0.5">beraberlik</span>
+                     <span className="text-[13px] font-bold text-[#1FFFFF]">{formatOdds(match.odds?.['X'])}</span>
                   </button>
-                  <button className="flex-1 bg-[#13151A] hover:bg-[#2C2F3D] rounded border border-[#2C2F3D] flex flex-col items-center py-2 transition-colors">
-                     <span className="text-[10px] text-gray-400 mb-0.5">2</span>
-                     <span className={`text-[13px] font-bold ${changedOdds[`${match.id}-2`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-2`] === 'down' ? 'text-red-400' : 'text-white'}`}>
-                       {formatOdds(match.odds?.['2'])}
-                     </span>
+                  <button className="flex-1 bg-[#2F4553] hover:bg-[#3d5566] rounded flex flex-col items-start px-3 py-1.5 transition-colors">
+                     <span className="text-[11px] text-[#B1BAD3] mb-0.5">{match.team_away.slice(0,10)}</span>
+                     <span className="text-[13px] font-bold text-[#1FFFFF]">{formatOdds(match.odds?.['2'])}</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── TOP SGMS ── */}
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-center px-1">
+            <h2 className="text-white font-bold flex items-center gap-2 text-[15px]">
+              <div className="bg-[#B1BAD3] text-[#0F212E] text-[10px] font-black px-1 rounded-sm tracking-tighter mr-1">SGM</div>
+              Top SGMs
+            </h2>
+            <div className="flex gap-1">
+              <button className="p-1.5 rounded border border-[#2F4553] bg-transparent hover:bg-[#2F4553] text-[#B1BAD3] hover:text-white transition-colors"><ChevronLeft size={14}/></button>
+              <button className="p-1.5 rounded border border-[#2F4553] bg-transparent hover:bg-[#2F4553] text-[#B1BAD3] hover:text-white transition-colors"><ChevronRight size={14}/></button>
+            </div>
+          </div>
+          
+          <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x pb-2">
+            {[1, 2, 3].map((item, i) => (
+              <div key={i} className="min-w-[340px] w-[340px] bg-[#1A2C38] rounded-lg flex flex-col shrink-0 snap-start overflow-hidden">
+                <div className="p-3 pb-2 flex justify-between items-center">
+                  <div className="flex items-center gap-2 text-[11px] font-medium text-[#B1BAD3]">
+                    <span>14 Tem Sal 22:00</span>
+                    <BarChart2 size={12}/>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-[#B1BAD3] font-bold flex items-center gap-1"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" className="w-3 h-3 opacity-60 invert"/> {i === 0 ? '1.132' : i === 1 ? '877' : '127'}</span>
+                    <Star size={14} className="text-yellow-500 fill-current"/>
+                  </div>
+                </div>
+                
+                <div className="px-3 py-1 flex items-center justify-between pb-4 border-b border-[#2F4553]/50">
+                  <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/FR.svg" className="w-6 h-4 rounded-sm object-cover" />
+                  <div className="flex flex-col items-center justify-center">
+                    <span className="text-white font-bold text-[13px]">Fransa</span>
+                    <span className="text-white font-bold text-[13px]">İspanya</span>
+                  </div>
+                  <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/ES.svg" className="w-6 h-4 rounded-sm object-cover" />
+                </div>
+
+                <div className="p-4 flex flex-col gap-3">
+                  <span className="text-white font-bold text-[13px]">{i === 1 ? '6 Legs' : '3 Legs'}</span>
+                  
+                  {i === 1 ? (
+                    <>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2 text-white font-bold text-[13px]">
+                          <img src="https://cdn-icons-png.flaticon.com/512/861/861512.png" className="w-4 h-4 invert opacity-70" /> üstü 3.5
+                        </div>
+                        <span className="text-[#B1BAD3] text-[11px]">Toplam gol (90' + Oynanmamış Süre)</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2 text-white font-bold text-[13px]">
+                          <img src="https://cdn-icons-png.flaticon.com/512/861/861512.png" className="w-4 h-4 invert opacity-70" /> Mbappe, Kylian 2+
+                        </div>
+                        <span className="text-[#B1BAD3] text-[11px]">Oyuncu gol olan şutları (uzatmalar dahil)</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2 text-white font-bold text-[13px]">
+                          <img src="https://cdn-icons-png.flaticon.com/512/861/861512.png" className="w-4 h-4 invert opacity-70" /> var
+                        </div>
+                        <span className="text-[#B1BAD3] text-[11px]">Karşılıklı gol (90' + Oynanmamış Süre)</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2 text-white font-bold text-[13px]">
+                          <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/FR.svg" className="w-4 h-3 rounded-sm object-cover" /> Fransa
+                        </div>
+                        <span className="text-[#B1BAD3] text-[11px]">1x2 (90' + Oynanmamış Süre)</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2 text-white font-bold text-[13px]">
+                          <img src="https://cdn-icons-png.flaticon.com/512/861/861512.png" className="w-4 h-4 invert opacity-70" /> var
+                        </div>
+                        <span className="text-[#B1BAD3] text-[11px]">Karşılıklı gol (90' + Oynanmamış Süre)</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2 text-white font-bold text-[13px]">
+                          <img src="https://cdn-icons-png.flaticon.com/512/861/861512.png" className="w-4 h-4 invert opacity-70" /> Mbappe, Kylian
+                        </div>
+                        <span className="text-[#B1BAD3] text-[11px]">Gol atar (90' + Oynanmamış Süre)</span>
+                      </div>
+                    </>
+                  )}
+
+                  <button className="text-white text-[12px] font-bold text-left hover:underline mt-1">
+                    Çoklu Bahisi Görüntüle &gt;
+                  </button>
+                </div>
+
+                <div className="p-3 pt-0 mt-auto">
+                  <button className="w-full bg-[#0F212E] hover:bg-[#2F4553] rounded py-3 px-4 flex justify-between items-center transition-colors">
+                     <span className="text-[12px] text-white font-medium">Bahis Kuponuna Ekle</span>
+                     <span className="text-[14px] font-bold text-[#1FFFFF]">{i === 0 ? '4,81' : i === 1 ? '28,12' : '3,52'}</span>
                   </button>
                 </div>
               </div>
