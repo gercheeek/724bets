@@ -360,6 +360,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <Activity className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}
                 </div>
+                <div onClick={() => onViewChange('sports-beta')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-[#00FFA3] transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Activity className="w-5 h-5 text-[#00FFA3] shrink-0" />
+                  {isOpen && <span className="text-[13px] font-bold text-[#00FFA3] tracking-wide">Spor 2 (Özel)</span>}
+                </div>
               </div>
 
               <div className="w-full h-px bg-white/5 my-2"></div>
