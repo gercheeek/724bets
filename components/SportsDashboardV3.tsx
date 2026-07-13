@@ -20,7 +20,7 @@ import {
   Shield,
   Star
 } from 'lucide-react';
-import { SingleMatchView } from './SingleMatchView';
+import { SingleMatchView, prefetchMatchDetails } from './SingleMatchView';
 import BetBuilderCards from './BetBuilderCards';
 
 interface SportsDashboardV3Props {
@@ -108,6 +108,7 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
           <Target className="w-4 h-4" /> Seçili Maçın Bahisleri
         </span>
         <button 
+          onMouseEnter={() => prefetchMatchDetails(match.id)}
           onClick={(e) => {
             e.stopPropagation();
             setSelectedMatch(match);
@@ -289,6 +290,7 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                 {footballMatches.map((match, i) => (
                   <div key={match.id} className="flex flex-col">
                     <div 
+                      onMouseEnter={() => prefetchMatchDetails(match.id)}
                       onClick={() => toggleMatch(match.id)}
                       className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center cursor-pointer hover:bg-gradient-to-r hover:from-[#161A23] hover:to-[#0E1116] transition-all group ${i !== footballMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
                     >
@@ -370,6 +372,7 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                 {basketballMatches.map((match, i) => (
                   <div key={match.id} className="flex flex-col">
                     <div 
+                      onMouseEnter={() => prefetchMatchDetails(match.id)}
                       onClick={() => toggleMatch(match.id)}
                       className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center cursor-pointer hover:bg-gradient-to-r hover:from-[#161A23] hover:to-[#0E1116] transition-all group ${i !== basketballMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
                     >
@@ -451,6 +454,7 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                 {tennisMatches.map((match, i) => (
                   <div key={match.id} className="flex flex-col">
                     <div 
+                      onMouseEnter={() => prefetchMatchDetails(match.id)}
                       onClick={() => toggleMatch(match.id)}
                       className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center cursor-pointer hover:bg-gradient-to-r hover:from-[#161A23] hover:to-[#0E1116] transition-all group ${i !== tennisMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
                     >

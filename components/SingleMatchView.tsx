@@ -3,21 +3,58 @@ import { ArrowLeft, Target, BarChart2, MessageCircle, Info, Shield, Trophy, Acti
 
 interface SingleMatchViewProps {
   match: any;
-  onBack: () => void;
 }
+
+// Global cache for lightning-fast subsequent loads
+export const matchCache: Record<string, { markets: any[], categories: string[] }> = {};
+
+export const prefetchMatchDetails = (id: string) => {
+  if (matchCache[id]) return;
+  
+  // Mark as fetching to prevent duplicate network requests
+  matchCache[id] = { markets: [], categories: [] }; 
+  
+  fetch(`/.netlify/functions/match_details?id=${id}`)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success) {
+        matchCache[id] = {
+          markets: json.data.markets,
+          categories: json.data.categories
+        };
+      }
+    })
+    .catch(err => {
+      console.error("Prefetch failed", err);
+      delete matchCache[id]; // allow retry
+    });
+};
 
 export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack }) => {
   const [activeTab, setActiveTab] = useState('Tümü');
-  const [markets, setMarkets] = useState<any[]>([]);
-  const [categories, setCategories] = useState<string[]>(['Tümü']);
-  const [loading, setLoading] = useState(true);
+  const [markets, setMarkets] = useState<any[]>(matchCache[match.id]?.markets || []);
+  const [categories, setCategories] = useState<string[]>(matchCache[match.id]?.categories || ['Tümü']);
+  const [loading, setLoading] = useState(!matchCache[match.id]);
 
   useEffect(() => {
+    // If we already have it in cache, do nothing
+    if (matchCache[match.id]) {
+      setMarkets(matchCache[match.id].markets);
+      setCategories(matchCache[match.id].categories);
+      setLoading(false);
+      return;
+    }
+
     const fetchDetails = async () => {
       try {
+        setLoading(true);
         const res = await fetch(`/.netlify/functions/match_details?id=${match.id}`);
         const json = await res.json();
         if (json.success) {
+          matchCache[match.id] = {
+            markets: json.data.markets,
+            categories: json.data.categories
+          };
           setMarkets(json.data.markets);
           setCategories(json.data.categories);
         }
