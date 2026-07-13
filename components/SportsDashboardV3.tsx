@@ -66,9 +66,15 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
     { name: 'NBA', icon: <Dribbble className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
   ];
 
-  const footballMatches = matches.filter(m => m.sport === 'futbol');
-  const basketballMatches = matches.filter(m => m.sport === 'basketbol');
-  const tennisMatches = matches.filter(m => m.sport === 'tenis');
+  const filteredMatches = matches.filter(m => {
+    if (activeLeftTab === 'canli') return m.isLive === true;
+    if (activeLeftTab === 'spor') return m.isLive === false;
+    return true;
+  });
+
+  const footballMatches = filteredMatches.filter(m => m.sport === 'futbol');
+  const basketballMatches = filteredMatches.filter(m => m.sport === 'basketbol');
+  const tennisMatches = filteredMatches.filter(m => m.sport === 'tenis');
 
   return (
     <div className="flex w-full h-full bg-[#09090b] text-zinc-300 font-sans overflow-hidden">
@@ -144,7 +150,9 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
       {/* ─── CENTER CONTENT (MATCHES) ─── */}
       <div className="flex-1 flex flex-col bg-[#09090b] overflow-y-auto custom-scrollbar relative">
         <div className="sticky top-0 z-20 bg-[#09090b]/90 backdrop-blur-md px-6 py-4 border-b border-[#202532]">
-          <h1 className="text-[#00FFA3] text-xs font-bold tracking-widest uppercase">CANLI BAHİS</h1>
+          <h1 className="text-[#00FFA3] text-xs font-bold tracking-widest uppercase">
+            {activeLeftTab === 'canli' ? 'CANLI BAHİS' : 'MAÇ ÖNCESİ / YAKINDA'}
+          </h1>
         </div>
 
         <div className="p-4 flex flex-col gap-4">
