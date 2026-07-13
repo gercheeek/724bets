@@ -3,9 +3,9 @@ import json
 from playwright.sync_api import sync_playwright
 from supabase import create_client, Client
 
-# Supabase Ayarları - BURAYI KENDİ BİLGİLERİNLE DOLDUR
-SUPABASE_URL = "https://SENIN-PROJE-ID.supabase.co"
-SUPABASE_KEY = "SENIN-SERVICE-ROLE-KEY-VEYA-ANON-KEY"
+# Supabase Ayarları
+SUPABASE_URL = "https://eaxtuvjcanakaqetuqlc.supabase.co"
+SUPABASE_KEY = "sb_publishable_nzbN9-CrSawHUxEZNYZBzg_WOlgQ9X0"
 
 def init_supabase():
     try:
