@@ -87,7 +87,15 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
         <span className="text-[#00FFA3] text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 drop-shadow-[0_0_8px_rgba(0,255,163,0.3)]">
           <Target className="w-4 h-4" /> Seçili Maçın Bahisleri
         </span>
-        <span className="text-zinc-500 text-[10px] uppercase font-bold bg-[#12161E] px-2 py-1 rounded border border-[#202532]">+ {match.marketsAvailable || 72} Ekstra Seçenek</span>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            alert("Tüm bahis seçenekleri yakında eklenecektir!");
+          }}
+          className="text-zinc-400 text-[10px] uppercase font-bold bg-[#12161E] px-3 py-1.5 rounded border border-[#202532] hover:bg-[#1A1D24] hover:text-[#00FFA3] hover:border-[#00FFA3]/30 transition-all cursor-pointer shadow-sm active:scale-95"
+        >
+          + {match.marketsAvailable || 72} Ekstra Seçenek
+        </button>
       </div>
       
       <div className="grid grid-cols-2 gap-3">
@@ -272,7 +280,12 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                         {match.odds.map((odd, idx) => (
                           <button 
                             key={idx}
-                            onClick={(e) => e.stopPropagation()} // Prevent row expansion when clicking odds
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (typeof odd === 'string' && odd.startsWith('+')) {
+                                toggleMatch(match.id);
+                              }
+                            }}
                             className={`w-${idx === 3 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
                               ${match.selected === idx 
                                 ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
@@ -348,7 +361,12 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                         {match.odds.map((odd, idx) => (
                           <button 
                             key={idx}
-                            onClick={(e) => e.stopPropagation()} // Prevent row expansion when clicking odds
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (typeof odd === 'string' && odd.startsWith('+')) {
+                                toggleMatch(match.id);
+                              }
+                            }}
                             className={`w-${idx === 2 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
                               ${match.selected === idx 
                                 ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
@@ -423,7 +441,12 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                         {match.odds.map((odd, idx) => (
                           <button 
                             key={idx}
-                            onClick={(e) => e.stopPropagation()} // Prevent row expansion when clicking odds
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (typeof odd === 'string' && odd.startsWith('+')) {
+                                toggleMatch(match.id);
+                              }
+                            }}
                             className={`w-${idx === 2 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
                               ${match.selected === idx 
                                 ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
