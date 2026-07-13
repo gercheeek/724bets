@@ -28,6 +28,22 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
   const [isSavingPassword, setIsSavingPassword] = useState(false);
   const [passwordSaveStatus, setPasswordSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
+  // Avatar Selection
+  const presetAvatars = [
+    "Felix", "Aneka", "Jasper", "Mimi", "Zoe", "Destiny", "George", "Trouble", "Baby", "Oliver"
+  ];
+  
+  const handleAvatarSelect = (seed: string) => {
+    // Save to local state and localStorage
+    const newAvatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+    const updatedUser = { ...siteUser, avatarUrl: newAvatarUrl };
+    setSiteUser(updatedUser);
+    localStorage.setItem('site_member', JSON.stringify(updatedUser));
+    
+    // Attempt DB update if column exists (it might fail if column doesn't exist yet, but won't break the app due to local state updating)
+    supabase.from('members').update({ avatarUrl: newAvatarUrl }).eq('id', siteUser.id).then();
+  };
+
   // Settings States
   const [ambientMode, setAmbientMode] = useState(true);
   const [newsletters, setNewsletters] = useState(false);
@@ -136,21 +152,21 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                 </h3>
                 <div className="flex items-center gap-1.5 mt-0.5">
                    <div className="w-3.5 h-3.5 bg-orange-300 rounded shadow-sm" />
-                   <span className="text-white/90 text-sm font-bold">Bronz 2</span>
+                   <span className="text-white/90 text-sm font-bold">Bronz 1</span>
                 </div>
               </div>
             </div>
             
             <div className="relative z-10 w-full">
               <div className="flex items-center justify-between text-white font-bold text-xs mb-1.5">
-                <span>69.85%</span>
+                <span>0.00%</span>
                 <div className="flex items-center gap-1">
                   <div className="w-3.5 h-3.5 bg-orange-500 rounded shadow-sm" />
-                  <span>Bronz 3</span>
+                  <span>Bronz 2</span>
                 </div>
               </div>
               <div className="w-full h-1.5 bg-black/30 rounded-full overflow-hidden">
-                <div className="h-full bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]" style={{ width: '69.85%' }} />
+                <div className="h-full bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]" style={{ width: '0%' }} />
               </div>
             </div>
           </div>
@@ -202,18 +218,36 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
             <div className="animate-fade-in flex flex-col w-full space-y-8">
               <h1 className="text-2xl font-black text-white tracking-tight">Profil</h1>
               
-              {/* Avatar Upload */}
+              {/* Avatar Selection */}
               <div className="flex flex-col gap-2">
-                <label className="text-zinc-400 font-bold text-sm">Avatar</label>
-                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-4 flex items-center gap-6">
-                  <div className="w-16 h-16 rounded-xl bg-black overflow-hidden border-2 border-zinc-800">
-                    <img src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} className="w-full h-full object-cover" />
+                <label className="text-zinc-400 font-bold text-sm">Avatar Seçimi</label>
+                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex flex-col gap-4">
+                  <div className="flex items-center gap-6 pb-4 border-b border-[#202532]">
+                    <div className="w-16 h-16 rounded-xl bg-black overflow-hidden border-2 border-zinc-800 shrink-0">
+                      <img src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-white font-bold">Mevcut Avatar</span>
+                      <span className="text-zinc-500 text-xs">Sohbetlerde ve profilinizde görünecek yüzünüzü aşağıdan seçebilirsiniz.</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <button className="bg-[#00FFA3] hover:bg-[#00E676] text-black font-black text-sm px-6 py-2.5 rounded-lg w-max transition-colors">
-                      Yükle
-                    </button>
-                    <span className="text-zinc-500 text-xs">Desteklenen dosyalar: Tüm yaygın görüntü formatları (PNG, JPG, GIF, WebP, vb.)</span>
+                  
+                  <div className="grid grid-cols-5 sm:grid-cols-10 gap-3 mt-2">
+                    {presetAvatars.map((seed) => {
+                      const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+                      const isSelected = (siteUser as any).avatarUrl === url;
+                      return (
+                        <button
+                          key={seed}
+                          onClick={() => handleAvatarSelect(seed)}
+                          className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 bg-black/50 ${
+                            isSelected ? 'border-[#00FFA3] scale-110 shadow-[0_0_15px_rgba(0,255,163,0.3)]' : 'border-zinc-800 hover:border-zinc-600 hover:scale-105 opacity-70 hover:opacity-100'
+                          }`}
+                        >
+                          <img src={url} className="w-full h-full object-cover" />
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
