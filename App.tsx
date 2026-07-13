@@ -1438,7 +1438,9 @@ const App: React.FC = () => {
         <WalletModal onClose={() => setShowDepositModal(false)} />
       )}
 
-      {isMaintenanceActive && view !== 'admin' ? (
+      {appStage === 'loading' ? (
+        <AppLoader fadeOut={false} />
+      ) : isMaintenanceActive && view !== 'admin' ? (
         <MaintenanceScreen 
           message={siteStatusConfig.maintenanceMessage} 
           onAdminLogin={() => setAuthModalMode('admin')}
