@@ -1551,21 +1551,19 @@ const App: React.FC = () => {
                       </button>
                     </>
                   ) : (
-                    <>
-                      {/* Giriş Yap / Cüzdan (Logged out) */}
+                      {/* Gamdom Style Mobile Auth Buttons */}
                       <button
                         onClick={() => setAuthModalMode('member')}
-                        className="flex items-center justify-center h-8 bg-[#151A23] hover:bg-[#1A212D] text-white transition-colors px-2.5 rounded-md border border-white/5 shadow-sm"
+                        className="flex items-center justify-center h-[34px] bg-[#1A1D24] hover:bg-[#2A2E3D] text-white transition-colors px-3.5 rounded-[8px] font-bold text-[13px]"
                       >
-                        <Wallet className="w-3.5 h-3.5 text-[#00FFA3] mr-1.5" />
-                        <span className="text-[11px] font-bold">Giriş Yap</span>
+                        Giriş yap
                       </button>
-                      
-                      <button onClick={() => setIsMobileChatOpen(true)} className="flex items-center justify-center h-8 w-8 text-gray-400 hover:text-white transition-colors rounded-md bg-[#1A1D24] border border-white/5 relative active:scale-95">
-                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-                         <span className="absolute top-[6px] right-[6px] w-1.5 h-1.5 bg-[#00FFA3] rounded-full animate-pulse shadow-[0_0_5px_rgba(0,255,163,0.8)]"></span>
+                      <button
+                        onClick={() => setAuthModalMode('register')}
+                        className="flex items-center justify-center h-[34px] bg-[#00FFA3] hover:bg-[#00E693] text-black transition-colors px-3.5 rounded-[8px] font-extrabold text-[13px] shadow-[0_0_10px_rgba(0,255,163,0.2)] ml-1"
+                      >
+                        Kaydolun
                       </button>
-                    </>
                   )}
                 </div>
               </header>
