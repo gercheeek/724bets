@@ -13,6 +13,18 @@ export interface Game {
 
 export const ALL_GAMES: Game[] = [
   {
+    "id": 99999,
+    "name": "Big Black Cock",
+    "provider": "Wicked Games",
+    "category": "slots",
+    "image": "https://picsum.photos/seed/rooster/500/500",
+    "demoSymbol": null,
+    "rtp": "96.50%",
+    "players": 12500,
+    "isPopular": true,
+    "isNew": true
+  },
+  {
     "id": 1,
     "name": "Sweet Bonanza",
     "provider": "Pragmatic Play",
