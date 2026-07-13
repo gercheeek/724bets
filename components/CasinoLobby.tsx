@@ -141,6 +141,48 @@ const SectionHeader: React.FC<{ title: string, icon?: React.ReactNode }> = ({ ti
   </div>
 );
 
+const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: any[], onSelect: (g: any) => void }> = ({ title, icon, games, onSelect }) => {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 400;
+      scrollRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-4 mb-4">
+      <div className="flex items-center justify-between mt-8">
+        <div className="flex items-center gap-2">
+          {icon && <div className="text-[#00FFA3]">{icon}</div>}
+          <h2 className="text-white text-lg font-black tracking-tight">{title}</h2>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={() => scroll('left')} className="w-8 h-8 rounded bg-[#1A1D29] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+            <ChevronLeft size={18} />
+          </button>
+          <button className="px-3 h-8 rounded bg-[#1A1D29] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors text-[13px] font-bold">
+            Hepsi
+          </button>
+          <button onClick={() => scroll('right')} className="w-8 h-8 rounded bg-[#1A1D29] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </div>
+      
+      <div ref={scrollRef} className="overflow-x-auto hide-scrollbar -mx-4 px-4 pb-4" style={{ scrollSnapType: 'x mandatory' }}>
+        <div className="flex gap-4 min-w-max">
+          {games.map((game) => (
+            <div key={game.id} style={{ width: 'calc(100vw / 2.5 - 16px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
+              <GameCard game={game} onClick={() => onSelect(game)} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: boolean }> = ({ customGames = [], isLoggedIn = false }) => {
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -275,6 +317,15 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
           </div>
         ) : (
           <div className="flex flex-col gap-4">
+            
+            {/* NEW SLIDER SECTION: Gerçek Oyunlar */}
+            <SliderSection 
+              title="Gerçek Oyunlar" 
+              icon={<Flame className="text-white" fill="white" />} 
+              games={popularGames} 
+              onSelect={setSelectedGame} 
+            />
+
             <SectionHeader title="Popüler Slotlar" icon={<Flame />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {popularGames.map(game => (
