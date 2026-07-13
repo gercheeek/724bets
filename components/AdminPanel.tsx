@@ -16,6 +16,7 @@ import AdminChatTab from './AdminChatTab';
 import AdminNotificationTab from './AdminNotificationTab';
 import AdminPromoTab from './AdminPromoTab';
 import AdminReferralTab from './AdminReferralTab';
+import AdminSportsTab from './AdminSportsTab';
 import { AdminBackupTab } from './AdminBackupTab';
 import { NavVisibility } from './Header';
 import { supabase } from '../utils/supabase';
@@ -102,7 +103,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues' | 'wallet' | 'promocodes' | 'referrals'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues' | 'wallet' | 'promocodes' | 'referrals' | 'sports'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,
