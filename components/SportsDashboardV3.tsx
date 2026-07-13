@@ -30,6 +30,7 @@ interface SportsDashboardV3Props {
 const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => {
   const [activeLeftTab, setActiveLeftTab] = useState<'spor' | 'canli'>('spor');
   const [activeRightTab, setActiveRightTab] = useState<'bilgi' | 'tv'>('bilgi');
+  const [activeLeague, setActiveLeague] = useState<string | null>(null);
   const [openSports, setOpenSports] = useState<Record<string, boolean>>({
     'futbol': true,
     'basketbol': true,
@@ -91,11 +92,10 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
     { name: 'Voleybol Şampiyonlar', isLive: false, count: 5, icon: <Trophy className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
   ];
 
-  const filteredMatches = matches.filter(m => {
-    if (activeLeftTab === 'canli') return m.isLive === true;
-    if (activeLeftTab === 'spor') return m.isLive === false;
-    return true;
-  });
+  let filteredMatches = activeLeftTab === 'canli' ? matches.filter(m => m.isLive) : matches;
+  if (activeLeague) {
+    filteredMatches = filteredMatches.filter(m => m.league === activeLeague);
+  }
 
   const footballMatches = filteredMatches.filter(m => m.sport === 'futbol');
   const basketballMatches = filteredMatches.filter(m => m.sport === 'basketbol');
@@ -206,24 +206,30 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
             <span className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Öne Çıkan Ligler</span>
           </div>
           {leagues.map((league, idx) => (
-            <div key={idx} className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-[#1A1D24] group transition-all hover:translate-x-1 border border-transparent hover:border-[#202532]">
+            <div 
+              key={idx} 
+              onClick={() => setActiveLeague(league.name)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer group transition-all hover:translate-x-1 border ${activeLeague === league.name ? 'bg-[#1A1D24] border-[#00FFA3]/30 shadow-[0_0_10px_rgba(0,255,163,0.05)]' : 'border-transparent hover:border-[#202532] hover:bg-[#1A1D24]'}`}
+            >
               <div className="w-5 flex justify-center">{league.icon}</div>
-              <span className="text-[11px] font-medium text-zinc-400 group-hover:text-zinc-200 transition-colors">{league.name}</span>
+              <span className={`text-[11px] font-medium transition-colors ${activeLeague === league.name ? 'text-[#00FFA3]' : 'text-zinc-400 group-hover:text-zinc-200'}`}>{league.name}</span>
               <div className="ml-auto flex items-center gap-2">
                 {league.isLive && (
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.5)]"></span>
                 )}
-                <span className="text-[10px] font-bold text-zinc-600 group-hover:text-[#00FFA3] transition-colors">{league.count}</span>
+                <span className={`text-[10px] font-bold transition-colors ${activeLeague === league.name ? 'text-[#00FFA3]' : 'text-zinc-600 group-hover:text-[#00FFA3]'}`}>{league.count}</span>
               </div>
             </div>
           ))}
 
           <div className="w-full h-px bg-[#202532] my-4"></div>
           
-          <div className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-[#1A1D24] group transition-colors mt-auto border border-transparent hover:border-[#202532] shadow-sm">
-            <Activity className="w-4 h-4 text-[#00FFA3] group-hover:scale-110 transition-transform" />
-            <span className="text-xs font-bold text-zinc-300 group-hover:text-white">Tüm Popüler Etkinlikler</span>
-            <ChevronDown className="w-4 h-4 text-zinc-600 ml-auto group-hover:text-[#00FFA3] transition-colors" />
+          <div 
+            onClick={() => setActiveLeague(null)}
+            className={`flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer group transition-colors mt-auto border shadow-sm ${activeLeague === null ? 'bg-[#1A1D24] border-[#00FFA3]/30 shadow-[0_0_10px_rgba(0,255,163,0.05)]' : 'border-transparent hover:border-[#202532] hover:bg-[#1A1D24]'}`}
+          >
+            <Activity className={`w-4 h-4 transition-transform group-hover:scale-110 ${activeLeague === null ? 'text-[#00FFA3]' : 'text-zinc-500 group-hover:text-[#00FFA3]'}`} />
+            <span className={`text-xs font-bold ${activeLeague === null ? 'text-white' : 'text-zinc-300 group-hover:text-white'}`}>Tüm Popüler Etkinlikler</span>
           </div>
         </div>
       </div>
