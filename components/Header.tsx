@@ -507,27 +507,27 @@ const Header: React.FC<HeaderProps> = ({
                   <button
                     onClick={onMemberLoginClick}
                     style={{
-                      background: 'transparent',
-                      color: '#0EA5E9',
-                      border: '1px solid rgba(14, 165, 233, 0.5)',
+                      background: '#1A1D24',
+                      color: '#FFFFFF',
+                      border: 'none',
                       padding: '0 16px',
                       height: '36px',
-                      fontWeight: 800,
-                      fontSize: '13px',
-                      borderRadius: '9999px',
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      borderRadius: '8px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       whiteSpace: 'nowrap'
                     }}
-                    className="hover:bg-sky-500/10 transition-colors"
+                    className="hover:bg-[#2A2E3D] transition-colors"
                   >
                     Giriş yap
                   </button>
                   <button
                     onClick={onSupportClick}
-                    className="bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 flex items-center justify-center relative"
+                    className="hidden md:flex bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 items-center justify-center relative"
                     title="Canlı Sohbet"
                     style={{ height: '36px', width: '36px' }}
                   >
@@ -543,22 +543,21 @@ const Header: React.FC<HeaderProps> = ({
                       border: 'none',
                       padding: '0 16px',
                       height: '36px',
-                      fontWeight: 900,
-                      fontSize: '13px',
-                      borderRadius: '9999px',
+                      fontWeight: 800,
+                      fontSize: '14px',
+                      borderRadius: '8px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       whiteSpace: 'nowrap',
-                      boxShadow: '0 2px 8px rgba(0, 255, 163, 0.3)'
+                      boxShadow: '0 0 15px rgba(0, 255, 163, 0.15)'
                     }}
-                    className="hover:scale-105 active:scale-95 transition-transform"
+                    className="hover:bg-[#00E693] transition-colors"
                   >
-                    Şimdi kayıt ol
+                    Kaydolun
                   </button>
                 </div>
-
               </>
             )}
           </div>
