@@ -75,51 +75,71 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
     setOpenSports(prev => ({ ...prev, [sport]: !prev[sport] }));
   };
 
-  const leagueIconMap: Record<string, React.ReactNode> = {
-    'Türkiye Süper Lig': <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'Şampiyonlar Ligi': <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" />,
-    'İngiltere Premier Lig': <img src="https://flagcdn.com/w20/gb-eng.png" alt="EN" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'Premier Lig': <img src="https://flagcdn.com/w20/gb-eng.png" alt="EN" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'İspanya LaLiga': <img src="https://flagcdn.com/w20/es.png" alt="ES" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'LaLiga': <img src="https://flagcdn.com/w20/es.png" alt="ES" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'İtalya Serie A': <img src="https://flagcdn.com/w20/it.png" alt="IT" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'Serie A': <img src="https://flagcdn.com/w20/it.png" alt="IT" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'Fransa Ligue 1': <img src="https://flagcdn.com/w20/fr.png" alt="FR" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'Ligue 1': <img src="https://flagcdn.com/w20/fr.png" alt="FR" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'Almanya Bundesliga': <img src="https://flagcdn.com/w20/de.png" alt="DE" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'Bundesliga': <img src="https://flagcdn.com/w20/de.png" alt="DE" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" />,
-    'NBA': <Dribbble className="w-4 h-4 text-orange-500/80 group-hover:text-orange-400 transition-colors" />,
-    'Euroleague': <Dribbble className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" />,
-    'Wimbledon': <Circle className="w-4 h-4 text-yellow-500/80 group-hover:text-yellow-400 transition-colors" />
-  };
+  const defaultLeagues = [
+    { name: 'Türkiye. Süper Lig', matchName: 'Süper Lig', icon: <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'UEFA Şampiyonlar Ligi', matchName: 'Şampiyonlar Ligi', icon: <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'İngiltere Premier Ligi', matchName: 'Premier Ligi', icon: <img src="https://flagcdn.com/w20/gb-eng.png" alt="EN" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'İngiltere.Championship', matchName: 'Championship', icon: <img src="https://flagcdn.com/w20/gb-eng.png" alt="EN" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'İspanya LaLiga', matchName: 'LaLiga', icon: <img src="https://flagcdn.com/w20/es.png" alt="ES" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'İtalya Serie A', matchName: 'Serie A', icon: <img src="https://flagcdn.com/w20/it.png" alt="IT" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'Fransa Ligue 1', matchName: 'Ligue 1', icon: <img src="https://flagcdn.com/w20/fr.png" alt="FR" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'Hollanda Eredivisie', matchName: 'Eredivisie', icon: <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'Almanya. Bundesliga', matchName: 'Bundesliga', icon: <img src="https://flagcdn.com/w20/de.png" alt="DE" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'Portekiz Primeira Liga', matchName: 'Primeira Liga', icon: <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'Brezilya. Serie A', matchName: 'Brezilya Serie A', icon: <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'ABD. MLS', matchName: 'MLS', icon: <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'Erkekler. Avrupa Lig', matchName: 'Avrupa Ligi', icon: <Trophy className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'NBA', matchName: 'NBA', icon: <Dribbble className="w-4 h-4 text-orange-500/80 group-hover:text-orange-400 transition-colors" /> },
+  ];
 
   const currentMatches = activeLeftTab === 'canli' ? matches.filter(m => m.isLive) : matches;
   
-  // Calculate dynamic leagues
-  const leagueCounts: Record<string, { count: number, isLive: boolean }> = {};
+  // Update counts for default leagues
+  const displayLeagues = defaultLeagues.map(dl => {
+    // Check if the scraped league name contains our target name (e.g. "Premier Ligi" in "İngiltere Premier Ligi")
+    const matchingMatches = currentMatches.filter(m => m.league && m.league.includes(dl.matchName));
+    return {
+      ...dl,
+      count: matchingMatches.length,
+      isLive: matchingMatches.some(m => m.isLive)
+    };
+  });
+  
+  // Find other leagues that are active but not in the popular list
+  const activeLeagueNames = new Set(displayLeagues.map(l => l.matchName));
+  const otherLeaguesMap: Record<string, { count: number, isLive: boolean }> = {};
+  
   currentMatches.forEach(m => {
     if (!m.league) return;
-    if (!leagueCounts[m.league]) {
-      leagueCounts[m.league] = { count: 0, isLive: false };
-    }
-    leagueCounts[m.league].count++;
-    if (m.isLive) {
-      leagueCounts[m.league].isLive = true;
+    // Check if this match was already counted in a popular league
+    const isPopular = Array.from(activeLeagueNames).some(name => m.league?.includes(name));
+    if (!isPopular) {
+      if (!otherLeaguesMap[m.league]) {
+        otherLeaguesMap[m.league] = { count: 0, isLive: false };
+      }
+      otherLeaguesMap[m.league].count++;
+      if (m.isLive) otherLeaguesMap[m.league].isLive = true;
     }
   });
 
-  const dynamicLeagues = Object.entries(leagueCounts)
+  const otherLeagues = Object.entries(otherLeaguesMap)
     .sort((a, b) => b[1].count - a[1].count)
     .map(([name, data]) => ({
       name,
+      matchName: name,
       count: data.count,
       isLive: data.isLive,
-      icon: leagueIconMap[name] || <Globe className="w-4 h-4 text-zinc-600 group-hover:text-[#00FFA3] transition-colors" />
+      icon: <Globe className="w-4 h-4 text-zinc-600 group-hover:text-[#00FFA3] transition-colors" />
     }));
+    
+  const allLeagues = [...displayLeagues, ...otherLeagues];
 
   let filteredMatches = activeLeftTab === 'canli' ? matches.filter(m => m.isLive) : matches;
   if (activeLeague) {
-    filteredMatches = filteredMatches.filter(m => m.league === activeLeague);
+    // Get the matchName for the activeLeague
+    const clickedLeague = allLeagues.find(l => l.name === activeLeague);
+    const searchTarget = clickedLeague ? clickedLeague.matchName : activeLeague;
+    filteredMatches = filteredMatches.filter(m => m.league && m.league.includes(searchTarget));
   }
 
   const footballMatches = filteredMatches.filter(m => m.sport === 'futbol');
@@ -230,7 +250,7 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
           <div className="px-3 py-2 mb-1 flex justify-between items-center">
             <span className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Öne Çıkan Ligler</span>
           </div>
-          {dynamicLeagues.map((league, idx) => (
+          {allLeagues.map((league, idx) => (
             <div 
               key={idx} 
               onClick={() => setActiveLeague(league.name)}
@@ -242,7 +262,9 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                 {league.isLive && (
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.5)]"></span>
                 )}
-                <span className={`text-[10px] font-bold transition-colors ${activeLeague === league.name ? 'text-[#00FFA3]' : 'text-zinc-600 group-hover:text-[#00FFA3]'}`}>{league.count}</span>
+                {league.count > 0 && (
+                  <span className={`text-[10px] font-bold transition-colors ${activeLeague === league.name ? 'text-[#00FFA3]' : 'text-zinc-600 group-hover:text-[#00FFA3]'}`}>{league.count}</span>
+                )}
               </div>
             </div>
           ))}
