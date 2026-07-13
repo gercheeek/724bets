@@ -43,16 +43,29 @@ export const handler = async (event, context) => {
     const cleanedData = liveMatches.map(item => {
       let scoreHome = 0;
       let scoreAway = 0;
-      let displayTime = item.match_time || item.status || "Canlı";
+      let displayTime = item.match_time || "Canlı";
+      let sport = "futbol";
+      let rawStatus = item.status || "";
+
+      // Extract sport if present, e.g. "BASKETBOL|Canlı: 40-45 (1. Çeyrek)"
+      if (rawStatus.includes('|')) {
+         const parts = rawStatus.split('|');
+         sport = parts[0].toLowerCase();
+         rawStatus = parts[1];
+      }
+      
+      if (!item.match_time) {
+          displayTime = rawStatus;
+      }
       
       // Parse score and exact time from status: "Canlı: 0-0 (61)"
-      if (item.status && item.status.includes('Canlı:')) {
-         const scoreMatch = item.status.match(/Canlı: (\d+)-(\d+)/);
+      if (rawStatus.includes('Canlı:')) {
+         const scoreMatch = rawStatus.match(/Canlı:\s*(\d+)-(\d+)/);
          if (scoreMatch) {
            scoreHome = parseInt(scoreMatch[1], 10);
            scoreAway = parseInt(scoreMatch[2], 10);
          }
-         const timeMatch = item.status.match(/\(([^)]+)\)/);
+         const timeMatch = rawStatus.match(/\(([^)]+)\)/);
          if (timeMatch) {
            displayTime = timeMatch[1] + "'";
          }
@@ -60,7 +73,7 @@ export const handler = async (event, context) => {
 
       return {
         id: item.id || Math.random().toString(),
-        sport: 'futbol', 
+        sport: sport, 
         time: displayTime,
         home: item.home_team || "Ev Sahibi",
         away: item.away_team || "Deplasman",

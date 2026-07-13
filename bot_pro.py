@@ -13,6 +13,22 @@ def init_supabase():
     except:
         return None
 
+def guess_sport(lines):
+    text = " ".join(lines).lower()
+    if "set" in text or "oyun" in text or "tie-break" in text or "servis" in text or "atp" in text or "wta" in text:
+        return "tenis"
+    if "çeyrek" in text or "periyot" in text or "nba" in text or "basket" in text:
+        return "basketbol"
+    if "voleybol" in text or "setler" in text:
+        return "voleybol"
+    try:
+        if lines[0].isdigit() and lines[2].isdigit():
+            if int(lines[0]) > 20 or int(lines[2]) > 20:
+                return "basketbol"
+    except:
+        pass
+    return "futbol"
+
 def parse_match_text(text):
     """
     Digitain altyapısından dönen çok satırlı (newline) metni parse eder.
@@ -39,9 +55,10 @@ def parse_match_text(text):
         # Check if first line is a score (number)
         if lines[0].isdigit() and lines[2].isdigit():
             # Canlı Maç Formatı
+            sport = guess_sport(lines)
             match_data["home_team"] = lines[1]
             match_data["away_team"] = lines[3]
-            match_data["status"] = f"Canlı: {lines[0]}-{lines[2]} ({lines[4]})"
+            match_data["status"] = f"{sport.upper()}|Canlı: {lines[0]}-{lines[2]} ({lines[4]})"
             match_data["match_time"] = lines[4]
             # Oranlar sondan bir öncekilerdedir
             try:
@@ -52,10 +69,11 @@ def parse_match_text(text):
                 pass
         else:
             # Maç Öncesi Formatı
+            sport = guess_sport(lines)
             match_data["home_team"] = lines[0]
             match_data["away_team"] = lines[1]
             match_data["match_time"] = f"{lines[2]} {lines[3]}"
-            match_data["status"] = "Yakında"
+            match_data["status"] = f"{sport.upper()}|Yakında"
             try:
                 match_data["away_odd"] = float(lines[-2]) if lines[-2] != '-' else 0
                 match_data["draw_odd"] = float(lines[-3]) if lines[-3] != '-' else 0
@@ -105,7 +123,7 @@ def bul_ve_oku_iframe_icerigi(page, supabase):
                                 on_conflict='home_team,away_team'
                             ).execute()
                         except Exception as db_err:
-                            pass # Sessizce geç
+                            print(f"DB HATA: {db_err}")
                     print("[+] Veritabanı güncellendi!")
                 else:
                     print("[-] Supabase bağlantısı kurulamadı. Veriler public/live_matches.json dosyasına kaydediliyor...")
@@ -136,9 +154,11 @@ if __name__ == "__main__":
         print("[*] Hedef siteye gidiliyor...")
         page.goto("https://sport.7yrrerfcet.com/SportsBook/Home", wait_until="networkidle")
         
-        page.wait_for_timeout(3000) 
-        bul_ve_oku_iframe_icerigi(page, supabase_client)
-        
-        print("\n[*] Döngü bitti. 15 saniye sonra tekrar veri çekilebilir... (Kapatmak için CTRL+C)")
-        page.wait_for_timeout(15000)
-        context.close()
+        while True:
+            print("\n=============================================")
+            print("[*] Yeni Tarama Döngüsü Başlıyor...")
+            page.wait_for_timeout(3000) 
+            bul_ve_oku_iframe_icerigi(page, supabase_client)
+            
+            print("\n[*] Döngü bitti. 15 saniye bekleniyor... (Kapatmak için CTRL+C)")
+            page.wait_for_timeout(15000)
