@@ -57,20 +57,20 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
   };
 
   const leagues = [
-    { name: 'Türkiye, Süper Lig', icon: <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'UEFA Şampiyonlar Ligi', icon: <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
-    { name: 'İngiltere Premier Ligi', icon: <img src="https://flagcdn.com/w20/gb-eng.png" alt="EN" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'İngiltere Championship', icon: <img src="https://flagcdn.com/w20/gb-eng.png" alt="EN" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'İspanya LaLiga', icon: <img src="https://flagcdn.com/w20/es.png" alt="ES" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'İtalya Serie A', icon: <img src="https://flagcdn.com/w20/it.png" alt="IT" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'Fransa Ligue 1', icon: <img src="https://flagcdn.com/w20/fr.png" alt="FR" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'Hollanda Eredivisie', icon: <img src="https://flagcdn.com/w20/nl.png" alt="NL" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'Almanya Bundesliga', icon: <img src="https://flagcdn.com/w20/de.png" alt="DE" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'Portekiz Primeira Liga', icon: <img src="https://flagcdn.com/w20/pt.png" alt="PT" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'Brezilya Serie A', icon: <img src="https://flagcdn.com/w20/br.png" alt="BR" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'ABD, MLS', icon: <img src="https://flagcdn.com/w20/us.png" alt="US" className="w-4 h-4 rounded-full opacity-80 grayscale group-hover:grayscale-0 transition-all" /> },
-    { name: 'Erkekler Avrupa Lig', icon: <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
-    { name: 'NBA', icon: <Dribbble className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'Türkiye Süper Lig', isLive: true, count: 18, icon: <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'Şampiyonlar Ligi', isLive: false, count: 12, icon: <Globe className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'Premier League', isLive: true, count: 24, icon: <img src="https://flagcdn.com/w20/gb-eng.png" alt="EN" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'LaLiga', isLive: false, count: 15, icon: <img src="https://flagcdn.com/w20/es.png" alt="ES" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'Serie A', isLive: true, count: 10, icon: <img src="https://flagcdn.com/w20/it.png" alt="IT" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'Ligue 1', isLive: false, count: 8, icon: <img src="https://flagcdn.com/w20/fr.png" alt="FR" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'Bundesliga', isLive: false, count: 9, icon: <img src="https://flagcdn.com/w20/de.png" alt="DE" className="w-4 h-4 rounded-full opacity-80 group-hover:opacity-100 transition-all shadow-sm" /> },
+    { name: 'NBA', isLive: true, count: 14, icon: <Dribbble className="w-4 h-4 text-orange-500/80 group-hover:text-orange-400 transition-colors" /> },
+    { name: 'Euroleague', isLive: false, count: 8, icon: <Dribbble className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'NFL', isLive: false, count: 4, icon: <Trophy className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'Wimbledon', isLive: true, count: 11, icon: <Circle className="w-4 h-4 text-yellow-500/80 group-hover:text-yellow-400 transition-colors" /> },
+    { name: 'NHL Buz Hokeyi', isLive: false, count: 6, icon: <Activity className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'CS:GO Major', isLive: true, count: 3, icon: <Target className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
+    { name: 'Voleybol Şampiyonlar', isLive: false, count: 5, icon: <Trophy className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" /> },
   ];
 
   const filteredMatches = matches.filter(m => {
@@ -183,19 +183,28 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
 
         {/* League List */}
         <div className="flex-1 flex flex-col px-2 pb-4">
+          <div className="px-3 py-2 mb-1 flex justify-between items-center">
+            <span className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Öne Çıkan Ligler</span>
+          </div>
           {leagues.map((league, idx) => (
-            <div key={idx} className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-[#1A1D24] group transition-colors">
+            <div key={idx} className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-[#1A1D24] group transition-all hover:translate-x-1 border border-transparent hover:border-[#202532]">
               <div className="w-5 flex justify-center">{league.icon}</div>
-              <span className="text-xs font-medium text-zinc-400 group-hover:text-zinc-200">{league.name}</span>
+              <span className="text-[11px] font-medium text-zinc-400 group-hover:text-zinc-200 transition-colors">{league.name}</span>
+              <div className="ml-auto flex items-center gap-2">
+                {league.isLive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.5)]"></span>
+                )}
+                <span className="text-[10px] font-bold text-zinc-600 group-hover:text-[#00FFA3] transition-colors">{league.count}</span>
+              </div>
             </div>
           ))}
 
-          <div className="w-full h-px bg-[#202532] my-2"></div>
+          <div className="w-full h-px bg-[#202532] my-4"></div>
           
-          <div className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-[#1A1D24] group transition-colors mt-auto">
-            <Activity className="w-4 h-4 text-zinc-500 group-hover:text-[#00FFA3] transition-colors" />
-            <span className="text-xs font-medium text-zinc-400 group-hover:text-zinc-200">Popüler Etkinlikler</span>
-            <ChevronDown className="w-4 h-4 text-zinc-600 ml-auto" />
+          <div className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-[#1A1D24] group transition-colors mt-auto border border-transparent hover:border-[#202532] shadow-sm">
+            <Activity className="w-4 h-4 text-[#00FFA3] group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-bold text-zinc-300 group-hover:text-white">Tüm Popüler Etkinlikler</span>
+            <ChevronDown className="w-4 h-4 text-zinc-600 ml-auto group-hover:text-[#00FFA3] transition-colors" />
           </div>
         </div>
       </div>
