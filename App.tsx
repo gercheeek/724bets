@@ -1808,6 +1808,12 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {view === 'sports-beta' && (
+          <div className="animate-fade-in relative h-full w-full overflow-y-auto pb-32">
+            <SportsDashboard onNavigate={setView} />
+          </div>
+        )}
+
         {view === 'sports2' && (
           <div className="animate-fade-in w-full relative flex flex-col" style={{ height: 'calc(100vh - var(--header-height))' }}>
             
