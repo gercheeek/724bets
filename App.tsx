@@ -1769,8 +1769,8 @@ const App: React.FC = () => {
         )}
 
         {view === 'sports' && (
-          <div className="animate-fade-in relative w-full bg-[#09090b] flex justify-center overflow-hidden" style={{ height: 'calc(100vh - var(--header-height))' }}>
-            <div className="w-full h-full md:max-w-[480px] bg-[#111] shadow-2xl relative border-x border-[#2C2F3D]">
+          <div className="animate-fade-in relative w-full h-full bg-[#09090b] flex justify-center overflow-hidden" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            <div className="w-full h-full bg-[#09090b] relative">
               {iframeLoading && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
                   <div className="flex flex-col items-center gap-4">
