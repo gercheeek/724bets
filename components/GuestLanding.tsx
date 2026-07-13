@@ -151,8 +151,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           <div className="w-full mb-4">
              <WorldCupTeaser>
                {/* Welcome & Search Bar Inline */}
-               <div className="w-full py-4 flex justify-between items-center mb-2">
-                 <h2 className="text-xl sm:text-2xl md:text-[28px] font-black text-white tracking-tight">
+               <div className="w-full py-2 flex justify-between items-center mb-2">
+                 <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
                    Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
                  </h2>
                  
@@ -175,11 +175,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                </div>
 
                {/* 2 Big Cards: Casino & Sports */}
-               <div className="w-full pb-8 grid grid-cols-2 gap-4">
+               <div className="w-full pb-6 grid grid-cols-2 gap-4">
                  {/* Kumarhane Card */}
                  <div 
                    onClick={() => onViewChange('blackjack')}
-                   className="relative w-full h-[140px] sm:h-[180px] md:h-[300px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
+                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
                  >
                    <div className="w-full h-[70%] md:h-[75%] relative overflow-hidden">
                       <img 
@@ -189,11 +189,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                       />
                    </div>
                    {/* Solid Bottom Band */}
-                   <div className="w-full h-[30%] md:h-[25%] bg-gradient-to-r from-[#811850] to-[#59103a] p-2 sm:p-4 md:px-6 flex items-center justify-center sm:justify-between z-20 border-t border-white/10">
-                     <h3 className="text-base sm:text-2xl md:text-3xl font-black text-white tracking-tight">
+                   <div className="w-full h-[30%] md:h-[25%] bg-gradient-to-r from-[#811850] to-[#59103a] p-2 sm:p-3 md:px-5 flex items-center justify-center sm:justify-between z-20 border-t border-white/10">
+                     <h3 className="text-base sm:text-xl md:text-2xl font-black text-white tracking-tight">
                        Kumarhane
                      </h3>
-                     <button className="hidden sm:block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-sm rounded transition-colors">
+                     <button className="hidden sm:block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 text-xs rounded transition-colors">
                        Ziyaret et
                      </button>
                    </div>
@@ -202,7 +202,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  {/* Spor Bahisleri Card */}
                  <div 
                    onClick={() => onViewChange('sports')}
-                   className="relative w-full h-[140px] sm:h-[180px] md:h-[300px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
+                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
                  >
                    <div className="w-full h-[70%] md:h-[75%] relative overflow-hidden">
                      <img 
@@ -212,11 +212,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                      />
                    </div>
                    {/* Solid Bottom Band */}
-                   <div className="w-full h-[30%] md:h-[25%] bg-gradient-to-r from-[#216115] to-[#15420d] p-2 sm:p-4 md:px-6 flex items-center justify-center sm:justify-between z-20 border-t border-white/10">
-                     <h3 className="text-base sm:text-2xl md:text-3xl font-black text-white tracking-tight">
+                   <div className="w-full h-[30%] md:h-[25%] bg-gradient-to-r from-[#216115] to-[#15420d] p-2 sm:p-3 md:px-5 flex items-center justify-center sm:justify-between z-20 border-t border-white/10">
+                     <h3 className="text-base sm:text-xl md:text-2xl font-black text-white tracking-tight">
                        Spor Bahisleri
                      </h3>
-                     <button className="hidden sm:block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-sm rounded transition-colors">
+                     <button className="hidden sm:block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 text-xs rounded transition-colors">
                        Ziyaret et
                      </button>
                    </div>

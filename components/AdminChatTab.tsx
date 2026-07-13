@@ -217,7 +217,7 @@ export default function AdminChatTab() {
   const [statusMessage, setStatusMessage] = useState('');
 
   // AI Autopilot (Oto-Pilot) State'leri
-  const [hfToken, setHfToken] = useState(() => localStorage.getItem('hf_token') || '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');
+  const [hfToken, setHfToken] = useState(() => localStorage.getItem('hf_token') || '');
   const [isAutopilotRunning, setIsAutopilotRunning] = useState(false);
   const [autopilotTopic, setAutopilotTopic] = useState('');
   const [activeOverrideTopic, setActiveOverrideTopic] = useState('');
@@ -579,7 +579,7 @@ export default function AdminChatTab() {
       return;
     }
 
-    const token = hfToken || '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';
+    const token = hfToken || '';
     if (!token) {
       setStatusMessage('⚠️ Hugging Face Token eksik!');
       setIsAutopilotRunning(false);
