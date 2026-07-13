@@ -491,10 +491,7 @@ const App: React.FC = () => {
                 email: u.email,
                 phone: '05555555555',
                 password: 'google_oauth_' + u.id,
-                status: 'active',
-                tc_no: Math.floor(Math.random() * 90000000000 + 10000000000).toString(),
-                referral_code: Math.random().toString(36).substring(2, 10).toUpperCase(),
-                referred_by: null
+                status: 'active'
            }]).select().single();
            
            if (insertError) {
