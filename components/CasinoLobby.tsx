@@ -72,41 +72,61 @@ const getGameColor = (name: string) => {
 
 const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick }) => {
   const cardColor = getGameColor(game.name);
+  const randomPlayers = React.useMemo(() => Math.floor(Math.random() * 500) + 100, []);
+  const players = game.players || randomPlayers;
   
   return (
-    <div 
-      className="group relative flex flex-col cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.6)] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:-translate-y-1" 
-      onClick={onClick}
-      style={{ aspectRatio: '3/4', backgroundColor: '#111' }}
-    >
-      {/* Top Image Section */}
-      <div className="relative w-full h-[65%] overflow-hidden bg-[#1A1D29]">
-        <img 
-          src={game.img || game.image} 
-          alt={game.name} 
-          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" 
-        />
-        {/* Play Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
-          <div className="w-12 h-12 bg-[#f0b90b] rounded-full flex items-center justify-center text-black shadow-[0_0_20px_rgba(240,185,11,0.6)] transform scale-75 group-hover:scale-100 transition-all duration-300">
-            <Play fill="currentColor" size={20} className="ml-1" />
+    <div className="flex flex-col">
+      <div 
+        className="group relative flex flex-col cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.6)] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:-translate-y-1" 
+        onClick={onClick}
+        style={{ aspectRatio: '3/4', backgroundColor: '#111' }}
+      >
+        {/* Drops & Wins Badge for Pragmatic Games */}
+        {game.provider === 'Pragmatic Play' && (
+          <div className="absolute -top-1 -left-1 bg-[#141414] rounded-full flex flex-col items-center justify-center shadow-[2px_2px_10px_rgba(0,0,0,0.8)] z-40 border border-white/10" style={{ width: '42px', height: '42px' }}>
+            <Crown size={12} className="text-[#f0b90b] mb-0.5" />
+            <span className="text-[5.5px] font-black text-white uppercase text-center leading-[1.1]">Drops<br/>& Wins</span>
+          </div>
+        )}
+
+        {/* Top Image Section */}
+        <div className="relative w-full h-[65%] overflow-hidden bg-[#1A1D29]">
+          <img 
+            src={game.img || game.image} 
+            alt={game.name} 
+            className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" 
+          />
+          {/* Play Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
+            <div className="w-12 h-12 bg-[#f0b90b] rounded-full flex items-center justify-center text-black shadow-[0_0_20px_rgba(240,185,11,0.6)] transform scale-75 group-hover:scale-100 transition-all duration-300">
+              <Play fill="currentColor" size={20} className="ml-1" />
+            </div>
           </div>
         </div>
-      </div>
-      
-      {/* Bottom Color Block */}
-      <div 
-        className="relative w-full h-[35%] flex flex-col items-center justify-center p-2 z-20"
-        style={{ background: cardColor }}
-      >
-        <h3 
-          className="text-white text-[12px] sm:text-[13px] font-black uppercase tracking-tight leading-[1.1] text-center drop-shadow-md line-clamp-2"
-          style={{ fontFamily: "'Inter', sans-serif" }}
+        
+        {/* Bottom Color Block */}
+        <div 
+          className="relative w-full h-[35%] flex flex-col items-center justify-center p-2 z-20"
+          style={{ background: cardColor }}
         >
-          {game.name || 'Slot Oyunu'}
-        </h3>
-        <span className="text-white/90 text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.1em] mt-1 drop-shadow-sm">
-          {game.provider || 'Pragmatic Play'}
+          <h3 
+            className="text-white text-[12px] sm:text-[13px] font-black uppercase tracking-tight leading-[1.1] text-center drop-shadow-md line-clamp-2"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            {game.name || 'Slot Oyunu'}
+          </h3>
+          <span className="text-white/90 text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.1em] mt-1 drop-shadow-sm">
+            {game.provider || 'Pragmatic Play'}
+          </span>
+        </div>
+      </div>
+
+      {/* Player Count Below Card */}
+      <div className="flex items-center justify-center gap-1.5 mt-2.5">
+        <div className="w-1.5 h-1.5 rounded-full bg-[#00e676] shadow-[0_0_5px_#00e676]"></div>
+        <span className="text-[#848B9D] text-[10px] sm:text-[11px] font-medium tracking-wide">
+          <strong className="text-white">{players}</strong> Oyuncular
         </span>
       </div>
     </div>
