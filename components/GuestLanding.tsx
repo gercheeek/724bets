@@ -175,7 +175,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                </div>
 
                {/* 2 Big Cards: Casino & Sports */}
-               <div className="w-full pb-8 grid grid-cols-2 gap-2 md:gap-4">
+               <div className="w-full pb-8 grid grid-cols-2 gap-4">
                  {/* Kumarhane Card */}
                  <div 
                    onClick={() => onViewChange('blackjack')}
