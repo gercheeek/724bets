@@ -224,12 +224,12 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                           {odd}
                         </button>
                       ))}
-                    </div>
                   </div>
                 ))}
-              )}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
+        )}
 
           {/* Basketball Group */}
           {basketballMatches.length > 0 && (
@@ -294,9 +294,10 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                     </div>
                   </div>
                 ))}
-              )}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
+        )}
 
           {/* Tennis Group */}
           {tennisMatches.length > 0 && (
