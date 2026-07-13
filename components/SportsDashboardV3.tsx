@@ -224,6 +224,7 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                           {odd}
                         </button>
                       ))}
+                    </div>
                   </div>
                 ))}
               </div>
