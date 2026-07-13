@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Trophy, Globe, Target, Circle, Activity, Dribbble, MessageCircle, BarChart2, Info,
-  ChevronDown, ChevronUp, Search, PlayCircle, Shield
+  ChevronDown, ChevronUp, Search, PlayCircle, Shield, Star
 } from 'lucide-react';
+import { SingleMatchView } from './SingleMatchView';
 
 interface SportsDashboardV3Props {
   onNavigate: (view: string) => void;
@@ -17,6 +18,7 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
     'tenis': true
   });
   const [expandedMatches, setExpandedMatches] = useState<Record<string, boolean>>({});
+  const [selectedMatch, setSelectedMatch] = useState<any | null>(null);
 
   const toggleMatch = (matchId: string) => {
     setExpandedMatches(prev => ({ ...prev, [matchId]: !prev[matchId] }));
@@ -90,7 +92,7 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
         <button 
           onClick={(e) => {
             e.stopPropagation();
-            alert("Tüm bahis seçenekleri yakında eklenecektir!");
+            setSelectedMatch(match);
           }}
           className="text-zinc-400 text-[10px] uppercase font-bold bg-[#12161E] px-3 py-1.5 rounded border border-[#202532] hover:bg-[#1A1D24] hover:text-[#00FFA3] hover:border-[#00FFA3]/30 transition-all cursor-pointer shadow-sm active:scale-95"
         >
@@ -200,13 +202,17 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
 
       {/* ─── CENTER CONTENT (MATCHES) ─── */}
       <div className="flex-1 flex flex-col bg-[#09090b] overflow-y-auto custom-scrollbar relative">
-        <div className="sticky top-0 z-20 bg-[#09090b]/90 backdrop-blur-md px-6 py-4 border-b border-[#202532]">
-          <h1 className="text-[#00FFA3] text-xs font-bold tracking-widest uppercase">
-            {activeLeftTab === 'canli' ? 'CANLI BAHİS' : 'MAÇ ÖNCESİ / YAKINDA'}
-          </h1>
-        </div>
+        {selectedMatch ? (
+          <SingleMatchView match={selectedMatch} onBack={() => setSelectedMatch(null)} />
+        ) : (
+          <>
+            <div className="sticky top-0 z-20 bg-[#09090b]/90 backdrop-blur-md px-6 py-4 border-b border-[#202532]">
+              <h1 className="text-[#00FFA3] text-xs font-bold tracking-widest uppercase">
+                {activeLeftTab === 'canli' ? 'CANLI BAHİS' : 'MAÇ ÖNCESİ / YAKINDA'}
+              </h1>
+            </div>
 
-        <div className="p-4 flex flex-col gap-4">
+            <div className="p-4 flex flex-col gap-4">
           
           {loading && (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
@@ -471,6 +477,8 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
           )}
 
         </div>
+          </>
+        )}
       </div>
 
       {/* ─── RIGHT SIDEBAR (LIVE PITCH & SLIP) ─── */}
