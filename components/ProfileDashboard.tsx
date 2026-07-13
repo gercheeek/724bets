@@ -524,6 +524,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                              setIsAnimating(true);
                              setTimeout(() => {
                                setGlobalLang(targetLang);
+                               setTimeout(() => setIsAnimating(false), 200);
                              }, 800);
                            }
                         }}
