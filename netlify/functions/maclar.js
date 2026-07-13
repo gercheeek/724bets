@@ -58,10 +58,9 @@ export const handler = async (event, context) => {
           displayTime = rawStatus;
       }
       
-      const popularLeagues = ['Türkiye Süper Lig', 'Şampiyonlar Ligi', 'Premier League', 'LaLiga', 'Serie A', 'Ligue 1', 'Bundesliga'];
-      let league = popularLeagues[parseInt((item.id || "").replace(/[^0-9]/g, '') || "0") % popularLeagues.length];
+      let league = item.league || "Diğer Ligler";
       if (sport !== 'futbol') {
-          league = sport === 'basketbol' ? 'NBA' : 'Wimbledon';
+          league = sport === 'basketbol' ? 'NBA' : 'Wimbledon'; // Kept fallback for other sports if scraper doesn't get them perfectly
       }
       
       const isLive = rawStatus.includes('Canlı');

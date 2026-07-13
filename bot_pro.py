@@ -102,27 +102,71 @@ def bul_ve_oku_iframe_icerigi(page, supabase):
                 
                 frame.wait_for_selector(".oneGame", timeout=45000)
                 print("[+] Ekranda aşağı kaydırılarak tüm maçların yüklenmesi sağlanıyor...")
-                all_match_texts = set()
+                all_games = {} # text -> league mapping
                 previous_count = 0
                 
                 for _ in range(15):
-                    maclar = frame.locator(".oneGame").all_inner_texts()
-                    for m in maclar:
-                        all_match_texts.add(m)
+                    # Sayfadaki tüm oneGame elementlerini ve onların üstlerindeki lig başlıklarını JS ile alıyoruz
+                    extracted = frame.evaluate("""
+                        () => {
+                            let results = [];
+                            let games = document.querySelectorAll('.oneGame');
+                            games.forEach(game => {
+                                let leagueName = "Popüler Lig"; // Default fallback
+                                
+                                // Digitain altyapısında genellikle maçların üstünde .sportGroup veya .tournamentName gibi bir class olur.
+                                let el = game;
+                                while(el && el !== document.body) {
+                                    // 1. Üst konteynerdeki başlığı ara
+                                    let titleEl = el.querySelector('.leagueName, .tournament-name, .sportToursItem .name, .group-title');
+                                    if (titleEl && titleEl.innerText && !titleEl.innerText.includes(game.innerText.substring(0,10))) {
+                                        leagueName = titleEl.innerText;
+                                        break;
+                                    }
+                                    
+                                    // 2. Önceki kardeş elementlere bak (Örn: <div class="league-header">Lig</div> <div class="oneGame">...</div>)
+                                    let prev = el.previousElementSibling;
+                                    while (prev) {
+                                        if (prev.innerText && prev.innerText.trim().length > 0 && !prev.innerText.includes(':') && prev.innerText.length < 50) {
+                                            if (prev.className && typeof prev.className === 'string' && (prev.className.toLowerCase().includes('head') || prev.className.toLowerCase().includes('title') || prev.className.toLowerCase().includes('tour'))) {
+                                                leagueName = prev.innerText;
+                                                break;
+                                            }
+                                        }
+                                        prev = prev.previousElementSibling;
+                                    }
+                                    if (leagueName !== "Popüler Lig") break;
+                                    
+                                    el = el.parentElement;
+                                }
+                                
+                                results.push({
+                                    text: game.innerText,
+                                    league: leagueName.trim().split('\\n')[0]
+                                });
+                            });
+                            return results;
+                        }
+                    """)
                     
-                    if len(all_match_texts) == previous_count and len(all_match_texts) > 5:
+                    for item in extracted:
+                        all_games[item['text']] = item['league']
+                    
+                    if len(all_games) == previous_count and len(all_games) > 5:
                         break # Belki sonuna geldik
                         
-                    previous_count = len(all_match_texts)
+                    previous_count = len(all_games)
                     frame.locator("body").press("PageDown")
                     page.wait_for_timeout(1000)
                 
-                print(f"[+] Kaydırma bitti. Toplam {len(all_match_texts)} eşsiz maç bulundu!\n")
+                print(f"[+] Kaydırma bitti. Toplam {len(all_games)} eşsiz maç bulundu!\n")
                 
                 parsed_matches = []
-                for mac_text in all_match_texts:
+                for mac_text, league_name in all_games.items():
                     data = parse_match_text(mac_text)
                     if data:
+                        # Append the extracted league
+                        data['league'] = league_name
                         parsed_matches.append(data)
                 
                 print(f"[+] {len(parsed_matches)} maç başarıyla JSON'a dönüştürüldü.")
