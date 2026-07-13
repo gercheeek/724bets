@@ -1495,7 +1495,6 @@ const App: React.FC = () => {
                 </button>
                 
                 <div className="font-black text-xl text-white tracking-tight shrink px-1 flex items-center group cursor-pointer" onClick={() => window.location.href = '/'}>
-                  <Club className="w-6 h-6 text-[#00FFA3] mr-1.5 logo-clover-intro group-hover:rotate-[360deg] transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] drop-shadow-[0_0_8px_rgba(0,255,163,0.5)] group-hover:scale-110" strokeWidth={2.5} />
                   <span className="logo-text-intro">
                     <span className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#00FFA3] transition-colors duration-300">
                       724bets
