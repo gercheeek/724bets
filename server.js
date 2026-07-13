@@ -9,6 +9,11 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+// Root endpoint for health check
+app.get('/', (req, res) => {
+  res.send('724Bahis Sports Middleware is running. API endpoint is at /api/maclar');
+});
+
 // Main proxy endpoint
 app.get('/api/maclar', async (req, res) => {
   try {
