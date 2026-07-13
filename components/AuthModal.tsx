@@ -140,10 +140,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 email: mUsername.trim().includes('@') ? mUsername.trim() : `${mUsername.trim().replace(/[^a-zA-Z0-9]/g, '')}@724bets.com`,
                 phone: mUsername.trim().replace(/[^0-9]/g, '') || '05555555555',
                 password: mPassword,
-                status: 'pending',
-                tc_no: Math.floor(Math.random() * 90000000000 + 10000000000).toString(),
-                referral_code: Math.random().toString(36).substring(2, 10).toUpperCase(),
-                referred_by: null
+                status: 'pending'
             }]).select().single();
 
             if (insertError || !newUser) {
