@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import LanguageTransition from './components/LanguageTransition';
@@ -485,7 +486,7 @@ const App: React.FC = () => {
            const usernameBase = u.user_metadata?.full_name?.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || u.email?.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') || 'googleuser';
            const newUsername = usernameBase + Math.floor(Math.random() * 1000);
            
-           const { data: newUser } = await supabase.from('members').insert([{
+           const { data: newUser, error: insertError } = await supabase.from('members').insert([{
                 username: newUsername,
                 email: u.email,
                 phone: '05555555555',
@@ -495,6 +496,11 @@ const App: React.FC = () => {
                 referral_code: newUsername.substring(0,8),
                 referred_by: null
            }]).select().single();
+           
+           if (insertError) {
+             console.error("Google login DB insert error:", insertError);
+             alert("Kayıt oluşturulurken veritabanı hatası: " + insertError.message);
+           }
            
            if (newUser) {
              await supabase.from('loyalty').insert([{
