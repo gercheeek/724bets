@@ -1541,7 +1541,7 @@ const App: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
+          {!(view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen}
@@ -1769,8 +1769,24 @@ const App: React.FC = () => {
         )}
 
         {view === 'sports' && (
-          <div className="animate-fade-in relative h-full w-full overflow-y-auto pb-32">
-            <SportsDashboard onNavigate={() => {}} />
+          <div className="animate-fade-in relative h-full w-full bg-[#09090b] flex justify-center overflow-hidden">
+            <div className="w-full h-full md:max-w-[480px] bg-[#111] shadow-2xl relative border-x border-[#2C2F3D]">
+              {iframeLoading && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-10 h-10 border-4 border-[#00FFA3] border-t-transparent rounded-full animate-spin"></div>
+                    <div className="text-[#00FFA3] font-bold text-sm animate-pulse tracking-wider">YÜKLENİYOR...</div>
+                  </div>
+                </div>
+              )}
+              <iframe 
+                src="https://sport.7yrrerfcet.com/SportsBook/Home"
+                onLoad={() => setIframeLoading(false)}
+                className="w-full h-full border-none"
+                frameBorder="0"
+                allowFullScreen
+              />
+            </div>
           </div>
         )}
 
