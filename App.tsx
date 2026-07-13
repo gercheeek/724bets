@@ -459,6 +459,80 @@ const App: React.FC = () => {
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
 
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        const u = session.user;
+        const { data: existingUser } = await supabase.from('members').select('*').eq('email', u.email).single();
+        
+        let finalUser;
+        if (existingUser) {
+           finalUser = {
+                id: existingUser.id,
+                username: existingUser.username,
+                password: existingUser.password,
+                email: existingUser.email || '',
+                phone: existingUser.phone || '',
+                createdAt: new Date(existingUser.created_at).getTime(),
+                status: existingUser.status || 'active',
+                notes: existingUser.notes || '',
+                role: existingUser.role || 'member',
+                balance: existingUser.balance || 0
+            };
+        } else {
+           const usernameBase = u.user_metadata?.full_name?.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || u.email?.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') || 'googleuser';
+           const newUsername = usernameBase + Math.floor(Math.random() * 1000);
+           
+           const { data: newUser } = await supabase.from('members').insert([{
+                username: newUsername,
+                email: u.email,
+                phone: '05555555555',
+                password: 'google_oauth_' + u.id,
+                status: 'active',
+                tc_no: '11111111111',
+                referral_code: newUsername.substring(0,8),
+                referred_by: null
+           }]).select().single();
+           
+           if (newUser) {
+             await supabase.from('loyalty').insert([{
+                user_id: newUser.id,
+                coins: 0,
+                tickets: 0,
+                pending_tickets: 0,
+                total_earned: 0,
+                transactions: [],
+                last_volume_reset_date: '',
+                daily_volume_accumulated: 0
+             }]);
+             finalUser = {
+                id: newUser.id,
+                username: newUser.username,
+                password: newUser.password,
+                email: newUser.email || '',
+                phone: newUser.phone || '',
+                createdAt: new Date(newUser.created_at).getTime(),
+                status: newUser.status || 'active',
+                notes: newUser.notes || '',
+                role: newUser.role || 'member',
+                balance: newUser.balance || 0
+             };
+           }
+        }
+
+        if (finalUser) {
+          setSiteUser(finalUser);
+          localStorage.setItem('site_member', JSON.stringify(finalUser));
+          setAuthModalMode(null);
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   // Automatically toggle sidebar when login state changes (for desktop)
   useEffect(() => {
     if (window.innerWidth >= 1280) {
