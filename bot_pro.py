@@ -165,8 +165,8 @@ def bul_ve_oku_iframe_icerigi(page, supabase):
                 for mac_text, league_name in all_games.items():
                     data = parse_match_text(mac_text)
                     if data:
-                        # Append the extracted league
-                        data['league'] = league_name
+                        # Append the extracted league into the status field to avoid DB schema errors
+                        data['status'] = f"{data['status']}|LEAGUE:{league_name}"
                         parsed_matches.append(data)
                 
                 print(f"[+] {len(parsed_matches)} maç başarıyla JSON'a dönüştürüldü.")
