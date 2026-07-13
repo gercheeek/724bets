@@ -24,6 +24,9 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
   const [username, setUsername] = useState(siteUser.username || '');
   const [email, setEmail] = useState(siteUser.email || '');
   const [phone, setPhone] = useState(siteUser.phone || '');
+  const [password, setPassword] = useState('');
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
+  const [passwordSaveStatus, setPasswordSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   // Settings States
   const [ambientMode, setAmbientMode] = useState(true);
@@ -68,6 +71,35 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
     localStorage.removeItem('site_user_role');
     setSiteUser(null);
     window.location.reload();
+  };
+
+  const handlePasswordSave = async () => {
+    if (!password || password.length < 6) {
+      alert("Şifre en az 6 karakter olmalıdır!");
+      return;
+    }
+    
+    setIsSavingPassword(true);
+    setPasswordSaveStatus('idle');
+    
+    const { error } = await supabase
+      .from('members')
+      .update({ password: password })
+      .eq('id', siteUser.id);
+      
+    setIsSavingPassword(false);
+    
+    if (error) {
+      setPasswordSaveStatus('error');
+      alert("Şifre güncellenirken bir hata oluştu: " + error.message);
+    } else {
+      setPasswordSaveStatus('success');
+      const updatedUser = { ...siteUser, password };
+      setSiteUser(updatedUser);
+      localStorage.setItem('site_member', JSON.stringify(updatedUser));
+      setTimeout(() => setPasswordSaveStatus('idle'), 3000);
+      setPassword('');
+    }
   };
 
   const menuItems = [
@@ -214,6 +246,31 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                     />
                     <button className="bg-[#1A212D] text-zinc-500 font-bold px-6 py-3.5 rounded-xl cursor-not-allowed">
                       Kaydet
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-zinc-400 font-bold text-sm">Şifre Oluştur / Değiştir</label>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="password" 
+                      placeholder="Yeni şifrenizi girin (Google ile girenler için)"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#00FFA3]/50 transition-colors"
+                    />
+                    <button 
+                      onClick={handlePasswordSave}
+                      disabled={isSavingPassword || !password}
+                      className={`font-bold px-6 py-3.5 rounded-xl transition-colors ${
+                        passwordSaveStatus === 'success' ? 'bg-[#00FFA3] text-black' :
+                        passwordSaveStatus === 'error' ? 'bg-red-500 text-white' :
+                        password ? 'bg-[#1A212D] text-white hover:bg-[#202532]' :
+                        'bg-[#1A212D] text-zinc-500 cursor-not-allowed'
+                      }`}
+                    >
+                      {isSavingPassword ? '...' : passwordSaveStatus === 'success' ? 'Kaydedildi ✓' : 'Kaydet'}
                     </button>
                   </div>
                 </div>
