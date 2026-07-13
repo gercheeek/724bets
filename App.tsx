@@ -466,7 +466,7 @@ const App: React.FC = () => {
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         const u = session.user;
-        const { data: existingUser } = await supabase.from('members').select('*').eq('email', u.email).single();
+        const { data: existingUser } = await supabase.from('members').select('*').ilike('email', u.email).maybeSingle();
         
         let finalUser;
         if (existingUser) {
@@ -486,7 +486,8 @@ const App: React.FC = () => {
            const usernameBase = u.user_metadata?.full_name?.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || u.email?.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') || 'googleuser';
            const newUsername = usernameBase + Math.floor(Math.random() * 1000);
            
-           const { data: newUser, error: insertError } = await supabase.from('members').insert([{
+           let newUser = null;
+           const { data: insertedUser, error: insertError } = await supabase.from('members').insert([{
                 username: newUsername,
                 email: u.email,
                 phone: '05555555555',
@@ -494,22 +495,32 @@ const App: React.FC = () => {
                 status: 'active'
            }]).select().single();
            
+           newUser = insertedUser;
+           
            if (insertError) {
-             console.error("Google login DB insert error:", insertError);
-             alert("Kayıt oluşturulurken veritabanı hatası: " + insertError.message);
+             if (insertError.code === '23505') {
+                 // Duplicate key error due to React Strict Mode double-firing. Re-fetch user safely.
+                 const { data: doubleCheckUser } = await supabase.from('members').select('*').eq('email', u.email).single();
+                 newUser = doubleCheckUser;
+             } else {
+                 console.error("Google login DB insert error:", insertError);
+                 alert("Kayıt oluşturulurken veritabanı hatası: " + insertError.message);
+             }
            }
            
            if (newUser) {
-             await supabase.from('loyalty').insert([{
-                user_id: newUser.id,
-                coins: 0,
-                tickets: 0,
-                pending_tickets: 0,
-                total_earned: 0,
-                transactions: [],
-                last_volume_reset_date: '',
-                daily_volume_accumulated: 0
-             }]);
+             if (!insertError) {
+                 await supabase.from('loyalty').insert([{
+                    user_id: newUser.id,
+                    coins: 0,
+                    tickets: 0,
+                    pending_tickets: 0,
+                    total_earned: 0,
+                    transactions: [],
+                    last_volume_reset_date: '',
+                    daily_volume_accumulated: 0
+                 }]);
+             }
              finalUser = {
                 id: newUser.id,
                 username: newUser.username,
