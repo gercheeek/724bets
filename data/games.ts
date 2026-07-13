@@ -24,18 +24,7 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 2,
-    "name": "Gates of Olympus",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1590131464303-31fbf85cb355?w=2160&q=100",
-    "demoSymbol": "vs20olympgate",
-    "rtp": "97.82%",
-    "players": 4150,
-    "isPopular": true,
-    "isNew": false
-  },
+  
   {
     "id": 3,
     "name": "Sugar Rush",
@@ -96,54 +85,10 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 8,
-    "name": "The Dog House Megaways",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=2160&q=100",
-    "demoSymbol": "vswaysdogs",
-    "rtp": "95.95%",
-    "players": 1060,
-    "isPopular": true,
-    "isNew": false
-  },
-  {
-    "id": 9,
-    "name": "Fruit Party",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1519996529931-28324d5a630e?w=2160&q=100",
-    "demoSymbol": "vs20fruitparty",
-    "rtp": "96.25%",
-    "players": 14245,
-    "isPopular": true,
-    "isNew": false
-  },
-  {
-    "id": 10,
-    "name": "Madame Destiny Megaways",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?w=2160&q=100",
-    "demoSymbol": "vswaysmadame",
-    "rtp": "96.16%",
-    "players": 2513,
-    "isPopular": true,
-    "isNew": false
-  },
-  {
-    "id": 11,
-    "name": "Gems Bonanza",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1582181519504-207d57c74dbd?w=2160&q=100",
-    "demoSymbol": "vs20goldfever",
-    "rtp": "96.43%",
-    "players": 4918,
-    "isPopular": true,
-    "isNew": false
-  },
+  
+  
+  
+  
   {
     "id": 12,
     "name": "Wild West Gold",
@@ -156,18 +101,7 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 13,
-    "name": "Buffalo King Megaways",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1545653457-37d45e415fb5?w=2160&q=100",
-    "demoSymbol": "vswaysbufking",
-    "rtp": "96.49%",
-    "players": 1510,
-    "isPopular": true,
-    "isNew": false
-  },
+  
   {
     "id": 14,
     "name": "Cleocatra",
@@ -216,18 +150,7 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 18,
-    "name": "John Hunter and the Tomb of the Scarab Queen",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1539655823528-76c24388e630?w=2160&q=100",
-    "demoSymbol": "vs25scarabqueen",
-    "rtp": "97.38%",
-    "players": 5592,
-    "isPopular": true,
-    "isNew": false
-  },
+  
   {
     "id": 19,
     "name": "Mustang Gold",
@@ -324,18 +247,7 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 27,
-    "name": "Big Bass Keeping it Reel",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1544721477-742a03e1e92d?w=2160&q=100",
-    "demoSymbol": "vs10bbkir",
-    "rtp": "96.68%",
-    "players": 6016,
-    "isPopular": true,
-    "isNew": false
-  },
+  
   {
     "id": 28,
     "name": "Club Tropicana",
@@ -360,30 +272,8 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 30,
-    "name": "Release the Kraken",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1589115797316-2c525f2b8f88?w=2160&q=100",
-    "demoSymbol": "vs20kraken",
-    "rtp": "95.20%",
-    "players": 13108,
-    "isPopular": true,
-    "isNew": false
-  },
-  {
-    "id": 31,
-    "name": "Release the Kraken 2",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1549480017-d774619d8544?w=2160&q=100",
-    "demoSymbol": "vs20kraken2",
-    "rtp": "95.05%",
-    "players": 13521,
-    "isPopular": true,
-    "isNew": false
-  },
+  
+  
   {
     "id": 32,
     "name": "Fruit Party 2",
@@ -396,30 +286,8 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 33,
-    "name": "5 Lions Megaways",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1548671168-953a63319047?w=2160&q=100",
-    "demoSymbol": "vswayslions",
-    "rtp": "97.86%",
-    "players": 12739,
-    "isPopular": true,
-    "isNew": false
-  },
-  {
-    "id": 34,
-    "name": "Rise of Giza PowerNudge",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=2160&q=100",
-    "demoSymbol": "vs10nudgeit",
-    "rtp": "95.14%",
-    "players": 3170,
-    "isPopular": true,
-    "isNew": false
-  },
+  
+  
   {
     "id": 35,
     "name": "Chicken Drop",
@@ -444,18 +312,7 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": true
   },
-  {
-    "id": 37,
-    "name": "Floating Dragon",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1533662580796-0391d182283e?w=2160&q=100",
-    "demoSymbol": "vs10floatdrg",
-    "rtp": "96.28%",
-    "players": 8724,
-    "isPopular": true,
-    "isNew": false
-  },
+  
   {
     "id": 38,
     "name": "Power of Thor Megaways",
@@ -468,18 +325,7 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": true
   },
-  {
-    "id": 39,
-    "name": "Hot Fiesta",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1588107936155-27a4d5386dd2?w=2160&q=100",
-    "demoSymbol": "vs25hotfiesta",
-    "rtp": "97.39%",
-    "players": 3295,
-    "isPopular": true,
-    "isNew": false
-  },
+  
   {
     "id": 40,
     "name": "Extra Juicy",
@@ -504,18 +350,7 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 42,
-    "name": "Curse of the Werewolf Megaways",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1508216335198-5085d7b56dc6?w=2160&q=100",
-    "demoSymbol": "vswayswerewolf",
-    "rtp": "97.47%",
-    "players": 15733,
-    "isPopular": true,
-    "isNew": false
-  },
+  
   {
     "id": 43,
     "name": "Star Bounty",
@@ -540,30 +375,8 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 45,
-    "name": "Congo Cash",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1536643198084-257a7993a4bc?w=2160&q=100",
-    "demoSymbol": "vs432congocash",
-    "rtp": "97.51%",
-    "players": 13564,
-    "isPopular": true,
-    "isNew": false
-  },
-  {
-    "id": 46,
-    "name": "Eye of the Storm",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1539655823528-76c24388e630?w=2160&q=100",
-    "demoSymbol": "vs10eyestorm",
-    "rtp": "95.84%",
-    "players": 6735,
-    "isPopular": true,
-    "isNew": false
-  },
+  
+  
   {
     "id": 47,
     "name": "Fishin' Reels",
@@ -588,18 +401,7 @@ export const ALL_GAMES: Game[] = [
     "isPopular": true,
     "isNew": false
   },
-  {
-    "id": 49,
-    "name": "Joker King",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://images.unsplash.com/photo-1505322022379-7c3353ee6291?w=2160&q=100",
-    "demoSymbol": "vs25jokerking",
-    "rtp": "95.29%",
-    "players": 9169,
-    "isPopular": true,
-    "isNew": false
-  },
+  
   {
     "id": 50,
     "name": "Spartan King",
