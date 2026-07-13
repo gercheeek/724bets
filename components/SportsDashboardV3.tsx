@@ -330,62 +330,69 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
 
             {openSports['futbol'] && (
               <div className="flex flex-col">
-                <div className="grid grid-cols-[1fr_auto] gap-4 px-4 py-2 border-b border-[#202532] bg-[#0E1116] text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
-                  <div>Etkinlik</div>
-                  <div className="flex items-center gap-2 pr-2">
-                    <div className="w-14 text-center">1</div>
-                    <div className="w-14 text-center">X</div>
-                    <div className="w-14 text-center">2</div>
-                    <div className="w-16 text-center">Daha f...</div>
-                  </div>
-                </div>
+
 
                 {footballMatches.map((match, i) => (
                   <div key={match.id} className="flex flex-col">
                     <div 
                       onMouseEnter={() => prefetchMatchDetails(match.id)}
                       onClick={() => toggleMatch(match.id)}
-                      className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center cursor-pointer hover:bg-gradient-to-r hover:from-[#161A23] hover:to-[#0E1116] transition-all group ${i !== footballMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
+                      className={`flex flex-col md:flex-row md:items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#161A23] transition-colors group ${i !== footballMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
                     >
-                      <div className="flex items-start gap-3">
-                        <div className="flex flex-col items-center min-w-[24px]">
-                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreHome}</span>
-                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreAway}</span>
-                          <span className="text-zinc-600 text-[10px] mt-1 whitespace-nowrap">{match.time}</span>
-                        </div>
-                        <div className="flex flex-col gap-1 flex-1">
-                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.home}</span>
-                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.away}</span>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2 mt-1">
-                          <div className="flex items-center gap-1 bg-[#1A1D24] px-1.5 py-0.5 rounded text-zinc-400 hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 cursor-pointer transition-all border border-transparent hover:border-[#00FFA3]/20">
-                            <MessageCircle className="w-3 h-3" />
-                            <span className="text-[10px] font-bold">72</span>
+                      {/* Left: Teams & Score */}
+                      <div className="flex items-start gap-4 mb-3 md:mb-0">
+                        {/* Scores (Only if live) */}
+                        {match.isLive && (
+                          <div className="flex flex-col items-center justify-center gap-1.5 mt-0.5">
+                            <span className="text-[#00FFA3] font-bold text-[15px] leading-none">{match.scoreHome}</span>
+                            <span className="text-[#00FFA3] font-bold text-[15px] leading-none">{match.scoreAway}</span>
                           </div>
-                          <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
-                          <Info className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
+                        )}
+                        
+                        {/* Teams */}
+                        <div className="flex flex-col gap-1.5">
+                          <span className="text-zinc-200 text-[13px] font-medium group-hover:text-[#00FFA3] transition-colors leading-none">{match.home}</span>
+                          <span className="text-zinc-200 text-[13px] font-medium group-hover:text-[#00FFA3] transition-colors leading-none">{match.away}</span>
+                          {match.isLive && (
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.5)]"></span>
+                              <span className="text-red-500 text-[10px] font-bold">{match.time}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        {match.odds.map((odd, idx) => (
-                          <button 
-                            key={idx}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (typeof odd === 'string' && odd.startsWith('+')) {
-                                toggleMatch(match.id);
-                              }
-                            }}
-                            className={`w-${idx === 3 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
-                              ${match.selected === idx 
-                                ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
-                                : 'bg-[#0E1116] border border-[#202532] text-zinc-300 hover:border-[#00FFA3]/50 hover:text-[#00FFA3] hover:shadow-[0_0_10px_rgba(0,255,163,0.1)]'
-                              }
-                            `}
-                          >
-                            {odd}
-                          </button>
-                        ))}
+
+                      {/* Right: Info & Odds */}
+                      <div className="flex flex-col items-start md:items-end gap-2">
+                        {/* Top Right: Time & Markets */}
+                        <div className="flex items-center gap-3">
+                          {!match.isLive && (
+                             <span className="text-zinc-400 text-[11px] font-medium tracking-wide">#{match.id.substring(0,5).toUpperCase()} &bull; {match.time}</span>
+                          )}
+                          <Info className="w-3.5 h-3.5 text-zinc-500 hover:text-white transition-colors" />
+                          <div className="bg-[#00FFA3]/10 text-[#00FFA3] px-2 py-0.5 rounded text-[10px] font-bold border border-[#00FFA3]/20">
+                            +{match.marketsAvailable || 72}
+                          </div>
+                        </div>
+
+                        {/* Bottom Right: Odds */}
+                        <div className="flex items-center gap-1.5 w-full md:w-auto">
+                          <div className="flex items-center bg-[#0E1116] rounded border border-[#202532] hover:border-[#00FFA3]/40 transition-colors flex-1 md:w-[76px] h-9"
+                               onClick={(e) => { e.stopPropagation(); toggleMatch(match.id); }}>
+                            <span className="w-6 text-center text-zinc-500 text-[10px] font-bold border-r border-[#202532]/50">1</span>
+                            <button className="flex-1 text-white font-bold text-xs h-full">{match.odds[0]}</button>
+                          </div>
+                          <div className="flex items-center bg-[#0E1116] rounded border border-[#202532] hover:border-[#00FFA3]/40 transition-colors flex-1 md:w-[76px] h-9"
+                               onClick={(e) => { e.stopPropagation(); toggleMatch(match.id); }}>
+                            <span className="w-6 text-center text-zinc-500 text-[10px] font-bold border-r border-[#202532]/50">X</span>
+                            <button className="flex-1 text-white font-bold text-xs h-full">{match.odds[1]}</button>
+                          </div>
+                          <div className="flex items-center bg-[#0E1116] rounded border border-[#202532] hover:border-[#00FFA3]/40 transition-colors flex-1 md:w-[76px] h-9"
+                               onClick={(e) => { e.stopPropagation(); toggleMatch(match.id); }}>
+                            <span className="w-6 text-center text-zinc-500 text-[10px] font-bold border-r border-[#202532]/50">2</span>
+                            <button className="flex-1 text-white font-bold text-xs h-full">{match.odds[2]}</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     {/* Expanded Markets */}
@@ -413,61 +420,64 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
 
             {openSports['basketbol'] && (
               <div className="flex flex-col">
-                <div className="grid grid-cols-[1fr_auto] gap-4 px-4 py-2 border-b border-[#202532] bg-[#0E1116] text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
-                  <div>Etkinlik</div>
-                  <div className="flex items-center gap-2 pr-2">
-                    <div className="w-14 text-center">1</div>
-                    <div className="w-14 text-center">2</div>
-                    <div className="w-16 text-center">Daha f...</div>
-                  </div>
-                </div>
+
 
                 {basketballMatches.map((match, i) => (
                   <div key={match.id} className="flex flex-col">
                     <div 
                       onMouseEnter={() => prefetchMatchDetails(match.id)}
                       onClick={() => toggleMatch(match.id)}
-                      className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center cursor-pointer hover:bg-gradient-to-r hover:from-[#161A23] hover:to-[#0E1116] transition-all group ${i !== basketballMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
+                      className={`flex flex-col md:flex-row md:items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#161A23] transition-colors group ${i !== basketballMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
                     >
-                      <div className="flex items-start gap-3">
-                        <div className="flex flex-col items-center min-w-[24px]">
-                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreHome}</span>
-                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreAway}</span>
-                          <span className="text-zinc-600 text-[10px] mt-1 whitespace-nowrap">{match.time}</span>
-                        </div>
-                        <div className="flex flex-col gap-1 flex-1">
-                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.home}</span>
-                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.away}</span>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2 mt-1">
-                          <div className="flex items-center gap-1 bg-[#1A1D24] px-1.5 py-0.5 rounded text-zinc-400 hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 cursor-pointer transition-all border border-transparent hover:border-[#00FFA3]/20">
-                            <MessageCircle className="w-3 h-3" />
-                            <span className="text-[10px] font-bold">72</span>
+                      {/* Left: Teams & Score */}
+                      <div className="flex items-start gap-4 mb-3 md:mb-0">
+                        {/* Scores (Only if live) */}
+                        {match.isLive && (
+                          <div className="flex flex-col items-center justify-center gap-1.5 mt-0.5">
+                            <span className="text-[#00FFA3] font-bold text-[15px] leading-none">{match.scoreHome}</span>
+                            <span className="text-[#00FFA3] font-bold text-[15px] leading-none">{match.scoreAway}</span>
                           </div>
-                          <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
-                          <Info className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
+                        )}
+                        
+                        {/* Teams */}
+                        <div className="flex flex-col gap-1.5">
+                          <span className="text-zinc-200 text-[13px] font-medium group-hover:text-[#00FFA3] transition-colors leading-none">{match.home}</span>
+                          <span className="text-zinc-200 text-[13px] font-medium group-hover:text-[#00FFA3] transition-colors leading-none">{match.away}</span>
+                          {match.isLive && (
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.5)]"></span>
+                              <span className="text-red-500 text-[10px] font-bold">{match.time}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        {match.odds.map((odd, idx) => (
-                          <button 
-                            key={idx}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (typeof odd === 'string' && odd.startsWith('+')) {
-                                toggleMatch(match.id);
-                              }
-                            }}
-                            className={`w-${idx === 2 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
-                              ${match.selected === idx 
-                                ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
-                                : 'bg-[#0E1116] border border-[#202532] text-zinc-300 hover:border-[#00FFA3]/50 hover:text-[#00FFA3] hover:shadow-[0_0_10px_rgba(0,255,163,0.1)]'
-                              }
-                            `}
-                          >
-                            {odd}
-                          </button>
-                        ))}
+
+                      {/* Right: Info & Odds */}
+                      <div className="flex flex-col items-start md:items-end gap-2">
+                        {/* Top Right: Time & Markets */}
+                        <div className="flex items-center gap-3">
+                          {!match.isLive && (
+                             <span className="text-zinc-400 text-[11px] font-medium tracking-wide">#{match.id.substring(0,5).toUpperCase()} &bull; {match.time}</span>
+                          )}
+                          <Info className="w-3.5 h-3.5 text-zinc-500 hover:text-white transition-colors" />
+                          <div className="bg-[#00FFA3]/10 text-[#00FFA3] px-2 py-0.5 rounded text-[10px] font-bold border border-[#00FFA3]/20">
+                            +{match.marketsAvailable || 72}
+                          </div>
+                        </div>
+
+                        {/* Bottom Right: Odds (Basketball 1 and 2) */}
+                        <div className="flex items-center gap-1.5 w-full md:w-auto">
+                          <div className="flex items-center bg-[#0E1116] rounded border border-[#202532] hover:border-[#00FFA3]/40 transition-colors flex-1 md:w-[90px] h-9"
+                               onClick={(e) => { e.stopPropagation(); toggleMatch(match.id); }}>
+                            <span className="w-8 text-center text-zinc-500 text-[10px] font-bold border-r border-[#202532]/50">1</span>
+                            <button className="flex-1 text-white font-bold text-xs h-full">{match.odds[0]}</button>
+                          </div>
+                          <div className="flex items-center bg-[#0E1116] rounded border border-[#202532] hover:border-[#00FFA3]/40 transition-colors flex-1 md:w-[90px] h-9"
+                               onClick={(e) => { e.stopPropagation(); toggleMatch(match.id); }}>
+                            <span className="w-8 text-center text-zinc-500 text-[10px] font-bold border-r border-[#202532]/50">2</span>
+                            <button className="flex-1 text-white font-bold text-xs h-full">{match.odds[1]}</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     {/* Expanded Markets */}
