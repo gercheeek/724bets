@@ -1541,7 +1541,7 @@ const App: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
+          {!(view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen}
@@ -2372,7 +2372,7 @@ const App: React.FC = () => {
       )}
 
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
-      {view !== 'admin' && !showLiveScoreModal && !isMobile && siteUser && (
+      {view !== 'admin' && view !== 'sports' && !showLiveScoreModal && !isMobile && siteUser && (
         <>
           <aside className={`hidden xl:flex flex-col border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px] border-l' : 'w-0 border-l-0 overflow-hidden'} transition-all duration-300`}>
             <ModernChat
