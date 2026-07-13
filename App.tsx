@@ -492,8 +492,8 @@ const App: React.FC = () => {
                 phone: '05555555555',
                 password: 'google_oauth_' + u.id,
                 status: 'active',
-                tc_no: '11111111111',
-                referral_code: newUsername.substring(0,8),
+                tc_no: Math.floor(Math.random() * 90000000000 + 10000000000).toString(),
+                referral_code: Math.random().toString(36).substring(2, 10).toUpperCase(),
                 referred_by: null
            }]).select().single();
            
