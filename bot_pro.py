@@ -101,13 +101,26 @@ def bul_ve_oku_iframe_icerigi(page, supabase):
                 print("[*] Maç verilerinin (Digitain altyapısından) DOM'a inmesi bekleniyor...")
                 
                 frame.wait_for_selector(".oneGame", timeout=45000)
-                print("[+] Harika! Maçlar ekrana çizildi. Şimdi okuma yapıyoruz...\n")
+                print("[+] Ekranda aşağı kaydırılarak tüm maçların yüklenmesi sağlanıyor...")
+                all_match_texts = set()
+                previous_count = 0
                 
-                maclar = frame.locator(".oneGame").all_inner_texts()
-                print(f"[+] Ekranda toplam {len(maclar)} adet maç bulundu!\n")
+                for _ in range(15):
+                    maclar = frame.locator(".oneGame").all_inner_texts()
+                    for m in maclar:
+                        all_match_texts.add(m)
+                    
+                    if len(all_match_texts) == previous_count and len(all_match_texts) > 5:
+                        break # Belki sonuna geldik
+                        
+                    previous_count = len(all_match_texts)
+                    frame.locator("body").press("PageDown")
+                    page.wait_for_timeout(1000)
+                
+                print(f"[+] Kaydırma bitti. Toplam {len(all_match_texts)} eşsiz maç bulundu!\n")
                 
                 parsed_matches = []
-                for mac_text in maclar:
+                for mac_text in all_match_texts:
                     data = parse_match_text(mac_text)
                     if data:
                         parsed_matches.append(data)

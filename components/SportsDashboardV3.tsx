@@ -1,9 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Trophy, Globe, Target, Circle, Activity, Dribbble, MessageCircle, BarChart2, Info,
-  ChevronDown, ChevronUp, Search, PlayCircle, Shield, Star
+  Trophy, 
+  Flame, 
+  Clock, 
+  ChevronRight, 
+  Search, 
+  Filter, 
+  MessageCircle, 
+  BarChart2, 
+  ChevronDown, 
+  ChevronUp, 
+  Activity, 
+  Circle,
+  PlayCircle,
+  Globe,
+  Target,
+  Dribbble,
+  Info,
+  Shield,
+  Star
 } from 'lucide-react';
 import { SingleMatchView } from './SingleMatchView';
+import BetBuilderCards from './BetBuilderCards';
 
 interface SportsDashboardV3Props {
   onNavigate: (view: string) => void;
@@ -220,6 +238,8 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                 {activeLeftTab === 'canli' ? 'CANLI BAHİS' : 'MAÇ ÖNCESİ / YAKINDA'}
               </h1>
             </div>
+
+            <BetBuilderCards />
 
             <div className="p-4 flex flex-col gap-4">
           
