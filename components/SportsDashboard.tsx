@@ -177,49 +177,36 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
           
           <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x pb-2">
             {liveMatches.slice(0, 5).map(match => (
-              <div key={match.id} className="min-w-[340px] w-[340px] bg-[#1A2C38] rounded-lg flex flex-col shrink-0 snap-start overflow-hidden">
-                <div className="p-3 pb-2 flex justify-between items-center">
-                  <div className="flex items-center gap-2 text-[11px] font-medium text-[#B1BAD3]">
-                    <span>
-                      {new Date(match.match_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} {new Date(match.match_date).toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})}
-                    </span>
-                    <BarChart2 size={12}/>
-                    <Activity size={12}/>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-[#B1BAD3] font-bold flex items-center gap-1"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" className="w-3 h-3 opacity-60 invert"/> 33.000</span>
-                    <Star size={14} className="text-yellow-500 fill-current"/>
-                  </div>
+              <div key={match.id} className="min-w-[280px] w-[280px] bg-[#1A1D24] rounded-xl flex flex-col shrink-0 snap-start overflow-hidden p-3 gap-3">
+                <div className="flex justify-end w-full">
+                  <span className="text-[11px] font-medium text-[#B1BAD3]">
+                    {new Date(match.match_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} {new Date(match.match_date).toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})}
+                  </span>
                 </div>
                 
-                <div className="px-3 py-1 flex items-center justify-between">
-                  <img src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${match.team_home.includes('Fransa') ? 'FR' : 'GB'}.svg`} className="w-6 h-4 rounded-sm object-cover" />
-                  
-                  <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-3">
+                    <img src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${match.team_home.includes('Fransa') || match.team_home.includes('France') ? 'FR' : 'GB'}.svg`} className="w-5 h-5 rounded-full object-cover" />
                     <span className="text-white font-bold text-[13px]">{match.team_home}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <img src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${match.team_away.includes('İspanya') || match.team_away.includes('Spain') ? 'ES' : 'AR'}.svg`} className="w-5 h-5 rounded-full object-cover" />
                     <span className="text-white font-bold text-[13px]">{match.team_away}</span>
                   </div>
-
-                  <img src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${match.team_away.includes('İspanya') ? 'ES' : 'AR'}.svg`} className="w-6 h-4 rounded-sm object-cover" />
                 </div>
 
-                <div className="px-3 py-2 flex items-center gap-1">
-                  <Flame size={12} className="text-orange-500 fill-current" />
-                  <span className="text-[#B1BAD3] text-[10px] font-semibold">74% of 1x2 bets on {match.team_home}</span>
-                </div>
-
-                <div className="px-3 pb-3 flex gap-2">
-                  <button className="flex-1 bg-[#2F4553] hover:bg-[#3d5566] rounded flex flex-col items-start px-3 py-1.5 transition-colors">
-                     <span className="text-[11px] text-[#B1BAD3] mb-0.5">{match.team_home.slice(0,10)}</span>
-                     <span className="text-[13px] font-bold text-[#1FFFFF]">{formatOdds(match.odds?.['1'])}</span>
+                <div className="flex gap-2 mt-auto pt-2">
+                  <button className="flex-1 bg-[#0F1115] hover:bg-[#2F4553] rounded-lg flex flex-col items-center justify-center py-2 transition-colors">
+                     <span className="text-[10px] text-[#B1BAD3] mb-0.5">1</span>
+                     <span className="text-[14px] font-bold text-white">{formatOdds(match.odds?.['1'])}</span>
                   </button>
-                  <button className="flex-1 bg-[#2F4553] hover:bg-[#3d5566] rounded flex flex-col items-start px-3 py-1.5 transition-colors">
-                     <span className="text-[11px] text-[#B1BAD3] mb-0.5">beraberlik</span>
-                     <span className="text-[13px] font-bold text-[#1FFFFF]">{formatOdds(match.odds?.['X'])}</span>
+                  <button className="flex-1 bg-[#0F1115] hover:bg-[#2F4553] rounded-lg flex flex-col items-center justify-center py-2 transition-colors">
+                     <span className="text-[10px] text-[#B1BAD3] mb-0.5">X</span>
+                     <span className="text-[14px] font-bold text-white">{formatOdds(match.odds?.['X'])}</span>
                   </button>
-                  <button className="flex-1 bg-[#2F4553] hover:bg-[#3d5566] rounded flex flex-col items-start px-3 py-1.5 transition-colors">
-                     <span className="text-[11px] text-[#B1BAD3] mb-0.5">{match.team_away.slice(0,10)}</span>
-                     <span className="text-[13px] font-bold text-[#1FFFFF]">{formatOdds(match.odds?.['2'])}</span>
+                  <button className="flex-1 bg-[#0F1115] hover:bg-[#2F4553] rounded-lg flex flex-col items-center justify-center py-2 transition-colors">
+                     <span className="text-[10px] text-[#B1BAD3] mb-0.5">2</span>
+                     <span className="text-[14px] font-bold text-white">{formatOdds(match.odds?.['2'])}</span>
                   </button>
                 </div>
               </div>
