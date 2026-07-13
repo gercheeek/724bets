@@ -59,49 +59,55 @@ const getDemoUrl = (game: any): string | null => {
   return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
 };
 
+const getGameColor = (name: string) => {
+  const n = name.toLowerCase();
+  if (n.includes('sweet') || n.includes('sugar') || n.includes('candy') || n.includes('fruit')) return 'linear-gradient(to bottom, #FF007A, #B30055)';
+  if (n.includes('zeus') || n.includes('olympus') || n.includes('thor') || n.includes('gods') || n.includes('kraken')) return 'linear-gradient(to bottom, #0044FF, #002299)';
+  if (n.includes('bass') || n.includes('splash') || n.includes('fisherman') || n.includes('catch')) return 'linear-gradient(to bottom, #00B633, #007A22)';
+  if (n.includes('party') || n.includes('fiesta') || n.includes('magic')) return 'linear-gradient(to bottom, #9D00FF, #550099)';
+  if (n.includes('gold') || n.includes('dog') || n.includes('rhino') || n.includes('buffalo') || n.includes('lion')) return 'linear-gradient(to bottom, #FF6B00, #B34A00)';
+  if (n.includes('gem') || n.includes('diamond') || n.includes('crystal')) return 'linear-gradient(to bottom, #00E5FF, #008899)';
+  return 'linear-gradient(to bottom, #1E88E5, #0D47A1)'; // Default vibrant blue
+};
+
 const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick }) => {
+  const cardColor = getGameColor(game.name);
+  
   return (
     <div 
-      className="group relative flex flex-col gap-2 cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.4)] border border-white/5 bg-[#0d0d0d] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(255,193,7,0.15)] hover:border-[#f0b90b]/30" 
+      className="group relative flex flex-col cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.6)] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:-translate-y-1" 
       onClick={onClick}
-      style={{ aspectRatio: '3/4' }}
+      style={{ aspectRatio: '3/4', backgroundColor: '#111' }}
     >
-      <div className="absolute inset-0 w-full h-full bg-[#1A1D29]">
+      {/* Top Image Section */}
+      <div className="relative w-full h-[65%] overflow-hidden bg-[#1A1D29]">
         <img 
           src={game.img || game.image} 
           alt={game.name} 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" 
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
-      </div>
-      
-      {/* Game Info - Overlay style */}
-      <div className="absolute bottom-0 inset-x-0 p-3 flex flex-col items-center justify-end z-20">
-        <h3 className="text-white text-[12px] font-black uppercase tracking-wide leading-tight text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-          {game.name || 'Slot Oyunu'}
-        </h3>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-[#f0b90b] text-[8px] font-bold uppercase tracking-[0.15em]">
-            {game.provider || 'Pragmatic Play'}
-          </span>
-          {game.rtp && (
-            <span className="text-[#848B9D] text-[8px] font-mono tracking-wider">
-              • {game.rtp}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Play Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
-        <div className="flex flex-col items-center gap-2 transform scale-75 group-hover:scale-100 transition-all duration-300">
-          <div className="w-12 h-12 bg-[#f0b90b] rounded-full flex items-center justify-center text-black shadow-[0_0_20px_rgba(240,185,11,0.6)]">
+        {/* Play Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
+          <div className="w-12 h-12 bg-[#f0b90b] rounded-full flex items-center justify-center text-black shadow-[0_0_20px_rgba(240,185,11,0.6)] transform scale-75 group-hover:scale-100 transition-all duration-300">
             <Play fill="currentColor" size={20} className="ml-1" />
           </div>
-          <span className="text-white text-[9px] font-black uppercase tracking-widest drop-shadow-md">
-            HEMEN OYNA
-          </span>
         </div>
+      </div>
+      
+      {/* Bottom Color Block */}
+      <div 
+        className="relative w-full h-[35%] flex flex-col items-center justify-center p-2 z-20"
+        style={{ background: cardColor }}
+      >
+        <h3 
+          className="text-white text-[12px] sm:text-[13px] font-black uppercase tracking-tight leading-[1.1] text-center drop-shadow-md line-clamp-2"
+          style={{ fontFamily: "'Inter', sans-serif" }}
+        >
+          {game.name || 'Slot Oyunu'}
+        </h3>
+        <span className="text-white/90 text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.1em] mt-1 drop-shadow-sm">
+          {game.provider || 'Pragmatic Play'}
+        </span>
       </div>
     </div>
   );
