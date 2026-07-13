@@ -322,7 +322,9 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
             <SliderSection 
               title="Gerçek Oyunlar" 
               icon={<Flame className="text-white" fill="white" />} 
-              games={popularGames} 
+              games={customGames.filter(g => g.isActive && g.type === 'slot').length > 0 
+                ? customGames.filter(g => g.isActive && g.type === 'slot').map(cg => ({ ...cg, img: cg.image, category: 'slots' })) 
+                : popularGames} 
               onSelect={setSelectedGame} 
             />
 
