@@ -61,24 +61,46 @@ const getDemoUrl = (game: any): string | null => {
 
 const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick }) => {
   return (
-    <div className="group relative flex flex-col gap-2 cursor-pointer" onClick={onClick}>
-      <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden bg-[#1A1D29]">
-        <img src={game.img || game.image} alt={game.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:brightness-50" />
-        
-        {/* Play Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-          <div className="w-14 h-14 bg-[#00FFA3] rounded-full flex items-center justify-center text-black transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-[0_0_20px_rgba(0,255,163,0.5)]">
-            <Play fill="currentColor" size={24} className="ml-1" />
-          </div>
-        </div>
+    <div 
+      className="group relative flex flex-col gap-2 cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.4)] border border-white/5 bg-[#0d0d0d] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(255,193,7,0.15)] hover:border-[#f0b90b]/30" 
+      onClick={onClick}
+      style={{ aspectRatio: '3/4' }}
+    >
+      <div className="absolute inset-0 w-full h-full bg-[#1A1D29]">
+        <img 
+          src={game.img || game.image} 
+          alt={game.name} 
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
       </div>
       
-      {/* Game Info - Gamdom style */}
-      <div className="flex flex-col px-1">
-        <h3 className="text-white text-[13px] font-bold leading-tight truncate">{game.name || 'Slot Oyunu'}</h3>
-        <div className="flex items-center justify-between mt-0.5">
-          <span className="text-[#848B9D] text-[11px] truncate">{game.provider || 'Pragmatic Play'}</span>
-          {game.rtp && <span className="text-[#848B9D] text-[10px] font-mono">{game.rtp}</span>}
+      {/* Game Info - Overlay style */}
+      <div className="absolute bottom-0 inset-x-0 p-3 flex flex-col items-center justify-end z-20">
+        <h3 className="text-white text-[12px] font-black uppercase tracking-wide leading-tight text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+          {game.name || 'Slot Oyunu'}
+        </h3>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-[#f0b90b] text-[8px] font-bold uppercase tracking-[0.15em]">
+            {game.provider || 'Pragmatic Play'}
+          </span>
+          {game.rtp && (
+            <span className="text-[#848B9D] text-[8px] font-mono tracking-wider">
+              • {game.rtp}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Play Overlay */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
+        <div className="flex flex-col items-center gap-2 transform scale-75 group-hover:scale-100 transition-all duration-300">
+          <div className="w-12 h-12 bg-[#f0b90b] rounded-full flex items-center justify-center text-black shadow-[0_0_20px_rgba(240,185,11,0.6)]">
+            <Play fill="currentColor" size={20} className="ml-1" />
+          </div>
+          <span className="text-white text-[9px] font-black uppercase tracking-widest drop-shadow-md">
+            HEMEN OYNA
+          </span>
         </div>
       </div>
     </div>
