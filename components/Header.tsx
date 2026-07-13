@@ -339,23 +339,7 @@ const Header: React.FC<HeaderProps> = ({
             <Menu className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           
-          <div
-            id="tour-logo"
-            className="group flex items-center cursor-pointer flex-shrink-0"
-            onClick={() => onViewChange?.('home')}
-          >
-            {/* The Leaf Icon */}
-            <div className="relative z-10 bg-[#0F1219] flex items-center justify-center group-hover:drop-shadow-[0_0_15px_rgba(0,255,163,0.3)] transition-all duration-300">
-              <Clover className="w-8 h-8 md:w-10 md:h-10 text-[#009F4D]" fill="#009F4D" strokeWidth={1} />
-            </div>
-            
-            {/* Expanding Text */}
-            <div className="overflow-hidden whitespace-nowrap transition-[max-width,opacity,margin] duration-500 ease-in-out max-w-0 opacity-0 group-hover:max-w-[200px] group-hover:opacity-100 group-hover:ml-1 md:group-hover:ml-2 flex items-center">
-              <span className="flex items-center text-[20px] md:text-[22px] font-black font-['Inter'] tracking-tight text-white drop-shadow-[0_0_8px_rgba(0,255,163,0.3)]">
-                724<span className="text-[#00FFA3]">BETS</span>
-              </span>
-            </div>
-          </div>
+
 
           <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
             <button 
