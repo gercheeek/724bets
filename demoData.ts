@@ -1,6 +1,161 @@
 import { MatchAnalysis, NewsArticle } from './types';
 
-export const demoAnalyses: MatchAnalysis[] = [];
+// Helper to dynamically calculate future match dates relative to current load time
+const getFutureDate = (offsetDays: number): string => {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  return d.toISOString().split('T')[0];
+};
+
+const wcMatchesRaw = [
+  {
+    exactDate: '2026-07-07', time: '19:00',
+    home: '🇦🇷 Arjantin', away: '🇪🇬 Mısır',
+    odds1: '1.38', oddsX: '4.90', odds2: '9.50',
+    oddsOver: '2.06', oddsUnder: '1.83',
+    odds1X: '1.07', odds12: '1.21', oddsX2: '3.15'
+  },
+  {
+    exactDate: '2026-07-07', time: '19:00',
+    home: '🇦🇲 Ararat-Ermenistan', away: '🇱🇻 Riga FC',
+    odds1: '2.80', oddsX: '3.10', odds2: '2.40',
+    oddsOver: '2.00', oddsUnder: '1.72',
+    odds1X: '1.48', odds12: '1.29', oddsX2: '1.36'
+  },
+  {
+    exactDate: '2026-07-07', time: '19:00',
+    home: '🇱🇹 FK Kauno Zalgiris', away: '🇽🇰 Drita (KOS)',
+    odds1: '1.84', oddsX: '3.30', odds2: '3.90',
+    oddsOver: '2.00', oddsUnder: '1.70',
+    odds1X: '1.19', odds12: '1.25', oddsX2: '1.82'
+  },
+  {
+    exactDate: '2026-07-07', time: '20:00',
+    home: '🇲🇰 Vardar Skopje', away: '🇫🇮 KuPS',
+    odds1: '2.30', oddsX: '3.30', odds2: '2.80',
+    oddsOver: '1.94', oddsUnder: '1.78',
+    odds1X: '1.36', odds12: '1.27', oddsX2: '1.50'
+  },
+  {
+    exactDate: '2026-07-07', time: '20:15',
+    home: '🇱🇺 UNA Strassen', away: '🇸🇲 La Fiorita',
+    odds1: '1.26', oddsX: '5.00', odds2: '9.50',
+    oddsOver: '1.72', oddsUnder: '2.00',
+    odds1X: '1.01', odds12: '1.11', oddsX2: '3.30'
+  },
+  {
+    exactDate: '2026-07-07', time: '20:30',
+    home: '🇲🇹 Floriana', away: '🇮🇪 Shamrock Rovers',
+    odds1: '2.95', oddsX: '3.20', odds2: '2.25',
+    oddsOver: '2.05', oddsUnder: '1.68',
+    odds1X: '1.54', odds12: '1.28', oddsX2: '1.32'
+  },
+  {
+    exactDate: '2026-07-07', time: '21:30',
+    home: '🇧🇦 Borac Banja Luka', away: '🇧🇬 Levski Sofia',
+    odds1: '3.20', oddsX: '3.00', odds2: '2.20',
+    oddsOver: '1.68', oddsUnder: '2.05',
+    odds1X: '1.56', odds12: '1.31', oddsX2: '1.28'
+  },
+  {
+    exactDate: '2026-07-07', time: '21:45',
+    home: '🇫🇴 Klaksvik', away: '🇱🇺 FC Atert Bissen',
+    odds1: '1.46', oddsX: '4.00', odds2: '6.00',
+    oddsOver: '1.84', oddsUnder: '1.86',
+    odds1X: '1.07', odds12: '1.18', oddsX2: '2.45'
+  },
+  {
+    exactDate: '2026-07-07', time: '22:00',
+    home: '🇮🇸 Vikingur Reykjavik', away: '🇭🇺 Gyori ETO',
+    odds1: '2.55', oddsX: '3.30', odds2: '2.45',
+    oddsOver: '1.72', oddsUnder: '2.00',
+    odds1X: '1.45', odds12: '1.26', oddsX2: '1.42'
+  },
+  {
+    exactDate: '2026-07-07', time: '23:00',
+    home: '🇨🇭 İsviçre', away: '🇨🇴 Kolombiya',
+    odds1: '3.65', oddsX: '3.15', odds2: '2.27',
+    oddsOver: '1.72', oddsUnder: '2.22',
+    odds1X: '1.73', odds12: '1.35', oddsX2: '1.34'
+  },
+  {
+    exactDate: '2026-07-08', time: '18:00',
+    home: '🇰🇿 Kairat Almaty', away: '🇲🇪 Sutjeska',
+    odds1: '1.29', oddsX: '4.80', odds2: '9.00',
+    oddsOver: '1.76', oddsUnder: '1.96',
+    odds1X: '1.02', odds12: '1.12', oddsX2: '3.10'
+  },
+  {
+    exactDate: '2026-07-08', time: '20:00',
+    home: '🇧🇾 ML Vitebsk', away: '🇷🇴 Univ. Craiova',
+    odds1: '3.40', oddsX: '3.10', odds2: '2.05',
+    oddsOver: '2.05', oddsUnder: '1.68',
+    odds1X: '1.64', odds12: '1.29', oddsX2: '1.24'
+  },
+  {
+    exactDate: '2026-07-08', time: '21:00',
+    home: '🇺🇦 Ukrayna U19', away: '🇩🇪 Almanya U19',
+    odds1: '3.60', oddsX: '3.60', odds2: '1.95',
+    oddsOver: '1.74', oddsUnder: '2.02',
+    odds1X: '1.79', odds12: '1.26', oddsX2: '1.26'
+  },
+  {
+    exactDate: '2026-07-09', time: '20:00',
+    home: '🇺🇦 Dinamo Kiev', away: '🇷🇴 Univ. Cluj',
+    odds1: '1.58', oddsX: '3.80', odds2: '5.00',
+    oddsOver: '1.72', oddsUnder: '2.00',
+    odds1X: '1.12', odds12: '1.20', oddsX2: '2.15'
+  },
+  {
+    exactDate: '2026-07-09', time: '21:00',
+    home: '🇷🇸 Vojvodina', away: '🇭🇺 Ferencvaros',
+    odds1: '2.85', oddsX: '3.30', odds2: '2.25',
+    oddsOver: '1.68', oddsUnder: '2.05',
+    odds1X: '1.52', odds12: '1.26', oddsX2: '1.35'
+  },
+  {
+    exactDate: '2026-07-09', time: '23:00',
+    home: '🇫🇷 Fransa', away: '🇲🇦 Fas',
+    odds1: '1.60', oddsX: '3.85', odds2: '6.55',
+    oddsOver: '2.05', oddsUnder: '1.84',
+    odds1X: '1.13', odds12: '1.29', oddsX2: '2.42'
+  }
+];
+
+const generateDemoAnalyses = (): MatchAnalysis[] => {
+  return wcMatchesRaw.map((m, index) => {
+    return {
+      id: `analysis-${index}-${m.home.replace(/[^a-zA-Z0-9]/g, '')}`,
+      league: `Öne Çıkan Maçlar`,
+      homeTeam: m.home,
+      awayTeam: m.away,
+      matchTime: m.time,
+      matchDate: m.exactDate,
+      analysis: `${m.home} ile ${m.away} karşı karşıya geliyor. Uzman ekibimizin detaylı istatistiksel analizine göre bu maçta dikkat çeken fırsatlar var.`,
+      tacticalSummary: "Her iki takımın da son maçlarındaki form durumları ve taktiksel dizilişleri bu karşılaşmanın yüksek tempoda geçeceğine işaret ediyor.",
+      breakingPoint: "Orta sahadaki ikili mücadeleler ve kanat organizasyonları maçın kilidini çözecek olan en önemli faktörler.",
+      bettingScenario: `Taraf bahsinde ${m.odds1 < m.odds2 ? 'ev sahibi' : 'deplasman'} takım bir adım önde. Gol beklentisi oranlara da yansımış durumda.`,
+      prediction: parseFloat(m.odds1) < parseFloat(m.odds2) ? 'MS 1' : 'MS 2',
+      confidence: 85,
+      modelScore: 8.5,
+      recentHistory: 'İki takım arasındaki rekabette son dönemdeki istatistikler ve mevcut kadro kaliteleri.',
+      expectedGoals: '1.80 - 1.20',
+      bookieOdds: [],
+      createdAt: Date.now() - (index * 3600000),
+      sport: 'Futbol',
+      odds1: m.odds1,
+      oddsX: m.oddsX,
+      odds2: m.odds2,
+      oddsOver: m.oddsOver,
+      oddsUnder: m.oddsUnder,
+      odds1X: m.odds1X,
+      odds12: m.odds12,
+      oddsX2: m.oddsX2
+    };
+  });
+};
+
+export const demoAnalyses = generateDemoAnalyses();
 
 export const demoCoupons: any[] = [
     {

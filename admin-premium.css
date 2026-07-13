@@ -1,0 +1,311 @@
+/* 
+   ================================================================
+   GAMDOM STYLE PREMIUM ADMIN DESIGN SYSTEM
+   ================================================================ 
+*/
+
+:root {
+  --adm-bg: #0D1117;
+  --adm-sidebar: #0D1117;
+  --adm-card: #161B22;
+  --adm-card-hover: #1C2333;
+  --adm-input: #0D1117;
+  --adm-accent: #00FFC2; /* Neon Yeşil */
+  --adm-accent-glow: rgba(0, 255, 194, 0.25);
+  --adm-border: rgba(255, 255, 255, 0.05);
+  --adm-text: #E6EDF3;
+  --adm-text-muted: #7D8590;
+  --adm-danger: #ff4d4d;
+  --adm-radius: 16px;
+  --adm-radius-lg: 24px;
+}
+
+/* Base Layout */
+.admin-shell {
+  background-color: var(--adm-bg) !important;
+  color: var(--adm-text) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* Sidebar Profile Card - COMPACT DESIGN */
+.adm-profile-card {
+  background: var(--adm-card);
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.adm-profile-avatar {
+  width: 44px;
+  height: 44px;
+  background: var(--adm-bg);
+  border: 2px solid var(--adm-accent);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 15px var(--adm-accent-glow);
+}
+
+.adm-profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.adm-profile-name {
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adm-profile-id {
+  font-size: 9px;
+  color: var(--adm-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adm-progress-container {
+  width: 100%;
+  height: 4px;
+  background: var(--adm-bg);
+  border-radius: 10px;
+  margin-top: 8px;
+  position: relative;
+}
+
+.adm-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--adm-accent), #00d4ff);
+  border-radius: 10px;
+}
+
+/* Navigation Items */
+.adm-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--adm-text-muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  margin-bottom: 4px;
+  width: 100%;
+  text-align: left;
+}
+
+.adm-nav-item:hover {
+  background: var(--adm-card);
+  color: var(--adm-text);
+  border-color: var(--adm-border);
+  transform: translateX(4px);
+}
+
+.adm-nav-item.active {
+  background: var(--adm-accent) !important;
+  color: #000 !important;
+  box-shadow: 0 4px 20px var(--adm-accent-glow);
+  font-weight: 900;
+}
+
+.adm-nav-item.active svg {
+  stroke-width: 3px;
+}
+
+/* Cards & Sections */
+.adm-card {
+  background: var(--adm-card);
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius-lg);
+  padding: 32px;
+  transition: all 0.3s ease;
+}
+
+.adm-card:hover {
+  border-color: rgba(var(--adm-accent-rgb), 0.2);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.adm-section-title {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.adm-section-title::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: var(--adm-accent);
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--adm-accent-glow);
+}
+
+/* Inputs & Form Elements */
+.adm-input {
+  background: var(--adm-input) !important;
+  border: 1px solid var(--adm-border) !important;
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
+  color: var(--adm-text) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  width: 100%;
+}
+
+.adm-input:focus {
+  border-color: var(--adm-accent) !important;
+  box-shadow: 0 0 0 3px var(--adm-accent-glow) !important;
+  outline: none !important;
+}
+
+/* Buttons */
+.adm-btn-primary {
+  background: var(--adm-accent);
+  color: #000;
+  font-weight: 900;
+  padding: 14px 28px;
+  border-radius: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.adm-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--adm-accent-glow);
+  opacity: 0.95;
+}
+
+.adm-btn-outline {
+  background: transparent;
+  border: 2px solid var(--adm-border);
+  color: var(--adm-text-muted);
+  font-weight: 800;
+  padding: 14px 28px;
+  border-radius: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adm-btn-outline:hover {
+  border-color: var(--adm-accent);
+  color: var(--adm-accent);
+  background: var(--adm-accent-glow);
+}
+
+/* Toggle Switch Style */
+.adm-toggle {
+  width: 50px;
+  height: 26px;
+  background: #2D333B;
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.adm-toggle.active {
+  background: var(--adm-accent);
+}
+
+.adm-toggle-circle {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.adm-toggle.active .adm-toggle-circle {
+  left: 27px;
+  background: #000;
+}
+
+/* Global Utility & Overrides for un-updated components */
+.admin-shell section > div[class*="bg-zinc-900"],
+.admin-shell div[class*="bg-zinc-900"] {
+  background-color: var(--adm-card) !important;
+  border-color: var(--adm-border) !important;
+  border-radius: var(--adm-radius) !important;
+}
+
+.admin-shell input[class*="bg-black"],
+.admin-shell textarea[class*="bg-black"] {
+  background-color: var(--adm-bg) !important;
+  border-color: var(--adm-border) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+}
+
+.admin-shell .text-primary {
+  color: var(--adm-accent) !important;
+}
+
+.admin-shell .bg-primary {
+  background-color: var(--adm-accent) !important;
+  color: #000 !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--adm-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--adm-card);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--adm-border);
+}
+
+/* Mobile Fixes */
+@media (max-width: 768px) {
+  .admin-shell aside {
+    width: 100% !important;
+    border-right: none;
+    border-bottom: 1px solid var(--adm-border);
+  }
+}

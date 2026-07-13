@@ -22,6 +22,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroSliderConfig, dailyKuponC
         <HeroSlider 
           config={heroSliderConfig} 
           onSlideChange={handleSlideChange}
+          onInternalNavigate={(url) => {
+            const event = new CustomEvent('internal-navigate', { detail: { url } });
+            window.dispatchEvent(event);
+          }}
         />
       </div>
 

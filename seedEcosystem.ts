@@ -1,19 +1,19 @@
 import { PoolConfig } from './types';
 import { demoAnalyses, demoCoupons } from './demoData';
+import { updateGlobalConfig } from './utils/supabase';
 
-const SEED_FLAG = 'ecosystem_seeded_v4'; // Bumped to v4 for 9 April Clean Slate reset
+const SEED_FLAG = 'ecosystem_seeded_v11'; // Bumped to v11 to force fresh load of new World Cup 2026 analyses
 
 export async function seedEcosystemData() {
     if (localStorage.getItem(SEED_FLAG)) return;
 
-    console.log('🚀 Starting ecosystem synchronization...');
+    console.log('🚀 Starting ecosystem synchronization v11 (15-day dynamic analyses)...');
 
     // ─── 1. SEED ANALYSES ──────────────────────────────────────────────────────
     try {
-        const stored = localStorage.getItem('site_analyses');
-        if (!stored) {
-            localStorage.setItem('site_analyses', JSON.stringify(demoAnalyses));
-        }
+        localStorage.setItem('site_analyses', JSON.stringify(demoAnalyses));
+        await updateGlobalConfig('site_analyses', demoAnalyses);
+        console.log('✅ 15-day analyses successfully seeded in local storage and Supabase.');
     } catch (e) {
         console.warn('Local Sync (Analyses) failed:', e);
     }
@@ -21,7 +21,7 @@ export async function seedEcosystemData() {
     // ─── 2. SEED COUPONS ───────────────────────────────────────────────────────
     try {
         const stored = localStorage.getItem('site_coupons');
-        if (!stored) {
+        if (!stored || JSON.parse(stored).length === 0) {
             localStorage.setItem('site_coupons', JSON.stringify(demoCoupons));
         }
     } catch (e) {
@@ -31,7 +31,7 @@ export async function seedEcosystemData() {
     // ─── 3. SEED POOL (724TOTO) ────────────────────────────────────────────────
     try {
         const stored = localStorage.getItem('site_pool_config');
-        if (!stored) {
+        if (!stored || (stored.startsWith('[') && JSON.parse(stored).length === 0)) {
             const poolConfig: PoolConfig = {
                 id: 'pool-seed-1',
                 matches: demoAnalyses.slice(0, 15).map((m, i) => ({

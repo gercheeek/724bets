@@ -58,6 +58,7 @@ interface BlackjackGameProps {
     onGameComplete: (lastPlayTime: number) => void;
     isLoggedIn: boolean;
     onLoginRequired: () => void;
+    userRole?: string | null;
 }
 
 // ─────────────────────────── CARD COMPONENT ─────────────────────────────────
@@ -74,7 +75,7 @@ const CardUI: React.FC<{ card: Card; delay?: number; animate?: boolean }> = ({ c
     if (card.hidden) {
         return (
             <div className="relative flex-shrink-0" style={{ width: '64px', height: '96px' }}>
-                <div className="w-full h-full rounded-xl flex items-center justify-center"
+                <div className="w-full h-full rounded-lg flex items-center justify-center"
                     style={{ background: 'linear-gradient(135deg, #1e3a5f, #0f2740)', border: '2px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 15px rgba(0,0,0,0.5)' }}>
                     <div className="text-2xl opacity-30">🂠</div>
                 </div>
@@ -92,7 +93,7 @@ const CardUI: React.FC<{ card: Card; delay?: number; animate?: boolean }> = ({ c
                 transition: 'all 0.35s cubic-bezier(0.34,1.3,0.64,1)',
             }}
         >
-            <div className="w-full h-full rounded-xl flex flex-col justify-between p-1.5"
+            <div className="w-full h-full rounded-lg flex flex-col justify-between p-1.5"
                 style={{ background: 'white', border: '2px solid rgba(0,0,0,0.1)', boxShadow: '0 4px 15px rgba(0,0,0,0.4)' }}>
                 <div className="flex flex-col items-start leading-none">
                     <span className="font-black text-sm leading-none" style={{ color: isRed ? '#dc2626' : '#111' }}>{card.rank}</span>
@@ -170,7 +171,7 @@ function pickReward(rewards: BlackjackReward[]): BlackjackReward {
     return pool[pool.length - 1];
 }
 
-const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, isLoggedIn, onLoginRequired }) => {
+const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, isLoggedIn, onLoginRequired, userRole }) => {
     const [deck, setDeck] = useState<Card[]>([]);
     const [playerHand, setPlayerHand] = useState<Card[]>([]);
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
@@ -185,6 +186,10 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
 
     // Cooldown check
     useEffect(() => {
+        if (userRole === 'admin') {
+            setCooldownLeft(0);
+            return;
+        }
         const tick = () => {
             const last = Number(localStorage.getItem('blackjack_last_play') || 0);
             const diff = Date.now() - last;
@@ -198,7 +203,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
         tick();
         const interval = setInterval(tick, 1000);
         return () => clearInterval(interval);
-    }, [cooldownHours]);
+    }, [cooldownHours, userRole]);
 
     const formatCooldown = (ms: number) => {
         const h = Math.floor(ms / 3600000);
@@ -230,8 +235,10 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
             setTimeout(() => endGame([...pHand], [...dHand], remaining, true), 600);
         }
 
-        localStorage.setItem('blackjack_last_play', String(Date.now()));
-        onGameComplete(Date.now());
+        if (userRole !== 'admin') {
+            localStorage.setItem('blackjack_last_play', String(Date.now()));
+            onGameComplete(Date.now());
+        }
     }, [isLoggedIn, cooldownLeft, onLoginRequired, onGameComplete]);
 
     const hit = () => {
@@ -369,7 +376,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                     </div>
                     {!isLoggedIn ? (
                         <button onClick={onLoginRequired}
-                            className="px-4 py-2 rounded-xl font-black text-xs uppercase tracking-widest text-black transition-all hover:scale-105"
+                            className="px-4 py-2 rounded-lg font-black text-xs uppercase tracking-widest text-black transition-all hover:scale-105"
                             style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)' }}>
                             🔑 Giriş Yap
                         </button>
@@ -382,7 +389,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                 </div>
 
                 {/* Casino Table */}
-                <div className="relative rounded-[32px] overflow-hidden p-6"
+                <div className="relative rounded-lg overflow-hidden p-6"
                     style={{
                         background: 'linear-gradient(145deg, #0d3b17, #0a2e12, #062009)',
                         border: '3px solid rgba(240,185,11,0.25)',
@@ -391,20 +398,20 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                     }}>
 
                     {/* Table border glow */}
-                    <div className="absolute inset-0 rounded-[32px] pointer-events-none"
+                    <div className="absolute inset-0 rounded-lg pointer-events-none"
                         style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%)' }} />
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px]"
                         style={{ background: 'linear-gradient(90deg, transparent, rgba(240,185,11,0.6), transparent)' }} />
 
                     {/* PRIZE PHASE */}
                     {(phase === 'prize') && reward && (
-                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-[32px]"
+                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-lg"
                             style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(4px)' }}>
                             <MoneyBag reward={reward} onOpen={() => setBagOpened(true)} opened={bagOpened} />
                             {bagOpened && (
                                 <button
-                                    onClick={() => { setPhase('waiting'); setResult(null); setBagOpened(false); setReward(null); setCooldownLeft(cooldownHours * 3600000); }}
-                                    className="mt-8 px-6 py-3 rounded-2xl font-black text-sm uppercase tracking-widest text-black transition-all hover:scale-105"
+                                    onClick={() => { setPhase('waiting'); setResult(null); setBagOpened(false); setReward(null); setCooldownLeft(userRole === 'admin' ? 0 : cooldownHours * 3600000); }}
+                                    className="mt-8 px-6 py-3 rounded-lg font-black text-sm uppercase tracking-widest text-black transition-all hover:scale-105"
                                     style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 20px rgba(240,185,11,0.4)' }}>
                                     Masaya Dön
                                 </button>
@@ -429,13 +436,13 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
 
                             {!isLoggedIn ? (
                                 <button onClick={onLoginRequired}
-                                    className="px-10 py-4 rounded-2xl font-black text-base uppercase tracking-widest text-black transition-all hover:scale-105 shadow-2xl"
+                                    className="px-10 py-4 rounded-lg font-black text-base uppercase tracking-widest text-black transition-all hover:scale-105 shadow-2xl"
                                     style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 30px rgba(240,185,11,0.4)' }}>
                                     🔑 Üye Ol & Oyna
                                 </button>
                             ) : (
                                 <button onClick={startGame}
-                                    className="px-10 py-4 rounded-2xl font-black text-base uppercase tracking-widest text-black transition-all hover:scale-105 shadow-2xl"
+                                    className="px-10 py-4 rounded-lg font-black text-base uppercase tracking-widest text-black transition-all hover:scale-105 shadow-2xl"
                                     style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 30px rgba(240,185,11,0.4)' }}>
                                     🎴 El Oyna
                                 </button>
@@ -466,14 +473,14 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                             </div>
 
                             {/* Dealer speech bubble */}
-                            <div className="px-4 py-3 rounded-2xl text-center"
+                            <div className="px-4 py-3 rounded-lg text-center"
                                 style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.06)' }}>
                                 <span className="text-zinc-300 text-sm font-bold italic">🎩 "{dealerMsg}"</span>
                             </div>
 
                             {/* Result banner */}
                             {phase === 'result' && result && (
-                                <div className="flex items-center justify-center py-4 rounded-2xl font-black text-xl uppercase tracking-widest animate-fade-in"
+                                <div className="flex items-center justify-center py-4 rounded-lg font-black text-xl uppercase tracking-widest animate-fade-in"
                                     style={{
                                         background: result === 'bust' || result === 'lose' ? 'rgba(239,68,68,0.15)' : result === 'push' ? 'rgba(100,100,100,0.15)' : 'rgba(16,185,129,0.15)',
                                         border: `1px solid ${result === 'bust' || result === 'lose' ? 'rgba(239,68,68,0.3)' : result === 'push' ? 'rgba(100,100,100,0.3)' : 'rgba(16,185,129,0.3)'}`,
@@ -507,12 +514,12 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                             {phase === 'player' && (
                                 <div className="flex gap-3 justify-center mt-2">
                                     <button onClick={hit}
-                                        className="px-8 py-3 rounded-2xl font-black text-sm uppercase tracking-widest text-white transition-all hover:scale-105 active:scale-95"
+                                        className="px-8 py-3 rounded-lg font-black text-sm uppercase tracking-widest text-white transition-all hover:scale-105 active:scale-95"
                                         style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 0 15px rgba(16,185,129,0.3)' }}>
                                         🃏 Çek
                                     </button>
                                     <button onClick={() => stand()}
-                                        className="px-8 py-3 rounded-2xl font-black text-sm uppercase tracking-widest text-black transition-all hover:scale-105 active:scale-95"
+                                        className="px-8 py-3 rounded-lg font-black text-sm uppercase tracking-widest text-black transition-all hover:scale-105 active:scale-95"
                                         style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 15px rgba(240,185,11,0.3)' }}>
                                         ✋ Dur
                                     </button>
@@ -522,7 +529,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                             {phase === 'result' && (
                                 <div className="flex justify-center mt-2">
                                     <button onClick={() => { setPhase('waiting'); setResult(null); }}
-                                        className="px-8 py-3 rounded-2xl font-black text-sm uppercase tracking-widest text-black transition-all hover:scale-105"
+                                        className="px-8 py-3 rounded-lg font-black text-sm uppercase tracking-widest text-black transition-all hover:scale-105"
                                         style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)' }}>
                                         🔄 Tekrar Oyna
                                     </button>
@@ -539,7 +546,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                         { label: 'El Hakkı', value: `Her ${cooldownHours} Saat` },
                         { label: 'Mod', value: 'Ücretsiz Demo' },
                     ].map((item, i) => (
-                        <div key={i} className="px-3 py-2.5 rounded-xl text-center bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                        <div key={i} className="px-3 py-2.5 rounded-lg text-center bg-[var(--bg-card)] border border-[var(--border-subtle)]">
                             <div className="text-[var(--text-muted)] text-[9px] font-black uppercase tracking-widest mb-0.5">{item.label}</div>
                             <div className="text-[var(--text-primary)] font-black text-xs">{item.value}</div>
                         </div>

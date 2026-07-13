@@ -34,7 +34,7 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
         >
             {/* Popup card */}
             <div
-                className="relative w-full max-w-sm md:max-w-lg rounded-3xl overflow-hidden"
+                className="relative w-full max-w-sm md:max-w-lg rounded-lg overflow-hidden"
                 style={{
                     background: 'linear-gradient(145deg, #020804 0%, #0c0a00 50%, #020804 100%)',
                     border: '2px solid rgba(240,185,11,0.7)',
@@ -86,7 +86,7 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
 
                     {/* Logo + Brand name */}
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
+                        <div className="w-14 h-14 md:w-16 md:h-16 rounded-lg flex items-center justify-center flex-shrink-0"
                             style={{ background: 'linear-gradient(135deg, #f0b90b, #d9a508)', boxShadow: '0 0 30px rgba(240,185,11,0.5)' }}>
                             <span className="text-black font-black text-[10px] md:text-xs uppercase tracking-tighter leading-tight text-center">724<br />BETS</span>
                         </div>
@@ -100,7 +100,7 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
                     </div>
 
                     {/* Offer highlight */}
-                    <div className="rounded-2xl p-4 md:p-5 mb-6"
+                    <div className="rounded-lg p-4 md:p-5 mb-6"
                         style={{
                             background: 'linear-gradient(135deg, rgba(240,185,11,0.08), rgba(240,185,11,0.03))',
                             border: '1px solid rgba(240,185,11,0.2)',
@@ -121,7 +121,7 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
                             { icon: '📞', label: '7/24 Destek' },
                             { icon: '🏆', label: 'Yüksek Oranlar' },
                         ].map((f, i) => (
-                            <div key={i} className="flex flex-col items-center gap-1.5 px-3 py-3 rounded-xl text-center"
+                            <div key={i} className="flex flex-col items-center gap-1.5 px-3 py-3 rounded-lg text-center"
                                 style={{ background: 'rgba(240,185,11,0.06)', border: '1px solid rgba(240,185,11,0.15)' }}>
                                 <span className="text-xl">{f.icon}</span>
                                 <span className="text-zinc-300 text-[10px] font-black uppercase tracking-widest">{f.label}</span>
@@ -135,7 +135,7 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
                             href={config.buttonLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm uppercase tracking-widest text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-lg font-black text-sm uppercase tracking-widest text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
                             style={{
                                 background: 'linear-gradient(135deg, #f0b90b 0%, #ffd357 50%, #f0b90b 100%)',
                                 boxShadow: '0 0 30px rgba(240,185,11,0.5)',
@@ -147,7 +147,7 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
                         </a>
                         <button
                             onClick={handleClose}
-                            className="py-4 px-6 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:bg-white/5 active:scale-95"
+                            className="py-4 px-6 rounded-lg font-black text-xs uppercase tracking-widest transition-all hover:bg-white/5 active:scale-95"
                             style={{
                                 border: '1px solid rgba(255,255,255,0.1)',
                                 color: 'rgba(255,255,255,0.6)',

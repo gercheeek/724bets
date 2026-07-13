@@ -192,22 +192,22 @@ const AdminPoolTab: React.FC = () => {
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-black flex items-center gap-3"><Trophy className="w-6 h-6 text-[#f0b90b]" /> 724BAHİS.NET YÖNETİMİ</h2>
                 {pool && (
-                    <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-500 rounded-xl text-xs font-bold border border-red-500/30 hover:bg-red-500/30 transition-all">
+                    <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-500 rounded-lg text-xs font-bold border border-red-500/30 hover:bg-red-500/30 transition-all">
                         <RefreshCw className="w-4 h-4" /> SIFIRLA
                     </button>
                 )}
             </div>
 
-            {msg && <div className="bg-green-500/20 border border-green-500/30 text-green-400 font-bold text-sm p-4 rounded-xl animate-fade-in-up">{msg}</div>}
+            {msg && <div className="bg-green-500/20 border border-green-500/30 text-green-400 font-bold text-sm p-4 rounded-lg animate-fade-in-up">{msg}</div>}
 
             {/* AI PASTE MODAL */}
             {showAiModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-                    <div className="bg-zinc-950 border border-[#f0b90b]/20 p-5 rounded-3xl max-w-2xl w-full shadow-[0_0_50px_rgba(240,185,11,0.1)] relative">
+                    <div className="bg-zinc-950 border border-[#f0b90b]/20 p-5 rounded-lg max-w-2xl w-full shadow-[0_0_50px_rgba(240,185,11,0.1)] relative">
                         <button onClick={() => setShowAiModal(false)} className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800">✕</button>
 
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#f0b90b] to-yellow-600 flex items-center justify-center shadow-[0_0_30px_rgba(240,185,11,0.3)]">
+                            <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-[#f0b90b] to-yellow-600 flex items-center justify-center shadow-[0_0_30px_rgba(240,185,11,0.3)]">
                                 <Sparkles className="w-8 h-8 text-black" />
                             </div>
                             <div>
@@ -217,7 +217,7 @@ const AdminPoolTab: React.FC = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4">
+                            <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4">
                                 <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-2">DESTEKLENEN FORMATLAR</p>
                                 <div className="flex flex-wrap gap-2">
                                     <span className="px-2 py-1 bg-zinc-800 rounded-lg text-[10px] text-zinc-400 font-bold">Galatasaray - Fenerbahçe</span>
@@ -232,13 +232,13 @@ const AdminPoolTab: React.FC = () => {
                                 onChange={e => setAiInput(e.target.value)}
                                 rows={12}
                                 placeholder={`Örnek:\n\n🗓 3 Mart 2026\n\nSüper Lig:\nGalatasaray - Fenerbahçe\nBeşiktaş - Trabzonspor\n\nPremier League:\nManchester City - Liverpool\nArsenal - Chelsea\n...`}
-                                className="w-full bg-black border border-zinc-800 rounded-2xl p-4 text-sm text-white font-mono placeholder:text-zinc-700 focus:border-[#f0b90b]/40 focus:outline-none transition-colors resize-none"
+                                className="w-full bg-black border border-zinc-800 rounded-lg p-4 text-sm text-white font-mono placeholder:text-zinc-700 focus:border-[#f0b90b]/40 focus:outline-none transition-colors resize-none"
                             />
 
                             <button
                                 onClick={handleAiParse}
                                 disabled={!aiInput.trim()}
-                                className={`w-full py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${aiInput.trim() ? 'bg-[#f0b90b] text-black hover:shadow-[0_0_30px_rgba(240,185,11,0.4)]' : 'bg-zinc-900 text-zinc-600 cursor-not-allowed'}`}
+                                className={`w-full py-4 rounded-lg font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${aiInput.trim() ? 'bg-[#f0b90b] text-black hover:shadow-[0_0_30px_rgba(240,185,11,0.4)]' : 'bg-zinc-900 text-zinc-600 cursor-not-allowed'}`}
                             >
                                 <Zap className="w-5 h-5" /> MAÇLARI OLUŞTUR
                             </button>
@@ -249,25 +249,25 @@ const AdminPoolTab: React.FC = () => {
 
             {/* POOL STATUS CONTROLS */}
             {pool && (
-                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
                     <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-4">HAVUZ DURUMU</h3>
                     <div className="flex gap-3 mb-4">
                         {(['open', 'live', 'completed'] as const).map(s => (
-                            <button key={s} onClick={() => handleStatusChange(s)} className={`flex-1 py-3 rounded-xl text-xs font-black uppercase transition-all ${pool.status === s ? 'bg-[#f0b90b] text-black' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'}`}>
+                            <button key={s} onClick={() => handleStatusChange(s)} className={`flex-1 py-3 rounded-lg text-xs font-black uppercase transition-all ${pool.status === s ? 'bg-[#f0b90b] text-black' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700'}`}>
                                 {s === 'open' ? '🟢 AÇIK' : s === 'live' ? '🔴 CANLI' : '✅ TAMAMLA'}
                             </button>
                         ))}
                     </div>
                     <div className="grid grid-cols-3 gap-4 text-center">
-                        <div className="bg-zinc-950 rounded-xl p-3 border border-zinc-800">
+                        <div className="bg-zinc-950 rounded-lg p-3 border border-zinc-800">
                             <p className="text-xs text-zinc-500 font-bold">Katılımcı</p>
                             <p className="text-xl font-black text-white">{pool.entries.length}</p>
                         </div>
-                        <div className="bg-zinc-950 rounded-xl p-3 border border-zinc-800">
+                        <div className="bg-zinc-950 rounded-lg p-3 border border-zinc-800">
                             <p className="text-xs text-zinc-500 font-bold">Ödül Havuzu</p>
                             <p className="text-xl font-black text-[#f0b90b]">{pool.prizePool.toLocaleString('tr-TR')} ₺</p>
                         </div>
-                        <div className="bg-zinc-950 rounded-xl p-3 border border-zinc-800">
+                        <div className="bg-zinc-950 rounded-lg p-3 border border-zinc-800">
                             <p className="text-xs text-zinc-500 font-bold">Durum</p>
                             <p className="text-xl font-black text-white uppercase">{pool.status}</p>
                         </div>
@@ -277,11 +277,11 @@ const AdminPoolTab: React.FC = () => {
 
             {/* MATCH RESULTS (when pool exists) */}
             {pool && (
-                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
                     <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-4">MAÇ SONUÇLARI GİR</h3>
                     <div className="space-y-2">
                         {pool.matches.map((m, idx) => (
-                            <div key={m.id} className="flex items-center gap-3 bg-zinc-950 rounded-xl p-3 border border-zinc-800">
+                            <div key={m.id} className="flex items-center gap-3 bg-zinc-950 rounded-lg p-3 border border-zinc-800">
                                 <span className="text-zinc-600 text-xs font-black w-6">{idx + 1}</span>
                                 <span className="flex-1 text-white text-sm font-bold">{m.homeTeam} <span className="text-zinc-600">vs</span> {m.awayTeam}</span>
                                 <span className="text-zinc-600 text-[10px] font-bold hidden md:block">{m.league}</span>
@@ -300,25 +300,25 @@ const AdminPoolTab: React.FC = () => {
 
             {/* CREATE NEW POOL */}
             {!pool && (
-                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-6">
+                <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 space-y-6">
                     <h3 className="text-sm font-black text-zinc-400 uppercase tracking-widest">YENİ HAVUZ OLUŞTUR</h3>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
                             <label className="text-xs text-zinc-500 font-bold block mb-1">Toplam Ödül (₺)</label>
-                            <input type="number" value={prizePool} onChange={e => setPrizePool(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-[#f0b90b] font-black" />
+                            <input type="number" value={prizePool} onChange={e => setPrizePool(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-[#f0b90b] font-black" />
                         </div>
                         <div>
                             <label className="text-xs text-zinc-500 font-bold block mb-1">15 Bilen (₺)</label>
-                            <input type="number" value={prize15} onChange={e => setPrize15(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-xl p-3 font-bold" />
+                            <input type="number" value={prize15} onChange={e => setPrize15(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-lg p-3 font-bold" />
                         </div>
                         <div>
                             <label className="text-xs text-zinc-500 font-bold block mb-1">14 Bilen (₺)</label>
-                            <input type="number" value={prize14} onChange={e => setPrize14(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-xl p-3 font-bold" />
+                            <input type="number" value={prize14} onChange={e => setPrize14(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-lg p-3 font-bold" />
                         </div>
                         <div>
                             <label className="text-xs text-zinc-500 font-bold block mb-1">13 Bilen (₺)</label>
-                            <input type="number" value={prize13} onChange={e => setPrize13(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-xl p-3 font-bold" />
+                            <input type="number" value={prize13} onChange={e => setPrize13(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-lg p-3 font-bold" />
                         </div>
                     </div>
 
@@ -326,10 +326,10 @@ const AdminPoolTab: React.FC = () => {
                     <div className="flex items-center justify-between">
                         <p className="text-xs text-zinc-500 font-bold">{matches.length}/15 Maç</p>
                         <div className="flex gap-2">
-                            <button onClick={() => setShowAiModal(true)} className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#f0b90b] to-yellow-600 text-black rounded-xl text-xs font-black hover:shadow-[0_0_20px_rgba(240,185,11,0.3)] transition-all">
+                            <button onClick={() => setShowAiModal(true)} className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#f0b90b] to-yellow-600 text-black rounded-lg text-xs font-black hover:shadow-[0_0_20px_rgba(240,185,11,0.3)] transition-all">
                                 <Sparkles className="w-4 h-4" /> YAPAY ZEKA İLE YERLEŞTİR
                             </button>
-                            <button onClick={addMatch} disabled={matches.length >= 15} className="flex items-center gap-2 px-4 py-2.5 bg-zinc-800 text-zinc-300 rounded-xl text-xs font-bold hover:bg-zinc-700 transition-all disabled:opacity-50 border border-zinc-700">
+                            <button onClick={addMatch} disabled={matches.length >= 15} className="flex items-center gap-2 px-4 py-2.5 bg-zinc-800 text-zinc-300 rounded-lg text-xs font-bold hover:bg-zinc-700 transition-all disabled:opacity-50 border border-zinc-700">
                                 <Plus className="w-4 h-4" /> MANUEL EKLE
                             </button>
                         </div>
@@ -337,7 +337,7 @@ const AdminPoolTab: React.FC = () => {
 
                     <div className="space-y-2">
                         {matches.map((m, idx) => (
-                            <div key={m.id} className="flex items-center gap-2 bg-zinc-950 rounded-xl p-3 border border-zinc-800 group">
+                            <div key={m.id} className="flex items-center gap-2 bg-zinc-950 rounded-lg p-3 border border-zinc-800 group">
                                 <span className="text-zinc-600 text-xs font-black w-6">{idx + 1}</span>
                                 <input value={m.homeTeam} onChange={e => updateMatch(idx, 'homeTeam', e.target.value)} placeholder="Ev sahibi" className="flex-1 bg-black border border-zinc-800 rounded-lg p-2 text-sm" />
                                 <span className="text-zinc-600 text-xs font-bold">vs</span>
@@ -350,7 +350,7 @@ const AdminPoolTab: React.FC = () => {
                     </div>
 
                     {matches.length === 15 && (
-                        <button onClick={handleCreate} className="w-full py-4 bg-[#f0b90b] text-black rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-[0_0_30px_rgba(240,185,11,0.4)] transition-all flex items-center justify-center gap-2">
+                        <button onClick={handleCreate} className="w-full py-4 bg-[#f0b90b] text-black rounded-lg font-black text-sm uppercase tracking-widest hover:shadow-[0_0_30px_rgba(240,185,11,0.4)] transition-all flex items-center justify-center gap-2">
                             <Play className="w-5 h-5" /> HAVUZU OLUŞTUR VE AÇ
                         </button>
                     )}

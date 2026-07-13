@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  Settings, User, Pen, LogOut, ChevronDown, Search, Coins, Send, X,
-  MessageSquare, Home, Ticket, BarChart3, Shield, Newspaper,
-  Target, Spade, Trophy, TicketCheck, Gift, Tv
+  Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
+  MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
+  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club,
+  Bell, Users, ShieldCheck, Lock, Link, FileText, Clover
 } from 'lucide-react';
-import { SiteUser, UserLoyalty, MarqueeConfig, LiveOddsConfig } from '../types';
+import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
 
 export interface NavVisibility {
@@ -18,6 +19,8 @@ export interface NavVisibility {
   loyalty: boolean;
   raffle: boolean;
   giveaway: boolean;
+  trustedSites: boolean;
+  cekilis: boolean;
 }
 
 export const DEFAULT_NAV_VISIBILITY: NavVisibility = {
@@ -31,6 +34,8 @@ export const DEFAULT_NAV_VISIBILITY: NavVisibility = {
   loyalty: false,
   raffle: false,
   giveaway: false,
+  trustedSites: true,
+  cekilis: true,
 };
 
 interface HeaderProps {
@@ -41,18 +46,34 @@ interface HeaderProps {
   userRole?: string | null;
   siteUser?: SiteUser | null;
   onMemberLoginClick?: () => void;
+  onMemberRegisterClick?: () => void;
   onMemberLogout?: () => void;
   onSearchClick?: () => void;
   navVisibility?: NavVisibility;
   marqueeConfig?: MarqueeConfig;
-  liveOddsConfig?: LiveOddsConfig;
   onSupportClick?: () => void;
+  isChatOpen?: boolean;
+  isSidebarOpen?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 function getUserLoyalty(userId: string): UserLoyalty {
-  const stored = localStorage.getItem(`loyalty_${userId}`);
-  if (stored) return JSON.parse(stored);
-  return { userId, coins: 0, tickets: 0, pendingTickets: 0, totalEarned: 0, transactions: [], lastVolumeResetDate: '', dailyVolumeAccumulated: 0 };
+  const defaultLoyalty: UserLoyalty = { userId, coins: 0, tickets: 0, pendingTickets: 0, totalEarned: 0, transactions: [], lastVolumeResetDate: '', dailyVolumeAccumulated: 0 };
+  try {
+    const stored = localStorage.getItem(`loyalty_${userId}`);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed && typeof parsed === 'object') {
+        return {
+          ...defaultLoyalty,
+          ...parsed
+        };
+      }
+    }
+  } catch (e) {
+    console.error("Error reading user loyalty:", e);
+  }
+  return defaultLoyalty;
 }
 
 /* ── Category definitions ── */
@@ -63,10 +84,13 @@ interface CategoryItem {
   icon: React.ReactNode;
   visKey?: keyof NavVisibility;
   scrollTo?: string; // if we should scroll to an element instead of switching view
+  href?: string;
   requireRole?: boolean;
 }
 
 const ICON_SIZE = 'w-5 h-5';
+
+
 
 const Header: React.FC<HeaderProps> = ({
   onAdminClick,
@@ -76,37 +100,39 @@ const Header: React.FC<HeaderProps> = ({
   userRole = null,
   siteUser = null,
   onMemberLoginClick,
+  onMemberRegisterClick,
   onMemberLogout,
   onSearchClick,
   navVisibility,
   marqueeConfig,
-  liveOddsConfig,
   onSupportClick,
+  isChatOpen = false,
+  isSidebarOpen = false,
+  onToggleSidebar,
 }) => {
   const [logoHovered, setLogoHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const walletDropdownRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
-  // Deposit Modal State
-  const [showDepositModal, setShowDepositModal] = useState(false);
   const [depositUsername, setDepositUsername] = useState('');
   const [depositMsg, setDepositMsg] = useState({ type: '', text: '' });
 
   /* ── Category list ── */
-  const categories: CategoryItem[] = [
-    { key: 'home', view: 'home', label: 'Ana Sayfa', icon: <Home className={ICON_SIZE} /> },
+    const categories: CategoryItem[] = [
+    { key: 'slotra', view: 'slotra', label: 'Gerçek', icon: <Target className={ICON_SIZE} /> },
     { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
-    { key: 'analysis', view: 'analysis', label: 'Analizler', icon: <BarChart3 className={ICON_SIZE} />, visKey: 'analysis' },
     { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
-    { key: 'news', view: 'news', label: 'Haberler', icon: <Newspaper className={ICON_SIZE} />, visKey: 'news' },
+    { key: 'trusted-sites', view: 'trusted-sites', label: 'Güvenilir', icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
     { key: 'pool', view: 'pool', label: '724TOTO', icon: <Target className={ICON_SIZE} />, visKey: 'pool' },
     { key: 'blackjack', view: 'blackjack', label: 'Casino', icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
     { key: 'loyalty', view: 'loyalty', label: 'Görevler', icon: <Trophy className={ICON_SIZE} />, visKey: 'loyalty' },
-    { key: 'raffle', view: 'raffle', label: 'Bilet', icon: <TicketCheck className={ICON_SIZE} />, visKey: 'raffle' },
-    { key: 'giveaway', view: 'giveaway', label: 'Çekiliş', icon: <Gift className={ICON_SIZE} />, visKey: 'giveaway', requireRole: true },
-    { key: '724tv', view: '724tv', label: '724TV', icon: <Tv className={ICON_SIZE} /> },
   ];
 
   const handleDepositSubmit = () => {
@@ -122,7 +148,7 @@ const Header: React.FC<HeaderProps> = ({
         id: Date.now().toString(),
         userId: siteUser.id,
         username: siteUser.username,
-        content: `724BAHİS.NET Yatırım Bildirimi:\n724BAHİS.NET Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
+        content: `724BETS Yatırım Bildirimi:\n724BETS Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
         isRead: false,
         createdAt: Date.now()
       };
@@ -131,7 +157,6 @@ const Header: React.FC<HeaderProps> = ({
 
       setDepositMsg({ type: 'success', text: 'Bildirim başarıyla gönderildi!' });
       setTimeout(() => {
-        setShowDepositModal(false);
         setDepositUsername('');
         setDepositMsg({ type: '', text: '' });
       }, 2000);
@@ -145,6 +170,9 @@ const Header: React.FC<HeaderProps> = ({
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false);
       }
+      if (walletDropdownRef.current && !walletDropdownRef.current.contains(e.target as Node)) {
+        setWalletDropdownOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -154,110 +182,21 @@ const Header: React.FC<HeaderProps> = ({
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const isAdmin = userRole === 'admin';
   const isEditor = userRole && userRole !== 'admin';
 
-  /* ── User status area (capsule buttons) ── */
-  const renderUserStatus = () => {
-    // Admin logged in
-    if (isAdmin) {
-      return (
-        <button
-          onClick={onAdminClick}
-          className="header-capsule header-capsule--admin"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#f0b90b] animate-pulse" />
-          <Settings className="w-3.5 h-3.5" />
-          YÖNETİCİ
-        </button>
-      );
-    }
 
-    // Editor logged in
-    if (isEditor) {
-      return (
-        <button
-          onClick={onAdminClick}
-          className="header-capsule header-capsule--editor"
-        >
-          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-          <Pen className="w-3.5 h-3.5" />
-          EDİTÖR
-        </button>
-      );
-    }
-
-    // Site member logged in
-    if (siteUser) {
-      const loyalty = getUserLoyalty(siteUser.id);
-      return (
-        <div className="flex items-center gap-2">
-          {/* Coin Balance */}
-          <div
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-pointer"
-            onClick={() => onViewChange?.('loyalty')}
-            title="Coin Bakiyesi"
-            style={{ background: 'rgba(240, 185, 11, 0.12)', border: '1px solid rgba(240, 185, 11, 0.25)' }}
-          >
-            <Coins className="w-3.5 h-3.5 text-[#f0b90b]" />
-            <span className="text-[#f0b90b] font-black text-xs tabular-nums">{loyalty.coins.toLocaleString('tr')}</span>
-          </div>
-
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setDropdownOpen(prev => !prev)}
-              className="header-capsule header-capsule--member"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <User className="w-3.5 h-3.5" />
-              <span className="max-w-[80px] truncate">{siteUser.username}</span>
-              <ChevronDown className={`w-3 h-3 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {dropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-2 z-50" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-modal)' }}>
-                <div className="px-4 py-2 mb-1" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                  <p className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-dim)' }}>Üye Hesabı</p>
-                  <p className="text-sm font-black truncate" style={{ color: 'var(--text-primary)' }}>{siteUser.username}</p>
-                </div>
-                <button
-                  onClick={() => { setDropdownOpen(false); setShowDepositModal(true); }}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-blue-500 hover:bg-blue-500/5 text-xs font-bold transition-colors border-b border-black/5"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  Yatırım Bildir
-                </button>
-                <button
-                  onClick={() => { setDropdownOpen(false); onMemberLogout?.(); }}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-500/5 text-xs font-bold transition-colors"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  Çıkış Yap
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    // Guest - not logged in
-    return (
-      <button
-        className="header-capsule header-capsule--login"
-        onClick={onMemberLoginClick}
-      >
-        <User className="w-4 h-4" />
-        Giriş Yap
-      </button>
-    );
-  };
 
   /* ── Handle category click ── */
   const handleCategoryClick = (cat: CategoryItem) => {
+    if (cat.href) {
+      window.open(cat.href, '_blank');
+      return;
+    }
     if (cat.scrollTo) {
       onViewChange?.(cat.view);
       const el = document.getElementById(cat.scrollTo!);
@@ -269,7 +208,6 @@ const Header: React.FC<HeaderProps> = ({
 
   /* ── Is this category active? ── */
   const isCategoryActive = (cat: CategoryItem) => {
-    if (cat.key === 'coupons') return false; // scrollTo target, never "active"
     return activeView === cat.view;
   };
 
@@ -277,23 +215,56 @@ const Header: React.FC<HeaderProps> = ({
     <>
       <div className={`header-wrapper ${isScrolled ? 'scrolled' : ''}`}>
         <style>{`
+          @media (max-width: 768px) {
+            .header-topbar-right .header-icon-btn {
+              display: none !important;
+            }
+          }
           @keyframes custom-marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
           }
           .animate-custom-marquee {
             animation: custom-marquee var(--speed, 20s) linear infinite;
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
           }
           @keyframes logoShimmer {
             0%   { background-position: 200% center; }
             100% { background-position: -200% center; }
           }
           @keyframes logoGlow {
-            0%, 100% { text-shadow: 0 0 10px rgba(240,185,11,0.3), 0 0 20px rgba(240,185,11,0.1); }
-            50% { text-shadow: 0 0 15px rgba(240,185,11,0.5), 0 0 30px rgba(240,185,11,0.2), 0 0 45px rgba(240,185,11,0.1); }
+            0%, 100% { text-shadow: 0 0 10px rgba(0,255,163,0.3), 0 0 20px rgba(0,255,163,0.1); }
+            50% { text-shadow: 0 0 15px rgba(0,255,163,0.5), 0 0 30px rgba(0,255,163,0.2), 0 0 45px rgba(0,255,163,0.1); }
           }
+          @keyframes slotMachineDrop {
+            0% { transform: translateY(-40px) scaleY(1.5); opacity: 0; filter: blur(4px); }
+            60% { transform: translateY(10px) scaleY(0.9); opacity: 1; filter: blur(0); }
+            80% { transform: translateY(-4px) scaleY(1.05); }
+            100% { transform: translateY(0) scaleY(1); opacity: 1; }
+          }
+          .slot-text {
+            display: inline-block;
+            opacity: 0;
+            animation: slotMachineDrop 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
+          }
+
+          @keyframes neonFlickerDelay {
+            0%, 5%, 15%, 25% { opacity: 0; text-shadow: none; filter: brightness(0.2); }
+            10%, 20%, 30% { opacity: 0.8; text-shadow: 0 0 10px #00FFA3, 0 0 20px #00FFA3; filter: brightness(1.5); }
+            35%, 100% { opacity: 1; text-shadow: 0 0 5px rgba(0,255,163,0.5), 0 0 15px rgba(0,255,163,0.8); filter: brightness(1); }
+          }
+          .neon-text {
+            display: inline-block;
+            opacity: 0;
+            animation: neonFlickerDelay 2s ease-out 1.2s forwards;
+          }
+
+
           .logo-text-724 {
             position: relative;
+            z-index: 10000;
             display: inline-flex;
             align-items: center;
             gap: 0;
@@ -312,16 +283,16 @@ const Header: React.FC<HeaderProps> = ({
             overflow: hidden;
           }
           .logo-text-724 .logo-num {
-            background: linear-gradient(135deg, #f0b90b, #ffdd57, #f0b90b);
+            background: linear-gradient(135deg, #00FFA3, #00FFA3, #00FFA3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: logoGlow 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 8px rgba(240,185,11,0.4));
+            filter: drop-shadow(0 0 8px rgba(0,255,163,0.4));
           }
           .logo-text-724 .logo-dot {
-            color: #f0b90b;
-            -webkit-text-fill-color: #f0b90b;
+            color: #00FFA3;
+            -webkit-text-fill-color: #00FFA3;
             font-weight: 900;
           }
           .logo-text-724 .logo-ext {
@@ -333,16 +304,16 @@ const Header: React.FC<HeaderProps> = ({
             font-size: 20px;
           }
           .logo-text-724:hover {
-            background: linear-gradient(135deg, rgba(240,185,11,0.1), rgba(255,215,0,0.04));
-            border-color: rgba(240,185,11,0.2);
-            box-shadow: 0 0 35px rgba(240,185,11,0.15), 0 0 70px rgba(240,185,11,0.05);
+            background: linear-gradient(135deg, rgba(0,255,163,0.1), rgba(0,255,163,0.04));
+            border-color: rgba(0,255,163,0.2);
+            box-shadow: 0 0 35px rgba(0,255,163,0.15), 0 0 70px rgba(0,255,163,0.05);
             transform: scale(1.04);
           }
           .logo-text-724::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(105deg, transparent 40%, rgba(255,215,0,0.1) 50%, transparent 60%);
+            background: linear-gradient(105deg, transparent 40%, rgba(0,255,163,0.1) 50%, transparent 60%);
             background-size: 200% 100%;
             border-radius: inherit;
             pointer-events: none;
@@ -352,280 +323,232 @@ const Header: React.FC<HeaderProps> = ({
             opacity: 1;
             animation: logoShimmer 2s ease-in-out infinite;
           }
-          .header-wrapper {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
+          .header-topbar {
+            transition: padding-left 0.3s ease-in-out;
+          }
+          .header-icon-btn:hover {
+            color: #00FFA3 !important;
           }
         `}</style>
 
-        {/* ══════ TIER 1: Top Bar — Logo + Nav + Controls ══════ */}
-        <div className="header-topbar">
-          {/* Left: Logo Text */}
-          <div
-            className="logo-text-724 shrink-0"
-            onClick={() => onViewChange?.('home')}
-          >
-            <span className="logo-num">724BAHİS</span>
-            <span className="logo-dot">.</span>
-            <span className="logo-ext">NET</span>
-          </div>
+      <div className="header-topbar relative w-full h-[64px] bg-[#0F1219] border-b border-white/5 flex justify-center">
+        <div className="w-full max-w-[1400px] px-2 md:px-4 h-full flex items-center justify-between">
+            {/* Left: Hamburger & Logo & Desktop Tabs */}
+            <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
+              <div 
+                className="flex items-center cursor-pointer select-none ml-0"
+                onClick={() => onViewChange?.('home')}
+                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
+              >
+                <span className="text-white font-extrabold text-xl md:text-2xl uppercase">724</span>
+                <span className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase">BETS</span>
+              </div>
 
-          {/* Center: Navigation Items */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '2px', flex: 1, justifyContent: 'center', overflow: 'auto', scrollbarWidth: 'none' }}>
-            {categories.map((cat) => {
-              if (cat.visKey && navVisibility?.[cat.visKey] === false) return null;
-              if (cat.requireRole && !userRole) return null;
-              const active = isCategoryActive(cat);
-              return (
-                <button
-                  key={cat.key}
-                  className={`header-cat-item ${active ? 'active' : ''}`}
-                  onClick={() => handleCategoryClick(cat)}
-                  style={{ padding: '8px 14px', flexDirection: 'row', gap: '6px' }}
+              <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
+                <button 
+                  onClick={() => onViewChange?.('home')}
+                  className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'home' || activeView === 'blackjack' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
                 >
-                  <span className="header-cat-icon">{cat.icon}</span>
-                  <span className="header-cat-label" style={{ fontSize: '11px' }}>{cat.label}</span>
+                  Casino
                 </button>
-              );
-            })}
-          </nav>
+                <button 
+                  onClick={() => onViewChange?.('sports')}
+                  className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'sports' || activeView === 'sports2' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+                >
+                  Spor
+                </button>
+              </div>
+            </div>
 
-          {/* Right: Search + User */}
-          <div className="header-topbar-right">
-            <button
-              onClick={onSearchClick}
-              className="header-icon-btn"
-              title="Maç Ara"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onSupportClick}
-              className="header-icon-btn"
-              title="Canlı Destek"
-            >
-              <MessageSquare className="w-4 h-4" />
-            </button>
-            {renderUserStatus()}
-          </div>
+        {/* Center: Wallet Pill (Only if logged in) */}
+        <div className="flex items-center justify-center flex-[1.5] z-10">
+          {siteUser && (
+            <div className="relative flex items-center bg-[#151921] rounded-lg md:rounded-xl pl-1 pr-0.5 py-0.5 border border-white/5 h-[36px] md:h-[44px] shadow-inner" ref={walletDropdownRef}>
+              
+              {/* Balance Section */}
+              <div 
+                className="flex items-center cursor-pointer hover:bg-[#1C2028] transition-colors rounded-lg py-1 px-1 mr-1"
+                onClick={() => setWalletDropdownOpen(prev => !prev)}
+              >
+                <div className="w-6 h-6 md:w-8 md:h-8 rounded md:rounded-lg bg-[#00FFA3] flex items-center justify-center mr-1.5 md:mr-2 flex-shrink-0">
+                  <span className="text-black font-black text-[12px] md:text-sm">$</span>
+                </div>
+                <span className="text-white font-bold text-[13px] md:text-[15px] tracking-tight mr-1 md:mr-3 whitespace-nowrap">{siteUser.balance?.toFixed(2) || '0.00'}</span>
+                <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-500 mr-1 md:mr-2 transition-transform flex-shrink-0 ${walletDropdownOpen ? 'rotate-180' : ''}`} />
+              </div>
+
+              {/* Deposit Button attached to pill */}
+              <button
+                onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
+                className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-black w-[32px] h-[32px] md:w-auto md:px-5 md:h-[36px] rounded-md md:rounded-lg text-[15px] transition-colors shadow-[0_0_10px_rgba(0,255,163,0.2)] flex items-center justify-center flex-shrink-0"
+              >
+                <Wallet className="w-4 h-4 md:hidden" />
+                <span className="hidden md:block whitespace-nowrap">Cüzdan</span>
+              </button>
+
+              {walletDropdownOpen && (
+                <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-full mt-2 w-64 rounded-xl py-2 z-50 bg-[#1A1D24] border border-white/5 shadow-2xl text-left">
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors bg-[#1C2028]/50">
+                      <div className="flex items-center gap-3">
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#ef3434]">₺</div>
+                        <span className="text-white font-bold text-sm">TRY</span>
+                      </div>
+                      <span className="text-white font-bold text-sm">{siteUser.balance?.toFixed(2)}</span>
+                    </div>
+                    <button className="w-full text-center py-4 text-zinc-400 hover:text-white font-bold text-sm transition-colors border-t border-white/5 mt-2">
+                      Cüzdan Ayarları
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* ══════ TIER 2: Marquee Bar ══════ */}
-        {marqueeConfig?.isActive && (
-          <div className="header-categories" style={{ justifyContent: 'center', padding: '10px 16px', background: '#08080C' }}>
-            <style>{`
-              .marquee-container-hover-pause:hover .animate-custom-marquee {
-                animation-play-state: paused;
-              }
-              .marquee-fade-wrapper {
-                animation: marqueeFadeIn 0.8s ease forwards;
-              }
-              @keyframes marqueeFadeIn {
-                from { opacity: 0; transform: translateY(4px); }
-                to { opacity: 1; transform: translateY(0); }
-              }
-            `}</style>
-            <div className="flex-1 overflow-hidden marquee-container-hover-pause" style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}>
-              <div key={marqueeConfig.text} className="marquee-fade-wrapper">
-                <div 
-                  className="whitespace-nowrap animate-custom-marquee inline-block"
-                  style={{ 
-                    color: '#FFF', 
-                    fontFamily: '"Inter", sans-serif',
-                    fontWeight: 500,
-                    fontSize: '13px',
-                    letterSpacing: '0.5px',
-                    '--speed': `${marqueeConfig.speed ?? 30}s` 
-                  } as React.CSSProperties}
+        {/* Right: Controls (Profile, Chat, Notifications) */}
+        <div id="tour-user-panel" className="flex items-center justify-end flex-1 gap-1 md:gap-3 z-10">
+          {siteUser ? (
+            <>
+              {/* Profile Dropdown */}
+              <div className="relative" ref={profileRef}>
+                <button 
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#00FFA3]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0"
                 >
-                  {/* 
-                    Smart Separator Density: 
-                    We use an EVEN number of loops (2 or 4) to ensure transform: translateX(-50%) is seamless.
-                  */}
-                  {(() => {
-                    const text = marqueeConfig.text || '';
-                    const separator = (
-                      <span 
-                        style={{ 
-                          color: '#FFD700', 
-                          margin: '0 30px', 
-                          textShadow: '0 0 8px rgba(255,215,0,0.6)',
-                          fontWeight: 900,
-                          letterSpacing: '1px',
-                          display: 'inline-block'
-                        }}
-                      >
-                        724BAHİS.NET
-                      </span>
-                    );
-
-                    const keyword = /724bahis\.net/gi;
-
-                    // CASE 1: Manual Placement via '724bahis.net' keyword
-                    if (text.match(keyword)) {
-                      const parts = text.split(keyword);
-                      return [...Array(2)].map((_, i) => (
-                        <React.Fragment key={i}>
-                          {parts.map((p, j) => (
-                            <React.Fragment key={j}>
-                              <span style={{ whiteSpace: 'pre' }}>{p}</span>
-                              {j < parts.length - 1 && separator}
-                            </React.Fragment>
-                          ))}
-                          {/* Ensure a separator between marquee repetitions */}
-                          {separator}
-                        </React.Fragment>
-                      ));
-                    }
-
-                    // CASE 2: Fallback to Smart Density (for old or short text)
-                    if (text.length < 150) {
-                      return [...Array(4)].map((_, i) => (
-                        <span key={i} className="inline-flex items-center">
-                          <span>{text}</span>
-                          {separator}
-                        </span>
-                      ));
-                    }
-
-                    const chunks = text.match(/.{1,180}(?:\s|$)/g) || [text];
-                    return [...Array(2)].map((_, i) => ( 
-                      <React.Fragment key={i}>
-                        {chunks.map((chunk, j) => (
-                          <span key={j} className="inline-flex items-center">
-                            <span>{chunk.trim()}</span>
-                            {separator}
-                          </span>
-                        ))}
-                        {separator}
-                      </React.Fragment>
-                    ));
-                  })()}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ══════ TIER 3: Live Odds Ticker Bar ══════ */}
-        {liveOddsConfig?.isActive && liveOddsConfig.matches.length > 0 && (
-          <div className="header-categories" style={{ padding: '0', borderBottom: '1px solid rgba(255,255,255,0.04)', background: '#08080C' }}>
-            <div className="w-full overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 2%, black 98%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 2%, black 98%, transparent)' }}>
-              <div className="flex items-center gap-0 animate-odds-scroll whitespace-nowrap" style={{ '--odds-count': liveOddsConfig.matches.length, '--odds-speed': `${liveOddsConfig.speed || 6}s` } as React.CSSProperties}>
-                {[...liveOddsConfig.matches, ...liveOddsConfig.matches].map((match, idx) => (
-                  <a
-                    key={`odds-${idx}`}
-                    href={match.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-5 py-2 border-r border-white/[0.04] hover:bg-white/[0.03] transition-all duration-200 group shrink-0"
-                    style={{ textDecoration: 'none' }}
-                  >
-                    {/* Live badge */}
-                    {match.isLive && (
-                      <span className="flex items-center gap-1 px-1.5 py-0.5 bg-red-500/15 border border-red-500/30 rounded text-[9px] font-black text-red-400 uppercase tracking-wider">
-                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-                        Canlı
-                      </span>
-                    )}
-                    {!match.isLive && (
-                      <span className="text-[9px] font-bold text-zinc-500 min-w-[32px]">{match.matchTime}</span>
-                    )}
-
-                    {/* Teams */}
-                    <span className="text-[11px] font-bold text-zinc-300 group-hover:text-white transition-colors">
-                      {match.homeTeam} <span className="text-zinc-600 mx-0.5">vs</span> {match.awayTeam}
-                    </span>
-
-                    {/* Odds buttons */}
-                    <div className="flex items-center gap-1">
-                      <span className="px-2 py-1 rounded text-[10px] font-black bg-[#f0b90b]/8 text-[#f0b90b] border border-[#f0b90b]/15 hover:bg-[#f0b90b]/20 hover:border-[#f0b90b]/40 transition-all cursor-pointer" title="1">
-                        {match.odd1}
-                      </span>
-                      <span className="px-2 py-1 rounded text-[10px] font-black bg-white/[0.04] text-zinc-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-white transition-all cursor-pointer" title="X">
-                        {match.oddX}
-                      </span>
-                      <span className="px-2 py-1 rounded text-[10px] font-black bg-[#3b82f6]/8 text-[#60a5fa] border border-[#3b82f6]/15 hover:bg-[#3b82f6]/20 hover:border-[#3b82f6]/40 transition-all cursor-pointer" title="2">
-                        {match.odd2}
-                      </span>
-                    </div>
-
-                    {/* League badge */}
-                    <span className="text-[8px] font-black text-zinc-400 uppercase tracking-wider">{match.league}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* DEPOSIT MODAL */}
-      {showDepositModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
-          <div 
-            className="rounded-3xl w-full max-w-sm overflow-hidden shadow-modal relative" 
-            style={{ 
-              background: 'var(--bg-card)', 
-              border: '1px solid var(--border-card)' 
-            }}
-          >
-            <button
-              onClick={() => setShowDepositModal(false)}
-              className="absolute top-4 right-4 text-[#9CA3AF] hover:text-[#1A1A1A] transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="p-6">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4">
-                <Send className="w-6 h-6 text-blue-400" />
-              </div>
-
-              <h3 className="text-xl font-black mb-2" style={{ color: 'var(--text-primary)' }}>Yatırım Bildirimi</h3>
-              <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-                724BAHİS.NET'e yaptığınız yatırımların onaylanması ve <strong>Coin / Bilet</strong> tanımlamalarınızın yapılması için 724BAHİS.NET kullanıcı adınızı bize iletin.
-              </p>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="text-xs font-bold uppercase ml-1 block mb-1" style={{ color: 'var(--text-dim)' }}>724BAHİS.NET Kullanıcı Adınız</label>
-                  <input
-                    type="text"
-                    value={depositUsername}
-                    onChange={(e) => setDepositUsername(e.target.value)}
-                    placeholder="Kullanıcı adınızı girin"
-                    className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                    style={{ 
-                      background: 'var(--bg-elevated)', 
-                      borderColor: 'var(--border-subtle)',
-                      color: 'var(--text-primary)'
-                    }}
+                  <img 
+                    src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
+                    className="w-full h-full object-cover bg-[#1F232B]" 
+                    alt="avatar" 
                   />
-                </div>
+                </button>
 
-                {depositMsg.text && (
-                  <div className={`p-3 rounded-xl text-sm font-bold ${depositMsg.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
-                    {depositMsg.text}
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-[#1A1D24] border border-white/5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
+                    <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <User className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Profil</span>
+                    </button>
+                    
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Bell className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Gelen Kutusu</span>
+                    </button>
+
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Users className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">İştirakler</span>
+                    </button>
+
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <ShieldCheck className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Doğrulamalar</span>
+                    </button>
+
+                    <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Settings className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Ayarlar</span>
+                    </button>
+
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Lock className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Gizlilik</span>
+                    </button>
+
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <Link className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">Bağlantılar</span>
+                    </button>
+
+                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                      <FileText className="w-5 h-5 text-zinc-400 group-hover:text-white" />
+                      <span className="font-semibold text-sm">İşlemler</span>
+                    </button>
+
+                    <button 
+                      onClick={() => {
+                        setIsProfileOpen(false);
+                        localStorage.removeItem('site_current_member');
+                        localStorage.removeItem('site_member');
+                        localStorage.removeItem('site_user_role');
+                        window.location.reload();
+                      }}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-white/5 mt-1"
+                    >
+                      <LogOut className="w-5 h-5 text-zinc-400 group-hover:text-red-400" />
+                      <span className="font-semibold text-sm">Çıkış yap</span>
+                    </button>
                   </div>
                 )}
-
-                <button
-                  onClick={handleDepositSubmit}
-                  className="w-full bg-blue-500 hover:bg-blue-400 text-white font-black py-3 rounded-xl transition-all flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" /> BİLDİRİM GÖNDER
-                </button>
               </div>
-            </div>
+            </>
+          ) : (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <button
+                    onClick={onMemberLoginClick}
+                    style={{
+                      background: '#1A1D24',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      padding: '0 16px',
+                      height: '36px',
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      whiteSpace: 'nowrap'
+                    }}
+                    className="hover:bg-[#2A2E3D] transition-colors"
+                  >
+                    Giriş yap
+                  </button>
+                  <button
+                    onClick={onSupportClick}
+                    className="hidden md:flex bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 items-center justify-center relative"
+                    title="Canlı Sohbet"
+                    style={{ height: '36px', width: '36px' }}
+                  >
+                    <MessageSquare className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
+                  </button>
+
+                  <button
+                    id="tour-register-btn"
+                    onClick={onMemberRegisterClick}
+                    style={{
+                      background: '#00FFA3',
+                      color: '#000000',
+                      border: 'none',
+                      padding: '0 16px',
+                      height: '36px',
+                      fontWeight: 800,
+                      fontSize: '14px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      whiteSpace: 'nowrap',
+                      boxShadow: '0 0 15px rgba(0, 255, 163, 0.15)'
+                    }}
+                    className="hover:bg-[#00E693] transition-colors"
+                  >
+                    Kaydolun
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
-      )}
+
+
+
+
+        </div>
+      </div>
     </>
   );
 };

@@ -12,6 +12,7 @@ export interface SiteUser {
   status?: 'pending' | 'active' | 'suspended';
   notes?: string;
   role?: 'admin' | 'editor' | 'author' | 'member';
+  balance?: number;
 }
 
 export interface UserMessage {
@@ -21,6 +22,22 @@ export interface UserMessage {
   content: string;
   isRead: boolean;
   createdAt: number;
+}
+
+export interface BotScenario {
+  id: string;
+  text: string;
+  intervalMinutes: number; // e.g. every 30 minutes
+  isActive: boolean;
+}
+
+export interface ChatBotConfig {
+  id: string;
+  name: string;
+  role: 'SYSTEM' | 'ADMIN' | 'VIP'; // label like SYSTEM, ADM
+  color: string; // hex code like #F5A623
+  isActive: boolean;
+  scenarios: BotScenario[];
 }
 
 export interface PaymentRequest {
@@ -49,6 +66,13 @@ export interface PaymentConfig {
 export interface EditorAccount {
   id: string;
   name: string;
+  username: string;
+  password: string;
+  createdAt: number;
+}
+
+export interface GuestAccount {
+  id: string;
   username: string;
   password: string;
   createdAt: number;
@@ -142,6 +166,16 @@ export interface MatchAnalysis {
   createdAt: number;
   sport?: SportCategory;
   editorId?: string;
+  // Detailed Odds for Bulletin (Result, Total, Double Chance)
+  odds1?: string;
+  oddsX?: string;
+  odds2?: string;
+  oddsOver?: string;
+  oddsUnder?: string;
+  odds1X?: string;
+  odds12?: string;
+  oddsX2?: string;
+  isActive?: boolean;
 }
 
 export interface CouponMatch {
@@ -571,6 +605,11 @@ export interface SiteStatusConfig {
     maintenanceMessage: string;
 }
 
+export interface LoaderConfig {
+    isActive: boolean;
+    text?: string;
+}
+
 // ─── Hero Slider ─────────────────────────────────────────────────────────────
 export interface HeroSlide {
     id: string;
@@ -582,9 +621,15 @@ export interface HeroSlide {
 }
 
 export interface HeroSliderConfig {
-    isActive: boolean;
-    autoPlayInterval: number; // ms
-    slides: HeroSlide[];
+  isActive: boolean;
+  autoPlayInterval?: number;
+  slides: HeroSlide[];
+}
+
+export interface Slider2Config {
+  isActive: boolean;
+  autoPlayInterval?: number;
+  slides: HeroSlide[]; // We can reuse HeroSlide for the individual slide type
 }
 
 // ─── Daily Banko Kupon (Hero Section) ────────────────────────────────────────
@@ -595,6 +640,7 @@ export interface DailyKuponMatch {
     prediction: string;
     odd: string;
     league?: string;
+    time?: string;
 }
 
 export interface DailyKuponConfig {
@@ -602,6 +648,7 @@ export interface DailyKuponConfig {
     title: string;
     playLink?: string;
     matches: DailyKuponMatch[];
+    totalOdd?: string;
 }
 
 // ─── Raffle (Bilet Havuzu) Config ───────────────────────────────────────────
@@ -673,14 +720,28 @@ export interface TVChannel {
     id: string;
     name: string;
     slug: string; // Kick username or custom identifier
-    platform: 'kick' | 'custom'; // stream platform
-    streamUrl: string; // e.g. kick username or direct URL
+    platform: 'kick' | 'custom'; // legacy field (kept for safety)
+    streamUrl: string; // legacy field (kept for safety)
     thumbnailUrl: string;
     category: string; // e.g. 'CANLI MAÇ', 'CANLI YAYIN', 'SPOR'
     isLive: boolean;
     isActive: boolean;
     order: number;
     viewerCount?: number;
+    tags?: string[];
+    isVip?: boolean;
+
+    // New Dynamic Fields
+    sourceType?: 'platform' | 'video' | 'iframe';
+    platformType?: 'kick' | 'twitch';
+    platformUsername?: string;
+    videoUrl?: string;
+    iframeUrl?: string;
+
+    // Fallback Settings
+    fallbackType?: 'video' | 'iframe' | 'none';
+    fallbackVideoUrl?: string;
+    fallbackIframeUrl?: string;
 }
 
 export interface TVConfig {
@@ -698,4 +759,256 @@ export interface TVChatMessage {
     role: 'admin' | 'vip' | 'user';
     timestamp: number;
     channelId: string;
+}
+
+// ─── Premium Analysis & Payment System ───────────────────────────────────────
+export interface PremiumAnalysis {
+  id: string;
+  matchName: string;
+  league: string;
+  matchDate: string;
+  prediction: string;
+  odd: number;
+  confidence: number;
+  analysisText: string;
+  isGuaranteed: boolean;
+  price: number;
+  status: 'pending' | 'won' | 'lost' | 'void';
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface PremiumPayment {
+  id: string;
+  userId: string;
+  username: string;
+  analysisId: string;
+  amount: number;
+  method: 'usdt' | 'bank_transfer';
+  txReference: string;
+  status: 'pending' | 'confirmed' | 'rejected' | 'refunded';
+  refundReason?: string;
+  createdAt: string;
+  processedAt?: string;
+}
+
+export interface UserBalance {
+  userId: string;
+  username: string;
+  siteBalance: number;
+  updatedAt: string;
+}
+
+// ─── Casino Lobby Games (Promotional Banner Feed) ───────────────────────────
+export interface CasinoLobbyGame {
+  id: string;
+  name: string;
+  provider: string;
+  type: 'slot' | 'live' | 'sport';
+  lobbyCategory?: 'popular' | 'pragmatic' | 'jackpots' | 'amusnet' | 'egtBannerGames' | 'amusnetBannerGames' | 'yeni' | 'hizli' | 'galaxsys';
+  badgeText?: string;
+  badgeColor?: string;
+  themeColor: string;
+  image: string; // Base64 or Image URL
+  link: string;  // Redirect Affiliate link
+  isActive: boolean;
+  order: number;
+}
+
+
+// ─── Güvenilir Siteler Module ─────────────────────────────────────────────────
+
+export type CompanyTier = 'featured' | 'gold' | 'silver' | 'bronze';
+
+export interface CompanyReply {
+  content: string;
+  replyAt: number;       // unix ms — timestamp when reply becomes visible
+  isVisible: boolean;
+  authorTitle: string;   // "Firma Yetkilisi" or custom
+}
+
+export interface CompanyComment {
+  id: string;
+  companyId: string;
+  authorName: string;
+  authorAvatar: string;  // emoji character or initials string
+  content: string;
+  sentiment: 'positive' | 'neutral' | 'critical';
+  rating: number;        // 1–5
+  isSimulated: boolean;
+  isVisible: boolean;
+  createdAt: number;     // unix ms
+  reply?: CompanyReply;
+}
+
+export interface TrustedCompany {
+  id: string;
+  name: string;
+  logo: string;
+  affiliateLink: string;
+  tier: CompanyTier;
+  overallScore: number;       // 0–10
+  safetyScore: number;        // 0–10
+  bonusScore: number;         // 0–10
+  supportScore: number;       // 0–10
+  paymentScore: number;       // 0–10
+  welcomeBonus: string;       // e.g. "%200 Çevrimsiz + 1000 FS"
+  bonusDetail: string;        // secondary offer
+  promotionText?: string;     // e.g. "%300 HOŞGELDİN BONUSU + 1500 FS"
+  promotionColor?: string;    // hex code
+  features: string[];         // badge chips
+  pros: string[];
+  cons: string[];
+  description: string;
+  licenseInfo: string;
+  foundedYear: number;
+  minDeposit: string;
+  withdrawalSpeed: string;
+  isActive: boolean;
+  isFeatured: boolean;
+  order: number;
+  createdAt: number;
+  lastUpdated: number;
+  nextCommentAt: number;
+  commentDripEnabled: boolean;
+}
+
+// ─── 724TV Types ─────────────────────────────────────────────────────────────
+export interface Streamer {
+  id: string;
+  name: string;
+  kick_username?: string;
+  avatar_url?: string;
+  tags?: string[];
+  is_live: boolean;
+  is_vip: boolean;
+  source_type: 'platform' | 'video' | 'iframe';
+  platform_type: 'kick' | 'twitch' | 'youtube';
+  video_url?: string;
+  iframe_url?: string;
+  fallback_type?: 'none' | 'video' | 'iframe';
+  fallback_video_url?: string;
+  fallback_iframe_url?: string;
+  viewer_count: number;
+  order_index: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface VOD {
+  id: string;
+  title: string;
+  video_url: string;
+  thumbnail_url?: string;
+  streamer_id?: string;
+  views: number;
+  created_at?: string;
+}
+
+export interface Gift {
+  id: string;
+  name: string;
+  emoji: string;
+  price: number;
+  order_index: number;
+  created_at?: string;
+}
+
+// ─── Legacy/Missing Types restored from deleted types/index.ts ────────────────
+export type RaffleStatus = 'draft' | 'active' | 'completed' | 'cancelled';
+
+export interface User {
+  id: string;
+  username: string;
+  coin_balance: number;
+  created_at: string;
+}
+
+export interface LiveCode {
+  id: string;
+  code: string;
+  reward_coin: number;
+  max_winners: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface CodeClaim {
+  id: string;
+  user_id: string;
+  code_id: string;
+  claimed_at: string;
+}
+
+export interface Raffle {
+  id: string;
+  title: string;
+  description: string | null;
+  ticket_price: number;
+  status: RaffleStatus;
+  created_at: string;
+  // Virtual fields populated by queries
+  total_tickets?: number;
+  max_tickets?: number;
+  image_url?: string;
+  end_date?: string;
+}
+
+export interface Ticket {
+  id: string;
+  user_id: string;
+  raffle_id: string;
+  win_chance_multiplier: number;
+  created_at: string;
+  // Joined fields
+  user?: Pick<User, 'id' | 'username'>;
+}
+
+export interface RaffleParticipant {
+  user_id: string;
+  username: string;
+  ticket_count: number;
+  total_weight: number; // sum of win_chance_multiplier
+}
+
+export interface UpdateMultiplierBody {
+  action: 'update_multiplier';
+  raffle_id: string;
+  user_id: string;
+  multiplier: number;
+}
+
+export interface PickWinnerBody {
+  action: 'pick_winner';
+  raffle_id: string;
+  forced_user_id?: string;
+}
+
+export type AdminRafflePostBody = UpdateMultiplierBody | PickWinnerBody;
+
+export interface ApiResponse<T = unknown> {
+  data?: T;
+  error?: string;
+}
+
+export interface ClaimCodeResult {
+  success: boolean;
+  reward_coin?: number;
+  new_balance?: number;
+  message: string;
+  error_code?: 'CODE_NOT_FOUND' | 'ALREADY_CLAIMED' | 'LIMIT_REACHED';
+}
+
+export interface BettingMatch {
+  id: string;
+  league: string;
+  homeTeam: string;
+  awayTeam: string;
+  matchTime: string;
+  odds: {
+    home: string;
+    draw: string;
+    away: string;
+  };
+  isActive: boolean;
 }

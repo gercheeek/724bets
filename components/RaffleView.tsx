@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LoyaltyConfig, UserLoyalty, SiteUser, RaffleConfig } from '../types';
-import { Ticket, Trophy, Clock, Coins, Info, Users, ChevronDown, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Ticket, Trophy, Clock, Coins, Info, Users, ChevronDown, ChevronUp, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
 
 function loadUserLoyalty(userId: string): UserLoyalty {
     const stored = localStorage.getItem(`loyalty_${userId}`);
@@ -43,7 +43,7 @@ const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
     }, [targetDate]);
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6 }}>
             {[
                 { label: 'GÜN', val: timeLeft.d },
                 { label: 'SAAT', val: timeLeft.h },
@@ -52,23 +52,18 @@ const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
             ].map((t, idx) => (
                 <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div style={{
-                        width: '100%', height: 48,
-                        background: '#0d0d0d',
-                        border: '1px solid rgba(212,175,55,0.2)',
-                        borderRadius: 10,
+                        width: '100%', height: 36,
+                        background: '#141B25',
+                        border: '1px solid rgba(245,166,35,0.2)',
+                        borderRadius: 8,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: 22, fontWeight: 800, color: '#fff',
-                        marginBottom: 4,
+                        fontSize: 16, fontWeight: 800, color: '#fff',
+                        marginBottom: 2,
                         position: 'relative'
                     }}>
                         {String(t.val).padStart(2, '0')}
-                        <div style={{
-                            position: 'absolute', bottom: 6, left: '25%', right: '25%',
-                            height: 1, background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)',
-                            opacity: 0.5
-                        }} />
                     </div>
-                    <span style={{ fontSize: 7, color: '#666', fontWeight: 800, letterSpacing: '0.15em' }}>{t.label}</span>
+                    <span style={{ fontSize: 6, color: '#666', fontWeight: 800, letterSpacing: '0.1em' }}>{t.label}</span>
                 </div>
             ))}
         </div>
@@ -79,42 +74,50 @@ const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
 // OPTIMIZATION 2: Memoize individual Ticket Slots to stop re-rendering 200 elements
 // --------------------------------------------------------------------------------
 const TicketSlot = React.memo(({ index, isSold, isMe, username, onSelect }: { index: number, isSold: boolean, isMe: boolean, username: string, onSelect: (idx: number) => void }) => {
+    const [isHovered, setIsHovered] = useState(false);
     return (
         <div
             title={isSold ? (isMe ? 'Sizin' : username) : `Bilet ${index + 1} (Boş)`}
             onClick={() => !isSold && onSelect(index)}
-            className={`raffle-slot ${isSold ? '' : 'raffle-slot-empty'}`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             style={{
-                height: 24, borderRadius: 3,
-                display: 'flex', justifyContent: 'center', alignItems: 'center',
+                background: isSold 
+                  ? (isMe ? 'linear-gradient(135deg,rgba(100,180,255,0.1),rgba(100,180,255,0.05))' : 'linear-gradient(135deg,#1a1000,#0d0800)') 
+                  : 'rgba(255,255,255,0.02)',
+                border: `1px solid ${isSold ? (isMe ? 'rgba(100,180,255,0.5)' : 'rgba(245,166,35,0.4)') : isHovered ? 'rgba(245,166,35,0.3)' : 'rgba(255,255,255,0.06)'}`,
+                borderRadius: 8,
+                padding: '8px 4px',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
                 cursor: isSold ? 'default' : 'pointer',
-                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s, border-color 0.3s',
-                ...(isSold
-                    ? (isMe
-                        ? {
-                            background: 'rgba(59,130,246,0.25)',
-                            border: '1px solid #3b82f6',
-                            color: '#3b82f6'
-                        }
-                        : {
-                            background: '#D4AF37',
-                            border: '1px solid #D4AF37',
-                            color: '#000',
-                            boxShadow: '0 0 8px rgba(212,175,55,0.3)'
-                        })
-                    : {
-                        background: '#151515',
-                        border: '1px solid #252525',
-                        color: '#444'
-                    })
+                position: 'relative', overflow: 'hidden',
+                transition: 'all 0.2s ease',
+                transform: isHovered && !isSold ? 'translateY(-2px) scale(1.02)' : 'none',
+                boxShadow: isSold ? (isMe ? '0 0 10px rgba(100,180,255,0.15)' : '0 0 10px rgba(245,166,35,0.15)') : isHovered ? '0 0 10px rgba(245,166,35,0.1)' : 'none',
+                minHeight: 56,
+                zIndex: isHovered ? 10 : 1,
             }}
         >
-            <span style={{
-                fontSize: 7, fontWeight: isSold && !isMe ? 800 : 600,
-                lineHeight: 1
-            }}>
-                #{String(index + 1).padStart(3, '0')}
-            </span>
+            {isHovered && !isSold && (
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg, transparent 30%, rgba(245,166,35,0.04) 50%, transparent 70%)', animation: 'shimmerLine 1.5s ease-in-out infinite' }} />
+            )}
+            
+            {isSold ? (
+                <>
+                    <div style={{ fontSize: 14 }}>🎫</div>
+                    <div style={{ color: isMe ? '#64b4ff' : '#F5A623', fontWeight: 900, fontSize: 8, textAlign: 'center', letterSpacing: '0.05em' }}>
+                        {isMe ? 'SİZİN' : username.substring(0,6)}
+                    </div>
+                    <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 7, fontFamily: 'monospace' }}>#{String(index + 1).padStart(3, '0')}</div>
+                </>
+            ) : (
+                <>
+                    <div style={{ fontSize: 14, filter: 'grayscale(0.5)', opacity: 0.6 }}>🎫</div>
+                    <div style={{ color: 'rgba(255,255,255,0.2)', fontSize: 8, fontWeight: 700, textAlign: 'center' }}>
+                        AL
+                    </div>
+                </>
+            )}
         </div>
     );
 });
@@ -134,6 +137,17 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
     const [ticketPool, setTicketPool] = useState<{ slot: number, userId: string, username: string }[]>(getTicketPool);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+    // Collapsed sections state
+    const [collapsed, setCollapsed] = useState<Record<string, boolean>>({
+        stats: false,
+        form: false,
+        legend: false,
+        pool: false,
+        rules: true,
+        howItWorks: true,
+        faq: true
+    });
+
     // Form states
     const [depositUsername, setDepositUsername] = useState('');
     const [depositAmount, setDepositAmount] = useState('');
@@ -144,13 +158,13 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
     const renderRuleIcon = (icon: string) => {
         switch (icon) {
-            case 'Shield': return <Shield size={14} />;
-            case 'AlertTriangle': return <AlertTriangle size={14} />;
-            case 'CheckCircle': return <CheckCircle size={14} />;
-            case 'Users': return <Users size={14} />;
-            case 'Trophy': return <Trophy size={14} />;
-            case 'Info': return <Info size={14} />;
-            default: return <Info size={14} />;
+            case 'Shield': return <Shield size={12} />;
+            case 'AlertTriangle': return <AlertTriangle size={12} />;
+            case 'CheckCircle': return <CheckCircle size={12} />;
+            case 'Users': return <Users size={12} />;
+            case 'Trophy': return <Trophy size={12} />;
+            case 'Info': return <Info size={12} />;
+            default: return <Info size={12} />;
         }
     };
 
@@ -159,6 +173,10 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
     const showSuccess = (msg: string) => {
         setSuccessMsg(msg);
         setTimeout(() => setSuccessMsg(null), 3000);
+    };
+
+    const toggleSection = (section: string) => {
+        setCollapsed(prev => ({ ...prev, [section]: !prev[section] }));
     };
 
     const handleDepositRequest = () => {
@@ -217,9 +235,6 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
     const TOTAL_POOL_SIZE = 200;
 
-    // --------------------------------------------------------------------------------
-    // OPTIMIZATION 3: Stable Select Handler using Functional Updates
-    // --------------------------------------------------------------------------------
     const handleSelectSlot = useCallback((slotIndex: number) => {
         let success = false;
         
@@ -253,284 +268,308 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
     const totalSold = ticketPool.length;
 
     return (
-        <div style={{ minHeight: '100vh', background: '#0d0d0d', padding: '0 0 80px', fontFamily: "'Inter', sans-serif", color: '#fff' }}>
+        <div style={{ minHeight: '100vh', background: '#141B25', padding: '0 0 60px', fontFamily: "'Inter', sans-serif", color: '#fff' }}>
             {successMsg && (
                 <div style={{
                     position: 'fixed', top: 80, left: '50%', transform: 'translate3d(-50%, 0, 0)', zIndex: 50,
-                    padding: '12px 24px', borderRadius: 12, background: 'rgba(13,13,13,0.95)',
-                    backdropFilter: 'blur(20px)', fontSize: 13, color: '#D4AF37',
-                    border: '1px solid rgba(212,175,55,0.4)', boxShadow: '0 8px 32px rgba(212,175,55,0.15)',
+                    padding: '8px 16px', borderRadius: 10, background: 'rgba(13,13,13,0.95)',
+                    backdropFilter: 'blur(20px)', fontSize: 12, color: '#F5A623',
+                    border: '1px solid rgba(245,166,35,0.4)', boxShadow: '0 6px 20px rgba(245,166,35,0.15)',
                     animation: 'slideDown 0.3s ease', willChange: 'transform, opacity'
                 }}>
                     {successMsg}
                 </div>
             )}
             
-            <div style={{ maxWidth: 1152, margin: '0 auto', padding: '0 16px' }}>
-                <div style={{ display: 'flex', gap: 16, marginBottom: 16, alignItems: 'stretch' }}>
+            <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 16px' }}>
+                <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'stretch' }}>
                     {/* ═══ LEFT SIDEBAR ═══ */}
-                    <div style={{ width: '33.333%', display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+                    <div style={{ width: '33.333%', display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
                         
                         {/* 1. Countdown & VIP Cards Component */}
                         <div style={{
-                            background: '#1a1a1a', border: '1px solid rgba(212,175,55,0.25)',
-                            borderRadius: 16, padding: 20, overflow: 'hidden', position: 'relative',
-                            flex: '0 0 auto', display: 'flex', flexDirection: 'column', gap: 16
+                            background: '#1E2530', border: '1px solid rgba(245,166,35,0.15)',
+                            borderRadius: 12, padding: 12, overflow: 'hidden', position: 'relative',
+                            flex: '0 0 auto', display: 'flex', flexDirection: 'column', gap: 10
                         }}>
-                            <div style={{ position: 'absolute', top: 0, right: 0, padding: 16, opacity: 0.05, pointerEvents: 'none' }}>
-                                <Clock size={120} strokeWidth={1} style={{ transform: 'translate(20%, -20%)' }} />
+                            <div 
+                                onClick={() => toggleSection('stats')}
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', zIndex: 11 }}
+                            >
+                                <span style={{ color: '#fff', fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                                    HESAP DURUMU & SÜRE
+                                </span>
+                                {collapsed.stats ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                             </div>
 
-                            {/* UI ADJUSTMENT: Shrunk VIP Stats embedded directly here (40% smaller) */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, position: 'relative', zIndex: 10 }}>
-                                {/* Biletleriniz Small */}
-                                <div style={{
-                                    borderRadius: 12,
-                                    background: 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(13,13,13,0.95) 50%, rgba(212,175,55,0.05) 100%)',
-                                    border: '1px solid rgba(212,175,55,0.3)',
-                                    padding: '14px 16px',
-                                    boxShadow: '0 4px 16px rgba(0,0,0,0.4)'
-                                }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                                        <Ticket size={12} style={{ color: '#D4AF37' }} />
-                                        <span style={{ color: '#999', fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                                            MEVCUT BİLETLER
-                                        </span>
+                            {!collapsed.stats && (
+                                <>
+                                    <div style={{ position: 'absolute', top: 0, right: 0, padding: 8, opacity: 0.03, pointerEvents: 'none' }}>
+                                        <Clock size={80} strokeWidth={1} style={{ transform: 'translate(20%, -20%)' }} />
                                     </div>
-                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                                        <span style={{ fontSize: 24, fontWeight: 900, color: '#fff', textShadow: '0 0 20px rgba(212,175,55,0.3)', lineHeight: 1 }}>
-                                            {loyalty.tickets}
-                                        </span>
-                                        <span style={{ fontSize: 10, fontWeight: 600, color: '#D4AF37', opacity: 0.8 }}>Adet</span>
-                                    </div>
-                                </div>
 
-                                {/* Mevcut Coin Small */}
-                                <div style={{
-                                    borderRadius: 12,
-                                    background: 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(13,13,13,0.95) 50%, rgba(212,175,55,0.05) 100%)',
-                                    border: '1px solid rgba(212,175,55,0.3)',
-                                    padding: '14px 16px',
-                                    boxShadow: '0 4px 16px rgba(0,0,0,0.4)'
-                                }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                                        <Coins size={12} style={{ color: '#D4AF37' }} />
-                                        <span style={{ color: '#999', fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                                            MEVCUT COİN
-                                        </span>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                                        <span style={{ fontSize: 24, fontWeight: 900, color: '#fff', textShadow: '0 0 20px rgba(212,175,55,0.3)', lineHeight: 1 }}>
-                                            {loyalty.coins.toLocaleString('tr')}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, position: 'relative', zIndex: 10 }}>
+                                        {/* Biletleriniz Small */}
+                                        <div style={{
+                                            borderRadius: 8,
+                                            background: 'linear-gradient(135deg, rgba(245,166,35,0.05) 0%, rgba(13,13,13,0.95) 50%, rgba(245,166,35,0.03) 100%)',
+                                            border: '1px solid rgba(245,166,35,0.2)',
+                                            padding: '8px 10px',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
+                                        }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
+                                                <Ticket size={10} style={{ color: '#F5A623' }} />
+                                                <span style={{ color: '#888', fontSize: 7, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                    BİLETLERİNİZ
+                                                </span>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
+                                                <span style={{ fontSize: 16, fontWeight: 900, color: '#fff', lineHeight: 1 }}>
+                                                    {loyalty.tickets}
+                                                </span>
+                                            </div>
+                                        </div>
 
-                            {/* Buy Button inside Sidebar */}
-                            <div style={{ position: 'relative', zIndex: 10 }}>
-                                {buyMsg && (
-                                    <div style={{ fontSize: 10, fontWeight: 600, color: buyMsg.includes('✅') ? '#D4AF37' : '#ef4444', textAlign: 'center', marginBottom: 8 }}>
-                                        {buyMsg}
+                                        {/* Mevcut Coin Small */}
+                                        <div style={{
+                                            borderRadius: 8,
+                                            background: 'linear-gradient(135deg, rgba(245,166,35,0.05) 0%, rgba(13,13,13,0.95) 50%, rgba(245,166,35,0.03) 100%)',
+                                            border: '1px solid rgba(245,166,35,0.2)',
+                                            padding: '8px 10px',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
+                                        }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
+                                                <Coins size={10} style={{ color: '#F5A623' }} />
+                                                <span style={{ color: '#888', fontSize: 7, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                    COIN
+                                                </span>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
+                                                <span style={{ fontSize: 16, fontWeight: 900, color: '#fff', lineHeight: 1 }}>
+                                                    {loyalty.coins.toLocaleString('tr')}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                )}
-                                <button
-                                    onClick={handleBuyTicket}
-                                    disabled={loyalty.coins < TICKET_PRICE}
-                                    style={{
-                                        width: '100%', padding: '12px 0', borderRadius: 10, fontSize: 11, fontWeight: 800,
-                                        border: 'none', cursor: loyalty.coins >= TICKET_PRICE ? 'pointer' : 'not-allowed',
-                                        transition: 'all 0.3s ease', letterSpacing: '0.05em',
-                                        ...(loyalty.coins >= TICKET_PRICE
-                                            ? {
-                                                background: 'linear-gradient(180deg, #D4AF37 0%, #996515 100%)',
-                                                color: '#0d0d0d',
-                                                boxShadow: '0 4px 20px rgba(212,175,55,0.3)'
-                                            }
-                                            : {
-                                                background: '#1a1a1a', color: '#555',
-                                                border: '1px solid #2a2a2a'
-                                            })
-                                    }}
-                                >
-                                    YENİ BİLET SATIN AL (500)
-                                </button>
-                            </div>
 
-                            <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent)', margin: '4px 0', position: 'relative', zIndex: 10 }} />
+                                    {/* Buy Button inside Sidebar */}
+                                    <div style={{ position: 'relative', zIndex: 10 }}>
+                                        {buyMsg && (
+                                            <div style={{ fontSize: 9, fontWeight: 600, color: buyMsg.includes('✅') ? '#F5A623' : '#ef4444', textAlign: 'center', marginBottom: 4 }}>
+                                                {buyMsg}
+                                            </div>
+                                        )}
+                                        <button
+                                            onClick={handleBuyTicket}
+                                            disabled={loyalty.coins < TICKET_PRICE}
+                                            style={{
+                                                width: '100%', padding: '8px 0', borderRadius: 8, fontSize: 9, fontWeight: 800,
+                                                border: 'none', cursor: loyalty.coins >= TICKET_PRICE ? 'pointer' : 'not-allowed',
+                                                transition: 'all 0.2s ease', letterSpacing: '0.05em',
+                                                ...(loyalty.coins >= TICKET_PRICE
+                                                    ? {
+                                                        background: 'linear-gradient(180deg, #F5A623 0%, #996515 100%)',
+                                                        color: '#141B25',
+                                                        boxShadow: '0 2px 10px rgba(245,166,35,0.2)'
+                                                    }
+                                                    : {
+                                                        background: '#050C18', color: '#555',
+                                                        border: '1px solid #0A1428'
+                                                    })
+                                            }}
+                                        >
+                                            BİLET SATIN AL (500)
+                                        </button>
+                                    </div>
 
-                            <div style={{ position: 'relative', zIndex: 10 }}>
-                                <div style={{
-                                    color: '#D4AF37', fontSize: 10, fontWeight: 800,
-                                    textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 16,
-                                    display: 'flex', alignItems: 'center', gap: 8
-                                }}>
-                                    <Clock size={12} style={{ color: '#D4AF37' }} />
-                                    SONRAKİ ÇEKİLİŞ
-                                </div>
-                                <div style={{
-                                    fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 20,
-                                    padding: '8px 14px', borderRadius: 8,
-                                    border: '1px solid rgba(212,175,55,0.3)',
-                                    background: 'rgba(212,175,55,0.05)',
-                                    display: 'inline-block'
-                                }}>
-                                    {new Date(config.drawDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                </div>
-                                
-                                <CountdownDisplay targetDate={targetDate} />
-                            </div>
+                                    <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(245,166,35,0.15), transparent)', margin: '2px 0', position: 'relative', zIndex: 10 }} />
+
+                                    <div style={{ position: 'relative', zIndex: 10 }}>
+                                        <div style={{
+                                            color: '#F5A623', fontSize: 8, fontWeight: 800,
+                                            textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6,
+                                            display: 'flex', alignItems: 'center', gap: 4
+                                        }}>
+                                            <Clock size={10} style={{ color: '#F5A623' }} />
+                                            SONRAKİ ÇEKİLİŞ
+                                        </div>
+                                        <div style={{
+                                            fontSize: 11, fontWeight: 700, color: '#fff', marginBottom: 8,
+                                            padding: '4px 8px', borderRadius: 6,
+                                            border: '1px solid rgba(245,166,35,0.2)',
+                                            background: 'rgba(245,166,35,0.03)',
+                                            display: 'inline-block'
+                                        }}>
+                                            {new Date(config.drawDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        </div>
+                                        
+                                        <CountdownDisplay targetDate={targetDate} />
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                         {/* 2. Bilet Talep Formu */}
                         <div style={{
-                            background: '#1a1a1a', border: '1px solid #2a2a2a',
-                            borderRadius: 16, padding: 20, flex: '1 1 auto',
-                            display: 'flex', flexDirection: 'column'
+                            background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
+                            borderRadius: 12, padding: 12, flex: '1 1 auto',
+                            display: 'flex', flexDirection: 'column', gap: 10
                         }}>
-                            <div style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                marginBottom: 16, borderBottom: '1px solid #2a2a2a', paddingBottom: 12
-                            }}>
-                                <span style={{ color: '#fff', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                            <div 
+                                onClick={() => toggleSection('form')}
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: collapsed.form ? 'none' : '1px solid #222', paddingBottom: collapsed.form ? 0 : 8 }}
+                            >
+                                <span style={{ color: '#fff', fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                                     TALEP OLUŞTUR
                                 </span>
-                                <span style={{
-                                    color: '#D4AF37', fontSize: 9, fontWeight: 700,
-                                    border: '1px solid rgba(212,175,55,0.3)', padding: '3px 8px',
-                                    borderRadius: 6, letterSpacing: '0.05em'
-                                }}>
-                                    500 TL = 1 Bilet
-                                </span>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
-                                <input type="text" placeholder="724BAHİS Kullanıcı Adı" value={depositUsername}
-                                    onChange={e => setDepositUsername(e.target.value)}
-                                    style={{
-                                        width: '100%', padding: '10px 12px', background: '#0d0d0d',
-                                        border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff',
-                                        fontSize: 12, outline: 'none', transition: 'border-color 0.3s'
-                                    }}
-                                    onFocus={e => e.target.style.borderColor = '#D4AF37'}
-                                    onBlur={e => e.target.style.borderColor = '#2a2a2a'}
-                                />
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                                    <input type="number" placeholder="Yatırım Tutarı" value={depositAmount}
-                                        onChange={e => setDepositAmount(e.target.value)}
-                                        style={{
-                                            width: '100%', padding: '10px 12px', background: '#0d0d0d',
-                                            border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff',
-                                            fontSize: 12, outline: 'none', transition: 'border-color 0.3s'
-                                        }}
-                                        onFocus={e => e.target.style.borderColor = '#D4AF37'}
-                                        onBlur={e => e.target.style.borderColor = '#2a2a2a'}
-                                    />
-                                    <input type="number" placeholder="Bilet No (1-200)" value={depositTicket}
-                                        onChange={e => setDepositTicket(e.target.value)}
-                                        style={{
-                                            width: '100%', padding: '10px 12px', background: '#0d0d0d',
-                                            border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff',
-                                            fontSize: 12, outline: 'none', transition: 'border-color 0.3s'
-                                        }}
-                                        onFocus={e => e.target.style.borderColor = '#D4AF37'}
-                                        onBlur={e => e.target.style.borderColor = '#2a2a2a'}
-                                    />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <span style={{
+                                        color: '#F5A623', fontSize: 7, fontWeight: 700,
+                                        border: '1px solid rgba(245,166,35,0.2)', padding: '2px 6px',
+                                        borderRadius: 4, letterSpacing: '0.05em'
+                                    }}>
+                                        500 TL = 1 B
+                                    </span>
+                                    {collapsed.form ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                                 </div>
-                                <input type="datetime-local" value={depositDate}
-                                    onChange={e => setDepositDate(e.target.value)}
-                                    style={{
-                                        width: '100%', padding: '10px 12px', background: '#0d0d0d',
-                                        border: '1px solid #2a2a2a', borderRadius: 10, color: '#fff',
-                                        fontSize: 12, outline: 'none', colorScheme: 'dark',
-                                        transition: 'border-color 0.3s'
-                                    }}
-                                    onFocus={e => e.target.style.borderColor = '#D4AF37'}
-                                    onBlur={e => e.target.style.borderColor = '#2a2a2a'}
-                                />
-                                <button onClick={handleDepositRequest}
-                                    style={{
-                                        width: '100%', marginTop: 8, padding: '14px 0', borderRadius: 10,
-                                        fontWeight: 900, fontSize: 13, letterSpacing: '0.08em',
-                                        color: '#0d0d0d', border: 'none', cursor: 'pointer',
-                                        background: 'linear-gradient(180deg, #D4AF37 0%, #B8860B 50%, #996515 100%)',
-                                        boxShadow: '0 4px 20px rgba(212,175,55,0.35), inset 0 1px 0 rgba(255,255,255,0.25)',
-                                        transition: 'all 0.3s ease', textTransform: 'uppercase'
-                                    }}
-                                >
-                                    TALEP GÖNDER
-                                </button>
                             </div>
+                            
+                            {!collapsed.form && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+                                    <input type="text" placeholder="Kullanıcı Adı" value={depositUsername}
+                                        onChange={e => setDepositUsername(e.target.value)}
+                                        style={{
+                                            width: '100%', padding: '8px 10px', background: '#141B25',
+                                            border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, color: '#fff',
+                                            fontSize: 10, outline: 'none'
+                                        }}
+                                    />
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                                        <input type="number" placeholder="Tutar (TL)" value={depositAmount}
+                                            onChange={e => setDepositAmount(e.target.value)}
+                                            style={{
+                                                width: '100%', padding: '8px 10px', background: '#141B25',
+                                                border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, color: '#fff',
+                                                fontSize: 10, outline: 'none'
+                                            }}
+                                        />
+                                        <input type="number" placeholder="Bilet No" value={depositTicket}
+                                            onChange={e => setDepositTicket(e.target.value)}
+                                            style={{
+                                                width: '100%', padding: '8px 10px', background: '#141B25',
+                                                border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, color: '#fff',
+                                                fontSize: 10, outline: 'none'
+                                            }}
+                                        />
+                                    </div>
+                                    <input type="datetime-local" value={depositDate}
+                                        onChange={e => setDepositDate(e.target.value)}
+                                        style={{
+                                            width: '100%', padding: '8px 10px', background: '#141B25',
+                                            border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, color: '#fff',
+                                            fontSize: 10, outline: 'none', colorScheme: 'dark'
+                                        }}
+                                    />
+                                    <button onClick={handleDepositRequest}
+                                        style={{
+                                            width: '100%', marginTop: 4, padding: '10px 0', borderRadius: 8,
+                                            fontWeight: 900, fontSize: 10, letterSpacing: '0.05em',
+                                            color: '#141B25', border: 'none', cursor: 'pointer',
+                                            background: 'linear-gradient(180deg, #F5A623 0%, #B8860B 50%, #996515 100%)',
+                                            boxShadow: '0 2px 10px rgba(245,166,35,0.2)',
+                                            transition: 'all 0.2s', textTransform: 'uppercase'
+                                        }}
+                                    >
+                                        TALEP GÖNDER
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
                         {/* 3. Legend */}
                         <div style={{
-                            background: '#1a1a1a', border: '1px solid #2a2a2a',
-                            borderRadius: 16, padding: '16px 20px',
+                            background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
+                            borderRadius: 12, padding: 10,
                             flex: '0 0 auto'
                         }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                    <div style={{
-                                        width: 14, height: 14, background: '#D4AF37', borderRadius: 3, boxShadow: '0 0 8px rgba(212,175,55,0.4)'
-                                    }} />
-                                    <span style={{ color: '#999', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-                                        DOLU BİLET
-                                    </span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                    <div style={{
-                                        width: 14, height: 14, background: 'rgba(59,130,246,0.3)', border: '1.5px solid #3b82f6', borderRadius: 3
-                                    }} />
-                                    <span style={{ color: '#999', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-                                        SİZİN BİLETLERİNİZ
-                                    </span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                    <div style={{
-                                        width: 14, height: 14, background: '#1a1a1a', border: '1.5px solid #333', borderRadius: 3, boxShadow: '0 0 6px rgba(212,175,55,0.1)'
-                                    }} />
-                                    <span style={{ color: '#999', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-                                        BOŞ SLOT
-                                    </span>
-                                </div>
+                            <div 
+                                onClick={() => toggleSection('legend')}
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: collapsed.legend ? 'none' : '1px solid #222', paddingBottom: collapsed.legend ? 0 : 6, marginBottom: collapsed.legend ? 0 : 6 }}
+                            >
+                                <span style={{ color: '#fff', fontSize: 9, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                                    AÇIKLAMA (RENKLER)
+                                </span>
+                                {collapsed.legend ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                             </div>
+
+                            {!collapsed.legend && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <div style={{
+                                            width: 10, height: 10, background: '#F5A623', borderRadius: 2, boxShadow: '0 0 4px rgba(245,166,35,0.3)'
+                                        }} />
+                                        <span style={{ color: '#888', fontSize: 8, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                            DOLU BİLET
+                                        </span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <div style={{
+                                            width: 10, height: 10, background: 'rgba(59,130,246,0.3)', border: '1px solid #3b82f6', borderRadius: 2
+                                        }} />
+                                        <span style={{ color: '#888', fontSize: 8, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                            SİZİN BİLETLERİNİZ
+                                        </span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <div style={{
+                                            width: 10, height: 10, background: '#050C18', border: '1px solid #333', borderRadius: 2
+                                        }} />
+                                        <span style={{ color: '#888', fontSize: 8, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                            BOŞ SLOT
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
                     {/* ═══ RIGHT: Bilet Havuzu WITH VIRTUALIZATION-LIKE MEMO ═══ */}
                     <div style={{
                         width: '66.667%', minWidth: 0,
-                        background: '#1a1a1a', border: '1px solid #2a2a2a',
-                        borderRadius: 16, overflow: 'hidden',
+                        background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
+                        borderRadius: 12, overflow: 'hidden',
                         display: 'flex', flexDirection: 'column'
                     }}>
-                        <div style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            padding: 20, borderBottom: '1px solid #2a2a2a', background: '#1a1a1a'
-                        }}>
-                            <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', margin: 0 }}>
+                        <div 
+                            style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                padding: 12, borderBottom: '1px solid #222', background: '#1E2530'
+                            }}
+                        >
+                            <h3 style={{ color: '#fff', fontSize: 11, fontWeight: 850, letterSpacing: '0.05em', margin: 0, textTransform: 'uppercase' }}>
                                 BİLET HAVUZU (200 SLOT)
                             </h3>
-                            <div style={{
-                                color: '#999', fontSize: 12, fontWeight: 600,
-                                border: '1px solid #2a2a2a', background: '#111', padding: '4px 10px',
-                                borderRadius: 8
-                            }}>
-                                {totalSold} / {TOTAL_POOL_SIZE}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <div style={{
+                                    color: '#999', fontSize: 9, fontWeight: 700,
+                                    border: '1px solid rgba(255,255,255,0.05)', background: '#141B25', padding: '2px 8px',
+                                    borderRadius: 6
+                                }}>
+                                    {totalSold} / {TOTAL_POOL_SIZE}
+                                </div>
                             </div>
                         </div>
                         
                         <div style={{
-                            padding: '16px 20px', flex: 1,
+                            padding: 10, flex: 1,
                             background: 'rgba(17,17,17,0.3)'
                         }}>
                             <div style={{
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(10, 1fr)',
-                                gap: 2, width: '100%',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(56px, 1fr))',
+                                gap: 6, width: '100%',
                                 maxWidth: '100%'
                             }}>
-                                {/* Optimal rendering loop using useMemo wrapping React.memo slots for high performance */}
                                 {useMemo(() => {
                                     return Array.from({ length: TOTAL_POOL_SIZE }, (_, index) => {
                                         const found = ticketPool.find(t => t.slot === index);
@@ -553,96 +592,121 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
                 {/* ═══ POOL RULES ═══ */}
                 <div style={{
-                    background: '#1a1a1a', border: '1px solid rgba(212,175,55,0.2)',
-                    borderRadius: 16, padding: 24, marginBottom: 16
+                    background: '#1E2530', border: '1px solid rgba(245,166,35,0.15)',
+                    borderRadius: 12, padding: 12, marginBottom: 12
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-                        <Shield size={16} style={{ color: '#D4AF37' }} />
-                        <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 700, margin: 0, letterSpacing: '0.05em' }}>
+                    <div 
+                        onClick={() => toggleSection('rules')}
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', borderBottom: collapsed.rules ? 'none' : '1px solid #222', paddingBottom: collapsed.rules ? 0 : 8, marginBottom: collapsed.rules ? 0 : 8 }}
+                    >
+                        <Shield size={12} style={{ color: '#F5A623' }} />
+                        <h3 style={{ color: '#fff', fontSize: 10, fontWeight: 900, margin: 0, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                             BİLET HAVUZU KURALLARI
                         </h3>
-                        <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, rgba(212,175,55,0.3), transparent)' }} />
+                        <div style={{ flex: 1 }} />
+                        {collapsed.rules ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
-                        {config.rules.map((rule, idx) => (
-                            <div key={idx} style={{
-                                display: 'flex', alignItems: 'flex-start', gap: 12,
-                                padding: '14px 16px', background: 'rgba(13,13,13,0.6)',
-                                borderRadius: 12, border: '1px solid #222'
-                            }}>
-                                <div style={{
-                                    flexShrink: 0, width: 28, height: 28, borderRadius: 8,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid rgba(212,175,55,0.2)'
+
+                    {!collapsed.rules && (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 8 }}>
+                            {config.rules.map((rule, idx) => (
+                                <div key={idx} style={{
+                                    display: 'flex', alignItems: 'flex-start', gap: 8,
+                                    padding: '10px 12px', background: 'rgba(13,13,13,0.6)',
+                                    borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)'
                                 }}>
-                                    {renderRuleIcon(rule.icon)}
+                                    <div style={{
+                                        flexShrink: 0, width: 22, height: 22, borderRadius: 6,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        background: 'rgba(245,166,35,0.1)', color: '#F5A623', border: '1px solid rgba(245,166,35,0.15)'
+                                    }}>
+                                        {renderRuleIcon(rule.icon)}
+                                    </div>
+                                    <span style={{ color: '#ccc', fontSize: 10, fontWeight: 500, lineHeight: 1.4, paddingTop: 2 }}>
+                                        {rule.text}
+                                    </span>
                                 </div>
-                                <span style={{ color: '#ccc', fontSize: 12, fontWeight: 500, lineHeight: 1.5, paddingTop: 4 }}>
-                                    {rule.text}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* ═══ NASIL ÇALIŞIR ═══ */}
                 <div style={{
-                    background: '#1a1a1a', border: '1px solid #2a2a2a',
-                    borderRadius: 16, padding: 20, marginBottom: 16
+                    background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
+                    borderRadius: 12, padding: 12, marginBottom: 12
                 }}>
-                    <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', marginBottom: 16, margin: '0 0 16px' }}>
-                        NASIL ÇALIŞIR?
-                    </h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-                        {[
-                            { emoji: '💰', step: 'Adım 1', label: 'Yatırım Yap' },
-                            { emoji: '🎫', step: 'Adım 2', label: 'Talep Oluştur' },
-                            { emoji: '✅', step: 'Adım 3', label: 'Onay Bekle' },
-                            { emoji: '🎁', step: 'Adım 4', label: 'Çekilişe Katıl' }
-                        ].map((item, idx) => (
-                            <div key={idx} style={{ background: '#0d0d0d', border: '1px solid #2a2a2a', padding: 16, borderRadius: 12, display: 'flex', alignItems: 'center', gap: 14 }}>
-                                <span style={{ fontSize: 24 }}>{item.emoji}</span>
-                                <div>
-                                    <div style={{ fontSize: 10, color: '#888', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.step}</div>
-                                    <div style={{ fontSize: 14, color: '#fff', fontWeight: 600 }}>{item.label}</div>
-                                </div>
-                            </div>
-                        ))}
+                    <div 
+                        onClick={() => toggleSection('howItWorks')}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: collapsed.howItWorks ? 'none' : '1px solid #222', paddingBottom: collapsed.howItWorks ? 0 : 8, marginBottom: collapsed.howItWorks ? 0 : 8 }}
+                    >
+                        <h3 style={{ color: '#fff', fontSize: 10, fontWeight: 900, letterSpacing: '0.05em', margin: 0, textTransform: 'uppercase' }}>
+                            NASIL ÇALIŞIR?
+                        </h3>
+                        {collapsed.howItWorks ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                     </div>
+
+                    {!collapsed.howItWorks && (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                            {[
+                                { emoji: '💰', step: 'Adım 1', label: 'Yatırım Yap' },
+                                { emoji: '🎫', step: 'Adım 2', label: 'Talep Oluştur' },
+                                { emoji: '✅', step: 'Adım 3', label: 'Onay Bekle' },
+                                { emoji: '🎁', step: 'Adım 4', label: 'Katıl' }
+                            ].map((item, idx) => (
+                                <div key={idx} style={{ background: '#141B25', border: '1px solid rgba(255,255,255,0.05)', padding: 10, borderRadius: 8, display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <span style={{ fontSize: 18 }}>{item.emoji}</span>
+                                    <div>
+                                        <div style={{ fontSize: 7, color: '#888', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.step}</div>
+                                        <div style={{ fontSize: 10, color: '#fff', fontWeight: 600 }}>{item.label}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* ═══ SSS (FAQ) ═══ */}
                 <div style={{
-                    background: '#1a1a1a', border: '1px solid #2a2a2a',
-                    borderRadius: 16, padding: 20, marginBottom: 32
+                    background: '#1E2530', border: '1px solid rgba(255,255,255,0.05)',
+                    borderRadius: 12, padding: 12, marginBottom: 20
                 }}>
-                    <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', marginBottom: 16, margin: '0 0 16px' }}>
-                        S.S.S.
-                    </h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                        {config.faqs.map((faq, idx) => (
-                            <div key={idx} style={{ background: '#0d0d0d', border: '1px solid #2a2a2a', borderRadius: 12, overflow: 'hidden' }}>
-                                <button
-                                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                                    style={{
-                                        width: '100%', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                        textAlign: 'left', background: 'transparent', border: 'none', cursor: 'pointer', color: '#fff'
-                                    }}
-                                >
-                                    <span style={{ fontSize: 12, fontWeight: 600 }}>{faq.q}</span>
-                                    <ChevronDown style={{
-                                        width: 16, height: 16, color: '#888', transition: 'transform 0.3s',
-                                        transform: openFaq === idx ? 'rotate(180deg)' : 'rotate(0deg)'
-                                    }} />
-                                </button>
-                                {openFaq === idx && (
-                                    <div style={{ padding: '12px 20px 16px', color: '#888', fontSize: 12, fontWeight: 500, borderTop: '1px solid #2a2a2a' }}>
-                                        {faq.a}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+                    <div 
+                        onClick={() => toggleSection('faq')}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', borderBottom: collapsed.faq ? 'none' : '1px solid #222', paddingBottom: collapsed.faq ? 0 : 8, marginBottom: collapsed.faq ? 0 : 8 }}
+                    >
+                        <h3 style={{ color: '#fff', fontSize: 10, fontWeight: 900, letterSpacing: '0.05em', margin: 0, textTransform: 'uppercase' }}>
+                            S.S.S. (SIKÇA SORULAN SORULAR)
+                        </h3>
+                        {collapsed.faq ? <ChevronDown size={14} color="#F5A623" /> : <ChevronUp size={14} color="#F5A623" />}
                     </div>
+
+                    {!collapsed.faq && (
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                            {config.faqs.map((faq, idx) => (
+                                <div key={idx} style={{ background: '#141B25', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, overflow: 'hidden' }}>
+                                    <button
+                                        onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                                        style={{
+                                            width: '100%', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                            textAlign: 'left', background: 'transparent', border: 'none', cursor: 'pointer', color: '#fff'
+                                        }}
+                                    >
+                                        <span style={{ fontSize: 10, fontWeight: 600 }}>{faq.q}</span>
+                                        <ChevronDown style={{
+                                            width: 12, height: 12, color: '#888', transition: 'transform 0.3s',
+                                            transform: openFaq === idx ? 'rotate(180deg)' : 'rotate(0deg)'
+                                        }} />
+                                    </button>
+                                    {openFaq === idx && (
+                                        <div style={{ padding: '8px 14px 10px', color: '#888', fontSize: 9, fontWeight: 500, borderTop: '1px solid #222' }}>
+                                            {faq.a}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -661,19 +725,19 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                     content: '';
                     position: absolute;
                     inset: -1px;
-                    border-radius: 3px;
-                    box-shadow: 0 0 6px rgba(212,175,55,0.08);
+                    border-radius: 2px;
+                    box-shadow: 0 0 4px rgba(245,166,35,0.06);
                     opacity: 1;
                     pointer-events: none;
                     will-change: opacity;
                     animation: slotGlowGpu 3s ease-in-out infinite;
                 }
                 .raffle-slot-empty:hover {
-                    background-color: #1e1e1e !important;
-                    border-color: rgba(212,175,55,0.4) !important;
-                    color: #D4AF37 !important;
-                    box-shadow: 0 0 14px rgba(212,175,55,0.25) !important;
-                    transform: scale(1.08) translate3d(0, 0, 0) !important;
+                    background-color: #050C18 !important;
+                    border-color: rgba(245,166,35,0.3) !important;
+                    color: #F5A623 !important;
+                    box-shadow: 0 0 10px rgba(245,166,35,0.2) !important;
+                    transform: scale(1.06) translate3d(0, 0, 0) !important;
                     z-index: 10;
                 }
                 .raffle-slot-empty:hover::after {
@@ -689,7 +753,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                     to { transform: translate3d(-50%, 0, 0); opacity: 1; }
                 }
                 @media (min-width: 640px) {
-                    .raffle-slot { height: 26px !important; }
+                    .raffle-slot { height: 22px !important; }
                 }
             `}</style>
         </div>

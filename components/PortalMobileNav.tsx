@@ -1,5 +1,10 @@
 import React from 'react';
-import { Home, BarChart3, Ticket, Shield, User } from 'lucide-react';
+import { 
+  HomeOutlined, 
+  BarChartOutlined, 
+  SafetyOutlined, 
+  PlayCircleOutlined 
+} from '@ant-design/icons';
 
 interface PortalMobileNavProps {
   activeView: string;
@@ -15,11 +20,8 @@ interface NavItem {
 
 const PortalMobileNav: React.FC<PortalMobileNavProps> = ({ activeView, onViewChange }) => {
   const items: NavItem[] = [
-    { view: 'home', label: 'Ana Sayfa', icon: <Home style={{ width: 20, height: 20 }} /> },
-    { view: 'analysis', label: 'Analizler', icon: <BarChart3 style={{ width: 20, height: 20 }} /> },
-    { view: 'coupons', label: 'Kuponlar', icon: <Ticket style={{ width: 20, height: 20 }} /> },
-    { view: 'brands', label: 'Siteler', icon: <Shield style={{ width: 20, height: 20 }} /> },
-    { view: 'loyalty', label: 'Profil', icon: <User style={{ width: 20, height: 20 }} /> },
+    { view: 'home', label: 'Ana Sayfa', icon: <HomeOutlined style={{ fontSize: '20px' }} /> },
+    { view: 'trusted-sites', label: 'Siteler', icon: <SafetyOutlined style={{ fontSize: '20px' }} /> },
   ];
 
   return (

@@ -21,7 +21,7 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminL
       <div className="relative max-w-md w-full text-center">
         {/* Branding */}
         <div className="mb-6 md:mb-8 flex flex-col items-center">
-          <div className="w-12 h-12 mb-4 rounded-xl bg-amber-500 flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.25)]">
+          <div className="w-12 h-12 mb-4 rounded-lg bg-amber-500 flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.25)]">
             <Settings className="w-6 h-6 text-black animate-spin" style={{ animationDuration: '4s' }} />
           </div>
           <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-white mb-1">
@@ -53,7 +53,7 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminL
               { label: 'PERFORMANS', sub: 'Optimize' },
               { label: 'YENİ SÜRÜM', sub: 'v2.4.0' }
             ].map((stat, i) => (
-              <div key={i} className="text-center p-3 rounded-xl bg-white/5 border border-white/5">
+              <div key={i} className="text-center p-3 rounded-lg bg-white/5 border border-white/5">
                 <div className="text-[8px] font-black text-zinc-500 uppercase tracking-widest mb-1">{stat.label}</div>
                 <div className="text-[10px] font-bold text-zinc-300">{stat.sub}</div>
               </div>
@@ -62,7 +62,7 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminL
 
           <button
             onClick={onAdminLogin}
-            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-zinc-800/50 hover:bg-amber-500/10 border border-zinc-700 hover:border-amber-500/30 text-[10px] font-black text-zinc-500 hover:text-amber-500 uppercase tracking-widest transition-all duration-300 group"
+            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-zinc-800/50 hover:bg-amber-500/10 border border-zinc-700 hover:border-amber-500/30 text-[10px] font-black text-zinc-500 hover:text-amber-500 uppercase tracking-widest transition-all duration-300 group"
           >
             <Lock className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
             YETKİLİ GİRİŞİ

@@ -17,7 +17,7 @@ const BrandCard: React.FC<BrandCardProps> = ({ brand, index = 0 }) => {
   const tierClass = getTierClass(index);
 
   return (
-    <div className={`brand-card ${tierClass} animate-fade-in-up animate-delay-${Math.min(index + 1, 5)}`} style={{ opacity: 0 }}>
+    <div className={`brand-card bonus-karti ${tierClass} animate-fade-in-up animate-delay-${Math.min(index + 1, 5)}`} style={{ opacity: 0 }}>
       <div className="brand-card-logo">
         <img src={brand.logo} alt={brand.name} />
       </div>

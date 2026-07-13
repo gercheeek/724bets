@@ -16,12 +16,12 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <div style={{ width: '2px', height: '12px', background: '#FFD700', borderRadius: '1px' }} />
-                    <Flame style={{ width: 12, height: 12, color: '#FFD700' }} />
+                    <div style={{ width: '2px', height: '12px', background: '#F5A623', borderRadius: '1px' }} />
+                    <Flame style={{ width: 12, height: 12, color: '#F5A623' }} />
                     <span style={{ color: '#fff', fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Popüler Bahisler</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                    <TrendingUp style={{ width: 9, height: 9, color: '#FFD700' }} />
+                    <TrendingUp style={{ width: 9, height: 9, color: '#F5A623' }} />
                     <span style={{ color: 'rgba(255,215,0,0.6)', fontSize: '7px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
                 </div>
             </div>
@@ -89,7 +89,7 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
 
                             {/* Play count */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                                <span style={{ fontSize: '10px', fontWeight: 800, color: '#FFD700' }}>
+                                <span style={{ fontSize: '10px', fontWeight: 800, color: '#F5A623' }}>
                                     {bet.playCount} kez oynandı
                                 </span>
                                 <span style={{ fontSize: '10px' }}>🔥</span>
@@ -119,7 +119,7 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
                                 <span style={{ fontSize: '13px', fontWeight: 900, color: '#e5e5e5' }}>
                                     {bet.predictionShort}
                                 </span>
-                                <span style={{ fontSize: '15px', fontWeight: 900, color: '#FFD700' }}>
+                                <span style={{ fontSize: '15px', fontWeight: 900, color: '#F5A623' }}>
                                     {bet.odds.toFixed(2)}
                                 </span>
                             </div>

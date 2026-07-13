@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Images</title>
+  <style>
+    body { background: #111; color: white; display: flex; flex-wrap: wrap; gap: 10px; padding: 20px; }
+    div { display: flex; flex-direction: column; align-items: center; }
+    img { width: 150px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <script>
+    for (let i = 1; i <= 48; i++) {
+      document.write('<div><img src="games/game_' + i + '.jpg" alt="game_' + i + '" /><span>game_' + i + '</span></div>');
+    }
+  </script>
+</body>
+</html>
