@@ -1769,56 +1769,8 @@ const App: React.FC = () => {
         )}
 
         {view === 'sports' && (
-          <div className="animate-fade-in relative h-full w-full">
-            {iframeLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-lg" style={{ height: 'calc(100vh - var(--header-height) - 10px)' }}>
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                  <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
-                </div>
-              </div>
-            )}
-            <div 
-              ref={sportsContainerRef}
-              className="w-full rounded-lg shadow-2xl bg-[#09090b] relative" 
-              style={{ 
-                height: '100%', 
-                overflowX: isMobile ? 'auto' : 'hidden',
-                overflowY: 'hidden',
-                WebkitOverflowScrolling: 'touch'
-              }}
-            >
-              <div style={{ width: isMobile ? '768px' : '100%', height: '100%', position: 'relative' }}>
-                <iframe 
-                  src="https://sport.7yrrerfcet.com/SportsBook/Home"
-                  onLoad={() => {
-                     if (isMobile && sportsContainerRef.current) {
-                        setTimeout(() => {
-                          if (sportsContainerRef.current) sportsContainerRef.current.scrollLeft = 210;
-                        }, 100);
-                     }
-                  }}
-                  frameBorder="0"
-                  allowFullScreen
-                  title="Canlı Spor Bahisleri"
-                  className="relative z-0"
-                  style={{
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
-                    width: '100%',
-                    height: '100%',
-                    filter: 'contrast(1.05) brightness(0.9) grayscale(0.2)'
-                  }}
-                />
-
-
-              </div>
-
-              {/* Site theme color overlay (tinting the grey background to slate) */}
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" />
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0F172A]/20" />
-            </div>
+          <div className="animate-fade-in relative h-full w-full overflow-y-auto pb-32">
+            <SportsDashboard onNavigate={() => {}} />
           </div>
         )}
 
