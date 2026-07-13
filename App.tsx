@@ -1769,8 +1769,16 @@ const App: React.FC = () => {
         )}
 
         {view === 'sports' && (
-          <div className="animate-fade-in relative w-full h-full bg-[#09090b] flex justify-center overflow-hidden" style={{ height: 'calc(100vh - var(--header-height))' }}>
-            <div className="w-full h-full bg-[#09090b] relative">
+          <div 
+            className="animate-fade-in relative w-full bg-[#09090b] overflow-hidden" 
+            style={{ 
+              height: 'calc(100dvh - var(--header-height))',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            {/* Tam Responsif İframe Kapsayıcısı (Responsive Iframe Wrapper) */}
+            <div className="w-full flex-1 relative overflow-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
               {iframeLoading && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
                   <div className="flex flex-col items-center gap-4">
@@ -1782,8 +1790,18 @@ const App: React.FC = () => {
               <iframe 
                 src="https://sport.7yrrerfcet.com/SportsBook/Home"
                 onLoad={() => setIframeLoading(false)}
-                className="w-full h-full border-none"
+                className="absolute top-0 left-0 w-full h-full border-none outline-none"
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  border: 'none',
+                  margin: 0,
+                  padding: 0,
+                  overflow: 'hidden',
+                  zIndex: 10
+                }}
                 frameBorder="0"
+                scrolling="yes"
                 allowFullScreen
               />
             </div>
