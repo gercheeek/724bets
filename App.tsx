@@ -1818,7 +1818,7 @@ const App: React.FC = () => {
         )}
 
         {view === 'sports3' && (
-          <div className="animate-fade-in relative h-full w-full overflow-hidden">
+          <div className="animate-fade-in relative h-full w-full overflow-hidden pb-16 md:pb-12">
             <SportsDashboardV3 onNavigate={setView} />
           </div>
         )}
