@@ -58,8 +58,10 @@ export const handler = async (event, context) => {
           displayTime = rawStatus;
       }
       
+      const isLive = rawStatus.includes('Canlı');
+      
       // Parse score and exact time from status: "Canlı: 0-0 (61)"
-      if (rawStatus.includes('Canlı:')) {
+      if (isLive) {
          const scoreMatch = rawStatus.match(/Canlı:\s*(\d+)-(\d+)/);
          if (scoreMatch) {
            scoreHome = parseInt(scoreMatch[1], 10);
@@ -75,6 +77,7 @@ export const handler = async (event, context) => {
         id: item.id || Math.random().toString(),
         sport: sport, 
         time: displayTime,
+        isLive: isLive,
         home: item.home_team || "Ev Sahibi",
         away: item.away_team || "Deplasman",
         scoreHome: scoreHome,
