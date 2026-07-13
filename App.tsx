@@ -1912,72 +1912,7 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {view === 'sports3' && (
-          <div className="animate-fade-in w-full h-full relative">
-            {iframeLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-lg" style={{ height: 'calc(100vh - var(--header-height))' }}>
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                  <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
-                </div>
-              </div>
-            )}
-            <div 
-              ref={sports3ContainerRef}
-              className="w-full rounded-lg shadow-2xl bg-[#0F172A] relative" 
-              style={{ 
-                height: 'calc(100vh - var(--header-height))',
-                overflowX: isMobile ? 'auto' : 'hidden',
-                overflowY: 'hidden',
-                WebkitOverflowScrolling: 'touch'
-              }}
-            >
-              <div style={{ width: isMobile ? '768px' : '100%', height: '100%', position: 'relative' }}>
-                <iframe 
-                  src="https://tarafbet977.com/tr/live/"
-                  onLoad={() => {
-                     if (isMobile && sports3ContainerRef.current) {
-                        setTimeout(() => {
-                          if (sports3ContainerRef.current) sports3ContainerRef.current.scrollLeft = 210;
-                        }, 100);
-                     }
-                  }}
-                  frameBorder="0"
-                  allowFullScreen
-                  title="Spor 3"
-                  className="relative z-0"
-                  style={{
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
-                    width: '100%',
-                    height: '100%'
-                  }}
-                />
-                
 
-              </div>
-
-              {/* Site theme color overlay (tinting the grey background to slate) */}
-              <div 
-                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" 
-                style={{ 
-                  clipPath: isMobile 
-                    ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
-                    : 'polygon(0% 0%, 100% 0%, 100% calc(100% - 70px), calc(100% - 300px) calc(100% - 70px), calc(100% - 300px) 100%, 0% 100%)' 
-                }} 
-              />
-              <div 
-                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0F172A]/20" 
-                style={{ 
-                  clipPath: isMobile 
-                    ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
-                    : 'polygon(0% 0%, 100% 0%, 100% calc(100% - 70px), calc(100% - 300px) calc(100% - 70px), calc(100% - 300px) 100%, 0% 100%)' 
-                }} 
-              />
-            </div>
-          </div>
-        )}
 
         {view === 'sports4' && (
           <div className="animate-fade-in w-full h-full relative">
