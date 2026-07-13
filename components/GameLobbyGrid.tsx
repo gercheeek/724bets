@@ -131,14 +131,19 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
 
   const getDemoUrl = (game: GameItem | null): string | null => {
     if (!game) return null;
+    
+    // In a real scenario, this would come from the game object directly
+    // For now, we only support known Pragmatic Play demos via this public URL
     const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-    let symbol = 'vs10bbbonanza'; // Default to big bass bonanza so all games have a demo
+    let symbol = null;
     
     if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
     else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
     else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
     else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
-    else if (nameString.includes('lebandit')) symbol = 'vs20olympgate';
+    else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
+    
+    if (!symbol) return null; // No fallback! If we don't know it, we don't show it.
   
     return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
   };
