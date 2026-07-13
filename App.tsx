@@ -1494,14 +1494,7 @@ const App: React.FC = () => {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
                 
-                <div className="font-black text-xl text-white tracking-tight shrink px-1 flex items-center group cursor-pointer" onClick={() => window.location.href = '/'}>
-                  <span className="logo-text-intro">
-                    <span className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#00FFA3] transition-colors duration-300">
-                      724bets
-                    </span>
-                    <span className="bg-[#00FFA3]/10 text-[#00FFA3] border border-[#00FFA3]/30 text-[8px] font-extrabold px-1.5 py-[1px] rounded-full ml-1.5 tracking-wider -translate-y-1.5 group-hover:border-[#00FFA3] group-hover:shadow-[0_0_8px_rgba(0,255,163,0.3)] transition-all duration-300">BETA</span>
-                  </span>
-                </div>
+
                 
                 <div className="flex items-center shrink-0">
                   {siteUser ? (
