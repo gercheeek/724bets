@@ -196,77 +196,43 @@ const LiveMatches: React.FC = () => {
             {/* Glow effect */}
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(0, 255, 163, 0.03) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
-            {/* Live indicator / Status */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <div className="flex items-center gap-1.5">
-                <Wifi className="w-3 h-3" style={{ color: '#00FFA3' }} />
-                <span style={{ fontSize: '9px', fontWeight: 900, color: 'rgba(0, 255, 163, 0.9)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  {match.status || 'Canlı Bahis'}
-                </span>
-              </div>
-              <TrendingUp className="w-3.5 h-3.5" style={{ color: 'rgba(0, 255, 163, 0.3)' }} />
+            {/* Date/Status Top Right */}
+            <div className="absolute top-4 right-4 text-zinc-400 text-[11px] font-semibold flex items-center gap-1.5">
+              {match.status === 'Canlı Bahis' && (
+                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FFA3', boxShadow: '0 0 6px #00FFA3', animation: 'live-pulse 2s infinite' }} />
+              )}
+              {match.status || 'Canlı Bahis'}
             </div>
 
-            {/* Team Names */}
-            <div style={{ marginBottom: '12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                <div style={{
-                  width: '4px', height: '16px', borderRadius: '2px',
-                  background: 'linear-gradient(180deg, #00FFA3, #00FFA3)',
-                  boxShadow: '0 0 6px rgba(0, 255, 163, 0.4)'
-                }} />
-                <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff', letterSpacing: '-0.3px' }}>
-                  {match.ev_sahibi}
-                </span>
+            {/* Teams */}
+            <div className="flex flex-col gap-3 mt-1 mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                  <span className="text-[10px]">⚽</span>
+                </div>
+                <span className="text-white font-bold text-[13px]">{match.ev_sahibi}</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{
-                  width: '4px', height: '16px', borderRadius: '2px',
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))'
-                }} />
-                <span style={{ fontSize: '13px', fontWeight: 900, color: 'rgba(255,255,255,0.65)', letterSpacing: '-0.3px' }}>
-                  {match.deplasman}
-                </span>
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                  <span className="text-[10px]">⚽</span>
+                </div>
+                <span className="text-white font-bold text-[13px]">{match.deplasman}</span>
               </div>
             </div>
 
-            {/* Odds Row */}
-            <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
-              {/* 1 */}
-              <div style={{
-                flex: 1, textAlign: 'center', padding: '10px 4px',
-                background: 'rgba(0, 255, 163, 0.04)',
-                borderRadius: '8px',
-                transition: 'all 0.2s'
-              }}>
-                <div style={{ fontSize: '8px', fontWeight: 900, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>1</div>
-                <div style={{ fontSize: '14px', fontWeight: 900, color: getOddColor(match.oranlar?.['1']), letterSpacing: '-0.5px' }}>
-                  {formatOdd(match.oranlar?.['1'])}
-                </div>
+            {/* Odds Buttons */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0F1219] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+                <span className="text-[10px] font-bold text-zinc-500 mb-0.5">1</span>
+                <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['1']) }}>{formatOdd(match.oranlar?.['1'])}</span>
               </div>
-              {/* X */}
-              <div style={{
-                flex: 1, textAlign: 'center', padding: '10px 4px',
-                background: 'rgba(0, 255, 163, 0.04)',
-                borderRadius: '8px',
-                transition: 'all 0.2s'
-              }}>
-                <div style={{ fontSize: '8px', fontWeight: 900, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>X</div>
-                <div style={{ fontSize: '14px', fontWeight: 900, color: getOddColor(match.oranlar?.['X']), letterSpacing: '-0.5px' }}>
-                  {formatOdd(match.oranlar?.['X'])}
-                </div>
+              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0F1219] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+                <span className="text-[10px] font-bold text-zinc-500 mb-0.5">X</span>
+                <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['X']) }}>{formatOdd(match.oranlar?.['X'])}</span>
               </div>
-              {/* 2 */}
-              <div style={{
-                flex: 1, textAlign: 'center', padding: '10px 4px',
-                background: 'rgba(0, 255, 163, 0.04)',
-                borderRadius: '8px',
-                transition: 'all 0.2s'
-              }}>
-                <div style={{ fontSize: '8px', fontWeight: 900, color: '#555', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>2</div>
-                <div style={{ fontSize: '14px', fontWeight: 900, color: getOddColor(match.oranlar?.['2']), letterSpacing: '-0.5px' }}>
-                  {formatOdd(match.oranlar?.['2'])}
-                </div>
+              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0F1219] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+                <span className="text-[10px] font-bold text-zinc-500 mb-0.5">2</span>
+                <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['2']) }}>{formatOdd(match.oranlar?.['2'])}</span>
               </div>
             </div>
 

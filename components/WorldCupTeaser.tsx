@@ -43,148 +43,51 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
         <div className="mb-8">
           <h3 className="text-white font-bold text-lg mb-4">Maçlar</h3>
           <div className="flex gap-4 overflow-x-auto pb-2 hide-scrollbar">
-            
-            {/* MATCH CARD 1 */}
-            <div 
-              onClick={() => onMatchClick('m1')}
-              className="bg-[#1E202B] rounded-xl p-4 min-w-[280px] sm:min-w-[320px] shrink-0 border border-[#2C2F3D] cursor-pointer hover:border-[#00FFA3]/50 transition-colors"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-white text-[13px] font-bold">12.07 0:00</span>
-                <div className="flex items-center gap-3 text-[#A0A5BB]">
-                  <div className="flex items-center gap-1 bg-[#00FFA3] text-black px-2 py-0.5 rounded-full text-[12px] font-bold">
-                    <MessageCircle size={12} fill="currentColor" />
-                    <span>64</span>
-                  </div>
-                  <BarChart2 size={16} />
-                  <Star size={16} />
+            {/* GAMDOM STYLE MATCH CARDS */}
+            {[
+              { id: 'm1', date: '12 Tem 0:00', home: { name: 'Norway', flag: 'no' }, away: { name: 'England', flag: 'gb-eng' }, odds: { '1': '4.05', 'X': '3.75', '2': '1.95' } },
+              { id: 'm2', date: '12 Tem 4:00', home: { name: 'Argentina', flag: 'ar' }, away: { name: 'Switzerland', flag: 'ch' }, odds: { '1': '1.70', 'X': '3.60', '2': '5.90' }, selectedIndex: 0 },
+              { id: 'm3', date: '14 Tem 22:00', home: { name: 'France', flag: 'fr' }, away: { name: 'Spain', flag: 'es' }, odds: { '1': '2.35', 'X': '3.30', '2': '3.30' } },
+            ].map((match) => (
+              <div 
+                key={match.id}
+                onClick={() => onMatchClick(match.id)}
+                className="bg-[#15171d] rounded-2xl p-4 min-w-[260px] sm:min-w-[280px] shrink-0 border border-white/5 cursor-pointer hover:bg-[#1a1c24] transition-colors relative"
+              >
+                {/* Date Top Right */}
+                <div className="absolute top-4 right-4 text-zinc-400 text-[11px] font-semibold">
+                  {match.date}
                 </div>
-              </div>
-              <div className="flex items-center justify-between px-2 mb-6">
-                <div className="flex flex-col items-center gap-2">
-                  <img src="https://flagcdn.com/w40/no.png" alt="Norveç" className="w-8 h-6 rounded-sm object-cover" />
-                  <span className="text-white font-medium text-[13px]">Norveç</span>
-                </div>
-                <div className="text-[#454A62] font-black italic text-lg">VS</div>
-                <div className="flex flex-col items-center gap-2">
-                  <img src="https://flagcdn.com/w40/gb-eng.png" alt="İngiltere" className="w-8 h-6 rounded-sm object-cover border border-[#2C2F3D]" />
-                  <span className="text-white font-medium text-[13px]">İngiltere</span>
-                </div>
-              </div>
-              <div className="mb-2 flex items-center gap-2 text-[#A0A5BB] text-[12px]">
-                Maç Sonucu <span className="w-2 h-2 rounded-full bg-[#00FFA3]"></span>
-              </div>
-              <div className="flex items-center bg-[#181A22] rounded-lg border border-[#2C2F3D] overflow-hidden">
-                <button className="px-2 py-2 text-[#454A62] hover:text-white hover:bg-white/5"><ChevronLeft size={16} /></button>
-                <div className="flex-1 flex text-white text-[13px]">
-                  <div className="flex-1 flex justify-between px-3 py-2 border-r border-[#2C2F3D] hover:bg-white/5">
-                    <span className="text-[#A0A5BB]">1</span>
-                    <span className="font-bold">4.05</span>
-                  </div>
-                  <div className="flex-1 flex justify-between px-3 py-2 border-r border-[#2C2F3D] hover:bg-white/5">
-                    <span className="text-[#A0A5BB]">X</span>
-                    <span className="font-bold">3.75</span>
-                  </div>
-                  <div className="flex-1 flex justify-between px-3 py-2 hover:bg-white/5">
-                    <span className="text-[#A0A5BB]">2</span>
-                    <span className="font-bold">1.95</span>
-                  </div>
-                </div>
-                <button className="px-2 py-2 text-[#454A62] hover:text-white hover:bg-white/5"><ChevronRight size={16} /></button>
-              </div>
-            </div>
 
-            {/* MATCH CARD 2 */}
-            <div 
-              onClick={() => onMatchClick('m2')}
-              className="bg-[#1E202B] rounded-xl p-4 min-w-[280px] sm:min-w-[320px] shrink-0 border border-[#2C2F3D] cursor-pointer hover:border-[#00FFA3]/50 transition-colors"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-white text-[13px] font-bold">12.07 4:00</span>
-                <div className="flex items-center gap-3 text-[#A0A5BB]">
-                  <div className="flex items-center gap-1 bg-[#00FFA3] text-black px-2 py-0.5 rounded-full text-[12px] font-bold">
-                    <MessageCircle size={12} fill="currentColor" />
-                    <span>64</span>
+                {/* Teams */}
+                <div className="flex flex-col gap-3 mt-1 mb-5">
+                  <div className="flex items-center gap-3">
+                    <img src={`https://flagcdn.com/w40/${match.home.flag}.png`} alt={match.home.name} className="w-6 h-6 rounded-full object-cover shadow-sm" />
+                    <span className="text-white font-bold text-sm">{match.home.name}</span>
                   </div>
-                  <BarChart2 size={16} />
-                  <Star size={16} />
-                </div>
-              </div>
-              <div className="flex items-center justify-between px-2 mb-6">
-                <div className="flex flex-col items-center gap-2">
-                  <img src="https://flagcdn.com/w40/ar.png" alt="Arjantin" className="w-8 h-6 rounded-sm object-cover" />
-                  <span className="text-white font-medium text-[13px]">Arjantin</span>
-                </div>
-                <div className="text-[#454A62] font-black italic text-lg">VS</div>
-                <div className="flex flex-col items-center gap-2">
-                  <img src="https://flagcdn.com/w40/ch.png" alt="İsviçre" className="w-8 h-6 rounded-sm object-cover" />
-                  <span className="text-white font-medium text-[13px]">İsviçre</span>
-                </div>
-              </div>
-              <div className="mb-2 flex items-center gap-2 text-[#A0A5BB] text-[12px]">
-                Maç Sonucu <span className="w-2 h-2 rounded-full bg-[#00FFA3]"></span>
-              </div>
-              <div className="flex items-center bg-[#181A22] rounded-lg border border-[#2C2F3D] overflow-hidden">
-                <button className="px-2 py-2 text-[#454A62] hover:text-white hover:bg-white/5"><ChevronLeft size={16} /></button>
-                <div className="flex-1 flex text-white text-[13px]">
-                  <div className="flex-1 flex justify-between px-3 py-2 border-r border-[#2C2F3D] bg-[#00FFA3] text-black">
-                    <span className="text-black/70">1</span>
-                    <span className="font-bold">1.7</span>
-                  </div>
-                  <div className="flex-1 flex justify-between px-3 py-2 border-r border-[#2C2F3D] hover:bg-white/5">
-                    <span className="text-[#A0A5BB]">X</span>
-                    <span className="font-bold">3.6</span>
-                  </div>
-                  <div className="flex-1 flex justify-between px-3 py-2 hover:bg-white/5">
-                    <span className="text-[#A0A5BB]">2</span>
-                    <span className="font-bold">5.9</span>
+                  <div className="flex items-center gap-3">
+                    <img src={`https://flagcdn.com/w40/${match.away.flag}.png`} alt={match.away.name} className="w-6 h-6 rounded-full object-cover shadow-sm" />
+                    <span className="text-white font-bold text-sm">{match.away.name}</span>
                   </div>
                 </div>
-                <button className="px-2 py-2 text-[#454A62] hover:text-white hover:bg-white/5"><ChevronRight size={16} /></button>
-              </div>
-            </div>
-            
-            {/* MATCH CARD 3 (Fransa) */}
-            <div 
-              onClick={() => onMatchClick('m3')}
-              className="bg-[#1E202B] rounded-xl p-4 min-w-[320px] shrink-0 border border-[#2C2F3D] cursor-pointer hover:border-[#00FFA3]/50 transition-colors"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-white text-[13px] font-bold">14.07 22:00</span>
-                <div className="flex items-center gap-3 text-[#A0A5BB]">
-                  <BarChart2 size={16} />
-                  <Star size={16} />
-                </div>
-              </div>
-              <div className="flex items-center justify-between px-2 mb-6">
-                <div className="flex flex-col items-center gap-2">
-                  <img src="https://flagcdn.com/w40/fr.png" alt="Fransa" className="w-8 h-6 rounded-sm object-cover" />
-                  <span className="text-white font-medium text-[13px]">Fransa</span>
-                </div>
-                <div className="text-[#454A62] font-black italic text-lg">VS</div>
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-8 h-6 rounded-sm bg-zinc-800 border border-[#2C2F3D] animate-pulse" />
-                  <span className="text-[#A0A5BB] font-medium text-[13px]">TBD</span>
-                </div>
-              </div>
-              <div className="mb-2 flex items-center gap-2 text-[#A0A5BB] text-[12px]">
-                Maç Sonucu <span className="w-2 h-2 rounded-full bg-[#00FFA3]"></span>
-              </div>
-              <div className="flex items-center bg-[#181A22] rounded-lg border border-[#2C2F3D] overflow-hidden">
-                <button className="px-2 py-2 text-[#454A62] hover:text-white hover:bg-white/5"><ChevronLeft size={16} /></button>
-                <div className="flex-1 flex text-white text-[13px]">
-                  <div className="flex-1 flex justify-between px-3 py-2 border-r border-[#2C2F3D] hover:bg-white/5">
-                    <span className="text-[#A0A5BB]">1</span>
-                    <span className="font-bold">2.44</span>
+
+                {/* Odds Buttons */}
+                <div className="flex items-center gap-2">
+                  <div className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${match.selectedIndex === 0 ? 'bg-[#00FFA3] text-black' : 'bg-[#0F1219] hover:bg-white/5 text-white'}`}>
+                    <span className={`text-[10px] font-bold ${match.selectedIndex === 0 ? 'text-black/70' : 'text-zinc-500'}`}>1</span>
+                    <span className="font-bold text-[13px] sm:text-sm">{match.odds['1']}</span>
                   </div>
-                  <div className="flex-1 flex justify-between px-3 py-2 hover:bg-white/5">
-                    <span className="text-[#A0A5BB]">X</span>
-                    <span className="font-bold">3.10</span>
+                  <div className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${match.selectedIndex === 1 ? 'bg-[#00FFA3] text-black' : 'bg-[#0F1219] hover:bg-white/5 text-white'}`}>
+                    <span className={`text-[10px] font-bold ${match.selectedIndex === 1 ? 'text-black/70' : 'text-zinc-500'}`}>X</span>
+                    <span className="font-bold text-[13px] sm:text-sm">{match.odds['X']}</span>
+                  </div>
+                  <div className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${match.selectedIndex === 2 ? 'bg-[#00FFA3] text-black' : 'bg-[#0F1219] hover:bg-white/5 text-white'}`}>
+                    <span className={`text-[10px] font-bold ${match.selectedIndex === 2 ? 'text-black/70' : 'text-zinc-500'}`}>2</span>
+                    <span className="font-bold text-[13px] sm:text-sm">{match.odds['2']}</span>
                   </div>
                 </div>
-                <button className="px-2 py-2 text-[#454A62] hover:text-white hover:bg-white/5"><ChevronRight size={16} /></button>
               </div>
-            </div>
+            ))}
 
           </div>
         </div>
