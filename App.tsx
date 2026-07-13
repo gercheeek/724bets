@@ -1790,7 +1790,7 @@ const App: React.FC = () => {
                 </div>
               )}
               <iframe 
-                src="https://sport.7yrrerfcet.com/SportsBook/Home"
+                src="https://tarafbet977.com/tr/live/"
                 onLoad={() => setIframeLoading(false)}
                 className="absolute top-0 left-0 w-full h-full border-none outline-none"
                 style={{ 
