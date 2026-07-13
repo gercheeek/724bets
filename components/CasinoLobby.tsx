@@ -278,6 +278,17 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               ))}
             </div>
 
+            <SectionHeader title="Çok Kazandıranlar" icon={<Flame className="text-[#f0b90b]" />} />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+              {allGames
+                .filter(g => g.type === 'slot' || g.category === 'slots')
+                .sort((a, b) => b.players - a.players)
+                .slice(12, 24)
+                .map(game => (
+                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} />
+              ))}
+            </div>
+
             <SectionHeader title="Yeni Eklenenler" icon={<Sparkles />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {newGames.map(game => (
