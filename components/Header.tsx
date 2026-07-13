@@ -261,13 +261,7 @@ const Header: React.FC<HeaderProps> = ({
             animation: neonFlickerDelay 2s ease-out 1.2s forwards;
           }
 
-          @keyframes cloverCasinoPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 5px rgba(0,255,163,0.3)); }
-            50% { transform: scale(1.15) rotate(180deg); filter: drop-shadow(0 0 20px rgba(0,255,163,1)); }
-          }
-          .clover-casino {
-            animation: cloverCasinoPulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-          }
+
           .logo-text-724 {
             position: relative;
             z-index: 10000;

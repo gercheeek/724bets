@@ -167,26 +167,7 @@ html, body {
 }
 
 /* ===== Logo Intro Animations ===== */
-@keyframes clover-intro-pulse {
-  0% { transform: scale(1) rotate(0deg); }
-  15% { transform: scale(0.7) rotate(-15deg); }
-  35% { transform: scale(1.2) rotate(15deg); }
-  50% { transform: scale(1) rotate(0deg); }
-  100% { transform: scale(1) rotate(0deg); }
-}
 
-@keyframes text-intro-collapse {
-  0% { max-width: 150px; opacity: 1; transform: scale(1) translateX(0); }
-  15% { transform: scale(0.7) translateX(0); max-width: 150px; opacity: 1; }
-  35% { transform: scale(1.2) translateX(0); max-width: 150px; opacity: 1; }
-  50% { transform: scale(1) translateX(0); max-width: 150px; opacity: 1; }
-  65% { max-width: 150px; opacity: 1; transform: scale(1) translateX(0); }
-  100% { max-width: 0px; opacity: 0; margin-left: 0; padding-left: 0; padding-right: 0; transform: scale(0.2) translateX(-50px); }
-}
-
-.logo-clover-intro {
-  animation: clover-intro-pulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
 
 .logo-text-intro {
   display: inline-flex;
