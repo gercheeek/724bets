@@ -1490,12 +1490,8 @@ const App: React.FC = () => {
             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
             {view !== 'kral' && (
               <header className="flex lg:hidden items-center justify-between p-2 px-3 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1">
-                <button onClick={() => setIsMobileMenuOpen(true)} className="flex items-center justify-center w-8 h-8 text-gray-300 hover:text-white transition-colors rounded-md bg-[#1A1D24] border border-white/5 active:scale-95 shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
-                </button>
-                
                 <div 
-                  className="font-black text-xl tracking-tight flex items-center cursor-pointer select-none ml-2" 
+                  className="font-black text-xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
                   onClick={() => setView('home')}
                   style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
                 >

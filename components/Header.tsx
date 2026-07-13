@@ -335,12 +335,8 @@ const Header: React.FC<HeaderProps> = ({
         
         {/* Left: Hamburger & Logo & Desktop Tabs */}
         <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
-          <button onClick={onToggleSidebar} className="text-zinc-400 hover:text-white transition-colors p-1 md:p-2 flex-shrink-0">
-            <Menu className="w-5 h-5 md:w-6 md:h-6" />
-          </button>
-          
           <div 
-            className="flex items-center cursor-pointer select-none ml-2"
+            className="flex items-center cursor-pointer select-none ml-0"
             onClick={() => onViewChange?.('home')}
             style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
           >
