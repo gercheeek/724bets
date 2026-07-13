@@ -48,6 +48,14 @@ export const handler = async (event, context) => {
       let rawStatus = item.status || "";
 
       // Extract sport if present, e.g. "BASKETBOL|Canlı: 40-45 (1. Çeyrek)"
+      let league = "Diğer Ligler"; // Default
+      
+      if (rawStatus.includes('|LEAGUE:')) {
+         const leagueParts = rawStatus.split('|LEAGUE:');
+         league = leagueParts[1].trim();
+         rawStatus = leagueParts[0];
+      }
+      
       if (rawStatus.includes('|')) {
          const parts = rawStatus.split('|');
          sport = parts[0].toLowerCase();
@@ -58,9 +66,9 @@ export const handler = async (event, context) => {
           displayTime = rawStatus;
       }
       
-      let league = item.league || "Diğer Ligler";
-      if (sport !== 'futbol') {
-          league = sport === 'basketbol' ? 'NBA' : 'Wimbledon'; // Kept fallback for other sports if scraper doesn't get them perfectly
+      // Fallback for non-football if scraper completely failed
+      if (sport !== 'futbol' && league === "Diğer Ligler") {
+          league = sport === 'basketbol' ? 'NBA' : 'Wimbledon'; 
       }
       
       const isLive = rawStatus.includes('Canlı');
