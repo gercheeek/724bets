@@ -1792,10 +1792,11 @@ const App: React.FC = () => {
               <iframe 
                 src="https://tarafbet977.com/tr/live/"
                 onLoad={() => setIframeLoading(false)}
-                className="absolute top-0 left-0 w-full border-none outline-none"
+                className="absolute left-0 w-full border-none outline-none"
                 style={{ 
+                  top: '-135px', /* Üst menüyü (Tarafbet header'ını) kesmek için yukarı kaydır */
                   width: '100%', 
-                  height: 'calc(100% + 800px)', /* Alt kısımdaki footer'ı kesmek için 800px fazladan uzunluk */
+                  height: 'calc(100% + 935px)', /* 135px üst kırpma + 800px alt kırpma toplamı */
                   border: 'none',
                   margin: 0,
                   padding: 0,
