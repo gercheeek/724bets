@@ -16,6 +16,11 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
     'basketbol': true,
     'tenis': true
   });
+  const [expandedMatches, setExpandedMatches] = useState<Record<string, boolean>>({});
+
+  const toggleMatch = (matchId: string) => {
+    setExpandedMatches(prev => ({ ...prev, [matchId]: !prev[matchId] }));
+  };
 
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,6 +80,44 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
   const footballMatches = filteredMatches.filter(m => m.sport === 'futbol');
   const basketballMatches = filteredMatches.filter(m => m.sport === 'basketbol');
   const tennisMatches = filteredMatches.filter(m => m.sport === 'tenis');
+
+  const renderExpandedMarkets = (match: any) => (
+    <div className="bg-gradient-to-b from-[#0B0D12] to-[#09090b] border-b border-[#202532]/50 p-5 shadow-inner">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-[#00FFA3] text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 drop-shadow-[0_0_8px_rgba(0,255,163,0.3)]">
+          <Target className="w-4 h-4" /> Seçili Maçın Bahisleri
+        </span>
+        <span className="text-zinc-500 text-[10px] uppercase font-bold bg-[#12161E] px-2 py-1 rounded border border-[#202532]">+ {match.marketsAvailable || 72} Ekstra Seçenek</span>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-[#12161E] border border-[#202532] rounded-lg p-2 hover:border-[#00FFA3]/40 transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,163,0.05)] group">
+          <div className="text-zinc-400 text-[10px] uppercase font-bold mb-2 text-center group-hover:text-zinc-300 transition-colors">Çifte Şans</div>
+          <div className="flex items-center gap-1">
+            <button className="flex-1 h-9 bg-[#1A1D24] rounded text-xs text-zinc-300 font-bold hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 hover:border hover:border-[#00FFA3]/30 transition-all">1.25</button>
+            <button className="flex-1 h-9 bg-[#1A1D24] rounded text-xs text-zinc-300 font-bold hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 hover:border hover:border-[#00FFA3]/30 transition-all">1.18</button>
+            <button className="flex-1 h-9 bg-[#1A1D24] rounded text-xs text-zinc-300 font-bold hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 hover:border hover:border-[#00FFA3]/30 transition-all">1.40</button>
+          </div>
+        </div>
+        
+        <div className="bg-[#12161E] border border-[#202532] rounded-lg p-2 hover:border-[#00FFA3]/40 transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,163,0.05)] group">
+          <div className="text-zinc-400 text-[10px] uppercase font-bold mb-2 text-center group-hover:text-zinc-300 transition-colors">Karşılıklı Gol</div>
+          <div className="flex items-center gap-1">
+            <button className="flex-1 h-9 bg-[#1A1D24] rounded text-xs text-zinc-300 font-bold hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 hover:border hover:border-[#00FFA3]/30 transition-all flex justify-between px-3 items-center"><span className="text-zinc-500 font-normal group-hover:text-zinc-400">Var</span> 1.85</button>
+            <button className="flex-1 h-9 bg-[#1A1D24] rounded text-xs text-zinc-300 font-bold hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 hover:border hover:border-[#00FFA3]/30 transition-all flex justify-between px-3 items-center"><span className="text-zinc-500 font-normal group-hover:text-zinc-400">Yok</span> 1.95</button>
+          </div>
+        </div>
+
+        <div className="col-span-2 bg-[#12161E] border border-[#202532] rounded-lg p-2 hover:border-[#00FFA3]/40 transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,163,0.05)] group">
+          <div className="text-zinc-400 text-[10px] uppercase font-bold mb-2 text-center group-hover:text-zinc-300 transition-colors">Toplam Alt/Üst (2.5)</div>
+          <div className="flex items-center gap-1">
+            <button className="flex-1 h-9 bg-[#1A1D24] rounded text-xs text-zinc-300 font-bold hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 hover:border hover:border-[#00FFA3]/30 transition-all flex justify-between px-6 items-center"><span className="text-zinc-500 font-normal group-hover:text-zinc-400">Alt</span> 2.10</button>
+            <button className="flex-1 h-9 bg-[#1A1D24] rounded text-xs text-zinc-300 font-bold hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 hover:border hover:border-[#00FFA3]/30 transition-all flex justify-between px-6 items-center"><span className="text-zinc-500 font-normal group-hover:text-zinc-400">Üst</span> 1.65</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex w-full h-full bg-[#09090b] text-zinc-300 font-sans overflow-hidden">
@@ -201,41 +244,49 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                 </div>
 
                 {footballMatches.map((match, i) => (
-                  <div key={match.id} className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center ${i !== footballMatches.length - 1 ? 'border-b border-[#202532]/50' : ''} hover:bg-[#161A23] transition-colors`}>
-                    <div className="flex items-start gap-3">
-                      <div className="flex flex-col items-center min-w-[24px]">
-                        <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreHome}</span>
-                        <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreAway}</span>
-                        <span className="text-zinc-600 text-[10px] mt-1 whitespace-nowrap">{match.time}</span>
-                      </div>
-                      <div className="flex flex-col gap-1 flex-1">
-                        <span className="text-zinc-200 text-xs font-medium">{match.home}</span>
-                        <span className="text-zinc-200 text-xs font-medium">{match.away}</span>
-                      </div>
-                      <div className="flex items-center gap-2 ml-2 mt-1">
-                        <div className="flex items-center gap-1 bg-[#1A1D24] px-1.5 py-0.5 rounded text-zinc-400 hover:text-white cursor-pointer transition-colors">
-                          <MessageCircle className="w-3 h-3" />
-                          <span className="text-[10px] font-bold">72</span>
+                  <div key={match.id} className="flex flex-col">
+                    <div 
+                      onClick={() => toggleMatch(match.id)}
+                      className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center cursor-pointer hover:bg-gradient-to-r hover:from-[#161A23] hover:to-[#0E1116] transition-all group ${i !== footballMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex flex-col items-center min-w-[24px]">
+                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreHome}</span>
+                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreAway}</span>
+                          <span className="text-zinc-600 text-[10px] mt-1 whitespace-nowrap">{match.time}</span>
                         </div>
-                        <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-white cursor-pointer transition-colors" />
-                        <Info className="w-4 h-4 text-zinc-500 hover:text-white cursor-pointer transition-colors" />
+                        <div className="flex flex-col gap-1 flex-1">
+                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.home}</span>
+                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.away}</span>
+                        </div>
+                        <div className="flex items-center gap-2 ml-2 mt-1">
+                          <div className="flex items-center gap-1 bg-[#1A1D24] px-1.5 py-0.5 rounded text-zinc-400 hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 cursor-pointer transition-all border border-transparent hover:border-[#00FFA3]/20">
+                            <MessageCircle className="w-3 h-3" />
+                            <span className="text-[10px] font-bold">72</span>
+                          </div>
+                          <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
+                          <Info className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {match.odds.map((odd, idx) => (
+                          <button 
+                            key={idx}
+                            onClick={(e) => e.stopPropagation()} // Prevent row expansion when clicking odds
+                            className={`w-${idx === 3 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
+                              ${match.selected === idx 
+                                ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
+                                : 'bg-[#0E1116] border border-[#202532] text-zinc-300 hover:border-[#00FFA3]/50 hover:text-[#00FFA3] hover:shadow-[0_0_10px_rgba(0,255,163,0.1)]'
+                              }
+                            `}
+                          >
+                            {odd}
+                          </button>
+                        ))}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {match.odds.map((odd, idx) => (
-                        <button 
-                          key={idx}
-                          className={`w-${idx === 3 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
-                            ${match.selected === idx 
-                              ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
-                              : 'bg-[#0E1116] border border-[#202532] text-zinc-300 hover:border-[#00FFA3]/50 hover:text-[#00FFA3]'
-                            }
-                          `}
-                        >
-                          {odd}
-                        </button>
-                      ))}
-                    </div>
+                    {/* Expanded Markets */}
+                    {expandedMatches[match.id] && renderExpandedMarkets(match)}
                   </div>
                 ))}
               </div>
@@ -269,41 +320,49 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                 </div>
 
                 {basketballMatches.map((match, i) => (
-                  <div key={match.id} className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center ${i !== basketballMatches.length - 1 ? 'border-b border-[#202532]/50' : ''} hover:bg-[#161A23] transition-colors`}>
-                    <div className="flex items-start gap-3">
-                      <div className="flex flex-col items-center min-w-[24px]">
-                        <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreHome}</span>
-                        <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreAway}</span>
-                        <span className="text-zinc-600 text-[10px] mt-1 whitespace-nowrap">{match.time}</span>
-                      </div>
-                      <div className="flex flex-col gap-1 flex-1">
-                        <span className="text-zinc-200 text-xs font-medium">{match.home}</span>
-                        <span className="text-zinc-200 text-xs font-medium">{match.away}</span>
-                      </div>
-                      <div className="flex items-center gap-2 ml-2 mt-1">
-                        <div className="flex items-center gap-1 bg-[#1A1D24] px-1.5 py-0.5 rounded text-zinc-400 hover:text-white cursor-pointer transition-colors">
-                          <MessageCircle className="w-3 h-3" />
-                          <span className="text-[10px] font-bold">72</span>
+                  <div key={match.id} className="flex flex-col">
+                    <div 
+                      onClick={() => toggleMatch(match.id)}
+                      className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center cursor-pointer hover:bg-gradient-to-r hover:from-[#161A23] hover:to-[#0E1116] transition-all group ${i !== basketballMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex flex-col items-center min-w-[24px]">
+                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreHome}</span>
+                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreAway}</span>
+                          <span className="text-zinc-600 text-[10px] mt-1 whitespace-nowrap">{match.time}</span>
                         </div>
-                        <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-white cursor-pointer transition-colors" />
-                        <Info className="w-4 h-4 text-zinc-500 hover:text-white cursor-pointer transition-colors" />
+                        <div className="flex flex-col gap-1 flex-1">
+                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.home}</span>
+                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.away}</span>
+                        </div>
+                        <div className="flex items-center gap-2 ml-2 mt-1">
+                          <div className="flex items-center gap-1 bg-[#1A1D24] px-1.5 py-0.5 rounded text-zinc-400 hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 cursor-pointer transition-all border border-transparent hover:border-[#00FFA3]/20">
+                            <MessageCircle className="w-3 h-3" />
+                            <span className="text-[10px] font-bold">72</span>
+                          </div>
+                          <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
+                          <Info className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {match.odds.map((odd, idx) => (
+                          <button 
+                            key={idx}
+                            onClick={(e) => e.stopPropagation()} // Prevent row expansion when clicking odds
+                            className={`w-${idx === 2 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
+                              ${match.selected === idx 
+                                ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
+                                : 'bg-[#0E1116] border border-[#202532] text-zinc-300 hover:border-[#00FFA3]/50 hover:text-[#00FFA3] hover:shadow-[0_0_10px_rgba(0,255,163,0.1)]'
+                              }
+                            `}
+                          >
+                            {odd}
+                          </button>
+                        ))}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {match.odds.map((odd, idx) => (
-                        <button 
-                          key={idx}
-                          className={`w-${idx === 2 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
-                            ${match.selected === idx 
-                              ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
-                              : 'bg-[#0E1116] border border-[#202532] text-zinc-300 hover:border-[#00FFA3]/50 hover:text-[#00FFA3]'
-                            }
-                          `}
-                        >
-                          {odd}
-                        </button>
-                      ))}
-                    </div>
+                    {/* Expanded Markets */}
+                    {expandedMatches[match.id] && renderExpandedMarkets(match)}
                   </div>
                 ))}
               </div>
@@ -337,40 +396,48 @@ const SportsDashboardV3: React.FC<SportsDashboardV3Props> = ({ onNavigate }) => 
                 </div>
 
                 {tennisMatches.map((match, i) => (
-                  <div key={match.id} className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center ${i !== tennisMatches.length - 1 ? 'border-b border-[#202532]/50' : ''} hover:bg-[#161A23] transition-colors`}>
-                    <div className="flex items-start gap-3">
-                      <div className="flex flex-col items-center min-w-[24px]">
-                        <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreHome}</span>
-                        <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreAway}</span>
-                        <span className="text-zinc-600 text-[10px] mt-1 whitespace-nowrap">{match.time}</span>
-                      </div>
-                      <div className="flex flex-col gap-1 flex-1">
-                        <span className="text-zinc-200 text-xs font-medium">{match.home}</span>
-                        <span className="text-zinc-200 text-xs font-medium">{match.away}</span>
-                      </div>
-                      <div className="flex items-center gap-2 ml-2 mt-1">
-                        <div className="flex items-center gap-1 bg-[#1A1D24] px-1.5 py-0.5 rounded text-zinc-400 hover:text-white cursor-pointer transition-colors">
-                          <MessageCircle className="w-3 h-3" />
-                          <span className="text-[10px] font-bold">72</span>
+                  <div key={match.id} className="flex flex-col">
+                    <div 
+                      onClick={() => toggleMatch(match.id)}
+                      className={`grid grid-cols-[1fr_auto] gap-4 px-4 py-3 items-center cursor-pointer hover:bg-gradient-to-r hover:from-[#161A23] hover:to-[#0E1116] transition-all group ${i !== tennisMatches.length - 1 && !expandedMatches[match.id] ? 'border-b border-[#202532]/50' : ''}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex flex-col items-center min-w-[24px]">
+                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreHome}</span>
+                          <span className="text-[#00FFA3] font-bold text-[13px]">{match.scoreAway}</span>
+                          <span className="text-zinc-600 text-[10px] mt-1 whitespace-nowrap">{match.time}</span>
                         </div>
-                        <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-white cursor-pointer transition-colors" />
+                        <div className="flex flex-col gap-1 flex-1">
+                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.home}</span>
+                          <span className="text-zinc-200 text-xs font-medium group-hover:text-[#00FFA3] transition-colors">{match.away}</span>
+                        </div>
+                        <div className="flex items-center gap-2 ml-2 mt-1">
+                          <div className="flex items-center gap-1 bg-[#1A1D24] px-1.5 py-0.5 rounded text-zinc-400 hover:text-[#00FFA3] hover:bg-[#00FFA3]/10 cursor-pointer transition-all border border-transparent hover:border-[#00FFA3]/20">
+                            <MessageCircle className="w-3 h-3" />
+                            <span className="text-[10px] font-bold">72</span>
+                          </div>
+                          <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-[#00FFA3] cursor-pointer transition-colors" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {match.odds.map((odd, idx) => (
+                          <button 
+                            key={idx}
+                            onClick={(e) => e.stopPropagation()} // Prevent row expansion when clicking odds
+                            className={`w-${idx === 2 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
+                              ${match.selected === idx 
+                                ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
+                                : 'bg-[#0E1116] border border-[#202532] text-zinc-300 hover:border-[#00FFA3]/50 hover:text-[#00FFA3] hover:shadow-[0_0_10px_rgba(0,255,163,0.1)]'
+                              }
+                            `}
+                          >
+                            {odd}
+                          </button>
+                        ))}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {match.odds.map((odd, idx) => (
-                        <button 
-                          key={idx}
-                          className={`w-${idx === 2 ? '16' : '14'} h-8 rounded flex items-center justify-center text-xs font-bold transition-all
-                            ${match.selected === idx 
-                              ? 'bg-[#00FFA3]/10 border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.2)]' 
-                              : 'bg-[#0E1116] border border-[#202532] text-zinc-300 hover:border-[#00FFA3]/50 hover:text-[#00FFA3]'
-                            }
-                          `}
-                        >
-                          {odd}
-                        </button>
-                      ))}
-                    </div>
+                    {/* Expanded Markets */}
+                    {expandedMatches[match.id] && renderExpandedMarkets(match)}
                   </div>
                 ))}
               </div>
