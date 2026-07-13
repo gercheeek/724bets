@@ -71,7 +71,6 @@ const getGameColor = (name: string) => {
 };
 
 const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick }) => {
-  const cardColor = getGameColor(game.name);
   const randomPlayers = React.useMemo(() => Math.floor(Math.random() * 500) + 100, []);
   const players = game.players || randomPlayers;
   
@@ -88,22 +87,6 @@ const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick 
           alt={game.name} 
           className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110 z-10" 
         />
-        
-        {/* Gradient Overlay for Text */}
-        <div 
-          className="absolute bottom-0 left-0 w-full h-[60%] flex flex-col items-center justify-end p-2 pb-3 z-20"
-          style={{ background: `linear-gradient(to top, ${cardColor} 0%, ${cardColor}DD 40%, transparent 100%)` }}
-        >
-          <h3 
-            className="text-white text-[12px] sm:text-[14px] font-black uppercase tracking-tight leading-[1.1] text-center drop-shadow-md line-clamp-2"
-            style={{ fontFamily: "'Inter', sans-serif" }}
-          >
-            {game.name || 'Slot Oyunu'}
-          </h3>
-          <span className="text-white/90 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] mt-1 drop-shadow-sm">
-            {game.provider || 'Pragmatic Play'}
-          </span>
-        </div>
 
         {/* Play Overlay */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
