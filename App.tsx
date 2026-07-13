@@ -1551,6 +1551,7 @@ const App: React.FC = () => {
                       </button>
                     </>
                   ) : (
+                    <>
                       {/* Gamdom Style Mobile Auth Buttons */}
                       <button
                         onClick={() => setAuthModalMode('member')}
@@ -1564,6 +1565,7 @@ const App: React.FC = () => {
                       >
                         Kaydolun
                       </button>
+                    </>
                   )}
                 </div>
               </header>
