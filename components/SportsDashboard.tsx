@@ -1,73 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, BarChart2, Star, MessageSquare } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BarChart2, Star, MessageSquare, Lock } from 'lucide-react';
+import { supabase } from '../utils/supabase';
 
 interface SportsDashboardProps {
   onNavigate: () => void;
 }
 
 const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
-  const [liveMatches, setLiveMatches] = useState([
-    { id: 1, minute: 60, time: "2. Yarı 60'", team1: "Canberra Croatia", team2: "Brindabella Blues", score1: 2, score2: 0, s1: 1.05, sX: 8.50, s2: 22.0, tU: 1.66, tA: 2.09, cs1X: 1.01, cs12: 1.03, csX2: 5.50 },
-    { id: 2, minute: 87, time: "2. Yarı 87'", team1: "Canberra Olympic", team2: "Canberra White Eagles", score1: 2, score2: 1, s1: 1.10, sX: 6.45, s2: 28.0, tU: 2.80, tA: 1.38, cs1X: 1.01, cs12: 1.09, csX2: 5.95 },
-    { id: 3, minute: 65, time: "2. Yarı 65'", team1: "Canberra Juventus", team2: "O'Connor Knights", score1: 1, score2: 0, s1: 1.19, sX: 5.25, s2: 17.5, tU: 1.85, tA: 1.85, cs1X: 1.01, cs12: 1.14, csX2: 4.45 },
-    { id: 4, minute: 61, time: "2. Yarı 61'", team1: "Tuggeranong Utd", team2: "Belconnen Utd", score1: 1, score2: 0, s1: 1.43, sX: 3.80, s2: 8.40, tU: 2.25, tA: 1.57, cs1X: 1.04, cs12: 1.24, csX2: 2.79 },
-    { id: 5, minute: 0, time: "Başla...", team1: "Northern Tigers", team2: "Newcastle Jets NPL", score1: 0, score2: 0, s1: 1.49, sX: 4.65, s2: 5.20, tU: 2.01, tA: 1.71, cs1X: 1.14, cs12: 1.18, csX2: 2.61 },
-    { id: 6, minute: 31, time: "1. Yarı 31'", team1: "Moreton City Excelsior", team2: "Magic United U23", score1: 2, score2: 1, s1: 1.20, sX: 4.50, s2: 10.5, tU: 1.99, tA: 1.73, cs1X: 1.02, cs12: 1.10, csX2: 3.50 }
-  ]);
-  
+  const [liveMatches, setLiveMatches] = useState<any[]>([]);
   const [changedOdds, setChangedOdds] = useState<{[key: string]: 'up' | 'down'}>({});
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveMatches(prev => {
-        const next = [...prev];
-        const newChangedOdds: {[key: string]: 'up' | 'down'} = {};
-        
-        let hasChanges = false;
-        
-        for (let i = 0; i < next.length; i++) {
-          if (Math.random() > 0.4) continue; // Only update some matches
-          
-          hasChanges = true;
-          const match = { ...next[i] };
-          
-          // Randomly tick minute
-          if (match.minute > 0 && match.minute < 90 && Math.random() > 0.5) {
-             match.minute += 1;
-             const half = match.minute > 45 ? "2. Yarı" : "1. Yarı";
-             match.time = `${half} ${match.minute}'`;
-          }
+    const fetchMatches = async () => {
+      const { data } = await supabase.from('sports_matches').select('*').in('status', ['active', 'suspended']).order('match_date', { ascending: false });
+      if (data) setLiveMatches(data);
+    };
+    fetchMatches();
 
-          // Randomly update odds
-          const oddsKeys = ['s1', 'sX', 's2', 'tU', 'tA', 'cs1X', 'cs12', 'csX2'] as const;
-          oddsKeys.forEach(key => {
-            if (Math.random() > 0.7) {
-              const diff = (Math.random() * 0.2 - 0.1);
-              const oldVal = match[key];
-              const newVal = Math.max(1.01, oldVal + diff);
-              match[key] = Number(newVal.toFixed(2));
-              newChangedOdds[`${match.id}-${key}`] = newVal > oldVal ? 'up' : 'down';
+    const channel = supabase.channel('public:sports_matches')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'sports_matches' }, (payload) => {
+        if (payload.eventType === 'UPDATE') {
+          const newMatch = payload.new;
+          setLiveMatches(prev => {
+            const idx = prev.findIndex(m => m.id === newMatch.id);
+            if (idx === -1) return [...prev, newMatch];
+            
+            const oldMatch = prev[idx];
+            const oddsKeys = ['1', 'X', '2', 'tU', 'tA', 'cs1X', 'cs12', 'csX2'];
+            const newChangedOdds: {[key: string]: 'up' | 'down'} = {};
+            
+            oddsKeys.forEach(k => {
+              const oldVal = oldMatch.odds?.[k];
+              const newVal = newMatch.odds?.[k];
+              if (oldVal !== undefined && newVal !== undefined && oldVal !== newVal) {
+                newChangedOdds[`${newMatch.id}-${k}`] = newVal > oldVal ? 'up' : 'down';
+              }
+            });
+            
+            if (Object.keys(newChangedOdds).length > 0) {
+              setChangedOdds(curr => ({ ...curr, ...newChangedOdds }));
+              setTimeout(() => {
+                 setChangedOdds(curr => {
+                    const cleaned = { ...curr };
+                    Object.keys(newChangedOdds).forEach(k => delete cleaned[k]);
+                    return cleaned;
+                 });
+              }, 3000);
             }
+            
+            const next = [...prev];
+            next[idx] = newMatch;
+            return next;
           });
-          
-          next[i] = match;
+        } else if (payload.eventType === 'INSERT') {
+          setLiveMatches(prev => [payload.new, ...prev]);
+        } else if (payload.eventType === 'DELETE') {
+          setLiveMatches(prev => prev.filter(m => m.id !== payload.old.id));
         }
-        
-        if (hasChanges) {
-          setChangedOdds(curr => ({ ...curr, ...newChangedOdds }));
-          setTimeout(() => {
-             setChangedOdds(curr => {
-                const cleaned = { ...curr };
-                Object.keys(newChangedOdds).forEach(k => delete cleaned[k]);
-                return cleaned;
-             });
-          }, 2000);
-        }
-        
-        return next;
-      });
-    }, 2500);
-    return () => clearInterval(interval);
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (
@@ -263,23 +258,25 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
                 
                 {/* Match Info */}
                 <div className="w-[30%] min-w-[200px] flex items-center gap-3">
-                  <div className="w-[45px] text-center text-[#A0A5BB] text-[10px] font-semibold leading-tight flex flex-col items-center">
-                    {match.time.split(' ').map((t, i) => <span key={i}>{t}</span>)}
+                  <div className="w-[50px] text-center text-[#A0A5BB] text-[10px] font-bold leading-tight flex flex-col items-center">
+                    {match.match_minute || new Date(match.match_date).toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})}
+                    {match.is_live && <span className="text-red-500 text-[9px] animate-pulse mt-0.5">CANLI</span>}
+                    {match.status === 'suspended' && <span className="text-orange-500 text-[9px] mt-0.5">ASKIYA ALINDI</span>}
                   </div>
                   <div className="flex flex-col gap-1 flex-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <img src={`https://picsum.photos/seed/${idx*2}/20/20`} className="w-3.5 h-3.5 rounded-full" />
-                        <span className="font-bold text-[12px]">{match.team1}</span>
+                        <img src={`https://picsum.photos/seed/${match.team_home}/20/20`} className="w-3.5 h-3.5 rounded-full" />
+                        <span className="font-bold text-[12px]">{match.team_home}</span>
                       </div>
-                      <span className="text-[#00FFA3] font-black text-[12px]">{match.score1}</span>
+                      <span className="text-[#00FFA3] font-black text-[12px]">{match.score_home}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <img src={`https://picsum.photos/seed/${idx*2+1}/20/20`} className="w-3.5 h-3.5 rounded-full" />
-                        <span className="font-bold text-[12px]">{match.team2}</span>
+                        <img src={`https://picsum.photos/seed/${match.team_away}/20/20`} className="w-3.5 h-3.5 rounded-full" />
+                        <span className="font-bold text-[12px]">{match.team_away}</span>
                       </div>
-                      <span className="text-[#00FFA3] font-black text-[12px]">{match.score2}</span>
+                      <span className="text-[#00FFA3] font-black text-[12px]">{match.score_away}</span>
                     </div>
                   </div>
                 </div>
@@ -287,12 +284,15 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
                 {/* Sonuç (1X2) */}
                 <div className="flex-1 flex justify-center px-2">
                   <div className="flex w-full max-w-[200px] bg-[#12141A] rounded overflow-hidden border border-[#2C2F3D]">
-                    {(['s1', 'sX', 's2'] as const).map((key, i) => {
-                      const val = match[key];
+                    {(['1', 'X', '2'] as const).map((key, i) => {
+                      const val = match.odds?.[key];
                       const status = changedOdds[`${match.id}-${key}`];
+                      const isDisabled = match.status === 'suspended';
                       return (
-                        <button key={i} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 hover:bg-white/10 cursor-pointer ${i < 2 ? 'border-r border-[#2C2F3D]' : ''} transition-colors duration-300 ${status === 'up' ? 'bg-green-500/20' : status === 'down' ? 'bg-red-500/20' : ''}`}>
-                          <span className={`text-[12px] font-bold ${status === 'up' ? 'text-green-400' : status === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>{typeof val === 'number' ? val.toFixed(2) : val}</span>
+                        <button key={i} disabled={isDisabled} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 hover:bg-white/10 ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${i < 2 ? 'border-r border-[#2C2F3D]' : ''} transition-colors duration-300 ${status === 'up' ? 'bg-green-500/20' : status === 'down' ? 'bg-red-500/20' : ''}`}>
+                          <span className={`text-[12px] font-bold ${status === 'up' ? 'text-green-400' : status === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>
+                            {isDisabled ? <Lock size={12}/> : (typeof val === 'number' ? val.toFixed(2) : '-')}
+                          </span>
                         </button>
                       )
                     })}
@@ -302,13 +302,17 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
                 {/* Toplam (Over/Under) */}
                 <div className="flex-1 flex justify-center px-2">
                   <div className="flex w-full max-w-[200px] bg-[#12141A] rounded overflow-hidden border border-[#2C2F3D]">
-                    <button onClick={onNavigate} className={`flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer border-r border-[#2C2F3D] transition-colors duration-300 ${changedOdds[`${match.id}-tU`] === 'up' ? 'bg-green-500/20' : changedOdds[`${match.id}-tU`] === 'down' ? 'bg-red-500/20' : ''}`}>
+                    <button disabled={match.status === 'suspended'} onClick={onNavigate} className={`flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 ${match.status === 'suspended' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} border-r border-[#2C2F3D] transition-colors duration-300 ${changedOdds[`${match.id}-tU`] === 'up' ? 'bg-green-500/20' : changedOdds[`${match.id}-tU`] === 'down' ? 'bg-red-500/20' : ''}`}>
                       <span className="text-[10px] text-gray-500">Üst</span>
-                      <span className={`text-[12px] font-bold ${changedOdds[`${match.id}-tU`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-tU`] === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>{match.tU.toFixed(2)}</span>
+                      <span className={`text-[12px] font-bold ${changedOdds[`${match.id}-tU`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-tU`] === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>
+                        {match.status === 'suspended' ? <Lock size={12}/> : match.odds?.tU?.toFixed(2) || '-'}
+                      </span>
                     </button>
-                    <button onClick={onNavigate} className={`flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 cursor-pointer transition-colors duration-300 ${changedOdds[`${match.id}-tA`] === 'up' ? 'bg-green-500/20' : changedOdds[`${match.id}-tA`] === 'down' ? 'bg-red-500/20' : ''}`}>
+                    <button disabled={match.status === 'suspended'} onClick={onNavigate} className={`flex-1 flex justify-between items-center px-2 py-2 hover:bg-white/10 ${match.status === 'suspended' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} transition-colors duration-300 ${changedOdds[`${match.id}-tA`] === 'up' ? 'bg-green-500/20' : changedOdds[`${match.id}-tA`] === 'down' ? 'bg-red-500/20' : ''}`}>
                       <span className="text-[10px] text-gray-500">Alt</span>
-                      <span className={`text-[12px] font-bold ${changedOdds[`${match.id}-tA`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-tA`] === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>{match.tA.toFixed(2)}</span>
+                      <span className={`text-[12px] font-bold ${changedOdds[`${match.id}-tA`] === 'up' ? 'text-green-400' : changedOdds[`${match.id}-tA`] === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>
+                        {match.status === 'suspended' ? <Lock size={12}/> : match.odds?.tA?.toFixed(2) || '-'}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -317,11 +321,14 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
                 <div className="flex-1 flex justify-center px-2">
                   <div className="flex w-full max-w-[200px] bg-[#12141A] rounded overflow-hidden border border-[#2C2F3D]">
                     {(['cs1X', 'cs12', 'csX2'] as const).map((key, i) => {
-                      const val = match[key];
+                      const val = match.odds?.[key];
                       const status = changedOdds[`${match.id}-${key}`];
+                      const isDisabled = match.status === 'suspended';
                       return (
-                        <button key={i} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 hover:bg-white/10 cursor-pointer ${i < 2 ? 'border-r border-[#2C2F3D]' : ''} transition-colors duration-300 ${status === 'up' ? 'bg-green-500/20' : status === 'down' ? 'bg-red-500/20' : ''}`}>
-                          <span className={`text-[12px] font-bold ${status === 'up' ? 'text-green-400' : status === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>{typeof val === 'number' ? val.toFixed(2) : val}</span>
+                        <button key={i} disabled={isDisabled} onClick={onNavigate} className={`flex-1 flex justify-center items-center py-2 hover:bg-white/10 ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${i < 2 ? 'border-r border-[#2C2F3D]' : ''} transition-colors duration-300 ${status === 'up' ? 'bg-green-500/20' : status === 'down' ? 'bg-red-500/20' : ''}`}>
+                          <span className={`text-[12px] font-bold ${status === 'up' ? 'text-green-400' : status === 'down' ? 'text-red-400' : 'text-[#00FFA3]'}`}>
+                            {isDisabled ? <Lock size={12}/> : (typeof val === 'number' ? val.toFixed(2) : '-')}
+                          </span>
                         </button>
                       )
                     })}
@@ -339,6 +346,9 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
                 
               </div>
             ))}
+            {liveMatches.length === 0 && (
+              <div className="text-center py-10 text-zinc-500">Şu anda gösterilecek maç bulunmuyor.</div>
+            )}
           </div>
           </div>
           </div>
