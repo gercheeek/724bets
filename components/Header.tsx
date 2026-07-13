@@ -331,34 +331,34 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[64px] bg-[#0F1219] px-2 md:px-4 border-b border-white/5 flex items-center justify-between">
-        
-        {/* Left: Hamburger & Logo & Desktop Tabs */}
-        <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
-          <div 
-            className="flex items-center cursor-pointer select-none ml-0"
-            onClick={() => onViewChange?.('home')}
-            style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
-          >
-            <span className="text-white font-extrabold text-xl md:text-2xl uppercase">724</span>
-            <span className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase">BETS</span>
-          </div>
+      <div className="header-topbar relative w-full h-[64px] bg-[#0F1219] border-b border-white/5 flex justify-center">
+        <div className="w-full max-w-[1400px] px-2 md:px-4 h-full flex items-center justify-between">
+            {/* Left: Hamburger & Logo & Desktop Tabs */}
+            <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
+              <div 
+                className="flex items-center cursor-pointer select-none ml-0"
+                onClick={() => onViewChange?.('home')}
+                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
+              >
+                <span className="text-white font-extrabold text-xl md:text-2xl uppercase">724</span>
+                <span className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase">BETS</span>
+              </div>
 
-          <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
-            <button 
-              onClick={() => onViewChange?.('home')}
-              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'home' || activeView === 'blackjack' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
-            >
-              Casino
-            </button>
-            <button 
-              onClick={() => onViewChange?.('sports')}
-              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'sports' || activeView === 'sports2' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
-            >
-              Spor
-            </button>
-          </div>
-        </div>
+              <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
+                <button 
+                  onClick={() => onViewChange?.('home')}
+                  className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'home' || activeView === 'blackjack' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+                >
+                  Casino
+                </button>
+                <button 
+                  onClick={() => onViewChange?.('sports')}
+                  className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'sports' || activeView === 'sports2' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+                >
+                  Spor
+                </button>
+              </div>
+            </div>
 
         {/* Center: Wallet Pill (Only if logged in) */}
         <div className="flex items-center justify-center flex-[1.5] z-10">
@@ -547,6 +547,7 @@ const Header: React.FC<HeaderProps> = ({
 
 
 
+        </div>
       </div>
     </>
   );

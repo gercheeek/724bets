@@ -74,7 +74,7 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
     <div className="w-full bg-[#12141A] font-sans text-white pb-10 mt-6 rounded-xl overflow-hidden shadow-2xl">
       
       {/* ── TOP FEATURED CARDS ── */}
-      <div className="flex gap-4 overflow-x-auto hide-scrollbar p-4 lg:p-6">
+      <div className="flex gap-4 overflow-x-auto scrollbar-hide p-4 lg:p-6">
         
         {/* Card 1: Football */}
         <div className="relative min-w-[320px] h-[180px] rounded-xl overflow-hidden shrink-0 group cursor-pointer border border-[#2C2F3D]">
@@ -224,7 +224,7 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
       <div className="px-4 lg:px-6">
         
         {/* Header Tabs */}
-        <div className="flex items-center gap-2 border-b border-[#2C2F3D] pb-2 mb-4 overflow-x-auto hide-scrollbar">
+        <div className="flex items-center gap-2 border-b border-[#2C2F3D] pb-2 mb-4 overflow-x-auto scrollbar-hide">
           <h2 className="font-bold text-[15px] tracking-wide shrink-0 mr-4">Canlı etkinlikler</h2>
           <div className="flex items-center gap-2 bg-[#1A1D24] rounded-lg px-2 py-1 shrink-0">
             <button className="text-gray-400 hover:text-white px-2"><ChevronLeft size={14} /></button>
@@ -243,7 +243,7 @@ const SportsDashboard: React.FC<SportsDashboardProps> = ({ onNavigate }) => {
 
         {/* Table Container */}
         <div className="bg-[#16181F] rounded-lg border border-[#2C2F3D] overflow-hidden">
-          <div className="w-full overflow-x-auto hide-scrollbar">
+          <div className="w-full overflow-x-auto scrollbar-hide">
             <div className="min-w-[800px]">
           
           {/* Table Headers */}

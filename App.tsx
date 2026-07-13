@@ -1453,7 +1453,7 @@ const App: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
+          {!(view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen}
@@ -1468,7 +1468,7 @@ const App: React.FC = () => {
           )}
 
           {/* MOBİL DRAWER - SOL MENÜ */}
-          {isMobileMenuOpen && (
+          {isMobileMenuOpen && siteUser && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
               <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
               <aside className="w-[280px] bg-[#111317] border-r border-[#1A1D24] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
@@ -1487,11 +1487,29 @@ const App: React.FC = () => {
           )}
 
           {/* 2. ORTA ANA İÇERİK (Mobilde tam ekran, masaüstünde kalan alanı kaplar) */}
-          <main className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}>
+          <main 
+            id="main-scroll-container"
+            className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}
+            onScroll={(e) => {
+              const currentScrollY = e.currentTarget.scrollTop;
+              const mobileHeader = document.getElementById('mobile-top-header');
+              if (mobileHeader) {
+                if (currentScrollY > (window as any).lastMainScrollY && currentScrollY > 50) {
+                  mobileHeader.style.transform = 'translateY(-100%)';
+                } else {
+                  mobileHeader.style.transform = 'translateY(0)';
+                }
+              }
+              (window as any).lastMainScrollY = currentScrollY;
+            }}
+          >
             
             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
             {view !== 'kral' && (
-              <header className="flex lg:hidden items-center justify-between p-2 px-3 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1">
+              <header 
+                id="mobile-top-header"
+                className="flex lg:hidden items-center justify-between p-2 px-3 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1 transition-transform duration-300"
+              >
                 <div 
                   className="font-black text-xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
                   onClick={() => setView('home')}
@@ -1612,8 +1630,8 @@ const App: React.FC = () => {
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
           (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
-            ? 'p-0 w-full max-w-full pb-[70px] md:pb-0' 
-            : 'px-2 py-4 md:p-6 w-full max-w-full pb-[80px] md:pb-6'
+            ? 'p-0 w-full max-w-[1400px] mx-auto pb-[70px] md:pb-0' 
+            : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
         style={{ 
           position: 'relative', 
@@ -1719,9 +1737,9 @@ const App: React.FC = () => {
         {view === 'sports2' && (
           <div className="animate-fade-in w-full relative flex flex-col" style={{ height: 'calc(100vh - var(--header-height))' }}>
             
-            {/* ── LIVE BULLETIN (Bot Data) ── */}
-            <div className="w-full shrink-0">
-              <LiveMatches />
+            {/* ── GAMDOM STYLE BANNER & MATCHES ── */}
+            <div className="w-full shrink-0 px-4 md:px-8 max-w-[1400px] mx-auto">
+              <WorldCupTeaser />
             </div>
 
             {/* Custom Sports2 Header */}
@@ -2298,7 +2316,7 @@ const App: React.FC = () => {
       )}
 
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
-      {view !== 'admin' && !showLiveScoreModal && !isMobile && (
+      {view !== 'admin' && !showLiveScoreModal && !isMobile && siteUser && (
         <>
           <aside className={`hidden xl:flex flex-col border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px] border-l' : 'w-0 border-l-0 overflow-hidden'} transition-all duration-300`}>
             <ModernChat
@@ -2312,7 +2330,7 @@ const App: React.FC = () => {
           </aside>
 
           {/* Gamdom-style Floating Action Buttons (Desktop Only) */}
-          {!isChatOpen && (
+          {!isChatOpen && siteUser && (
             <div className="hidden xl:flex fixed bottom-6 right-6 flex-col gap-2 z-50">
               <button 
                 onClick={() => setIsChatOpen(true)}
@@ -2342,7 +2360,7 @@ const App: React.FC = () => {
       )}
 
       {/* Gamdom-style Floating Action Buttons (Mobile Only) */}
-      {view !== 'admin' && !showLiveScoreModal && isMobile && !isMobileChatOpen && (
+      {view !== 'admin' && !showLiveScoreModal && isMobile && !isMobileChatOpen && siteUser && (
         <div className="flex xl:hidden fixed bottom-20 right-4 flex-col gap-2 z-50">
           <button 
             onClick={() => setIsMobileChatOpen(true)}
@@ -2363,7 +2381,7 @@ const App: React.FC = () => {
       )}
 
       {/* MOBİL DRAWER - SOHBET */}
-      {isMobileChatOpen && (
+      {isMobileChatOpen && siteUser && (
         <div className="fixed inset-0 z-[110] flex xl:hidden justify-end">
           <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileChatOpen(false)}></div>
           <aside className="w-[90%] sm:w-[380px] max-w-[420px] bg-[#111317] border-l border-[#1A1D24] h-full shadow-[-10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-right">

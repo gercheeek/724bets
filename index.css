@@ -1090,12 +1090,14 @@ html, body {
   overflow: hidden;
 }
 
-/* Scrollbar hide for category filters */
-.scrollbar-hide::-webkit-scrollbar {
+/* Scrollbar hide for category filters and lists */
+.scrollbar-hide::-webkit-scrollbar,
+.hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-.scrollbar-hide {
+.scrollbar-hide,
+.hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

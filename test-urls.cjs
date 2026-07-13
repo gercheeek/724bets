@@ -1,23 +1,18 @@
-const puppeteer = require('puppeteer');
+const https = require('https');
 
-(async () => {
-  const browser = await puppeteer.launch();
-  const urls = [
-    'https://sport.7yrrerfcet.com/SportsBook/Results',
-    'https://sport.7yrrerfcet.com/SportsBook/LiveScore',
-    'https://sport.7yrrerfcet.com/SportsBook/LiveCalendar',
-    'https://sport.7yrrerfcet.com/SportsBook/Home?page=results',
-  ];
+const urls = [
+  'https://cdn2.softswiss.net/i/s3/pragmaticexternal/SweetBonanza.png',
+  'https://cdn2.softswiss.net/i/s3/pragmaticexternal/GatesofOlympus.png',
+  'https://cdn2.softswiss.net/i/s3/pragmaticexternal/SugarRush.png',
+  'https://cdn2.softswiss.net/i/s3/pragmaticexternal/SweetBonanza1000.png',
+  'https://b2b.pragmaticplay.net/gs2c/minipic/game/vs20sweetbonanza.png',
+  'https://b2b.pragmaticplay.net/gs2c/minipic/game/vs20sb1000.png'
+];
 
-  for (const url of urls) {
-    const page = await browser.newPage();
-    try {
-      const response = await page.goto(url, { waitUntil: 'networkidle2', timeout: 5000 });
-      console.log(`URL: ${url} -> Status: ${response.status()}`);
-    } catch (e) {
-      console.log(`URL: ${url} -> Failed: ${e.message}`);
-    }
-    await page.close();
-  }
-  await browser.close();
-})();
+urls.forEach(url => {
+  https.get(url, (res) => {
+    console.log(`${url} - Status: ${res.statusCode}`);
+  }).on('error', (e) => {
+    console.error(`${url} - Error: ${e.message}`);
+  });
+});
