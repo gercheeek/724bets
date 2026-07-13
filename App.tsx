@@ -902,17 +902,19 @@ const App: React.FC = () => {
         if (savedRole) setUserRole(savedRole as string);
         if (savedMember) {
           const parsedUser = JSON.parse(savedMember);
+          setSiteUser(parsedUser); // Instantly restore UI state
+          
           if (parsedUser.id !== 'admin-session') {
-            // Fetch latest balance from DB
+            // Fetch latest balance from DB in background
             const { data: latestUser } = await supabase.from('members').select('balance, role, status').eq('id', parsedUser.id).single();
             if (latestUser) {
               parsedUser.balance = latestUser.balance || 0;
               parsedUser.role = latestUser.role || parsedUser.role;
               parsedUser.status = latestUser.status || parsedUser.status;
-              localStorage.setItem('site_member', JSON.stringify(parsedUser));
+              localStorage.setItem('site_current_member', JSON.stringify(parsedUser));
+              setSiteUser({...parsedUser}); // Update UI with fresh data
             }
           }
-          setSiteUser(parsedUser);
         }
 
 
