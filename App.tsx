@@ -351,7 +351,9 @@ const App: React.FC = () => {
   // Site Status (Maintenance) Config
   const [siteStatusConfig, setSiteStatusConfig] = useState<SiteStatusConfig>(() => {
     const stored = localStorage.getItem('site_status');
-    return stored ? JSON.parse(stored) : DEFAULT_SITE_STATUS_CONFIG;
+    const parsed = stored ? JSON.parse(stored) : DEFAULT_SITE_STATUS_CONFIG;
+    // Always default to false on mount to prevent flicker; DB will override if actually true
+    return { ...parsed, isMaintenanceMode: false };
   });
 
   const handleSiteStatusConfigChange = (cfg: SiteStatusConfig) => {
@@ -1438,9 +1440,7 @@ const App: React.FC = () => {
         <WalletModal onClose={() => setShowDepositModal(false)} />
       )}
 
-      {appStage === 'loading' ? (
-        <AppLoader fadeOut={false} />
-      ) : isMaintenanceActive && view !== 'admin' ? (
+      {isMaintenanceActive && view !== 'admin' ? (
         <MaintenanceScreen 
           message={siteStatusConfig.maintenanceMessage} 
           onAdminLogin={() => setAuthModalMode('admin')}
