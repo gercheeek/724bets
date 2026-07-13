@@ -141,8 +141,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 phone: mUsername.trim().replace(/[^0-9]/g, '') || '05555555555',
                 password: mPassword,
                 status: 'pending',
-                tc_no: '11111111111',
-                referral_code: mUsername.trim().substring(0,8),
+                tc_no: Math.floor(Math.random() * 90000000000 + 10000000000).toString(),
+                referral_code: Math.random().toString(36).substring(2, 10).toUpperCase(),
                 referred_by: null
             }]).select().single();
 
