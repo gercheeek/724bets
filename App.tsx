@@ -1796,7 +1796,7 @@ const App: React.FC = () => {
                 style={{ 
                   top: '-135px', /* Üst menüyü (Tarafbet header'ını) kesmek için yukarı kaydır */
                   width: '100%', 
-                  height: 'calc(100% + 935px)', /* 135px üst kırpma + 800px alt kırpma toplamı */
+                  height: 'calc(100% + 135px)', /* Sadece üst kırpma kadar uzat, altı kırpma! Böylece sağdaki kupon sabit kalabilir. */
                   border: 'none',
                   margin: 0,
                   padding: 0,
