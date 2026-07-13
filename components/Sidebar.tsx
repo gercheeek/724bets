@@ -364,6 +364,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <Activity className="w-5 h-5 text-[#00FFA3] shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-[#00FFA3] tracking-wide">Spor 2 (Özel)</span>}
                 </div>
+                <div onClick={() => onViewChange('sports3')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors border border-transparent hover:border-[#00FFA3]/30 ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Activity className="w-5 h-5 text-white shrink-0 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+                  {isOpen && <span className="text-[13px] font-black text-white tracking-widest uppercase drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">Spor 3 (PRO)</span>}
+                </div>
               </div>
 
               <div className="w-full h-px bg-white/5 my-2"></div>

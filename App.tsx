@@ -47,6 +47,7 @@ import MyBetsModal from './components/MyBetsModal';
 import KralView from './components/KralView';
 import WorldCupTeaser from './components/WorldCupTeaser';
 import SportsDashboard from './components/SportsDashboard';
+import SportsDashboardV3 from './components/SportsDashboardV3';
 import LiveBetsFeed from './components/LiveBetsFeed';
 import CasinoLobby from './components/CasinoLobby';
 // removed UserBets
@@ -1813,6 +1814,12 @@ const App: React.FC = () => {
         {view === 'sports-beta' && (
           <div className="animate-fade-in relative h-full w-full overflow-y-auto pb-32">
             <SportsDashboard onNavigate={setView} />
+          </div>
+        )}
+
+        {view === 'sports3' && (
+          <div className="animate-fade-in relative h-full w-full overflow-hidden">
+            <SportsDashboardV3 onNavigate={setView} />
           </div>
         )}
 
