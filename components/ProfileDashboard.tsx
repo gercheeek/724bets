@@ -241,7 +241,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
                     <div>
-                      <h4 className="text-white font-black text-lg mb-0.5">3036</h4>
+                      <h4 className="text-white font-black text-lg mb-0.5">0</h4>
                       <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Oynanan oyunlar</p>
                     </div>
                     <div className="w-10 h-10 bg-amber-900/30 rounded-lg flex items-center justify-center -rotate-12">
@@ -250,7 +250,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                   </div>
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
                     <div>
-                      <h4 className="text-white font-black text-lg mb-0.5">$6,130.71</h4>
+                      <h4 className="text-white font-black text-lg mb-0.5">$0.00</h4>
                       <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Toplam Ücret</p>
                     </div>
                     <div className="w-10 h-10 bg-emerald-900/30 rounded-full flex items-center justify-center border border-emerald-500/20">
@@ -268,7 +268,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                   </div>
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
                     <div>
-                      <h4 className="text-white font-black text-lg mb-0.5">-$318.98</h4>
+                      <h4 className="text-white font-black text-lg mb-0.5">$0.00</h4>
                       <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider flex items-center gap-1">Net Kazanç <Info className="w-3.5 h-3.5" /></p>
                     </div>
                     <div className="w-10 h-10 bg-yellow-900/30 rounded-full flex items-center justify-center border border-yellow-500/20">
