@@ -339,7 +339,14 @@ const Header: React.FC<HeaderProps> = ({
             <Menu className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           
-
+          <div 
+            className="flex items-center cursor-pointer select-none ml-2"
+            onClick={() => onViewChange?.('home')}
+            style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
+          >
+            <span className="text-white font-extrabold text-xl md:text-2xl uppercase">724</span>
+            <span className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase">BETS</span>
+          </div>
 
           <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
             <button 
