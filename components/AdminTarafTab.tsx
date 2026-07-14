@@ -19,6 +19,10 @@ export default function AdminTarafTab() {
   const [manualHomeScore, setManualHomeScore] = useState(0);
   const [manualAwayScore, setManualAwayScore] = useState(0);
   
+  // Accordion State
+  const [expandedSports, setExpandedSports] = useState<Record<string, boolean>>({'Futbol': true});
+  const [expandedLeagues, setExpandedLeagues] = useState<Record<string, boolean>>({});
+  
   // Load settings from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('taraf_admin_settings');
@@ -299,32 +303,100 @@ export default function AdminTarafTab() {
              </div>
            </div>
 
-           <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-2 max-h-[600px]">
-             {liveEvents.slice(0, 50).map(ev => {
-                const isSelected = selectedMatch?.id === ev.id;
-                let home = ev.data?.participants?.home || ev.data?.name?.split(' - ')[0] || 'Ev Sahibi';
-                let away = ev.data?.participants?.away || ev.data?.name?.split(' - ')[1] || 'Deplasman';
+           <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col max-h-[600px] bg-[#1a1d24] rounded-lg border border-[#2c313c]">
+             {(() => {
+                // Group by Sport -> Competition
+                const grouped: Record<string, Record<string, any[]>> = {};
+                liveEvents.forEach(ev => {
+                   const sportName = ev.data?.sport?.name || 'Diğer';
+                   const compName = ev.data?.competition?.name || 'Genel';
+                   if (!grouped[sportName]) grouped[sportName] = {};
+                   if (!grouped[sportName][compName]) grouped[sportName][compName] = [];
+                   grouped[sportName][compName].push(ev);
+                });
                 
-                return (
-                  <button 
-                    key={ev.id}
-                    onClick={() => handleSelectMatch(ev)}
-                    className={`w-full text-left p-3 rounded-lg border transition-all ${
-                      isSelected ? 'bg-[#3b82f6]/10 border-[#3b82f6]' : 'bg-[#0a0c10] border-[#2c313c] hover:border-[#424b5c]'
-                    }`}
-                  >
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-[#a0a5b5] text-xs font-bold">{ev.data?.sport?.name}</span>
-                      <span className="text-[#00FFA3] text-xs font-bold">{ev.data?.minute ? `${ev.data.minute}'` : 'Canlı'}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                       <span className="text-white font-bold text-sm truncate">{home}</span>
-                       <span className="text-white font-black text-sm mx-2 bg-[#1a1d24] px-2 rounded border border-[#2c313c]">{ev.data?.current_score || '0:0'}</span>
-                       <span className="text-white font-bold text-sm truncate">{away}</span>
-                    </div>
-                  </button>
-                )
-             })}
+                return Object.entries(grouped).map(([sportName, comps]) => {
+                   const sportCount = Object.values(comps).reduce((sum, arr) => sum + arr.length, 0);
+                   const isSportExpanded = expandedSports[sportName];
+                   
+                   return (
+                     <div key={sportName} className="flex flex-col border-b border-[#2c313c] last:border-0">
+                       <div 
+                         className="flex items-center justify-between p-3 cursor-pointer hover:bg-[#232833] transition-colors"
+                         onClick={() => setExpandedSports(prev => ({...prev, [sportName]: !isSportExpanded}))}
+                       >
+                         <div className="flex items-center gap-3">
+                           <div className="w-6 h-6 rounded-full bg-[#00FFA3]/20 text-[#00FFA3] flex items-center justify-center text-xs">⚽</div>
+                           <span className="text-white font-bold">{sportName}</span>
+                         </div>
+                         <div className="flex items-center gap-2">
+                           <div className="bg-[#2c313c] px-2 py-0.5 rounded text-xs font-bold text-white">{sportCount}</div>
+                           <div className={`transform transition-transform ${isSportExpanded ? 'rotate-180' : ''}`}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400"><path d="M6 9l6 6 6-6"/></svg>
+                           </div>
+                         </div>
+                       </div>
+                       
+                       {isSportExpanded && (
+                         <div className="flex flex-col bg-[#12141a]">
+                           {Object.entries(comps).map(([compName, evs]) => {
+                              const compKey = `${sportName}-${compName}`;
+                              const isCompExpanded = expandedLeagues[compKey];
+                              
+                              return (
+                                <div key={compName} className="flex flex-col border-t border-[#1f232b]">
+                                  <div 
+                                    className="flex items-center justify-between p-2.5 pl-6 cursor-pointer hover:bg-[#1a1d24] transition-colors"
+                                    onClick={() => setExpandedLeagues(prev => ({...prev, [compKey]: !isCompExpanded}))}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-[10px]">🌍</div>
+                                      <span className="text-gray-300 font-bold text-sm truncate max-w-[150px]">{compName}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <div className="bg-[#1f232b] px-2 py-0.5 rounded text-xs font-bold text-gray-400">{evs.length}</div>
+                                      <div className={`transform transition-transform ${isCompExpanded ? 'rotate-180' : ''}`}>
+                                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500"><path d="M6 9l6 6 6-6"/></svg>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  {isCompExpanded && (
+                                    <div className="flex flex-col gap-1 p-2 pl-8 bg-[#0a0c10]">
+                                      {evs.map(ev => {
+                                         const isSelected = selectedMatch?.id === ev.id;
+                                         let home = ev.data?.participants?.home || ev.data?.name?.split(' - ')[0] || 'Ev Sahibi';
+                                         let away = ev.data?.participants?.away || ev.data?.name?.split(' - ')[1] || 'Deplasman';
+                                         return (
+                                           <button 
+                                             key={ev.id}
+                                             onClick={() => handleSelectMatch(ev)}
+                                             className={`w-full text-left p-2 rounded-lg border transition-all ${
+                                               isSelected ? 'bg-[#3b82f6]/10 border-[#3b82f6]' : 'bg-[#12141a] border-[#1f232b] hover:border-[#424b5c]'
+                                             }`}
+                                           >
+                                             <div className="flex justify-between items-center mb-1">
+                                               <span className="text-[#00FFA3] text-[10px] font-bold">{ev.data?.minute ? `${ev.data.minute}'` : 'Canlı'}</span>
+                                             </div>
+                                             <div className="flex justify-between items-center">
+                                                <span className="text-gray-300 font-bold text-xs truncate max-w-[80px]">{home}</span>
+                                                <span className="text-white font-black text-xs mx-1 bg-[#1a1d24] px-1.5 rounded border border-[#2c313c]">{ev.data?.current_score || '0:0'}</span>
+                                                <span className="text-gray-300 font-bold text-xs truncate max-w-[80px]">{away}</span>
+                                             </div>
+                                           </button>
+                                         );
+                                      })}
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                           })}
+                         </div>
+                       )}
+                     </div>
+                   );
+                });
+             })()}
            </div>
          </div>
       </div>
