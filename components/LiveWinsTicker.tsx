@@ -3,14 +3,14 @@ import BetDetailsModal, { BetDetailData } from './BetDetailsModal';
 import { Diamond } from 'lucide-react';
 
 const TICKER_GAMES = [
-  { name: "Keno", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-keno.png", type: 'keno' as const },
-  { name: "Dice", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-dice.png", type: 'dice' as const },
-  { name: "Plinko", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-plinko.png", type: 'slot' as const },
-  { name: "Mines", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-mines.png", type: 'slot' as const },
-  { name: "War", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-war.png", type: 'slot' as const },
-  { name: "Hilo", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-hilo.png", type: 'slot' as const },
-  { name: "Blackjack", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-blackjack.png", type: 'blackjack' as const },
-  { name: "Roulette", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-roulette.png", type: 'slot' as const }
+  { name: 'Keno', provider: 'Rainbet', image: 'https://images.unsplash.com/photo-1626244799042-4ebce91fb0ea?w=400&q=80', type: 'keno' as const },
+  { name: 'Dice', provider: 'Rainbet', image: 'https://images.unsplash.com/photo-1570303363992-7f95ee20ebdb?w=400&q=80', type: 'dice' as const },
+  { name: 'Plinko', provider: 'Rainbet', image: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&q=80', type: 'slot' as const },
+  { name: 'Mines', provider: 'Rainbet', image: 'https://images.unsplash.com/photo-1621501103258-3e913072223b?w=400&q=80', type: 'slot' as const },
+  { name: 'War', provider: 'Rainbet', image: 'https://images.unsplash.com/photo-1533745848184-3db07256e163?w=400&q=80', type: 'slot' as const },
+  { name: 'Hilo', provider: 'Rainbet', image: 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?w=400&q=80', type: 'slot' as const },
+  { name: 'Blackjack', provider: 'Rainbet', image: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&q=80', type: 'blackjack' as const },
+  { name: 'Roulette', provider: 'Rainbet', image: 'https://images.unsplash.com/photo-1606822839446-f9e42cba2bdf?w=400&q=80', type: 'slot' as const }
 ];
 
 const önIsimler = ["Alpha", "Crypto", "Degen", "Whale", "Vegas", "Joker", "Lucky", "Zeus", "Shadow", "VIP", "Player", "Star", "King", "Matrix", "Neon"];
