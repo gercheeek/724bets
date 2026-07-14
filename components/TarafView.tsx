@@ -365,18 +365,28 @@ export default function TarafView() {
          }
       }
       
-      let minuteStr = ev.data?.minute ? `${ev.data.minute}'` : 'Canlı';
+      let minuteStr = ev.data?.minute ? String(ev.data.minute) : 'Canlı';
       let subTimeStr = '';
       
-      if (ev.data?.extended_status) {
-         if (ev.data.extended_status.includes('quarter_1')) subTimeStr = '1. Çeyrek';
-         else if (ev.data.extended_status.includes('quarter_2')) subTimeStr = '2. Çeyrek';
-         else if (ev.data.extended_status.includes('quarter_3')) subTimeStr = '3. Çeyrek';
-         else if (ev.data.extended_status.includes('quarter_4')) subTimeStr = '4. Çeyrek';
-         else if (ev.data.extended_status === 'first_half') subTimeStr = '1. Yarı';
-         else if (ev.data.extended_status === 'second_half') subTimeStr = '2. Yarı';
-         else if (ev.data.extended_status === 'halftime') { minuteStr = 'Devre'; subTimeStr = 'Arası'; }
-         else if (ev.data.extended_status === 'timeout') { subTimeStr = 'Mola'; }
+      const extStatus = ev.data?.extended_status || '';
+      const status = ev.data?.status || '';
+
+      if (status === 'half_time' || extStatus === 'half_time' || extStatus === 'halftime' || status === 'halftime') {
+         minuteStr = 'Devre'; 
+         subTimeStr = 'Arası';
+      } else if (extStatus) {
+         if (extStatus.includes('quarter_1')) subTimeStr = '1. Çeyrek';
+         else if (extStatus.includes('quarter_2')) subTimeStr = '2. Çeyrek';
+         else if (extStatus.includes('quarter_3')) subTimeStr = '3. Çeyrek';
+         else if (extStatus.includes('quarter_4')) subTimeStr = '4. Çeyrek';
+         else if (extStatus === 'first_half') subTimeStr = '1. Yarı';
+         else if (extStatus === 'second_half') subTimeStr = '2. Yarı';
+         else if (extStatus === 'timeout') subTimeStr = 'Mola';
+      }
+      
+      // Add ' to minute if it's a number (not 'Canlı' or 'Devre')
+      if (minuteStr !== 'Canlı' && minuteStr !== 'Devre' && !minuteStr.includes("'")) {
+          minuteStr = `${minuteStr}'`;
       }
       
       if (minuteStr === 'Canlı' && subTimeStr !== '') {

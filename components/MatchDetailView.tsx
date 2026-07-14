@@ -182,7 +182,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
             <div className="flex flex-col items-center justify-center px-8 md:px-12 shrink-0">
               <span className="text-[#00e676] font-bold text-[12px] mb-2 flex items-center gap-1.5">
                  <div className="w-2 h-2 rounded-full bg-[#00e676] animate-pulse shadow-[0_0_8px_rgba(0,230,118,0.6)]"></div>
-                 {match.minute ? `${match.minute}'` : "CANLI"}
+                 {match.minute || "CANLI"}
               </span>
               
               <div className="flex items-center gap-3">
