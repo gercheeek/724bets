@@ -6,15 +6,14 @@ import {
 import ErrorBoundary from './ErrorBoundary';
 import MatchDetailView from './MatchDetailView';
 
-const OddButton = ({ label, value, isMore, isStale, onClick }: { label: string, value: string, isMore?: boolean, isStale?: boolean, onClick?: () => void }) => {
+const OddButton = React.memo(({ label, value, isMore, isStale, onClick }: { label: string, value: string, isMore?: boolean, isStale?: boolean, onClick?: () => void }) => {
    const [trend, setTrend] = useState<'up' | 'down' | 'none'>('none');
    const prevValueRef = useRef(value);
 
    useEffect(() => {
-      if (isStale) return; // Don't track trend if stale
-      if (value !== '-' && prevValueRef.current !== '-' && value !== prevValueRef.current) {
-         const newVal = parseFloat(value);
+      if (value && prevValueRef.current && value !== prevValueRef.current && value !== '-') {
          const oldVal = parseFloat(prevValueRef.current);
+         const newVal = parseFloat(value);
          if (newVal > oldVal) setTrend('up');
          else if (newVal < oldVal) setTrend('down');
          
@@ -22,20 +21,7 @@ const OddButton = ({ label, value, isMore, isStale, onClick }: { label: string, 
          prevValueRef.current = value;
          return () => clearTimeout(timer);
       }
-      prevValueRef.current = value;
-   }, [value, isStale]);
-
-   if (isStale) {
-      return (
-         <button className={`flex-1 h-[40px] ${isMore ? 'max-w-[45px]' : ''} flex items-center justify-center rounded-[4px] border border-[#2c313c] bg-[#1a1d24]/50 opacity-60 cursor-not-allowed`}>
-            {isMore ? (
-               <span className="text-[11px] text-[#5c677d] font-bold">{label}</span>
-            ) : (
-               <Lock className="w-3.5 h-3.5 text-[#5c677d]" />
-            )}
-         </button>
-      );
-   }
+   }, [value]);
 
    if (isMore) {
       return (
@@ -45,26 +31,113 @@ const OddButton = ({ label, value, isMore, isStale, onClick }: { label: string, 
       );
    }
 
-   let baseClass = "flex-1 h-[40px] flex items-center justify-center rounded-[4px] border transition-all relative overflow-hidden group/btn bg-[#1a1d24] hover:bg-[#252a33] ";
-   let textClass = "text-[13px] font-bold tracking-tight ";
-   
-   if (trend === 'up') {
-      baseClass += "border-[#00E676] shadow-[0_0_8px_rgba(0,230,118,0.15)] ";
-      textClass += "text-[#00E676]";
-   } else if (trend === 'down') {
-      baseClass += "border-[#FF6D00] shadow-[0_0_8px_rgba(255,109,0,0.15)] ";
-      textClass += "text-[#FF6D00]";
-   } else {
-      baseClass += "border-[#2c313c] hover:border-[#424b5c] ";
-      textClass += "text-white";
-   }
-
    return (
-      <button className={baseClass}>
-         <span className={textClass}>{value}</span>
+      <button className={`relative group flex-1 h-10 ${isStale ? 'pointer-events-none' : ''} ${
+         trend === 'up' ? 'bg-[#00E676]/10 border-[#00E676]' : 
+         trend === 'down' ? 'bg-[#FF1744]/10 border-[#FF1744]' : 
+         'bg-[#1a1d24] hover:bg-[#2c313c] border-[#2c313c]'
+      } rounded-[4px] border transition-all overflow-hidden flex flex-col justify-center px-2`}>
+         
+         {isStale && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1a1d24]/60 backdrop-blur-[1px]">
+               <Lock className="w-4 h-4 text-[#5c677d]" />
+            </div>
+         )}
+         
+         <div className={`flex items-center justify-between w-full ${isStale ? 'opacity-50' : 'opacity-100'}`}>
+            <span className="text-[11px] font-bold text-[#a0a5b5]">{label}</span>
+            <span className={`text-[12.5px] font-black ${
+               trend === 'up' ? 'text-[#00E676]' : 
+               trend === 'down' ? 'text-[#FF1744]' : 
+               'text-[#f2a900]'
+            }`}>{value || '-'}</span>
+         </div>
       </button>
    );
-};
+});
+
+const MemoizedMatchRow = React.memo(({ match, index, activeSport, isStale, toggleFavorite, setSelectedMatch }: any) => {
+   return (
+      <div className={`flex flex-col lg:flex-row lg:items-center justify-between px-4 py-3 bg-[#12141a] hover:bg-[#1a1d24] border-[#1f232b] transition-all cursor-pointer group ${index !== 0 ? 'border-t' : ''}`}>
+         <div className="flex items-center flex-1 gap-4">
+            <div className="flex flex-col items-center justify-center w-[60px] shrink-0 border-r border-[#1f232b] pr-4">
+               {match.status === 'live' ? (
+                  <>
+                     <span className="text-[11px] text-[#00E676] font-bold mb-0.5 tracking-wider">{match.minute}</span>
+                     <span className="text-[10px] font-bold text-[#5c677d]">{match.halfScore}</span>
+                  </>
+               ) : (
+                  <>
+                     <span className="text-[10px] text-[#5c677d] font-bold uppercase tracking-wider mb-0.5">{match.date}</span>
+                     <span className="text-[13px] font-black text-white">{match.time}</span>
+                  </>
+               )}
+            </div>
+            
+            <div className="flex flex-col gap-2 flex-1 pr-4 lg:pr-6">
+               <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                     <div className="w-3.5 h-3.5 rounded bg-gradient-to-br from-white/20 to-white/5 border border-white/10 shadow-sm flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded bg-white/50"></div>
+                     </div>
+                     <span className="text-[13px] font-bold text-[#f1f5f9] group-hover:text-white transition-colors">{match.home}</span>
+                  </div>
+                  {match.status === 'live' && (
+                     <div className="bg-[#1f232b] px-2 py-0.5 rounded border border-[#2c313c] text-[12px] font-black text-white min-w-[28px] text-center shadow-inner">
+                        {match.score.split('-')[0]?.trim() || '0'}
+                     </div>
+                  )}
+               </div>
+               
+               <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                     <div className="w-3.5 h-3.5 rounded bg-gradient-to-br from-[#e62020]/40 to-[#e62020]/10 border border-[#e62020]/20 shadow-sm flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded bg-[#e62020]"></div>
+                     </div>
+                     <span className="text-[13px] font-bold text-[#f1f5f9] group-hover:text-white transition-colors">{match.away}</span>
+                  </div>
+                  {match.status === 'live' && (
+                     <div className="bg-[#1f232b] px-2 py-0.5 rounded border border-[#2c313c] text-[12px] font-black text-white min-w-[28px] text-center shadow-inner">
+                        {match.score.split('-')[1]?.trim() || '0'}
+                     </div>
+                  )}
+               </div>
+            </div>
+
+            <div className="hidden lg:flex items-center gap-3 px-4 border-l border-[#1f232b] h-10 transition-opacity">
+               <button 
+                 onClick={(e) => toggleFavorite(e, String(match.id))}
+                 className={`transition-colors ${match.isFavorite ? 'text-[#f2a900] opacity-100' : 'text-[#5c677d] hover:text-[#f2a900] opacity-50 group-hover:opacity-100'}`}
+               >
+                 <Star className="w-[14px] h-[14px]" fill={match.isFavorite ? "#f2a900" : "none"} />
+               </button>
+            </div>
+         </div>
+         
+         <div className="flex items-center gap-1.5 w-full lg:w-[280px] xl:w-[320px] shrink-0 mt-3 lg:mt-0">
+            {match.odds.map((odd: any, idx: number) => (
+               <OddButton 
+                 key={idx} 
+                 label={odd.label} 
+                 value={odd.value} 
+                 isMore={odd.isMore} 
+                 isStale={isStale}
+                 onClick={odd.isMore ? () => setSelectedMatch(match) : undefined}
+               />
+            ))}
+         </div>
+      </div>
+   );
+}, (prevProps, nextProps) => {
+   return (
+     prevProps.match.id === nextProps.match.id &&
+     prevProps.match.minute === nextProps.match.minute &&
+     prevProps.match.score === nextProps.match.score &&
+     prevProps.isStale === nextProps.isStale &&
+     prevProps.match.isFavorite === nextProps.match.isFavorite &&
+     JSON.stringify(prevProps.match.odds) === JSON.stringify(nextProps.match.odds)
+   );
+});
 
 export default function TarafView() {
   const [activeTab, setActiveTab] = useState('live');
@@ -86,12 +159,21 @@ export default function TarafView() {
 
   const [isConnected, setIsConnected] = useState(false);
   const [isStale, setIsStale] = useState(false);
-
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const heartbeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const reconnectAttemptsRef = useRef(0);
-  const lastMessageTimeRef = useRef<number>(Date.now());
+  const [visibleCount, setVisibleCount] = useState(15);
   const wsRef = useRef<WebSocket | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+  const heartbeatIntervalRef = useRef<NodeJS.Timeout>();
+  const processBufferIntervalRef = useRef<NodeJS.Timeout>();
+  const lastMessageTimeRef = useRef<number>(Date.now());
+  const reconnectAttemptsRef = useRef(0);
+  const messageBufferRef = useRef<any[]>([]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    if (scrollHeight - scrollTop <= clientHeight + 250) {
+      setVisibleCount(prev => prev + 15);
+    }
+  };
 
   useEffect(() => {
     const connectWs = () => {
@@ -120,34 +202,7 @@ export default function TarafView() {
             const payload = parsed[1];
             
             if (payload && payload.events) {
-              setLiveEvents(prevEvents => {
-                const newEvents = [...prevEvents];
-                
-                payload.events.forEach((incomingEv: any) => {
-                  const existingIdx = newEvents.findIndex(e => e.id === incomingEv.id);
-                  
-                  if (existingIdx >= 0) {
-                    const existingEv = newEvents[existingIdx];
-                    newEvents[existingIdx] = {
-                      ...existingEv,
-                      ...incomingEv,
-                      data: {
-                        ...existingEv.data,
-                        ...incomingEv.data,
-                        participants: incomingEv.data?.participants || existingEv.data?.participants
-                      },
-                      group_markets: {
-                        ...existingEv.group_markets,
-                        ...incomingEv.group_markets
-                      }
-                    };
-                  } else {
-                    newEvents.push(incomingEv);
-                  }
-                });
-                
-                return newEvents;
-              });
+              messageBufferRef.current.push(payload);
             }
           } catch (e) {
             console.error('Error parsing delta:', e);
@@ -182,9 +237,49 @@ export default function TarafView() {
          }
       }, 5000);
 
+    processBufferIntervalRef.current = setInterval(() => {
+      if (messageBufferRef.current.length === 0) return;
+      
+      const payloads = [...messageBufferRef.current];
+      messageBufferRef.current = [];
+      
+      setLiveEvents(prevEvents => {
+        const newEvents = [...prevEvents];
+        let hasChanges = false;
+        
+        payloads.forEach(payload => {
+          payload.events?.forEach((incomingEv: any) => {
+            const existingIdx = newEvents.findIndex(e => e.id === incomingEv.id);
+            hasChanges = true;
+            if (existingIdx >= 0) {
+              const existingEv = newEvents[existingIdx];
+              newEvents[existingIdx] = {
+                ...existingEv,
+                ...incomingEv,
+                data: {
+                  ...existingEv.data,
+                  ...incomingEv.data,
+                  participants: incomingEv.data?.participants || existingEv.data?.participants
+                },
+                group_markets: {
+                  ...existingEv.group_markets,
+                  ...incomingEv.group_markets
+                }
+              };
+            } else {
+              newEvents.push(incomingEv);
+            }
+          });
+        });
+        
+        return hasChanges ? newEvents : prevEvents;
+      });
+    }, 1000);
+
     return () => {
       if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
       if (heartbeatIntervalRef.current) clearInterval(heartbeatIntervalRef.current);
+      if (processBufferIntervalRef.current) clearInterval(processBufferIntervalRef.current);
       if (wsRef.current) {
          wsRef.current.close();
          wsRef.current = null;
@@ -246,7 +341,7 @@ export default function TarafView() {
       return timeB - timeA;
     });
     
-    validEvents.slice(0, 50).forEach((ev, index) => {
+    validEvents.slice(0, visibleCount).forEach((ev, index) => {
       const sportName = activeSport;
       const countryName = ev.data?.country?.name || 'Uluslararası';
       const tourName = ev.data?.tournament?.name || 'Lig';
@@ -457,7 +552,7 @@ export default function TarafView() {
            </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-[#0a0c10]">
+        <div onScroll={handleScroll} className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-[#0a0c10]">
            {!hasMatches ? (
               <div className="flex flex-col items-center justify-center py-20 text-[#5c677d]">
                  {activeTab === 'live' && !isConnected ? (
@@ -498,81 +593,15 @@ export default function TarafView() {
                        </div>
                        <div className="flex flex-col">
                           {matches.map((match, index) => (
-                             <div key={match.id} className={`flex flex-col lg:flex-row lg:items-center justify-between px-4 py-3 bg-[#12141a] hover:bg-[#1a1d24] border-[#1f232b] transition-all cursor-pointer group ${index !== 0 ? 'border-t' : ''}`}>
-                                <div className="flex items-center flex-1 gap-4">
-                                   <div className="flex flex-col items-center justify-center w-[60px] shrink-0 border-r border-[#1f232b] pr-4">
-                                      {match.status === 'live' ? (
-                                         <>
-                                            <span className="text-[11px] text-[#00E676] font-bold mb-0.5 tracking-wider">{match.minute}</span>
-                                            <span className="text-[10px] font-bold text-[#5c677d]">{match.halfScore}</span>
-                                         </>
-                                      ) : (
-                                         <>
-                                            <span className="text-[10px] text-[#5c677d] font-bold uppercase tracking-wider mb-0.5">{match.date}</span>
-                                            <span className="text-[13px] font-black text-white">{match.time}</span>
-                                         </>
-                                      )}
-                                   </div>
-                                   
-                                   {/* Teams & Score */}
-                                   <div className="flex flex-col gap-2 flex-1 pr-4 lg:pr-6">
-                                      
-                                      {/* Home Row */}
-                                      <div className="flex items-center justify-between w-full">
-                                         <div className="flex items-center gap-3">
-                                            <div className="w-3.5 h-3.5 rounded bg-gradient-to-br from-white/20 to-white/5 border border-white/10 shadow-sm flex items-center justify-center">
-                                               <div className="w-1.5 h-1.5 rounded bg-white/50"></div>
-                                            </div>
-                                            <span className="text-[13px] font-bold text-[#f1f5f9] group-hover:text-white transition-colors">{match.home}</span>
-                                         </div>
-                                         {match.status === 'live' && (
-                                            <div className="bg-[#1f232b] px-2 py-0.5 rounded border border-[#2c313c] text-[12px] font-black text-white min-w-[28px] text-center shadow-inner">
-                                               {match.score.split('-')[0]?.trim() || '0'}
-                                            </div>
-                                         )}
-                                      </div>
-                                      
-                                      {/* Away Row */}
-                                      <div className="flex items-center justify-between w-full">
-                                         <div className="flex items-center gap-3">
-                                            <div className="w-3.5 h-3.5 rounded bg-gradient-to-br from-[#e62020]/40 to-[#e62020]/10 border border-[#e62020]/20 shadow-sm flex items-center justify-center">
-                                               <div className="w-1.5 h-1.5 rounded bg-[#e62020]"></div>
-                                            </div>
-                                            <span className="text-[13px] font-bold text-[#f1f5f9] group-hover:text-white transition-colors">{match.away}</span>
-                                         </div>
-                                         {match.status === 'live' && (
-                                            <div className="bg-[#1f232b] px-2 py-0.5 rounded border border-[#2c313c] text-[12px] font-black text-white min-w-[28px] text-center shadow-inner">
-                                               {match.score.split('-')[1]?.trim() || '0'}
-                                            </div>
-                                         )}
-                                      </div>
-                                   </div>
-
-                                   {/* Stat Icons */}
-                                   <div className="hidden lg:flex items-center gap-3 px-4 border-l border-[#1f232b] h-10 transition-opacity">
-                                      <button 
-                                        onClick={(e) => toggleFavorite(e, String(match.id))}
-                                        className={`transition-colors ${match.isFavorite ? 'text-[#f2a900] opacity-100' : 'text-[#5c677d] hover:text-[#f2a900] opacity-50 group-hover:opacity-100'}`}
-                                      >
-                                        <Star className="w-[14px] h-[14px]" fill={match.isFavorite ? "#f2a900" : "none"} />
-                                      </button>
-                                   </div>
-                                </div>
-                                
-                                {/* Right: Odds Buttons */}
-                                <div className="flex items-center gap-1.5 w-full lg:w-[280px] xl:w-[320px] shrink-0 mt-3 lg:mt-0">
-                                   {match.odds.map((odd: any, idx: number) => (
-                                      <OddButton 
-                                        key={idx} 
-                                        label={odd.label} 
-                                        value={odd.value} 
-                                        isMore={odd.isMore} 
-                                        isStale={isStale}
-                                        onClick={odd.isMore ? () => setSelectedMatch(match) : undefined}
-                                      />
-                                   ))}
-                                </div>
-                             </div>
+                             <MemoizedMatchRow 
+                               key={match.id} 
+                               match={match} 
+                               index={index} 
+                               activeSport={activeSport} 
+                               isStale={isStale} 
+                               toggleFavorite={toggleFavorite} 
+                               setSelectedMatch={setSelectedMatch} 
+                             />
                           ))}
                        </div>
                     </div>
