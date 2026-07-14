@@ -91,30 +91,36 @@ export default function LiveWinsTicker() {
   return (
     <div className="w-full relative flex items-center bg-[#0f141c] overflow-hidden py-4 border-b border-gray-800">
       
-      {/* Sticky Left Button */}
-      <div className="absolute left-0 z-20 h-full flex items-center pl-4 bg-gradient-to-r from-[#0f141c] via-[#0f141c] to-transparent pr-16 md:pr-24">
-         <button className="bg-[#1a222f] hover:bg-[#263246] transition-colors border border-gray-700 rounded-xl px-5 py-3 md:px-6 md:py-4 flex items-center gap-3 shadow-2xl whitespace-nowrap group">
-           <span className="w-3 h-3 rounded-full bg-[#00FFA3] animate-pulse shadow-[0_0_12px_rgba(0,255,163,0.9)]"></span>
-           <span className="text-gray-200 font-black text-sm md:text-base uppercase tracking-widest group-hover:text-white transition-colors">Canlı Kazançlar</span>
-         </button>
+      {/* Sleek Floating Live Badge */}
+      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-4 md:pl-6 pointer-events-none bg-gradient-to-r from-[#0f141c] via-[#0f141c]/90 to-transparent pr-24">
+         <div className="bg-[#151921]/80 backdrop-blur-md border border-white/5 rounded-full px-4 py-2 flex items-center gap-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+           <div className="relative flex items-center justify-center">
+             <span className="absolute w-3 h-3 rounded-full bg-[#00FFA3] animate-ping opacity-60"></span>
+             <span className="relative w-1.5 h-1.5 rounded-full bg-[#00FFA3] shadow-[0_0_8px_#00FFA3]"></span>
+           </div>
+           <span className="text-white font-black text-[10px] md:text-xs uppercase tracking-[0.2em] mt-[1px]">Canlı</span>
+         </div>
       </div>
 
       {/* Horizontal Scrolling List */}
       <div 
-        className="flex gap-4 overflow-x-auto hide-scrollbar w-full pl-[260px] md:pl-[340px] pr-8 scroll-smooth"
+        className="flex gap-4 overflow-x-auto hide-scrollbar w-full pl-[130px] md:pl-[160px] pr-8 scroll-smooth"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
         {wins.map((win) => (
           <div 
             key={win.id}
             onClick={() => setSelectedWin(win)}
-            className="flex-shrink-0 flex items-center bg-[#1a222f] border border-[#263246] hover:border-gray-500 hover:bg-[#1f2837] cursor-pointer transition-all p-3 md:p-4 rounded-2xl min-w-[220px] md:min-w-[260px] animate-fade-in shadow-lg"
+            className="flex-shrink-0 flex items-center bg-[#13171F] border border-white/5 hover:border-[#00FFA3]/30 hover:bg-[#181d26] cursor-pointer transition-all duration-300 p-2.5 md:p-3 rounded-2xl min-w-[210px] md:min-w-[240px] animate-fade-in hover:shadow-[0_0_20px_rgba(0,255,163,0.05)] group"
           >
-            <img 
-              src={win.image} 
-              alt={win.game} 
-              className="w-14 h-14 md:w-16 md:h-16 rounded-xl md:rounded-2xl object-cover mr-4 bg-gray-900 shadow-lg border border-white/5"
-            />
+            <div className="relative mr-3 md:mr-4 shrink-0">
+              <div className="absolute inset-0 bg-[#00FFA3] blur-md opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl" />
+              <img 
+                src={win.image} 
+                alt={win.game} 
+                className="relative w-12 h-12 md:w-14 md:h-14 rounded-xl object-cover bg-gray-900 shadow-lg border border-white/10"
+              />
+            </div>
 
             <div className="text-sm leading-tight flex flex-col justify-center">
               <p className="text-gray-400 text-[11px] md:text-xs font-bold uppercase tracking-wider mb-0.5">{win.game}</p>
