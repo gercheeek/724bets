@@ -1,6 +1,15 @@
 import React, { useRef } from 'react';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 
+// Using an SVG that resembles the Gamdom Live Games icon
+const LiveCasinoIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="#F59E0B"/>
+    <circle cx="12" cy="12" r="7" fill="#111317"/>
+    <circle cx="12" cy="12" r="4" fill="#F59E0B"/>
+  </svg>
+);
+
 const LIVE_GAMES = [
   {
     id: 1,
@@ -84,37 +93,28 @@ export default function LiveGamesSlider() {
     <div className="w-full max-w-[1400px] mx-auto px-4 md:px-0 my-8">
       
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-1">
-        <div className="flex items-center gap-3">
-          {/* Custom Casino Chips Icon */}
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 p-[2px] shadow-[0_0_15px_rgba(250,204,21,0.3)]">
-            <div className="w-full h-full bg-[#111317] rounded-full flex items-center justify-center">
-              <div className="w-5 h-5 rounded-full border-2 border-dashed border-yellow-500 flex items-center justify-center">
-                 <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-              </div>
-            </div>
-          </div>
-          <h2 className="text-white font-bold text-xl md:text-2xl tracking-tight">Canlı Oyunlar</h2>
+      <div className="flex items-center justify-between mb-4 px-2">
+        <div className="flex items-center gap-2">
+          <LiveCasinoIcon />
+          <h2 className="text-white text-lg md:text-xl font-bold">Canlı Oyunlar</h2>
         </div>
         
         <div className="flex items-center gap-2">
-          <button className="hidden md:block bg-[#1a1d24] hover:bg-[#232833] text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors border border-white/5">
-            Tümünü görüntüle
+          <button 
+            onClick={() => scroll('left')}
+            className="w-8 h-8 rounded-md bg-[#2A2D35] hover:bg-[#3A3D45] flex items-center justify-center transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-400" />
           </button>
-          <div className="flex items-center gap-1">
-            <button 
-              onClick={() => scroll('left')}
-              className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center bg-[#1a1d24] hover:bg-[#232833] rounded-lg border border-white/5 transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5 text-gray-400" />
-            </button>
-            <button 
-              onClick={() => scroll('right')}
-              className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center bg-[#1a1d24] hover:bg-[#232833] rounded-lg border border-white/5 transition-colors"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-            </button>
-          </div>
+          <button className="px-3 h-8 rounded-md bg-[#2A2D35] hover:bg-[#3A3D45] flex items-center justify-center transition-colors text-[13px] font-bold text-gray-300">
+            Hepsi
+          </button>
+          <button 
+            onClick={() => scroll('right')}
+            className="w-8 h-8 rounded-md bg-[#2A2D35] hover:bg-[#3A3D45] flex items-center justify-center transition-colors"
+          >
+            <ChevronRight className="w-5 h-5 text-gray-400" />
+          </button>
         </div>
       </div>
 
