@@ -1,0 +1,15 @@
+HTTP/2 403 
+date: Tue, 14 Jul 2026 21:56:37 GMT
+content-type: application/xml
+content-length: 251
+x-amz-request-id: tx00000c371b86db042b11d-006a56b095-15723431c-nyc3c
+accept-ranges: bytes
+vary: Origin, Access-Control-Request-Headers, Access-Control-Request-Method
+cache-control: max-age=0
+strict-transport-security: max-age=15552000; includeSubDomains; preload
+x-do-cdn-uuid: b6d459df-4d15-405e-a03e-faa20bd29568
+cf-cache-status: BYPASS
+set-cookie: __cf_bm=GTmssLn5YaEp9OMlghsZ1eYVZH0cglvoMuitrXrTJA0-1784066197.380049-1.0.1.1-z4.sq0Xn_j30.tGxtDpjeenXABW2v_jVyfZHsvrWaFhcgUuhmaytHD_COQ6Kxm9B4xhYpzEInaspQru.bEKN4mL4xVxseuDPXA7AP9gkGU437P14lD.c6b8g1P5iOYsI; HttpOnly; SameSite=None; Secure; Path=/; Domain=digitaloceanspaces.com; Expires=Tue, 14 Jul 2026 22:26:37 GMT
+server: cloudflare
+cf-ray: a1b3c74599b91658-SIN
+
