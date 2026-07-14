@@ -442,16 +442,23 @@ export default function TarafView() {
         score: score,
         halfScore: subTimeStr,
         odds: oddsObj,
-        isFavorite: favorites.includes(String(ev.data?.id))
+        isFavorite: favorites.includes(String(ev.data?.id)),
+        rawEvent: ev
       });
     });
   }
   
   if (selectedMatch) {
+    // Find the most up-to-date raw event from liveEvents
+    const currentRawEvent = liveEvents.find(e => e.id === selectedMatch.rawEvent?.id) || selectedMatch.rawEvent;
+    
     return (
-      <ErrorBoundary>
-        <MatchDetailView match={selectedMatch} onBack={() => setSelectedMatch(null)} />
-      </ErrorBoundary>
+      <div className="w-full h-full relative z-[100] bg-[#1e232b]">
+        <MatchDetailView 
+          match={{...selectedMatch, rawEvent: currentRawEvent}} 
+          onBack={() => setSelectedMatch(null)} 
+        />
+      </div>
     );
   }
 

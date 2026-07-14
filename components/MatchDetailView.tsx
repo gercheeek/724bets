@@ -18,35 +18,114 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
     setOpenAccordions(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
-  const tabs = ['HEPSİ', 'Taraf', 'Alt/Üst', 'Korner', 'Goller', '1.Devre', '2.Devre', 'Handikap'];
+  const parseMarkets = () => {
+    if (!match.rawEvent?.group_markets) return { tabs: ['HEPSİ'], markets: [] };
+    
+    const groupMarkets = match.rawEvent.group_markets;
+    const allTabs = new Set(['HEPSİ']);
+    const parsedMarkets: any[] = [];
+    
+    Object.keys(groupMarkets).forEach(groupKey => {
+      let tab = 'Taraf';
+      if (groupKey.includes('first-half')) { tab = '1.Devre'; allTabs.add(tab); }
+      else if (groupKey.includes('second-half')) { tab = '2.Devre'; allTabs.add(tab); }
+      else if (groupKey.includes('corner')) { tab = 'Korner'; allTabs.add(tab); }
+      else if (groupKey.includes('set|')) { tab = `${groupKey.split('|')[1]}.Set`; allTabs.add(tab); }
+      else allTabs.add(tab);
+      
+      groupMarkets[groupKey].forEach((marketStr: string) => {
+        const parts = marketStr.split('|');
+        const marketId = parts[0];
+        const type = parts[1];
+        const arg = parts[2];
+        const selectionsStr = parts.find(p => p.includes('~home~') || p.includes('~away~') || p.includes('~over~') || p.includes('~under~') || p.includes('~odd~') || p.includes('~even~'));
+        
+        if (!selectionsStr) return;
+        
+        let marketName = '';
+        if (type === '1x2' || type === '12') marketName = 'Maç Sonucu';
+        else if (type === 'ou') { marketName = 'Alt/Üst' + (arg ? ` (${arg})` : ''); allTabs.add('Alt/Üst'); }
+        else if (type === 'ah') { marketName = 'Asya Handikap' + (arg ? ` (${arg})` : ''); allTabs.add('Handikap'); }
+        else if (type === 'ou_home') marketName = 'Ev Sahibi Alt/Üst' + (arg ? ` (${arg})` : '');
+        else if (type === 'ou_away') marketName = 'Deplasman Alt/Üst' + (arg ? ` (${arg})` : '');
+        else if (type === 'oe') marketName = 'Tek/Çift';
+        else marketName = type;
+        
+        if (tab !== 'Taraf' && tab !== 'HEPSİ') {
+           marketName = `${tab} ${marketName}`;
+        }
 
-  // Mock data to match the screenshot
-  const mockMarkets = [
-    {
-      name: 'Maç Sonucu',
-      type: '1x2',
-      options: [
-        { label: '1', value: '8.90', active: true },
-        { label: 'X', value: '4.50' },
-        { label: '2', value: '1.29' }
-      ]
-    },
-    {
-      name: 'Üst/Alt',
-      type: 'over_under',
-      rows: [
-        { overLabel: 'Üst 1.5', overValue: '1.03', underLabel: 'Alt 1.5', underValue: '8.00', active: 'over' },
-        { overLabel: 'Üst 2.5', overValue: '1.37', underLabel: 'Alt 2.5', underValue: '2.75', active: 'over' },
-        { overLabel: 'Üst 3', overValue: '1.60', underLabel: 'Alt 3', underValue: '2.15', active: 'over' },
-        { overLabel: 'Üst 3.5', overValue: '2.15', underLabel: 'Alt 3.5', underValue: '1.62', active: 'over' },
-        { overLabel: 'Üst 4', overValue: '3.10', underLabel: 'Alt 4', underValue: '1.30', active: 'over' },
-      ]
-    },
-    {
-      name: 'Asya Handikap',
-      type: 'empty'
-    }
-  ];
+        const selections = selectionsStr.split('!');
+        const parsedSelections: Record<string, string> = {};
+        selections.forEach(s => {
+           const sParts = s.split('~');
+           if (sParts.length > 2) parsedSelections[sParts[1]] = parseFloat(sParts[2]).toFixed(2);
+        });
+        
+        // Formatting specific market types
+        if (type === '1x2') {
+           parsedMarkets.push({
+             tab, id: marketId, name: marketName, renderType: '1x2',
+             options: [
+               { label: '1', value: parsedSelections['home'] || '-' },
+               { label: 'X', value: parsedSelections['draw'] || '-' },
+               { label: '2', value: parsedSelections['away'] || '-' }
+             ]
+           });
+        } else if (type === '12') {
+           parsedMarkets.push({
+             tab, id: marketId, name: marketName, renderType: '1x2',
+             options: [
+               { label: '1', value: parsedSelections['home'] || '-' },
+               { label: '2', value: parsedSelections['away'] || '-' }
+             ]
+           });
+        } else if (type === 'ou' || type === 'ou_home' || type === 'ou_away') {
+           // We might have multiple 'ou' rows. We will group them later or just show them as individual accordions for now.
+           parsedMarkets.push({
+             tab: type === 'ou' ? 'Alt/Üst' : tab, id: marketId, name: marketName, renderType: 'over_under',
+             rows: [{
+               overLabel: 'Üst', overValue: parsedSelections['over'] || '-',
+               underLabel: 'Alt', underValue: parsedSelections['under'] || '-'
+             }]
+           });
+        } else if (type === 'ah') {
+           parsedMarkets.push({
+             tab: 'Handikap', id: marketId, name: marketName, renderType: 'over_under', // Use over_under 2-col layout for handicap
+             rows: [{
+               overLabel: '1', overValue: parsedSelections['home'] || '-',
+               underLabel: '2', underValue: parsedSelections['away'] || '-'
+             }]
+           });
+        } else {
+           parsedMarkets.push({
+             tab, id: marketId, name: marketName, renderType: '1x2',
+             options: Object.keys(parsedSelections).map(k => ({ label: k.toUpperCase(), value: parsedSelections[k] }))
+           });
+        }
+      });
+    });
+    
+    // Sort tabs based on standard order
+    const standardOrder = ['HEPSİ', 'Taraf', 'Alt/Üst', 'Korner', 'Goller', '1.Devre', '2.Devre', 'Handikap'];
+    const sortedTabs = Array.from(allTabs).sort((a, b) => {
+       const aIdx = standardOrder.indexOf(a);
+       const bIdx = standardOrder.indexOf(b);
+       if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+       if (aIdx !== -1) return -1;
+       if (bIdx !== -1) return 1;
+       return a.localeCompare(b);
+    });
+
+    return { tabs: sortedTabs, markets: parsedMarkets };
+  };
+
+  const { tabs, markets } = parseMarkets();
+  
+  // Filter markets by active tab
+  const displayMarkets = activeTab === 'HEPSİ' 
+    ? markets 
+    : markets.filter(m => m.tab === activeTab || m.name.includes(activeTab));
 
   return (
     <div className="flex flex-col w-full h-full bg-[#0a0c10] overflow-y-auto custom-scrollbar">
@@ -132,8 +211,14 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
       <div className="flex-1 p-3 sm:p-4 pb-24 bg-[#0a0c10] flex justify-center">
         <div className="w-full max-w-[700px] flex flex-col gap-2">
           
-          {mockMarkets.map((market, idx) => {
-            const isOpen = openAccordions[market.name];
+          {displayMarkets.length === 0 && (
+            <div className="py-12 flex flex-col items-center justify-center gap-2">
+               <span className="text-[#5c677d] text-[12px] font-bold">Bu kategori için market bulunamadı.</span>
+            </div>
+          )}
+          
+          {displayMarkets.map((market, idx) => {
+            const isOpen = openAccordions[market.name] !== false; // Default true
             
             return (
               <div key={idx} className="bg-[#12141a] rounded-[4px] border border-[#1f232b]">
@@ -145,7 +230,6 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
                 >
                   <span className="text-[#a0a5b5] font-bold text-[12px]">{market.name}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-[#5c677d] text-[10px] font-bold">3 Bahis</span>
                     {isOpen ? (
                       <ChevronUp className="w-4 h-4 text-[#5c677d]" />
                     ) : (
@@ -158,19 +242,15 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
                 {isOpen && (
                   <div className="p-3 bg-[#0a0c10] border-t border-[#1f232b]">
                     
-                    {market.type === '1x2' && market.options && (
+                    {market.renderType === '1x2' && market.options && (
                       <div className="flex items-center gap-1.5">
-                        {market.options.map((opt, i) => (
+                        {market.options.map((opt: any, i: number) => (
                           <button 
                             key={i} 
-                            className={`flex-1 h-9 rounded-[4px] flex items-center justify-between px-3 transition-all ${
-                              opt.active 
-                                ? 'bg-[#00E676]/10 border border-[#00E676] text-[#00E676]' 
-                                : 'bg-[#1a1d24] border border-[#2c313c] hover:bg-[#2c313c] text-white'
-                            }`}
+                            className={`flex-1 h-9 rounded-[4px] flex items-center justify-between px-3 transition-all bg-[#1a1d24] border border-[#2c313c] hover:bg-[#2c313c] text-white`}
                           >
                             <span className="font-bold text-[11px] text-[#a0a5b5]">{opt.label}</span>
-                            <span className={`font-black text-[12px] ${opt.active ? 'text-[#00E676]' : 'text-[#f2a900]'}`}>
+                            <span className={`font-black text-[12px] ${opt.value !== '-' ? 'text-[#00E676]' : 'text-[#f2a900]'}`}>
                               {opt.value}
                             </span>
                           </button>
@@ -178,49 +258,28 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
                       </div>
                     )}
 
-                    {market.type === 'over_under' && market.rows && (
+                    {market.renderType === 'over_under' && market.rows && (
                       <div className="flex flex-col gap-1.5">
-                        {market.rows.map((row, i) => (
+                        {market.rows.map((row: any, i: number) => (
                           <div key={i} className="flex items-center gap-1.5">
                             <button 
-                              className={`flex-1 h-9 rounded-[4px] flex items-center justify-between px-3 transition-all ${
-                                row.active === 'over' 
-                                  ? 'bg-[#00E676]/10 border border-[#00E676] text-[#00E676]' 
-                                  : 'bg-[#1a1d24] border border-[#2c313c] hover:bg-[#2c313c] text-white'
-                              }`}
+                              className={`flex-1 h-9 rounded-[4px] flex items-center justify-between px-3 transition-all bg-[#1a1d24] border border-[#2c313c] hover:bg-[#2c313c] text-white`}
                             >
                               <span className="font-bold text-[11px] text-[#a0a5b5]">{row.overLabel}</span>
-                              <span className={`font-black text-[12px] ${row.active === 'over' ? 'text-[#00E676]' : 'text-[#f2a900]'}`}>
+                              <span className={`font-black text-[12px] ${row.overValue !== '-' ? 'text-[#00E676]' : 'text-[#f2a900]'}`}>
                                 {row.overValue}
                               </span>
                             </button>
                             <button 
-                              className={`flex-1 h-9 rounded-[4px] flex items-center justify-between px-3 transition-all ${
-                                row.active === 'under' 
-                                  ? 'bg-[#00E676]/10 border border-[#00E676] text-[#00E676]' 
-                                  : 'bg-[#1a1d24] border border-[#2c313c] hover:bg-[#2c313c] text-white'
-                              }`}
+                              className={`flex-1 h-9 rounded-[4px] flex items-center justify-between px-3 transition-all bg-[#1a1d24] border border-[#2c313c] hover:bg-[#2c313c] text-white`}
                             >
                               <span className="font-bold text-[11px] text-[#a0a5b5]">{row.underLabel}</span>
-                              <span className={`font-black text-[12px] ${row.active === 'under' ? 'text-[#00E676]' : 'text-[#f2a900]'}`}>
+                              <span className={`font-black text-[12px] ${row.underValue !== '-' ? 'text-[#00E676]' : 'text-[#f2a900]'}`}>
                                 {row.underValue}
                               </span>
                             </button>
                           </div>
                         ))}
-                        
-                        {/* Daha Fazla Button */}
-                        <button className="w-full h-9 mt-1.5 rounded-[4px] bg-[#12141a] hover:bg-[#1a1d24] border border-[#1f232b] flex items-center justify-center gap-2 text-[#5c677d] hover:text-[#a0a5b5] font-bold text-[10px] transition-colors tracking-widest">
-                          <ChevronDown className="w-3.5 h-3.5" />
-                          TÜMÜNÜ GÖSTER
-                          <ChevronDown className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    )}
-
-                    {market.type === 'empty' && (
-                      <div className="py-8 flex flex-col items-center justify-center gap-2">
-                         <div className="w-6 h-6 rounded-full border-2 border-[#2c313c] border-t-[#5c677d] animate-spin"></div>
                       </div>
                     )}
 
