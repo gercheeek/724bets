@@ -32,8 +32,8 @@ const getRankColor = (rank: number) => {
 
 const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-[#1D212B] w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-[#2A2E3D] flex flex-col transform transition-all">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
+      <div className="bg-[#1D212B] w-full max-w-lg rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border border-[#2A2E3D] flex flex-col transform transition-all my-auto">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#2A2E3D]">
           <h2 className="text-white font-semibold text-base">Bahis Detayı</h2>
@@ -46,12 +46,12 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
         <div className="p-5 flex flex-col gap-6">
           
           {/* Game Info & User */}
-          <div className="flex gap-4">
-            <div className="w-20 h-24 rounded-lg overflow-hidden shrink-0 border border-white/5 shadow-lg bg-[#0F121A]">
+          <div className="flex gap-6">
+            <div className="w-28 h-32 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.5)] bg-[#0F121A]">
               <img src={data.image} alt={data.game} className="w-full h-full object-cover" />
             </div>
-            <div className="flex flex-col flex-1 justify-center">
-              <h3 className="text-white font-bold text-lg leading-tight">{data.game}</h3>
+            <div className="flex flex-col flex-1 justify-center py-2">
+              <h3 className="text-white font-black text-2xl leading-tight tracking-wide">{data.game}</h3>
               <p className="text-gray-400 text-xs mb-3">{data.provider}</p>
               
               <div className="flex items-center gap-2 mb-1.5">
