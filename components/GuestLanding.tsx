@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Trophy, Shield, Target, ChevronRight, Info } from 'lucide-react';
 import LiveWinsTable from './LiveWinsTable';
+import LiveGamesSlider from './LiveGamesSlider';
 import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
@@ -227,6 +228,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
         </>
       )}
+
+      {/* Live Games Slider */}
+      <div className="w-full">
+        <LiveGamesSlider />
+      </div>
 
       {/* Gamdom Originals / Game Grid */}
       <div className="w-full pb-4">
