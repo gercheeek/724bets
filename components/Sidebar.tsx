@@ -356,6 +356,11 @@ const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Block 2: Spor Link */}
               <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+                <div onClick={() => onViewChange('sporx')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Activity className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
+                  {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">Sporx</span>}
+                </div>
+
                 <div onClick={() => onViewChange('sports')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Activity className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}

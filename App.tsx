@@ -65,6 +65,10 @@ import LiveMatches from './components/LiveMatches';
 
 import MatchResultsWidget from './components/MatchResultsWidget';
 import { PromoSlider } from './components/PromoSlider';
+import { WithdrawalHistory } from './components/WithdrawalHistory';
+import { DepositHistory } from './components/DepositHistory';
+import { LiveSportsBulletin } from './components/LiveSportsBulletin';
+import { SporxBulletin } from './components/SporxBulletin';
 import GameLobbyGrid from './components/GameLobbyGrid';
 import Sidebar from './components/Sidebar';
 import GuestLanding from './components/GuestLanding';
@@ -1770,43 +1774,15 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {view === 'sporx' && (
+          <div className="animate-fade-in w-full bg-[#1C2128] relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+            <SporxBulletin />
+          </div>
+        )}
+
         {view === 'sports' && (
-          <div 
-            className="animate-fade-in relative w-full bg-[#09090b] overflow-hidden" 
-            style={{ 
-              height: 'calc(100dvh - var(--header-height))',
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
-            {/* Tam Responsif İframe Kapsayıcısı (Responsive Iframe Wrapper) */}
-            <div className="w-full flex-1 relative overflow-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
-              {iframeLoading && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-10 h-10 border-4 border-[#00FFA3] border-t-transparent rounded-full animate-spin"></div>
-                    <div className="text-[#00FFA3] font-bold text-sm animate-pulse tracking-wider">YÜKLENİYOR...</div>
-                  </div>
-                </div>
-              )}
-              <iframe 
-                src="https://tarafbet977.com/tr/live/"
-                onLoad={() => setIframeLoading(false)}
-                className="absolute left-0 w-full border-none outline-none"
-                style={{ 
-                  top: '-135px', /* Üst menüyü (Tarafbet header'ını) kesmek için yukarı kaydır */
-                  width: '100%', 
-                  height: 'calc(100% + 135px)', /* Sadece üst kırpma kadar uzat, altı kırpma! Böylece sağdaki kupon sabit kalabilir. */
-                  border: 'none',
-                  margin: 0,
-                  padding: 0,
-                  zIndex: 10
-                }}
-                frameBorder="0"
-                scrolling="yes"
-                allowFullScreen
-              />
-            </div>
+          <div className="animate-fade-in w-full bg-[#09090b] relative z-20">
+            <LiveSportsBulletin />
           </div>
         )}
 
