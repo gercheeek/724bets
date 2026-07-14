@@ -174,8 +174,16 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
           <div className="flex items-center justify-between w-full">
             
             {/* Home Team */}
-            <div className="flex items-center justify-end gap-3 flex-1">
-              <span className="text-white font-bold text-[16px] md:text-[18px] text-right tracking-wide">{match.home}</span>
+            <div className="flex items-center justify-end gap-3 md:gap-4 flex-1">
+              <span className="text-white font-bold text-[14px] md:text-[18px] text-right tracking-wide line-clamp-2">{match.home}</span>
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1a1d24] border-2 border-[#2c313c] shadow-lg flex items-center justify-center shrink-0 relative overflow-hidden">
+                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent z-10"></div>
+                 <img 
+                   src={`https://ui-avatars.com/api/?name=${encodeURIComponent(match.home)}&background=1a1d24&color=ffffff&bold=true&font-size=0.4`} 
+                   alt={match.home}
+                   className="w-full h-full object-cover relative z-0"
+                 />
+              </div>
             </div>
 
             {/* Score & Time */}
@@ -197,8 +205,16 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
             </div>
 
             {/* Away Team */}
-            <div className="flex items-center justify-start gap-3 flex-1">
-              <span className="text-white font-bold text-[16px] md:text-[18px] text-left tracking-wide">{match.away}</span>
+            <div className="flex items-center justify-start gap-3 md:gap-4 flex-1">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1a1d24] border-2 border-[#2c313c] shadow-lg flex items-center justify-center shrink-0 relative overflow-hidden">
+                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent z-10"></div>
+                 <img 
+                   src={`https://ui-avatars.com/api/?name=${encodeURIComponent(match.away)}&background=1a1d24&color=ffffff&bold=true&font-size=0.4`} 
+                   alt={match.away}
+                   className="w-full h-full object-cover relative z-0"
+                 />
+              </div>
+              <span className="text-white font-bold text-[14px] md:text-[18px] text-left tracking-wide line-clamp-2">{match.away}</span>
             </div>
 
           </div>
