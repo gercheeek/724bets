@@ -3,14 +3,14 @@ import BetDetailsModal, { BetDetailData } from './BetDetailsModal';
 import { Diamond } from 'lucide-react';
 
 const TICKER_GAMES = [
-  { name: "Keno", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-keno.png", type: 'keno' as const },
-  { name: "Dice", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-dice.png", type: 'dice' as const },
-  { name: "Plinko", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-plinko.png", type: 'slot' as const },
-  { name: "Mines", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-mines.png", type: 'slot' as const },
-  { name: "War", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-war.png", type: 'slot' as const },
-  { name: "Hilo", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-hilo.png", type: 'slot' as const },
-  { name: "Blackjack", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-blackjack.png", type: 'blackjack' as const },
-  { name: "Roulette", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-roulette.png", type: 'slot' as const }
+  { name: "Keno", provider: 'Rainbet', image: "/images/rainbet-keno.jpg", type: 'keno' as const },
+  { name: "Dice", provider: 'Rainbet', image: "/images/rainbet-dice.jpg", type: 'dice' as const },
+  { name: "Plinko", provider: 'Rainbet', image: "/images/rainbet-plinko.jpg", type: 'slot' as const },
+  { name: "Mines", provider: 'Rainbet', image: "/images/rainbet-mines.jpg", type: 'slot' as const },
+  { name: "War", provider: 'Rainbet', image: "/images/rainbet-war.jpg", type: 'slot' as const },
+  { name: "Hilo", provider: 'Rainbet', image: "/images/rainbet-hilo.jpg", type: 'slot' as const },
+  { name: "Blackjack", provider: 'Rainbet', image: "/images/rainbet-blackjack.jpg", type: 'blackjack' as const },
+  { name: "Roulette", provider: 'Rainbet', image: "/images/rainbet-roulette.jpg", type: 'slot' as const }
 ];
 
 const önIsimler = ["Alpha", "Crypto", "Degen", "Whale", "Vegas", "Joker", "Lucky", "Zeus", "Shadow", "VIP", "Player", "Star", "King", "Matrix", "Neon"];
