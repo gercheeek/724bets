@@ -92,36 +92,36 @@ export default function LiveWinsTicker() {
     <div className="w-full relative flex items-center bg-[#0f141c] overflow-hidden py-4 border-b border-gray-800">
       
       {/* Sticky Left Button */}
-      <div className="absolute left-0 z-20 h-full flex items-center pl-4 bg-gradient-to-r from-[#0f141c] via-[#0f141c] to-transparent pr-12">
-         <button className="bg-[#1a222f] hover:bg-[#263246] transition-colors border border-gray-700 rounded-lg px-4 py-2.5 flex items-center gap-2 shadow-xl whitespace-nowrap">
-           <span className="w-2.5 h-2.5 rounded-full bg-[#00FFA3] animate-pulse shadow-[0_0_8px_rgba(0,255,163,0.8)]"></span>
-           <span className="text-gray-300 font-bold text-xs uppercase tracking-wider">Canlı Kazançlar</span>
+      <div className="absolute left-0 z-20 h-full flex items-center pl-4 bg-gradient-to-r from-[#0f141c] via-[#0f141c] to-transparent pr-16 md:pr-24">
+         <button className="bg-[#1a222f] hover:bg-[#263246] transition-colors border border-gray-700 rounded-xl px-5 py-3 md:px-6 md:py-4 flex items-center gap-3 shadow-2xl whitespace-nowrap group">
+           <span className="w-3 h-3 rounded-full bg-[#00FFA3] animate-pulse shadow-[0_0_12px_rgba(0,255,163,0.9)]"></span>
+           <span className="text-gray-200 font-black text-sm md:text-base uppercase tracking-widest group-hover:text-white transition-colors">Canlı Kazançlar</span>
          </button>
       </div>
 
       {/* Horizontal Scrolling List */}
       <div 
-        className="flex gap-3 overflow-x-auto hide-scrollbar w-full pl-[210px] md:pl-[240px] pr-4 scroll-smooth"
+        className="flex gap-4 overflow-x-auto hide-scrollbar w-full pl-[260px] md:pl-[340px] pr-8 scroll-smooth"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
         {wins.map((win) => (
           <div 
             key={win.id}
             onClick={() => setSelectedWin(win)}
-            className="flex-shrink-0 flex items-center bg-[#1a222f] border border-[#263246] hover:border-gray-500 cursor-pointer transition-all p-2 rounded-xl min-w-[170px] animate-fade-in"
+            className="flex-shrink-0 flex items-center bg-[#1a222f] border border-[#263246] hover:border-gray-500 hover:bg-[#1f2837] cursor-pointer transition-all p-3 md:p-4 rounded-2xl min-w-[220px] md:min-w-[260px] animate-fade-in shadow-lg"
           >
             <img 
               src={win.image} 
               alt={win.game} 
-              className="w-10 h-10 rounded-lg object-cover mr-3 bg-gray-900 shadow-md"
+              className="w-14 h-14 md:w-16 md:h-16 rounded-xl md:rounded-2xl object-cover mr-4 bg-gray-900 shadow-lg border border-white/5"
             />
 
             <div className="text-sm leading-tight flex flex-col justify-center">
-              <p className="text-gray-400 text-[10px] font-semibold uppercase">{win.game}</p>
-              <p className="text-gray-200 font-medium text-xs my-0.5">
+              <p className="text-gray-400 text-[11px] md:text-xs font-bold uppercase tracking-wider mb-0.5">{win.game}</p>
+              <p className="text-gray-100 font-semibold text-sm md:text-base my-0.5 truncate max-w-[120px] md:max-w-[140px]">
                 {win.user.substring(0, 4)}***{win.user.slice(-2)}
               </p>
-              <p className="text-[#00FFA3] font-bold text-xs">{win.payout}</p>
+              <p className="text-[#00FFA3] font-black text-sm md:text-base tracking-tight mt-0.5">{win.payout}</p>
             </div>
           </div>
         ))}
