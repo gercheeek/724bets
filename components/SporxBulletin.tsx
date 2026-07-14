@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Search, Star, Lock, ChevronRight, ChevronDown, Trophy, Activity, ArrowLeft } from 'lucide-react';
+import { Search, Star, Lock, ChevronRight, ChevronDown, Trophy, Activity, ArrowLeft, Menu } from 'lucide-react';
 
-export const SporxBulletin = () => {
+export const SporxBulletin = ({ onBack }: { onBack?: () => void }) => {
   const [events, setEvents] = useState<any[]>([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const wsRef = useRef<WebSocket | null>(null);
 
   // Categories based on screenshot
@@ -59,36 +60,51 @@ export const SporxBulletin = () => {
     <div className="flex h-full w-full bg-[#1C2128] text-white font-sans overflow-hidden">
       
       {/* Left Sidebar */}
-      <div className="w-[260px] bg-[#222831] border-r border-[#2C3440] flex flex-col shrink-0">
+      <div className={`bg-[#222831] border-r border-[#2C3440] flex flex-col shrink-0 transition-all duration-300 ${isSidebarOpen ? 'w-[260px]' : 'w-[72px]'}`}>
+        
+        {/* Toggle Button for Sidebar */}
+        <div className="p-4 flex items-center justify-between border-b border-[#2C3440] h-14 shrink-0">
+          {isSidebarOpen && <span className="font-bold text-[#00E75A] tracking-wider">SPORX</span>}
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={`w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#2C3440] transition-colors ${!isSidebarOpen ? 'mx-auto' : ''}`}>
+            <Menu className="w-5 h-5 text-zinc-400" />
+          </button>
+        </div>
+
         <div className="p-4">
-          <div className="bg-[#181C22] rounded-full px-4 py-2 flex items-center gap-2 border border-[#2C3440]">
-            <input type="text" placeholder="Arama Yapın..." className="bg-transparent text-sm w-full outline-none text-zinc-300 placeholder-zinc-500" />
-            <Search className="w-4 h-4 text-zinc-500" />
+          <div className={`bg-[#181C22] rounded-full flex items-center border border-[#2C3440] transition-all ${isSidebarOpen ? 'px-4 py-2 gap-2' : 'w-10 h-10 justify-center mx-auto'}`}>
+            {isSidebarOpen ? (
+              <>
+                <input type="text" placeholder="Arama Yapın..." className="bg-transparent text-sm w-full outline-none text-zinc-300 placeholder-zinc-500" />
+                <Search className="w-4 h-4 text-zinc-500 shrink-0" />
+              </>
+            ) : (
+              <Search className="w-4 h-4 text-zinc-500" />
+            )}
           </div>
         </div>
 
         <div className="flex-1 overflow-y-auto scrollbar-hide py-2">
-          <div className="px-4 py-3 flex items-center gap-3 hover:bg-[#2C3440] cursor-pointer">
-            <div className="w-6 h-6 rounded-full bg-[#181C22] flex items-center justify-center">
+          <div className={`py-3 flex items-center hover:bg-[#2C3440] cursor-pointer transition-all ${isSidebarOpen ? 'px-4 gap-3' : 'justify-center'}`}>
+            <div className="w-6 h-6 rounded-full bg-[#181C22] flex items-center justify-center shrink-0">
               <Star className="w-3.5 h-3.5 text-[#00E75A]" />
             </div>
-            <span className="text-sm font-semibold">Favorilerim</span>
+            {isSidebarOpen && <span className="text-sm font-semibold truncate">Favorilerim</span>}
           </div>
           
-          <div className="px-4 py-3 flex items-center gap-3 hover:bg-[#2C3440] cursor-pointer">
-            <div className="w-6 h-6 rounded-full bg-[#181C22] flex items-center justify-center text-yellow-500 font-bold text-xs">
+          <div className={`py-3 flex items-center hover:bg-[#2C3440] cursor-pointer transition-all ${isSidebarOpen ? 'px-4 gap-3' : 'justify-center'}`}>
+            <div className="w-6 h-6 rounded-full bg-[#181C22] flex items-center justify-center text-yellow-500 font-bold text-xs shrink-0">
               00
             </div>
-            <span className="text-sm font-semibold">Maç Sonuçları</span>
+            {isSidebarOpen && <span className="text-sm font-semibold truncate">Maç Sonuçları</span>}
           </div>
 
-          <div className="mt-4">
-            <div className="px-4 py-2 flex items-center justify-between text-zinc-400">
+          <div className="mt-4 border-t border-[#2C3440]/50 pt-2">
+            <div className={`py-2 flex items-center justify-between text-zinc-400 ${isSidebarOpen ? 'px-4' : 'justify-center'}`}>
               <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-[#00E75A]" />
-                <span className="text-sm font-bold text-white">Canlı Bahisler</span>
+                <Activity className="w-4 h-4 text-[#00E75A] shrink-0" />
+                {isSidebarOpen && <span className="text-sm font-bold text-white truncate">Canlı Bahisler</span>}
               </div>
-              <ChevronDown className="w-4 h-4" />
+              {isSidebarOpen && <ChevronDown className="w-4 h-4 shrink-0" />}
             </div>
 
             {/* Sports Menu */}
@@ -103,16 +119,19 @@ export const SporxBulletin = () => {
               <div 
                 key={sport.name} 
                 onClick={() => setActiveSport(sport.name === 'Özel' ? activeSport : sport.name)}
-                className={`px-4 py-2.5 flex items-center justify-between cursor-pointer border-l-2 border-transparent hover:bg-[#2C3440] ${sport.bg || ''} ${activeSport === sport.name ? 'border-[#00E75A] bg-[#2C3440]' : ''}`}
+                className={`py-2.5 flex items-center justify-between cursor-pointer border-l-2 border-transparent hover:bg-[#2C3440] transition-colors ${sport.bg || ''} ${activeSport === sport.name ? 'border-[#00E75A] bg-[#2C3440]' : ''} ${isSidebarOpen ? 'px-4' : 'justify-center'}`}
+                title={!isSidebarOpen ? sport.name : undefined}
               >
-                <div className="flex items-center gap-3">
-                  <span className={`text-lg ${sport.color}`}>{sport.icon}</span>
-                  <span className="text-sm text-zinc-300">{sport.name}</span>
+                <div className={`flex items-center ${isSidebarOpen ? 'gap-3' : 'justify-center'}`}>
+                  <span className={`text-lg shrink-0 ${sport.color}`}>{sport.icon}</span>
+                  {isSidebarOpen && <span className="text-sm text-zinc-300 truncate">{sport.name}</span>}
                 </div>
-                <div className="flex items-center gap-2 text-zinc-500">
-                  <span className="text-xs font-bold">{sport.count}</span>
-                  <ChevronDown className="w-4 h-4" />
-                </div>
+                {isSidebarOpen && (
+                  <div className="flex items-center gap-2 text-zinc-500 shrink-0">
+                    <span className="text-xs font-bold">{sport.count}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -124,7 +143,7 @@ export const SporxBulletin = () => {
         
         {/* Top Header Navigation */}
         <div className="h-14 border-b border-[#2C3440] flex items-center px-4 gap-2 shrink-0 bg-[#222831]">
-          <button className="w-8 h-8 flex items-center justify-center text-zinc-500 hover:bg-[#2C3440] hover:text-white rounded">
+          <button onClick={onBack} className="w-8 h-8 flex items-center justify-center text-zinc-500 hover:bg-[#2C3440] hover:text-white rounded transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </button>
           
