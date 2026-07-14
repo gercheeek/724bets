@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
+import FomoNotifications from './components/FomoNotifications';
 import LanguageTransition from './components/LanguageTransition';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -150,7 +151,20 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
   return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#00FFA3' }}>{text}</span>;
 };
 
-const App: React.FC = () => {
+export default function App() {
+  return (
+    <ThemeProvider>
+      <LanguageProvider>
+        <div className="min-h-screen bg-[#0B0E14] text-gray-100 flex flex-col font-sans">
+          <FomoNotifications />
+          <AppContent />
+        </div>
+      </LanguageProvider>
+    </ThemeProvider>
+  );
+}
+
+const AppContent: React.FC = () => {
   const sports2ContainerRef = useRef<HTMLDivElement>(null);
   const sportsContainerRef = useRef<HTMLDivElement>(null);
   const sports3ContainerRef = useRef<HTMLDivElement>(null);
@@ -1467,8 +1481,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <LanguageProvider>
-      <ThemeProvider>
+    <>
       {/* Onboarding Popup Overlay */}
       {showOnboardingPopup && (
         <OnboardingPopup 
@@ -2480,9 +2493,6 @@ const App: React.FC = () => {
       />
       <GlobalToaster />
       <LanguageTransition />
-    </ThemeProvider>
-    </LanguageProvider>
+    </>
   );
 };
-
-export default App;

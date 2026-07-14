@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
+import { useLanguage, LanguageCode } from '../contexts/LanguageContext';
 
 export interface NavVisibility {
   coupons: boolean;
@@ -117,6 +118,10 @@ const Header: React.FC<HeaderProps> = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
+
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const walletDropdownRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
@@ -169,8 +174,11 @@ const Header: React.FC<HeaderProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setIsProfileOpen(false);
+      }
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangDropdownOpen(false);
       }
       if (walletDropdownRef.current && !walletDropdownRef.current.contains(e.target as Node)) {
         setWalletDropdownOpen(false);
@@ -419,6 +427,39 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Controls (Profile, Chat, Notifications) */}
         <div id="tour-user-panel" className="flex items-center justify-end flex-1 gap-1 md:gap-3 z-10">
+          
+          {/* Language Switcher */}
+          <div className="relative hidden sm:block" ref={langRef}>
+            <button 
+              onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+              className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors text-zinc-300 hover:text-white"
+            >
+              <span className="text-sm font-bold uppercase">{language}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${langDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {langDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-32 bg-[#1A1D24] border border-white/5 rounded-xl shadow-2xl z-50 overflow-hidden py-2 animate-fade-in">
+                <button onClick={() => { setLanguage('tr'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'tr' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
+                  <span className="text-base">🇹🇷</span>
+                  <span className="font-semibold text-sm">TR</span>
+                </button>
+                <button onClick={() => { setLanguage('en'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'en' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
+                  <span className="text-base">🇬🇧</span>
+                  <span className="font-semibold text-sm">EN</span>
+                </button>
+                <button onClick={() => { setLanguage('es'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'es' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
+                  <span className="text-base">🇪🇸</span>
+                  <span className="font-semibold text-sm">ES</span>
+                </button>
+                <button onClick={() => { setLanguage('pt'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'pt' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
+                  <span className="text-base">🇧🇷</span>
+                  <span className="font-semibold text-sm">PT</span>
+                </button>
+              </div>
+            )}
+          </div>
+
           {siteUser ? (
             <>
               {/* Profile Dropdown */}
@@ -498,24 +539,9 @@ const Header: React.FC<HeaderProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <button
                     onClick={onMemberLoginClick}
-                    style={{
-                      background: '#1A1D24',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      padding: '0 16px',
-                      height: '36px',
-                      fontWeight: 700,
-                      fontSize: '14px',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      whiteSpace: 'nowrap'
-                    }}
-                    className="hover:bg-[#2A2E3D] transition-colors"
+                    className="bg-transparent hover:bg-white/5 text-white border-0 font-bold text-sm md:text-sm h-8 md:h-10 px-3 md:px-5 rounded-lg transition-colors whitespace-nowrap"
                   >
-                    Giriş yap
+                    {t('login')}
                   </button>
                   <button
                     onClick={onSupportClick}
@@ -547,7 +573,7 @@ const Header: React.FC<HeaderProps> = ({
                     }}
                     className="hover:bg-[#00E693] transition-colors"
                   >
-                    Kaydolun
+                    {t('register')}
                   </button>
                 </div>
               </>

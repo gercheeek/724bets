@@ -172,7 +172,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                    className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5"
                  >
                    <Search className="w-4 h-4 text-gray-400 mr-3" />
-                   <span className="text-gray-400 text-sm font-medium">Oyunları ara...</span>
+                   <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
                  </div>
                </div>
 
@@ -193,10 +193,10 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                    
                    <div className="relative z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
                      <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-md">
-                       Kumarhane
+                       {t('casino')}
                      </h3>
                      <button className="self-start sm:self-auto bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg">
-                       Ziyaret et Casino
+                       {t('visit_casino')}
                      </button>
                    </div>
                  </div>
@@ -216,10 +216,10 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                    
                    <div className="relative z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
                      <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-md">
-                       Spor Bahisleri
+                       {t('sports')}
                      </h3>
                      <button className="self-start sm:self-auto bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg">
-                       Ziyaret et Sports
+                       {t('visit_sports')}
                      </button>
                    </div>
                  </div>

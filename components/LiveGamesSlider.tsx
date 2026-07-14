@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Using an SVG that resembles the Gamdom Live Games icon
 const LiveCasinoIcon = () => (
@@ -78,6 +79,7 @@ const LIVE_GAMES = [
 
 export default function LiveGamesSlider() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -96,7 +98,7 @@ export default function LiveGamesSlider() {
       <div className="flex items-center justify-between mb-4 px-2">
         <div className="flex items-center gap-2">
           <LiveCasinoIcon />
-          <h2 className="text-white text-lg md:text-xl font-bold">Canlı Oyunlar</h2>
+          <h2 className="text-white text-lg md:text-xl font-bold">{t('live_games')}</h2>
         </div>
         
         <div className="flex items-center gap-2">
@@ -107,7 +109,7 @@ export default function LiveGamesSlider() {
             <ChevronLeft className="w-5 h-5 text-gray-400" />
           </button>
           <button className="px-3 h-8 rounded-md bg-[#2A2D35] hover:bg-[#3A3D45] flex items-center justify-center transition-colors text-[13px] font-bold text-gray-300">
-            Hepsi
+            {t('view_all')}
           </button>
           <button 
             onClick={() => scroll('right')}
