@@ -79,6 +79,7 @@ import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
 import Spor724View from './components/Spor724View';
 import TarafView from './components/TarafView';
+import ComingSoon from './components/ComingSoon';
 const SITE_CACHE_VERSION = "2026.06.25_v1";
 
 const formatDateTR = (dateStr: string) => {
@@ -152,6 +153,18 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
 };
 
 export default function App() {
+  const isDev = window.location.search.includes('dev=true');
+
+  if (!isDev) {
+    return (
+      <ThemeProvider>
+        <LanguageProvider>
+          <ComingSoon />
+        </LanguageProvider>
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider>
       <LanguageProvider>
