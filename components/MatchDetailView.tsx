@@ -18,6 +18,34 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
     setOpenAccordions(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
+  // Simple i18n translation dictionary for API keys
+  const t = (key: string) => {
+    const lowerKey = key.toLowerCase();
+    const dictionary: Record<string, string> = {
+      'home': '1 (Ev Sahibi)',
+      'away': '2 (Deplasman)',
+      'draw': 'X (Beraberlik)',
+      'over': 'Üst',
+      'under': 'Alt',
+      'odd': 'Tek',
+      'even': 'Çift',
+      'corner_ou': 'Korner Alt/Üst',
+      'corner_ah': 'Korner Asya Handikap',
+      'corner_oua': 'Korner Alt/Üst (Asya)',
+      'corner_1x2': 'Korner Maç Sonucu',
+      'cards_ou': 'Kart Alt/Üst',
+      'cards_ah': 'Kart Handikap',
+      'booking_points_ou': 'Kart Puanı Alt/Üst',
+      '1st_goal': '1. Golü Kim Atar',
+      'next_goal': 'Sıradaki Gol',
+      'clean_sheet': 'Gol Yemez',
+      'both_to_score': 'Karşılıklı Gol',
+      'yes': 'Evet',
+      'no': 'Hayır'
+    };
+    return dictionary[lowerKey] || key.toUpperCase(); // Fallback to uppercase
+  };
+
   const parseMarkets = () => {
     if (!match.rawEvent?.group_markets) return { tabs: ['HEPSİ'], markets: [] };
     
@@ -38,7 +66,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
         const marketId = parts[0];
         const type = parts[1];
         const arg = parts[2];
-        const selectionsStr = parts.find(p => p.includes('~home~') || p.includes('~away~') || p.includes('~over~') || p.includes('~under~') || p.includes('~odd~') || p.includes('~even~'));
+        const selectionsStr = parts.find(p => p.includes('~home~') || p.includes('~away~') || p.includes('~over~') || p.includes('~under~') || p.includes('~odd~') || p.includes('~even~') || p.includes('~yes~') || p.includes('~no~'));
         
         if (!selectionsStr) return;
         
@@ -49,9 +77,9 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
         else if (type === 'ou_home') marketName = 'Ev Sahibi Alt/Üst' + (arg ? ` (${arg})` : '');
         else if (type === 'ou_away') marketName = 'Deplasman Alt/Üst' + (arg ? ` (${arg})` : '');
         else if (type === 'oe') marketName = 'Tek/Çift';
-        else marketName = type;
+        else marketName = t(type); // Use translation for unknown raw types
         
-        if (tab !== 'Taraf' && tab !== 'HEPSİ') {
+        if (tab !== 'Taraf' && tab !== 'HEPSİ' && !marketName.includes(tab)) {
            marketName = `${tab} ${marketName}`;
         }
 
@@ -81,7 +109,6 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
              ]
            });
         } else if (type === 'ou' || type === 'ou_home' || type === 'ou_away') {
-           // We might have multiple 'ou' rows. We will group them later or just show them as individual accordions for now.
            parsedMarkets.push({
              tab: type === 'ou' ? 'Alt/Üst' : tab, id: marketId, name: marketName, renderType: 'over_under',
              rows: [{
@@ -91,7 +118,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
            });
         } else if (type === 'ah') {
            parsedMarkets.push({
-             tab: 'Handikap', id: marketId, name: marketName, renderType: 'over_under', // Use over_under 2-col layout for handicap
+             tab: 'Handikap', id: marketId, name: marketName, renderType: 'over_under',
              rows: [{
                overLabel: '1', overValue: parsedSelections['home'] || '-',
                underLabel: '2', underValue: parsedSelections['away'] || '-'
@@ -100,7 +127,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
         } else {
            parsedMarkets.push({
              tab, id: marketId, name: marketName, renderType: '1x2',
-             options: Object.keys(parsedSelections).map(k => ({ label: k.toUpperCase(), value: parsedSelections[k] }))
+             options: Object.keys(parsedSelections).map(k => ({ label: t(k), value: parsedSelections[k] }))
            });
         }
       });
@@ -131,47 +158,47 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
     <div className="flex flex-col w-full h-full bg-[#0a0c10] overflow-y-auto custom-scrollbar">
       
       {/* HEADER SECTION (Minimalist Dark) */}
-      <div className="relative w-full py-6 bg-[#12141a] shrink-0 border-b border-[#1f232b] flex justify-center">
+      <div className="relative w-full py-6 sm:py-8 bg-[#12141a] shrink-0 border-b border-[#1f232b] flex justify-center">
         
         {/* Back Button */}
         <button 
           onClick={onBack}
-          className="absolute top-1/2 -translate-y-1/2 left-4 xl:left-8 z-10 w-9 h-9 rounded bg-[#1a1d24] hover:bg-[#252a33] border border-[#2c313c] flex items-center justify-center transition-colors text-[#a0a5b5] hover:text-white"
+          className="absolute top-1/2 -translate-y-1/2 left-4 md:left-8 z-10 w-10 h-10 rounded bg-[#1a1d24] hover:bg-[#252a33] border border-[#2c313c] flex items-center justify-center transition-colors text-[#a0a5b5] hover:text-white shadow-sm"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-5 h-5" />
         </button>
 
         {/* Header Content */}
-        <div className="flex items-center justify-center z-10 w-full max-w-[600px] mx-auto px-12">
+        <div className="flex items-center justify-center z-10 w-full max-w-5xl mx-auto px-16 md:px-24">
           
           <div className="flex items-center justify-between w-full">
             
             {/* Home Team */}
             <div className="flex items-center justify-end gap-3 flex-1">
-              <span className="text-white font-bold text-[14px] text-right tracking-wide">{match.home}</span>
+              <span className="text-white font-bold text-[16px] md:text-[18px] text-right tracking-wide">{match.home}</span>
             </div>
 
             {/* Score & Time */}
-            <div className="flex flex-col items-center justify-center px-6 shrink-0">
-              <span className="text-[#00e676] font-bold text-[11px] mb-1.5 flex items-center gap-1.5">
-                 <div className="w-1.5 h-1.5 rounded-full bg-[#00e676] animate-pulse"></div>
+            <div className="flex flex-col items-center justify-center px-8 md:px-12 shrink-0">
+              <span className="text-[#00e676] font-bold text-[12px] mb-2 flex items-center gap-1.5">
+                 <div className="w-2 h-2 rounded-full bg-[#00e676] animate-pulse shadow-[0_0_8px_rgba(0,230,118,0.6)]"></div>
                  {match.minute ? `${match.minute}'` : "CANLI"}
               </span>
               
-              <div className="flex items-center gap-2">
-                <span className="text-white font-black text-2xl">{match.score.split('-')[0]?.trim() || '0'}</span>
-                <span className="text-[#5c677d] font-black text-xl">-</span>
-                <span className="text-white font-black text-2xl">{match.score.split('-')[1]?.trim() || '0'}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-white font-black text-3xl md:text-4xl drop-shadow-md">{match.score.split('-')[0]?.trim() || '0'}</span>
+                <span className="text-[#5c677d] font-black text-2xl md:text-3xl mb-1">-</span>
+                <span className="text-white font-black text-3xl md:text-4xl drop-shadow-md">{match.score.split('-')[1]?.trim() || '0'}</span>
               </div>
               
-              <span className="text-[#5c677d] font-bold text-[10px] mt-1 uppercase tracking-wider">
-                 {match.halfScore || '1. Yarı'}
+              <span className="text-[#a0a5b5] font-bold text-[11px] md:text-[12px] mt-2 uppercase tracking-widest bg-[#1a1d24] px-3 py-1 rounded-full border border-[#2c313c]">
+                 {match.halfScore || '1. YARI'}
               </span>
             </div>
 
             {/* Away Team */}
             <div className="flex items-center justify-start gap-3 flex-1">
-              <span className="text-white font-bold text-[14px] text-left tracking-wide">{match.away}</span>
+              <span className="text-white font-bold text-[16px] md:text-[18px] text-left tracking-wide">{match.away}</span>
             </div>
 
           </div>
@@ -180,7 +207,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
 
       {/* TABS MENU */}
       <div className="flex justify-center bg-[#12141a] border-b border-[#1f232b] relative z-20">
-        <div className="flex items-center w-full max-w-[700px] h-12 px-2 overflow-x-auto scrollbar-hide">
+        <div className="flex items-center w-full max-w-5xl h-[52px] px-2 md:px-4 overflow-x-auto scrollbar-hide">
            <button className="h-full px-3 text-[#5c677d] hover:text-white shrink-0 flex items-center justify-center transition-colors">
               <ArrowLeft className="w-4 h-4" />
            </button>
@@ -208,8 +235,8 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
       </div>
 
       {/* MARKETS CONTAINER */}
-      <div className="flex-1 p-3 sm:p-4 pb-24 bg-[#0a0c10] flex justify-center">
-        <div className="w-full max-w-[700px] flex flex-col gap-2">
+      <div className="flex-1 p-3 sm:p-6 pb-24 bg-[#0a0c10] flex justify-center">
+        <div className="w-full max-w-5xl flex flex-col gap-3">
           
           {displayMarkets.length === 0 && (
             <div className="py-12 flex flex-col items-center justify-center gap-2">
