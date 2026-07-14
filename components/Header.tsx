@@ -3,7 +3,7 @@ import {
   Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
   MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
   Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club,
-  Bell, Users, ShieldCheck, Lock, Link, FileText, Clover
+  Bell, Users, ShieldCheck, Lock, Link, FileText, Clover, Activity
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
@@ -126,7 +126,9 @@ const Header: React.FC<HeaderProps> = ({
 
   /* ── Category list ── */
     const categories: CategoryItem[] = [
+    { key: 'spor724', view: 'spor724', label: 'SPOR724', icon: <Target className={ICON_SIZE} /> },
     { key: 'slotra', view: 'slotra', label: 'Gerçek', icon: <Target className={ICON_SIZE} /> },
+    { key: 'mobile-bulletin', view: 'mobile-bulletin', label: 'M.Bülten', icon: <Activity className={ICON_SIZE} /> },
     { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
     { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
     { key: 'trusted-sites', view: 'trusted-sites', label: 'Güvenilir', icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },

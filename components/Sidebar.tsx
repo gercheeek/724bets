@@ -46,7 +46,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const topGrid: MenuItem[] = [
     { id: 'canli', label: 'CANLI', icon: <Flame className="w-5 h-5 mb-1" />, view: 'sports' },
-    { id: 'casino', label: 'CASINO', icon: <Target className="w-5 h-5 mb-1" />, view: 'blackjack' },
+    { id: 'taraf', label: 'TARAF', icon: <Target className="w-5 h-5 mb-1 text-red-500" />, view: 'taraf' },
+    { id: 'casino', label: 'CASINO', icon: <Dices className="w-5 h-5 mb-1" />, view: 'blackjack' },
   ];
 
   const menuConfig: MenuItem[] = [
@@ -103,6 +104,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       ]
     },
     { id: 'analiz', label: '724BETS ANALİZ & CANLI BÜLTEN', icon: <BarChart3 className="w-4 h-4 text-[#00FFA3]" />, view: 'analysis' },
+    { id: 'mobil-bulten', label: 'MOBİL BÜLTEN', icon: <Activity className="w-4 h-4 text-[#00FFA3]" />, view: 'mobile-bulletin' },
     { id: 'at-yarisi', label: 'AT YARIŞI', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
     { id: 'sss', label: 'SSS', icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
     { id: 'kurallar', label: 'BAHİS KURALLARI', icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },
@@ -360,10 +362,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <Activity className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
                   {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">Sporx</span>}
                 </div>
-
-                <div onClick={() => onViewChange('sports')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
-                  <Activity className="w-5 h-5 text-white/70 shrink-0" />
-                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}
+                <div onClick={() => onViewChange('spor724')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Target className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
+                  {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">SPOR724</span>}
                 </div>
               </div>
 

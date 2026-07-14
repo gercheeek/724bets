@@ -69,12 +69,15 @@ import { WithdrawalHistory } from './components/WithdrawalHistory';
 import { DepositHistory } from './components/DepositHistory';
 import { LiveSportsBulletin } from './components/LiveSportsBulletin';
 import { SporxBulletin } from './components/SporxBulletin';
+import MobileBulletinView from './components/MobileBulletinView';
 import GameLobbyGrid from './components/GameLobbyGrid';
 import Sidebar from './components/Sidebar';
 import GuestLanding from './components/GuestLanding';
 import HeroSection from './components/HeroSection';
 import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
+import Spor724View from './components/Spor724View';
+import TarafView from './components/TarafView';
 const SITE_CACHE_VERSION = "2026.06.25_v1";
 
 const formatDateTR = (dateStr: string) => {
@@ -159,7 +162,7 @@ const App: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2'>('home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'sporx' | 'taraf'>('home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -765,7 +768,7 @@ const App: React.FC = () => {
     return stored ? JSON.parse(stored) : demoCoupons;
   });
   const [showSearch, setShowSearch] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(window.innerWidth >= 1280);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [globalTvPip, setGlobalTvPip] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
@@ -1137,7 +1140,7 @@ const App: React.FC = () => {
         setView('trusted-detail');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['blackjack', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis'];
+        const validViews = ['blackjack', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -1166,6 +1169,14 @@ const App: React.FC = () => {
       if (meta) {
         meta.remove();
       }
+    }
+  }, [view]);
+
+  // Auto-close sidebars when entering spor724 view
+  useEffect(() => {
+    if (view === 'spor724') {
+      setIsSidebarOpen(false);
+      setIsChatOpen(false);
     }
   }, [view]);
 
@@ -1723,7 +1734,7 @@ const App: React.FC = () => {
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'taraf') 
             ? 'p-0 w-full max-w-[1400px] mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
@@ -1781,8 +1792,16 @@ const App: React.FC = () => {
         )}
 
         {view === 'sports' && (
-          <div className="animate-fade-in w-full bg-[#09090b] relative z-20">
-            <LiveSportsBulletin />
+          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+            <Spor724View 
+              onNavigate={(v: string) => handleViewChange(v)}
+            />
+          </div>
+        )}
+
+        {view === 'taraf' && (
+          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+            <TarafView />
           </div>
         )}
 
@@ -1999,6 +2018,24 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {view === 'slotra' && (
+          <div className="w-full h-full flex flex-col bg-[#0a0a0a]">
+            <Header onAdminClick={() => {}} onViewChange={() => {}} activeView="slotra" />
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
+              <h1 className="text-3xl font-black text-white mb-6 uppercase tracking-wider text-center">Gerçek Casino</h1>
+              <div className="text-zinc-500 text-center max-w-xl mx-auto">Gerçek casino deneyimi çok yakında...</div>
+            </div>
+          </div>
+        )}
+
+        {view === 'spor724' && (
+          <div className="animate-fade-in w-full bg-[#0a0a0c] relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+            <Spor724View 
+              onNavigate={(v: string) => setView(v)}
+            />
+          </div>
+        )}
+
         {view === 'casino2' && (
           <div className="animate-fade-in w-full relative flex flex-col overflow-hidden" style={{ minHeight: 'calc(100vh - 85px)', height: 'calc(100vh - 85px)' }}>
             {iframeLoading && (
@@ -2189,6 +2226,11 @@ const App: React.FC = () => {
           <div className="animate-fade-in">
             <DemoGames />
           </div>
+        )}
+
+
+        {view === 'mobile-bulletin' && (
+          <MobileBulletinView onBack={() => setView('home')} />
         )}
         {view === 'slotra' && (
           <div className="animate-fade-in w-full h-full min-h-screen">
@@ -2391,7 +2433,7 @@ const App: React.FC = () => {
 
       {/* 724BETS OVERLAY FOOTER */}
       {['sports', 'sports2', 'sports3', 'sports4', 'sports5'].includes(view) && (
-        <div className="fixed bottom-16 md:bottom-0 left-0 w-full z-[90] bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex flex-col md:flex-row items-center justify-between px-4 py-3 pointer-events-auto">
+        <div className="hidden md:flex fixed bottom-0 left-0 w-full z-[90] bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex-row items-center justify-between px-4 py-3 pointer-events-auto">
           <div className="flex items-center gap-3">
             <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: '20px', color: '#fff', letterSpacing: '-1px' }}>
               724bets

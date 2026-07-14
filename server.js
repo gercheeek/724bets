@@ -6,6 +6,15 @@ import cors from 'cors';
 const app = express();
 app.use(cors());
 
+// Prevent proxy from crashing on unexpected errors
+process.on('uncaughtException', (err) => {
+    console.error('🔥 [CRITICAL] Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🔥 [CRITICAL] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
@@ -19,98 +28,87 @@ const targetHeaders = {
     'Accept-Language': 'tr,en-US;q=0.9,en;q=0.8'
 };
 
-let targetSocket = null;
-let connectedClients = new Set();
-let pingIntervalId = null;
-
-function connectToTarget() {
-    if (targetSocket) {
-        return;
-    }
-
-    console.log('🔗 [PROXY] Connecting to Tarafbet...');
-    targetSocket = new WebSocket(targetWsUrl, { headers: targetHeaders });
+wss.on('connection', (ws) => {
+    console.log('💻 [LOCAL] Frontend client connected. Opening new target connection...');
+    
+    const targetSocket = new WebSocket(targetWsUrl, { headers: targetHeaders });
+    let pingIntervalId = null;
+    let messageBuffer = [];
+    let isTargetReady = false;
 
     targetSocket.on('open', () => {
-        console.log('✅ [PROXY] Connected to Tarafbet target server!');
+        console.log('✅ [PROXY] Connected to Tarafbet for client!');
     });
 
     targetSocket.on('message', (data) => {
         const msg = data.toString();
         
         // Handle Engine.IO Ping/Pong
-        // In Engine.IO v3, client sends ping ('2'), server sends pong ('3').
-        // Sometimes server sends ping, client sends pong. We handle both just in case.
         if (msg === '2' || msg === 'ping') {
             targetSocket.send('3');
-            return;
+            // Do NOT return here. Let the proxy forward the '2' to the frontend 
+            // so the frontend knows the connection is alive!
         }
 
-        // Handle initial connection payload '0{...}' which contains pingInterval
         if (msg.startsWith('0{')) {
             try {
                 const initData = JSON.parse(msg.substring(1));
-                console.log('📡 [PROXY] Received init data:', initData);
-                
-                // Set up ping interval
                 if (initData.pingInterval) {
-                    if (pingIntervalId) clearInterval(pingIntervalId);
                     pingIntervalId = setInterval(() => {
-                        if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
-                            targetSocket.send('2'); // Send ping
+                        if (targetSocket.readyState === WebSocket.OPEN) {
+                            targetSocket.send('2');
                         }
                     }, initData.pingInterval);
                 }
+                
+                // Send Socket.IO connect
+                if (targetSocket.readyState === WebSocket.OPEN) {
+                    targetSocket.send('40');
+                    isTargetReady = true;
+                    if (messageBuffer.length > 0) {
+                        for (const bmsg of messageBuffer) {
+                            targetSocket.send(bmsg);
+                        }
+                        messageBuffer = [];
+                    }
+                }
             } catch (e) {
-                console.error('Failed to parse init data:', e);
+                console.error('Parse error:', e);
             }
         }
-        
-        // Broadcast all other messages to connected frontend clients
-        for (const client of connectedClients) {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(msg);
-            }
+
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(msg);
         }
     });
 
     targetSocket.on('close', () => {
-        console.log('⚠️ [PROXY] Disconnected from Tarafbet. Reconnecting in 5s...');
-        targetSocket = null;
-        if (pingIntervalId) {
-            clearInterval(pingIntervalId);
-            pingIntervalId = null;
+        console.log('⚠️ [PROXY] Target connection closed.');
+        if (pingIntervalId) clearInterval(pingIntervalId);
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.close();
         }
-        setTimeout(connectToTarget, 5000);
     });
 
     targetSocket.on('error', (err) => {
-        console.error('❌ [PROXY] Target WS Error:', err.message);
+        console.error('❌ [PROXY] Target error:', err.message);
     });
-}
-
-// Start the target connection
-connectToTarget();
-
-// Handle local frontend clients connecting to this proxy
-wss.on('connection', (ws) => {
-    console.log('💻 [LOCAL] Frontend client connected to Proxy');
-    connectedClients.add(ws);
 
     ws.on('message', (message) => {
         const msg = message.toString();
-        // If frontend sends a message, forward it to the target
-        if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
-            console.log('⬆️ [LOCAL->TARGET] Forwarding:', msg.substring(0, 100));
+        if (isTargetReady && targetSocket.readyState === WebSocket.OPEN) {
             targetSocket.send(msg);
         } else {
-            console.log('⚠️ [LOCAL] Target not connected, cannot forward message:', msg.substring(0, 100));
+            messageBuffer.push(msg);
         }
     });
 
     ws.on('close', () => {
-        console.log('💻 [LOCAL] Frontend client disconnected');
-        connectedClients.delete(ws);
+        console.log('💻 [LOCAL] Frontend disconnected. Closing target connection.');
+        if (pingIntervalId) clearInterval(pingIntervalId);
+        if (targetSocket.readyState === WebSocket.OPEN) {
+            targetSocket.close();
+        }
     });
 });
 

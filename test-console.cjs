@@ -9,7 +9,8 @@ const puppeteer = require('puppeteer');
   page.on('requestfailed', request => console.log('REQUEST FAILED:', request.url(), request.failure().errorText));
 
   try {
-    await page.goto('http://localhost:3002/', { waitUntil: 'networkidle0' });
+    const targetUrl = process.argv[2] || 'http://localhost:3000/';
+    await page.goto(targetUrl, { waitUntil: 'networkidle0' });
   } catch (e) {
     console.error('Goto error:', e);
   }

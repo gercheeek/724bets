@@ -1,15 +1,12 @@
 const puppeteer = require('puppeteer');
+
 (async () => {
-  const browser = await puppeteer.launch({ headless: 'new' });
-  const page1 = await browser.newPage();
-  await page1.setViewport({ width: 1280, height: 800 });
-  await page1.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
-  await page1.screenshot({ path: 'local.png' });
-
-  const page2 = await browser.newPage();
-  await page2.setViewport({ width: 1280, height: 800 });
-  await page2.goto('https://www.724bahis.net/', { waitUntil: 'networkidle2' });
-  await page2.screenshot({ path: 'live.png' });
-
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1920, height: 1080 });
+  await page.goto('https://tarafbet980.com/tr/sports/', { waitUntil: 'networkidle2' });
+  // Wait a few seconds for data to load
+  await new Promise(r => setTimeout(r, 5000));
+  await page.screenshot({ path: 'tarafbet_screenshot.png', fullPage: true });
   await browser.close();
 })();
