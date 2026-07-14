@@ -255,13 +255,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           
           {/* Spacer to align sidebar content below Header */}
           <div className="h-[70px] w-full shrink-0 flex items-center px-4 pt-2">
-             {isOpen && (
-               <div className="flex items-center gap-1 ml-2 select-none">
-                 <span className="text-white font-black text-2xl tracking-tighter" style={{ fontFamily: 'Inter, sans-serif' }}>
-                   724<span className="text-[#00FFA3]">BETS</span>
-                 </span>
-               </div>
-             )}
+             {/* Logo removed as per user request, leaving empty space */}
           </div>
 
           
