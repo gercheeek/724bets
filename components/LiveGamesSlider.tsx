@@ -170,11 +170,28 @@ export default function LiveGamesSlider() {
             </div>
 
             {/* Bottom Content */}
-            <div className="absolute bottom-0 left-0 w-full p-3 flex flex-col items-center text-center z-10">
-              <h3 className="text-white font-black text-xs md:text-sm leading-tight drop-shadow-md mb-1 px-1" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+            <div className="absolute bottom-0 left-0 w-full p-2 md:p-3 flex flex-col items-center text-center z-10 pb-3 md:pb-4">
+              <h3 
+                className="text-white leading-[1.1] mb-0.5 px-1 drop-shadow-[0_2px_4px_rgba(0,0,0,1)]" 
+                style={{ 
+                  fontFamily: "'Oswald', 'Impact', 'Arial Narrow', sans-serif", 
+                  fontSize: '15px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  transform: 'scaleY(1.15)'
+                }}
+              >
                 {game.title}
               </h3>
-              <p className="text-white/90 font-bold text-[9px] md:text-[10px] drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+              <p 
+                className="text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,1)] mt-1" 
+                style={{ 
+                  fontFamily: "'Oswald', 'Impact', 'Arial Narrow', sans-serif", 
+                  fontSize: '9px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}
+              >
                 {game.provider}
               </p>
             </div>
