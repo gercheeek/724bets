@@ -53,10 +53,11 @@ interface BlockProps {
   icon: React.ReactNode;
   games: GameItem[];
   showPlayers?: boolean;
+  isSports?: boolean;
   onGameClick?: (game: GameItem) => void;
 }
 
-const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, onGameClick }) => {
+const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSports, onGameClick }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -93,20 +94,38 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, onGa
         className="overflow-x-auto hide-scrollbar -mx-2 px-2"
         style={{ scrollSnapType: 'x mandatory' }}
       >
-        <div className="flex gap-3 min-w-max pb-4">
+        <div className="flex gap-3 md:gap-4 min-w-max pb-4 pt-2">
           {games.map((game) => (
-            <div key={game.id} onClick={() => onGameClick?.(game)} className="flex flex-col gap-2 group cursor-pointer" style={{ width: 'calc(100vw / 2.5 - 12px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
-              <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-zinc-900 shadow-md group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:-translate-y-1">
-                <img 
-                  src={game.image} 
-                  alt={game.title}
-                  className="absolute inset-0 !w-full !h-full !object-cover !object-center block"
-                />
+            <div key={game.id} onClick={() => onGameClick?.(game)} className="flex flex-col gap-2 cursor-pointer relative" style={{ width: 'calc(100vw / 2.5 - 12px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
+              
+              <div className="relative group w-full h-full">
+                {/* The Gamdom Glow (Blurred background image behind the card) */}
+                <div 
+                  className="absolute -inset-1 rounded-[1.5rem] bg-cover bg-center opacity-0 group-hover:opacity-75 transition-opacity duration-500 z-0 scale-95 translate-y-2 pointer-events-none"
+                  style={{ backgroundImage: `url(${game.image})`, filter: 'blur(20px) saturate(150%) brightness(1.2)' }}
+                ></div>
+                
+                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-transform duration-300 group-hover:-translate-y-1">
+                  <img 
+                    src={game.image} 
+                    alt={game.title}
+                    className="absolute inset-0 !w-full !h-full !object-cover !object-center block transition-transform duration-700 group-hover:scale-105"
+                  />
+                  
+                  {isSports && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-3 z-20">
+                      <h3 className="text-white font-black text-xs md:text-sm text-center drop-shadow-md tracking-wider">
+                        {game.title}
+                      </h3>
+                    </div>
+                  )}
+                </div>
               </div>
-              {showPlayers && game.players && (
-                <div className="flex items-center justify-center gap-1.5 mt-1">
+
+              {!isSports && showPlayers && game.players && (
+                <div className="flex items-center justify-center gap-1.5 mt-0.5">
                   <div className="w-2 h-2 rounded-full bg-[#00FFA3] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
-                  <span className="text-gray-400 text-[11px] font-medium"><span className="text-white font-bold">{game.players}</span> Oyuncular</span>
+                  <span className="text-gray-400 text-[10px] md:text-[11px] font-medium"><span className="text-white font-bold">{game.players}</span> Oyuncular</span>
                 </div>
               )}
             </div>
@@ -238,6 +257,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         title="Popüler Sporlar" 
         icon={<Trophy className="w-5 h-5 text-white" />} 
         games={sports} 
+        isSports={true}
         showPlayers={false}
         onGameClick={(game) => setSelectedGame(game)}
       />
