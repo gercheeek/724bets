@@ -111,14 +111,6 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                     alt={game.title}
                     className="absolute inset-0 !w-full !h-full !object-cover !object-center block transition-transform duration-700 group-hover:scale-105"
                   />
-                  
-                  {isSports && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-3 z-20">
-                      <h3 className="text-white font-black text-xs md:text-sm text-center drop-shadow-md tracking-wider">
-                        {game.title}
-                      </h3>
-                    </div>
-                  )}
                 </div>
               </div>
 
