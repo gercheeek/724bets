@@ -488,7 +488,8 @@ export default function TarafView() {
         halfScore: subTimeStr,
         odds: oddsObj,
         isFavorite: favorites.includes(String(ev.data?.id)),
-        rawEvent: ev
+        rawEvent: ev,
+        override: override && override.isActive ? override : null
       });
     });
   }

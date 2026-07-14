@@ -47,6 +47,29 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
   };
 
   const parseMarkets = () => {
+    if (match.override) {
+       return {
+         tabs: ['HEPSİ', 'Taraf', 'Alt/Üst'],
+         markets: [
+           {
+             tab: 'Taraf', id: 'sim-1x2', name: 'Maç Sonucu', renderType: '1x2',
+             options: [
+               { label: '1', value: match.override.odds['1x2']?.home || '-' },
+               { label: 'X', value: match.override.odds['1x2']?.draw || '-' },
+               { label: '2', value: match.override.odds['1x2']?.away || '-' }
+             ]
+           },
+           {
+             tab: 'Alt/Üst', id: 'sim-ou', name: 'Alt/Üst (2.5)', renderType: '1x2',
+             options: [
+               { label: 'Üst', value: match.override.odds['ou25']?.over || '-' },
+               { label: 'Alt', value: match.override.odds['ou25']?.under || '-' }
+             ]
+           }
+         ]
+       };
+    }
+
     if (!match.rawEvent?.group_markets) return { tabs: ['HEPSİ'], markets: [] };
     
     const groupMarkets = match.rawEvent.group_markets;
