@@ -181,22 +181,22 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  {/* Kumarhane Card */}
                  <div 
                    onClick={() => onViewChange('blackjack')}
-                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
+                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col justify-end p-3 md:p-5"
                  >
-                   <div className="w-full h-[70%] md:h-[75%] relative overflow-hidden">
-                      <img 
-                        src="/images/purple_casino_card.jpg" 
-                        alt="Casino" 
-                        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                      />
-                   </div>
-                   {/* Solid Bottom Band */}
-                   <div className="w-full h-[30%] md:h-[25%] bg-gradient-to-r from-[#811850] to-[#59103a] p-2 sm:p-3 md:px-5 flex items-center justify-center sm:justify-between z-20 border-t border-white/10">
-                     <h3 className="text-base sm:text-xl md:text-2xl font-black text-white tracking-tight">
+                   <img 
+                     src="https://gamdom.com/static/dyn/banners/tr-tr0ad40188-8f5c-4015-a3f5-1b941902ee35-banners.avif" 
+                     alt="Casino" 
+                     className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                   />
+                   {/* Gradient overlay for readability */}
+                   <div className="absolute inset-0 bg-gradient-to-t from-[#811850]/80 via-transparent to-transparent pointer-events-none"></div>
+                   
+                   <div className="relative z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
+                     <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-md">
                        Kumarhane
                      </h3>
-                     <button className="hidden sm:block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 text-xs rounded transition-colors">
-                       Ziyaret et
+                     <button className="self-start sm:self-auto bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg">
+                       Ziyaret et Casino
                      </button>
                    </div>
                  </div>
@@ -204,22 +204,22 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  {/* Spor Bahisleri Card */}
                  <div 
                    onClick={() => onViewChange('sports')}
-                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col"
+                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col justify-end p-3 md:p-5"
                  >
-                   <div className="w-full h-[70%] md:h-[75%] relative overflow-hidden">
-                     <img 
-                       src="/images/green_sports_card.jpg" 
-                       alt="Sports Betting" 
-                       className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                     />
-                   </div>
-                   {/* Solid Bottom Band */}
-                   <div className="w-full h-[30%] md:h-[25%] bg-gradient-to-r from-[#216115] to-[#15420d] p-2 sm:p-3 md:px-5 flex items-center justify-center sm:justify-between z-20 border-t border-white/10">
-                     <h3 className="text-base sm:text-xl md:text-2xl font-black text-white tracking-tight">
+                   <img 
+                     src="https://gamdom.com/static/dyn/banners/tr-trc75c9984-9a76-4653-bc88-773fa769e4dc-banners.avif" 
+                     alt="Sports Betting" 
+                     className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                   />
+                   {/* Gradient overlay for readability */}
+                   <div className="absolute inset-0 bg-gradient-to-t from-[#216115]/80 via-transparent to-transparent pointer-events-none"></div>
+                   
+                   <div className="relative z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
+                     <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-md">
                        Spor Bahisleri
                      </h3>
-                     <button className="hidden sm:block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 text-xs rounded transition-colors">
-                       Ziyaret et
+                     <button className="self-start sm:self-auto bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg">
+                       Ziyaret et Sports
                      </button>
                    </div>
                  </div>
