@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Trophy, Shield, Target, ChevronRight, Info } from 'lucide-react';
-import LiveWinsTable from './LiveWinsTable';
+import LiveWinsTicker from './LiveWinsTicker';
 import LiveGamesSlider from './LiveGamesSlider';
 import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
@@ -226,6 +226,10 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                </div>
              </WorldCupTeaser>
           </div>
+          
+          <div className="w-full mb-8">
+            <LiveWinsTicker />
+          </div>
         </>
       )}
 
@@ -239,11 +243,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         <GameLobbyGrid 
           customGames={customGames}
         />
-      </div>
-
-      {/* Live Wins Table */}
-      <div className="w-full">
-         <LiveWinsTable />
       </div>
 
     </div>
