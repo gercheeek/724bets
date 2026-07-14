@@ -1547,7 +1547,7 @@ const App: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
+          {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen}
@@ -1776,7 +1776,7 @@ const App: React.FC = () => {
 
         {view === 'sporx' && (
           <div className="animate-fade-in w-full bg-[#1C2128] relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
-            <SporxBulletin />
+            <SporxBulletin onBack={() => handleViewChange('home')} />
           </div>
         )}
 
