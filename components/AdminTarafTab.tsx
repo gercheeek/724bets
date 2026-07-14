@@ -34,35 +34,75 @@ export default function AdminTarafTab() {
   };
 
   // Connect to WS for live tracking
+  const wsRef = useRef<WebSocket | null>(null);
+  const messageBufferRef = useRef<any[]>([]);
+  const reconnectAttemptsRef = useRef(0);
+  const reconnectTimeoutRef = useRef<any>(null);
+  const processBufferIntervalRef = useRef<any>(null);
+
   useEffect(() => {
-    const ws = new WebSocket('wss://tarafbet980.com/ws');
-    
-    ws.onopen = () => {
-      ws.send('42["subscribe-LiveEvents",{"locale":"tr_TR"}]');
+    const connectWs = () => {
+      if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) return;
+      
+      const ws = new WebSocket('ws://localhost:4000');
+      wsRef.current = ws;
+      
+      ws.onopen = () => {
+        reconnectAttemptsRef.current = 0;
+        ws.send('42["subscribe-LiveEvents",{"locale":"tr_TR"}]');
+      };
+
+      ws.onmessage = (event) => {
+        const msg = event.data.toString();
+        if (msg.startsWith('42[')) {
+          try {
+            const parsed = JSON.parse(msg.substring(2));
+            const payload = parsed[1];
+            if (payload && payload.events) {
+              messageBufferRef.current.push(payload);
+            }
+          } catch (e) {}
+        }
+      };
+
+      ws.onclose = () => {
+        const timeout = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 10000);
+        reconnectAttemptsRef.current += 1;
+        reconnectTimeoutRef.current = setTimeout(connectWs, timeout);
+      };
+      
+      ws.onerror = () => ws.close();
     };
 
-    ws.onmessage = (event) => {
-      const msg = event.data.toString();
-      if (msg.startsWith('42[')) {
-        try {
-          const parsed = JSON.parse(msg.substring(2));
-          const payload = parsed[1];
-          if (payload && payload.events) {
-            setLiveEvents(prev => {
-              const newEvs = [...prev];
-              payload.events.forEach((incoming: any) => {
-                const idx = newEvs.findIndex(e => e.id === incoming.id);
-                if (idx >= 0) newEvs[idx] = { ...newEvs[idx], ...incoming };
-                else newEvs.push(incoming);
-              });
-              return newEvs;
-            });
-          }
-        } catch (e) {}
-      }
-    };
+    connectWs();
+
+    processBufferIntervalRef.current = setInterval(() => {
+      if (messageBufferRef.current.length === 0) return;
+      
+      const payloads = [...messageBufferRef.current];
+      messageBufferRef.current = [];
+      
+      setLiveEvents(prevEvents => {
+        const newEvents = [...prevEvents];
+        payloads.forEach(payload => {
+          payload.events?.forEach((incomingEv: any) => {
+            const existingIdx = newEvents.findIndex(e => e.id === incomingEv.id);
+            if (existingIdx >= 0) {
+              newEvents[existingIdx] = { ...newEvents[existingIdx], ...incomingEv };
+            } else {
+              newEvents.push(incomingEv);
+            }
+          });
+        });
+        return newEvents;
+      });
+    }, 1000);
     
-    return () => ws.close();
+    return () => {
+      if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
+      if (processBufferIntervalRef.current) clearInterval(processBufferIntervalRef.current);
+      if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
+    };
   }, []);
 
   const handleSelectMatch = (ev: any) => {
