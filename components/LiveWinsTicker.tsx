@@ -3,14 +3,14 @@ import BetDetailsModal, { BetDetailData } from './BetDetailsModal';
 import { Diamond } from 'lucide-react';
 
 const TICKER_GAMES = [
-  { name: "Keno", provider: 'Rainbet', image: "https://placehold.co/400x400/151921/00FFA3/png?text=Keno", type: 'keno' as const },
-  { name: "Dice", provider: 'Rainbet', image: "https://placehold.co/400x400/151921/00FFA3/png?text=Dice", type: 'dice' as const },
-  { name: "Plinko", provider: 'Rainbet', image: "https://placehold.co/400x400/151921/00FFA3/png?text=Plinko", type: 'slot' as const },
-  { name: "Mines", provider: 'Rainbet', image: "https://placehold.co/400x400/151921/00FFA3/png?text=Mines", type: 'slot' as const },
-  { name: "War", provider: 'Rainbet', image: "https://placehold.co/400x400/151921/00FFA3/png?text=War", type: 'slot' as const },
-  { name: "Hilo", provider: 'Rainbet', image: "https://placehold.co/400x400/151921/00FFA3/png?text=Hilo", type: 'slot' as const },
-  { name: "Blackjack", provider: 'Rainbet', image: "https://placehold.co/400x400/151921/00FFA3/png?text=Blackjack", type: 'blackjack' as const },
-  { name: "Roulette", provider: 'Rainbet', image: "https://placehold.co/400x400/151921/00FFA3/png?text=Roulette", type: 'slot' as const }
+  { name: "Keno", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-keno.png", type: 'keno' as const },
+  { name: "Dice", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-dice.png", type: 'dice' as const },
+  { name: "Plinko", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-plinko.png", type: 'slot' as const },
+  { name: "Mines", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-mines.png", type: 'slot' as const },
+  { name: "War", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-war.png", type: 'slot' as const },
+  { name: "Hilo", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-hilo.png", type: 'slot' as const },
+  { name: "Blackjack", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-blackjack.png", type: 'blackjack' as const },
+  { name: "Roulette", provider: 'Rainbet', image: "https://rainbet-images.nyc3.cdn.digitaloceanspaces.com/slots/rainbet-roulette.png", type: 'slot' as const }
 ];
 
 const önIsimler = ["Alpha", "Crypto", "Degen", "Whale", "Vegas", "Joker", "Lucky", "Zeus", "Shadow", "VIP", "Player", "Star", "King", "Matrix", "Neon"];
@@ -114,14 +114,7 @@ export default function LiveWinsTicker() {
               src={win.image} 
               alt={win.game} 
               className="w-10 h-10 rounded-lg object-cover mr-3 bg-gray-900 shadow-md"
-              onError={(e) => {
-                (e.target as HTMLElement).style.display = 'none';
-                ((e.target as HTMLElement).nextSibling as HTMLElement).style.display = 'flex';
-              }}
             />
-            <div className="w-10 h-10 bg-gray-800 rounded-lg mr-3 hidden items-center justify-center text-lg">
-              🎮
-            </div>
 
             <div className="text-sm leading-tight flex flex-col justify-center">
               <p className="text-gray-400 text-[10px] font-semibold uppercase">{win.game}</p>
