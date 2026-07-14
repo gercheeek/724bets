@@ -157,6 +157,25 @@ export default function TarafView() {
     });
   };
 
+  const [tarafSettings, setTarafSettings] = useState({ margin: 5, liveDelay: 8, minBet: 10, maxBet: 15000, isActive: true });
+  const [tarafOverrides, setTarafOverrides] = useState<Record<string, any>>({});
+
+  useEffect(() => {
+     const loadSettings = () => {
+        try {
+           const settingsStr = localStorage.getItem('taraf_admin_settings');
+           if (settingsStr) setTarafSettings(JSON.parse(settingsStr));
+           
+           const overridesStr = localStorage.getItem('taraf_manual_overrides');
+           if (overridesStr) setTarafOverrides(JSON.parse(overridesStr));
+        } catch (e) {}
+     };
+     
+     loadSettings();
+     const interval = setInterval(loadSettings, 2000); // Check overrides frequently
+     return () => clearInterval(interval);
+  }, []);
+
   const [isConnected, setIsConnected] = useState(false);
   const [isStale, setIsStale] = useState(false);
   const [visibleCount, setVisibleCount] = useState(15);
@@ -394,7 +413,7 @@ export default function TarafView() {
          subTimeStr = '';
       }
       
-      const score = ev.data?.current_score ? ev.data.current_score.replace(':', ' - ') : '-';
+      let score = ev.data?.current_score ? ev.data.current_score.replace(':', ' - ') : '-';
       const isTwoWay = ['Basketbol', 'Tenis', 'Voleybol', 'Masa Tenisi'].includes(activeSport);
       
       const rawMarkets = ev.group_markets?.["full_event|0"];
@@ -406,7 +425,23 @@ export default function TarafView() {
       let awayOdd = '-';
       let moreCount = '+99';
       
-      if (targetMarket) {
+      const marginFactor = (100 - (tarafSettings.margin || 0)) / 100;
+      
+      const applyMargin = (val: number) => {
+         return Math.max(1.01, val * marginFactor).toFixed(2);
+      };
+
+      const override = tarafOverrides[ev.id];
+
+      if (override && override.isActive) {
+         // USE MANUAL OVERRIDE (Simulated Odds)
+         homeOdd = override.odds?.['1x2']?.home || '-';
+         drawOdd = override.odds?.['1x2']?.draw || '-';
+         awayOdd = override.odds?.['1x2']?.away || '-';
+         score = override.score || score;
+         minuteStr = `${override.minute}'` || minuteStr;
+         subTimeStr = '';
+      } else if (targetMarket) {
          const parts = targetMarket.split('|');
          const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
          
@@ -418,9 +453,9 @@ export default function TarafView() {
                   const type = selParts[1];
                   const oddVal = parseFloat(selParts[2]);
                   if (!isNaN(oddVal)) {
-                     if (type === 'home') homeOdd = oddVal.toFixed(2);
-                     if (type === 'draw') drawOdd = oddVal.toFixed(2);
-                     if (type === 'away') awayOdd = oddVal.toFixed(2);
+                     if (type === 'home') homeOdd = applyMargin(oddVal);
+                     if (type === 'draw') drawOdd = applyMargin(oddVal);
+                     if (type === 'away') awayOdd = applyMargin(oddVal);
                   }
                }
             });
