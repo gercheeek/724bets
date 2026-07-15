@@ -222,9 +222,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
             <div className="w-full max-w-4xl bg-[#111317] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-[700px]">
                 
                 {/* Left Side - Promo Graphic (Hidden on mobile) */}
-                <div className="hidden md:flex w-1/2 relative bg-gradient-to-br from-[#0B0E14] to-[#00FFA3]/20 items-center justify-center overflow-hidden border-r border-white/5 h-full">
-                    {/* Add a generic background image from our assets */}
-                    <div className="absolute inset-0 bg-[url('/images/casino_neon_banner.jpg')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
+                <div className="hidden md:flex w-1/2 relative bg-gradient-to-br from-[#0B0E14] to-[#00FFA3]/20 items-center justify-center overflow-hidden border-r border-white/5 h-full transition-all duration-500">
+                    {/* Add a dynamic background image based on tab */}
+                    <div 
+                        className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay transition-all duration-500"
+                        style={{ backgroundImage: `url('/images/${memberMode === 'register' ? 'sports_neon_banner.jpg' : 'casino_neon_banner.jpg'}')` }}
+                    ></div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#111317] via-transparent to-transparent"></div>
                     <div className="relative z-10 flex flex-col items-center text-center p-8">
                         <h1 className="text-4xl font-black text-white tracking-tighter mb-4 drop-shadow-2xl">724BETS</h1>
