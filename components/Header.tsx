@@ -360,8 +360,8 @@ const Header: React.FC<HeaderProps> = ({
                 onMouseEnter={() => setLogoHoverCount(prev => prev + 1)}
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
               >
-                <SlotText text="724" className="text-white font-extrabold text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
-                <SlotText text="BETS" className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
+                <SlotText text="724" className="text-white font-extrabold text-2xl md:text-3xl uppercase text-center" trigger={logoHoverCount} />
+                <SlotText text="BETS" className="text-[#00FFA3] font-black text-lg md:text-xl uppercase text-center ml-0.5" trigger={logoHoverCount} />
               </div>
 
               <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
