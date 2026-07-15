@@ -4,6 +4,7 @@ import LiveWinsTicker from './LiveWinsTicker';
 import LiveGamesSlider from './LiveGamesSlider';
 import LiveBetsTable from './LiveBetsTable';
 import { CasinoLobbyGame, SiteUser } from '../types';
+import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
 import OriginalsSlider from './OriginalsSlider';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -245,6 +246,13 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
         </>
       )}
+
+      {/* Gamdom Originals / Game Grid (Popüler Oyunlar Only) */}
+      <div className="w-full">
+        <GameLobbyGrid 
+          customGames={customGames}
+        />
+      </div>
 
       {/* Originals Slider */}
       <div className="w-full">

@@ -202,23 +202,6 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         showPlayers={true}
         onGameClick={(game) => setSelectedGame(game)}
       />
-      
-      <GameBlock 
-        title={t('popular_sports')} 
-        icon={<Trophy className="w-5 h-5 text-white" />} 
-        games={sports} 
-        isSports={true}
-        showPlayers={false}
-        onGameClick={(game) => setSelectedGame(game)}
-      />
-
-      <GameBlock 
-        title={t('live_casino')} 
-        icon={<Video className="w-5 h-5 text-white" />} 
-        games={live} 
-        showPlayers={true}
-        onGameClick={(game) => setSelectedGame(game)}
-      />
 
       {selectedGame && typeof document !== 'undefined' && createPortal(
         <div 
