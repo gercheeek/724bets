@@ -11,12 +11,24 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
       {/* HERO BANNER */}
       <div className="w-full rounded-2xl overflow-hidden relative flex flex-col md:flex-row items-center min-h-[200px] md:min-h-[160px] h-full shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 group cursor-pointer">
         
+        {/* Continuous Motion Style */}
+        <style>{`
+          @keyframes continuousPan {
+            0% { transform: scale(1.15) translate(-2%, -1%); }
+            50% { transform: scale(1.15) translate(2%, 1%); }
+            100% { transform: scale(1.15) translate(-2%, -1%); }
+          }
+          .animate-pan {
+            animation: continuousPan 25s ease-in-out infinite;
+          }
+        `}</style>
+
         {/* Background Image & Overlay */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 overflow-hidden">
           <img 
             src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop" 
             alt="World Cup Stadium" 
-            className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
+            className="w-full h-full object-cover object-center animate-pan group-hover:scale-125 transition-transform duration-1000 ease-out"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/90 to-[#0B0E14]/20 group-hover:from-[#0B0E14] group-hover:via-[#0B0E14]/80 group-hover:to-transparent transition-colors duration-500"></div>
           {/* Neon Green Glow Effect */}
