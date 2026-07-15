@@ -1629,10 +1629,10 @@ const AppContent: React.FC = () => {
             {view !== 'kral' && (
               <header 
                 id="mobile-top-header"
-                className="flex lg:hidden items-center justify-between p-2 px-3 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1 transition-transform duration-300"
+                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1 transition-transform duration-300"
               >
                 <div 
-                  className="font-black text-xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
+                  className="font-black text-2xl sm:text-3xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
                   onClick={() => setView('home')}
                   style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
                 >
@@ -1643,14 +1643,14 @@ const AppContent: React.FC = () => {
                     <>
                       {/* 1. Gamdom Style Wallet (Pill) */}
                       <div 
-                        className="flex items-center bg-[#1A1F29] rounded-lg p-1 pr-2 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
+                        className="flex items-center bg-[#1A1F29] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
-                        <div className="w-6 h-6 rounded bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
-                          <span className="text-[13px]">$</span>
+                        <div className="w-7 h-7 rounded bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
+                          <span className="text-[14px]">$</span>
                         </div>
-                        <span className="text-white font-bold text-[13px] tracking-tight mr-1.5">${siteUser.balance?.toFixed(2) || '0.00'}</span>
-                        <svg className="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
+                        <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">${siteUser.balance?.toFixed(2) || '0.00'}</span>
+                        <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M7 10l5 5 5-5z" />
                         </svg>
                       </div>
@@ -1658,15 +1658,15 @@ const AppContent: React.FC = () => {
                       {/* 2. Cüzdan Butonu (Sadece İkon) */}
                       <button 
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                        className="flex items-center justify-center w-8 h-8 bg-[#00FFA3] hover:bg-[#00e693] rounded-lg transition-colors ml-1.5 shadow-[0_0_15px_rgba(0,255,163,0.2)] active:scale-95"
+                        className="flex items-center justify-center w-10 h-10 bg-[#00FFA3] hover:bg-[#00e693] rounded-lg transition-colors ml-2 shadow-[0_0_15px_rgba(0,255,163,0.2)] active:scale-95"
                       >
-                        <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="currentColor">
+                        <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M21 7.5C21 5.567 19.433 4 17.5 4H6.5C4.567 4 3 5.567 3 7.5v9C3 18.433 4.567 20 6.5 20h11c1.933 0 3.5-1.567 3.5-3.5v-9zm-3.5 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
                         </svg>
                       </button>
                       
                       {/* 3. Profil Avatarı */}
-                      <button onClick={() => handleViewChange('profile')} className="w-8 h-8 rounded-full border border-white/10 bg-[#1A1D24] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
+                      <button onClick={() => handleViewChange('profile')} className="w-10 h-10 rounded-full border border-white/10 bg-[#1A1D24] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
                         <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} alt="Avatar" className="w-full h-full object-cover" />
                       </button>
 
@@ -1678,10 +1678,10 @@ const AppContent: React.FC = () => {
                           localStorage.removeItem('site_user_role');
                           window.location.reload();
                         }} 
-                        className="w-8 h-8 flex items-center justify-center rounded-md bg-red-500/10 text-red-500 border border-red-500/20 ml-1 active:scale-95"
+                        className="w-10 h-10 flex items-center justify-center rounded-md bg-red-500/10 text-red-500 border border-red-500/20 ml-2 active:scale-95"
                         title="Çıkış Yap"
                       >
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                       </button>
                     </>
                   ) : (
@@ -1689,13 +1689,13 @@ const AppContent: React.FC = () => {
                       {/* Gamdom Style Mobile Auth Buttons */}
                       <button
                         onClick={() => setAuthModalMode('member')}
-                        className="flex items-center justify-center h-[34px] bg-[#1A1D24] hover:bg-[#2A2E3D] text-white transition-colors px-3.5 rounded-[8px] font-bold text-[13px]"
+                        className="flex items-center justify-center h-[40px] bg-[#1A1D24] hover:bg-[#2A2E3D] text-white transition-colors px-5 rounded-[10px] font-bold text-sm"
                       >
                         Giriş yap
                       </button>
                       <button
                         onClick={() => setAuthModalMode('register')}
-                        className="flex items-center justify-center h-[34px] bg-[#00FFA3] hover:bg-[#00E693] text-black transition-colors px-3.5 rounded-[8px] font-extrabold text-[13px] shadow-[0_0_10px_rgba(0,255,163,0.2)] ml-1"
+                        className="flex items-center justify-center h-[40px] bg-[#00FFA3] hover:bg-[#00E693] text-black transition-colors px-5 rounded-[10px] font-extrabold text-sm shadow-[0_0_10px_rgba(0,255,163,0.2)] ml-2"
                       >
                         Kaydolun
                       </button>
