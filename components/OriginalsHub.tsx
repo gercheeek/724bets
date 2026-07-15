@@ -7,6 +7,7 @@ const ORIGINALS = [
         name: 'Blackjack PRO',
         desc: 'Klasik casino deneyimi, premium kalite.',
         color: 'from-emerald-600 to-emerald-900',
+        image: '/originals/blackjack_pro.jpg',
         path: 'blackjack-pro',
         icon: '♠️',
         popular: true
@@ -16,6 +17,7 @@ const ORIGINALS = [
         name: 'Plinko PRO',
         desc: 'Fizik tabanlı çarpan eğlencesi.',
         color: 'from-purple-600 to-purple-900',
+        image: '/originals/plinko_pro.jpg',
         path: 'plinko',
         icon: '🎯',
         popular: true
@@ -25,6 +27,7 @@ const ORIGINALS = [
         name: 'Dice',
         desc: 'Hızlı, adil ve kazançlı zar oyunu.',
         color: 'from-blue-600 to-blue-900',
+        image: '/originals/dice.jpg',
         path: 'dice',
         icon: '🎲'
     },
@@ -33,6 +36,7 @@ const ORIGINALS = [
         name: 'Limbo',
         desc: 'Sınırları zorla, devasa çarpanları yakala.',
         color: 'from-red-600 to-red-900',
+        image: '/originals/limbo.jpg',
         path: 'limbo',
         icon: '🚀'
     },
@@ -41,6 +45,7 @@ const ORIGINALS = [
         name: 'Keno',
         desc: 'Şansını sayılarla dene.',
         color: 'from-orange-500 to-orange-800',
+        image: '/originals/keno.jpg',
         path: 'keno',
         icon: '🎱'
     },
@@ -49,6 +54,7 @@ const ORIGINALS = [
         name: 'HiLo',
         desc: 'Bir sonraki kart yüksek mi düşük mü?',
         color: 'from-pink-600 to-pink-900',
+        image: '/originals/hilo.jpg',
         path: 'hilo',
         icon: '🃏'
     }
@@ -87,8 +93,12 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
                             onClick={() => onNavigate(game.path)}
                             className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer border border-white/5 hover:border-[#ffd700]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(255,215,0,0.15)] transform hover:-translate-y-2"
                         >
-                            {/* Card Background (Gradient + Noise) */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-80 group-hover:opacity-100 transition-opacity`}></div>
+                            {/* Card Background Image */}
+                            <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500 group-hover:scale-105" />
+                            
+                            {/* Card Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90"></div>
+                            
                             <div className="absolute inset-0 opacity-[0.15]" 
                                  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}>
                             </div>
