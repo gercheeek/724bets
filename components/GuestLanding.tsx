@@ -6,6 +6,7 @@ import LiveBetsTable from './LiveBetsTable';
 import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
+import OriginalsSlider from './OriginalsSlider';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {
@@ -174,49 +175,59 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
           </div>
 
-          {/* Middle Column: Casino Card (Big Card Style) */}
-          <div 
-            onClick={() => onViewChange('blackjack')}
-            className="relative w-full h-[220px] lg:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col transition-transform hover:-translate-y-1"
-          >
-            <div className="w-full h-[75%] relative overflow-hidden">
-               <img 
-                 src="/images/purple_casino_card.jpg" 
-                 alt="Casino" 
-                 className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-               />
+          {/* Middle & Right Columns: Seamless Casino & Sports Banner */}
+          <div className="lg:col-span-2 w-full h-[220px] lg:h-full rounded-xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-transparent flex flex-row">
+            
+            {/* Kumarhane Card */}
+            <div 
+              onClick={() => onViewChange('blackjack')}
+              className="relative w-1/2 h-full cursor-pointer group bg-[#0B0E14] flex flex-col justify-end p-5 z-20 border-r border-white/5"
+            >
+              <div className="absolute top-0 left-0 w-[120%] h-full pointer-events-none [mask-image:linear-gradient(to_right,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_60%,transparent_100%)] overflow-hidden">
+                <img 
+                  src="/images/casino_neon_banner.jpg" 
+                  alt="Casino" 
+                  className="absolute inset-0 w-full h-full object-cover object-[right_center] transform group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.5)_30%,rgba(0,0,0,0)_70%)] pointer-events-none group-hover:bg-[linear-gradient(to_right,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.3)_30%,rgba(0,0,0,0)_70%)] transition-all duration-500"></div>
+              </div>
+              
+              <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 transition-transform duration-500 max-w-[80%]">
+                <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
+                  Casino
+                </h3>
+                <div className="mb-2">
+                  <ActivePlayersCounter type="casino" />
+                </div>
+                <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm hidden md:block w-fit">
+                  {t('visitCasino')}
+                </button>
+              </div>
             </div>
-            {/* Solid Bottom Band */}
-            <div className="w-full h-[25%] bg-gradient-to-r from-[#811850] to-[#59103a] p-4 flex items-center justify-between z-20 border-t border-white/10">
-              <h3 className="text-xl font-black text-white tracking-tight">
-                Kumarhane
-              </h3>
-              <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 text-xs rounded transition-colors hidden sm:block lg:hidden xl:block">
-                Ziyaret et
-              </button>
-            </div>
-          </div>
 
-          {/* Right Column: Sports Card (Big Card Style) */}
-          <div 
-            onClick={() => onViewChange('sports')}
-            className="relative w-full h-[220px] lg:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col transition-transform hover:-translate-y-1"
-          >
-            <div className="w-full h-[75%] relative overflow-hidden">
+            {/* Spor Bahisleri Card */}
+            <div 
+              onClick={() => onViewChange('sports')}
+              className="relative w-1/2 h-full cursor-pointer group bg-[#0B0E14] flex flex-col justify-end p-5 overflow-hidden z-10"
+            >
               <img 
-                src="/images/green_sports_card.jpg" 
+                src="/images/green_sports_card_left.jpg" 
                 alt="Sports Betting" 
-                className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                className="absolute inset-0 w-full h-full object-cover object-[left_center] transform group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
               />
-            </div>
-            {/* Solid Bottom Band */}
-            <div className="w-full h-[25%] bg-gradient-to-r from-[#216115] to-[#15420d] p-4 flex items-center justify-between z-20 border-t border-white/10">
-              <h3 className="text-xl font-black text-white tracking-tight">
-                Spor Bahisleri
-              </h3>
-              <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 text-xs rounded transition-colors hidden sm:block lg:hidden xl:block">
-                Ziyaret et
-              </button>
+              <div className="absolute inset-0 bg-[linear-gradient(to_left,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.5)_30%,rgba(0,0,0,0)_70%)] pointer-events-none group-hover:bg-[linear-gradient(to_left,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.3)_30%,rgba(0,0,0,0)_70%)] transition-all duration-500"></div>
+              
+              <div className="relative z-20 flex flex-col items-end gap-3 h-full justify-center self-end text-right transform group-hover:-translate-x-3 transition-transform duration-500 max-w-[80%] ml-auto">
+                <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
+                  Spor
+                </h3>
+                <div className="mb-2">
+                  <ActivePlayersCounter type="sports" />
+                </div>
+                <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm hidden md:block w-fit">
+                  {t('visitSports')}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -239,6 +250,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
         </>
       )}
+
+      {/* Originals Slider */}
+      <div className="w-full">
+        <OriginalsSlider onNavigate={onViewChange} />
+      </div>
 
       {/* Live Games Slider */}
       <div className="w-full">
