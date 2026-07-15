@@ -230,18 +230,6 @@ export default function PlinkoView({ siteUser, setSiteUser, onAuthRequired }: an
              height={600}
              className="z-10 w-full h-full object-contain absolute inset-0"
            />
-
-           {/* Bucket Multipliers */}
-           <div className="absolute bottom-6 left-0 w-full flex justify-center gap-[2px] md:gap-1 z-20 px-2 md:px-8">
-             {MULTIPLIERS.map((mult, i) => (
-               <div 
-                 key={i}
-                 className={`flex-1 h-8 rounded shadow-lg flex items-center justify-center text-[9px] md:text-[11px] font-black ${MULTIPLIER_COLORS[i]} border-b-4 border-black/20 text-black`}
-               >
-                 {mult}x
-               </div>
-             ))}
-           </div>
         </div>
       </div>
     </div>
