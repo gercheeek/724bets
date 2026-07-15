@@ -92,7 +92,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
     if (!mainContainer) return;
 
     const handleScroll = () => {
-      if (mainContainer.scrollTop > 300) {
+      if (mainContainer.scrollTop > 1200) {
         setShowTeaser(false);
       }
     };
