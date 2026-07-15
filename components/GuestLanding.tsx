@@ -199,8 +199,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 <div className="mb-2">
                   <ActivePlayersCounter type="casino" />
                 </div>
-                <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm hidden md:block w-fit">
-                  {t('visitCasino')}
+                <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 md:px-4 py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm inline-block w-fit">
+                  {t('visit_casino')}
                 </button>
               </div>
             </div>
@@ -224,8 +224,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 <div className="mb-2">
                   <ActivePlayersCounter type="sports" />
                 </div>
-                <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm hidden md:block w-fit">
-                  {t('visitSports')}
+                <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 md:px-4 py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm inline-block w-fit">
+                  {t('visit_sports')}
                 </button>
               </div>
             </div>
@@ -332,8 +332,8 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
               <ActivePlayersCounter type="casino" />
             </div>
             
-            <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm hidden md:block">
-              {t('visitCasino')}
+            <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 md:px-4 py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm inline-block w-fit">
+              {t('visit_casino')}
             </button>
           </div>
         </div>
@@ -359,8 +359,8 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
               <ActivePlayersCounter type="sports" />
             </div>
             
-            <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm hidden md:block">
-              {t('visitSports')}
+            <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 md:px-4 py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm inline-block w-fit">
+              {t('visit_sports')}
             </button>
           </div>
         </div>
