@@ -176,22 +176,22 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  </div>
                </div>               {/* 2 Big Cards: Casino & Sports (Split Screen on Mobile, Separate on Desktop) */}
                <div className="w-full pb-6 md:pb-6 mb-4 md:mb-0">
-                 <div className="w-full grid grid-cols-2 gap-0 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative">
+                 <div className="w-full grid grid-cols-2 gap-0 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative bg-[url('/images/merged_casino_sports.jpg')] md:bg-none bg-cover bg-center">
                    {/* Center Divider Line (Mobile Only) */}
                    <div className="absolute top-0 bottom-0 left-1/2 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-30 transform -translate-x-1/2 pointer-events-none md:hidden"></div>
                    
                    {/* Kumarhane Card */}
                    <div 
                      onClick={() => onViewChange('blackjack')}
-                     className="relative w-full h-full cursor-pointer group bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
+                     className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
                    >
                      <img 
                        src="/images/casino_neon_banner.jpg" 
                        alt="Casino" 
-                       className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 md:group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100 md:opacity-100"
+                       className="hidden md:block absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
                      />
                      {/* Gradient overlay for readability */}
-                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
                      
                      <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500">
                        <h3 className="text-3xl sm:text-4xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
@@ -206,15 +206,15 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                    {/* Spor Bahisleri Card */}
                    <div 
                      onClick={() => onViewChange('sports')}
-                     className="relative w-full h-full cursor-pointer group bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
+                     className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
                    >
                      <img 
                        src="/images/sports_neon_banner.jpg" 
                        alt="Sports Betting" 
-                       className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 md:group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100 md:opacity-100"
+                       className="hidden md:block absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
                      />
                      {/* Gradient overlay for readability */}
-                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+                     <div className="absolute inset-0 bg-gradient-to-l md:bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
                      
                      <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500">
                        <h3 className="text-3xl sm:text-4xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
