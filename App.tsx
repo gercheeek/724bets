@@ -1612,16 +1612,7 @@ const AppContent: React.FC = () => {
             id="main-scroll-container"
             className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}
             onScroll={(e) => {
-              const currentScrollY = e.currentTarget.scrollTop;
-              const mobileHeader = document.getElementById('mobile-top-header');
-              if (mobileHeader) {
-                if (currentScrollY > (window as any).lastMainScrollY && currentScrollY > 50) {
-                  mobileHeader.style.transform = 'translateY(-100%)';
-                } else {
-                  mobileHeader.style.transform = 'translateY(0)';
-                }
-              }
-              (window as any).lastMainScrollY = currentScrollY;
+              // Scroll handler removed to prevent mobile header glitching
             }}
           >
             
@@ -1629,7 +1620,7 @@ const AppContent: React.FC = () => {
             {view !== 'kral' && (
               <header 
                 id="mobile-top-header"
-                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1 transition-transform duration-300"
+                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1"
               >
                 <div 
                   className="font-black text-2xl sm:text-3xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
