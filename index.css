@@ -802,6 +802,11 @@ html, body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.35);
 }
 
+@keyframes confetti-fall {
+  0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
 /* 3. BRONZ KART (index 2+ – 3. sıra ve sonrası) */
 .brand-card.bronz {
   background: linear-gradient(135deg, #804a00 0%, #c4a265 40%, #b08d57 60%, #804a00 100%);
