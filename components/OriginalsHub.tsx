@@ -69,56 +69,56 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[#ffd700]/10 blur-[150px] rounded-full"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto relative z-10">
+            <div className="max-w-5xl mx-auto relative z-10">
                 
                 {/* Header */}
-                <div className="flex flex-col items-center mb-16 text-center">
-                    <div className="flex items-center gap-2 mb-4 bg-white/5 border border-[#ffd700]/20 px-4 py-1.5 rounded-full backdrop-blur-sm">
-                        <Sparkles className="w-4 h-4 text-[#ffd700]" />
-                        <span className="text-[#ffd700] text-xs font-bold uppercase tracking-widest">724BETS Exclusive</span>
+                <div className="flex flex-col items-center mb-10 md:mb-16 text-center">
+                    <div className="flex items-center gap-2 mb-3 bg-white/5 border border-[#ffd700]/20 px-3 py-1 rounded-full backdrop-blur-sm">
+                        <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-[#ffd700]" />
+                        <span className="text-[#ffd700] text-[10px] md:text-xs font-bold uppercase tracking-widest">724BETS Exclusive</span>
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-4 drop-shadow-lg">
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-3 drop-shadow-lg">
                         724BETS <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd700] to-[#b8860b]">ORIGINALS</span>
                     </h1>
-                    <p className="text-gray-400 max-w-2xl text-sm md:text-base">
+                    <p className="text-gray-400 max-w-xl text-xs md:text-sm px-4">
                         Sadece 724BETS'e özel, Provably Fair altyapısıyla geliştirilmiş, piyasanın en yüksek RTP (Geri Ödeme) oranlarına sahip premium oyun serisi.
                     </p>
                 </div>
 
                 {/* Game Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 px-2 md:px-0">
                     {ORIGINALS.map((game) => (
                         <div 
                             key={game.id}
                             onClick={() => onNavigate(game.path)}
-                            className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer border border-white/5 hover:border-[#ffd700]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(255,215,0,0.15)] transform hover:-translate-y-2"
+                            className="group relative aspect-[4/5] md:aspect-video rounded-xl md:rounded-2xl overflow-hidden cursor-pointer border border-white/5 hover:border-[#ffd700]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(255,215,0,0.15)] transform hover:-translate-y-1 md:hover:-translate-y-2 flex flex-col"
                         >
                             {/* Card Background Image */}
                             <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500 group-hover:scale-105" />
                             
                             {/* Card Gradient Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90"></div>
                             
                             <div className="absolute inset-0 opacity-[0.15]" 
                                  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}>
                             </div>
 
                             {/* Inner Content */}
-                            <div className="absolute inset-0 p-6 flex flex-col justify-between z-10">
+                            <div className="absolute inset-0 p-3 md:p-5 flex flex-col justify-between z-10">
                                 <div className="flex justify-between items-start">
-                                    <div className="text-5xl drop-shadow-lg filter group-hover:scale-110 transition-transform">
+                                    <div className="text-3xl md:text-4xl drop-shadow-lg filter group-hover:scale-110 transition-transform">
                                         {game.icon}
                                     </div>
                                     {game.popular && (
-                                        <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-white/30">
+                                        <span className="bg-white/20 backdrop-blur-sm text-white text-[8px] md:text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 md:px-2.5 md:py-1 rounded-full border border-white/30">
                                             Popüler
                                         </span>
                                     )}
                                 </div>
                                 
-                                <div>
-                                    <h3 className="text-2xl font-black text-white tracking-tight mb-1 group-hover:text-[#ffd700] transition-colors">{game.name}</h3>
-                                    <p className="text-white/70 text-sm">{game.desc}</p>
+                                <div className="mt-auto">
+                                    <h3 className="text-sm md:text-xl font-black text-white tracking-tight mb-0.5 md:mb-1 group-hover:text-[#ffd700] transition-colors leading-tight">{game.name}</h3>
+                                    <p className="text-white/70 text-[9px] md:text-xs leading-snug hidden md:block">{game.desc}</p>
                                 </div>
                             </div>
 
