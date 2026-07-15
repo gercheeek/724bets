@@ -227,13 +227,33 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
 
     return (
         <div className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+            <style>{`
+                @keyframes slowPanZoom {
+                    0% { transform: scale(1) translate(0, 0); }
+                    100% { transform: scale(1.12) translate(-1%, 2%); }
+                }
+                .auto-pan-image {
+                    animation: slowPanZoom 8s ease-out forwards;
+                }
+            `}</style>
             <div className="w-full max-w-4xl bg-[#111317] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-[640px] max-h-[90vh]">
                 
                 {/* Left Side - Promo Graphic (Mobile Splash / Desktop Left Half) */}
                 <div className={`flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
+                    
+                    {/* Sleek, unobtrusive loading indicator for mobile splash */}
+                    {showSplash && (
+                        <div className="absolute top-0 left-0 w-full z-20 flex justify-center pt-8 md:hidden">
+                            <div className="bg-black/30 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full flex items-center gap-3 shadow-lg">
+                                <Loader2 className="w-4 h-4 text-[#00FFA3] animate-spin" />
+                                <span className="text-white/80 font-bold tracking-widest uppercase text-[10px]">Yükleniyor</span>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Add a dynamic background image based on tab */}
                     <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-normal transition-transform duration-[3000ms] ease-out group-hover:scale-110"
+                        className="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-normal transition-transform duration-[3000ms] ease-out group-hover:scale-110 auto-pan-image"
                         style={{ backgroundImage: `url('/images/${memberMode === 'register' ? 'esports_girls_register.jpg' : 'esports_girls_login.jpg'}')` }}
                     ></div>
                     {/* Gradients to ensure text is readable at top and bottom */}
