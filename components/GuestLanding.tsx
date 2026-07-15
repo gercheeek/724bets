@@ -8,6 +8,7 @@ import WorldCupTeaser from './WorldCupTeaser';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {
+  const { t } = useLanguage();
   const [players, setPlayers] = useState(0);
 
   useEffect(() => {
@@ -58,8 +59,8 @@ const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {
   return (
     <div className="flex items-center gap-1.5 sm:gap-2">
       <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
-      <span className="text-gray-200 text-xs sm:text-sm lg:text-base font-medium tracking-wide whitespace-nowrap">
-        {formatted} Oynuyor
+      <span className="text-gray-200 text-sm sm:text-base lg:text-lg font-medium tracking-wide whitespace-nowrap">
+        {formatted} {t('playing') || 'Oynuyor'}
       </span>
     </div>
   );
@@ -234,58 +235,56 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  </div>
                </div>               {/* 2 Big Cards: Casino & Sports (Split Screen on Mobile, Separate on Desktop) */}
                <div className="w-full pb-6 md:pb-6 mb-4 md:mb-0">
-                 <div className="w-full grid grid-cols-2 gap-0 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative bg-black md:bg-transparent">
-                   {/* Center Divider Line (Mobile Only) */}
-                   <div className="absolute top-0 bottom-0 left-1/2 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-30 transform -translate-x-1/2 pointer-events-none md:hidden"></div>
+                 <div className="w-full grid grid-cols-2 gap-2 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative bg-transparent">
                    
-                   {/* Kumarhane Card (Left Aligned Text, Right Aligned Image) */}
+                   {/* Kumarhane Card */}
                    <div 
                      onClick={() => onViewChange('blackjack')}
                      className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
                    >
                      <img 
-                       src="/images/casino_aligned.jpg" 
+                       src="/images/casino_neon_banner.jpg" 
                        alt="Casino" 
                        className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
                      />
                      {/* Gradient overlay for readability (dark on left) */}
                      <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
                      
-                     <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500">
-                       <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6">
-                         <h3 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                           CASINO
-                         </h3>
+                     <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
+                       <h3 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none">
+                         {t('casino') || 'CASINO'}
+                       </h3>
+                       <div className="mb-2">
                          <ActivePlayersCounter type="casino" />
                        </div>
-                       <button className="bg-white/10 hover:bg-[#00FFA3] hover:text-black hover:border-transparent md:hover:bg-white/20 md:hover:text-white md:hover:border-white/10 backdrop-blur-md text-white font-extrabold md:font-bold px-5 py-2 md:px-5 md:py-2.5 text-xs sm:text-sm md:text-sm rounded-xl md:rounded-lg transition-all duration-300 border border-white/20 md:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg mt-2">
-                         Ziyaret et Casino
+                       <button className="bg-[#3b354f] hover:bg-[#4a4260] text-white font-bold px-6 py-2.5 sm:px-8 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg whitespace-nowrap">
+                         {t('visit_casino') || 'Ziyaret et Casino'}
                        </button>
                      </div>
                    </div>
   
-                   {/* Spor Bahisleri Card (Right Aligned Text, Left Aligned Image) */}
+                   {/* Spor Bahisleri Card */}
                    <div 
                      onClick={() => onViewChange('sports')}
                      className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
                    >
                      <img 
-                       src="/images/sports_aligned.jpg" 
+                       src="/images/sports_neon_banner.jpg" 
                        alt="Sports Betting" 
                        className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
                      />
-                     {/* Gradient overlay for readability (dark on right) */}
-                     <div className="absolute inset-0 bg-gradient-to-l from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+                     {/* Gradient overlay for readability (dark on left) */}
+                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
                      
-                     <div className="relative z-20 flex flex-col items-end text-right gap-2 h-full justify-center transform group-hover:-translate-x-3 md:group-hover:-translate-x-0 transition-transform duration-500">
-                       <div className="flex flex-wrap items-center justify-end flex-row-reverse gap-2 sm:gap-3 md:gap-4 lg:gap-6">
-                         <h3 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                           SPOR
-                         </h3>
+                     <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
+                       <h3 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none">
+                         {t('sports') || 'SPOR'}
+                       </h3>
+                       <div className="mb-2">
                          <ActivePlayersCounter type="sports" />
                        </div>
-                       <button className="bg-white/10 hover:bg-[#00FFA3] hover:text-black hover:border-transparent md:hover:bg-white/20 md:hover:text-white md:hover:border-white/10 backdrop-blur-md text-white font-extrabold md:font-bold px-5 py-2 md:px-5 md:py-2.5 text-xs sm:text-sm md:text-sm rounded-xl md:rounded-lg transition-all duration-300 border border-white/20 md:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg mt-2">
-                         Ziyaret et Sports
+                       <button className="bg-[#00FFA3] hover:bg-[#00E693] text-black font-bold px-6 py-2.5 sm:px-8 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 shadow-[0_10px_30px_rgba(0,255,163,0.3)] md:shadow-[0_5px_15px_rgba(0,255,163,0.4)] whitespace-nowrap">
+                         {t('visit_sports') || 'Ziyaret et Sports'}
                        </button>
                      </div>
                    </div>
