@@ -228,10 +228,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         className="absolute inset-0 bg-cover bg-center opacity-70 mix-blend-normal transition-all duration-500"
                         style={{ backgroundImage: `url('/images/${memberMode === 'register' ? 'esports_girls_register.jpg' : 'esports_girls_login.jpg'}')` }}
                     ></div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#111317] via-transparent to-transparent opacity-80"></div>
-                    <div className="relative z-10 flex flex-col items-center text-center p-8">
-                        <h1 className="text-4xl font-black text-white tracking-tighter mb-4 drop-shadow-2xl">724BETS</h1>
-                        <p className="text-zinc-300 text-sm font-medium opacity-80">Dünyanın En Büyük Çevrim içi Casino ve <span className="text-[#00FFA3]">Spor Bahisleri</span> Platformu</p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#111317] via-transparent to-[#111317]/50 opacity-90"></div>
+                    
+                    {/* Top Logo */}
+                    <div className="relative z-10 w-full pt-8 flex justify-center">
+                        <span className="text-3xl font-black text-white tracking-tight drop-shadow-lg">724bets</span>
+                    </div>
+
+                    {/* Bottom Terms Text */}
+                    <div className="relative z-10 w-full pb-8 px-6 text-center mt-auto">
+                        <p className="text-white/70 text-[11px] font-medium leading-relaxed drop-shadow-md">
+                            Siteye erişerek, en az 18 yaşında olduğumu ve şunu okuduğumu beyan ederim: <span className="text-white font-bold cursor-pointer hover:underline">Şartlar ve Koşullar</span>
+                        </p>
                     </div>
                 </div>
 
