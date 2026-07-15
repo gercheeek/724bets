@@ -110,8 +110,8 @@ const SlotText: React.FC<{ text: string; className?: string }> = ({ text, classN
       if (iteration >= text.length) {
         clearInterval(intervalRef.current!);
       }
-      iteration += 1 / 4;
-    }, 40);
+      iteration += 1 / 8; // Slower lock-in (smaller number = longer spin)
+    }, 60); // Slower flicker
   };
 
   useEffect(() => {
