@@ -354,7 +354,7 @@ const Header: React.FC<HeaderProps> = ({
               </button>
 
               <div 
-                className="flex items-center cursor-pointer select-none ml-0"
+                className="flex items-center cursor-pointer select-none ml-0 logo-text-724"
                 onClick={() => onViewChange?.('home')}
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
               >
