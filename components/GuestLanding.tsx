@@ -262,9 +262,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               
               <div className={`w-full ${showTeaser ? 'lg:w-[45%] xl:w-[40%]' : 'w-full'}`}>
                 {/* 2 Big Cards Container */}
-                <div className="w-full grid grid-cols-2 gap-0 h-[220px] sm:h-[300px] lg:h-[160px] md:h-[200px] rounded-3xl md:rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-[#0B0E14] h-full">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-0 h-[260px] sm:h-[300px] lg:h-[160px] md:h-[200px] rounded-3xl md:rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-[#0B0E14] h-full">
                   {/* Kumarhane Card */}
-                  <div onClick={() => onViewChange('blackjack')} className="relative w-full h-full cursor-pointer group flex flex-col justify-end p-4 lg:p-5 border-r border-white/5 z-20">
+                  <div onClick={() => onViewChange('blackjack')} className="relative w-full h-full cursor-pointer group flex flex-col justify-end p-4 lg:p-5 border-b sm:border-b-0 sm:border-r border-white/5 z-20">
                     <div className="absolute top-0 left-0 w-[120%] h-full pointer-events-none [mask-image:linear-gradient(to_right,black_50%,transparent_100%)] overflow-hidden">
                       <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[right_center] transform group-hover:scale-105 transition-all duration-700 ease-out opacity-100" />
                       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.4)_40%,rgba(0,0,0,0)_100%)] group-hover:bg-[linear-gradient(to_right,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.2)_40%,rgba(0,0,0,0)_100%)] transition-all duration-500"></div>
