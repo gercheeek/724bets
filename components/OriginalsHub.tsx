@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Sparkles, ShieldCheck, MonitorPlay, Gift, Flame, Trophy, Users } from 'lucide-react';
+import LiveBetsTable from './LiveBetsTable';
 
 const ORIGINALS = [
     {
@@ -259,8 +260,13 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
                     </div>
                 </div>
 
+                {/* Live Bets & Leaderboards */}
+                <div className="mt-8 md:mt-12 w-full">
+                    <LiveBetsTable />
+                </div>
+
                 {/* Footer Security Badge */}
-                <div className="mt-16 flex justify-center pb-8">
+                <div className="mt-8 flex justify-center pb-8">
                     <div className="flex items-center gap-3 text-gray-500/60 text-[10px] font-bold uppercase tracking-widest bg-white/5 px-6 py-3 rounded-full border border-white/5">
                         <ShieldCheck className="w-4 h-4 text-green-500/70" />
                         Tüm 724GAMES Oyunları %100 Adil (Provably Fair) Sertifikalıdır
