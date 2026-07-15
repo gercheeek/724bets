@@ -345,6 +345,13 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
             />
 
+            <SectionHeader title="Popüler Slotlar" icon={<Flame />} />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+              {popularGames.map(game => (
+                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
+              ))}
+            </div>
+
             <SectionHeader title="Canlı Casino" icon={<MonitorPlay />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {liveGames.map(game => (
