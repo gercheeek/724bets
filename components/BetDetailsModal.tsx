@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Copy, ExternalLink, Link as LinkIcon, Diamond } from 'lucide-react';
 
 export interface BetDetailData {
@@ -31,7 +32,16 @@ const getRankColor = (rank: number) => {
 };
 
 const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
       <div className="bg-[#1D212B] w-full max-w-lg rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border border-[#2A2E3D] flex flex-col transform transition-all my-auto">
         {/* Header */}
@@ -191,7 +201,8 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
           <ExternalLink className="w-3.5 h-3.5 text-gray-500 group-hover:text-gray-300" />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
