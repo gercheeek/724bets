@@ -249,11 +249,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     <div className="absolute inset-0 bg-gradient-to-b from-[#111317]/90 via-transparent to-[#111317]/90 pointer-events-none"></div>
 
                     {/* Bottom Terms Text */}
-                    <div className="relative z-10 w-full pb-8 px-8 text-center flex justify-center">
-                        <p className="text-zinc-300 text-[11px] font-medium leading-relaxed drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] max-w-xs">
-                            Siteye erişerek, en az 18 yaşında olduğumu ve şunu okuduğumu beyan ederim: <br/>
-                            <span className="text-white font-bold cursor-pointer hover:text-[#00FFA3] transition-colors underline decoration-white/30 underline-offset-2">Şartlar ve Koşullar</span>
-                        </p>
+                    <div className="relative z-10 w-full pb-8 px-8 flex justify-center">
+                        <div className="bg-black/50 backdrop-blur-md border border-white/10 px-6 py-4 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all hover:bg-black/60">
+                            <p className="text-white/90 text-[11px] font-medium leading-relaxed max-w-[280px] text-center">
+                                Siteye erişerek, en az 18 yaşında olduğumu ve şunu okuduğumu beyan ederim: <br/>
+                                <span className="text-white font-bold cursor-pointer hover:text-[#00FFA3] transition-colors underline decoration-white/30 underline-offset-4 mt-1.5 inline-block">Şartlar ve Koşullar</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
