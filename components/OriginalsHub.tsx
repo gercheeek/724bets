@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Sparkles, ShieldCheck } from 'lucide-react';
+import { Play, Sparkles, ShieldCheck, MonitorPlay } from 'lucide-react';
 
 const ORIGINALS = [
     {
@@ -65,8 +65,27 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
         <div className="w-full min-h-[calc(100vh-60px)] bg-[#050505] p-6 md:p-12 relative overflow-hidden font-sans">
             
             {/* Background elements */}
-            <div className="absolute inset-0 pointer-events-none z-0">
+            <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[#ffd700]/10 blur-[150px] rounded-full"></div>
+                 <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 blur-[150px] rounded-full mix-blend-screen"></div>
+                 <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-purple-500/5 blur-[150px] rounded-full mix-blend-screen"></div>
+                 
+                 {/* Floating Particles for Gaming Atmosphere */}
+                 {Array.from({ length: 20 }).map((_, i) => (
+                    <div 
+                        key={i}
+                        className="absolute rounded-full bg-[#ffd700] animate-pulse"
+                        style={{
+                            width: Math.random() * 4 + 1 + 'px',
+                            height: Math.random() * 4 + 1 + 'px',
+                            top: Math.random() * 100 + '%',
+                            left: Math.random() * 100 + '%',
+                            opacity: Math.random() * 0.5 + 0.1,
+                            animationDuration: Math.random() * 3 + 2 + 's',
+                            animationDelay: Math.random() * 2 + 's'
+                        }}
+                    ></div>
+                 ))}
             </div>
 
             <div className="max-w-5xl mx-auto relative z-10">
@@ -130,6 +149,40 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
                             </div>
                         </div>
                     ))}
+                </div>
+
+                {/* 724TV Banner */}
+                <div 
+                    onClick={() => onNavigate('724tv')}
+                    className="mt-12 relative w-full rounded-2xl overflow-hidden cursor-pointer group border border-white/10 hover:border-[#ffd700]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_40px_rgba(255,215,0,0.15)] transform hover:-translate-y-1"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] z-0"></div>
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay z-0"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
+                    
+                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-6 md:p-8">
+                        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 mb-4 md:mb-0 text-center md:text-left">
+                            <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/30 group-hover:bg-red-500/20 transition-colors relative shrink-0">
+                                <MonitorPlay className="w-8 h-8 text-red-500" />
+                                <div className="absolute top-0 right-0 w-3 h-3 rounded-full bg-red-500 animate-ping"></div>
+                                <div className="absolute top-0 right-0 w-3 h-3 rounded-full bg-red-500"></div>
+                            </div>
+                            <div>
+                                <div className="flex flex-col md:flex-row items-center gap-2 mb-1">
+                                    <span className="bg-red-500 text-white text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded animate-pulse">CANLI YAYIN</span>
+                                    <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">724TV Özel Maç Yayınları</h3>
+                                </div>
+                                <p className="text-gray-400 text-xs md:text-sm">En popüler spor müsabakalarını HD kalitede, kesintisiz ve bedava izleyin.</p>
+                            </div>
+                        </div>
+                        
+                        <div className="w-full md:w-auto mt-2 md:mt-0">
+                            <button className="w-full md:w-auto px-8 py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 group-hover:border-[#ffd700]/30 group-hover:text-[#ffd700]">
+                                <Play className="w-4 h-4" />
+                                <span>Hemen İzle</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Footer Security Badge */}
