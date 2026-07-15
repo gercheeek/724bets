@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Spade, Target, Gift, User, Play } from 'lucide-react';
+import { Home, Spade, Target, Gift, User, Play, Megaphone } from 'lucide-react';
 import { SiteUser } from '../types';
 
 interface MobileBottomNavProps {
@@ -20,7 +20,7 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     { id: 'blackjack', label: 'Slot', icon: Spade },
     { id: 'sports', label: 'Spor', icon: Target },
     { id: 'cekilis', label: 'Çekiliş', icon: Gift },
-    { id: 'profile', label: siteUser ? 'Profil' : 'Giriş', icon: User, action: onProfileClick }
+    { id: 'promo', label: 'Promosyonlar', icon: Megaphone }
   ];
 
   return (
