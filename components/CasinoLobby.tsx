@@ -6,8 +6,8 @@ import { ALL_GAMES } from '../data/games';
 
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
-  { id: 'originals', label: 'Orijinal Oyunlar', icon: <Crown size={16} /> },
   { id: 'slots', label: 'Slotlar', icon: <Flame size={16} /> },
+  { id: 'originals', label: 'Orijinal Oyunlar', icon: <Crown size={16} /> },
   { id: 'live', label: 'Canlı Casino', icon: <MonitorPlay size={16} /> },
   { id: 'table', label: 'Masa Oyunları', icon: <Disc size={16} /> },
   { id: 'new', label: 'Yeni Eklenenler', icon: <Sparkles size={16} /> },

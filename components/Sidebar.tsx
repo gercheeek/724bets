@@ -254,7 +254,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className={`gamdom-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
         <div className="gamdom-sidebar-inner pb-20">
           
-          {/* Top Switcher (Casino | Spor | Orijinaller) */}
+          {/* Top Switcher (Casino | Spor) */}
           <div className="h-[70px] w-full shrink-0 flex items-center px-4 pt-2 relative z-50">
               <div className="flex w-full bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner">
                 <button 
@@ -269,60 +269,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                 >
                   Spor
                 </button>
-                <div className="relative group flex-1 flex justify-center">
-                  <button 
-                    onClick={() => onViewChange('originals')}
-                    className={`w-full py-2 rounded-md text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${(activeView === 'plinko' || activeView === 'originals') ? 'bg-[#1C2028] text-[#00FFA3] shadow-md' : 'text-zinc-400 hover:text-zinc-200 group-hover:bg-[#1C2028] group-hover:text-white'}`}
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00FFA3] animate-pulse"></span>
-                    Orijinaller
-                  </button>
-                  
-                  {/* Gamdom-style Originals Mega Menu */}
-                  <div className="absolute top-[calc(100%+8px)] left-0 w-[900px] bg-[#111317] border border-white/5 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[9999] pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0">
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-2">
-                          <img src="/logo.png" alt="724Bets" className="w-6 h-6 object-contain filter drop-shadow-[0_0_8px_rgba(0,255,163,0.5)]" />
-                          <h3 className="text-white font-bold text-lg">724Bets Originals</h3>
-                        </div>
-                        <button onClick={() => onViewChange('originals')} className="px-4 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white text-sm font-bold transition-colors">
-                          Hepsini Gör
-                        </button>
-                      </div>
-                      
-                      <div className="grid grid-cols-5 gap-4">
-                        {[
-                          { id: 'crash', name: 'CRASH', color: 'from-[#00FFA3] to-[#00b371]', img: '/images/rainbet-crash.jpg', plays: '2.5M' },
-                          { id: 'plinko', name: 'PLINKO', color: 'from-[#ff9f00] to-[#cc4400]', img: '/images/rainbet-plinko.jpg', plays: '1.8M' },
-                          { id: 'dice', name: 'DICE', color: 'from-[#ff0055] to-[#cc0044]', img: '/images/rainbet-dice.jpg', plays: '1.2M' },
-                          { id: 'roulette', name: 'ROULETTE', color: 'from-[#9900ff] to-[#6600cc]', img: '/images/rainbet-roulette.jpg', plays: '984K' },
-                          { id: 'mines', name: 'MINES', color: 'from-[#00ccff] to-[#0088cc]', img: '/images/rainbet-mines.jpg', plays: '1.5M' }
-                        ].map((game) => (
-                          <div 
-                            key={game.id}
-                            onClick={() => onViewChange(game.id)}
-                            className="relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-300 group/card border border-white/10"
-                          >
-                            <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-80 mix-blend-overlay z-10`}></div>
-                            <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-cover z-0" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-20"></div>
-                            
-                            <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-md z-30 flex items-center gap-1 border border-white/10">
-                              <Target className="w-3 h-3 text-white/70" />
-                              <span className="text-white font-bold text-[10px]">{game.plays}</span>
-                            </div>
-
-                            <div className="absolute bottom-4 left-0 w-full text-center z-30">
-                              <h4 className="text-white font-black text-lg tracking-wide uppercase drop-shadow-md">{game.name}</h4>
-                              <p className="text-white/70 text-[10px] font-bold">724BETS</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
           </div>
 
