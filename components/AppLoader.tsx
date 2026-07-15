@@ -6,9 +6,10 @@ import SlotText from './SlotText';
 interface AppLoaderProps {
   fadeOut?: boolean;
   onComplete?: () => void;
+  isReady?: boolean;
 }
 
-const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false, onComplete }) => {
+const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false, onComplete, isReady = true }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false, onComplete }) =>
             color: '#fff',
           }}>
             <SlotText text="724" className="text-white" />
-            <SlotText text="BETS" className="text-[#00FFA3] ml-[2px]" onComplete={onComplete} />
+            <SlotText text="BETS" className="text-[#00FFA3] ml-[2px]" onComplete={onComplete} isReady={isReady} />
           </span>
         </div>
         <div className="mt-8 w-32 h-1 bg-[#1A1D29] rounded-full overflow-hidden">

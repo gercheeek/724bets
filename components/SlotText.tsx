@@ -4,12 +4,19 @@ interface SlotTextProps {
   text: string;
   className?: string;
   onComplete?: () => void;
+  isReady?: boolean;
 }
 
-const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete }) => {
+const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete, isReady = true }) => {
   const [displayedText, setDisplayedText] = useState(text);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Use a ref for isReady so the interval always sees the latest value without restarting
+  const isReadyRef = useRef(isReady);
+  useEffect(() => {
+    isReadyRef.current = isReady;
+  }, [isReady]);
 
   const triggerAnimation = () => {
     let iteration = 0;
@@ -26,7 +33,13 @@ const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete }) => {
         clearInterval(intervalRef.current!);
         if (onComplete) onComplete();
       }
+      
       iteration += 1 / 5; // Faster lock-in
+      
+      // If content is not ready, keep the last letter spinning infinitely
+      if (!isReadyRef.current && iteration >= text.length - 0.5) {
+        iteration = text.length - 0.5;
+      }
     }, 50); // Slightly faster flicker
   };
 
