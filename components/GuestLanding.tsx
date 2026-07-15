@@ -223,7 +223,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       ) : (
         // GUEST VIEW: Promo Cards + Search + 2 Big Cards
         <>
-
           <div className="w-full mb-4">
              {showTeaser ? (
                <WorldCupTeaser>
@@ -232,80 +231,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
              ) : (
                <GuestLandingContent onSearchClick={onSearchClick} onViewChange={onViewChange} t={t} />
              )}
-               {/* Welcome & Search Bar Inline */}
-               <div className="w-full py-2 flex justify-between items-center mb-2">
-                 <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
-                   Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
-                 </h2>
-                 
-                 {/* Mobile Search Icon */}
-                 <button 
-                   onClick={onSearchClick} 
-                   className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors"
-                 >
-                   <Search className="w-5 h-5 text-gray-400" />
-                 </button>
-
-                 {/* Desktop Search Bar */}
-                 <div 
-                   onClick={onSearchClick}
-                   className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5"
-                 >
-                   <Search className="w-4 h-4 text-gray-400 mr-3" />
-                   <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
-                 </div>
-               </div>               {/* 2 Big Cards: Casino & Sports (Split Screen on Mobile, Separate on Desktop) */}
-               <div className="w-full pb-6 md:pb-6 mb-4 md:mb-0">
-                 <div className="w-full grid grid-cols-2 gap-2 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative bg-transparent">
-                   
-                   {/* Kumarhane Card */}
-                   <div 
-                     onClick={() => onViewChange('blackjack')}
-                     className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
-                   >
-                     <img 
-                       src="/images/casino_neon_banner.jpg" 
-                       alt="Casino" 
-                       className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
-                     />
-                     {/* Gradient overlay for readability (dark on left) */}
-                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
-                     
-                     <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
-                       <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
-                         Casino
-                       </h3>
-                       <div className="mb-2">
-                         <ActivePlayersCounter type="casino" />
-                       </div>
-                       <button className="bg-[#3b354f] hover:bg-[#4a4260] text-white font-bold px-6 py-2.5 sm:px-8 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg whitespace-nowrap">
-                         {t('visit_casino') || 'Ziyaret et Casino'}
-                       </button>
-                     </div>
-                   </div>
-  
-                   {/* Spor Bahisleri Card */}
-                   <div 
-                     onClick={() => onViewChange('sports')}
-                     className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
-                   >
-                     <img 
-                       src="/images/sports_neon_banner.jpg" 
-                       alt="Sports Betting" 
-                       className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
-                     />
-                     {/* Gradient overlay for readability (dark on left) */}
-                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
-                     
-                     <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
-                       <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
-                         Spor
-                       </h3>
-                       <div className="mb-2">
-                         <ActivePlayersCounter type="sports" />
-                       </div>
-                       <button className="bg-[#2a3630] hover:bg-[#34453e] text-white font-bold px-6 py-2.5 sm:px-8 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg whitespace-nowrap">
-                         {t('visit_sports') || 'Ziyaret et Sports'}
           </div>
           
           <div className="w-full mb-8">
