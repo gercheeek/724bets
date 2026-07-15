@@ -251,7 +251,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                      <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
                      
                      <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
-                       <h3 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
+                       <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
                          Casino
                        </h3>
                        <div className="mb-2">
@@ -277,7 +277,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                      <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
                      
                      <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
-                       <h3 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
+                       <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
                          Spor
                        </h3>
                        <div className="mb-2">
