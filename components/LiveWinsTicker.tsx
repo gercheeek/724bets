@@ -3,27 +3,27 @@ import BetDetailsModal, { BetDetailData } from './BetDetailsModal';
 import { Diamond } from 'lucide-react';
 
 const TICKER_GAMES = [
-  // Rainbet Originals
-  { name: "Keno", provider: 'Rainbet', image: "/images/rainbet-keno.jpg", type: 'keno' as const },
-  { name: "Dice", provider: 'Rainbet', image: "/images/rainbet-dice.jpg", type: 'dice' as const },
-  { name: "Plinko", provider: 'Rainbet', image: "/images/rainbet-plinko.jpg", type: 'slot' as const },
-  { name: "Mines", provider: 'Rainbet', image: "/images/rainbet-mines.jpg", type: 'slot' as const },
-  { name: "War", provider: 'Rainbet', image: "/images/rainbet-war.jpg", type: 'slot' as const },
-  { name: "Hilo", provider: 'Rainbet', image: "/images/rainbet-hilo.jpg", type: 'slot' as const },
-  { name: "Blackjack", provider: 'Rainbet', image: "/images/rainbet-blackjack.jpg", type: 'blackjack' as const },
-  { name: "Roulette", provider: 'Rainbet', image: "/images/rainbet-roulette.jpg", type: 'slot' as const },
+  // Rainbet Originals (Weighted heavily to appear more often)
+  { name: "Dice", provider: '724Bets', image: "/images/rainbet-dice.jpg", type: 'dice' as const },
+  { name: "Dice", provider: '724Bets', image: "/images/rainbet-dice.jpg", type: 'dice' as const },
+  { name: "Plinko", provider: '724Bets', image: "/images/rainbet-plinko.jpg", type: 'slot' as const },
+  { name: "Plinko", provider: '724Bets', image: "/images/rainbet-plinko.jpg", type: 'slot' as const },
+  { name: "Mines", provider: '724Bets', image: "/images/rainbet-mines.jpg", type: 'slot' as const },
+  { name: "Mines", provider: '724Bets', image: "/images/rainbet-mines.jpg", type: 'slot' as const },
+  { name: "Keno", provider: '724Bets', image: "/images/rainbet-keno.jpg", type: 'keno' as const },
+  { name: "War", provider: '724Bets', image: "/images/rainbet-war.jpg", type: 'slot' as const },
+  { name: "Hilo", provider: '724Bets', image: "/images/rainbet-hilo.jpg", type: 'slot' as const },
+  { name: "Roulette", provider: '724Bets', image: "/images/rainbet-roulette.jpg", type: 'slot' as const },
   
-  // Provider Slots
+  // Provider Slots (Fewer)
   { name: "Sweet Bonanza", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s4/pragmaticexternal/SweetBonanza.png", type: 'slot' as const },
-  { name: "The Dog House", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s4/pragmaticexternal/TheDogHouse.png", type: 'slot' as const },
-  { name: "Gates of Olympus", provider: 'Pragmatic Play', image: "https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Gates-of-Olympus-PragmaticPlay/Vertical/GatesofOlympus_20250328152430427.webp", type: 'slot' as const },
-  { name: "Wanted Dead or a Wild", provider: 'Hacksaw Gaming', image: "https://cdn2.softswiss.net/i/s4/hacksaw/WantedDeadoraWild.png", type: 'slot' as const },
-  { name: "Sugar Rush", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s4/pragmaticexternal/SugarRush.png", type: 'slot' as const }
+  { name: "Wanted Dead or a Wild", provider: 'Hacksaw Gaming', image: "https://cdn2.softswiss.net/i/s4/hacksaw/WantedDeadoraWild.png", type: 'slot' as const }
 ];
 
 const önIsimler = ["Alpha", "Crypto", "Degen", "Whale", "Vegas", "Joker", "Lucky", "Zeus", "Shadow", "VIP", "Player", "Star", "King", "Matrix", "Neon"];
 const sonIsimler = ["Pro", "X", "99", "777", "Boss", "Kral", "Lord", "Master", "Winner", "Hunter", "Gamer", "Collector", "Fiend", "Rider"];
-const MULTIPLIERS = [1.2, 1.5, 2.0, 3.4, 5.0, 10.0, 25.5, 100.0, 500.0, 0.0, 0.5];
+const MULTIPLIERS = [1.2, 1.5, 2.0, 2.5, 3.0, 5.0, 10.0, 25.0, 50.0, 0.0];
+const BET_AMOUNTS = [0.5, 1, 2, 4, 5, 10, 15, 20, 25, 50];
 
 const getRankColor = (rank: number) => {
   if (rank > 80) return 'text-yellow-400';
@@ -41,7 +41,7 @@ const generateFakeBet = (): BetDetailData => {
   const user = `${rastgeleOn}${rastgeleSon}`;
   const userRank = Math.floor(Math.random() * 100);
   
-  const betAmountRaw = (Math.random() * 2500 + 0.5).toFixed(2);
+  const betAmountRaw = getRandom(BET_AMOUNTS).toFixed(2);
   const multiplierRaw = getRandom(MULTIPLIERS);
   const payoutRaw = (parseFloat(betAmountRaw) * multiplierRaw).toFixed(2);
   
@@ -106,28 +106,9 @@ export default function LiveWinsTicker() {
   return (
     <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 border-b border-white/5">
       
-      {/* Premium Gamdom-Style Floating Live Badge */}
-      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-2 md:pl-6 pr-6 md:pr-16 pointer-events-none bg-gradient-to-r from-[#0B0E14] via-[#0B0E14] to-transparent">
-         <div className="bg-[#11141D]/90 backdrop-blur-md rounded-xl px-3 py-2 md:px-5 md:py-3 flex items-center gap-2.5 md:gap-3 border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.7)] relative overflow-hidden ring-1 ring-[#00FFA3]/10">
-           {/* Glass reflection */}
-           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-           
-           <div className="relative flex items-center justify-center shrink-0">
-             <span className="absolute w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#00FFA3] animate-ping opacity-60"></span>
-             <span className="relative w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#00FFA3] shadow-[0_0_12px_#00FFA3]"></span>
-           </div>
-           <div className="flex flex-col items-start justify-center">
-             <span className="text-white font-black text-[11px] md:text-[14px] tracking-[0.1em] uppercase font-['Outfit'] leading-none drop-shadow-md">
-               Canlı <span className="hidden md:inline">Kazançlar</span>
-             </span>
-             <span className="hidden md:block text-[#00FFA3] text-[9px] font-bold tracking-[0.2em] mt-1 opacity-90 uppercase">Gerçek Zamanlı</span>
-           </div>
-         </div>
-      </div>
-
-      {/* Horizontal Scrolling List */}
+      {/* Horizontal Scrolling List (Full Width) */}
       <div 
-        className="flex gap-2.5 md:gap-4 overflow-x-auto hide-scrollbar w-full pl-[160px] md:pl-[190px] pr-8 scroll-smooth"
+        className="flex gap-2.5 md:gap-4 overflow-x-auto hide-scrollbar w-full px-4 md:px-8 scroll-smooth"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
         {wins.map((win) => (
