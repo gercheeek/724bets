@@ -97,46 +97,50 @@ export default function LiveWinsTicker() {
   }, []);
 
   return (
-    <div className="w-full relative flex items-center bg-[#0f141c] overflow-hidden py-4 border-b border-gray-800">
+    <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 md:py-4 border-b border-white/5">
       
       {/* Sleek Floating Live Badge */}
-      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-4 md:pl-6 pointer-events-none bg-gradient-to-r from-[#0f141c] via-[#0f141c]/90 to-transparent pr-24">
-         <div className="bg-[#151921]/80 backdrop-blur-md border border-white/5 rounded-full px-4 py-2 flex items-center gap-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-2 md:pl-4 pointer-events-none bg-gradient-to-r from-[#0B0E14] via-[#0B0E14] to-transparent pr-16">
+         <div className="bg-[#1F2331] rounded-lg px-3 py-2 flex items-center gap-2 shadow-lg border border-white/5">
            <div className="relative flex items-center justify-center">
-             <span className="absolute w-3 h-3 rounded-full bg-[#00FFA3] animate-ping opacity-60"></span>
-             <span className="relative w-1.5 h-1.5 rounded-full bg-[#00FFA3] shadow-[0_0_8px_#00FFA3]"></span>
+             <span className="absolute w-2.5 h-2.5 rounded-full bg-[#00E676] animate-ping opacity-60"></span>
+             <span className="relative w-2 h-2 rounded-full bg-[#00E676]"></span>
            </div>
-           <span className="text-white font-black text-[10px] md:text-xs uppercase tracking-[0.2em] mt-[1px]">Canlı</span>
+           <span className="text-gray-200 font-semibold text-xs whitespace-nowrap">Canlı Kazançlar</span>
          </div>
       </div>
 
       {/* Horizontal Scrolling List */}
       <div 
-        className="flex gap-4 overflow-x-auto hide-scrollbar w-full pl-[130px] md:pl-[160px] pr-8 scroll-smooth"
+        className="flex gap-2 md:gap-3 overflow-x-auto hide-scrollbar w-full pl-[140px] md:pl-[180px] pr-8 scroll-smooth"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
         {wins.map((win) => (
           <div 
             key={win.id}
             onClick={() => setSelectedWin(win)}
-            className="flex-shrink-0 flex items-center bg-[#13171F] border border-white/5 hover:border-[#00FFA3]/30 hover:bg-[#181d26] cursor-pointer transition-all duration-300 p-2.5 md:p-3 rounded-2xl min-w-[210px] md:min-w-[240px] animate-fade-in hover:shadow-[0_0_20px_rgba(0,255,163,0.05)] group"
+            className="flex-shrink-0 flex flex-col items-center cursor-pointer transition-transform duration-300 hover:-translate-y-1 group w-[76px] md:w-[90px]"
           >
-            <div className="relative mr-3 md:mr-4 shrink-0">
-              <div className="absolute inset-0 bg-[#00FFA3] blur-md opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl" />
-              <img 
-                src={win.image} 
-                alt={win.game} 
-                className="relative w-12 h-12 md:w-14 md:h-14 rounded-xl object-cover bg-gray-900 shadow-lg border border-white/10"
-              />
+            {/* Game Cover */}
+            <div className="w-full aspect-[3/4] rounded-lg overflow-hidden relative shadow-md mb-2 bg-[#151922]">
+               <img 
+                 src={win.image} 
+                 alt={win.game} 
+                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+               />
+               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
             </div>
 
-            <div className="text-sm leading-tight flex flex-col justify-center">
-              <p className="text-gray-400 text-[11px] md:text-xs font-bold uppercase tracking-wider mb-0.5">{win.game}</p>
-              <p className="text-gray-100 font-semibold text-sm md:text-base my-0.5 truncate max-w-[120px] md:max-w-[140px]">
-                {win.user.substring(0, 4)}***{win.user.slice(-2)}
-              </p>
-              <p className="text-[#00FFA3] font-black text-sm md:text-base tracking-tight mt-0.5">{win.payout}</p>
+            {/* User Info */}
+            <div className="flex items-center gap-1 w-full justify-center px-1 mb-0.5">
+               <Diamond className={`w-2.5 h-2.5 md:w-3 md:h-3 ${getRankColor(win.userRank)} shrink-0`} fill="currentColor" />
+               <span className="text-gray-300 font-medium text-[10px] md:text-[11px] truncate">{win.user.substring(0, 4)}...</span>
             </div>
+            
+            {/* Payout */}
+            <span className="text-[#00E676] font-bold text-[10px] md:text-[12px] tracking-tight">
+               {win.payout}
+            </span>
           </div>
         ))}
       </div>
