@@ -243,10 +243,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                <GuestLandingContent onSearchClick={onSearchClick} onViewChange={onViewChange} t={t} />
              )}
           </div>
-          
-          <div className="w-full mb-8">
-            <LiveWinsTicker />
-          </div>
         </>
       )}
 
@@ -254,6 +250,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       <div className="w-full">
         <OriginalsSlider onNavigate={onViewChange} />
       </div>
+
+      {/* Live Wins Ticker */}
+      <div className="w-full mb-8">
+        <LiveWinsTicker />
+      </div>
+
 
       {/* Live Games Slider */}
       <div className="w-full">
