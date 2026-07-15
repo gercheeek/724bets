@@ -302,19 +302,23 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         <LiveWinsTicker />
       </div>
 
-      {/* Gamdom Originals / Game Grid (Popüler Oyunlar Only) */}
-      <div className="w-full mb-2 bg-[#0B0E14] rounded-2xl md:rounded-3xl p-4 md:p-6 border border-white/5">
+      <div className="w-full">
         <GameLobbyGrid customGames={[]} />
       </div>
 
-      {/* Demo Games List */}
-      <div className="w-full mb-2 bg-[#0B0E14] rounded-2xl md:rounded-3xl p-4 md:p-6 border border-white/5">
-        <DemoGames />
+      {/* Originals Slider */}
+      <div className="w-full">
+        <OriginalsSlider onNavigate={onViewChange} />
       </div>
 
-      {/* Mini Original Games */}
+      {/* Live Games Slider */}
+      <div className="w-full">
+        <LiveGamesSlider />
+      </div>
+
+      {/* Live Bets and Leaderboards */}
       <div className="w-full pb-8">
-        <MiniOriginalGames />
+        <LiveBetsTable />
       </div>
 
       {/* Spacer to allow scrolling past bottom bar on mobile */}
