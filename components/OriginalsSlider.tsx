@@ -171,7 +171,7 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
     };
 
     return (
-        <div className="w-full max-w-[1400px] mx-auto px-4 md:px-0 my-8">
+        <div className="w-full max-w-[1400px] mx-auto px-4 md:px-0 my-2 md:my-4">
             {/* Header */}
             <div className="flex items-center justify-between mb-4 px-2">
                 <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">

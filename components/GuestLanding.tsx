@@ -183,15 +183,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               onClick={() => onViewChange('blackjack')}
               className="relative w-1/2 h-full cursor-pointer group bg-[#0B0E14] flex flex-col justify-end p-5 z-20 border-r border-white/5"
             >
-              <div className="absolute top-0 left-0 w-[120%] h-full pointer-events-none [mask-image:linear-gradient(to_right,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_60%,transparent_100%)] overflow-hidden">
-                <img 
-                  src="/images/casino_neon_banner.jpg" 
-                  alt="Casino" 
-                  className="absolute inset-0 w-full h-full object-cover object-[right_center] transform group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.5)_30%,rgba(0,0,0,0)_70%)] pointer-events-none group-hover:bg-[linear-gradient(to_right,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.3)_30%,rgba(0,0,0,0)_70%)] transition-all duration-500"></div>
-              </div>
-              
+
               <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 transition-transform duration-500 max-w-[80%]">
                 <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
                   Casino
@@ -260,7 +252,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       </div>
 
       {/* Live Wins Ticker */}
-      <div className="w-full mb-8">
+      <div className="w-full mb-4">
         <LiveWinsTicker />
       </div>
 
@@ -313,19 +305,8 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
         {/* Kumarhane Card */}
         <div 
           onClick={() => onViewChange('blackjack')}
-          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-l-xl md:border-y md:border-l md:border-white/5 z-20"
+          className="relative w-full h-full cursor-pointer group bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-l-xl md:border-y md:border-l md:border-white/5 z-20"
         >
-          {/* Image & Overlay Container with Mask for seamless blending */}
-          <div className="absolute top-0 left-0 w-[120%] h-full pointer-events-none [mask-image:linear-gradient(to_right,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_60%,transparent_100%)] overflow-hidden rounded-l-3xl md:rounded-l-xl">
-            <img 
-              src="/images/casino_neon_banner.jpg" 
-              alt="Casino" 
-              className="absolute inset-0 w-full h-full object-cover object-[right_center] transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
-            />
-            {/* Gradient overlay INSIDE mask: Solid dark on left for text, completely transparent on the right seam */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.5)_30%,rgba(0,0,0,0)_70%)] pointer-events-none group-hover:bg-[linear-gradient(to_right,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.3)_30%,rgba(0,0,0,0)_70%)] transition-all duration-500"></div>
-          </div>
-          
           <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
             <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
               Casino

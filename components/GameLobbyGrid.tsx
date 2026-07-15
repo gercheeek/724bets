@@ -58,7 +58,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
   };
 
   return (
-    <div className="mb-10 w-full">
+    <div className="mb-6 md:mb-8 w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 px-2">
         <div className="flex items-center gap-2">
@@ -194,7 +194,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
     : liveCasinoGames.map(g => ({ ...g, players: getDynamicPlayers(g.id) }));
 
   return (
-    <div className="w-full bg-transparent p-0 my-8">
+    <div className="w-full bg-transparent p-0 my-4 md:my-6">
       <GameBlock 
         title={t('popular_games')} 
         icon={<Flame className="w-5 h-5 text-white" fill="white" />} 
