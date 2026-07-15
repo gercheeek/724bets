@@ -6,6 +6,7 @@ import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, Bl
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
 import AdminPlinkoTab from './AdminPlinkoTab';
+import AdminBlackjackTab from './AdminBlackjackTab';
 import AdminGiveawayTab from './AdminGiveawayTab';
 import AdminRaffleTab from './AdminRaffleTab';
 import AdminPopularBetsTab from './AdminPopularBetsTab';
@@ -996,6 +997,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   </button>
                   <button onClick={() => setActiveTab('plinko')} className={`adm-nav-item ${activeTab === 'plinko' ? 'active' : ''}`}>
                     <Target className="w-4 h-4" /> PLINKO (PRO)
+                  </button>
+                  <button onClick={() => setActiveTab('blackjack-pro')} className={`adm-nav-item ${activeTab === 'blackjack-pro' ? 'active' : ''}`}>
+                    <span className="text-sm">🃏</span> BLACKJACK (PRO)
                   </button>
                   <button onClick={() => setActiveTab('giveaway')} className={`adm-nav-item ${activeTab === 'giveaway' ? 'active' : ''}`}>
                     <Gift className="w-4 h-4" /> ÇEKİLİŞ YÖNETİMİ
@@ -3699,6 +3703,9 @@ Maç Listesi: `}
       )}
       {activeTab === 'plinko' && (
         <AdminPlinkoTab />
+      )}
+      {activeTab === 'blackjack-pro' && (
+        <AdminBlackjackTab />
       )}
 
       {activeTab === 'raffle' && (

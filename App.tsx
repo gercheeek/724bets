@@ -20,6 +20,8 @@ import MobileBottomNav from './components/MobileBottomNav';
 import WalletModal from './components/WalletModal';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
+import BlackjackProView from './components/BlackjackProView';
+import MaintenanceScreen from './components/MaintenanceScreen';
 import GlobalToaster from './components/GlobalToaster';
 
 import LiveSupportModal from './components/LiveSupportModal';
@@ -179,7 +181,7 @@ const AppContent: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'sporx' | 'taraf' | 'plinko'>('home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'sporx' | 'taraf' | 'plinko'>('home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -1159,7 +1161,7 @@ const AppContent: React.FC = () => {
         setView('trusted-detail');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['blackjack', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf'];
+        const validViews = ['blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -1358,7 +1360,7 @@ const AppContent: React.FC = () => {
     if (v !== 'analysis') {
       setActiveAnalysisId(null);
     }
-    if (v !== 'blackjack') {
+    if (v !== 'blackjack' && v !== 'blackjack-pro') {
       setActiveCasinoGame(null);
     }
     // Lucky Wheel is members-only
@@ -1821,8 +1823,18 @@ const AppContent: React.FC = () => {
         )}
 
         {view === 'plinko' && (
-          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+          <div className="animate-fade-in w-full h-full relative z-[50]">
             <PlinkoView 
+              siteUser={siteUser} 
+              setSiteUser={setSiteUser} 
+              onAuthRequired={() => setAuthModalMode('member')} 
+            />
+          </div>
+        )}
+
+        {view === 'blackjack-pro' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <BlackjackProView 
               siteUser={siteUser} 
               setSiteUser={setSiteUser} 
               onAuthRequired={() => setAuthModalMode('member')} 
