@@ -174,56 +174,59 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                    <Search className="w-4 h-4 text-gray-400 mr-3" />
                    <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
                  </div>
-               </div>
-
-               {/* 2 Big Cards: Casino & Sports */}
-               <div className="w-full pb-6 grid grid-cols-2 gap-4">
-                 {/* Kumarhane Card */}
-                 <div 
-                   onClick={() => onViewChange('blackjack')}
-                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_15px_50px_rgba(0,0,0,0.6)] bg-[#0B0E14] border border-white/5 flex flex-col justify-end p-3 md:p-5"
-                 >
-                   <img 
-                     src="/images/casino_neon_banner.jpg" 
-                     alt="Casino" 
-                     className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                   />
-                   {/* Gradient overlay for readability */}
-                   <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none"></div>
+               </div>               {/* 2 Big Cards: Casino & Sports (Split Screen Design) */}
+               <div className="w-full pb-8 mb-4">
+                 <div className="w-full grid grid-cols-2 h-[220px] sm:h-[300px] md:h-[400px] rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative">
+                   {/* Center Divider Line */}
+                   <div className="absolute top-0 bottom-0 left-1/2 w-[1px] md:w-[2px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-30 transform -translate-x-1/2 pointer-events-none"></div>
                    
-                   <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center">
-                     <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                       {t('casino')}
-                     </h3>
-                     <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-5 py-2.5 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg mt-2">
-                       {t('visit_casino')}
-                     </button>
+                   {/* Kumarhane Card */}
+                   <div 
+                     onClick={() => onViewChange('blackjack')}
+                     className="relative w-full h-full cursor-pointer group bg-[#0B0E14] flex flex-col justify-end p-5 md:p-12 overflow-hidden"
+                   >
+                     <img 
+                       src="/images/casino_neon_banner.jpg" 
+                       alt="Casino" 
+                       className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
+                     />
+                     {/* Gradient overlay for readability */}
+                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+                     
+                     <div className="relative z-20 flex flex-col items-start gap-2 md:gap-4 h-full justify-center transform group-hover:translate-x-3 transition-transform duration-500">
+                       <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)]">
+                         {t('casino')}
+                       </h3>
+                       <button className="bg-white/10 hover:bg-[#00FFA3] hover:text-black hover:border-transparent backdrop-blur-md text-white font-extrabold px-5 py-2 md:px-8 md:py-4 text-xs sm:text-sm md:text-base rounded-xl transition-all duration-300 border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] mt-2">
+                         {t('visit_casino')}
+                       </button>
+                     </div>
+                   </div>
+  
+                   {/* Spor Bahisleri Card */}
+                   <div 
+                     onClick={() => onViewChange('sports')}
+                     className="relative w-full h-full cursor-pointer group bg-[#0B0E14] flex flex-col justify-end p-5 md:p-12 overflow-hidden"
+                   >
+                     <img 
+                       src="/images/sports_neon_banner.jpg" 
+                       alt="Sports Betting" 
+                       className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 group-hover:-rotate-1 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
+                     />
+                     {/* Gradient overlay for readability */}
+                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+                     
+                     <div className="relative z-20 flex flex-col items-start gap-2 md:gap-4 h-full justify-center transform group-hover:translate-x-3 transition-transform duration-500">
+                       <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)]">
+                         {t('sports')}
+                       </h3>
+                       <button className="bg-white/10 hover:bg-[#00FFA3] hover:text-black hover:border-transparent backdrop-blur-md text-white font-extrabold px-5 py-2 md:px-8 md:py-4 text-xs sm:text-sm md:text-base rounded-xl transition-all duration-300 border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] mt-2">
+                         {t('visit_sports')}
+                       </button>
+                     </div>
                    </div>
                  </div>
-
-                 {/* Spor Bahisleri Card */}
-                 <div 
-                   onClick={() => onViewChange('sports')}
-                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_15px_50px_rgba(0,0,0,0.6)] bg-[#0B0E14] border border-white/5 flex flex-col justify-end p-3 md:p-5"
-                 >
-                   <img 
-                     src="/images/sports_neon_banner.jpg" 
-                     alt="Sports Betting" 
-                     className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                   />
-                   {/* Gradient overlay for readability */}
-                   <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none"></div>
-                   
-                   <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center">
-                     <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                       {t('sports')}
-                     </h3>
-                     <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-5 py-2.5 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg mt-2">
-                       {t('visit_sports')}
-                     </button>
-                   </div>
-                 </div>
-               </div>
+               </div>v>
              </WorldCupTeaser>
           </div>
           

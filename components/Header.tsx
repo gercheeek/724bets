@@ -377,6 +377,13 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   Spor
                 </button>
+                <button 
+                  onClick={() => onViewChange?.('plinko')}
+                  className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center gap-1.5 ${(activeView === 'plinko' || activeView === 'originals') ? 'bg-[#1C2028] text-[#00FFA3] shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00FFA3] animate-pulse"></span>
+                  Orijinaller
+                </button>
               </div>
             </div>
 
