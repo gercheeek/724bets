@@ -199,8 +199,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 <div className="mb-2">
                   <ActivePlayersCounter type="casino" />
                 </div>
-                <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 md:px-4 py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm inline-block w-fit">
-                  {t('visit_casino')}
+                <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white font-black px-6 md:px-8 py-2 md:py-2.5 text-[11px] sm:text-xs md:text-sm tracking-[0.2em] rounded-xl transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 inline-flex items-center justify-center w-fit">
+                  <span className="relative z-10 group-hover/btn:text-[#00FFA3] transition-colors">GİRİŞ</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                 </button>
               </div>
             </div>
@@ -224,8 +225,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 <div className="mb-2">
                   <ActivePlayersCounter type="sports" />
                 </div>
-                <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 md:px-4 py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm rounded-lg transition-colors backdrop-blur-sm inline-block w-fit">
-                  {t('visit_sports')}
+                <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white font-black px-6 md:px-8 py-2 md:py-2.5 text-[11px] sm:text-xs md:text-sm tracking-[0.2em] rounded-xl transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 inline-flex items-center justify-center w-fit">
+                  <span className="relative z-10 group-hover/btn:text-[#00FFA3] transition-colors">GİRİŞ</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                 </button>
               </div>
             </div>
@@ -274,8 +276,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     <div className="relative z-20 flex flex-col items-start gap-2 lg:gap-3 h-full justify-center transform group-hover:translate-x-2 transition-transform duration-500 max-w-[70%] lg:max-w-[80%]">
                       <h3 className="text-3xl sm:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-md leading-none font-['Outfit'] pb-1">Casino</h3>
                       <div className="hidden sm:block"><ActivePlayersCounter type="casino" /></div>
-                      <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 lg:px-4 lg:py-2 text-[10px] sm:text-xs rounded-lg transition-colors backdrop-blur-sm mt-auto sm:mt-0 w-fit">
-                        {t('visit_casino')}
+                      <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white font-black px-6 lg:px-8 py-2 lg:py-2.5 text-[11px] sm:text-xs rounded-xl tracking-[0.2em] transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 mt-auto sm:mt-0 inline-flex items-center justify-center w-fit">
+                        <span className="relative z-10 group-hover/btn:text-[#00FFA3] transition-colors">GİRİŞ</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                       </button>
                     </div>
                   </div>
@@ -287,8 +290,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     <div className="relative z-20 flex flex-col items-end gap-2 lg:gap-3 h-full justify-center self-end text-right transform group-hover:-translate-x-2 transition-transform duration-500 max-w-[70%] lg:max-w-[80%] ml-auto">
                       <h3 className="text-3xl sm:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-md leading-none font-['Outfit'] pb-1">Spor</h3>
                       <div className="hidden sm:block"><ActivePlayersCounter type="sports" /></div>
-                      <button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-3 py-1.5 lg:px-4 lg:py-2 text-[10px] sm:text-xs rounded-lg transition-colors backdrop-blur-sm mt-auto sm:mt-0 w-fit">
-                        {t('visit_sports')}
+                      <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white font-black px-6 lg:px-8 py-2 lg:py-2.5 text-[11px] sm:text-xs rounded-xl tracking-[0.2em] transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 mt-auto sm:mt-0 inline-flex items-center justify-center w-fit">
+                        <span className="relative z-10 group-hover/btn:text-[#00FFA3] transition-colors">GİRİŞ</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                       </button>
                     </div>
                   </div>
