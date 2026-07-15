@@ -234,95 +234,59 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  </div>
                </div>               {/* 2 Big Cards: Casino & Sports (Split Screen on Mobile, Separate on Desktop) */}
                <div className="w-full pb-6 md:pb-6 mb-4 md:mb-0">
-                 <div className="w-full grid grid-cols-2 gap-2 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] relative">
+                 <div className="w-full grid grid-cols-2 gap-0 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative bg-black md:bg-transparent">
+                   {/* Center Divider Line (Mobile Only) */}
+                   <div className="absolute top-0 bottom-0 left-1/2 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-30 transform -translate-x-1/2 pointer-events-none md:hidden"></div>
                    
-                   {/* Kumarhane Card */}
+                   {/* Kumarhane Card (Left Aligned Text, Right Aligned Image) */}
                    <div 
                      onClick={() => onViewChange('blackjack')}
-                     className="relative w-full h-full cursor-pointer group bg-[#2D62A2] flex flex-col justify-between rounded-xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-[#2D62A2] md:border-[#2D62A2] transition-transform duration-300 hover:scale-[1.02]"
+                     className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
                    >
-                     {/* Image section */}
-                     <div className="absolute top-0 left-0 right-0 bottom-12 sm:bottom-14 overflow-hidden">
-                       <img 
-                         src="/images/mosaic_casino_bg.jpg" 
-                         alt="Casino" 
-                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105 transform"
-                       />
-                       {/* Overlay tint */}
-                       <div className="absolute inset-0 bg-[#0c1f38]/60 mix-blend-overlay"></div>
-                       <div className="absolute inset-0 bg-gradient-to-t from-[#2D62A2] via-transparent to-transparent opacity-80"></div>
-                     </div>
+                     <img 
+                       src="/images/casino_aligned.jpg" 
+                       alt="Casino" 
+                       className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
+                     />
+                     {/* Gradient overlay for readability (dark on left) */}
+                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
                      
-                     {/* Spacer to push footer down */}
-                     <div className="flex-1 pointer-events-none"></div>
-
-                     {/* Solid Footer */}
-                     <div className="relative z-20 h-12 sm:h-14 bg-[#2D62A2] flex items-center justify-between px-3 sm:px-4 md:px-5">
-                       <div className="flex items-center gap-2 sm:gap-3">
-                         <div className="text-white hidden sm:block">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 sm:w-6 sm:h-6 opacity-90 text-blue-200">
-                             <path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" />
-                             <path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" />
-                             <path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12" />
-                             <path d="M22 9c-4.28 0-7.11-2.83-10-9" />
-                           </svg>
-                         </div>
-                         <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-white tracking-wide">
-                           Casino
+                     <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500">
+                       <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+                         <h3 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                           CASINO
                          </h3>
+                         <ActivePlayersCounter type="casino" />
                        </div>
-                       
-                       <div className="flex items-center gap-1 sm:gap-3">
-                         <div className="hidden md:block">
-                           <ActivePlayersCounter type="casino" />
-                         </div>
-                         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white opacity-80 group-hover:translate-x-1 transition-transform" />
-                       </div>
+                       <button className="bg-white/10 hover:bg-[#00FFA3] hover:text-black hover:border-transparent md:hover:bg-white/20 md:hover:text-white md:hover:border-white/10 backdrop-blur-md text-white font-extrabold md:font-bold px-5 py-2 md:px-5 md:py-2.5 text-xs sm:text-sm md:text-sm rounded-xl md:rounded-lg transition-all duration-300 border border-white/20 md:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg mt-2">
+                         Ziyaret et Casino
+                       </button>
                      </div>
                    </div>
   
-                   {/* Spor Bahisleri Card */}
+                   {/* Spor Bahisleri Card (Right Aligned Text, Left Aligned Image) */}
                    <div 
                      onClick={() => onViewChange('sports')}
-                     className="relative w-full h-full cursor-pointer group bg-[#394255] flex flex-col justify-between rounded-xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-[#394255] md:border-[#394255] transition-transform duration-300 hover:scale-[1.02]"
+                     className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
                    >
-                     {/* Image section */}
-                     <div className="absolute top-0 left-0 right-0 bottom-12 sm:bottom-14 overflow-hidden">
-                       <img 
-                         src="/images/mosaic_sports_bg.jpg" 
-                         alt="Sports Betting" 
-                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105 transform"
-                       />
-                       {/* Overlay tint */}
-                       <div className="absolute inset-0 bg-[#1e232e]/60 mix-blend-overlay"></div>
-                       <div className="absolute inset-0 bg-gradient-to-t from-[#394255] via-transparent to-transparent opacity-80"></div>
-                     </div>
+                     <img 
+                       src="/images/sports_aligned.jpg" 
+                       alt="Sports Betting" 
+                       className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
+                     />
+                     {/* Gradient overlay for readability (dark on right) */}
+                     <div className="absolute inset-0 bg-gradient-to-l from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
                      
-                     {/* Spacer to push footer down */}
-                     <div className="flex-1 pointer-events-none"></div>
-
-                     {/* Solid Footer */}
-                     <div className="relative z-20 h-12 sm:h-14 bg-[#394255] flex items-center justify-between px-3 sm:px-4 md:px-5">
-                       <div className="flex items-center gap-2 sm:gap-3">
-                         <div className="text-white hidden sm:block">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 sm:w-6 sm:h-6 opacity-90 text-gray-300">
-                             <circle cx="12" cy="12" r="10" />
-                             <path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94" />
-                             <path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32" />
-                             <path d="M8.56 2.75c4.37 6 6 9.42 8 17.72" />
-                           </svg>
-                         </div>
-                         <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-white tracking-wide">
-                           Bahis Merkezi
+                     <div className="relative z-20 flex flex-col items-end text-right gap-2 h-full justify-center transform group-hover:-translate-x-3 md:group-hover:-translate-x-0 transition-transform duration-500">
+                       <div className="flex flex-wrap items-center justify-end flex-row-reverse gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+                         <h3 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                           SPOR
                          </h3>
+                         <ActivePlayersCounter type="sports" />
                        </div>
-                       
-                       <div className="flex items-center gap-1 sm:gap-3">
-                         <div className="hidden md:block">
-                           <ActivePlayersCounter type="sports" />
-                         </div>
-                         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white opacity-80 group-hover:translate-x-1 transition-transform" />
-                       </div>
+                       <button className="bg-white/10 hover:bg-[#00FFA3] hover:text-black hover:border-transparent md:hover:bg-white/20 md:hover:text-white md:hover:border-white/10 backdrop-blur-md text-white font-extrabold md:font-bold px-5 py-2 md:px-5 md:py-2.5 text-xs sm:text-sm md:text-sm rounded-xl md:rounded-lg transition-all duration-300 border border-white/20 md:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg mt-2">
+                         Ziyaret et Sports
+                       </button>
                      </div>
                    </div>
                  </div>
