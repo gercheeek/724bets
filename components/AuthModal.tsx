@@ -240,7 +240,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     animation: slowPanZoom 8s ease-out forwards;
                 }
             `}</style>
-            <div className="w-full max-w-4xl bg-[#111317] rounded-none md:rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border-0 md:border border-white/5 h-[100dvh] md:h-[640px] max-h-[100dvh] md:max-h-[90vh]">
+            <div className="w-full max-w-4xl bg-[#111317] rounded-none md:rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border-0 md:border border-white/5 h-[100dvh] md:h-auto md:min-h-[640px] max-h-[100dvh] md:max-h-[95vh]">
                 
                 {/* Left Side - Promo Graphic (Mobile Splash / Desktop Left Half) */}
                 <div className={`flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
@@ -314,7 +314,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     </div>
 
                     {/* Flex container to center form content vertically and take remaining space */}
-                    <div className="flex-1 flex flex-col justify-center">
+                    <div className="flex-1 flex flex-col pb-8">
                 {activeTab === 'member' && (
                     <>
                         {registrationPending ? (
