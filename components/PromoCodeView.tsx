@@ -104,30 +104,30 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
 
   return (
     <div className="flex-1 overflow-y-auto bg-[#0a0a0a] min-h-screen">
-      <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 pt-12">
-        <div className="flex flex-col items-center justify-center text-center space-y-4 mb-10">
-          <div className="w-20 h-20 bg-gradient-to-tr from-[#00FFA3]/20 to-[#00FFA3]/5 rounded-full flex items-center justify-center border border-[#00FFA3]/30 mb-2 shadow-[0_0_30px_rgba(0,255,163,0.15)]">
-            <Ticket className="w-10 h-10 text-[#00FFA3]" />
+      <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 pt-6 sm:pt-12">
+        <div className="flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4 mb-6 sm:mb-10">
+          <div className="w-14 h-14 sm:w-20 sm:h-20 bg-gradient-to-tr from-[#00FFA3]/20 to-[#00FFA3]/5 rounded-full flex items-center justify-center border border-[#00FFA3]/30 shadow-[0_0_30px_rgba(0,255,163,0.15)]">
+            <Ticket className="w-7 h-7 sm:w-10 sm:h-10 text-[#00FFA3]" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">Kodu <span className="text-[#00FFA3] drop-shadow-[0_0_15px_rgba(0,255,163,0.4)]">Kullan</span></h1>
-          <p className="text-zinc-400 max-w-lg mx-auto text-sm sm:text-base">
+          <h1 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">Kodu <span className="text-[#00FFA3] drop-shadow-[0_0_15px_rgba(0,255,163,0.4)]">Kullan</span></h1>
+          <p className="text-zinc-400 max-w-lg mx-auto text-xs sm:text-base px-2">
             Elindeki promosyon kodunu aşağıya gir ve anında bedava bakiye veya free spin kazan!
           </p>
         </div>
 
-        <div className="max-w-md mx-auto bg-[#151821] border border-white/5 p-6 sm:p-8 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
+        <div className="max-w-md mx-auto bg-[#151821] border border-white/5 p-5 sm:p-8 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00FFA3]/0 via-[#00FFA3]/50 to-[#00FFA3]/0"></div>
           
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Promosyon Kodu</label>
+              <label className="block text-[10px] sm:text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5 sm:mb-2 ml-1">Promosyon Kodu</label>
               <div className="relative">
                   <input 
                     type="text" 
                     value={code}
                     onChange={(e) => setCode(e.target.value.toUpperCase())}
                     placeholder="ÖRN: BONUS2026"
-                    className="w-full bg-[#0B0E14] border-2 border-white/5 focus:border-[#00FFA3]/50 focus:shadow-[0_0_15px_rgba(0,255,163,0.1)] rounded-xl py-4 px-5 text-white text-lg font-bold tracking-widest text-center transition-all outline-none placeholder:text-zinc-700"
+                    className="w-full bg-[#0B0E14] border-2 border-white/5 focus:border-[#00FFA3]/50 focus:shadow-[0_0_15px_rgba(0,255,163,0.1)] rounded-xl py-3 sm:py-4 px-4 text-white text-base sm:text-lg font-bold tracking-widest text-center transition-all outline-none placeholder:text-zinc-700"
                   />
               </div>
             </div>
@@ -135,9 +135,9 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
             <button 
               onClick={handleCheckCode}
               disabled={loading || !code.trim()}
-              className="w-full bg-[#00FFA3] hover:bg-[#00E693] text-black font-black py-4 rounded-xl transition-all shadow-[0_0_15px_rgba(0,255,163,0.2)] hover:shadow-[0_0_25px_rgba(0,255,163,0.4)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#00FFA3] hover:bg-[#00E693] text-black font-black py-3 sm:py-4 rounded-xl transition-all shadow-[0_0_15px_rgba(0,255,163,0.2)] hover:shadow-[0_0_25px_rgba(0,255,163,0.4)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
-              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'KODU KONTROL ET'}
+              {loading ? <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" /> : 'KODU KONTROL ET'}
             </button>
           </div>
 
@@ -165,18 +165,19 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
         </div>
         
         {/* Decorative elements */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-          <div className="bg-[#151821] p-5 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors">
-            <h4 className="text-[#00FFA3] font-bold text-sm uppercase mb-1">Anında Aktarım</h4>
-            <p className="text-zinc-500 text-xs">Kodlar anında onaylanır ve bakiyeniz saniyeler içinde güncellenir.</p>
+        {/* Decorative elements */}
+        <div className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto pb-8 sm:pb-0">
+          <div className="bg-[#151821] p-4 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors flex flex-col items-center justify-center">
+            <h4 className="text-[#00FFA3] font-bold text-[11px] sm:text-sm uppercase mb-1 sm:mb-1.5">Anında Aktarım</h4>
+            <p className="text-zinc-500 text-[10px] sm:text-xs leading-tight">Kodlar anında onaylanır ve bakiyeniz saniyeler içinde güncellenir.</p>
           </div>
-          <div className="bg-[#151821] p-5 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors">
-            <h4 className="text-[#00FFA3] font-bold text-sm uppercase mb-1">Limitli Kodlar</h4>
-            <p className="text-zinc-500 text-xs">Hızlı davranın, özel kodlar kısa sürede tükenebilir.</p>
+          <div className="bg-[#151821] p-4 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors flex flex-col items-center justify-center">
+            <h4 className="text-[#00FFA3] font-bold text-[11px] sm:text-sm uppercase mb-1 sm:mb-1.5">Limitli Kodlar</h4>
+            <p className="text-zinc-500 text-[10px] sm:text-xs leading-tight">Hızlı davranın, özel kodlar kısa sürede tükenebilir.</p>
           </div>
-          <div className="bg-[#151821] p-5 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors">
-            <h4 className="text-[#00FFA3] font-bold text-sm uppercase mb-1">Büyük Ödüller</h4>
-            <p className="text-zinc-500 text-xs">Sosyal medya hesaplarımızdan paylaşılan sürpriz kodları kaçırmayın.</p>
+          <div className="bg-[#151821] p-4 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors flex flex-col items-center justify-center hidden sm:flex">
+            <h4 className="text-[#00FFA3] font-bold text-[11px] sm:text-sm uppercase mb-1 sm:mb-1.5">Büyük Ödüller</h4>
+            <p className="text-zinc-500 text-[10px] sm:text-xs leading-tight">Sosyal medya hesaplarımızdan paylaşılan sürpriz kodları kaçırmayın.</p>
           </div>
         </div>
 

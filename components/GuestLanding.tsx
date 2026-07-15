@@ -7,6 +7,64 @@ import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
 import { useLanguage } from '../contexts/LanguageContext';
 
+const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {
+  const [players, setPlayers] = useState(0);
+
+  useEffect(() => {
+    const seed = type === 'casino' ? 1 : 2;
+    const calculateBase = () => {
+      const now = new Date();
+      const day = now.getDay();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      
+      const isWeekend = day === 0 || day === 6;
+      const min = isWeekend ? 9000 : 7000;
+      const max = isWeekend ? 14000 : 9950;
+      
+      // Peak at 21:00 (0.875 of day), trough at 09:00 (0.375 of day)
+      const timeProgress = (hour * 60 + minute) / (24 * 60);
+      const wave = Math.cos((timeProgress - 21/24) * 2 * Math.PI); 
+      const normalizedWave = (wave + 1) / 2; // 0 to 1
+      
+      // Hourly noise (slow changes)
+      const noise = Math.sin((minute + seed * 10) * Math.PI / 30) * (isWeekend ? 800 : 400);
+      
+      let val = min + (max - min) * normalizedWave + noise;
+      if (!isWeekend && val > 9999) val = 9950;
+      if (val < min) val = min;
+      
+      return Math.floor(val);
+    };
+
+    setPlayers(calculateBase());
+
+    const interval = setInterval(() => {
+      setPlayers(prev => {
+        if (Math.random() > 0.8) return calculateBase();
+        const diff = Math.floor(Math.random() * 31) - 15;
+        let next = prev + diff;
+        const isWeekend = new Date().getDay() === 0 || new Date().getDay() === 6;
+        if (!isWeekend && next > 9999) next = 9999;
+        return next;
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [type]);
+
+  const formatted = players.toLocaleString('tr-TR');
+
+  return (
+    <div className="flex items-center gap-1.5 sm:gap-2">
+      <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"></span>
+      <span className="text-gray-200 text-xs sm:text-sm lg:text-base font-medium tracking-wide whitespace-nowrap">
+        {formatted} Oynuyor
+      </span>
+    </div>
+  );
+};
+
 interface GuestLandingProps {
   siteUser?: SiteUser | null;
   onSearchClick: () => void;
@@ -176,53 +234,95 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  </div>
                </div>               {/* 2 Big Cards: Casino & Sports (Split Screen on Mobile, Separate on Desktop) */}
                <div className="w-full pb-6 md:pb-6 mb-4 md:mb-0">
-                 <div className="w-full grid grid-cols-2 gap-0 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative bg-[url('/images/merged_casino_sports.jpg')] md:bg-none bg-cover bg-center">
-                   {/* Center Divider Line (Mobile Only) */}
-                   <div className="absolute top-0 bottom-0 left-1/2 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-30 transform -translate-x-1/2 pointer-events-none md:hidden"></div>
+                 <div className="w-full grid grid-cols-2 gap-2 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] relative">
                    
                    {/* Kumarhane Card */}
                    <div 
                      onClick={() => onViewChange('blackjack')}
-                     className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
+                     className="relative w-full h-full cursor-pointer group bg-[#2D62A2] flex flex-col justify-between rounded-xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-[#2D62A2] md:border-[#2D62A2] transition-transform duration-300 hover:scale-[1.02]"
                    >
-                     <img 
-                       src="/images/casino_neon_banner.jpg" 
-                       alt="Casino" 
-                       className="hidden md:block absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
-                     />
-                     {/* Gradient overlay for readability */}
-                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+                     {/* Image section */}
+                     <div className="absolute top-0 left-0 right-0 bottom-12 sm:bottom-14 overflow-hidden">
+                       <img 
+                         src="/images/mosaic_casino_bg.jpg" 
+                         alt="Casino" 
+                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105 transform"
+                       />
+                       {/* Overlay tint */}
+                       <div className="absolute inset-0 bg-[#0c1f38]/60 mix-blend-overlay"></div>
+                       <div className="absolute inset-0 bg-gradient-to-t from-[#2D62A2] via-transparent to-transparent opacity-80"></div>
+                     </div>
                      
-                     <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500">
-                       <h3 className="text-3xl sm:text-4xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                         {t('casino')}
-                       </h3>
-                       <button className="bg-white/10 hover:bg-[#00FFA3] hover:text-black hover:border-transparent md:hover:bg-white/20 md:hover:text-white md:hover:border-white/10 backdrop-blur-md text-white font-extrabold md:font-bold px-5 py-2 md:px-5 md:py-2.5 text-xs sm:text-sm md:text-sm rounded-xl md:rounded-lg transition-all duration-300 border border-white/20 md:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg mt-2">
-                         {t('visit_casino')}
-                       </button>
+                     {/* Spacer to push footer down */}
+                     <div className="flex-1 pointer-events-none"></div>
+
+                     {/* Solid Footer */}
+                     <div className="relative z-20 h-12 sm:h-14 bg-[#2D62A2] flex items-center justify-between px-3 sm:px-4 md:px-5">
+                       <div className="flex items-center gap-2 sm:gap-3">
+                         <div className="text-white hidden sm:block">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 sm:w-6 sm:h-6 opacity-90 text-blue-200">
+                             <path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" />
+                             <path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z" />
+                             <path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12" />
+                             <path d="M22 9c-4.28 0-7.11-2.83-10-9" />
+                           </svg>
+                         </div>
+                         <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-white tracking-wide">
+                           Casino
+                         </h3>
+                       </div>
+                       
+                       <div className="flex items-center gap-1 sm:gap-3">
+                         <div className="hidden md:block">
+                           <ActivePlayersCounter type="casino" />
+                         </div>
+                         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white opacity-80 group-hover:translate-x-1 transition-transform" />
+                       </div>
                      </div>
                    </div>
   
                    {/* Spor Bahisleri Card */}
                    <div 
                      onClick={() => onViewChange('sports')}
-                     className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
+                     className="relative w-full h-full cursor-pointer group bg-[#394255] flex flex-col justify-between rounded-xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-[#394255] md:border-[#394255] transition-transform duration-300 hover:scale-[1.02]"
                    >
-                     <img 
-                       src="/images/sports_neon_banner.jpg" 
-                       alt="Sports Betting" 
-                       className="hidden md:block absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
-                     />
-                     {/* Gradient overlay for readability */}
-                     <div className="absolute inset-0 bg-gradient-to-l md:bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+                     {/* Image section */}
+                     <div className="absolute top-0 left-0 right-0 bottom-12 sm:bottom-14 overflow-hidden">
+                       <img 
+                         src="/images/mosaic_sports_bg.jpg" 
+                         alt="Sports Betting" 
+                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105 transform"
+                       />
+                       {/* Overlay tint */}
+                       <div className="absolute inset-0 bg-[#1e232e]/60 mix-blend-overlay"></div>
+                       <div className="absolute inset-0 bg-gradient-to-t from-[#394255] via-transparent to-transparent opacity-80"></div>
+                     </div>
                      
-                     <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500">
-                       <h3 className="text-3xl sm:text-4xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                         {t('sports')}
-                       </h3>
-                       <button className="bg-white/10 hover:bg-[#00FFA3] hover:text-black hover:border-transparent md:hover:bg-white/20 md:hover:text-white md:hover:border-white/10 backdrop-blur-md text-white font-extrabold md:font-bold px-5 py-2 md:px-5 md:py-2.5 text-xs sm:text-sm md:text-sm rounded-xl md:rounded-lg transition-all duration-300 border border-white/20 md:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg mt-2">
-                         {t('visit_sports')}
-                       </button>
+                     {/* Spacer to push footer down */}
+                     <div className="flex-1 pointer-events-none"></div>
+
+                     {/* Solid Footer */}
+                     <div className="relative z-20 h-12 sm:h-14 bg-[#394255] flex items-center justify-between px-3 sm:px-4 md:px-5">
+                       <div className="flex items-center gap-2 sm:gap-3">
+                         <div className="text-white hidden sm:block">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 sm:w-6 sm:h-6 opacity-90 text-gray-300">
+                             <circle cx="12" cy="12" r="10" />
+                             <path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94" />
+                             <path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32" />
+                             <path d="M8.56 2.75c4.37 6 6 9.42 8 17.72" />
+                           </svg>
+                         </div>
+                         <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-white tracking-wide">
+                           Bahis Merkezi
+                         </h3>
+                       </div>
+                       
+                       <div className="flex items-center gap-1 sm:gap-3">
+                         <div className="hidden md:block">
+                           <ActivePlayersCounter type="sports" />
+                         </div>
+                         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white opacity-80 group-hover:translate-x-1 transition-transform" />
+                       </div>
                      </div>
                    </div>
                  </div>
