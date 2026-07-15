@@ -283,7 +283,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                        <div className="mb-2">
                          <ActivePlayersCounter type="sports" />
                        </div>
-                       <button className="bg-[#00FFA3] hover:bg-[#00E693] text-black font-bold px-6 py-2.5 sm:px-8 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 shadow-[0_10px_30px_rgba(0,255,163,0.3)] md:shadow-[0_5px_15px_rgba(0,255,163,0.4)] whitespace-nowrap">
+                       <button className="bg-[#2a3630] hover:bg-[#34453e] text-white font-bold px-6 py-2.5 sm:px-8 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-lg whitespace-nowrap">
                          {t('visit_sports') || 'Ziyaret et Sports'}
                        </button>
                      </div>
