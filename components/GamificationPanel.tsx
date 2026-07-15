@@ -3,9 +3,11 @@ import { Trophy, Star, Target, CheckCircle2, Medal, X, Zap, Crown, Flame } from 
 
 interface GamificationPanelProps {
   className?: string;
+  isLoggedIn?: boolean;
+  onLoginClick?: () => void;
 }
 
-export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className = '' }) => {
+export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className = '', isLoggedIn = false, onLoginClick }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -28,8 +30,8 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className 
           </div>
         </div>
       </div>
-
-      <div className="p-5 md:p-6 flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {isLoggedIn ? (
+        <div className="p-5 md:p-6 flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Level Progress */}
           <div className="bg-[#131722] rounded-2xl p-5 border border-white/5 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -48,122 +50,183 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className 
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full h-3 bg-black/50 rounded-full overflow-hidden relative z-10 p-0.5">
-              <div className="h-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 rounded-full w-[90%] relative">
-                <div className="absolute inset-0 bg-white/20 animate-pulse" />
+            <div className="h-3 w-full bg-[#0A0D14] rounded-full overflow-hidden relative z-10 p-0.5 border border-white/5 shadow-inner">
+              <div 
+                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 relative"
+                style={{ width: '90%' }}
+              >
+                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"></div>
               </div>
             </div>
-            <p className="text-zinc-500 text-xs font-medium mt-3 text-center relative z-10">Seviye 43 için 500 XP daha kazanmalısın!</p>
+            <div className="mt-2 text-center text-[11px] text-zinc-500 font-medium">Seviye 43 için 500 XP daha kazanmalısın!</div>
           </div>
 
           {/* Daily Quests */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-black text-lg flex items-center gap-2">
+          <div className="bg-[#131722] rounded-2xl p-5 border border-white/5 flex flex-col group relative overflow-hidden">
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#00FFA3]/5 rounded-full blur-3xl group-hover:bg-[#00FFA3]/10 transition-colors duration-500"></div>
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <div className="flex items-center gap-2">
                 <Target className="w-5 h-5 text-[#00FFA3]" />
-                Günlük Görevler
-              </h3>
-              <span className="text-zinc-500 text-xs font-bold bg-white/5 px-2 py-1 rounded-md">Yenilenme: 14s 23d</span>
+                <h3 className="text-white font-bold text-base">Günlük Görevler</h3>
+              </div>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 bg-[#0A0D14] px-2 py-1 rounded-md border border-white/5">Yenilenme: 14s 23d</span>
             </div>
-
-            <div className="flex flex-col gap-3">
-              {/* Quest 1 (Completed) */}
-              <div className="bg-[#131722] p-4 rounded-xl border border-[#00FFA3]/20 relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-32 h-32 bg-[#00FFA3]/5 blur-3xl rounded-full" />
-                <div className="flex justify-between items-center relative z-10">
-                  <div className="flex-1">
-                    <h4 className="text-white font-bold text-sm mb-1">Blackjack'te 3 Kez 21 Yap</h4>
-                    <div className="flex items-center gap-2">
-                      <div className="w-full h-1.5 bg-black/50 rounded-full overflow-hidden">
-                        <div className="h-full bg-[#00FFA3] w-full" />
-                      </div>
-                      <span className="text-[#00FFA3] text-xs font-bold whitespace-nowrap">3/3</span>
-                    </div>
-                  </div>
-                  <button className="ml-4 bg-[#00FFA3] text-black font-black text-xs px-4 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.3)] hover:scale-105 transition-transform animate-pulse">
-                    AL
-                  </button>
-                </div>
-              </div>
-
-              {/* Quest 2 (In Progress) */}
-              <div className="bg-[#131722] p-4 rounded-xl border border-white/5 relative overflow-hidden">
-                <div className="flex justify-between items-center relative z-10">
-                  <div className="flex-1">
-                    <h4 className="text-white font-bold text-sm mb-1">Spor'da 50 USDT Bahis Yap</h4>
-                    <div className="flex items-center gap-2">
-                      <div className="w-full h-1.5 bg-black/50 rounded-full overflow-hidden">
-                        <div className="h-full bg-violet-500 w-[40%]" />
-                      </div>
-                      <span className="text-zinc-400 text-xs font-bold whitespace-nowrap">20/50</span>
-                    </div>
-                  </div>
-                  <div className="ml-4 text-xs font-bold text-zinc-500 px-3 py-1.5 bg-black/30 rounded-lg">
-                    50 XP
+            
+            <div className="flex-1 flex flex-col gap-3 relative z-10">
+              {/* Task 1 - Completed */}
+              <div className="bg-[#0A0D14] rounded-xl p-3 border border-[#00FFA3]/20 flex items-center justify-between relative overflow-hidden group/task hover:border-[#00FFA3]/40 transition-colors">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00FFA3]/5 to-transparent opacity-0 group-hover/task:opacity-100 transition-opacity" />
+                <div className="flex-1 mr-3 relative z-10">
+                  <div className="text-sm text-white font-bold mb-2 group-hover/task:text-[#00FFA3] transition-colors">Blackjack'te 3 Kez 21 Yap</div>
+                  <div className="h-1.5 w-full bg-[#131722] rounded-full overflow-hidden">
+                    <div className="h-full bg-[#00FFA3] w-full shadow-[0_0_10px_rgba(0,255,163,0.5)]"></div>
                   </div>
                 </div>
+                <button className="relative z-10 px-4 py-1.5 bg-[#00FFA3] text-black font-black text-xs rounded-lg uppercase tracking-wider hover:bg-white hover:scale-105 hover:shadow-[0_0_15px_rgba(0,255,163,0.4)] transition-all active:scale-95">
+                  AL
+                </button>
               </div>
 
-              {/* Quest 3 (In Progress) */}
-              <div className="bg-[#131722] p-4 rounded-xl border border-white/5 relative overflow-hidden">
-                <div className="flex justify-between items-center relative z-10">
-                  <div className="flex-1">
-                    <h4 className="text-white font-bold text-sm mb-1">Üst Üste 5 El Kazan</h4>
-                    <div className="flex items-center gap-2">
-                      <div className="w-full h-1.5 bg-black/50 rounded-full overflow-hidden">
-                        <div className="h-full bg-fuchsia-500 w-[20%]" />
-                      </div>
-                      <span className="text-zinc-400 text-xs font-bold whitespace-nowrap">1/5</span>
+              {/* Task 2 - In Progress */}
+              <div className="bg-[#0A0D14] rounded-xl p-3 border border-white/5 flex items-center justify-between group/task hover:border-violet-500/30 transition-colors">
+                <div className="flex-1 mr-3">
+                  <div className="text-sm text-white font-bold mb-2 group-hover/task:text-violet-400 transition-colors">Spor'da 50 USDT Bahis Yap</div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1.5 flex-1 bg-[#131722] rounded-full overflow-hidden">
+                      <div className="h-full bg-violet-500 w-[40%] shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
+                    </div>
+                    <span className="text-[10px] font-bold text-zinc-500">20/50</span>
+                  </div>
+                </div>
+                <div className="text-xs font-black text-violet-400 bg-violet-500/10 px-2 py-1 rounded border border-violet-500/20">50 XP</div>
+              </div>
+
+              {/* Task 3 - New */}
+              <div className="bg-[#0A0D14] rounded-xl p-3 border border-white/5 flex items-center justify-between group/task hover:border-fuchsia-500/30 transition-colors">
+                <div className="flex-1 mr-3">
+                  <div className="text-sm text-white font-bold mb-2 group-hover/task:text-fuchsia-400 transition-colors">Üst Üste 5 El Kazan</div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1.5 flex-1 bg-[#131722] rounded-full overflow-hidden">
+                      <div className="h-full bg-fuchsia-500 w-[20%] shadow-[0_0_10px_rgba(217,70,239,0.5)]"></div>
+                    </div>
+                    <span className="text-[10px] font-bold text-zinc-500">1/5</span>
+                  </div>
+                </div>
+                <div className="text-xs font-black text-fuchsia-400 bg-fuchsia-500/10 px-2 py-1 rounded border border-fuchsia-500/20">100 XP</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Achievements/Badges */}
+          <div className="bg-[#131722] rounded-2xl p-5 border border-white/5 flex flex-col group relative overflow-hidden">
+             <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-[#f0b90b]/5 rounded-full blur-3xl group-hover:bg-[#f0b90b]/10 transition-colors duration-500"></div>
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <div className="flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-[#f0b90b]" />
+                <h3 className="text-white font-bold text-base">Rozetler & Başarımlar</h3>
+              </div>
+              <button className="text-[10px] uppercase font-bold tracking-wider text-zinc-400 hover:text-white transition-colors">Tümünü Gör</button>
+            </div>
+            
+            <div className="flex-1 grid grid-cols-3 gap-3 relative z-10">
+              <div className="bg-gradient-to-b from-[#f0b90b]/10 to-[#0A0D14] rounded-xl p-3 border border-[#f0b90b]/20 flex flex-col items-center justify-center gap-2 text-center group/badge hover:-translate-y-1 transition-transform cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-[#f0b90b]/20 flex items-center justify-center border border-[#f0b90b]/40 shadow-[0_0_15px_rgba(240,185,11,0.2)] group-hover/badge:shadow-[0_0_20px_rgba(240,185,11,0.4)] transition-shadow">
+                  <Flame className="w-5 h-5 text-[#f0b90b]" />
+                </div>
+                <span className="text-[10px] font-bold text-[#f0b90b] leading-tight">Kusursuz Seri</span>
+              </div>
+
+              <div className="bg-gradient-to-b from-blue-500/10 to-[#0A0D14] rounded-xl p-3 border border-blue-500/20 flex flex-col items-center justify-center gap-2 text-center group/badge hover:-translate-y-1 transition-transform cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/40 shadow-[0_0_15px_rgba(59,130,246,0.2)] group-hover/badge:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-shadow">
+                  <Trophy className="w-5 h-5 text-blue-400" />
+                </div>
+                <span className="text-[10px] font-bold text-blue-400 leading-tight">Spor Kurdu</span>
+              </div>
+
+              <div className="bg-[#0A0D14] rounded-xl p-3 border border-white/5 flex flex-col items-center justify-center gap-2 text-center opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                  <Zap className="w-5 h-5 text-zinc-500" />
+                </div>
+                <span className="text-[10px] font-bold text-zinc-500 leading-tight">Jackpot Avcısı</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="p-8 md:p-12 relative overflow-hidden">
+          {/* Decorative background elements for CTA */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-violet-600/10 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#00FFA3]/5 rounded-full blur-[80px]" />
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex-1 max-w-2xl text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 mb-4">
+                <Sparkles className="w-4 h-4 text-fuchsia-400" />
+                <span className="text-xs font-bold text-fuchsia-300 uppercase tracking-wider">Özel Ödül Sistemi</span>
+              </div>
+              <h3 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight font-['Outfit']">
+                Oynadıkça Kazan, <br className="hidden md:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FFA3] to-[#00B8FF]">Seviye Atla!</span>
+              </h3>
+              <p className="text-zinc-400 text-sm md:text-base mb-8 max-w-lg mx-auto md:mx-0">
+                724Bets Görevler ve Kariyer sistemine katılarak günlük görevleri tamamlayın, 
+                XP toplayın ve seviye atladıkça nakit ödüller, bedava dönüşler ve VIP ayrıcalıklarının kilidini açın.
+              </p>
+              
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                <button 
+                  onClick={onLoginClick}
+                  className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-black hover:scale-105 hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all active:scale-95 flex items-center gap-2"
+                >
+                  <Crown className="w-5 h-5" />
+                  Kariyerine Başla
+                </button>
+                <div className="flex items-center gap-4 text-xs font-bold text-zinc-500">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#00FFA3]" />
+                    <span>Günlük Ödüller</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#00FFA3]" />
+                    <span>Özel Rozetler</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Visual Teaser */}
+            <div className="w-full max-w-xs relative perspective-1000">
+              <div className="relative transform rotate-y-[-15deg] rotate-x-[10deg] group hover:rotate-y-0 hover:rotate-x-0 transition-transform duration-700">
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 rounded-2xl blur-xl" />
+                <div className="bg-[#131722] border border-white/10 rounded-2xl p-5 relative z-10 shadow-2xl">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-xs font-bold text-zinc-400">Örnek Görev</div>
+                    <div className="text-xs font-black text-[#00FFA3] bg-[#00FFA3]/10 px-2 py-1 rounded">200 XP</div>
+                  </div>
+                  <div className="text-sm text-white font-bold mb-4">Bugün 3 Farklı Slot Oyunu Dene</div>
+                  <div className="h-2 w-full bg-[#0A0D14] rounded-full overflow-hidden mb-2">
+                    <div className="h-full bg-gradient-to-r from-[#00FFA3] to-[#00B8FF] w-[66%] relative">
+                      <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
                     </div>
                   </div>
-                  <div className="ml-4 text-xs font-bold text-zinc-500 px-3 py-1.5 bg-black/30 rounded-lg">
-                    100 XP
+                  <div className="text-right text-[10px] font-bold text-zinc-500">2 / 3 Tamamlandı</div>
+                  
+                  <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-fuchsia-500/20 flex items-center justify-center border border-fuchsia-500/40">
+                      <Flame className="w-5 h-5 text-fuchsia-400" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-white">Rozet Kazan</div>
+                      <div className="text-[10px] text-zinc-500">Yeni başarı kilidi</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Badges / Medals */}
-          <div>
-            <div className="flex items-center justify-between mb-4 mt-2">
-              <h3 className="text-white font-black text-lg flex items-center gap-2">
-                <Medal className="w-5 h-5 text-amber-400" />
-                Rozetler & Başarımlar
-              </h3>
-              <button className="text-xs font-bold text-zinc-400 hover:text-white transition-colors">Tümünü Gör</button>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              {/* Badge 1 (Unlocked) */}
-              <div className="bg-gradient-to-b from-[#1a1814] to-[#0A0D14] border border-amber-500/30 rounded-xl p-3 flex flex-col items-center justify-center text-center relative group cursor-pointer overflow-hidden">
-                <div className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                  <Flame className="w-6 h-6 text-amber-400" />
-                </div>
-                <span className="text-white text-xs font-bold leading-tight mt-1">Kusursuz<br/>Seri</span>
-              </div>
-
-              {/* Badge 2 (Unlocked) */}
-              <div className="bg-gradient-to-b from-[#14151a] to-[#0A0D14] border border-blue-500/30 rounded-xl p-3 flex flex-col items-center justify-center text-center relative group cursor-pointer overflow-hidden">
-                <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                  <Trophy className="w-6 h-6 text-blue-400" />
-                </div>
-                <span className="text-white text-xs font-bold leading-tight mt-1">Spor<br/>Kurdu</span>
-              </div>
-
-              {/* Badge 3 (Locked) */}
-              <div className="bg-[#131722] border border-white/5 rounded-xl p-3 flex flex-col items-center justify-center text-center relative group cursor-pointer opacity-50 grayscale hover:opacity-75 transition-opacity">
-                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-2">
-                  <Zap className="w-6 h-6 text-zinc-500" />
-                </div>
-                <span className="text-zinc-500 text-xs font-bold leading-tight mt-1">Jackpot<br/>Avcısı</span>
-              </div>
-            </div>
-          </div>
-
-      </div>
+        </div>
+      )}
     </div>
   );
 };

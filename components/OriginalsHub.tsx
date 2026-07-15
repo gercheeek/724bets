@@ -137,7 +137,7 @@ const ORIGINALS: GameData[] = [
     }
 ];
 
-export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) => void }) {
+export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (v: string) => void, isLoggedIn?: boolean }) {
     const [mounted, setMounted] = useState(false);
     const [selectedGame, setSelectedGame] = useState<GameData | null>(null);
 
@@ -200,7 +200,7 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
 
                 {/* Gamification Panel Section */}
                 <div className="w-full">
-                    <GamificationPanel className="w-full" />
+                    <GamificationPanel className="w-full" isLoggedIn={isLoggedIn} onLoginClick={() => onNavigate('login')} />
                 </div>
 
                 {/* Slider Header */}

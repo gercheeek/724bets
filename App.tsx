@@ -1835,7 +1835,7 @@ const AppContent: React.FC = () => {
 
         {view === 'originals' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
-            <OriginalsHub onNavigate={handleViewChange} />
+            <OriginalsHub onNavigate={handleViewChange} isLoggedIn={!!(siteUser || userRole)} />
           </div>
         )}
 
