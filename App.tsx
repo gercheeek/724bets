@@ -1160,6 +1160,8 @@ const AppContent: React.FC = () => {
         setView('trusted-sites');
       } else if (cleanPath === '/trusted-detail') {
         setView('trusted-detail');
+      } else if (cleanPath === '/casino') {
+        setView('blackjack');
       } else {
         const viewName = cleanPath.substring(1);
         const validViews = ['blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf'];
@@ -1392,6 +1394,8 @@ const AppContent: React.FC = () => {
       path = '/trusted-sites';
     } else if (v === 'trusted-detail') {
       path = '/trusted-detail';
+    } else if (v === 'blackjack') {
+      path = '/casino';
     } else {
       path = `/${v}`;
     }

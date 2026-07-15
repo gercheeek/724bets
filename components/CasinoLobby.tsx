@@ -15,7 +15,7 @@ const TABS = [
 
 const BANNERS = [
   { id: 1, image: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=1200&auto=format&fit=crop', title: '5.000₺ Hoş Geldin Bonusu', sub: 'İlk yatırımınıza özel fırsatı kaçırmayın' },
-  { id: 2, image: 'https://images.unsplash.com/photo-1606167668511-8785bbbe5761?q=80&w=1200&auto=format&fit=crop', title: 'Haftalık %20 Cashback', sub: 'Kayıplarınızı anında telafi edin' },
+  { id: 2, image: '/images/cashback_boss.jpg', title: 'Haftalık %20 Cashback', sub: 'Kayıplarınızı anında telafi edin' },
 ];
 
 const DEMO_GAMES = [
