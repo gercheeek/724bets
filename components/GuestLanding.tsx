@@ -290,20 +290,20 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
 
     {/* 2 Big Cards: Casino & Sports (Split Screen on Mobile, Separate on Desktop) */}
     <div className="w-full pb-6 md:pb-6 mb-4 md:mb-0">
-      <div className="w-full grid grid-cols-2 gap-2 md:gap-4 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative bg-transparent">
+      <div className="w-full grid grid-cols-2 gap-0 h-[220px] sm:h-[300px] md:h-[240px] rounded-3xl md:rounded-none overflow-hidden md:overflow-visible shadow-[0_20px_60px_rgba(0,0,0,0.7)] md:shadow-none border border-white/10 md:border-none relative bg-transparent">
         
         {/* Kumarhane Card */}
         <div 
           onClick={() => onViewChange('blackjack')}
-          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
+          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-l-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border-y md:border-l md:border-white/5"
         >
           <img 
             src="/images/casino_neon_banner.jpg" 
             alt="Casino" 
             className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
           />
-          {/* Gradient overlay for readability (dark on left) */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+          {/* Gradient overlay: Dark on left for text, dark on right to hide seam */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.3)_50%,rgba(0,0,0,0.9)_100%)] md:bg-[linear-gradient(to_right,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.2)_50%,rgba(0,0,0,0.95)_100%)] pointer-events-none group-hover:bg-[linear-gradient(to_right,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0.2)_50%,rgba(0,0,0,0.9)_100%)] transition-all duration-500"></div>
           
           <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
             <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
@@ -322,15 +322,15 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
         {/* Spor Bahisleri Card */}
         <div 
           onClick={() => onViewChange('sports')}
-          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
+          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-r-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border-y md:border-r md:border-white/5"
         >
           <img 
             src="/images/green_sports_card_left.jpg" 
             alt="Sports Betting" 
             className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
           />
-          {/* Gradient overlay for readability (dark on right) */}
-          <div className="absolute inset-0 bg-gradient-to-l from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+          {/* Gradient overlay: Dark on right for text, dark on left to hide seam */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_left,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.3)_50%,rgba(0,0,0,0.9)_100%)] md:bg-[linear-gradient(to_left,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.2)_50%,rgba(0,0,0,0.95)_100%)] pointer-events-none group-hover:bg-[linear-gradient(to_left,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0.2)_50%,rgba(0,0,0,0.9)_100%)] transition-all duration-500"></div>
           
           <div className="relative z-20 flex flex-col items-end gap-3 h-full justify-center self-end text-right transform group-hover:-translate-x-3 md:group-hover:-translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%] ml-auto">
             <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
