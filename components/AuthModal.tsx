@@ -514,6 +514,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 )}
                     </div>
                 </div>
+                )}
             </div>
         </div>
     );
