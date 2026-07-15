@@ -1569,10 +1569,16 @@ const AppContent: React.FC = () => {
           onAdminLogin={() => setAuthModalMode('admin')}
         />
       ) : (
-        <div className="relative flex h-[100dvh] w-full bg-[#111317] text-white overflow-hidden" style={{
-          visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
-          '--header-height': '60px'
-        } as React.CSSProperties}>
+        <div 
+          className="relative flex h-[100dvh] w-full bg-[#111317] text-white overflow-hidden" 
+          onPointerDown={() => setIsLogoSpinning(true)}
+          onPointerUp={() => setIsLogoSpinning(false)}
+          onPointerCancel={() => setIsLogoSpinning(false)}
+          style={{
+            visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
+            '--header-height': '60px'
+          } as React.CSSProperties}
+        >
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
@@ -1627,9 +1633,6 @@ const AppContent: React.FC = () => {
                 <div 
                   className="font-black text-2xl sm:text-3xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
                   onClick={() => setView('home')}
-                  onPointerDown={() => setIsLogoSpinning(true)}
-                  onPointerUp={() => setIsLogoSpinning(false)}
-                  onPointerLeave={() => setIsLogoSpinning(false)}
                   style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
                 >
                   <SlotText text="724" className="text-white font-extrabold" isSpinning={isLogoSpinning} />
