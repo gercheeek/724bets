@@ -36,6 +36,8 @@ const DEMO_GAMES = [
   { id: 115, name: 'Hilo', provider: 'Originals', img: '/images/rainbet-hilo.jpg', category: 'originals', rtp: '99.00%' },
   { id: 116, name: 'Blackjack', provider: 'Originals', img: '/images/rainbet-blackjack.jpg', category: 'originals', rtp: '99.29%' },
   { id: 117, name: 'Roulette', provider: 'Originals', img: '/images/rainbet-roulette.jpg', category: 'originals', rtp: '97.30%' },
+  { id: 118, name: 'Chicken Cross', provider: 'Originals', img: '/images/rainbet-chickencross.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 119, name: 'Limbo', provider: 'Originals', img: '/images/rainbet-limbo.jpg', category: 'originals', rtp: '99.00%' },
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%' },
   { id: 116, name: '30 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/30-Coins-Santas-Jackpots-Wazdan/Vertical/30CoinsSantasJackpots.webp', category: 'new', rtp: '96.18%' },
   { id: 117, name: 'Flaming Hot', provider: 'EGT Digital', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/FlamingHotExtremeBellLink.webp', category: 'slots', rtp: '95.96%' },
