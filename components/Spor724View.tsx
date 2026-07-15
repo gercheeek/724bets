@@ -4,6 +4,7 @@ import {
   Megaphone, Target, Gift, Shield, Gamepad2, Trophy, 
   Activity, Star, Lock, Flame, Clock, PlayCircle, Calendar
 } from 'lucide-react';
+import maclarData from '../maclar.json';
 
 interface Spor724ViewProps {
   onNavigate: (view: string) => void;
@@ -145,6 +146,42 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   const [activeSport, setActiveSport] = useState('Futbol');
   const [activeMarket, setActiveMarket] = useState('Maç Sonucu 1x2');
   const [isBetSlipOpen, setIsBetSlipOpen] = useState(false);
+
+  // Parse real data from maclar.json
+  const parsedMatches = React.useMemo(() => {
+    try {
+      if (!Array.isArray(maclarData)) return [];
+      return maclarData.slice(0, 15).map((ev: any) => {
+        const m1x2 = ev.markets?.find((m: any) => m.Name === 'Maç Sonucu 1X2');
+        if (!m1x2) return null;
+        
+        const homeSel = m1x2.Selections?.find((s: any) => s.OutcomeType?.trim() === 'Ev');
+        const drawSel = m1x2.Selections?.find((s: any) => s.OutcomeType?.trim() === 'Berabere');
+        const awaySel = m1x2.Selections?.find((s: any) => s.OutcomeType?.trim() === 'Deplasman');
+        
+        if (!homeSel || !awaySel) return null;
+        
+        return {
+          id: ev.id,
+          date: 'Bugün',
+          time: '21:00', // Mocking time as API only returned markets here
+          home: homeSel.Name || 'Ev Sahibi',
+          away: awaySel.Name || 'Deplasman',
+          odds: [
+            { label: '1', value: homeSel.TrueOdds?.toFixed(2) || '1.10' },
+            { label: 'X', value: drawSel?.TrueOdds?.toFixed(2) || '1.10' },
+            { label: '2', value: awaySel.TrueOdds?.toFixed(2) || '1.10' },
+            { label: 'Diğer', value: '+' + (ev.markets?.length || 15), isMarket: true }
+          ]
+        };
+      }).filter(Boolean).slice(0, 5);
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  }, []);
+
+  const upcomingMatchesToUse = parsedMatches.length > 0 ? parsedMatches : mockUpcomingMatches;
 
   const megaBoostsRef = useRef<HTMLDivElement>(null);
 
@@ -310,7 +347,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                </div>
 
                {/* Match Rows */}
-               {mockUpcomingMatches.map((match, index) => (
+               {upcomingMatchesToUse.map((match, index) => (
                   <div key={match.id} className="flex flex-col md:flex-row md:items-center justify-between px-4 py-3 bg-[#0b0e14] border-b border-[#1f232b] hover:bg-[#12161f] transition-colors cursor-pointer group gap-4 md:gap-0">
                      
                      {/* Left side: Teams */}
