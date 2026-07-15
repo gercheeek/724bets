@@ -1020,68 +1020,6 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     </div>
                 </div>
 
-                {/* World Cup Match Highlights (VODs) - Placed directly below the player/channels row */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 900, color: '#6b7280', letterSpacing: '1px', textTransform: 'uppercase' }}>DÜNYA KUPASI MAÇ ÖZETLERİ</span>
-                        <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, rgba(255,255,255,0.06), transparent)' }} />
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' }}>
-                        {vods.length === 0 ? (
-                            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '40px 0', color: '#6b7280', fontSize: '13px' }}>Henüz eklenmiş maç özeti bulunamadı.</div>
-                        ) : (
-                            vods.map(vod => (
-                                <div 
-                                    key={vod.id} 
-                                    onClick={() => { 
-                                        setActiveChannel({ id: vod.id, name: vod.title, sourceType: 'video', videoUrl: vod.video_url, isLive: false, category: 'VOD' } as any); 
-                                    }}
-                                    style={{
-                                        background: 'rgba(255,255,255,0.02)',
-                                        border: '1px solid rgba(255,255,255,0.06)',
-                                        borderRadius: '8px', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.2s ease'
-                                    }}
-                                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0, 255, 163, 0.4)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateY(0)'; }}
-                                >
-                                    <div style={{ width: '100%', height: '124px', background: '#080a10', position: 'relative' }}>
-                                        {vod.thumbnail_url ? (
-                                            <img src={vod.thumbnail_url} alt={vod.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        ) : (
-                                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Tv style={{ width: 28, height: 28, color: '#374151' }} />
-                                            </div>
-                                        )}
-                                        <div style={{ position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,0,0,.85)', padding: '2px 7px', borderRadius: '4px', fontSize: '8px', color: '#fff', fontWeight: 800 }}>
-                                            {vod.views || 0} izlenme
-                                        </div>
-                                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top,rgba(0,0,0,.4),transparent)' }} />
-                                    </div>
-                                    <div style={{ padding: '12px' }}>
-                                        <div style={{ fontSize: '12px', fontWeight: 800, color: '#fff', marginBottom: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{vod.title}</div>
-                                        <div style={{ fontSize: '10px', color: '#6b7280' }}>
-                                            {vod.created_at ? new Date(vod.created_at).toLocaleDateString('tr-TR') : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-
-                {/* ── TICKER ─────────────────────────────────────────── */}
-                {currentConfig.tickerText && (
-                    <div style={{ padding: '10px 0', background: '#050507', borderRadius: '8px', border: '1px solid rgba(0, 255, 163,.1)', overflow: 'hidden', position: 'relative', marginTop: '16px' }}>
-                        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg,transparent,#00FFA3,transparent)', opacity: .4 }} />
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', animation: 'marquee 30s linear infinite', whiteSpace: 'nowrap' }}>
-                            <Zap style={{ width: 10, height: 10, color: '#00FFA3', flexShrink: 0 }} />
-                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#00FFA3', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{currentConfig.tickerText}</span>
-                            <span style={{ color: '#1a1a1a', margin: '0 20px' }}>|</span>
-                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#00FFA3', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{currentConfig.tickerText}</span>
-                        </div>
-                    </div>
-                )}
-
             </div>
         </div>
     );
