@@ -13,6 +13,18 @@ export interface Game {
 
 export const ALL_GAMES: Game[] = [
   {
+    "id": 99998,
+    "name": "Sweet Bonanza 1000",
+    "provider": "Pragmatic Play",
+    "category": "new",
+    "image": "https://cdn2.softswiss.net/i/s3/pragmaticexternal/SweetBonanza1000.png",
+    "demoSymbol": "vs20sbonz1000",
+    "rtp": "96.53%",
+    "players": 18452,
+    "isPopular": true,
+    "isNew": true
+  },
+  {
     "id": 1,
     "name": "Sweet Bonanza",
     "provider": "Pragmatic Play",
