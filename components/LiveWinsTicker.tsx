@@ -107,16 +107,15 @@ export default function LiveWinsTicker() {
     <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 border-b border-white/5">
       
       {/* Premium Gamdom-Style Floating Live Badge */}
-      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-2 md:pl-6 pr-16 pointer-events-none bg-gradient-to-r from-[#0B0E14] via-[#0B0E14] to-transparent">
-         <div className="bg-[#0B0E14]/80 backdrop-blur-md rounded-full px-4 py-2.5 flex items-center gap-3 border border-[#00FFA3]/30 shadow-[0_0_20px_rgba(0,255,163,0.15)] relative overflow-hidden">
-           {/* Inner green glow */}
-           <div className="absolute inset-0 bg-[#00FFA3]/5"></div>
-           
+      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-2 md:pl-6 pr-6 md:pr-16 pointer-events-none bg-gradient-to-r from-[#0B0E14] via-[#0B0E14] to-transparent">
+         <div className="bg-[#151821] rounded-full px-3 py-1.5 md:px-4 md:py-2 flex items-center gap-2 border border-white/10 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
            <div className="relative flex items-center justify-center">
-             <span className="absolute w-3 h-3 rounded-full bg-[#00FFA3] animate-ping opacity-40"></span>
-             <span className="relative w-2 h-2 rounded-full bg-[#00FFA3] shadow-[0_0_12px_#00FFA3]"></span>
+             <span className="absolute w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#00FFA3] animate-ping opacity-40"></span>
+             <span className="relative w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#00FFA3] shadow-[0_0_8px_#00FFA3]"></span>
            </div>
-           <span className="relative text-[#00FFA3] font-black text-[10px] md:text-[11px] tracking-widest uppercase drop-shadow-[0_0_8px_rgba(0,255,163,0.5)]">Canlı Kazançlar</span>
+           <span className="text-white font-bold text-[10px] md:text-[12px] tracking-wide">
+             Canlı <span className="hidden md:inline">Kazançlar</span>
+           </span>
          </div>
       </div>
 
