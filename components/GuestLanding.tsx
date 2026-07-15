@@ -6,6 +6,7 @@ import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
 import { useLanguage } from '../contexts/LanguageContext';
+import PopularGamesSlider from './PopularGamesSlider';
 
 const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {
   const { t } = useLanguage();
@@ -293,7 +294,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
              </WorldCupTeaser>
           </div>
           
-          <div className="w-full mb-8">
+          <div className="w-full">
+            <PopularGamesSlider />
+          </div>
+
+          <div className="w-full mb-8 mt-4">
             <LiveWinsTicker />
           </div>
         </>
