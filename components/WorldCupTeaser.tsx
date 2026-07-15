@@ -19,17 +19,19 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
             100% { transform: scale(1.15) translate(-2%, -1%); }
           }
           .animate-pan {
-            animation: continuousPan 25s ease-in-out infinite;
+            animation: continuousPan 20s linear infinite;
           }
         `}</style>
 
         {/* Background Image & Overlay */}
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop" 
-            alt="World Cup Stadium" 
-            className="w-full h-full object-cover object-center animate-pan group-hover:scale-125 transition-transform duration-1000 ease-out"
-          />
+          <div className="w-full h-full transform group-hover:scale-[1.15] transition-transform duration-1000 ease-out">
+            <img 
+              src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop" 
+              alt="World Cup Stadium" 
+              className="w-full h-full object-cover object-center animate-pan"
+            />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/90 to-[#0B0E14]/20 group-hover:from-[#0B0E14] group-hover:via-[#0B0E14]/80 group-hover:to-transparent transition-colors duration-500"></div>
           {/* Neon Green Glow Effect */}
           <div className="absolute top-0 left-0 w-1/2 h-full bg-[#00FFA3]/5 blur-[100px] pointer-events-none"></div>
