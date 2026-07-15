@@ -2457,39 +2457,7 @@ const AppContent: React.FC = () => {
     </div>
     )}
 
-      {/* 724BETS OVERLAY FOOTER */}
-      {['sports', 'sports2', 'sports3', 'sports4', 'sports5'].includes(view) && (
-        <div className="hidden md:flex fixed bottom-0 left-0 w-full z-[90] bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex-row items-center justify-between px-4 py-3 pointer-events-auto">
-          <div className="flex items-center gap-3">
-            <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: '20px', color: '#fff', letterSpacing: '-1px' }}>
-              724bets
-            </span>
-            <div className="h-5 w-px bg-zinc-700 hidden md:block"></div>
-            <span className="text-zinc-400 text-[11px] hidden md:block max-w-[450px] leading-snug">
-              724bets, Curaçao yasalarına göre lisanslanmış profesyonel ve güvenilir bahis platformudur. Tüm hakları saklıdır.
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-3 mt-2 md:mt-0">
-             <div className="hidden lg:flex items-center gap-2 mr-2 opacity-80 overflow-x-auto max-w-[200px] md:max-w-none scrollbar-hide">
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAPARA</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">HAVALE</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAYCO</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">MASTERCARD</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">VISA</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">BITCOIN</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">TETHER</div>
-             </div>
-             <button 
-               onClick={() => alert('Lisans belgeleri yakında eklenecek.')}
-               className="px-3 py-1.5 bg-[#00FFA3]/10 border border-[#00FFA3]/30 text-[#00FFA3] rounded text-[10px] font-bold hover:bg-[#00FFA3]/20 transition-colors flex items-center gap-1.5 shrink-0"
-             >
-               <ShieldCheck className="w-3.5 h-3.5" />
-               LİSANS BELGELERİ
-             </button>
-          </div>
-        </div>
-      )}
+      {/* 724BETS OVERLAY FOOTER REMOVED AS PER USER REQUEST */}
 
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav 
