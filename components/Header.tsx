@@ -91,6 +91,42 @@ interface CategoryItem {
 
 const ICON_SIZE = 'w-5 h-5';
 
+const SlotText: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
+  const [displayedText, setDisplayedText] = useState(text);
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const triggerAnimation = () => {
+    let iteration = 0;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
+      setDisplayedText(
+        text.split("").map((letter, index) => {
+          if (index < iteration) return text[index];
+          return letters[Math.floor(Math.random() * letters.length)];
+        }).join("")
+      );
+      if (iteration >= text.length) {
+        clearInterval(intervalRef.current!);
+      }
+      iteration += 1 / 4;
+    }, 40);
+  };
+
+  useEffect(() => {
+    triggerAnimation();
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [text]);
+
+  return (
+    <span className={className} onMouseEnter={triggerAnimation} style={{ display: 'inline-block', minWidth: `${text.length * 0.65}em` }}>
+      {displayedText}
+    </span>
+  );
+};
 
 
 const Header: React.FC<HeaderProps> = ({
@@ -359,8 +395,8 @@ const Header: React.FC<HeaderProps> = ({
                 onClick={() => onViewChange?.('home')}
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
               >
-                <span className="text-white font-extrabold text-xl md:text-2xl uppercase">724</span>
-                <span className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase">BETS</span>
+                <SlotText text="724" className="text-white font-extrabold text-xl md:text-2xl uppercase text-center" />
+                <SlotText text="BETS" className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase text-center" />
               </div>
 
               <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
