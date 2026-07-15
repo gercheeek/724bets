@@ -2,19 +2,18 @@ import React from 'react';
 
 interface WorldCupTeaserProps {
   onMatchClick?: (matchId: string) => void;
-  children?: React.ReactNode;
 }
 
-const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick, children }) => {
+const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
   return (
-    <div className="w-full flex flex-col gap-6 my-4 font-sans">
+    <div className="w-full flex flex-col gap-6 font-sans h-full">
       
       {/* HERO BANNER */}
-      <div className="w-full rounded-2xl overflow-hidden relative flex flex-col md:flex-row items-center min-h-[260px] md:min-h-[140px]" 
-           style={{ background: 'linear-gradient(90deg, #360773 0%, #15022e 100%)' }}>
+      <div className="w-full rounded-2xl overflow-hidden relative flex flex-col md:flex-row items-center min-h-[160px] md:min-h-[100px] h-full transform-gpu will-change-transform" 
+           style={{ background: 'linear-gradient(90deg, #360773 0%, #15022e 100%)', WebkitTransform: 'translateZ(0)' }}>
         
         {/* Background Decorations (Simulating the coins/space bg) */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center md:justify-end">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center md:justify-end transform-gpu" style={{ WebkitTransform: 'translateZ(0)' }}>
            {/* We can use CSS gradients and blurred circles to simulate the space aesthetic since we don't have the exact image */}
            <div className="absolute top-[-50%] right-[-10%] w-[80%] h-[200%] bg-gradient-to-l from-purple-600/30 to-transparent blur-3xl transform rotate-12"></div>
            <div className="absolute bottom-0 right-[20%] w-[300px] h-[300px] bg-yellow-500/20 rounded-full blur-3xl"></div>
@@ -68,12 +67,6 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick, children 
         </div>
       </div>
 
-      {/* INJECTED CONTENT (e.g. Welcome Text & Big Cards) */}
-      {children && (
-        <div className="w-full">
-          {children}
-        </div>
-      )}
     </div>
   );
 };
