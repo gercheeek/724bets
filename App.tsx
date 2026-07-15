@@ -2413,7 +2413,7 @@ const AppContent: React.FC = () => {
           </aside>
 
           {/* Gamdom-style Floating Action Buttons (Desktop Only) */}
-          {!isChatOpen && siteUser && (
+          {!isChatOpen && siteUser && view !== 'home' && (
             <div className="hidden xl:flex fixed bottom-6 right-6 flex-col gap-2 z-50">
               <button 
                 onClick={() => setIsChatOpen(true)}
@@ -2443,7 +2443,7 @@ const AppContent: React.FC = () => {
       )}
 
       {/* Gamdom-style Floating Action Buttons (Mobile Only) */}
-      {view !== 'admin' && !showLiveScoreModal && isMobile && !isMobileChatOpen && siteUser && (
+      {view !== 'admin' && view !== 'home' && !showLiveScoreModal && isMobile && !isMobileChatOpen && siteUser && (
         <div className="flex xl:hidden fixed bottom-20 right-4 flex-col gap-2 z-50">
           <button 
             onClick={() => setIsMobileChatOpen(true)}
