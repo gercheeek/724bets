@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Star, Target, CheckCircle2, Medal, X, Zap, Crown, Flame } from 'lucide-react';
+import { Trophy, Star, Target, CheckCircle2, Medal, X, Zap, Crown, Flame, Sparkles } from 'lucide-react';
 
 interface GamificationPanelProps {
   className?: string;
