@@ -104,48 +104,48 @@ export default function LiveWinsTicker() {
   }, []);
 
   return (
-    <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 md:py-4 border-b border-white/5">
+    <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 border-b border-white/5">
       
       {/* Sleek Floating Live Badge */}
-      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-2 md:pl-4 pointer-events-none bg-gradient-to-r from-[#0B0E14] via-[#0B0E14] to-transparent pr-16">
-         <div className="bg-[#1F2331] rounded-lg px-3 py-2 flex items-center gap-2 shadow-lg border border-white/5">
+      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-4 pr-6 pointer-events-none bg-[#0B0E14] shadow-[20px_0_20px_-10px_#0B0E14]">
+         <div className="bg-[#1C202B] rounded-xl px-3.5 py-2 flex items-center gap-2.5 border border-white/5 shadow-md">
            <div className="relative flex items-center justify-center">
-             <span className="absolute w-2.5 h-2.5 rounded-full bg-[#00E676] animate-ping opacity-60"></span>
-             <span className="relative w-2 h-2 rounded-full bg-[#00E676]"></span>
+             <span className="absolute w-2.5 h-2.5 rounded-full bg-[#00E676] animate-ping opacity-50"></span>
+             <span className="relative w-2 h-2 rounded-full bg-[#00E676] shadow-[0_0_8px_rgba(0,230,118,0.8)]"></span>
            </div>
-           <span className="text-gray-200 font-semibold text-xs whitespace-nowrap">Canlı Kazançlar</span>
+           <span className="text-[#9BA1B0] font-semibold text-[12px] whitespace-nowrap tracking-wide">Canlı Kazançlar</span>
          </div>
       </div>
 
       {/* Horizontal Scrolling List */}
       <div 
-        className="flex gap-2 md:gap-3 overflow-x-auto hide-scrollbar w-full pl-[140px] md:pl-[180px] pr-8 scroll-smooth"
+        className="flex gap-2.5 md:gap-4 overflow-x-auto hide-scrollbar w-full pl-[160px] md:pl-[190px] pr-8 scroll-smooth"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
         {wins.map((win) => (
           <div 
             key={win.id}
             onClick={() => setSelectedWin(win)}
-            className="flex-shrink-0 flex flex-col items-center cursor-pointer transition-transform duration-300 hover:-translate-y-1 group w-[76px] md:w-[90px]"
+            className="flex-shrink-0 flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 group w-[80px] md:w-[96px]"
           >
             {/* Game Cover */}
-            <div className="w-full aspect-[3/4] rounded-lg overflow-hidden relative shadow-md mb-2 bg-[#151922]">
+            <div className="w-full aspect-[3/4] rounded-[10px] md:rounded-xl overflow-hidden relative shadow-lg mb-2.5 bg-[#151922] ring-1 ring-white/5 group-hover:ring-white/10 transition-all">
                <img 
                  src={win.image} 
                  alt={win.game} 
                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                />
-               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
             </div>
 
             {/* User Info */}
-            <div className="flex items-center gap-1 w-full justify-center px-1 mb-0.5">
-               <Diamond className={`w-2.5 h-2.5 md:w-3 md:h-3 ${getRankColor(win.userRank)} shrink-0`} fill="currentColor" />
-               <span className="text-gray-300 font-medium text-[10px] md:text-[11px] truncate">{win.user.substring(0, 4)}...</span>
+            <div className="flex items-center gap-1.5 w-full justify-center px-1 mb-1">
+               <Diamond className={`w-2.5 h-2.5 md:w-3 md:h-3 ${getRankColor(win.userRank)} shrink-0 opacity-90`} fill="currentColor" />
+               <span className="text-[#848B9D] font-semibold text-[10px] md:text-[11px] truncate tracking-wide">{win.user.substring(0, 4)}...</span>
             </div>
             
             {/* Payout */}
-            <span className="text-[#00E676] font-bold text-[10px] md:text-[12px] tracking-tight">
+            <span className="text-[#00E676] font-black text-[11px] md:text-[13px] tracking-wide">
                {win.payout}
             </span>
           </div>
