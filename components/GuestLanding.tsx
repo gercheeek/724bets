@@ -239,35 +239,34 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         // GUEST VIEW: Welcome, Search + Side-by-Side Hero Banner & Cards
         <>
 
-
-            {/* Welcome & Search Bar Inline (Moved to top for balance) */}
-            <div className="w-full py-2 flex justify-between items-center mb-4 lg:mb-6">
-              <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
-                Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
-              </h2>
-              {/* Mobile Search Icon */}
-              <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
-                <Search className="w-5 h-5 text-gray-400" />
-              </button>
-              {/* Desktop Search Bar */}
-              <div onClick={onSearchClick} className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[240px] xl:w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5">
-                <Search className="w-4 h-4 text-gray-400 mr-3" />
-                <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
-              </div>
-            </div>
-
             {/* Layout Column (Stacked vertically for harmonious full-width design on PC) */}
-            <div className="w-full flex flex-col gap-4 pb-6 md:pb-6 mb-4 md:mb-0">
+            <div className="w-full flex flex-col gap-2 md:gap-4 pb-2 md:pb-6 mb-2 md:mb-0">
               {showTeaser && (
-                <div className="w-full flex-shrink-0">
+                <div className="w-full flex-shrink-0 mb-1 md:mb-2">
                   <WorldCupTeaser />
                 </div>
               )}
               
+              {/* Welcome & Search Bar Inline (Between teaser and cards) */}
+              <div className="w-full py-1.5 md:py-2 flex justify-between items-center mb-1 lg:mb-4">
+                <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
+                  Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
+                </h2>
+                {/* Mobile Search Icon */}
+                <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
+                  <Search className="w-5 h-5 text-gray-400" />
+                </button>
+                {/* Desktop Search Bar */}
+                <div onClick={onSearchClick} className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[240px] xl:w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5">
+                  <Search className="w-4 h-4 text-gray-400 mr-3" />
+                  <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
+                </div>
+              </div>
+              
               <div className="w-full flex flex-col">
 
                 {/* 2 Big Cards Container */}
-                <div className="w-full flex-1 grid grid-cols-1 sm:grid-cols-2 gap-0 min-h-[260px] md:min-h-[200px] lg:min-h-[160px] rounded-3xl md:rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-[#0B0E14]">
+                <div className="w-full flex-1 grid grid-cols-1 sm:grid-cols-2 gap-0 min-h-[180px] md:min-h-[200px] lg:min-h-[160px] rounded-3xl md:rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-[#0B0E14]">
                   {/* Kumarhane Card */}
                   <div onClick={() => onViewChange('blackjack')} className="relative w-full h-full cursor-pointer group flex flex-col justify-end p-4 lg:p-5 border-b sm:border-b-0 sm:border-r border-white/5 z-20">
                     <div className="absolute top-0 left-0 w-[120%] h-full pointer-events-none [mask-image:linear-gradient(to_right,black_50%,transparent_100%)] overflow-hidden">

@@ -9,7 +9,7 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
     <div className="w-full flex flex-col gap-6 font-sans h-full">
       
       {/* HERO BANNER */}
-      <div className="w-full rounded-2xl overflow-hidden relative flex flex-col md:flex-row items-center min-h-[200px] md:min-h-[160px] h-full shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 group cursor-pointer">
+      <div className="w-full rounded-2xl overflow-hidden relative flex flex-col md:flex-row items-center min-h-[140px] md:min-h-[160px] h-full shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 group cursor-pointer">
         
         {/* Continuous Motion Style */}
         <style>{`
@@ -38,7 +38,7 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between w-full p-6 md:p-8 lg:px-10 h-full gap-6 md:gap-0">
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between w-full p-4 md:p-8 lg:px-10 h-full gap-4 md:gap-0">
           
           {/* Title Area */}
           <div className="flex flex-col text-center md:text-left max-w-md transform group-hover:translate-x-2 transition-transform duration-500">
