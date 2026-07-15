@@ -106,36 +106,36 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
     <div className="flex-1 overflow-y-auto bg-[#0a0a0a] min-h-screen">
       <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 pt-12">
         <div className="flex flex-col items-center justify-center text-center space-y-4 mb-10">
-          <div className="w-20 h-20 bg-gradient-to-tr from-[#f0b90b]/20 to-[#f0b90b]/5 rounded-full flex items-center justify-center border border-[#f0b90b]/30 mb-2 shadow-[0_0_30px_rgba(240,185,11,0.15)]">
-            <Ticket className="w-10 h-10 text-[#f0b90b]" />
+          <div className="w-20 h-20 bg-gradient-to-tr from-[#00FFA3]/20 to-[#00FFA3]/5 rounded-full flex items-center justify-center border border-[#00FFA3]/30 mb-2 shadow-[0_0_30px_rgba(0,255,163,0.15)]">
+            <Ticket className="w-10 h-10 text-[#00FFA3]" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">Kodu <span className="text-[#f0b90b]">Kullan</span></h1>
+          <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">Kodu <span className="text-[#00FFA3] drop-shadow-[0_0_15px_rgba(0,255,163,0.4)]">Kullan</span></h1>
           <p className="text-zinc-400 max-w-lg mx-auto text-sm sm:text-base">
             Elindeki promosyon kodunu aşağıya gir ve anında bedava bakiye veya free spin kazan!
           </p>
         </div>
 
-        <div className="max-w-md mx-auto bg-zinc-900 border border-zinc-800 p-6 sm:p-8 rounded-2xl shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#f0b90b]/0 via-[#f0b90b] to-[#f0b90b]/0"></div>
+        <div className="max-w-md mx-auto bg-[#151821] border border-white/5 p-6 sm:p-8 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00FFA3]/0 via-[#00FFA3]/50 to-[#00FFA3]/0"></div>
           
           <div className="space-y-6">
             <div>
               <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Promosyon Kodu</label>
               <div className="relative">
-                <input 
-                  type="text" 
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  placeholder="ÖRN: BONUS2026"
-                  className="w-full bg-black border-2 border-zinc-800 focus:border-[#f0b90b] rounded-xl py-4 px-5 text-white text-lg font-bold tracking-widest text-center transition-colors outline-none placeholder:text-zinc-700"
-                />
+                  <input 
+                    type="text" 
+                    value={code}
+                    onChange={(e) => setCode(e.target.value.toUpperCase())}
+                    placeholder="ÖRN: BONUS2026"
+                    className="w-full bg-[#0B0E14] border-2 border-white/5 focus:border-[#00FFA3]/50 focus:shadow-[0_0_15px_rgba(0,255,163,0.1)] rounded-xl py-4 px-5 text-white text-lg font-bold tracking-widest text-center transition-all outline-none placeholder:text-zinc-700"
+                  />
               </div>
             </div>
 
             <button 
               onClick={handleCheckCode}
               disabled={loading || !code.trim()}
-              className="w-full bg-gradient-to-r from-[#f0b90b] to-[#e5a900] hover:from-[#fada55] hover:to-[#f0b90b] text-black font-black py-4 rounded-xl transition-all shadow-lg shadow-[#f0b90b]/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#00FFA3] hover:bg-[#00E693] text-black font-black py-4 rounded-xl transition-all shadow-[0_0_15px_rgba(0,255,163,0.2)] hover:shadow-[0_0_25px_rgba(0,255,163,0.4)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'KODU KONTROL ET'}
             </button>
@@ -166,16 +166,16 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
         
         {/* Decorative elements */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-          <div className="bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 text-center">
-            <h4 className="text-[#f0b90b] font-bold text-sm uppercase mb-1">Anında Aktarım</h4>
+          <div className="bg-[#151821] p-5 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors">
+            <h4 className="text-[#00FFA3] font-bold text-sm uppercase mb-1">Anında Aktarım</h4>
             <p className="text-zinc-500 text-xs">Kodlar anında onaylanır ve bakiyeniz saniyeler içinde güncellenir.</p>
           </div>
-          <div className="bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 text-center">
-            <h4 className="text-[#f0b90b] font-bold text-sm uppercase mb-1">Limitli Kodlar</h4>
+          <div className="bg-[#151821] p-5 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors">
+            <h4 className="text-[#00FFA3] font-bold text-sm uppercase mb-1">Limitli Kodlar</h4>
             <p className="text-zinc-500 text-xs">Hızlı davranın, özel kodlar kısa sürede tükenebilir.</p>
           </div>
-          <div className="bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 text-center">
-            <h4 className="text-[#f0b90b] font-bold text-sm uppercase mb-1">Büyük Ödüller</h4>
+          <div className="bg-[#151821] p-5 rounded-xl border border-white/5 text-center shadow-lg hover:border-white/10 transition-colors">
+            <h4 className="text-[#00FFA3] font-bold text-sm uppercase mb-1">Büyük Ödüller</h4>
             <p className="text-zinc-500 text-xs">Sosyal medya hesaplarımızdan paylaşılan sürpriz kodları kaçırmayın.</p>
           </div>
         </div>
