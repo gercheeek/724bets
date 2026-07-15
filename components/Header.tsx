@@ -8,6 +8,7 @@ import {
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
 import { useLanguage, LanguageCode } from '../contexts/LanguageContext';
+import SlotText from './SlotText';
 
 export interface NavVisibility {
   coupons: boolean;
@@ -90,44 +91,6 @@ interface CategoryItem {
 }
 
 const ICON_SIZE = 'w-5 h-5';
-
-const SlotText: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
-  const [displayedText, setDisplayedText] = useState(text);
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const triggerAnimation = () => {
-    let iteration = 0;
-    if (intervalRef.current) clearInterval(intervalRef.current);
-
-    intervalRef.current = setInterval(() => {
-      setDisplayedText(
-        text.split("").map((letter, index) => {
-          if (index < iteration) return text[index];
-          return letters[Math.floor(Math.random() * letters.length)];
-        }).join("")
-      );
-      if (iteration >= text.length) {
-        clearInterval(intervalRef.current!);
-      }
-      iteration += 1 / 8; // Slower lock-in (smaller number = longer spin)
-    }, 60); // Slower flicker
-  };
-
-  useEffect(() => {
-    triggerAnimation();
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [text]);
-
-  return (
-    <span className={className} onMouseEnter={triggerAnimation} style={{ display: 'inline-block', minWidth: `${text.length * 0.65}em` }}>
-      {displayedText}
-    </span>
-  );
-};
-
 
 const Header: React.FC<HeaderProps> = ({
   onAdminClick,

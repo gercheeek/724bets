@@ -194,9 +194,10 @@ const AppContent: React.FC = () => {
     setShowLoader(true);
     setFadeOutLoader(false);
     
+    // Fallback timer just in case
     const timer1 = setTimeout(() => {
       setFadeOutLoader(true);
-    }, 2500); // Start fading out at 2.5s
+    }, 5000); 
     
     const timer2 = setTimeout(() => {
       setShowLoader(false);
@@ -1570,7 +1571,7 @@ const AppContent: React.FC = () => {
           visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
           '--header-height': '60px'
         } as React.CSSProperties}>
-          {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
+          {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (

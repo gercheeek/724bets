@@ -193,8 +193,8 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
     }
   };
 
-  // Combine ALL_GAMES with customGames
-  const allGames = [...ALL_GAMES, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
+  // Combine ALL_GAMES, DEMO_GAMES, and customGames
+  const allGames = [...ALL_GAMES, ...DEMO_GAMES, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
 
   const filteredGames = allGames.filter(game => {
     const matchesTab = activeTab === 'all' || game.category === activeTab;
