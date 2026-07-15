@@ -181,21 +181,21 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  {/* Kumarhane Card */}
                  <div 
                    onClick={() => onViewChange('blackjack')}
-                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col justify-end p-3 md:p-5"
+                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_15px_50px_rgba(0,0,0,0.6)] bg-[#0B0E14] border border-white/5 flex flex-col justify-end p-3 md:p-5"
                  >
                    <img 
-                     src="https://gamdom.com/static/dyn/banners/tr-tr0ad40188-8f5c-4015-a3f5-1b941902ee35-banners.avif" 
+                     src="/images/casino_neon_banner.jpg" 
                      alt="Casino" 
                      className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                    />
                    {/* Gradient overlay for readability */}
-                   <div className="absolute inset-0 bg-gradient-to-t from-[#811850]/80 via-transparent to-transparent pointer-events-none"></div>
+                   <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none"></div>
                    
-                   <div className="relative z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
-                     <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-md">
+                   <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center">
+                     <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                        {t('casino')}
                      </h3>
-                     <button className="self-start sm:self-auto bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg">
+                     <button className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-5 py-2.5 text-xs md:text-sm rounded-lg transition-colors shadow-[0_0_15px_rgba(0,255,163,0.3)] mt-2">
                        {t('visit_casino')}
                      </button>
                    </div>
@@ -204,21 +204,21 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                  {/* Spor Bahisleri Card */}
                  <div 
                    onClick={() => onViewChange('sports')}
-                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-[#111317] flex flex-col justify-end p-3 md:p-5"
+                   className="relative w-full h-[140px] sm:h-[180px] md:h-[240px] rounded-xl overflow-hidden cursor-pointer group shadow-[0_15px_50px_rgba(0,0,0,0.6)] bg-[#0B0E14] border border-white/5 flex flex-col justify-end p-3 md:p-5"
                  >
                    <img 
-                     src="https://gamdom.com/static/dyn/banners/tr-trc75c9984-9a76-4653-bc88-773fa769e4dc-banners.avif" 
+                     src="/images/sports_neon_banner.jpg" 
                      alt="Sports Betting" 
                      className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                    />
                    {/* Gradient overlay for readability */}
-                   <div className="absolute inset-0 bg-gradient-to-t from-[#216115]/80 via-transparent to-transparent pointer-events-none"></div>
+                   <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none"></div>
                    
-                   <div className="relative z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
-                     <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-md">
+                   <div className="relative z-20 flex flex-col items-start gap-2 h-full justify-center">
+                     <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                        {t('sports')}
                      </h3>
-                     <button className="self-start sm:self-auto bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold px-4 py-2 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg">
+                     <button className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-5 py-2.5 text-xs md:text-sm rounded-lg transition-colors shadow-[0_0_15px_rgba(0,255,163,0.3)] mt-2">
                        {t('visit_sports')}
                      </button>
                    </div>
