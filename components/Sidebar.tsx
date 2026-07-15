@@ -41,6 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   // Track open state of accordions
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [isCasinoOpen, setIsCasinoOpen] = useState(false);
+  const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
   const [isSporOpen, setIsSporOpen] = useState(false);
   const [isSponsorlukOpen, setIsSponsorlukOpen] = useState(false);
 
@@ -345,6 +346,33 @@ const Sidebar: React.FC<SidebarProps> = ({
                     </div>
                     <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">Canlı Casino</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Block 1.5: Originals Accordion */}
+              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+                <div 
+                  onClick={() => setIsOriginalsOpen(!isOriginalsOpen)}
+                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Target className="w-5 h-5 text-white/70 shrink-0" />
+                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Originals</span>}
+                  </div>
+                  {isOpen && <ChevronLeft className={`w-4 h-4 text-white/70 transition-transform ${isOriginalsOpen ? '-rotate-90' : ''}`} />}
+                </div>
+                
+                {isOpen && isOriginalsOpen && (
+                  <div className="flex flex-col py-1">
+                    <div onClick={() => onViewChange('plinko')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
+                      <div className="flex gap-0.5 opacity-50 group-hover:opacity-100">
+                        <div className="w-1 h-1 rounded-full bg-[#0090FF]"></div>
+                        <div className="w-1 h-1 rounded-full bg-[#00FFA3]"></div>
+                        <div className="w-1 h-1 rounded-full bg-[#2a8bf2]"></div>
+                      </div>
+                      <span className="text-[13px] font-medium tracking-wide text-[#00FFA3]">Plinko</span>
                     </div>
                   </div>
                 )}
