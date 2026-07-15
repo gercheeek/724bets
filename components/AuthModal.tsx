@@ -225,10 +225,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 <div className="hidden md:flex w-1/2 relative bg-gradient-to-br from-[#0B0E14] to-[#00FFA3]/20 items-center justify-center overflow-hidden border-r border-white/5 h-full transition-all duration-500">
                     {/* Add a dynamic background image based on tab */}
                     <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay transition-all duration-500"
-                        style={{ backgroundImage: `url('/images/${memberMode === 'register' ? 'sports_neon_banner.jpg' : 'casino_neon_banner.jpg'}')` }}
+                        className="absolute inset-0 bg-cover bg-center opacity-70 mix-blend-normal transition-all duration-500"
+                        style={{ backgroundImage: `url('/images/${memberMode === 'register' ? 'esports_girls_register.jpg' : 'esports_girls_login.jpg'}')` }}
                     ></div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#111317] via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#111317] via-transparent to-transparent opacity-80"></div>
                     <div className="relative z-10 flex flex-col items-center text-center p-8">
                         <h1 className="text-4xl font-black text-white tracking-tighter mb-4 drop-shadow-2xl">724BETS</h1>
                         <p className="text-zinc-300 text-sm font-medium opacity-80">Dünyanın En Büyük Çevrim içi Casino ve <span className="text-[#00FFA3]">Spor Bahisleri</span> Platformu</p>
