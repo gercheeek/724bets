@@ -3,7 +3,7 @@ import {
   Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
   MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
   Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club,
-  Bell, Users, ShieldCheck, Lock, Link, FileText, Clover, Activity
+  Bell, Users, ShieldCheck, Lock, Link, FileText, Clover, Activity, Briefcase
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
@@ -116,6 +116,7 @@ const Header: React.FC<HeaderProps> = ({
   const profileRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
+  const [walletSearch, setWalletSearch] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const { language, setLanguage, t } = useLanguage();
 
@@ -372,43 +373,79 @@ const Header: React.FC<HeaderProps> = ({
         {/* Center: Wallet Pill (Only if logged in) */}
         <div className="flex items-center justify-center flex-[1.5] z-10">
           {siteUser && (
-            <div className="relative flex items-center bg-[#151921] rounded-lg md:rounded-xl pl-1 pr-0.5 py-0.5 border border-white/5 h-[36px] md:h-[44px] shadow-inner" ref={walletDropdownRef}>
+            <div className="relative flex items-center bg-[#1E252D] rounded-lg md:rounded-xl pl-3 pr-0 py-0 border border-[#2B3544] h-[36px] md:h-[44px] shadow-sm" ref={walletDropdownRef}>
               
               {/* Balance Section */}
               <div 
-                className="flex items-center cursor-pointer hover:bg-[#1C2028] transition-colors rounded-lg py-1 px-1 mr-1"
+                className="flex items-center cursor-pointer hover:bg-[#252D37] transition-colors rounded-l-lg py-1 pr-3 h-full"
                 onClick={() => setWalletDropdownOpen(prev => !prev)}
               >
-                <div className="w-6 h-6 md:w-8 md:h-8 rounded md:rounded-lg bg-[#00FFA3] flex items-center justify-center mr-1.5 md:mr-2 flex-shrink-0">
-                  <span className="text-black font-black text-[12px] md:text-sm">$</span>
+                <span className="text-white font-bold text-[13px] md:text-[15px] tracking-tight mr-2 whitespace-nowrap">{(siteUser.balance || 0).toFixed(8)}</span>
+                <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#26A17B] flex items-center justify-center mr-2 flex-shrink-0">
+                  <span className="text-white font-black text-[11px] md:text-xs">₮</span>
                 </div>
-                <span className="text-white font-bold text-[13px] md:text-[15px] tracking-tight mr-1 md:mr-3 whitespace-nowrap">{siteUser.balance?.toFixed(2) || '0.00'}</span>
-                <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-500 mr-1 md:mr-2 transition-transform flex-shrink-0 ${walletDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-400 transition-transform flex-shrink-0 ${walletDropdownOpen ? 'rotate-180' : ''}`} />
               </div>
 
               {/* Deposit Button attached to pill */}
               <button
                 onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-black w-[32px] h-[32px] md:w-auto md:px-5 md:h-[36px] rounded-md md:rounded-lg text-[15px] transition-colors shadow-[0_0_10px_rgba(0,255,163,0.2)] flex items-center justify-center flex-shrink-0"
+                className="bg-[#1A7BF2] hover:bg-[#1565C0] text-white font-bold w-[32px] h-[36px] md:w-auto md:px-5 md:h-[44px] rounded-r-lg text-[14px] md:text-[15px] transition-colors flex items-center justify-center flex-shrink-0 border-l border-[#1A7BF2]"
               >
                 <Wallet className="w-4 h-4 md:hidden" />
                 <span className="hidden md:block whitespace-nowrap">Cüzdan</span>
               </button>
 
               {walletDropdownOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-full mt-2 w-64 rounded-xl py-2 z-50 bg-[#1A1D24] border border-white/5 shadow-2xl text-left">
-                  <div className="flex flex-col">
-                    <div className="flex items-center justify-between px-4 py-3 hover:bg-[#1C2028] cursor-pointer transition-colors bg-[#1C2028]/50">
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold bg-[#ef3434]">₺</div>
-                        <span className="text-white font-bold text-sm">TRY</span>
-                      </div>
-                      <span className="text-white font-bold text-sm">{siteUser.balance?.toFixed(2)}</span>
+                <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-[#17202A] border border-[#2B3544] shadow-2xl text-left overflow-hidden">
+                  
+                  {/* Search bar */}
+                  <div className="p-3 border-b border-[#2B3544]">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                      <input 
+                        type="text" 
+                        value={walletSearch}
+                        onChange={(e) => setWalletSearch(e.target.value)}
+                        placeholder="Para Birimi Ara" 
+                        className="w-full bg-[#1C2531] border border-[#2B3544] rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#1A7BF2] transition-colors placeholder-zinc-400"
+                      />
                     </div>
-                    <button className="w-full text-center py-4 text-zinc-400 hover:text-white font-bold text-sm transition-colors border-t border-white/5 mt-2">
-                      Cüzdan Ayarları
-                    </button>
                   </div>
+
+                  {/* Crypto List */}
+                  <div className="flex flex-col max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#2B3544] scrollbar-track-transparent">
+                    {[
+                      { sym: 'USDT', icon: '₮', bg: '#26A17B' },
+                      { sym: 'BTC', icon: '₿', bg: '#F7931A' },
+                      { sym: 'ETH', icon: 'Ξ', bg: '#627EEA' },
+                      { sym: 'LTC', icon: 'Ł', bg: '#BFBBBB' },
+                      { sym: 'SOL', icon: 'S', bg: 'linear-gradient(45deg, #00FFA3, #03E1FF)' },
+                      { sym: 'DOGE', icon: 'Ð', bg: '#C2A633' },
+                      { sym: 'BCH', icon: '₿', bg: '#8DC351' },
+                      { sym: 'XRP', icon: '✕', bg: '#23292F' },
+                      { sym: 'TRX', icon: '💎', bg: '#FF0013' }
+                    ].filter(c => c.sym.toLowerCase().includes(walletSearch.toLowerCase())).map((crypto, idx) => (
+                      <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#1C2531] cursor-pointer transition-colors group">
+                        <span className="text-white font-bold text-[14px] md:text-[15px] font-mono tracking-tight group-hover:text-white/90">{(crypto.sym === 'USDT' ? (siteUser.balance || 0) : 0).toFixed(8)}</span>
+                        <div className="flex items-center gap-2">
+                          <div 
+                            className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-black shadow-sm"
+                            style={{ background: crypto.bg }}
+                          >
+                            {crypto.icon}
+                          </div>
+                          <span className="text-white font-bold text-sm tracking-wide">{crypto.sym}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Footer Button */}
+                  <button className="w-full flex items-center justify-center gap-2 py-3.5 text-white bg-[#1C2531] hover:bg-[#252D37] font-bold text-sm transition-colors border-t border-[#2B3544]">
+                    <Briefcase className="w-4 h-4 text-zinc-400" />
+                    Cüzdan Ayarları
+                  </button>
                 </div>
               )}
             </div>
