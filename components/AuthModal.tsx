@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Lock, User, X, LogIn, UserPlus, Shield, Mail, Phone, Clock, Loader2, Club, Eye, EyeOff } from 'lucide-react';
 import { SiteUser, EditorAccount } from '../types';
 import { supabase } from '../utils/supabase';
@@ -28,8 +28,16 @@ const InputField: React.FC<{
 );
 
 const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin, onClose, hideMemberLogin = false, initialMemberMode = 'login' }) => {
+    const [showSplash, setShowSplash] = useState(true);
     const [activeTab, setActiveTab] = useState<'member' | 'admin' | 'guest'>(hideMemberLogin ? 'admin' : mode);
     const [memberMode, setMemberMode] = useState<'login' | 'register'>(initialMemberMode);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowSplash(false);
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, []);
 
     const [mUsername, setMUsername] = useState('');
     const [mEmail, setMEmail] = useState('');
@@ -222,7 +230,16 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
             <div className="w-full max-w-4xl bg-[#111317] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-[640px] max-h-[90vh]">
                 
                 {/* Left Side - Promo Graphic (Hidden on mobile) */}
-                <div className="hidden md:flex flex-col justify-between w-1/2 relative overflow-hidden border-r border-white/5 h-full transition-all duration-500">
+                <div className={`hidden md:flex flex-col justify-between relative overflow-hidden h-full transition-all duration-700 ease-in-out ${showSplash ? 'w-full' : 'w-1/2 border-r border-white/5'}`}>
+                    {/* Loading Indicator */}
+                    {showSplash && (
+                        <div className="absolute inset-0 flex items-center justify-center z-20 transition-opacity duration-500">
+                            <div className="flex flex-col items-center gap-4 bg-black/40 p-6 rounded-2xl backdrop-blur-sm border border-white/10">
+                                <Loader2 className="w-10 h-10 text-[#00FFA3] animate-spin" />
+                                <span className="text-white font-bold tracking-widest uppercase text-sm drop-shadow-md">Yükleniyor...</span>
+                            </div>
+                        </div>
+                    )}
                     {/* Add a dynamic background image based on tab */}
                     <div 
                         className="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-normal transition-all duration-500"
@@ -249,7 +266,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 </div>
 
                 {/* Right Side - Auth Form */}
-                <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col relative bg-[#151821] overflow-y-auto h-full scrollbar-hide">
+                {!showSplash && (
+                <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col relative bg-[#151821] overflow-y-auto h-full scrollbar-hide animate-in fade-in slide-in-from-right-8 duration-700">
                     <button onClick={onClose} className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#1F232B] flex items-center justify-center text-zinc-400 hover:text-white transition-colors z-10 hover:bg-[#2A2E39]">
                         <X className="w-4 h-4" />
                     </button>
