@@ -295,13 +295,16 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
         {/* Kumarhane Card */}
         <div 
           onClick={() => onViewChange('blackjack')}
-          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-l-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border-y md:border-l md:border-white/5"
+          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-l-xl md:border-y md:border-l md:border-white/5 z-20"
         >
-          <img 
-            src="/images/casino_neon_banner.jpg" 
-            alt="Casino" 
-            className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
-          />
+          {/* Image Container with Mask for blending */}
+          <div className="absolute top-0 left-0 w-[120%] h-full pointer-events-none [mask-image:linear-gradient(to_right,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_60%,transparent_100%)] overflow-hidden rounded-l-3xl md:rounded-l-xl">
+            <img 
+              src="/images/casino_neon_banner.jpg" 
+              alt="Casino" 
+              className="absolute inset-0 w-full h-full object-cover object-[right_center] transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
+            />
+          </div>
           {/* Gradient overlay: Solid dark on left for text, soft shadow on right to gently mask seam */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,1)_0%,rgba(0,0,0,0.9)_25%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.4)_100%)] md:bg-[linear-gradient(to_right,rgba(0,0,0,1)_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.3)_100%)] pointer-events-none group-hover:bg-[linear-gradient(to_right,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.8)_30%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.2)_100%)] transition-all duration-500"></div>
           
@@ -322,12 +325,12 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
         {/* Spor Bahisleri Card */}
         <div 
           onClick={() => onViewChange('sports')}
-          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-r-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border-y md:border-r md:border-white/5"
+          className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-r-xl overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border-y md:border-r md:border-white/5 z-10"
         >
           <img 
             src="/images/green_sports_card_left.jpg" 
             alt="Sports Betting" 
-            className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
+            className="absolute inset-0 w-full h-full object-cover object-[left_center] transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
           />
           {/* Gradient overlay: Solid dark on right for text, soft shadow on left to gently mask seam (symmetrical to Casino) */}
           <div className="absolute inset-0 bg-[linear-gradient(to_left,rgba(0,0,0,1)_0%,rgba(0,0,0,0.9)_25%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.4)_100%)] md:bg-[linear-gradient(to_left,rgba(0,0,0,1)_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.3)_100%)] pointer-events-none group-hover:bg-[linear-gradient(to_left,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.8)_30%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.2)_100%)] transition-all duration-500"></div>
