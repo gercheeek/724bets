@@ -26,8 +26,8 @@ const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete }) => {
         clearInterval(intervalRef.current!);
         if (onComplete) onComplete();
       }
-      iteration += 1 / 8; // Slower lock-in
-    }, 60); // Slower flicker
+      iteration += 1 / 5; // Faster lock-in
+    }, 50); // Slightly faster flicker
   };
 
   useEffect(() => {
