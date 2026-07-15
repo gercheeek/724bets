@@ -229,11 +229,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         <div className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
             <div className="w-full max-w-4xl bg-[#111317] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-[640px] max-h-[90vh]">
                 
-                {/* Left Side - Promo Graphic (Hidden on mobile) */}
-                <div className={`hidden md:flex flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'w-full' : 'w-1/2 border-r border-white/5'}`}>
-                    {/* Loading Indicator */}
+                {/* Left Side - Promo Graphic (Mobile Splash / Desktop Left Half) */}
+                <div className={`flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
+                    {/* Loading Indicator - Only visible on mobile during splash */}
                     {showSplash && (
-                        <div className="absolute inset-0 flex items-center justify-center z-20 transition-opacity duration-500">
+                        <div className="absolute inset-0 flex md:hidden items-center justify-center z-20 transition-opacity duration-500">
                             <div className="flex flex-col items-center gap-4 bg-black/40 p-6 rounded-2xl backdrop-blur-sm border border-white/10">
                                 <Loader2 className="w-10 h-10 text-[#00FFA3] animate-spin" />
                                 <span className="text-white font-bold tracking-widest uppercase text-sm drop-shadow-md">Yükleniyor...</span>
@@ -260,8 +260,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 </div>
 
                 {/* Right Side - Auth Form */}
-                {!showSplash && (
-                <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col relative bg-[#151821] overflow-y-auto h-full scrollbar-hide animate-in fade-in slide-in-from-right-8 duration-700">
+                <div className={`w-full md:w-1/2 p-6 md:p-10 flex-col relative bg-[#151821] overflow-y-auto h-full scrollbar-hide animate-in fade-in slide-in-from-right-8 duration-700 ${showSplash ? 'hidden md:flex' : 'flex'}`}>
                     <button onClick={onClose} className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#1F232B] flex items-center justify-center text-zinc-400 hover:text-white transition-colors z-10 hover:bg-[#2A2E39]">
                         <X className="w-4 h-4" />
                     </button>
@@ -508,7 +507,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 )}
                     </div>
                 </div>
-                )}
             </div>
         </div>
     );
