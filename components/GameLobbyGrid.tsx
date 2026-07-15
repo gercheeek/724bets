@@ -224,17 +224,6 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
 
   return (
     <div className="w-full bg-transparent p-0 my-4 md:my-6">
-      <GameBlock 
-        title={t('popular_games')} 
-        icon={<Flame className="w-5 h-5 text-white" fill="white" />} 
-        games={slots} 
-        showPlayers={true}
-        onGameClick={(game) => setSelectedGame(game)}
-        onDemoClick={(game) => {
-          setSelectedGame(game);
-          setShowDemoIframe(true);
-        }}
-      />
 
       {selectedGame && typeof document !== 'undefined' && createPortal(
         <div 

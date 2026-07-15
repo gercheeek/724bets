@@ -46,29 +46,42 @@ const DEMO_GAMES = [
 
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
-  if (game.demoSymbol) {
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
-  }
   
   const nameString = (game.name || game.img || game.image || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  let symbol = 'vs20sweetbonanza'; // Fallback to Sweet Bonanza if unknown
+  let symbol = game.demoSymbol || 'vs20olympx'; // Fallback
 
-  if (nameString.includes('sweetbonanza1000')) symbol = 'vs20sbonz1000';
-  else if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
-  else if (nameString.includes('gatesofolympus1000')) symbol = 'vs20olympgate1000';
-  else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
-  else if (nameString.includes('sugarrush1000')) symbol = 'vs20sugarrushx';
-  else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
-  else if (nameString.includes('starlightprincess1000')) symbol = 'vs20starlightx';
-  else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
-  else if (nameString.includes('bigbasssplash')) symbol = 'vs10txbigbass';
-  else if (nameString.includes('bigbassbonanza')) symbol = 'vs10bbbonanza';
-  else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
-  else if (nameString.includes('zeus')) symbol = 'vs20zeushades';
-  else if (nameString.includes('doghouse')) symbol = 'vs20doghouse';
-  else if (nameString.includes('fruitparty')) symbol = 'vs20fruitparty';
+  if (!game.demoSymbol) {
+    if (nameString.includes('sweetbonanza1000')) symbol = 'vs20sbonz1000';
+    else if (nameString.includes('sweetbonanza')) symbol = 'vs20fruitsw';
+    else if (nameString.includes('gatesofolympus1000')) symbol = 'vs20olympgate1000';
+    else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
+    else if (nameString.includes('sugarrush1000')) symbol = 'vs20sugarrushx';
+    else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
+    else if (nameString.includes('starlightprincess1000')) symbol = 'vs20starlightx';
+    else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
+    else if (nameString.includes('bigbasssplash')) symbol = 'vs10txbigbass';
+    else if (nameString.includes('bigbassbonanza')) symbol = 'vs10bbbonanza';
+    else if (nameString.includes('zeus') || nameString.includes('hades')) symbol = 'vs20zeushades';
+    else if (nameString.includes('doghouse')) symbol = 'vs20doghouse';
+    else if (nameString.includes('fruitparty')) symbol = 'vs20fruitparty';
+  }
   
-  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&websiteUrl=https%3A%2F%2Fdemogamesfree.pragmaticplay.net&jurisdiction=99&enviroment=PREPROD&m=1`;
+};
+
+const getDisplayGameName = (game: any) => {
+  if (game.name && game.name !== 'Yeni Slot Oyunu' && game.name !== 'Yeni Canlı Masa' && game.name !== 'Yeni Spor') {
+    return game.name;
+  }
+  // Try to extract from URL if name is default
+  const url = game.img || game.image || '';
+  if (url) {
+    const match = url.match(/\/Games\/([^\/]+)\//i);
+    if (match && match[1]) {
+      return match[1].replace(/-/g, ' ').replace(/PragmaticPlay|Pragmatic Play/ig, '').trim();
+    }
+  }
+  return game.name || 'Casino Slot';
 };
 
 const getGameColor = (name: string) => {
@@ -323,23 +336,14 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
         ) : (
           <div className="flex flex-col gap-4">
             
-            {/* NEW SLIDER SECTION: Gerçek Oyunlar */}
+            {/* POPULAR GAMES SLIDER SECTION */}
             <SliderSection 
-              title="Gerçek Oyunlar" 
+              title="Popüler Oyunlar" 
               icon={<Flame className="text-white" fill="white" />} 
-              games={customGames.filter(g => g.isActive && g.type === 'slot').length > 0 
-                ? customGames.filter(g => g.isActive && g.type === 'slot').map(cg => ({ ...cg, img: cg.image, category: 'slots' })) 
-                : popularGames} 
+              games={popularGames} 
               onSelect={setSelectedGame}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
             />
-
-            <SectionHeader title="Popüler Slotlar" icon={<Flame />} />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              {popularGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
-              ))}
-            </div>
 
             <SectionHeader title="Canlı Casino" icon={<MonitorPlay />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
@@ -385,7 +389,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               <div className="flex items-center justify-between p-4 bg-[#1A1D29] border-b border-[#2A2E3D]">
                 <div className="flex items-center gap-3">
                    <div className="w-2.5 h-2.5 rounded-full bg-[#00FFA3] animate-pulse shadow-[0_0_10px_rgba(0,255,163,0.8)]" />
-                   <span className="text-white font-bold">{selectedGame.name || 'Demo Oyunu'}</span>
+                   <span className="text-white font-bold">{getDisplayGameName(selectedGame)}</span>
                    <span className="bg-[#00FFA3]/10 text-[#00FFA3] border border-[#00FFA3]/20 text-[10px] px-2 py-0.5 rounded font-black tracking-widest uppercase ml-2">Eğlence Modu</span>
                 </div>
                 <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 flex items-center justify-center bg-[#2A2E3D] hover:bg-[#3A3F54] rounded-lg text-white transition-colors">✕</button>
@@ -415,7 +419,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               </div>
 
               <div className="relative z-10 px-6 pb-8 pt-4 text-center flex flex-col items-center">
-                <h3 className="text-2xl font-black text-white mb-1">{selectedGame.name || 'Casino Slot'}</h3>
+                <h3 className="text-2xl font-black text-white mb-1">{getDisplayGameName(selectedGame)}</h3>
                 <p className="text-[#00FFA3] text-sm font-bold mb-6">{selectedGame.provider || 'Pragmatic Play'}</p>
 
                 <div className="w-full grid grid-cols-2 gap-3 mb-6 bg-[#0F121A] p-3 rounded-lg border border-[#2A2E3D]">
