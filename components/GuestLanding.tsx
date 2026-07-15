@@ -325,14 +325,14 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
           className="relative w-full h-full cursor-pointer group bg-transparent md:bg-[#0B0E14] flex flex-col justify-end p-5 md:p-5 md:rounded-xl md:overflow-hidden md:shadow-[0_15px_50px_rgba(0,0,0,0.6)] md:border md:border-white/5"
         >
           <img 
-            src="/images/green_sports_card.jpg" 
+            src="/images/green_sports_card_left.jpg" 
             alt="Sports Betting" 
             className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
           />
-          {/* Gradient overlay for readability (dark on left) */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
+          {/* Gradient overlay for readability (dark on right) */}
+          <div className="absolute inset-0 bg-gradient-to-l from-black/90 md:from-black/80 via-black/40 md:via-black/40 to-transparent pointer-events-none group-hover:from-black/80 transition-all duration-500"></div>
           
-          <div className="relative z-20 flex flex-col items-start gap-3 h-full justify-center transform group-hover:translate-x-3 md:group-hover:translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%]">
+          <div className="relative z-20 flex flex-col items-end gap-3 h-full justify-center self-end text-right transform group-hover:-translate-x-3 md:group-hover:-translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%] ml-auto">
             <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
               Spor
             </h3>
