@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Spade, Target, Gift, User, Play, Megaphone } from 'lucide-react';
+import { Home, Spade, Target, Gift, MessageSquare } from 'lucide-react';
 import { SiteUser } from '../types';
 
 interface MobileBottomNavProps {
@@ -20,7 +20,7 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     { id: 'blackjack', label: 'Slot', icon: Spade },
     { id: 'sports', label: 'Spor', icon: Target },
     { id: 'cekilis', label: 'Çekiliş', icon: Gift },
-    { id: 'promo', label: 'Promosyonlar', icon: Megaphone }
+    { id: 'chat', label: 'Chat', icon: MessageSquare, action: () => window.dispatchEvent(new Event('openSupportChat')) }
   ];
 
   return (
