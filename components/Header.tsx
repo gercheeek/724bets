@@ -369,7 +369,7 @@ const Header: React.FC<HeaderProps> = ({
               <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">
                 <button 
                   onClick={() => onViewChange?.('home')}
-                  className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'home' || activeView === 'blackjack' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+                  className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${((activeView === 'home' && isAuthenticated) || activeView === 'blackjack') ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
                 >
                   Casino
                 </button>
