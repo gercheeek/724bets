@@ -346,13 +346,15 @@ const Header: React.FC<HeaderProps> = ({
             {/* Left: Hamburger & Logo & Desktop Tabs */}
             <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
               
-              <button 
-                onClick={onToggleSidebar}
-                className="hidden lg:flex w-10 h-10 items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors mr-2"
-                title="Menüyü Aç/Kapat"
-              >
-                <Menu className="w-6 h-6" />
-              </button>
+              {(siteUser || userRole) && (
+                <button 
+                  onClick={onToggleSidebar}
+                  className="hidden lg:flex w-10 h-10 items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors mr-2"
+                  title="Menüyü Aç/Kapat"
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              )}
 
               <div 
                 className="flex items-center cursor-pointer select-none ml-0 logo-text-724"
