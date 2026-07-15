@@ -106,14 +106,17 @@ export default function LiveWinsTicker() {
   return (
     <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 border-b border-white/5">
       
-      {/* Sleek Floating Live Badge */}
-      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-4 pr-6 pointer-events-none bg-[#0B0E14] shadow-[20px_0_20px_-10px_#0B0E14]">
-         <div className="bg-[#1C202B] rounded-xl px-3.5 py-2 flex items-center gap-2.5 border border-white/5 shadow-md">
+      {/* Premium Gamdom-Style Floating Live Badge */}
+      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-2 md:pl-6 pr-16 pointer-events-none bg-gradient-to-r from-[#0B0E14] via-[#0B0E14] to-transparent">
+         <div className="bg-[#0B0E14]/80 backdrop-blur-md rounded-full px-4 py-2.5 flex items-center gap-3 border border-[#00FFA3]/30 shadow-[0_0_20px_rgba(0,255,163,0.15)] relative overflow-hidden">
+           {/* Inner green glow */}
+           <div className="absolute inset-0 bg-[#00FFA3]/5"></div>
+           
            <div className="relative flex items-center justify-center">
-             <span className="absolute w-2.5 h-2.5 rounded-full bg-[#00E676] animate-ping opacity-50"></span>
-             <span className="relative w-2 h-2 rounded-full bg-[#00E676] shadow-[0_0_8px_rgba(0,230,118,0.8)]"></span>
+             <span className="absolute w-3 h-3 rounded-full bg-[#00FFA3] animate-ping opacity-40"></span>
+             <span className="relative w-2 h-2 rounded-full bg-[#00FFA3] shadow-[0_0_12px_#00FFA3]"></span>
            </div>
-           <span className="text-[#9BA1B0] font-semibold text-[12px] whitespace-nowrap tracking-wide">Canlı Kazançlar</span>
+           <span className="relative text-[#00FFA3] font-black text-[10px] md:text-[11px] tracking-widest uppercase drop-shadow-[0_0_8px_rgba(0,255,163,0.5)]">Canlı Kazançlar</span>
          </div>
       </div>
 
