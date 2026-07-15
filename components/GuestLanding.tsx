@@ -240,31 +240,31 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         <>
 
 
-            {/* Layout Row */}
-            <div className={`w-full flex flex-col ${showTeaser ? 'lg:flex-row' : ''} gap-4 pb-6 md:pb-6 mb-4 md:mb-0`}>
+            {/* Welcome & Search Bar Inline (Moved to top for balance) */}
+            <div className="w-full py-2 flex justify-between items-center mb-4 lg:mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
+                Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
+              </h2>
+              {/* Mobile Search Icon */}
+              <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
+                <Search className="w-5 h-5 text-gray-400" />
+              </button>
+              {/* Desktop Search Bar */}
+              <div onClick={onSearchClick} className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[240px] xl:w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5">
+                <Search className="w-4 h-4 text-gray-400 mr-3" />
+                <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
+              </div>
+            </div>
+
+            {/* Layout Column (Stacked vertically for harmonious full-width design on PC) */}
+            <div className="w-full flex flex-col gap-4 pb-6 md:pb-6 mb-4 md:mb-0">
               {showTeaser && (
-                <div className="w-full lg:w-[55%] xl:w-[60%] flex-shrink-0">
+                <div className="w-full flex-shrink-0">
                   <WorldCupTeaser />
                 </div>
               )}
               
-              <div className={`w-full ${showTeaser ? 'lg:w-[45%] xl:w-[40%]' : 'w-full'} flex flex-col`}>
-                
-                {/* Welcome & Search Bar Inline */}
-                <div className="w-full py-2 flex justify-between items-center mb-4 lg:mb-6">
-                  <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
-                    Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
-                  </h2>
-                  {/* Mobile Search Icon */}
-                  <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
-                    <Search className="w-5 h-5 text-gray-400" />
-                  </button>
-                  {/* Desktop Search Bar */}
-                  <div onClick={onSearchClick} className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[240px] xl:w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5">
-                    <Search className="w-4 h-4 text-gray-400 mr-3" />
-                    <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
-                  </div>
-                </div>
+              <div className="w-full flex flex-col">
 
                 {/* 2 Big Cards Container */}
                 <div className="w-full flex-1 grid grid-cols-1 sm:grid-cols-2 gap-0 min-h-[260px] md:min-h-[200px] lg:min-h-[160px] rounded-3xl md:rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-[#0B0E14]">
