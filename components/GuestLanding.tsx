@@ -114,17 +114,17 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
     {
       title: t("promo_1_title"),
       subtitle: t("promo_1_sub"),
-      icon: <Trophy strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-yellow-600/20 group-hover:text-yellow-500/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(202,138,4,0.15)]" />
+      icon: <Trophy strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-40 h-40 text-yellow-500/10 group-hover:text-yellow-400/20 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6" />
     },
     {
       title: t("promo_2_title"),
       subtitle: t("promo_2_sub"),
-      icon: <Shield strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-red-600/20 group-hover:text-red-500/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(220,38,38,0.15)]" />
+      icon: <Shield strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-40 h-40 text-red-500/10 group-hover:text-red-400/20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6" />
     },
     {
       title: t("promo_3_title"),
       subtitle: t("promo_3_sub"),
-      icon: <Target strokeWidth={1.5} className="absolute -right-6 top-1/2 transform -translate-y-1/2 w-44 h-44 text-[#00FFA3]/20 group-hover:text-[#00FFA3]/40 transition-all duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(0,255,163,0.15)]" />
+      icon: <Target strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-40 h-40 text-[#00FFA3]/10 group-hover:text-[#00FFA3]/20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12" />
     }
   ];
 
@@ -138,13 +138,13 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           <div className="w-full px-4 pt-0 -mt-4 pb-2 hidden md:block">
             <div className="grid grid-cols-3 gap-4">
               {promoCards.map((card, idx) => (
-                <div key={idx} className="relative overflow-hidden rounded-xl bg-[#12161E] border border-[#202532] hover:border-white/10 h-[140px] flex p-6 items-center shadow-2xl group cursor-pointer transition-all duration-300">
-                  <div className="flex flex-col z-10 w-2/3">
-                    <span className="text-white font-black text-xl lg:text-2xl tracking-tight leading-tight mb-2">{card.title}</span>
-                    <span className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">{card.subtitle}</span>
+                <div key={idx} className="relative overflow-hidden rounded-xl bg-[#151821] border border-white/5 hover:border-[#00FFA3]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="flex flex-col z-10 w-2/3 relative">
+                    <span className="text-white font-black text-xl lg:text-2xl tracking-tight leading-tight mb-1.5 group-hover:text-[#00FFA3] transition-colors">{card.title}</span>
+                    <span className="text-zinc-400 text-[10px] font-black uppercase tracking-wider">{card.subtitle}</span>
                   </div>
                   {card.icon}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 </div>
               ))}
             </div>
