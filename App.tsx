@@ -1637,7 +1637,7 @@ const AppContent: React.FC = () => {
                   style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
                 >
                   <span className="text-white font-extrabold">724</span>
-                  <span className="text-[#00FFA3] font-black text-[0.7em]">BETS</span>
+                  <span className="text-[#00FFA3] font-black">BETS</span>
                 </div><div className="flex items-center shrink-0">
                   {siteUser ? (
                     <>
