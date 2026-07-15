@@ -41,7 +41,7 @@ export const ALL_GAMES: Game[] = [
     "name": "Gates of Olympus",
     "provider": "Pragmatic Play",
     "category": "slots",
-    "image": "https://images.unsplash.com/photo-1590131464303-31fbf85cb355?w=2160&q=100",
+    "image": "https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Gates-of-Olympus-PragmaticPlay/Vertical/GatesofOlympus_20250328152430427.webp",
     "demoSymbol": "vs20olympgate",
     "rtp": "97.82%",
     "players": 4150,
