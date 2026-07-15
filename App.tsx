@@ -1822,7 +1822,11 @@ const AppContent: React.FC = () => {
 
         {view === 'plinko' && (
           <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
-            <PlinkoView />
+            <PlinkoView 
+              siteUser={siteUser} 
+              setSiteUser={setSiteUser} 
+              onAuthRequired={() => setAuthModalMode('member')} 
+            />
           </div>
         )}
 
@@ -2247,6 +2251,8 @@ const AppContent: React.FC = () => {
             activeView={view}
           />
         )}
+
+
         {view === 'demo' && (
           <div className="animate-fade-in">
             <DemoGames />
