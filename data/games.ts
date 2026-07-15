@@ -16,11 +16,81 @@ export const ALL_GAMES: Game[] = [
     "id": 99998,
     "name": "Sweet Bonanza 1000",
     "provider": "Pragmatic Play",
-    "category": "new",
+    "category": "slots",
     "image": "https://cdn2.softswiss.net/i/s4/pragmaticexternal/SweetBonanza1000.png",
     "demoSymbol": "vs20sbonz1000",
     "rtp": "96.53%",
     "players": 18452,
+    "isPopular": true,
+    "isNew": true
+  },
+  {
+    "id": 99999,
+    "name": "Zeus VS Hades",
+    "provider": "Pragmatic Play",
+    "category": "slots",
+    "image": "https://cdn2.softswiss.net/i/s4/pragmaticexternal/ZeusvsHadesGodsofWar.png",
+    "demoSymbol": "vs20zeushades",
+    "rtp": "96.05%",
+    "players": 15410,
+    "isPopular": true,
+    "isNew": false
+  },
+  {
+    "id": 6,
+    "name": "Big Bass Splash",
+    "provider": "Pragmatic Play",
+    "category": "slots",
+    "image": "https://cdn2.softswiss.net/i/s4/pragmaticexternal/BigBassSplash.png",
+    "demoSymbol": "vs10txbigbass",
+    "rtp": "96.37%",
+    "players": 14547,
+    "isPopular": true,
+    "isNew": false
+  },
+  {
+    "id": 5,
+    "name": "Big Bass Bonanza",
+    "provider": "Pragmatic Play",
+    "category": "slots",
+    "image": "https://cdn2.softswiss.net/i/s4/pragmaticexternal/BigBassBonanza.png",
+    "demoSymbol": "vs10bbbonanza",
+    "rtp": "95.49%",
+    "players": 15925,
+    "isPopular": true,
+    "isNew": false
+  },
+  {
+    "id": 7,
+    "name": "Sugar Rush 1000",
+    "provider": "Pragmatic Play",
+    "category": "slots",
+    "image": "https://cdn2.softswiss.net/i/s4/pragmaticexternal/SugarRush1000.png",
+    "demoSymbol": "vs20sugarrushx",
+    "rtp": "96.53%",
+    "players": 12840,
+    "isPopular": true,
+    "isNew": true
+  },
+  {
+    "id": 100001,
+    "name": "Le Fisherman",
+    "provider": "Hacksaw",
+    "category": "slots",
+    "image": "https://cdn2.softswiss.net/i/s4/hacksaw/LeFisherman.png",
+    "rtp": "96.22%",
+    "players": 10320,
+    "isPopular": true,
+    "isNew": true
+  },
+  {
+    "id": 100002,
+    "name": "Munchy Milo",
+    "provider": "Hacksaw",
+    "category": "slots",
+    "image": "https://cdn2.softswiss.net/i/s4/hacksaw/MunchyMilo.png",
+    "rtp": "96.11%",
+    "players": 9540,
     "isPopular": true,
     "isNew": true
   },
@@ -58,7 +128,7 @@ export const ALL_GAMES: Game[] = [
     "rtp": "96.19%",
     "players": 15295,
     "isPopular": true,
-    "isNew": true
+    "isNew": false
   },
   {
     "id": 4,
@@ -69,30 +139,6 @@ export const ALL_GAMES: Game[] = [
     "demoSymbol": "vs20starlight",
     "rtp": "95.07%",
     "players": 5662,
-    "isPopular": true,
-    "isNew": true
-  },
-  {
-    "id": 5,
-    "name": "Big Bass Bonanza",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://cdn2.softswiss.net/i/s4/pragmaticexternal/BigBassBonanza.png",
-    "demoSymbol": "vs10bbbonanza",
-    "rtp": "95.49%",
-    "players": 15925,
-    "isPopular": true,
-    "isNew": false
-  },
-  {
-    "id": 6,
-    "name": "Big Bass Splash",
-    "provider": "Pragmatic Play",
-    "category": "slots",
-    "image": "https://cdn2.softswiss.net/i/s4/pragmaticexternal/BigBassSplash.png",
-    "demoSymbol": "vs10txbigbass",
-    "rtp": "96.37%",
-    "players": 14547,
     "isPopular": true,
     "isNew": false
   },
