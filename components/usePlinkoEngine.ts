@@ -56,17 +56,18 @@ export function usePlinkoEngine(config: PlinkoEngineConfig) {
   const ySpacing = (height - yStart - bucketHeight - 20) / rowCount;
   
   // X calculation function
-  const getRowWidth = (row: number) => (row + 3) * ySpacing;
   const getPegX = (row: number, col: number) => {
-    const rowWidth = getRowWidth(row);
+    const pegsInRow = row + 3;
+    const rowWidth = (pegsInRow - 1) * ySpacing; // Distance from first peg to last peg
     const startX = width / 2 - rowWidth / 2;
     return startX + col * ySpacing;
   };
 
   const getBucketX = (col: number) => {
-    const rowWidth = getRowWidth(rowCount); // 16 rows = 17 buckets
-    const startX = width / 2 - rowWidth / 2;
-    return startX + col * ySpacing;
+    // 17 buckets (MULTIPLIERS.length) fit perfectly between the 18 pegs of the last row (rowCount - 1)
+    const leftPegX = getPegX(rowCount - 1, col);
+    const rightPegX = getPegX(rowCount - 1, col + 1);
+    return (leftPegX + rightPegX) / 2;
   };
 
   // Draw loop
