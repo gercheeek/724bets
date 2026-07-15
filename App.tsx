@@ -1585,7 +1585,7 @@ const AppContent: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
+          {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen}
@@ -1600,7 +1600,7 @@ const AppContent: React.FC = () => {
           )}
 
           {/* MOBİL DRAWER - SOL MENÜ */}
-          {isMobileMenuOpen && siteUser && (
+          {isMobileMenuOpen && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
               <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
               <aside className="w-[280px] bg-[#111317] border-r border-[#1A1D24] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
@@ -2047,7 +2047,11 @@ const AppContent: React.FC = () => {
 
         {view === 'blackjack' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
-            <CasinoLobby customGames={casinoLobbyGames} isLoggedIn={!!(siteUser || userRole)} />
+            <CasinoLobby 
+              customGames={casinoLobbyGames} 
+              isLoggedIn={!!(siteUser || userRole)}
+              onNavigate={handleViewChange}
+            />
           </div>
         )}
 

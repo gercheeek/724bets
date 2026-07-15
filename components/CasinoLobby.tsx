@@ -28,11 +28,14 @@ const DEMO_GAMES = [
   { id: 107, name: 'Starlight Princess', provider: 'Pragmatic Play', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Starlight-Princess-1000-Pragmatic-Play/Vertical/StarlightPrincess1000_20250312174636784.webp', category: 'slots', rtp: '96.50%' },
   { id: 108, name: '40 Super Hot', provider: 'Amusnet', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/Vertical/40SuperHotBellLink.webp', category: 'slots', rtp: '95.81%' },
   { id: 109, name: 'XXXTreme Lightning', provider: 'Evolution', img: 'https://images.unsplash.com/photo-1517594422361-5e18d033339f?w=500&q=80', category: 'live', rtp: '97.30%' },
-  { id: 110, name: 'Crash', provider: 'Originals', img: 'https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=500&q=80', category: 'originals', rtp: '99.00%' },
-  { id: 111, name: 'Blackjack', provider: 'Evolution', img: 'https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=500&q=80', category: 'table', rtp: '99.29%' },
-  { id: 112, name: 'Baccarat', provider: 'Evolution', img: 'https://images.unsplash.com/photo-1610486242698-c92336340f1a?w=500&q=80', category: 'table', rtp: '98.94%' },
-  { id: 113, name: 'Dice', provider: 'Originals', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Playson/RoyalJokerHoldandWin.webp', category: 'originals', rtp: '99.00%' },
-  { id: 114, name: 'Roulette', provider: 'Originals', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Playson/RoyalFortunatorHoldandWin.webp', category: 'originals', rtp: '97.30%' },
+  { id: 110, name: 'Plinko', provider: 'Originals', img: '/images/rainbet-plinko.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 111, name: 'Keno', provider: 'Originals', img: '/images/rainbet-keno.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 112, name: 'Dice', provider: 'Originals', img: '/images/rainbet-dice.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 113, name: 'Mines', provider: 'Originals', img: '/images/rainbet-mines.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 114, name: 'War', provider: 'Originals', img: '/images/rainbet-war.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 115, name: 'Hilo', provider: 'Originals', img: '/images/rainbet-hilo.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 116, name: 'Blackjack', provider: 'Originals', img: '/images/rainbet-blackjack.jpg', category: 'originals', rtp: '99.29%' },
+  { id: 117, name: 'Roulette', provider: 'Originals', img: '/images/rainbet-roulette.jpg', category: 'originals', rtp: '97.30%' },
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%' },
   { id: 116, name: '30 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/30-Coins-Santas-Jackpots-Wazdan/Vertical/30CoinsSantasJackpots.webp', category: 'new', rtp: '96.18%' },
   { id: 117, name: 'Flaming Hot', provider: 'EGT Digital', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/FlamingHotExtremeBellLink.webp', category: 'slots', rtp: '95.96%' },
@@ -155,8 +158,8 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
       
       <div ref={scrollRef} className="overflow-x-auto hide-scrollbar -mx-4 px-4 pb-4" style={{ scrollSnapType: 'x mandatory' }}>
         <div className="flex gap-4 min-w-max">
-          {games.map((game) => (
-            <div key={game.id} style={{ width: 'calc(100vw / 2.5 - 16px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
+          {games.map((game, i) => (
+            <div key={`${game.id}-${i}`} style={{ width: 'calc(100vw / 2.5 - 16px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
               <GameCard game={game} onClick={() => onSelect(game)} />
             </div>
           ))}
@@ -166,7 +169,7 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
   );
 };
 
-const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: boolean }> = ({ customGames = [], isLoggedIn = false }) => {
+const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: boolean, onNavigate?: (view: string) => void }> = ({ customGames = [], isLoggedIn = false, onNavigate }) => {
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -411,7 +414,13 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                      onClick={() => {
                        setSelectedGame(null);
                        setShowDemoIframe(false);
-                       handleAction();
+                       if (selectedGame.category === 'originals' || selectedGame.name === 'Plinko') {
+                         if (onNavigate) {
+                           onNavigate('plinko');
+                         }
+                       } else {
+                         handleAction();
+                       }
                      }}
                      className="w-full py-3.5 rounded-lg font-black text-sm transition-all bg-[#00FFA3] text-black hover:bg-[#00E676] shadow-[0_0_15px_rgba(0,255,163,0.3)]"
                    >
