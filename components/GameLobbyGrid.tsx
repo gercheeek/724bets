@@ -20,14 +20,14 @@ const slotGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'slots' || g.
 })).slice(0, 16);
 
 const sportGames: GameItem[] = [
-  { id: 'sp1', title: 'FOOTBALL', image: '/games/game_9.jpg' },
-  { id: 'sp2', title: 'BASKETBALL', image: '/games/game_10.jpg' },
-  { id: 'sp3', title: 'BASEBALL', image: '/games/game_11.jpg' },
-  { id: 'sp4', title: 'HOCKEY', image: '/games/game_12.jpg' },
-  { id: 'sp5', title: 'VOLLEYBALL', image: '/games/game_13.jpg' },
-  { id: 'sp6', title: 'NFL', image: '/games/game_14.jpg' },
-  { id: 'sp7', title: 'E-SPORTS', image: '/games/game_15.jpg' },
-  { id: 'sp8', title: 'BADMINTON', image: '/games/game_16.jpg' },
+  { id: 'sp1', title: 'FOOTBALL', image: '/images/sports_football.jpg' },
+  { id: 'sp2', title: 'BASKETBALL', image: '/images/sports_basketball.jpg' },
+  { id: 'sp3', title: 'BASEBALL', image: '/images/sports_baseball.jpg' },
+  { id: 'sp4', title: 'HOCKEY', image: '/images/sports_hockey.jpg' },
+  { id: 'sp5', title: 'VOLLEYBALL', image: '/images/sports_volleyball.jpg' },
+  { id: 'sp6', title: 'NFL', image: '/images/sports_nfl.jpg' },
+  { id: 'sp7', title: 'E-SPORTS', image: '/images/sports_esports.jpg' },
+  { id: 'sp8', title: 'BADMINTON', image: '/images/sports_badminton.jpg' },
 ];
 
 const liveCasinoGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'live').map(g => ({
