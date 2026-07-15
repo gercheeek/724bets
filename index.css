@@ -132,6 +132,16 @@ html, body {
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
+/* ===== Autofill Fix for Dark Theme ===== */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #1A1D24 inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 
 
 /* Theme-Aware Utility Classes */
