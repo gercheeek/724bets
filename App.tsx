@@ -154,18 +154,6 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
 };
 
 export default function App() {
-  const isDev = window.location.search.includes('dev=true');
-
-  if (!isDev) {
-    return (
-      <ThemeProvider>
-        <LanguageProvider>
-          <ComingSoon />
-        </LanguageProvider>
-      </ThemeProvider>
-    );
-  }
-
   return (
     <ThemeProvider>
       <LanguageProvider>
