@@ -123,6 +123,7 @@ const Header: React.FC<HeaderProps> = ({
   const langRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const walletDropdownRef = useRef<HTMLDivElement>(null);
+  const [logoHoverCount, setLogoHoverCount] = useState(0);
   const { theme } = useTheme();
 
   const [depositUsername, setDepositUsername] = useState('');
@@ -356,10 +357,11 @@ const Header: React.FC<HeaderProps> = ({
               <div 
                 className="flex items-center cursor-pointer select-none ml-0 logo-text-724"
                 onClick={() => onViewChange?.('home')}
+                onMouseEnter={() => setLogoHoverCount(prev => prev + 1)}
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
               >
-                <SlotText text="724" className="text-white font-extrabold text-xl md:text-2xl uppercase text-center" />
-                <SlotText text="BETS" className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase text-center" />
+                <SlotText text="724" className="text-white font-extrabold text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
+                <SlotText text="BETS" className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
               </div>
 
               <div className="hidden lg:flex bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner ml-2">

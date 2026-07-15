@@ -232,6 +232,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     0% { transform: scale(1) translate(0, 0); }
                     100% { transform: scale(1.12) translate(-1%, 2%); }
                 }
+                @keyframes loading-bar {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(300%); }
+                }
                 .auto-pan-image {
                     animation: slowPanZoom 8s ease-out forwards;
                 }
@@ -243,10 +247,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     
                     {/* Sleek, unobtrusive loading indicator for mobile splash */}
                     {showSplash && (
-                        <div className="absolute top-0 left-0 w-full z-20 flex justify-center pt-8 md:hidden">
-                            <div className="bg-black/30 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full flex items-center gap-3 shadow-lg">
-                                <Loader2 className="w-4 h-4 text-[#00FFA3] animate-spin" />
-                                <span className="text-white/80 font-bold tracking-widest uppercase text-[10px]">Yükleniyor</span>
+                        <div className="absolute bottom-32 left-0 w-full z-20 flex flex-col items-center justify-center md:hidden gap-3 px-4">
+                            <span className="text-[#00FFA3] font-bold tracking-[0.3em] uppercase text-[9px] drop-shadow-[0_0_8px_rgba(0,255,163,0.8)] animate-pulse">
+                                SİSTEM BAĞLANTISI KURULUYOR...
+                            </span>
+                            <div className="w-48 h-[2px] bg-white/5 rounded-full overflow-hidden shadow-inner">
+                                <div className="h-full bg-[#00FFA3] w-1/3 rounded-full animate-[loading-bar_1.5s_ease-in-out_infinite]" style={{ boxShadow: '0 0 10px #00FFA3' }} />
                             </div>
                         </div>
                     )}

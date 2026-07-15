@@ -5,9 +5,10 @@ interface SlotTextProps {
   className?: string;
   onComplete?: () => void;
   isReady?: boolean;
+  trigger?: number;
 }
 
-const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete, isReady = true }) => {
+const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete, isReady = true, trigger = 0 }) => {
   const [displayedText, setDisplayedText] = useState(text);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -50,8 +51,14 @@ const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete, isRead
     };
   }, [text]);
 
+  useEffect(() => {
+    if (trigger > 0) {
+      triggerAnimation();
+    }
+  }, [trigger]);
+
   return (
-    <span className={className} onMouseEnter={triggerAnimation} style={{ display: 'inline-block', minWidth: `${text.length * 0.65}em` }}>
+    <span className={className} style={{ display: 'inline-block', minWidth: `${text.length * 0.65}em` }}>
       {displayedText}
     </span>
   );
