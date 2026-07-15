@@ -10,13 +10,15 @@ interface GameItem {
   title: string;
   image: string;
   players?: number;
+  demoSymbol?: string | null;
 }
 
 const slotGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'slots' || g.category === 'new').map(g => ({
   id: g.id.toString(),
   title: g.name.toUpperCase(),
   image: g.image,
-  players: g.players
+  players: g.players,
+  demoSymbol: g.demoSymbol
 })).slice(0, 16);
 
 const sportGames: GameItem[] = [
@@ -34,14 +36,19 @@ const liveCasinoGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'live')
   id: g.id.toString(),
   title: g.name.toUpperCase(),
   image: g.image,
-  players: g.players
+  players: g.players,
+  demoSymbol: g.demoSymbol
 })).slice(0, 16);
 
 const getDemoUrl = (game: GameItem | null): string | null => {
   if (!game) return null;
+  if (game.demoSymbol) {
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+  }
   const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   let symbol = null;
-  if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
+  if (nameString.includes('sweetbonanza1000')) symbol = 'vs20sbonz1000';
+  else if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
   else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
   else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
   else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';

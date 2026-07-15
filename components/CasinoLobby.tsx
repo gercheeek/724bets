@@ -52,8 +52,8 @@ const getDemoUrl = (game: any): string | null => {
   
   const nameString = (game.name || game.img || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   let symbol = null;
-  
-  if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
+  if (nameString.includes('sweetbonanza1000')) symbol = 'vs20sbonz1000';
+  else if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
   else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
   else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
   else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
