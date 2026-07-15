@@ -108,14 +108,20 @@ export default function LiveWinsTicker() {
       
       {/* Premium Gamdom-Style Floating Live Badge */}
       <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pl-2 md:pl-6 pr-6 md:pr-16 pointer-events-none bg-gradient-to-r from-[#0B0E14] via-[#0B0E14] to-transparent">
-         <div className="bg-[#151821] rounded-full px-3 py-1.5 md:px-4 md:py-2 flex items-center gap-2 border border-white/10 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
-           <div className="relative flex items-center justify-center">
-             <span className="absolute w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#00FFA3] animate-ping opacity-40"></span>
-             <span className="relative w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#00FFA3] shadow-[0_0_8px_#00FFA3]"></span>
+         <div className="bg-[#11141D]/90 backdrop-blur-md rounded-xl px-3 py-2 md:px-5 md:py-3 flex items-center gap-2.5 md:gap-3 border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.7)] relative overflow-hidden ring-1 ring-[#00FFA3]/10">
+           {/* Glass reflection */}
+           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+           
+           <div className="relative flex items-center justify-center shrink-0">
+             <span className="absolute w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#00FFA3] animate-ping opacity-60"></span>
+             <span className="relative w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#00FFA3] shadow-[0_0_12px_#00FFA3]"></span>
            </div>
-           <span className="text-white font-bold text-[10px] md:text-[12px] tracking-wide">
-             Canlı <span className="hidden md:inline">Kazançlar</span>
-           </span>
+           <div className="flex flex-col items-start justify-center">
+             <span className="text-white font-black text-[11px] md:text-[14px] tracking-[0.1em] uppercase font-['Outfit'] leading-none drop-shadow-md">
+               Canlı <span className="hidden md:inline">Kazançlar</span>
+             </span>
+             <span className="hidden md:block text-[#00FFA3] text-[9px] font-bold tracking-[0.2em] mt-1 opacity-90 uppercase">Gerçek Zamanlı</span>
+           </div>
          </div>
       </div>
 
