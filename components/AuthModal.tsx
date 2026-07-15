@@ -21,7 +21,7 @@ const InputField: React.FC<{
         <input
             type={type} value={value} onChange={e => onChange(e.target.value)}
             required={required}
-            className="w-full bg-black border border-zinc-800 rounded-lg py-3.5 pl-11 pr-4 text-white text-sm focus:border-[#f0b90b] transition-colors outline-none placeholder-zinc-600"
+            className="w-full bg-black border border-zinc-800 rounded-lg py-3.5 pl-11 pr-4 text-white text-[16px] md:text-sm focus:border-[#f0b90b] transition-colors outline-none placeholder-zinc-600"
             placeholder={placeholder}
         />
     </div>
@@ -240,7 +240,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     animation: slowPanZoom 8s ease-out forwards;
                 }
             `}</style>
-            <div className="w-full max-w-4xl bg-[#111317] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-[640px] max-h-[90vh]">
+            <div className="w-full max-w-4xl bg-[#111317] rounded-none md:rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border-0 md:border border-white/5 h-[100dvh] md:h-[640px] max-h-[100dvh] md:max-h-[90vh]">
                 
                 {/* Left Side - Promo Graphic (Mobile Splash / Desktop Left Half) */}
                 <div className={`flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
