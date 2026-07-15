@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Video, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Video, X, Play } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { CasinoLobbyGame } from '../types';
 import { ALL_GAMES } from '../data/games';
@@ -94,12 +94,21 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   style={{ backgroundImage: `url(${game.image})`, filter: 'blur(20px) saturate(150%) brightness(1.2)' }}
                 ></div>
                 
-                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-transform duration-300 group-hover:-translate-y-1">
+                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[#00FFA3]/50">
                   <img 
                     src={game.image} 
                     alt={game.title}
-                    className="absolute inset-0 !w-full !h-full !object-cover !object-center block transition-transform duration-700 group-hover:scale-105"
+                    className="absolute inset-0 !w-full !h-full !object-cover !object-center block transition-transform duration-700 ease-out group-hover:scale-110"
                   />
+                  
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
+                  {/* Play button appears on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
+                      <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg">
+                          <Play className="w-5 h-5 text-white fill-current ml-1" />
+                      </div>
+                  </div>
                 </div>
               </div>
 
