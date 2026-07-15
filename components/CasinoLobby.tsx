@@ -50,17 +50,24 @@ const getDemoUrl = (game: any): string | null => {
     return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
   }
   
-  const nameString = (game.name || game.img || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  let symbol = null;
-  if (nameString.includes('sweetbonanza1000')) symbol = 'vs20sweetbonanza';
-  else if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
-  else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
-  else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
-  else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
-  else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
-  
-  if (!symbol) return null;
+  const nameString = (game.name || game.img || game.image || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  let symbol = 'vs20sweetbonanza'; // Fallback to Sweet Bonanza if unknown
 
+  if (nameString.includes('sweetbonanza1000')) symbol = 'vs20sbonz1000';
+  else if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
+  else if (nameString.includes('gatesofolympus1000')) symbol = 'vs20olympgate1000';
+  else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
+  else if (nameString.includes('sugarrush1000')) symbol = 'vs20sugarrushx';
+  else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
+  else if (nameString.includes('starlightprincess1000')) symbol = 'vs20starlightx';
+  else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
+  else if (nameString.includes('bigbasssplash')) symbol = 'vs10txbigbass';
+  else if (nameString.includes('bigbassbonanza')) symbol = 'vs10bbbonanza';
+  else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
+  else if (nameString.includes('zeus')) symbol = 'vs20zeushades';
+  else if (nameString.includes('doghouse')) symbol = 'vs20doghouse';
+  else if (nameString.includes('fruitparty')) symbol = 'vs20fruitparty';
+  
   return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
 };
 
@@ -75,7 +82,7 @@ const getGameColor = (name: string) => {
   return '#1565C0'; // Default Blue
 };
 
-const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick }) => {
+const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => void }> = ({ game, onClick, onDemoClick }) => {
   const randomPlayers = React.useMemo(() => Math.floor(Math.random() * 500) + 100, []);
   const players = game.players || randomPlayers;
   
@@ -93,11 +100,21 @@ const GameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick 
           className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110 z-10" 
         />
 
-        {/* Play Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/40 backdrop-blur-[2px]">
-          <div className="w-12 h-12 bg-[#f0b90b] rounded-full flex items-center justify-center text-black shadow-[0_0_20px_rgba(240,185,11,0.6)] transform scale-75 group-hover:scale-100 transition-all duration-300">
-            <Play fill="currentColor" size={20} className="ml-1" />
-          </div>
+        {/* Play Overlay with Real and Demo Buttons */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/70 backdrop-blur-[2px]">
+          <button 
+            onClick={(e) => { e.stopPropagation(); onClick(); }}
+            className="bg-[#00FFA3] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+          >
+            GERÇEK OYNA
+          </button>
+          
+          <button 
+            onClick={(e) => { e.stopPropagation(); onDemoClick ? onDemoClick() : onClick(); }}
+            className="bg-[#2A2E3D] hover:bg-[#3A3F54] border border-white/10 text-white font-bold text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+          >
+            EĞLENCE MODU
+          </button>
         </div>
       </div>
 
@@ -129,7 +146,7 @@ const SectionHeader: React.FC<{ title: string, icon?: React.ReactNode }> = ({ ti
   </div>
 );
 
-const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: any[], onSelect: (g: any) => void }> = ({ title, icon, games, onSelect }) => {
+const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: any[], onSelect: (g: any) => void, onDemo: (g: any) => void }> = ({ title, icon, games, onSelect, onDemo }) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -162,7 +179,7 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
         <div className="flex gap-4 min-w-max">
           {games.map((game, i) => (
             <div key={`${game.id}-${i}`} style={{ width: 'calc(100vw / 2.5 - 16px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
-              <GameCard game={game} onClick={() => onSelect(game)} />
+              <GameCard game={game} onClick={() => onSelect(game)} onDemoClick={() => onDemo(game)} />
             </div>
           ))}
         </div>
@@ -313,20 +330,21 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               games={customGames.filter(g => g.isActive && g.type === 'slot').length > 0 
                 ? customGames.filter(g => g.isActive && g.type === 'slot').map(cg => ({ ...cg, img: cg.image, category: 'slots' })) 
                 : popularGames} 
-              onSelect={setSelectedGame} 
+              onSelect={setSelectedGame}
+              onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
             />
 
             <SectionHeader title="Popüler Slotlar" icon={<Flame />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {popularGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} />
+                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
               ))}
             </div>
 
             <SectionHeader title="Canlı Casino" icon={<MonitorPlay />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {liveGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} />
+                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
               ))}
             </div>
 
@@ -337,14 +355,14 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                 .sort((a, b) => b.players - a.players)
                 .slice(12, 24)
                 .map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} />
+                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
               ))}
             </div>
 
             <SectionHeader title="Yeni Eklenenler" icon={<Sparkles />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {newGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} />
+                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
               ))}
             </div>
           </div>
