@@ -226,7 +226,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                      </div>
                    </div>
                  </div>
-               </div>v>
+               </div>
              </WorldCupTeaser>
           </div>
           
