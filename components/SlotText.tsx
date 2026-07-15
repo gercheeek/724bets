@@ -6,53 +6,77 @@ interface SlotTextProps {
   onComplete?: () => void;
   isReady?: boolean;
   trigger?: number;
+  isSpinning?: boolean;
 }
 
-const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete, isReady = true, trigger = 0 }) => {
+const SlotText: React.FC<SlotTextProps> = ({ text, className, onComplete, isReady = true, trigger = 0, isSpinning = false }) => {
   const [displayedText, setDisplayedText] = useState(text);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Use a ref for isReady so the interval always sees the latest value without restarting
   const isReadyRef = useRef(isReady);
+  const isSpinningRef = useRef(isSpinning);
+
   useEffect(() => {
     isReadyRef.current = isReady;
   }, [isReady]);
+
+  useEffect(() => {
+    // Only handle changes if we've already mounted, 
+    // to avoid double triggering on initial load.
+    isSpinningRef.current = isSpinning;
+    if (isSpinning) {
+      startInfiniteSpin();
+    } else {
+      triggerAnimation();
+    }
+  }, [isSpinning]);
+
+  const startInfiniteSpin = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setDisplayedText(
+        text.split("").map(() => letters[Math.floor(Math.random() * letters.length)]).join("")
+      );
+    }, 50);
+  };
 
   const triggerAnimation = () => {
     let iteration = 0;
     if (intervalRef.current) clearInterval(intervalRef.current);
 
     intervalRef.current = setInterval(() => {
+      if (isSpinningRef.current) return; // Managed by startInfiniteSpin now
+
       setDisplayedText(
         text.split("").map((letter, index) => {
           if (index < iteration) return text[index];
           return letters[Math.floor(Math.random() * letters.length)];
         }).join("")
       );
+      
       if (iteration >= text.length) {
         clearInterval(intervalRef.current!);
         if (onComplete) onComplete();
       }
       
-      iteration += 1 / 5; // Faster lock-in
+      iteration += 1 / 5; // Lock-in speed
       
-      // If content is not ready, keep the last letter spinning infinitely
       if (!isReadyRef.current && iteration >= text.length - 0.5) {
         iteration = text.length - 0.5;
       }
-    }, 50); // Slightly faster flicker
+    }, 50);
   };
 
   useEffect(() => {
-    triggerAnimation();
+    if (!isSpinningRef.current) triggerAnimation();
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [text]);
 
   useEffect(() => {
-    if (trigger > 0) {
+    if (trigger > 0 && !isSpinningRef.current) {
       triggerAnimation();
     }
   }, [trigger]);

@@ -240,6 +240,7 @@ const AppContent: React.FC = () => {
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isLogoSpinning, setIsLogoSpinning] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
 
@@ -1625,10 +1626,13 @@ const AppContent: React.FC = () => {
                 <div 
                   className="font-black text-2xl sm:text-3xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
                   onClick={() => setView('home')}
+                  onPointerDown={() => setIsLogoSpinning(true)}
+                  onPointerUp={() => setIsLogoSpinning(false)}
+                  onPointerLeave={() => setIsLogoSpinning(false)}
                   style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
                 >
-                  <span className="text-white font-extrabold">724</span>
-                  <span className="text-[#00FFA3] font-black">BETS</span>
+                  <SlotText text="724" className="text-white font-extrabold" isSpinning={isLogoSpinning} />
+                  <SlotText text="BETS" className="text-[#00FFA3] font-black" isSpinning={isLogoSpinning} />
                 </div><div className="flex items-center shrink-0">
                   {siteUser ? (
                     <>
