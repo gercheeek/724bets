@@ -329,8 +329,8 @@ const GuestLandingContent = ({ onSearchClick, onViewChange, t }: any) => (
             alt="Sports Betting" 
             className="absolute inset-0 w-full h-full object-cover transform md:group-hover:scale-105 transition-all duration-700 ease-out opacity-100"
           />
-          {/* Gradient overlay: Dark on right for text, soft shadow on left to gently mask seam */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_left,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.1)_50%,rgba(0,0,0,0.4)_100%)] md:bg-[linear-gradient(to_left,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.1)_50%,rgba(0,0,0,0.3)_100%)] pointer-events-none group-hover:bg-[linear-gradient(to_left,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0.1)_50%,rgba(0,0,0,0.2)_100%)] transition-all duration-500"></div>
+          {/* Gradient overlay: Solid dark on right for text, soft shadow on left to gently mask seam (symmetrical to Casino) */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_left,rgba(0,0,0,1)_0%,rgba(0,0,0,0.9)_25%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.4)_100%)] md:bg-[linear-gradient(to_left,rgba(0,0,0,1)_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.3)_100%)] pointer-events-none group-hover:bg-[linear-gradient(to_left,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.8)_30%,rgba(0,0,0,0.1)_60%,rgba(0,0,0,0.2)_100%)] transition-all duration-500"></div>
           
           <div className="relative z-20 flex flex-col items-end gap-3 h-full justify-center self-end text-right transform group-hover:-translate-x-3 md:group-hover:-translate-x-0 transition-transform duration-500 max-w-[60%] sm:max-w-[50%] ml-auto">
             <h3 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,1)] md:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-none font-['Outfit'] pb-1">
