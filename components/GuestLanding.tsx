@@ -7,7 +7,6 @@ import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
 import { useLanguage } from '../contexts/LanguageContext';
-import { GamificationPanel } from './GamificationPanel';
 
 const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {
   const { t } = useLanguage();
@@ -88,7 +87,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   const [currentPromoSlide, setCurrentPromoSlide] = useState(0);
   const [showTeaser, setShowTeaser] = useState(true);
   const { t } = useLanguage();
-  const [isGamificationOpen, setIsGamificationOpen] = useState(false);
 
   useEffect(() => {
     const mainContainer = document.getElementById('main-scroll-container');
@@ -241,21 +239,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
         </>
       )}
-
-      {/* Gamification Panel */}
-      <GamificationPanel isOpen={isGamificationOpen} onClose={() => setIsGamificationOpen(false)} />
-
-      {/* Gamification Floating Trigger */}
-      <button 
-        onClick={() => setIsGamificationOpen(true)}
-        className="fixed top-1/2 right-0 -translate-y-1/2 bg-gradient-to-l from-[#0A0D14] to-fuchsia-600/90 text-white p-2 pl-3 sm:p-3 sm:pl-4 rounded-l-2xl shadow-[-10px_0_30px_rgba(139,92,246,0.3)] z-[90] flex flex-col items-center gap-2 hover:pl-6 hover:bg-fuchsia-500 transition-all border border-r-0 border-fuchsia-400/50 group"
-      >
-        <div className="relative">
-          <Trophy className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform text-amber-300 drop-shadow-[0_0_10px_rgba(252,211,77,0.8)]" />
-          <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full border-2 border-[#0A0D14] animate-bounce"></span>
-        </div>
-        <span className="text-[10px] sm:text-xs font-black tracking-widest hidden sm:block" style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}>GÖREVLER</span>
-      </button>
 
       {/* Live Games Slider */}
       <div className="w-full">

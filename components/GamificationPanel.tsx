@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Trophy, Star, Target, CheckCircle2, Medal, X, Zap, Crown, Flame } from 'lucide-react';
 
 interface GamificationPanelProps {
-  isOpen: boolean;
-  onClose: () => void;
+  className?: string;
 }
 
-export const GamificationPanel: React.FC<GamificationPanelProps> = ({ isOpen, onClose }) => {
+export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className = '' }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -16,39 +15,21 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ isOpen, on
   if (!mounted) return null;
 
   return (
-    <>
-      {/* Backdrop */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] transition-opacity duration-300"
-          onClick={onClose}
-        />
-      )}
-
-      {/* Drawer */}
-      <div 
-        className={`fixed inset-y-0 right-0 w-full sm:w-[400px] bg-[#0A0D14] z-[9999] shadow-[-20px_0_60px_rgba(0,0,0,0.8)] border-l border-white/5 transform transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-y-auto flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
-      >
-        {/* Header */}
-        <div className="sticky top-0 z-20 flex items-center justify-between p-5 bg-[#0A0D14]/90 backdrop-blur-md border-b border-white/5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.3)]">
-              <Crown className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h2 className="text-white font-black text-lg leading-tight font-['Outfit']">Kariyer & Görevler</h2>
-              <p className="text-zinc-400 text-xs font-semibold">VIP Silver Üye</p>
-            </div>
+    <div className={`w-full bg-[#0A0D14] rounded-2xl md:rounded-3xl border border-white/5 shadow-xl overflow-hidden flex flex-col ${className}`}>
+      {/* Header */}
+      <div className="flex items-center justify-between p-5 md:p-6 bg-[#131722]/50 border-b border-white/5">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+            <Crown className="w-6 h-6 text-white" />
           </div>
-          <button 
-            onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
-          >
-            <X className="w-5 h-5 text-zinc-400" />
-          </button>
+          <div>
+            <h2 className="text-white font-black text-xl leading-tight font-['Outfit']">Kariyer & Görevler</h2>
+            <p className="text-zinc-400 text-sm font-semibold">VIP Silver Üye</p>
+          </div>
         </div>
+      </div>
 
-        <div className="p-5 flex-1 flex flex-col gap-6">
+      <div className="p-5 md:p-6 flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Level Progress */}
           <div className="bg-[#131722] rounded-2xl p-5 border border-white/5 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -182,8 +163,7 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ isOpen, on
             </div>
           </div>
 
-        </div>
       </div>
-    </>
+    </div>
   );
 };

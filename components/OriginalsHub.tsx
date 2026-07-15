@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Sparkles, ShieldCheck, MonitorPlay, Gift, Flame, Trophy, Users } from 'lucide-react';
 import LiveBetsTable from './LiveBetsTable';
+import { GamificationPanel } from './GamificationPanel';
 
 const ORIGINALS = [
     {
@@ -166,6 +167,11 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
                             </button>
                         </div>
                     </div>
+                </div>
+
+                {/* Gamification Panel Section */}
+                <div className="mb-12 md:mb-16">
+                    <GamificationPanel className="w-full bg-gradient-to-br from-[#131722] to-[#0A0D14]" />
                 </div>
 
                 {/* Section Title */}
