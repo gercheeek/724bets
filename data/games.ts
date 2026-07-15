@@ -13,6 +13,18 @@ export interface Game {
 
 export const ALL_GAMES: Game[] = [
   {
+    "id": 999123,
+    "name": "Death Becomes You",
+    "provider": "Hacksaw Gaming",
+    "category": "slots",
+    "image": "https://cdn2.softswiss.net/i/s4/hacksaw/DeathBecomesYou.png",
+    "demoSymbol": "death_becomes_you",
+    "rtp": "96.34%",
+    "players": 12450,
+    "isPopular": true,
+    "isNew": true
+  },
+  {
     "id": 99998,
     "name": "Sweet Bonanza 1000",
     "provider": "Pragmatic Play",
