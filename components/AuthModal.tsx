@@ -230,7 +230,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
             <div className="w-full max-w-4xl bg-[#111317] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-[640px] max-h-[90vh]">
                 
                 {/* Left Side - Promo Graphic (Hidden on mobile) */}
-                <div className={`hidden md:flex flex-col justify-between relative overflow-hidden h-full transition-all duration-700 ease-in-out ${showSplash ? 'w-full' : 'w-1/2 border-r border-white/5'}`}>
+                <div className={`hidden md:flex flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'w-full' : 'w-1/2 border-r border-white/5'}`}>
                     {/* Loading Indicator */}
                     {showSplash && (
                         <div className="absolute inset-0 flex items-center justify-center z-20 transition-opacity duration-500">
@@ -242,19 +242,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     )}
                     {/* Add a dynamic background image based on tab */}
                     <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-normal transition-all duration-500"
+                        className="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-normal transition-transform duration-[3000ms] ease-out group-hover:scale-110"
                         style={{ backgroundImage: `url('/images/${memberMode === 'register' ? 'esports_girls_register.jpg' : 'esports_girls_login.jpg'}')` }}
                     ></div>
                     {/* Gradients to ensure text is readable at top and bottom */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#111317]/90 via-transparent to-[#111317]/90"></div>
-                    
-                    {/* Top Logo */}
-                    <div className="relative z-10 w-full pt-10 flex justify-center">
-                        <div className="flex items-center gap-0.5 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)]">
-                            <span className="text-3xl font-black text-white tracking-tighter">724</span>
-                            <span className="text-3xl font-black text-[#00FFA3] tracking-tighter">BETS</span>
-                        </div>
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#111317]/90 via-transparent to-[#111317]/90 pointer-events-none"></div>
 
                     {/* Bottom Terms Text */}
                     <div className="relative z-10 w-full pb-8 px-8 text-center flex justify-center">
