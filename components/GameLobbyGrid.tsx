@@ -37,6 +37,19 @@ const liveCasinoGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'live')
   players: g.players
 })).slice(0, 16);
 
+const getDemoUrl = (game: GameItem | null): string | null => {
+  if (!game) return null;
+  const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  let symbol = null;
+  if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
+  else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
+  else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
+  else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
+  else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
+  if (!symbol) return null;
+  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+};
+
 interface BlockProps {
   title: string;
   icon: React.ReactNode;
@@ -44,9 +57,10 @@ interface BlockProps {
   showPlayers?: boolean;
   isSports?: boolean;
   onGameClick?: (game: GameItem) => void;
+  onDemoClick?: (game: GameItem) => void;
 }
 
-const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSports, onGameClick }) => {
+const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSports, onGameClick, onDemoClick }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
 
@@ -103,11 +117,23 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
 
-                  {/* Play button appears on hover */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
-                      <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg">
-                          <Play className="w-5 h-5 text-white fill-current ml-1" />
-                      </div>
+                  {/* Hover Buttons */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto bg-black/60 backdrop-blur-[2px]">
+                      <button 
+                         onClick={(e) => { e.stopPropagation(); onGameClick?.(game); }}
+                         className="w-[80%] flex items-center justify-center gap-2 bg-[#00FFA3] hover:bg-[#00E676] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
+                      >
+                         GERÇEK OYNA
+                      </button>
+                      
+                      {getDemoUrl(game) && (
+                         <button 
+                           onClick={(e) => { e.stopPropagation(); onDemoClick?.(game); }}
+                           className="w-[80%] flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-2.5 rounded-lg transition-transform hover:scale-105 text-[11px] uppercase tracking-wider backdrop-blur-md"
+                         >
+                           DEMO OYNA
+                         </button>
+                      )}
                   </div>
                 </div>
               </div>
@@ -136,19 +162,6 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
   const [selectedGame, setSelectedGame] = useState<GameItem | null>(null);
   const [showDemoIframe, setShowDemoIframe] = useState(false);
   const { t } = useLanguage();
-
-  const getDemoUrl = (game: GameItem | null): string | null => {
-    if (!game) return null;
-    const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-    let symbol = null;
-    if (nameString.includes('sweetbonanza')) symbol = 'vs20sweetbonanza';
-    else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
-    else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
-    else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
-    else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
-    if (!symbol) return null;
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -210,6 +223,10 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         games={slots} 
         showPlayers={true}
         onGameClick={(game) => setSelectedGame(game)}
+        onDemoClick={(game) => {
+          setSelectedGame(game);
+          setShowDemoIframe(true);
+        }}
       />
 
       {selectedGame && typeof document !== 'undefined' && createPortal(
