@@ -13,6 +13,17 @@ export interface Game {
 
 export const ALL_GAMES: Game[] = [
   {
+    "id": 99999,
+    "name": "Evolution Blackjack",
+    "provider": "Evolution",
+    "category": "new",
+    "image": "https://cdn2.softswiss.net/i/s3/evolution/Evolution_Blackjack.png",
+    "rtp": "99.28%",
+    "players": 25684,
+    "isPopular": true,
+    "isNew": true
+  },
+  {
     "id": 1,
     "name": "Sweet Bonanza",
     "provider": "Pragmatic Play",
