@@ -70,10 +70,10 @@ const CasinoChip: React.FC<{ value: number; color?: string; onClick?: () => void
     const colorClass = bgColors[chipColor as keyof typeof bgColors];
 
     const chipBody = (
-        <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${colorClass} shadow-[0_5px_15px_rgba(0,0,0,0.5)] border-[3px] border-white/20 flex items-center justify-center relative cursor-pointer ${isSelected ? 'ring-2 ring-[#ffd700] ring-offset-2 ring-offset-transparent transform -translate-y-2' : ''} transition-all`}>
-            <div className="absolute inset-1 rounded-full border-[3px] border-dashed border-white/40"></div>
-            <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
-                <span className="text-white font-black text-xs drop-shadow-md">{value}</span>
+        <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br ${colorClass} shadow-[0_5px_15px_rgba(0,0,0,0.5)] border-[3px] border-white/20 flex items-center justify-center relative cursor-pointer ${isSelected ? 'ring-2 ring-[#ffd700] ring-offset-2 ring-offset-transparent transform -translate-y-2' : ''} transition-all`}>
+            <div className="absolute inset-1 rounded-full border-[2px] md:border-[3px] border-dashed border-white/40"></div>
+            <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
+                <span className="text-white font-black text-[10px] md:text-xs drop-shadow-md">{value}</span>
             </div>
         </div>
     );
@@ -81,13 +81,13 @@ const CasinoChip: React.FC<{ value: number; color?: string; onClick?: () => void
     if (stacked) {
         const numChips = Math.min(Math.max(Math.floor(value / 10), 1), 6);
         return (
-            <div className="relative w-14 h-14 flex items-center justify-center">
+            <div className="relative w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
                 {Array.from({ length: numChips }).map((_, i) => (
                     <div key={i} className="absolute" style={{ bottom: `${i * 5}px`, zIndex: i }}>
-                        <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${colorClass} shadow-[0_4px_5px_rgba(0,0,0,0.5)] border-[2px] border-white/20 flex items-center justify-center relative`}>
+                        <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br ${colorClass} shadow-[0_4px_5px_rgba(0,0,0,0.5)] border-[2px] border-white/20 flex items-center justify-center relative`}>
                             <div className="absolute inset-1 rounded-full border-[3px] border-dashed border-white/40"></div>
-                            <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
-                                <span className="text-white font-black text-xs drop-shadow-md">{value}</span>
+                            <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
+                                <span className="text-white font-black text-[10px] md:text-xs drop-shadow-md">{value}</span>
                             </div>
                         </div>
                     </div>
@@ -287,13 +287,13 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
     };
 
     const leftControls = (
-        <div className="flex items-center gap-3 pr-8 w-full justify-start">
+        <div className="flex items-center gap-2 md:gap-3 justify-center md:justify-start w-full">
             <CasinoChip value={10} onClick={() => handleAddBet(10)} />
             <CasinoChip value={50} onClick={() => handleAddBet(50)} />
             <CasinoChip value={100} onClick={() => handleAddBet(100)} />
             
             {(gameState === 'idle' || gameState === 'ended') && betAmount > 0 && (
-                <button onClick={() => setBetAmount(0)} className="w-10 h-10 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/40 font-black text-xs border border-red-500/50 transition-colors flex items-center justify-center ml-2">
+                <button onClick={() => setBetAmount(0)} className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/40 font-black text-[10px] md:text-xs border border-red-500/50 transition-colors flex items-center justify-center ml-1 md:ml-2">
                     X
                 </button>
             )}
@@ -301,44 +301,44 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
     );
 
     const centerControls = (
-        <div className="flex items-center gap-4 px-4 w-[300px] justify-center shrink-0 border-x border-white/10">
+        <div className="flex items-center gap-2 md:gap-4 px-2 md:px-4 justify-center shrink-0">
             <button 
                 disabled={betAmount === 0 || (gameState !== 'idle' && gameState !== 'ended')}
                 onClick={handleDeal}
-                className={`w-[70px] h-[70px] rounded-full flex flex-col items-center justify-center gap-1 transition-all shadow-lg border-2 ${
+                className={`w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full flex flex-col items-center justify-center gap-0.5 md:gap-1 transition-all shadow-lg border-2 ${
                     betAmount > 0 && (gameState === 'idle' || gameState === 'ended') 
                     ? 'bg-gradient-to-b from-gray-200 to-gray-400 border-white hover:scale-105 active:scale-95 text-black' 
                     : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
                 }`}
             >
-                <span className="text-2xl">♠</span>
-                <span className="text-[10px] font-black uppercase tracking-wider">Deal</span>
+                <span className="text-xl md:text-2xl">♠</span>
+                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">Deal</span>
             </button>
 
             <button 
                 disabled={gameState !== 'playing'}
                 onClick={handleHit}
-                className={`w-[70px] h-[70px] rounded-full flex flex-col items-center justify-center gap-1 transition-all shadow-lg border-2 ${
+                className={`w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full flex flex-col items-center justify-center gap-0.5 md:gap-1 transition-all shadow-lg border-2 ${
                     gameState === 'playing' 
                     ? 'bg-gradient-to-b from-emerald-500 to-emerald-700 border-emerald-300 hover:scale-105 active:scale-95 text-white' 
                     : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
                 }`}
             >
-                <span className="text-2xl">✋</span>
-                <span className="text-[10px] font-black uppercase tracking-wider">Hit</span>
+                <span className="text-xl md:text-2xl">✋</span>
+                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">Hit</span>
             </button>
 
             <button 
                 disabled={gameState !== 'playing'}
                 onClick={handleStand}
-                className={`w-[70px] h-[70px] rounded-full flex flex-col items-center justify-center gap-1 transition-all shadow-lg border-2 ${
+                className={`w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full flex flex-col items-center justify-center gap-0.5 md:gap-1 transition-all shadow-lg border-2 ${
                     gameState === 'playing' 
                     ? 'bg-gradient-to-b from-rose-500 to-rose-700 border-rose-300 hover:scale-105 active:scale-95 text-white' 
                     : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
                 }`}
             >
-                <span className="text-2xl">🛑</span>
-                <span className="text-[10px] font-black uppercase tracking-wider">Stand</span>
+                <span className="text-xl md:text-2xl">🛑</span>
+                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">Stand</span>
             </button>
         </div>
     );

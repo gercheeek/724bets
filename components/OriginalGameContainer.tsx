@@ -82,30 +82,30 @@ export default function OriginalGameContainer({
             </div>
 
             {/* ── UNIFIED BOTTOM CONTROL PANEL ── */}
-            <div className="w-full flex justify-center pb-6 z-30 px-4 mt-auto">
-                <div className="bg-[#111]/80 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.8)] w-full max-w-5xl">
+            <div className="w-full flex justify-center pb-4 md:pb-6 z-30 px-2 md:px-4 mt-auto">
+                <div className="bg-[#111]/80 backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full p-4 md:px-6 md:py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.8)] w-full max-w-5xl">
                     
                     {/* Left Controls (Bets, Chips) */}
-                    <div className="flex items-center flex-1 justify-start">
+                    <div className="flex items-center w-full md:w-auto flex-1 justify-center md:justify-start">
                         {leftControls}
                     </div>
 
                     {/* Center Controls (Action Buttons) */}
-                    <div className="flex items-center justify-center shrink-0">
+                    <div className="flex items-center justify-center shrink-0 w-full md:w-auto border-y md:border-y-0 border-white/5 py-2 md:py-0">
                         {centerControls}
                     </div>
 
                     {/* Right Controls (Balance) */}
-                    <div className="flex flex-col items-end flex-1 justify-end">
+                    <div className="flex items-center md:flex-col md:items-end w-full md:w-auto flex-1 justify-between md:justify-end">
                         {rightControls ? rightControls : (
-                            <div className="flex flex-col items-end">
-                                <span className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Bakiye</span>
-                                <div className="bg-black/80 px-5 py-2.5 rounded-full border border-white/10 shadow-inner flex items-center gap-2">
-                                    <span className="text-emerald-400 font-black text-lg">
+                            <>
+                                <span className="text-gray-500 text-[10px] font-bold uppercase tracking-widest md:mb-1">Bakiye</span>
+                                <div className="bg-black/80 px-4 md:px-5 py-2 md:py-2.5 rounded-full border border-white/10 shadow-inner flex items-center gap-2">
+                                    <span className="text-emerald-400 font-black text-base md:text-lg">
                                         ${siteUser ? siteUser.balance.toFixed(2) : '0.00'}
                                     </span>
                                 </div>
-                            </div>
+                            </>
                         )}
                     </div>
 
