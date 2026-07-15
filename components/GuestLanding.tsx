@@ -235,22 +235,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       ) : (
         // GUEST VIEW: Welcome, Search + Side-by-Side Hero Banner & Cards
         <>
-          <div className="w-full mb-4">
-            {/* Welcome & Search Bar Inline */}
-            <div className="w-full py-2 flex justify-between items-center mb-2">
-              <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
-                Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
-              </h2>
-              {/* Mobile Search Icon */}
-              <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
-                <Search className="w-5 h-5 text-gray-400" />
-              </button>
-              {/* Desktop Search Bar */}
-              <div onClick={onSearchClick} className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5">
-                <Search className="w-4 h-4 text-gray-400 mr-3" />
-                <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
-              </div>
-            </div>
+
 
             {/* Layout Row */}
             <div className={`w-full flex flex-col ${showTeaser ? 'lg:flex-row' : ''} gap-4 pb-6 md:pb-6 mb-4 md:mb-0`}>
@@ -293,9 +278,24 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
               </div>
             </div>
-          </div>
         </>
       )}
+
+      {/* Welcome & Search Bar Inline */}
+      <div className="w-full py-2 flex justify-between items-center mt-4 mb-4">
+        <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
+          Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
+        </h2>
+        {/* Mobile Search Icon */}
+        <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
+          <Search className="w-5 h-5 text-gray-400" />
+        </button>
+        {/* Desktop Search Bar */}
+        <div onClick={onSearchClick} className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5">
+          <Search className="w-4 h-4 text-gray-400 mr-3" />
+          <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
+        </div>
+      </div>
 
       {/* Live Wins Ticker */}
       <div className="w-full mb-4 mt-2">
