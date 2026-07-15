@@ -2,49 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Play, Sparkles, ShieldCheck, MonitorPlay, Gift, Flame, Trophy, Users, ChevronRight } from 'lucide-react';
 import LiveBetsTable from './LiveBetsTable';
 import { GamificationPanel } from './GamificationPanel';
+import { GameDetailModal, GameData } from './GameDetailModal';
 
-const ORIGINALS = [
+const ORIGINALS: GameData[] = [
     {
-        id: 'blackjack-pro',
-        name: 'Blackjack PRO',
-        desc: 'Klasik casino deneyimi, premium kalite.',
-        color: 'from-emerald-600 to-emerald-900',
-        image: '/originals/blackjack_pro.jpg',
-        path: 'blackjack-pro',
-        icon: '♠️',
-        popular: true,
-        players: 1245
-    },
-    {
-        id: 'plinko-pro',
-        name: 'Plinko PRO',
+        id: 'plinko',
+        name: 'Plinko',
         desc: 'Fizik tabanlı çarpan eğlencesi.',
         color: 'from-purple-600 to-purple-900',
         image: '/originals/plinko_pro.jpg',
         path: 'plinko',
         icon: '🎯',
-        popular: true,
-        players: 3892
-    },
-    {
-        id: 'dice',
-        name: 'Dice',
-        desc: 'Hızlı, adil ve kazançlı zar oyunu.',
-        color: 'from-blue-600 to-blue-900',
-        image: '/originals/dice.jpg',
-        path: 'dice',
-        icon: '🎲',
-        players: 843
-    },
-    {
-        id: 'limbo',
-        name: 'Limbo',
-        desc: 'Sınırları zorla, devasa çarpanları yakala.',
-        color: 'from-red-600 to-red-900',
-        image: '/originals/limbo.jpg',
-        path: 'limbo',
-        icon: '🚀',
-        players: 621
+        players: 569,
+        rtp: '%99.0',
+        maxWin: '1000x',
+        volatility: 'Yüksek'
     },
     {
         id: 'keno',
@@ -54,7 +26,49 @@ const ORIGINALS = [
         image: '/originals/keno.jpg',
         path: 'keno',
         icon: '🎱',
-        players: 450
+        players: 318,
+        rtp: '%98.5',
+        maxWin: '500x',
+        volatility: 'Orta'
+    },
+    {
+        id: 'dice',
+        name: 'Dice',
+        desc: 'Hızlı, adil ve kazançlı zar oyunu.',
+        color: 'from-blue-600 to-blue-900',
+        image: '/originals/dice.jpg',
+        path: 'dice',
+        icon: '🎲',
+        players: 482,
+        rtp: '%99.0',
+        maxWin: '9900x',
+        volatility: 'Çok Yüksek'
+    },
+    {
+        id: 'mines',
+        name: 'Mines',
+        desc: 'Mayınlara basmadan elmasları topla.',
+        color: 'from-red-600 to-red-900',
+        image: '/originals/limbo.jpg', // Placeholder image if mines doesn't exist
+        path: 'mines',
+        icon: '💣',
+        players: 356,
+        rtp: '%99.0',
+        maxWin: '5.1M x',
+        volatility: 'Yüksek'
+    },
+    {
+        id: 'war',
+        name: 'War',
+        desc: 'Savaş! Kimin kartı daha yüksek?',
+        color: 'from-red-600 to-red-900',
+        image: '/originals/hilo.jpg', // Placeholder
+        path: 'war',
+        icon: '⚔️',
+        players: 481,
+        rtp: '%98.0',
+        maxWin: '2x',
+        volatility: 'Düşük'
     },
     {
         id: 'hilo',
@@ -64,12 +78,69 @@ const ORIGINALS = [
         image: '/originals/hilo.jpg',
         path: 'hilo',
         icon: '🃏',
-        players: 320
+        players: 517,
+        rtp: '%99.0',
+        maxWin: 'Sınırsız',
+        volatility: 'Değişken'
+    },
+    {
+        id: 'blackjack',
+        name: 'Blackjack',
+        desc: 'Klasik casino deneyimi, premium kalite.',
+        color: 'from-emerald-600 to-emerald-900',
+        image: '/originals/blackjack_pro.jpg',
+        path: 'blackjack-pro',
+        icon: '♠️',
+        players: 215,
+        rtp: '%99.5',
+        maxWin: '2.5x',
+        volatility: 'Düşük'
+    },
+    {
+        id: 'roulette',
+        name: 'Roulette',
+        desc: 'Orijinal 724Bets Rulet heyecanı.',
+        color: 'from-emerald-600 to-emerald-900',
+        image: '/originals/blackjack_pro.jpg', // Placeholder
+        path: 'roulette',
+        icon: '🎡',
+        players: 352,
+        rtp: '%97.3',
+        maxWin: '35x',
+        volatility: 'Orta'
+    },
+    {
+        id: 'chicken-cross',
+        name: 'Chicken Cross',
+        desc: 'Tavuk karşıya geçebilecek mi?',
+        color: 'from-emerald-600 to-emerald-900',
+        image: '/originals/plinko_pro.jpg', // Placeholder
+        path: 'chicken-cross',
+        icon: '🐔',
+        players: 219,
+        rtp: '%98.0',
+        maxWin: '1000x',
+        volatility: 'Orta'
+    },
+    {
+        id: 'limbo',
+        name: 'Limbo',
+        desc: 'Sınırları zorla, devasa çarpanları yakala.',
+        color: 'from-red-600 to-red-900',
+        image: '/originals/limbo.jpg',
+        path: 'limbo',
+        icon: '🚀',
+        players: 325,
+        rtp: '%99.0',
+        maxWin: '1M x',
+        volatility: 'Maksimum'
     }
 ];
 
 export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) => void }) {
     const [mounted, setMounted] = useState(false);
+    const [selectedGame, setSelectedGame] = useState<GameData | null>(null);
+
     useEffect(() => setMounted(true), []);
 
     return (
@@ -144,43 +215,34 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
                     </div>
                 </div>
 
-                {/* Horizontal Games Slider */}
-                <div className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {/* Horizontal Games Slider - Portrait Cards */}
+                <div className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide w-full" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     {ORIGINALS.map((game, i) => (
-                        <div 
-                            key={game.id}
-                            onClick={() => onNavigate(game.path)}
-                            className={`shrink-0 snap-start group relative rounded-3xl overflow-hidden cursor-pointer border border-white/5 hover:border-[#00FFA3]/50 transition-all duration-500 shadow-xl flex flex-col h-[320px] ${game.popular ? 'w-[300px] sm:w-[340px]' : 'w-[240px] sm:w-[260px]'}`}
-                        >
-                            <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-30 transition-opacity duration-700 group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            
-                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-8 group-hover:translate-y-0 z-20 pointer-events-none">
-                                <span className="text-[100px] drop-shadow-[0_0_30px_rgba(0,255,163,0.8)] filter brightness-125">{game.icon}</span>
-                            </div>
-
-                            <div className="absolute inset-0 p-5 flex flex-col justify-between z-30 transition-transform duration-500 group-hover:-translate-y-2">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-1.5 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 text-gray-300 group-hover:border-[#00FFA3]/30 group-hover:text-[#00FFA3] transition-colors">
-                                        <Users className="w-3 h-3" />
-                                        <span className="text-[10px] font-bold">{game.players.toLocaleString('tr-TR')} Oyuncu</span>
-                                    </div>
-                                    {game.popular && (
-                                        <span className="bg-[#00FFA3] text-black text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-[0_0_15px_rgba(0,255,163,0.5)]">
-                                            Popüler
-                                        </span>
-                                    )}
-                                </div>
+                        <div key={game.id} className="shrink-0 snap-start flex flex-col items-center group">
+                            {/* Card Body - Portrait */}
+                            <div 
+                                onClick={() => setSelectedGame(game)}
+                                className="w-[150px] h-[200px] md:w-[180px] md:h-[240px] relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-[0_10px_30px_rgba(0,255,163,0.3)] transition-all duration-300 transform group-hover:-translate-y-2 border border-white/5 group-hover:border-[#00FFA3]/50"
+                            >
+                                <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
                                 
-                                <div className="mt-auto flex justify-between items-end">
-                                    <div>
-                                        <h3 className="text-xl font-black text-white tracking-tight mb-1 group-hover:text-[#00FFA3] transition-colors leading-none">{game.name}</h3>
-                                        <p className="text-gray-400 text-xs leading-snug max-w-[160px] group-hover:opacity-0 transition-opacity duration-300">{game.desc}</p>
-                                    </div>
-                                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-[#00FFA3] group-hover:border-[#00FFA3] transition-all duration-300 shadow-lg transform group-hover:scale-110">
-                                        <Play className="w-4 h-4 text-white group-hover:text-black fill-current ml-1" />
+                                {/* Very subtle gradient just to make sure image pops if needed, no texts blocking image */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                                {/* Play button appears on hover */}
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                    <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20">
+                                        <Play className="w-5 h-5 text-white fill-current ml-1" />
                                     </div>
                                 </div>
+                            </div>
+                            
+                            {/* External Player Count (Matches Screenshot) */}
+                            <div className="mt-3 flex items-center gap-1.5 px-2">
+                                <div className="w-2 h-2 rounded-full bg-[#00FFA3] shadow-[0_0_8px_#00FFA3]"></div>
+                                <span className="text-zinc-300 text-xs font-bold font-sans">
+                                    <span className="text-white">{game.players}</span> Oyuncular
+                                </span>
                             </div>
                         </div>
                     ))}
@@ -214,6 +276,14 @@ export default function OriginalsHub({ onNavigate }: { onNavigate: (v: string) =
                     <LiveBetsTable />
                 </div>
             </div>
+
+            {/* Game Detail Modal */}
+            <GameDetailModal 
+                game={selectedGame} 
+                isOpen={!!selectedGame} 
+                onClose={() => setSelectedGame(null)} 
+                onPlay={(path) => onNavigate(path)} 
+            />
 
             <style>{`
                 .scrollbar-hide::-webkit-scrollbar {
