@@ -175,7 +175,6 @@ const ScoreBadge: React.FC<{ score: number; show: boolean }> = ({ score, show })
 
 // ─────────────────────────── MAIN GAME VIEW ──────────────────────────────
 export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired }: any) {
-    const [selectedChip, setSelectedChip] = useState(10);
     const [betAmount, setBetAmount] = useState(0);
     
     const [deck, setDeck] = useState<Card[]>([]);
@@ -319,16 +318,22 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
         }, dHand.length * 200 + 500);
     };
 
-    const handlePlaceBet = () => {
+    const handleNewGame = () => {
+        setGameState('idle');
+        setPlayerHand([]);
+        setDealerHand([]);
+        setResult(null);
+        setPayout(0);
+    };
+
+    const handleAddBet = (amount: number) => {
         if (gameState !== 'idle' && gameState !== 'ended') return;
         if (gameState === 'ended') {
-            setGameState('idle');
-            setPlayerHand([]);
-            setDealerHand([]);
-            setBetAmount(0);
-            setResult(null);
+            handleNewGame();
+            setBetAmount(amount);
+        } else {
+            setBetAmount(prev => prev + amount);
         }
-        setBetAmount(prev => prev + selectedChip);
     };
 
     const clearBet = () => {
@@ -396,7 +401,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                 {/* Player Area & Betting Circle */}
                 <div className="w-full flex flex-col items-center relative">
                     {/* Betting Circle */}
-                    <div className="absolute top-[-30px] w-24 h-24 rounded-full border border-dashed border-[#ffd700]/50 flex items-center justify-center bg-[#ffd700]/5 cursor-pointer hover:bg-[#ffd700]/10 transition-colors z-0" onClick={handlePlaceBet}>
+                    <div className="absolute top-[-30px] w-24 h-24 rounded-full border border-dashed border-[#ffd700]/50 flex items-center justify-center bg-[#ffd700]/5 z-0">
                         <span className="text-[#ffd700]/50 text-[9px] uppercase font-bold tracking-widest absolute top-2">Place Bet</span>
                         
                         {/* Render Stacked Chips if betAmount > 0 */}
@@ -427,9 +432,9 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                     
                     {/* Left: Chip Selector */}
                     <div className="flex items-center gap-3 pr-8 md:border-r border-white/10">
-                        <CasinoChip value={10} isSelected={selectedChip === 10} onClick={() => setSelectedChip(10)} />
-                        <CasinoChip value={50} isSelected={selectedChip === 50} onClick={() => setSelectedChip(50)} />
-                        <CasinoChip value={100} isSelected={selectedChip === 100} onClick={() => setSelectedChip(100)} />
+                        <CasinoChip value={10} onClick={() => handleAddBet(10)} />
+                        <CasinoChip value={50} onClick={() => handleAddBet(50)} />
+                        <CasinoChip value={100} onClick={() => handleAddBet(100)} />
                         
                         {(gameState === 'idle' || gameState === 'ended') && betAmount > 0 && (
                             <button onClick={clearBet} className="w-10 h-10 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/40 font-black text-xs border border-red-500/50 transition-colors flex items-center justify-center ml-2">
@@ -498,12 +503,19 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
 
             {/* ── CINEMATIC RESULT BANNER ── */}
             {gameState === 'ended' && result && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-gradient-to-b from-black via-[#111] to-black border-y-4 border-[#ffd700] w-full py-12 shadow-[0_0_150px_rgba(255,215,0,0.3)] relative flex flex-col items-center justify-center transform scale-100 transition-transform">
+                <div 
+                    className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[4px] animate-fade-in cursor-pointer"
+                    onClick={handleNewGame}
+                >
+                    <div className={`px-16 py-10 rounded-[2rem] border-2 shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center transform transition-transform ${
+                        result === 'win' || result === 'blackjack' ? 'bg-black/60 border-[#ffd700]/50 shadow-[#ffd700]/20' : 
+                        result === 'push' ? 'bg-black/60 border-gray-400/50 shadow-gray-500/20' : 
+                        'bg-black/80 border-red-500/50 shadow-red-500/20'
+                    }`}>
                         
                         {/* Confetti */}
                         {(result === 'win' || result === 'blackjack') && (
-                            <div className="absolute inset-0 opacity-80 pointer-events-none overflow-hidden">
+                            <div className="absolute inset-0 opacity-80 pointer-events-none overflow-hidden rounded-[2rem]">
                                 {[...Array(20)].map((_, i) => (
                                     <div key={i} className="absolute top-[-20%] w-3 h-8 bg-green-500" 
                                          style={{ left: `${Math.random()*100}%`, animation: `confetti-fall ${1 + Math.random()}s linear infinite` }}></div>
@@ -515,9 +527,9 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                             </div>
                         )}
 
-                        <h2 className={`text-6xl md:text-9xl font-black uppercase tracking-tighter mb-2 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] ${
+                        <h2 className={`text-5xl md:text-8xl font-black uppercase tracking-tighter mb-1 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] ${
                             result === 'win' || result === 'blackjack' ? 'text-transparent bg-clip-text bg-gradient-to-b from-[#ffd700] to-[#b8860b]' : 
-                            result === 'push' ? 'text-gray-300' : 'text-transparent bg-clip-text bg-gradient-to-b from-red-500 to-red-800'
+                            result === 'push' ? 'text-gray-300' : 'text-transparent bg-clip-text bg-gradient-to-b from-red-400 to-red-700'
                         }`}>
                             {result === 'win' ? 'YOU WIN' : 
                              result === 'blackjack' ? 'BLACKJACK' :
@@ -526,13 +538,13 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                         </h2>
                         
                         {payout > 0 && (
-                            <div className="text-4xl md:text-5xl text-green-400 font-black tracking-widest mt-4 drop-shadow-[0_0_20px_rgba(34,197,94,0.6)]">
+                            <div className="text-3xl md:text-5xl text-green-400 font-black tracking-widest mt-2 drop-shadow-[0_0_20px_rgba(34,197,94,0.6)]">
                                 +${payout.toFixed(2)}
                             </div>
                         )}
                         
-                        <div className="text-gray-400 text-sm font-bold uppercase tracking-widest mt-6 bg-white/10 px-4 py-1 rounded-full border border-white/10 animate-pulse">
-                            Tab to place new bet
+                        <div className="text-white/40 text-xs font-bold uppercase tracking-widest mt-8 animate-pulse">
+                            Tap anywhere to continue
                         </div>
                     </div>
                 </div>
