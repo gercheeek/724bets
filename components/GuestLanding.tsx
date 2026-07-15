@@ -195,7 +195,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                        {t('casino')}
                      </h3>
-                     <button className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-5 py-2.5 text-xs md:text-sm rounded-lg transition-colors shadow-[0_0_15px_rgba(0,255,163,0.3)] mt-2">
+                     <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-5 py-2.5 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg mt-2">
                        {t('visit_casino')}
                      </button>
                    </div>
@@ -218,7 +218,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                        {t('sports')}
                      </h3>
-                     <button className="bg-[#00FFA3] hover:bg-[#00e693] text-black font-extrabold px-5 py-2.5 text-xs md:text-sm rounded-lg transition-colors shadow-[0_0_15px_rgba(0,255,163,0.3)] mt-2">
+                     <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-5 py-2.5 text-xs md:text-sm rounded-lg transition-colors border border-white/10 shadow-lg mt-2">
                        {t('visit_sports')}
                      </button>
                    </div>

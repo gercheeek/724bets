@@ -341,7 +341,7 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[64px] bg-[#0F1219] border-b border-white/5 flex justify-center">
+      <div className="header-topbar relative w-full h-[72px] bg-[#0F1219] border-b border-white/5 flex justify-center">
         <div className="w-full max-w-[1400px] px-2 md:px-4 h-full flex items-center justify-between">
             {/* Left: Hamburger & Logo & Desktop Tabs */}
             <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
@@ -536,18 +536,18 @@ const Header: React.FC<HeaderProps> = ({
             </>
           ) : (
               <>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <button
                     onClick={onMemberLoginClick}
-                    className="bg-transparent hover:bg-white/5 text-white border-0 font-bold text-sm md:text-sm h-8 md:h-10 px-3 md:px-5 rounded-lg transition-colors whitespace-nowrap"
+                    className="flex items-center justify-center bg-[#1A1D24] hover:bg-[#252A34] text-white font-bold text-[14px] h-[40px] px-5 rounded-lg transition-colors whitespace-nowrap"
                   >
                     {t('login')}
                   </button>
                   <button
                     onClick={onSupportClick}
-                    className="hidden md:flex bg-[#1C2028] hover:bg-[#252A34] text-white p-2 rounded-md transition-colors border border-white/5 items-center justify-center relative"
+                    className="hidden md:flex bg-[#1C2028] hover:bg-[#252A34] text-white rounded-lg transition-colors border border-white/5 items-center justify-center relative"
                     title="Canlı Sohbet"
-                    style={{ height: '36px', width: '36px' }}
+                    style={{ height: '40px', width: '40px' }}
                   >
                     <MessageSquare className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
                   </button>
@@ -555,23 +555,7 @@ const Header: React.FC<HeaderProps> = ({
                   <button
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
-                    style={{
-                      background: '#00FFA3',
-                      color: '#000000',
-                      border: 'none',
-                      padding: '0 16px',
-                      height: '36px',
-                      fontWeight: 800,
-                      fontSize: '14px',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      whiteSpace: 'nowrap',
-                      boxShadow: '0 0 15px rgba(0, 255, 163, 0.15)'
-                    }}
-                    className="hover:bg-[#00E693] transition-colors"
+                    className="flex items-center justify-center bg-[#00FFA3] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-[40px] px-6 rounded-lg transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
                   >
                     {t('register')}
                   </button>
