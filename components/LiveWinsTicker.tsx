@@ -14,11 +14,11 @@ const TICKER_GAMES = [
   { name: "Roulette", provider: 'Rainbet', image: "/images/rainbet-roulette.jpg", type: 'slot' as const },
   
   // Provider Slots
-  { name: "Sweet Bonanza", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s3/pragmaticexternal/SweetBonanza.png", type: 'slot' as const },
-  { name: "The Dog House", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s3/pragmaticexternal/TheDogHouse.png", type: 'slot' as const },
-  { name: "Gates of Olympus", provider: 'Pragmatic Play', image: "https://placehold.co/400x400/2C184A/FFD700/png?text=Gates+of\\nOlympus", type: 'slot' as const },
-  { name: "Wanted Dead or a Wild", provider: 'Hacksaw Gaming', image: "https://placehold.co/400x400/1A1110/FF4500/png?text=Wanted\\nDead\\nor+a+Wild", type: 'slot' as const },
-  { name: "Sugar Rush", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s3/pragmaticexternal/SugarRush.png", type: 'slot' as const }
+  { name: "Sweet Bonanza", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s4/pragmaticexternal/SweetBonanza.png", type: 'slot' as const },
+  { name: "The Dog House", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s4/pragmaticexternal/TheDogHouse.png", type: 'slot' as const },
+  { name: "Gates of Olympus", provider: 'Pragmatic Play', image: "https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Gates-of-Olympus-PragmaticPlay/Vertical/GatesofOlympus_20250328152430427.webp", type: 'slot' as const },
+  { name: "Wanted Dead or a Wild", provider: 'Hacksaw Gaming', image: "https://cdn2.softswiss.net/i/s4/hacksaw/WantedDeadoraWild.png", type: 'slot' as const },
+  { name: "Sugar Rush", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s4/pragmaticexternal/SugarRush.png", type: 'slot' as const }
 ];
 
 const önIsimler = ["Alpha", "Crypto", "Degen", "Whale", "Vegas", "Joker", "Lucky", "Zeus", "Shadow", "VIP", "Player", "Star", "King", "Matrix", "Neon"];
