@@ -22,8 +22,9 @@ import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
 import GlobalToaster from './components/GlobalToaster';
 
-import MaintenanceScreen from './components/MaintenanceScreen';
+import LiveSupportModal from './components/LiveSupportModal';
 import ChatBot from './components/ChatBot';
+import SlotText from './components/SlotText';
 import ModernChat from './components/ModernChat';
 import PromoWheel from './components/PromoWheel';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
