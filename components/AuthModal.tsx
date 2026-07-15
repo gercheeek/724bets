@@ -219,10 +219,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
 
     return (
         <div className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
-            <div className="w-full max-w-4xl bg-[#111317] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 min-h-[600px]">
+            <div className="w-full max-w-4xl bg-[#111317] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-[700px]">
                 
                 {/* Left Side - Promo Graphic (Hidden on mobile) */}
-                <div className="hidden md:flex w-1/2 relative bg-gradient-to-br from-[#0B0E14] to-[#00FFA3]/20 items-center justify-center overflow-hidden border-r border-white/5">
+                <div className="hidden md:flex w-1/2 relative bg-gradient-to-br from-[#0B0E14] to-[#00FFA3]/20 items-center justify-center overflow-hidden border-r border-white/5 h-full">
                     {/* Add a generic background image from our assets */}
                     <div className="absolute inset-0 bg-[url('/images/casino_neon_banner.jpg')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#111317] via-transparent to-transparent"></div>
@@ -233,7 +233,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 </div>
 
                 {/* Right Side - Auth Form */}
-                <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col relative bg-[#151821]">
+                <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col relative bg-[#151821] overflow-y-auto h-full scrollbar-hide">
                     <button onClick={onClose} className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#1F232B] flex items-center justify-center text-zinc-400 hover:text-white transition-colors z-10 hover:bg-[#2A2E39]">
                         <X className="w-4 h-4" />
                     </button>
