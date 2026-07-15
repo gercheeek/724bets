@@ -245,9 +245,26 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
               )}
               
-              <div className={`w-full ${showTeaser ? 'lg:w-[45%] xl:w-[40%]' : 'w-full'}`}>
+              <div className={`w-full ${showTeaser ? 'lg:w-[45%] xl:w-[40%]' : 'w-full'} flex flex-col`}>
+                
+                {/* Welcome & Search Bar Inline */}
+                <div className="w-full py-2 flex justify-between items-center mb-4 lg:mb-6">
+                  <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
+                    Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
+                  </h2>
+                  {/* Mobile Search Icon */}
+                  <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
+                    <Search className="w-5 h-5 text-gray-400" />
+                  </button>
+                  {/* Desktop Search Bar */}
+                  <div onClick={onSearchClick} className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[240px] xl:w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5">
+                    <Search className="w-4 h-4 text-gray-400 mr-3" />
+                    <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
+                  </div>
+                </div>
+
                 {/* 2 Big Cards Container */}
-                <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-0 h-[260px] sm:h-[300px] lg:h-[160px] md:h-[200px] rounded-3xl md:rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-[#0B0E14] h-full">
+                <div className="w-full flex-1 grid grid-cols-1 sm:grid-cols-2 gap-0 min-h-[260px] md:min-h-[200px] lg:min-h-[160px] rounded-3xl md:rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-[#0B0E14]">
                   {/* Kumarhane Card */}
                   <div onClick={() => onViewChange('blackjack')} className="relative w-full h-full cursor-pointer group flex flex-col justify-end p-4 lg:p-5 border-b sm:border-b-0 sm:border-r border-white/5 z-20">
                     <div className="absolute top-0 left-0 w-[120%] h-full pointer-events-none [mask-image:linear-gradient(to_right,black_50%,transparent_100%)] overflow-hidden">
@@ -281,21 +298,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         </>
       )}
 
-      {/* Welcome & Search Bar Inline */}
-      <div className="w-full py-2 flex justify-between items-center mt-4 mb-4">
-        <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
-          Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
-        </h2>
-        {/* Mobile Search Icon */}
-        <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
-          <Search className="w-5 h-5 text-gray-400" />
-        </button>
-        {/* Desktop Search Bar */}
-        <div onClick={onSearchClick} className="hidden md:flex items-center bg-[#151821] rounded-lg px-4 py-3 w-[320px] cursor-pointer hover:bg-[#1a1e29] transition-colors border border-white/5">
-          <Search className="w-4 h-4 text-gray-400 mr-3" />
-          <span className="text-gray-400 text-sm font-medium">{t('search')}</span>
-        </div>
-      </div>
+
 
       {/* Live Wins Ticker */}
       <div className="w-full mb-4 mt-2">
