@@ -366,13 +366,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                 
                 {isOpen && isOriginalsOpen && (
                   <div className="flex flex-col py-1">
-                    <div onClick={() => onViewChange('plinko')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
-                      <div className="flex gap-0.5 opacity-50 group-hover:opacity-100">
-                        <div className="w-1 h-1 rounded-full bg-[#0090FF]"></div>
-                        <div className="w-1 h-1 rounded-full bg-[#00FFA3]"></div>
-                        <div className="w-1 h-1 rounded-full bg-[#2a8bf2]"></div>
-                      </div>
-                      <span className="text-[13px] font-medium tracking-wide text-[#00FFA3]">Plinko</span>
+                    <div onClick={() => onViewChange('originals')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#00FFA3] shadow-[0_0_8px_rgba(0,255,163,0.8)]" />
+                      <span className="text-[13px] font-bold tracking-wide text-[#00FFA3]">724BETS Originals</span>
                     </div>
                   </div>
                 )}

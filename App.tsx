@@ -66,6 +66,7 @@ import ProfileDashboard from './components/ProfileDashboard';
 import GameLobbyTeaser from './components/GameLobbyTeaser';
 import TV724View from './components/TV724View';
 import LiveMatches from './components/LiveMatches';
+import OriginalsHub from './components/OriginalsHub';
 
 import MatchResultsWidget from './components/MatchResultsWidget';
 import { PromoSlider } from './components/PromoSlider';
@@ -1829,6 +1830,12 @@ const AppContent: React.FC = () => {
               setSiteUser={setSiteUser} 
               onAuthRequired={() => setAuthModalMode('member')} 
             />
+          </div>
+        )}
+
+        {view === 'originals' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <OriginalsHub onNavigate={handleViewChange} />
           </div>
         )}
 
