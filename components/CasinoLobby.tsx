@@ -59,7 +59,7 @@ const getDemoUrl = (game: any): string | null => {
   else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
   else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
   
-  if (!symbol) return null;
+  if (!symbol) return 'https://aleaplay.evo-games.com/frontend/evo/r2/#provider=evolution&vt_id=tba6pfctuu7qgxxr&ua_launch_id=18c286f27d98364b0b5946e8&table_id=scabetstack00001&app=promotions&game=scalablebetstackerbj&free_games=direct';
 
   return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
 };
