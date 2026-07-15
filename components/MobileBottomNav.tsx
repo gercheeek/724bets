@@ -19,7 +19,7 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     { id: 'home', label: 'Ana Sayfa', icon: Home },
     { id: 'blackjack', label: 'Slot', icon: Spade },
     { id: 'sports', label: 'Spor', icon: Target },
-    { id: 'cekilis', label: 'Çekiliş', icon: Gift },
+    { id: 'originals', label: 'Lobby', icon: Gift },
     { id: 'chat', label: 'Chat', icon: MessageSquare, action: () => window.dispatchEvent(new Event('openSupportChat')) }
   ];
 
