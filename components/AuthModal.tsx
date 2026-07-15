@@ -231,15 +231,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 
                 {/* Left Side - Promo Graphic (Mobile Splash / Desktop Left Half) */}
                 <div className={`flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
-                    {/* Loading Indicator - Only visible on mobile during splash */}
-                    {showSplash && (
-                        <div className="absolute inset-0 flex md:hidden items-center justify-center z-20 transition-opacity duration-500">
-                            <div className="flex flex-col items-center gap-4 bg-black/40 p-6 rounded-2xl backdrop-blur-sm border border-white/10">
-                                <Loader2 className="w-10 h-10 text-[#00FFA3] animate-spin" />
-                                <span className="text-white font-bold tracking-widest uppercase text-sm drop-shadow-md">Yükleniyor...</span>
-                            </div>
-                        </div>
-                    )}
                     {/* Add a dynamic background image based on tab */}
                     <div 
                         className="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-normal transition-transform duration-[3000ms] ease-out group-hover:scale-110"
