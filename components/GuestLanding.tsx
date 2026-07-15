@@ -3,6 +3,7 @@ import { Search, Trophy, Shield, Target, ChevronRight, Info } from 'lucide-react
 import LiveWinsTicker from './LiveWinsTicker';
 import LiveGamesSlider from './LiveGamesSlider';
 import LiveBetsTable from './LiveBetsTable';
+import RacesAndGiveaways from './RacesAndGiveaways';
 import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
@@ -325,6 +326,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
       {/* Live Bets and Leaderboards */}
       <div className="w-full pb-8">
+        <RacesAndGiveaways />
         <LiveBetsTable />
       </div>
 
