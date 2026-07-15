@@ -247,6 +247,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         </>
       )}
 
+      {/* Live Wins Ticker */}
+      <div className="w-full mb-4">
+        <LiveWinsTicker />
+      </div>
+
       {/* Gamdom Originals / Game Grid (Popüler Oyunlar Only) */}
       <div className="w-full">
         <GameLobbyGrid 
@@ -257,11 +262,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       {/* Originals Slider */}
       <div className="w-full">
         <OriginalsSlider onNavigate={onViewChange} />
-      </div>
-
-      {/* Live Wins Ticker */}
-      <div className="w-full mb-4">
-        <LiveWinsTicker />
       </div>
 
 
