@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Video, X, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, Trophy, Target, Video, X, Play, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { CasinoLobbyGame } from '../types';
 import { ALL_GAMES } from '../data/games';
@@ -223,62 +223,82 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
           }}
         >
           {showDemoIframe && getDemoUrl(selectedGame) ? (
-            <div className="relative w-full max-w-5xl h-[80vh] bg-black rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-               <div className="h-12 bg-[#1A1D29] flex items-center justify-between px-4 border-b border-white/10 flex-shrink-0">
-                  <div className="flex items-center gap-2">
-                     <span className="w-3 h-3 rounded-full bg-red-500"></span>
-                     <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
-                     <span className="w-3 h-3 rounded-full bg-green-500"></span>
-                     <span className="text-white font-bold ml-4">{selectedGame.title} (DEMO)</span>
+            <div className="relative w-full max-w-[1600px] w-[95vw] h-[90vh] bg-black rounded-xl md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col border border-white/5">
+               <div className="h-12 md:h-14 bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 border-b border-white/5 flex-shrink-0">
+                  <div className="flex items-center gap-3">
+                     <div className="flex gap-1.5 opacity-50 hover:opacity-100 transition-opacity hidden md:flex">
+                         <span className="w-3 h-3 rounded-full bg-red-500"></span>
+                         <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+                         <span className="w-3 h-3 rounded-full bg-green-500"></span>
+                     </div>
+                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.title} <span className="text-[#00FFA3] font-black text-[10px] md:text-xs ml-2 border border-[#00FFA3]/30 bg-[#00FFA3]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
                   </div>
-                  <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-red-500 hover:text-white rounded-lg transition-colors text-gray-400">
+                  <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
                     <X className="w-5 h-5" />
                   </button>
                </div>
                <iframe 
                  src={getDemoUrl(selectedGame)!}
-                 className="w-full flex-1 border-0"
+                 className="w-full flex-1 border-0 bg-[#0B0E14]"
                  allowFullScreen
                  title={selectedGame.title || 'Demo Game'}
                />
             </div>
           ) : (
-            <div className="relative m-auto z-10 bg-[#1A1D29] rounded-2xl border border-[#2A2E3D] w-full max-w-[400px] shadow-2xl overflow-hidden animate-fade-in">
-              <button onClick={() => { setSelectedGame(null); setShowDemoIframe(false); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/40 hover:bg-black/60 rounded-full text-white transition-all z-20 backdrop-blur-sm">✕</button>
+            <div className="relative m-auto z-10 bg-[#111317] rounded-3xl border border-white/5 w-[90vw] md:w-[600px] lg:w-[650px] shadow-[0_30px_100px_rgba(0,0,0,0.9)] overflow-hidden animate-fade-in flex flex-col items-center p-6 md:p-10">
+              <button 
+                  onClick={() => { setSelectedGame(null); setShowDemoIframe(false); }}
+                  className="absolute top-4 right-4 z-50 w-8 h-8 md:w-10 md:h-10 bg-black/40 hover:bg-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all border border-white/10 shadow-lg"
+              >
+                  <X className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
               
-              <div className="relative aspect-video w-full flex flex-col items-center justify-center">
-                <div className="absolute inset-0 bg-[#0F121A]">
-                  <img src={selectedGame.image} className="w-full h-full object-cover opacity-50" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A1D29] to-transparent" />
-                </div>
-                
-                <div className="relative z-10 w-24 h-24 mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
-                  <img src={selectedGame.image} className="w-full h-full object-cover" />
-                </div>
+              <div className="w-[120px] h-[160px] md:w-[150px] md:h-[200px] shrink-0 mt-2 mb-6 drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)] relative group cursor-pointer" onClick={() => setShowDemoIframe(true)}>
+                   <img src={selectedGame.image} alt={selectedGame.title} className="absolute inset-0 w-full h-full object-cover rounded-xl border border-white/10 shadow-2xl transition-transform duration-500 group-hover:scale-105" />
+                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-xl flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                          <Play className="w-5 h-5 text-white fill-current ml-1" />
+                      </div>
+                   </div>
               </div>
 
-              <div className="relative z-10 px-6 pb-8 pt-4 text-center flex flex-col items-center">
-                <h3 className="text-2xl font-black text-white mb-1">{selectedGame.title || 'Casino Slot'}</h3>
-                <p className="text-[#00FFA3] text-sm font-bold mb-6">Pragmatic Play</p>
+              <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase mb-8 text-center drop-shadow-lg">
+                  {selectedGame.title || 'Casino Slot'}
+              </h1>
 
-                <div className="w-full flex flex-col gap-3">
+              <div className="w-full mb-10 text-left">
+                  <h3 className="text-white font-bold text-sm md:text-base mb-3 flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-zinc-400" />
+                      Oyun Hakkında
+                  </h3>
+                  <p className="text-zinc-400 text-xs md:text-sm leading-relaxed">
+                      {selectedGame.title} oyunu tamamen şeffaf ve %100 kanıtlanabilir adil (Provably Fair) altyapısıyla çalışmaktadır. Sonuçlar önceden belirlenir ve dışarıdan asla müdahale edilemez. Pragmatic Play kalitesiyle hemen oynamaya başla ve devasa çarpanları yakala.
+                  </p>
+              </div>
+
+              <div className="w-full mt-auto flex flex-col sm:flex-row gap-3">
                   <button 
-                     onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))}
-                     className="w-full flex items-center justify-center gap-2 bg-[#00FFA3] hover:bg-[#00E676] text-black font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.3)] uppercase tracking-wider text-sm"
+                      onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))}
+                      className="flex-1 h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#00FFA3] hover:bg-[#00e693] text-black font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
                   >
-                     <Flame className="w-4 h-4" />
-                     {t('play_real_money')}
+                      GERÇEK OYNA
                   </button>
                   
                   {getDemoUrl(selectedGame) && (
-                     <button 
-                       onClick={() => setShowDemoIframe(true)}
-                       className="w-full bg-[#1F2331] hover:bg-[#2A2E3D] border border-[#2A2E3D] text-white font-bold py-3.5 rounded-xl transition-colors text-sm"
-                     >
-                       {t('play_demo')}
-                     </button>
+                      <button 
+                        onClick={() => setShowDemoIframe(true)}
+                        className="flex-1 h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#1F2331] hover:bg-[#2A2E3D] border border-[#2A2E3D] text-white font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95"
+                      >
+                          <Play className="w-5 h-5 fill-current" />
+                          DEMO OYNA
+                      </button>
                   )}
-                </div>
+              </div>
+              
+              <div className="flex items-center justify-center gap-2 mt-4 text-center w-full">
+                  <span className="text-zinc-500 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">
+                      ŞU AN <span className="text-[#00FFA3]">{selectedGame.players?.toLocaleString('tr-TR')} OYUNCU</span> AKTİF
+                  </span>
               </div>
             </div>
           )}
