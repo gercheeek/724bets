@@ -25,6 +25,13 @@ const önIsimler = ["Alpha", "Crypto", "Degen", "Whale", "Vegas", "Joker", "Luck
 const sonIsimler = ["Pro", "X", "99", "777", "Boss", "Kral", "Lord", "Master", "Winner", "Hunter", "Gamer", "Collector", "Fiend", "Rider"];
 const MULTIPLIERS = [1.2, 1.5, 2.0, 3.4, 5.0, 10.0, 25.5, 100.0, 500.0, 0.0, 0.5];
 
+const getRankColor = (rank: number) => {
+  if (rank > 80) return 'text-yellow-400';
+  if (rank > 50) return 'text-gray-300';
+  if (rank > 20) return 'text-[#CD7F32]';
+  return 'text-blue-400';
+};
+
 const getRandom = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
 
 const generateFakeBet = (): BetDetailData => {
