@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Sparkles, ArrowRight, X, Info } from 'lucide-react';
 
 const LimitedTimePromo = () => {
@@ -34,57 +35,57 @@ const LimitedTimePromo = () => {
 
   return (
     <>
-      <div className="w-full relative overflow-hidden rounded-xl bg-[#0B0E14] border border-[#FF3366]/30 p-1 mb-4 shadow-[0_0_20px_rgba(255,51,102,0.1)] group transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,51,102,0.2)]">
+      <div className="w-full relative overflow-hidden rounded-2xl bg-[#0F121A] border border-[#2A2E3D] p-1 mb-6 shadow-xl group transition-all duration-500">
         {/* Background Image & Effects */}
-        <div className="absolute inset-0 z-0 overflow-hidden rounded-lg">
-          <img src="/images/limited_promo_bg_vibrant.jpg" className="w-full h-full object-cover opacity-60 mix-blend-screen scale-105 group-hover:scale-100 transition-transform duration-1000" alt="" />
-          {/* Soft radial gradient to focus on content */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#0B0E14_80%)]"></div>
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-[#0B0E14]"></div>
+        <div className="absolute inset-0 z-0 overflow-hidden rounded-[14px]">
+          <img src="/images/limited_promo_bg_vibrant.jpg" className="w-full h-full object-cover opacity-40 mix-blend-screen scale-105 group-hover:scale-100 transition-transform duration-1000" alt="" />
+          {/* Rich Dark Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0F121A] via-[#0F121A]/70 to-[#0F121A]"></div>
+          {/* Subtle Green Glow */}
+          <div className="absolute right-0 top-0 w-1/3 h-full bg-[#00FFA3]/5 blur-[100px] pointer-events-none"></div>
         </div>
 
         {/* Subtle sweeping light effect */}
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1500 z-10 pointer-events-none"></div>
 
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 px-4 py-3">
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 px-6 py-4">
         
         {/* Left Side: Text Only */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-4 w-full md:w-auto text-center md:text-left">
           <div className="flex flex-col justify-center">
-            <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-              <Sparkles className="w-5 h-5 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" />
-              <h3 className="text-white font-black text-lg md:text-xl tracking-tight uppercase" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+            <div className="flex items-center justify-center md:justify-start gap-3 mb-1.5">
+              <Sparkles className="w-6 h-6 text-[#00FFA3] drop-shadow-[0_0_8px_rgba(0,255,163,0.5)]" />
+              <h3 className="text-white font-black text-xl md:text-2xl tracking-tight uppercase">
                 5.000₺ HOŞ GELDİN BONUSU
               </h3>
-              <span className="bg-[#FF3366]/20 text-[#FF3366] border border-[#FF3366]/50 text-[9px] md:text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest hidden sm:inline-block">
-                Sınırlı Süre
+              <span className="bg-gradient-to-r from-[#FF3366] to-[#E62E5C] text-white text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-widest hidden sm:inline-block shadow-[0_0_10px_rgba(255,51,102,0.3)]">
+                Özel Teklif
               </span>
             </div>
-            <p className="text-gray-300 text-sm font-medium pl-0 md:pl-7">
-              10.000₺ Yap, <strong className="text-white text-base bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent">2.500₺ Nakit Çek!</strong>
+            <p className="text-[#848B9D] text-sm md:text-base font-medium">
+              10.000₺ Yap, <strong className="text-white">2.500₺ Nakit Çek!</strong>
             </p>
           </div>
         </div>
 
         {/* Right Side: Promo Input & Action */}
-        <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-end shrink-0 mt-2 md:mt-0">
+        <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-end shrink-0">
           
-          {/* Promo Code Input */}
+          {/* Sleek Promo Code Input */}
           <div className="relative">
             <input 
               type="text"
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
               placeholder="PROMO KODU"
-              className="bg-[#0B0E14]/80 border border-white/20 text-white placeholder-white/30 text-sm font-bold tracking-widest uppercase rounded-lg px-4 py-3 w-[160px] focus:outline-none focus:border-[#FF3366] transition-colors"
+              className="bg-[#1A1D29] border border-[#2A2E3D] text-white placeholder-[#848B9D] text-[13px] font-bold tracking-widest uppercase rounded-lg px-5 py-3.5 w-[200px] focus:outline-none focus:border-[#00FFA3] focus:shadow-[0_0_15px_rgba(0,255,163,0.15)] transition-all"
             />
           </div>
 
-          {/* Primary CTA Button (Green) */}
+          {/* Primary CTA Button */}
           <button 
             onClick={handleClaim}
-            className="relative overflow-hidden group/btn bg-[#00FFA3] hover:bg-[#00E676] text-black font-black px-6 py-3 rounded-lg shadow-[0_0_20px_rgba(0,255,163,0.3)] hover:shadow-[0_0_30px_rgba(0,255,163,0.5)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 uppercase tracking-wide text-sm"
+            className="relative overflow-hidden group/btn bg-[#00FFA3] hover:bg-[#00E676] text-[#0F121A] font-black px-8 py-3.5 rounded-lg shadow-[0_0_20px_rgba(0,255,163,0.2)] hover:shadow-[0_0_30px_rgba(0,255,163,0.4)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 uppercase tracking-widest text-[13px]"
           >
             <span className="relative z-10">KULLAN</span>
             <ArrowRight className="relative z-10 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -98,7 +99,7 @@ const LimitedTimePromo = () => {
             localStorage.setItem('promoClosed', 'true');
             setIsVisible(false);
           }}
-          className="absolute top-2 right-2 text-white/30 hover:text-white transition-colors"
+          className="absolute top-3 right-3 text-[#848B9D] hover:text-white transition-colors bg-[#1A1D29] rounded-full p-1 border border-[#2A2E3D]"
         >
           <X className="w-4 h-4" />
         </button>
@@ -106,8 +107,8 @@ const LimitedTimePromo = () => {
     </div>
 
     {/* Terms Modal */}
-    {showTerms && (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    {showTerms && typeof document !== 'undefined' && createPortal(
+      <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
         <div className="bg-[#1A1D29] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-md relative shadow-2xl animate-in fade-in zoom-in duration-300">
           <button 
             onClick={() => setShowTerms(false)}
@@ -144,13 +145,14 @@ const LimitedTimePromo = () => {
             </button>
             <button 
               onClick={handleAcceptTerms}
-              className="flex-1 bg-[#00FFA3] hover:bg-[#00E676] text-black font-black py-3 rounded-xl shadow-[0_0_20px_rgba(0,255,163,0.3)] transition-colors"
+              className="flex-1 bg-[#00FFA3] hover:bg-[#00E676] text-[#0F121A] font-black py-3 rounded-xl shadow-[0_0_20px_rgba(0,255,163,0.3)] transition-colors"
             >
-              Şartları Kabul Et
+              Kabul Et
             </button>
           </div>
         </div>
-      </div>
+      </div>,
+      document.body
     )}
     </>
   );
