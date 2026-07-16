@@ -2,14 +2,14 @@ import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Play, Gamepad2, Flame } from 'lucide-react';
 
 const NEW_GAMES = [
-    { id: '1', title: 'OUT OF THE WOODS', provider: 'PRAGMATIC PLAY', img: '/images/slots/outofthewoods.jpg', color: 'from-[#E3358E]/90 to-[#E3358E]', players: 557 },
-    { id: '2', title: 'LEGION GOLD\nAND THE\nTHRONE OF DEAD', provider: 'PLAY\'N GO', img: '/images/slots/legiongold.jpg', color: 'from-[#BA3B2B]/90 to-[#BA3B2B]', players: 156 },
-    { id: '3', title: 'BIG BASS\nBLAST', provider: 'PRAGMATIC PLAY', img: '/images/slots/bigbass.jpg', color: 'from-[#2F292A]/90 to-[#2F292A]', players: 355 },
-    { id: '4', title: 'THE DOG HOUSE\nMEGAWAYS\n1000', provider: 'PRAGMATIC PLAY', img: '/images/slots/doghouse.jpg', color: 'from-[#A68822]/90 to-[#A68822]', players: 471 },
-    { id: '5', title: 'ARENA\nOF IRON', provider: 'HACKSAW GAMING', img: '/images/slots/arena.jpg', color: 'from-[#8E1018]/90 to-[#8E1018]', players: 524 },
-    { id: '6', title: 'CRABBY\'S GOLD II', provider: 'PLAY\'N GO', img: '/images/slots/crabby.jpg', color: 'from-[#B93822]/90 to-[#B93822]', players: 412 },
-    { id: '7', title: 'FRUIT SHOP', provider: 'NETENT', img: '/images/slots/fruitshop.jpg', color: 'from-[#1E83C5]/90 to-[#1E83C5]', players: 320 },
-    { id: '8', title: 'GRUG MAKE FIRE', provider: 'HACKSAW GAMING', img: '/images/slots/grug.jpg', color: 'from-[#D98731]/90 to-[#D98731]', players: 289 },
+    { id: '1', title: 'OUT OF THE WOODS', provider: 'HACKSAW GAMING', img: 'https://cdn2.softswiss.net/i/s4/hacksaw/OutOfTheWoods.png', color: 'from-[#E3358E]/90 to-[#E3358E]', players: 557 },
+    { id: '2', title: 'LEGION GOLD\nAND THE\nTHRONE OF DEAD', provider: 'PLAY\'N GO', img: 'https://cdn2.softswiss.net/i/s4/playngo/LegionGoldAndTheThroneOfDead.png', color: 'from-[#BA3B2B]/90 to-[#BA3B2B]', players: 156 },
+    { id: '3', title: 'BIG BASS\nBLAST', provider: 'PRAGMATIC PLAY', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/BigBassSplash.png', color: 'from-[#2F292A]/90 to-[#2F292A]', players: 355 },
+    { id: '4', title: 'THE DOG HOUSE\nMEGAWAYS\n1000', provider: 'PRAGMATIC PLAY', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/TheDogHouseMegaways.png', color: 'from-[#A68822]/90 to-[#A68822]', players: 471 },
+    { id: '5', title: 'SWEET BONANZA', provider: 'PRAGMATIC PLAY', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/SweetBonanza.png', color: 'from-[#E3358E]/90 to-[#E3358E]', players: 13781 },
+    { id: '6', title: 'GATES OF OLYMPUS', provider: 'PRAGMATIC PLAY', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/GatesofOlympus1000.png', color: 'from-[#BA3B2B]/90 to-[#BA3B2B]', players: 14150 },
+    { id: '7', title: 'SUGAR RUSH', provider: 'PRAGMATIC PLAY', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/SugarRush.png', color: 'from-[#E3358E]/90 to-[#E3358E]', players: 15295 },
+    { id: '8', title: 'DEATH BECOMES YOU', provider: 'HACKSAW GAMING', img: 'https://cdn2.softswiss.net/i/s4/hacksaw/DeathBecomesYou.png', color: 'from-[#2F292A]/90 to-[#2F292A]', players: 12450 },
 ];
 
 export default function NewGamesSlider() {

@@ -221,7 +221,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
                         <div key={game.id} className="shrink-0 snap-start flex flex-col items-center group">
                             {/* Card Body - Portrait */}
                             <div 
-                                onClick={() => setSelectedGame(game)}
+                                onClick={() => onNavigate(game.path)}
                                 className="w-[150px] h-[200px] md:w-[180px] md:h-[240px] relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-[0_10px_30px_rgba(0,255,163,0.3)] transition-all duration-300 transform group-hover:-translate-y-2 border border-white/5 group-hover:border-[#10B981]/50"
                             >
                                 <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
