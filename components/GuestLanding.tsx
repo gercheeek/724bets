@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Trophy, Shield, Target, ChevronRight, Info, Crown, Star, Play } from 'lucide-react';
+import { Search, Trophy, Shield, Target, ChevronRight, Info, Crown, Star, Play, X } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import LiveWinsTicker from './LiveWinsTicker';
 import LiveGamesSlider from './LiveGamesSlider';
 import LiveBetsTable from './LiveBetsTable';
@@ -11,6 +12,24 @@ import WorldCupTeaser from './WorldCupTeaser';
 import OriginalsSlider from './OriginalsSlider';
 import LimitedTimePromo from './LimitedTimePromo';
 import { useLanguage } from '../contexts/LanguageContext';
+
+const NEW_ADDED_GAMES = [
+  { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%', players: 204 },
+  { id: 116, name: 'Out of the Woods', provider: 'Pragmatic Play', img: '/images/slots/outofthewoods.jpg', category: 'new', rtp: '96.50%', demoSymbol: 'vs25bstackwild', players: 278 },
+  { id: 1161, name: 'Legion Gold And The Throne Of Dead', provider: 'Play\'n GO', img: '/images/slots/legiongold.jpg', category: 'new', rtp: '96.20%', customDemoUrl: 'https://acccw.playngonetwork.com/casino/ContainerLauncher?pid=1857&brand=b2b_anj&gid=throneofdead&practice=1&lang=en_GB&div=gameWrapper&embedmode=iframe&channel=mobile&origin=https%3A%2F%2Fslotra.com', players: 335 },
+  { id: 1162, name: 'Big Bass Blast', provider: 'Pragmatic Play', img: '/images/slots/bigbass.jpg', category: 'new', rtp: '96.71%', demoSymbol: 'vs10bbasblitz', players: 190 },
+  { id: 1163, name: 'The Dog House Megaways 1000', provider: 'Pragmatic Play', img: '/images/slots/doghouse.jpg', category: 'new', rtp: '96.55%', demoSymbol: 'vswaysdh1000', players: 371 },
+  { id: 1164, name: 'Arena of Iron', provider: 'Hacksaw Gaming', img: '/images/slots/arena.jpg', category: 'new', rtp: '96.30%', customDemoUrl: 'https://d2sx83al1f82za.cloudfront.net/2309/1.4.4/index.html?language=en&channel=mobile&gameid=2309&mode=2&token=123token&partner=slotra&env=https://d2sx83al1f82za.cloudfront.net/demo/api&realmoneyenv=https://d2sx83al1f82za.cloudfront.net/api&alwaysredirect=true', players: 449 }
+];
+
+const getDemoUrl = (game: any): string | null => {
+  if (!game) return null;
+  if (game.customDemoUrl) return game.customDemoUrl;
+  if (game.demoSymbol) {
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+  }
+  return null;
+};
 
 const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {
   const { t } = useLanguage();
@@ -264,7 +283,40 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             
           </div>
 
-          {/* New Games Slider for Members */}
+          {/* Yeni Eklenenler Grid for Members */}
+          <div className="w-full mt-8 mb-4">
+            <div className="flex items-center gap-2 mb-4 px-2">
+              <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Yeni Eklenenler</h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 px-2">
+              {NEW_ADDED_GAMES.map(game => (
+                <div key={game.id} className="relative group cursor-pointer rounded-xl overflow-hidden shadow-lg border border-white/5 bg-[#11141D] transition-transform duration-300 hover:-translate-y-1" onClick={() => onViewChange('casino')}>
+                  <div className="relative w-full aspect-[3/4] overflow-hidden">
+                    <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E14] via-transparent to-transparent opacity-80"></div>
+                  </div>
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 z-30 backdrop-blur-[2px]">
+                    <button className="w-12 h-12 bg-[#10B981] hover:bg-[#0da070] rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+                      <Play className="w-5 h-5 text-black ml-1" fill="currentColor" />
+                    </button>
+                    {(game.demoSymbol || game.customDemoUrl) && (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); setSelectedGame(game); setShowDemoIframe(true); }}
+                        className="bg-white/10 hover:bg-white/20 text-white font-bold text-xs py-1.5 px-4 rounded-full border border-white/20 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"
+                      >
+                        Demo Oyna
+                      </button>
+                    )}
+                  </div>
+                  <div className="absolute bottom-2 left-2 flex items-center gap-1.5 z-20">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
+                    <span className="text-[10px] sm:text-xs font-bold text-gray-300 drop-shadow-md">{game.players} Oyuncular</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
         </div>
         </>
@@ -339,7 +391,40 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               </div>
             </div>
 
-            {/* New Games Slider for Guests */}
+            {/* Yeni Eklenenler Grid for Guests */}
+            <div className="w-full mt-8 mb-4">
+              <div className="flex items-center gap-2 mb-4 px-2">
+                <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Yeni Eklenenler</h2>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 px-2">
+                {NEW_ADDED_GAMES.map(game => (
+                  <div key={game.id} className="relative group cursor-pointer rounded-xl overflow-hidden shadow-lg border border-white/5 bg-[#11141D] transition-transform duration-300 hover:-translate-y-1" onClick={onMemberRegisterClick}>
+                    <div className="relative w-full aspect-[3/4] overflow-hidden">
+                      <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E14] via-transparent to-transparent opacity-80"></div>
+                    </div>
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 z-30 backdrop-blur-[2px]">
+                      <button className="w-12 h-12 bg-[#10B981] hover:bg-[#0da070] rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+                        <Play className="w-5 h-5 text-black ml-1" fill="currentColor" />
+                      </button>
+                      {(game.demoSymbol || game.customDemoUrl) && (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setSelectedGame(game); setShowDemoIframe(true); }}
+                          className="bg-white/10 hover:bg-white/20 text-white font-bold text-xs py-1.5 px-4 rounded-full border border-white/20 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"
+                        >
+                          Demo Oyna
+                        </button>
+                      )}
+                    </div>
+                    <div className="absolute bottom-2 left-2 flex items-center gap-1.5 z-20">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
+                      <span className="text-[10px] sm:text-xs font-bold text-gray-300 drop-shadow-md">{game.players} Oyuncular</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
         </>
       )}
@@ -370,6 +455,41 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         <RacesAndGiveaways />
         <LiveBetsTable />
       </div>
+
+      {/* Demo Iframe Modal */}
+      {selectedGame && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[99999] flex p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedGame(null);
+              setShowDemoIframe(false);
+            }
+          }}
+        >
+          {showDemoIframe && getDemoUrl(selectedGame) ? (
+            <div className="relative w-full max-w-[1600px] w-[95vw] h-[90vh] bg-black rounded-xl md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col border border-white/5 m-auto">
+               <div className="h-12 md:h-14 bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 border-b border-white/5 flex-shrink-0">
+                  <div className="flex items-center gap-3">
+                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.name} <span className="text-[#10B981] font-black text-[10px] md:text-xs ml-2 border border-[#10B981]/30 bg-[#10B981]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
+                  </div>
+                  <button onClick={() => { setShowDemoIframe(false); setSelectedGame(null); }} className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
+                    <X className="w-5 h-5" />
+                  </button>
+               </div>
+               <div className="flex-1 w-full relative bg-[#05070A]">
+                  <iframe 
+                    src={getDemoUrl(selectedGame) || ''}
+                    className="absolute inset-0 w-full h-full border-none"
+                    allowFullScreen
+                    allow="autoplay; fullscreen"
+                  ></iframe>
+               </div>
+            </div>
+          ) : null}
+        </div>,
+        document.body
+      )}
 
       {/* Spacer to allow scrolling past bottom bar on mobile */}
       <div className="h-[80px] md:h-0 w-full flex-shrink-0" />
