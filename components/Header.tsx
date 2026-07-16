@@ -390,7 +390,7 @@ const Header: React.FC<HeaderProps> = ({
               {/* Deposit Button attached to pill */}
               <button
                 onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                className="bg-[#1A7BF2] hover:bg-[#1565C0] text-white font-bold w-[32px] h-[36px] md:w-auto md:px-5 md:h-[44px] rounded-r-lg text-[14px] md:text-[15px] transition-colors flex items-center justify-center flex-shrink-0 border-l border-[#1A7BF2]"
+                className="bg-[#1475E1] hover:bg-[#0f60c0] text-white font-bold w-[32px] h-[36px] md:w-auto md:px-5 md:h-[44px] rounded-r-lg text-[14px] md:text-[15px] transition-colors flex items-center justify-center flex-shrink-0 border-l border-[#1475E1] shadow-[0_0_15px_rgba(20,117,225,0.3)]"
               >
                 <Wallet className="w-4 h-4 md:hidden" />
                 <span className="hidden md:block whitespace-nowrap">Cüzdan</span>
