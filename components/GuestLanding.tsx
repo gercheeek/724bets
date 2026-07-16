@@ -109,6 +109,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 }) => {
   const [currentPromoSlide, setCurrentPromoSlide] = useState(0);
   const [showTeaser, setShowTeaser] = useState(true);
+  const [selectedGame, setSelectedGame] = useState<any | null>(null);
+  const [showDemoIframe, setShowDemoIframe] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
