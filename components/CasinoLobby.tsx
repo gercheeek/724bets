@@ -44,7 +44,7 @@ const DEMO_GAMES = [
     id: 116, 
     name: 'Out of the Woods', 
     provider: 'Pragmatic Play', 
-    img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523109e9fec840eaeed00', 
+    img: '/images/slots/outofthewoods.jpg', 
     category: 'new', 
     rtp: '96.50%',
     demoSymbol: 'vs25bstackwild'
@@ -53,7 +53,7 @@ const DEMO_GAMES = [
     id: 1161, 
     name: 'Legion Gold And The Throne Of Dead', 
     provider: 'Play\'n GO', 
-    img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523235229c24dca9f40d6', 
+    img: '/images/slots/legiongold.jpg', 
     category: 'new', 
     rtp: '96.20%',
     customDemoUrl: 'https://acccw.playngonetwork.com/casino/ContainerLauncher?pid=1857&brand=b2b_anj&gid=throneofdead&practice=1&lang=en_GB&div=gameWrapper&embedmode=iframe&channel=mobile&origin=https%3A%2F%2Fslotra.com'
@@ -62,7 +62,7 @@ const DEMO_GAMES = [
     id: 1162, 
     name: 'Big Bass Blast', 
     provider: 'Pragmatic Play', 
-    img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a4f6a30db4d711f8d6a96e9', 
+    img: '/images/slots/bigbass.jpg', 
     category: 'new', 
     rtp: '96.71%',
     demoSymbol: 'vs10bbasblitz'
@@ -71,16 +71,16 @@ const DEMO_GAMES = [
     id: 1163, 
     name: 'The Dog House Megaways 1000', 
     provider: 'Pragmatic Play', 
-    img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5524d03da928ad473ccbc8', 
+    img: '/images/slots/doghouse.jpg', 
     category: 'new', 
     rtp: '96.55%',
     demoSymbol: 'vswaysdh1000'
   },
   { 
     id: 1164, 
-    name: 'Grug Make Fire', 
+    name: 'Arena of Iron', 
     provider: 'Hacksaw Gaming', 
-    img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5524e39666981d0311ce45', 
+    img: '/images/slots/arena.jpg', 
     category: 'new', 
     rtp: '96.30%',
     customDemoUrl: 'https://d2sx83al1f82za.cloudfront.net/2309/1.4.4/index.html?language=en&channel=mobile&gameid=2309&mode=2&token=123token&partner=slotra&env=https://d2sx83al1f82za.cloudfront.net/demo/api&realmoneyenv=https://d2sx83al1f82za.cloudfront.net/api&alwaysredirect=true'
