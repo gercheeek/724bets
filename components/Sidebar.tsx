@@ -41,12 +41,14 @@ const Sidebar: React.FC<SidebarProps> = ({
   // Track open state of accordions
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [isCasinoOpen, setIsCasinoOpen] = useState(false);
+  const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
   const [isSporOpen, setIsSporOpen] = useState(false);
   const [isSponsorlukOpen, setIsSponsorlukOpen] = useState(false);
 
   const topGrid: MenuItem[] = [
     { id: 'canli', label: 'CANLI', icon: <Flame className="w-5 h-5 mb-1" />, view: 'sports' },
-    { id: 'casino', label: 'CASINO', icon: <Target className="w-5 h-5 mb-1" />, view: 'blackjack' },
+    { id: 'taraf', label: 'TARAF', icon: <Target className="w-5 h-5 mb-1 text-red-500" />, view: 'taraf' },
+    { id: 'casino', label: 'CASINO', icon: <Dices className="w-5 h-5 mb-1" />, view: 'blackjack' },
   ];
 
   const menuConfig: MenuItem[] = [
@@ -103,6 +105,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       ]
     },
     { id: 'analiz', label: '724BETS ANALİZ & CANLI BÜLTEN', icon: <BarChart3 className="w-4 h-4 text-[#00FFA3]" />, view: 'analysis' },
+    { id: 'mobil-bulten', label: 'MOBİL BÜLTEN', icon: <Activity className="w-4 h-4 text-[#00FFA3]" />, view: 'mobile-bulletin' },
     { id: 'at-yarisi', label: 'AT YARIŞI', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
     { id: 'sss', label: 'SSS', icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
     { id: 'kurallar', label: 'BAHİS KURALLARI', icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },
@@ -251,15 +254,22 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className={`gamdom-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
         <div className="gamdom-sidebar-inner pb-20">
           
-          {/* Spacer to align sidebar content below Header */}
-          <div className="h-[70px] w-full shrink-0 flex items-center px-4 pt-2">
-             {isOpen && (
-               <div className="flex items-center gap-1 ml-2 select-none">
-                 <span className="text-white font-black text-2xl tracking-tighter" style={{ fontFamily: 'Inter, sans-serif' }}>
-                   724<span className="text-[#00FFA3]">BETS</span>
-                 </span>
-               </div>
-             )}
+          {/* Top Switcher (Casino | Spor) */}
+          <div className="h-[70px] w-full shrink-0 flex items-center px-4 pt-2 relative z-50">
+              <div className="flex w-full bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner">
+                <button 
+                  onClick={() => onViewChange('home')}
+                  className={`flex-1 py-2 rounded-md text-sm font-bold transition-all ${((activeView === 'home') || activeView === 'blackjack') ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+                >
+                  Casino
+                </button>
+                <button 
+                  onClick={() => onViewChange('sports')}
+                  className={`flex-1 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'sports' || activeView === 'sports2' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+                >
+                  Spor
+                </button>
+              </div>
           </div>
 
           
@@ -354,16 +364,38 @@ const Sidebar: React.FC<SidebarProps> = ({
                 )}
               </div>
 
+              {/* Block 1.5: Originals Accordion */}
+              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
+                <div 
+                  onClick={() => setIsOriginalsOpen(!isOriginalsOpen)}
+                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Target className="w-5 h-5 text-white/70 shrink-0" />
+                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Originals</span>}
+                  </div>
+                  {isOpen && <ChevronLeft className={`w-4 h-4 text-white/70 transition-transform ${isOriginalsOpen ? '-rotate-90' : ''}`} />}
+                </div>
+                
+                {isOpen && isOriginalsOpen && (
+                  <div className="flex flex-col py-1">
+                    <div onClick={() => onViewChange('originals')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#00FFA3] shadow-[0_0_8px_rgba(0,255,163,0.8)]" />
+                      <span className="text-[13px] font-bold tracking-wide text-[#00FFA3]">724BETS Originals</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Block 2: Spor Link */}
               <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div onClick={() => onViewChange('sporx')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Activity className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
                   {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">Sporx</span>}
                 </div>
-
-                <div onClick={() => onViewChange('sports')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
-                  <Activity className="w-5 h-5 text-white/70 shrink-0" />
-                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Spor</span>}
+                <div onClick={() => onViewChange('spor724')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Target className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
+                  {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">SPOR724</span>}
                 </div>
               </div>
 
@@ -444,6 +476,11 @@ const Sidebar: React.FC<SidebarProps> = ({
               {renderNavList(extrasConfig)}
             </div>
           )}
+
+          {/* Anjouan License Badge - Placed at the very bottom */}
+          <div className={`mt-auto pt-8 pb-10 flex flex-col items-center justify-center transition-all ${!isOpen ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
+            <img src="/images/anjouan-license.png" alt="Anjouan Gaming Valid License" className="w-32 hover:scale-105 transition-transform" />
+          </div>
 
         </div>
       </div>

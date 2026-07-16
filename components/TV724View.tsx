@@ -850,15 +850,15 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             {/* ══════════════════════════════════════════════════════════════
                 MAIN CONTENT
             ════════════════════════════════════════════════════════════════ */}
-            <div className="tv-wrap animate-fade-in" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="tv-wrap animate-fade-in" style={{ maxWidth: '1200px', margin: '0 auto', padding: isMobile ? '0' : '24px 16px', display: 'flex', flexDirection: 'column', gap: isMobile ? '0' : '24px' }}>
                 
                 {/* Side-by-Side: Video Player (left) + Channels List (right) */}
-                <div style={{ display: 'flex', gap: '20px', width: '100%', flexDirection: isMobile ? 'column' : 'row', alignItems: 'stretch' }}>
+                <div style={{ display: 'flex', gap: isMobile ? '0' : '20px', width: '100%', flexDirection: isMobile ? 'column' : 'row', alignItems: 'stretch' }}>
                     
                     {/* Left Column: Video Player */}
-                    <div style={{ flex: 1.8, minWidth: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div style={{ flex: 1.8, minWidth: isMobile ? '100%' : '320px', display: 'flex', flexDirection: 'column', gap: isMobile ? '0' : '16px', position: isMobile ? 'sticky' : 'relative', top: isMobile ? 0 : 'auto', zIndex: isMobile ? 100 : 1, background: isMobile ? '#000' : 'transparent', borderBottom: isMobile ? '1px solid rgba(255,255,255,0.05)' : 'none', boxShadow: isMobile ? '0 10px 30px rgba(0,0,0,0.8)' : 'none' }}>
                         {!isMiniPlayer ? (
-                            <div ref={playerContainerRef} className="player-hover" style={{ width: '100%', aspectRatio: '16/9', position: 'relative', background: '#000', borderRadius: '8px', overflow: 'hidden', border: activeChannel?.isLive ? '1.5px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.7)', transition: 'all 0.3s ease' }}>
+                            <div ref={playerContainerRef} className={isMobile ? '' : 'player-hover'} style={{ width: '100%', aspectRatio: '16/9', position: 'relative', background: '#000', borderRadius: isMobile ? '0' : '8px', overflow: 'hidden', border: activeChannel?.isLive && !isMobile ? '1.5px solid rgba(239, 68, 68, 0.4)' : isMobile ? 'none' : '1px solid rgba(255, 255, 255, 0.08)', boxShadow: isMobile ? 'none' : '0 20px 50px rgba(0,0,0,0.7)', transition: 'all 0.3s ease' }}>
                                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                                     <div style={{ width: '100%', height: '100%', filter: showPaywall ? 'blur(8px)' : 'none', transition: 'filter 0.5s', pointerEvents: showPaywall ? 'none' : 'auto' }}>
                                         {activeChannel ? (
@@ -875,9 +875,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     
                                     {showPaywall && (
                                         <div style={{ position: 'absolute', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
-                                            <div style={{ background: 'rgba(15, 17, 26, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '30px 40px', borderRadius: '8px', textAlign: 'center', maxWidth: '400px', boxShadow: '0 20px 45px rgba(0,0,0,0.6)' }}>
-                                                <h2 style={{ fontSize: '24px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Heyecanı Kaçırma!</h2>
-                                                <p style={{ fontSize: '14px', color: '#d1d5db', marginBottom: '24px', lineHeight: 1.5 }}>15 saniyelik önizleme süren doldu. Ücretsiz üye ol, tüm canlı yayınlara ve özel sohbet odalarına anında erişim sağla.</p>
+                                            <div style={{ background: 'rgba(15, 17, 26, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: isMobile ? '20px' : '30px 40px', borderRadius: '8px', textAlign: 'center', maxWidth: '400px', boxShadow: '0 20px 45px rgba(0,0,0,0.6)', margin: isMobile ? '16px' : '0' }}>
+                                                <h2 style={{ fontSize: isMobile ? '20px' : '24px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Heyecanı Kaçırma!</h2>
+                                                <p style={{ fontSize: '13px', color: '#d1d5db', marginBottom: '24px', lineHeight: 1.5 }}>15 saniyelik önizleme süren doldu. Ücretsiz üye ol, tüm canlı yayınlara ve özel sohbet odalarına anında erişim sağla.</p>
                                                 <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
                                                     <button onClick={onLoginRequired} style={{ background: '#00FFA3', color: '#000', fontWeight: 900, padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s' }} className="hover:scale-105">ÜYE GİRİŞİ</button>
                                                 </div>
@@ -886,21 +886,31 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     )}
                                     
                                     {activeChannel && !showPaywall && (
-                                        <div className="ctrl-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, transparent 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', zIndex: 45, opacity: 0, transition: 'opacity 0.25s' }}>
+                                        <div className="ctrl-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, transparent 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '0 16px' : '0 24px', zIndex: 45, opacity: isMobile ? 1 : 0, transition: 'opacity 0.25s' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                                 <button onClick={() => setIsPlaying(!isPlaying)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>{isPlaying ? <Pause style={{ width: 16, height: 16 }} /> : <Play style={{ width: 16, height: 16 }} />}</button>
                                                 <button onClick={() => setIsMuted(!isMuted)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>{isMuted ? <VolumeX style={{ width: 16, height: 16, color: '#ef4444' }} /> : <Volume2 style={{ width: 16, height: 16, color: '#adff2f' }} />}</button>
                                                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', letterSpacing: '0.5px' }}>{activeChannel.name.toUpperCase()}</span>
                                             </div>
                                             <div style={{ display: 'flex', gap: '8px' }}>
-                                                {/* Mini Player button removed */}
+                                                {isMobile && (
+                                                    <button onClick={() => {
+                                                        const el = playerContainerRef.current;
+                                                        if (el) {
+                                                            if (document.fullscreenElement) document.exitFullscreen();
+                                                            else el.requestFullscreen();
+                                                        }
+                                                    }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                                                        <Maximize style={{ width: 16, height: 16 }} />
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                     )}
                                 </div>
                             </div>
                         ) : (
-                            <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(0, 255, 163, 0.3)', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.02)', gap: '16px', padding: '24px', textAlign: 'center' }}>
+                            <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(0, 255, 163, 0.3)', borderRadius: isMobile ? '0' : '8px', background: 'rgba(0, 255, 163, 0.02)', gap: '16px', padding: '24px', textAlign: 'center' }}>
                                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(0, 255, 163, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <Tv style={{ width: 20, height: 20, color: '#00FFA3' }} />
                                 </div>
@@ -914,7 +924,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     </div>
                     
                     {/* Right Column: Channels List */}
-                    <div style={{ width: isMobile ? '100%' : '340px', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '16px', flexShrink: 0, height: isMobile ? '380px' : 'auto', position: 'relative' }}>
+                    <div style={{ width: isMobile ? '100%' : '340px', display: 'flex', flexDirection: 'column', background: isMobile ? 'transparent' : 'rgba(255,255,255,0.02)', border: isMobile ? 'none' : '1px solid rgba(255,255,255,0.06)', borderRadius: isMobile ? '0' : '8px', padding: isMobile ? '16px' : '16px', flexShrink: 0, height: isMobile ? 'auto' : 'auto', position: 'relative' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexShrink: 0 }}>
                             <span style={{ fontSize: '11px', fontWeight: 900, color: '#6b7280', letterSpacing: '1px' }}>CANLI KANALLAR</span>
                             <div style={{ position: 'relative', width: '150px' }}>
@@ -930,8 +940,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                         </div>
                         
                         {/* Scrollable list of channels */}
-                        <div style={{ flex: 1, position: 'relative', minHeight: isMobile ? '320px' : 0 }}>
-                            <div className="custom-scrollbar" style={{ position: 'absolute', inset: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '4px' }}>
+                        <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+                            <div className="custom-scrollbar" style={{ position: isMobile ? 'relative' : 'absolute', inset: isMobile ? 'auto' : 0, overflowY: isMobile ? 'visible' : 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: isMobile ? '0' : '4px' }}>
                                 {(() => {
                                     const filtered = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
                                     if (filtered.length === 0) {
@@ -976,28 +986,28 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                             } as any);
                                                         }}
                                                         style={{
-                                                            background: isActive ? 'linear-gradient(135deg, rgba(0, 255, 163, 0.15), rgba(0, 255, 163, 0.03))' : 'rgba(255,255,255,0.01)',
+                                                            background: isActive ? 'linear-gradient(135deg, rgba(0, 255, 163, 0.15), rgba(0, 255, 163, 0.03))' : 'rgba(255,255,255,0.02)',
                                                             border: '1px solid ' + (isActive ? '#00FFA3' : 'rgba(255,255,255,0.04)'),
-                                                            borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', transition: 'all 0.2s ease',
-                                                            display: 'flex', alignItems: 'center', gap: '10px'
+                                                            borderRadius: isMobile ? '12px' : '8px', padding: isMobile ? '12px 16px' : '10px 12px', cursor: 'pointer', transition: 'all 0.2s ease',
+                                                            display: 'flex', alignItems: 'center', gap: '12px', marginBottom: isMobile ? '8px' : '0'
                                                         }}
                                                         onMouseEnter={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                                                         onMouseLeave={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; }}
                                                     >
-                                                        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: '2px' }}>
+                                                        <div style={{ width: isMobile ? '48px' : '40px', height: isMobile ? '48px' : '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: '2px' }}>
                                                             <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                                         </div>
                                                         <div style={{ flex: 1, minWidth: 0, marginLeft: '4px' }}>
-                                                            <div style={{ fontSize: '14px', fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
-                                                            <div style={{ fontSize: '10px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.platform_type}</div>
+                                                            <div style={{ fontSize: isMobile ? '15px' : '14px', fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
+                                                            <div style={{ fontSize: '10px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px' }}>{s.platform_type}</div>
                                                         </div>
                                                         {isLive ? (
-                                                            <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '8px', padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                            <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '8px', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                                 <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#ef4444', animation: 'pulse 1.5s infinite' }} />
-                                                                <span style={{ fontSize: '8px', fontWeight: 900, color: '#ef4444' }}>CANLI</span>
+                                                                <span style={{ fontSize: '9px', fontWeight: 900, color: '#ef4444' }}>CANLI</span>
                                                             </div>
                                                         ) : (
-                                                            <span style={{ fontSize: '9px', color: '#4b5563', fontWeight: 800 }}>OFFLINE</span>
+                                                            <span style={{ fontSize: '10px', color: '#4b5563', fontWeight: 800 }}>OFFLINE</span>
                                                         )}
                                                     </div>
                                                 );
@@ -1009,68 +1019,6 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                         </div>
                     </div>
                 </div>
-
-                {/* World Cup Match Highlights (VODs) - Placed directly below the player/channels row */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 900, color: '#6b7280', letterSpacing: '1px', textTransform: 'uppercase' }}>DÜNYA KUPASI MAÇ ÖZETLERİ</span>
-                        <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, rgba(255,255,255,0.06), transparent)' }} />
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' }}>
-                        {vods.length === 0 ? (
-                            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '40px 0', color: '#6b7280', fontSize: '13px' }}>Henüz eklenmiş maç özeti bulunamadı.</div>
-                        ) : (
-                            vods.map(vod => (
-                                <div 
-                                    key={vod.id} 
-                                    onClick={() => { 
-                                        setActiveChannel({ id: vod.id, name: vod.title, sourceType: 'video', videoUrl: vod.video_url, isLive: false, category: 'VOD' } as any); 
-                                    }}
-                                    style={{
-                                        background: 'rgba(255,255,255,0.02)',
-                                        border: '1px solid rgba(255,255,255,0.06)',
-                                        borderRadius: '8px', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.2s ease'
-                                    }}
-                                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0, 255, 163, 0.4)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateY(0)'; }}
-                                >
-                                    <div style={{ width: '100%', height: '124px', background: '#080a10', position: 'relative' }}>
-                                        {vod.thumbnail_url ? (
-                                            <img src={vod.thumbnail_url} alt={vod.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        ) : (
-                                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Tv style={{ width: 28, height: 28, color: '#374151' }} />
-                                            </div>
-                                        )}
-                                        <div style={{ position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,0,0,.85)', padding: '2px 7px', borderRadius: '4px', fontSize: '8px', color: '#fff', fontWeight: 800 }}>
-                                            {vod.views || 0} izlenme
-                                        </div>
-                                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top,rgba(0,0,0,.4),transparent)' }} />
-                                    </div>
-                                    <div style={{ padding: '12px' }}>
-                                        <div style={{ fontSize: '12px', fontWeight: 800, color: '#fff', marginBottom: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{vod.title}</div>
-                                        <div style={{ fontSize: '10px', color: '#6b7280' }}>
-                                            {vod.created_at ? new Date(vod.created_at).toLocaleDateString('tr-TR') : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-
-                {/* ── TICKER ─────────────────────────────────────────── */}
-                {currentConfig.tickerText && (
-                    <div style={{ padding: '10px 0', background: '#050507', borderRadius: '8px', border: '1px solid rgba(0, 255, 163,.1)', overflow: 'hidden', position: 'relative', marginTop: '16px' }}>
-                        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg,transparent,#00FFA3,transparent)', opacity: .4 }} />
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', animation: 'marquee 30s linear infinite', whiteSpace: 'nowrap' }}>
-                            <Zap style={{ width: 10, height: 10, color: '#00FFA3', flexShrink: 0 }} />
-                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#00FFA3', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{currentConfig.tickerText}</span>
-                            <span style={{ color: '#1a1a1a', margin: '0 20px' }}>|</span>
-                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#00FFA3', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{currentConfig.tickerText}</span>
-                        </div>
-                    </div>
-                )}
 
             </div>
         </div>

@@ -5,6 +5,8 @@ import { Brand, MatchAnalysis, Coupon, CouponMatch, WheelReward, WheelConfig, Bl
 
 import AdminMembersTab from './AdminMembersTab';
 import AdminPoolTab from './AdminPoolTab';
+import AdminPlinkoTab from './AdminPlinkoTab';
+import AdminBlackjackTab from './AdminBlackjackTab';
 import AdminGiveawayTab from './AdminGiveawayTab';
 import AdminRaffleTab from './AdminRaffleTab';
 import AdminPopularBetsTab from './AdminPopularBetsTab';
@@ -17,6 +19,7 @@ import AdminNotificationTab from './AdminNotificationTab';
 import AdminPromoTab from './AdminPromoTab';
 import AdminReferralTab from './AdminReferralTab';
 import AdminSportsTab from './AdminSportsTab';
+import AdminTarafTab from './AdminTarafTab';
 import { AdminBackupTab } from './AdminBackupTab';
 import { NavVisibility } from './Header';
 import { supabase } from '../utils/supabase';
@@ -103,7 +106,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 }) => {
   const isAuthor = role.startsWith('author_');
   const isEditor = role.startsWith('editor');
-  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues' | 'wallet' | 'promocodes' | 'referrals' | 'sports'>('content');
+  const [activeTab, setActiveTab] = useState<'profile' | 'content' | 'style' | 'seo' | 'analysis' | 'coupons' | 'wheel' | 'editors' | 'guests' | 'blackjack' | 'loyalty' | 'members' | 'messages' | 'pool' | 'giveaway' | 'raffle' | 'visibility' | 'liveodds' | 'system' | 'popularbets' | '724tv' | 'casinolobby' | 'trusted' | 'chatmanage' | 'notifications' | 'premium' | 'payment' | 'leagues' | 'wallet' | 'promocodes' | 'referrals' | 'sports' | 'taraf'>('content');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     profile: true,
     site: false,
@@ -959,6 +962,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                       <button onClick={() => setActiveTab('liveodds')} className={`adm-nav-item ${activeTab === 'liveodds' ? 'active' : ''}`}>
                         <Activity className="w-4 h-4" /> CANLI ORANLAR
                       </button>
+                      <button onClick={() => setActiveTab('taraf')} className={`adm-nav-item ${activeTab === 'taraf' ? 'active' : ''}`}>
+                        <Target className="w-4 h-4 text-red-500" /> TARAF (CANLI MOTOR)
+                      </button>
+                      <button onClick={() => setActiveTab('sports')} className={`adm-nav-item ${activeTab === 'sports' ? 'active' : ''}`}>
+                        <Trophy className="w-4 h-4" /> SPOR YÖNETİMİ
+                      </button>
                       <button onClick={() => setActiveTab('popularbets')} className={`adm-nav-item ${activeTab === 'popularbets' ? 'active' : ''}`}>
                         <TrendingUp className="w-4 h-4" /> POPÜLER BAHİSLER
                       </button>
@@ -985,6 +994,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   </button>
                   <button onClick={() => setActiveTab('pool')} className={`adm-nav-item ${activeTab === 'pool' ? 'active' : ''}`}>
                     <Trophy className="w-4 h-4" /> 724TOTO
+                  </button>
+                  <button onClick={() => setActiveTab('plinko')} className={`adm-nav-item ${activeTab === 'plinko' ? 'active' : ''}`}>
+                    <Target className="w-4 h-4" /> PLINKO (PRO)
+                  </button>
+                  <button onClick={() => setActiveTab('blackjack-pro')} className={`adm-nav-item ${activeTab === 'blackjack-pro' ? 'active' : ''}`}>
+                    <span className="text-sm">🃏</span> BLACKJACK (PRO)
                   </button>
                   <button onClick={() => setActiveTab('giveaway')} className={`adm-nav-item ${activeTab === 'giveaway' ? 'active' : ''}`}>
                     <Gift className="w-4 h-4" /> ÇEKİLİŞ YÖNETİMİ
@@ -1799,6 +1814,20 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
             </section>
 
+          </div>
+        )}
+
+        {/* ═══ TARAF (CANLI MOTOR) ═══ */}
+        {activeTab === 'taraf' && (
+          <div className="animate-fade-in h-full">
+            <AdminTarafTab />
+          </div>
+        )}
+
+        {/* ═══ SPORTS MANAGEMENT ═══ */}
+        {activeTab === 'sports' && (
+          <div className="animate-fade-in h-full">
+            <AdminSportsTab />
           </div>
         )}
 
@@ -3671,6 +3700,12 @@ Maç Listesi: `}
 
       {activeTab === 'pool' && (
         <AdminPoolTab />
+      )}
+      {activeTab === 'plinko' && (
+        <AdminPlinkoTab />
+      )}
+      {activeTab === 'blackjack-pro' && (
+        <AdminBlackjackTab />
       )}
 
       {activeTab === 'raffle' && (

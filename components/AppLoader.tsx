@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Club } from 'lucide-react';
+import SlotText from './SlotText';
 
 interface AppLoaderProps {
   fadeOut?: boolean;
+  onComplete?: () => void;
+  isReady?: boolean;
 }
 
-const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false }) => {
+const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false, onComplete, isReady = true }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -27,8 +30,8 @@ const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false }) => {
             fontWeight: 900,
             color: '#fff',
           }}>
-            <span className="slot-text">724</span>
-            <span className="neon-text text-[#00FFA3] ml-[2px]">BETS</span>
+            <SlotText text="724" className="text-white" />
+            <SlotText text="BETS" className="text-[#00FFA3] ml-[2px]" onComplete={onComplete} isReady={isReady} />
           </span>
         </div>
         <div className="mt-8 w-32 h-1 bg-[#1A1D29] rounded-full overflow-hidden">
