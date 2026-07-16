@@ -477,10 +477,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
 
-          {/* Anjouan License Badge - Placed at the very bottom */}
-          <div className={`mt-auto pt-8 pb-10 flex flex-col items-center justify-center transition-all ${!isOpen ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
-            <img src="/images/anjouan-license.png" alt="Anjouan Gaming Valid License" className="w-32 hover:scale-105 transition-transform" />
-          </div>
 
         </div>
       </div>
