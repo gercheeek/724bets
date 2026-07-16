@@ -219,35 +219,31 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
 
           {/* Middle & Right Columns: Seamless Casino & Sports Banner */}
-          <div className="lg:col-span-2 w-full h-[220px] lg:h-full rounded-xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-transparent flex flex-col">
+          <div className="lg:col-span-2 w-full h-[240px] md:h-[220px] lg:h-full rounded-xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-white/10 relative bg-[#05070A] flex flex-col md:flex-row group/banner">
             
             {/* Kumarhane Card */}
             <div 
               onClick={() => onViewChange('blackjack')}
-              className="relative w-full h-1/2 cursor-pointer group bg-[#0D1017] flex flex-row items-center justify-between p-5 lg:p-8 z-20 overflow-hidden border-b border-white/5 shadow-[inset_0_0_40px_rgba(147,51,234,0.05)] hover:shadow-[inset_0_0_80px_rgba(147,51,234,0.15)] transition-shadow duration-500"
+              className="relative flex-1 cursor-pointer group/casino flex items-center justify-between p-5 lg:p-8 z-20 overflow-hidden transition-all duration-700 opacity-100 group-hover/banner:opacity-40 hover:!opacity-100"
             >
-              {/* Radial Glow Behind Text */}
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-purple-600/20 rounded-full blur-[80px] pointer-events-none z-10 opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
-
-              {/* Image & Masks */}
-              <div className="absolute top-0 left-0 w-[80%] h-full pointer-events-none [mask-image:linear-gradient(to_right,black_30%,transparent_100%)] overflow-hidden">
+              {/* Background Image & Overlay */}
+              <div className="absolute inset-0 z-0">
                 <img 
-                  src="/images/casino_neon_banner.jpg" 
+                  src="/images/casino_bg_premium.jpg" 
                   alt="Casino" 
-                  className="absolute inset-0 w-full h-full object-cover object-[right_center] transform group-hover:scale-105 transition-all duration-700 ease-out opacity-70 group-hover:opacity-90"
+                  className="w-full h-full object-cover transform group-hover/casino:scale-105 transition-transform duration-1000 ease-out"
                 />
-                {/* Darken image slightly so text is readable */}
-                <div className="absolute inset-0 bg-black/40"></div>
-                {/* Purple color tint overlay */}
-                <div className="absolute inset-0 bg-purple-900/30 mix-blend-overlay"></div>
+                {/* 50-60% Opacity Overlay to make text pop */}
+                <div className="absolute inset-0 bg-[#05070A]/60 group-hover/casino:bg-[#05070A]/40 transition-colors duration-700"></div>
+                {/* Subtle Purple Neon Glow on Hover */}
+                <div className="absolute inset-0 bg-purple-600/0 group-hover/casino:bg-purple-600/10 mix-blend-screen transition-colors duration-700"></div>
+                {/* Text Background Fade */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#05070A] via-[#05070A]/70 to-transparent w-3/4"></div>
               </div>
 
-              {/* Solid gradient to blend left edge text area */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0D1017] via-[#0D1017]/80 to-transparent w-[50%] z-10 pointer-events-none"></div>
-
-              <div className="relative z-20 flex flex-row items-center justify-between w-full h-full transform group-hover:translate-x-3 transition-transform duration-500">
+              <div className="relative z-20 flex flex-row items-center justify-between w-full h-full transform group-hover/casino:translate-x-2 transition-transform duration-500">
                 <div className="flex flex-col items-start gap-1.5">
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-purple-100 tracking-tight drop-shadow-[0_0_15px_rgba(147,51,234,0.5)] leading-none font-['Outfit'] pb-1">
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-lg leading-none font-['Outfit'] pb-1">
                     Casino
                   </h3>
                   <ActivePlayersCounter type="casino" />
@@ -259,40 +255,45 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               </div>
             </div>
 
+            {/* Glowing Divider */}
+            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent z-30 shadow-[0_0_15px_rgba(255,255,255,0.3)]"></div>
+            <div className="md:hidden absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent z-30"></div>
+
             {/* Spor Bahisleri Card */}
             <div 
               onClick={() => onViewChange('sports')}
-              className="relative w-full h-1/2 cursor-pointer group bg-[#0D1017] flex flex-row items-center justify-between p-5 lg:p-8 overflow-hidden z-10 shadow-[inset_0_0_40px_rgba(0,255,163,0.02)] hover:shadow-[inset_0_0_80px_rgba(0,255,163,0.08)] transition-shadow duration-500"
+              className="relative flex-1 cursor-pointer group/sports flex items-center justify-between p-5 lg:p-8 z-20 overflow-hidden transition-all duration-700 opacity-100 group-hover/banner:opacity-40 hover:!opacity-100"
             >
-              {/* Radial Glow Behind Text */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#00FFA3]/10 rounded-full blur-[80px] pointer-events-none z-10 opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
-
-              {/* Image & Masks */}
-              <div className="absolute top-0 right-0 w-[80%] h-full pointer-events-none [mask-image:linear-gradient(to_left,black_30%,transparent_100%)] overflow-hidden">
+              {/* Background Image & Overlay */}
+              <div className="absolute inset-0 z-0">
                 <img 
-                  src="/images/green_sports_card_left.jpg" 
+                  src="/images/sports_bg_premium.jpg" 
                   alt="Sports Betting" 
-                  className="absolute inset-0 w-full h-full object-cover object-[left_center] transform group-hover:scale-105 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100"
+                  className="w-full h-full object-cover transform group-hover/sports:scale-105 transition-transform duration-1000 ease-out"
                 />
-                <div className="absolute inset-0 bg-black/30"></div>
-                {/* Green color tint overlay */}
-                <div className="absolute inset-0 bg-[#00FFA3]/10 mix-blend-overlay"></div>
+                {/* 50-60% Opacity Overlay to make text pop */}
+                <div className="absolute inset-0 bg-[#05070A]/60 group-hover/sports:bg-[#05070A]/40 transition-colors duration-700"></div>
+                {/* Subtle Green Neon Glow on Hover */}
+                <div className="absolute inset-0 bg-[#00FFA3]/0 group-hover/sports:bg-[#00FFA3]/10 mix-blend-screen transition-colors duration-700"></div>
+                {/* Text Background Fade */}
+                <div className="absolute md:inset-0 md:bg-gradient-to-l md:from-[#05070A] md:via-[#05070A]/70 md:to-transparent w-full md:w-full inset-0 bg-gradient-to-r from-[#05070A] via-[#05070A]/70 to-transparent md:left-auto"></div>
               </div>
               
-              {/* Solid gradient to blend right edge text area */}
-              <div className="absolute right-0 top-0 h-full bg-gradient-to-l from-[#0D1017] via-[#0D1017]/80 to-transparent w-[50%] z-10 pointer-events-none"></div>
-
-              <div className="relative z-20 flex flex-row items-center justify-between w-full h-full transform group-hover:-translate-x-3 transition-transform duration-500">
-                <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 flex-shrink-0">
+              <div className="relative z-20 flex flex-row items-center justify-between w-full h-full transform group-hover/sports:translate-x-2 md:group-hover/sports:-translate-x-2 transition-transform duration-500">
+                <button className="hidden md:flex relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white items-center justify-center w-12 h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 flex-shrink-0">
                   <Play className="relative z-10 w-5 h-5 group-hover/btn:text-[#00FFA3] transition-colors ml-1" fill="currentColor" />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                 </button>
-                <div className="flex flex-col items-end gap-1.5 text-right">
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-[0_0_15px_rgba(0,255,163,0.3)] leading-none font-['Outfit'] pb-1">
+                <div className="flex flex-col items-start md:items-end gap-1.5 md:text-right">
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-lg leading-none font-['Outfit'] pb-1">
                     Spor
                   </h3>
                   <ActivePlayersCounter type="sports" />
                 </div>
+                <button className="md:hidden relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 flex-shrink-0">
+                  <Play className="relative z-10 w-5 h-5 group-hover/btn:text-[#00FFA3] transition-colors ml-1" fill="currentColor" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                </button>
               </div>
             </div>
           </div>
