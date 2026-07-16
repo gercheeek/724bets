@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
+import FomoNotifications from './components/FomoNotifications';
 import LanguageTransition from './components/LanguageTransition';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -19,10 +20,13 @@ import MobileBottomNav from './components/MobileBottomNav';
 import WalletModal from './components/WalletModal';
 import AnalysisView from './components/AnalysisView';
 import BlackjackGame from './components/BlackjackGame';
+import BlackjackProView from './components/BlackjackProView';
+import MaintenanceScreen from './components/MaintenanceScreen';
 import GlobalToaster from './components/GlobalToaster';
 
-import MaintenanceScreen from './components/MaintenanceScreen';
+import LiveSupportModal from './components/LiveSupportModal';
 import ChatBot from './components/ChatBot';
+import SlotText from './components/SlotText';
 import ModernChat from './components/ModernChat';
 import PromoWheel from './components/PromoWheel';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
@@ -46,6 +50,7 @@ import DemoGames from './components/DemoGames';
 import MyBetsModal from './components/MyBetsModal';
 import KralView from './components/KralView';
 import WorldCupTeaser from './components/WorldCupTeaser';
+import Footer from './components/Footer';
 
 import LiveBetsFeed from './components/LiveBetsFeed';
 import CasinoLobby from './components/CasinoLobby';
@@ -62,6 +67,7 @@ import ProfileDashboard from './components/ProfileDashboard';
 import GameLobbyTeaser from './components/GameLobbyTeaser';
 import TV724View from './components/TV724View';
 import LiveMatches from './components/LiveMatches';
+import OriginalsHub from './components/OriginalsHub';
 
 import MatchResultsWidget from './components/MatchResultsWidget';
 import { PromoSlider } from './components/PromoSlider';
@@ -69,12 +75,17 @@ import { WithdrawalHistory } from './components/WithdrawalHistory';
 import { DepositHistory } from './components/DepositHistory';
 import { LiveSportsBulletin } from './components/LiveSportsBulletin';
 import { SporxBulletin } from './components/SporxBulletin';
+import MobileBulletinView from './components/MobileBulletinView';
 import GameLobbyGrid from './components/GameLobbyGrid';
 import Sidebar from './components/Sidebar';
 import GuestLanding from './components/GuestLanding';
 import HeroSection from './components/HeroSection';
 import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
+import Spor724View from './components/Spor724View';
+import TarafView from './components/TarafView';
+import ComingSoon from './components/ComingSoon';
+import PlinkoView from './components/PlinkoView';
 const SITE_CACHE_VERSION = "2026.06.25_v1";
 
 const formatDateTR = (dateStr: string) => {
@@ -147,7 +158,20 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
   return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#00FFA3' }}>{text}</span>;
 };
 
-const App: React.FC = () => {
+export default function App() {
+  return (
+    <ThemeProvider>
+      <LanguageProvider>
+        <div className="min-h-screen bg-[#0B0E14] text-gray-100 flex flex-col font-sans">
+          <FomoNotifications />
+          <AppContent />
+        </div>
+      </LanguageProvider>
+    </ThemeProvider>
+  );
+}
+
+const AppContent: React.FC = () => {
   const sports2ContainerRef = useRef<HTMLDivElement>(null);
   const sportsContainerRef = useRef<HTMLDivElement>(null);
   const sports3ContainerRef = useRef<HTMLDivElement>(null);
@@ -159,7 +183,7 @@ const App: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2'>('home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'sporx' | 'taraf' | 'plinko'>('home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -175,9 +199,10 @@ const App: React.FC = () => {
     setShowLoader(true);
     setFadeOutLoader(false);
     
+    // Fallback timer just in case
     const timer1 = setTimeout(() => {
       setFadeOutLoader(true);
-    }, 2500); // Start fading out at 2.5s
+    }, 5000); 
     
     const timer2 = setTimeout(() => {
       setShowLoader(false);
@@ -201,9 +226,7 @@ const App: React.FC = () => {
     window.addEventListener('internal-navigate', handleInternalNavigate as EventListener);
     
     const handleOpenSupportChat = () => {
-      // Open mobile chat overlay for all screens when clicked from sidebar if !siteUser, else normal toggle
-      const member = localStorage.getItem('site_current_member');
-      if (!member) {
+      if (window.innerWidth < 1280) {
          setIsMobileChatOpen(true);
       } else {
          setIsChatOpen(prev => !prev);
@@ -220,6 +243,7 @@ const App: React.FC = () => {
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isLogoSpinning, setIsLogoSpinning] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
 
@@ -460,8 +484,17 @@ const App: React.FC = () => {
   };
 
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(() => {
+    try { return localStorage.getItem('site_user_role') || null; } catch { return null; }
+  });
+  const [siteUser, setSiteUser] = useState<SiteUser | null>(() => {
+    try {
+      const saved = localStorage.getItem('site_current_member') || localStorage.getItem('site_member');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
 
   useEffect(() => {
@@ -765,7 +798,7 @@ const App: React.FC = () => {
     return stored ? JSON.parse(stored) : demoCoupons;
   });
   const [showSearch, setShowSearch] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(window.innerWidth >= 1280);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [globalTvPip, setGlobalTvPip] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
@@ -1135,9 +1168,11 @@ const App: React.FC = () => {
         setView('trusted-sites');
       } else if (cleanPath === '/trusted-detail') {
         setView('trusted-detail');
+      } else if (cleanPath === '/casino') {
+        setView('blackjack');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['blackjack', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis'];
+        const validViews = ['blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -1166,6 +1201,14 @@ const App: React.FC = () => {
       if (meta) {
         meta.remove();
       }
+    }
+  }, [view]);
+
+  // Auto-close sidebars when entering spor724 view
+  useEffect(() => {
+    if (view === 'spor724') {
+      setIsSidebarOpen(false);
+      setIsChatOpen(false);
     }
   }, [view]);
 
@@ -1328,7 +1371,7 @@ const App: React.FC = () => {
     if (v !== 'analysis') {
       setActiveAnalysisId(null);
     }
-    if (v !== 'blackjack') {
+    if (v !== 'blackjack' && v !== 'blackjack-pro') {
       setActiveCasinoGame(null);
     }
     // Lucky Wheel is members-only
@@ -1359,6 +1402,8 @@ const App: React.FC = () => {
       path = '/trusted-sites';
     } else if (v === 'trusted-detail') {
       path = '/trusted-detail';
+    } else if (v === 'blackjack') {
+      path = '/casino';
     } else {
       path = `/${v}`;
     }
@@ -1456,8 +1501,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <LanguageProvider>
-      <ThemeProvider>
+    <>
       {/* Onboarding Popup Overlay */}
       {showOnboardingPopup && (
         <OnboardingPopup 
@@ -1540,17 +1584,23 @@ const App: React.FC = () => {
           onAdminLogin={() => setAuthModalMode('admin')}
         />
       ) : (
-        <div className="relative flex h-[100dvh] w-full bg-[#111317] text-white overflow-hidden" style={{
-          visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
-          '--header-height': '60px'
-        } as React.CSSProperties}>
-          {showLoader && <AppLoader fadeOut={fadeOutLoader} />}
+        <div 
+          className="relative flex h-[100dvh] w-full bg-[#111317] text-white overflow-hidden" 
+          onPointerDown={() => setIsLogoSpinning(true)}
+          onPointerUp={() => setIsLogoSpinning(false)}
+          onPointerCancel={() => setIsLogoSpinning(false)}
+          style={{
+            visibility: (appStage === 'ready' || appStage === 'popup' || showLoader) ? 'visible' : 'hidden',
+            '--header-height': '60px'
+          } as React.CSSProperties}
+        >
+          {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && siteUser && (
-            <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
+          {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway' || (view === 'home' && !siteUser)) && (
+            <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
-                isOpen={isSidebarOpen}
+                isOpen={isSidebarOpen || view === 'blackjack'}
                 onToggle={() => setIsSidebarOpen(!isSidebarOpen)} 
                 activeView={view}
                 onViewChange={handleViewChange}
@@ -1562,7 +1612,7 @@ const App: React.FC = () => {
           )}
 
           {/* MOBİL DRAWER - SOL MENÜ */}
-          {isMobileMenuOpen && siteUser && (
+          {isMobileMenuOpen && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
               <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
               <aside className="w-[280px] bg-[#111317] border-r border-[#1A1D24] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
@@ -1585,16 +1635,7 @@ const App: React.FC = () => {
             id="main-scroll-container"
             className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}
             onScroll={(e) => {
-              const currentScrollY = e.currentTarget.scrollTop;
-              const mobileHeader = document.getElementById('mobile-top-header');
-              if (mobileHeader) {
-                if (currentScrollY > (window as any).lastMainScrollY && currentScrollY > 50) {
-                  mobileHeader.style.transform = 'translateY(-100%)';
-                } else {
-                  mobileHeader.style.transform = 'translateY(0)';
-                }
-              }
-              (window as any).lastMainScrollY = currentScrollY;
+              // Scroll handler removed to prevent mobile header glitching
             }}
           >
             
@@ -1602,28 +1643,28 @@ const App: React.FC = () => {
             {view !== 'kral' && (
               <header 
                 id="mobile-top-header"
-                className="flex lg:hidden items-center justify-between p-2 px-3 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1 transition-transform duration-300"
+                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1"
               >
                 <div 
-                  className="font-black text-xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
+                  className="font-black text-2xl sm:text-3xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
                   onClick={() => setView('home')}
                   style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
                 >
-                  <span className="text-white font-extrabold">724</span>
-                  <span className="text-[#00FFA3] font-black">BETS</span>
+                  <SlotText text="724" className="text-white font-extrabold" isSpinning={isLogoSpinning} />
+                  <SlotText text="BETS" className="text-[#00FFA3] font-black" isSpinning={isLogoSpinning} />
                 </div><div className="flex items-center shrink-0">
                   {siteUser ? (
                     <>
                       {/* 1. Gamdom Style Wallet (Pill) */}
                       <div 
-                        className="flex items-center bg-[#1A1F29] rounded-lg p-1 pr-2 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
+                        className="flex items-center bg-[#1A1F29] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
-                        <div className="w-6 h-6 rounded bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
-                          <span className="text-[13px]">$</span>
+                        <div className="w-7 h-7 rounded bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
+                          <span className="text-[14px]">$</span>
                         </div>
-                        <span className="text-white font-bold text-[13px] tracking-tight mr-1.5">${siteUser.balance?.toFixed(2) || '0.00'}</span>
-                        <svg className="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
+                        <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">${siteUser.balance?.toFixed(2) || '0.00'}</span>
+                        <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M7 10l5 5 5-5z" />
                         </svg>
                       </div>
@@ -1631,15 +1672,15 @@ const App: React.FC = () => {
                       {/* 2. Cüzdan Butonu (Sadece İkon) */}
                       <button 
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                        className="flex items-center justify-center w-8 h-8 bg-[#00FFA3] hover:bg-[#00e693] rounded-lg transition-colors ml-1.5 shadow-[0_0_15px_rgba(0,255,163,0.2)] active:scale-95"
+                        className="flex items-center justify-center w-10 h-10 bg-[#00FFA3] hover:bg-[#00e693] rounded-lg transition-colors ml-2 shadow-[0_0_15px_rgba(0,255,163,0.2)] active:scale-95"
                       >
-                        <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="currentColor">
+                        <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M21 7.5C21 5.567 19.433 4 17.5 4H6.5C4.567 4 3 5.567 3 7.5v9C3 18.433 4.567 20 6.5 20h11c1.933 0 3.5-1.567 3.5-3.5v-9zm-3.5 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
                         </svg>
                       </button>
                       
                       {/* 3. Profil Avatarı */}
-                      <button onClick={() => handleViewChange('profile')} className="w-8 h-8 rounded-full border border-white/10 bg-[#1A1D24] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
+                      <button onClick={() => handleViewChange('profile')} className="w-10 h-10 rounded-full border border-white/10 bg-[#1A1D24] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
                         <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} alt="Avatar" className="w-full h-full object-cover" />
                       </button>
 
@@ -1651,10 +1692,10 @@ const App: React.FC = () => {
                           localStorage.removeItem('site_user_role');
                           window.location.reload();
                         }} 
-                        className="w-8 h-8 flex items-center justify-center rounded-md bg-red-500/10 text-red-500 border border-red-500/20 ml-1 active:scale-95"
+                        className="w-10 h-10 flex items-center justify-center rounded-md bg-red-500/10 text-red-500 border border-red-500/20 ml-2 active:scale-95"
                         title="Çıkış Yap"
                       >
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                       </button>
                     </>
                   ) : (
@@ -1662,13 +1703,13 @@ const App: React.FC = () => {
                       {/* Gamdom Style Mobile Auth Buttons */}
                       <button
                         onClick={() => setAuthModalMode('member')}
-                        className="flex items-center justify-center h-[34px] bg-[#1A1D24] hover:bg-[#2A2E3D] text-white transition-colors px-3.5 rounded-[8px] font-bold text-[13px]"
+                        className="flex items-center justify-center h-[40px] bg-[#1A1D24] hover:bg-[#2A2E3D] text-white transition-colors px-5 rounded-[10px] font-bold text-sm"
                       >
                         Giriş yap
                       </button>
                       <button
                         onClick={() => setAuthModalMode('register')}
-                        className="flex items-center justify-center h-[34px] bg-[#00FFA3] hover:bg-[#00E693] text-black transition-colors px-3.5 rounded-[8px] font-extrabold text-[13px] shadow-[0_0_10px_rgba(0,255,163,0.2)] ml-1"
+                        className="flex items-center justify-center h-[40px] bg-[#00FFA3] hover:bg-[#00E693] text-black transition-colors px-5 rounded-[10px] font-extrabold text-sm shadow-[0_0_10px_rgba(0,255,163,0.2)] ml-2"
                       >
                         Kaydolun
                       </button>
@@ -1723,7 +1764,7 @@ const App: React.FC = () => {
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5') 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'taraf') 
             ? 'p-0 w-full max-w-[1400px] mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
@@ -1781,8 +1822,42 @@ const App: React.FC = () => {
         )}
 
         {view === 'sports' && (
-          <div className="animate-fade-in w-full bg-[#09090b] relative z-20">
-            <LiveSportsBulletin />
+          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+            <Spor724View 
+              onNavigate={(v: string) => handleViewChange(v)}
+            />
+          </div>
+        )}
+
+        {view === 'taraf' && (
+          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+            <TarafView />
+          </div>
+        )}
+
+        {view === 'plinko' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <PlinkoView 
+              siteUser={siteUser} 
+              setSiteUser={setSiteUser} 
+              onAuthRequired={() => setAuthModalMode('member')} 
+            />
+          </div>
+        )}
+
+        {view === 'originals' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <OriginalsHub onNavigate={handleViewChange} isLoggedIn={!!(siteUser || userRole)} />
+          </div>
+        )}
+
+        {view === 'blackjack-pro' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <BlackjackProView 
+              siteUser={siteUser} 
+              setSiteUser={setSiteUser} 
+              onAuthRequired={() => setAuthModalMode('member')} 
+            />
           </div>
         )}
 
@@ -1995,7 +2070,29 @@ const App: React.FC = () => {
 
         {view === 'blackjack' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
-            <CasinoLobby customGames={casinoLobbyGames} isLoggedIn={!!(siteUser || userRole)} />
+            <CasinoLobby 
+              customGames={casinoLobbyGames} 
+              isLoggedIn={!!(siteUser || userRole)}
+              onNavigate={handleViewChange}
+            />
+          </div>
+        )}
+
+        {view === 'slotra' && (
+          <div className="w-full h-full flex flex-col bg-[#0a0a0a]">
+            <Header onAdminClick={() => {}} onViewChange={() => {}} activeView="slotra" />
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
+              <h1 className="text-3xl font-black text-white mb-6 uppercase tracking-wider text-center">Gerçek Casino</h1>
+              <div className="text-zinc-500 text-center max-w-xl mx-auto">Gerçek casino deneyimi çok yakında...</div>
+            </div>
+          </div>
+        )}
+
+        {view === 'spor724' && (
+          <div className="animate-fade-in w-full bg-[#0a0a0c] relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+            <Spor724View 
+              onNavigate={(v: string) => setView(v)}
+            />
           </div>
         )}
 
@@ -2185,10 +2282,17 @@ const App: React.FC = () => {
             activeView={view}
           />
         )}
+
+
         {view === 'demo' && (
           <div className="animate-fade-in">
             <DemoGames />
           </div>
+        )}
+
+
+        {view === 'mobile-bulletin' && (
+          <MobileBulletinView onBack={() => setView('home')} />
         )}
         {view === 'slotra' && (
           <div className="animate-fade-in w-full h-full min-h-screen">
@@ -2218,7 +2322,7 @@ const App: React.FC = () => {
       </div>
       </div>
 
-
+      {view !== 'admin' && <Footer />}
           </main>
 
 
@@ -2317,7 +2421,7 @@ const App: React.FC = () => {
           </aside>
 
           {/* Gamdom-style Floating Action Buttons (Desktop Only) */}
-          {!isChatOpen && siteUser && (
+          {!isChatOpen && (
             <div className="hidden xl:flex fixed bottom-6 right-6 flex-col gap-2 z-50">
               <button 
                 onClick={() => setIsChatOpen(true)}
@@ -2347,7 +2451,7 @@ const App: React.FC = () => {
       )}
 
       {/* Gamdom-style Floating Action Buttons (Mobile Only) */}
-      {view !== 'admin' && !showLiveScoreModal && isMobile && !isMobileChatOpen && siteUser && (
+      {view !== 'admin' && !showLiveScoreModal && isMobile && !isMobileChatOpen && (
         <div className="flex xl:hidden fixed bottom-20 right-4 flex-col gap-2 z-50">
           <button 
             onClick={() => setIsMobileChatOpen(true)}
@@ -2368,7 +2472,7 @@ const App: React.FC = () => {
       )}
 
       {/* MOBİL DRAWER - SOHBET */}
-      {isMobileChatOpen && siteUser && (
+      {isMobileChatOpen && (
         <div className="fixed inset-0 z-[110] flex xl:hidden justify-end">
           <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileChatOpen(false)}></div>
           <aside className="w-[90%] sm:w-[380px] max-w-[420px] bg-[#111317] border-l border-[#1A1D24] h-full shadow-[-10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-right">
@@ -2389,39 +2493,7 @@ const App: React.FC = () => {
     </div>
     )}
 
-      {/* 724BETS OVERLAY FOOTER */}
-      {['sports', 'sports2', 'sports3', 'sports4', 'sports5'].includes(view) && (
-        <div className="fixed bottom-16 md:bottom-0 left-0 w-full z-[90] bg-[#09090b] border-t border-zinc-800 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] flex flex-col md:flex-row items-center justify-between px-4 py-3 pointer-events-auto">
-          <div className="flex items-center gap-3">
-            <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: '20px', color: '#fff', letterSpacing: '-1px' }}>
-              724bets
-            </span>
-            <div className="h-5 w-px bg-zinc-700 hidden md:block"></div>
-            <span className="text-zinc-400 text-[11px] hidden md:block max-w-[450px] leading-snug">
-              724bets, Curaçao yasalarına göre lisanslanmış profesyonel ve güvenilir bahis platformudur. Tüm hakları saklıdır.
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-3 mt-2 md:mt-0">
-             <div className="hidden lg:flex items-center gap-2 mr-2 opacity-80 overflow-x-auto max-w-[200px] md:max-w-none scrollbar-hide">
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAPARA</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">HAVALE</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">PAYCO</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">MASTERCARD</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">VISA</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">BITCOIN</div>
-                <div className="h-6 px-2 bg-[#1A233A] rounded border border-zinc-700 flex items-center justify-center text-[9px] font-bold text-white">TETHER</div>
-             </div>
-             <button 
-               onClick={() => alert('Lisans belgeleri yakında eklenecek.')}
-               className="px-3 py-1.5 bg-[#00FFA3]/10 border border-[#00FFA3]/30 text-[#00FFA3] rounded text-[10px] font-bold hover:bg-[#00FFA3]/20 transition-colors flex items-center gap-1.5 shrink-0"
-             >
-               <ShieldCheck className="w-3.5 h-3.5" />
-               LİSANS BELGELERİ
-             </button>
-          </div>
-        </div>
-      )}
+      {/* 724BETS OVERLAY FOOTER REMOVED AS PER USER REQUEST */}
 
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav 
@@ -2438,9 +2510,6 @@ const App: React.FC = () => {
       />
       <GlobalToaster />
       <LanguageTransition />
-    </ThemeProvider>
-    </LanguageProvider>
+    </>
   );
 };
-
-export default App;

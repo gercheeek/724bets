@@ -66,14 +66,16 @@ if (typeof window !== 'undefined' && !window.globalSimulation) {
       }
     }
 
-    const lines = text.split('\n').filter(line => line.includes(':'));
+    const lines = text.split('\n');
     const parsedMessages = lines.map(line => {
-      const colonIdx = line.indexOf(':');
-      const username = line.substring(0, colonIdx).trim();
-      let message = line.substring(colonIdx + 1).trim();
+      let cleanLine = line.replace(/^[\(\[]?\d{1,2}:\d{2}[:\d{2}]*[\)\]]?\s*-?\s*/, '').trim();
+      if (!cleanLine.includes(':')) return null;
+      const colonIdx = cleanLine.indexOf(':');
+      const username = cleanLine.substring(0, colonIdx).trim();
+      let message = cleanLine.substring(colonIdx + 1).trim();
       message = message.replace(/\[.*?\]|\(.*?\)/g, '').trim();
       return { username, message };
-    });
+    }).filter((m): m is {username: string, message: string} => m !== null && m.username !== '');
 
     remainingMessages = parsedMessages.length;
     if (window.globalSimulation) {
