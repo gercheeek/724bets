@@ -89,30 +89,30 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
       <div className="flex flex-1 overflow-hidden relative">
         
         {/* Left Panel: Stats */}
-        <aside className={`hidden xl:flex flex-col w-[320px] bg-[#0A0D11] border-r border-white/5 overflow-y-auto transition-all duration-500 ease-in-out ${showLeftPanel ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 absolute left-0 h-full'}`}>
+        <aside className={`hidden xl:flex flex-col w-[320px] bg-[#0f172a]/40 backdrop-blur-md border-r border-blue-500/15 hover:border-blue-500/30 overflow-y-auto transition-all duration-500 ease-in-out ${showLeftPanel ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 absolute left-0 h-full'}`}>
            <div className="p-5 flex flex-col gap-6">
               
               {/* Player Stats Widget */}
-              <div className="bg-[#11141D] rounded-xl p-4 border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] relative overflow-hidden group">
-                 <div className="absolute inset-0 bg-gradient-to-b from-[#10B981]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="bg-black/20 rounded-xl p-4 border border-blue-500/15 hover:border-blue-500/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] relative overflow-hidden group transition-colors">
+                 <div className="absolute inset-0 bg-gradient-to-b from-[#10B981]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                  <div className="flex items-center gap-2 mb-4 relative z-10">
                     <Info className="w-4 h-4 text-[#10B981]" />
                     <h3 className="font-bold text-sm text-gray-200 tracking-wider uppercase">Oyuncu İstatistikleri</h3>
                  </div>
                  <div className="grid grid-cols-2 gap-3 relative z-10">
-                    <div className="bg-[#05070A] rounded-lg p-3 border border-white/5 flex flex-col items-center justify-center">
+                    <div className="bg-[#05070A]/50 rounded-lg p-3 border border-blue-500/10 flex flex-col items-center justify-center">
                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Toplam Bahis</span>
-                       <span className="text-lg font-black text-white font-mono">1,245</span>
+                       <span className="text-lg font-black text-white font-mono tracking-tighter">1,245</span>
                     </div>
-                    <div className="bg-[#05070A] rounded-lg p-3 border border-white/5 flex flex-col items-center justify-center">
+                    <div className="bg-[#05070A]/50 rounded-lg p-3 border border-blue-500/10 flex flex-col items-center justify-center">
                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Kazanma Oranı</span>
-                       <span className="text-lg font-black text-[#10B981] font-mono">%48.2</span>
+                       <span className="text-lg font-black text-[#10B981] font-mono tracking-tighter">%48.2</span>
                     </div>
                  </div>
               </div>
 
               {/* Leaderboard Widget */}
-              <div className="bg-[#11141D] rounded-xl p-4 border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+              <div className="bg-black/20 rounded-xl p-4 border border-blue-500/15 hover:border-blue-500/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-colors">
                  <div className="flex items-center gap-2 mb-4">
                     <Trophy className="w-4 h-4 text-yellow-500" />
                     <h3 className="font-bold text-sm text-gray-200 tracking-wider uppercase">Lider Tablosu</h3>
@@ -128,22 +128,22 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                             <div className={`w-6 h-6 rounded-full flex items-center justify-center ${winner.bg} ${winner.color} text-[10px] font-black`}>{winner.rank}</div>
                             <span className="text-sm font-bold text-gray-300">{winner.name}</span>
                          </div>
-                         <span className={`text-sm font-black font-mono ${winner.color}`}>{winner.amount}</span>
+                         <span className={`text-sm font-black font-mono tracking-tighter ${winner.color}`}>{winner.amount}</span>
                       </div>
                     ))}
                  </div>
               </div>
 
               {/* Live Feed Widget */}
-              <div className="bg-[#11141D] rounded-xl p-4 border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex-1 min-h-[200px]">
+              <div className="bg-black/20 rounded-xl p-4 border border-blue-500/15 hover:border-blue-500/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex-1 min-h-[200px] transition-colors">
                  <div className="flex items-center gap-2 mb-4">
                     <Sparkles className="w-4 h-4 text-[#3B82F6]" />
                     <h3 className="font-bold text-sm text-gray-200 tracking-wider uppercase">Canlı Kazançlar</h3>
                  </div>
                  <div className="flex flex-col gap-3 relative overflow-hidden">
                     {/* Faded edges */}
-                    <div className="absolute top-0 w-full h-4 bg-gradient-to-b from-[#11141D] to-transparent z-10"></div>
-                    <div className="absolute bottom-0 w-full h-8 bg-gradient-to-t from-[#11141D] to-transparent z-10"></div>
+                    <div className="absolute top-0 w-full h-4 bg-gradient-to-b from-[#0f172a] to-transparent z-10"></div>
+                    <div className="absolute bottom-0 w-full h-8 bg-gradient-to-t from-[#0f172a] to-transparent z-10"></div>
                     
                     <div className="flex flex-col gap-3 animate-pulse">
                        {/* Mock items */}
@@ -152,14 +152,14 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                              <span className="text-xs font-bold text-gray-300">Alex_724</span>
                              <span className="text-[10px] text-gray-500">Mines</span>
                           </div>
-                          <span className="text-sm font-black text-[#10B981] font-mono">+₺1,250</span>
+                          <span className="text-sm font-black text-[#10B981] font-mono tracking-tighter drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">+₺1,250</span>
                        </div>
                        <div className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5">
                           <div className="flex flex-col">
                              <span className="text-xs font-bold text-gray-400">Can_Y</span>
                              <span className="text-[10px] text-gray-500">Blackjack Pro</span>
                           </div>
-                          <span className="text-sm font-black text-white font-mono">+₺400</span>
+                          <span className="text-sm font-black text-white font-mono tracking-tighter">+₺400</span>
                        </div>
                     </div>
                  </div>
@@ -194,8 +194,8 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
         </main>
 
         {/* Right Panel: Chat */}
-        <aside className={`hidden xl:flex flex-col w-[350px] bg-[#0A0D11] border-l border-white/5 transition-all duration-500 ease-in-out ${showRightPanel ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 absolute right-0 h-full z-0'}`}>
-           <div className="h-full w-full relative z-10">
+        <aside className={`hidden xl:flex flex-col w-[350px] bg-[#0f172a]/40 backdrop-blur-md border-l border-blue-500/15 hover:border-blue-500/30 transition-all duration-500 ease-in-out ${showRightPanel ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 absolute right-0 h-full z-0'}`}>
+           <div className="h-full w-full relative z-10 font-mono tracking-tight">
               <ModernChat 
                 open={true}
                 onOpen={() => {}}

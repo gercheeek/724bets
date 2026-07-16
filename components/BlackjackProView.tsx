@@ -70,10 +70,10 @@ const CasinoChip: React.FC<{ value: number; color?: string; onClick?: () => void
     const colorClass = bgColors[chipColor as keyof typeof bgColors];
 
     const chipBody = (
-        <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br ${colorClass} shadow-[0_5px_15px_rgba(0,0,0,0.5)] border-[3px] border-white/20 flex items-center justify-center relative cursor-pointer ${isSelected ? 'ring-2 ring-[#ffd700] ring-offset-2 ring-offset-transparent transform -translate-y-2' : ''} transition-all`}>
-            <div className="absolute inset-1 rounded-full border-[2px] md:border-[3px] border-dashed border-white/40"></div>
-            <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
-                <span className="text-white font-black text-[10px] md:text-xs drop-shadow-md">{value}</span>
+        <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br ${colorClass} shadow-[0_10px_20px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)] border-[2px] border-[#a0aec0] flex items-center justify-center relative cursor-pointer ${isSelected ? 'ring-2 ring-[#ffd700] ring-offset-2 ring-offset-transparent transform -translate-y-2' : ''} transition-all`}>
+            <div className="absolute inset-1 rounded-full border-[1px] border-solid border-[#e2e8f0]/50 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]"></div>
+            <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center border border-white/10 shadow-inner">
+                <span className="text-white font-black font-mono text-[10px] md:text-xs drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">{value}</span>
             </div>
         </div>
     );
@@ -84,10 +84,10 @@ const CasinoChip: React.FC<{ value: number; color?: string; onClick?: () => void
             <div className="relative w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
                 {Array.from({ length: numChips }).map((_, i) => (
                     <div key={i} className="absolute" style={{ bottom: `${i * 5}px`, zIndex: i }}>
-                        <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br ${colorClass} shadow-[0_4px_5px_rgba(0,0,0,0.5)] border-[2px] border-white/20 flex items-center justify-center relative`}>
-                            <div className="absolute inset-1 rounded-full border-[3px] border-dashed border-white/40"></div>
-                            <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
-                                <span className="text-white font-black text-[10px] md:text-xs drop-shadow-md">{value}</span>
+                        <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br ${colorClass} shadow-[0_4px_10px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)] border-[2px] border-[#a0aec0] flex items-center justify-center relative`}>
+                            <div className="absolute inset-1 rounded-full border-[1px] border-solid border-[#e2e8f0]/50 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]"></div>
+                            <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center border border-white/10 shadow-inner">
+                                <span className="text-white font-black font-mono text-[10px] md:text-xs drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">{value}</span>
                             </div>
                         </div>
                     </div>
@@ -425,14 +425,13 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                 <button 
                     disabled={totalBet === 0 && gameState === 'betting'}
                     onClick={gameState === 'ended' ? handleNewGame : handleDeal}
-                    className={`w-[70px] h-[70px] md:w-[80px] md:h-[80px] rounded-full flex flex-col items-center justify-center gap-1 transition-all shadow-lg border-2 ${
+                    className={`w-[70px] h-[70px] md:w-[80px] md:h-[80px] rounded-full flex flex-col items-center justify-center gap-1 transition-all shadow-lg border-2 z-10 ${
                         (totalBet > 0 || gameState === 'ended')
-                        ? 'bg-gradient-to-b from-gray-200 to-gray-400 border-white hover:scale-105 active:scale-95 text-black' 
+                        ? 'bg-[#10B981]/20 border-[#10B981] hover:bg-[#10B981]/30 hover:scale-105 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] active:scale-95 text-[#10B981]' 
                         : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
                     }`}
                 >
-                    <span className="text-2xl md:text-3xl">{gameState === 'ended' ? '↺' : '♠'}</span>
-                    <span className="text-[10px] md:text-xs font-black uppercase tracking-wider">{gameState === 'ended' ? 'New' : 'Deal'}</span>
+                    <span className="text-xl md:text-2xl font-black uppercase tracking-wider">{gameState === 'ended' ? 'New' : 'Deal'}</span>
                 </button>
             ) : (
                 <>
@@ -530,7 +529,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
 
                         {/* Betting Circle */}
                         <div 
-                            className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full border-2 ${hand.bet > 0 ? 'border-[#ffd700]/50' : 'border-dashed border-white/20'} flex items-center justify-center bg-black/40 z-0 cursor-pointer hover:bg-white/10 transition-colors`}
+                            className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full border-[2px] ${hand.bet > 0 ? 'border-[#10B981] shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'border-solid border-white/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]'} flex items-center justify-center bg-black/40 z-0 cursor-pointer transition-all`}
                             onClick={() => handleAddBetToSeat(i)}
                         >
                             {hand.bet === 0 && <span className="text-white/30 text-[8px] md:text-[10px] uppercase font-bold tracking-widest text-center px-2">Place<br/>Bet</span>}
