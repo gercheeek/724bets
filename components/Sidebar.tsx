@@ -405,7 +405,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div onClick={() => onViewChange('promo')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Ticket className="w-5 h-5 text-white/70 shrink-0" />
-                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Kodu Kullan</span>}
+                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Promosyonlar</span>}
                 </div>
                 <div onClick={() => onViewChange('referral')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Users className="w-5 h-5 text-white/70 shrink-0" />

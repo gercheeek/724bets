@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Ticket, Gift, CheckCircle2, XCircle, Loader2, Zap, Lock, Trophy } from 'lucide-react';
+import { Ticket, Gift, CheckCircle2, XCircle, Loader2, Zap, Lock, Trophy, Clock, PartyPopper, Wallet, TrendingUp, Calendar, RefreshCw, Cake } from 'lucide-react';
 import { SiteUser } from '../types';
 import { supabase } from '../utils/supabase';
 
@@ -12,6 +12,19 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ success: boolean; message: string; rewardAmount?: number; rewardType?: string } | null>(null);
+  const [activeTab, setActiveTab] = useState<'casino' | 'spor'>('casino');
+
+  const promos = [
+    { title: 'Gece Bonusu (Çevrimsiz)', desc: 'Saat 02:00-05:00 arası yatırımlarınız freespinlerle ödüllendiriliyor.', icon: <Clock className="w-8 h-8 text-indigo-400" /> },
+    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: '724BETS\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-8 h-8 text-yellow-400" /> },
+    { title: 'İlk Çekime 2 Katı Ödeme (Çevrimsiz)', desc: 'İlk çekiminizi yaparken kazancınızın 2 katını gönderiyoruz.', icon: <Wallet className="w-8 h-8 text-emerald-400" /> },
+    { title: 'Günlük Prim (Çevrimsiz)', desc: 'Aktifliğinize göre hesabınızda her gün nakit bonuslar yatıyor.', icon: <Gift className="w-8 h-8 text-pink-400" /> },
+    { title: 'Haftalık Jest Bonusu (Çevrimsiz)', desc: 'Tüm haftaki performansınız her cumartesi ödüllendiriliyor.', icon: <Calendar className="w-8 h-8 text-blue-400" /> },
+    { title: 'Seviye Atlama Bonusu (Çevrimsiz)', desc: 'VIP seviyeniz yükseldikçe daha fazla ödül ve ayrıcalık sizi bekliyor.', icon: <TrendingUp className="w-8 h-8 text-green-400" /> },
+    { title: 'Günlük Kayıp Bonusu (Çevrimsiz)', desc: 'Şanssız geçen her gün yeni bir başlangıça dönüşüyor.', icon: <RefreshCw className="w-8 h-8 text-red-400" /> },
+    { title: 'Doğum Günü Bonusu (Çevrimsiz)', desc: 'Profil seviyenize özel nakit bonus hesabınıza otomatik ekleniyor.', icon: <Cake className="w-8 h-8 text-purple-400" /> },
+    { title: 'Aylık Kayıp Bonusu (Çevrimsiz)', desc: '724BETS\'te her kayıp miktarı yeni bir geriye dönüş fırsatı.', icon: <RefreshCw className="w-8 h-8 text-orange-400" /> },
+  ];
 
   const handleCheckCode = async () => {
     if (!siteUser) {
@@ -169,25 +182,41 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
           )}
         </div>
         
-        {/* Decorative elements */}
-        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto pb-8 sm:pb-0">
-          <div className="relative overflow-hidden bg-[#151821] p-5 rounded-2xl border border-white/5 hover:border-[#10B981]/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] transition-all duration-300 hover:-translate-y-1 group flex flex-col items-center justify-center text-center">
-            <Zap strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-28 h-28 text-[#10B981]/5 group-hover:text-[#10B981]/10 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-12" />
-            <h4 className="text-[#10B981] font-black text-[12px] sm:text-[13px] uppercase mb-1.5 group-hover:text-white transition-colors relative z-10">Anında Aktarım</h4>
-            <p className="text-zinc-400 text-[11px] sm:text-[12px] leading-relaxed relative z-10">Kodlar anında onaylanır ve bakiyeniz saniyeler içinde güncellenir.</p>
+        {/* Promotions Section */}
+        <div className="max-w-6xl mx-auto mt-12 sm:mt-16 pb-12">
+          
+          <div className="flex items-center gap-2 mb-8">
+            <button 
+              onClick={() => setActiveTab('casino')}
+              className={`px-8 py-2.5 rounded-full font-bold transition-all ${activeTab === 'casino' ? 'bg-[#4361EE] text-white shadow-lg' : 'bg-[#2A2E3D] text-gray-400 hover:text-white hover:bg-[#3A3E4D]'}`}
+            >
+              Casino
+            </button>
+            <button 
+              onClick={() => setActiveTab('spor')}
+              className={`px-8 py-2.5 rounded-full font-bold transition-all ${activeTab === 'spor' ? 'bg-[#4361EE] text-white shadow-lg' : 'bg-[#2A2E3D] text-gray-400 hover:text-white hover:bg-[#3A3E4D]'}`}
+            >
+              Spor
+            </button>
           </div>
-          <div className="relative overflow-hidden bg-[#151821] p-5 rounded-2xl border border-white/5 hover:border-[#10B981]/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] transition-all duration-300 hover:-translate-y-1 group flex flex-col items-center justify-center text-center">
-            <Lock strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-28 h-28 text-[#10B981]/5 group-hover:text-[#10B981]/10 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12" />
-            <h4 className="text-[#10B981] font-black text-[12px] sm:text-[13px] uppercase mb-1.5 group-hover:text-white transition-colors relative z-10">Limitli Kodlar</h4>
-            <p className="text-zinc-400 text-[11px] sm:text-[12px] leading-relaxed relative z-10">Hızlı davranın, özel kodlar kısa sürede tükenebilir.</p>
-          </div>
-          <div className="relative overflow-hidden bg-[#151821] p-5 rounded-2xl border border-white/5 hover:border-[#10B981]/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] transition-all duration-300 hover:-translate-y-1 group flex flex-col items-center justify-center text-center sm:flex">
-            <Trophy strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-28 h-28 text-[#10B981]/5 group-hover:text-[#10B981]/10 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6" />
-            <h4 className="text-[#10B981] font-black text-[12px] sm:text-[13px] uppercase mb-1.5 group-hover:text-white transition-colors relative z-10">Büyük Ödüller</h4>
-            <p className="text-zinc-400 text-[11px] sm:text-[12px] leading-relaxed relative z-10">Sosyal medya hesaplarımızdan paylaşılan sürpriz kodları kaçırmayın.</p>
-          </div>
-        </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+            {promos.map((promo, idx) => (
+              <div key={idx} className="flex gap-4 relative group cursor-pointer p-4 rounded-2xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                <div className="w-[100px] h-[100px] shrink-0 bg-gradient-to-br from-[#2A313C] to-[#1A1F27] rounded-3xl flex items-center justify-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/5 relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#10B981]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  {promo.icon}
+                </div>
+                <div className="flex flex-col pt-1">
+                  <h3 className="text-white font-bold text-sm sm:text-base leading-tight mb-2 group-hover:text-[#10B981] transition-colors">{promo.title}</h3>
+                  <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">{promo.desc}</p>
+                </div>
+                {/* Custom separator line below each row except last, handled by grid layout generally, but we can add a border bottom if requested. The design is a grid. */}
+              </div>
+            ))}
+          </div>
+          
+        </div>
       </div>
     </div>
   );
