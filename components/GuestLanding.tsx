@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Trophy, Shield, Target, ChevronRight, Info } from 'lucide-react';
+import { Search, Trophy, Shield, Target, ChevronRight, Info, Crown, Star } from 'lucide-react';
 import LiveWinsTicker from './LiveWinsTicker';
 import LiveGamesSlider from './LiveGamesSlider';
 import LiveBetsTable from './LiveBetsTable';
@@ -152,27 +152,59 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
 
           <div className="w-full px-4 pt-4 pb-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Left Column: VIP Progress */}
-          <div className="bg-[#111317] rounded-xl border border-white/5 p-5 flex flex-col justify-center h-auto min-h-[200px] shadow-lg">
-            <h3 className="text-white text-[15px] font-bold mb-4 flex items-center">
-              VIP İlerlemeniz
-            </h3>
-            <div className="border border-white/10 rounded-lg p-4 bg-[#151821] hover:bg-[#1a1d26] transition-colors cursor-pointer">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-white font-bold text-sm flex items-center group">
-                  {siteUser.username} <ChevronRight className="w-4 h-4 ml-1 text-gray-500 group-hover:text-white transition-colors" />
-                </span>
+          {/* Left Column: Premium VIP Progress Card */}
+          <div className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden group cursor-pointer">
+            {/* Background Image / Gradients */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#161A22] to-[#0A0D11] z-0"></div>
+            
+            {/* Crown watermark */}
+            <div className="absolute -right-6 -top-6 opacity-[0.03] transform group-hover:scale-110 group-hover:opacity-[0.05] transition-all duration-700 z-0">
+              <Crown className="w-48 h-48 text-white" />
+            </div>
+
+            {/* Shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out z-0 pointer-events-none"></div>
+
+            {/* Header Area */}
+            <div className="relative z-10 flex justify-between items-start mb-6 lg:mb-0">
+              <div className="flex flex-col gap-1">
+                <h3 className="text-white font-black text-lg sm:text-xl tracking-wide drop-shadow-md flex items-center gap-2">
+                  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                  VIP KULÜBÜ
+                </h3>
+                <span className="text-gray-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Mevcut Seviye: Yok</span>
               </div>
-              <div className="flex items-center gap-1 mb-2">
-                <span className="text-white font-black text-[15px]">%0,06</span>
-                <Info className="w-3.5 h-3.5 text-gray-400" />
+              {/* Avatar / Username */}
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-black/40 rounded-full py-1.5 px-3 border border-white/5 backdrop-blur-sm group-hover:bg-black/60 transition-colors">
+                <span className="text-white font-bold text-xs sm:text-sm">{siteUser.username}</span>
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-[#00FFA3]" />
               </div>
-              <div className="w-full h-1.5 bg-[#0f1115] rounded-full overflow-hidden mb-2">
-                <div className="h-full bg-[#00FFA3] rounded-full shadow-[0_0_10px_rgba(0,255,163,0.5)]" style={{ width: '0.06%' }}></div>
+            </div>
+
+            {/* Progress Area */}
+            <div className="relative z-10 flex flex-col gap-2.5 sm:gap-3 mt-4 lg:mt-auto">
+              <div className="flex justify-between items-end">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-gray-400 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">İlerleme</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-white font-black text-xl sm:text-2xl drop-shadow-[0_0_10px_rgba(0,255,163,0.3)]">%0.06</span>
+                    <Info className="w-3.5 h-3.5 text-gray-500 hover:text-white transition-colors" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <Trophy className="w-3 h-3 sm:w-4 sm:h-4 text-[#CD7F32]" />
+                  <span className="text-[#CD7F32] text-[10px] sm:text-xs font-bold uppercase tracking-wider">Hedef: Bronz</span>
+                </div>
               </div>
-              <div className="text-gray-400 text-xs font-semibold">
-                Bir sonraki seviye: Bronz
+
+              {/* Progress Bar */}
+              <div className="w-full h-2 sm:h-2.5 bg-black/60 rounded-full overflow-hidden shadow-inner border border-white/5 relative">
+                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#00FFA3]/50 to-[#00FFA3] rounded-full shadow-[0_0_15px_rgba(0,255,163,0.6)]" style={{ width: '0.06%' }}>
+                  {/* Inner shine */}
+                  <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 rounded-full"></div>
+                </div>
               </div>
+              <p className="text-gray-500 text-[9px] sm:text-[10px] font-medium text-right mt-0.5">Bronz seviyesine ulaşmak için bahis yapmaya devam edin.</p>
             </div>
           </div>
 
