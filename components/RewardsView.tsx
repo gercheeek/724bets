@@ -27,10 +27,10 @@ const RewardsView: React.FC<RewardsViewProps> = ({ siteUser }) => {
             <span className="font-bold text-sm md:text-base text-zinc-200">Bahis Geri Ödemesi</span>
             <Info className="w-4 h-4 text-zinc-500 cursor-pointer" />
           </div>
-          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-[#00FFA3] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.3)] transition-shadow">
-            <span className="text-[#00FFA3] font-black text-2xl md:text-3xl">₺</span>
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-[#10B981] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.3)] transition-shadow">
+            <span className="text-[#10B981] font-black text-2xl md:text-3xl">₺</span>
           </div>
-          <button className="w-full bg-[#00FFA3] hover:bg-[#00E693] text-black font-bold py-2.5 rounded-lg text-xs md:text-sm shadow-[0_0_15px_rgba(0,255,163,0.2)] transition-all">
+          <button className="w-full bg-[#10B981] hover:bg-[#00E693] text-black font-bold py-2.5 rounded-lg text-xs md:text-sm shadow-[0_0_15px_rgba(0,255,163,0.2)] transition-all">
             Şunun için Kutuyu Aç:
           </button>
         </div>
@@ -41,10 +41,10 @@ const RewardsView: React.FC<RewardsViewProps> = ({ siteUser }) => {
             <span className="font-bold text-sm md:text-base text-zinc-200">Günlük</span>
             <Info className="w-4 h-4 text-zinc-500 cursor-pointer" />
           </div>
-          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-[#00FFA3] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.3)] transition-shadow">
-            <span className="text-[#00FFA3] font-black text-2xl md:text-3xl">1</span>
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-[#10B981] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.3)] transition-shadow">
+            <span className="text-[#10B981] font-black text-2xl md:text-3xl">1</span>
           </div>
-          <button className="w-full bg-[#00FFA3] hover:bg-[#00E693] text-black font-bold py-2.5 rounded-lg text-xs md:text-sm shadow-[0_0_15px_rgba(0,255,163,0.2)] transition-all">
+          <button className="w-full bg-[#10B981] hover:bg-[#00E693] text-black font-bold py-2.5 rounded-lg text-xs md:text-sm shadow-[0_0_15px_rgba(0,255,163,0.2)] transition-all">
             Şunun için Kutuyu Aç:
           </button>
         </div>
@@ -55,10 +55,10 @@ const RewardsView: React.FC<RewardsViewProps> = ({ siteUser }) => {
             <span className="font-bold text-sm md:text-base text-zinc-200">Haftalık</span>
             <Info className="w-4 h-4 text-zinc-500 cursor-pointer" />
           </div>
-          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-[#00FFA3] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.3)] transition-shadow">
-            <span className="text-[#00FFA3] font-black text-2xl md:text-3xl">7</span>
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-[#10B981] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.3)] transition-shadow">
+            <span className="text-[#10B981] font-black text-2xl md:text-3xl">7</span>
           </div>
-          <button className="w-full bg-[#00FFA3] hover:bg-[#00E693] text-black font-bold py-2.5 rounded-lg text-xs md:text-sm shadow-[0_0_15px_rgba(0,255,163,0.2)] transition-all">
+          <button className="w-full bg-[#10B981] hover:bg-[#00E693] text-black font-bold py-2.5 rounded-lg text-xs md:text-sm shadow-[0_0_15px_rgba(0,255,163,0.2)] transition-all">
             Şunun için Kutuyu Aç:
           </button>
         </div>
@@ -83,10 +83,10 @@ const RewardsView: React.FC<RewardsViewProps> = ({ siteUser }) => {
             <span className="font-bold text-sm md:text-base text-zinc-200">Aylık</span>
             <Info className="w-4 h-4 text-zinc-500 cursor-pointer" />
           </div>
-          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-[#00FFA3] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.3)] transition-shadow">
-            <span className="text-[#00FFA3] font-black text-2xl md:text-3xl">30</span>
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-[#10B981] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] group-hover:shadow-[0_0_30px_rgba(0,255,163,0.3)] transition-shadow">
+            <span className="text-[#10B981] font-black text-2xl md:text-3xl">30</span>
           </div>
-          <button className="w-full bg-[#00FFA3] hover:bg-[#00E693] text-black font-bold py-2.5 rounded-lg text-xs md:text-sm shadow-[0_0_15px_rgba(0,255,163,0.2)] transition-all">
+          <button className="w-full bg-[#10B981] hover:bg-[#00E693] text-black font-bold py-2.5 rounded-lg text-xs md:text-sm shadow-[0_0_15px_rgba(0,255,163,0.2)] transition-all">
             Şunun için Kutuyu Aç:
           </button>
         </div>
@@ -114,7 +114,7 @@ const RewardsView: React.FC<RewardsViewProps> = ({ siteUser }) => {
           {/* Progress Bar Side */}
           <div className="flex-1 w-full">
             <div className="w-full h-3 md:h-4 bg-[#252a35] rounded-full mb-6 overflow-hidden relative border border-white/5">
-              <div className="absolute top-0 left-0 h-full w-[45%] bg-gradient-to-r from-[#00FFA3]/50 to-[#00FFA3] rounded-full shadow-[0_0_15px_rgba(0,255,163,0.5)]"></div>
+              <div className="absolute top-0 left-0 h-full w-[45%] bg-gradient-to-r from-[#10B981]/50 to-[#10B981] rounded-full shadow-[0_0_15px_rgba(0,255,163,0.5)]"></div>
             </div>
             <div className="flex justify-between items-center w-full px-2">
               <div className="flex items-center gap-2">

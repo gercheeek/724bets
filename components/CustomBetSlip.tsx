@@ -13,11 +13,11 @@ export const CustomBetSlip = () => {
       {/* Header */}
       <div className="bg-[#232833] p-4 flex items-center justify-between border-b border-white/5 shrink-0">
         <div className="flex items-center gap-2">
-          <DollarSign className="w-5 h-5 text-[#00FFA3]" />
+          <DollarSign className="w-5 h-5 text-[#10B981]" />
           <h2 className="text-white font-black text-sm uppercase tracking-wide">Bahis Kuponu</h2>
         </div>
         {bets.length > 0 && (
-          <span className="bg-[#00FFA3] text-black text-xs font-bold px-2 py-0.5 rounded-full">
+          <span className="bg-[#10B981] text-black text-xs font-bold px-2 py-0.5 rounded-full">
             {bets.length} Maç
           </span>
         )}
@@ -47,7 +47,7 @@ export const CustomBetSlip = () => {
               <div className="flex items-end justify-between mt-2 pt-2 border-t border-white/5">
                 <div>
                   <div className="text-xs text-zinc-400">{bet.market}</div>
-                  <div className="text-sm font-semibold text-[#00FFA3]">{bet.selection}</div>
+                  <div className="text-sm font-semibold text-[#10B981]">{bet.selection}</div>
                 </div>
                 <div className="text-base font-black text-white">{bet.odds}</div>
               </div>
@@ -61,7 +61,7 @@ export const CustomBetSlip = () => {
         <div className="bg-[#15181E] p-4 border-t border-white/5 shrink-0">
           <div className="flex justify-between items-center mb-4">
             <span className="text-zinc-400 text-sm">Toplam Oran:</span>
-            <span className="text-[#00FFA3] text-lg font-black">{totalOdds}</span>
+            <span className="text-[#10B981] text-lg font-black">{totalOdds}</span>
           </div>
 
           <div className="bg-[#1C2028] border border-white/5 rounded-lg p-3 mb-4 flex flex-col items-center">
@@ -80,7 +80,7 @@ export const CustomBetSlip = () => {
             <span className="text-white text-lg font-black">{potentialWin} ₺</span>
           </div>
 
-          <button className="w-full bg-[#00FFA3] hover:bg-[#00FFA3]/90 text-black font-black uppercase tracking-wider py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.2)]">
+          <button className="w-full bg-[#10B981] hover:bg-[#10B981]/90 text-black font-black uppercase tracking-wider py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.2)]">
             Bahis Yap
           </button>
         </div>

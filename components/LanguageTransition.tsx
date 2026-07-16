@@ -27,12 +27,12 @@ const LanguageTransition: React.FC = () => {
     >
       <div className="relative flex flex-col items-center justify-center">
         {/* Glow behind text */}
-        <div className="absolute inset-0 bg-[#00FFA3] blur-[100px] opacity-20 rounded-full scale-150 animate-pulse" />
+        <div className="absolute inset-0 bg-[#10B981] blur-[100px] opacity-20 rounded-full scale-150 animate-pulse" />
         
         {/* 724BETS text animation */}
         <div className={`transform transition-all duration-700 ease-out ${visible ? 'scale-100 translate-y-0 opacity-100' : 'scale-50 translate-y-10 opacity-0'}`}>
           <span className="flex items-center text-[50px] md:text-[80px] font-black font-['Inter'] tracking-tight text-white drop-shadow-[0_0_15px_rgba(0,255,163,0.5)]">
-            724<span className="text-[#00FFA3]">BETS</span>
+            724<span className="text-[#10B981]">BETS</span>
           </span>
         </div>
       </div>

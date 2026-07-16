@@ -61,7 +61,7 @@ const BetBuilderCards: React.FC = () => {
           >
             BetBuilder Özel
             {activeTab === 'betbuilder' && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#00FFA3] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#10B981] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
             )}
           </button>
           <button 
@@ -70,7 +70,7 @@ const BetBuilderCards: React.FC = () => {
           >
             Günün çoklu bahsi
             {activeTab === 'gunun_bahsi' && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#00FFA3] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#10B981] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
             )}
           </button>
         </div>

@@ -47,7 +47,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
             <h1 className="text-white text-2xl font-black tracking-tight">Bahislerim</h1>
-            <span className="bg-[#00FFA3]/10 border border-[#00FFA3]/20 text-[#00FFA3] text-xs font-bold px-2 py-0.5 rounded">
+            <span className="bg-[#10B981]/10 border border-[#10B981]/20 text-[#10B981] text-xs font-bold px-2 py-0.5 rounded">
               {mockBets.length}
             </span>
           </div>
@@ -57,7 +57,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
               onClick={() => setActiveMainTab('aktif')}
               className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${
                 activeMainTab === 'aktif' 
-                  ? 'bg-transparent border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_15px_rgba(0,255,163,0.1)]' 
+                  ? 'bg-transparent border border-[#10B981] text-[#10B981] shadow-[0_0_15px_rgba(0,255,163,0.1)]' 
                   : 'text-zinc-500 border border-transparent hover:text-white'
               }`}
             >
@@ -67,7 +67,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
               onClick={() => setActiveMainTab('gecmis')}
               className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${
                 activeMainTab === 'gecmis' 
-                  ? 'bg-transparent border border-[#00FFA3] text-[#00FFA3] shadow-[0_0_15px_rgba(0,255,163,0.1)]' 
+                  ? 'bg-transparent border border-[#10B981] text-[#10B981] shadow-[0_0_15px_rgba(0,255,163,0.1)]' 
                   : 'text-zinc-500 border border-transparent hover:text-white'
               }`}
             >
@@ -85,7 +85,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                 onClick={() => setActiveSubTab(tab)}
                 className={`pb-3 border-b-2 text-sm font-semibold whitespace-nowrap transition-colors ${
                   activeSubTab === tab 
-                    ? 'border-[#00FFA3] text-[#00FFA3]' 
+                    ? 'border-[#10B981] text-[#10B981]' 
                     : 'border-transparent text-zinc-500 hover:text-white'
                 }`}
               >
@@ -140,7 +140,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                 {/* Mid Bar (Logo & Actions) */}
                 <div className="flex items-center justify-between border-t border-b border-white/5 py-3 mb-5">
                   <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-[#00FFA3]" />
+                    <Shield className="w-5 h-5 text-[#10B981]" />
                     <span className="text-white font-black tracking-wide text-sm">724BAHİS</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -168,12 +168,12 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-zinc-400 font-medium">Tahmini Ödeme</span>
-                    <span className="text-[#00FFA3] font-black">{bet.estimatedPayout}</span>
+                    <span className="text-[#10B981] font-black">{bet.estimatedPayout}</span>
                   </div>
                 </div>
                 
                 {/* Action Button */}
-                <button className="w-full py-3.5 bg-[#00FFA3] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-sm rounded-lg transition-all flex items-center justify-between px-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] hover:shadow-[0_0_30px_rgba(0,255,163,0.3)]">
+                <button className="w-full py-3.5 bg-[#10B981] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-sm rounded-lg transition-all flex items-center justify-between px-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] hover:shadow-[0_0_30px_rgba(0,255,163,0.3)]">
                   <span>Erken ödeme {bet.cashoutValue}</span>
                   <ArrowRightLeft className="w-4 h-4" />
                 </button>

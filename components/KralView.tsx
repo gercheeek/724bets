@@ -32,8 +32,8 @@ const KralView = ({
     <div className="min-h-screen bg-[#07090E] text-white flex flex-col relative overflow-hidden">
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#00FFA3] rounded-full blur-[150px] opacity-[0.03]" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-[#00FFA3] rounded-full blur-[180px] opacity-[0.02]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#10B981] rounded-full blur-[150px] opacity-[0.03]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-[#10B981] rounded-full blur-[180px] opacity-[0.02]" />
       </div>
 
       {/* Top Navbar */}
@@ -47,7 +47,7 @@ const KralView = ({
           </button>
           <div>
             <h1 className="text-xl font-black italic tracking-wider text-white">
-              724<span className="text-[#00FFA3]">ANALİZ</span>
+              724<span className="text-[#10B981]">ANALİZ</span>
             </h1>
             <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Özel Analiz Portalı (Beta)</p>
           </div>
@@ -63,31 +63,31 @@ const KralView = ({
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full mt-6">
               <button 
                 onClick={() => onNavigate?.('pool')} 
-                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
+                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#10B981]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
               >
-                <Target className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
+                <Target className="w-5 h-5 text-gray-400 group-hover:text-[#10B981] transition-colors" />
                 <span className="text-sm font-black text-white tracking-wider uppercase">724TOTO</span>
               </button>
               <button 
                 onClick={() => onNavigate?.('loyalty')} 
-                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
+                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#10B981]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
               >
-                <Trophy className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
+                <Trophy className="w-5 h-5 text-gray-400 group-hover:text-[#10B981] transition-colors" />
                 <span className="text-sm font-black text-white tracking-wider uppercase">Görevler</span>
               </button>
               <button 
                 onClick={() => onNavigate?.('wheel')} 
-                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#00FFA3]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
+                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-[#0a0a0a] hover:bg-[#1a1a1a] border border-white/10 hover:border-[#10B981]/50 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg group"
               >
-                <Activity className="w-5 h-5 text-gray-400 group-hover:text-[#00FFA3] transition-colors" />
+                <Activity className="w-5 h-5 text-gray-400 group-hover:text-[#10B981] transition-colors" />
                 <span className="text-sm font-black text-white tracking-wider uppercase">Çarkıfelek</span>
               </button>
             </div>
             {/* ── Canlı Skor Section ── */}
             <div className="p-4 sm:p-6 mb-6 rounded-lg bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-zinc-800/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 w-full text-left">
               <div className="flex items-center gap-3 w-full sm:w-auto">
-                <div className="w-10 h-10 rounded-lg bg-[#00FFA3]/10 flex items-center justify-center border border-[#00FFA3]/20 shrink-0">
-                  <Target className="w-5 h-5 text-[#00FFA3]" />
+                <div className="w-10 h-10 rounded-lg bg-[#10B981]/10 flex items-center justify-center border border-[#10B981]/20 shrink-0">
+                  <Target className="w-5 h-5 text-[#10B981]" />
                 </div>
                 <div>
                   <h3 className="text-white font-black text-sm uppercase tracking-wider italic">MAÇ SONUÇLARI & CANLI SKOR</h3>
@@ -96,7 +96,7 @@ const KralView = ({
               </div>
               <button 
                 onClick={onShowLiveScore}
-                className="w-full sm:w-auto px-6 py-3 bg-[#00FFA3] hover:bg-[#33FFB5] text-black text-xs sm:text-sm font-black rounded-lg transition-all hover:scale-105 active:scale-95 uppercase tracking-wider shrink-0 mt-2 sm:mt-0"
+                className="w-full sm:w-auto px-6 py-3 bg-[#10B981] hover:bg-[#33FFB5] text-black text-xs sm:text-sm font-black rounded-lg transition-all hover:scale-105 active:scale-95 uppercase tracking-wider shrink-0 mt-2 sm:mt-0"
               >
                 Canlı Skor
               </button>

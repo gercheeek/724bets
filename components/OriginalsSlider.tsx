@@ -210,7 +210,7 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                             {/* Card Body - Portrait */}
                             <div 
                                 onClick={() => setSelectedGame(game)}
-                                className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#00FFA3]/40"
+                                className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
                             >
                                 <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
                                 
@@ -226,7 +226,7 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                             
                             {/* External Player Count */}
                             <div className="mt-3 flex items-center gap-1.5 px-2">
-                                <div className="w-2 h-2 rounded-full bg-[#00FFA3] shadow-[0_0_8px_#00FFA3] animate-pulse"></div>
+                                <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse"></div>
                                 <span className="text-zinc-400 text-xs font-bold font-sans">
                                     <span className="text-white">{game.players}</span> Oyuncular
                                 </span>

@@ -263,7 +263,7 @@ const Header: React.FC<HeaderProps> = ({
 
           @keyframes neonFlickerDelay {
             0%, 5%, 15%, 25% { opacity: 0; text-shadow: none; filter: brightness(0.2); }
-            10%, 20%, 30% { opacity: 0.8; text-shadow: 0 0 10px #00FFA3, 0 0 20px #00FFA3; filter: brightness(1.5); }
+            10%, 20%, 30% { opacity: 0.8; text-shadow: 0 0 10px #10B981, 0 0 20px #10B981; filter: brightness(1.5); }
             35%, 100% { opacity: 1; text-shadow: 0 0 5px rgba(0,255,163,0.5), 0 0 15px rgba(0,255,163,0.8); filter: brightness(1); }
           }
           .neon-text {
@@ -294,7 +294,7 @@ const Header: React.FC<HeaderProps> = ({
             overflow: hidden;
           }
           .logo-text-724 .logo-num {
-            background: linear-gradient(135deg, #00FFA3, #00FFA3, #00FFA3);
+            background: linear-gradient(135deg, #10B981, #10B981, #10B981);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -302,8 +302,8 @@ const Header: React.FC<HeaderProps> = ({
             filter: drop-shadow(0 0 8px rgba(0,255,163,0.4));
           }
           .logo-text-724 .logo-dot {
-            color: #00FFA3;
-            -webkit-text-fill-color: #00FFA3;
+            color: #10B981;
+            -webkit-text-fill-color: #10B981;
             font-weight: 900;
           }
           .logo-text-724 .logo-ext {
@@ -338,7 +338,7 @@ const Header: React.FC<HeaderProps> = ({
             transition: padding-left 0.3s ease-in-out;
           }
           .header-icon-btn:hover {
-            color: #00FFA3 !important;
+            color: #10B981 !important;
           }
         `}</style>
 
@@ -347,7 +347,7 @@ const Header: React.FC<HeaderProps> = ({
             {/* Left: Hamburger & Logo & Desktop Tabs */}
             <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
               
-              {(siteUser || userRole) && (
+              {(siteUser || userRole) && !(activeView === 'home' || activeView === 'sporx' || activeView === 'sports' || activeView === 'sports3' || activeView === 'sports4' || activeView === 'sports5' || activeView === 'giveaway') && (
                 <button 
                   onClick={onToggleSidebar}
                   className="hidden lg:flex w-10 h-10 items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors mr-2"
@@ -364,7 +364,7 @@ const Header: React.FC<HeaderProps> = ({
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
               >
                 <SlotText text="724" className="text-white font-extrabold text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
-                <SlotText text="BETS" className="text-[#00FFA3] font-black text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
+                <SlotText text="BETS" className="text-[#10B981] font-black text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
               </div>
 
 
@@ -420,7 +420,7 @@ const Header: React.FC<HeaderProps> = ({
                       { sym: 'BTC', icon: '₿', bg: '#F7931A' },
                       { sym: 'ETH', icon: 'Ξ', bg: '#627EEA' },
                       { sym: 'LTC', icon: 'Ł', bg: '#BFBBBB' },
-                      { sym: 'SOL', icon: 'S', bg: 'linear-gradient(45deg, #00FFA3, #03E1FF)' },
+                      { sym: 'SOL', icon: 'S', bg: 'linear-gradient(45deg, #10B981, #03E1FF)' },
                       { sym: 'DOGE', icon: 'Ð', bg: '#C2A633' },
                       { sym: 'BCH', icon: '₿', bg: '#8DC351' },
                       { sym: 'XRP', icon: '✕', bg: '#23292F' },
@@ -493,7 +493,7 @@ const Header: React.FC<HeaderProps> = ({
               <div className="relative" ref={profileRef}>
                 <button 
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#00FFA3]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#10B981]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0"
                 >
                   <img 
                     src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
@@ -582,7 +582,7 @@ const Header: React.FC<HeaderProps> = ({
                   <button
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
-                    className="flex items-center justify-center bg-[#00FFA3] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-[40px] px-6 rounded-lg transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
+                    className="flex items-center justify-center bg-[#10B981] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-[40px] px-6 rounded-lg transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
                   >
                     {t('register')}
                   </button>

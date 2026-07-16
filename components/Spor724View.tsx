@@ -425,7 +425,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                               </div>
                               <span className="text-[12px] text-[#d1d5db] font-medium group-hover:text-white transition-colors tracking-wide">{match.home}</span>
                            </div>
-                           <span className="text-[13px] font-black text-[#00FFA3] block md:hidden">{match.homeScore}</span>
+                           <span className="text-[13px] font-black text-[#10B981] block md:hidden">{match.homeScore}</span>
                         </div>
                         <div className="flex items-center justify-between pr-4 md:pr-0">
                            <div className="flex items-center gap-2">
@@ -434,18 +434,18 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                               </div>
                               <span className="text-[12px] text-[#d1d5db] font-medium group-hover:text-white transition-colors tracking-wide">{match.away}</span>
                            </div>
-                           <span className="text-[13px] font-black text-[#00FFA3] block md:hidden">{match.awayScore}</span>
+                           <span className="text-[13px] font-black text-[#10B981] block md:hidden">{match.awayScore}</span>
                         </div>
                      </div>
 
                      {/* Middle side: Live Time & Scores (Desktop) */}
                      <div className="hidden md:flex items-center gap-6 pr-6 border-r border-[#1f232b]/50 mr-4 h-10">
                         <div className="flex flex-col items-center gap-1 w-10">
-                           <span className="text-[10px] font-black text-[#00FFA3] animate-pulse">{match.minute}</span>
+                           <span className="text-[10px] font-black text-[#10B981] animate-pulse">{match.minute}</span>
                         </div>
                         <div className="flex flex-col items-center gap-1.5 w-6">
-                           <span className="text-[12px] font-black text-[#00FFA3]">{match.homeScore}</span>
-                           <span className="text-[12px] font-black text-[#00FFA3]">{match.awayScore}</span>
+                           <span className="text-[12px] font-black text-[#10B981]">{match.homeScore}</span>
+                           <span className="text-[12px] font-black text-[#10B981]">{match.awayScore}</span>
                         </div>
                         <div className="flex items-center justify-center h-full ml-1 opacity-60">
                            <svg viewBox="0 0 24 24" fill="currentColor" className="w-[13px] h-[13px] text-[#a0a5b5]"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>

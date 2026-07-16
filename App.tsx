@@ -155,7 +155,7 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
     return <span className="font-black" style={{ color: '#00E676', animation: 'pulse 1.5s infinite' }}>CANLI</span>;
   }
 
-  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#00FFA3' }}>{text}</span>;
+  return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#10B981' }}>{text}</span>;
 };
 
 export default function App() {
@@ -242,7 +242,7 @@ const AppContent: React.FC = () => {
   
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isLogoSpinning, setIsLogoSpinning] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
@@ -781,7 +781,7 @@ const AppContent: React.FC = () => {
       setWelcomePopupConfig(cleanedWelcome);
     }
   }, []);
-  const [themeColor, setThemeColor] = useState('#00FFA3');
+  const [themeColor, setThemeColor] = useState('#10B981');
   const [activeAnalysisId, setActiveAnalysisId] = useState<string | null>(null);
   const [welcomePopupConfig, setWelcomePopupConfig] = useState<WelcomePopupConfig>(() => {
     try {
@@ -1597,7 +1597,7 @@ const AppContent: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway' || (view === 'home' && !siteUser)) && (
+          {!(view === 'home' || view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen || view === 'blackjack'}
@@ -1651,7 +1651,7 @@ const AppContent: React.FC = () => {
                   style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
                 >
                   <SlotText text="724" className="text-white font-extrabold" isSpinning={isLogoSpinning} />
-                  <SlotText text="BETS" className="text-[#00FFA3] font-black" isSpinning={isLogoSpinning} />
+                  <SlotText text="BETS" className="text-[#10B981] font-black" isSpinning={isLogoSpinning} />
                 </div><div className="flex items-center shrink-0">
                   {siteUser ? (
                     <>
@@ -1660,7 +1660,7 @@ const AppContent: React.FC = () => {
                         className="flex items-center bg-[#1A1F29] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
-                        <div className="w-7 h-7 rounded bg-[#00FFA3] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
+                        <div className="w-7 h-7 rounded bg-[#10B981] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
                           <span className="text-[14px]">$</span>
                         </div>
                         <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">${siteUser.balance?.toFixed(2) || '0.00'}</span>
@@ -1672,7 +1672,7 @@ const AppContent: React.FC = () => {
                       {/* 2. Cüzdan Butonu (Sadece İkon) */}
                       <button 
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                        className="flex items-center justify-center w-10 h-10 bg-[#00FFA3] hover:bg-[#00e693] rounded-lg transition-colors ml-2 shadow-[0_0_15px_rgba(0,255,163,0.2)] active:scale-95"
+                        className="flex items-center justify-center w-10 h-10 bg-[#10B981] hover:bg-[#00e693] rounded-lg transition-colors ml-2 shadow-[0_0_15px_rgba(0,255,163,0.2)] active:scale-95"
                       >
                         <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M21 7.5C21 5.567 19.433 4 17.5 4H6.5C4.567 4 3 5.567 3 7.5v9C3 18.433 4.567 20 6.5 20h11c1.933 0 3.5-1.567 3.5-3.5v-9zm-3.5 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
@@ -1709,7 +1709,7 @@ const AppContent: React.FC = () => {
                       </button>
                       <button
                         onClick={() => setAuthModalMode('register')}
-                        className="flex items-center justify-center h-[40px] bg-[#00FFA3] hover:bg-[#00E693] text-black transition-colors px-5 rounded-[10px] font-extrabold text-sm shadow-[0_0_10px_rgba(0,255,163,0.2)] ml-2"
+                        className="flex items-center justify-center h-[40px] bg-[#10B981] hover:bg-[#00E693] text-black transition-colors px-5 rounded-[10px] font-extrabold text-sm shadow-[0_0_10px_rgba(0,255,163,0.2)] ml-2"
                       >
                         Kaydolun
                       </button>
@@ -1798,9 +1798,9 @@ const AppContent: React.FC = () => {
             <section id="brands-section" className="brands-section relative z-10">
               <div className="brands-header mb-12 animate-fade-in-up">
                 <h2 className="text-[40px] md:text-[48px] font-black italic uppercase tracking-tighter" style={{ color: 'var(--text-primary)' }}>
-                  GÜVENİLİR <span className="text-[#00FFA3]">FİRMALAR</span>
+                  GÜVENİLİR <span className="text-[#10B981]">FİRMALAR</span>
                 </h2>
-                <div className="h-1 w-20 bg-[#00FFA3] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(0,255,163,0.4)]" />
+                <div className="h-1 w-20 bg-[#10B981] mx-auto mt-4 mb-6 shadow-[0_0_15px_rgba(0,255,163,0.4)]" />
                 <p className="font-bold uppercase text-[11px] tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
                   Sizin için test ettiğimiz, ödemesini yapan lisanslı siteler.
                 </p>
@@ -2137,7 +2137,7 @@ const AppContent: React.FC = () => {
                 <h2 className="text-white font-black text-3xl uppercase tracking-tight">Günlük Görevler</h2>
                 <p className="text-zinc-500 font-bold text-sm">Coin kazanmak ve marketi kullanmak için üye girişi gereklidir.</p>
                 <button onClick={() => setAuthModalMode('member')}
-                  className="px-8 py-4 bg-[#00FFA3] text-black font-black text-sm rounded-lg uppercase tracking-widest hover:bg-[#00FFA3]/90 transition-all shadow-[0_0_25px_rgba(0,255,163,0.4)]">
+                  className="px-8 py-4 bg-[#10B981] text-black font-black text-sm rounded-lg uppercase tracking-widest hover:bg-[#10B981]/90 transition-all shadow-[0_0_25px_rgba(0,255,163,0.4)]">
                   🔑 Üye Ol / Giriş Yap
                 </button>
               </div>

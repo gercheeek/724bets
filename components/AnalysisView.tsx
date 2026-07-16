@@ -37,7 +37,7 @@ const getLeagueFlag = (league: string): string => {
 
 const getConfidenceColor = (confidence: number) => {
     if (confidence >= 85) return { text: 'text-[#00E676]', bg: 'bg-[#00E676]/10', border: 'border-[#00E676]/30' };
-    if (confidence >= 70) return { text: 'text-[#00FFA3]', bg: 'bg-[#00FFA3]/10', border: 'border-[#00FFA3]/30' };
+    if (confidence >= 70) return { text: 'text-[#10B981]', bg: 'bg-[#10B981]/10', border: 'border-[#10B981]/30' };
     return { text: 'text-[#ff3d00]', bg: 'bg-[#ff3d00]/10', border: 'border-[#ff3d00]/30' };
 };
 
@@ -79,12 +79,12 @@ const AnalysisDrawer: React.FC<{
             {/* World Cup Watermark */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ opacity: 0.04 }}>
                 <svg viewBox="0 0 120 140" className="w-48 h-56" fill="none">
-                    <path d="M60 10 L75 45 L110 50 L85 75 L92 110 L60 95 L28 110 L35 75 L10 50 L45 45 Z" fill="#00FFA3" />
-                    <rect x="45" y="95" width="30" height="8" rx="2" fill="#00FFA3" />
-                    <rect x="35" y="103" width="50" height="6" rx="2" fill="#00FFA3" />
-                    <rect x="40" y="109" width="40" height="12" rx="3" fill="#00FFA3" />
-                    <circle cx="60" cy="52" r="12" fill="none" stroke="#00FFA3" strokeWidth="2" />
-                    <path d="M54 48 L54 56 L66 52 Z" fill="#00FFA3" />
+                    <path d="M60 10 L75 45 L110 50 L85 75 L92 110 L60 95 L28 110 L35 75 L10 50 L45 45 Z" fill="#10B981" />
+                    <rect x="45" y="95" width="30" height="8" rx="2" fill="#10B981" />
+                    <rect x="35" y="103" width="50" height="6" rx="2" fill="#10B981" />
+                    <rect x="40" y="109" width="40" height="12" rx="3" fill="#10B981" />
+                    <circle cx="60" cy="52" r="12" fill="none" stroke="#10B981" strokeWidth="2" />
+                    <path d="M54 48 L54 56 L66 52 Z" fill="#10B981" />
                 </svg>
             </div>
 
@@ -93,12 +93,12 @@ const AnalysisDrawer: React.FC<{
                 <div className="lg:col-span-6 space-y-4">
                     <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
-                            <div className="w-0.5 h-5 bg-[#00FFA3] rounded-full" />
+                            <div className="w-0.5 h-5 bg-[#10B981] rounded-full" />
                             <h4 className="text-white font-black text-[11px] uppercase tracking-widest">EDİTÖR DETAYLI ANALİZİ</h4>
                         </div>
                         <div className="flex items-center gap-1.5 px-4 py-1.5 bg-[#22262F] rounded">
                             <User className="w-3.5 h-3.5 text-gray-500" />
-                            <span className="text-[10px] font-black text-[#00FFA3] tracking-widest uppercase">
+                            <span className="text-[10px] font-black text-[#10B981] tracking-widest uppercase">
                                 {analysis.editorId === 'admin' ? 'YÖNETİCİ' : analysis.editorId || 'EDİTÖR'}
                             </span>
                         </div>
@@ -108,7 +108,7 @@ const AnalysisDrawer: React.FC<{
                         {/* Tactical Summary */}
                         <div className="space-y-1.5">
                             <div className="flex items-center gap-2">
-                                <Search className="w-3.5 h-3.5 text-[#00FFA3]" />
+                                <Search className="w-3.5 h-3.5 text-[#10B981]" />
                                 <span className="text-gray-500 font-black text-[9px] uppercase tracking-widest">TAKTİK ÖZET</span>
                             </div>
                             <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#1A1D24]/40 p-3 rounded">
@@ -119,7 +119,7 @@ const AnalysisDrawer: React.FC<{
                         {/* Breaking Point */}
                         <div className="space-y-1.5">
                             <div className="flex items-center gap-2">
-                                <Zap className="w-3.5 h-3.5 text-[#00FFA3]" />
+                                <Zap className="w-3.5 h-3.5 text-[#10B981]" />
                                 <span className="text-gray-500 font-black text-[9px] uppercase tracking-widest">MAÇIN KIRILMA ANI</span>
                             </div>
                             <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#1A1D24]/40 p-3 rounded">
@@ -130,7 +130,7 @@ const AnalysisDrawer: React.FC<{
                         {/* Betting Scenario */}
                         <div className="space-y-1.5">
                             <div className="flex items-center gap-2">
-                                <Target className="w-3.5 h-3.5 text-[#00FFA3]" />
+                                <Target className="w-3.5 h-3.5 text-[#10B981]" />
                                 <span className="text-gray-500 font-black text-[9px] uppercase tracking-widest">BAHİS SENARYOSU</span>
                             </div>
                             {isLoggedIn ? (
@@ -143,7 +143,7 @@ const AnalysisDrawer: React.FC<{
                                         {analysis.bettingScenario}
                                     </p>
                                     <div className="absolute inset-0 flex items-center pl-5">
-                                        <button onClick={onLoginRequired} className="flex items-center gap-1.5 px-3 py-1 bg-[#00FFA3] text-[#000000] font-black text-[9px] rounded uppercase tracking-widest hover:bg-[#00cc82] transition shadow-[0_0_12px_rgba(0,255,163,0.3)]">
+                                        <button onClick={onLoginRequired} className="flex items-center gap-1.5 px-3 py-1 bg-[#10B981] text-[#000000] font-black text-[9px] rounded uppercase tracking-widest hover:bg-[#00cc82] transition shadow-[0_0_12px_rgba(0,255,163,0.3)]">
                                             <Lock className="w-3 h-3" /> Üye Ol, Gör
                                         </button>
                                     </div>
@@ -162,7 +162,7 @@ const AnalysisDrawer: React.FC<{
                     {isLoggedIn ? (
                         <>
                             <div className="flex items-center gap-2 mb-3">
-                                <Flame className="w-4 h-4 text-[#00FFA3]" />
+                                <Flame className="w-4 h-4 text-[#10B981]" />
                                 <h5 className="text-white font-black text-[11px] uppercase tracking-widest">EN İYİ ORANLAR</h5>
                             </div>
                             <div className="space-y-2">
@@ -172,7 +172,7 @@ const AnalysisDrawer: React.FC<{
                                             <div className="flex items-center gap-2">
                                                 <span className="text-white font-black text-[11px] uppercase">{bookie.name}</span>
                                                 {bookie.isHighest && (
-                                                    <span className="bg-[#00FFA3] text-[#000000] text-[7px] font-black px-1.5 py-0.5 rounded animate-pulse">EN YÜKSEK</span>
+                                                    <span className="bg-[#10B981] text-[#000000] text-[7px] font-black px-1.5 py-0.5 rounded animate-pulse">EN YÜKSEK</span>
                                                 )}
                                             </div>
                                         </div>
@@ -182,17 +182,17 @@ const AnalysisDrawer: React.FC<{
                                                     <span className="text-gray-600 text-[8px] font-black uppercase">
                                                         {selectedSport === 'Basketbol' ? 'ÜST' : selectedSport === 'Futbol' ? 'KG VAR' : 'SEÇİM 1'}
                                                     </span>
-                                                    <span className="text-[#00FFA3] font-black text-sm">{bookie.odd1}</span>
+                                                    <span className="text-[#10B981] font-black text-sm">{bookie.odd1}</span>
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-gray-600 text-[8px] font-black uppercase">
                                                         {selectedSport === 'Basketbol' ? 'ALT' : selectedSport === 'Futbol' ? '2.5 ÜST' : 'SEÇİM 2'}
                                                     </span>
-                                                    <span className="text-[#00FFA3] font-black text-sm">{bookie.odd2}</span>
+                                                    <span className="text-[#10B981] font-black text-sm">{bookie.odd2}</span>
                                                 </div>
                                             </div>
                                             <a href={bookie.link} target="_blank" rel="noopener noreferrer"
-                                                className={`text-[10px] font-black px-3 py-1.5 rounded transition-all ${bookie.isHighest ? 'bg-[#00FFA3] text-[#000000] shadow-[0_0_10px_rgba(0,255,163,0.2)] hover:bg-[#00cc82]' : 'bg-[#1f2635] text-gray-300 hover:bg-[#2a3045] hover:text-white'}`}>
+                                                className={`text-[10px] font-black px-3 py-1.5 rounded transition-all ${bookie.isHighest ? 'bg-[#10B981] text-[#000000] shadow-[0_0_10px_rgba(0,255,163,0.2)] hover:bg-[#00cc82]' : 'bg-[#1f2635] text-gray-300 hover:bg-[#2a3045] hover:text-white'}`}>
                                                 {bookie.isHighest ? 'EN YÜKSEK ORAN' : 'ŞİMDİ OYNA'}
                                             </a>
                                         </div>
@@ -211,19 +211,19 @@ const AnalysisDrawer: React.FC<{
                                     <div key={i} className="p-4 rounded-lg bg-[#1A1D24]">
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-white font-black text-[11px] uppercase">{name}</span>
-                                            {i === 1 && <span className="bg-[#00FFA3] text-[#000000] text-[7px] font-black px-1.5 py-0.5 rounded">EN YÜKSEK</span>}
+                                            {i === 1 && <span className="bg-[#10B981] text-[#000000] text-[7px] font-black px-1.5 py-0.5 rounded">EN YÜKSEK</span>}
                                         </div>
                                         <div className="flex gap-4">
-                                            <span className="text-[#00FFA3] font-black text-sm">{(1.8 + i * 0.15).toFixed(2)}</span>
-                                            <span className="text-[#00FFA3] font-black text-sm">{(2.1 + i * 0.1).toFixed(2)}</span>
+                                            <span className="text-[#10B981] font-black text-sm">{(1.8 + i * 0.15).toFixed(2)}</span>
+                                            <span className="text-[#10B981] font-black text-sm">{(2.1 + i * 0.1).toFixed(2)}</span>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-lg bg-black/30 backdrop-blur-[2px]">
-                                <Lock className="w-6 h-6 text-[#00FFA3]" />
+                                <Lock className="w-6 h-6 text-[#10B981]" />
                                 <button onClick={onLoginRequired}
-                                    className="flex items-center gap-2 px-5 py-2 bg-[#00FFA3] text-[#000000] font-black text-xs rounded uppercase tracking-widest hover:bg-[#00cc82] transition shadow-[0_0_20px_rgba(0,255,163,0.3)]">
+                                    className="flex items-center gap-2 px-5 py-2 bg-[#10B981] text-[#000000] font-black text-xs rounded uppercase tracking-widest hover:bg-[#00cc82] transition shadow-[0_0_20px_rgba(0,255,163,0.3)]">
                                     Üye Ol, Oranları Gör
                                 </button>
                                 <p className="text-gray-500 text-[9px] font-bold uppercase tracking-widest">Canlı oran karşılaştırması</p>
@@ -352,12 +352,12 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                     onClick={() => setSelectedDate(selectedDate === date ? 'WEEKLY' : date)}
                                     className={`flex flex-col items-center justify-center min-w-[80px] sm:min-w-[90px] py-3 px-4 rounded-lg transition-all duration-300 relative ${
                                         isSelected
-                                            ? 'bg-[#00FFA3] text-[#000000] shadow-[0_0_20px_rgba(0,255,163,0.35)] font-black scale-105 z-10'
+                                            ? 'bg-[#10B981] text-[#000000] shadow-[0_0_20px_rgba(0,255,163,0.35)] font-black scale-105 z-10'
                                             : 'bg-[#1A1D24] hover:bg-[#22262F] text-gray-400 hover:text-white'
                                     }`}
                                 >
                                     {isToday && (
-                                        <span className={`absolute top-1 right-1.5 w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#1A1D24]' : 'bg-[#00FFA3] animate-pulse'}`} />
+                                        <span className={`absolute top-1 right-1.5 w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#1A1D24]' : 'bg-[#10B981] animate-pulse'}`} />
                                     )}
                                     <span className="text-[9px] uppercase tracking-widest font-black opacity-80 mb-0.5">
                                         {isToday ? 'Bugün' : d.toLocaleDateString('tr-TR', { weekday: 'short' })}
@@ -379,14 +379,14 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
                 {/* World Cup 2026 Branding Header */}
                 <div className="mb-6 rounded-lg overflow-hidden relative shadow-[0_0_30px_rgba(0,255,163,0.05)]" style={{ background: 'linear-gradient(135deg, rgba(26,21,0,0.8) 0%, rgba(10,13,20,0.9) 100%)' }}>
-                    <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 bg-no-repeat bg-right-bottom" style={{ backgroundImage: 'radial-gradient(circle at right, #00FFA3 0%, transparent 70%)' }}></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 bg-no-repeat bg-right-bottom" style={{ backgroundImage: 'radial-gradient(circle at right, #10B981 0%, transparent 70%)' }}></div>
                     <div className="p-4 sm:p-5 flex items-center justify-between relative z-10">
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <Trophy className="w-4 h-4 text-[#00FFA3]" />
-                                <p className="text-[10px] font-black text-[#00FFA3]/90 uppercase tracking-[0.2em]">ÖZEL ANALİZLER</p>
+                                <Trophy className="w-4 h-4 text-[#10B981]" />
+                                <p className="text-[10px] font-black text-[#10B981]/90 uppercase tracking-[0.2em]">ÖZEL ANALİZLER</p>
                             </div>
-                            <h2 className="text-2xl md:text-3xl font-black italic tracking-tighter" style={{ color: '#00FFA3', textShadow: '0 0 20px rgba(0,255,163,0.3)' }}>
+                            <h2 className="text-2xl md:text-3xl font-black italic tracking-tighter" style={{ color: '#10B981', textShadow: '0 0 20px rgba(0,255,163,0.3)' }}>
                                 WORLD CUP <span className="text-white">2026</span>
                             </h2>
                         </div>
@@ -408,7 +408,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                         {(Object.entries(groupedByDate) as [string, MatchAnalysis[]][]).map(([date, matches]) => (
                             <div key={date}>
                                 {/* Date Separator */}
-                                <div className="flex items-center gap-2 text-[11px] font-bold text-[#00FFA3] tracking-wider uppercase mb-2 mt-5 px-1 first:mt-0">
+                                <div className="flex items-center gap-2 text-[11px] font-bold text-[#10B981] tracking-wider uppercase mb-2 mt-5 px-1 first:mt-0">
                                     <Calendar className="w-3.5 h-3.5" />
                                     {formatDateTR(date)}
                                     <span className="text-gray-600 font-medium normal-case">({matches.length} analiz)</span>
@@ -435,7 +435,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                             <span className="text-[11px] font-bold text-gray-400 px-3 py-1.5 rounded shrink-0" style={{ background: '#1A1D24' }}>
                                                                 🕐 {analysis.matchTime}
                                                             </span>
-                                                            <span className="text-[10px] font-black text-[#00FFA3] uppercase px-3 py-1 rounded shrink-0" style={{ background: 'rgba(0,255,163,0.1)' }}>
+                                                            <span className="text-[10px] font-black text-[#10B981] uppercase px-3 py-1 rounded shrink-0" style={{ background: 'rgba(0,255,163,0.1)' }}>
                                                                 {getLeagueFlag(analysis.league)} {analysis.league}
                                                             </span>
                                                             <div className="text-sm font-black text-white flex items-center gap-2">
@@ -456,7 +456,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                         <button
                                                             onClick={onLoginRequired}
                                                             className="flex items-center gap-2 px-4 py-2 font-black text-xs rounded-lg uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(0,255,163,0.3)] hover:shadow-[0_0_30px_rgba(0,255,163,0.5)]"
-                                                            style={{ background: '#00FFA3', color: '#000000' }}
+                                                            style={{ background: '#10B981', color: '#000000' }}
                                                         >
                                                             <Lock className="w-3.5 h-3.5" />
                                                             Üye Ol, Tüm Analizleri Gör
@@ -485,13 +485,13 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                         </span>
 
                                                         {/* League badge */}
-                                                        <span className="text-[10px] font-black text-[#00FFA3] uppercase px-3 py-1 rounded shrink-0" style={{ background: 'rgba(0,255,163,0.08)' }}>
+                                                        <span className="text-[10px] font-black text-[#10B981] uppercase px-3 py-1 rounded shrink-0" style={{ background: 'rgba(0,255,163,0.08)' }}>
                                                             {getLeagueFlag(analysis.league)} {analysis.league}
                                                         </span>
 
                                                         {/* Guarantee badge (high confidence) */}
                                                         {analysis.confidence >= 88 && (
-                                                            <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0" style={{ background: '#00FFA3', color: '#000000' }}>
+                                                            <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0" style={{ background: '#10B981', color: '#000000' }}>
                                                                 <Shield className="w-3 h-3" /> İADE GARANTİLİ
                                                             </span>
                                                         )}
@@ -512,7 +512,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                         </div>
                                                         <div className="px-4 py-2 rounded-lg text-center min-w-[55px]" style={{ background: '#1A1D24' }}>
                                                             <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">ORAN</span>
-                                                            <span className="text-[11px] font-black text-[#00FFA3]">{highestOdds?.odd1 || '—'}</span>
+                                                            <span className="text-[11px] font-black text-[#10B981]">{highestOdds?.odd1 || '—'}</span>
                                                         </div>
                                                         <div className={`px-4 py-2 rounded-lg text-center min-w-[55px] ${confColor.bg}`}>
                                                             <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">GÜVEN</span>
@@ -526,7 +526,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                             <CheckCircle2 className="w-3 h-3" /> ANALİZ AÇIK
                                                         </span>
                                                         <button
-                                                            className={`text-xs font-black py-2 px-4 rounded-lg flex items-center gap-1.5 transition-all duration-200 ${isExpanded ? 'bg-[#00FFA3] text-[#000000]' : 'text-gray-300 hover:bg-[#00FFA3] hover:text-[#000000]'}`}
+                                                            className={`text-xs font-black py-2 px-4 rounded-lg flex items-center gap-1.5 transition-all duration-200 ${isExpanded ? 'bg-[#10B981] text-[#000000]' : 'text-gray-300 hover:bg-[#10B981] hover:text-[#000000]'}`}
                                                             style={!isExpanded ? { background: '#1f2635' } : {}}
                                                         >
                                                             {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}

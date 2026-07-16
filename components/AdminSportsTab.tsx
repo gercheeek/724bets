@@ -117,13 +117,13 @@ const AdminSportsTab: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-black text-white flex items-center gap-2">
-            <Target className="text-[#00FFA3]" /> Spor Bülteni Yönetimi
+            <Target className="text-[#10B981]" /> Spor Bülteni Yönetimi
           </h2>
           <p className="text-zinc-400 mt-1">Sitedeki bahis oranlarını, canlı skorları ve maçları buradan anlık yönetin.</p>
         </div>
         <button 
           onClick={() => setShowForm(!showForm)}
-          className="bg-[#00FFA3] hover:bg-[#00E676] text-black font-black px-4 py-2 rounded-xl flex items-center gap-2 transition-colors"
+          className="bg-[#10B981] hover:bg-[#00E676] text-black font-black px-4 py-2 rounded-xl flex items-center gap-2 transition-colors"
         >
           <Plus size={20} /> Yeni Maç Ekle
         </button>
@@ -139,7 +139,7 @@ const AdminSportsTab: React.FC = () => {
               <select 
                 value={newMatch.sport_category}
                 onChange={e => setNewMatch({...newMatch, sport_category: e.target.value})}
-                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00FFA3]"
+                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#10B981]"
               >
                 <option value="Futbol">Futbol</option>
                 <option value="Basketbol">Basketbol</option>
@@ -153,7 +153,7 @@ const AdminSportsTab: React.FC = () => {
               <input 
                 type="text" required placeholder="Örn: Premier Lig"
                 value={newMatch.league} onChange={e => setNewMatch({...newMatch, league: e.target.value})}
-                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00FFA3]"
+                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#10B981]"
               />
             </div>
 
@@ -162,7 +162,7 @@ const AdminSportsTab: React.FC = () => {
               <input 
                 type="text" required placeholder="Ev Sahibi"
                 value={newMatch.team_home} onChange={e => setNewMatch({...newMatch, team_home: e.target.value})}
-                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00FFA3]"
+                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#10B981]"
               />
             </div>
 
@@ -171,7 +171,7 @@ const AdminSportsTab: React.FC = () => {
               <input 
                 type="text" required placeholder="Deplasman"
                 value={newMatch.team_away} onChange={e => setNewMatch({...newMatch, team_away: e.target.value})}
-                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00FFA3]"
+                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#10B981]"
               />
             </div>
 
@@ -180,12 +180,12 @@ const AdminSportsTab: React.FC = () => {
               <input 
                 type="datetime-local" required
                 value={newMatch.match_date} onChange={e => setNewMatch({...newMatch, match_date: e.target.value})}
-                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00FFA3]"
+                className="bg-[#0A0C10] border border-[#202532] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#10B981]"
               />
             </div>
 
             <div className="md:col-span-2 lg:col-span-5 flex justify-end mt-2">
-              <button type="submit" className="bg-[#00FFA3] text-black font-bold px-6 py-2 rounded-lg flex items-center gap-2">
+              <button type="submit" className="bg-[#10B981] text-black font-bold px-6 py-2 rounded-lg flex items-center gap-2">
                 <Save size={16} /> Maçı Kaydet
               </button>
             </div>
@@ -207,7 +207,7 @@ const AdminSportsTab: React.FC = () => {
                   <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{match.sport_category} • {match.league}</span>
                   <div className="flex items-center gap-2 text-lg font-black">
                     <span>{match.team_home}</span>
-                    <span className="text-[#00FFA3] bg-[#0A0C10] px-2 py-0.5 rounded border border-[#202532]">{match.score_home} - {match.score_away}</span>
+                    <span className="text-[#10B981] bg-[#0A0C10] px-2 py-0.5 rounded border border-[#202532]">{match.score_home} - {match.score_away}</span>
                     <span>{match.team_away}</span>
                   </div>
                 </div>
@@ -242,17 +242,17 @@ const AdminSportsTab: React.FC = () => {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex-1 flex flex-col gap-1">
                     <label className="text-[10px] text-zinc-400">Ev</label>
-                    <input type="number" value={match.score_home} onChange={e => updateMatch(match.id, { score_home: Number(e.target.value) })} className="w-full bg-[#12161E] border border-[#202532] rounded px-2 py-1 text-sm font-bold text-center focus:border-[#00FFA3] outline-none" />
+                    <input type="number" value={match.score_home} onChange={e => updateMatch(match.id, { score_home: Number(e.target.value) })} className="w-full bg-[#12161E] border border-[#202532] rounded px-2 py-1 text-sm font-bold text-center focus:border-[#10B981] outline-none" />
                   </div>
                   <div className="flex-1 flex flex-col gap-1">
                     <label className="text-[10px] text-zinc-400">Dep</label>
-                    <input type="number" value={match.score_away} onChange={e => updateMatch(match.id, { score_away: Number(e.target.value) })} className="w-full bg-[#12161E] border border-[#202532] rounded px-2 py-1 text-sm font-bold text-center focus:border-[#00FFA3] outline-none" />
+                    <input type="number" value={match.score_away} onChange={e => updateMatch(match.id, { score_away: Number(e.target.value) })} className="w-full bg-[#12161E] border border-[#202532] rounded px-2 py-1 text-sm font-bold text-center focus:border-[#10B981] outline-none" />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label className="text-[10px] text-zinc-400">Dakika / Durum (Örn: 45', Devre Arası)</label>
-                  <input type="text" value={match.match_minute} onChange={e => updateMatch(match.id, { match_minute: e.target.value })} placeholder="Örn: 45', Devre Arası" className="w-full bg-[#12161E] border border-[#202532] rounded px-2 py-1 text-sm font-bold focus:border-[#00FFA3] outline-none" />
+                  <input type="text" value={match.match_minute} onChange={e => updateMatch(match.id, { match_minute: e.target.value })} placeholder="Örn: 45', Devre Arası" className="w-full bg-[#12161E] border border-[#202532] rounded px-2 py-1 text-sm font-bold focus:border-[#10B981] outline-none" />
                 </div>
               </div>
 
@@ -272,7 +272,7 @@ const AdminSportsTab: React.FC = () => {
                           type="number" step="0.01" 
                           value={match.odds[odd.key as keyof typeof match.odds] || ''} 
                           onChange={e => updateOdds(match.id, match.odds, odd.key, Number(e.target.value))}
-                          className="w-full bg-transparent border-none text-center text-[#00FFA3] font-black outline-none"
+                          className="w-full bg-transparent border-none text-center text-[#10B981] font-black outline-none"
                         />
                       </div>
                     ))}

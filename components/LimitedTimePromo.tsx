@@ -42,7 +42,7 @@ const LimitedTimePromo = () => {
           {/* Rich Dark Gradient */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0F121A] via-[#0F121A]/70 to-[#0F121A]"></div>
           {/* Subtle Green Glow */}
-          <div className="absolute right-0 top-0 w-1/3 h-full bg-[#00FFA3]/5 blur-[100px] pointer-events-none"></div>
+          <div className="absolute right-0 top-0 w-1/3 h-full bg-[#10B981]/5 blur-[100px] pointer-events-none"></div>
         </div>
 
         {/* Subtle sweeping light effect */}
@@ -54,7 +54,7 @@ const LimitedTimePromo = () => {
         <div className="flex flex-col md:flex-row items-center md:items-start gap-4 w-full md:w-auto text-center md:text-left">
           <div className="flex flex-col justify-center">
             <div className="flex items-center justify-center md:justify-start gap-3 mb-1.5">
-              <Sparkles className="w-6 h-6 text-[#00FFA3] drop-shadow-[0_0_8px_rgba(0,255,163,0.5)]" />
+              <Sparkles className="w-6 h-6 text-[#10B981] drop-shadow-[0_0_8px_rgba(0,255,163,0.5)]" />
               <h3 className="text-white font-black text-xl md:text-2xl tracking-tight uppercase">
                 5.000₺ HOŞ GELDİN BONUSU
               </h3>
@@ -78,14 +78,14 @@ const LimitedTimePromo = () => {
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
               placeholder="PROMO KODU"
-              className="bg-[#1A1D29] border border-[#2A2E3D] text-white placeholder-[#848B9D] text-[13px] font-bold tracking-widest uppercase rounded-lg px-5 py-3.5 w-[200px] focus:outline-none focus:border-[#00FFA3] focus:shadow-[0_0_15px_rgba(0,255,163,0.15)] transition-all"
+              className="bg-[#1A1D29] border border-[#2A2E3D] text-white placeholder-[#848B9D] text-[13px] font-bold tracking-widest uppercase rounded-lg px-5 py-3.5 w-[200px] focus:outline-none focus:border-[#10B981] focus:shadow-[0_0_15px_rgba(0,255,163,0.15)] transition-all"
             />
           </div>
 
           {/* Primary CTA Button */}
           <button 
             onClick={handleClaim}
-            className="relative overflow-hidden group/btn bg-[#00FFA3] hover:bg-[#00E676] text-[#0F121A] font-black px-8 py-3.5 rounded-lg shadow-[0_0_20px_rgba(0,255,163,0.2)] hover:shadow-[0_0_30px_rgba(0,255,163,0.4)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 uppercase tracking-widest text-[13px]"
+            className="relative overflow-hidden group/btn bg-[#10B981] hover:bg-[#00E676] text-[#0F121A] font-black px-8 py-3.5 rounded-lg shadow-[0_0_20px_rgba(0,255,163,0.2)] hover:shadow-[0_0_30px_rgba(0,255,163,0.4)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 uppercase tracking-widest text-[13px]"
           >
             <span className="relative z-10">KULLAN</span>
             <ArrowRight className="relative z-10 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -133,10 +133,10 @@ const LimitedTimePromo = () => {
                 <strong className="text-white">Katılım:</strong> Bu kampanya sadece ilk defa üye olan ve <strong className="text-white">en az 2.500₺</strong> yatırım yapan kullanıcılar için geçerlidir.
               </li>
               <li>
-                <strong className="text-white">Oyun Özgürlüğü:</strong> Bonusunuzu ve ana paranızı kısıtlama olmaksızın <strong className="text-[#00FFA3]">tüm Slot ve Canlı Casino</strong> oyunlarında esnek bir şekilde kullanabilirsiniz.
+                <strong className="text-white">Oyun Özgürlüğü:</strong> Bonusunuzu ve ana paranızı kısıtlama olmaksızın <strong className="text-[#10B981]">tüm Slot ve Canlı Casino</strong> oyunlarında esnek bir şekilde kullanabilirsiniz.
               </li>
               <li>
-                <strong className="text-white">Hedef & Çekim:</strong> Karmaşık çevrim şartları yoktur! Toplam bakiyenizi oyunlara katılarak <strong className="text-white">10.000₺</strong>'ye ulaştırdığınız an, doğrudan <strong className="text-[#00FFA3]">5.000₺ NAKİT ÇEKİM</strong> yapabilirsiniz. (Çekim sonrası kalan bakiye sistem tarafından sıfırlanır).
+                <strong className="text-white">Hedef & Çekim:</strong> Karmaşık çevrim şartları yoktur! Toplam bakiyenizi oyunlara katılarak <strong className="text-white">10.000₺</strong>'ye ulaştırdığınız an, doğrudan <strong className="text-[#10B981]">5.000₺ NAKİT ÇEKİM</strong> yapabilirsiniz. (Çekim sonrası kalan bakiye sistem tarafından sıfırlanır).
               </li>
               <li>
                 <strong className="text-white">Kurallar:</strong> Bu teklif diğer promosyonlarla birleştirilemez ve her kullanıcının IP/Cihaz başına tek bir katılım hakkı bulunmaktadır.
@@ -153,7 +153,7 @@ const LimitedTimePromo = () => {
             </button>
             <button 
               onClick={handleAcceptTerms}
-              className="flex-1 bg-[#00FFA3] hover:bg-[#00E676] text-[#0F121A] font-black py-3 rounded-xl shadow-[0_0_20px_rgba(0,255,163,0.3)] transition-colors"
+              className="flex-1 bg-[#10B981] hover:bg-[#00E676] text-[#0F121A] font-black py-3 rounded-xl shadow-[0_0_20px_rgba(0,255,163,0.3)] transition-colors"
             >
               Kabul Et
             </button>

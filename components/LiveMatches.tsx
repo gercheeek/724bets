@@ -86,7 +86,7 @@ const LiveMatches: React.FC = () => {
     if (!odd) return '#888';
     if (odd < 1.5) return '#ff6b6b';
     if (odd < 2.0) return '#ffa726';
-    if (odd < 3.0) return '#00FFA3';
+    if (odd < 3.0) return '#10B981';
     return '#66bb6a';
   };
 
@@ -100,7 +100,7 @@ const LiveMatches: React.FC = () => {
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-4">
           <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(0, 255, 163, 0.1)' }}>
-            <Zap className="w-4 h-4" style={{ color: '#00FFA3' }} />
+            <Zap className="w-4 h-4" style={{ color: '#10B981' }} />
           </div>
           <h3 className="font-black text-sm uppercase tracking-wider italic" style={{ color: '#e0e0e0' }}>
             CANLI ORANLAR
@@ -138,14 +138,14 @@ const LiveMatches: React.FC = () => {
       {/* Section Header */}
       <div className="flex items-center gap-2 mb-4">
         <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(0, 255, 163, 0.1)' }}>
-          <Zap className="w-4 h-4" style={{ color: '#00FFA3' }} />
+          <Zap className="w-4 h-4" style={{ color: '#10B981' }} />
         </div>
         <h3 className="font-black text-sm uppercase tracking-wider italic" style={{ color: '#e0e0e0' }}>
           CANLI ORANLAR
         </h3>
         <div className="flex items-center gap-1.5 ml-1">
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00FFA3', boxShadow: '0 0 8px #00FFA3', animation: 'live-pulse 2s infinite' }} />
-          <span style={{ fontSize: '9px', fontWeight: 900, color: '#00FFA3', textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981', animation: 'live-pulse 2s infinite' }} />
+          <span style={{ fontSize: '9px', fontWeight: 900, color: '#10B981', textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
         </div>
         <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(0, 255, 163, 0.2), transparent)' }} />
         <div className="flex items-center gap-2">
@@ -160,7 +160,7 @@ const LiveMatches: React.FC = () => {
               width: '28px', height: '28px', borderRadius: '8px',
               background: 'rgba(0, 255, 163, 0.06)',
               cursor: 'pointer', transition: 'all 0.3s',
-              color: '#00FFA3'
+              color: '#10B981'
             }}
             title="Yenile"
           >
@@ -199,7 +199,7 @@ const LiveMatches: React.FC = () => {
             {/* Date/Status Top Right */}
             <div className="absolute top-4 right-4 text-zinc-400 text-[11px] font-semibold flex items-center gap-1.5">
               {match.status === 'Canlı Bahis' && (
-                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FFA3', boxShadow: '0 0 6px #00FFA3', animation: 'live-pulse 2s infinite' }} />
+                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px #10B981', animation: 'live-pulse 2s infinite' }} />
               )}
               {match.status || 'Canlı Bahis'}
             </div>
@@ -244,7 +244,7 @@ const LiveMatches: React.FC = () => {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                 width: '100%', padding: '9px 12px',
-                background: 'linear-gradient(135deg, #00FFA3 0%, #00FFA3 100%)',
+                background: 'linear-gradient(135deg, #10B981 0%, #10B981 100%)',
                 color: '#000', fontWeight: 900, fontSize: '10px',
                 borderRadius: '8px', textTransform: 'uppercase',
                 letterSpacing: '1.5px', textDecoration: 'none',
