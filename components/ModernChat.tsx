@@ -75,6 +75,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
     const [isEventCollapsed, setIsEventCollapsed] = useState(false);
     const [isPollCollapsed, setIsPollCollapsed] = useState(false);
+    const [showRules, setShowRules] = useState(false);
+
+    useEffect(() => {
+        if (open && siteUser) {
+            setShowRules(true);
+        } else {
+            setShowRules(false);
+        }
+    }, [open, siteUser]);
 
     useEffect(() => {
         const handleOutsideClick = () => {
@@ -524,7 +533,48 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0F1219] shadow-2xl font-sans text-left">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0F1219] shadow-2xl font-sans text-left relative">
+            
+            {/* Chat Rules Overlay */}
+            {showRules && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+                    <div className="bg-[#1A1D24] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-sm shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                        <div className="flex items-center gap-3 mb-6">
+                            <Shield className="w-6 h-6 text-[#10B981]" />
+                            <h2 className="text-lg font-black text-white tracking-wider">SOHBET KURALLARI</h2>
+                        </div>
+                        <ul className="space-y-4 text-sm text-gray-300 font-medium">
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Her zaman kibar olun ve herkese saygı gösterin.</span>
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Nefret söylemini, ırkçılığı, cinsiyetçiliği veya benzer davranışları içeren her türlü hali tolere edilmez.</span>
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Spam yapmayı, dilenmeyi veya bahşiş istemeyi kaçının.</span>
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Ortaklık kodlarını, linkleri paylaşmak veya yayınınızı tanıtmak kabul edilmez.</span>
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Bu kuralları ihlal etmek, chat yasağına veya bazı durumlarda hesabınızın yasaklanmasına yol açabilir.</span>
+                            </li>
+                        </ul>
+                        <button 
+                            onClick={() => setShowRules(false)}
+                            className="w-full mt-6 bg-[#10B981] hover:bg-[#059669] text-black font-black py-3.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                        >
+                            Anladım, teşekkürler
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Header */}
             <div className="bg-[#0F1219] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5 shadow-sm">
                 <div className="flex items-center gap-3">
