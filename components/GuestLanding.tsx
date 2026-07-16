@@ -8,6 +8,7 @@ import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
 import OriginalsSlider from './OriginalsSlider';
+import LimitedTimePromo from './LimitedTimePromo';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {
@@ -151,7 +152,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
           </div>
 
-          <div className="w-full px-4 pt-4 pb-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Special Promo for Logged In Users */}
+          <div className="w-full px-4">
+            <LimitedTimePromo />
+          </div>
+
+          <div className="w-full px-4 pt-2 pb-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Left Column: Premium VIP Progress Card */}
           <div className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden group cursor-pointer">
             {/* Background Image / Gradients */}
@@ -176,8 +182,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               </div>
               {/* Avatar / Username */}
               <div className="flex items-center gap-1.5 sm:gap-2 bg-black/40 rounded-full py-1.5 px-3 border border-white/5 backdrop-blur-sm group-hover:bg-black/60 transition-colors">
+                <span className="text-gray-400 text-[10px] sm:text-xs font-medium mr-0.5">ÜYE:</span>
                 <span className="text-white font-bold text-xs sm:text-sm">{siteUser.username}</span>
-                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-[#00FFA3]" />
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-[#00FFA3] ml-0.5" />
               </div>
             </div>
 
