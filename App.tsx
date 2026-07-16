@@ -50,6 +50,7 @@ import DemoGames from './components/DemoGames';
 import MyBetsModal from './components/MyBetsModal';
 import KralView from './components/KralView';
 import WorldCupTeaser from './components/WorldCupTeaser';
+import Footer from './components/Footer';
 
 import LiveBetsFeed from './components/LiveBetsFeed';
 import CasinoLobby from './components/CasinoLobby';
@@ -2314,7 +2315,7 @@ const AppContent: React.FC = () => {
       </div>
       </div>
 
-
+      {view !== 'admin' && <Footer />}
           </main>
 
 
