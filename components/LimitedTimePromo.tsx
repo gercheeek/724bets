@@ -63,7 +63,7 @@ const LimitedTimePromo = () => {
               </span>
             </div>
             <p className="text-[#848B9D] text-sm md:text-base font-medium">
-              10.000₺ Yap, <strong className="text-white">2.500₺ Nakit Çek!</strong>
+              2.500₺ Yatır, 10.000₺ Yap, <strong className="text-white">5.000₺ Nakit Çek!</strong>
             </p>
           </div>
         </div>
@@ -126,13 +126,21 @@ const LimitedTimePromo = () => {
           
           <div className="space-y-4 text-sm text-[#848B9D]">
             <p>
-              Tebrikler! <strong>{promoCode}</strong> kodunu başarıyla girdiniz. Bu 5.000₺ Hoş Geldin Bonusu kampanyasına katılmak üzeresiniz.
+              Tebrikler! <strong>{promoCode}</strong> kodunu başarıyla girdiniz. 5.000₺ Hoş Geldin Bonusu kampanyasına katılmak üzeresiniz.
             </p>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Bonus sadece yeni üyelere ve ilk yatırıma özeldir.</li>
-              <li>Bonusu çekilebilir nakde dönüştürmek için bakiyenizi en az 10.000₺ yapmalısınız.</li>
-              <li>Çevrim şartları tamamlandığında en fazla 2.500₺ nakit çekim yapabilirsiniz.</li>
-              <li>Bu kampanya diğer bonuslarla birleştirilemez.</li>
+            <ul className="list-disc pl-5 space-y-3">
+              <li>
+                <strong className="text-white">Katılım:</strong> Bu kampanya sadece ilk defa üye olan ve <strong className="text-white">en az 2.500₺</strong> yatırım yapan kullanıcılar için geçerlidir.
+              </li>
+              <li>
+                <strong className="text-white">Oyun Özgürlüğü:</strong> Bonusunuzu ve ana paranızı kısıtlama olmaksızın <strong className="text-[#00FFA3]">tüm Slot ve Canlı Casino</strong> oyunlarında esnek bir şekilde kullanabilirsiniz.
+              </li>
+              <li>
+                <strong className="text-white">Hedef & Çekim:</strong> Karmaşık çevrim şartları yoktur! Toplam bakiyenizi oyunlara katılarak <strong className="text-white">10.000₺</strong>'ye ulaştırdığınız an, doğrudan <strong className="text-[#00FFA3]">5.000₺ NAKİT ÇEKİM</strong> yapabilirsiniz. (Çekim sonrası kalan bakiye sistem tarafından sıfırlanır).
+              </li>
+              <li>
+                <strong className="text-white">Kurallar:</strong> Bu teklif diğer promosyonlarla birleştirilemez ve her kullanıcının IP/Cihaz başına tek bir katılım hakkı bulunmaktadır.
+              </li>
             </ul>
           </div>
           
