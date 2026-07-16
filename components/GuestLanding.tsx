@@ -240,12 +240,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   alt="Casino" 
                   className="absolute top-0 left-0 w-full md:w-[200%] h-full max-w-none object-cover object-[center] md:object-[left_center] transform group-hover/casino:scale-105 transition-transform duration-1000 ease-out"
                 />
-                {/* 50-60% Opacity Overlay to make text pop */}
-                <div className="absolute inset-0 bg-[#05070A]/60 group-hover/casino:bg-[#05070A]/40 transition-colors duration-700"></div>
+                {/* 30% Opacity Overlay to make text pop */}
+                <div className="absolute inset-0 bg-[#05070A]/30 group-hover/casino:bg-transparent transition-colors duration-700 z-10"></div>
                 {/* Subtle Purple Neon Glow on Hover */}
-                <div className="absolute inset-0 bg-purple-600/0 group-hover/casino:bg-purple-600/10 mix-blend-screen transition-colors duration-700"></div>
+                <div className="absolute inset-0 bg-purple-600/0 group-hover/casino:bg-purple-600/10 mix-blend-screen transition-colors duration-700 z-10"></div>
                 {/* Text Background Fade */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#05070A] via-[#05070A]/70 to-transparent w-3/4"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#05070A]/90 via-[#05070A]/40 to-transparent w-3/4 z-10 pointer-events-none"></div>
               </div>
 
               <div className="relative z-20 flex flex-row items-center justify-between w-full h-full transform group-hover/casino:translate-x-2 transition-transform duration-500">
@@ -278,12 +278,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   alt="Sports Betting" 
                   className="absolute top-0 right-0 w-full md:w-[200%] h-full max-w-none object-cover object-[center] md:object-[right_center] transform group-hover/sports:scale-105 transition-transform duration-1000 ease-out"
                 />
-                {/* 50-60% Opacity Overlay to make text pop */}
-                <div className="absolute inset-0 bg-[#05070A]/60 group-hover/sports:bg-[#05070A]/40 transition-colors duration-700"></div>
+                {/* 30% Opacity Overlay to make text pop */}
+                <div className="absolute inset-0 bg-[#05070A]/30 group-hover/sports:bg-transparent transition-colors duration-700 z-10"></div>
                 {/* Subtle Green Neon Glow on Hover */}
-                <div className="absolute inset-0 bg-[#00FFA3]/0 group-hover/sports:bg-[#00FFA3]/10 mix-blend-screen transition-colors duration-700"></div>
+                <div className="absolute inset-0 bg-[#00FFA3]/0 group-hover/sports:bg-[#00FFA3]/10 mix-blend-screen transition-colors duration-700 z-10"></div>
                 {/* Text Background Fade */}
-                <div className="absolute md:inset-0 md:bg-gradient-to-l md:from-[#05070A] md:via-[#05070A]/70 md:to-transparent w-full md:w-full inset-0 bg-gradient-to-r from-[#05070A] via-[#05070A]/70 to-transparent md:left-auto"></div>
+                <div className="absolute md:inset-0 md:bg-gradient-to-l md:from-[#05070A]/90 md:via-[#05070A]/40 md:to-transparent w-full md:w-full inset-0 bg-gradient-to-r from-[#05070A]/90 via-[#05070A]/40 to-transparent md:left-auto z-10 pointer-events-none"></div>
               </div>
               
               <div className="relative z-20 flex flex-row items-center justify-between w-full h-full transform group-hover/sports:translate-x-2 md:group-hover/sports:-translate-x-2 transition-transform duration-500">
