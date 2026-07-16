@@ -15,7 +15,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const NEW_ADDED_GAMES = [
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%', players: 204 },
-  { id: 116, name: 'Out of the Woods', provider: 'Pragmatic Play', img: '/images/slots/outofthewoods.jpg', category: 'new', rtp: '96.50%', demoSymbol: 'vs25bstackwild', players: 278 },
+  { id: 1160, name: 'Out of the Woods', provider: 'Pragmatic Play', img: '/images/slots/outofthewoods.jpg', category: 'new', rtp: '96.50%', demoSymbol: 'vs25bstackwild', players: 278 },
   { id: 1161, name: 'Legion Gold And The Throne Of Dead', provider: 'Play\'n GO', img: '/images/slots/legiongold.jpg', category: 'new', rtp: '96.20%', customDemoUrl: 'https://acccw.playngonetwork.com/casino/ContainerLauncher?pid=1857&brand=b2b_anj&gid=throneofdead&practice=1&lang=en_GB&div=gameWrapper&embedmode=iframe&channel=mobile&origin=https%3A%2F%2Fslotra.com', players: 335 },
   { id: 1162, name: 'Big Bass Blast', provider: 'Pragmatic Play', img: '/images/slots/bigbass.jpg', category: 'new', rtp: '96.71%', demoSymbol: 'vs10bbasblitz', players: 190 },
   { id: 1163, name: 'The Dog House Megaways 1000', provider: 'Pragmatic Play', img: '/images/slots/doghouse.jpg', category: 'new', rtp: '96.55%', demoSymbol: 'vswaysdh1000', players: 371 },
