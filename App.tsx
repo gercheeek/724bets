@@ -2407,7 +2407,7 @@ const AppContent: React.FC = () => {
       )}
 
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
-      {view !== 'admin' && view !== 'sports' && !showLiveScoreModal && !isMobile && siteUser && (
+      {view !== 'admin' && view !== 'sports' && !showLiveScoreModal && !isMobile && (
         <>
           <aside className={`hidden xl:flex flex-col border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px] border-l' : 'w-0 border-l-0 overflow-hidden'} transition-all duration-300`}>
             <ModernChat
