@@ -486,8 +486,17 @@ const AppContent: React.FC = () => {
   };
 
   const [selectedArticleId, setSelectedArticleId] = useState<string>('');
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(() => {
+    try { return localStorage.getItem('site_user_role') || null; } catch { return null; }
+  });
+  const [siteUser, setSiteUser] = useState<SiteUser | null>(() => {
+    try {
+      const saved = localStorage.getItem('site_current_member') || localStorage.getItem('site_member');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
 
   useEffect(() => {

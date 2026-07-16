@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Trophy, Shield, Target, ChevronRight, Info, Crown, Star } from 'lucide-react';
+import { Search, Trophy, Shield, Target, ChevronRight, Info, Crown, Star, Play } from 'lucide-react';
 import LiveWinsTicker from './LiveWinsTicker';
 import LiveGamesSlider from './LiveGamesSlider';
 import LiveBetsTable from './LiveBetsTable';
@@ -249,8 +249,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   </h3>
                   <ActivePlayersCounter type="casino" />
                 </div>
-                <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-purple-500/50 text-white font-black px-6 md:px-10 py-2.5 text-[11px] sm:text-xs md:text-sm tracking-[0.2em] rounded-xl transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(147,51,234,0.3)] hover:-translate-y-0.5 flex-shrink-0">
-                  <span className="relative z-10 group-hover/btn:text-purple-400 transition-colors">GİRİŞ</span>
+                <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-purple-500/50 text-white flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(147,51,234,0.3)] hover:-translate-y-0.5 flex-shrink-0">
+                  <Play className="relative z-10 w-5 h-5 group-hover/btn:text-purple-400 transition-colors ml-1" fill="currentColor" />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                 </button>
               </div>
@@ -280,8 +280,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               <div className="absolute right-0 top-0 h-full bg-gradient-to-l from-[#0D1017] via-[#0D1017]/80 to-transparent w-[50%] z-10 pointer-events-none"></div>
 
               <div className="relative z-20 flex flex-row items-center justify-between w-full h-full transform group-hover:-translate-x-3 transition-transform duration-500">
-                <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white font-black px-6 md:px-10 py-2.5 text-[11px] sm:text-xs md:text-sm tracking-[0.2em] rounded-xl transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 flex-shrink-0">
-                  <span className="relative z-10 group-hover/btn:text-[#00FFA3] transition-colors">GİRİŞ</span>
+                <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 flex-shrink-0">
+                  <Play className="relative z-10 w-5 h-5 group-hover/btn:text-[#00FFA3] transition-colors ml-1" fill="currentColor" />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                 </button>
                 <div className="flex flex-col items-end gap-1.5 text-right">
@@ -336,8 +336,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     <div className="relative z-20 flex flex-col items-start gap-2 lg:gap-3 h-full justify-center transform group-hover:translate-x-2 transition-transform duration-500 max-w-[70%] lg:max-w-[80%]">
                       <h3 className="text-3xl sm:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-md leading-none font-['Outfit'] pb-1">Casino</h3>
                       <div className="hidden sm:block"><ActivePlayersCounter type="casino" /></div>
-                      <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white font-black px-6 lg:px-8 py-2 lg:py-2.5 text-[11px] sm:text-xs rounded-xl tracking-[0.2em] transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 mt-auto sm:mt-0 inline-flex items-center justify-center w-fit">
-                        <span className="relative z-10 group-hover/btn:text-[#00FFA3] transition-colors">GİRİŞ</span>
+                      <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-purple-500/50 text-white flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(147,51,234,0.3)] hover:-translate-y-0.5 mt-auto sm:mt-0 w-fit">
+                        <Play className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:text-purple-400 transition-colors ml-1" fill="currentColor" />
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                       </button>
                     </div>
@@ -350,8 +350,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     <div className="relative z-20 flex flex-col items-end gap-2 lg:gap-3 h-full justify-center self-end text-right transform group-hover:-translate-x-2 transition-transform duration-500 max-w-[70%] lg:max-w-[80%] ml-auto">
                       <h3 className="text-3xl sm:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-md leading-none font-['Outfit'] pb-1">Spor</h3>
                       <div className="hidden sm:block"><ActivePlayersCounter type="sports" /></div>
-                      <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white font-black px-6 lg:px-8 py-2 lg:py-2.5 text-[11px] sm:text-xs rounded-xl tracking-[0.2em] transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 mt-auto sm:mt-0 inline-flex items-center justify-center w-fit">
-                        <span className="relative z-10 group-hover/btn:text-[#00FFA3] transition-colors">GİRİŞ</span>
+                      <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 mt-auto sm:mt-0 w-fit">
+                        <Play className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:text-[#00FFA3] transition-colors ml-1" fill="currentColor" />
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                       </button>
                     </div>
