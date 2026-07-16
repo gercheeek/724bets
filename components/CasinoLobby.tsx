@@ -601,7 +601,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
       {/* GAME MODAL (Kept similar structure but adapted style) */}
       {selectedGame && createPortal(
         <div 
-          className="fixed inset-0 z-[99999] flex p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setSelectedGame(null);
