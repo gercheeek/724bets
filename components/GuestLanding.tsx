@@ -116,17 +116,29 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
     {
       title: t("promo_1_title"),
       subtitle: t("promo_1_sub"),
-      icon: <Trophy strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-40 h-40 text-yellow-500/10 group-hover:text-yellow-400/20 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6" />
+      Icon: Trophy,
+      colorClass: "from-yellow-400 via-yellow-600 to-yellow-900",
+      glowClass: "bg-yellow-500",
+      iconColorClass: "text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]",
+      textColorClass: "text-yellow-500/80 group-hover:text-yellow-400"
     },
     {
       title: t("promo_2_title"),
       subtitle: t("promo_2_sub"),
-      icon: <Shield strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-40 h-40 text-red-500/10 group-hover:text-red-400/20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6" />
+      Icon: Shield,
+      colorClass: "from-purple-400 via-purple-600 to-purple-900",
+      glowClass: "bg-purple-500",
+      iconColorClass: "text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]",
+      textColorClass: "text-purple-500/80 group-hover:text-purple-400"
     },
     {
       title: t("promo_3_title"),
       subtitle: t("promo_3_sub"),
-      icon: <Target strokeWidth={1.5} className="absolute -right-4 -bottom-4 w-40 h-40 text-[#00FFA3]/10 group-hover:text-[#00FFA3]/20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12" />
+      Icon: Target,
+      colorClass: "from-[#00FFA3] via-[#00FFA3]/60 to-[#00FFA3]/20",
+      glowClass: "bg-[#00FFA3]",
+      iconColorClass: "text-[#00FFA3] drop-shadow-[0_0_8px_rgba(0,255,163,0.8)]",
+      textColorClass: "text-[#00FFA3]/80 group-hover:text-[#00FFA3]"
     }
   ];
 
@@ -147,11 +159,24 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     <div className="absolute inset-0 bg-[#0B0E14]/40 group-hover:bg-[#0B0E14]/20 transition-colors duration-1000"></div>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
-                  <div className="flex flex-col z-10 w-2/3 relative">
-                    <span className="text-white font-black text-xl lg:text-2xl tracking-tight leading-tight mb-1.5 group-hover:text-[#00FFA3] transition-colors">{card.title}</span>
-                    <span className="text-zinc-400 text-[10px] font-black uppercase tracking-wider">{card.subtitle}</span>
+                  
+                  <div className="flex flex-row items-center w-full relative z-10 gap-4">
+                    <div className="flex-shrink-0 relative">
+                       {/* Rich glowing icon container */}
+                       <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-gradient-to-br ${card.colorClass} p-[1px] shadow-lg group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-shadow duration-500`}>
+                         <div className="w-full h-full bg-[#0B0E14]/90 backdrop-blur-md rounded-2xl flex items-center justify-center relative overflow-hidden group-hover:bg-[#0B0E14]/60 transition-colors duration-500">
+                           {/* Icon glow */}
+                           <div className={`absolute inset-0 opacity-40 blur-xl ${card.glowClass} group-hover:opacity-60 transition-opacity duration-500`}></div>
+                           <card.Icon className={`w-6 h-6 lg:w-7 lg:h-7 relative z-10 ${card.iconColorClass} group-hover:scale-110 transition-transform duration-500`} />
+                         </div>
+                       </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="text-white font-black text-lg lg:text-xl tracking-tight leading-tight mb-1">{card.title}</span>
+                      <span className={`text-[9px] lg:text-[10px] font-black uppercase tracking-wider transition-colors duration-500 ${card.textColorClass}`}>{card.subtitle}</span>
+                    </div>
                   </div>
-                  {card.icon}
                 </div>
               ))}
             </div>
