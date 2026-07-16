@@ -25,7 +25,7 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 
   return (
     <div className="mobile-bottom-nav-container fixed bottom-0 left-0 right-0 z-[100] bg-[#0f1115] border-t border-white/5 pb-safe">
-      <div className="flex items-center justify-around px-2 h-16">
+      <div className="flex items-center justify-between px-1 sm:px-2 h-16 w-full max-w-full">
         {items.map((item) => {
           const isActive = activeView === item.id;
           const Icon = item.icon;
@@ -34,12 +34,12 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             <button
               key={item.id}
               onClick={() => item.action ? item.action() : onViewChange(item.id)}
-              className="relative flex flex-col items-center justify-center w-full h-full space-y-1 transition-all group"
+              className="relative flex-1 flex flex-col items-center justify-center h-full gap-0.5 transition-all group"
             >
-              <div className={`p-1.5 transition-all duration-300 ${isActive ? 'text-[#00FFA3]' : 'text-gray-500'}`}>
-                <Icon size={22} className={isActive ? 'scale-110' : ''} />
+              <div className={`transition-all duration-300 ${isActive ? 'text-[#00FFA3] -translate-y-0.5' : 'text-gray-500'}`}>
+                <Icon size={20} className={isActive ? 'scale-110 drop-shadow-[0_0_8px_rgba(0,255,163,0.5)]' : ''} />
               </div>
-              <span className={`text-[10px] font-bold tracking-wide transition-colors ${isActive ? 'text-[#00FFA3]' : 'text-gray-500'}`}>
+              <span className={`text-[9px] sm:text-[10px] font-bold tracking-wide transition-colors ${isActive ? 'text-[#00FFA3]' : 'text-gray-500'}`}>
                 {item.label}
               </span>
             </button>
