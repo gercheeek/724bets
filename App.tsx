@@ -84,6 +84,7 @@ import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
 import Spor724View from './components/Spor724View';
 import TarafView from './components/TarafView';
+import InGameLayout from './components/InGameLayout';
 import ComingSoon from './components/ComingSoon';
 import PlinkoView from './components/PlinkoView';
 const SITE_CACHE_VERSION = "2026.06.25_v1";
@@ -1583,6 +1584,14 @@ const AppContent: React.FC = () => {
           message={siteStatusConfig.maintenanceMessage} 
           onAdminLogin={() => setAuthModalMode('admin')}
         />
+      ) : view === 'blackjack-pro' ? (
+        <InGameLayout siteUser={siteUser} onViewChange={handleViewChange} gameTitle="Blackjack Pro">
+           <BlackjackProView 
+             siteUser={siteUser} 
+             setSiteUser={setSiteUser} 
+             onAuthRequired={() => setAuthModalMode('member')} 
+           />
+        </InGameLayout>
       ) : (
         <div 
           className="relative flex h-[100dvh] w-full bg-[#111317] text-white overflow-hidden" 
@@ -1848,16 +1857,6 @@ const AppContent: React.FC = () => {
         {view === 'originals' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
             <OriginalsHub onNavigate={handleViewChange} isLoggedIn={!!(siteUser || userRole)} />
-          </div>
-        )}
-
-        {view === 'blackjack-pro' && (
-          <div className="animate-fade-in w-full h-full relative z-[50]">
-            <BlackjackProView 
-              siteUser={siteUser} 
-              setSiteUser={setSiteUser} 
-              onAuthRequired={() => setAuthModalMode('member')} 
-            />
           </div>
         )}
 
