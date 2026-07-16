@@ -159,7 +159,10 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
           <div className="w-full px-4 pt-2 pb-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Left Column: Premium VIP Progress Card */}
-          <div className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden group cursor-pointer">
+          <div 
+            onClick={() => onViewChange('originals')}
+            className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden group cursor-pointer"
+          >
             {/* Background Image / Gradients */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#161A22] to-[#0A0D11] z-0"></div>
             
@@ -220,7 +223,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             
             {/* Kumarhane Card */}
             <div 
-              onClick={() => onViewChange('blackjack')}
+              onClick={() => onViewChange('originals')}
               className="relative w-full h-1/2 cursor-pointer group bg-[#0D1017] flex flex-row items-center justify-between p-5 lg:p-8 z-20 overflow-hidden border-b border-white/5 shadow-[inset_0_0_40px_rgba(147,51,234,0.05)] hover:shadow-[inset_0_0_80px_rgba(147,51,234,0.15)] transition-shadow duration-500"
             >
               {/* Radial Glow Behind Text */}
