@@ -116,28 +116,22 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
     {
       title: t("promo_1_title"),
       subtitle: t("promo_1_sub"),
-      Icon: Trophy,
-      colorClass: "from-yellow-400 via-yellow-600 to-yellow-900",
+      image: "/images/3d_trophy.jpg",
       glowClass: "bg-yellow-500",
-      iconColorClass: "text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]",
       textColorClass: "text-yellow-500/80 group-hover:text-yellow-400"
     },
     {
       title: t("promo_2_title"),
       subtitle: t("promo_2_sub"),
-      Icon: Shield,
-      colorClass: "from-purple-400 via-purple-600 to-purple-900",
+      image: "/images/3d_shield.jpg",
       glowClass: "bg-purple-500",
-      iconColorClass: "text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]",
       textColorClass: "text-purple-500/80 group-hover:text-purple-400"
     },
     {
       title: t("promo_3_title"),
       subtitle: t("promo_3_sub"),
-      Icon: Target,
-      colorClass: "from-[#00FFA3] via-[#00FFA3]/60 to-[#00FFA3]/20",
+      image: "/images/3d_support.jpg",
       glowClass: "bg-[#00FFA3]",
-      iconColorClass: "text-[#00FFA3] drop-shadow-[0_0_8px_rgba(0,255,163,0.8)]",
       textColorClass: "text-[#00FFA3]/80 group-hover:text-[#00FFA3]"
     }
   ];
@@ -160,15 +154,13 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
                   
-                  <div className="flex flex-row items-center w-full relative z-10 gap-4">
+                  <div className="flex flex-row items-center w-full relative z-10 gap-2 lg:gap-4">
                     <div className="flex-shrink-0 relative">
-                       {/* Rich glowing icon container */}
-                       <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-gradient-to-br ${card.colorClass} p-[1px] shadow-lg group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-shadow duration-500`}>
-                         <div className="w-full h-full bg-[#0B0E14]/90 backdrop-blur-md rounded-2xl flex items-center justify-center relative overflow-hidden group-hover:bg-[#0B0E14]/60 transition-colors duration-500">
+                       {/* Rich glowing 3D icon container */}
+                       <div className="w-20 h-20 lg:w-24 lg:h-24 relative flex items-center justify-center transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500">
                            {/* Icon glow */}
-                           <div className={`absolute inset-0 opacity-40 blur-xl ${card.glowClass} group-hover:opacity-60 transition-opacity duration-500`}></div>
-                           <card.Icon className={`w-6 h-6 lg:w-7 lg:h-7 relative z-10 ${card.iconColorClass} group-hover:scale-110 transition-transform duration-500`} />
-                         </div>
+                           <div className={`absolute inset-0 opacity-40 blur-2xl ${card.glowClass} group-hover:opacity-70 transition-opacity duration-500 rounded-full scale-75`}></div>
+                           <img src={card.image} className="w-full h-full object-contain mix-blend-screen relative z-10" alt={card.title} style={{ filter: 'brightness(1.3) contrast(1.2)' }} />
                        </div>
                     </div>
 
