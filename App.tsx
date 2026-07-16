@@ -226,9 +226,7 @@ const AppContent: React.FC = () => {
     window.addEventListener('internal-navigate', handleInternalNavigate as EventListener);
     
     const handleOpenSupportChat = () => {
-      // Open mobile chat overlay for all screens when clicked from sidebar if !siteUser, else normal toggle
-      const member = localStorage.getItem('site_current_member');
-      if (!member) {
+      if (window.innerWidth < 1280) {
          setIsMobileChatOpen(true);
       } else {
          setIsChatOpen(prev => !prev);
@@ -2423,7 +2421,7 @@ const AppContent: React.FC = () => {
           </aside>
 
           {/* Gamdom-style Floating Action Buttons (Desktop Only) */}
-          {!isChatOpen && siteUser && view !== 'home' && (
+          {!isChatOpen && (
             <div className="hidden xl:flex fixed bottom-6 right-6 flex-col gap-2 z-50">
               <button 
                 onClick={() => setIsChatOpen(true)}
@@ -2453,7 +2451,7 @@ const AppContent: React.FC = () => {
       )}
 
       {/* Gamdom-style Floating Action Buttons (Mobile Only) */}
-      {view !== 'admin' && view !== 'home' && !showLiveScoreModal && isMobile && !isMobileChatOpen && siteUser && (
+      {view !== 'admin' && !showLiveScoreModal && isMobile && !isMobileChatOpen && (
         <div className="flex xl:hidden fixed bottom-20 right-4 flex-col gap-2 z-50">
           <button 
             onClick={() => setIsMobileChatOpen(true)}
@@ -2474,7 +2472,7 @@ const AppContent: React.FC = () => {
       )}
 
       {/* MOBİL DRAWER - SOHBET */}
-      {isMobileChatOpen && siteUser && (
+      {isMobileChatOpen && (
         <div className="fixed inset-0 z-[110] flex xl:hidden justify-end">
           <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileChatOpen(false)}></div>
           <aside className="w-[90%] sm:w-[380px] max-w-[420px] bg-[#111317] border-l border-[#1A1D24] h-full shadow-[-10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-right">

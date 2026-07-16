@@ -165,120 +165,231 @@ const ScoreBadge: React.FC<{ score: number; show: boolean }> = ({ score, show })
 };
 
 // ─────────────────────────── MAIN GAME VIEW ──────────────────────────────
+interface PlayerHand {
+    id: number;
+    cards: Card[];
+    bet: number;
+    status: 'waiting' | 'playing' | 'stand' | 'bust' | 'blackjack' | 'settled';
+    result: 'win' | 'lose' | 'push' | 'blackjack' | 'bust' | null;
+    payout: number;
+}
+
 export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired, onNavigate }: any) {
-    const [betAmount, setBetAmount] = useState(0);
+    const [selectedChip, setSelectedChip] = useState<number>(10);
     const [deck, setDeck] = useState<Card[]>([]);
-    const [playerHand, setPlayerHand] = useState<Card[]>([]);
+    
+    const initialHands: PlayerHand[] = [
+        { id: 0, cards: [], bet: 0, status: 'waiting', result: null, payout: 0 },
+        { id: 1, cards: [], bet: 0, status: 'waiting', result: null, payout: 0 },
+        { id: 2, cards: [], bet: 0, status: 'waiting', result: null, payout: 0 }
+    ];
+    const [hands, setHands] = useState<PlayerHand[]>(initialHands);
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
-    const [gameState, setGameState] = useState<'idle' | 'playing' | 'dealerTurn' | 'ended'>('idle');
-    const [result, setResult] = useState<'win' | 'lose' | 'push' | 'blackjack' | 'bust' | null>(null);
-    const [payout, setPayout] = useState(0);
+    
+    const [gameState, setGameState] = useState<'betting' | 'playing' | 'dealerTurn' | 'ended'>('betting');
+    const [activeHandIndex, setActiveHandIndex] = useState<number>(-1);
+    
+    // Derived total bet
+    const totalBet = hands.reduce((sum, h) => sum + h.bet, 0);
+    const totalPayout = hands.reduce((sum, h) => sum + h.payout, 0);
 
     useEffect(() => { setDeck(shuffleDeck(buildDeck())); }, []);
 
     const handleNewGame = () => {
-        setGameState('idle');
-        setPlayerHand([]);
+        setGameState('betting');
+        setHands(hands.map(h => ({ ...h, cards: [], status: 'waiting', result: null, payout: 0 })));
         setDealerHand([]);
-        setResult(null);
-        setPayout(0);
+        setActiveHandIndex(-1);
     };
 
-    const handleAddBet = (amount: number) => {
+    const handleClearBets = () => {
+        if (gameState !== 'betting') return;
+        setHands(initialHands);
+    };
+
+    const handleAddBetToSeat = (seatIndex: number) => {
         if (!siteUser) return onAuthRequired();
-        if (gameState !== 'idle' && gameState !== 'ended') return;
-        if (gameState === 'ended') {
-            handleNewGame();
-            setBetAmount(amount);
-        } else {
-            setBetAmount(prev => prev + amount);
-        }
+        if (gameState !== 'betting') return;
+        
+        if (siteUser.balance < selectedChip) { alert("Yetersiz bakiye!"); return; }
+
+        setHands(prev => {
+            const newHands = [...prev];
+            newHands[seatIndex].bet += selectedChip;
+            return newHands;
+        });
     };
 
     const handleDeal = () => {
         if (!siteUser) return onAuthRequired();
-        if (betAmount <= 0) return;
-        if (siteUser.balance < betAmount) { alert("Yetersiz bakiye!"); return; }
-
-        const newBalance = siteUser.balance - betAmount;
+        if (totalBet <= 0) return;
+        
+        // Deduct total bet
+        if (siteUser.balance < totalBet) { alert("Yetersiz bakiye!"); return; }
+        const newBalance = siteUser.balance - totalBet;
         setSiteUser({ ...siteUser, balance: newBalance });
         if (!siteUser.id.toString().startsWith('guest_')) {
             supabase.from('members').update({ balance: newBalance }).eq('id', siteUser.id).then();
         }
 
         let currentDeck = [...deck];
-        if (currentDeck.length < 20) currentDeck = shuffleDeck(buildDeck());
+        if (currentDeck.length < 30) currentDeck = shuffleDeck(buildDeck());
 
-        const pHand = [currentDeck.pop()!, currentDeck.pop()!];
+        // Deal cards to active hands
+        const newHands = [...hands];
+        for (let i = 0; i < 2; i++) {
+            newHands.forEach(h => {
+                if (h.bet > 0) h.cards.push(currentDeck.pop()!);
+            });
+        }
+        
+        // Deal to dealer
         const dHand = [currentDeck.pop()!, { ...currentDeck.pop()!, hidden: true }];
 
         setDeck(currentDeck);
-        setPlayerHand(pHand);
         setDealerHand(dHand);
         setGameState('playing');
-        setResult(null);
-        setPayout(0);
 
-        if (isBlackjack(pHand)) {
-            if (isBlackjack(dHand)) {
-                dHand[1].hidden = false;
-                setDealerHand([...dHand]);
-                setTimeout(() => settleGame(betAmount, 'push', newBalance + betAmount), 1200);
-            } else {
-                dHand[1].hidden = false;
-                setDealerHand([...dHand]);
-                const win = betAmount * 2.5;
-                setTimeout(() => settleGame(win, 'blackjack', newBalance + win), 1200);
+        // Check for immediate blackjacks and set initial statuses
+        let firstActive = -1;
+        let anyPlaying = false;
+        let instantWinBalance = newBalance;
+
+        newHands.forEach((h, i) => {
+            if (h.bet > 0) {
+                if (isBlackjack(h.cards)) {
+                    h.status = 'blackjack';
+                    // We don't settle immediately if dealer might have blackjack, but for simplicity here we assume standard US rules without insurance.
+                    // Actually, let's wait to settle until dealer turn to check for push.
+                } else {
+                    h.status = 'playing';
+                    if (firstActive === -1) firstActive = i;
+                    anyPlaying = true;
+                }
             }
+        });
+
+        setHands(newHands);
+
+        if (anyPlaying) {
+            setActiveHandIndex(firstActive);
+        } else {
+            // All active hands got blackjack
+            setTimeout(() => processDealerTurn(currentDeck, newHands, dHand, newBalance), 1000);
+        }
+    };
+
+    const advanceHand = (currentHands: PlayerHand[], currDeck: Card[]) => {
+        let next = -1;
+        for (let i = activeHandIndex + 1; i < currentHands.length; i++) {
+            if (currentHands[i].status === 'playing') {
+                next = i;
+                break;
+            }
+        }
+        if (next !== -1) {
+            setActiveHandIndex(next);
+        } else {
+            setActiveHandIndex(-1);
+            setGameState('dealerTurn');
+            setTimeout(() => processDealerTurn(currDeck, currentHands, dealerHand, siteUser.balance), 500);
         }
     };
 
     const handleHit = () => {
-        if (gameState !== 'playing') return;
-        const currentDeck = [...deck];
-        const newHand = [...playerHand, currentDeck.pop()!];
+        if (gameState !== 'playing' || activeHandIndex === -1) return;
+        
+        let currentDeck = [...deck];
+        const newHands = [...hands];
+        const activeHand = newHands[activeHandIndex];
+        
+        activeHand.cards.push(currentDeck.pop()!);
         setDeck(currentDeck);
-        setPlayerHand(newHand);
 
-        if (isBust(newHand)) {
-            const dHand = [...dealerHand];
-            dHand[1].hidden = false;
-            setDealerHand(dHand);
-            setTimeout(() => settleGame(0, 'bust', siteUser.balance), 800);
+        if (isBust(activeHand.cards)) {
+            activeHand.status = 'bust';
+            setHands(newHands);
+            setTimeout(() => advanceHand(newHands, currentDeck), 600);
+        } else {
+            setHands(newHands);
         }
     };
 
     const handleStand = () => {
-        if (gameState !== 'playing') return;
-        setGameState('dealerTurn');
-
-        let currentDeck = [...deck];
-        let dHand = [...dealerHand];
-        dHand[1].hidden = false; 
-
-        let dTotal = handTotal(dHand);
-        while (dTotal < 17) {
-            dHand.push(currentDeck.pop()!);
-            dTotal = handTotal(dHand);
-        }
-
-        setDeck(currentDeck);
-        setDealerHand(dHand);
-        const pTotal = handTotal(playerHand);
-
-        setTimeout(() => {
-            if (isBust(dHand)) settleGame(betAmount * 2, 'win', siteUser.balance + betAmount * 2);
-            else if (dTotal > pTotal) settleGame(0, 'lose', siteUser.balance);
-            else if (pTotal > dTotal) settleGame(betAmount * 2, 'win', siteUser.balance + betAmount * 2);
-            else settleGame(betAmount, 'push', siteUser.balance + betAmount);
-        }, dHand.length * 200 + 500);
+        if (gameState !== 'playing' || activeHandIndex === -1) return;
+        const newHands = [...hands];
+        newHands[activeHandIndex].status = 'stand';
+        setHands(newHands);
+        advanceHand(newHands, deck);
     };
 
-    const settleGame = (winAmount: number, finalResult: any, finalBalance: number) => {
-        setPayout(winAmount);
-        setResult(finalResult);
+    const processDealerTurn = (currDeck: Card[], currHands: PlayerHand[], dHand: Card[], currentBalance: number) => {
+        setGameState('dealerTurn');
+        dHand[1].hidden = false;
+        
+        // Only draw if there's at least one hand that didn't bust and isn't blackjack
+        const needsDraw = currHands.some(h => h.bet > 0 && h.status === 'stand');
+        
+        let dTotal = handTotal(dHand);
+        if (needsDraw) {
+            while (dTotal < 17) {
+                dHand.push(currDeck.pop()!);
+                dTotal = handTotal(dHand);
+            }
+        }
+        
+        setDeck(currDeck);
+        setDealerHand([...dHand]);
+
+        const dealerBusted = isBust(dHand);
+        const dealerBJ = isBlackjack(dHand);
+        
+        let totalWin = 0;
+
+        currHands.forEach(h => {
+            if (h.bet === 0) return;
+            
+            h.status = 'settled';
+            const pTotal = handTotal(h.cards);
+            const pBJ = isBlackjack(h.cards);
+
+            if (h.cards.length > 0 && isBust(h.cards)) {
+                h.result = 'bust';
+                h.payout = 0;
+            } else if (pBJ) {
+                if (dealerBJ) {
+                    h.result = 'push';
+                    h.payout = h.bet;
+                } else {
+                    h.result = 'blackjack';
+                    h.payout = h.bet * 2.5;
+                }
+            } else if (dealerBJ) {
+                h.result = 'lose';
+                h.payout = 0;
+            } else if (dealerBusted) {
+                h.result = 'win';
+                h.payout = h.bet * 2;
+            } else {
+                if (pTotal > dTotal) {
+                    h.result = 'win';
+                    h.payout = h.bet * 2;
+                } else if (pTotal < dTotal) {
+                    h.result = 'lose';
+                    h.payout = 0;
+                } else {
+                    h.result = 'push';
+                    h.payout = h.bet;
+                }
+            }
+            totalWin += h.payout;
+        });
+
+        setHands([...currHands]);
         setGameState('ended');
+        
         if (siteUser) {
+            const finalBalance = currentBalance + totalWin;
             setSiteUser({ ...siteUser, balance: finalBalance });
             if (!siteUser.id.toString().startsWith('guest_')) {
                 supabase.from('members').update({ balance: finalBalance }).eq('id', siteUser.id).then();
@@ -287,73 +398,85 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
     };
 
     const leftControls = (
-        <div className="flex items-center gap-2 md:gap-3 justify-center md:justify-start w-full">
-            <CasinoChip value={10} onClick={() => handleAddBet(10)} />
-            <CasinoChip value={50} onClick={() => handleAddBet(50)} />
-            <CasinoChip value={100} onClick={() => handleAddBet(100)} />
-            
-            {(gameState === 'idle' || gameState === 'ended') && betAmount > 0 && (
-                <button onClick={() => setBetAmount(0)} className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/40 font-black text-[10px] md:text-xs border border-red-500/50 transition-colors flex items-center justify-center ml-1 md:ml-2">
-                    X
-                </button>
-            )}
+        <div className="flex flex-col items-center md:items-start gap-1 justify-center w-full">
+            <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1 text-center md:text-left w-full">Çip Seç & Masaya Tıkla</span>
+            <div className="flex items-center gap-2 justify-center md:justify-start w-full">
+                {[10, 50, 100].map(val => (
+                    <CasinoChip 
+                        key={val} 
+                        value={val} 
+                        isSelected={selectedChip === val}
+                        onClick={() => setSelectedChip(val)} 
+                    />
+                ))}
+                
+                {(gameState === 'betting') && totalBet > 0 && (
+                    <button onClick={handleClearBets} className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/40 font-black text-[10px] md:text-xs border border-red-500/50 transition-colors flex items-center justify-center ml-1 md:ml-2">
+                        X
+                    </button>
+                )}
+            </div>
         </div>
     );
 
     const centerControls = (
         <div className="flex items-center gap-2 md:gap-4 px-2 md:px-4 justify-center shrink-0">
-            <button 
-                disabled={betAmount === 0 || (gameState !== 'idle' && gameState !== 'ended')}
-                onClick={handleDeal}
-                className={`w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full flex flex-col items-center justify-center gap-0.5 md:gap-1 transition-all shadow-lg border-2 ${
-                    betAmount > 0 && (gameState === 'idle' || gameState === 'ended') 
-                    ? 'bg-gradient-to-b from-gray-200 to-gray-400 border-white hover:scale-105 active:scale-95 text-black' 
-                    : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
-                }`}
-            >
-                <span className="text-xl md:text-2xl">♠</span>
-                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">Deal</span>
-            </button>
+            {gameState === 'betting' || gameState === 'ended' ? (
+                <button 
+                    disabled={totalBet === 0 && gameState === 'betting'}
+                    onClick={gameState === 'ended' ? handleNewGame : handleDeal}
+                    className={`w-[70px] h-[70px] md:w-[80px] md:h-[80px] rounded-full flex flex-col items-center justify-center gap-1 transition-all shadow-lg border-2 ${
+                        (totalBet > 0 || gameState === 'ended')
+                        ? 'bg-gradient-to-b from-gray-200 to-gray-400 border-white hover:scale-105 active:scale-95 text-black' 
+                        : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
+                    }`}
+                >
+                    <span className="text-2xl md:text-3xl">{gameState === 'ended' ? '↺' : '♠'}</span>
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-wider">{gameState === 'ended' ? 'New' : 'Deal'}</span>
+                </button>
+            ) : (
+                <>
+                    <button 
+                        disabled={gameState !== 'playing' || activeHandIndex === -1}
+                        onClick={handleHit}
+                        className={`w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full flex flex-col items-center justify-center gap-0.5 md:gap-1 transition-all shadow-lg border-2 ${
+                            gameState === 'playing' 
+                            ? 'bg-gradient-to-b from-emerald-500 to-emerald-700 border-emerald-300 hover:scale-105 active:scale-95 text-white' 
+                            : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
+                        }`}
+                    >
+                        <span className="text-xl md:text-2xl">✋</span>
+                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">Hit</span>
+                    </button>
 
-            <button 
-                disabled={gameState !== 'playing'}
-                onClick={handleHit}
-                className={`w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full flex flex-col items-center justify-center gap-0.5 md:gap-1 transition-all shadow-lg border-2 ${
-                    gameState === 'playing' 
-                    ? 'bg-gradient-to-b from-emerald-500 to-emerald-700 border-emerald-300 hover:scale-105 active:scale-95 text-white' 
-                    : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
-                }`}
-            >
-                <span className="text-xl md:text-2xl">✋</span>
-                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">Hit</span>
-            </button>
-
-            <button 
-                disabled={gameState !== 'playing'}
-                onClick={handleStand}
-                className={`w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full flex flex-col items-center justify-center gap-0.5 md:gap-1 transition-all shadow-lg border-2 ${
-                    gameState === 'playing' 
-                    ? 'bg-gradient-to-b from-rose-500 to-rose-700 border-rose-300 hover:scale-105 active:scale-95 text-white' 
-                    : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
-                }`}
-            >
-                <span className="text-xl md:text-2xl">🛑</span>
-                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">Stand</span>
-            </button>
+                    <button 
+                        disabled={gameState !== 'playing' || activeHandIndex === -1}
+                        onClick={handleStand}
+                        className={`w-[60px] h-[60px] md:w-[70px] md:h-[70px] rounded-full flex flex-col items-center justify-center gap-0.5 md:gap-1 transition-all shadow-lg border-2 ${
+                            gameState === 'playing' 
+                            ? 'bg-gradient-to-b from-rose-500 to-rose-700 border-rose-300 hover:scale-105 active:scale-95 text-white' 
+                            : 'bg-gray-800/50 border-gray-600/50 opacity-50 cursor-not-allowed text-gray-400'
+                        }`}
+                    >
+                        <span className="text-xl md:text-2xl">🛑</span>
+                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">Stand</span>
+                    </button>
+                </>
+            )}
         </div>
     );
 
     const rightControls = (
-        <div className="flex flex-col items-end flex-1 justify-end">
+        <div className="flex flex-col items-end flex-1 justify-center w-full">
             <span className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Bakiye</span>
-            <div className="bg-black/80 px-5 py-2.5 rounded-full border border-[#ffd700]/30 shadow-inner flex items-center gap-2">
-                <span className="text-[#ffd700] font-black text-lg">
+            <div className="bg-black/80 px-4 py-2 md:px-5 md:py-2.5 rounded-full border border-[#ffd700]/30 shadow-inner flex items-center gap-2">
+                <span className="text-[#ffd700] font-black text-sm md:text-lg">
                     ${siteUser ? siteUser.balance.toFixed(2) : '0.00'}
                 </span>
             </div>
-            {betAmount > 0 && (
-                <span className="text-white text-[10px] font-bold mt-2 bg-white/10 px-2 py-0.5 rounded-full absolute -top-8 right-6">
-                    Bet: ${betAmount.toFixed(2)}
+            {totalBet > 0 && (
+                <span className="text-white text-[10px] font-bold mt-2 bg-white/10 px-2 py-0.5 rounded-full">
+                    Total Bet: ${totalBet.toFixed(2)}
                 </span>
             )}
         </div>
@@ -361,7 +484,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
 
     return (
         <OriginalGameContainer 
-            title="Blackjack PRO" 
+            title="Blackjack PRO Multi-hand" 
             siteUser={siteUser}
             onNavigate={onNavigate}
             leftControls={leftControls}
@@ -370,7 +493,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
         >
             
             {/* Dealer Area */}
-            <div className="w-full flex flex-col items-center mb-16 relative">
+            <div className="w-full flex flex-col items-center mb-8 relative">
                 <ScoreBadge score={handTotal(dealerHand)} show={dealerHand.length > 0 && !dealerHand[1]?.hidden} />
                 <div className="flex justify-center min-h-[140px] relative pl-14">
                     {dealerHand.map((card, i) => (
@@ -379,66 +502,86 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                 </div>
             </div>
 
-            {/* Player Area & Betting Circle */}
-            <div className="w-full flex flex-col items-center relative">
-                <div className="absolute top-[-30px] w-24 h-24 rounded-full border border-dashed border-[#ffd700]/30 flex items-center justify-center bg-[#ffd700]/5 z-0">
-                    <span className="text-[#ffd700]/30 text-[9px] uppercase font-bold tracking-widest absolute top-2">Place Bet</span>
-                    {betAmount > 0 && (
-                        <div className="absolute inset-0 flex items-center justify-center animate-fade-in-up pointer-events-none mt-4">
-                            <CasinoChip value={betAmount} stacked={true} />
+            {/* Player Multi-hand Area */}
+            <div className="w-full flex justify-center gap-4 md:gap-12 relative px-2">
+                {hands.map((hand, i) => (
+                    <div key={hand.id} className={`flex flex-col items-center relative transition-all duration-300 ${activeHandIndex === i ? 'scale-110 z-20' : 'scale-90 opacity-80 z-10'}`}>
+                        
+                        {/* Highlight for Active Hand */}
+                        {activeHandIndex === i && (
+                            <div className="absolute -inset-4 border-2 border-[#ffd700]/50 rounded-3xl bg-[#ffd700]/5 animate-pulse -z-10"></div>
+                        )}
+
+                        {/* Hand Score */}
+                        <div className="mb-2 h-6">
+                            {hand.cards.length > 0 && (
+                                <div className="bg-black/80 border border-white/20 text-white font-black text-xs px-2 py-0.5 rounded shadow-lg backdrop-blur-sm">
+                                    {handTotal(hand.cards)}
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
-                <ScoreBadge score={handTotal(playerHand)} show={playerHand.length > 0} />
-                <div className="flex justify-center min-h-[140px] relative pl-14 z-10">
-                    {playerHand.map((card, i) => (
-                        <CardUI key={card.id} card={card} index={i} />
-                    ))}
-                </div>
+
+                        {/* Hand Cards */}
+                        <div className="flex justify-center min-h-[120px] md:min-h-[140px] relative pl-8 md:pl-14 z-10 w-full mb-4">
+                            {hand.cards.map((card, idx) => (
+                                <CardUI key={card.id} card={card} index={idx} />
+                            ))}
+                        </div>
+
+                        {/* Betting Circle */}
+                        <div 
+                            className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full border-2 ${hand.bet > 0 ? 'border-[#ffd700]/50' : 'border-dashed border-white/20'} flex items-center justify-center bg-black/40 z-0 cursor-pointer hover:bg-white/10 transition-colors`}
+                            onClick={() => handleAddBetToSeat(i)}
+                        >
+                            {hand.bet === 0 && <span className="text-white/30 text-[8px] md:text-[10px] uppercase font-bold tracking-widest text-center px-2">Place<br/>Bet</span>}
+                            {hand.bet > 0 && (
+                                <div className="absolute inset-0 flex items-center justify-center animate-fade-in-up pointer-events-none mt-2">
+                                    <CasinoChip value={hand.bet} stacked={true} />
+                                </div>
+                            )}
+                        </div>
+                        
+                        {/* Result Badge */}
+                        <div className="h-8 mt-2 flex items-center justify-center">
+                            {hand.result && (
+                                <div className={`px-3 py-1 rounded border text-[10px] md:text-xs font-black uppercase tracking-widest ${
+                                    hand.result === 'win' || hand.result === 'blackjack' ? 'bg-[#ffd700]/20 text-[#ffd700] border-[#ffd700]/50' :
+                                    hand.result === 'push' ? 'bg-gray-500/20 text-gray-300 border-gray-500/50' :
+                                    'bg-red-500/20 text-red-400 border-red-500/50'
+                                }`}>
+                                    {hand.result}
+                                    {hand.payout > 0 && <span className="ml-1">+${hand.payout}</span>}
+                                </div>
+                            )}
+                        </div>
+                        
+                    </div>
+                ))}
             </div>
 
-            {/* Cinematic Banner */}
-            {gameState === 'ended' && result && (
+            {/* Cinematic Banner for Big Wins */}
+            {gameState === 'ended' && totalPayout > totalBet && (
                 <div 
-                    className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[4px] animate-fade-in cursor-pointer"
-                    onClick={handleNewGame}
+                    className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[4px] animate-fade-in pointer-events-none"
                 >
-                    <div className={`px-16 py-10 rounded-[2rem] border-2 shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center transform transition-transform ${
-                        result === 'win' || result === 'blackjack' ? 'bg-black/60 border-[#ffd700]/50 shadow-[#ffd700]/20' : 
-                        result === 'push' ? 'bg-black/60 border-gray-400/50 shadow-gray-500/20' : 
-                        'bg-black/80 border-red-500/50 shadow-red-500/20'
-                    }`}>
-                        
-                        {(result === 'win' || result === 'blackjack') && (
-                            <div className="absolute inset-0 opacity-80 pointer-events-none overflow-hidden rounded-[2rem]">
-                                {[...Array(20)].map((_, i) => (
-                                    <div key={i} className="absolute top-[-20%] w-3 h-8 bg-green-500" 
-                                         style={{ left: `${Math.random()*100}%`, animation: `confetti-fall ${1 + Math.random()}s linear infinite` }}></div>
-                                ))}
-                                {[...Array(20)].map((_, i) => (
-                                    <div key={i} className="absolute top-[-20%] w-4 h-4 rounded-full bg-[#ffd700]" 
-                                         style={{ left: `${Math.random()*100}%`, animation: `confetti-fall ${1.5 + Math.random()}s linear infinite` }}></div>
-                                ))}
-                            </div>
-                        )}
+                    <div className="px-16 py-10 rounded-[2rem] border-2 shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center bg-black/60 border-[#ffd700]/50 shadow-[#ffd700]/20">
+                        <div className="absolute inset-0 opacity-80 pointer-events-none overflow-hidden rounded-[2rem]">
+                            {[...Array(20)].map((_, i) => (
+                                <div key={i} className="absolute top-[-20%] w-3 h-8 bg-green-500" 
+                                     style={{ left: `${Math.random()*100}%`, animation: `confetti-fall ${1 + Math.random()}s linear infinite` }}></div>
+                            ))}
+                            {[...Array(20)].map((_, i) => (
+                                <div key={i} className="absolute top-[-20%] w-4 h-4 rounded-full bg-[#ffd700]" 
+                                     style={{ left: `${Math.random()*100}%`, animation: `confetti-fall ${1.5 + Math.random()}s linear infinite` }}></div>
+                            ))}
+                        </div>
 
-                        <h2 className={`text-5xl md:text-8xl font-black uppercase tracking-tighter mb-1 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] ${
-                            result === 'win' || result === 'blackjack' ? 'text-transparent bg-clip-text bg-gradient-to-b from-[#ffd700] to-[#b8860b]' : 
-                            result === 'push' ? 'text-gray-300' : 'text-transparent bg-clip-text bg-gradient-to-b from-red-400 to-red-700'
-                        }`}>
-                            {result === 'win' ? 'YOU WIN' : 
-                             result === 'blackjack' ? 'BLACKJACK' :
-                             result === 'push' ? 'PUSH' :
-                             result === 'bust' ? 'BUST' : 'DEALER WINS'}
+                        <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-1 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] text-transparent bg-clip-text bg-gradient-to-b from-[#ffd700] to-[#b8860b]">
+                            YOU WIN
                         </h2>
                         
-                        {payout > 0 && (
-                            <div className="text-3xl md:text-5xl text-emerald-400 font-black tracking-widest mt-2 drop-shadow-[0_0_20px_rgba(52,211,153,0.6)]">
-                                +${payout.toFixed(2)}
-                            </div>
-                        )}
-                        <div className="text-white/40 text-xs font-bold uppercase tracking-widest mt-8 animate-pulse">
-                            Tap anywhere to continue
+                        <div className="text-3xl md:text-5xl text-emerald-400 font-black tracking-widest mt-2 drop-shadow-[0_0_20px_rgba(52,211,153,0.6)]">
+                            +${totalPayout.toFixed(2)}
                         </div>
                     </div>
                 </div>
