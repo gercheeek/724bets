@@ -2,14 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { Timer, Gift, Sparkles, ArrowRight } from 'lucide-react';
 
 const LimitedTimePromo = () => {
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(() => {
+    const savedEndTime = localStorage.getItem('promoEndTime');
+    if (savedEndTime) {
+      const remaining = Math.floor((parseInt(savedEndTime) - Date.now()) / 1000);
+      return remaining > 0 ? remaining : 0;
+    }
+    const newEndTime = Date.now() + 300 * 1000; // 5 minutes
+    localStorage.setItem('promoEndTime', newEndTime.toString());
+    return 300;
+  });
+  
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    if (timeLeft <= 0) return;
+    // Hide if already expired on mount
+    if (localStorage.getItem('promoExpired') === 'true') {
+      setIsVisible(false);
+      return;
+    }
+
+    if (timeLeft <= 0) {
+      localStorage.setItem('promoExpired', 'true');
+      setIsVisible(false);
+      return;
+    }
     
     const interval = setInterval(() => {
-      setTimeLeft(prev => prev - 1);
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          localStorage.setItem('promoExpired', 'true');
+          setIsVisible(false);
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
     
     return () => clearInterval(interval);
