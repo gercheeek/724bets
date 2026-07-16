@@ -23,16 +23,18 @@ export default function OriginalGameContainer({
     return (
         <div className="w-full relative flex flex-col bg-[#050505] overflow-hidden font-sans" style={{ height: 'calc(100dvh - var(--header-height, 60px))' }}>
             
-            {/* ── UNIFIED CORPORATE BACKGROUND (Onyx & Gold) ── */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                {/* Noise Texture */}
-                <div className="absolute inset-0 opacity-[0.15]" 
-                     style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}>
+            {/* ── BACKGROUND LAYER ── */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                {/* Base color / Anthracite Radial Gradient */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(30,41,59,1)_0%,rgba(15,23,42,1)_100%)]"></div>
+                {/* Cyber Grid Texture */}
+                <div className="absolute inset-0 opacity-5"
+                     style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
                 </div>
                 {/* Vignette */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.9)_100%)]"></div>
-                {/* Subtle Gold Center Glow */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#ffd700]/5 blur-[120px] rounded-[100%]"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.7)_100%)]"></div>
+                {/* Subtle Electric Blue Center Glow */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#3B82F6]/10 blur-[120px] rounded-[100%]"></div>
             </div>
 
             {/* ── 724BETS CORPORATE WATERMARK ── */}
