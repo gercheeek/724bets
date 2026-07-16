@@ -223,7 +223,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             
             {/* Kumarhane Card */}
             <div 
-              onClick={() => onViewChange('originals')}
+              onClick={() => onViewChange('blackjack')}
               className="relative w-full h-1/2 cursor-pointer group bg-[#0D1017] flex flex-row items-center justify-between p-5 lg:p-8 z-20 overflow-hidden border-b border-white/5 shadow-[inset_0_0_40px_rgba(147,51,234,0.05)] hover:shadow-[inset_0_0_80px_rgba(147,51,234,0.15)] transition-shadow duration-500"
             >
               {/* Radial Glow Behind Text */}
