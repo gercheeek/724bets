@@ -4,6 +4,7 @@ import LiveWinsTicker from './LiveWinsTicker';
 import LiveGamesSlider from './LiveGamesSlider';
 import LiveBetsTable from './LiveBetsTable';
 import RacesAndGiveaways from './RacesAndGiveaways';
+import NewGamesSlider from './NewGamesSlider';
 import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
 import WorldCupTeaser from './WorldCupTeaser';
@@ -262,6 +263,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
             
           </div>
+
+          {/* New Games Slider for Members */}
+          <NewGamesSlider />
         </div>
         </>
       ) : (
@@ -334,6 +338,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
               </div>
             </div>
+
+            {/* New Games Slider for Guests */}
+            <NewGamesSlider />
         </>
       )}
 
