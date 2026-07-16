@@ -52,7 +52,7 @@ export default function FomoNotifications() {
 
   return (
     <div 
-      className="fixed bottom-20 md:bottom-6 left-4 md:left-auto md:right-6 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300 max-w-[280px] w-auto"
+      className="fixed bottom-20 md:bottom-6 left-4 md:left-6 md:right-auto z-50 animate-in slide-in-from-bottom-5 fade-in duration-300 max-w-[280px] w-auto"
     >
       <div className="bg-[#13161c]/90 backdrop-blur-md border border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.6)] rounded-full pl-2 pr-4 py-1.5 flex items-center gap-3 relative cursor-pointer hover:bg-[#1a1d24] transition-colors">
         

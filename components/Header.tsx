@@ -571,15 +571,6 @@ const Header: React.FC<HeaderProps> = ({
                     {t('login')}
                   </button>
                   <button
-                    onClick={onSupportClick}
-                    className="hidden md:flex bg-[#1C2028] hover:bg-[#252A34] text-white rounded-lg transition-colors border border-white/5 items-center justify-center relative"
-                    title="Canlı Sohbet"
-                    style={{ height: '40px', width: '40px' }}
-                  >
-                    <MessageSquare className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
-                  </button>
-
-                  <button
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
                     className="flex items-center justify-center bg-[#10B981] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-[40px] px-6 rounded-lg transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
