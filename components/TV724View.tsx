@@ -12,13 +12,13 @@ import {
 // ─── STATIC DATA ─────────────────────────────────────────────────────────────
 const HERO_SLIDES = [
     { id: 'live', tag: 'CANLI YAYIN', tagColor: '#ef4444', title: 'TÜRKİYE\'NİN İLK KUMAR TV\'Sİ', subtitle: '7/24 Canlı Bahis & Spor Analizi', cta: 'YAYINI İZLE', ctaColor: '#ef4444', bg: 'linear-gradient(135deg, #0a0000 0%, #1a0000 40%, #0d0407 100%)', accent: '#ef4444', emoji: '📺', imageUrl: null },
-    { id: 'tournament', tag: 'BÜYÜK TURNUVA', tagColor: '#00FFA3', title: '₺500.000 ÖDÜL HAVUZU', subtitle: 'Özel Turnuvaya Katıl — Her Cuma Çekiliş', cta: 'HEMEN KATIL', ctaColor: '#00FFA3', bg: 'linear-gradient(135deg, #0a0800 0%, #1a1000 40%, #0d0a00 100%)', accent: '#00FFA3', emoji: '🏆', imageUrl: null },
+    { id: 'tournament', tag: 'BÜYÜK TURNUVA', tagColor: '#10B981', title: '₺500.000 ÖDÜL HAVUZU', subtitle: 'Özel Turnuvaya Katıl — Her Cuma Çekiliş', cta: 'HEMEN KATIL', ctaColor: '#10B981', bg: 'linear-gradient(135deg, #0a0800 0%, #1a1000 40%, #0d0a00 100%)', accent: '#10B981', emoji: '🏆', imageUrl: null },
 ];
 
 
 
 const FLASH_EVENTS = [
-    { type: 'bonus', icon: '🎰', title: 'BONUS KODU!', description: 'Bu yayına özel anlık bonus!', code: 'TV724BONUS', reward: '%100 İlk Yatırım Bonusu', color: '#00FFA3', duration: 60 },
+    { type: 'bonus', icon: '🎰', title: 'BONUS KODU!', description: 'Bu yayına özel anlık bonus!', code: 'TV724BONUS', reward: '%100 İlk Yatırım Bonusu', color: '#10B981', duration: 60 },
     { type: 'quiz', icon: '⚡', title: 'FLASH QUIZ!', description: 'Bu yarı kaç gol atılacak?', options: ['0-1 GOL', '2-3 GOL', '4+ GOL'], reward: '200 Coin Kazan!', color: '#00D4FF', duration: 30 },
     { type: 'spin', icon: '🎡', title: 'ŞANS ÇEVİRMECESİ!', description: 'Çarkı çevir, bedava bahis kazan!', reward: 'Bedava Bahis Hakkı', color: '#ADFF2F', duration: 45 },
 ];
@@ -659,14 +659,14 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             }
         }
         if (sourceType === 'video') return <div style={{ width: '100%', height: '100%', background: '#000' }}><video ref={videoRef} src={activeChannel.videoUrl || activeChannel.streamUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
-        if (sourceType === 'iframe') return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{!isIframeLoaded && <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', zIndex: 10 }}><div style={{ width: '32px', height: '32px', border: '2px solid rgba(0, 255, 163,0.3)', borderTopColor: '#00FFA3', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /></div>}<iframe src={activeChannel.iframeUrl || activeChannel.streamUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={() => setIsIframeLoaded(true)} title={activeChannel.name} /></div>;
+        if (sourceType === 'iframe') return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{!isIframeLoaded && <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', zIndex: 10 }}><div style={{ width: '32px', height: '32px', border: '2px solid rgba(0, 255, 163,0.3)', borderTopColor: '#10B981', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /></div>}<iframe src={activeChannel.iframeUrl || activeChannel.streamUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={() => setIsIframeLoaded(true)} title={activeChannel.name} /></div>;
         if (activeChannel.fallbackType === 'video' && activeChannel.fallbackVideoUrl) return <div style={{ width: '100%', height: '100%', background: '#000' }}><video ref={videoRef} src={activeChannel.fallbackVideoUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
         if (activeChannel.fallbackType === 'iframe' && activeChannel.fallbackIframeUrl) return <div style={{ width: '100%', height: '100%', position: 'relative' }}><iframe src={activeChannel.fallbackIframeUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={() => setIsIframeLoaded(true)} title={activeChannel.name} /></div>;
 
         return (
-            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#00FFA3', gap: '12px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
+            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#10B981', gap: '12px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
                 <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(0, 255, 163,0.06)', border: '1px solid rgba(0, 255, 163,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse-slow 3s infinite' }}>
-                    <Tv style={{ width: 24, height: 24, color: '#00FFA3', opacity: 0.8 }} />
+                    <Tv style={{ width: 24, height: 24, color: '#10B981', opacity: 0.8 }} />
                 </div>
                 <p style={{ fontSize: '12px', color: '#6b7280', fontWeight: 600, letterSpacing: '0.5px' }}>YAYIN YAKINDA BAŞLAYACAK</p>
             </div>
@@ -753,7 +753,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 .program-card:hover { border-color:rgba(255,255,255,.15)!important; transform:translateY(-2px); }
                 .chat-input-wrap:focus-within { border-color:rgba(173,255,47,.5)!important; }
                 .odds-btn:hover { filter:brightness(1.15); transform:scale(1.03); }
-                .odds-btn-selected { box-shadow:0 0 0 2px #00FFA3, 0 0 12px rgba(0, 255, 163,.3)!important; }
+                .odds-btn-selected { box-shadow:0 0 0 2px #10B981, 0 0 12px rgba(0, 255, 163,.3)!important; }
                 .section-label { font-size:11px; font-weight:900; color:#6b7280; text-transform:uppercase; letter-spacing:2px; display:flex; align-items:center; gap:8px; }
                 .section-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(255,255,255,.06),transparent); }
 
@@ -864,9 +864,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                         {activeChannel ? (
                                             getStreamEmbed()
                                         ) : (
-                                            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#00FFA3', gap: '16px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
+                                            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#10B981', gap: '16px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
                                                 <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(0, 255, 163, 0.06)', border: '1px solid rgba(0, 255, 163, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse-slow 3s infinite' }}>
-                                                    <Tv style={{ width: 32, height: 32, color: '#00FFA3', opacity: 0.8 }} />
+                                                    <Tv style={{ width: 32, height: 32, color: '#10B981', opacity: 0.8 }} />
                                                 </div>
                                                 <p style={{ fontSize: '15px', color: '#9ca3af', fontWeight: 700, letterSpacing: '0.5px' }}>Lütfen bir kanal veya maç seçiniz</p>
                                             </div>
@@ -879,7 +879,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                 <h2 style={{ fontSize: isMobile ? '20px' : '24px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Heyecanı Kaçırma!</h2>
                                                 <p style={{ fontSize: '13px', color: '#d1d5db', marginBottom: '24px', lineHeight: 1.5 }}>15 saniyelik önizleme süren doldu. Ücretsiz üye ol, tüm canlı yayınlara ve özel sohbet odalarına anında erişim sağla.</p>
                                                 <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-                                                    <button onClick={onLoginRequired} style={{ background: '#00FFA3', color: '#000', fontWeight: 900, padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s' }} className="hover:scale-105">ÜYE GİRİŞİ</button>
+                                                    <button onClick={onLoginRequired} style={{ background: '#10B981', color: '#000', fontWeight: 900, padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s' }} className="hover:scale-105">ÜYE GİRİŞİ</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -912,13 +912,13 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                         ) : (
                             <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(0, 255, 163, 0.3)', borderRadius: isMobile ? '0' : '8px', background: 'rgba(0, 255, 163, 0.02)', gap: '16px', padding: '24px', textAlign: 'center' }}>
                                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(0, 255, 163, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Tv style={{ width: 20, height: 20, color: '#00FFA3' }} />
+                                    <Tv style={{ width: 20, height: 20, color: '#10B981' }} />
                                 </div>
                                 <div>
                                     <h4 style={{ fontSize: '14px', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>Mini Oynatıcı Aktif</h4>
                                     <p style={{ fontSize: '11px', color: '#6b7280' }}>Yayın ekranın sağ alt köşesinde ufak pencerede oynamaya devam ediyor.</p>
                                 </div>
-                                <button onClick={() => setIsMiniPlayer(false)} style={{ background: 'rgba(0, 255, 163, 0.1)', border: '1px solid rgba(0, 255, 163, 0.2)', borderRadius: '8px', color: '#00FFA3', fontSize: '12px', fontWeight: 800, padding: '8px 16px', cursor: 'pointer', transition: 'all 0.2s' }}>Oynatıcıyı Geri Getir</button>
+                                <button onClick={() => setIsMiniPlayer(false)} style={{ background: 'rgba(0, 255, 163, 0.1)', border: '1px solid rgba(0, 255, 163, 0.2)', borderRadius: '8px', color: '#10B981', fontSize: '12px', fontWeight: 800, padding: '8px 16px', cursor: 'pointer', transition: 'all 0.2s' }}>Oynatıcıyı Geri Getir</button>
                             </div>
                         )}
                     </div>
@@ -965,7 +965,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                                     return sortedGroupNames.map(groupName => (
                                         <div key={groupName} style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
-                                            <div style={{ fontSize: '11px', fontWeight: 900, color: '#00FFA3', padding: '6px 4px 2px 4px', borderBottom: '1px solid rgba(0, 255, 163, 0.15)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                            <div style={{ fontSize: '11px', fontWeight: 900, color: '#10B981', padding: '6px 4px 2px 4px', borderBottom: '1px solid rgba(0, 255, 163, 0.15)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                                                 {groupName}
                                             </div>
                                             {groups[groupName].map(s => {
@@ -987,7 +987,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                         }}
                                                         style={{
                                                             background: isActive ? 'linear-gradient(135deg, rgba(0, 255, 163, 0.15), rgba(0, 255, 163, 0.03))' : 'rgba(255,255,255,0.02)',
-                                                            border: '1px solid ' + (isActive ? '#00FFA3' : 'rgba(255,255,255,0.04)'),
+                                                            border: '1px solid ' + (isActive ? '#10B981' : 'rgba(255,255,255,0.04)'),
                                                             borderRadius: isMobile ? '12px' : '8px', padding: isMobile ? '12px 16px' : '10px 12px', cursor: 'pointer', transition: 'all 0.2s ease',
                                                             display: 'flex', alignItems: 'center', gap: '12px', marginBottom: isMobile ? '8px' : '0'
                                                         }}

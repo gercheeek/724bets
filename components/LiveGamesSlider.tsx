@@ -152,7 +152,7 @@ export default function LiveGamesSlider() {
             {/* Top Left Badges */}
             <div className="absolute top-2 left-2 flex flex-col gap-1 items-start z-10">
               {game.isExclusive && (
-                <div className="bg-[#00FFA3] text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider shadow-lg">
+                <div className="bg-[#10B981] text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider shadow-lg">
                   ÖZEL
                 </div>
               )}

@@ -57,10 +57,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       label: 'SENİN İÇİN SEÇİLDİ', 
       icon: <Star className="w-4 h-4 text-zinc-400" />,
       subItems: [
-        { id: 'uefa', label: 'UEFA Avrupa Ligi', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
-        { id: 'wimbledon-w', label: 'Wimbledon Kadınlar Tenisi', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
-        { id: 'wimbledon-m', label: 'Wimbledon Tek Erkekler', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
-        { id: 'conference', label: 'UEFA Conference League', icon: <Globe className="w-4 h-4 text-[#00FFA3]/60" />, view: 'sports' },
+        { id: 'uefa', label: 'UEFA Avrupa Ligi', icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
+        { id: 'wimbledon-w', label: 'Wimbledon Kadınlar Tenisi', icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
+        { id: 'wimbledon-m', label: 'Wimbledon Tek Erkekler', icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
+        { id: 'conference', label: 'UEFA Conference League', icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
       ]
     },
     {
@@ -104,8 +104,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         { id: 'lol', label: 'League of Legends', icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'esports' },
       ]
     },
-    { id: 'analiz', label: '724BETS ANALİZ & CANLI BÜLTEN', icon: <BarChart3 className="w-4 h-4 text-[#00FFA3]" />, view: 'analysis' },
-    { id: 'mobil-bulten', label: 'MOBİL BÜLTEN', icon: <Activity className="w-4 h-4 text-[#00FFA3]" />, view: 'mobile-bulletin' },
+    { id: 'analiz', label: '724BETS ANALİZ & CANLI BÜLTEN', icon: <BarChart3 className="w-4 h-4 text-[#10B981]" />, view: 'analysis' },
+    { id: 'mobil-bulten', label: 'MOBİL BÜLTEN', icon: <Activity className="w-4 h-4 text-[#10B981]" />, view: 'mobile-bulletin' },
     { id: 'at-yarisi', label: 'AT YARIŞI', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
     { id: 'sss', label: 'SSS', icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
     { id: 'kurallar', label: 'BAHİS KURALLARI', icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },
@@ -147,8 +147,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           key={item.id} 
           className={`group mb-2 transition-all duration-300 rounded-lg ${
             item.subItems && isOpenAccordion 
-              ? 'border border-[#00FFA3]/50 shadow-[0_0_15px_rgba(0,255,163,0.15)] bg-[#1A1D24]' 
-              : 'border border-transparent hover:border-[#00FFA3]/30 hover:shadow-[0_0_15px_rgba(0,255,163,0.1)]'
+              ? 'border border-[#10B981]/50 shadow-[0_0_15px_rgba(0,255,163,0.15)] bg-[#1A1D24]' 
+              : 'border border-transparent hover:border-[#10B981]/30 hover:shadow-[0_0_15px_rgba(0,255,163,0.1)]'
           }`}
         >
           <div 
@@ -166,10 +166,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                   item.subItems 
                     ? `bg-[#1A1D24] text-white rounded-t-lg border-b border-white/5` 
                     : isItemActive 
-                      ? 'bg-[#1A253A] text-white border-l-2 border-[#00FFA3]' 
-                      : 'hover:bg-[#00FFA3]/10 hover:text-white text-white/70 border-l-2 border-transparent'
+                      ? 'bg-[#1A253A] text-white border-l-2 border-[#10B981]' 
+                      : 'hover:bg-[#10B981]/10 hover:text-white text-white/70 border-l-2 border-transparent'
                 }`
-              : `flex items-center justify-center w-12 h-12 rounded-xl transition-all mx-auto mb-1 cursor-pointer ${!item.subItems && isItemActive ? 'bg-[#00FFA3] text-black' : 'text-white/70 hover:bg-[#1A253A] hover:text-white'}`
+              : `flex items-center justify-center w-12 h-12 rounded-xl transition-all mx-auto mb-1 cursor-pointer ${!item.subItems && isItemActive ? 'bg-[#10B981] text-black' : 'text-white/70 hover:bg-[#1A253A] hover:text-white'}`
             }
             title={!isOpen ? item.label : undefined}
           >
@@ -204,10 +204,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                     key={sub.id}
                     onClick={() => sub.view && onViewChange(sub.view)}
                     className={`flex items-center gap-3 py-2.5 px-4 cursor-pointer transition-all ${
-                      isSubActive ? 'text-[#00FFA3]' : 'text-zinc-200 hover:text-white hover:bg-[#00FFA3]/10 hover:text-white'
+                      isSubActive ? 'text-[#10B981]' : 'text-zinc-200 hover:text-white hover:bg-[#10B981]/10 hover:text-white'
                     }`}
                   >
-                    <span className={`flex-shrink-0 ${isSubActive ? 'text-[#00FFA3]' : 'text-white/70'}`}>{sub.icon}</span>
+                    <span className={`flex-shrink-0 ${isSubActive ? 'text-[#10B981]' : 'text-white/70'}`}>{sub.icon}</span>
                     <span className="text-[14px] font-bold tracking-wide truncate">
                       {sub.label}
                     </span>
@@ -294,7 +294,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       }}
                       className={`flex flex-col items-center justify-center py-3 rounded-xl transition-all ${
                         isActive 
-                          ? 'bg-[#00FFA3] text-black font-black' 
+                          ? 'bg-[#10B981] text-black font-black' 
                           : 'bg-[#131C28] text-white/70 hover:bg-[#1A253A] hover:text-white font-bold'
                       }`}
                     >
@@ -323,7 +323,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       }}
                       className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all mx-auto ${
                         isActive 
-                          ? 'bg-[#00FFA3] text-black shadow-[0_0_15px_rgba(0,255,163,0.3)]' 
+                          ? 'bg-[#10B981] text-black shadow-[0_0_15px_rgba(0,255,163,0.3)]' 
                           : 'bg-[#131C28] text-white/70 hover:bg-[#1A253A] hover:text-white'
                       }`}
                     >
@@ -343,7 +343,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <div className={`flex flex-col ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div 
                   onClick={() => setIsCasinoOpen(!isCasinoOpen)}
-                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
+                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
                 >
                   <div className="flex items-center gap-3">
                     <Dices className="w-5 h-5 text-white/70 shrink-0" />
@@ -354,10 +354,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                 
                 {isOpen && isCasinoOpen && (
                   <div className="flex flex-col py-1">
-                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
+                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#10B981]/10 hover:text-white text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar</span>
                     </div>
-                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
+                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#10B981]/10 hover:text-white text-[#888] hover:text-zinc-200">
                       <span className="text-[13px] font-medium tracking-wide">Canlı Casino</span>
                     </div>
                   </div>
@@ -368,7 +368,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div 
                   onClick={() => setIsOriginalsOpen(!isOriginalsOpen)}
-                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
+                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
                 >
                   <div className="flex items-center gap-3">
                     <Target className="w-5 h-5 text-white/70 shrink-0" />
@@ -379,9 +379,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                 
                 {isOpen && isOriginalsOpen && (
                   <div className="flex flex-col py-1">
-                    <div onClick={() => onViewChange('originals')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#00FFA3]/10 hover:text-white text-[#888] hover:text-zinc-200">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#00FFA3] shadow-[0_0_8px_rgba(0,255,163,0.8)]" />
-                      <span className="text-[13px] font-bold tracking-wide text-[#00FFA3]">724BETS Originals</span>
+                    <div onClick={() => onViewChange('originals')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#10B981]/10 hover:text-white text-[#888] hover:text-zinc-200">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-[0_0_8px_rgba(0,255,163,0.8)]" />
+                      <span className="text-[13px] font-bold tracking-wide text-[#10B981]">724BETS Originals</span>
                     </div>
                   </div>
                 )}
@@ -389,11 +389,11 @@ const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Block 2: Spor Link */}
               <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div onClick={() => onViewChange('sporx')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                <div onClick={() => onViewChange('sporx')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Activity className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
                   {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">Sporx</span>}
                 </div>
-                <div onClick={() => onViewChange('spor724')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                <div onClick={() => onViewChange('spor724')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Target className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
                   {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">SPOR724</span>}
                 </div>
@@ -403,19 +403,19 @@ const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Block 3: Kodu Kullan etc. */}
               <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div onClick={() => onViewChange('promo')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                <div onClick={() => onViewChange('promo')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Ticket className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Kodu Kullan</span>}
                 </div>
-                <div onClick={() => onViewChange('referral')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                <div onClick={() => onViewChange('referral')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Users className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Arkadaşını Davet Et</span>}
                 </div>
-                <div className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                <div className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <Send className="w-5 h-5 text-white/70 shrink-0" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Telegram</span>}
                 </div>
-                <div className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                <div className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <div className="w-5 h-5 text-white/70 shrink-0 flex items-center justify-center border border-zinc-300 rounded-sm">
                     <span className="text-[10px] font-black leading-none">↓</span>
                   </div>
@@ -429,7 +429,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div 
                   onClick={() => setIsSponsorlukOpen(!isSponsorlukOpen)}
-                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
+                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
                 >
                   <div className="flex items-center gap-3">
                     <Crown className="w-5 h-5 text-white/70 shrink-0" />
@@ -453,12 +453,12 @@ const Sidebar: React.FC<SidebarProps> = ({
               <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
                 <div 
                   onClick={() => window.dispatchEvent(new Event('openSupportChat'))}
-                  className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
+                  className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
                 >
                   <MessageSquare className="w-5 h-5 text-white/70 shrink-0 fill-current" />
                   {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Canlı Destek</span>}
                 </div>
-                <div className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#00FFA3]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                <div className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
                   <div className="flex items-center gap-3">
                     <Globe className="w-5 h-5 text-white/70 shrink-0" />
                     {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Türkçe</span>}

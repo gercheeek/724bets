@@ -48,7 +48,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                 <button
                     onClick={() => setSelectedDate('WEEKLY')}
                     className={`flex flex-col items-center justify-center min-w-[55px] h-[38px] rounded-lg transition-all duration-300 ${selectedDate === 'WEEKLY'
-                        ? 'bg-[#00FFA3] text-black shadow-[0_2px_10px_rgba(0,255,163,0.2)]'
+                        ? 'bg-[#10B981] text-black shadow-[0_2px_10px_rgba(0,255,163,0.2)]'
                         : 'bg-zinc-800/20 text-zinc-500 hover:bg-zinc-800/50 hover:text-white'
                         }`}
                 >
@@ -64,7 +64,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                             key={date}
                             onClick={() => setSelectedDate(date)}
                             className={`flex flex-col items-center justify-center min-w-[55px] h-[38px] rounded-lg transition-all duration-300 ${isSelected
-                                ? 'bg-[#00FFA3] text-black shadow-[0_2px_10px_rgba(0,255,163,0.2)]'
+                                ? 'bg-[#10B981] text-black shadow-[0_2px_10px_rgba(0,255,163,0.2)]'
                                 : 'bg-zinc-800/20 text-zinc-500 hover:bg-zinc-800/50 hover:text-white'
                                 }`}
                         >
@@ -83,7 +83,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                         onClick={() => setSelectedCategory(cat)}
                         className={`px-4 py-2 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all duration-300 shrink-0 ${
                             selectedCategory === cat
-                                ? 'bg-[#00FFA3] text-black shadow-[0_0_10px_rgba(0,255,163,0.15)]'
+                                ? 'bg-[#10B981] text-black shadow-[0_0_10px_rgba(0,255,163,0.15)]'
                                 : 'bg-zinc-800/30 text-zinc-500 hover:bg-zinc-800/60 hover:text-white'
                         }`}
                     >
@@ -113,7 +113,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                     <div className="rounded-lg p-5 pointer-events-none bg-[#1A1D24]" style={{ filter: 'blur(4px)', userSelect: 'none', boxShadow: 'var(--shadow-card)' }}>
                                         <div className="flex items-center justify-between mb-3">
                                             <div className="flex gap-1.5 flex-wrap">
-                                                <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' : isHigh ? 'bg-rose-500/10 text-rose-500' : 'bg-[#00FFA3]/10 text-[#00FFA3]'}`}>
+                                                <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' : isHigh ? 'bg-rose-500/10 text-rose-500' : 'bg-[#10B981]/10 text-[#10B981]'}`}>
                                                     {isLow ? '🛡 BANKO' : isHigh ? '🔥 YÜKSEK RİSK' : '⚡ DEĞER ORAN'}
                                                 </div>
                                                 {coupon.category && (
@@ -127,20 +127,20 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                             {coupon.matches.slice(0, 3).map((m, i) => (
                                                 <div key={i} className="flex items-center justify-between rounded-lg p-3 bg-[#22262F]">
                                                     <span className="text-xs font-black truncate" style={{ color: 'var(--text-primary)' }}>{m.homeTeam} - {m.awayTeam}</span>
-                                                    <span className="text-[#00FFA3] text-xs font-black ml-2">{m.odd}</span>
+                                                    <span className="text-[#10B981] text-xs font-black ml-2">{m.odd}</span>
                                                 </div>
                                             ))}
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span style={{ color: 'var(--text-dim)', fontSize: '10px', fontWeight: 'bold' }}>TOPLAM ORAN</span>
-                                            <span className="text-[#00FFA3] text-sm font-black">{coupon.totalOdd}</span>
+                                            <span className="text-[#10B981] text-sm font-black">{coupon.totalOdd}</span>
                                         </div>
                                     </div>
                                     {/* Lock Overlay */}
                                     <div className="absolute inset-0 rounded-lg flex flex-col items-center justify-center backdrop-blur-[2px]" style={{ background: 'color-mix(in srgb, var(--bg-card) 60%, transparent)' }}>
                                         <button
                                             onClick={onLoginRequired}
-                                            className="flex items-center gap-2 px-5 py-2.5 bg-[#00FFA3] text-black font-black text-xs rounded-full uppercase tracking-widest hover:bg-[#00FFA3]/90 transition-all shadow-[0_0_20px_rgba(0,255,163,0.3)] hover:shadow-[0_0_30px_rgba(0,255,163,0.5)]"
+                                            className="flex items-center gap-2 px-5 py-2.5 bg-[#10B981] text-black font-black text-xs rounded-full uppercase tracking-widest hover:bg-[#10B981]/90 transition-all shadow-[0_0_20px_rgba(0,255,163,0.3)] hover:shadow-[0_0_30px_rgba(0,255,163,0.5)]"
                                         >
                                             <Lock className="w-3.5 h-3.5" />
                                             Üye Ol, Tümünü Gör
@@ -162,7 +162,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                     <div className="flex items-center gap-1.5 flex-wrap">
                                         <div className={`px-2 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isLow ? 'bg-emerald-500/10 text-emerald-500' :
                                             isHigh ? 'bg-rose-500/10 text-rose-500' :
-                                                'bg-[#00FFA3]/10 text-[#00FFA3]'
+                                                'bg-[#10B981]/10 text-[#10B981]'
                                             }`}>
                                             {isLow ? <Shield className="w-2.5 h-2.5" /> :
                                                 isHigh ? <Flame className="w-2.5 h-2.5" /> :
@@ -176,7 +176,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                         )}
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        <div className="w-1 h-1 rounded-full bg-[#00FFA3] animate-pulse" />
+                                        <div className="w-1 h-1 rounded-full bg-[#10B981] animate-pulse" />
                                         <span className="text-zinc-500 font-bold text-[8px] uppercase tracking-widest">AI ANALİZ</span>
                                     </div>
                                 </div>
@@ -190,10 +190,10 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                                     <span className="font-black text-xs uppercase italic tracking-tight truncate max-w-[80%]" style={{ color: 'var(--text-primary)' }}>
                                                         {match.homeTeam} - {match.awayTeam}
                                                     </span>
-                                                    <span className="text-[#00FFA3] font-black text-xs">{match.odd}</span>
+                                                    <span className="text-[#10B981] font-black text-xs">{match.odd}</span>
                                                 </div>
                                                 <div className="flex items-center gap-1.5">
-                                                    <div className="h-px w-4 bg-[#00FFA3]/30 rounded-full" />
+                                                    <div className="h-px w-4 bg-[#10B981]/30 rounded-full" />
                                                      <span className="font-bold text-[9px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                                                         {match.prediction}
                                                         {selectedDate === 'WEEKLY' && <span className="ml-1.5 pl-1.5 text-[#9CA3AF] opacity-80">{new Date(coupon.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}</span>}
@@ -208,14 +208,14 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                 <div className="mb-3 space-y-1.5">
                                     <div className="flex justify-between items-center text-[8px] font-black text-[#9CA3AF] uppercase tracking-widest">
                                         <span>RİSK SEVİYESİ</span>
-                                        <span className={isLow ? 'text-emerald-500' : isHigh ? 'text-rose-500' : 'text-[#00FFA3]'}>
+                                        <span className={isLow ? 'text-emerald-500' : isHigh ? 'text-rose-500' : 'text-[#10B981]'}>
                                             {coupon.riskLevel}
                                         </span>
                                     </div>
                                     <div className="h-1 w-full bg-black/5 rounded-full overflow-hidden">
                                         <div className={`h-full rounded-full transition-all duration-1000 ${isLow ? 'w-[30%] bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' :
                                             isHigh ? 'w-[100%] bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]' :
-                                                'w-[65%] bg-[#00FFA3] shadow-[0_0_10px_rgba(0,255,163,0.5)]'
+                                                'w-[65%] bg-[#10B981] shadow-[0_0_10px_rgba(0,255,163,0.5)]'
                                             }`} />
                                     </div>
                                 </div>
@@ -226,15 +226,15 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                         <div className="flex flex-col">
                                             <span className="font-black text-[9px] uppercase tracking-widest mb-0.5" style={{ color: 'var(--text-muted)' }}>TOPLAM ORAN</span>
                                             <div className="text-2xl font-black italic leading-none" style={{ color: 'var(--text-primary)' }}>
-                                                {coupon.totalOdd}<span className="text-[#00FFA3] text-base ml-1">x</span>
+                                                {coupon.totalOdd}<span className="text-[#10B981] text-base ml-1">x</span>
                                             </div>
                                         </div>
 
                                         {/* Animated CTA */}
                                         <div className="flex-1 flex justify-center px-4">
-                                            <div className="px-4 py-2 bg-[#00FFA3]/10 rounded-full animate-pulse flex items-center gap-1.5">
-                                                <Zap className="w-3 h-3 text-[#00FFA3]" />
-                                                <span className="text-[9px] font-black text-[#00FFA3] tracking-widest uppercase">ANALİZ İÇİN TIKLA</span>
+                                            <div className="px-4 py-2 bg-[#10B981]/10 rounded-full animate-pulse flex items-center gap-1.5">
+                                                <Zap className="w-3 h-3 text-[#10B981]" />
+                                                <span className="text-[9px] font-black text-[#10B981] tracking-widest uppercase">ANALİZ İÇİN TIKLA</span>
                                             </div>
                                         </div>
 
@@ -255,10 +255,10 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
 
                 {/* Section Bottom CTA */}
                 <div className="mt-6 flex flex-col gap-3 animate-fade-in-up animate-delay-3">
-                    <button className="w-full py-3 bg-[#00FFA3] text-black rounded-lg font-black text-[10px] uppercase tracking-widest hover:shadow-[0_8px_30px_rgba(0,255,163,0.3)] transition-all">
+                    <button className="w-full py-3 bg-[#10B981] text-black rounded-lg font-black text-[10px] uppercase tracking-widest hover:shadow-[0_8px_30px_rgba(0,255,163,0.3)] transition-all">
                         TÜM KUPONLARI GÖR
                     </button>
-                    <button className="w-full py-3 rounded-lg font-black text-[10px] uppercase tracking-widest hover:text-[#00FFA3] transition-all text-zinc-400 bg-zinc-800/30 hover:bg-zinc-800/60">
+                    <button className="w-full py-3 rounded-lg font-black text-[10px] uppercase tracking-widest hover:text-[#10B981] transition-all text-zinc-400 bg-zinc-800/30 hover:bg-zinc-800/60">
                         CANLI ANALİZLERE GİT
                     </button>
                 </div>
@@ -272,8 +272,8 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                         {/* Modal Header */}
                         <div className="flex items-center justify-between px-6 py-4 bg-[#22262F]">
                             <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-full bg-[#00FFA3]/10 flex items-center justify-center">
-                                    <Zap className="w-4 h-4 text-[#00FFA3]" />
+                                <div className="w-8 h-8 rounded-full bg-[#10B981]/10 flex items-center justify-center">
+                                    <Zap className="w-4 h-4 text-[#10B981]" />
                                 </div>
                                 <div>
                                     <h3 className="text-sm font-black uppercase" style={{ color: 'var(--text-primary)' }}>{selectedCoupon.title} - AI ANALİZİ</h3>
@@ -293,7 +293,7 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                 {selectedCoupon.matches.map((match, idx) => (
                                     <div key={idx} className="rounded-lg p-5 relative overflow-hidden group bg-[#22262F]">
                                         {/* Background Glow */}
-                                        <div className="absolute top-0 right-0 w-20 h-20 bg-[#00FFA3]/5 rounded-full blur-xl pointer-events-none" />
+                                        <div className="absolute top-0 right-0 w-20 h-20 bg-[#10B981]/5 rounded-full blur-xl pointer-events-none" />
 
                                         <div className="flex items-center justify-between mb-2">
                                             <div className="flex items-center gap-2">
@@ -323,12 +323,12 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                                     { name: 'BETLİVO', odds: (parseFloat(match.odd) * 1.05).toFixed(2) },
                                                     { name: 'MARSBAHİS', odds: (parseFloat(match.odd) * 1.08).toFixed(2), isHighest: true }
                                                 ].map((bookie, bidx) => (
-                                                    <div key={bidx} className={`flex-1 min-w-[100px] flex items-center justify-between px-3 py-2 rounded transition-all ${bookie.isHighest ? 'bg-[#00FFA3]/10 shadow-[0_0_8px_rgba(0,255,163,0.15)] animate-pulse' : 'bg-[#1A1D24]'}`}>
+                                                    <div key={bidx} className={`flex-1 min-w-[100px] flex items-center justify-between px-3 py-2 rounded transition-all ${bookie.isHighest ? 'bg-[#10B981]/10 shadow-[0_0_8px_rgba(0,255,163,0.15)] animate-pulse' : 'bg-[#1A1D24]'}`}>
                                                         <div className="flex items-center gap-1">
                                                             <span className="text-[9px] font-black" style={{ color: 'var(--text-primary)' }}>{bookie.name}</span>
-                                                            {bookie.isHighest && <span className="text-[6px] bg-[#00FFA3] text-black px-0.5 rounded font-black">EN YÜKSEK</span>}
+                                                            {bookie.isHighest && <span className="text-[6px] bg-[#10B981] text-black px-0.5 rounded font-black">EN YÜKSEK</span>}
                                                         </div>
-                                                        <span className={`text-[10px] font-black ${bookie.isHighest ? 'text-[#00FFA3]' : ''}`} style={bookie.isHighest ? {} : { color: 'var(--text-muted)' }}>{bookie.odds}</span>
+                                                        <span className={`text-[10px] font-black ${bookie.isHighest ? 'text-[#10B981]' : ''}`} style={bookie.isHighest ? {} : { color: 'var(--text-muted)' }}>{bookie.odds}</span>
                                                     </div>
                                                 ))}
                                             </div>
@@ -347,14 +347,14 @@ const DailyCoupons: React.FC<DailyCouponsProps> = ({ coupons, isLoggedIn = false
                                 </div>
                                 <div className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded bg-[#1A1D24]">
                                     <User className="w-3 h-3" style={{ color: 'var(--text-dim)' }} />
-                                    <span className="text-[9px] font-black text-[#00FFA3] tracking-widest uppercase">
+                                    <span className="text-[9px] font-black text-[#10B981] tracking-widest uppercase">
                                         {selectedCoupon.editorId === 'admin' ? 'YÖNETİCİ' : selectedCoupon.editorId ? selectedCoupon.editorId : 'EDİTÖR'}
                                     </span>
                                 </div>
                             </div>
                             <div className="text-right">
                                 <p className="text-[9px] font-bold uppercase mb-0.5" style={{ color: 'var(--text-dim)' }}>Toplam Oran</p>
-                                <p className="text-lg font-black text-[#00FFA3]">{selectedCoupon.totalOdd}</p>
+                                <p className="text-lg font-black text-[#10B981]">{selectedCoupon.totalOdd}</p>
                             </div>
                         </div>
 

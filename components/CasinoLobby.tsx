@@ -274,7 +274,7 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/70 backdrop-blur-[2px]">
           <button 
             onClick={(e) => { e.stopPropagation(); onClick(); }}
-            className="bg-[#00FFA3] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+            className="bg-[#10B981] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
           >
             GERÇEK OYNA
           </button>
@@ -341,7 +341,7 @@ const NewGameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () =
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/60 backdrop-blur-[2px]">
         <button 
           onClick={(e) => { e.stopPropagation(); onClick(); }}
-          className="bg-[#00FFA3] hover:bg-[#00E676] text-black font-black text-[11px] px-4 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+          className="bg-[#10B981] hover:bg-[#00E676] text-black font-black text-[11px] px-4 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
         >
           GERÇEK OYNA
         </button>
@@ -359,7 +359,7 @@ const NewGameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () =
 const SectionHeader: React.FC<{ title: string, icon?: React.ReactNode }> = ({ title, icon }) => (
   <div className="flex items-center justify-between mb-4 mt-8">
     <div className="flex items-center gap-2">
-      {icon && <div className="text-[#00FFA3]">{icon}</div>}
+      {icon && <div className="text-[#10B981]">{icon}</div>}
       <h2 className="text-white text-lg font-black tracking-tight">{title}</h2>
     </div>
     <div className="flex gap-2">
@@ -465,13 +465,13 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`relative flex items-center gap-2 py-4 px-2 whitespace-nowrap text-sm font-bold transition-colors ${
-                activeTab === tab.id ? 'text-[#00FFA3]' : 'text-[#848B9D] hover:text-white'
+                activeTab === tab.id ? 'text-[#10B981]' : 'text-[#848B9D] hover:text-white'
               }`}
             >
               {tab.icon}
               {tab.label}
               {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#00FFA3] rounded-t-full shadow-[0_-2px_10px_rgba(0,255,163,0.5)]" />
+                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#10B981] rounded-t-full shadow-[0_-2px_10px_rgba(0,255,163,0.5)]" />
               )}
             </button>
           ))}
@@ -497,7 +497,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                   <p className="text-[#848B9D] text-sm md:text-lg mb-6 font-medium">
                     {banner.sub}
                   </p>
-                  <button className="bg-[#00FFA3] hover:bg-[#00E676] text-black px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(0,255,163,0.3)]">
+                  <button className="bg-[#10B981] hover:bg-[#00E676] text-black px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(0,255,163,0.3)]">
                     Hemen Katıl
                   </button>
                 </div>
@@ -509,7 +509,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                 <button 
                   key={idx} 
                   onClick={() => setCurrentBanner(idx)}
-                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#00FFA3]' : 'w-2 bg-white/20'}`}
+                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#10B981]' : 'w-2 bg-white/20'}`}
                 />
               ))}
             </div>
@@ -530,7 +530,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               placeholder="Oyun Ara..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#1A1D29] border border-[#2A2E3D] rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:border-[#00FFA3] transition-colors font-medium"
+              className="w-full bg-[#1A1D29] border border-[#2A2E3D] rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:border-[#10B981] transition-colors font-medium"
             />
           </div>
         </div>
@@ -675,7 +675,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
 
               <div className="relative z-10 px-6 pb-8 pt-4 text-center flex flex-col items-center">
                 <h3 className="text-2xl font-black text-white mb-1">{getDisplayGameName(selectedGame)}</h3>
-                <p className="text-[#00FFA3] text-sm font-bold mb-6">{selectedGame.provider || 'Pragmatic Play'}</p>
+                <p className="text-[#10B981] text-sm font-bold mb-6">{selectedGame.provider || 'Pragmatic Play'}</p>
 
                 <div className="w-full grid grid-cols-2 gap-3 mb-6 bg-[#0F121A] p-3 rounded-lg border border-[#2A2E3D]">
                   <div className="flex flex-col items-center">
@@ -701,7 +701,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                          handleAction();
                        }
                      }}
-                     className="w-full py-3.5 rounded-lg font-black text-sm transition-all bg-[#00FFA3] text-black hover:bg-[#00E676] shadow-[0_0_15px_rgba(0,255,163,0.3)]"
+                     className="w-full py-3.5 rounded-lg font-black text-sm transition-all bg-[#10B981] text-black hover:bg-[#00E676] shadow-[0_0_15px_rgba(0,255,163,0.3)]"
                    >
                      Gerçek Parayla Oyna
                    </button>
@@ -711,7 +711,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                        onClick={() => setShowDemoIframe(true)}
                        className="w-full py-3.5 rounded-lg font-bold text-sm transition-all bg-[#2A2E3D] text-white hover:bg-[#3A3F54] flex items-center justify-center gap-2"
                      >
-                       <Play size={16} className="text-[#00FFA3]" fill="currentColor" />
+                       <Play size={16} className="text-[#10B981]" fill="currentColor" />
                        Eğlencesine Oyna
                      </button>
                   )}

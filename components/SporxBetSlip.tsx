@@ -13,7 +13,7 @@ export const SporxBetSlip = () => {
     <div className="w-[320px] flex-shrink-0 bg-[#20252D] flex flex-col h-full border-l border-white/5">
       {/* Header & Tabs */}
       <div className="px-4 pt-4 pb-2 bg-[#1A1D24] border-b border-white/5">
-        <div className="flex items-center gap-2 mb-4 justify-center text-[#00FFA3]">
+        <div className="flex items-center gap-2 mb-4 justify-center text-[#10B981]">
           <Trophy className="w-5 h-5" />
           <span className="font-bold tracking-wide uppercase">Kuponum</span>
         </div>
@@ -24,7 +24,7 @@ export const SporxBetSlip = () => {
               key={t}
               onClick={() => setBetTab(t)}
               className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-                betTab === t ? 'bg-[#00FFA3] text-black shadow-md' : 'text-zinc-500 hover:text-white'
+                betTab === t ? 'bg-[#10B981] text-black shadow-md' : 'text-zinc-500 hover:text-white'
               }`}
             >
               {t}
@@ -48,7 +48,7 @@ export const SporxBetSlip = () => {
                 <div className="text-[10px] text-zinc-500 mb-1 uppercase tracking-wider">{bet.marketName}</div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-bold text-white">{bet.selectionName}</span>
-                  <span className="text-sm font-black text-[#00FFA3] bg-[#00FFA3]/10 px-2 py-0.5 rounded">
+                  <span className="text-sm font-black text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded">
                     {bet.odd.toFixed(2)}
                   </span>
                 </div>
@@ -61,7 +61,7 @@ export const SporxBetSlip = () => {
             <div className="bg-[#1A1D24] rounded-xl p-4 border border-white/5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-bold text-zinc-400">Toplam Oran</span>
-                <span className="text-lg font-black text-[#00FFA3]">{totalOdds.toFixed(2)}</span>
+                <span className="text-lg font-black text-[#10B981]">{totalOdds.toFixed(2)}</span>
               </div>
               
               <div className="bg-[#161920] rounded-lg p-2 border border-white/5 flex items-center justify-between mb-3">
@@ -80,7 +80,7 @@ export const SporxBetSlip = () => {
               </div>
             </div>
 
-            <button className="w-full py-4 bg-gradient-to-r from-[#00FFA3] to-[#00E75A] text-black font-black uppercase tracking-wider rounded-xl hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(0,255,163,0.2)]">
+            <button className="w-full py-4 bg-gradient-to-r from-[#10B981] to-[#00E75A] text-black font-black uppercase tracking-wider rounded-xl hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(0,255,163,0.2)]">
               BAHİS YAP
             </button>
             <button 
@@ -104,17 +104,17 @@ export const SporxBetSlip = () => {
           <div className="w-full flex flex-col gap-2">
             <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#1A1D24] border border-white/5 text-zinc-300 transition-colors group">
               <div className="flex items-center gap-3">
-                <Activity className="w-5 h-5 text-[#00FFA3]" />
+                <Activity className="w-5 h-5 text-[#10B981]" />
                 <span className="text-sm font-bold">Spor bahisleri</span>
               </div>
-              <span className="text-zinc-600 group-hover:text-[#00FFA3] transition-colors">→</span>
+              <span className="text-zinc-600 group-hover:text-[#10B981] transition-colors">→</span>
             </button>
             <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#1A1D24] border border-white/5 text-zinc-300 transition-colors group">
               <div className="flex items-center gap-3">
-                <Star className="w-5 h-5 text-[#00FFA3]" />
+                <Star className="w-5 h-5 text-[#10B981]" />
                 <span className="text-sm font-bold">Canlı Bahis</span>
               </div>
-              <span className="text-zinc-600 group-hover:text-[#00FFA3] transition-colors">→</span>
+              <span className="text-zinc-600 group-hover:text-[#10B981] transition-colors">→</span>
             </button>
           </div>
         </div>

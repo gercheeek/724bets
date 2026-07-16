@@ -195,7 +195,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                 <span className={`font-bold text-sm ${activeTab === 'deposit' ? 'text-white' : 'text-zinc-300'}`}>Para Yatır</span>
               </div>
               {activeTab === 'deposit' && (
-                <div className="hidden md:block w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
+                <div className="hidden md:block w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#10B981] border-b-[5px] border-b-transparent"></div>
               )}
             </button>
 
@@ -211,7 +211,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                 <span className={`font-bold text-sm ${activeTab === 'withdraw' ? 'text-white' : 'text-zinc-300'}`}>Para Çek</span>
               </div>
               {activeTab === 'withdraw' && (
-                <div className="hidden md:block w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#00FFA3] border-b-[5px] border-b-transparent"></div>
+                <div className="hidden md:block w-0 h-0 border-t-[5px] border-t-transparent border-l-[6px] border-l-[#10B981] border-b-[5px] border-b-transparent"></div>
               )}
             </button>
           </div>
@@ -272,9 +272,9 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                   <h3 className="text-[#8892A3] text-sm mb-3 font-semibold">Borsalar ve Cüzdanlar</h3>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { icon: <BinanceIcon />, name: 'Binance', fee: '0% FEE', feeColor: 'text-[#00FFA3]' },
-                      { icon: <CoinbaseIcon />, name: 'Coinbase', fee: '0% FEE', feeColor: 'text-[#00FFA3]' },
-                      { icon: <OtherCryptoIcon />, name: 'Diğer', fee: '0% FEE', feeColor: 'text-[#00FFA3]' },
+                      { icon: <BinanceIcon />, name: 'Binance', fee: '0% FEE', feeColor: 'text-[#10B981]' },
+                      { icon: <CoinbaseIcon />, name: 'Coinbase', fee: '0% FEE', feeColor: 'text-[#10B981]' },
+                      { icon: <OtherCryptoIcon />, name: 'Diğer', fee: '0% FEE', feeColor: 'text-[#10B981]' },
                     ].map((item, i) => (
                       <button key={i} className="flex items-center justify-between p-3 bg-[#1A1F29] hover:bg-[#1E2532] rounded-xl transition-colors border border-transparent hover:border-white/5">
                         <div className="flex items-center gap-3">

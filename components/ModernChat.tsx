@@ -480,15 +480,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         const r = role?.toUpperCase();
         if (r === 'ADMIN') return '#EF4444'; // Kırmızı admin
         if (r === 'VIP') return '#38BDF8'; // Mavi VIP
-        if (r === 'SYSTEM' || r === 'BOT') return '#00FFA3'; // Neon yeşil bot
-        return '#00FFA3'; // Neon yeşil normal üyeler için
+        if (r === 'SYSTEM' || r === 'BOT') return '#10B981'; // Neon yeşil bot
+        return '#10B981'; // Neon yeşil normal üyeler için
     };
 
     const getRoleBadge = (role: string, msgObj?: any) => {
         const r = role?.toUpperCase();
         
         if (r === 'ADMIN') {
-            const color = msgObj?.botColor || '#00FFA3';
+            const color = msgObj?.botColor || '#10B981';
             return (
                 <span 
                     className="px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase"
@@ -499,7 +499,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             );
         }
         if (r === 'SYSTEM' || r === 'BOT') {
-            const color = msgObj?.botColor || '#00FFA3';
+            const color = msgObj?.botColor || '#10B981';
             return (
                 <span 
                     className="px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase"
@@ -551,11 +551,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
             {/* Pinned Message Bar */}
             {pinnedMessage && pinnedMessage.text && (
-                <div className="bg-[#00FFA3]/10 px-4 py-3 flex items-center justify-between gap-3 text-left">
+                <div className="bg-[#10B981]/10 px-4 py-3 flex items-center justify-between gap-3 text-left">
                     <div className="flex items-start gap-2 min-w-0">
-                        <span className="text-[12px] mt-0.5 text-[#00FFA3]">📌</span>
+                        <span className="text-[12px] mt-0.5 text-[#10B981]">📌</span>
                         <div className="min-w-0">
-                            <div className="text-[10px] font-bold text-[#00FFA3] flex items-center gap-1">
+                            <div className="text-[10px] font-bold text-[#10B981] flex items-center gap-1">
                                 <span>Sabitlendi</span>
                                 <span className="text-[8px] text-zinc-500">•</span>
                                 <span style={{ color: getRoleColor(pinnedMessage.role) }}>{pinnedMessage.username}</span>
@@ -580,7 +580,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                 <div className="bg-[#0F1219] p-3 space-y-3 flex-shrink-0">
                     {/* Event Card */}
                     {eventWidget && eventWidget.show && (
-                        <div className="bg-[#131C28] rounded-xl border-l-4 border-[#00FFA3] p-3 flex flex-col gap-2 transition-all">
+                        <div className="bg-[#131C28] rounded-xl border-l-4 border-[#10B981] p-3 flex flex-col gap-2 transition-all">
                             <div 
                                 onClick={() => setIsEventCollapsed(!isEventCollapsed)}
                                 className="flex items-center justify-between text-xs font-bold text-white cursor-pointer select-none"
@@ -603,7 +603,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                     <div className="flex justify-between items-end">
                                         <div className="flex flex-col">
                                             <span className="text-[9px] text-gray-400 font-medium">{eventWidget.promoName}</span>
-                                            <span className="text-xs font-black text-[#00FFA3]">{eventWidget.prizeAmount}</span>
+                                            <span className="text-xs font-black text-[#10B981]">{eventWidget.prizeAmount}</span>
                                         </div>
                                         {eventWidget.ctaUrl && (
                                             <a 
@@ -623,7 +623,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
                     {/* Poll Card */}
                     {activePoll && activePoll.isActive && (
-                         <div className="bg-[#131C28] rounded-xl border-l-4 border-[#00FFA3] p-3 flex flex-col gap-2 transition-all">
+                         <div className="bg-[#131C28] rounded-xl border-l-4 border-[#10B981] p-3 flex flex-col gap-2 transition-all">
                              <div 
                                  onClick={() => setIsPollCollapsed(!isPollCollapsed)}
                                  className="flex items-center justify-between text-xs font-bold text-sky-400 cursor-pointer select-none"
@@ -654,7 +654,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                                              <span>%{percentage} ({activePoll.votes[idx]} Oy)</span>
                                                          </div>
                                                          <div className="w-full bg-[#111317] rounded-full h-1 overflow-hidden">
-                                                             <div className="bg-[#00FFA3] h-1 rounded-full" style={{ width: `${percentage}%` }}></div>
+                                                             <div className="bg-[#10B981] h-1 rounded-full" style={{ width: `${percentage}%` }}></div>
                                                          </div>
                                                      </div>
                                                  );
@@ -666,7 +666,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                                  <button 
                                                      key={idx}
                                                      onClick={() => handleVote(idx)}
-                                                     className="w-full bg-[#0F1219] hover:bg-[#00FFA3]/10 hover:text-white text-slate-300 font-bold text-[9px] py-2 px-3 rounded-xl text-left transition-all border-none"
+                                                     className="w-full bg-[#0F1219] hover:bg-[#10B981]/10 hover:text-white text-slate-300 font-bold text-[9px] py-2 px-3 rounded-xl text-left transition-all border-none"
                                                  >
                                                      {opt}
                                                  </button>
@@ -703,7 +703,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className={`p-3 flex flex-row gap-3 relative group text-left cursor-default border-b border-white/5 hover:bg-[#00FFA3]/5 transition-colors ${
+                            className={`p-3 flex flex-row gap-3 relative group text-left cursor-default border-b border-white/5 hover:bg-[#10B981]/5 transition-colors ${
                                 msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19]/20' : 
                                 (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-transparent' : 
                                 'bg-transparent'
@@ -727,7 +727,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                         {formatTime(msg.created_at)}
                                     </span>
                                     {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
-                                        <span className="bg-gradient-to-br from-[#00FFA3] to-[#00CC82] text-black px-1.5 py-0.5 rounded-sm text-[9px] font-black leading-none text-center shadow-[0_4px_12px_rgba(0,255,163,0.3)]">
+                                        <span className="bg-gradient-to-br from-[#10B981] to-[#00CC82] text-black px-1.5 py-0.5 rounded-sm text-[9px] font-black leading-none text-center shadow-[0_4px_12px_rgba(0,255,163,0.3)]">
                                             ADM
                                         </span>
                                     )}
@@ -740,7 +740,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 </div>
                                 <div className={`text-[12px] leading-relaxed break-words pr-4 antialiased ${
                                     (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-zinc-300 font-normal'
-                                }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#00FFA3') : undefined }}>
+                                }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#10B981') : undefined }}>
                                     {renderMessageText(msg.message)}
                                 </div>
                             </div>
@@ -767,7 +767,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                         handlePinMessage(msg.message, msg.username, msg.role || 'member');
                                         setActiveMenuId(null);
                                       }}
-                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-[#00FFA3] transition-colors flex items-center gap-1.5"
+                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-[#10B981] transition-colors flex items-center gap-1.5"
                                     >
                                       📌 Sabitle
                                     </button>

@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
           {/* Brand & About */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-[#00FFA3] text-2xl font-black">724BETS</span>
+              <span className="text-[#10B981] text-2xl font-black">724BETS</span>
             </div>
             <p className="text-[#848B9D] text-sm leading-relaxed">
               Premium kripto ve havale odaklı casino deneyimi. Güvenli, hızlı ve adil oyun anlayışıyla sektörün en yenilikçi platformu.
@@ -76,8 +76,8 @@ const Footer: React.FC = () => {
               <div className="bg-[#11141D] border border-red-500/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.15)]">
                 <span className="text-red-500 font-black text-lg">18+</span>
               </div>
-              <div className="bg-[#11141D] border border-[#00FFA3]/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,163,0.1)]">
-                <Lock className="text-[#00FFA3] w-5 h-5" />
+              <div className="bg-[#11141D] border border-[#10B981]/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,163,0.1)]">
+                <Lock className="text-[#10B981] w-5 h-5" />
               </div>
               <div className="bg-[#11141D] border border-white/10 rounded-full px-4 h-12 flex items-center justify-center gap-2">
                 <ShieldAlert className="text-white w-4 h-4" />
@@ -87,7 +87,7 @@ const Footer: React.FC = () => {
             
             <div className="text-xs text-gray-500 max-w-xs border-l-2 lg:border-l-0 lg:border-r-2 border-red-500/50 pl-3 lg:pl-0 lg:pr-3 py-1">
               <p className="mb-1 text-gray-400 font-medium">Kumar bağımlılık yapabilir.</p>
-              <p>Lütfen sınırlarınızı bilin ve sorumlu bir şekilde oynayın. Yardım için <a href="#" className="text-white hover:text-[#00FFA3] underline">destek kurumlarına</a> başvurabilirsiniz.</p>
+              <p>Lütfen sınırlarınızı bilin ve sorumlu bir şekilde oynayın. Yardım için <a href="#" className="text-white hover:text-[#10B981] underline">destek kurumlarına</a> başvurabilirsiniz.</p>
             </div>
           </div>
 
@@ -102,7 +102,7 @@ const Footer: React.FC = () => {
             <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">KYC Politikası</a>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#00FFA3]/50" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]/50" />
             <span className="tracking-wide">© 2026 724BETS. Tüm Hakları Saklıdır.</span>
           </div>
         </div>

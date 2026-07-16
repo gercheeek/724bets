@@ -115,7 +115,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   style={{ backgroundImage: `url(${game.image})`, filter: 'blur(20px) saturate(150%) brightness(1.2)' }}
                 ></div>
                 
-                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[#00FFA3]/50">
+                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[#10B981]/50">
                   <img 
                     src={game.image} 
                     alt={game.title}
@@ -128,7 +128,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto bg-black/60 backdrop-blur-[2px]">
                       <button 
                          onClick={(e) => { e.stopPropagation(); onGameClick?.(game); }}
-                         className="w-[80%] flex items-center justify-center gap-2 bg-[#00FFA3] hover:bg-[#00E676] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
+                         className="w-[80%] flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#00E676] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
                       >
                          GERÇEK OYNA
                       </button>
@@ -147,7 +147,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
 
               {!isSports && showPlayers && game.players && (
                 <div className="flex items-center justify-center gap-1.5 mt-0.5">
-                  <div className="w-2 h-2 rounded-full bg-[#00FFA3] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
                   <span className="text-gray-400 text-[10px] md:text-[11px] font-medium"><span className="text-white font-bold">{game.players}</span> {t('players')}</span>
                 </div>
               )}
@@ -244,7 +244,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
                          <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
                          <span className="w-3 h-3 rounded-full bg-green-500"></span>
                      </div>
-                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.title} <span className="text-[#00FFA3] font-black text-[10px] md:text-xs ml-2 border border-[#00FFA3]/30 bg-[#00FFA3]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
+                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.title} <span className="text-[#10B981] font-black text-[10px] md:text-xs ml-2 border border-[#10B981]/30 bg-[#10B981]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
                   </div>
                   <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
                     <X className="w-5 h-5" />
@@ -292,7 +292,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
               <div className="w-full mt-auto flex flex-col sm:flex-row gap-3">
                   <button 
                       onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))}
-                      className="flex-1 h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#00FFA3] hover:bg-[#00e693] text-black font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
+                      className="flex-1 h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#10B981] hover:bg-[#00e693] text-black font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
                   >
                       GERÇEK OYNA
                   </button>
@@ -310,7 +310,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
               
               <div className="flex items-center justify-center gap-2 mt-4 text-center w-full">
                   <span className="text-zinc-500 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">
-                      ŞU AN <span className="text-[#00FFA3]">{selectedGame.players?.toLocaleString('tr-TR')} OYUNCU</span> AKTİF
+                      ŞU AN <span className="text-[#10B981]">{selectedGame.players?.toLocaleString('tr-TR')} OYUNCU</span> AKTİF
                   </span>
               </div>
             </div>

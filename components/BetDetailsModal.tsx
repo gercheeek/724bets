@@ -101,7 +101,7 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
             </div>
             <div className="flex-1 flex flex-col items-center justify-center p-2">
               <span className="text-gray-500 text-xs font-medium mb-1">Ödeme</span>
-              <span className="text-[#00FFA3] text-sm font-bold">{data.payout}</span>
+              <span className="text-[#10B981] text-sm font-bold">{data.payout}</span>
             </div>
           </div>
 
@@ -127,7 +127,7 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
 
                 {/* Player */}
                 <div className="flex gap-2 relative">
-                   <div className="absolute -left-10 top-1/2 -translate-y-1/2 bg-[#00FFA3]/20 text-[#00FFA3] border border-[#00FFA3]/30 text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full">
+                   <div className="absolute -left-10 top-1/2 -translate-y-1/2 bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/30 text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full">
                      {data.cards.playerScore}
                    </div>
                    {data.cards.player.map((card, i) => (
@@ -148,7 +148,7 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
                    const isHit = data.kenoNumbers!.hits.includes(num);
                    
                    let bg = "bg-[#1D212B] text-gray-400"; // default
-                   if (isSelected && isHit) bg = "bg-[#00FFA3] text-black shadow-[0_0_8px_rgba(0,255,163,0.5)]";
+                   if (isSelected && isHit) bg = "bg-[#10B981] text-black shadow-[0_0_8px_rgba(0,255,163,0.5)]";
                    else if (isSelected) bg = "bg-[#ef3434] text-white"; // missed
                    else if (isHit) bg = "bg-purple-500/20 text-purple-400 border border-purple-500/30"; // hit but not selected
                    
@@ -167,12 +167,12 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
                 <div className="flex justify-between items-end mb-2">
                   <div className="flex flex-col">
                     <span className="text-gray-500 text-[10px] font-bold">ZAR SONUCU</span>
-                    <span className={`text-2xl font-black ${parseFloat(data.multiplier) > 1 ? 'text-[#00FFA3]' : 'text-red-500'}`}>
+                    <span className={`text-2xl font-black ${parseFloat(data.multiplier) > 1 ? 'text-[#10B981]' : 'text-red-500'}`}>
                       {data.diceRoll?.toFixed(2)}
                     </span>
                   </div>
                 </div>
-                <div className="w-full h-3 rounded-full bg-gradient-to-r from-red-500 via-[#1D212B] to-[#00FFA3] relative overflow-hidden">
+                <div className="w-full h-3 rounded-full bg-gradient-to-r from-red-500 via-[#1D212B] to-[#10B981] relative overflow-hidden">
                   <div 
                     className="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_10px_white]"
                     style={{ left: `${data.diceRoll}%` }}
@@ -186,7 +186,7 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
                <div className="w-full h-32 rounded-xl overflow-hidden relative shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-[#2A2E3D]">
                   <img src={data.image} className="absolute inset-0 w-full h-full object-cover blur-sm opacity-50" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-[#00FFA3] font-black text-3xl drop-shadow-2xl">{data.multiplier}</span>
+                    <span className="text-[#10B981] font-black text-3xl drop-shadow-2xl">{data.multiplier}</span>
                   </div>
                </div>
             )}

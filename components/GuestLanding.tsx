@@ -126,7 +126,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
     {
       title: t("promo_3_title"),
       subtitle: t("promo_3_sub"),
-      textColor: "group-hover:text-[#00FFA3]"
+      textColor: "group-hover:text-[#10B981]"
     }
   ];
 
@@ -140,7 +140,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           <div className="w-full px-4 pt-0 -mt-4 pb-2 hidden md:block">
             <div className="grid grid-cols-3 gap-4">
               {promoCards.map((card, idx) => (
-                <div key={idx} className="relative overflow-hidden rounded-xl bg-[#0B0E14] border border-white/5 hover:border-[#00FFA3]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                <div key={idx} className="relative overflow-hidden rounded-xl bg-[#0B0E14] border border-white/5 hover:border-[#10B981]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
                   {/* Premium Background */}
                   <div className="absolute inset-0 z-0">
                     <img src="/images/promo_cards_bg_soft.jpg" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" alt="" />
@@ -197,7 +197,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               <div className="flex items-center gap-1.5 sm:gap-2 bg-black/40 rounded-full py-1.5 px-3 border border-white/5 backdrop-blur-sm group-hover:bg-black/60 transition-colors">
                 <span className="text-gray-400 text-[10px] sm:text-xs font-medium mr-0.5">ÜYE:</span>
                 <span className="text-white font-bold text-xs sm:text-sm">{siteUser.username}</span>
-                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-[#00FFA3] ml-0.5" />
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-[#10B981] ml-0.5" />
               </div>
             </div>
 
@@ -219,7 +219,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
               {/* Progress Bar */}
               <div className="w-full h-2 sm:h-2.5 bg-black/60 rounded-full overflow-hidden shadow-inner border border-white/5 relative">
-                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#00FFA3]/50 to-[#00FFA3] rounded-full shadow-[0_0_15px_rgba(0,255,163,0.6)]" style={{ width: '0.06%' }}>
+                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#10B981]/50 to-[#10B981] rounded-full shadow-[0_0_15px_rgba(0,255,163,0.6)]" style={{ width: '0.06%' }}>
                   {/* Inner shine */}
                   <div className="absolute top-0 left-0 w-full h-1/2 bg-white/30 rounded-full"></div>
                 </div>
@@ -288,7 +288,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 {/* 30% Opacity Overlay to make text pop */}
                 <div className="absolute inset-0 bg-[#05070A]/30 group-hover/sports:bg-transparent transition-colors duration-700 z-10"></div>
                 {/* Subtle Green Neon Glow on Hover */}
-                <div className="absolute inset-0 bg-[#00FFA3]/0 group-hover/sports:bg-[#00FFA3]/10 mix-blend-screen transition-colors duration-700 z-10"></div>
+                <div className="absolute inset-0 bg-[#10B981]/0 group-hover/sports:bg-[#10B981]/10 mix-blend-screen transition-colors duration-700 z-10"></div>
                 {/* Text Background Fade - Gradient on the left (center of banner) */}
                 <div className="absolute inset-0 md:bg-gradient-to-r md:from-[#05070A]/90 md:via-[#05070A]/40 md:to-transparent bg-gradient-to-r from-[#05070A]/90 via-[#05070A]/40 to-transparent md:w-3/4 md:left-0 md:right-auto z-10 pointer-events-none"></div>
               </div>
@@ -300,8 +300,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   </h3>
                   <ActivePlayersCounter type="sports" />
                 </div>
-                <button className="hidden md:flex relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white items-center justify-center w-12 h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 flex-shrink-0">
-                  <Play className="relative z-10 w-5 h-5 group-hover/btn:text-[#00FFA3] transition-colors ml-1" fill="currentColor" />
+                <button className="hidden md:flex relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#10B981]/50 text-white items-center justify-center w-12 h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 flex-shrink-0">
+                  <Play className="relative z-10 w-5 h-5 group-hover/btn:text-[#10B981] transition-colors ml-1" fill="currentColor" />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                 </button>
               </div>
@@ -324,7 +324,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               {/* Welcome & Search Bar Inline (Between teaser and cards) */}
               <div className="w-full py-1.5 md:py-2 flex justify-between items-center mb-1 lg:mb-4">
                 <h2 className="text-xl sm:text-2xl md:text-2xl font-black text-white tracking-tight">
-                  Hoş geldiniz <span className="text-[#00FFA3]">724bets!</span>
+                  Hoş geldiniz <span className="text-[#10B981]">724bets!</span>
                 </h2>
                 {/* Mobile Search Icon */}
                 <button onClick={onSearchClick} className="md:hidden flex items-center justify-center w-10 h-10 bg-[#151821] rounded-lg border border-white/5 hover:bg-[#1a1e29] transition-colors">
@@ -364,8 +364,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     <div className="relative z-20 flex flex-col items-end gap-2 lg:gap-3 h-full justify-center self-end text-right transform group-hover:-translate-x-2 transition-transform duration-500 max-w-[70%] lg:max-w-[80%] ml-auto">
                       <h3 className="text-3xl sm:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-md leading-none font-['Outfit'] pb-1">Spor</h3>
                       <div className="hidden sm:block"><ActivePlayersCounter type="sports" /></div>
-                      <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#00FFA3]/50 text-white flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 mt-auto sm:mt-0 w-fit">
-                        <Play className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:text-[#00FFA3] transition-colors ml-1" fill="currentColor" />
+                      <button className="relative overflow-hidden group/btn bg-[#1A1D24]/80 hover:bg-[#1A1D24] border border-white/10 hover:border-[#10B981]/50 text-white flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all duration-300 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(0,255,163,0.2)] hover:-translate-y-0.5 mt-auto sm:mt-0 w-fit">
+                        <Play className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:text-[#10B981] transition-colors ml-1" fill="currentColor" />
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                       </button>
                     </div>

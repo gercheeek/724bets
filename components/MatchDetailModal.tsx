@@ -88,10 +88,10 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
             </button>
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                {homeTeam} <span className="text-[#00FFA3] mx-2">{score}</span> {awayTeam}
+                {homeTeam} <span className="text-[#10B981] mx-2">{score}</span> {awayTeam}
               </h2>
               <div className="text-xs text-zinc-400 flex items-center gap-2">
-                <span className="text-[#00FFA3] font-bold">{status} {minute}</span>
+                <span className="text-[#10B981] font-bold">{status} {minute}</span>
                 <span>•</span>
                 <span>{mData.tournament?.category?.name} - {mData.tournament?.name}</span>
               </div>
@@ -101,7 +101,7 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
             <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-white">
               <BarChart2 className="w-5 h-5" />
             </button>
-            <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-[#00FFA3]">
+            <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-[#10B981]">
               <Star className="w-5 h-5" />
             </button>
           </div>
@@ -118,7 +118,7 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
                 onClick={() => setActiveTab(key)}
                 className={`whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl transition-colors ${
                   activeTab === key 
-                    ? 'bg-[#00FFA3] text-black' 
+                    ? 'bg-[#10B981] text-black' 
                     : 'bg-[#2A313C] text-zinc-400 hover:bg-[#323A47] hover:text-white'
                 }`}
               >
@@ -148,12 +148,12 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
                         onClick={() => toggleBetSelection(match, marketName, fName, sel.odd)}
                         className={`flex items-center justify-between p-3 rounded-lg transition-colors border ${
                           selected 
-                            ? 'bg-[#00FFA3]/10 border-[#00FFA3] text-white' 
+                            ? 'bg-[#10B981]/10 border-[#10B981] text-white' 
                             : 'bg-[#1A1D24] border-white/5 text-zinc-400 hover:bg-[#2A313C] hover:text-white'
                         }`}
                       >
                         <span className="text-xs font-semibold">{fName}</span>
-                        <span className={`text-sm font-bold ${selected ? 'text-[#00FFA3]' : 'text-white'}`}>
+                        <span className={`text-sm font-bold ${selected ? 'text-[#10B981]' : 'text-white'}`}>
                           {sel.odd.toFixed(2)}
                         </span>
                       </button>

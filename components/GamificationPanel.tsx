@@ -64,10 +64,10 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className 
 
           {/* Daily Quests */}
           <div className="bg-[#131722] rounded-2xl p-5 border border-white/5 flex flex-col group relative overflow-hidden">
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#00FFA3]/5 rounded-full blur-3xl group-hover:bg-[#00FFA3]/10 transition-colors duration-500"></div>
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#10B981]/5 rounded-full blur-3xl group-hover:bg-[#10B981]/10 transition-colors duration-500"></div>
             <div className="flex items-center justify-between mb-4 relative z-10">
               <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-[#00FFA3]" />
+                <Target className="w-5 h-5 text-[#10B981]" />
                 <h3 className="text-white font-bold text-base">Günlük Görevler</h3>
               </div>
               <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 bg-[#0A0D14] px-2 py-1 rounded-md border border-white/5">Yenilenme: 14s 23d</span>
@@ -75,15 +75,15 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className 
             
             <div className="flex-1 flex flex-col gap-3 relative z-10">
               {/* Task 1 - Completed */}
-              <div className="bg-[#0A0D14] rounded-xl p-3 border border-[#00FFA3]/20 flex items-center justify-between relative overflow-hidden group/task hover:border-[#00FFA3]/40 transition-colors">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00FFA3]/5 to-transparent opacity-0 group-hover/task:opacity-100 transition-opacity" />
+              <div className="bg-[#0A0D14] rounded-xl p-3 border border-[#10B981]/20 flex items-center justify-between relative overflow-hidden group/task hover:border-[#10B981]/40 transition-colors">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#10B981]/5 to-transparent opacity-0 group-hover/task:opacity-100 transition-opacity" />
                 <div className="flex-1 mr-3 relative z-10">
-                  <div className="text-sm text-white font-bold mb-2 group-hover/task:text-[#00FFA3] transition-colors">Blackjack'te 3 Kez 21 Yap</div>
+                  <div className="text-sm text-white font-bold mb-2 group-hover/task:text-[#10B981] transition-colors">Blackjack'te 3 Kez 21 Yap</div>
                   <div className="h-1.5 w-full bg-[#131722] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#00FFA3] w-full shadow-[0_0_10px_rgba(0,255,163,0.5)]"></div>
+                    <div className="h-full bg-[#10B981] w-full shadow-[0_0_10px_rgba(0,255,163,0.5)]"></div>
                   </div>
                 </div>
-                <button className="relative z-10 px-4 py-1.5 bg-[#00FFA3] text-black font-black text-xs rounded-lg uppercase tracking-wider hover:bg-white hover:scale-105 hover:shadow-[0_0_15px_rgba(0,255,163,0.4)] transition-all active:scale-95">
+                <button className="relative z-10 px-4 py-1.5 bg-[#10B981] text-black font-black text-xs rounded-lg uppercase tracking-wider hover:bg-white hover:scale-105 hover:shadow-[0_0_15px_rgba(0,255,163,0.4)] transition-all active:scale-95">
                   AL
                 </button>
               </div>
@@ -157,7 +157,7 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className 
         <div className="p-8 md:p-12 relative overflow-hidden">
           {/* Decorative background elements for CTA */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-violet-600/10 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#00FFA3]/5 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#10B981]/5 rounded-full blur-[80px]" />
           
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex-1 max-w-2xl text-center md:text-left">
@@ -167,7 +167,7 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className 
               </div>
               <h3 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight font-['Outfit']">
                 Oynadıkça Kazan, <br className="hidden md:block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FFA3] to-[#00B8FF]">Seviye Atla!</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#10B981] to-[#00B8FF]">Seviye Atla!</span>
               </h3>
               <p className="text-zinc-400 text-sm md:text-base mb-8 max-w-lg mx-auto md:mx-0">
                 724Bets Görevler ve Kariyer sistemine katılarak günlük görevleri tamamlayın, 
@@ -184,11 +184,11 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className 
                 </button>
                 <div className="flex items-center gap-4 text-xs font-bold text-zinc-500">
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#00FFA3]" />
+                    <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
                     <span>Günlük Ödüller</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#00FFA3]" />
+                    <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
                     <span>Özel Rozetler</span>
                   </div>
                 </div>
@@ -202,11 +202,11 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({ className 
                 <div className="bg-[#131722] border border-white/10 rounded-2xl p-5 relative z-10 shadow-2xl">
                   <div className="flex items-center justify-between mb-4">
                     <div className="text-xs font-bold text-zinc-400">Örnek Görev</div>
-                    <div className="text-xs font-black text-[#00FFA3] bg-[#00FFA3]/10 px-2 py-1 rounded">200 XP</div>
+                    <div className="text-xs font-black text-[#10B981] bg-[#10B981]/10 px-2 py-1 rounded">200 XP</div>
                   </div>
                   <div className="text-sm text-white font-bold mb-4">Bugün 3 Farklı Slot Oyunu Dene</div>
                   <div className="h-2 w-full bg-[#0A0D14] rounded-full overflow-hidden mb-2">
-                    <div className="h-full bg-gradient-to-r from-[#00FFA3] to-[#00B8FF] w-[66%] relative">
+                    <div className="h-full bg-gradient-to-r from-[#10B981] to-[#00B8FF] w-[66%] relative">
                       <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
                     </div>
                   </div>

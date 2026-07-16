@@ -81,7 +81,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavi
                     title: game.name,
                     subtitle: game.provider,
                     meta: `Kategori: ${game.category.toUpperCase()} · RTP: ${game.rtp || '-'}`,
-                    icon: <Play className="w-4 h-4 text-[#00FFA3]" />,
+                    icon: <Play className="w-4 h-4 text-[#10B981]" />,
                     action: () => {
                         onNavigate?.('casino');
                         // In a real app we'd dispatch an event to open this specific game

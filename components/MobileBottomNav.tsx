@@ -36,10 +36,10 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               onClick={() => item.action ? item.action() : onViewChange(item.id)}
               className="relative flex-1 flex flex-col items-center justify-center h-full gap-0.5 transition-all group"
             >
-              <div className={`transition-all duration-300 ${isActive ? 'text-[#00FFA3] -translate-y-0.5' : 'text-gray-500'}`}>
+              <div className={`transition-all duration-300 ${isActive ? 'text-[#10B981] -translate-y-0.5' : 'text-gray-500'}`}>
                 <Icon size={20} className={isActive ? 'scale-110 drop-shadow-[0_0_8px_rgba(0,255,163,0.5)]' : ''} />
               </div>
-              <span className={`text-[9px] sm:text-[10px] font-bold tracking-wide transition-colors ${isActive ? 'text-[#00FFA3]' : 'text-gray-500'}`}>
+              <span className={`text-[9px] sm:text-[10px] font-bold tracking-wide transition-colors ${isActive ? 'text-[#10B981]' : 'text-gray-500'}`}>
                 {item.label}
               </span>
             </button>

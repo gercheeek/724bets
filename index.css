@@ -37,7 +37,7 @@
   --glass-border: rgba(0, 0, 0, 0.06);
 
   /* Gamdom Neon Green / Accent */
-  --gold-primary: #00FFA3;
+  --gold-primary: #10B981;
   --gold-hover: #14E564;
   --gold-glow: rgba(0, 255, 163, 0.25);
   --gold-subtle: rgba(0, 255, 163, 0.08);
@@ -96,7 +96,7 @@
   --glass-border: rgba(255, 255, 255, 0.08);
 
   /* Gamdom Neon Green / Accent (dark) */
-  --gold-primary: #00FFA3;
+  --gold-primary: #10B981;
   --gold-hover: #14E564;
   --gold-glow: rgba(0, 255, 163, 0.25);
   --gold-subtle: rgba(0, 255, 163, 0.08);
