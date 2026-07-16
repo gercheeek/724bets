@@ -844,7 +844,8 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             )}
                         </div>
                     );
-                })}
+                })
+            )}
             </div>
 
             {/* Input Footer Area */}
