@@ -536,23 +536,19 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     const getRoleColor = (role: string, username?: string, msgObj?: any) => {
         if (msgObj && msgObj.botColor) return msgObj.botColor;
         const r = role?.toUpperCase();
-        if (r === 'ADMIN') return '#EF4444'; // Kırmızı admin
-        if (r === 'VIP') return '#38BDF8'; // Mavi VIP
-        if (r === 'SYSTEM' || r === 'BOT') return '#10B981'; // Neon yeşil bot
-        return '#10B981'; // Neon yeşil normal üyeler için
+        if (r === 'ADMIN') return '#F87171'; // Soft red for admin
+        if (r === 'VIP') return '#38BDF8'; // Sky blue for VIP
+        if (r === 'SYSTEM' || r === 'BOT') return '#10B981'; // Emerald for bots
+        return '#E5E7EB'; // Light gray/white for normal users
     };
 
     const getRoleBadge = (role: string, msgObj?: any) => {
         const r = role?.toUpperCase();
         
         if (r === 'ADMIN') {
-            const color = msgObj?.botColor || '#10B981';
             return (
-                <span 
-                    className="px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase"
-                    style={{ background: `linear-gradient(to right, ${color}, #fff)` }}
-                >
-                    ADMIN
+                <span className="inline-flex items-center gap-0.5 bg-[#EF4444]/10 text-[#F87171] px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none mr-1.5 border border-[#EF4444]/20 uppercase">
+                    <Shield className="w-2.5 h-2.5" /> ADMIN
                 </span>
             );
         }
@@ -560,10 +556,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             const color = msgObj?.botColor || '#10B981';
             return (
                 <span 
-                    className="px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase"
-                    style={{ background: `linear-gradient(to right, ${color}, #fff)` }}
+                    className="inline-flex items-center gap-0.5 bg-black/20 px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none mr-1.5 uppercase border border-white/5"
+                    style={{ color }}
                 >
-                    SİSTEM
+                    <Cpu className="w-2.5 h-2.5" /> BOT
                 </span>
             );
         }
@@ -762,21 +758,16 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                     <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap">
                                         {formatTime(msg.created_at)}
                                     </span>
-                                    {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
-                                        <span className="bg-gradient-to-r from-[#10B981] to-[#059669] text-white px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none text-center shadow-[0_2px_8px_rgba(16,185,129,0.4)]">
-                                            ADM
-                                        </span>
-                                    )}
                                     <span 
-                                        className="text-[13px] font-extrabold tracking-wide drop-shadow-sm" 
+                                        className="text-[13px] font-extrabold tracking-wide drop-shadow-sm flex items-center" 
                                         style={{ color: getRoleColor(msg.role, msg.username, msg) }}
                                     >
                                         {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
                                     </span>
                                 </div>
                                 <div className={`text-[13px] leading-relaxed break-words pr-4 antialiased ${
-                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-gray-300 font-medium'
-                                }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#10B981') : undefined }}>
+                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold text-white' : 'text-gray-300 font-medium'
+                                }`}>
                                     {renderMessageText(msg.message)}
                                 </div>
                             </div>

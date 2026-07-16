@@ -2475,8 +2475,7 @@ const AppContent: React.FC = () => {
       {isMobileChatOpen && (
         <div className="fixed inset-0 z-[110] flex xl:hidden justify-end">
           <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileChatOpen(false)}></div>
-          <aside className="w-[90%] sm:w-[380px] max-w-[420px] bg-[#111317] border-l border-[#1A1D24] h-full shadow-[-10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-right">
-             <button onClick={() => setIsMobileChatOpen(false)} className="absolute top-4 -left-12 w-10 h-10 bg-[#111317] border border-[#1A1D24] rounded-l-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[-5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
+          <aside className="w-full h-full bg-[#0F1219] flex-shrink-0 relative z-10 animate-slide-in-right">
             <ModernChat
               open={true}
               onOpen={() => {}}
