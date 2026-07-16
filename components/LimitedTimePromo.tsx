@@ -38,7 +38,7 @@ const LimitedTimePromo = () => {
       <div className="w-full relative overflow-hidden rounded-2xl bg-[#0F121A] border border-[#2A2E3D] p-1 mb-6 shadow-xl group transition-all duration-500">
         {/* Background Image & Effects */}
         <div className="absolute inset-0 z-0 overflow-hidden rounded-[14px]">
-          <img src="/images/limited_promo_bg_vibrant.jpg" className="w-full h-full object-cover opacity-40 mix-blend-screen scale-105 group-hover:scale-100 transition-transform duration-1000" alt="" />
+          <img src="/images/seamless_banner_premium.jpg" className="w-full h-full object-cover opacity-60 mix-blend-screen scale-105 group-hover:scale-100 transition-transform duration-1000 object-[right_center]" alt="" />
           {/* Rich Dark Gradient */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0F121A] via-[#0F121A]/70 to-[#0F121A]"></div>
           {/* Subtle Green Glow */}
