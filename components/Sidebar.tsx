@@ -272,68 +272,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </div>
           </div>
 
-          
-          {/* Top 2x2 Grid */}
-          {activeView !== 'kral' && (
-            isOpen ? (
-              <div className="grid grid-cols-2 gap-2 px-3 pb-3">
-                {topGrid.map(item => {
-                  const isActive = activeView === item.view;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        if (item.id === 'canli') {
-                          window.dispatchEvent(new CustomEvent('internal-navigate', { detail: { url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' } }));
-                        }
-                        if (item.href) {
-                          window.open(item.href, '_blank');
-                        } else if (item.view) {
-                          onViewChange(item.view);
-                        }
-                      }}
-                      className={`flex flex-col items-center justify-center py-3 rounded-xl transition-all ${
-                        isActive 
-                          ? 'bg-[#10B981] text-black font-black' 
-                          : 'bg-[#131C28] text-white/70 hover:bg-[#1A253A] hover:text-white font-bold'
-                      }`}
-                    >
-                      {item.icon}
-                      <span className="text-[11px] tracking-wider uppercase mt-1">{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="flex flex-col gap-2 p-2 pb-3">
-                {topGrid.map(item => {
-                  const isActive = activeView === item.view;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        if (item.id === 'canli') {
-                          window.dispatchEvent(new CustomEvent('internal-navigate', { detail: { url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' } }));
-                        }
-                        if (item.href) {
-                          window.open(item.href, '_blank');
-                        } else if (item.view) {
-                          onViewChange(item.view);
-                        }
-                      }}
-                      className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all mx-auto ${
-                        isActive 
-                          ? 'bg-[#10B981] text-black shadow-[0_0_15px_rgba(0,255,163,0.3)]' 
-                          : 'bg-[#131C28] text-white/70 hover:bg-[#1A253A] hover:text-white'
-                      }`}
-                    >
-                      {item.icon}
-                    </button>
-                  );
-                })}
-              </div>
-            )
-          )}
+
 
           {/* Unified 5 Menu Blocks (Casino, Spor, Kodu Kullan etc, Sponsorluk, Support) */}
           {activeView !== 'kral' && (
