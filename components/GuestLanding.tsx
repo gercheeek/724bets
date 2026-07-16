@@ -234,11 +234,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               className="relative flex-1 cursor-pointer group/casino flex items-center justify-between p-5 lg:p-8 z-20 overflow-hidden transition-all duration-700 opacity-100 group-hover/banner:opacity-40 hover:!opacity-100"
             >
               {/* Background Image & Overlay */}
-              <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 z-0 overflow-hidden">
                 <img 
-                  src="/images/casino_bg_premium.jpg" 
+                  src="/images/seamless_banner_premium.jpg" 
                   alt="Casino" 
-                  className="w-full h-full object-cover transform group-hover/casino:scale-105 transition-transform duration-1000 ease-out"
+                  className="absolute top-0 left-0 w-full md:w-[200%] h-full max-w-none object-cover object-[center] md:object-[left_center] transform group-hover/casino:scale-105 transition-transform duration-1000 ease-out"
                 />
                 {/* 50-60% Opacity Overlay to make text pop */}
                 <div className="absolute inset-0 bg-[#05070A]/60 group-hover/casino:bg-[#05070A]/40 transition-colors duration-700"></div>
@@ -272,11 +272,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               className="relative flex-1 cursor-pointer group/sports flex items-center justify-between p-5 lg:p-8 z-20 overflow-hidden transition-all duration-700 opacity-100 group-hover/banner:opacity-40 hover:!opacity-100"
             >
               {/* Background Image & Overlay */}
-              <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 z-0 overflow-hidden">
                 <img 
-                  src="/images/sports_bg_premium.jpg" 
+                  src="/images/seamless_banner_premium.jpg" 
                   alt="Sports Betting" 
-                  className="w-full h-full object-cover transform group-hover/sports:scale-105 transition-transform duration-1000 ease-out"
+                  className="absolute top-0 right-0 w-full md:w-[200%] h-full max-w-none object-cover object-[center] md:object-[right_center] transform group-hover/sports:scale-105 transition-transform duration-1000 ease-out"
                 />
                 {/* 50-60% Opacity Overlay to make text pop */}
                 <div className="absolute inset-0 bg-[#05070A]/60 group-hover/sports:bg-[#05070A]/40 transition-colors duration-700"></div>
