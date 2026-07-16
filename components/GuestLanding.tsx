@@ -143,7 +143,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 <div key={idx} className="relative overflow-hidden rounded-xl bg-[#0B0E14] border border-white/5 hover:border-[#00FFA3]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
                   {/* Premium Background */}
                   <div className="absolute inset-0 z-0">
-                    <img src="/images/promo_cards_bg.jpg" className="w-full h-full object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-1000" alt="" />
+                    <img src="/images/promo_cards_bg_soft.jpg" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" alt="" />
+                    <div className="absolute inset-0 bg-[#0B0E14]/40 group-hover:bg-[#0B0E14]/20 transition-colors duration-1000"></div>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
                   <div className="flex flex-col z-10 w-2/3 relative">
