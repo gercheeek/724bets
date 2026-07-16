@@ -36,16 +36,11 @@ const LimitedTimePromo = () => {
 
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 px-4 py-3">
         
-        {/* Left Side: Icon & Text */}
+        {/* Left Side: Text Only */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-4 w-full md:w-auto text-center md:text-left">
-          {/* Glassy Icon Container */}
-          <div className="relative shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#FF3366]/20 to-transparent border border-[#FF3366]/30 flex items-center justify-center backdrop-blur-sm shadow-[0_0_15px_rgba(255,51,102,0.3)]">
-            <Gift className="w-6 h-6 text-[#FF3366]" />
-            <Sparkles className="absolute -top-1.5 -right-1.5 w-4 h-4 text-yellow-400 animate-pulse" />
-          </div>
-          
           <div className="flex flex-col justify-center">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+              <Sparkles className="w-5 h-5 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]" />
               <h3 className="text-white font-black text-lg md:text-xl tracking-tight uppercase" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
                 5.000₺ HOŞ GELDİN BONUSU
               </h3>
@@ -53,7 +48,7 @@ const LimitedTimePromo = () => {
                 Sınırlı Süre
               </span>
             </div>
-            <p className="text-gray-300 text-sm font-medium">
+            <p className="text-gray-300 text-sm font-medium pl-0 md:pl-7">
               10.000₺ Yap, <strong className="text-white text-base bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent">2.500₺ Nakit Çek!</strong>
             </p>
           </div>
