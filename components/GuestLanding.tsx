@@ -191,7 +191,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           {/* Left Column: Premium VIP Progress Card */}
           <div 
             onClick={() => onViewChange('originals')}
-            className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden group cursor-pointer bg-[#0A0D11]"
+            className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_60px_rgba(234,179,8,0.15)] hover:border-yellow-500/30 overflow-hidden group cursor-pointer bg-[#0A0D11] transition-all duration-500"
           >
             {/* Background Image / Gradients */}
             <div className="absolute inset-0 z-0">

@@ -21,7 +21,7 @@ const LimitedTimePromo = () => {
   const seconds = timeLeft % 60;
 
   return (
-    <div className="w-full relative overflow-hidden rounded-xl bg-[#0B0E14] border border-red-500/40 p-1 mb-4 shadow-[0_0_40px_rgba(239,68,68,0.2)] group hover:shadow-[0_0_60px_rgba(239,68,68,0.4)] transition-all duration-500 hover:-translate-y-0.5">
+    <div className="w-full relative overflow-hidden rounded-xl bg-[#0B0E14] border border-red-500/20 p-1 mb-4 shadow-[0_0_30px_rgba(239,68,68,0.15)] group hover:shadow-[0_0_50px_rgba(239,68,68,0.3)] hover:border-red-500/40 transition-all duration-500 hover:-translate-y-0.5">
       {/* Vibrant Premium Background */}
       <div className="absolute inset-0 z-0">
         <img src="/images/limited_promo_bg_vibrant.jpg" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 mix-blend-screen" alt="" />
