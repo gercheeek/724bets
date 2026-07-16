@@ -322,12 +322,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
             {/* Layout Column */}
             <div className="w-full flex flex-col gap-4 lg:gap-8 pb-4 md:pb-8 mb-2">
-              {showTeaser && (
-                <div className="w-full flex-shrink-0 mb-2">
-                  <WorldCupTeaser />
-                </div>
-              )}
-              
               <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 items-center lg:items-stretch py-4">
                 
                 {/* Left Side: Welcome & Auth */}
