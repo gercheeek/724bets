@@ -75,6 +75,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
     const [isEventCollapsed, setIsEventCollapsed] = useState(false);
     const [isPollCollapsed, setIsPollCollapsed] = useState(false);
+    const [showRules, setShowRules] = useState(false);
+
+    useEffect(() => {
+        if (open && siteUser) {
+            setShowRules(true);
+        } else {
+            setShowRules(false);
+        }
+    }, [open, siteUser]);
 
     useEffect(() => {
         const handleOutsideClick = () => {
@@ -524,24 +533,69 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0F1219] shadow-2xl font-sans text-left">
-            {/* Header */}
-            <div className="bg-[#0F1219] px-4 py-3 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5">
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 bg-[#252A33] px-3 py-1.5 rounded text-xs font-bold hover:bg-[#2C323D] cursor-pointer transition-colors">
-                        <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-3 rounded-sm object-cover" />
-                        <span>Türkçe</span>
-                        <span className="text-[10px] ml-1">▼</span>
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0F1219] shadow-2xl font-sans text-left relative">
+            
+            {/* Chat Rules Overlay */}
+            {showRules && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+                    <div className="bg-[#1A1D24] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-sm shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                        <div className="flex items-center gap-3 mb-6">
+                            <Shield className="w-6 h-6 text-[#10B981]" />
+                            <h2 className="text-lg font-black text-white tracking-wider">SOHBET KURALLARI</h2>
+                        </div>
+                        <ul className="space-y-4 text-sm text-gray-300 font-medium">
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Her zaman kibar olun ve herkese saygı gösterin.</span>
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Nefret söylemini, ırkçılığı, cinsiyetçiliği veya benzer davranışları içeren her türlü hali tolere edilmez.</span>
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Spam yapmayı, dilenmeyi veya bahşiş istemeyi kaçının.</span>
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Ortaklık kodlarını, linkleri paylaşmak veya yayınınızı tanıtmak kabul edilmez.</span>
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-gray-500">-</span>
+                                <span>Bu kuralları ihlal etmek, chat yasağına veya bazı durumlarda hesabınızın yasaklanmasına yol açabilir.</span>
+                            </li>
+                        </ul>
+                        <button 
+                            onClick={() => setShowRules(false)}
+                            className="w-full mt-6 bg-[#10B981] hover:bg-[#059669] text-black font-black py-3.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                        >
+                            Anladım, teşekkürler
+                        </button>
                     </div>
                 </div>
-                <div className="flex items-center gap-3 text-zinc-400">
-                    <div className="flex items-center gap-1.5 text-xs font-bold hover:text-white transition-colors cursor-pointer">
+            )}
+
+            {/* Header */}
+            <div className="bg-[#0F1219] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5 shadow-sm">
+                <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 bg-[#1A1D24] border border-[#2A2E3D] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#20242D] hover:border-white/20 cursor-pointer transition-all shadow-inner">
+                        <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-3 rounded-sm object-cover shadow-sm" />
+                        <span className="text-gray-200">Türkçe</span>
+                        <span className="text-[10px] ml-1 text-gray-500">▼</span>
+                    </div>
+                </div>
+                <div className="flex items-center gap-4 text-zinc-400">
+                    <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#1A1D24] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        <span>2.485</span>
+                        <span className="text-gray-300">2.485</span>
                     </div>
                     <button 
                         onClick={onClose} 
-                        className="p-1 hover:bg-white/5 active:scale-95 transition-all rounded text-zinc-400 hover:text-white"
+                        className="p-1.5 hover:bg-white/10 active:scale-95 transition-all rounded-lg text-zinc-400 hover:text-white"
                         title="Kapat"
                     >
                         <X className="w-4 h-4" />
@@ -703,10 +757,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     messages.map((msg, i) => (
                         <div 
                             key={msg.id || i} 
-                            className={`p-3 flex flex-row gap-3 relative group text-left cursor-default border-b border-white/5 hover:bg-[#10B981]/5 transition-colors ${
-                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#092b19]/20' : 
+                            className={`px-4 py-2.5 flex flex-row gap-3 relative group text-left cursor-default transition-all duration-300 rounded-lg mx-2 ${
+                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-gradient-to-r from-emerald-500/10 to-transparent border-l-2 border-emerald-500' : 
                                 (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-transparent' : 
-                                'bg-transparent'
+                                'bg-transparent hover:bg-white/[0.02]'
                             }`}
                             onContextMenu={(e) => {
                                 if (isAdmin) {
@@ -716,30 +770,30 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 }
                             }}
                         >
-                            {/* Avatar placeholder - using DiceBear for now based on username */}
-                            <div className="w-8 h-8 rounded-full bg-zinc-800 flex-shrink-0 overflow-hidden mt-1 border border-white/10">
+                            {/* Avatar */}
+                            <div className={`w-8 h-8 rounded-full bg-[#1A1D24] flex-shrink-0 overflow-hidden mt-0.5 border ${msg.role?.toUpperCase() === 'ADMIN' ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-white/10'}`}>
                                 <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.username}`} alt={msg.username} className="w-full h-full object-cover" />
                             </div>
 
                             <div className="flex flex-col flex-1 min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                                <div className="flex items-center gap-2 flex-wrap mb-1">
                                     <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap">
                                         {formatTime(msg.created_at)}
                                     </span>
                                     {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
-                                        <span className="bg-gradient-to-br from-[#10B981] to-[#00CC82] text-black px-1.5 py-0.5 rounded-sm text-[9px] font-black leading-none text-center shadow-[0_4px_12px_rgba(0,255,163,0.3)]">
+                                        <span className="bg-gradient-to-r from-[#10B981] to-[#059669] text-white px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none text-center shadow-[0_2px_8px_rgba(16,185,129,0.4)]">
                                             ADM
                                         </span>
                                     )}
                                     <span 
-                                        className="text-xs font-bold tracking-wide" 
+                                        className="text-[13px] font-extrabold tracking-wide drop-shadow-sm" 
                                         style={{ color: getRoleColor(msg.role, msg.username, msg) }}
                                     >
                                         {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
                                     </span>
                                 </div>
-                                <div className={`text-[12px] leading-relaxed break-words pr-4 antialiased ${
-                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-zinc-300 font-normal'
+                                <div className={`text-[13px] leading-relaxed break-words pr-4 antialiased ${
+                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-gray-300 font-medium'
                                 }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#10B981') : undefined }}>
                                     {renderMessageText(msg.message)}
                                 </div>
@@ -812,37 +866,37 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             </div>
 
             {/* Input Footer Area */}
-            <div className="p-3 bg-[#0F1219] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5">
+            <div className="px-4 py-4 bg-[#0F1219] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
                 {/* Message Input */}
                 {!siteUser ? (
-                    <div className="p-2 flex flex-col items-center justify-center gap-2">
+                    <div className="flex flex-col items-center justify-center">
                         <input 
                             type="text"
                             disabled
                             placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
-                            className="w-full bg-[#1C1F26] border border-white/5 text-[11px] font-bold text-center text-gray-500 rounded px-4 py-3 cursor-not-allowed"
+                            className="w-full bg-[#1A1D24] border border-[#2A2E3D] text-[12px] font-bold text-center text-gray-500 rounded-xl px-4 py-3.5 cursor-not-allowed shadow-inner"
                         />
                     </div>
                 ) : (
                     <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
-                        <div className="relative flex items-center bg-[#1C1F26] border border-transparent focus-within:border-emerald-500 rounded overflow-hidden transition-all duration-300">
+                        <div className="relative flex items-center bg-[#13161C] border border-[#2A2E3D] focus-within:border-[#10B981] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)] rounded-xl overflow-hidden transition-all duration-300">
                             <input
                                 type="text"
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
-                                placeholder="Start typing.."
-                                className="flex-1 bg-transparent text-sm text-gray-200 focus:outline-none placeholder-zinc-500 px-4 py-3"
+                                placeholder="Mesajınızı yazın..."
+                                className="flex-1 bg-transparent text-sm font-medium text-white focus:outline-none placeholder-zinc-500 px-4 py-3.5"
                             />
                             <div className="flex items-center pr-2 gap-1 h-full">
-                                <button type="button" className="text-zinc-500 hover:text-white transition-colors p-1.5 rounded hover:bg-white/5" title="Emoji">
-                                    <Smile className="w-4 h-4" />
+                                <button type="button" className="text-zinc-500 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5" title="Emoji">
+                                    <Smile className="w-5 h-5" />
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={!newMessage.trim()}
-                                    className="text-emerald-500 hover:text-emerald-400 disabled:opacity-30 disabled:hover:text-emerald-500 transition-colors p-1.5 rounded hover:bg-emerald-500/10 ml-1"
+                                    className="text-black bg-[#10B981] disabled:bg-[#2A2E3D] disabled:text-gray-500 hover:bg-[#059669] transition-all p-2 rounded-lg ml-1 shadow-[0_0_10px_rgba(16,185,129,0.2)] disabled:shadow-none"
                                 >
-                                    <Send className="w-4 h-4" />
+                                    <Send className="w-4 h-4 ml-0.5" />
                                 </button>
                             </div>
                         </div>
