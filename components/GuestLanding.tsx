@@ -116,23 +116,23 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
     {
       title: t("promo_1_title"),
       subtitle: t("promo_1_sub"),
-      image: "/images/3d_trophy.jpg",
-      glowClass: "bg-yellow-500",
-      textColorClass: "text-yellow-500/80 group-hover:text-yellow-400"
+      Icon: Trophy,
+      iconColor: "text-yellow-500",
+      glowColor: "bg-yellow-500"
     },
     {
       title: t("promo_2_title"),
       subtitle: t("promo_2_sub"),
-      image: "/images/3d_shield.jpg",
-      glowClass: "bg-purple-500",
-      textColorClass: "text-purple-500/80 group-hover:text-purple-400"
+      Icon: Shield,
+      iconColor: "text-purple-500",
+      glowColor: "bg-purple-500"
     },
     {
       title: t("promo_3_title"),
       subtitle: t("promo_3_sub"),
-      image: "/images/3d_support.jpg",
-      glowClass: "bg-[#00FFA3]",
-      textColorClass: "text-[#00FFA3]/80 group-hover:text-[#00FFA3]"
+      Icon: Target,
+      iconColor: "text-[#00FFA3]",
+      glowColor: "bg-[#00FFA3]"
     }
   ];
 
@@ -154,19 +154,17 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
                   
-                  <div className="flex flex-row items-center w-full relative z-10 gap-2 lg:gap-4">
-                    <div className="flex-shrink-0 relative">
-                       {/* Rich glowing 3D icon container */}
-                       <div className="w-20 h-20 lg:w-24 lg:h-24 relative flex items-center justify-center transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500">
-                           {/* Icon glow */}
-                           <div className={`absolute inset-0 opacity-40 blur-2xl ${card.glowClass} group-hover:opacity-70 transition-opacity duration-500 rounded-full scale-75`}></div>
-                           <img src={card.image} className="w-full h-full object-contain mix-blend-screen relative z-10" alt={card.title} style={{ filter: 'brightness(1.3) contrast(1.2)' }} />
-                       </div>
+                  <div className="flex flex-row items-center w-full relative z-10 gap-5 lg:gap-6">
+                    {/* Clean Minimalist Icon */}
+                    <div className="relative flex-shrink-0 flex items-center justify-center transform group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500">
+                        {/* Soft ambient glow behind the icon */}
+                        <div className={`absolute inset-0 opacity-20 blur-xl ${card.glowColor} group-hover:opacity-40 transition-opacity duration-500 rounded-full scale-150`}></div>
+                        <card.Icon strokeWidth={1.5} className={`w-10 h-10 lg:w-12 lg:h-12 relative z-10 ${card.iconColor} drop-shadow-md`} />
                     </div>
 
                     <div className="flex flex-col">
                       <span className="text-white font-black text-lg lg:text-xl tracking-tight leading-tight mb-1">{card.title}</span>
-                      <span className={`text-[9px] lg:text-[10px] font-black uppercase tracking-wider transition-colors duration-500 ${card.textColorClass}`}>{card.subtitle}</span>
+                      <span className={`text-[9px] lg:text-[10px] font-black uppercase tracking-wider transition-colors duration-500 text-zinc-400 group-hover:${card.iconColor}`}>{card.subtitle}</span>
                     </div>
                   </div>
                 </div>
