@@ -13,7 +13,15 @@ interface ModernChatProps {
     botsConfig?: any[]; // ChatBotConfig[]
 }
 
-const GLOBAL_CHANNEL_ID = '00000000-0000-0000-0000-000000000000';
+const LANGUAGES = [
+    { id: '00000000-0000-0000-0000-000000000000', code: 'TR', name: 'Türkçe', flag: 'tr' },
+    { id: '00000000-0000-0000-0000-000000000001', code: 'EN', name: 'English', flag: 'gb' },
+    { id: '00000000-0000-0000-0000-000000000002', code: 'DE', name: 'Deutsch', flag: 'de' },
+    { id: '00000000-0000-0000-0000-000000000003', code: 'ES', name: 'Español', flag: 'es' },
+    { id: '00000000-0000-0000-0000-000000000004', code: 'PT', name: 'Português', flag: 'pt' }
+];
+
+const GLOBAL_CHANNEL_ID = LANGUAGES[0].id;
 
 // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
 const sanitize = (msg: string) => msg.replace(/küfür1|argo1|kötükelime/gi, '***');
@@ -65,6 +73,8 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     const [lastMsgTime, setLastMsgTime] = useState(0);
     const [chatEnabled, setChatEnabled] = useState(true);
     const [rateLimitSec, setRateLimitSec] = useState(15);
+    const [activeLang, setActiveLang] = useState(LANGUAGES[0]);
+    const [showLangMenu, setShowLangMenu] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
 
     // Interactive States
@@ -170,7 +180,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                 const { data, error } = await supabase
                     .from('tv_chat')
                     .select('*')
-                    .eq('channel_id', GLOBAL_CHANNEL_ID)
+                    .eq('channel_id', activeLang.id)
                     .order('created_at', { ascending: true })
                     .limit(100);
 
@@ -228,7 +238,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         const channel = supabase.channel('global-chat-room')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tv_chat' }, (payload) => {
                 const m = payload.new;
-                if (m.channel_id === GLOBAL_CHANNEL_ID && isMounted) {
+                if (m.channel_id === activeLang.id && isMounted) {
                     setMessages(prev => {
                         if (prev.some(msg => msg.id === m.id)) return prev;
                         return [...prev, m];
@@ -252,7 +262,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             clearInterval(settingsInterval);
             supabase.removeChannel(channel);
         };
-    }, [open]);
+    }, [open, activeLang.id]);
 
     // Gelişmiş Bot Yönetimi Simülasyonu
     useEffect(() => {
@@ -323,7 +333,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                 message: 'tip',
                 tipData: { sender, amount, receiver },
                 created_at: new Date().toISOString(),
-                channel_id: 'global'
+                channel_id: activeLang.id
             };
             
             setMessages(prev => {
@@ -399,7 +409,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         const finalMessage = sanitize(newMessage.trim());
 
         const msgObj = {
-            channel_id: GLOBAL_CHANNEL_ID,
+            channel_id: activeLang.id,
             user_id: myUserId,
             username: myUsername,
             message: finalMessage,
@@ -536,23 +546,19 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     const getRoleColor = (role: string, username?: string, msgObj?: any) => {
         if (msgObj && msgObj.botColor) return msgObj.botColor;
         const r = role?.toUpperCase();
-        if (r === 'ADMIN') return '#EF4444'; // Kırmızı admin
-        if (r === 'VIP') return '#38BDF8'; // Mavi VIP
-        if (r === 'SYSTEM' || r === 'BOT') return '#10B981'; // Neon yeşil bot
-        return '#10B981'; // Neon yeşil normal üyeler için
+        if (r === 'ADMIN') return '#F87171'; // Soft red for admin
+        if (r === 'VIP') return '#38BDF8'; // Sky blue for VIP
+        if (r === 'SYSTEM' || r === 'BOT') return '#10B981'; // Emerald for bots
+        return '#E5E7EB'; // Light gray/white for normal users
     };
 
     const getRoleBadge = (role: string, msgObj?: any) => {
         const r = role?.toUpperCase();
         
         if (r === 'ADMIN') {
-            const color = msgObj?.botColor || '#10B981';
             return (
-                <span 
-                    className="px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase"
-                    style={{ background: `linear-gradient(to right, ${color}, #fff)` }}
-                >
-                    ADMIN
+                <span className="inline-flex items-center gap-0.5 bg-[#EF4444]/10 text-[#F87171] px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none mr-1.5 border border-[#EF4444]/20 uppercase">
+                    <Shield className="w-2.5 h-2.5" /> ADMIN
                 </span>
             );
         }
@@ -560,10 +566,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             const color = msgObj?.botColor || '#10B981';
             return (
                 <span 
-                    className="px-1 py-0.5 rounded text-[8px] font-black text-black tracking-wider leading-none mr-1.5 uppercase"
-                    style={{ background: `linear-gradient(to right, ${color}, #fff)` }}
+                    className="inline-flex items-center gap-0.5 bg-black/20 px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none mr-1.5 uppercase border border-white/5"
+                    style={{ color }}
                 >
-                    SİSTEM
+                    <Cpu className="w-2.5 h-2.5" /> BOT
                 </span>
             );
         }
@@ -626,12 +632,34 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
             {/* Header */}
             <div className="bg-[#0F1219] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5 shadow-sm">
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 bg-[#1A1D24] border border-[#2A2E3D] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#20242D] hover:border-white/20 cursor-pointer transition-all shadow-inner">
-                        <img src="https://flagcdn.com/w20/tr.png" alt="TR" className="w-4 h-3 rounded-sm object-cover shadow-sm" />
-                        <span className="text-gray-200">Türkçe</span>
+                <div className="flex items-center gap-3 relative">
+                    <div 
+                        onClick={() => setShowLangMenu(!showLangMenu)}
+                        className="flex items-center gap-2 bg-[#1A1D24] border border-[#2A2E3D] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#20242D] hover:border-white/20 cursor-pointer transition-all shadow-inner relative z-20"
+                    >
+                        <img src={`https://flagcdn.com/w20/${activeLang.flag}.png`} alt={activeLang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
+                        <span className="text-gray-200">{activeLang.name}</span>
                         <span className="text-[10px] ml-1 text-gray-500">▼</span>
                     </div>
+
+                    {/* Language Dropdown */}
+                    {showLangMenu && (
+                        <>
+                            <div className="fixed inset-0 z-10" onClick={() => setShowLangMenu(false)}></div>
+                            <div className="absolute top-full mt-2 left-0 w-36 bg-[#1A1D24] border border-[#2A2E3D] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-20 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                                {LANGUAGES.map(lang => (
+                                    <div 
+                                        key={lang.id}
+                                        onClick={() => { setActiveLang(lang); setShowLangMenu(false); }}
+                                        className={`flex items-center gap-2 px-3 py-2 text-xs font-bold cursor-pointer transition-colors ${activeLang.id === lang.id ? 'bg-[#10B981]/10 text-[#10B981]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                                    >
+                                        <img src={`https://flagcdn.com/w20/${lang.flag}.png`} alt={lang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
+                                        <span>{lang.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
                 <div className="flex items-center gap-4 text-zinc-400">
                     <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#1A1D24] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
@@ -762,21 +790,16 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                     <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap">
                                         {formatTime(msg.created_at)}
                                     </span>
-                                    {msg.role?.toUpperCase() === 'ADMIN' && !msg.botColor && (
-                                        <span className="bg-gradient-to-r from-[#10B981] to-[#059669] text-white px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none text-center shadow-[0_2px_8px_rgba(16,185,129,0.4)]">
-                                            ADM
-                                        </span>
-                                    )}
                                     <span 
-                                        className="text-[13px] font-extrabold tracking-wide drop-shadow-sm" 
+                                        className="text-[13px] font-extrabold tracking-wide drop-shadow-sm flex items-center" 
                                         style={{ color: getRoleColor(msg.role, msg.username, msg) }}
                                     >
                                         {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
                                     </span>
                                 </div>
                                 <div className={`text-[13px] leading-relaxed break-words pr-4 antialiased ${
-                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold' : 'text-gray-300 font-medium'
-                                }`} style={{ color: (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? (msg.botColor || '#10B981') : undefined }}>
+                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold text-white' : 'text-gray-300 font-medium'
+                                }`}>
                                     {renderMessageText(msg.message)}
                                 </div>
                             </div>
