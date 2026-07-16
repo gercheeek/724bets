@@ -136,8 +136,15 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       {siteUser ? (
         // MEMBER VIEW: Promo Cards + VIP Dashboard
         <>
+          {/* World Cup Teaser for Members */}
+          {showTeaser && (
+            <div className="w-full px-4 pt-0 -mt-4 pb-4">
+              <WorldCupTeaser />
+            </div>
+          )}
+
           {/* 3 Top Promo Cards (Desktop Only) */}
-          <div className="w-full px-4 pt-0 -mt-4 pb-2 hidden md:block">
+          <div className="w-full px-4 pb-2 hidden md:block">
             <div className="grid grid-cols-3 gap-4">
               {promoCards.map((card, idx) => (
                 <div key={idx} className="relative overflow-hidden rounded-xl bg-[#0B0E14] border border-white/5 hover:border-[#10B981]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
