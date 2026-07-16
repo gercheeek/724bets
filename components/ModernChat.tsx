@@ -300,6 +300,55 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         };
     }, [open, botsConfig]);
 
+    // Fake Tip Generator
+    useEffect(() => {
+        if (!open) return;
+        
+        let timeoutId: NodeJS.Timeout;
+
+        const USERS = ['kellyfart', 'gavinwithag', 'Sergey***', 'Yilmaz***', 'Carlos***', 'Maria***', 'Ali***', 'Metin***', 'Joao***'];
+        
+        const sendFakeTip = () => {
+            const sender = USERS[Math.floor(Math.random() * USERS.length)];
+            let receiver = USERS[Math.floor(Math.random() * USERS.length)];
+            while (receiver === sender) {
+                receiver = USERS[Math.floor(Math.random() * USERS.length)];
+            }
+            const amount = `$${(Math.random() * 50 + 1).toFixed(2).replace('.', ',')}`;
+            
+            const newTipMsg = {
+                id: `tip_${Date.now()}_${Math.random().toString(36).substr(2,9)}`,
+                username: 'System',
+                role: 'system_tip',
+                message: 'tip',
+                tipData: { sender, amount, receiver },
+                created_at: new Date().toISOString(),
+                channel_id: 'global'
+            };
+            
+            setMessages(prev => {
+                const updated = [...prev, newTipMsg];
+                setTimeout(() => {
+                    if (chatContainerRef.current) {
+                        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+                    }
+                }, 50);
+                return updated;
+            });
+
+            // 3 to 5 times an hour means every 12 to 20 minutes (720,000 to 1,200,000 ms)
+            const nextDelay = Math.random() * (1200000 - 720000) + 720000; 
+            timeoutId = setTimeout(sendFakeTip, nextDelay);
+        };
+
+        // Trigger the first one relatively quickly so the user can verify it works (e.g. 5-15 seconds)
+        // Then subsequent ones will follow the 12-20 minute rule.
+        const initialDelay = Math.random() * 10000 + 5000;
+        timeoutId = setTimeout(sendFakeTip, initialDelay);
+
+        return () => clearTimeout(timeoutId);
+    }, [open]);
+
     const handleSendMessage = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!newMessage.trim()) return;
@@ -651,7 +700,43 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         <p className="text-xs text-gray-500">Henüz mesaj yok. İlk mesajı sen yaz!</p>
                     </div>
                 ) : (
-                    messages.map((msg, i) => (
+                    messages.map((msg, i) => {
+                        if (msg.role === 'system_tip' && msg.tipData) {
+                            return (
+                                <div key={msg.id || i} className="px-2 py-1 mx-1.5">
+                                    <div className="relative overflow-hidden rounded-md border border-yellow-500/80 bg-[#1e1c17] p-2.5 flex items-center justify-between text-left shadow-[0_2px_10px_rgba(234,179,8,0.15)] group cursor-default transition-all duration-300">
+                                        <div className="flex items-center gap-2.5 relative z-10 w-full">
+                                            <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-zinc-400 drop-shadow-sm"><path d="M12 2L2 12l10 10 10-10L12 2z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor" /></svg>
+                                            </div>
+                                            <div className="text-gray-100 text-[13px] font-medium leading-tight flex items-center flex-wrap gap-1.5 pr-8 tracking-wide">
+                                                <span className="text-white font-semibold">{msg.tipData.sender}</span> 
+                                                <span className="text-gray-300">gönderildi</span>
+                                                <span className="text-yellow-500 font-extrabold">{msg.tipData.amount}</span>
+                                                <span className="text-gray-300">'e</span>
+                                                <span className="text-white font-semibold">{msg.tipData.receiver}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Floating Coins Effect */}
+                                        <div className="absolute right-0 top-0 h-full flex items-center pr-2 opacity-90 pointer-events-none transform group-hover:scale-110 transition-transform duration-300">
+                                            <div className="relative w-9 h-9 flex items-center justify-center">
+                                                <div className="absolute top-1 right-1 text-yellow-400 text-[9px] animate-pulse">✦</div>
+                                                <div className="absolute bottom-2 left-0 text-yellow-400 text-[7px] animate-pulse delay-150">✦</div>
+                                                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-600 border border-yellow-600 shadow-sm absolute transform -translate-x-1 -translate-y-1 z-10 flex items-center justify-center">
+                                                    <div className="w-3 h-3 border border-yellow-700/50 rounded-full"></div>
+                                                </div>
+                                                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-700 border border-yellow-700 shadow-sm absolute transform translate-x-1.5 translate-y-1.5 flex items-center justify-center">
+                                                    <div className="w-3 h-3 border border-yellow-800/50 rounded-full"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        }
+                        
+                        return (
                         <div 
                             key={msg.id || i} 
                             className={`px-4 py-2.5 flex flex-row gap-3 relative group text-left cursor-default transition-all duration-300 rounded-lg mx-2 ${
@@ -758,8 +843,8 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 </div>
                             )}
                         </div>
-                    ))
-                )}
+                    );
+                })}
             </div>
 
             {/* Input Footer Area */}
