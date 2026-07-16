@@ -38,11 +38,20 @@ const LimitedTimePromo = () => {
       <div className="w-full relative overflow-hidden rounded-2xl bg-[#0F121A] border border-[#2A2E3D] p-1 mb-6 shadow-xl group transition-all duration-500">
         {/* Background Image & Effects */}
         <div className="absolute inset-0 z-0 overflow-hidden rounded-[14px]">
-          <img src="/images/seamless_banner_premium.jpg" className="w-full h-full object-cover opacity-60 mix-blend-screen scale-105 group-hover:scale-100 transition-transform duration-1000 object-[right_center]" alt="" />
-          {/* Rich Dark Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0F121A] via-[#0F121A]/70 to-[#0F121A]"></div>
+          {/* Mobile Image (unchanged) */}
+          <img src="/images/seamless_banner_premium.jpg" className="md:hidden w-full h-full object-cover opacity-60 mix-blend-screen scale-105 group-hover:scale-100 transition-transform duration-1000 object-[right_center]" alt="" />
+          
+          {/* Desktop Background (Simplified & Elite) */}
+          <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-[#0F121A] via-[#131A26] to-[#0F121A]">
+            <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
+          </div>
+
+          {/* Rich Dark Gradient (Overlay for Mobile) */}
+          <div className="md:hidden absolute inset-0 bg-gradient-to-r from-[#0F121A] via-[#0F121A]/70 to-[#0F121A]"></div>
+          
           {/* Subtle Green Glow */}
-          <div className="absolute right-0 top-0 w-1/3 h-full bg-[#10B981]/5 blur-[100px] pointer-events-none"></div>
+          <div className="absolute right-0 top-0 md:w-1/2 w-1/3 h-full bg-[#10B981]/10 blur-[120px] pointer-events-none"></div>
+          <div className="hidden md:block absolute left-1/4 bottom-0 w-1/4 h-1/2 bg-sky-500/5 blur-[100px] pointer-events-none"></div>
         </div>
 
         {/* Subtle sweeping light effect */}
