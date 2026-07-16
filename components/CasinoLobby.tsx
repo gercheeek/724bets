@@ -41,7 +41,7 @@ const DEMO_GAMES = [
   { id: 119, name: 'Limbo', provider: 'Originals', img: '/images/rainbet-limbo.jpg', category: 'originals', rtp: '99.00%' },
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%' },
   { 
-    id: 116, 
+    id: 1160, 
     name: 'Out of the Woods', 
     provider: 'Pragmatic Play', 
     img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523109e9fec840eaeed00', 
@@ -455,8 +455,32 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
   const liveGames = allGames.filter(g => g.category === 'live').slice(0, 12);
   const newGames = allGames.filter(g => g.category === 'new' || g.isNew).slice(0, 12);
 
+  const handleGameClick = (game: any) => {
+    if (game.provider === 'Originals') {
+      if (game.name === 'Blackjack') {
+        onNavigate && onNavigate('blackjack-pro');
+      } else if (game.name === 'Plinko') {
+        onNavigate && onNavigate('plinko');
+      } else {
+        setSelectedGame(game);
+        setShowDemoIframe(true);
+      }
+      return;
+    }
+    setSelectedGame(game);
+  };
+
+  const handleDemoClick = (game: any) => {
+    if (game.provider === 'Originals') {
+      handleGameClick(game);
+      return;
+    }
+    setSelectedGame(game);
+    setShowDemoIframe(true);
+  };
+
   return (
-    <div className="w-full min-h-screen bg-[#0F121A] font-sans pb-24">
+    <div className="w-full h-full flex flex-col bg-[#0B0E14] text-white">
       {/* 1. TOP NAVBAR (Gamdom Style) */}
       <div className="sticky top-0 z-40 bg-[#0F121A]/95 backdrop-blur-md border-b border-[#1A1D29] px-4 md:px-8 py-0">
         <div className="max-w-[1600px] mx-auto flex items-center gap-6 overflow-x-auto hide-scrollbar">
@@ -566,14 +590,14 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
             <SectionHeader title="Popüler Slotlar" icon={<Flame />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {popularGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
+                <GameCard key={game.id} game={game} onClick={() => handleGameClick(game)} onDemoClick={() => handleDemoClick(game)} />
               ))}
             </div>
 
             <SectionHeader title="Canlı Casino" icon={<MonitorPlay />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {liveGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
+                <GameCard key={game.id} game={game} onClick={() => handleGameClick(game)} onDemoClick={() => handleDemoClick(game)} />
               ))}
             </div>
 
@@ -584,14 +608,14 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                 .sort((a, b) => b.players - a.players)
                 .slice(12, 24)
                 .map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
+                <GameCard key={game.id} game={game} onClick={() => handleGameClick(game)} onDemoClick={() => handleDemoClick(game)} />
               ))}
             </div>
 
             <SectionHeader title="Yeni Eklenenler" icon={<Sparkles />} />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               {newGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} onDemoClick={() => { setSelectedGame(game); setShowDemoIframe(true); }} />
+                <GameCard key={game.id} game={game} onClick={() => handleGameClick(game)} onDemoClick={() => handleDemoClick(game)} />
               ))}
             </div>
           </div>
