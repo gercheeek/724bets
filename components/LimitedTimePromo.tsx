@@ -21,56 +21,62 @@ const LimitedTimePromo = () => {
   const seconds = timeLeft % 60;
 
   return (
-    <div className="w-full relative overflow-hidden rounded-xl bg-[#0B0E14] border border-red-500/20 p-1 mb-4 shadow-[0_0_30px_rgba(239,68,68,0.15)] group hover:shadow-[0_0_50px_rgba(239,68,68,0.3)] hover:border-red-500/40 transition-all duration-500 hover:-translate-y-0.5">
-      {/* Vibrant Premium Background */}
-      <div className="absolute inset-0 z-0">
-        <img src="/images/limited_promo_bg_vibrant.jpg" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 mix-blend-screen" alt="" />
-        {/* Gradients to keep text readable but let the sides shine */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14]/90 via-[#0B0E14]/60 to-[#0B0E14]/80"></div>
-        {/* Pulsing red glow */}
-        <div className="absolute inset-0 bg-red-900/10 mix-blend-color-dodge animate-pulse"></div>
+    <div className="w-full relative overflow-hidden rounded-xl bg-[#0B0E14] border border-[#FF3366]/30 p-1 mb-4 shadow-[0_0_20px_rgba(255,51,102,0.1)] group transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,51,102,0.2)]">
+      {/* Background Image & Effects */}
+      <div className="absolute inset-0 z-0 overflow-hidden rounded-lg">
+        <img src="/images/limited_promo_bg_vibrant.jpg" className="w-full h-full object-cover opacity-60 mix-blend-screen scale-105 group-hover:scale-100 transition-transform duration-1000" alt="" />
+        {/* Soft radial gradient to focus on content */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#0B0E14_80%)]"></div>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-[#0B0E14]"></div>
       </div>
 
-      {/* Animated border line */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000 z-10"></div>
-      
-      <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-red-500/20 to-transparent pointer-events-none z-10"></div>
+      {/* Subtle sweeping light effect */}
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1500 z-10 pointer-events-none"></div>
 
-      <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-4 p-3 lg:p-4">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 px-4 py-3">
         
         {/* Left Side: Icon & Text */}
-        <div className="flex items-center gap-3 w-full xl:w-auto">
-          <div className="relative shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center animate-pulse">
-            <Gift className="w-5 h-5 md:w-6 md:h-6 text-red-500" />
-            <Sparkles className="absolute -top-1 -right-1 w-3 h-3 md:w-4 md:h-4 text-yellow-400" />
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-4 w-full md:w-auto text-center md:text-left">
+          {/* Glassy Icon Container */}
+          <div className="relative shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#FF3366]/20 to-transparent border border-[#FF3366]/30 flex items-center justify-center backdrop-blur-sm shadow-[0_0_15px_rgba(255,51,102,0.3)]">
+            <Gift className="w-6 h-6 text-[#FF3366]" />
+            <Sparkles className="absolute -top-1.5 -right-1.5 w-4 h-4 text-yellow-400 animate-pulse" />
           </div>
-          <div className="flex flex-col">
-            <h3 className="text-white font-black text-sm sm:text-base md:text-lg tracking-wide flex flex-wrap items-center gap-2">
-              İLK ÜYELERE ÖZEL REDDEDİLEMEYECEK TEKLİF!
-              <span className="bg-red-500 text-white text-[9px] sm:text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse whitespace-nowrap">Sınırlı Süre</span>
-            </h3>
-            <p className="text-gray-300 text-xs sm:text-sm mt-0.5 font-medium">
-              Hemen yatır <strong className="text-[#00FFA3]">5.000 TL Bonus</strong> al. 10.000 TL yap, <strong className="text-white">2.500 TL Çek!</strong>
+          
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+              <h3 className="text-white font-black text-lg md:text-xl tracking-tight uppercase" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+                5.000₺ HOŞ GELDİN BONUSU
+              </h3>
+              <span className="bg-[#FF3366]/20 text-[#FF3366] border border-[#FF3366]/50 text-[9px] md:text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest hidden sm:inline-block">
+                Sınırlı Süre
+              </span>
+            </div>
+            <p className="text-gray-300 text-sm font-medium">
+              10.000₺ Yap, <strong className="text-white text-base bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent">2.500₺ Nakit Çek!</strong>
             </p>
           </div>
         </div>
 
         {/* Right Side: Timer & Action */}
-        <div className="flex items-center justify-between w-full xl:w-auto gap-3 shrink-0">
-          <div className="flex flex-col items-center justify-center bg-black/50 border border-white/5 rounded-lg px-3 sm:px-4 py-1.5 min-w-[80px]">
-            <span className="text-gray-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">Kalan Süre</span>
-            <div className="flex items-center gap-1 sm:gap-1.5 text-red-500 font-mono font-bold text-base sm:text-lg">
-              <Timer className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+        <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-end shrink-0 mt-2 md:mt-0">
+          {/* Minimal Timer */}
+          <div className="flex flex-col items-center justify-center bg-black/40 border border-white/10 rounded-lg px-4 py-2 backdrop-blur-md">
+            <span className="text-[#848B9D] text-[10px] font-bold uppercase tracking-widest mb-0.5">Kalan Süre</span>
+            <div className="flex items-center gap-1.5 text-white font-mono font-bold text-lg">
+              <Timer className="w-4 h-4 text-[#FF3366]" />
               {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
             </div>
           </div>
 
+          {/* Primary CTA Button (Green) */}
           <button 
             onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-            className="relative overflow-hidden group/btn bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-black px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-1.5 sm:gap-2 uppercase tracking-wider text-[11px] sm:text-sm"
+            className="relative overflow-hidden group/btn bg-[#00FFA3] hover:bg-[#00E676] text-black font-black px-6 py-3 rounded-lg shadow-[0_0_20px_rgba(0,255,163,0.3)] hover:shadow-[0_0_30px_rgba(0,255,163,0.5)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 uppercase tracking-wide text-sm"
           >
-            <span className="relative z-10 whitespace-nowrap">BONUSU KAP!</span>
-            <ArrowRight className="relative z-10 w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/btn:translate-x-1 transition-transform" />
+            <span className="relative z-10">BONUSU KAP</span>
+            <ArrowRight className="relative z-10 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
             <div className="absolute inset-0 bg-white/20 -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-500"></div>
           </button>
         </div>
