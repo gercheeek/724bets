@@ -140,8 +140,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           <div className="w-full px-4 pt-0 -mt-4 pb-2 hidden md:block">
             <div className="grid grid-cols-3 gap-4">
               {promoCards.map((card, idx) => (
-                <div key={idx} className="relative overflow-hidden rounded-xl bg-[#151821] border border-white/5 hover:border-[#00FFA3]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div key={idx} className="relative overflow-hidden rounded-xl bg-[#0B0E14] border border-white/5 hover:border-[#00FFA3]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                  {/* Premium Background */}
+                  <div className="absolute inset-0 z-0">
+                    <img src="/images/promo_cards_bg.jpg" className="w-full h-full object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-1000" alt="" />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
                   <div className="flex flex-col z-10 w-2/3 relative">
                     <span className="text-white font-black text-xl lg:text-2xl tracking-tight leading-tight mb-1.5 group-hover:text-[#00FFA3] transition-colors">{card.title}</span>
                     <span className="text-zinc-400 text-[10px] font-black uppercase tracking-wider">{card.subtitle}</span>
@@ -161,10 +165,13 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           {/* Left Column: Premium VIP Progress Card */}
           <div 
             onClick={() => onViewChange('originals')}
-            className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden group cursor-pointer"
+            className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden group cursor-pointer bg-[#0A0D11]"
           >
             {/* Background Image / Gradients */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#161A22] to-[#0A0D11] z-0"></div>
+            <div className="absolute inset-0 z-0">
+              <img src="/images/vip_bg.jpg" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-1000" alt="" />
+              <div className="absolute inset-0 bg-[#0A0D11]/50"></div>
+            </div>
             
             {/* Crown watermark */}
             <div className="absolute -right-6 -top-6 opacity-[0.03] transform group-hover:scale-110 group-hover:opacity-[0.05] transition-all duration-700 z-0">

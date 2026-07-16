@@ -21,11 +21,17 @@ const LimitedTimePromo = () => {
   const seconds = timeLeft % 60;
 
   return (
-    <div className="w-full relative overflow-hidden rounded-xl bg-gradient-to-r from-red-900/40 via-[#0B0E14] to-[#0B0E14] border border-red-500/30 p-1 mb-4 shadow-[0_0_30px_rgba(239,68,68,0.15)] group">
+    <div className="w-full relative overflow-hidden rounded-xl bg-[#0B0E14] border border-red-500/30 p-1 mb-4 shadow-[0_0_30px_rgba(239,68,68,0.15)] group">
+      {/* Premium Background */}
+      <div className="absolute inset-0 z-0">
+        <img src="/images/limited_promo_bg.jpg" className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-1000" alt="" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14]/70 via-[#0B0E14]/80 to-[#0B0E14]"></div>
+      </div>
+
       {/* Animated border line */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000 z-10"></div>
       
-      <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-red-500/10 to-transparent pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-red-500/10 to-transparent pointer-events-none z-10"></div>
 
       <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-4 p-3 lg:p-4">
         
