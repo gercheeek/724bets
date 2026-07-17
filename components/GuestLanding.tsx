@@ -251,7 +251,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
 
           {/* Middle & Right Columns: Casino & Sports Cards */}
-          <div className="lg:col-span-2 w-full h-[240px] md:h-[220px] lg:h-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="lg:col-span-2 w-full h-[180px] md:h-[220px] lg:h-full grid grid-cols-2 gap-3 md:gap-4">
             
             {/* Casino Card */}
             <div onClick={() => onViewChange('blackjack')} className="relative w-full h-full cursor-pointer group flex flex-col rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] hover:border-[#10B981]/30 transition-all duration-300 hover:-translate-y-1">
@@ -329,7 +329,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
                 
                 {/* Right Side: 2 Big Cards */}
-                <div className="w-full lg:w-[55%] flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 min-h-[300px] lg:min-h-[320px] px-2 lg:px-0">
+                <div className="w-full lg:w-[55%] flex-1 grid grid-cols-2 gap-3 lg:gap-4 min-h-[160px] md:min-h-[300px] lg:min-h-[320px] px-2 lg:px-0">
                   
                   {/* Casino Card */}
                   <div onClick={() => onViewChange('blackjack')} className="relative w-full h-full cursor-pointer group flex flex-col rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] hover:border-[#10B981]/30 transition-all duration-300 hover:-translate-y-1">

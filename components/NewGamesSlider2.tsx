@@ -72,27 +72,30 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {NEW_GAMES_2.map((game) => (
-          <div 
-            key={game.id} 
-            onClick={() => onPlayGame(game)}
-            className="flex-none snap-start group relative w-[140px] h-[190px] md:w-[160px] md:h-[220px] rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
-          >
-            
-            <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-fill transition-transform duration-700 group-hover:scale-110" />
-            
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div key={game.id} className="shrink-0 snap-start flex flex-col items-center group">
+            <div 
+              onClick={() => onPlayGame(game)}
+              className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
+            >
+              
+              <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-fill transition-transform duration-700 ease-out group-hover:scale-110" />
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-            {/* Play button appears on hover */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20">
-                    <Play className="w-5 h-5 text-white fill-current ml-1" />
-                </div>
+              {/* Play button appears on hover */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20">
+                      <Play className="w-5 h-5 text-white fill-current ml-1" />
+                  </div>
+              </div>
             </div>
 
-            {/* Active Players & Dot */}
-            <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1.5 z-20">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
-              <span className="text-[10px] sm:text-xs font-bold text-gray-300 drop-shadow-md">{game.players} {t('players')}</span>
+            {/* External Player Count */}
+            <div className="mt-3 flex items-center gap-1.5 px-2">
+              <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse"></div>
+              <span className="text-zinc-400 text-xs font-bold font-sans">
+                <span className="text-white">{game.players}</span> {t('players')}
+              </span>
             </div>
             
           </div>
