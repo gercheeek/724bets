@@ -398,30 +398,37 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               <div className="flex items-center gap-2 mb-4 px-2">
                 <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Yeni Eklenenler</h2>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 px-2">
+              <div className="flex flex-wrap gap-3 md:gap-4 px-2">
                 {NEW_ADDED_GAMES.map(game => (
-                  <div key={game.id} className="relative group cursor-pointer rounded-xl overflow-hidden shadow-lg border border-white/5 bg-[#11141D] transition-transform duration-300 hover:-translate-y-1" onClick={onMemberRegisterClick}>
-                    <div className="relative w-full aspect-[3/4] overflow-hidden">
-                      <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E14] via-transparent to-transparent opacity-80"></div>
-                    </div>
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 z-30 backdrop-blur-[2px]">
-                      <button className="w-12 h-12 bg-[#10B981] hover:bg-[#0da070] rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
-                        <Play className="w-5 h-5 text-black ml-1" fill="currentColor" />
-                      </button>
-                      {(game.demoSymbol || game.customDemoUrl) && (
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setSelectedGame(game); setShowDemoIframe(true); }}
-                          className="bg-white/10 hover:bg-white/20 text-white font-bold text-xs py-1.5 px-4 rounded-full border border-white/20 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"
-                        >
-                          Demo Oyna
+                  <div key={game.id} className="flex flex-col items-center group">
+                    <div 
+                      onClick={onMemberRegisterClick}
+                      className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
+                    >
+                      <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      
+                      {/* Play & Demo Buttons appear on hover */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 backdrop-blur-[2px] bg-black/40">
+                        <button className="w-12 h-12 bg-[#10B981] hover:bg-[#0da070] rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.5)] border border-white/20">
+                          <Play className="w-5 h-5 text-black ml-1 fill-current" />
                         </button>
-                      )}
+                        {(game.demoSymbol || game.customDemoUrl) && (
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setSelectedGame(game); setShowDemoIframe(true); }}
+                            className="bg-black/60 hover:bg-white/20 text-white font-bold text-[10px] py-1.5 px-3 rounded-full border border-white/20 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"
+                          >
+                            Demo Oyna
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <div className="absolute bottom-2 left-2 flex items-center gap-1.5 z-20">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
-                      <span className="text-[10px] sm:text-xs font-bold text-gray-300 drop-shadow-md">{game.players} Oyuncular</span>
+                    {/* External Player Count */}
+                    <div className="mt-3 flex items-center gap-1.5 px-2">
+                      <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse"></div>
+                      <span className="text-zinc-400 text-[11px] font-bold font-sans">
+                        <span className="text-white">{game.players}</span> Oyuncular
+                      </span>
                     </div>
                   </div>
                 ))}
