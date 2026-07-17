@@ -257,7 +257,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full border-b border-white/5 cursor-pointer hover:brightness-110 transition-all overflow-hidden">
                 <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover:scale-[1.05] transition-all duration-700 ease-out opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                <div className="relative z-20 flex flex-col justify-center h-full px-5 lg:px-6">
+                <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-6 h-full px-5 lg:px-6">
                     <h3 className="text-[28px] sm:text-[32px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1">Casino</h3>
                     <div className="block"><ActivePlayersCounter type="casino" /></div>
                 </div>
@@ -267,7 +267,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full cursor-pointer hover:brightness-110 transition-all overflow-hidden">
                 <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover:scale-[1.05] transition-all duration-700 ease-out opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                <div className="relative z-20 flex flex-col justify-center items-end h-full px-5 lg:px-6">
+                <div className="relative z-20 flex flex-col justify-end items-end pb-4 sm:pb-6 h-full px-5 lg:px-6">
                     <h3 className="text-[28px] sm:text-[32px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1">Spor</h3>
                     <div className="block"><ActivePlayersCounter type="sports" /></div>
                 </div>
@@ -331,7 +331,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full border-b border-white/5 cursor-pointer hover:brightness-110 transition-all overflow-hidden">
                       <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover:scale-[1.05] transition-all duration-700 ease-out opacity-80" />
                       <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                      <div className="relative z-20 flex flex-col justify-center h-full px-5 lg:px-6">
+                      <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-6 h-full px-5 lg:px-6">
                           <h3 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1">Casino</h3>
                           <div className="block"><ActivePlayersCounter type="casino" /></div>
                       </div>
@@ -341,7 +341,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full cursor-pointer hover:brightness-110 transition-all overflow-hidden">
                       <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover:scale-[1.05] transition-all duration-700 ease-out opacity-80" />
                       <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                      <div className="relative z-20 flex flex-col justify-center items-end h-full px-5 lg:px-6">
+                      <div className="relative z-20 flex flex-col justify-end items-end pb-4 sm:pb-6 h-full px-5 lg:px-6">
                           <h3 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1">Spor</h3>
                           <div className="block"><ActivePlayersCounter type="sports" /></div>
                       </div>
