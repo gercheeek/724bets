@@ -251,24 +251,24 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
 
           {/* Middle & Right Columns: Unified Casino & Sports Card */}
-          <div className="lg:col-span-2 w-full h-[240px] md:h-[220px] lg:h-full flex flex-col rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] group transition-all duration-300 hover:border-[#10B981]/30 hover:-translate-y-1">
+          <div className="lg:col-span-2 w-full h-[240px] md:h-[220px] lg:h-full flex flex-col rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14]">
             
             {/* Top Half: Casino */}
-            <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full border-b border-white/5 cursor-pointer hover:brightness-110 transition-all overflow-hidden">
-                <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover:scale-[1.05] transition-all duration-700 ease-out opacity-80" />
+            <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full border-b border-white/10 cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/casino overflow-hidden">
+                <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/casino:opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-6 h-full px-5 lg:px-6">
-                    <h3 className="text-[28px] sm:text-[32px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1">Casino</h3>
+                <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-5 h-full px-5 lg:px-6">
+                    <h3 className="text-[28px] sm:text-[32px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/casino:translate-x-1 transition-transform">Casino</h3>
                     <div className="block"><ActivePlayersCounter type="casino" /></div>
                 </div>
             </div>
 
             {/* Bottom Half: Sports */}
-            <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full cursor-pointer hover:brightness-110 transition-all overflow-hidden">
-                <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover:scale-[1.05] transition-all duration-700 ease-out opacity-80" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                <div className="relative z-20 flex flex-col justify-end items-end pb-4 sm:pb-6 h-full px-5 lg:px-6">
-                    <h3 className="text-[28px] sm:text-[32px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1">Spor</h3>
+            <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/sports overflow-hidden">
+                <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/sports:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-l from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
+                <div className="relative z-20 flex flex-col justify-end items-end pb-4 sm:pb-5 h-full pr-4 lg:pr-5 pl-5">
+                    <h3 className="text-[28px] sm:text-[32px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/sports:-translate-x-1 transition-transform">Spor</h3>
                     <div className="block"><ActivePlayersCounter type="sports" /></div>
                 </div>
             </div>
@@ -325,24 +325,24 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
                 
                 {/* Right Side: Unified Big Card */}
-                <div className="w-full lg:w-[55%] flex-1 flex flex-col min-h-[220px] md:min-h-[300px] lg:min-h-[320px] px-2 lg:px-0 rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] group transition-all duration-300 hover:border-[#10B981]/30 hover:-translate-y-1">
+                <div className="w-full lg:w-[55%] flex-1 flex flex-col min-h-[220px] md:min-h-[300px] lg:min-h-[320px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14]">
                   
                   {/* Top Half: Casino */}
-                  <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full border-b border-white/5 cursor-pointer hover:brightness-110 transition-all overflow-hidden">
-                      <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover:scale-[1.05] transition-all duration-700 ease-out opacity-80" />
+                  <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full border-b border-white/10 cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/casino overflow-hidden">
+                      <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/casino:opacity-100" />
                       <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                      <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-6 h-full px-5 lg:px-6">
-                          <h3 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1">Casino</h3>
+                      <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-5 h-full px-5 lg:px-6">
+                          <h3 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/casino:translate-x-1 transition-transform">Casino</h3>
                           <div className="block"><ActivePlayersCounter type="casino" /></div>
                       </div>
                   </div>
 
                   {/* Bottom Half: Sports */}
-                  <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full cursor-pointer hover:brightness-110 transition-all overflow-hidden">
-                      <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover:scale-[1.05] transition-all duration-700 ease-out opacity-80" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                      <div className="relative z-20 flex flex-col justify-end items-end pb-4 sm:pb-6 h-full px-5 lg:px-6">
-                          <h3 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1">Spor</h3>
+                  <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/sports overflow-hidden">
+                      <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/sports:opacity-100" />
+                      <div className="absolute inset-0 bg-gradient-to-l from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
+                      <div className="relative z-20 flex flex-col justify-end items-end pb-4 sm:pb-5 h-full pr-4 lg:pr-5 pl-5">
+                          <h3 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/sports:-translate-x-1 transition-transform">Spor</h3>
                           <div className="block"><ActivePlayersCounter type="sports" /></div>
                       </div>
                   </div>
