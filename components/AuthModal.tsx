@@ -226,7 +226,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
     };
 
     return (
-        <div className="fixed inset-0 z-[20000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+        <div className={`fixed inset-0 z-[20000] flex items-center justify-center bg-black/90 backdrop-blur-md ${showSplash ? 'p-0 md:p-4' : 'p-4'}`}>
             <style>{`
                 @keyframes slowPanZoom {
                     0% { transform: scale(1) translate(0, 0); }
@@ -240,7 +240,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     animation: slowPanZoom 8s ease-out forwards;
                 }
             `}</style>
-            <div className="w-full max-w-4xl bg-[#111317] rounded-2xl md:rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-auto min-h-[500px] md:min-h-[640px] max-h-[95vh]">
+            <div className={`w-full max-w-4xl bg-[#111317] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 ${showSplash ? 'h-[100dvh] rounded-none md:h-auto md:min-h-[640px] md:rounded-2xl' : 'h-auto min-h-[500px] max-h-[95vh] md:min-h-[640px] rounded-2xl md:rounded-2xl'}`}>
                 
                 {/* Left Side - Promo Graphic (Mobile Splash / Desktop Left Half) */}
                 <div className={`flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
