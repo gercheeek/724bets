@@ -368,7 +368,7 @@ const Header: React.FC<HeaderProps> = ({
                 onMouseEnter={() => setLogoHoverCount(prev => prev + 1)}
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
               >
-                <SlotText text="724" className="text-white font-extrabold text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
+                <span className="text-white font-extrabold text-xl md:text-2xl uppercase text-center">724</span>
                 <div className="flex items-center perspective-1000 ml-[2px]">
                   {['B', 'E', 'T', 'S'].map((letter, i) => {
                     const isSportsView = activeView === 'sporx' || activeView === 'sports' || activeView === 'sports3' || activeView === 'sports4' || activeView === 'sports5';
