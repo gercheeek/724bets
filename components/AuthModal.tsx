@@ -240,7 +240,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     animation: slowPanZoom 8s ease-out forwards;
                 }
             `}</style>
-            <div className="w-full max-w-4xl bg-[#111317] rounded-none md:rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border-0 md:border border-white/5 h-[100dvh] md:h-auto md:min-h-[640px] max-h-[100dvh] md:max-h-[95vh]">
+            <div className="w-full max-w-4xl bg-[#111317] rounded-2xl md:rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 h-auto min-h-[500px] md:min-h-[640px] max-h-[95vh]">
                 
                 {/* Left Side - Promo Graphic (Mobile Splash / Desktop Left Half) */}
                 <div className={`flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
@@ -277,8 +277,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 </div>
 
                 {/* Right Side - Auth Form */}
-                <div className={`w-full md:w-1/2 p-6 md:p-10 flex-col relative bg-[#151821] overflow-y-auto h-full scrollbar-hide animate-in fade-in slide-in-from-right-8 duration-700 ${showSplash ? 'hidden md:flex' : 'flex'}`}>
-                    <button onClick={onClose} className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#1F232B] flex items-center justify-center text-zinc-400 hover:text-white transition-colors z-10 hover:bg-[#2A2E39]">
+                <div className={`w-full md:w-1/2 p-5 sm:p-6 md:p-10 flex-col relative bg-[#151821] overflow-y-auto h-full scrollbar-hide animate-in fade-in slide-in-from-right-8 duration-700 ${showSplash ? 'hidden md:flex' : 'flex'}`}>
+                    <button onClick={onClose} className="absolute top-4 right-4 md:top-6 md:right-6 w-8 h-8 rounded-full bg-[#1F232B] flex items-center justify-center text-zinc-400 hover:text-white transition-colors z-10 hover:bg-[#2A2E39]">
                         <X className="w-4 h-4" />
                     </button>
 
@@ -296,18 +296,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         >
                             Kayıt Ol
                         </button>
-                        {!hideMemberLogin && (
-                            <button 
-                                onClick={() => setActiveTab('admin')}
-                                className={`pb-2 px-1 text-sm font-bold transition-colors border-b-2 ml-auto ${activeTab === 'admin' ? 'border-[#10B981] text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}
-                            >
-                                Yönetici
-                            </button>
-                        )}
                     </div>
 
                     {/* Header Text */}
-                    <div className="mb-6">
+                    <div className="mb-5 md:mb-6 mt-2 md:mt-0">
                         <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
                             {activeTab === 'admin' ? 'Yönetici Girişi' : (memberMode === 'register' ? 'Bir Hesap Oluştur' : 'Hesabınıza giriş yapın')}
                         </h2>
