@@ -12,6 +12,7 @@ import WorldCupTeaser from './WorldCupTeaser';
 import OriginalsSlider from './OriginalsSlider';
 import LimitedTimePromo from './LimitedTimePromo';
 import { useLanguage } from '../contexts/LanguageContext';
+import { GameDetailModal, GameData } from './GameDetailModal';
 
 const NEW_ADDED_GAMES = [
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%', players: 204 },
@@ -111,6 +112,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   const [showTeaser, setShowTeaser] = useState(true);
   const [selectedGame, setSelectedGame] = useState<any | null>(null);
   const [showDemoIframe, setShowDemoIframe] = useState(false);
+  const [detailModalGame, setDetailModalGame] = useState<GameData | null>(null);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -402,25 +404,27 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 {NEW_ADDED_GAMES.map(game => (
                   <div key={game.id} className="flex flex-col items-center group">
                     <div 
-                      onClick={onMemberRegisterClick}
+                      onClick={() => setDetailModalGame({
+                        id: game.id.toString(),
+                        name: game.name,
+                        desc: `${game.provider} sağlayıcısından yepyeni bir deneyim.`,
+                        color: 'from-emerald-600 to-emerald-900',
+                        image: game.img,
+                        path: 'slots', 
+                        icon: '🎰',
+                        players: game.players,
+                        fullDesc: `${game.name}, ${game.provider} tarafından sunulan popüler ve kazançlı bir slottur. Yüksek RTP ve devasa çarpan potansiyeliyle hemen oynamaya başlayın.`
+                      })}
                       className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
                     >
                       <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       
-                      {/* Play & Demo Buttons appear on hover */}
+                      {/* Play Button appears on hover */}
                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 backdrop-blur-[2px] bg-black/40">
                         <button className="w-12 h-12 bg-[#10B981] hover:bg-[#0da070] rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.5)] border border-white/20">
                           <Play className="w-5 h-5 text-black ml-1 fill-current" />
                         </button>
-                        {(game.demoSymbol || game.customDemoUrl) && (
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); setSelectedGame(game); setShowDemoIframe(true); }}
-                            className="bg-black/60 hover:bg-white/20 text-white font-bold text-[10px] py-1.5 px-3 rounded-full border border-white/20 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"
-                          >
-                            Demo Oyna
-                          </button>
-                        )}
                       </div>
                     </div>
                     {/* External Player Count */}
@@ -453,6 +457,16 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       <div className="w-full">
         <OriginalsSlider onNavigate={onViewChange} />
       </div>
+
+      <GameDetailModal 
+        game={detailModalGame} 
+        isOpen={!!detailModalGame} 
+        onClose={() => setDetailModalGame(null)} 
+        onPlay={() => {
+          setDetailModalGame(null);
+          onMemberRegisterClick();
+        }} 
+      />
 
       {/* Live Games Slider */}
       <div className="w-full">
