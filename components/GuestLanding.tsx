@@ -325,7 +325,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
 
           {/* Yeni Eklenenler 2 */}
-          <NewGamesSlider2 />
+          <NewGamesSlider2 onPlayGame={() => onViewChange('casino')} />
 
         </>
       ) : (
@@ -449,7 +449,14 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
 
             {/* Yeni Eklenenler 2 (Guest View) */}
-            <NewGamesSlider2 />
+            <NewGamesSlider2 onPlayGame={(game) => setDetailModalGame({
+              id: game.id,
+              name: game.name,
+              provider: game.provider,
+              img: game.img,
+              demoUrl: getDemoUrl(game),
+              fullDesc: `${game.name}, ${game.provider} tarafından sunulan popüler ve kazançlı bir slottur. Yüksek RTP ve devasa çarpan potansiyeliyle hemen oynamaya başlayın.`
+            })} />
 
         </>
       )}
