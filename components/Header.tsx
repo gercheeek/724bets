@@ -249,6 +249,11 @@ const Header: React.FC<HeaderProps> = ({
             0%, 100% { text-shadow: 0 0 10px rgba(0,255,163,0.3), 0 0 20px rgba(0,255,163,0.1); }
             50% { text-shadow: 0 0 15px rgba(0,255,163,0.5), 0 0 30px rgba(0,255,163,0.2), 0 0 45px rgba(0,255,163,0.1); }
           }
+          .perspective-1000 { perspective: 1000px; }
+          .transform-style-3d { transform-style: preserve-3d; }
+          .backface-hidden { backface-visibility: hidden; }
+          .rotate-y-180 { transform: rotateY(180deg); }
+          .group:hover .group-hover\:rotate-y-180 { transform: rotateY(180deg); }
           @keyframes slotMachineDrop {
             0% { transform: translateY(-40px) scaleY(1.5); opacity: 0; filter: blur(4px); }
             60% { transform: translateY(10px) scaleY(0.9); opacity: 1; filter: blur(0); }
@@ -358,13 +363,26 @@ const Header: React.FC<HeaderProps> = ({
               )}
 
               <div 
-                className="flex items-center cursor-pointer select-none ml-0 logo-text-724"
+                className="flex items-center cursor-pointer select-none ml-0 logo-text-724 group"
                 onClick={() => onViewChange?.('home')}
                 onMouseEnter={() => setLogoHoverCount(prev => prev + 1)}
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
               >
                 <SlotText text="724" className="text-white font-extrabold text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
-                <SlotText text="BETS" className="text-[#10B981] font-black text-xl md:text-2xl uppercase text-center" trigger={logoHoverCount} />
+                <div className="flex items-center perspective-1000 ml-[2px]">
+                  {['B', 'E', 'T', 'S'].map((letter, i) => {
+                    const isSportsView = activeView === 'sporx' || activeView === 'sports' || activeView === 'sports3' || activeView === 'sports4' || activeView === 'sports5';
+                    const symbol = isSportsView ? (i % 2 === 0 ? '🏆' : '⚽') : ['♠', '♥', '♦', '♣'][i];
+                    return (
+                      <div key={i} className="relative w-[15px] md:w-[19px] h-6 md:h-8 transform-style-3d transition-transform duration-[800ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-y-180" style={{ transitionDelay: `${i * 75}ms` }}>
+                        {/* Front face (Letter) */}
+                        <span className="absolute inset-0 backface-hidden flex items-center justify-center text-[#10B981] font-black text-xl md:text-2xl uppercase">{letter}</span>
+                        {/* Back face (Symbol) */}
+                        <span className="absolute inset-0 backface-hidden rotate-y-180 flex items-center justify-center text-[#10B981] text-[18px] md:text-[22px] drop-shadow-[0_0_8px_rgba(16,185,129,0.8)] opacity-20 group-hover:opacity-100 transition-opacity duration-700 font-normal">{symbol}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
 
