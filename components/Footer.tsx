@@ -109,7 +109,7 @@ const Footer: React.FC = () => {
               <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]/50" />
               <span className="tracking-wide">{t("all_rights_reserved")}</span>
             </div>
-            <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">724net v 0.0.1</span>
+            <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">724net v2.0.0</span>
           </div>
         </div>
 

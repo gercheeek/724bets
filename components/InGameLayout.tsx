@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, Maximize2, Minimize2, Wallet, User, Info, Trophy, Sparkles, ChevronRight, MessageSquare, Activity, X } from 'lucide-react';
+import { ChevronLeft, Maximize2, Minimize2, Wallet, User, Info, Trophy, Sparkles, ChevronRight, MessageSquare, Activity, X, Gamepad2 } from 'lucide-react';
 import { SiteUser } from '../types';
 import ModernChat from './ModernChat';
 
@@ -155,6 +155,40 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                          </div>
                          <span className={`text-sm font-black font-mono tracking-tighter ${winner.color}`}>{winner.amount}</span>
                       </div>
+                    ))}
+                 </div>
+              </div>
+
+              {/* Other Games Widget */}
+              <div className="bg-black/20 rounded-xl p-4 border border-blue-500/15 hover:border-blue-500/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-colors">
+                 <div className="flex items-center gap-2 mb-4">
+                    <Gamepad2 className="w-4 h-4 text-[#8B5CF6]" />
+                    <h3 className="font-bold text-sm text-gray-200 tracking-wider uppercase">Diğer Oyunlar</h3>
+                 </div>
+                 <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: 'limbo', name: 'Limbo' },
+                      { id: 'chicken-run', name: 'Chicken Run' },
+                      { id: 'plinko', name: 'Plinko' },
+                      { id: 'dice', name: 'Dice' },
+                      { id: 'mines', name: 'Mines' },
+                      { id: 'keno', name: 'Keno' },
+                      { id: 'war', name: 'Casino War' },
+                      { id: 'hilo', name: 'HiLo' },
+                      { id: 'roulette', name: 'Roulette' },
+                      { id: 'blackjack-pro', name: 'Blackjack Pro' },
+                      { id: 'crash-turbo', name: 'Crash Turbo' },
+                      { id: 'turbo-mines', name: 'Turbo Mines' },
+                      { id: 'hacksaw', name: 'Hacksaw Slot' },
+                      { id: 'redtiger', name: 'Red Tiger Slot' },
+                    ].map(game => (
+                      <button 
+                        key={game.id}
+                        onClick={() => onViewChange(game.id)}
+                        className="text-left bg-[#05070A]/50 hover:bg-[#3B82F6]/20 border border-white/5 hover:border-[#3B82F6]/50 rounded-lg p-2 text-[10px] sm:text-xs font-bold text-gray-300 hover:text-white transition-all truncate"
+                      >
+                         {game.name}
+                      </button>
                     ))}
                  </div>
               </div>

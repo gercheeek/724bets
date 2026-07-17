@@ -87,7 +87,19 @@ import TarafView from './components/TarafView';
 import InGameLayout from './components/InGameLayout';
 import ComingSoon from './components/ComingSoon';
 import PlinkoView from './components/PlinkoView';
-const SITE_CACHE_VERSION = "2026.06.25_v1";
+import LimboView from './components/LimboView';
+import ChickenRunView from './components/ChickenRunView';
+import DiceView from './components/DiceView';
+import MinesView from './components/MinesView';
+import KenoView from './components/KenoView';
+import WarView from './components/WarView';
+import HiLoView from './components/HiLoView';
+import RouletteView from './components/RouletteView';
+import CrashTurboView from './components/CrashTurboView';
+import TurboMinesView from './components/TurboMinesView';
+import HacksawSlotView from './components/HacksawSlotView';
+import RedTigerSlotView from './components/RedTigerSlotView';
+const SITE_CACHE_VERSION = "2026.07.17_v2";
 
 const formatDateTR = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -184,7 +196,7 @@ const AppContent: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'sporx' | 'taraf' | 'plinko'>('home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'sporx' | 'taraf' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger'>('home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -1177,7 +1189,7 @@ const AppContent: React.FC = () => {
         setView('sports');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf'];
+        const validViews = ['blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -1232,6 +1244,8 @@ const AppContent: React.FC = () => {
       case 'slotra':
       case 'slotra2':
       case 'plinko':
+      case 'limbo':
+      case 'chicken-run':
       case 'pool':
         title = "724Bahis | Casino ve Canlı Casino Oyunları - Hızlı Kazanç";
         desc = "724Bahis güvencesiyle rulet, blackjack, poker, baccarat ve binlerce popüler slot oyunu ile eğlenerek kazanın.";
@@ -1661,13 +1675,69 @@ const AppContent: React.FC = () => {
           message={siteStatusConfig.maintenanceMessage} 
           onAdminLogin={() => setAuthModalMode('admin')}
         />
-      ) : view === 'blackjack-pro' ? (
-        <InGameLayout siteUser={siteUser} onViewChange={handleViewChange} gameTitle="Blackjack Pro">
-           <BlackjackProView 
-             siteUser={siteUser} 
-             setSiteUser={setSiteUser} 
-             onAuthRequired={() => setAuthModalMode('member')} 
-           />
+      ) : (['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'].includes(view)) ? (
+        <InGameLayout 
+          siteUser={siteUser} 
+          onViewChange={handleViewChange} 
+          gameTitle={
+              view === 'limbo' ? 'Limbo' : 
+              view === 'chicken-run' ? 'Chicken Run' : 
+              view === 'plinko' ? 'Plinko' :
+              view === 'dice' ? 'Dice' :
+              view === 'mines' ? 'Mines' :
+              view === 'keno' ? 'Keno' :
+              view === 'war' ? 'Casino War' :
+              view === 'hilo' ? 'HiLo' :
+              view === 'roulette' ? 'Roulette' :
+              view === 'crash-turbo' ? 'Crash' :
+              view === 'turbo-mines' ? 'Turbo Mines' :
+              view === 'hacksaw' ? 'Hacksaw Slot' :
+              view === 'redtiger' ? 'Red Tiger Slot' :
+              'Blackjack Pro'
+          }
+        >
+           {view === 'blackjack-pro' && (
+             <BlackjackProView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'limbo' && (
+             <LimboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'chicken-run' && (
+             <ChickenRunView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'plinko' && (
+             <PlinkoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'dice' && (
+             <DiceView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'mines' && (
+             <MinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'keno' && (
+             <KenoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'war' && (
+             <WarView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'hilo' && (
+             <HiLoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'roulette' && (
+             <RouletteView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'crash-turbo' && (
+             <CrashTurboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'turbo-mines' && (
+             <TurboMinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'hacksaw' && (
+             <HacksawSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
+           {view === 'redtiger' && (
+             <RedTigerSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+           )}
         </InGameLayout>
       ) : (
         <div 
@@ -1683,7 +1753,7 @@ const AppContent: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'home' || view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
+          {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen || view === 'blackjack'}
@@ -1850,8 +1920,8 @@ const AppContent: React.FC = () => {
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'taraf') 
-            ? 'p-0 w-full max-w-[1400px] mx-auto pb-[70px] md:pb-0' 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'taraf' || view === 'limbo' || view === 'chicken-run' || view === 'originals') 
+            ? 'p-0 w-full max-w-full mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
         style={{ 
@@ -1915,21 +1985,7 @@ const AppContent: React.FC = () => {
           </div>
         )}
 
-        {view === 'taraf' && (
-          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
-            <TarafView />
-          </div>
-        )}
 
-        {view === 'plinko' && (
-          <div className="animate-fade-in w-full h-full relative z-[50]">
-            <PlinkoView 
-              siteUser={siteUser} 
-              setSiteUser={setSiteUser} 
-              onAuthRequired={() => setAuthModalMode('member')} 
-            />
-          </div>
-        )}
 
         {view === 'originals' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">

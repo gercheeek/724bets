@@ -584,14 +584,14 @@ const Header: React.FC<HeaderProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <button
                     onClick={onMemberLoginClick}
-                    className="flex items-center justify-center bg-[#1A1D24] hover:bg-[#252A34] text-white font-bold text-[14px] h-[40px] px-5 rounded-lg transition-colors whitespace-nowrap"
+                    className="flex items-center justify-center bg-[#1A1D24] hover:bg-[#252A34] text-white font-bold text-[14px] h-[42px] w-[110px] rounded-lg transition-colors whitespace-nowrap"
                   >
                     {t('login')}
                   </button>
                   <button
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
-                    className="flex items-center justify-center bg-[#10B981] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-[40px] px-6 rounded-lg transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
+                    className="flex items-center justify-center bg-[#10B981] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-[42px] w-[110px] rounded-lg transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
                   >
                     {t('register')}
                   </button>

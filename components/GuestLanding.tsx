@@ -14,6 +14,7 @@ import LimitedTimePromo from './LimitedTimePromo';
 import { useLanguage } from '../contexts/LanguageContext';
 import { GameDetailModal, GameData } from './GameDetailModal';
 import { NewGamesSlider2 } from './NewGamesSlider2';
+import AnimatedCyberBackground from './AnimatedCyberBackground';
 
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
@@ -159,27 +160,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
           )}
 
-          {/* 3 Top Promo Cards (Desktop Only) */}
-          <div className="w-full px-4 pb-2 hidden md:block">
-            <div className="grid grid-cols-3 gap-4">
-              {promoCards.map((card, idx) => (
-                <div key={idx} className="relative overflow-hidden rounded-xl bg-[#0B0E14] border border-white/5 hover:border-[#10B981]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
-                  {/* Premium Background */}
-                  <div className="absolute inset-0 z-0 bg-[#111620] group-hover:bg-[#151b28] transition-colors duration-500">
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.05),transparent_70%)] group-hover:bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.1),transparent_70%)] transition-colors duration-500"></div>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
-                  
-                  <div className="flex flex-row items-center w-full relative z-10">
-                    <div className="flex flex-col">
-                      <span className="text-white font-black text-lg lg:text-xl tracking-tight leading-tight mb-1">{card.title}</span>
-                      <span className={`text-[9px] lg:text-[10px] font-black uppercase tracking-wider transition-colors duration-500 text-zinc-400 ${card.textColor}`}>{card.subtitle}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+
 
           {/* Special Promo for Logged In Users */}
           <div className="w-full px-4">
@@ -251,10 +232,20 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
 
           {/* Middle & Right Columns: Separated Casino & Sports Cards */}
-          <div className="lg:col-span-2 w-full h-[240px] md:h-[220px] lg:h-full flex flex-col gap-3 md:gap-4">
+          <div className="lg:col-span-2 w-full h-auto lg:h-full flex flex-col gap-3 md:gap-4">
             
-            {/* Top Half: Casino */}
-            <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/casino">
+            {/* Top Third: Originals */}
+            <div onClick={() => onViewChange('originals')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-[#10B981]/30 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.3)] group/orig">
+                <img src="/images/neon-plinko.jpg" alt="Originals" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
+                <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-5 h-full px-5 lg:px-6">
+                    <h3 className="text-[28px] sm:text-[32px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/orig:translate-x-1 transition-transform flex items-center gap-2"><span className="text-[#10B981]">724</span> ORIGINALS</h3>
+                    <div className="block"><ActivePlayersCounter type="casino" /></div>
+                </div>
+            </div>
+
+            {/* Middle Third: Casino */}
+            <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/casino">
                 <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/casino:opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
                 <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-5 h-full px-5 lg:px-6">
@@ -263,8 +254,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
             </div>
 
-            {/* Bottom Half: Sports */}
-            <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/sports">
+            {/* Bottom Third: Sports */}
+            <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/sports">
                 <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/sports:opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-l from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
                 <div className="relative z-20 flex flex-col justify-end items-end pb-2 sm:pb-5 h-full pr-2 sm:pr-5 pl-5">
@@ -276,6 +267,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
           </div>
 
+          {/* Live Wins Ticker */}
+          <div className="w-full mb-1 mt-1">
+            <LiveWinsTicker />
+          </div>
+
           {/* Yeni Eklenenler Slider (Member View) */}
           <NewGamesSlider2 onPlayGame={() => onViewChange('casino')} />
 
@@ -284,108 +280,98 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         // GUEST VIEW: Welcome, Search + Side-by-Side Hero Banner & Cards
         <>
 
-            {/* Layout Column */}
-            <div className="w-full flex flex-col gap-4 lg:gap-8 pb-4 md:pb-8 mb-2">
-              <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 items-center lg:items-stretch py-4">
-                
-                {/* Left Side: Welcome & Auth */}
-                <div className="w-full lg:w-[45%] flex flex-col justify-center px-4 lg:px-6">
-                  <h1 className="text-[36px] sm:text-[48px] lg:text-[56px] font-black tracking-tighter leading-[1.05] mb-5 drop-shadow-lg font-['Outfit']">
-                    <span className="text-white">{t('hero_title_1')}</span> <br className="hidden sm:block" />
-                    <span className="text-[#10B981]">{t('hero_title_2')}</span>
-                  </h1>
-                  <p className="text-zinc-400 text-base sm:text-lg font-medium mb-8 max-w-[420px] leading-relaxed">
-                    {t('hero_subtitle')} Yüksek oranlar ve anında ödemelerle kazanmaya hemen başla.
-                  </p>
-                  
-                  <div className="flex items-center gap-3 mb-8">
-                    <button 
-                      onClick={onMemberRegisterClick}
-                      className="bg-[#1475E1] hover:bg-[#0f60c0] text-white font-medium text-[16px] py-3.5 px-6 rounded-[8px] flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(20,117,225,0.3)]"
-                    >
-                      Kaydol <ArrowRight className="w-5 h-5" />
-                    </button>
-                    
-                    {/* Social Dropdown */}
-                    <div className="relative group/social">
-                      <button className="flex items-center gap-3 bg-[#212C3A] hover:bg-[#2C3B4E] px-4 py-3.5 rounded-[8px] border border-white/5 transition-colors h-[52px]">
-                        <div className="flex items-center -space-x-2">
-                          <div className="w-7 h-7 rounded-full bg-white border-2 border-[#212C3A] flex items-center justify-center relative z-40 overflow-hidden shadow-sm">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" alt="Steam" className="w-4 h-4 object-contain" />
-                          </div>
-                          <div className="w-7 h-7 rounded-full bg-white border-2 border-[#212C3A] flex items-center justify-center relative z-30 overflow-hidden shadow-sm">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="Metamask" className="w-4 h-4 object-contain" />
-                          </div>
-                          <div className="w-7 h-7 rounded-full bg-white border-2 border-[#212C3A] flex items-center justify-center relative z-20 overflow-hidden shadow-sm">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" className="w-4 h-4 object-contain" />
-                          </div>
-                          <div className="w-7 h-7 rounded-full bg-[#34A853] border-2 border-[#212C3A] flex items-center justify-center relative z-10 overflow-hidden shadow-sm">
-                             <span className="text-white text-[10px] font-bold">B</span>
-                          </div>
+          {/* New Guest Hero Layout */}
+          <div className="w-full px-4 lg:px-8 pt-8 pb-6 flex flex-col lg:flex-row gap-8 lg:gap-12 max-w-[1600px] mx-auto items-center">
+            
+            {/* Left Column: Hero Text + Buttons */}
+            <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+                <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-white tracking-tight leading-[1.1] mb-4">
+                  Saniyeler İçinde Yatır,<br />Dakikalar İçinde Çek.
+                </h1>
+                <p className="text-zinc-400 text-sm sm:text-base font-medium mb-8">
+                  Kesintisiz eğlence başladı.
+                </p>
+                <div className="flex flex-row items-center gap-3">
+                  <button 
+                    onClick={onMemberRegisterClick}
+                    className="bg-[#10B981] hover:bg-[#00e693] text-black font-black text-[14px] py-3.5 px-8 rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:-translate-y-0.5"
+                  >
+                    Kaydol <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <div className="flex items-center -space-x-1.5 bg-[#1F2633] rounded-lg px-4 py-3 border border-white/5 cursor-pointer hover:bg-[#262f3e] transition-colors shadow-inner" onClick={onMemberRegisterClick}>
+                        <div className="w-6 h-6 rounded-full bg-white border border-[#212C3A] flex items-center justify-center relative z-40 overflow-hidden shrink-0">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" className="w-3.5 h-3.5 object-contain" />
                         </div>
-                        <ChevronDown className="w-4 h-4 text-gray-400" />
-                      </button>
-                      
-                      {/* Dropdown menu */}
-                      <div className="absolute top-full left-0 mt-2 w-48 bg-[#212C3A] border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover/social:opacity-100 group-hover/social:visible transition-all z-50 py-2">
-                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
-                          <div className="w-6 h-6 flex items-center justify-center bg-white rounded-full">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" className="w-4 h-4" />
-                          </div>
-                          <span className="text-white text-[15px] font-medium">Steam</span>
+                        <div className="w-6 h-6 rounded-full bg-white border border-[#212C3A] flex items-center justify-center relative z-30 overflow-hidden shrink-0">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" className="w-3.5 h-3.5 object-contain" />
                         </div>
-                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
-                          <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" className="w-6 h-6" />
-                          <span className="text-white text-[15px] font-medium">Metamask</span>
+                        <div className="w-6 h-6 rounded-full bg-white border border-[#212C3A] flex items-center justify-center relative z-20 overflow-hidden shrink-0">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" className="w-3.5 h-3.5 object-contain" />
                         </div>
-                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
-                          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" className="w-6 h-6" />
-                          <span className="text-white text-[15px] font-medium">Google</span>
+                        <div className="w-6 h-6 rounded-full bg-[#10B981] border border-[#212C3A] flex items-center justify-center relative z-10 overflow-hidden shrink-0">
+                            <span className="text-black text-[9px] font-black">B</span>
                         </div>
-                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
-                          <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" className="w-6 h-6" />
-                          <span className="text-white text-[15px] font-medium">Telegram</span>
+                        <div className="pl-3 pr-1 text-zinc-500">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
-                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
-                          <div className="w-6 h-6 flex items-center justify-center">
-                            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                          </div>
-                          <span className="text-white text-[15px] font-medium">X</span>
-                        </div>
-                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
-                          <img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png" className="w-6 h-6 object-contain" />
-                          <span className="text-white text-[15px] font-medium">Solana</span>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
-                
-                {/* Right Side: Separated Casino & Sports Cards */}
-                <div className="w-full lg:w-[55%] flex-1 flex flex-col min-h-[220px] md:min-h-[300px] lg:min-h-[320px] gap-3 md:gap-4">
+            </div>
+
+            {/* Right Column: Split Originals, Casino & Sports Cards */}
+            <div className="w-full lg:w-[500px] xl:w-[600px] flex flex-col border border-white/5 bg-[#0B0E14] rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] shrink-0 group">
                   
-                  {/* Top Half: Casino */}
-                  <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/casino">
-                      <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/casino:opacity-100" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                      <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-5 h-full px-5 lg:px-6">
-                          <h3 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/casino:translate-x-1 transition-transform">Casino</h3>
-                          <div className="block"><ActivePlayersCounter type="casino" /></div>
+                  {/* Top Third: Originals */}
+                  <div onClick={() => onViewChange('originals')} className="relative h-[90px] md:h-[110px] w-full overflow-hidden cursor-pointer transition-all duration-300 group/orig border-b border-[#10B981]/30">
+                      <img src="/images/neon-plinko.jpg" alt="Originals" className="absolute inset-0 w-full h-full object-cover object-[center_right_-20%] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/70 to-transparent"></div>
+                      <div className="relative z-20 flex flex-col justify-center items-start h-full px-6 md:px-8">
+                          <h3 className="text-[32px] sm:text-[40px] font-black text-white tracking-tighter leading-none mb-1 flex items-center gap-2"><span className="text-[#10B981]">724</span> ORIGINALS</h3>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></div>
+                            <span className="text-zinc-300 text-xs sm:text-sm font-medium tracking-wide">3.120 playing</span>
+                          </div>
                       </div>
                   </div>
 
-                  {/* Bottom Half: Sports */}
-                  <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/sports">
-                      <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/sports:opacity-100" />
-                      <div className="absolute inset-0 bg-gradient-to-l from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
-                      <div className="relative z-20 flex flex-col justify-end items-end pb-2 sm:pb-5 h-full pr-2 sm:pr-5 pl-5">
-                          <h3 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/sports:-translate-x-1 transition-transform">Spor</h3>
-                          <div className="block"><ActivePlayersCounter type="sports" /></div>
+                  {/* Divider */}
+                  <div className="h-[1px] w-full bg-white/5 relative z-30"></div>
+
+                  {/* Middle Third: Casino */}
+                  <div onClick={() => onViewChange('blackjack')} className="relative h-[90px] md:h-[110px] w-full overflow-hidden cursor-pointer transition-all duration-300 group/casino">
+                      <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center_right_-20%] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/casino:opacity-100" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/70 to-transparent"></div>
+                      <div className="relative z-20 flex flex-col justify-center items-start h-full px-6 md:px-8">
+                          <h3 className="text-[32px] sm:text-[40px] font-black text-white tracking-tighter leading-none mb-1">Casino</h3>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></div>
+                            <span className="text-zinc-300 text-xs sm:text-sm font-medium tracking-wide">7.532 playing</span>
+                          </div>
+                      </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="h-[1px] w-full bg-white/5 relative z-30"></div>
+
+                  {/* Bottom Third: Sports */}
+                  <div onClick={() => onViewChange('sports')} className="relative h-[90px] md:h-[110px] w-full overflow-hidden cursor-pointer transition-all duration-300 group/sports">
+                      <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center_left_-10%] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/sports:opacity-100" />
+                      <div className="absolute inset-0 bg-gradient-to-l from-[#0B0E14] via-[#0B0E14]/70 to-transparent"></div>
+                      <div className="relative z-20 flex flex-col justify-center items-end h-full px-6 md:px-8">
+                          <h3 className="text-[32px] sm:text-[40px] font-black text-white tracking-tighter leading-none mb-1">Spor</h3>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></div>
+                            <span className="text-zinc-300 text-xs sm:text-sm font-medium tracking-wide">7.620 playing</span>
+                          </div>
                       </div>
                   </div>
                   
-                </div>
-              </div>
+            </div>
+          </div>
+
+            {/* Live Wins Ticker */}
+            <div className="w-full mb-1 mt-1">
+              <LiveWinsTicker />
             </div>
 
             {/* Yeni Eklenenler Slider (Guest View) */}
@@ -403,18 +389,14 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
 
 
-      {/* Live Wins Ticker */}
-      <div className="w-full mb-4 mt-2">
-        <LiveWinsTicker />
-      </div>
 
-      <div className="w-full">
-        <GameLobbyGrid customGames={[]} />
-      </div>
 
-      {/* Originals Slider */}
-      <div className="w-full">
+      <div className="w-full mt-4">
         <OriginalsSlider onNavigate={onViewChange} />
+      </div>
+
+      <div className="w-full mt-8">
+        <GameLobbyGrid customGames={[]} />
       </div>
 
       <GameDetailModal 
@@ -436,6 +418,28 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       <div className="w-full pb-8">
         <RacesAndGiveaways />
         <LiveBetsTable />
+      </div>
+
+      {/* Feature / Promo Cards (Moved to bottom) */}
+      <div className="w-full px-4 pb-12 hidden md:block max-w-[1600px] mx-auto">
+        <div className="grid grid-cols-3 gap-4">
+          {promoCards.map((card, idx) => (
+            <div key={idx} className="relative overflow-hidden rounded-xl bg-[#0B0E14] border border-white/5 hover:border-[#10B981]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
+              {/* Premium Background */}
+              <div className="absolute inset-0 z-0 bg-[#111620] group-hover:bg-[#151b28] transition-colors duration-500">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.05),transparent_70%)] group-hover:bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.1),transparent_70%)] transition-colors duration-500"></div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
+              
+              <div className="flex flex-row items-center w-full relative z-10">
+                <div className="flex flex-col">
+                  <span className="text-white font-black text-lg lg:text-xl tracking-tight leading-tight mb-1">{card.title}</span>
+                  <span className={`text-[9px] lg:text-[10px] font-black uppercase tracking-wider transition-colors duration-500 text-zinc-400 ${card.textColor}`}>{card.subtitle}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Demo Iframe Modal */}

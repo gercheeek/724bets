@@ -5,16 +5,16 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const TICKER_GAMES = [
   // Rainbet Originals (Weighted heavily to appear more often)
-  { name: "Dice", provider: '724Bets', image: "/images/rainbet-dice.jpg", type: 'dice' as const },
-  { name: "Dice", provider: '724Bets', image: "/images/rainbet-dice.jpg", type: 'dice' as const },
-  { name: "Plinko", provider: '724Bets', image: "/images/rainbet-plinko.jpg", type: 'slot' as const },
-  { name: "Plinko", provider: '724Bets', image: "/images/rainbet-plinko.jpg", type: 'slot' as const },
-  { name: "Mines", provider: '724Bets', image: "/images/rainbet-mines.jpg", type: 'slot' as const },
-  { name: "Mines", provider: '724Bets', image: "/images/rainbet-mines.jpg", type: 'slot' as const },
-  { name: "Keno", provider: '724Bets', image: "/images/rainbet-keno.jpg", type: 'keno' as const },
-  { name: "War", provider: '724Bets', image: "/images/rainbet-war.jpg", type: 'slot' as const },
-  { name: "Hilo", provider: '724Bets', image: "/images/rainbet-hilo.jpg", type: 'slot' as const },
-  { name: "Roulette", provider: '724Bets', image: "/images/rainbet-roulette.jpg", type: 'slot' as const },
+  { name: "Dice", provider: '724Bets', image: "/images/neon-dice.jpg", type: 'dice' as const },
+  { name: "Dice", provider: '724Bets', image: "/images/neon-dice.jpg", type: 'dice' as const },
+  { name: "Plinko", provider: '724Bets', image: "/images/neon-plinko.jpg", type: 'slot' as const },
+  { name: "Plinko", provider: '724Bets', image: "/images/neon-plinko.jpg", type: 'slot' as const },
+  { name: "Mines", provider: '724Bets', image: "/images/neon-mines.jpg", type: 'slot' as const },
+  { name: "Mines", provider: '724Bets', image: "/images/neon-mines.jpg", type: 'slot' as const },
+  { name: "Keno", provider: '724Bets', image: "/images/neon-keno.jpg", type: 'keno' as const },
+  { name: "War", provider: '724Bets', image: "/images/neon-war.jpg", type: 'slot' as const },
+  { name: "Hilo", provider: '724Bets', image: "/images/neon-hilo.jpg", type: 'slot' as const },
+  { name: "Roulette", provider: '724Bets', image: "/images/neon-roulette.jpg", type: 'slot' as const },
   
   // Provider Slots (Fewer)
   { name: "Sweet Bonanza", provider: 'Pragmatic Play', image: "https://cdn2.softswiss.net/i/s4/pragmaticexternal/SweetBonanza.png", type: 'slot' as const },
@@ -106,8 +106,8 @@ export default function LiveWinsTicker() {
   }, []);
 
   return (
-    <div className="w-full flex flex-col mb-4">
-      <div className="flex items-center gap-2 mb-4 px-2">
+    <div className="w-full flex flex-col mb-1">
+      <div className="flex items-center gap-2 mb-2 px-2">
         <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">{t('winners_title')}</h2>
       </div>
       <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 border-b border-white/5 rounded-xl">
@@ -128,8 +128,26 @@ export default function LiveWinsTicker() {
                <img 
                  src={win.image} 
                  alt={win.game} 
-                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 mix-blend-lighten"
                />
+               
+               {/* Massive 3D Badge Overlay */}
+               <div className="absolute inset-x-0 bottom-1 flex flex-col items-center z-20 pointer-events-none transform scale-90 md:scale-100 origin-bottom">
+                   <div className="bg-gradient-to-b from-[#1a1f35] to-[#0d111d] ring-1 ring-white/30 border border-black/50 rounded-lg px-2 py-1 flex flex-col items-center shadow-[0_4px_8px_rgba(0,0,0,0.9),inset_0_1px_2px_rgba(255,255,255,0.2)]">
+                       <span 
+                           className="font-black text-[10px] md:text-[11px] tracking-tighter leading-none"
+                           style={{
+                               background: 'linear-gradient(to bottom, #ffffff 20%, #b0b0b0 50%, #e0e0e0 80%)',
+                               WebkitBackgroundClip: 'text',
+                               WebkitTextFillColor: 'transparent',
+                               filter: 'drop-shadow(0px 1px 1px rgba(0,0,0,0.8))'
+                           }}
+                       >
+                           {win.game.toUpperCase()}
+                       </span>
+                   </div>
+                   <span className="italic font-black text-white text-[5px] md:text-[6px] tracking-[0.2em] mt-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)] opacity-95 -skew-x-12">724BETS</span>
+               </div>
                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
             </div>
 

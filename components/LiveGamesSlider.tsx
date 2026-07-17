@@ -92,10 +92,10 @@ export default function LiveGamesSlider() {
   };
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 md:px-0 my-8">
+    <div className="w-full max-w-[1400px] mx-auto px-4 md:px-0 my-2">
       
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-2">
+      <div className="flex items-center justify-between mb-2 px-2">
         <div className="flex items-center gap-2">
           <LiveCasinoIcon />
           <h2 className="text-white text-lg md:text-xl font-bold">{t('live_games')}</h2>

@@ -10,7 +10,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Plinko',
         desc: t("desc_plinko"),
         color: 'from-purple-600 to-purple-900',
-        image: '/images/rainbet-plinko.jpg',
+        image: '/images/neon-plinko.jpg',
         path: 'plinko',
         icon: '🎯',
         players: 569,
@@ -23,7 +23,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Keno',
         desc: t("desc_keno"),
         color: 'from-orange-500 to-orange-800',
-        image: '/images/rainbet-keno.jpg',
+        image: '/images/neon-keno.jpg',
         path: 'keno',
         icon: '🎱',
         players: 318,
@@ -36,7 +36,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Dice',
         desc: t("desc_dice"),
         color: 'from-blue-600 to-blue-900',
-        image: '/images/rainbet-dice.jpg',
+        image: '/images/neon-dice.jpg',
         path: 'dice',
         icon: '🎲',
         players: 482,
@@ -49,7 +49,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Mines',
         desc: t("desc_mines"),
         color: 'from-red-600 to-red-900',
-        image: '/images/rainbet-mines.jpg',
+        image: '/images/neon-mines.jpg',
         path: 'mines',
         icon: '💣',
         players: 356,
@@ -62,7 +62,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'War',
         desc: t("desc_war"),
         color: 'from-red-600 to-red-900',
-        image: '/images/rainbet-war.jpg',
+        image: '/images/neon-war.jpg',
         path: 'war',
         icon: '⚔️',
         players: 481,
@@ -75,7 +75,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'HiLo',
         desc: t("desc_hilo"),
         color: 'from-pink-600 to-pink-900',
-        image: '/images/rainbet-hilo.jpg',
+        image: '/images/neon-hilo.jpg',
         path: 'hilo',
         icon: '🃏',
         players: 517,
@@ -88,7 +88,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Blackjack',
         desc: t("desc_blackjack"),
         color: 'from-emerald-600 to-emerald-900',
-        image: '/images/rainbet-blackjack.jpg',
+        image: '/images/neon-blackjack.jpg',
         path: 'blackjack-pro',
         icon: '♠️',
         players: 215,
@@ -101,7 +101,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Roulette',
         desc: t("desc_roulette"),
         color: 'from-emerald-600 to-emerald-900',
-        image: '/images/rainbet-roulette.jpg',
+        image: '/images/neon-roulette.jpg',
         path: 'roulette',
         icon: '🎡',
         players: 352,
@@ -114,7 +114,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Chicken Cross',
         desc: t("desc_chickencross"),
         color: 'from-emerald-600 to-emerald-900',
-        image: '/images/rainbet-chickencross.jpg',
+        image: '/images/neon-chickencross.jpg',
         path: 'chicken-cross',
         icon: '🐔',
         players: 219,
@@ -127,13 +127,26 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Limbo',
         desc: t("desc_limbo"),
         color: 'from-red-600 to-red-900',
-        image: '/images/rainbet-limbo.jpg',
+        image: '/images/neon-limbo.jpg',
         path: 'limbo',
         icon: '🚀',
         players: 325,
         rtp: '%99.0',
         maxWin: '1M x',
         volatility: 'Maksimum'
+    },
+    {
+        id: 'chickenrun',
+        name: 'Chicken Run',
+        desc: 'Tavuğunla koş, engelleri aş, çarpanları yakala! Yeni ve çok eğlenceli.',
+        color: 'from-orange-500 to-red-600',
+        image: '/images/neon-chickenrun.jpg',
+        path: 'chicken-run',
+        icon: '🐔',
+        players: 185,
+        rtp: '%98.5',
+        maxWin: '2000x',
+        volatility: 'Orta'
     }
 ];
 
@@ -174,9 +187,9 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
     };
 
     return (
-        <div className="w-full max-w-[1400px] mx-auto px-4 md:px-0 my-2 md:my-4">
+        <div className="w-full max-w-[1400px] mx-auto px-4 md:px-0 my-1 md:my-2">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4 px-2">
+            <div className="flex items-center justify-between mb-2 px-2">
                 <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">
                     {t("original_games")}
                 </h2>
@@ -215,8 +228,25 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                                 onClick={() => setSelectedGame(game)}
                                 className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
                             >
-                                <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
+                                <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out mix-blend-lighten" />
                                 
+                                {/* Massive 3D Badge Overlay */}
+                                <div className="absolute inset-x-0 bottom-3 flex flex-col items-center z-20 pointer-events-none transform scale-100 group-hover:scale-110 transition-transform duration-500 origin-bottom">
+                                    <div className="bg-gradient-to-b from-[#1a1f35] to-[#0d111d] ring-1 ring-white/30 border border-black/50 rounded-xl px-4 py-1.5 flex flex-col items-center shadow-[0_8px_15px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.2)]">
+                                        <span 
+                                            className="font-black text-lg md:text-xl tracking-tighter leading-none"
+                                            style={{
+                                                background: 'linear-gradient(to bottom, #ffffff 20%, #b0b0b0 50%, #e0e0e0 80%)',
+                                                WebkitBackgroundClip: 'text',
+                                                WebkitTextFillColor: 'transparent',
+                                                filter: 'drop-shadow(0px 2px 1px rgba(0,0,0,0.8))'
+                                            }}
+                                        >
+                                            {game.name.toUpperCase()}
+                                        </span>
+                                    </div>
+                                    <span className="italic font-black text-white text-[9px] tracking-[0.2em] mt-1 drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)] opacity-95 -skew-x-12">724BETS</span>
+                                </div>
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                                 {/* Play button appears on hover */}

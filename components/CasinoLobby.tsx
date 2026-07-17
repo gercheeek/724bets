@@ -29,16 +29,17 @@ const DEMO_GAMES = [
   { id: 107, name: 'Starlight Princess', provider: 'Pragmatic Play', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Starlight-Princess-1000-Pragmatic-Play/Vertical/StarlightPrincess1000_20250312174636784.webp', category: 'slots', rtp: '96.50%' },
   { id: 108, name: '40 Super Hot', provider: 'Amusnet', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/Vertical/40SuperHotBellLink.webp', category: 'slots', rtp: '95.81%' },
   { id: 109, name: 'XXXTreme Lightning', provider: 'Evolution', img: 'https://images.unsplash.com/photo-1517594422361-5e18d033339f?w=500&q=80', category: 'live', rtp: '97.30%' },
-  { id: 110, name: 'Plinko', provider: 'Originals', img: '/images/rainbet-plinko.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 111, name: 'Keno', provider: 'Originals', img: '/images/rainbet-keno.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 112, name: 'Dice', provider: 'Originals', img: '/images/rainbet-dice.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 113, name: 'Mines', provider: 'Originals', img: '/images/rainbet-mines.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 114, name: 'War', provider: 'Originals', img: '/images/rainbet-war.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 115, name: 'Hilo', provider: 'Originals', img: '/images/rainbet-hilo.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 116, name: 'Blackjack', provider: 'Originals', img: '/images/rainbet-blackjack.jpg', category: 'originals', rtp: '99.29%' },
-  { id: 117, name: 'Roulette', provider: 'Originals', img: '/images/rainbet-roulette.jpg', category: 'originals', rtp: '97.30%' },
-  { id: 118, name: 'Chicken Cross', provider: 'Originals', img: '/images/rainbet-chickencross.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 119, name: 'Limbo', provider: 'Originals', img: '/images/rainbet-limbo.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 110, name: 'Plinko', provider: 'Originals', img: '/images/neon-plinko.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 111, name: 'Keno', provider: 'Originals', img: '/images/neon-keno.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 112, name: 'Dice', provider: 'Originals', img: '/images/neon-dice.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 113, name: 'Mines', provider: 'Originals', img: '/images/neon-mines.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 114, name: 'War', provider: 'Originals', img: '/images/neon-war.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 115, name: 'Hilo', provider: 'Originals', img: '/images/neon-hilo.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 116, name: 'Blackjack', provider: 'Originals', img: '/images/neon-blackjack.jpg', category: 'originals', rtp: '99.29%' },
+  { id: 117, name: 'Roulette', provider: 'Originals', img: '/images/neon-roulette.jpg', category: 'originals', rtp: '97.30%' },
+  { id: 118, name: 'Chicken Cross', provider: 'Originals', img: '/images/neon-chickencross.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 119, name: 'Limbo', provider: 'Originals', img: '/images/neon-limbo.jpg', category: 'originals', rtp: '99.00%', customDemoUrl: 'https://games.aliencdn.com/preprod/5008/v3.1/index.html?debug=true&sentry=true&token=wss%3A%2F%2Fgameshub-stage.aliencdn.com%2Fclient%2Fhubs%2FPREPROD_5008_RGS_1001%3Faccess_token%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODQyODc1NjYsImV4cCI6MTc4NDI4ODE2NiwiYXVkIjoiaHR0cHM6Ly9nYW1lc2h1Yi1zdGFnZS5hbGllbmNkbi5jb20vY2xpZW50L2h1YnMvUFJFUFJPRF81MDA4X1JHU18xMDAxIiwic3ViIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFhV1FpT2lJek5UUm1NREJtTWkwek5ETXdMVFExWlRJdE9HRTRZaTB5WXpoaVlqVmlaR1kzWWpJaUxDSjFjMlZ5Vkhsd1pTSTZJbEJNUVZsRlVpSXNJbWRoYldWSlpDSTZJalV3TURnaUxDSnZjRWxrSWpvaU1EQXdNQ0lzSW5Cc1lYbGxja1oxYkd4SlpDSTZJakF3TURBdlpHVm1ZWFZzZEM4eFptWm1OR1l5WkMxbE5UQmhMVFE1WTJFdE9EazVaaTFrWkRabFkyTmxPR0poTnpZaUxDSndiR0Y1WlhKVWIydGxiaUk2SW1WNVNtaGlSMk5wVDJsS1NWVjZTVEZPYVVselNXNVNOV05EU1RaSmEzQllWa05LT1M1bGVVcHVXVmN4YkZOWFVXbFBhVWt4VFVSQk5FbHBkMmxpTTBKS1drTkpOa2xxUVhkTlJFRnBURU5LYVdOdFJuVmFSV3hyU1dwdmFWcEhWbTFaV0ZaelpFTkpjMGx1UW5OWldHeHNZMnRzYTBscWIybE5WMXB0V21wU2JVMXRVWFJhVkZWM1dWTXdNRTlYVG1oTVZHYzFUMWRaZEZwSFVUSmFWMDVxV2xSb2FWbFVZekpKYVhkcFkwaEtkbVJ0Ykd0YVdFcEtXa05KTmtscVNYZE5SRUZwVEVOS2RtTkhWbmxaV0ZKMlkyeENjMWxZYkd4amJGSjJZVEpXZFVscWIybGxNWGRwWWpOS2NGb3liSFZaVjNoUVkwVnNhMWhEU1RaWVEwbDRUVVJSZDFoRFNYTllRMHAyWTIxc2JtRlhOV2hpUlVwNVdWYzFhMU5YVW1OSmFuQmpTV3hhUmxJd1JrOVNNVTVWVWxaS1prNXFaelZPVjFwdFRVUkNhbHBVV21oT2VrbDRUbGRSTlU1dFVUUlBSR2hzV0VOS09VbHBkMmxaTWpreFltNVNlV1ZUU1RaSmJHaFpTV2wzYVdKSFJqRmliVTV2VmxaV1NsSkRTVFpKYWtsM1RXcFpkMDU2UlROV1JFVjRUV3BaZDA1c2IzUk5WRlV6VG5wak1VOVhXVEZhUjBrMFpVaFJNbHBIYUVSTlZVWk9WVEpXYjJKVVozZE5SRUYzVFVSQmQwNUljRzVOUkVGM1RVUkJkMDFFUm5WalZFWjNTV2wzYVdKSFJqRmliVTV2VW0xc2VXTXpVbFJrUjFaM1ZrZHNkRnBZVGpCWlZ6RjNTV3B2ZUU1Nlp6Qk5hbWN6VGxSWk1rNTZZekZNUTBwd1l6QjRkbGx0U2pWSmFuQnRXVmQ0ZWxwVGQybGlSMFl4WW0xT2IxSXlSblJhVld4clNXcHZhVTVVUVhkUFEwbHpTVzFzZWxaSFZucGtRMGsyV20xR2MyTXlWWE5KYlRsNVlWZGtjR0p0Um5OVU0wSktXa05KTmtscVJYZE9SRUZwVEVOS2NHTXliRTVVVTBrMldtMUdjMk15VlhOSmJXeG9aRU5KTmsxVVl6Uk9SRWswVG5wVk1rNXBkMmxhV0doM1NXcHZlRTU2WnpCT2FsRXpUbFJaTW1aUkxtaGtjWFJvVWtWbGFqQjFUWEZSVkZsTVJYQnJUbmxoTkVVM01VVkpiVzA0TUdKQk1GZHhVVTFQWnpBaUxDSnNZVzVuZFdGblpTSTZJbVZ1SWl3aWFYTkdkVzVRYkdGNUlqcDBjblZsTENKaVlXeGhibU5sSWpveE1EQXdMQ0pqZFhKeVpXNWplU0k2SWxWVFJDSXNJbVZ1ZGlJNklsQlNSVkJTVDBRaUxDSnNZWFZ1WTJoVlZVbEVJam9pTWpBeU5qQTNNVGRVTVRFeU5qQTJXaTB4TlRjM056VTVaalZrWWpoNGREWmthRU14UVUxVFpXaHRPREF3TURBd01EQTBlbWN3TURBd01EQXdNVzV4TVhBaUxDSnlaM05KWkNJNk1UQXdNU3dpYVdGMElqb3hOemcwTWpnM05UWTJMQ0psZUhBaU9qRTNPRFF6TnpNNU5qWjkuSUZXZHB2dmRtc29Xa2VnWU9vbV85RVplLVZPNmlKV2hkUGJycHhfM0gzayJ9.ZGZcqcD7zy7KJtXlZtOhEM-sJlmTOcLmANkdowPfgj0&uuid=20260717T112606Z-1577759f5db8xt6dhC1AMSehm800000004zg00000001nq1p&skin=default&theme=dark' },
+  { id: 120, name: 'Chicken Run', provider: 'Originals', img: '/images/neon-chickenrun.jpg', category: 'originals', rtp: '98.50%', customDemoUrl: 'https://games.aliencdn.com/preprod/5019/v3.1/index.html?debug=true&sentry=true&token=wss%3A%2F%2Frgsstage01hub.ufo-hub.com%2Fclient%2Fhubs%2FPREPROD_5019_RGS_1001%3Faccess_token%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODQyODc0MjUsImV4cCI6MTc4NDI4ODAyNSwiYXVkIjoiaHR0cHM6Ly9yZ3NzdGFnZTAxaHViLnVmby1odWIuY29tL2NsaWVudC9odWJzL1BSRVBST0RfNTAxOV9SR1NfMTAwMSIsInN1YiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUoxYVdRaU9pSTBZelppTURrNU5pMWhNR1ZtTFRRek9EWXRPVGt3T1Mxa1lqWXhZamc0TldVd05XWWlMQ0oxYzJWeVZIbHdaU0k2SWxCTVFWbEZVaUlzSW1kaGJXVkpaQ0k2SWpVd01Ua2lMQ0p2Y0Vsa0lqb2lNREF3TUNJc0luQnNZWGxsY2taMWJHeEpaQ0k2SWpBd01EQXZaR1ZtWVhWc2RDODNZalZpWkRjeFlTMWxNVGd5TFRRek16a3RPVEF5WkMwd09HVXhOMk01TUdSbVpETWlMQ0p3YkdGNVpYSlViMnRsYmlJNkltVjVTbWhpUjJOcFQybEtTVlY2U1RGT2FVbHpTVzVTTldORFNUWkphM0JZVmtOS09TNWxlVXB1V1ZjeGJGTlhVV2xQYVVreFRVUkZOVWxwZDJsaU0wSktXa05KTmtscVFYZE5SRUZwVEVOS2FXTnRSblZhUld4clNXcHZhVnBIVm0xWldGWnpaRU5KYzBsdVFuTlpXR3hzWTJ0c2EwbHFiMmxPTWtreFdXMVJNMDFYUlhSYVZFVTBUV2t3TUUxNlRUVk1WR3QzVFcxUmRFMUVhR3hOVkdScVQxUkNhMXB0VVhwSmFYZHBZMGhLZG1SdGJHdGFXRXBLV2tOSk5rbHFTWGROUkVGcFRFTktkbU5IVm5sWldGSjJZMnhDYzFsWWJHeGpiRkoyWVRKV2RVbHFiMmxsTVhkcFlqTktjRm95YkhWWlYzaFFZMFZzYTFoRFNUWllRMGw0VFVSUmQxaERTWE5ZUTBwMlkyMXNibUZYTldoaVJVcDVXVmMxYTFOWFVtTkphbkJqU1d4YVJsSXdSazlTTVU1VlVsWktaazVxWnpWT1YxcHRUVVJDYWxwVVdtaE9la2w0VGxkUk5VNXRVVFJQUkdoc1dFTktPVWxwZDJsWk1qa3hZbTVTZVdWVFNUWkpiR2haU1dsM2FXSkhSakZpYlU1dlZsWldTbEpEU1RaSmFrbDNUV3BaZDA1NlJUTldSRVY0VFdwTk1FNVdiM1JOVkdNMFdrUlJORTVVV1RST2VtUnZaVzF3Y21FeWFFUk5WVVpPVlROSmVXRkhUWGROUkVGM1RVUkJkMDlJUlhkTlJFRjNUVVJCZDAxRVFYcGxia1p2U1dsM2FXSkhSakZpYlU1dlVtMXNlV016VWxSa1IxWjNWa2RzZEZwWVRqQlpWekYzU1dwdmVFNTZaekJOYW1jelRrUkpNVTE2UVRCTVEwcHdZekI0ZGxsdFNqVkphbkJ0V1ZkNGVscFRkMmxpUjBZeFltMU9iMUl5Um5SYVZXeHJTV3B2YVU1VVFYaFBVMGx6U1cxc2VsWkhWbnBrUTBrMldtMUdjMk15VlhOSmJUbDVZVmRrY0dKdFJuTlVNMEpLV2tOSk5rbHFSWGRPUkVGcFRFTktjR015YkU1VVUwazJXbTFHYzJNeVZYTkpiV3hvWkVOSk5rMVVZelJPUkVrMFRucFJlVTVUZDJsYVdHaDNTV3B2ZUU1Nlp6Qk9hbEV6VGtSSk1XWlJMazVJZVZscGNrRkthVzVVV1VWVFRYVnBaa2hWT0c1aU9TMWtXRmhCY0hKSVJGWmZUakpaY0dNeWEyc2lMQ0pzWVc1bmRXRm5aU0k2SW1WdUlpd2lhWE5HZFc1UWJHRjVJanAwY25WbExDSmlZV3hoYm1ObElqb3hNREF3TENKamRYSnlaVzVqZVNJNklsVlRSQ0lzSW1WdWRpSTZJbEJTUlZCU1QwUWlMQ0pzWVhWdVkyaFZWVWxFSWpvaU1qQXlOakEzTVRkVU1URXlNelExV2kweE56aGtORGcxTmpnM04yaDZhbXRyYUVNeFFVMVRjakpvWXpBd01EQXdNREE0Y1RBd01EQXdNREF3TURONmNXZ2lMQ0p5WjNOSlpDSTZNVEF3TVN3aWFXRjBJam94TnpnME1qZzNOREkxTENKbGVIQWlPakUzT0RRek56TTRNalY5Lm52VlBnQzZrd2xtN1FDcDM4RUtBNHgzaW1oNUNVNXVEcUUzSjF3LVFELXc&uuid=20260717T112345Z-178d4856877hzjkkhC1AMSr2hc00000008q0000000003zqh&skin=default&theme=chicken' },
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%' },
   { 
     id: 1160, 
@@ -267,8 +268,28 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
         <img 
           src={game.img || game.image} 
           alt={game.name} 
-          className={`absolute inset-0 w-full h-full ${game.containImg ? 'object-contain' : 'object-cover'} object-center transition-transform duration-700 group-hover:scale-110 z-10`} 
+          className={`absolute inset-0 w-full h-full ${game.containImg ? 'object-contain' : 'object-cover'} object-center transition-transform duration-700 group-hover:scale-110 z-10 ${game.category === 'originals' ? 'mix-blend-lighten' : ''}`} 
         />
+
+        {/* Conditionally Render Massive 3D Badge Overlay for Originals */}
+        {game.category === 'originals' && (
+            <div className="absolute inset-x-0 bottom-4 flex flex-col items-center z-20 pointer-events-none transform scale-100 group-hover:scale-110 transition-transform duration-500 origin-bottom">
+                <div className="bg-gradient-to-b from-[#1a1f35] to-[#0d111d] ring-1 ring-white/30 border border-black/50 rounded-xl px-4 py-1.5 flex flex-col items-center shadow-[0_8px_15px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.2)]">
+                    <span 
+                        className="font-black text-xl md:text-2xl tracking-tighter leading-none"
+                        style={{
+                            background: 'linear-gradient(to bottom, #ffffff 20%, #b0b0b0 50%, #e0e0e0 80%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            filter: 'drop-shadow(0px 2px 1px rgba(0,0,0,0.8))'
+                        }}
+                    >
+                        {game.name.toUpperCase()}
+                    </span>
+                </div>
+                <span className="italic font-black text-white text-[10px] tracking-[0.2em] mt-1 drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)] opacity-95 -skew-x-12">724BETS</span>
+            </div>
+        )}
 
         {/* Play Overlay with Real and Demo Buttons */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/70 backdrop-blur-[2px]">
@@ -688,12 +709,12 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               
               <div className="relative aspect-video w-full flex flex-col items-center justify-center">
                 <div className="absolute inset-0 bg-[#0F121A]">
-                  <img src={selectedGame.img || selectedGame.image} className="w-full h-full object-cover opacity-50" />
+                  <img src={selectedGame.img || selectedGame.image} className={`w-full h-full object-cover opacity-50 ${selectedGame.category === 'originals' ? 'mix-blend-lighten' : ''}`} />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1A1D29] to-transparent" />
                 </div>
                 
                 <div className="relative z-10 w-24 h-24 mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">
-                  <img src={selectedGame.img || selectedGame.image} className="w-full h-full object-cover" />
+                  <img src={selectedGame.img || selectedGame.image} className={`w-full h-full object-cover ${selectedGame.category === 'originals' ? 'mix-blend-lighten' : ''}`} />
                 </div>
               </div>
 

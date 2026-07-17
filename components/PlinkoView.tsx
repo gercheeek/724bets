@@ -1,29 +1,9 @@
 import React, { useState } from 'react';
-import { Settings, BarChart2, Volume2, ShieldCheck, Info } from 'lucide-react';
+import { ShieldCheck, Info } from 'lucide-react';
 import { usePlinkoEngine } from './usePlinkoEngine';
 import { supabase } from '../utils/supabase';
 
 const MULTIPLIERS = [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16];
-const MULTIPLIER_COLORS = [
-  'bg-gradient-to-b from-[#ff3b3b] to-[#c70000]', // 16x
-  'bg-gradient-to-b from-[#ff543b] to-[#d62000]', // 9x
-  'bg-gradient-to-b from-[#ff713b] to-[#e64600]', // 2x
-  'bg-gradient-to-b from-[#ff8c3b] to-[#ea5f00]', // 1.4x
-  'bg-gradient-to-b from-[#ffa63b] to-[#f27a00]', // 1.4x
-  'bg-gradient-to-b from-[#ffbf3b] to-[#e89a00]', // 1.2x
-  'bg-gradient-to-b from-[#ffd53b] to-[#eeb000]', // 1.1x
-  'bg-gradient-to-b from-[#ffea3b] to-[#f2c600]', // 1x
-  'bg-gradient-to-b from-[#f3ff3b] to-[#d4e000]', // 0.5x
-  'bg-gradient-to-b from-[#ffea3b] to-[#f2c600]', // 1x
-  'bg-gradient-to-b from-[#ffd53b] to-[#eeb000]', // 1.1x
-  'bg-gradient-to-b from-[#ffbf3b] to-[#e89a00]', // 1.2x
-  'bg-gradient-to-b from-[#ffa63b] to-[#f27a00]', // 1.4x
-  'bg-gradient-to-b from-[#ff8c3b] to-[#ea5f00]', // 1.4x
-  'bg-gradient-to-b from-[#ff713b] to-[#e64600]', // 2x
-  'bg-gradient-to-b from-[#ff543b] to-[#d62000]', // 9x
-  'bg-gradient-to-b from-[#ff3b3b] to-[#c70000]', // 16x
-];
-
 const WEIGHTS = [1, 16, 120, 560, 1820, 4368, 8008, 11440, 12870, 11440, 8008, 4368, 1820, 560, 120, 16, 1];
 const TOTAL_WEIGHT = 65536;
 
@@ -37,7 +17,7 @@ export default function PlinkoView({ siteUser, setSiteUser, onAuthRequired }: an
     rowCount: 16,
     width: 800,
     height: 600,
-    onBucketLanded: () => {} // Win is calculated at drop time for sync reliability
+    onBucketLanded: () => {} 
   });
 
   const handleBet = async () => {
@@ -74,164 +54,129 @@ export default function PlinkoView({ siteUser, setSiteUser, onAuthRequired }: an
       supabase.from('members').update({ balance: newBalance }).eq('id', siteUser.id).then();
     }
 
-    try {
-      const logs = JSON.parse(localStorage.getItem('site_plinko_bets') || '[]');
-      logs.push({
-        id: Date.now().toString(),
-        userId: siteUser.id,
-        username: siteUser.username,
-        betAmount: amount,
-        multiplier,
-        winAmount,
-        profit: amount - winAmount,
-        time: new Date().toISOString()
-      });
-      if (logs.length > 500) logs.shift();
-      localStorage.setItem('site_plinko_bets', JSON.stringify(logs));
-    } catch (e) { }
-
     dropBall(targetBucket);
 
     setTimeout(() => {
       setIsBetting(false);
       setLastPayout({ amount: winAmount, multiplier });
-    }, 3000); // 3 seconds approx drop time
+    }, 3000); 
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-[calc(100vh-60px)] bg-[#0F121A] text-gray-200">
-      
-      {/* Left Sidebar (Bet Controls) */}
-      <div className="w-full lg:w-[320px] bg-[#1A1D29] border-r border-[#262A36] flex flex-col p-4 z-10 shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
+    <div className="flex flex-col md:flex-row w-full h-full bg-[#10171E] text-white font-sans overflow-y-auto md:overflow-hidden" style={{ height: 'calc(100dvh - var(--header-height, 60px))' }}>
         
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-gray-400 text-xs font-semibold">Bahis Miktarı</label>
-            <span className="text-gray-500 text-[10px] font-bold">
-              {siteUser ? `$${siteUser.balance.toFixed(2)}` : '$0.00'}
-            </span>
-          </div>
-          <div className="flex bg-[#12141C] rounded-lg border border-[#262A36] overflow-hidden focus-within:border-gray-500 transition-colors">
-            <div className="pl-3 pr-2 py-2.5 flex items-center justify-center border-r border-[#262A36]">
-              <span className="text-gray-500 text-sm font-bold">$</span>
+        {/* ── LEFT SIDEBAR (Controls) ── */}
+        <div className="w-full md:w-[320px] bg-[#222E3A] border-r border-[#151D24] p-4 flex flex-col shrink-0 z-20 shadow-2xl order-2 md:order-1 h-auto md:h-full overflow-y-auto">
+            
+            {/* Tabs */}
+            <div className="flex bg-[#151D24] rounded-full p-1 mb-6">
+                <button className="flex-1 bg-[#324555] text-white text-sm font-semibold rounded-full py-2 shadow-sm">Manuel</button>
+                <button className="flex-1 text-gray-400 hover:text-white text-sm font-semibold rounded-full py-2 transition-colors">Oto</button>
             </div>
-            <input 
-              type="number" 
-              value={betAmount} 
-              onChange={(e) => setBetAmount(e.target.value)}
-              step="0.1"
-              min="0.1"
-              className="bg-transparent flex-1 text-white px-3 text-sm font-bold outline-none"
-            />
-            <button 
-              onClick={() => setBetAmount((parseFloat(betAmount)/2).toFixed(2))}
-              className="px-3 hover:bg-white/5 transition-colors text-gray-400 text-xs font-bold border-l border-[#262A36]"
-            >
-              1/2
-            </button>
-            <button 
-              onClick={() => setBetAmount((parseFloat(betAmount)*2).toFixed(2))}
-              className="px-3 hover:bg-white/5 transition-colors text-gray-400 text-xs font-bold border-l border-[#262A36]"
-            >
-              2x
-            </button>
-          </div>
-        </div>
 
-        <div className="mb-6">
-          <label className="text-gray-400 text-xs font-semibold mb-2 block">Risk Seviyesi</label>
-          <div className="bg-[#12141C] rounded-lg border border-[#262A36] p-1 flex">
-            {['low', 'medium', 'high'].map((level) => (
-              <button 
-                key={level}
-                onClick={() => setRisk(level as any)}
-                className={`flex-1 py-2 text-[10px] sm:text-xs font-bold rounded-md uppercase transition-all ${
-                  risk === level 
-                    ? 'bg-[#2A2E3D] text-white shadow-lg' 
-                    : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
-                }`}
-              >
-                {level === 'low' ? 'DÜŞÜK' : level === 'medium' ? 'ORTA' : 'YÜKSEK'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <label className="text-gray-400 text-xs font-semibold mb-2 block">Satırlar</label>
-          <div className="flex gap-2">
-            <div className="w-12 bg-[#12141C] border border-[#262A36] rounded-lg flex items-center justify-center text-white font-bold text-sm">
-              16
+            {/* Bet Amount */}
+            <div className="mb-4 relative">
+                <div className="flex justify-between items-end mb-2">
+                    <label className="text-xs text-gray-400 font-semibold">Bahis Tutarı</label>
+                    <span className="text-xs text-gray-300 font-mono">₺{siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
+                </div>
+                <div className="flex bg-[#151D24] rounded-md border border-[#2A3744] overflow-hidden focus-within:border-[#3D82F6] transition-colors">
+                    <div className="px-3 flex items-center justify-center text-gray-400">₺</div>
+                    <input 
+                        type="number" 
+                        value={betAmount || ''}
+                        onChange={(e) => setBetAmount(e.target.value)}
+                        disabled={isBetting}
+                        placeholder="0.00"
+                        className="flex-1 bg-transparent text-white font-mono text-sm py-3 outline-none"
+                    />
+                    <div className="flex">
+                        <button className="px-3 text-xs font-bold text-gray-300 hover:bg-[#2A3744] border-l border-[#2A3744] transition-colors" onClick={() => setBetAmount((parseFloat(betAmount) / 2).toFixed(2))}>½</button>
+                        <button className="px-3 text-xs font-bold text-gray-300 hover:bg-[#2A3744] border-l border-[#2A3744] transition-colors" onClick={() => setBetAmount((parseFloat(betAmount) * 2).toFixed(2))}>2x</button>
+                    </div>
+                </div>
             </div>
-            <div className="flex-1 bg-[#12141C] border border-[#262A36] rounded-lg p-1.5 flex items-center opacity-50 cursor-not-allowed">
-               <div className="w-full flex items-center gap-1 bg-[#1C1F2B] rounded-full h-8 px-2 relative border border-[#2A2E3D]">
-                 {Array.from({length: 8}).map((_, i) => (
-                   <div key={i} className="flex-1 h-2 bg-[#27D26D] rounded-full" />
-                 ))}
-               </div>
+
+            {/* Risk Level */}
+            <div className="mb-6">
+                <label className="block text-xs text-gray-400 font-semibold mb-2">Risk Seviyesi</label>
+                <div className="relative">
+                    <select 
+                        value={risk}
+                        onChange={(e) => setRisk(e.target.value as any)}
+                        disabled={isBetting}
+                        className="w-full bg-[#151D24] text-white text-sm font-semibold py-3 px-4 rounded-md appearance-none border border-[#2A3744] outline-none focus:border-[#3D82F6]"
+                    >
+                        <option value="low">Düşük</option>
+                        <option value="medium">Orta</option>
+                        <option value="high">Yüksek</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            {/* Actions */}
+            <div className="flex flex-col gap-2 mt-auto">
+                <button 
+                    onClick={handleBet}
+                    disabled={isBetting}
+                    className={`w-full font-bold py-3.5 rounded-md transition-colors shadow-lg ${
+                        isBetting ? 'bg-[#324555] text-gray-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+                    }`}
+                >
+                    {isBetting ? 'Düşüyor...' : 'Bahis'}
+                </button>
+            </div>
         </div>
 
-        <button 
-          onClick={handleBet}
-          disabled={isBetting}
-          className="w-full bg-[#27D26D] hover:bg-[#20b75a] disabled:opacity-50 disabled:cursor-not-allowed text-[#0F121A] font-black py-4 rounded-lg shadow-[0_4px_15px_rgba(39,210,109,0.3)] transition-colors uppercase text-sm mb-4 mt-2"
-        >
-          {isBetting ? 'BAHİS OYNANIYOR...' : 'GİRİŞ YAP (BAHİS)'}
-        </button>
+        {/* ── RIGHT MAIN AREA (Centered Game Frame) ── */}
+        <div className="flex-1 bg-[#10171E] relative overflow-hidden flex items-center justify-center p-2 sm:p-4 md:p-12 order-1 md:order-2 min-h-[400px] md:min-h-0">
+            
+            {/* ── CENTERED GAME CONTAINER ── */}
+            <div className="w-full max-w-5xl h-full max-h-[700px] bg-[#151C23] relative rounded-3xl shadow-2xl overflow-hidden flex flex-col items-center justify-center border-[6px] border-[#1C252D]">
+                
+                {/* Top Info Badges */}
+                <div className="absolute top-6 left-6 flex items-center gap-2 z-20">
+                    <Info className="w-5 h-5 text-gray-500" />
+                    <span className="text-white font-bold tracking-widest text-sm flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#27D26D]"></div>
+                        Plinko
+                    </span>
+                </div>
+                
+                <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#1A1D29] px-3 py-1.5 rounded-full border border-white/5 z-20">
+                    <ShieldCheck className="w-4 h-4 text-gray-400" />
+                    <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
+                </div>
 
-        <div className="mt-auto pt-4 flex justify-between items-center text-gray-500 px-2">
-           <div className="flex gap-4">
-             <Settings className="w-4 h-4 hover:text-gray-300 cursor-pointer transition-colors" />
-             <BarChart2 className="w-4 h-4 hover:text-gray-300 cursor-pointer transition-colors" />
-             <Volume2 className="w-4 h-4 hover:text-gray-300 cursor-pointer transition-colors" />
-           </div>
-        </div>
-      </div>
+                {/* Payout Notification */}
+                {lastPayout && !isBetting && (
+                    <div className="absolute top-20 right-6 bg-[#1A1D29] border border-[#262A36] px-4 py-2 rounded-lg animate-fade-in-up z-50">
+                        <span className="text-gray-400 text-xs block mb-1">Son Kazanç</span>
+                        <span className={`text-lg font-black ${lastPayout.multiplier >= 1 ? 'text-[#27D26D]' : 'text-gray-300'}`}>
+                            {lastPayout.multiplier >= 1 ? '+' : ''}{lastPayout.amount.toFixed(2)} ₺
+                        </span>
+                    </div>
+                )}
 
-      {/* Right Area (Canvas & Game) */}
-      <div className="flex-1 relative flex flex-col items-center justify-center overflow-hidden bg-[#0F121A]">
-        
-        {/* Top Info */}
-        <div className="absolute top-6 left-6 flex items-center gap-2">
-          <Info className="w-5 h-5 text-gray-500" />
-          <span className="text-white font-bold tracking-widest text-sm flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#27D26D]"></div>
-            Plinko PRO
-          </span>
+                {/* Plinko Logo Background */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] z-0">
+                    <h1 className="text-[100px] md:text-[140px] font-black italic tracking-tighter select-none">PLINKO</h1>
+                </div>
+                
+                {/* The Canvas */}
+                <div className="relative w-full h-full max-w-[800px] aspect-[4/3] flex flex-col items-center justify-center mt-12 scale-90 md:scale-100 z-10">
+                    <canvas 
+                        ref={canvasRef}
+                        width={800}
+                        height={600}
+                        className="w-full h-full object-contain"
+                    />
+                </div>
+            </div>
         </div>
-        
-        <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#1A1D29] px-3 py-1.5 rounded-full border border-white/5">
-          <ShieldCheck className="w-4 h-4 text-gray-400" />
-          <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
-        </div>
-
-        {/* Payout Notification */}
-        {lastPayout && (
-          <div className="absolute top-20 right-6 bg-[#1A1D29] border border-[#262A36] px-4 py-2 rounded-lg animate-fade-in-up z-50">
-            <span className="text-gray-400 text-xs block mb-1">Son Kazanç</span>
-            <span className={`text-lg font-black ${lastPayout.multiplier > 1 ? 'text-[#27D26D]' : 'text-gray-300'}`}>
-              {lastPayout.multiplier > 1 ? '+' : ''}{lastPayout.amount.toFixed(2)} $
-            </span>
-          </div>
-        )}
-
-        {/* The Game Canvas Container */}
-        <div className="relative w-full max-w-[800px] aspect-[4/3] flex flex-col items-center justify-center mt-12 scale-90 md:scale-100">
-           {/* Plinko Logo Background */}
-           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
-             <h1 className="text-[100px] md:text-[120px] font-black italic tracking-tighter select-none">PLINKO</h1>
-           </div>
-           
-           <canvas 
-             ref={canvasRef}
-             width={800}
-             height={600}
-             className="z-10 w-full h-full object-contain absolute inset-0"
-           />
-        </div>
-      </div>
     </div>
   );
 }
