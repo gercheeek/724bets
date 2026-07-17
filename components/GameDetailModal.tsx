@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Play, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export interface GameData {
     id: string;
@@ -26,6 +27,7 @@ interface GameDetailModalProps {
 }
 
 export const GameDetailModal: React.FC<GameDetailModalProps> = ({ game, isOpen, onClose, onPlay }) => {
+    const { t } = useLanguage();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -74,10 +76,10 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ game, isOpen, 
                         <div className="w-full mb-10 text-left">
                             <h3 className="text-white font-bold text-sm md:text-base mb-3 flex items-center gap-2">
                                 <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-zinc-400" />
-                                Oyun Hakkında
+                                {t("about_game")}
                             </h3>
                             <p className="text-zinc-400 text-xs md:text-sm leading-relaxed">
-                                {game.fullDesc || `${game.desc} ${game.name} oyunu tamamen şeffaf ve %100 kanıtlanabilir adil (Provably Fair) altyapısıyla çalışmaktadır. Sonuçlar önceden belirlenir ve dışarıdan asla müdahale edilemez. Hemen oynamaya başla ve devasa çarpanları yakala.`}
+                                {game.fullDesc || `${game.desc} ${game.name} {t("default_game_desc")}`}
                             </p>
                         </div>
 
@@ -88,12 +90,12 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ game, isOpen, 
                                 className="w-full h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#10B981] hover:bg-[#00e693] text-black font-black text-lg md:text-xl tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
                             >
                                 <Play className="w-5 h-5 md:w-6 md:h-6 fill-current" />
-                                HEMEN OYNA
+                                {t("play_now_caps")}
                             </button>
                             
                             <div className="flex items-center justify-center gap-2 mt-4 text-center">
                                 <span className="text-zinc-500 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">
-                                    ŞU AN <span className="text-[#10B981]">{game.players.toLocaleString('tr-TR')} OYUNCU</span> AKTİF
+                                    {t("right_now")} <span className="text-[#10B981]">{game.players.toLocaleString()} {t("active_players_caps")}</span>
                                 </span>
                             </div>
                         </div>

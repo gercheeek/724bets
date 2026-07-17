@@ -132,15 +132,15 @@ const Header: React.FC<HeaderProps> = ({
 
   /* ── Category list ── */
     const categories: CategoryItem[] = [
-    { key: 'spor724', view: 'spor724', label: 'SPOR724', icon: <Target className={ICON_SIZE} /> },
-    { key: 'slotra', view: 'slotra', label: 'Gerçek', icon: <Target className={ICON_SIZE} /> },
-    { key: 'mobile-bulletin', view: 'mobile-bulletin', label: 'M.Bülten', icon: <Activity className={ICON_SIZE} /> },
-    { key: 'coupons', view: 'coupons', label: 'Kuponlar', icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
-    { key: 'brands', view: 'brands', label: 'Siteler', icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
-    { key: 'trusted-sites', view: 'trusted-sites', label: 'Güvenilir', icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
-    { key: 'pool', view: 'pool', label: '724TOTO', icon: <Target className={ICON_SIZE} />, visKey: 'pool' },
-    { key: 'blackjack', view: 'blackjack', label: 'Casino', icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
-    { key: 'loyalty', view: 'loyalty', label: 'Görevler', icon: <Trophy className={ICON_SIZE} />, visKey: 'loyalty' },
+    { key: 'spor724', view: 'spor724', label: t('header_spor724'), icon: <Target className={ICON_SIZE} /> },
+    { key: 'slotra', view: 'slotra', label: t('header_gercek'), icon: <Target className={ICON_SIZE} /> },
+    { key: 'mobile-bulletin', view: 'mobile-bulletin', label: t('header_mbulten'), icon: <Activity className={ICON_SIZE} /> },
+    { key: 'coupons', view: 'coupons', label: t('header_kuponlar'), icon: <Ticket className={ICON_SIZE} />, visKey: 'coupons' },
+    { key: 'brands', view: 'brands', label: t('header_siteler'), icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
+    { key: 'trusted-sites', view: 'trusted-sites', label: t('header_guvenilir'), icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
+    { key: 'pool', view: 'pool', label: t('header_toto'), icon: <Target className={ICON_SIZE} />, visKey: 'pool' },
+    { key: 'blackjack', view: 'blackjack', label: t('header_casino'), icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
+    { key: 'loyalty', view: 'loyalty', label: t('header_gorevler'), icon: <Trophy className={ICON_SIZE} />, visKey: 'loyalty' },
   ];
 
   const handleDepositSubmit = () => {
@@ -393,7 +393,7 @@ const Header: React.FC<HeaderProps> = ({
                 className="bg-[#1475E1] hover:bg-[#0f60c0] text-white font-bold w-[32px] h-[36px] md:w-auto md:px-5 md:h-[44px] rounded-r-lg text-[14px] md:text-[15px] transition-colors flex items-center justify-center flex-shrink-0 border-l border-[#1475E1] shadow-[0_0_15px_rgba(20,117,225,0.3)]"
               >
                 <Wallet className="w-4 h-4 md:hidden" />
-                <span className="hidden md:block whitespace-nowrap">Cüzdan</span>
+                <span className="hidden md:block whitespace-nowrap">{t('wallet_cuzdan')}</span>
               </button>
 
               {walletDropdownOpen && (
@@ -407,7 +407,7 @@ const Header: React.FC<HeaderProps> = ({
                         type="text" 
                         value={walletSearch}
                         onChange={(e) => setWalletSearch(e.target.value)}
-                        placeholder="Para Birimi Ara" 
+                        placeholder={t("wallet_ara")} 
                         className="w-full bg-[#1C2531] border border-[#2B3544] rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#1A7BF2] transition-colors placeholder-zinc-400"
                       />
                     </div>
@@ -444,7 +444,7 @@ const Header: React.FC<HeaderProps> = ({
                   {/* Footer Button */}
                   <button className="w-full flex items-center justify-center gap-2 py-3.5 text-white bg-[#1C2531] hover:bg-[#252D37] font-bold text-sm transition-colors border-t border-[#2B3544]">
                     <Briefcase className="w-4 h-4 text-zinc-400" />
-                    Cüzdan Ayarları
+                    {t('wallet_ayarlar')}
                   </button>
                 </div>
               )}
@@ -506,42 +506,42 @@ const Header: React.FC<HeaderProps> = ({
                   <div className="absolute right-0 mt-2 w-64 bg-[#1A1D24] border border-white/5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
                     <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <User className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">Profil</span>
+                      <span className="font-semibold text-sm">{t('profile_profil')}</span>
                     </button>
                     
                     <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <Bell className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">Gelen Kutusu</span>
+                      <span className="font-semibold text-sm">{t('profile_gelenkutusu')}</span>
                     </button>
 
                     <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <Users className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">İştirakler</span>
+                      <span className="font-semibold text-sm">{t('profile_istirakler')}</span>
                     </button>
 
                     <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <ShieldCheck className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">Doğrulamalar</span>
+                      <span className="font-semibold text-sm">{t('profile_dogrulamalar')}</span>
                     </button>
 
                     <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <Settings className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">Ayarlar</span>
+                      <span className="font-semibold text-sm">{t('profile_ayarlar')}</span>
                     </button>
 
                     <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <Lock className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">Gizlilik</span>
+                      <span className="font-semibold text-sm">{t('profile_gizlilik')}</span>
                     </button>
 
                     <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <Link className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">Bağlantılar</span>
+                      <span className="font-semibold text-sm">{t('profile_baglantilar')}</span>
                     </button>
 
                     <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <FileText className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">İşlemler</span>
+                      <span className="font-semibold text-sm">{t('profile_islemler')}</span>
                     </button>
 
                     <button 
@@ -555,7 +555,7 @@ const Header: React.FC<HeaderProps> = ({
                       className="flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-white/5 mt-1"
                     >
                       <LogOut className="w-5 h-5 text-zinc-400 group-hover:text-red-400" />
-                      <span className="font-semibold text-sm">Çıkış yap</span>
+                      <span className="font-semibold text-sm">{t('profile_cikis')}</span>
                     </button>
                   </div>
                 )}
