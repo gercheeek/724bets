@@ -23,15 +23,15 @@ const LanguageTransition: React.FC = () => {
 
   return (
     <div 
-      className={`fixed inset-0 z-[999999] bg-[#0a0b0e] flex items-center justify-center transition-opacity duration-500 pointer-events-none ${visible ? 'opacity-100' : 'opacity-0'}`}
+      className={`fixed inset-0 z-[999999] bg-[#0a0b0e]/95 backdrop-blur-md flex items-center justify-center transition-all duration-500 ease-in-out ${visible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
     >
       <div className="relative flex flex-col items-center justify-center">
         {/* Glow behind text */}
-        <div className="absolute inset-0 bg-[#10B981] blur-[100px] opacity-20 rounded-full scale-150 animate-pulse" />
+        <div className="absolute inset-0 bg-[#10B981] blur-[120px] opacity-25 rounded-full scale-150 animate-pulse" />
         
         {/* 724BETS text animation */}
-        <div className={`transform transition-all duration-700 ease-out ${visible ? 'scale-100 translate-y-0 opacity-100' : 'scale-50 translate-y-10 opacity-0'}`}>
-          <span className="flex items-center text-[50px] md:text-[80px] font-black font-['Inter'] tracking-tight text-white drop-shadow-[0_0_15px_rgba(0,255,163,0.5)]">
+        <div className={`transform transition-all duration-700 cubic-bezier(0.34, 1.56, 0.64, 1) ${visible ? 'scale-110 translate-y-0 opacity-100' : 'scale-75 translate-y-12 opacity-0'}`}>
+          <span className="flex items-center text-[60px] md:text-[90px] font-black font-['Outfit'] tracking-tighter text-white drop-shadow-[0_0_25px_rgba(0,255,163,0.35)] select-none">
             724<span className="text-[#10B981]">BETS</span>
           </span>
         </div>

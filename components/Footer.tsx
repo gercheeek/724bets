@@ -102,9 +102,12 @@ const Footer: React.FC = () => {
             <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">Sorumlu Oyun</a>
             <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">KYC Politikası</a>
           </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]/50" />
-            <span className="tracking-wide">© 2026 724BETS. Tüm Hakları Saklıdır.</span>
+          <div className="flex flex-col items-center md:items-end gap-1">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]/50" />
+              <span className="tracking-wide">© 2026 724BETS. Tüm Hakları Saklıdır.</span>
+            </div>
+            <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">724net v 0.0.1</span>
           </div>
         </div>
 
