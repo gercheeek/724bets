@@ -171,12 +171,27 @@ interface LanguageContextProps {
   language: LanguageCode;
   setLanguage: (lang: LanguageCode) => void;
   t: (key: string) => string;
+  isAnimating: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<LanguageCode>('tr');
+  const [language, setLanguageState] = useState<LanguageCode>('tr');
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const setLanguage = (lang: LanguageCode) => {
+    if (lang === language) return;
+    setIsAnimating(true);
+    
+    // Hold screen, change language, then release screen
+    setTimeout(() => {
+      setLanguageState(lang);
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 800); // Wait for translation to apply
+    }, 600); // Wait for transition fade-in
+  };
 
   const t = (key: string): string => {
     if (translations[key] && translations[key][language]) {
@@ -186,7 +201,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, isAnimating }}>
       {children}
     </LanguageContext.Provider>
   );
