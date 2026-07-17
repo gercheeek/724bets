@@ -48,7 +48,7 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
     <div className="w-full mt-6 mb-8 px-2">
       {/* Header & Navigation */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">{t('newly_added_2')}</h2>
+        <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">{t('newly_added')}</h2>
         <div className="flex items-center gap-2">
           <button 
             onClick={() => scroll('left')}

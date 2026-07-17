@@ -15,15 +15,6 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { GameDetailModal, GameData } from './GameDetailModal';
 import { NewGamesSlider2 } from './NewGamesSlider2';
 
-const NEW_ADDED_GAMES = [
-  { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%', players: 204 },
-  { id: 1160, name: 'Out of the Woods', provider: 'Pragmatic Play', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523109e9fec840eaeed00', category: 'new', rtp: '96.50%', demoSymbol: 'vs25bstackwild', players: 278 },
-  { id: 1161, name: 'Legion Gold And The Throne Of Dead', provider: 'Play\'n GO', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523235229c24dca9f40d6', category: 'new', rtp: '96.20%', customDemoUrl: 'https://acccw.playngonetwork.com/casino/ContainerLauncher?pid=1857&brand=b2b_anj&gid=throneofdead&practice=1&lang=en_GB&div=gameWrapper&embedmode=iframe&channel=mobile&origin=https%3A%2F%2Fslotra.com', players: 335 },
-  { id: 1162, name: 'Big Bass Blast', provider: 'Pragmatic Play', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a4f6a30db4d711f8d6a96e9', category: 'new', rtp: '96.71%', demoSymbol: 'vs10bbasblitz', players: 190 },
-  { id: 1163, name: 'The Dog House Megaways 1000', provider: 'Pragmatic Play', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5524d03da928ad473ccbc8', category: 'new', rtp: '96.55%', demoSymbol: 'vswaysdh1000', players: 371 },
-  { id: 1164, name: 'Arena of Iron', provider: 'Hacksaw Gaming', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5524e39666981d0311ce45', category: 'new', rtp: '96.30%', customDemoUrl: 'https://d2sx83al1f82za.cloudfront.net/2309/1.4.4/index.html?language=en&channel=mobile&gameid=2309&mode=2&token=123token&partner=slotra&env=https://d2sx83al1f82za.cloudfront.net/demo/api&realmoneyenv=https://d2sx83al1f82za.cloudfront.net/api&alwaysredirect=true', players: 449 }
-];
-
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
   if (game.customDemoUrl) return game.customDemoUrl;
@@ -289,44 +280,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
           </div>
 
-          {/* Yeni Eklenenler Grid for Members */}
-          <div className="w-full mt-8 mb-4">
-            <div className="flex items-center gap-2 mb-4 px-2">
-              <h2 className="text-xl md:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <span className="text-[#10B981]">✨</span> {t('newly_added')}
-              </h2>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 px-2">
-              {NEW_ADDED_GAMES.map(game => (
-                <div key={game.id} className="relative group cursor-pointer rounded-xl overflow-hidden shadow-lg border border-white/5 bg-[#11141D] transition-transform duration-300 hover:-translate-y-1" onClick={() => onViewChange('casino')}>
-                  <div className="relative w-full aspect-[3/4] overflow-hidden">
-                    <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E14] via-transparent to-transparent opacity-80"></div>
-                  </div>
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 z-30 backdrop-blur-[2px]">
-                    <button className="w-12 h-12 bg-[#10B981] hover:bg-[#0da070] rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
-                      <Play className="w-5 h-5 text-black ml-1" fill="currentColor" />
-                    </button>
-                    {(game.demoSymbol || game.customDemoUrl) && (
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); setSelectedGame(game); setShowDemoIframe(true); }}
-                        className="bg-white/10 hover:bg-white/20 text-white font-bold text-xs py-1.5 px-4 rounded-full border border-white/20 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"
-                      >
-                        Demo Oyna
-                      </button>
-                    )}
-                  </div>
-                  <div className="absolute bottom-2 left-2 flex items-center gap-1.5 z-20">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
-                    <span className="text-[10px] sm:text-xs font-bold text-gray-300 drop-shadow-md">{game.players} Oyuncular</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Yeni Eklenenler 2 */}
+          {/* Yeni Eklenenler Slider (Member View) */}
           <NewGamesSlider2 onPlayGame={() => onViewChange('casino')} />
 
         </>
@@ -405,52 +359,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               </div>
             </div>
 
-            {/* Yeni Eklenenler Grid for Guests */}
-            <div className="w-full mt-8 mb-4">
-              <div className="flex items-center gap-2 mb-4 px-2">
-                <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">{t('newly_added')}</h2>
-              </div>
-              <div className="flex flex-wrap gap-3 md:gap-4 px-2">
-                {NEW_ADDED_GAMES.map(game => (
-                  <div key={game.id} className="flex flex-col items-center group">
-                    <div 
-                      onClick={() => setDetailModalGame({
-                        id: game.id.toString(),
-                        name: game.name,
-                        desc: `${game.provider} sağlayıcısından yepyeni bir deneyim.`,
-                        color: 'from-emerald-600 to-emerald-900',
-                        image: game.img,
-                        path: 'slots', 
-                        icon: '🎰',
-                        players: game.players,
-                        fullDesc: `${game.name}, ${game.provider} tarafından sunulan popüler ve kazançlı bir slottur. Yüksek RTP ve devasa çarpan potansiyeliyle hemen oynamaya başlayın.`
-                      })}
-                      className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
-                    >
-                      <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-fill group-hover:scale-110 transition-transform duration-700 ease-out" />
-                      
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      
-                      {/* Play button appears on hover */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20">
-                              <Play className="w-5 h-5 text-white fill-current ml-1" />
-                          </div>
-                      </div>
-                    </div>
-                    {/* External Player Count */}
-                    <div className="mt-3 flex items-center gap-1.5 px-2">
-                      <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse"></div>
-                      <span className="text-zinc-400 text-[11px] font-bold font-sans">
-                        <span className="text-white">{game.players}</span> Oyuncular
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Yeni Eklenenler 2 (Guest View) */}
+            {/* Yeni Eklenenler Slider (Guest View) */}
             <NewGamesSlider2 onPlayGame={(game) => setDetailModalGame({
               id: game.id,
               name: game.name,
