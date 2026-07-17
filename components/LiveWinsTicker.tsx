@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import BetDetailsModal, { BetDetailData } from './BetDetailsModal';
 import { Diamond } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const TICKER_GAMES = [
   // Rainbet Originals (Weighted heavily to appear more often)
@@ -87,6 +88,7 @@ const generateFakeBet = (): BetDetailData => {
 export default function LiveWinsTicker() {
   const [wins, setWins] = useState<BetDetailData[]>([]);
   const [selectedWin, setSelectedWin] = useState<BetDetailData | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const initial = Array.from({ length: 25 }).map(() => generateFakeBet());
@@ -104,11 +106,15 @@ export default function LiveWinsTicker() {
   }, []);
 
   return (
-    <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 border-b border-white/5">
-      
-      {/* Horizontal Scrolling List (Full Width) */}
-      <div 
-        className="flex gap-2.5 md:gap-4 overflow-x-auto hide-scrollbar w-full px-4 md:px-8 scroll-smooth"
+    <div className="w-full flex flex-col mb-4">
+      <div className="flex items-center gap-2 mb-4 px-2">
+        <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">{t('winners_title')}</h2>
+      </div>
+      <div className="w-full relative flex items-center bg-[#0B0E14] overflow-hidden py-3 border-b border-white/5 rounded-xl">
+        
+        {/* Horizontal Scrolling List (Full Width) */}
+        <div 
+          className="flex gap-2.5 md:gap-4 overflow-x-auto hide-scrollbar w-full px-4 md:px-8 scroll-smooth"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
         {wins.map((win) => (
@@ -144,6 +150,7 @@ export default function LiveWinsTicker() {
       {selectedWin && (
         <BetDetailsModal data={selectedWin} onClose={() => setSelectedWin(null)} />
       )}
+      </div>
     </div>
   );
 }
