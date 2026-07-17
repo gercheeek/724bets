@@ -13,6 +13,7 @@ import OriginalsSlider from './OriginalsSlider';
 import LimitedTimePromo from './LimitedTimePromo';
 import { useLanguage } from '../contexts/LanguageContext';
 import { GameDetailModal, GameData } from './GameDetailModal';
+import { NewGamesSlider2 } from './NewGamesSlider2';
 
 const NEW_ADDED_GAMES = [
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%', players: 204 },
@@ -286,6 +287,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
             
           </div>
+          </div>
 
           {/* Yeni Eklenenler Grid for Members */}
           <div className="w-full mt-8 mb-4">
@@ -322,7 +324,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
           </div>
 
-        </div>
+          {/* Yeni Eklenenler 2 */}
+          <NewGamesSlider2 />
+
         </>
       ) : (
         // GUEST VIEW: Welcome, Search + Side-by-Side Hero Banner & Cards
@@ -439,6 +443,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 ))}
               </div>
             </div>
+
+            {/* Yeni Eklenenler 2 (Guest View) */}
+            <NewGamesSlider2 />
 
         </>
       )}
