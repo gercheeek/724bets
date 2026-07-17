@@ -177,6 +177,12 @@ const translations: Translations = {
     es: 'Recién Agregados 2',
     pt: 'Adicionados Recentemente 2'
   },
+  winners_title: {
+    tr: '7/24 Kazananlar',
+    en: '24/7 Winners',
+    es: 'Ganadores 24/7',
+    pt: 'Vencedores 24/7'
+  },
   promo_2_title: {
     tr: 'Güvenilir Sistem',
     en: 'Trusted System',
