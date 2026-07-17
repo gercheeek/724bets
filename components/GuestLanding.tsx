@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Trophy, Shield, Target, ChevronRight, Info, Crown, Star, Play, X } from 'lucide-react';
+import { Search, Trophy, Shield, Target, ChevronRight, Info, Crown, Star, Play, X, ArrowRight, ChevronDown } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import LiveWinsTicker from './LiveWinsTicker';
 import LiveGamesSlider from './LiveGamesSlider';
@@ -298,28 +298,65 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     {t('hero_subtitle')}
                   </p>
                   
-                  <button 
-                    onClick={onMemberRegisterClick}
-                    className="bg-[#1475E1] hover:bg-[#0f60c0] text-white font-bold text-[15px] py-3.5 px-8 rounded-sm w-fit transition-colors mb-8 shadow-lg shadow-blue-500/20"
-                  >
-                    {t('register')}
-                  </button>
-                  
-                  <div className="flex flex-col gap-3">
-                    <span className="text-gray-400 text-[13px] font-semibold">{t('register_alt')}</span>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <button className="flex items-center gap-2 bg-[#212C3A] hover:bg-[#2C3B4E] px-4 py-2.5 rounded-sm text-gray-200 hover:text-white font-bold text-[13px] transition-colors">
-                        <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                        Google
+                  <div className="flex items-center gap-3 mb-8">
+                    <button 
+                      onClick={onMemberRegisterClick}
+                      className="bg-[#34C759] hover:bg-[#2EB852] text-white font-medium text-[16px] py-3.5 px-6 rounded-[8px] flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(52,199,89,0.2)]"
+                    >
+                      Kaydol <ArrowRight className="w-5 h-5" />
+                    </button>
+                    
+                    {/* Social Dropdown */}
+                    <div className="relative group/social">
+                      <button className="flex items-center gap-3 bg-[#212C3A] hover:bg-[#2C3B4E] px-4 py-3.5 rounded-[8px] border border-white/5 transition-colors h-[52px]">
+                        <div className="flex items-center -space-x-2">
+                          <div className="w-7 h-7 rounded-full bg-white border-2 border-[#212C3A] flex items-center justify-center relative z-40 overflow-hidden shadow-sm">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" alt="Steam" className="w-4 h-4 object-contain" />
+                          </div>
+                          <div className="w-7 h-7 rounded-full bg-white border-2 border-[#212C3A] flex items-center justify-center relative z-30 overflow-hidden shadow-sm">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="Metamask" className="w-4 h-4 object-contain" />
+                          </div>
+                          <div className="w-7 h-7 rounded-full bg-white border-2 border-[#212C3A] flex items-center justify-center relative z-20 overflow-hidden shadow-sm">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" className="w-4 h-4 object-contain" />
+                          </div>
+                          <div className="w-7 h-7 rounded-full bg-[#34A853] border-2 border-[#212C3A] flex items-center justify-center relative z-10 overflow-hidden shadow-sm">
+                             <span className="text-white text-[10px] font-bold">B</span>
+                          </div>
+                        </div>
+                        <ChevronDown className="w-4 h-4 text-gray-400" />
                       </button>
-                      <button className="flex items-center gap-2 bg-[#212C3A] hover:bg-[#2C3B4E] px-4 py-2.5 rounded-sm text-gray-200 hover:text-white font-bold text-[13px] transition-colors">
-                        <svg className="w-[18px] h-[18px]" fill="#1877F2" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                        Facebook
-                      </button>
-                      <button className="flex items-center gap-2 bg-[#212C3A] hover:bg-[#2C3B4E] px-4 py-2.5 rounded-sm text-gray-200 hover:text-white font-bold text-[13px] transition-colors">
-                        <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14h-3v-2h-2v2H8V8h3.5v3h2V8h2v8z" fill="#58E027"/></svg>
-                        Kick
-                      </button>
+                      
+                      {/* Dropdown menu */}
+                      <div className="absolute top-full left-0 mt-2 w-48 bg-[#212C3A] border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover/social:opacity-100 group-hover/social:visible transition-all z-50 py-2">
+                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
+                          <div className="w-6 h-6 flex items-center justify-center bg-white rounded-full">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" className="w-4 h-4" />
+                          </div>
+                          <span className="text-white text-[15px] font-medium">Steam</span>
+                        </div>
+                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" className="w-6 h-6" />
+                          <span className="text-white text-[15px] font-medium">Metamask</span>
+                        </div>
+                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" className="w-6 h-6" />
+                          <span className="text-white text-[15px] font-medium">Google</span>
+                        </div>
+                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" className="w-6 h-6" />
+                          <span className="text-white text-[15px] font-medium">Telegram</span>
+                        </div>
+                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
+                          <div className="w-6 h-6 flex items-center justify-center">
+                            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                          </div>
+                          <span className="text-white text-[15px] font-medium">X</span>
+                        </div>
+                        <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
+                          <img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png" className="w-6 h-6 object-contain" />
+                          <span className="text-white text-[15px] font-medium">Solana</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
