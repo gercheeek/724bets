@@ -1171,6 +1171,10 @@ const AppContent: React.FC = () => {
         setView('trusted-detail');
       } else if (cleanPath === '/casino') {
         setView('blackjack');
+      } else if (cleanPath === '/spor') {
+        setView('sports');
+      } else if (cleanPath === '/canli') {
+        setView('sports');
       } else {
         const viewName = cleanPath.substring(1);
         const validViews = ['blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf'];
@@ -1188,21 +1192,94 @@ const AppContent: React.FC = () => {
     return () => window.removeEventListener('popstate', syncViewWithUrl);
   }, []);
 
-  // SEO noindex logic for demo view
+  // SEO dynamic title and meta logic
   useEffect(() => {
-    let meta = document.querySelector('meta[name="robots"]');
+    let robotsMeta = document.querySelector('meta[name="robots"]');
     if (view === 'demo') {
-      if (!meta) {
-        meta = document.createElement('meta');
-        meta.setAttribute('name', 'robots');
-        document.head.appendChild(meta);
+      if (!robotsMeta) {
+        robotsMeta = document.createElement('meta');
+        robotsMeta.setAttribute('name', 'robots');
+        document.head.appendChild(robotsMeta);
       }
-      meta.setAttribute('content', 'noindex, nofollow');
-    } else {
-      if (meta) {
-        meta.remove();
-      }
+      robotsMeta.setAttribute('content', 'noindex, nofollow');
+    } else if (robotsMeta) {
+      robotsMeta.setAttribute('content', 'index, follow');
     }
+
+    let title = "724Bahis - Güvenilir Bahis ve Canlı Casino";
+    let desc = "724Bahis ile en yüksek oranlarla spor bahisleri yapın, canlı casino oyunlarının keyfini çıkarın. Hemen üye olun, kazanmaya başlayın!";
+    
+    switch(view) {
+      case 'home':
+        title = "724Bahis | Canlı Bahis, Casino ve Canlı Casino Seçenekleri";
+        desc = "724Bahis ana sayfasında en güncel spor müsabakaları, popüler slot oyunları ve canlı casino masalarına hemen ulaşın.";
+        break;
+      case 'sports':
+      case 'sports2':
+      case 'sports3':
+      case 'sports4':
+      case 'sports5':
+      case 'spor724':
+      case 'sporx':
+      case 'taraf':
+      case 'mobile-bulletin':
+        title = "724Bahis | Spor Bahisleri ve Yüksek Oranlı Canlı Bahis";
+        desc = "Dünyanın her yerinden futbol, basketbol, tenis ve daha fazla spor dalına maç öncesi ve canlı bahis yapma fırsatı 724Bahis'te.";
+        break;
+      case 'blackjack':
+      case 'blackjack-pro':
+      case 'casino2':
+      case 'slotra':
+      case 'slotra2':
+      case 'plinko':
+      case 'pool':
+        title = "724Bahis | Casino ve Canlı Casino Oyunları - Hızlı Kazanç";
+        desc = "724Bahis güvencesiyle rulet, blackjack, poker, baccarat ve binlerce popüler slot oyunu ile eğlenerek kazanın.";
+        break;
+      case 'trusted-sites':
+      case 'trusted-detail':
+      case 'brands':
+        title = "724Bahis | Güvenilir Bahis Siteleri ve Şirket İncelemeleri";
+        desc = "Güvenilir bahis şirketleri listesi, detaylı incelemeler, oyuncu yorumları ve platform değerlendirmeleri 724Bahis kalitesiyle sizlerle.";
+        break;
+      case 'analysis':
+        title = "724Bahis | Detaylı Maç Analizleri ve Banko Kuponlar";
+        desc = "Uzman kadromuzdan en güncel maç istatistikleri, oran analizleri ve banko tahminler 724Bahis Analiz sayfasında.";
+        break;
+      case 'coupons':
+        title = "724Bahis | Hazır Kuponlar ve Günün Kuponu";
+        desc = "Kazanma oranı yüksek günün hazır kuponları ve popüler bahis kombinasyonlarını hemen inceleyin.";
+        break;
+      case '724tv':
+        title = "724Bahis TV | Kesintisiz ve Şifresiz Canlı Maç İzle";
+        desc = "724Bahis TV üzerinden tüm spor karşılaşmalarını şifresiz, donmadan, full HD kalitede bedava izleyin.";
+        break;
+      case 'raffle':
+      case 'cekilis':
+      case 'giveaway':
+        title = "724Bahis | Çekilişler, Turnuvalar ve Büyük Ödüller";
+        desc = "724Bahis'in düzenlediği muhteşem çekilişlere katılın, nakit ödüller, free spinler ve dev hediyeler kazanma şansı yakalayın.";
+        break;
+      case 'loyalty':
+        title = "724Bahis | VIP Sadakat Programı - Size Özel Ayrıcalıklar";
+        desc = "Bahis yaptıkça puan toplayın, 724Bahis VIP ayrıcalıklarından ve sınırsız ödüllerden anında faydalanın.";
+        break;
+      case 'promo':
+        title = "724Bahis | Güncel Promosyonlar, Bonus ve Deneme Bonusu Kodu";
+        desc = "En güncel 724Bahis promosyon kodları, hoş geldin bonusları ve bedava bahis seçenekleri bu sayfada.";
+        break;
+    }
+
+    document.title = title;
+    
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', desc);
+    
   }, [view]);
 
   // Auto-close sidebars when entering spor724 view
