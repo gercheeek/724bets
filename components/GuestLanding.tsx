@@ -283,8 +283,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       ) : (
         // GUEST VIEW: Welcome, Search + Side-by-Side Hero Banner & Cards
         <>
-            {/* Top Half Background Effect */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[550px] md:h-[650px] bg-gradient-to-b from-[#151f2e] via-[#0f151f] to-transparent pointer-events-none -z-10" />
 
             {/* Layout Column */}
             <div className="w-full flex flex-col gap-4 lg:gap-8 pb-4 md:pb-8 mb-2">
