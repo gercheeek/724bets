@@ -301,7 +301,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   <div className="flex items-center gap-3 mb-8">
                     <button 
                       onClick={onMemberRegisterClick}
-                      className="bg-[#34C759] hover:bg-[#2EB852] text-white font-medium text-[16px] py-3.5 px-6 rounded-[8px] flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(52,199,89,0.2)]"
+                      className="bg-[#1475E1] hover:bg-[#0f60c0] text-white font-medium text-[16px] py-3.5 px-6 rounded-[8px] flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(20,117,225,0.3)]"
                     >
                       Kaydol <ArrowRight className="w-5 h-5" />
                     </button>
