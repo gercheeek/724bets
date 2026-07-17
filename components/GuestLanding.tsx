@@ -289,25 +289,14 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 items-center lg:items-stretch py-4">
                 
                 {/* Left Side: Welcome & Auth */}
-                <div className="w-full lg:w-[45%] flex flex-col justify-center px-4 lg:px-6 relative">
-                  
-                  {/* Background Glow */}
-                  <div className="absolute top-1/2 left-1/4 -translate-y-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-[#10B981]/20 blur-[100px] rounded-full pointer-events-none"></div>
-
-                  <div className="relative z-10">
-                    {/* Premium Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 mb-5 md:mb-6 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                      <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse"></div>
-                      <span className="text-zinc-300 text-[10px] md:text-xs font-bold tracking-widest uppercase">Premium Bahis Deneyimi</span>
-                    </div>
-
-                    <h1 className="text-[32px] sm:text-[42px] lg:text-[48px] font-black text-white tracking-tighter leading-[1.05] mb-4 drop-shadow-2xl font-['Outfit']">
-                      <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/60">{t('hero_title_1')}</span> <br className="hidden sm:block" />
-                      <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#10B981] to-[#047857]">{t('hero_title_2')}</span>
-                    </h1>
-                    <p className="text-zinc-400 text-base sm:text-lg font-medium mb-8 max-w-[420px] leading-relaxed">
-                      {t('hero_subtitle')} Yüksek oranlar ve anında ödemelerle kazanmaya hemen başla.
-                    </p>
+                <div className="w-full lg:w-[45%] flex flex-col justify-center px-4 lg:px-6">
+                  <h1 className="text-[36px] sm:text-[48px] lg:text-[56px] font-black tracking-tighter leading-[1.05] mb-5 drop-shadow-lg font-['Outfit']">
+                    <span className="text-white">{t('hero_title_1')}</span> <br className="hidden sm:block" />
+                    <span className="text-[#10B981]">{t('hero_title_2')}</span>
+                  </h1>
+                  <p className="text-zinc-400 text-base sm:text-lg font-medium mb-8 max-w-[420px] leading-relaxed">
+                    {t('hero_subtitle')} Yüksek oranlar ve anında ödemelerle kazanmaya hemen başla.
+                  </p>
                   
                   <div className="flex items-center gap-3 mb-8">
                     <button 
@@ -366,7 +355,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                         <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 cursor-pointer" onClick={onMemberRegisterClick}>
                           <img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png" className="w-6 h-6 object-contain" />
                           <span className="text-white text-[15px] font-medium">Solana</span>
-                        </div>
                         </div>
                       </div>
                     </div>
