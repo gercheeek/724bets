@@ -7,6 +7,7 @@ import {
   BarChart3, Crown, Dices, Flame, ChevronUp, ChevronDown
 } from 'lucide-react';
 import { NavVisibility } from './Header';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface MenuItem {
   id: string;
@@ -39,6 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onStartTour,
 }) => {
   // Track open state of accordions
+  const { t } = useLanguage();
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [isCasinoOpen, setIsCasinoOpen] = useState(false);
   const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
@@ -46,84 +48,84 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [isSponsorlukOpen, setIsSponsorlukOpen] = useState(false);
 
   const topGrid: MenuItem[] = [
-    { id: 'canli', label: 'CANLI', icon: <Flame className="w-5 h-5 mb-1" />, view: 'sports' },
-    { id: 'taraf', label: 'TARAF', icon: <Target className="w-5 h-5 mb-1 text-red-500" />, view: 'taraf' },
-    { id: 'casino', label: 'CASINO', icon: <Dices className="w-5 h-5 mb-1" />, view: 'blackjack' },
+    { id: 'canli', label: t('canli'), icon: <Flame className="w-5 h-5 mb-1" />, view: 'sports' },
+    { id: 'taraf', label: t('taraf'), icon: <Target className="w-5 h-5 mb-1 text-red-500" />, view: 'taraf' },
+    { id: 'casino', label: t('casino').toUpperCase(), icon: <Dices className="w-5 h-5 mb-1" />, view: 'blackjack' },
   ];
 
   const menuConfig: MenuItem[] = [
     { 
       id: 'senin-icin', 
-      label: 'SENİN İÇİN SEÇİLDİ', 
+      label: t('senin_icin'), 
       icon: <Star className="w-4 h-4 text-zinc-400" />,
       subItems: [
-        { id: 'uefa', label: 'UEFA Avrupa Ligi', icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
-        { id: 'wimbledon-w', label: 'Wimbledon Kadınlar Tenisi', icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
-        { id: 'wimbledon-m', label: 'Wimbledon Tek Erkekler', icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
-        { id: 'conference', label: 'UEFA Conference League', icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
+        { id: 'uefa', label: t('uefa'), icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
+        { id: 'wimbledon-w', label: t('wimbledon_w'), icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
+        { id: 'wimbledon-m', label: t('wimbledon_m'), icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
+        { id: 'conference', label: t('conference'), icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
       ]
     },
     {
       id: 'ana-sporlar',
-      label: 'ANA SPORLAR',
+      label: t('ana_sporlar'),
       icon: <Trophy className="w-4 h-4 text-zinc-400" />,
       subItems: [
-        { id: 'futbol', label: 'Futbol', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'tenis', label: 'Tenis', icon: <Circle className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'basketbol', label: 'Basketbol', icon: <Dribbble className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'beyzbol', label: 'Beyzbol', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'mma', label: 'MMA', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' }
+        { id: 'futbol', label: t('futbol'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'tenis', label: t('tenis'), icon: <Circle className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'basketbol', label: t('basketbol'), icon: <Dribbble className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'beyzbol', label: t('beyzbol'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'mma', label: t('mma'), icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' }
       ]
     },
     {
       id: 'tum-sporlar',
-      label: 'TÜM SPORLAR',
+      label: t('tum_sporlar'),
       icon: <List className="w-4 h-4 text-zinc-400" />,
       subItems: [
-        { id: 'ragbi', label: 'Ragbi', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'avustralya', label: 'Avustralya Futbolu', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'hentbol', label: 'Hentbol', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'kriket', label: 'Kriket', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'voleybol', label: 'Voleybol', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'dart', label: 'Dart', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'boks', label: 'Boks', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'buz-hokeyi', label: 'Buz Hokeyi', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'masa-tenisi', label: 'Masa Tenisi', icon: <Circle className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'ragbi', label: t('ragbi'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'avustralya', label: t('avustralya'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'hentbol', label: t('hentbol'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'kriket', label: t('kriket'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'voleybol', label: t('voleybol'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'dart', label: t('dart'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'boks', label: t('boks'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'buz-hokeyi', label: t('buz_hokeyi'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+        { id: 'masa-tenisi', label: t('masa_tenisi'), icon: <Circle className="w-4 h-4 text-zinc-400" />, view: 'sports' },
       ]
     },
     {
       id: 'tum-esporlar',
-      label: 'TÜM E-SPORLAR',
+      label: t('tum_esporlar'),
       icon: <Gamepad2 className="w-4 h-4 text-zinc-400" />,
       subItems: [
-        { id: 'efutbol', label: 'eFutbol', icon: <Globe className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'nba2k', label: 'NBA2K', icon: <Dribbble className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'cs2', label: 'CS2', icon: <Crosshair className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'dota2', label: 'Dota 2', icon: <Monitor className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'valorant', label: 'Valorant', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'lol', label: 'League of Legends', icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'efutbol', label: t('efutbol'), icon: <Globe className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'nba2k', label: t('nba2k'), icon: <Dribbble className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'cs2', label: t('cs2'), icon: <Crosshair className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'dota2', label: t('dota2'), icon: <Monitor className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'valorant', label: t('valorant'), icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'esports' },
+        { id: 'lol', label: t('lol'), icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'esports' },
       ]
     },
-    { id: 'analiz', label: '724BETS ANALİZ & CANLI BÜLTEN', icon: <BarChart3 className="w-4 h-4 text-[#10B981]" />, view: 'analysis' },
-    { id: 'mobil-bulten', label: 'MOBİL BÜLTEN', icon: <Activity className="w-4 h-4 text-[#10B981]" />, view: 'mobile-bulletin' },
-    { id: 'at-yarisi', label: 'AT YARIŞI', icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-    { id: 'sss', label: 'SSS', icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
-    { id: 'kurallar', label: 'BAHİS KURALLARI', icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },
-    { id: 'oran', label: 'ORAN FORMATI', icon: <Globe className="w-4 h-4 text-zinc-400" />, subItems: [] },
+    { id: 'analiz', label: t('analiz'), icon: <BarChart3 className="w-4 h-4 text-[#10B981]" />, view: 'analysis' },
+    { id: 'mobil-bulten', label: t('mobil_bulten'), icon: <Activity className="w-4 h-4 text-[#10B981]" />, view: 'mobile-bulletin' },
+    { id: 'at-yarisi', label: t('at_yarisi'), icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
+    { id: 'sss', label: t('sss'), icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
+    { id: 'kurallar', label: t('kurallar'), icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },
+    { id: 'oran', label: t('oran'), icon: <Globe className="w-4 h-4 text-zinc-400" />, subItems: [] },
   ];
 
   const extrasConfig: MenuItem[] = [
     {
       id: 'diger',
-      label: 'DİĞER OYUNLAR',
+      label: t('diger'),
       icon: <Target className="w-4 h-4 text-zinc-400" />,
       subItems: [
-        { id: 'casino', label: '724Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'blackjack', visKey: 'blackjack' },
-        { id: 'live-casino', label: 'Canlı Casino', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'live-casino' },
-        { id: 'toto', label: '724TOTO', icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'pool', visKey: 'pool' },
-        { id: 'loyalty', label: 'Görevler', icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'loyalty', visKey: 'loyalty' },
-        { id: 'trusted-sites', label: 'Güvenilir Siteler', icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'trusted-sites', visKey: 'trustedSites' },
-        { id: 'giveaway', label: 'Çekiliş Yönetimi', icon: <Gift className="w-4 h-4 text-zinc-400" />, view: 'giveaway', requireRole: true },
+        { id: 'casino', label: t('casino724'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'blackjack', visKey: 'blackjack' },
+        { id: 'live-casino', label: t('live_casino'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'live-casino' },
+        { id: 'toto', label: t('toto'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'pool', visKey: 'pool' },
+        { id: 'loyalty', label: t('gorevler'), icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'loyalty', visKey: 'loyalty' },
+        { id: 'trusted-sites', label: t('guvenilir_siteler'), icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'trusted-sites', visKey: 'trustedSites' },
+        { id: 'giveaway', label: t('cekilis_yonetimi'), icon: <Gift className="w-4 h-4 text-zinc-400" />, view: 'giveaway', requireRole: true },
       ]
     }
   ];

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Megaphone, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Logo21: React.FC<{ style?: React.CSSProperties }> = ({ style }) => (
   <div 
@@ -50,24 +51,27 @@ interface Promo {
   title2Color?: string;
 }
 
-const PROMOS: Promo[] = [
-  { id: 1, title1: "30$'A KADAR", title2: "FREE SPIN", subtitle: "Haftanın Oyunu", buttonText: "Hemen Oyna", icon: "🦊" },
-  { id: 2, title1: "%30", title2: "NAKİT İADE", subtitle: "İlk Haftanızda. Her Gün.", buttonText: "Yatırım yap", icon: "🤑" },
-  { id: 3, title1: "KAZANMA ŞANSI", title2: "$10.000 NAKİT", subtitle: "Dünya Kupası Sandıkları.\nBahis Yap. Kazan. Tekrarla.", buttonText: "Hemen Oyna", icon: "🎁" },
-  { id: 4, title1: "BÜYÜK BAŞLA", title2: "7,000$'a kadar", subtitle: "+ 130 Free Spin\nİlk 4 yatırımınızda.", buttonText: "Yatırım yap", icon: "💎" },
-  { id: 5, title1: "%100'LE BAŞLA", title2: "SPOR BONUSU", subtitle: "500$'a kadar", buttonText: "Yatırım Yap", icon: "⚽" },
-  { id: 6, title1: "DÜNYA KUPASI", title2: "MEGA BOOST", subtitle: "Daha yüksek oranlar.\nDaha büyük kazançlar.", buttonText: "Bahis Yap", icon: "🏆" },
-  { id: 7, title1: "%500'E VARAN", title2: "KAZANÇ BOOSTU", subtitle: "ACCA'nı oluştur.\nOranlara meydan oku.", buttonText: "Bahis Yap", icon: "🚀" },
-  { id: 8, title1: "DÜNYA KUPASI", title2: "%20 EKSTRA", subtitle: "200$'a Kadar Bonus!", buttonText: "Bahis Yap", icon: "⚡" },
-  { id: 9, title1: "APP'İ İNDİR", title2: "40 FREE SPIN AL", subtitle: "21'i yanında taşı.", buttonText: "Şimdi İndir", icon: "📱" },
-  { id: 10, title1: "ÇEVİR KAZAN", title2: "5.000$ NAKİT", subtitle: "4 Free Spin. Her gün.", buttonText: "Şimdi Çevir", icon: "🎡" },
-  { id: 11, title1: "21 Elite CLUB'A", title2: "HOŞ GELDİNİZ", subtitle: "Yükseldikçe kazan.", buttonText: "Hemen oyna", icon: "🛡️" },
-  { id: 12, title1: "HER GÜN", title2: "%10 Bonus", subtitle: "Yatır. Oyna. Kazan.", buttonText: "Yatırım Yap", icon: "🎰" },
-  { id: 13, title1: "DAVET ET & KAZAN", title2: "%20 NAKİT", subtitle: "Kazancını arttır.", buttonText: "Hemen Başla", icon: "🤝" },
-  { id: 14, title1: "BÜYÜK OYNA", title2: "BİZLE KAL", subtitle: "21 kanallarına katıl.", buttonText: "Hemen katıl", icon: "💬" },
-];
+
 
 export const PromoSlider: React.FC = () => {
+  const { t } = useLanguage();
+
+  const PROMOS: Promo[] = [
+    { id: 1, title1: t("p_30kadar"), title2: t("p_freespin"), subtitle: t("p_haftanin"), buttonText: t("p_hemen_oyna"), icon: "🦊" },
+    { id: 2, title1: t("p_30"), title2: t("p_nakit_iade"), subtitle: t("p_ilk_hafta"), buttonText: t("p_yatirim_yap"), icon: "🤑" },
+    { id: 3, title1: t("p_kazanma_sansi"), title2: t("p_10k_nakit"), subtitle: t("p_dk_sandiklari"), buttonText: t("p_hemen_oyna"), icon: "🎁" },
+    { id: 4, title1: t("p_buyuk_basla"), title2: t("p_7k_kadar"), subtitle: t("p_130_fs"), buttonText: t("p_yatirim_yap"), icon: "💎" },
+    { id: 5, title1: t("p_100_basla"), title2: t("p_spor_bonusu"), subtitle: t("p_500_kadar"), buttonText: t("p_yatirim_yap"), icon: "⚽" },
+    { id: 6, title1: t("p_dunya_kupasi"), title2: t("p_mega_boost"), subtitle: t("p_daha_yuksek"), buttonText: t("p_bahis_yap"), icon: "🏆" },
+    { id: 7, title1: t("p_500_varan"), title2: t("p_kazanc_boostu"), subtitle: t("p_acca"), buttonText: t("p_bahis_yap"), icon: "🚀" },
+    { id: 8, title1: t("p_dunya_kupasi"), title2: t("p_20_ekstra"), subtitle: t("p_200_bonus"), buttonText: t("p_bahis_yap"), icon: "⚡" },
+    { id: 9, title1: t("p_app_indir"), title2: t("p_40_fs"), subtitle: t("p_21_yaninda"), buttonText: t("p_simdi_indir"), icon: "📱" },
+    { id: 10, title1: t("p_cevir_kazan"), title2: t("p_5k_nakit"), subtitle: t("p_4_fs_hergun"), buttonText: t("p_simdi_cevir"), icon: "🎡" },
+    { id: 11, title1: t("p_21_elite"), title2: t("p_hos_geldiniz"), subtitle: t("p_yukseldikce"), buttonText: t("p_hemen_oyna"), icon: "🛡️" },
+    { id: 12, title1: t("p_her_gun"), title2: t("p_10_bonus"), subtitle: t("p_yatir_oyna"), buttonText: t("p_yatirim_yap"), icon: "🎰" },
+    { id: 13, title1: t("p_davet_et"), title2: t("p_20_nakit"), subtitle: t("p_kazancini_arttir"), buttonText: t("p_hemen_basla"), icon: "🤝" },
+    { id: 14, title1: t("p_buyuk_oyna"), title2: t("p_bizle_kal"), subtitle: t("p_21_kanallari"), buttonText: t("p_hemen_katil"), icon: "💬" },
+  ];
   const [isPaused, setIsPaused] = React.useState(false);
 
   const handleCardClick = () => {

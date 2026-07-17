@@ -3,11 +3,12 @@ import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GameDetailModal, GameData } from './GameDetailModal';
 import { useLanguage } from '../contexts/LanguageContext';
 
-export const ORIGINALS_DATA: GameData[] = [
+export const getOriginalsData = (t: (key: string) => string): GameData[] => [
+
     {
         id: 'plinko',
         name: 'Plinko',
-        desc: 'Fizik tabanlı çarpan eğlencesi.',
+        desc: t("desc_plinko"),
         color: 'from-purple-600 to-purple-900',
         image: '/images/rainbet-plinko.jpg',
         path: 'plinko',
@@ -20,7 +21,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'keno',
         name: 'Keno',
-        desc: 'Şansını sayılarla dene.',
+        desc: t("desc_keno"),
         color: 'from-orange-500 to-orange-800',
         image: '/images/rainbet-keno.jpg',
         path: 'keno',
@@ -33,7 +34,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'dice',
         name: 'Dice',
-        desc: 'Hızlı, adil ve kazançlı zar oyunu.',
+        desc: t("desc_dice"),
         color: 'from-blue-600 to-blue-900',
         image: '/images/rainbet-dice.jpg',
         path: 'dice',
@@ -46,7 +47,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'mines',
         name: 'Mines',
-        desc: 'Mayınlara basmadan elmasları topla.',
+        desc: t("desc_mines"),
         color: 'from-red-600 to-red-900',
         image: '/images/rainbet-mines.jpg',
         path: 'mines',
@@ -59,7 +60,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'war',
         name: 'War',
-        desc: 'Savaş! Kimin kartı daha yüksek?',
+        desc: t("desc_war"),
         color: 'from-red-600 to-red-900',
         image: '/images/rainbet-war.jpg',
         path: 'war',
@@ -72,7 +73,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'hilo',
         name: 'HiLo',
-        desc: 'Bir sonraki kart yüksek mi düşük mü?',
+        desc: t("desc_hilo"),
         color: 'from-pink-600 to-pink-900',
         image: '/images/rainbet-hilo.jpg',
         path: 'hilo',
@@ -85,7 +86,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'blackjack',
         name: 'Blackjack',
-        desc: 'Klasik casino deneyimi, premium kalite.',
+        desc: t("desc_blackjack"),
         color: 'from-emerald-600 to-emerald-900',
         image: '/images/rainbet-blackjack.jpg',
         path: 'blackjack-pro',
@@ -98,7 +99,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'roulette',
         name: 'Roulette',
-        desc: 'Orijinal 724Bets Rulet heyecanı.',
+        desc: t("desc_roulette"),
         color: 'from-emerald-600 to-emerald-900',
         image: '/images/rainbet-roulette.jpg',
         path: 'roulette',
@@ -111,7 +112,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'chicken-cross',
         name: 'Chicken Cross',
-        desc: 'Tavuk karşıya geçebilecek mi?',
+        desc: t("desc_chickencross"),
         color: 'from-emerald-600 to-emerald-900',
         image: '/images/rainbet-chickencross.jpg',
         path: 'chicken-cross',
@@ -124,7 +125,7 @@ export const ORIGINALS_DATA: GameData[] = [
     {
         id: 'limbo',
         name: 'Limbo',
-        desc: 'Sınırları zorla, devasa çarpanları yakala.',
+        desc: t("desc_limbo"),
         color: 'from-red-600 to-red-900',
         image: '/images/rainbet-limbo.jpg',
         path: 'limbo',
@@ -137,6 +138,8 @@ export const ORIGINALS_DATA: GameData[] = [
 ];
 
 export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string) => void }) {
+  const { t } = useLanguage();
+  const originalsData = getOriginalsData(t);
     const scrollRef = useRef<HTMLDivElement>(null);
     const [selectedGame, setSelectedGame] = useState<GameData | null>(null);
     const [isHovered, setIsHovered] = useState(false);
@@ -175,7 +178,7 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
             {/* Header */}
             <div className="flex items-center justify-between mb-4 px-2">
                 <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">
-                    Orijinal Oyunlar
+                    {t("original_games")}
                 </h2>
                 <div className="flex items-center gap-2">
                     <button 
@@ -205,7 +208,7 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                     className="flex gap-4 overflow-x-auto pb-8 pt-2 px-2 snap-x snap-mandatory scrollbar-hide" 
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                    {ORIGINALS_DATA.map((game) => (
+                    {originalsData.map((game) => (
                         <div key={game.id} className="shrink-0 snap-start flex flex-col items-center group">
                             {/* Card Body - Portrait */}
                             <div 
@@ -228,7 +231,7 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                             <div className="mt-3 flex items-center gap-1.5 px-2">
                                 <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse"></div>
                                 <span className="text-zinc-400 text-xs font-bold font-sans">
-                                    <span className="text-white">{game.players}</span> Oyuncular
+                                    <span className="text-white">{game.players}</span> {t("players")}
                                 </span>
                             </div>
                         </div>
