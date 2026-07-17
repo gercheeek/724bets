@@ -7,20 +7,24 @@ export interface Game {
   provider: string;
   img: string;
   players: number;
+  demoSymbol?: string;
+  customDemoUrl?: string;
 }
 
 const NEW_GAMES_2: Game[] = [
-  { id: 201, name: 'Gates of Olympus', provider: 'Pragmatic Play', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Gates-of-Olympus-PragmaticPlay/Vertical/GatesofOlympus_20250328152430427.webp', players: 1245 },
-  { id: 202, name: 'Sweet Bonanza', provider: 'Pragmatic Play', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/SweetBonanza.png', players: 980 },
-  { id: 203, name: 'Starlight Princess', provider: 'Pragmatic Play', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/StarlightPrincess.png', players: 654 },
-  { id: 204, name: 'Sugar Rush', provider: 'Pragmatic Play', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/SugarRush.png', players: 432 },
-  { id: 205, name: 'Fruit Party', provider: 'Pragmatic Play', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/FruitParty.png', players: 321 },
-  { id: 206, name: 'Wanted Dead or a Wild', provider: 'Hacksaw Gaming', img: 'https://cdn2.softswiss.net/i/s4/hacksaw/WantedDeadoraWild.png', players: 876 },
-  { id: 207, name: 'Rip City', provider: 'Hacksaw Gaming', img: 'https://cdn2.softswiss.net/i/s4/hacksaw/RipCity.png', players: 543 },
-  { id: 208, name: 'Chaos Crew', provider: 'Hacksaw Gaming', img: 'https://cdn2.softswiss.net/i/s4/hacksaw/ChaosCrew.png', players: 234 }
+  { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', players: 204 },
+  { id: 1160, name: 'Out of the Woods', provider: 'Pragmatic Play', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523109e9fec840eaeed00', demoSymbol: 'vs25bstackwild', players: 278 },
+  { id: 1161, name: 'Legion Gold And The Throne Of Dead', provider: 'Play\'n GO', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523235229c24dca9f40d6', customDemoUrl: 'https://acccw.playngonetwork.com/casino/ContainerLauncher?pid=1857&brand=b2b_anj&gid=throneofdead&practice=1&lang=en_GB&div=gameWrapper&embedmode=iframe&channel=mobile&origin=https%3A%2F%2Fslotra.com', players: 335 },
+  { id: 1162, name: 'Big Bass Blast', provider: 'Pragmatic Play', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a4f6a30db4d711f8d6a96e9', demoSymbol: 'vs10bbasblitz', players: 190 },
+  { id: 1163, name: 'The Dog House Megaways 1000', provider: 'Pragmatic Play', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5524d03da928ad473ccbc8', demoSymbol: 'vswaysdh1000', players: 371 },
+  { id: 1164, name: 'Arena of Iron', provider: 'Hacksaw Gaming', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5524e39666981d0311ce45', customDemoUrl: 'https://d2sx83al1f82za.cloudfront.net/2309/1.4.4/index.html?language=en&channel=mobile&gameid=2309&mode=2&token=123token&partner=slotra&env=https://d2sx83al1f82za.cloudfront.net/demo/api&realmoneyenv=https://d2sx83al1f82za.cloudfront.net/api&alwaysredirect=true', players: 449 }
 ];
 
-export const NewGamesSlider2 = () => {
+interface NewGamesSlider2Props {
+  onPlayGame: (game: Game) => void;
+}
+
+export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -73,10 +77,22 @@ export const NewGamesSlider2 = () => {
 
             {/* Hover Actions */}
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/70 backdrop-blur-[2px]">
-              <button className="bg-[#10B981] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPlayGame(game);
+                }}
+                className="bg-[#10B981] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+              >
                 GERÇEK OYNA
               </button>
-              <button className="bg-[#2A2E3D] hover:bg-[#3A3F54] border border-white/10 text-white font-bold text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPlayGame(game);
+                }}
+                className="bg-[#2A2E3D] hover:bg-[#3A3F54] border border-white/10 text-white font-bold text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+              >
                 EĞLENCE MODU
               </button>
             </div>
