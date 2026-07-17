@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export interface Game {
   id: string | number;
@@ -25,6 +26,7 @@ interface NewGamesSlider2Props {
 }
 
 export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
+  const { t } = useLanguage();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -46,7 +48,7 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
     <div className="w-full mt-6 mb-8 px-2">
       {/* Header & Navigation */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Yeni Eklenenler 2</h2>
+        <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">{t('newly_added_2')}</h2>
         <div className="flex items-center gap-2">
           <button 
             onClick={() => scroll('left')}
@@ -84,7 +86,7 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
                 }}
                 className="bg-[#10B981] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
               >
-                GERÇEK OYNA
+                {t('play_real_money')}
               </button>
               <button 
                 onClick={(e) => {
@@ -93,14 +95,14 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
                 }}
                 className="bg-[#2A2E3D] hover:bg-[#3A3F54] border border-white/10 text-white font-bold text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
               >
-                EĞLENCE MODU
+                {t('play_demo')}
               </button>
             </div>
 
             {/* Active Players & Dot */}
             <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1.5 z-20">
               <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
-              <span className="text-[10px] sm:text-xs font-bold text-gray-300 drop-shadow-md">{game.players} Oyuncular</span>
+              <span className="text-[10px] sm:text-xs font-bold text-gray-300 drop-shadow-md">{game.players} {t('players')}</span>
             </div>
             
           </div>

@@ -141,6 +141,42 @@ const translations: Translations = {
     es: 'El Bono de Bienvenida te Espera',
     pt: 'O Bônus de Boas-Vindas te Espera'
   },
+  hero_title_1: {
+    tr: 'Saniyeler İçinde Yatır,',
+    en: 'Deposit in Seconds,',
+    es: 'Deposita en Segundos,',
+    pt: 'Deposite em Segundos,'
+  },
+  hero_title_2: {
+    tr: 'Dakikalar İçinde Çek.',
+    en: 'Withdraw in Minutes.',
+    es: 'Retira en Minutos.',
+    pt: 'Retire em Minutos.'
+  },
+  hero_subtitle: {
+    tr: 'Kesintisiz eğlence başladı.',
+    en: 'Uninterrupted entertainment has begun.',
+    es: 'El entretenimiento ininterrumpido ha comenzado.',
+    pt: 'O entretenimento ininterrupto começou.'
+  },
+  register_alt: {
+    tr: 'Veya diğer seçeneklerle kaydolun',
+    en: 'Or sign up with other options',
+    es: 'O regístrate con otras opciones',
+    pt: 'Ou inscreva-se com outras opções'
+  },
+  newly_added: {
+    tr: 'Yeni Eklenenler',
+    en: 'Newly Added',
+    es: 'Recién Agregados',
+    pt: 'Adicionados Recentemente'
+  },
+  newly_added_2: {
+    tr: 'Yeni Eklenenler 2',
+    en: 'Newly Added 2',
+    es: 'Recién Agregados 2',
+    pt: 'Adicionados Recentemente 2'
+  },
   promo_2_title: {
     tr: 'Güvenilir Sistem',
     en: 'Trusted System',
