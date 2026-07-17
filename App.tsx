@@ -510,6 +510,30 @@ const AppContent: React.FC = () => {
   });
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
 
+  const handleGlobalLogout = async () => {
+    try { await supabase.auth.signOut(); } catch (e) {}
+    localStorage.removeItem('site_current_member');
+    localStorage.removeItem('site_member');
+    localStorage.removeItem('site_user_role');
+    setSiteUser(null);
+    setUserRole(null);
+    if (view === 'admin') setView('home');
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      // If site_member is removed by another tab, sync logout here
+      if (e.key === 'site_member' && !e.newValue) {
+        setSiteUser(null);
+        setUserRole(null);
+        window.location.reload();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   useEffect(() => {
     const {
       data: { subscription },
@@ -1404,13 +1428,7 @@ const AppContent: React.FC = () => {
         themeColor={themeColor}
         onThemeChange={setThemeColor}
         hashtags={hashtags || ''}
-        onLogout={() => {
-          setSiteUser(null);
-          setUserRole(null);
-          localStorage.removeItem('site_current_member');
-          localStorage.removeItem('site_user_role');
-          setView('home');
-        }}
+        onLogout={handleGlobalLogout}
         onNavigateHome={() => {
           setView('home');
           window.scrollTo({ top: 0, behavior: 'auto' });
@@ -1893,13 +1911,7 @@ const AppContent: React.FC = () => {
         siteUser={siteUser}
         onMemberLoginClick={() => setAuthModalMode('member')}
         onMemberRegisterClick={() => setAuthModalMode('register')}
-        onMemberLogout={() => {
-          setSiteUser(null);
-          setUserRole(null);
-          localStorage.removeItem('site_current_member');
-          localStorage.removeItem('site_user_role');
-          if (view === 'admin') setView('home');
-        }}
+        onMemberLogout={handleGlobalLogout}
         onSearchClick={() => setShowSearch(true)}
         onSupportClick={() => setIsChatOpen(!isChatOpen)}
         navVisibility={navVisibility}

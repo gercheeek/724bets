@@ -81,7 +81,8 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
     }
   ];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try { await supabase.auth.signOut(); } catch (e) {}
     localStorage.removeItem('site_current_member');
     localStorage.removeItem('site_member');
     localStorage.removeItem('site_user_role');

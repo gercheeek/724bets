@@ -565,10 +565,7 @@ const Header: React.FC<HeaderProps> = ({
                     <button 
                       onClick={() => {
                         setIsProfileOpen(false);
-                        localStorage.removeItem('site_current_member');
-                        localStorage.removeItem('site_member');
-                        localStorage.removeItem('site_user_role');
-                        window.location.reload();
+                        onMemberLogout?.();
                       }}
                       className="flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-white/5 mt-1"
                     >
