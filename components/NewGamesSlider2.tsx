@@ -10,14 +10,14 @@ export interface Game {
 }
 
 const NEW_GAMES_2: Game[] = [
-  { id: 201, name: 'Gates of Olympus', provider: 'Pragmatic Play', img: '/images/slots/gatesofolympus.jpg', players: 1245 },
-  { id: 202, name: 'Sweet Bonanza', provider: 'Pragmatic Play', img: '/images/slots/sweetbonanza.jpg', players: 980 },
-  { id: 203, name: 'Starlight Princess', provider: 'Pragmatic Play', img: '/images/slots/starlight.jpg', players: 654 },
-  { id: 204, name: 'Sugar Rush', provider: 'Pragmatic Play', img: '/images/slots/sugarrush.jpg', players: 432 },
-  { id: 205, name: 'Fruit Party', provider: 'Pragmatic Play', img: '/images/slots/fruitparty.jpg', players: 321 },
-  { id: 206, name: 'Wanted Dead or a Wild', provider: 'Hacksaw Gaming', img: '/images/slots/wanted.jpg', players: 876 },
-  { id: 207, name: 'Rip City', provider: 'Hacksaw Gaming', img: '/images/slots/ripcity.jpg', players: 543 },
-  { id: 208, name: 'Chaos Crew', provider: 'Hacksaw Gaming', img: '/images/slots/chaoscrew.jpg', players: 234 }
+  { id: 201, name: 'Gates of Olympus', provider: 'Pragmatic Play', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Gates-of-Olympus-PragmaticPlay/Vertical/GatesofOlympus_20250328152430427.webp', players: 1245 },
+  { id: 202, name: 'Sweet Bonanza', provider: 'Pragmatic Play', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/SweetBonanza.png', players: 980 },
+  { id: 203, name: 'Starlight Princess', provider: 'Pragmatic Play', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/StarlightPrincess.png', players: 654 },
+  { id: 204, name: 'Sugar Rush', provider: 'Pragmatic Play', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/SugarRush.png', players: 432 },
+  { id: 205, name: 'Fruit Party', provider: 'Pragmatic Play', img: 'https://cdn2.softswiss.net/i/s4/pragmaticexternal/FruitParty.png', players: 321 },
+  { id: 206, name: 'Wanted Dead or a Wild', provider: 'Hacksaw Gaming', img: 'https://cdn2.softswiss.net/i/s4/hacksaw/WantedDeadoraWild.png', players: 876 },
+  { id: 207, name: 'Rip City', provider: 'Hacksaw Gaming', img: 'https://cdn2.softswiss.net/i/s4/hacksaw/RipCity.png', players: 543 },
+  { id: 208, name: 'Chaos Crew', provider: 'Hacksaw Gaming', img: 'https://cdn2.softswiss.net/i/s4/hacksaw/ChaosCrew.png', players: 234 }
 ];
 
 export const NewGamesSlider2 = () => {

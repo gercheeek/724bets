@@ -338,9 +338,13 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 
                 {/* Left Side: Welcome & Auth */}
                 <div className="w-full lg:w-[45%] flex flex-col justify-center px-4 lg:px-6">
-                  <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-black text-white tracking-tighter leading-[1.05] mb-6 drop-shadow-lg font-['Outfit']">
-                    Saniyeler İçinde Yatır, Dakikalar İçinde Çek. Kesintisiz Eğlence Başladı.
+                  <h1 className="text-[28px] sm:text-[36px] lg:text-[42px] font-black text-white tracking-tighter leading-[1.1] mb-3 drop-shadow-lg font-['Outfit']">
+                    Saniyeler İçinde Yatır, <br className="hidden sm:block" />
+                    Dakikalar İçinde Çek.
                   </h1>
+                  <p className="text-zinc-400 text-sm sm:text-base font-medium mb-7">
+                    Kesintisiz eğlence başladı.
+                  </p>
                   
                   <button 
                     onClick={onMemberRegisterClick}
