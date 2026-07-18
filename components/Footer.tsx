@@ -111,9 +111,9 @@ const Footer: React.FC = () => {
           <div className="flex flex-col items-center md:items-end gap-1">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#06b6d4]/50" />
-              <span className="tracking-wide">{t("all_rights_reserved")}</span>
+              <span className="tracking-wide text-xs text-zinc-500">{t("all_rights_reserved")}</span>
             </div>
-            <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">ahbapbet v2.0.0</span>
+            <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">ahbapbet v2.0.1</span>
           </div>
         </div>
 
