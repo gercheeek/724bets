@@ -204,8 +204,8 @@ export default function AdminTarafTab() {
       <div className="w-full xl:w-1/3 flex flex-col gap-6">
         <div className="bg-[#12141a] border border-[#1f232b] rounded-xl p-6 shadow-xl">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-[#10B981]/10 flex items-center justify-center border border-[#10B981]/20">
-               <Settings className="w-5 h-5 text-[#10B981]" />
+            <div className="w-10 h-10 rounded-lg bg-[#06b6d4]/10 flex items-center justify-center border border-[#06b6d4]/20">
+               <Settings className="w-5 h-5 text-[#06b6d4]" />
             </div>
             <div>
               <h2 className="text-white font-bold text-lg">Taraf (Canlı Motor) Ayarları</h2>
@@ -219,7 +219,7 @@ export default function AdminTarafTab() {
                 <div className="relative">
                   <input 
                     type="number" 
-                    className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-white font-bold focus:border-[#10B981] transition-colors outline-none"
+                    className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-white font-bold focus:border-[#06b6d4] transition-colors outline-none"
                     value={settings.margin}
                     onChange={(e) => setSettings({...settings, margin: parseFloat(e.target.value) || 0})}
                   />
@@ -233,7 +233,7 @@ export default function AdminTarafTab() {
                 <div className="relative">
                   <input 
                     type="number" 
-                    className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-white font-bold focus:border-[#10B981] transition-colors outline-none"
+                    className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-white font-bold focus:border-[#06b6d4] transition-colors outline-none"
                     value={settings.liveDelay}
                     onChange={(e) => setSettings({...settings, liveDelay: parseFloat(e.target.value) || 0})}
                   />
@@ -247,7 +247,7 @@ export default function AdminTarafTab() {
                    <label className="text-white font-bold text-sm">Min Bahis (₺)</label>
                    <input 
                      type="number" 
-                     className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-white font-bold focus:border-[#10B981] transition-colors outline-none"
+                     className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-white font-bold focus:border-[#06b6d4] transition-colors outline-none"
                      value={settings.minBet}
                      onChange={(e) => setSettings({...settings, minBet: parseFloat(e.target.value) || 0})}
                    />
@@ -256,7 +256,7 @@ export default function AdminTarafTab() {
                    <label className="text-white font-bold text-sm">Max Bahis (₺)</label>
                    <input 
                      type="number" 
-                     className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-white font-bold focus:border-[#10B981] transition-colors outline-none"
+                     className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-white font-bold focus:border-[#06b6d4] transition-colors outline-none"
                      value={settings.maxBet}
                      onChange={(e) => setSettings({...settings, maxBet: parseFloat(e.target.value) || 0})}
                    />
@@ -275,7 +275,7 @@ export default function AdminTarafTab() {
              
              <button 
                onClick={() => saveSettings(settings)}
-               className="w-full h-12 bg-[#10B981] hover:bg-[#00e693] text-black font-black rounded-lg transition-colors flex items-center justify-center gap-2"
+               className="w-full h-12 bg-[#06b6d4] hover:bg-[#00e693] text-black font-black rounded-lg transition-colors flex items-center justify-center gap-2"
              >
                <Save className="w-5 h-5" />
                AYARLARI KAYDET
@@ -289,16 +289,16 @@ export default function AdminTarafTab() {
          <div className="bg-[#12141a] border border-[#1f232b] rounded-xl p-6 shadow-xl h-full flex flex-col">
            <div className="flex items-center justify-between mb-4">
              <div className="flex items-center gap-3">
-               <div className="w-10 h-10 rounded-lg bg-[#3b82f6]/10 flex items-center justify-center border border-[#3b82f6]/20">
-                  <Activity className="w-5 h-5 text-[#3b82f6]" />
+               <div className="w-10 h-10 rounded-lg bg-[#10b981]/10 flex items-center justify-center border border-[#10b981]/20">
+                  <Activity className="w-5 h-5 text-[#10b981]" />
                </div>
                <div>
                  <h2 className="text-white font-bold text-lg">Canlı Bülten</h2>
                  <p className="text-[#5c677d] text-sm font-medium">Manuel mod için maç seçin</p>
                </div>
              </div>
-             <div className="flex items-center gap-2 text-[#10B981] bg-[#10B981]/10 px-3 py-1 rounded-full border border-[#10B981]/20">
-                <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></div>
+             <div className="flex items-center gap-2 text-[#06b6d4] bg-[#06b6d4]/10 px-3 py-1 rounded-full border border-[#06b6d4]/20">
+                <div className="w-2 h-2 rounded-full bg-[#06b6d4] animate-pulse"></div>
                 <span className="text-xs font-bold">{liveEvents.length} Maç</span>
              </div>
            </div>
@@ -326,7 +326,7 @@ export default function AdminTarafTab() {
                          onClick={() => setExpandedSports(prev => ({...prev, [sportName]: !isSportExpanded}))}
                        >
                          <div className="flex items-center gap-3">
-                           <div className="w-6 h-6 rounded-full bg-[#10B981]/20 text-[#10B981] flex items-center justify-center text-xs">⚽</div>
+                           <div className="w-6 h-6 rounded-full bg-[#06b6d4]/20 text-[#06b6d4] flex items-center justify-center text-xs">⚽</div>
                            <span className="text-white font-bold">{sportName}</span>
                          </div>
                          <div className="flex items-center gap-2">
@@ -350,7 +350,7 @@ export default function AdminTarafTab() {
                                     onClick={() => setExpandedLeagues(prev => ({...prev, [compKey]: !isCompExpanded}))}
                                   >
                                     <div className="flex items-center gap-2">
-                                      <div className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-[10px]">🌍</div>
+                                      <div className="w-5 h-5 rounded-full bg-[#10b981]/20 text-blue-400 flex items-center justify-center text-[10px]">🌍</div>
                                       <span className="text-gray-300 font-bold text-sm truncate max-w-[150px]">{compName}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -372,11 +372,11 @@ export default function AdminTarafTab() {
                                              key={ev.id}
                                              onClick={() => handleSelectMatch(ev)}
                                              className={`w-full text-left p-2 rounded-lg border transition-all ${
-                                               isSelected ? 'bg-[#3b82f6]/10 border-[#3b82f6]' : 'bg-[#12141a] border-[#1f232b] hover:border-[#424b5c]'
+                                               isSelected ? 'bg-[#10b981]/10 border-[#10b981]' : 'bg-[#12141a] border-[#1f232b] hover:border-[#424b5c]'
                                              }`}
                                            >
                                              <div className="flex justify-between items-center mb-1">
-                                               <span className="text-[#10B981] text-[10px] font-bold">{ev.data?.minute ? `${ev.data.minute}'` : 'Canlı'}</span>
+                                               <span className="text-[#06b6d4] text-[10px] font-bold">{ev.data?.minute ? `${ev.data.minute}'` : 'Canlı'}</span>
                                              </div>
                                              <div className="flex justify-between items-center">
                                                 <span className="text-gray-300 font-bold text-xs truncate max-w-[80px]">{home}</span>
@@ -449,7 +449,7 @@ export default function AdminTarafTab() {
                     <label className="text-white font-bold text-sm">Oynanan Dakika (Zaman Azaldıkça Oranlar Düşer)</label>
                     <input 
                       type="number" 
-                      className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-[#10B981] font-black focus:border-[#FF1744] transition-colors outline-none"
+                      className="w-full h-12 bg-[#0a0c10] border border-[#2c313c] rounded-lg px-4 text-[#06b6d4] font-black focus:border-[#FF1744] transition-colors outline-none"
                       value={manualMinute}
                       min="0" max="120"
                       onChange={(e) => setManualMinute(parseInt(e.target.value) || 0)}

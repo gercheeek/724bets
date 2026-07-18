@@ -86,7 +86,7 @@ const LiveMatches: React.FC = () => {
     if (!odd) return '#888';
     if (odd < 1.5) return '#ff6b6b';
     if (odd < 2.0) return '#ffa726';
-    if (odd < 3.0) return '#10B981';
+    if (odd < 3.0) return '#06b6d4';
     return '#66bb6a';
   };
 
@@ -100,7 +100,7 @@ const LiveMatches: React.FC = () => {
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-4">
           <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(0, 255, 163, 0.1)' }}>
-            <Zap className="w-4 h-4" style={{ color: '#10B981' }} />
+            <Zap className="w-4 h-4" style={{ color: '#06b6d4' }} />
           </div>
           <h3 className="font-black text-sm uppercase tracking-wider italic" style={{ color: '#e0e0e0' }}>
             CANLI ORANLAR
@@ -138,14 +138,14 @@ const LiveMatches: React.FC = () => {
       {/* Section Header */}
       <div className="flex items-center gap-2 mb-4">
         <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(0, 255, 163, 0.1)' }}>
-          <Zap className="w-4 h-4" style={{ color: '#10B981' }} />
+          <Zap className="w-4 h-4" style={{ color: '#06b6d4' }} />
         </div>
         <h3 className="font-black text-sm uppercase tracking-wider italic" style={{ color: '#e0e0e0' }}>
           CANLI ORANLAR
         </h3>
         <div className="flex items-center gap-1.5 ml-1">
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981', animation: 'live-pulse 2s infinite' }} />
-          <span style={{ fontSize: '9px', fontWeight: 900, color: '#10B981', textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#06b6d4', boxShadow: '0 0 8px #06b6d4', animation: 'live-pulse 2s infinite' }} />
+          <span style={{ fontSize: '9px', fontWeight: 900, color: '#06b6d4', textTransform: 'uppercase', letterSpacing: '1px' }}>CANLI</span>
         </div>
         <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(0, 255, 163, 0.2), transparent)' }} />
         <div className="flex items-center gap-2">
@@ -160,7 +160,7 @@ const LiveMatches: React.FC = () => {
               width: '28px', height: '28px', borderRadius: '8px',
               background: 'rgba(0, 255, 163, 0.06)',
               cursor: 'pointer', transition: 'all 0.3s',
-              color: '#10B981'
+              color: '#06b6d4'
             }}
             title="Yenile"
           >
@@ -199,7 +199,7 @@ const LiveMatches: React.FC = () => {
             {/* Date/Status Top Right */}
             <div className="absolute top-4 right-4 text-zinc-400 text-[11px] font-semibold flex items-center gap-1.5">
               {match.status === 'Canlı Bahis' && (
-                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px #10B981', animation: 'live-pulse 2s infinite' }} />
+                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#06b6d4', boxShadow: '0 0 6px #06b6d4', animation: 'live-pulse 2s infinite' }} />
               )}
               {match.status || 'Canlı Bahis'}
             </div>
@@ -222,15 +222,15 @@ const LiveMatches: React.FC = () => {
 
             {/* Odds Buttons */}
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0F1219] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0f172a] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
                 <span className="text-[10px] font-bold text-zinc-500 mb-0.5">1</span>
                 <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['1']) }}>{formatOdd(match.oranlar?.['1'])}</span>
               </div>
-              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0F1219] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0f172a] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
                 <span className="text-[10px] font-bold text-zinc-500 mb-0.5">X</span>
                 <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['X']) }}>{formatOdd(match.oranlar?.['X'])}</span>
               </div>
-              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0F1219] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0f172a] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
                 <span className="text-[10px] font-bold text-zinc-500 mb-0.5">2</span>
                 <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['2']) }}>{formatOdd(match.oranlar?.['2'])}</span>
               </div>
@@ -244,7 +244,7 @@ const LiveMatches: React.FC = () => {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                 width: '100%', padding: '9px 12px',
-                background: 'linear-gradient(135deg, #10B981 0%, #10B981 100%)',
+                background: 'linear-gradient(135deg, #06b6d4 0%, #06b6d4 100%)',
                 color: '#000', fontWeight: 900, fontSize: '10px',
                 borderRadius: '8px', textTransform: 'uppercase',
                 letterSpacing: '1.5px', textDecoration: 'none',

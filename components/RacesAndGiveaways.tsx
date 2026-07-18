@@ -5,7 +5,7 @@ const CircularProgress = ({
   progress, 
   title, 
   time, 
-  color = "#3B82F6" 
+  color = "#10b981" 
 }: { 
   progress: number; 
   title: string; 

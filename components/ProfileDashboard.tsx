@@ -57,7 +57,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
   const defaultMessages = [
     {
       id: 1,
-      title: "724BETS'e Hoş Geldiniz! 🎉",
+      title: "AHBAPBET'e Hoş Geldiniz! 🎉",
       date: "Az önce",
       content: "Aramıza katıldığınız için çok mutluyuz. Dünyanın en iyi oranları ve en popüler casino oyunlarıyla kazanmaya hazır olun! Herhangi bir sorunuz olursa Canlı Destek ekibimiz 7/24 hizmetinizdedir."
     },
@@ -71,7 +71,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
       id: 3,
       title: "⚠️ Taklit Sitelere Dikkat Edin",
       date: "Az önce",
-      content: "Değerli üyemiz, güvenliğiniz bizim için her şeyden önemli. Resmi sitemiz sadece 724bets.net ve 724bahis.net'tir. Bizi taklit eden dolandırıcı sitelere (phishing) karşı dikkatli olun ve şifrenizi asla başka yerlerde paylaşmayın."
+      content: "Değerli üyemiz, güvenliğiniz bizim için her şeyden önemli. Resmi sitemiz sadece ahbapbet.net ve ahbapbet.net'tir. Bizi taklit eden dolandırıcı sitelere (phishing) karşı dikkatli olun ve şifrenizi asla başka yerlerde paylaşmayın."
     },
     {
       id: 4,
@@ -182,16 +182,16 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                   onClick={() => setActiveTab(item.id as any)}
                   className={`flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm transition-all duration-200 ${
                     isActive 
-                      ? 'bg-[#151A25] text-[#10B981] shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-white/5' 
+                      ? 'bg-[#151A25] text-[#06b6d4] shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-white/5' 
                       : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
                   }`}
                 >
-                  <div className={isActive ? 'text-[#10B981]' : 'text-zinc-500'}>
+                  <div className={isActive ? 'text-[#06b6d4]' : 'text-zinc-500'}>
                     {item.icon}
                   </div>
                   <span className="flex-1 text-left">{item.label}</span>
                   {item.id === 'inbox' && (
-                    <span className="bg-[#10B981] text-black text-[10px] font-black px-2 py-0.5 rounded-full">
+                    <span className="bg-[#06b6d4] text-black text-[10px] font-black px-2 py-0.5 rounded-full">
                       4
                     </span>
                   )}
@@ -242,7 +242,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                           key={seed}
                           onClick={() => handleAvatarSelect(seed)}
                           className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 bg-black/50 ${
-                            isSelected ? 'border-[#10B981] scale-110 shadow-[0_0_15px_rgba(0,255,163,0.3)]' : 'border-zinc-800 hover:border-zinc-600 hover:scale-105 opacity-70 hover:opacity-100'
+                            isSelected ? 'border-[#06b6d4] scale-110 shadow-[0_0_15px_rgba(0,255,163,0.3)]' : 'border-zinc-800 hover:border-zinc-600 hover:scale-105 opacity-70 hover:opacity-100'
                           }`}
                         >
                           <img src={url} className="w-full h-full object-cover" />
@@ -262,7 +262,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       type="text" 
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#10B981]/50 transition-colors"
+                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#06b6d4]/50 transition-colors"
                     />
                     <button className="bg-[#1A212D] text-zinc-500 font-bold px-6 py-3.5 rounded-xl cursor-not-allowed">
                       Kaydet
@@ -277,7 +277,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       type="email" 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#10B981]/50 transition-colors"
+                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#06b6d4]/50 transition-colors"
                     />
                     <button className="bg-[#1A212D] text-zinc-500 font-bold px-6 py-3.5 rounded-xl cursor-not-allowed">
                       Kaydet
@@ -293,13 +293,13 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       placeholder="Yeni şifrenizi girin (Google ile girenler için)"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#10B981]/50 transition-colors"
+                      className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-5 py-3.5 text-white font-bold focus:outline-none focus:border-[#06b6d4]/50 transition-colors"
                     />
                     <button 
                       onClick={handlePasswordSave}
                       disabled={isSavingPassword || !password}
                       className={`font-bold px-6 py-3.5 rounded-xl transition-colors ${
-                        passwordSaveStatus === 'success' ? 'bg-[#10B981] text-black' :
+                        passwordSaveStatus === 'success' ? 'bg-[#06b6d4] text-black' :
                         passwordSaveStatus === 'error' ? 'bg-red-500 text-white' :
                         password ? 'bg-[#1A212D] text-white hover:bg-[#202532]' :
                         'bg-[#1A212D] text-zinc-500 cursor-not-allowed'
@@ -313,7 +313,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                 <div className="flex flex-col gap-2">
                   <label className="text-zinc-400 font-bold text-sm">Telefon numarası</label>
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3.5 flex items-center gap-3 focus-within:border-[#10B981]/50 transition-colors">
+                    <div className="flex-1 bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3.5 flex items-center gap-3 focus-within:border-[#06b6d4]/50 transition-colors">
                       <div className="flex items-center gap-2 cursor-pointer border-r border-zinc-700 pr-3">
                         <img src="https://flagcdn.com/w20/th.png" alt="TH" className="w-5 h-auto rounded-sm" />
                         <span className="text-white font-bold">+66</span>
@@ -428,20 +428,20 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       key={msg.id}
                       onClick={() => setExpandedMsg(isExpanded ? null : msg.id)}
                       className={`border rounded-xl transition-all duration-200 overflow-hidden cursor-pointer ${
-                        isExpanded ? 'bg-[#161B24] border-[#10B981]/30' : 'bg-[#12161E] border-[#202532] hover:bg-[#161B24]'
+                        isExpanded ? 'bg-[#161B24] border-[#06b6d4]/30' : 'bg-[#12161E] border-[#202532] hover:bg-[#161B24]'
                       }`}
                     >
                       <div className="p-4 flex items-center justify-between">
                         <div className="flex flex-col">
-                          <span className={`font-bold text-sm transition-colors ${isExpanded ? 'text-[#10B981]' : 'text-white'}`}>
+                          <span className={`font-bold text-sm transition-colors ${isExpanded ? 'text-[#06b6d4]' : 'text-white'}`}>
                             {msg.title}
                           </span>
                           <span className="text-zinc-500 text-xs font-medium mt-1">{msg.date}</span>
                         </div>
                         <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
-                          isExpanded ? 'bg-[#10B981]/10 rotate-45' : 'bg-[#1A212D]'
+                          isExpanded ? 'bg-[#06b6d4]/10 rotate-45' : 'bg-[#1A212D]'
                         }`}>
-                          <Plus className={`w-4 h-4 transition-colors ${isExpanded ? 'text-[#10B981]' : 'text-zinc-400'}`} />
+                          <Plus className={`w-4 h-4 transition-colors ${isExpanded ? 'text-[#06b6d4]' : 'text-zinc-400'}`} />
                         </div>
                       </div>
                       
@@ -467,14 +467,14 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
               <div className="flex flex-col gap-1 bg-[#12161E] border border-[#202532] rounded-xl overflow-hidden">
                 <div className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setAmbientMode(!ambientMode)}>
                   <span className="text-white font-bold text-sm">Casino oyunlarında amiyans modunu etkinleştirin</span>
-                  <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${ambientMode ? 'bg-[#10B981]' : 'bg-[#2A3143]'}`}>
+                  <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${ambientMode ? 'bg-[#06b6d4]' : 'bg-[#2A3143]'}`}>
                     <div className={`w-4 h-4 bg-white rounded-full transition-transform ${ambientMode ? 'translate-x-5' : 'translate-x-0'}`} />
                   </div>
                 </div>
                 <div className="w-full h-px bg-[#202532]" />
                 <div className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setNewsletters(!newsletters)}>
                   <span className="text-white font-bold text-sm">Haberler ve Teklifler Al</span>
-                  <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${newsletters ? 'bg-[#10B981]' : 'bg-[#2A3143]'}`}>
+                  <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${newsletters ? 'bg-[#06b6d4]' : 'bg-[#2A3143]'}`}>
                     <div className={`w-4 h-4 bg-zinc-400 rounded-full transition-transform ${newsletters ? 'translate-x-5 bg-white' : 'translate-x-0'}`} />
                   </div>
                 </div>
@@ -489,7 +489,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       <div className="relative flex-1">
                         <div 
                           onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
-                          className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#10B981]/30 transition-colors"
+                          className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#06b6d4]/30 transition-colors"
                         >
                           <div className="flex items-center gap-2">
                             <img src={localLanguage === 'Turkish' ? "https://flagcdn.com/w20/tr.png" : "https://flagcdn.com/w20/gb.png"} alt={localLanguage === 'Turkish' ? 'TR' : 'EN'} className="w-5 h-auto rounded-sm" />
@@ -529,7 +529,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                              }, 800);
                            }
                         }}
-                        className="bg-[#10B981] hover:bg-[#00E676] text-black font-black px-6 py-3 rounded-xl transition-colors h-full whitespace-nowrap"
+                        className="bg-[#06b6d4] hover:bg-[#00E676] text-black font-black px-6 py-3 rounded-xl transition-colors h-full whitespace-nowrap"
                       >
                         Kaydet
                       </button>
@@ -537,7 +537,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                   </div>
                   <div className="flex-1 flex flex-col gap-2">
                     <label className="text-zinc-500 font-bold text-xs uppercase">Sohbet Geçmişi Uzunluğu</label>
-                    <div className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#10B981]/30 transition-colors">
+                    <div className="bg-[#12161E] border border-[#202532] rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer hover:border-[#06b6d4]/30 transition-colors">
                       <span className="text-white font-bold text-sm">50</span>
                       <ChevronDown className="w-4 h-4 text-zinc-500" />
                     </div>
@@ -551,7 +551,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
 
               <div className="flex flex-col gap-4">
                 <h2 className="text-xl font-black text-white">2FA</h2>
-                <button className="bg-[#10B981] hover:bg-[#00E676] text-black font-black text-sm px-6 py-3 rounded-xl w-max transition-colors">
+                <button className="bg-[#06b6d4] hover:bg-[#00E676] text-black font-black text-sm px-6 py-3 rounded-xl w-max transition-colors">
                   2FA Kimlik Doğrulayıcıyı Etkinleştir
                 </button>
               </div>
@@ -587,7 +587,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       onClick={() => setTxTab(tab as any)}
                       className={`text-sm font-bold pb-4 -mb-[17px] transition-colors border-b-2 ${
                         txTab === tab 
-                          ? 'text-[#10B981] border-[#10B981]' 
+                          ? 'text-[#06b6d4] border-[#06b6d4]' 
                           : 'text-zinc-500 border-transparent hover:text-zinc-300'
                       }`}
                     >
@@ -643,7 +643,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                             <span className="text-zinc-300 font-medium text-sm">{tx.date}</span>
                           </td>
                           <td className="py-4 px-4">
-                            <span className="bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md">
+                            <span className="bg-[#06b6d4]/10 text-[#06b6d4] border border-[#06b6d4]/20 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md">
                               COMPLETE
                             </span>
                           </td>
@@ -657,7 +657,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                     </tbody>
                   </table>
                   <div className="flex items-center justify-center gap-2 mt-6">
-                    <button className="w-8 h-8 rounded-lg bg-[#151A25] text-[#10B981] font-bold text-sm border border-[#10B981]/20 flex items-center justify-center shadow">1</button>
+                    <button className="w-8 h-8 rounded-lg bg-[#151A25] text-[#06b6d4] font-bold text-sm border border-[#06b6d4]/20 flex items-center justify-center shadow">1</button>
                     <button className="w-8 h-8 rounded-lg bg-transparent text-zinc-500 hover:text-white font-bold text-sm flex items-center justify-center transition-colors">2</button>
                   </div>
                 </div>

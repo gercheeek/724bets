@@ -143,7 +143,7 @@ export default function LiveGamesSlider({ onPlayGame }: LiveGamesSliderProps) {
           <div 
             key={game.id} 
             onClick={() => onPlayGame?.(game)}
-            className="relative flex-shrink-0 w-[160px] md:w-[185px] h-[240px] md:h-[280px] rounded-xl overflow-hidden group cursor-pointer snap-start shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
+            className="relative flex-shrink-0 w-[130px] h-[180px] md:w-[140px] md:h-[200px] lg:w-[150px] lg:h-[220px] rounded-xl overflow-hidden group cursor-pointer snap-start shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
           >
             {/* Background Image */}
             <img 
@@ -158,7 +158,7 @@ export default function LiveGamesSlider({ onPlayGame }: LiveGamesSliderProps) {
             {/* Top Left Badges */}
             <div className="absolute top-2 left-2 flex flex-col gap-1 items-start z-10">
               {game.isExclusive && (
-                <div className="bg-[#10B981] text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider shadow-lg">
+                <div className="bg-[#10b981] text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider shadow-lg">
                   ÖZEL
                 </div>
               )}

@@ -300,7 +300,7 @@ export const demoPopularBets: any[] = [
         odds: 16.65,
         playCount: 131,
         isHot: true,
-        affiliateUrl: 'https://724bahis.net',
+        affiliateUrl: 'https://ahbapbet.net',
         league: 'Norveç'
     },
     {
@@ -313,7 +313,7 @@ export const demoPopularBets: any[] = [
         odds: 23.50,
         playCount: 128,
         isHot: true,
-        affiliateUrl: 'https://724bahis.net',
+        affiliateUrl: 'https://ahbapbet.net',
         league: 'K. İrlanda'
     },
     {
@@ -326,7 +326,7 @@ export const demoPopularBets: any[] = [
         odds: 22.25,
         playCount: 114,
         isHot: true,
-        affiliateUrl: 'https://724bahis.net',
+        affiliateUrl: 'https://ahbapbet.net',
         league: 'Norveç'
     },
     {
@@ -339,7 +339,7 @@ export const demoPopularBets: any[] = [
         odds: 1.76,
         playCount: 82,
         isHot: true,
-        affiliateUrl: 'https://724bahis.net',
+        affiliateUrl: 'https://ahbapbet.net',
         league: 'UEFA'
     }
 ];

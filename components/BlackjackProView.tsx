@@ -539,7 +539,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
 
                                 {/* Betting Circle */}
                                 <div 
-                                    className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full border-[2px] ${hand.bet > 0 ? 'border-[#10B981] shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'border-solid border-white/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]'} flex items-center justify-center bg-black/40 z-0 cursor-pointer transition-all`}
+                                    className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full border-[2px] ${hand.bet > 0 ? 'border-[#06b6d4] shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'border-solid border-white/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]'} flex items-center justify-center bg-black/40 z-0 cursor-pointer transition-all`}
                                     onClick={() => handleAddBetToSeat(i)}
                                 >
                                     {hand.bet === 0 && <span className="text-white/30 text-[8px] md:text-[10px] uppercase font-bold tracking-widest text-center px-2">Place<br/>Bet</span>}

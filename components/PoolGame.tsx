@@ -79,7 +79,7 @@ const AnalysisPanel: React.FC<{ match: PoolMatch; onClose: () => void }> = ({ ma
                     <div className="flex h-full">
                         <div className="pool-power-fill bg-gradient-to-r from-[#ffcc00] to-[#f0b90b]" style={{ width: `${a.homeWinPct}%` }} />
                         {drawPct > 0 && <div className="pool-power-fill bg-zinc-700" style={{ width: `${drawPct}%` }} />}
-                        <div className="pool-power-fill bg-gradient-to-r from-[#3b82f6] to-[#60a5fa]" style={{ width: `${a.awayWinPct}%` }} />
+                        <div className="pool-power-fill bg-gradient-to-r from-[#10b981] to-[#34d399]" style={{ width: `${a.awayWinPct}%` }} />
                     </div>
                 </div>
             </div>
@@ -260,7 +260,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                     </h1>
                     <p className="text-[var(--text-muted)] font-bold text-[11px]">15 maçı doğru tahmin et, büyük ödülü kazan!</p>
                     <div className="flex items-center justify-center gap-3 mt-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest ${pool.status === 'open' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : pool.status === 'live' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest ${pool.status === 'open' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : pool.status === 'live' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'bg-[#10b981]/20 text-blue-400 border border-[#10b981]/30'}`}>
                             {pool.status === 'open' ? '🟢 TAHMİNLER AÇIK' : pool.status === 'live' ? '🔴 CANLI' : '✅ TAMAMLANDI'}
                         </span>
                         <span className="text-[var(--text-dim)] text-[10px] font-bold">{pool.entries.length} Katılımcı</span>
@@ -335,7 +335,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                                                             disabled={submitted || pool.status !== 'open'}
                                                             className={`w-7 h-6 rounded text-[11px] font-black border transition-all duration-300 ${isResult ? 'bg-green-500/20 border-green-500 text-green-400' :
                                                                 isSelected ? 'bg-[#ffcc00]/20 border-[#ffcc00] text-[#ffcc00] pool-btn-glow' :
-                                                                    isUserPick && pool.status !== 'open' ? 'bg-blue-500/20 border-blue-500/50 text-blue-400' :
+                                                                    isUserPick && pool.status !== 'open' ? 'bg-[#10b981]/20 border-[#10b981]/50 text-blue-400' :
                                                                         'bg-[var(--bg-input)] border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-hover)]'
                                                                 } ${submitted || pool.status !== 'open' ? 'cursor-default' : 'cursor-pointer'}`}
                                                         >

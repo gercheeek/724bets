@@ -78,7 +78,7 @@ const BettingBulletin: React.FC<BettingBulletinProps> = ({ matches }) => {
       
       <div className="mt-4 flex justify-center">
         <a 
-          href="https://724bahis.net" 
+          href="https://ahbapbet.net" 
           target="_blank" 
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-[#F59E0B] text-xs font-black tracking-widest uppercase hover:text-white transition-colors"

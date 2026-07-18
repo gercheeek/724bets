@@ -43,7 +43,7 @@ const liveCasinoGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'live')
 const getDemoUrl = (game: GameItem | null): string | null => {
   if (!game) return null;
   if (game.demoSymbol) {
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://ahbapbet.net`;
   }
   const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   let symbol = null;
@@ -54,7 +54,7 @@ const getDemoUrl = (game: GameItem | null): string | null => {
   else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
   else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
   if (!symbol) return null;
-  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bahis.net`;
+  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://ahbapbet.net`;
 };
 
 interface BlockProps {
@@ -121,7 +121,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   style={{ backgroundImage: `url(${game.image})`, filter: 'blur(20px) saturate(150%) brightness(1.2)' }}
                 ></div>
                 
-                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[#10B981]/50">
+                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[#06b6d4]/50">
                   <img 
                     src={game.image} 
                     alt={game.title}
@@ -134,7 +134,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto bg-black/60 backdrop-blur-[2px]">
                       <button 
                          onClick={(e) => { e.stopPropagation(); onGameClick?.(game); }}
-                         className="w-[80%] flex items-center justify-center gap-2 bg-[#10B981] hover:bg-[#00E676] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
+                         className="w-[80%] flex items-center justify-center gap-2 bg-[#06b6d4] hover:bg-[#00E676] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
                       >
                          GERÇEK OYNA
                       </button>
@@ -153,7 +153,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
 
               {!isSports && showPlayers && game.players && (
                 <div className="flex items-center justify-center gap-1.5 mt-0.5">
-                  <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#06b6d4] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
                   <span className="text-gray-400 text-[10px] md:text-[11px] font-medium"><span className="text-white font-bold">{game.players}</span> {t('players')}</span>
                 </div>
               )}
@@ -243,14 +243,14 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
         >
           {showDemoIframe && getDemoUrl(selectedGame) ? (
             <div className="relative w-full max-w-[1600px] w-[95vw] h-[90vh] bg-black rounded-xl md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col border border-white/5">
-               <div className="h-12 md:h-14 bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 border-b border-white/5 flex-shrink-0">
+               <div className="h-12 md:h-14 bg-[#0f172a] flex items-center justify-between px-4 md:px-6 border-b border-white/5 flex-shrink-0">
                   <div className="flex items-center gap-3">
                      <div className="flex gap-1.5 opacity-50 hover:opacity-100 transition-opacity hidden md:flex">
                          <span className="w-3 h-3 rounded-full bg-red-500"></span>
                          <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
                          <span className="w-3 h-3 rounded-full bg-green-500"></span>
                      </div>
-                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.title} <span className="text-[#10B981] font-black text-[10px] md:text-xs ml-2 border border-[#10B981]/30 bg-[#10B981]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
+                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.title} <span className="text-[#06b6d4] font-black text-[10px] md:text-xs ml-2 border border-[#06b6d4]/30 bg-[#06b6d4]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
                   </div>
                   <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
                     <X className="w-5 h-5" />
@@ -258,7 +258,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
                </div>
                <iframe 
                  src={getDemoUrl(selectedGame)!}
-                 className="w-full flex-1 border-0 bg-[#0B0E14]"
+                 className="w-full flex-1 border-0 bg-[#0f172a]"
                  allowFullScreen
                  title={selectedGame.title || 'Demo Game'}
                />
@@ -298,7 +298,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
               <div className="w-full mt-auto flex flex-col sm:flex-row gap-3">
                   <button 
                       onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))}
-                      className="flex-1 h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#10B981] hover:bg-[#00e693] text-black font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
+                      className="flex-1 h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#06b6d4] hover:bg-[#00e693] text-black font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
                   >
                       GERÇEK OYNA
                   </button>
@@ -316,7 +316,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
               
               <div className="flex items-center justify-center gap-2 mt-4 text-center w-full">
                   <span className="text-zinc-500 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">
-                      ŞU AN <span className="text-[#10B981]">{selectedGame.players?.toLocaleString('tr-TR')} OYUNCU</span> AKTİF
+                      ŞU AN <span className="text-[#06b6d4]">{selectedGame.players?.toLocaleString('tr-TR')} OYUNCU</span> AKTİF
                   </span>
               </div>
             </div>

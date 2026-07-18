@@ -13,7 +13,6 @@ export interface Game {
 }
 
 const NEW_GAMES_2: Game[] = [
-  { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', demoSymbol: 'vs20olympx', players: 204 },
   { id: 1160, name: 'Out of the Woods', provider: 'Pragmatic Play', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523109e9fec840eaeed00', demoSymbol: 'vs25bstackwild', players: 278 },
   { id: 1161, name: 'Legion Gold And The Throne Of Dead', provider: 'Play\'n GO', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a5523235229c24dca9f40d6', customDemoUrl: 'https://acccw.playngonetwork.com/casino/ContainerLauncher?pid=1857&brand=b2b_anj&gid=throneofdead&practice=1&lang=en_GB&div=gameWrapper&embedmode=iframe&channel=mobile&origin=https%3A%2F%2Fslotra.com', players: 335 },
   { id: 1162, name: 'Big Bass Blast', provider: 'Pragmatic Play', img: 'https://zvrkntplm.com/media/pictures/290x342/quality/51/format/avif/6a4f6a30db4d711f8d6a96e9', demoSymbol: 'vs10bbasblitz', players: 190 },
@@ -79,7 +78,7 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
           <div key={game.id} className="shrink-0 snap-start flex flex-col items-center group">
             <div 
               onClick={() => onPlayGame(game)}
-              className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
+              className="w-[130px] h-[175px] md:w-[140px] md:h-[190px] lg:w-[150px] lg:h-[200px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#06b6d4]/40"
             >
               
               <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-fill transition-transform duration-700 ease-out group-hover:scale-110" />
@@ -93,15 +92,6 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
                   </div>
               </div>
             </div>
-
-            {/* External Player Count */}
-            <div className="mt-3 flex items-center gap-1.5 px-2">
-              <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse"></div>
-              <span className="text-zinc-400 text-xs font-bold font-sans">
-                <span className="text-white">{game.players}</span> {t('players')}
-              </span>
-            </div>
-            
           </div>
         ))}
       </div>

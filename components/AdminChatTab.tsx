@@ -97,7 +97,7 @@ if (typeof window !== 'undefined' && !window.globalSimulation) {
               username: msg.username, 
               is_bot: true, 
               role: 'member',
-              email: `${msg.username.replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@724bahis.com`,
+              email: `${msg.username.replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@ahbapbet.com`,
               password: 'bot_placeholder_pwd',
               status: 'active'
             }])
@@ -341,7 +341,7 @@ export default function AdminChatTab() {
           username: newBotName.trim(), 
           is_bot: true, 
           role: 'member',
-          email: `${newBotName.trim().replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@724bahis.com`,
+          email: `${newBotName.trim().replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@ahbapbet.com`,
           password: 'bot_placeholder_pwd',
           status: 'active'
         }])
@@ -390,7 +390,7 @@ export default function AdminChatTab() {
           username: randomName, 
           is_bot: true, 
           role: 'member',
-          email: `${randomName.toLowerCase()}_bot_${Date.now()}@724bahis.com`,
+          email: `${randomName.toLowerCase()}_bot_${Date.now()}@ahbapbet.com`,
           password: 'bot_placeholder_pwd',
           status: 'active'
         }])
@@ -444,7 +444,7 @@ export default function AdminChatTab() {
           username: name,
           is_bot: true,
           role: 'member',
-          email: `${name.toLowerCase()}_bot_${Date.now()}_${Math.floor(Math.random()*1000)}@724bahis.com`,
+          email: `${name.toLowerCase()}_bot_${Date.now()}_${Math.floor(Math.random()*1000)}@ahbapbet.com`,
           password: 'bot_placeholder_pwd',
           status: 'active'
         })))
@@ -602,7 +602,7 @@ export default function AdminChatTab() {
         : '';
 
       // 2. Prompt oluşturma
-      let systemPrompt = `Sen 724bahis.com sitesinde takılan heyecanlı bir bahisçi ve spor analistisin. 
+      let systemPrompt = `Sen ahbapbet.com sitesinde takılan heyecanlı bir bahisçi ve spor analistisin. 
 Canlı maçları takip edip skorlara göre tepki veriyorsun. Asla bir yapay zeka olduğunu belli etme.
 Kısa, öz ve argo içermeyen sokak ağzıyla (kanka, aga, hoca vb.) spor/casino muhabbeti yap.
 Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino sitelerini öv.`;
@@ -808,8 +808,8 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
             <div>
               <h3 className="text-md font-bold mb-3 text-green-400 flex items-center gap-2">🤖 Yeni Hayalet Üye (Bot)</h3>
               <form onSubmit={handleCreateBot} className="flex gap-2">
-                <input type="text" value={newBotName} onChange={(e) => setNewBotName(e.target.value)} placeholder="Kullanıcı Adı" className="flex-1 bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-sm text-white outline-none focus:border-blue-500 transition-colors" />
-                <button type="submit" className="bg-blue-600 hover:bg-blue-500 px-4 rounded-lg font-bold text-sm transition-colors text-white">EKLE</button>
+                <input type="text" value={newBotName} onChange={(e) => setNewBotName(e.target.value)} placeholder="Kullanıcı Adı" className="flex-1 bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-sm text-white outline-none focus:border-[#10b981] transition-colors" />
+                <button type="submit" className="bg-blue-600 hover:bg-[#10b981] px-4 rounded-lg font-bold text-sm transition-colors text-white">EKLE</button>
               </form>
               <div className="flex gap-2 mt-3">
                 <button

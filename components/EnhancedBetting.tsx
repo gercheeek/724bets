@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight, Flame } from 'lucide-react';
 
 const EnhancedBetting: React.FC = () => {
-  const gamdomLink = 'https://gamdom.com/r/724bahis';
+  const gamdomLink = 'https://gamdom.com/r/ahbapbet';
 
   return (
     <div className="mb-8">
@@ -80,7 +80,7 @@ const EnhancedBetting: React.FC = () => {
               VIP ÖDÜLLER VE<br/><span className="text-[#f2a900]">ÖZEL BONUSLAR</span>
             </h4>
             <p className="text-gray-400 text-xs sm:text-sm font-bold mb-4 max-w-[200px] sm:max-w-[250px]">
-              724bahis referansıyla katılanlara özel ekstra rakeback ve promosyonlar.
+              ahbapbet referansıyla katılanlara özel ekstra rakeback ve promosyonlar.
             </p>
             
             <div className="flex items-center gap-2 text-[#f2a900] font-black text-xs uppercase tracking-widest mt-auto group-hover:translate-x-2 transition-transform duration-300">

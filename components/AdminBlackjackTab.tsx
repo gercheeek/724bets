@@ -63,7 +63,7 @@ export default function AdminBlackjackTab() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-[#151821] p-6 rounded-xl border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-20">
-             <Activity className="w-12 h-12 text-blue-500" />
+             <Activity className="w-12 h-12 text-[#10b981]" />
           </div>
           <p className="text-gray-400 text-sm font-semibold mb-2">Toplam Oyun (El)</p>
           <p className="text-3xl font-black text-white">{stats.totalBets}</p>

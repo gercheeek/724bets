@@ -79,7 +79,7 @@ export function DepositModal({ isOpen, onClose, username }: DepositModalProps) {
 
         <div className="p-8 relative z-10">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-lg bg-[#10b981]/10 border border-[#10b981]/20 flex items-center justify-center">
               <Wallet className="w-6 h-6 text-blue-400" />
             </div>
             <div>
@@ -129,7 +129,7 @@ export function DepositModal({ isOpen, onClose, username }: DepositModalProps) {
               <div className="space-y-4">
                 <div>
                   <p className="text-xs text-zinc-500 font-bold mb-1 uppercase tracking-wider">Ağ (Network)</p>
-                  <div className="inline-flex px-3 py-1 bg-blue-500/10 text-blue-400 rounded-lg text-sm font-bold border border-blue-500/20">
+                  <div className="inline-flex px-3 py-1 bg-[#10b981]/10 text-blue-400 rounded-lg text-sm font-bold border border-[#10b981]/20">
                     {cryptoConfig.network}
                   </div>
                 </div>
@@ -157,7 +157,7 @@ export function DepositModal({ isOpen, onClose, username }: DepositModalProps) {
                   step="any"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full bg-zinc-900/80 border border-zinc-800 text-white rounded-lg pl-4 pr-12 py-3.5 focus:outline-none focus:border-blue-500 transition-colors font-medium text-lg placeholder-zinc-700"
+                  className="w-full bg-zinc-900/80 border border-zinc-800 text-white rounded-lg pl-4 pr-12 py-3.5 focus:outline-none focus:border-[#10b981] transition-colors font-medium text-lg placeholder-zinc-700"
                   placeholder="0.00"
                 />
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">
@@ -175,7 +175,7 @@ export function DepositModal({ isOpen, onClose, username }: DepositModalProps) {
                 required
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                className="w-full bg-zinc-900/80 border border-zinc-800 text-white rounded-lg px-4 py-3.5 focus:outline-none focus:border-blue-500 transition-colors font-medium placeholder-zinc-700"
+                className="w-full bg-zinc-900/80 border border-zinc-800 text-white rounded-lg px-4 py-3.5 focus:outline-none focus:border-[#10b981] transition-colors font-medium placeholder-zinc-700"
                 placeholder={method === 'bank' ? 'Adınız Soyadınız' : 'Örn: 8a7b6c5d4e3f...'}
               />
             </div>
@@ -196,7 +196,7 @@ export function DepositModal({ isOpen, onClose, username }: DepositModalProps) {
             <button 
               type="submit" 
               disabled={status === 'loading'}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-lg transition-all mt-4 disabled:opacity-50 flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
+              className="w-full bg-blue-600 hover:bg-[#10b981] text-white font-black py-4 rounded-lg transition-all mt-4 disabled:opacity-50 flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
             >
               {status === 'loading' ? 'İşleniyor...' : (
                 <>BİLDİRİMİ GÖNDER <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></>

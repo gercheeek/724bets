@@ -5,7 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 const Footer: React.FC = () => {
   const { t } = useLanguage();
   return (
-    <footer className="w-full bg-[#0B0E14] border-t border-white/5 py-10 md:py-16 mt-auto font-sans relative z-10">
+    <footer className="w-full bg-[#0f172a]/80 backdrop-blur-md border-t border-white/5 py-10 md:py-16 mt-auto font-sans relative z-10">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Main Footer Content */}
@@ -13,9 +13,13 @@ const Footer: React.FC = () => {
           
           {/* Brand & About */}
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-0.5 select-none" style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}>
-              <span className="text-white font-extrabold text-2xl uppercase text-center">724</span>
-              <span className="text-[#10B981] font-black text-2xl uppercase text-center">BETS</span>
+            <div className="flex items-center gap-0.5 select-none" style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}>
+              <span className="text-[#06b6d4] font-extrabold text-2xl lowercase text-center">ahbapbet</span>
+              <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full border-[2px] md:border-[3px] border-[#06b6d4] ml-1.5 -mt-3 md:-mt-4">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-[#06b6d4] w-3 h-3 md:w-3.5 md:h-3.5">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </div>
             </div>
             <p className="text-[#848B9D] text-sm leading-relaxed">
               {t("footer_desc")}
@@ -50,13 +54,13 @@ const Footer: React.FC = () => {
                 <img src="https://cryptologos.cc/logos/bnb-bnb-logo.svg?v=029" alt="Binance Coin" className="h-5 w-auto group-hover:scale-110 transition-transform" />
               </div>
               {/* Fiat/Bank */}
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-blue-500/30 rounded-lg w-14 h-10 flex items-center justify-center transition-colors">
+              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#10b981]/30 rounded-lg w-14 h-10 flex items-center justify-center transition-colors">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" className="h-3 w-auto brightness-200 grayscale" />
               </div>
               <div className="bg-[#1A1D24] border border-[#252A35] hover:border-red-500/30 rounded-lg w-14 h-10 flex items-center justify-center transition-colors">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" className="h-4 w-auto" />
               </div>
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#10B981]/50 rounded-lg px-4 h-10 flex items-center justify-center transition-colors">
+              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#06b6d4]/50 rounded-lg px-4 h-10 flex items-center justify-center transition-colors">
                 <span className="text-white font-bold text-[10px] sm:text-xs tracking-wider">{t("bank_transfer")}</span>
               </div>
             </div>
@@ -79,8 +83,8 @@ const Footer: React.FC = () => {
               <div className="bg-[#1A1D24] border border-red-500/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.15)]">
                 <span className="text-red-500 font-black text-lg">18+</span>
               </div>
-              <div className="bg-[#1A1D24] border border-[#10B981]/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,163,0.1)]">
-                <Lock className="text-[#10B981] w-5 h-5" />
+              <div className="bg-[#1A1D24] border border-[#06b6d4]/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,163,0.1)]">
+                <Lock className="text-[#06b6d4] w-5 h-5" />
               </div>
               <div className="bg-[#1A1D24] border border-[#252A35] rounded-full px-4 h-12 flex items-center justify-center gap-2">
                 <ShieldAlert className="text-white w-4 h-4" />
@@ -90,7 +94,7 @@ const Footer: React.FC = () => {
             
             <div className="text-xs text-gray-500 max-w-xs border-l-2 lg:border-l-0 lg:border-r-2 border-red-500/50 pl-3 lg:pl-0 lg:pr-3 py-1">
               <p className="mb-1 text-gray-400 font-medium">{t("gambling_addictive")}</p>
-              <p>{t('gambling_limits')} {t('gambling_help_1')} <a href="#" className="text-white hover:text-[#10B981] underline">{t('gambling_help_link')}</a> {t('gambling_help_2')}</p>
+              <p>{t('gambling_limits')} {t('gambling_help_1')} <a href="#" className="text-white hover:text-[#06b6d4] underline">{t('gambling_help_link')}</a> {t('gambling_help_2')}</p>
             </div>
           </div>
 
@@ -106,10 +110,10 @@ const Footer: React.FC = () => {
           </div>
           <div className="flex flex-col items-center md:items-end gap-1">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]/50" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#06b6d4]/50" />
               <span className="tracking-wide">{t("all_rights_reserved")}</span>
             </div>
-            <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">724net v2.0.0</span>
+            <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">ahbapbet v2.0.0</span>
           </div>
         </div>
 

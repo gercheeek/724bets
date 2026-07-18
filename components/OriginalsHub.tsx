@@ -4,73 +4,23 @@ import LiveBetsTable from './LiveBetsTable';
 import { GamificationPanel } from './GamificationPanel';
 import { GameDetailModal, GameData } from './GameDetailModal';
 
-const ORIGINALS: GameData[] = [
-    {
-        id: 'plinko',
-        name: 'Plinko',
-        desc: 'Fizik tabanlı çarpan eğlencesi.',
-        color: 'from-purple-600 to-purple-900',
-        image: '/images/clean-plinko-v4.jpg',
-        path: 'plinko',
-        icon: '🎯',
-        players: 569,
-        rtp: '%99.0',
-        maxWin: '1000x',
-        volatility: 'Yüksek'
-    },
-    {
-        id: 'dice',
-        name: 'Dice',
-        desc: 'Hızlı, adil ve kazançlı zar oyunu.',
-        color: 'from-blue-600 to-blue-900',
-        image: '/images/clean-dice-v4.jpg',
-        path: 'dice',
-        icon: '🎲',
-        players: 482,
-        rtp: '%99.0',
-        maxWin: '9900x',
-        volatility: 'Değişken'
-    },
-    {
-        id: 'hilo',
-        name: 'Hilo',
-        desc: 'Bir sonraki kart yüksek mi düşük mü?',
-        color: 'from-green-600 to-green-900',
-        image: '/images/clean-hilo-v4.jpg',
-        path: 'hilo',
-        icon: '🃏',
-        players: 481,
-        rtp: '%99.0',
-        maxWin: 'Limitsiz',
-        volatility: 'Düşük'
-    },
-    {
-        id: 'war',
-        name: 'War',
-        desc: 'Savaş! Kimin kartı daha yüksek?',
-        color: 'from-red-600 to-red-900',
-        image: '/images/clean-war-v4.jpg',
-        path: 'war',
-        icon: '⚔️',
-        players: 517,
-        rtp: '%99.0',
-        maxWin: '1000x',
-        volatility: 'Düşük'
-    },
-];
+import { useLanguage } from '../contexts/LanguageContext';
+import { getOriginalsData } from './OriginalsSlider';
 
 export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (v: string) => void, isLoggedIn?: boolean }) {
+    const { t } = useLanguage();
+    const ORIGINALS = getOriginalsData(t);
     const [mounted, setMounted] = useState(false);
     const [selectedGame, setSelectedGame] = useState<GameData | null>(null);
 
     useEffect(() => setMounted(true), []);
 
     return (
-        <div className="w-full min-h-[calc(100vh-60px)] bg-[#0B0E14] p-4 md:p-8 relative overflow-hidden font-sans flex flex-col items-center">
+        <div className="w-full min-h-[calc(100vh-60px)] bg-[#0f172a] p-4 md:p-8 relative overflow-hidden font-sans flex flex-col items-center">
             
             {/* Background elements - Neon theme */}
             <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#10B981]/5 blur-[120px] rounded-[100%] opacity-60 mix-blend-screen"></div>
+                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#06b6d4]/5 blur-[120px] rounded-[100%] opacity-60 mix-blend-screen"></div>
                  <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-fuchsia-600/5 blur-[150px] rounded-full mix-blend-screen"></div>
                  {/* Modern Grid Pattern instead of cubes */}
                  <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
@@ -82,17 +32,17 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
                 <div className="flex flex-col lg:flex-row gap-6 mt-4">
                     {/* Hero Title - Compact */}
                     <div className="flex-1 bg-gradient-to-br from-[#131722] to-[#0A0D14] border border-white/5 rounded-3xl p-8 flex flex-col justify-center relative overflow-hidden group">
-                        <div className="absolute right-0 top-0 w-64 h-64 bg-[#10B981]/10 blur-[80px] rounded-full group-hover:bg-[#10B981]/20 transition-all duration-700"></div>
+                        <div className="absolute right-0 top-0 w-64 h-64 bg-[#06b6d4]/10 blur-[80px] rounded-full group-hover:bg-[#06b6d4]/20 transition-all duration-700"></div>
                         <div className="relative z-10">
-                            <div className="flex items-center gap-2 mb-4 bg-[#10B981]/10 border border-[#10B981]/30 px-3 py-1 rounded-full w-fit">
-                                <Sparkles className="w-4 h-4 text-[#10B981]" />
-                                <span className="text-[#10B981] text-xs font-bold uppercase tracking-widest">Premium Hub</span>
+                            <div className="flex items-center gap-2 mb-4 bg-[#06b6d4]/10 border border-[#06b6d4]/30 px-3 py-1 rounded-full w-fit">
+                                <Sparkles className="w-4 h-4 text-[#06b6d4]" />
+                                <span className="text-[#06b6d4] text-xs font-bold uppercase tracking-widest">Premium Hub</span>
                             </div>
                             <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-3">
-                                724<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#10B981] to-[#00b372]">GAMES</span>
+                                <span className="lowercase">ahbapbet</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#06b6d4] to-[#00b372]">GAMES</span>
                             </h1>
                             <p className="text-zinc-400 text-sm max-w-sm leading-relaxed">
-                                Sadece 724BETS'e özel premium oyunlar ve devasa çekilişler.
+                                Sadece AHBAPBET'e özel premium oyunlar ve devasa çekilişler.
                             </p>
                         </div>
                     </div>
@@ -129,7 +79,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <h2 className="text-2xl font-black text-white tracking-tight uppercase">Premium Oyunlar</h2>
-                        <div className="hidden sm:block h-px w-32 bg-gradient-to-r from-[#10B981]/50 to-transparent"></div>
+                        <div className="hidden sm:block h-px w-32 bg-gradient-to-r from-[#06b6d4]/50 to-transparent"></div>
                     </div>
                     <div className="flex items-center gap-2 text-zinc-500 text-xs font-bold uppercase tracking-widest">
                         <span>Kaydır</span>
@@ -144,7 +94,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
                             {/* Card Body - Portrait */}
                             <div 
                                 onClick={() => onNavigate(game.path)}
-                                className="w-[150px] h-[200px] md:w-[180px] md:h-[240px] relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-[0_10px_30px_rgba(0,255,163,0.3)] transition-all duration-300 transform group-hover:-translate-y-2 border border-white/5 group-hover:border-[#10B981]/50"
+                                className="w-[150px] h-[200px] md:w-[180px] md:h-[240px] relative rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-[0_10px_30px_rgba(0,255,163,0.3)] transition-all duration-300 transform group-hover:-translate-y-2 border border-white/5 group-hover:border-[#06b6d4]/50"
                             >
                                 <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out mix-blend-lighten" />
                                 
@@ -158,14 +108,6 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
                                         <Play className="w-5 h-5 text-white fill-current ml-1" />
                                     </div>
                                 </div>
-                            </div>
-                            
-                            {/* External Player Count (Matches Screenshot) */}
-                            <div className="mt-3 flex items-center gap-1.5 px-2">
-                                <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981]"></div>
-                                <span className="text-zinc-300 text-xs font-bold font-sans">
-                                    <span className="text-white">{game.players}</span> Oyuncular
-                                </span>
                             </div>
                         </div>
                     ))}
@@ -184,7 +126,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
                         <div>
                             <div className="flex items-center gap-2 mb-1">
                                 <span className="bg-red-500 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full">CANLI</span>
-                                <h3 className="text-xl font-black text-white">724TV Özel Yayın</h3>
+                                <h3 className="text-xl font-black text-white"><span className="lowercase">ahbapbet</span> TV Özel Yayın</h3>
                             </div>
                             <p className="text-zinc-400 text-sm">Tüm maçları kesintisiz HD izle.</p>
                         </div>

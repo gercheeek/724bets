@@ -220,7 +220,7 @@ export default function RouletteView({ siteUser, setSiteUser, onAuthRequired }: 
                             {ROULETTE_NUMBERS.map((num, i) => {
                                 const angle = (360 / ROULETTE_NUMBERS.length) * i;
                                 const isGreen = num === 0;
-                                const color = isGreen ? '#10B981' : (isRed(num) ? '#DC2626' : '#111827');
+                                const color = isGreen ? '#06b6d4' : (isRed(num) ? '#DC2626' : '#111827');
                                 return (
                                     <div 
                                         key={num}

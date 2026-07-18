@@ -156,7 +156,7 @@ const Header: React.FC<HeaderProps> = ({
         id: Date.now().toString(),
         userId: siteUser.id,
         username: siteUser.username,
-        content: `724BETS Yatırım Bildirimi:\n724BETS Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
+        content: `AHBAPBET Yatırım Bildirimi:\nAHBAPBET Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
         isRead: false,
         createdAt: Date.now()
       };
@@ -268,7 +268,7 @@ const Header: React.FC<HeaderProps> = ({
 
           @keyframes neonFlickerDelay {
             0%, 5%, 15%, 25% { opacity: 0; text-shadow: none; filter: brightness(0.2); }
-            10%, 20%, 30% { opacity: 0.8; text-shadow: 0 0 10px #10B981, 0 0 20px #10B981; filter: brightness(1.5); }
+            10%, 20%, 30% { opacity: 0.8; text-shadow: 0 0 10px #10b981, 0 0 20px #10b981; filter: brightness(1.5); }
             35%, 100% { opacity: 1; text-shadow: 0 0 5px rgba(0,255,163,0.5), 0 0 15px rgba(0,255,163,0.8); filter: brightness(1); }
           }
           .neon-text {
@@ -299,7 +299,7 @@ const Header: React.FC<HeaderProps> = ({
             overflow: hidden;
           }
           .logo-text-724 .logo-num {
-            background: linear-gradient(135deg, #10B981, #10B981, #10B981);
+            background: linear-gradient(135deg, #10b981, #10b981, #10b981);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -307,8 +307,8 @@ const Header: React.FC<HeaderProps> = ({
             filter: drop-shadow(0 0 8px rgba(0,255,163,0.4));
           }
           .logo-text-724 .logo-dot {
-            color: #10B981;
-            -webkit-text-fill-color: #10B981;
+            color: #10b981;
+            -webkit-text-fill-color: #10b981;
             font-weight: 900;
           }
           .logo-text-724 .logo-ext {
@@ -343,11 +343,11 @@ const Header: React.FC<HeaderProps> = ({
             transition: padding-left 0.3s ease-in-out;
           }
           .header-icon-btn:hover {
-            color: #10B981 !important;
+            color: #10b981 !important;
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[72px] bg-[#0F1219] border-b border-white/5 flex justify-center">
+      <div className="header-topbar relative w-full h-[72px] bg-[#0B0E14] border-b border-transparent flex justify-center">
         <div className="w-full max-w-[1400px] px-2 md:px-4 h-full flex items-center justify-between">
             {/* Left: Hamburger & Logo & Desktop Tabs */}
             <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
@@ -363,25 +363,18 @@ const Header: React.FC<HeaderProps> = ({
               )}
 
               <div 
-                className="flex items-center cursor-pointer select-none ml-0 logo-text-724 group"
+                className="flex items-center cursor-pointer select-none ml-0 group"
                 onClick={() => onViewChange?.('home')}
-                onMouseEnter={() => setLogoHoverCount(prev => prev + 1)}
-                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
+                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}
               >
-                <span className="text-white font-extrabold text-xl md:text-2xl uppercase text-center">724</span>
-                <div className="flex items-center perspective-1000 ml-[2px]">
-                  {['B', 'E', 'T', 'S'].map((letter, i) => {
-                    const isSportsView = activeView === 'sporx' || activeView === 'sports' || activeView === 'sports3' || activeView === 'sports4' || activeView === 'sports5';
-                    const symbol = isSportsView ? (i % 2 === 0 ? '🏆' : '⚽') : ['♠', '♥', '♦', '♣'][i];
-                    return (
-                      <div key={i} className="relative w-[15px] md:w-[19px] h-6 md:h-8 transform-style-3d transition-transform duration-[800ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-y-180" style={{ transitionDelay: `${i * 75}ms` }}>
-                        {/* Front face (Letter) */}
-                        <span className="absolute inset-0 backface-hidden flex items-center justify-center text-[#10B981] font-black text-xl md:text-2xl uppercase">{letter}</span>
-                        {/* Back face (Symbol) */}
-                        <span className="absolute inset-0 backface-hidden rotate-y-180 flex items-center justify-center text-[#10B981] text-[18px] md:text-[22px] drop-shadow-[0_0_8px_rgba(16,185,129,0.8)] opacity-20 group-hover:opacity-100 transition-opacity duration-700 font-normal">{symbol}</span>
-                      </div>
-                    );
-                  })}
+                <span className="font-extrabold text-2xl md:text-3xl tracking-tight lowercase">
+                  <span className="text-white">ahbap</span>
+                  <span className="text-[#10b981]">bet</span>
+                </span>
+                <div className="flex items-center justify-center w-4 h-4 md:w-4 md:h-4 rounded-full border-[2px] border-[#10b981] ml-1 -mt-4">
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" className="text-[#10b981]">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
                 </div>
               </div>
 
@@ -389,13 +382,13 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
         {/* Center: Wallet Pill (Only if logged in) */}
-        <div className="flex items-center justify-center flex-[1.5] z-10">
+        <div className="hidden md:flex items-center justify-center flex-[1.5] z-10">
           {siteUser && (
-            <div className="relative flex items-center bg-[#1E252D] rounded-lg md:rounded-xl pl-3 pr-0 py-0 border border-[#2B3544] h-[36px] md:h-[44px] shadow-sm" ref={walletDropdownRef}>
+            <div className="relative flex items-center bg-[#14141a] rounded-lg md:rounded-xl pl-3 pr-0 py-0 border border-white/10 h-[36px] md:h-[44px] shadow-sm" ref={walletDropdownRef}>
               
               {/* Balance Section */}
               <div 
-                className="flex items-center cursor-pointer hover:bg-[#252D37] transition-colors rounded-l-lg py-1 pr-3 h-full"
+                className="flex items-center cursor-pointer hover:bg-[#1a1a22] transition-colors rounded-l-lg py-1 pr-3 h-full"
                 onClick={() => setWalletDropdownOpen(prev => !prev)}
               >
                 <span className="text-white font-bold text-[13px] md:text-[15px] tracking-tight mr-2 whitespace-nowrap">{(siteUser.balance || 0).toFixed(8)}</span>
@@ -415,10 +408,10 @@ const Header: React.FC<HeaderProps> = ({
               </button>
 
               {walletDropdownOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-[#17202A] border border-[#2B3544] shadow-2xl text-left overflow-hidden">
+                <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-[#0B0E14] border border-white/10 shadow-2xl text-left overflow-hidden">
                   
                   {/* Search bar */}
-                  <div className="p-3 border-b border-[#2B3544]">
+                  <div className="p-3 border-b border-white/10">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                       <input 
@@ -426,7 +419,7 @@ const Header: React.FC<HeaderProps> = ({
                         value={walletSearch}
                         onChange={(e) => setWalletSearch(e.target.value)}
                         placeholder={t("wallet_ara")} 
-                        className="w-full bg-[#1C2531] border border-[#2B3544] rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#1A7BF2] transition-colors placeholder-zinc-400"
+                        className="w-full bg-[#14141a] border border-white/10 rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#1A7BF2] transition-colors placeholder-zinc-400"
                       />
                     </div>
                   </div>
@@ -438,13 +431,13 @@ const Header: React.FC<HeaderProps> = ({
                       { sym: 'BTC', icon: '₿', bg: '#F7931A' },
                       { sym: 'ETH', icon: 'Ξ', bg: '#627EEA' },
                       { sym: 'LTC', icon: 'Ł', bg: '#BFBBBB' },
-                      { sym: 'SOL', icon: 'S', bg: 'linear-gradient(45deg, #10B981, #03E1FF)' },
+                      { sym: 'SOL', icon: 'S', bg: 'linear-gradient(45deg, #06b6d4, #03E1FF)' },
                       { sym: 'DOGE', icon: 'Ð', bg: '#C2A633' },
                       { sym: 'BCH', icon: '₿', bg: '#8DC351' },
                       { sym: 'XRP', icon: '✕', bg: '#23292F' },
                       { sym: 'TRX', icon: '💎', bg: '#FF0013' }
                     ].filter(c => c.sym.toLowerCase().includes(walletSearch.toLowerCase())).map((crypto, idx) => (
-                      <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#1C2531] cursor-pointer transition-colors group">
+                      <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#14141a] cursor-pointer transition-colors group">
                         <span className="text-white font-bold text-[14px] md:text-[15px] font-mono tracking-tight group-hover:text-white/90">{(crypto.sym === 'USDT' ? (siteUser.balance || 0) : 0).toFixed(8)}</span>
                         <div className="flex items-center gap-2">
                           <div 
@@ -460,7 +453,7 @@ const Header: React.FC<HeaderProps> = ({
                   </div>
 
                   {/* Footer Button */}
-                  <button className="w-full flex items-center justify-center gap-2 py-3.5 text-white bg-[#1C2531] hover:bg-[#252D37] font-bold text-sm transition-colors border-t border-[#2B3544]">
+                  <button className="w-full flex items-center justify-center gap-2 py-3.5 text-white bg-[#14141a] hover:bg-[#1a1a22] font-bold text-sm transition-colors border-t border-white/10">
                     <Briefcase className="w-4 h-4 text-zinc-400" />
                     {t('wallet_ayarlar')}
                   </button>
@@ -493,7 +486,7 @@ const Header: React.FC<HeaderProps> = ({
             </button>
             
             {langDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-32 bg-[#1A1D24] border border-white/5 rounded-xl shadow-2xl z-50 overflow-hidden py-2 animate-fade-in">
+              <div className="absolute right-0 mt-2 w-32 bg-[#0B0E14] border border-white/5 rounded-xl shadow-2xl z-50 overflow-hidden py-2 animate-fade-in">
                 <button onClick={() => { setLanguage('tr'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'tr' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
                   <span className="text-base">🇹🇷</span>
                   <span className="font-semibold text-sm">TR</span>
@@ -517,20 +510,20 @@ const Header: React.FC<HeaderProps> = ({
           {siteUser ? (
             <>
               {/* Profile Dropdown */}
-              <div className="relative" ref={profileRef}>
+              <div className="relative hidden md:block" ref={profileRef}>
                 <button 
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#10B981]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#10b981]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0"
                 >
                   <img 
                     src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
-                    className="w-full h-full object-cover bg-[#1F232B]" 
+                    className="w-full h-full object-cover bg-[#14141a]" 
                     alt="avatar" 
                   />
                 </button>
 
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-[#1A1D24] border border-white/5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
+                  <div className="absolute right-0 mt-2 w-64 bg-[#0B0E14] border border-white/5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
                     <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <User className="w-5 h-5 text-zinc-400 group-hover:text-white" />
                       <span className="font-semibold text-sm">{t('profile_profil')}</span>
@@ -587,17 +580,17 @@ const Header: React.FC<HeaderProps> = ({
             </>
           ) : (
               <>
-                <div className="flex items-center rounded-lg border border-[#2B3544] h-[42px] shadow-sm overflow-hidden">
+                <div className="flex items-center rounded-lg border border-white/10 h-[42px] overflow-hidden shadow-sm backdrop-blur-sm bg-white/5 p-1 gap-1">
                   <button
                     onClick={onMemberLoginClick}
-                    className="flex items-center justify-center bg-[#1A1D24] hover:bg-[#252A34] text-white font-bold text-[14px] h-full px-5 md:px-6 transition-colors whitespace-nowrap"
+                    className="flex items-center justify-center bg-transparent hover:bg-white/10 text-white border border-transparent hover:border-white/20 rounded-md font-bold text-[13px] h-full px-4 md:px-5 transition-all duration-300 whitespace-nowrap"
                   >
                     {t('login')}
                   </button>
                   <button
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
-                    className="flex items-center justify-center bg-[#10B981] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-full px-5 md:px-6 transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
+                    className="flex items-center justify-center bg-[#10b981] hover:bg-[#00E676] text-black rounded-md font-extrabold text-[13px] h-full px-4 md:px-5 transition-all duration-300 shadow-[0_0_15px_rgba(0,255,163,0.3)] whitespace-nowrap"
                   >
                     {t('register')}
                   </button>

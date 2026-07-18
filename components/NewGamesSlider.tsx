@@ -74,7 +74,7 @@ export default function NewGamesSlider() {
                                 <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 backdrop-blur-[2px] z-20">
                                     <button 
                                         onClick={(e) => { e.stopPropagation(); handlePlay(); }}
-                                        className="bg-[#10B981] hover:bg-[#00E693] text-black font-black w-[110px] py-2.5 rounded-sm flex items-center justify-center gap-1.5 transition-colors shadow-lg"
+                                        className="bg-[#06b6d4] hover:bg-[#00E693] text-black font-black w-[110px] py-2.5 rounded-sm flex items-center justify-center gap-1.5 transition-colors shadow-lg"
                                     >
                                         <Play className="w-3.5 h-3.5" fill="currentColor" />
                                         Oyna
@@ -87,14 +87,6 @@ export default function NewGamesSlider() {
                                         Demo
                                     </button>
                                 </div>
-                            </div>
-                            
-                            {/* Players count below card */}
-                            <div className="flex items-center justify-center gap-1.5 mt-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                                <span className="text-[11px] font-semibold text-zinc-400">
-                                    <span className="text-white">{game.players}</span> Oyuncular
-                                </span>
                             </div>
                         </div>
                     ))}

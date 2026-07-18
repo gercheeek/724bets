@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Star, Shield, Trash2, Smile, MoreVertical, Menu } from 'lucide-react';
+import { X, Send, Star, Shield, Trash2, Smile, MoreVertical, Menu, Cpu } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { SiteUser } from '../types';
 
@@ -548,7 +548,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         const r = role?.toUpperCase();
         if (r === 'ADMIN') return '#F87171'; // Soft red for admin
         if (r === 'VIP') return '#38BDF8'; // Sky blue for VIP
-        if (r === 'SYSTEM' || r === 'BOT') return '#10B981'; // Emerald for bots
+        if (r === 'SYSTEM' || r === 'BOT') return '#06b6d4'; // Emerald for bots
         return '#E5E7EB'; // Light gray/white for normal users
     };
 
@@ -563,7 +563,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             );
         }
         if (r === 'SYSTEM' || r === 'BOT') {
-            const color = msgObj?.botColor || '#10B981';
+            const color = msgObj?.botColor || '#06b6d4';
             return (
                 <span 
                     className="inline-flex items-center gap-0.5 bg-black/20 px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none mr-1.5 uppercase border border-white/5"
@@ -588,14 +588,14 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0F1219] shadow-2xl font-sans text-left relative">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0B0E14] border-l border-transparent shadow-2xl font-sans text-left relative">
             
             {/* Chat Rules Overlay */}
             {showRules && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-[#1A1D24] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-sm shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                    <div className="bg-[#14141a]/70 backdrop-blur-xl border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                         <div className="flex items-center gap-3 mb-6">
-                            <Shield className="w-6 h-6 text-[#10B981]" />
+                            <Shield className="w-6 h-6 text-[#06b6d4]" />
                             <h2 className="text-lg font-black text-white tracking-wider">SOHBET KURALLARI</h2>
                         </div>
                         <ul className="space-y-4 text-sm text-gray-300 font-medium">
@@ -622,7 +622,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         </ul>
                         <button 
                             onClick={() => setShowRules(false)}
-                            className="w-full mt-6 bg-[#10B981] hover:bg-[#059669] text-black font-black py-3.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                            className="w-full mt-6 bg-[#06b6d4] hover:bg-[#059669] text-white font-black py-3.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
                         >
                             Anladım, teşekkürler
                         </button>
@@ -631,11 +631,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             )}
 
             {/* Header */}
-            <div className="bg-[#0F1219] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5 shadow-sm">
+            <div className="bg-[#0B0E14] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-transparent shadow-sm">
                 <div className="flex items-center gap-3 relative">
                     <div 
                         onClick={() => setShowLangMenu(!showLangMenu)}
-                        className="flex items-center gap-2 bg-[#1A1D24] border border-[#2A2E3D] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#20242D] hover:border-white/20 cursor-pointer transition-all shadow-inner relative z-20"
+                        className="flex items-center gap-2 bg-[#14141a] border border-transparent px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#1a1a22] hover:border-white/20 cursor-pointer transition-all shadow-inner relative z-20"
                     >
                         <img src={`https://flagcdn.com/w20/${activeLang.flag}.png`} alt={activeLang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
                         <span className="text-gray-200">{activeLang.name}</span>
@@ -646,12 +646,12 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     {showLangMenu && (
                         <>
                             <div className="fixed inset-0 z-10" onClick={() => setShowLangMenu(false)}></div>
-                            <div className="absolute top-full mt-2 left-0 w-36 bg-[#1A1D24] border border-[#2A2E3D] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-20 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="absolute top-full mt-2 left-0 w-36 bg-[#14141a]/80 backdrop-blur-md border border-white/10 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                                 {LANGUAGES.map(lang => (
                                     <div 
                                         key={lang.id}
                                         onClick={() => { setActiveLang(lang); setShowLangMenu(false); }}
-                                        className={`flex items-center gap-2 px-3 py-2 text-xs font-bold cursor-pointer transition-colors ${activeLang.id === lang.id ? 'bg-[#10B981]/10 text-[#10B981]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                                        className={`flex items-center gap-2 px-3 py-2 text-xs font-bold cursor-pointer transition-colors ${activeLang.id === lang.id ? 'bg-[#06b6d4]/10 text-[#06b6d4]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
                                     >
                                         <img src={`https://flagcdn.com/w20/${lang.flag}.png`} alt={lang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
                                         <span>{lang.name}</span>
@@ -662,7 +662,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     )}
                 </div>
                 <div className="flex items-center gap-4 text-zinc-400">
-                    <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#1A1D24] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
+                    <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#14141a] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
                         <span className="relative flex h-2 w-2">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -682,11 +682,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
             {/* Pinned Message Bar */}
             {pinnedMessage && pinnedMessage.text && (
-                <div className="bg-[#10B981]/10 px-4 py-3 flex items-center justify-between gap-3 text-left">
+                <div className="bg-[#06b6d4]/10 px-4 py-3 flex items-center justify-between gap-3 text-left">
                     <div className="flex items-start gap-2 min-w-0">
-                        <span className="text-[12px] mt-0.5 text-[#10B981]">📌</span>
+                        <span className="text-[12px] mt-0.5 text-[#06b6d4]">📌</span>
                         <div className="min-w-0">
-                            <div className="text-[10px] font-bold text-[#10B981] flex items-center gap-1">
+                            <div className="text-[10px] font-bold text-[#06b6d4] flex items-center gap-1">
                                 <span>Sabitlendi</span>
                                 <span className="text-[8px] text-zinc-500">•</span>
                                 <span style={{ color: getRoleColor(pinnedMessage.role) }}>{pinnedMessage.username}</span>
@@ -732,7 +732,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         if (msg.role === 'system_tip' && msg.tipData) {
                             return (
                                 <div key={msg.id || i} className="px-2 py-1 mx-1.5">
-                                    <div className="relative overflow-hidden rounded-md border border-yellow-500/80 bg-[#1e1c17] p-2.5 flex items-center justify-between text-left shadow-[0_2px_10px_rgba(234,179,8,0.15)] group cursor-default transition-all duration-300">
+                                    <div className="relative overflow-hidden rounded-md border border-yellow-500/80 bg-[#14141a] p-2.5 flex items-center justify-between text-left shadow-[0_2px_10px_rgba(234,179,8,0.15)] group cursor-default transition-all duration-300">
                                         <div className="flex items-center gap-2.5 relative z-10 w-full">
                                             <div className="w-5 h-5 flex items-center justify-center shrink-0">
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-zinc-400 drop-shadow-sm"><path d="M12 2L2 12l10 10 10-10L12 2z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor" /></svg>
@@ -767,10 +767,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         return (
                         <div 
                             key={msg.id || i} 
-                            className={`px-3 py-2 flex flex-col gap-1 relative group text-left cursor-default transition-all duration-300 rounded-xl mx-2 mb-2 ${
-                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-gradient-to-r from-emerald-500/10 to-[#1A1D24] border border-emerald-500/20' : 
-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-[#1A1D24] border border-[#2A2E3D]' : 
-                                'bg-[#1A1D24] border border-[#2A2E3D] hover:bg-[#20242D]'
+                            className={`px-3 py-2.5 flex flex-col gap-1 relative group text-left cursor-default transition-all duration-300 rounded-md mx-2 mb-2 ${
+                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#0B0E14] border border-emerald-500/20' : 
+                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-[#0B0E14]' : 
+                                'bg-[#14141a] hover:bg-[#242938]'
                             }`}
                             onContextMenu={(e) => {
                                 if (isAdmin) {
@@ -815,13 +815,13 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 </button>
 
                                 {activeMenuId === msg.id && (
-                                  <div className="absolute right-0 mt-1 bg-[#1A1D24] rounded-lg shadow-2xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
+                                  <div className="absolute right-0 mt-1 bg-[#14141a] border border-white/5 rounded-lg shadow-2xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
                                     <button 
                                       onClick={() => {
                                         handlePinMessage(msg.message, msg.username, msg.role || 'member');
                                         setActiveMenuId(null);
                                       }}
-                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-[#10B981] transition-colors flex items-center gap-1.5"
+                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-[#06b6d4] transition-colors flex items-center gap-1.5"
                                     >
                                       📌 Sabitle
                                     </button>
@@ -849,7 +849,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             )}
 
                             {activeMutePopup === msg.id && (
-                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#111317', borderRadius: '8px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', minWidth: '220px' }}>
+                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#0B0E14', borderRadius: '8px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', minWidth: '220px' }}>
                                     <div style={{ padding: '12px' }}>
                                         <input value={muteReason} onChange={(e) => setMuteReason(e.target.value)} placeholder="Ceza nedeni (zorunlu)" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', padding: '8px 10px', fontSize: '10px', color: '#fff', outline: 'none', border: 'none' }} />
                                     </div>
@@ -867,7 +867,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             </div>
 
             {/* Input Footer Area */}
-            <div className="px-4 py-4 bg-[#0F1219] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
+            <div className="px-4 py-4 bg-[#0B0E14] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-transparent relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
                 {/* Message Input */}
                 {!siteUser ? (
                     <div className="flex flex-col items-center justify-center">
@@ -875,12 +875,12 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             type="text"
                             disabled
                             placeholder="Mesaj göndermek için lütfen giriş yapın"
-                            className="w-full bg-[#13161C] border border-[#2A2E3D] text-[12px] font-medium text-center text-gray-500 rounded-xl px-4 py-3.5 cursor-not-allowed shadow-inner"
+                            className="w-full bg-[#14141a] text-[12px] font-medium text-center text-zinc-400 rounded-md px-4 py-4 cursor-not-allowed"
                         />
                     </div>
                 ) : (
                     <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
-                        <div className="relative flex items-center bg-[#13161C] border border-[#2A2E3D] focus-within:border-[#10B981] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)] rounded-xl overflow-hidden transition-all duration-300">
+                        <div className="relative flex items-center bg-[#14141a] border border-transparent focus-within:border-[#10b981] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)] rounded-xl overflow-hidden transition-all duration-300">
                             <input
                                 type="text"
                                 value={newMessage}
@@ -895,7 +895,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 <button
                                     type="submit"
                                     disabled={!newMessage.trim()}
-                                    className="text-black bg-[#10B981] disabled:bg-[#2A2E3D] disabled:text-gray-500 hover:bg-[#059669] transition-all p-2 rounded-lg ml-1 shadow-[0_0_10px_rgba(16,185,129,0.2)] disabled:shadow-none"
+                                    className="text-white bg-[#06b6d4] disabled:bg-[#2A2E3D] disabled:text-gray-500 hover:bg-[#059669] transition-all p-2 rounded-lg ml-1 shadow-[0_0_10px_rgba(16,185,129,0.2)] disabled:shadow-none"
                                 >
                                     <Send className="w-4 h-4 ml-0.5" />
                                 </button>

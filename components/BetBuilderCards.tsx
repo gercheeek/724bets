@@ -9,8 +9,8 @@ const BetBuilderCards: React.FC = () => {
       id: 1,
       title: 'Fransa - İspanya',
       iconColor: 'text-blue-400',
-      iconBg: 'bg-blue-500/20',
-      borderClass: 'border-l-blue-500/50 border-b-green-500/50',
+      iconBg: 'bg-[#10b981]/20',
+      borderClass: 'border-l-#10b981/50 border-b-green-500/50',
       bets: [
         '1. Yarı: Doğru Skor: 1:1',
         'Kornerler: Kornerler Sonuç: 1',
@@ -39,8 +39,8 @@ const BetBuilderCards: React.FC = () => {
       id: 3,
       title: 'İngiltere - Arjantin',
       iconColor: 'text-blue-400',
-      iconBg: 'bg-blue-500/20',
-      borderClass: 'border-blue-500/50',
+      iconBg: 'bg-[#10b981]/20',
+      borderClass: 'border-[#10b981]/50',
       bets: [
         'Doğru Skor: 2:2',
         'Gol atmak: Lionel Andres Messi'
@@ -61,7 +61,7 @@ const BetBuilderCards: React.FC = () => {
           >
             BetBuilder Özel
             {activeTab === 'betbuilder' && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#10B981] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#06b6d4] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
             )}
           </button>
           <button 
@@ -70,7 +70,7 @@ const BetBuilderCards: React.FC = () => {
           >
             Günün çoklu bahsi
             {activeTab === 'gunun_bahsi' && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#10B981] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#06b6d4] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
             )}
           </button>
         </div>
@@ -97,7 +97,7 @@ const BetBuilderCards: React.FC = () => {
             style={{ 
               borderWidth: card.isSuper ? '2px' : '1px', 
               borderColor: card.isSuper ? '#f97316' : '#2A303D',
-              borderLeftColor: card.id === 1 ? '#3b82f6' : undefined,
+              borderLeftColor: card.id === 1 ? '#10b981' : undefined,
               borderBottomColor: card.id === 1 ? '#22c55e' : undefined,
             }}
           >
@@ -125,7 +125,7 @@ const BetBuilderCards: React.FC = () => {
                   
                   return (
                     <li key={i} className="text-[12px] text-zinc-300 relative flex items-center">
-                      <div className={`absolute -left-[23px] w-1.5 h-1.5 rounded-full ${card.isSuper ? 'bg-orange-500 shadow-[0_0_5px_#f97316]' : 'bg-blue-500 shadow-[0_0_5px_#3b82f6]'}`}></div>
+                      <div className={`absolute -left-[23px] w-1.5 h-1.5 rounded-full ${card.isSuper ? 'bg-orange-500 shadow-[0_0_5px_#f97316]' : 'bg-[#10b981] shadow-[0_0_5px_#10b981]'}`}></div>
                       <span>
                         {prefix ? prefix + ': ' : ''}
                         <strong className="text-white font-bold">{boldPart}</strong>

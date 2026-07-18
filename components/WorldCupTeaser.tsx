@@ -8,7 +8,7 @@ const slides = [
   {
     id: 'iphone',
     bgImage: 'https://images.unsplash.com/photo-1605236453806-6ff36851218e?q=80&w=2000&auto=format&fit=crop',
-    title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#10B981] to-[#00B273]">iPhone 17 Pro Max</span> Çekilişi</>,
+    title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#06b6d4] to-[#00B273]">iPhone 17 Pro Max</span> Çekilişi</>,
     subtitle: 'Yepyeni bir iPhone 17 Pro Max 256GB kazanma şansı için çekilişe hemen katılın!',
     buttonText: 'ŞİMDİ KATIL',
     statsLabel: 'Son Katılan',
@@ -17,7 +17,7 @@ const slides = [
   {
     id: 'worldcup-double',
     bgImage: '/images/football_macro_hero.jpg',
-    title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3B82F6] to-[#60A5FA]">DÜNYA KUPASI 2026</span></>,
+    title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#10b981] to-[#34d399]">DÜNYA KUPASI 2026</span></>,
     subtitle: 'KÂRINIZI İKİYE KATLAYIN! Herhangi bir oyuncuya gol atar bahsi alın, ilk golü o atarsa kazancınızı ikiye katlayalım!',
     buttonText: 'ŞİMDİ OYNA',
     statsLabel: 'Maksimum Ödül',
@@ -78,7 +78,7 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/90 to-[#0B0E14]/20 group-hover:from-[#0B0E14] group-hover:via-[#0B0E14]/80 group-hover:to-transparent transition-colors duration-500"></div>
               {/* Neon Green Glow Effect */}
-              <div className="absolute top-0 left-0 w-1/2 h-full bg-[#10B981]/5 blur-[100px] pointer-events-none"></div>
+              <div className="absolute top-0 left-0 w-1/2 h-full bg-[#06b6d4]/5 blur-[100px] pointer-events-none"></div>
             </div>
 
             {/* Content Container */}
@@ -103,10 +103,10 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
                       e.stopPropagation();
                       window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'register' }));
                     }}
-                    className="relative overflow-hidden group/btn bg-transparent border-2 border-[#10B981] hover:bg-[#10B981]/10 text-white font-black px-8 h-10 md:h-12 text-[11px] sm:text-xs tracking-[0.15em] rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(0,255,163,0.1)] hover:shadow-[0_0_25px_rgba(0,255,163,0.3)] hover:-translate-y-0.5 flex items-center justify-center uppercase w-full md:w-auto"
+                    className="relative overflow-hidden group/btn bg-transparent border-2 border-[#06b6d4] hover:bg-[#06b6d4]/10 text-white font-black px-8 h-10 md:h-12 text-[11px] sm:text-xs tracking-[0.15em] rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(0,255,163,0.1)] hover:shadow-[0_0_25px_rgba(0,255,163,0.3)] hover:-translate-y-0.5 flex items-center justify-center uppercase w-full md:w-auto"
                   >
                     <span className="relative z-10 flex items-center justify-center h-full pt-[2px]">{slide.buttonText}</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#10B981]/20 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#06b6d4]/20 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                   </button>
                 </div>
               </div>
@@ -123,7 +123,7 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
                 e.stopPropagation();
                 setCurrentSlide(idx);
               }}
-              className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-6 bg-[#10B981]' : 'w-2 bg-white/20 hover:bg-white/40'}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-6 bg-[#06b6d4]' : 'w-2 bg-white/20 hover:bg-white/40'}`}
             />
           ))}
         </div>

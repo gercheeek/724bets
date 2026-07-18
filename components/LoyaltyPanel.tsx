@@ -9,7 +9,7 @@ import {
 
 // ─── Default Config ────────────────────────────────────────────────────────
 export const DEFAULT_LOYALTY_CONFIG: LoyaltyConfig = {
-    programName: '724BAHİS.NET Sadakat Programı',
+    programName: 'AHBAPBET.NET Sadakat Programı',
     coinName: 'Coin',
     isActive: true,
     rules: [
@@ -45,7 +45,7 @@ export const DEFAULT_LOYALTY_CONFIG: LoyaltyConfig = {
         },
         {
             id: 'm3', name: '25 FreeSpin', description: '25 ücretsiz dönüş Slot oyunlarında',
-            type: 'freespin', coinCost: 200, emoji: '🎰', color: '#3b82f6', isActive: true, stock: -1,
+            type: 'freespin', coinCost: 200, emoji: '🎰', color: '#10b981', isActive: true, stock: -1,
         },
         {
             id: 'm4', name: '100 FreeSpin', description: '100 ücretsiz dönüş Slot oyunlarında',
@@ -220,7 +220,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                             <Star className="w-5 h-5 text-[#f0b90b]" />
                             <h1 className="text-[var(--text-primary)] font-black text-xl tracking-tight">{cfg.programName}</h1>
                         </div>
-                        <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">724bahis.net.net × 724BAHİS.NET Sadakat Sistemi</p>
+                        <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">ahbapbet.net.net × AHBAPBET.NET Sadakat Sistemi</p>
                     </div>
                     {onClose && (
                         <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
@@ -232,7 +232,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                 {/* Coin stats bar */}
                 <div className="grid grid-cols-3 gap-3 mb-5">
                     <StatCard label={cfg.coinName} value={loyalty.coins.toLocaleString('tr')} icon={<Coins className="w-5 h-5" />} color="#f0b90b" sub="Mevcut bakiye" />
-                    <StatCard label="Çekiliş" value={loyalty.tickets} icon={<Ticket className="w-5 h-5" />} color="#3b82f6" sub="Bilet sayısı" />
+                    <StatCard label="Çekiliş" value={loyalty.tickets} icon={<Ticket className="w-5 h-5" />} color="#10b981" sub="Bilet sayısı" />
                     <StatCard label="Toplam" value={loyalty.totalEarned.toLocaleString('tr')} icon={<Trophy className="w-5 h-5" />} color="#10b981" sub="Kazanılan coin" />
                 </div>
 
@@ -411,7 +411,7 @@ const LoyaltyPanel: React.FC<LoyaltyPanelProps> = ({ config, userId, onClose, on
                                     <div className={`font-black text-sm ${tx.type === 'earn' ? 'text-green-500' : 'text-orange-500'}`}>
                                         {tx.type === 'earn' ? '+' : '-'}{tx.amount} {cfg.coinName}
                                     </div>
-                                    {tx.tickets && tx.tickets > 0 ? <div className="text-blue-500 text-[10px] font-black">+{tx.tickets} Bilet</div> : null}
+                                    {tx.tickets && tx.tickets > 0 ? <div className="text-[#10b981] text-[10px] font-black">+{tx.tickets} Bilet</div> : null}
                                 </div>
                             </div>
                         ))}

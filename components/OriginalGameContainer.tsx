@@ -34,13 +34,13 @@ export default function OriginalGameContainer({
                 {/* Vignette */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.7)_100%)]"></div>
                 {/* Subtle Electric Blue Center Glow */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#3B82F6]/10 blur-[120px] rounded-[100%]"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#10b981]/10 blur-[120px] rounded-[100%]"></div>
             </div>
 
-            {/* ── 724BETS CORPORATE WATERMARK ── */}
+            {/* ── AHBAPBET CORPORATE WATERMARK ── */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none text-center w-full">
                 <h1 className="text-[100px] md:text-[160px] font-black italic tracking-tighter text-white opacity-[0.03] select-none">
-                    724BETS
+                    AHBAPBET
                 </h1>
             </div>
 
@@ -66,7 +66,7 @@ export default function OriginalGameContainer({
                     <span className="text-[#ffd700] font-black tracking-[0.3em] uppercase text-sm drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
                         {title}
                     </span>
-                    <span className="text-gray-500 text-[9px] uppercase tracking-widest mt-1">724Bets Original</span>
+                    <span className="text-gray-500 text-[9px] uppercase tracking-widest mt-1">Ahbapbet Original</span>
                 </div>
 
                 {/* Right: Provably Fair Badge */}

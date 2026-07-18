@@ -6,7 +6,6 @@ import {
   Home, FileText, Crosshair, Flag, Swords, Dribbble, Globe
 } from 'lucide-react';
 import maclarData from '../maclar.json';
-import WorldCupTeaser from './WorldCupTeaser';
 import SportsBanners from './SportsBanners';
 import { FloatingBetSlip } from './FloatingBetSlip';
 import { useBetting } from '../contexts/BettingContext';
@@ -251,27 +250,28 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
           <div className="p-4 md:p-6 w-full">
             
             {/* New Rainbet-style Sports Menu */}
-            <div className={`w-full bg-[#1e2331] rounded-[4px] border border-[#2a3040] shadow-sm mb-4 ${!isLoggedIn ? 'hidden md:block' : ''}`}>
+            <div className={`w-full bg-white/5 backdrop-blur-md rounded-xl border border-white/10 shadow-lg mb-6 ${!isLoggedIn ? 'hidden md:block' : ''}`}>
                <div className="flex items-center overflow-x-auto whitespace-nowrap scrollbar-hide px-2 py-1.5 h-[52px]">
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors"><Home size={18} /></button>
-                  <button className="h-10 px-2 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors">
-                     <div className="border border-current rounded-[3px] px-1.5 py-[2px] text-[10px] font-bold">CANLI</div>
+                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all"><Home size={18} /></button>
+                  <button className="h-10 px-2 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all relative group">
+                     <div className="border border-current rounded-[3px] px-1.5 py-[2px] text-[10px] font-bold group-hover:border-[#10b981] group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all">CANLI</div>
+                     <div className="absolute top-1 right-0 w-1.5 h-1.5 bg-[#10b981] rounded-full animate-ping"></div>
                   </button>
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors"><Star size={18} /></button>
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors"><FileText size={18} /></button>
+                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all"><Star size={18} /></button>
+                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all"><FileText size={18} /></button>
                   
                   <div className="w-px h-6 bg-[#2a3040] mx-1"></div>
 
                   <button className="w-10 h-10 shrink-0 flex items-center justify-center text-white transition-colors">
-                     <div className="w-[22px] h-[22px] rounded-full bg-blue-500 flex items-center justify-center border-[2px] border-white">
+                     <div className="w-[22px] h-[22px] rounded-full bg-[#10b981] flex items-center justify-center border-[2px] border-white">
                         <span className="text-[7px] font-black leading-none text-white">WC<br/>26</span>
                      </div>
                   </button>
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors">
+                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all">
                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                   </button>
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors"><Dribbble size={18} /></button>
-                  <button className="h-10 px-2 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors">
+                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all"><Dribbble size={18} /></button>
+                  <button className="h-10 px-2 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all">
                      <span className="text-[14px] font-black tracking-tighter border-y-2 border-current px-0.5">MMA</span>
                   </button>
                   
@@ -283,50 +283,47 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                      { icon: <Flag size={18} /> },
                      { icon: <Swords size={18} /> },
                      { icon: <Gamepad2 size={18} /> }
-                  ].map((item, i) => (
-                     <button key={i} className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors">
+                  ].map((item, i) => {
+                     const isActive = i === 0;
+                     return (
+                     <button key={i} className={`w-10 h-10 shrink-0 flex items-center justify-center transition-all ${isActive ? 'bg-[#10b981]/10 text-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.15)] border border-[#10b981]/20 rounded-lg' : 'text-[#94a3b8] hover:text-[#10b981] hover:scale-110'}`}>
                         {item.icon}
                      </button>
-                  ))}
+                     );
+                  })}
 
                   <div className="flex-1 min-w-[20px]"></div>
 
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white transition-colors"><Search size={18} /></button>
+                  <button className="w-12 h-12 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white hover:bg-white/5 rounded-full transition-colors"><Search size={20} /></button>
                </div>
             </div>
 
             {/* Sub Pills */}
-            <div className={`flex overflow-x-auto scrollbar-hide items-center gap-2 mb-4 w-full ${!isLoggedIn ? 'hidden md:flex' : ''}`}>
-               <button className="shrink-0 bg-[#1e2331] hover:bg-[#2a3040] border border-[#2a3040] text-white text-xs font-bold px-4 py-2.5 rounded-[4px] flex items-center gap-2 transition-colors">
+            <div className={`flex overflow-x-auto scrollbar-hide items-center gap-3 mb-6 w-full ${!isLoggedIn ? 'hidden md:flex' : ''}`}>
+               <button className="shrink-0 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#10b981]/50 text-[#94a3b8] hover:text-white text-xs font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors active-spring backdrop-blur-sm">
                   <div className="w-3 h-3 grid grid-cols-2 gap-[1px]">
-                     <div className="bg-yellow-500 rounded-sm"></div><div className="bg-yellow-500 rounded-sm"></div>
-                     <div className="bg-yellow-500 rounded-sm"></div><div className="bg-yellow-500 rounded-sm"></div>
+                     <div className="bg-[#10b981] rounded-sm"></div><div className="bg-[#10b981] rounded-sm"></div>
+                     <div className="bg-[#10b981] rounded-sm"></div><div className="bg-[#10b981] rounded-sm"></div>
                   </div>
                   ÖNE ÇIKANLAR
                </button>
-               <button className="shrink-0 bg-[#1e2331] hover:bg-[#2a3040] border border-[#2a3040] text-[#94a3b8] hover:text-white text-xs font-bold px-4 py-2.5 rounded-[4px] flex items-center gap-2 transition-colors">
+               <button className="shrink-0 bg-[#10b981] text-black shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:bg-[#10b981]/90 text-xs font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors active-spring">
                   <Activity size={14} />
                   TAHMİNLER
                </button>
-               <button className="shrink-0 bg-[#1e2331] hover:bg-[#2a3040] border border-[#2a3040] text-[#94a3b8] hover:text-white text-xs font-bold px-4 py-2.5 rounded-[4px] flex items-center gap-2 transition-colors">
+               <button className="shrink-0 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#10b981]/50 text-[#94a3b8] hover:text-white text-xs font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors active-spring backdrop-blur-sm">
                   <Calendar size={14} />
                   ETKİNLİK OLUŞTURUCU
                </button>
             </div>
             
-            {/* World Cup Slider */}
-            <div className="w-full h-[140px] md:h-[200px] mb-6">
-               <WorldCupTeaser />
-            </div>
 
-            {/* Static 3-Column Banners */}
-            <SportsBanners />
 
             {/* Matches Carousel */}
             <div className="mb-8 mt-2">
                {/* Pagination Dots above carousel */}
                <div className="flex items-center gap-1.5 mb-4 px-2">
-                  <div className="h-1 w-6 bg-blue-500 rounded-full"></div>
+                  <div className="h-1 w-6 bg-[#10b981] rounded-full"></div>
                   <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
                   <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
                   <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
@@ -337,27 +334,30 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
 
                <div className="flex overflow-x-auto gap-4 scrollbar-hide snap-x snap-mandatory pb-4">
                   {/* Card 1 */}
-                  <div className="min-w-[320px] max-w-[340px] bg-[#161c28] rounded-xl border border-[#2a3040] flex flex-col p-4 snap-center shrink-0">
+                  <div className="min-w-[320px] max-w-[340px] bg-[#1e1c24]/60 backdrop-blur-md rounded-xl border border-white/10 hover:border-[#10b981]/50 shadow-lg flex flex-col p-4 snap-center shrink-0 transition-colors group">
                      <div className="flex items-center justify-between text-[11px] text-[#94a3b8] mb-4">
                         <div className="flex items-center gap-1.5">
                            <Globe size={14} />
                            <span>Uluslararası • Dünya Kupası</span>
                         </div>
-                        <span>Yarın, 22:00</span>
+                        <span className="flex items-center gap-1.5 text-red-500 font-bold tracking-wider">
+                           <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+                           75' CANLI
+                        </span>
                      </div>
                      <div className="flex items-center justify-between mb-6 relative">
-                        <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none text-6xl font-black">
-                           VS
+                        <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                           1 - 0
                         </div>
                         <div className="flex flex-col items-center gap-2 z-10 w-20">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center text-2xl">
+                           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-2xl shadow-inner">
                               🇪🇸
                            </div>
                            <span className="text-white font-bold text-[11px] text-center w-full truncate">İspanya</span>
                         </div>
                         <div className="text-[10px] text-[#94a3b8] font-bold mt-4 z-10">1x2</div>
                         <div className="flex flex-col items-center gap-2 z-10 w-20">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center text-2xl">
+                           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-2xl shadow-inner">
                               🇦🇷
                            </div>
                            <span className="text-white font-bold text-[11px] text-center w-full truncate">Arjantin</span>
@@ -379,8 +379,8 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                               }}
                               className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-between text-[10px] transition-colors border ${
                                 isSel 
-                                  ? 'bg-[#10B981] border-[#10B981] text-black shadow-[#10B981]/20'
-                                  : 'bg-[#1e2331] hover:bg-[#2a3040] border-[#2a3040]'
+                                  ? 'bg-[#10b981] border-[#10b981] text-black shadow-[#10b981]/20 active-spring'
+                                  : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-[#10b981]'
                               }`}>
                                <span className={`font-medium ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.label}</span>
                                <span className={`font-bold ${isSel ? 'text-black' : 'text-white'}`}>{btn.odd}</span>
@@ -391,27 +391,30 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                   </div>
 
                   {/* Card 2 */}
-                  <div className="min-w-[320px] max-w-[340px] bg-[#161c28] rounded-xl border border-[#2a3040] flex flex-col p-4 snap-center shrink-0">
+                  <div className="min-w-[320px] max-w-[340px] bg-[#1e1c24]/60 backdrop-blur-md rounded-xl border border-white/10 hover:border-[#10b981]/50 shadow-lg flex flex-col p-4 snap-center shrink-0 transition-colors group">
                      <div className="flex items-center justify-between text-[11px] text-[#94a3b8] mb-4">
                         <div className="flex items-center gap-1.5">
                            <Swords size={14} />
                            <span>Counter-Strike 2 A...</span>
                         </div>
-                        <span>Bugün, 15:00</span>
+                        <span className="flex items-center gap-1.5 text-red-500 font-bold tracking-wider">
+                           <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+                           CANLI
+                        </span>
                      </div>
                      <div className="flex items-center justify-between mb-6 relative">
-                        <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none text-6xl font-black">
-                           CS
+                        <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                           12 - 10
                         </div>
                         <div className="flex flex-col items-center gap-2 z-10 w-24">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-xl font-black text-yellow-500">
+                           <div className="w-10 h-10 rounded-full overflow-hidden bg-yellow-500/20 backdrop-blur-md border border-yellow-500/30 flex items-center justify-center text-xl font-black text-yellow-500 shadow-inner shadow-yellow-500/20">
                               NIP
                            </div>
                            <span className="text-white font-bold text-[11px] text-center w-full truncate">Ninjas in Pyjamas</span>
                         </div>
                         <div className="text-[10px] text-[#94a3b8] font-bold mt-4 z-10">Kazanan</div>
                         <div className="flex flex-col items-center gap-2 z-10 w-24">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-red-500/10 border border-red-500/20 flex items-center justify-center text-xl font-black text-red-500">
+                           <div className="w-10 h-10 rounded-full overflow-hidden bg-red-500/20 backdrop-blur-md border border-red-500/30 flex items-center justify-center text-xl font-black text-red-500 shadow-inner shadow-red-500/20">
                               K27
                            </div>
                            <span className="text-white font-bold text-[11px] text-center w-full truncate">K27</span>
@@ -432,8 +435,8 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                               }}
                               className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-between text-xs transition-colors border ${
                                 isSel 
-                                  ? 'bg-[#10B981] border-[#10B981] text-black shadow-[#10B981]/20'
-                                  : 'bg-[#1e2331] hover:bg-[#2a3040] border-[#2a3040]'
+                                  ? 'bg-[#10b981] border-[#10b981] text-black shadow-[#10b981]/20 active-spring'
+                                  : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-[#10b981]'
                               }`}>
                                <span className={`font-medium ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.label}</span>
                                <span className={`font-bold ${isSel ? 'text-black' : 'text-white'}`}>{btn.odd}</span>
@@ -444,7 +447,7 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                   </div>
 
                   {/* Card 3 */}
-                  <div className="min-w-[320px] max-w-[340px] bg-[#161c28] rounded-xl border border-[#2a3040] flex flex-col p-4 snap-center shrink-0">
+                  <div className="min-w-[320px] max-w-[340px] bg-[#1e1c24]/60 backdrop-blur-md rounded-xl border border-white/10 hover:border-[#10b981]/50 shadow-lg flex flex-col p-4 snap-center shrink-0 transition-colors group">
                      <div className="flex items-center justify-between text-[11px] text-[#94a3b8] mb-4">
                         <div className="flex items-center gap-1.5">
                            <Target size={14} />
@@ -485,7 +488,7 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                               }}
                               className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-between text-xs transition-colors border ${
                                 isSel 
-                                  ? 'bg-[#10B981] border-[#10B981] text-black shadow-[#10B981]/20'
+                                  ? 'bg-[#06b6d4] border-[#06b6d4] text-black shadow-[#06b6d4]/20'
                                   : 'bg-[#1e2331] hover:bg-[#2a3040] border-[#2a3040]'
                               }`}>
                                <span className={`font-medium ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.label}</span>
@@ -506,28 +509,28 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                </div>
                
                <div className="flex items-center overflow-x-auto gap-2 scrollbar-hide px-2 pb-2">
-                  <button className="bg-blue-600 hover:bg-blue-500 text-white rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
+                  <button className="bg-[#10b981] text-black shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:bg-[#10b981]/90 rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
                      <Activity size={14} /> Futbol
                   </button>
-                  <button className="bg-[#1e2331] hover:bg-[#2a3040] text-[#94a3b8] hover:text-white rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
+                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
                      <Target size={14} /> Beyzbol
                   </button>
-                  <button className="bg-[#1e2331] hover:bg-[#2a3040] text-[#94a3b8] hover:text-white rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
+                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
                      <Trophy size={14} /> Tenis
                   </button>
-                  <button className="bg-[#1e2331] hover:bg-[#2a3040] text-[#94a3b8] hover:text-white rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
+                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
                      <Gamepad2 size={14} /> eFutbol
                   </button>
-                  <button className="bg-[#1e2331] hover:bg-[#2a3040] text-[#94a3b8] hover:text-white rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
+                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Dota 2
                   </button>
-                  <button className="bg-[#1e2331] hover:bg-[#2a3040] text-[#94a3b8] hover:text-white rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
+                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
                      <Dribbble size={14} /> Basketbol
                   </button>
-                  <button className="bg-[#1e2331] hover:bg-[#2a3040] text-[#94a3b8] hover:text-white rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
+                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
                      <Swords size={14} /> Counter-Strike
                   </button>
-                  <button className="bg-[#1e2331] hover:bg-[#2a3040] text-[#94a3b8] hover:text-white rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
+                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
                      <Activity size={14} /> Buz Hokeyi
                   </button>
                </div>
@@ -543,22 +546,22 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                   { id: 'p5', league: 'Uluslararası • Seçkin Kulüp Hazırlık Maçları', time: 'Bugün, 18:00', t1: 'RW Oberhausen', f1: '🇩🇪', t2: 'Borussia Dortmund', f2: '🇩🇪', odds: [{l:'1',v:'11.00',s:'Oberhausen'}, {l:'beraberlik',v:'9.00',s:'Beraberlik'}, {l:'2',v:'1.16',s:'Dortmund'}] },
                   { id: 'p6', league: 'Uluslararası • Seçkin Kulüp Hazırlık Maçları', time: 'Bugün, 20:00', t1: 'SK Rapid', f1: '🇦🇹', t2: 'Hamburger SV', f2: '🇩🇪', odds: [{l:'1',v:'2.54',s:'Rapid'}, {l:'beraberlik',v:'3.60',s:'Beraberlik'}, {l:'2',v:'2.54',s:'Hamburger'}] },
                ].map((match) => (
-                  <div key={match.id} className="bg-[#161c28] rounded-xl p-4 flex flex-col justify-between border border-transparent hover:border-white/10 transition-colors">
+                  <div key={match.id} className="bg-[#1e1c24]/60 backdrop-blur-md rounded-xl p-4 flex flex-col justify-between border border-white/10 hover:border-[#10b981]/50 transition-colors shadow-lg group">
                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-1.5 text-[11px] text-[#94a3b8]">
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
                            <Globe size={12} />
                            <span className="truncate max-w-[200px]">{match.league}</span>
                         </div>
-                        <div className="text-[11px] text-[#94a3b8] shrink-0">{match.time}</div>
+                        <div className="text-[10px] font-bold text-zinc-500 shrink-0">{match.time}</div>
                      </div>
                      <div className="flex flex-col gap-2 mb-4">
                         <div className="flex items-center gap-3">
                            <span className="text-xl w-6 text-center">{match.f1}</span>
-                           <span className="text-sm font-bold text-white truncate">{match.t1}</span>
+                           <span className="text-sm font-black text-white truncate tracking-wide">{match.t1}</span>
                         </div>
                         <div className="flex items-center gap-3">
                            <span className="text-xl w-6 text-center">{match.f2}</span>
-                           <span className="text-sm font-bold text-white truncate">{match.t2}</span>
+                           <span className="text-sm font-black text-white truncate tracking-wide">{match.t2}</span>
                         </div>
                      </div>
                      <div className="flex items-center gap-2 mt-auto">
@@ -573,17 +576,17 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                                        e.stopPropagation();
                                        toggleBetSelection({ id: match.id }, '1x2', btn.s, parseFloat(btn.v));
                                     }}
-                                    className={`flex-1 py-1.5 px-1.5 sm:px-3 rounded flex flex-col sm:flex-row items-center justify-center sm:justify-between text-[10px] sm:text-[11px] transition-colors border ${
+                                    className={`flex-1 py-1.5 px-1.5 sm:px-3 rounded flex flex-col sm:flex-row items-center justify-center sm:justify-between text-[10px] sm:text-[11px] transition-colors border group ${
                                        isSel 
-                                          ? 'bg-[#10B981] border-[#10B981] text-black shadow-[#10B981]/20'
-                                          : 'bg-[#1e2331] hover:bg-[#2a3040] border-transparent'
+                                          ? 'bg-[#10b981] border-[#10b981] text-black shadow-[#10b981]/20 active-spring'
+                                          : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-[#10b981]'
                                     }`}>
                                     <span className={`font-medium ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.l}</span>
-                                    <span className={`font-bold ${isSel ? 'text-black' : 'text-white'}`}>{btn.v}</span>
+                                    <span className={`font-bold transition-transform group-hover:scale-110 ${isSel ? 'text-black' : 'text-white'}`}>{btn.v}</span>
                                  </button>
                               );
                            })}
-                           <button className="w-8 flex items-center justify-center bg-[#1e2331] hover:bg-[#2a3040] rounded text-[#94a3b8]">
+                           <button className="w-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded text-[#94a3b8] transition-colors active-spring">
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
                            </button>
                         </div>
@@ -600,7 +603,7 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                </div>
                <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-4">
                   {/* Promo Banner */}
-                  <div className="relative rounded-xl overflow-hidden bg-[#161c28] min-h-[300px] flex flex-col items-center justify-center p-8 text-center group">
+                  <div className="relative rounded-xl overflow-hidden bg-[#1e1c24]/60 backdrop-blur-md border border-white/10 min-h-[300px] flex flex-col items-center justify-center p-8 text-center group shadow-lg hover:border-[#10b981]/50 transition-colors">
                      {/* Background Image */}
                      <div className="absolute inset-0 bg-[url('/football_macro_hero_1784349034576.jpg')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700"></div>
                      <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-[#0b0e14]/80 to-transparent"></div>
@@ -616,8 +619,8 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                         </h3>
                         
                         <div className="flex flex-col items-center gap-2 mb-8">
-                           <div className="flex items-center gap-2 text-xs font-bold text-[#10B981] mb-1 uppercase tracking-widest">
-                              <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></div>
+                           <div className="flex items-center gap-2 text-xs font-bold text-[#10b981] mb-1 uppercase tracking-widest">
+                              <div className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
                               KALAN SÜRE
                            </div>
                            <div className="flex items-center gap-4">
@@ -638,15 +641,15 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                            </div>
                         </div>
                         
-                        <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all hover:scale-105">
+                        <button className="bg-[#10b981] text-black font-black py-3 px-8 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all hover:scale-105 hover:bg-[#10b981]/90 active-spring tracking-wider">
                            NASIL KATILIRIM
                         </button>
                      </div>
                   </div>
 
                   {/* Leaderboard Table */}
-                  <div className="bg-[#161c28] rounded-xl overflow-hidden border border-[#2a3040] flex flex-col h-[380px] lg:h-auto">
-                     <div className="p-4 border-b border-[#2a3040] text-center text-sm font-bold text-white flex items-center justify-center gap-2 bg-[#1a2130]/50">
+                  <div className="bg-[#1e1c24]/60 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 flex flex-col h-[380px] lg:h-auto shadow-lg">
+                     <div className="p-4 border-b border-white/10 text-center text-sm font-bold text-white flex items-center justify-center gap-2 bg-black/20">
                         🏆 Tam skor tablosu
                      </div>
                      <div className="flex-1 overflow-y-auto scrollbar-hide">
@@ -720,15 +723,15 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                            <span className="text-white font-bold text-xs bg-white/5 px-2 py-1 rounded">{l.o}</span>
                         </div>
                      ))}
-                     <div className="mt-2 bg-[#10B981]/10 border border-[#10B981]/30 rounded-lg p-2.5 flex justify-between items-center relative overflow-hidden">
-                        <div className="absolute top-0 right-0 bg-[#10B981] text-black text-[8px] font-black px-2 py-0.5 rounded-bl">KOMBİNE ÖZEL</div>
-                        <span className="text-[#10B981] text-xs font-bold mt-1">x1.15 Kombine Özel</span>
+                     <div className="mt-2 bg-[#06b6d4]/10 border border-[#06b6d4]/30 rounded-lg p-2.5 flex justify-between items-center relative overflow-hidden">
+                        <div className="absolute top-0 right-0 bg-[#06b6d4] text-black text-[8px] font-black px-2 py-0.5 rounded-bl">KOMBİNE ÖZEL</div>
+                        <span className="text-[#06b6d4] text-xs font-bold mt-1">x1.15 Kombine Özel</span>
                      </div>
                   </div>
 
                   <div className="mt-auto pt-4 border-t border-[#2a3040]">
                      <div className="relative mb-3">
-                        <input type="text" value="1" readOnly className="w-full bg-[#0b0e14] border border-[#2a3040] rounded-lg py-2.5 px-4 text-right text-white font-bold pr-8 outline-none" />
+                        <input type="text" value="1" readOnly className="w-full bg-[#0f172a] border border-[#2a3040] rounded-lg py-2.5 px-4 text-right text-white font-bold pr-8 outline-none" />
                         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94a3b8] font-bold">$</span>
                      </div>
                      <div className="flex gap-2 mb-4">
@@ -740,7 +743,7 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                         <span className="text-[#94a3b8]">Toplam Oran</span>
                         <div className="flex items-center gap-2">
                            <span className="text-[#94a3b8] font-bold line-through">14.04</span>
-                           <span className="text-[#10B981] font-bold text-sm">16.146</span>
+                           <span className="text-[#06b6d4] font-bold text-sm">16.146</span>
                         </div>
                      </div>
                      <div className="flex justify-between items-center mb-4 text-xs">
@@ -769,8 +772,8 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                   </div>
 
                   <div className="flex flex-col items-center gap-2 mb-8">
-                     <span className="text-[10px] font-bold text-[#10B981] tracking-widest uppercase flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div> BAŞLANGIÇ ZAMANI
+                     <span className="text-[10px] font-bold text-[#06b6d4] tracking-widest uppercase flex items-center gap-1">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#06b6d4] animate-pulse"></div> BAŞLANGIÇ ZAMANI
                      </span>
                      <div className="flex items-center gap-3">
                         <div className="flex flex-col items-center">
@@ -823,7 +826,7 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                               }}
                               className={`flex-1 py-3 rounded-lg border flex flex-col items-center justify-center transition-colors ${
                                  isSel 
-                                    ? 'bg-[#10B981] border-[#10B981] text-black shadow-[#10B981]/20'
+                                    ? 'bg-[#06b6d4] border-[#06b6d4] text-black shadow-[#06b6d4]/20'
                                     : 'bg-[#1a2130] hover:bg-[#2a3040] border-[#2a3040]'
                               }`}>
                               <span className={`text-[10px] mb-0.5 ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.l}</span>
@@ -835,7 +838,7 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
 
                   <div className="mt-auto">
                      <div className="relative mb-3">
-                        <input type="text" value="1" readOnly className="w-full bg-[#0b0e14] border border-[#2a3040] rounded-lg py-2.5 px-4 text-right text-white font-bold pr-8 outline-none" />
+                        <input type="text" value="1" readOnly className="w-full bg-[#0f172a] border border-[#2a3040] rounded-lg py-2.5 px-4 text-right text-white font-bold pr-8 outline-none" />
                         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94a3b8] font-bold">$</span>
                      </div>
                      <div className="flex gap-2 mb-4">
@@ -881,7 +884,7 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
                      ].map((r, i) => (
                         <div key={i} className="flex justify-between items-center py-3.5 border-b border-[#2a3040]/30 last:border-0 hover:bg-white/5 px-2 rounded transition-colors cursor-pointer group">
                            <span className="text-xs text-[#94a3b8] font-bold group-hover:text-white transition-colors">{r.k}</span>
-                           <span className="text-xs text-white font-bold bg-[#1a2130] px-3 py-1.5 rounded border border-[#2a3040] group-hover:border-[#3b82f6]/50 group-hover:bg-[#3b82f6]/10 transition-colors">{r.v}</span>
+                           <span className="text-xs text-white font-bold bg-[#1a2130] px-3 py-1.5 rounded border border-[#2a3040] group-hover:border-[#10b981]/50 group-hover:bg-[#10b981]/10 transition-colors">{r.v}</span>
                         </div>
                      ))}
                   </div>

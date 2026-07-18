@@ -514,7 +514,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                         <div style={{
-                                            width: 10, height: 10, background: 'rgba(59,130,246,0.3)', border: '1px solid #3b82f6', borderRadius: 2
+                                            width: 10, height: 10, background: 'rgba(59,130,246,0.3)', border: '1px solid #10b981', borderRadius: 2
                                         }} />
                                         <span style={{ color: '#888', fontSize: 8, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                             SİZİN BİLETLERİNİZ

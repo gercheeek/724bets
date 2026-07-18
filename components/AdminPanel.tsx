@@ -149,8 +149,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const [localHashtags, setLocalHashtags] = useState(hashtags || '');
   const [localWheelConfig, setLocalWheelConfig] = useState<WheelConfig>({ ...wheelConfig });
   const [localBjConfig, setLocalBjConfig] = useState<BlackjackConfig>(bjConfig || { rewards: [], cooldownHours: 4, dealerHitSoft17: true, lastPlayTime: 0 });
-  const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: '724BAHİS.NET Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
-  const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: '724BAHİS.NET', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
+  const [localLoyaltyConfig, setLocalLoyaltyConfig] = useState<LoyaltyConfig>(loyaltyConfig || { programName: 'AHBAPBET.NET Sadakat Programı', coinName: 'Coin', isActive: true, rules: [], marketItems: [] });
+  const [localWelcomePopup, setLocalWelcomePopup] = useState<WelcomePopupConfig>(welcomePopupConfig || { isActive: true, title: 'AHBAPBET.NET', subtitle: '', offerMain: '', offerSub: '', buttonText: '', buttonLink: '' });
 
   const [localSiteStatus, setLocalSiteStatus] = useState<SiteStatusConfig>(siteStatusConfig || { isMaintenanceMode: false, maintenanceMessage: 'Sistemlerimizde bakım çalışması var.' });
   const [localMarquee, setLocalMarquee] = useState<MarqueeConfig>(marqueeConfig || { isActive: true, text: '', speed: 30, color: '#f0b90b', isBold: true });
@@ -341,9 +341,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     });
 
     // Join with the user's suggested manual keyword separator for the premium logo
-    const result = processedItems.join('. 724BAHİS.NET. ');
+    const result = processedItems.join('. AHBAPBET.NET. ');
     
-    setLocalMarquee({ ...localMarquee, text: result + '. 724BAHİS.NET' });
+    setLocalMarquee({ ...localMarquee, text: result + '. AHBAPBET.NET' });
     
     setShowAiMarqueeParser(false);
     setAiMarqueeRawText('');
@@ -655,7 +655,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         recentHistory: item.recentHistory || '8 Kazanç',
         expectedGoals: item.expectedGoals || '3.1',
         bookieOdds: item.bookieOdds || [
-          { name: '724BAHİS.NET', odd1: '1.70', odd2: '1.80', link: 'https://', isHighest: true },
+          { name: 'AHBAPBET.NET', odd1: '1.70', odd2: '1.80', link: 'https://', isHighest: true },
           { name: 'BETKOM', odd1: '1.65', odd2: '1.75', link: 'https://' }
         ],
         createdAt: Date.now()
@@ -1305,7 +1305,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   <div className="flex items-center justify-between pt-2">
                     <button 
                       onClick={() => {
-                        alert('Şifre sıfırlama linki kayıtlı e-posta adresinize (admin@724bets.com) gönderildi.');
+                        alert('Şifre sıfırlama linki kayıtlı e-posta adresinize (admin@ahbapbet.com) gönderildi.');
                       }}
                       className="text-[10px] font-black text-zinc-600 hover:text-white uppercase tracking-widest transition-all underline underline-offset-4"
                     >
@@ -1863,7 +1863,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                        </div>
                     </div>
                     <div className="flex gap-2">
-                       <button onClick={() => setShowLiveOddsBulkModal(true)} className="adm-btn-primary bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 text-[10px]">TOPLU EKLE</button>
+                       <button onClick={() => setShowLiveOddsBulkModal(true)} className="adm-btn-primary bg-blue-600 hover:bg-[#10b981] text-white px-6 py-2 text-[10px]">TOPLU EKLE</button>
                        <button onClick={() => {
                          const newMatch: LiveOddsMatch = { id: Date.now().toString(), homeTeam: '', awayTeam: '', league: '', matchTime: '20:00', odd1: '1.90', oddX: '3.50', odd2: '3.80', isLive: false, link: 'https://' };
                          const u = { ...localLiveOdds, matches: [...(localLiveOdds.matches || []), newMatch] }; setLocalLiveOdds(u); onSaveLiveOddsConfig?.(u);
@@ -1884,7 +1884,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                           <div className="flex gap-2">
                              <input value={match.odd1} className="w-full bg-black border border-amber-500/20 text-amber-500 text-center rounded-lg p-2 text-xs font-black" placeholder="1" />
                              <input value={match.oddX} className="w-full bg-black border border-zinc-800 text-zinc-400 text-center rounded-lg p-2 text-xs font-black" placeholder="X" />
-                             <input value={match.odd2} className="w-full bg-black border border-blue-500/20 text-blue-400 text-center rounded-lg p-2 text-xs font-black" placeholder="2" />
+                             <input value={match.odd2} className="w-full bg-black border border-[#10b981]/20 text-blue-400 text-center rounded-lg p-2 text-xs font-black" placeholder="2" />
                           </div>
                           <div className="flex items-center justify-end gap-2">
                              <button onClick={() => {
@@ -1907,7 +1907,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         {/* Live Odds Bulk Modal */}
         {showLiveOddsBulkModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-            <div className="bg-zinc-950 border border-blue-500/20 p-5 rounded-lg max-w-2xl w-full shadow-[0_0_50px_rgba(59,130,246,0.1)] relative">
+            <div className="bg-zinc-950 border border-[#10b981]/20 p-5 rounded-lg max-w-2xl w-full shadow-[0_0_50px_rgba(59,130,246,0.1)] relative">
               <button
                 onClick={() => setShowLiveOddsBulkModal(false)}
                 className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800"
@@ -1926,13 +1926,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div className="space-y-6">
-                <div className="bg-blue-500/5 border border-blue-500/10 p-4 rounded-lg">
+                <div className="bg-[#10b981]/5 border border-[#10b981]/10 p-4 rounded-lg">
                   <h4 className="text-[10px] font-black text-blue-400 uppercase mb-2 tracking-widest">Beklenen Format:</h4>
                   <p className="text-[11px] text-zinc-500 font-mono">
                     Ev Sahibi - Deplasman | Lig | Saat | 1 | X | 2 | Link
                   </p>
                   <p className="text-[10px] text-zinc-600 mt-2 italic">
-                    Örnek: Galatasaray - Fenerbahçe | Süper Lig | 21:00 | 2.10 | 3.40 | 3.25 | https://724bahis.net
+                    Örnek: Galatasaray - Fenerbahçe | Süper Lig | 21:00 | 2.10 | 3.40 | 3.25 | https://ahbapbet.net
                   </p>
                 </div>
 
@@ -1940,7 +1940,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   value={liveOddsBulkInput}
                   onChange={(e) => setLiveOddsBulkInput(e.target.value)}
                   placeholder="Maçları buraya yapıştırın..."
-                  className="w-full h-48 bg-black border border-zinc-800 rounded-lg p-6 text-white text-sm focus:border-blue-500/50 transition-all outline-none resize-none"
+                  className="w-full h-48 bg-black border border-zinc-800 rounded-lg p-6 text-white text-sm focus:border-[#10b981]/50 transition-all outline-none resize-none"
                 />
 
                 <div className="flex gap-4">
@@ -1952,7 +1952,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   </button>
                   <button
                     onClick={handleLiveOddsBulkParse}
-                    className="flex-[2] py-4 rounded-lg bg-blue-600 text-white font-black text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-[0_10px_20px_rgba(37,99,235,0.2)]"
+                    className="flex-[2] py-4 rounded-lg bg-blue-600 text-white font-black text-xs uppercase tracking-widest hover:bg-[#10b981] transition-all shadow-[0_10px_20px_rgba(37,99,235,0.2)]"
                   >
                     Maçları Sisteme Ekle
                   </button>
@@ -2351,8 +2351,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20">
-                      <TrendingUp className="w-5 h-5 text-blue-500" />
+                    <div className="w-10 h-10 bg-[#10b981]/10 rounded-lg flex items-center justify-center border border-[#10b981]/20">
+                      <TrendingUp className="w-5 h-5 text-[#10b981]" />
                     </div>
                     <div className="text-left">
                       <h3 className="text-white font-black text-sm uppercase tracking-tight italic">YAYINDAKİ ANALİZLER ({localAnalyses.length})</h3>
@@ -2365,7 +2365,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 {contentExpanded.analysis_list && (
                   <div className="p-6 pt-0 animate-fade-in space-y-3">
                     {localAnalyses.map(analysis => (
-                      <div key={analysis.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-lg flex items-center justify-between group hover:border-blue-500/30 transition-all">
+                      <div key={analysis.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-lg flex items-center justify-between group hover:border-[#10b981]/30 transition-all">
                          <div>
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-[8px] font-black px-1.5 py-0.5 rounded uppercase bg-zinc-800 text-zinc-400">{analysis.league}</span>
@@ -2595,7 +2595,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                                       <label className="text-[9px] font-black text-zinc-500 uppercase mb-1.5 block">AFFILIATE YÖNLENDİRME LİNKİ</label>
                                       <input value={bookie.link} onChange={(e) => {
                                         const updated = [...localAnalyses]; updated[idx].bookieOdds[bidx].link = e.target.value; setLocalAnalyses(updated);
-                                      }} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2.5 text-[11px] text-zinc-400 font-mono outline-none focus:bg-black focus:border-blue-500 transition-all" placeholder="https://..." />
+                                      }} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2.5 text-[11px] text-zinc-400 font-mono outline-none focus:bg-black focus:border-[#10b981] transition-all" placeholder="https://..." />
                                     </div>
 
                                     <label className="w-full lg:w-[160px] flex-shrink-0 flex items-center justify-between lg:justify-end gap-3 cursor-pointer select-none bg-zinc-900/50 hover:bg-zinc-800/80 px-4 py-2.5 rounded-lg border border-zinc-800/50 transition-colors">
@@ -2715,8 +2715,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20">
-                    <Search className="w-5 h-5 text-blue-500" />
+                  <div className="w-10 h-10 bg-[#10b981]/10 rounded-lg flex items-center justify-center border border-[#10b981]/20">
+                    <Search className="w-5 h-5 text-[#10b981]" />
                   </div>
                   <div className="text-left">
                     <h3 className="text-white font-black text-sm uppercase tracking-tight italic">SEO HASHTAG YÖNETİMİ</h3>
@@ -2733,8 +2733,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                     <textarea 
                       value={localHashtags} 
                       onChange={(e) => setLocalHashtags(e.target.value)} 
-                      placeholder="#bahis #canlıbahis #724bets..."
-                      className="w-full h-48 bg-black border border-zinc-800 rounded-lg p-5 outline-none focus:border-blue-500/50 text-zinc-300 font-mono text-sm resize-none leading-relaxed" 
+                      placeholder="#bahis #canlıbahis #ahbapbet..."
+                      className="w-full h-48 bg-black border border-zinc-800 rounded-lg p-5 outline-none focus:border-[#10b981]/50 text-zinc-300 font-mono text-sm resize-none leading-relaxed" 
                     />
                   </div>
                   <div className="mt-4 flex justify-end">
@@ -3058,7 +3058,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                   {editorAccounts.map(editor => (
                     <div key={editor.id} className="flex items-center justify-between bg-black border border-zinc-800 rounded-lg px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                        <div className="w-9 h-9 rounded-full bg-[#10b981]/10 border border-[#10b981]/20 flex items-center justify-center">
                           <User className="w-4 h-4 text-blue-400" />
                         </div>
                         <div>
@@ -3537,8 +3537,8 @@ Maç Listesi: `}
               className="w-full flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20">
-                  <Zap className="w-5 h-5 text-blue-500" />
+                <div className="w-10 h-10 bg-[#10b981]/10 rounded-lg flex items-center justify-center border border-[#10b981]/20">
+                  <Zap className="w-5 h-5 text-[#10b981]" />
                 </div>
                 <div className="text-left">
                   <h3 className="text-white font-black text-sm uppercase tracking-tight italic">🎯 TETİKLEME KURALLARI</h3>
@@ -3556,20 +3556,20 @@ Maç Listesi: `}
                       ...c,
                       rules: [...c.rules, { id: String(Date.now()), name: 'Yeni Kural', description: '', triggerType: 'deposit', thresholdAmount: 500, coinsAwarded: 100, ticketsAwarded: 0, isActive: true }]
                     }))}
-                    className="adm-btn-primary bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 text-[10px]"
+                    className="adm-btn-primary bg-[#10b981] hover:bg-blue-400 text-white px-6 py-2 text-[10px]"
                   >
                     + YENİ KURAL EKLE
                   </button>
                 </div>
 
                 {localLoyaltyConfig.rules.map((rule, idx) => (
-                  <div key={rule.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-lg space-y-4 group transition-all hover:border-blue-500/30">
+                  <div key={rule.id} className="p-4 bg-black/40 border border-zinc-800/50 rounded-lg space-y-4 group transition-all hover:border-[#10b981]/30">
                     <div className="flex items-center gap-3">
                       <div className="flex-1">
                         <label className="text-zinc-500 text-[8px] font-black uppercase tracking-widest mb-1 block ml-1">KURAL ADI</label>
                         <input type="text" value={rule.name}
                           onChange={e => setLocalLoyaltyConfig(c => ({ ...c, rules: c.rules.map((r, i) => i === idx ? { ...r, name: e.target.value } : r) }))}
-                          className="w-full bg-transparent border-b border-zinc-800 text-white font-black text-xs outline-none focus:border-blue-500/50 pb-1" placeholder="Kural Adı" />
+                          className="w-full bg-transparent border-b border-zinc-800 text-white font-black text-xs outline-none focus:border-[#10b981]/50 pb-1" placeholder="Kural Adı" />
                       </div>
                       <select value={rule.triggerType}
                         onChange={e => setLocalLoyaltyConfig(c => ({ ...c, rules: c.rules.map((r, i) => i === idx ? { ...r, triggerType: e.target.value as any } : r) }))}
@@ -4043,8 +4043,8 @@ Maç Listesi: `}
           <section className="bg-zinc-900/40 border border-zinc-800/60 rounded-lg overflow-hidden transition-all duration-300">
             <div className="p-5 flex items-center justify-between border-b border-zinc-800/50 bg-white/[0.02]">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20">
-                  <Users className="w-5 h-5 text-blue-500" />
+                <div className="w-10 h-10 bg-[#10b981]/10 rounded-lg flex items-center justify-center border border-[#10b981]/20">
+                  <Users className="w-5 h-5 text-[#10b981]" />
                 </div>
                 <div className="text-left">
                   <h3 className="text-white font-black text-sm uppercase tracking-tight italic">ÜYE VE KULLANICI YÖNETİMİ</h3>

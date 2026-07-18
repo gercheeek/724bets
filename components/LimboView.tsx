@@ -203,7 +203,7 @@ export default function LimboView({ siteUser, setSiteUser, onAuthRequired }: any
 
                     {/* Central Glow */}
                     <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[100px] opacity-30 transition-colors duration-500 ${
-                        isWinner ? 'bg-emerald-500' : crashed ? 'bg-red-500' : isPlaying ? 'bg-blue-500' : 'bg-[#3D82F6]'
+                        isWinner ? 'bg-emerald-500' : crashed ? 'bg-red-500' : isPlaying ? 'bg-[#10b981]' : 'bg-[#3D82F6]'
                     }`} />
 
                     {/* Massive Multiplier Display */}

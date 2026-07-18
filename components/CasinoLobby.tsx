@@ -3,6 +3,8 @@ import { Search, ChevronLeft, ChevronRight, Play, Filter, Grid2X2, Crown, Monito
 import { createPortal } from 'react-dom';
 import { CasinoLobbyGame } from '../types';
 import { ALL_GAMES } from '../data/games';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getOriginalsData } from './OriginalsSlider';
 
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
@@ -32,17 +34,6 @@ const DEMO_GAMES = [
   { id: 107, name: 'Starlight Princess', provider: 'Pragmatic Play', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Starlight-Princess-1000-Pragmatic-Play/Vertical/StarlightPrincess1000_20250312174636784.webp', category: 'slots', rtp: '96.50%' },
   { id: 108, name: '40 Super Hot', provider: 'Amusnet', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/Vertical/40SuperHotBellLink.webp', category: 'slots', rtp: '95.81%' },
   { id: 109, name: 'XXXTreme Lightning', provider: 'Evolution', img: 'https://images.unsplash.com/photo-1517594422361-5e18d033339f?w=500&q=80', category: 'live', rtp: '97.30%' },
-  { id: 110, name: 'Plinko', provider: 'Originals', img: '/images/clean-plinko-v4.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 111, name: 'Keno', provider: 'Originals', img: '/images/neon-keno.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 112, name: 'Dice', provider: 'Originals', img: '/images/clean-dice-v4.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 113, name: 'Mines', provider: 'Originals', img: '/images/neon-mines.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 114, name: 'War', provider: 'Originals', img: '/images/clean-war-v4.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 115, name: 'Hilo', provider: 'Originals', img: '/images/clean-hilo-v4.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 116, name: 'Blackjack', provider: 'Originals', img: '/images/neon-blackjack.jpg', category: 'originals', rtp: '99.29%' },
-  { id: 117, name: 'Roulette', provider: 'Originals', img: '/images/neon-roulette.jpg', category: 'originals', rtp: '97.30%' },
-  { id: 118, name: 'Chicken Cross', provider: 'Originals', img: '/images/neon-chickencross.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 119, name: 'Limbo', provider: 'Originals', img: '/images/neon-limbo.jpg', category: 'originals', rtp: '99.00%', customDemoUrl: 'https://games.aliencdn.com/preprod/5008/v3.1/index.html?debug=true&sentry=true&token=wss%3A%2F%2Fgameshub-stage.aliencdn.com%2Fclient%2Fhubs%2FPREPROD_5008_RGS_1001%3Faccess_token%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODQyODc1NjYsImV4cCI6MTc4NDI4ODE2NiwiYXVkIjoiaHR0cHM6Ly9nYW1lc2h1Yi1zdGFnZS5hbGllbmNkbi5jb20vY2xpZW50L2h1YnMvUFJFUFJPRF81MDA4X1JHU18xMDAxIiwic3ViIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFhV1FpT2lJek5UUm1NREJtTWkwek5ETXdMVFExWlRJdE9HRTRZaTB5WXpoaVlqVmlaR1kzWWpJaUxDSjFjMlZ5Vkhsd1pTSTZJbEJNUVZsRlVpSXNJbWRoYldWSlpDSTZJalV3TURnaUxDSnZjRWxrSWpvaU1EQXdNQ0lzSW5Cc1lYbGxja1oxYkd4SlpDSTZJakF3TURBdlpHVm1ZWFZzZEM4eFptWm1OR1l5WkMxbE5UQmhMVFE1WTJFdE9EazVaaTFrWkRabFkyTmxPR0poTnpZaUxDSndiR0Y1WlhKVWIydGxiaUk2SW1WNVNtaGlSMk5wVDJsS1NWVjZTVEZPYVVselNXNVNOV05EU1RaSmEzQllWa05LT1M1bGVVcHVXVmN4YkZOWFVXbFBhVWt4VFVSQk5FbHBkMmxpTTBKS1drTkpOa2xxUVhkTlJFRnBURU5LYVdOdFJuVmFSV3hyU1dwdmFWcEhWbTFaV0ZaelpFTkpjMGx1UW5OWldHeHNZMnRzYTBscWIybE5WMXB0V21wU2JVMXRVWFJhVkZWM1dWTXdNRTlYVG1oTVZHYzFUMWRaZEZwSFVUSmFWMDVxV2xSb2FWbFVZekpKYVhkcFkwaEtkbVJ0Ykd0YVdFcEtXa05KTmtscVNYZE5SRUZwVEVOS2RtTkhWbmxaV0ZKMlkyeENjMWxZYkd4amJGSjJZVEpXZFVscWIybGxNWGRwWWpOS2NGb3liSFZaVjNoUVkwVnNhMWhEU1RaWVEwbDRUVVJSZDFoRFNYTllRMHAyWTIxc2JtRlhOV2hpUlVwNVdWYzFhMU5YVW1OSmFuQmpTV3hhUmxJd1JrOVNNVTVWVWxaS1prNXFaelZPVjFwdFRVUkNhbHBVV21oT2VrbDRUbGRSTlU1dFVUUlBSR2hzV0VOS09VbHBkMmxaTWpreFltNVNlV1ZUU1RaSmJHaFpTV2wzYVdKSFJqRmliVTV2VmxaV1NsSkRTVFpKYWtsM1RXcFpkMDU2UlROV1JFVjRUV3BaZDA1c2IzUk5WRlV6VG5wak1VOVhXVEZhUjBrMFpVaFJNbHBIYUVSTlZVWk9WVEpXYjJKVVozZE5SRUYzVFVSQmQwNUljRzVOUkVGM1RVUkJkMDFFUm5WalZFWjNTV2wzYVdKSFJqRmliVTV2VW0xc2VXTXpVbFJrUjFaM1ZrZHNkRnBZVGpCWlZ6RjNTV3B2ZUU1Nlp6Qk5hbWN6VGxSWk1rNTZZekZNUTBwd1l6QjRkbGx0U2pWSmFuQnRXVmQ0ZWxwVGQybGlSMFl4WW0xT2IxSXlSblJhVld4clNXcHZhVTVVUVhkUFEwbHpTVzFzZWxaSFZucGtRMGsyV20xR2MyTXlWWE5KYlRsNVlWZGtjR0p0Um5OVU0wSktXa05KTmtscVJYZE9SRUZwVEVOS2NHTXliRTVVVTBrMldtMUdjMk15VlhOSmJXeG9aRU5KTmsxVVl6Uk9SRWswVG5wVk1rNXBkMmxhV0doM1NXcHZlRTU2WnpCT2FsRXpUbFJaTW1aUkxtaGtjWFJvVWtWbGFqQjFUWEZSVkZsTVJYQnJUbmxoTkVVM01VVkpiVzA0TUdKQk1GZHhVVTFQWnpBaUxDSnNZVzVuZFdGblpTSTZJbVZ1SWl3aWFYTkdkVzVRYkdGNUlqcDBjblZsTENKaVlXeGhibU5sSWpveE1EQXdMQ0pqZFhKeVpXNWplU0k2SWxWVFJDSXNJbVZ1ZGlJNklsQlNSVkJTVDBRaUxDSnNZWFZ1WTJoVlZVbEVJam9pTWpBeU5qQTNNVGRVTVRFeU5qQTJXaTB4TlRjM056VTVaalZrWWpoNGREWmthRU14UVUxVFpXaHRPREF3TURBd01EQTBlbWN3TURBd01EQXdNVzV4TVhBaUxDSnlaM05KWkNJNk1UQXdNU3dpYVdGMElqb3hOemcwTWpnM05UWTJMQ0psZUhBaU9qRTNPRFF6TnpNNU5qWjkuSUZXZHB2dmRtc29Xa2VnWU9vbV85RVplLVZPNmlKV2hkUGJycHhfM0gzayJ9.ZGZcqcD7zy7KJtXlZtOhEM-sJlmTOcLmANkdowPfgj0&uuid=20260717T112606Z-1577759f5db8xt6dhC1AMSehm800000004zg00000001nq1p&skin=default&theme=dark' },
-  { id: 120, name: 'Chicken Run', provider: 'Originals', img: '/images/neon-chickenrun.jpg', category: 'originals', rtp: '98.50%', customDemoUrl: 'https://games.aliencdn.com/preprod/5019/v3.1/index.html?debug=true&sentry=true&token=wss%3A%2F%2Frgsstage01hub.ufo-hub.com%2Fclient%2Fhubs%2FPREPROD_5019_RGS_1001%3Faccess_token%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODQyODc0MjUsImV4cCI6MTc4NDI4ODAyNSwiYXVkIjoiaHR0cHM6Ly9yZ3NzdGFnZTAxaHViLnVmby1odWIuY29tL2NsaWVudC9odWJzL1BSRVBST0RfNTAxOV9SR1NfMTAwMSIsInN1YiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUoxYVdRaU9pSTBZelppTURrNU5pMWhNR1ZtTFRRek9EWXRPVGt3T1Mxa1lqWXhZamc0TldVd05XWWlMQ0oxYzJWeVZIbHdaU0k2SWxCTVFWbEZVaUlzSW1kaGJXVkpaQ0k2SWpVd01Ua2lMQ0p2Y0Vsa0lqb2lNREF3TUNJc0luQnNZWGxsY2taMWJHeEpaQ0k2SWpBd01EQXZaR1ZtWVhWc2RDODNZalZpWkRjeFlTMWxNVGd5TFRRek16a3RPVEF5WkMwd09HVXhOMk01TUdSbVpETWlMQ0p3YkdGNVpYSlViMnRsYmlJNkltVjVTbWhpUjJOcFQybEtTVlY2U1RGT2FVbHpTVzVTTldORFNUWkphM0JZVmtOS09TNWxlVXB1V1ZjeGJGTlhVV2xQYVVreFRVUkZOVWxwZDJsaU0wSktXa05KTmtscVFYZE5SRUZwVEVOS2FXTnRSblZhUld4clNXcHZhVnBIVm0xWldGWnpaRU5KYzBsdVFuTlpXR3hzWTJ0c2EwbHFiMmxPTWtreFdXMVJNMDFYUlhSYVZFVTBUV2t3TUUxNlRUVk1WR3QzVFcxUmRFMUVhR3hOVkdScVQxUkNhMXB0VVhwSmFYZHBZMGhLZG1SdGJHdGFXRXBLV2tOSk5rbHFTWGROUkVGcFRFTktkbU5IVm5sWldGSjJZMnhDYzFsWWJHeGpiRkoyWVRKV2RVbHFiMmxsTVhkcFlqTktjRm95YkhWWlYzaFFZMFZzYTFoRFNUWllRMGw0VFVSUmQxaERTWE5ZUTBwMlkyMXNibUZYTldoaVJVcDVXVmMxYTFOWFVtTkphbkJqU1d4YVJsSXdSazlTTVU1VlVsWktaazVxWnpWT1YxcHRUVVJDYWxwVVdtaE9la2w0VGxkUk5VNXRVVFJQUkdoc1dFTktPVWxwZDJsWk1qa3hZbTVTZVdWVFNUWkpiR2haU1dsM2FXSkhSakZpYlU1dlZsWldTbEpEU1RaSmFrbDNUV3BaZDA1NlJUTldSRVY0VFdwTk1FNVdiM1JOVkdNMFdrUlJORTVVV1RST2VtUnZaVzF3Y21FeWFFUk5WVVpPVlROSmVXRkhUWGROUkVGM1RVUkJkMDlJUlhkTlJFRjNUVVJCZDAxRVFYcGxia1p2U1dsM2FXSkhSakZpYlU1dlVtMXNlV016VWxSa1IxWjNWa2RzZEZwWVRqQlpWekYzU1dwdmVFNTZaekJOYW1jelRrUkpNVTE2UVRCTVEwcHdZekI0ZGxsdFNqVkphbkJ0V1ZkNGVscFRkMmxpUjBZeFltMU9iMUl5Um5SYVZXeHJTV3B2YVU1VVFYaFBVMGx6U1cxc2VsWkhWbnBrUTBrMldtMUdjMk15VlhOSmJUbDVZVmRrY0dKdFJuTlVNMEpLV2tOSk5rbHFSWGRPUkVGcFRFTktjR015YkU1VVUwazJXbTFHYzJNeVZYTkpiV3hvWkVOSk5rMVVZelJPUkVrMFRucFJlVTVUZDJsYVdHaDNTV3B2ZUU1Nlp6Qk9hbEV6VGtSSk1XWlJMazVJZVZscGNrRkthVzVVV1VWVFRYVnBaa2hWT0c1aU9TMWtXRmhCY0hKSVJGWmZUakpaY0dNeWEyc2lMQ0pzWVc1bmRXRm5aU0k2SW1WdUlpd2lhWE5HZFc1UWJHRjVJanAwY25WbExDSmlZV3hoYm1ObElqb3hNREF3TENKamRYSnlaVzVqZVNJNklsVlRSQ0lzSW1WdWRpSTZJbEJTUlZCU1QwUWlMQ0pzWVhWdVkyaFZWVWxFSWpvaU1qQXlOakEzTVRkVU1URXlNelExV2kweE56aGtORGcxTmpnM04yaDZhbXRyYUVNeFFVMVRjakpvWXpBd01EQXdNREE0Y1RBd01EQXdNREF3TURONmNXZ2lMQ0p5WjNOSlpDSTZNVEF3TVN3aWFXRjBJam94TnpnME1qZzNOREkxTENKbGVIQWlPakUzT0RRek56TTRNalY5Lm52VlBnQzZrd2xtN1FDcDM4RUtBNHgzaW1oNUNVNXVEcUUzSjF3LVFELXc&uuid=20260717T112345Z-178d4856877hzjkkhC1AMSr2hc00000008q0000000003zqh&skin=default&theme=chicken' },
   { id: 115, name: '12 Coins', provider: 'Wazdan', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/12-Coins-Grand-Gold-Edition-Santas-Jackpots-Wazdan/Vertical/12CoinsGrandGoldEditionSantasJackpots.webp', category: 'new', rtp: '96.15%' },
   { 
     id: 1160, 
@@ -263,11 +254,14 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
   return (
     <div className="flex flex-col">
       <div 
-        className="group relative flex flex-col cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.6)] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:-translate-y-1" 
+        className="group relative flex flex-col cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.6)] transition-all duration-300 hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_15px_40px_rgba(0,0,0,0.5)] border border-transparent hover:border-white/10 hover:border-t-white/20 hover:border-l-white/20 hover:-translate-y-1" 
         style={{ aspectRatio: '3/4', backgroundColor: '#111' }}
         tabIndex={0}
-        onClick={() => {}} // Empty handler for iOS Safari hover
+        onClick={() => onClick()} // Trigger play on card click
       >
+        {/* Sweeping Light Beam on Hover */}
+        <div className="absolute top-0 left-[-100%] w-[50%] h-full bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] group-hover:left-[200%] transition-all duration-1000 ease-in-out pointer-events-none z-20"></div>
+        
         {/* Full Image */}
         <img 
           src={game.img || game.image} 
@@ -281,7 +275,7 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/70 backdrop-blur-[2px]">
           <button 
             onClick={(e) => { e.stopPropagation(); onClick(); }}
-            className="bg-[#10B981] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+            className="bg-[#10b981] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
           >
             GERÇEK OYNA
           </button>
@@ -295,13 +289,7 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
         </div>
       </div>
 
-      {/* Player Count Below Card */}
-      <div className="flex items-center justify-center gap-1.5 mt-2.5">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#00e676] shadow-[0_0_5px_#00e676]"></div>
-        <span className="text-[#848B9D] text-[10px] sm:text-[11px] font-medium tracking-wide">
-          <strong className="text-white">{players}</strong> Oyuncular
-        </span>
-      </div>
+
     </div>
   );
 };
@@ -313,7 +301,7 @@ const NewGameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () =
       className="group relative flex flex-col cursor-pointer rounded-[14px] overflow-hidden shadow-lg transition-transform duration-300 hover:-translate-y-1" 
       style={{ aspectRatio: '4/5', backgroundColor: '#111' }}
       tabIndex={0}
-      onClick={() => {}} // Empty handler for iOS Safari hover
+      onClick={() => onClick()} // Trigger play on card click
     >
       <img 
         src={game.img || game.image} 
@@ -349,7 +337,7 @@ const NewGameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () =
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/60 backdrop-blur-[2px]">
         <button 
           onClick={(e) => { e.stopPropagation(); onClick(); }}
-          className="bg-[#10B981] hover:bg-[#00E676] text-black font-black text-[11px] px-4 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+          className="bg-[#10b981] hover:bg-[#00E676] text-black font-black text-[11px] px-4 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
         >
           GERÇEK OYNA
         </button>
@@ -367,7 +355,7 @@ const NewGameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () =
 const SectionHeader: React.FC<{ title: string, icon?: React.ReactNode }> = ({ title, icon }) => (
   <div className="flex items-center justify-between mb-4 mt-8">
     <div className="flex items-center gap-2">
-      {icon && <div className="text-[#10B981]">{icon}</div>}
+      {icon && <div className="text-[#10b981]">{icon}</div>}
       <h2 className="text-white text-lg font-black tracking-tight">{title}</h2>
     </div>
     <div className="flex gap-2">
@@ -413,12 +401,8 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
       <div ref={scrollRef} className="overflow-x-auto hide-scrollbar -mx-4 px-4 pb-4" style={{ scrollSnapType: 'x mandatory' }}>
         <div className="flex gap-4 min-w-max">
           {games.map((game, i) => (
-            <div key={`${game.id}-${i}`} style={{ width: '180px', flexShrink: 0, scrollSnapAlign: 'start' }}>
-              {title.toLowerCase().includes('yeni') ? (
-                <NewGameCard game={game} onClick={() => onSelect(game)} onDemoClick={() => onDemo(game)} />
-              ) : (
-                <GameCard game={game} onClick={() => onSelect(game)} onDemoClick={() => onDemo(game)} />
-              )}
+            <div key={`${game.id}-${i}`} className="w-[130px] sm:w-[140px] md:w-[150px] lg:w-[160px]" style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
+              <GameCard game={game} onClick={() => onSelect(game)} onDemoClick={() => onDemo(game)} />
             </div>
           ))}
         </div>
@@ -427,7 +411,26 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
   );
 };
 
-const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: boolean, onNavigate?: (view: string) => void }> = ({ customGames = [], isLoggedIn = false, onNavigate }) => {
+export default function CasinoLobby({ 
+  onNavigate, 
+  customGames = [],
+  isLoggedIn = false
+}: { 
+  onNavigate: (view: string, gameData?: any) => void, 
+  customGames?: any[],
+  isLoggedIn?: boolean 
+}) {
+  const { t } = useLanguage();
+  const dynamicOriginals = getOriginalsData(t).map((game, i) => ({
+    id: 1000 + i,
+    name: game.name,
+    provider: 'Originals',
+    img: game.image,
+    category: 'originals',
+    rtp: game.rtp || '99.00%',
+    path: game.path
+  }));
+
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -441,6 +444,18 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
     return () => clearInterval(timer);
   }, []);
 
+  const handleGameSelect = (game: any) => {
+    if (game.category === 'originals' || game.provider === 'Originals' || game.name === 'Plinko' || game.name === 'Chicken Run' || game.name === 'Mission Uncrossable') {
+      let path = game.name.toLowerCase().replace(/\s+/g, '-');
+      if (path === 'mission-uncrossable') path = 'chicken-run';
+      if (onNavigate) {
+        onNavigate(path);
+      }
+    } else {
+      setSelectedGame(game);
+    }
+  };
+
   const handleAction = () => {
     if (isLoggedIn) {
       window.dispatchEvent(new Event('openDepositModal'));
@@ -449,8 +464,8 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
     }
   };
 
-  // Combine ALL_GAMES, DEMO_GAMES, and customGames
-  const allGames = [...ALL_GAMES, ...DEMO_GAMES, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
+  // Combine ALL_GAMES, DEMO_GAMES, dynamicOriginals, and customGames
+  const allGames = [...ALL_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
 
   const filteredGames = allGames.filter(game => {
     const matchesTab = activeTab === 'all' || game.category === activeTab;
@@ -488,29 +503,29 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#0B0E14] text-white">
+    <div className="w-full h-full flex flex-col bg-transparent text-white min-w-0">
       {/* 1. TOP NAVBAR (Gamdom Style) */}
       <div className="sticky top-0 z-40 bg-[#0F121A]/95 backdrop-blur-md border-b border-[#1A1D29] px-4 md:px-8 py-0">
-        <div className="max-w-[1600px] mx-auto flex items-center gap-6 overflow-x-auto hide-scrollbar">
+        <div className="max-w-[1600px] mx-auto flex items-center justify-center md:justify-center gap-4 md:gap-8 overflow-x-auto hide-scrollbar">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`relative flex items-center gap-2 py-4 px-2 whitespace-nowrap text-sm font-bold transition-colors ${
-                activeTab === tab.id ? 'text-[#10B981]' : 'text-[#848B9D] hover:text-white'
+                activeTab === tab.id ? 'text-[#10b981]' : 'text-[#848B9D] hover:text-white'
               }`}
             >
               {tab.icon}
               {tab.label}
               {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#10B981] rounded-t-full shadow-[0_-2px_10px_rgba(0,255,163,0.5)]" />
+                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#10b981] rounded-t-full shadow-[0_-2px_10px_rgba(0,255,163,0.5)]" />
               )}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-4 md:px-8 pt-6">
+      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-6 min-w-0">
         {/* 2. HERO BANNER */}
         {activeTab === 'all' && !searchQuery && (
           <div className="relative w-full aspect-[21/9] md:aspect-[32/9] rounded-xl overflow-hidden mb-8 group bg-[#1A1D29]">
@@ -522,14 +537,14 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                 <img src={banner.image} alt={banner.title} className="w-full h-full object-cover opacity-60 mix-blend-overlay" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0F121A] via-[#0F121A]/80 to-transparent" />
                 
-                <div className="absolute top-1/2 -translate-y-1/2 left-8 md:left-16 max-w-lg">
-                  <h1 className="text-3xl md:text-5xl font-black text-white mb-2 md:mb-4 tracking-tight leading-tight">
+                <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[90%] md:w-full max-w-3xl text-center px-4">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 md:mb-4 tracking-tight leading-tight">
                     {banner.title}
                   </h1>
                   <p className="text-[#848B9D] text-sm md:text-lg mb-6 font-medium">
                     {banner.sub}
                   </p>
-                  <button className="bg-[#10B981] hover:bg-[#00E676] text-black px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(0,255,163,0.3)]">
+                  <button className="bg-[#10b981] hover:bg-[#00E676] text-black px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(0,255,163,0.3)] mx-auto block">
                     Hemen Katıl
                   </button>
                 </div>
@@ -541,7 +556,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                 <button 
                   key={idx} 
                   onClick={() => setCurrentBanner(idx)}
-                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#10B981]' : 'w-2 bg-white/20'}`}
+                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#10b981]' : 'w-2 bg-white/20'}`}
                 />
               ))}
             </div>
@@ -549,7 +564,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
         )}
 
         {/* 3. FILTERS AND SEARCH */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
           <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#1A1D29] hover:bg-[#2A2E3D] border border-[#2A2E3D] rounded-lg text-white font-bold transition-colors">
             <Filter size={18} className="text-[#848B9D]" />
             Sağlayıcılar
@@ -562,7 +577,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               placeholder="Oyun Ara..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#1A1D29] border border-[#2A2E3D] rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:border-[#10B981] transition-colors font-medium"
+              className="w-full bg-[#1A1D29] border border-[#2A2E3D] rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:border-[#10b981] transition-colors font-medium"
             />
           </div>
         </div>
@@ -571,11 +586,48 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
         {searchQuery || activeTab !== 'all' ? (
           <div>
             <SectionHeader title={searchQuery ? 'Arama Sonuçları' : TABS.find(t => t.id === activeTab)?.label || 'Oyunlar'} />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              {filteredGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => setSelectedGame(game)} />
-              ))}
-            </div>
+            
+            {activeTab === 'egt' && !searchQuery ? (
+              <div className="w-full overflow-hidden relative py-4 group [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]">
+                <style>{`
+                  @keyframes egt-marquee {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                  }
+                  .animate-egt-marquee {
+                    animation: egt-marquee 120s linear infinite;
+                  }
+                  .group:hover .animate-egt-marquee {
+                    animation-play-state: paused;
+                  }
+                `}</style>
+                <div className="flex w-max animate-egt-marquee gap-3 sm:gap-4">
+                  {/* First Set */}
+                  <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4">
+                    {filteredGames.map(game => (
+                      <div key={`set1-${game.id}`} className="w-[120px] sm:w-[130px] md:w-[140px] lg:w-[150px] xl:w-[160px]">
+                        <GameCard game={game} onClick={() => handleGameSelect(game)} />
+                      </div>
+                    ))}
+                  </div>
+                  {/* Duplicate Set for Infinite Scroll */}
+                  <div className="grid grid-rows-2 grid-flow-col gap-3 sm:gap-4">
+                    {filteredGames.map(game => (
+                      <div key={`set2-${game.id}`} className="w-[120px] sm:w-[130px] md:w-[140px] lg:w-[150px] xl:w-[160px]">
+                        <GameCard game={game} onClick={() => handleGameSelect(game)} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+                {filteredGames.map(game => (
+                  <GameCard key={game.id} game={game} onClick={() => handleGameSelect(game)} />
+                ))}
+              </div>
+            )}
+            
             {filteredGames.length === 0 && (
               <div className="w-full py-20 flex flex-col items-center justify-center text-[#848B9D]">
                 <Search size={48} className="mb-4 opacity-20" />
@@ -586,36 +638,30 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
         ) : (
           <div className="flex flex-col gap-4">
             
+            {/* NEW GAMES SLIDER SECTION (Moved to top) */}
+            <SliderSection 
+              title="Yeni Eklenenler" 
+              icon={<Sparkles className="text-white" />} 
+              games={newGames} 
+              onSelect={handleGameSelect}
+              onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
+            />
+
             {/* POPULAR GAMES SLIDER SECTION */}
             <SliderSection 
               title="Popüler Oyunlar" 
               icon={<Flame className="text-white" fill="white" />} 
               games={popularGames} 
-              onSelect={setSelectedGame}
+              onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
             />
 
-            <SliderSection 
-              title="Canlı Casino" 
-              icon={<MonitorPlay className="text-white" />} 
-              games={liveGames} 
-              onSelect={setSelectedGame}
-              onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
-            />
 
             <SliderSection 
               title="Çok Kazandıranlar" 
               icon={<Flame className="text-[#f0b90b]" />} 
               games={allGames.filter(g => g.type === 'slot' || g.category === 'slots').sort((a, b) => b.players - a.players).slice(12, 24)} 
-              onSelect={setSelectedGame}
-              onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
-            />
-
-            <SliderSection 
-              title="Yeni Eklenenler" 
-              icon={<Sparkles className="text-white" />} 
-              games={newGames} 
-              onSelect={setSelectedGame}
+              onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
             />
           </div>
@@ -699,7 +745,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
 
               <div className="relative z-10 px-6 pb-8 pt-4 text-center flex flex-col items-center">
                 <h3 className="text-2xl font-black text-white mb-1">{getDisplayGameName(selectedGame)}</h3>
-                <p className="text-[#10B981] text-sm font-bold mb-6">{selectedGame.provider || 'Pragmatic Play'}</p>
+                <p className="text-[#10b981] text-sm font-bold mb-6">{selectedGame.provider || 'Pragmatic Play'}</p>
 
                 <div className="w-full grid grid-cols-2 gap-3 mb-6 bg-[#0F121A] p-3 rounded-lg border border-[#2A2E3D]">
                   <div className="flex flex-col items-center">
@@ -725,7 +771,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                          handleAction();
                        }
                      }}
-                     className="w-full py-3.5 rounded-lg font-black text-sm transition-all bg-[#10B981] text-black hover:bg-[#00E676] shadow-[0_0_15px_rgba(0,255,163,0.3)]"
+                     className="w-full py-3.5 rounded-lg font-black text-sm transition-all bg-[#10b981] text-black hover:bg-[#00E676] shadow-[0_0_15px_rgba(0,255,163,0.3)]"
                    >
                      Gerçek Parayla Oyna
                    </button>
@@ -735,7 +781,7 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
                        onClick={() => setShowDemoIframe(true)}
                        className="w-full py-3.5 rounded-lg font-bold text-sm transition-all bg-[#2A2E3D] text-white hover:bg-[#3A3F54] flex items-center justify-center gap-2"
                      >
-                       <Play size={16} className="text-[#10B981]" fill="currentColor" />
+                       <Play size={16} className="text-[#10b981]" fill="currentColor" />
                        Eğlencesine Oyna
                      </button>
                   )}
@@ -750,4 +796,3 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
   );
 };
 
-export default CasinoLobby;

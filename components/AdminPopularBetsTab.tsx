@@ -268,7 +268,7 @@ const AdminPopularBetsTab: React.FC<AdminPopularBetsTabProps> = ({ config, onSav
                             <input
                                 value={bet.affiliateUrl}
                                 onChange={e => updateBet(bet.id, 'affiliateUrl', e.target.value)}
-                                placeholder="https://724bahis.net/kayit?ref=..."
+                                placeholder="https://ahbapbet.net/kayit?ref=..."
                                 style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #222', background: '#111', color: '#22c55e', fontSize: '11px', fontWeight: 700, outline: 'none', boxSizing: 'border-box' }}
                             />
                         </div>

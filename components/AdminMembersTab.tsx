@@ -176,7 +176,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                             {member.status === 'suspended' ? '⛔ ASKIDA' : member.status === 'pending' ? '⏳ BEKLİYOR' : '✅ AKTİF'}
                         </span>
                         {member.role && member.role !== 'member' && (
-                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 flex items-center gap-1">
+                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-[#10b981]/10 text-blue-400 flex items-center gap-1">
                                 <Shield className="w-2 h-2" /> {member.role.toUpperCase()}
                             </span>
                         )}
@@ -267,7 +267,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                     {/* Password Management Section (Always Available) */}
                     <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)' }}>
                         <div className="flex items-center gap-2 mb-1">
-                            <Key className="w-3.5 h-3.5 text-blue-500" />
+                            <Key className="w-3.5 h-3.5 text-[#10b981]" />
                             <span className="text-white font-black text-[11px] uppercase tracking-wider">Şifre Yönetimi</span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -276,7 +276,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                                     type={showPassword ? 'text' : 'password'}
                                     value={editPassword}
                                     onChange={(e) => setEditPassword(e.target.value)}
-                                    className="w-full bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg pl-3 pr-8 py-1.5 outline-none focus:border-blue-500/50"
+                                    className="w-full bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg pl-3 pr-8 py-1.5 outline-none focus:border-[#10b981]/50"
                                     placeholder="Yeni Şifre"
                                 />
                                 <button 
@@ -289,7 +289,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
                             </div>
                             <button
                                 onClick={handleSavePassword}
-                                className="px-4 py-1.5 bg-blue-500 text-white font-black text-xs rounded-lg hover:bg-blue-400 transition-all flex items-center gap-1.5 shadow-lg shadow-blue-500/20"
+                                className="px-4 py-1.5 bg-[#10b981] text-white font-black text-xs rounded-lg hover:bg-blue-400 transition-all flex items-center gap-1.5 shadow-lg shadow-#10b981/20"
                             >
                                 <Save className="w-3 h-3" /> Güncelle
                             </button>

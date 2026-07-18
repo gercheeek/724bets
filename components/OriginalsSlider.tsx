@@ -4,13 +4,51 @@ import { GameDetailModal, GameData } from './GameDetailModal';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const getOriginalsData = (t: (key: string) => string): GameData[] => [
-
+    {
+        id: 'keno',
+        name: 'Keno',
+        desc: t("desc_keno"),
+        color: 'from-[#6E42E5] to-[#4F2AA8]',
+        image: '/images/flat-keno.jpg',
+        path: 'keno',
+        icon: '🎱',
+        players: 415,
+        rtp: '%99.0',
+        maxWin: '1000x',
+        volatility: 'Yüksek'
+    },
+    {
+        id: 'roulette',
+        name: 'Roulette',
+        desc: t("desc_roulette"),
+        color: 'from-[#201D2C] to-[#15131C]',
+        image: '/images/flat-roulette.jpg',
+        path: 'roulette',
+        icon: '🎰',
+        players: 890,
+        rtp: '%97.3',
+        maxWin: '36x',
+        volatility: 'Orta'
+    },
+    {
+        id: 'blackjack',
+        name: 'Blackjack',
+        desc: 'Klasik 21 kart oyunu',
+        color: 'from-[#A158FF] to-[#6E30D6]',
+        image: '/images/flat-blackjack.jpg',
+        path: 'blackjack',
+        icon: '🃏',
+        players: 1205,
+        rtp: '%99.5',
+        maxWin: '2.5x',
+        volatility: 'Düşük'
+    },
     {
         id: 'plinko',
         name: 'Plinko',
         desc: t("desc_plinko"),
-        color: 'from-purple-600 to-purple-900',
-        image: '/images/clean-plinko-v4.jpg',
+        color: 'from-[#6E42E5] to-[#4F2AA8]',
+        image: '/images/flat-plinko.jpg',
         path: 'plinko',
         icon: '🎯',
         players: 569,
@@ -19,43 +57,17 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         volatility: 'Yüksek'
     },
     {
-        id: 'dice',
-        name: 'Dice',
-        desc: t("desc_dice"),
-        color: 'from-blue-600 to-blue-900',
-        image: '/images/clean-dice-v4.jpg',
-        path: 'dice',
-        icon: '🎲',
-        players: 482,
+        id: 'chicken-run',
+        name: 'Mission Uncrossable',
+        desc: t("desc_chicken_run"),
+        color: 'from-[#1A1822] to-[#100E15]',
+        image: '/images/flat-mission.jpg',
+        path: 'chicken-run',
+        icon: '🐔',
+        players: 345,
         rtp: '%99.0',
-        maxWin: '9900x',
-        volatility: 'Değişken'
-    },
-    {
-        id: 'war',
-        name: 'War',
-        desc: t("desc_war"),
-        color: 'from-red-600 to-red-900',
-        image: '/images/clean-war-v4.jpg',
-        path: 'war',
-        icon: '⚔️',
-        players: 517,
-        rtp: '%98.5',
-        maxWin: '2x',
-        volatility: 'Düşük'
-    },
-    {
-        id: 'hilo',
-        name: 'Hilo',
-        desc: t("desc_hilo"),
-        color: 'from-green-600 to-green-900',
-        image: '/images/clean-hilo-v4.jpg',
-        path: 'hilo',
-        icon: '🃏',
-        players: 481,
-        rtp: '%99.0',
-        maxWin: 'Limitsiz',
-        volatility: 'Düşük'
+        maxWin: '1000x',
+        volatility: 'Orta'
     }
 ];
 
@@ -118,6 +130,19 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                 </div>
             </div>
 
+            <style>{`
+                @keyframes mobileShine {
+                    0% { transform: translateX(-150%) skewX(-30deg); }
+                    30% { transform: translateX(250%) skewX(-30deg); }
+                    100% { transform: translateX(250%) skewX(-30deg); }
+                }
+                @media (max-width: 768px) {
+                    .mobile-shine-anim {
+                        animation: mobileShine 4s infinite ease-in-out;
+                    }
+                }
+            `}</style>
+
             {/* Slider container with padding for shadows */}
             <div 
                 className="relative w-full"
@@ -134,28 +159,25 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                         <div key={game.id} className="shrink-0 snap-start flex flex-col items-center group">
                             {/* Card Body - Portrait */}
                             <div 
-                                onClick={() => setSelectedGame(game)}
-                                className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#10B981]/40"
+                                onClick={() => onNavigate(game.path)}
+                                className="w-[140px] h-[190px] md:w-[160px] md:h-[220px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/10 hover:border-white/30 bg-black/40"
                             >
-                                <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out mix-blend-lighten" />
+                                {/* Subtle Glass Highlight */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50 z-10 pointer-events-none mix-blend-overlay"></div>
                                 
+                                <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out z-0" />
+                                
+                                {/* Shine Effect */}
+                                <div className="absolute top-0 left-[-150%] w-[100%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-[30deg] group-hover:translate-x-[250%] transition-transform duration-[1.5s] ease-in-out z-20 pointer-events-none mobile-shine-anim"></div>
 
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
 
                                 {/* Play button appears on hover */}
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
                                     <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20">
                                         <Play className="w-5 h-5 text-white fill-current ml-1" />
                                     </div>
                                 </div>
-                            </div>
-                            
-                            {/* External Player Count */}
-                            <div className="mt-3 flex items-center gap-1.5 px-2">
-                                <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse"></div>
-                                <span className="text-zinc-400 text-xs font-bold font-sans">
-                                    <span className="text-white">{game.players}</span> {t("players")}
-                                </span>
                             </div>
                         </div>
                     ))}

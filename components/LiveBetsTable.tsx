@@ -33,7 +33,7 @@ const CurrencyIcon = ({ type }: { type: Bet['currency'] }) => {
     return <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-500 text-white text-[10px] font-bold">₮</span>;
   }
   if (type === 'EUR') {
-    return <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-blue-500 text-white text-[10px] font-bold">€</span>;
+    return <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#10b981] text-white text-[10px] font-bold">€</span>;
   }
   return <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-green-600 text-white text-[10px] font-bold">$</span>;
 };

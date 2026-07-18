@@ -56,7 +56,7 @@ export default function ChickenRunView({ siteUser, setSiteUser, onAuthRequired }
     useEffect(() => {
         let animationFrameId: number;
         let lastTime = performance.now();
-        const colors = ['#E12836', '#3B82F6', '#F59E0B', '#10B981', '#8B5CF6']; // Random car colors
+        const colors = ['#E12836', '#10b981', '#F59E0B', '#06b6d4', '#8B5CF6']; // Random car colors
 
         const updateCars = (time: number) => {
             const deltaTime = (time - lastTime) / 1000;

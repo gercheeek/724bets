@@ -126,7 +126,7 @@ const MoneyBag: React.FC<{ reward: BlackjackReward; onOpen: () => void; opened: 
             <div className="flex gap-2 mt-2">
                 {[...Array(12)].map((_, i) => (
                     <div key={i} className="w-2 h-2 rounded-full"
-                        style={{ background: ['#f0b90b', '#10b981', '#3b82f6', '#ef4444', '#8b5cf6', '#f59e0b'][i % 6], animation: `confetti-fall ${0.5 + Math.random() * 1}s ease-out ${Math.random() * 0.5}s forwards` }} />
+                        style={{ background: ['#f0b90b', '#10b981', '#10b981', '#ef4444', '#8b5cf6', '#f59e0b'][i % 6], animation: `confetti-fall ${0.5 + Math.random() * 1}s ease-out ${Math.random() * 0.5}s forwards` }} />
                 ))}
             </div>
         </div>
@@ -156,7 +156,7 @@ const MoneyBag: React.FC<{ reward: BlackjackReward; onOpen: () => void; opened: 
 const DEFAULT_REWARDS: BlackjackReward[] = [
     { id: '1', label: '50 TL Bonus', emoji: '🎁', weight: 30, color: '#10b981' },
     { id: '2', label: '100 TL Nakit', emoji: '💵', weight: 20, color: '#f0b90b' },
-    { id: '3', label: '25 Freespin', emoji: '🎰', weight: 25, color: '#3b82f6' },
+    { id: '3', label: '25 Freespin', emoji: '🎰', weight: 25, color: '#10b981' },
     { id: '4', label: '200 TL Bonus', emoji: '🏆', weight: 10, color: '#8b5cf6' },
     { id: '5', label: 'iPhone 15', emoji: '📱', weight: 2, color: '#ef4444' },
     { id: '6', label: '500 TL Jackpot', emoji: '👑', weight: 5, color: '#f59e0b' },
@@ -369,7 +369,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                         <div className="flex items-center gap-2 mb-0.5">
                             <span className="text-2xl">🎴</span>
                             <h1 className="text-[var(--text-primary)] font-black text-2xl tracking-tight">
-                                CASINO <span style={{ color: '#f0b90b' }}>724</span>
+                                <span className="lowercase">ahbapbet</span> <span style={{ color: '#06b6d4' }}>CASINO</span>
                             </h1>
                         </div>
                         <div className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">Blackjack · Profesyonel Masa</div>
@@ -429,7 +429,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                                     🎩
                                 </div>
                                 <div className="text-center">
-                                    <div className="text-[#f0b90b] font-black text-sm uppercase tracking-wider">Casino 724 Krupiyesi</div>
+                                    <div className="text-[#f0b90b] font-black text-sm uppercase tracking-wider">AHBAPBET Krupiyesi</div>
                                     <div className="text-white text-sm font-bold mt-1 max-w-xs text-center italic">"{dealerMsg}"</div>
                                 </div>
                             </div>
@@ -542,7 +542,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                 {/* Info strip */}
                 <div className="grid grid-cols-3 gap-2 mt-4">
                     {[
-                        { label: 'Krupiye', value: 'Casino 724' },
+                        { label: 'Krupiye', value: 'AHBAPBET' },
                         { label: 'El Hakkı', value: `Her ${cooldownHours} Saat` },
                         { label: 'Mod', value: 'Ücretsiz Demo' },
                     ].map((item, i) => (

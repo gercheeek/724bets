@@ -40,7 +40,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
       badgeColor: 'bg-purple-600',
       themeColor: activeSubTab === 'slot' ? 'from-[#FFC107] to-[#3E2723]' : activeSubTab === 'live' ? 'from-[#00E676] to-[#1B5E20]' : 'from-[#00E5FF] to-[#1A237E]',
       image: '',
-      link: 'https://724bahis.net',
+      link: 'https://ahbapbet.net',
       isActive: true,
       order: localGames.length + 1
     };
@@ -354,7 +354,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                       className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                     >
                       <option value="bg-purple-600">Mor</option>
-                      <option value="bg-blue-500">Mavi</option>
+                      <option value="bg-[#10b981]">Mavi</option>
                       <option value="bg-orange-500">Turuncu</option>
                       <option value="bg-emerald-500">Yeşil</option>
                       <option value="bg-red-500">Kırmızı</option>

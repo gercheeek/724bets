@@ -97,7 +97,7 @@ export default function AdminDepositsTab() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-2xl font-black flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-            <Wallet className="w-6 h-6 text-blue-500" />
+            <Wallet className="w-6 h-6 text-[#10b981]" />
             Finans ve Yatırımlar
           </h2>
           <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
@@ -106,7 +106,7 @@ export default function AdminDepositsTab() {
         </div>
         <button 
           onClick={fetchDeposits}
-          className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 rounded-lg transition-colors"
+          className="p-2 bg-[#10b981]/10 text-[#10b981] hover:bg-[#10b981]/20 rounded-lg transition-colors"
           title="Yenile"
         >
           <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />

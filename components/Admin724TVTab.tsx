@@ -657,7 +657,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
 
                                                             {/* Actions */}
                                                             <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
-                                                                <button onClick={() => toggleEdit(s.id)} style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', background: isEditing ? 'rgba(59,130,246,0.1)' : 'rgba(255,255,255,0.05)', color: isEditing ? '#3b82f6' : '#9ca3af', border: 'none', cursor: 'pointer' }}>
+                                                                <button onClick={() => toggleEdit(s.id)} style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', background: isEditing ? 'rgba(59,130,246,0.1)' : 'rgba(255,255,255,0.05)', color: isEditing ? '#10b981' : '#9ca3af', border: 'none', cursor: 'pointer' }}>
                                                                     <Edit3 size={14} />
                                                                 </button>
                                                                 <button onClick={() => handleSaveStreamer(s)} disabled={saving} style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', background: 'rgba(34,197,94,0.1)', color: '#22c55e', border: 'none', cursor: 'pointer' }}>

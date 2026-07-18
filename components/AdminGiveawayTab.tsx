@@ -260,7 +260,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-3">
                                     <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase ${g.status === 'active' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                            g.status === 'completed' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                            g.status === 'completed' ? 'bg-[#10b981]/10 text-blue-400 border border-[#10b981]/20' :
                                                 'bg-zinc-800 text-zinc-500 border border-zinc-700'
                                         }`}>
                                         {g.status === 'active' ? '🟢 AKTİF' : g.status === 'completed' ? '✅ TAMAMLANDI' : '📝 TASLAK'}

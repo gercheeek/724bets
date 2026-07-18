@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { X, Send } from 'lucide-react';
 
 // ─────────────── KNOWLEDGE BASE ───────────────
-const WHATSAPP_LINK = 'https://wa.me/905XXXXXXXXX?text=724bahis.net.net%20sitesinden%20destek%20istiyorum';
+const WHATSAPP_LINK = 'https://wa.me/905XXXXXXXXX?text=ahbapbet.net.net%20sitesinden%20destek%20istiyorum';
 
 interface Message {
     from: 'bot' | 'user';
@@ -14,12 +14,12 @@ const now = () => new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minu
 
 const MATCH_SCHEDULE: Record<string, string[]> = {
     '1 Mart': [
-        '🏀 NBA — OKC Thunder vs Denver Nuggets\n🕒 Saat: 04:00 TSİ\n📺 Yayın: 724bahis.net.net',
-        '🏀 EuroLeague — Anadolu Efes Maçı\n🕒 Saat: 20:30 TSİ\n📺 Yayın: 724bahis.net.net',
+        '🏀 NBA — OKC Thunder vs Denver Nuggets\n🕒 Saat: 04:00 TSİ\n📺 Yayın: ahbapbet.net.net',
+        '🏀 EuroLeague — Anadolu Efes Maçı\n🕒 Saat: 20:30 TSİ\n📺 Yayın: ahbapbet.net.net',
     ],
     '2 Mart': [
-        '🏀 BSL — Bursaspor Maçı\n🕒 Saat: 19:00 TSİ\n📺 Yayın: 724bahis.net.net',
-        '🏀 NBA — Golden State Warriors Maçı\n🕒 Saat: 04:30 TSİ\n📺 Yayın: 724bahis.net.net',
+        '🏀 BSL — Bursaspor Maçı\n🕒 Saat: 19:00 TSİ\n📺 Yayın: ahbapbet.net.net',
+        '🏀 NBA — Golden State Warriors Maçı\n🕒 Saat: 04:30 TSİ\n📺 Yayın: ahbapbet.net.net',
     ],
 };
 
@@ -30,7 +30,7 @@ function getBotReply(input: string): string {
 
     // WhatsApp / Support triggers
     if (SUPPORT_TRIGGERS.some(t => msg.includes(t))) {
-        return `Size daha hızlı yardımcı olabilmemiz için lütfen 724bahis.net.net WhatsApp hattımıza yazın:\n\n👉 ${WHATSAPP_LINK}`;
+        return `Size daha hızlı yardımcı olabilmemiz için lütfen ahbapbet.net.net WhatsApp hattımıza yazın:\n\n👉 ${WHATSAPP_LINK}`;
     }
 
     // Match schedule queries
@@ -52,12 +52,12 @@ function getBotReply(input: string): string {
 
     // NBA
     if (msg.includes('nba') || msg.includes('basketbol')) {
-        return `🏀 NBA & Basketbol yayınlarımızı 724bahis.net.net üzerinden canlı takip edebilirsiniz!\n\nYaklaşan NBA maçları için günlük yayın akışını menüden görebilirsiniz. Özel maç sorularınız için:\n📅 1 Mart: OKC - Denver (04:00 TSİ)\n📅 2 Mart: GSW maçı (04:30 TSİ)`;
+        return `🏀 NBA & Basketbol yayınlarımızı ahbapbet.net.net üzerinden canlı takip edebilirsiniz!\n\nYaklaşan NBA maçları için günlük yayın akışını menüden görebilirsiniz. Özel maç sorularınız için:\n📅 1 Mart: OKC - Denver (04:00 TSİ)\n📅 2 Mart: GSW maçı (04:30 TSİ)`;
     }
 
     // Football
     if (msg.includes('futbol') || msg.includes('süper lig') || msg.includes('premier') || msg.includes('la liga')) {
-        return `⚽ Futbol yayınları ve analizleri için 724bahis.net.net'in **Analizler** bölümünü inceleyin!\n\nGünlük maç tahminlerini ve istatistiksel analizlerimizi ücretsiz görüntüleyebilirsiniz.`;
+        return `⚽ Futbol yayınları ve analizleri için ahbapbet.net.net'in **Analizler** bölümünü inceleyin!\n\nGünlük maç tahminlerini ve istatistiksel analizlerimizi ücretsiz görüntüleyebilirsiniz.`;
     }
 
     // EuroLeague / BSL
@@ -82,12 +82,12 @@ function getBotReply(input: string): string {
 
     // Hello / Greeting
     if (msg.includes('merhaba') || msg.includes('selam') || msg.includes('hey') || msg === 'hi' || msg === 'hello') {
-        return `Merhaba! 👋 Ben 724bahis.net.net asistanıyım.\n\nSize şu konularda yardımcı olabilirim:\n• 🏀 Maç saatleri & yayın programı\n• 📊 Analiz & tahmin bilgisi\n• 🔧 Teknik destek\n• 💬 Canlı destek yönlendirme\n\nNasıl yardımcı olabilirim?`;
+        return `Merhaba! 👋 Ben ahbapbet.net.net asistanıyım.\n\nSize şu konularda yardımcı olabilirim:\n• 🏀 Maç saatleri & yayın programı\n• 📊 Analiz & tahmin bilgisi\n• 🔧 Teknik destek\n• 💬 Canlı destek yönlendirme\n\nNasıl yardımcı olabilirim?`;
     }
 
-    // 724BAHİS.NET / sponsors
-    if (msg.includes('724bahis.net') || msg.includes('sponsor') || msg.includes('reklam')) {
-        return `✨ 724BAHİS.NET, sitemizin ana sponsorudur.\n\nAyrıcalıklı bonus ve kampanyalar için:\n🌐 724bahis.net.net\n\nİş birliği talepleriniz için:\n👉 ${WHATSAPP_LINK}`;
+    // AHBAPBET.NET / sponsors
+    if (msg.includes('ahbapbet.net') || msg.includes('sponsor') || msg.includes('reklam')) {
+        return `✨ AHBAPBET.NET, sitemizin ana sponsorudur.\n\nAyrıcalıklı bonus ve kampanyalar için:\n🌐 ahbapbet.net.net\n\nİş birliği talepleriniz için:\n👉 ${WHATSAPP_LINK}`;
     }
 
     // Default
@@ -114,7 +114,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
     const [messages, setMessages] = useState<Message[]>([
         {
             from: 'bot',
-            text: 'Merhaba! 👋 Ben Banu, 724bahis.net.net canlı destek asistanınızım. Size nasıl yardımcı olabilirim? 😊',
+            text: 'Merhaba! 👋 Ben Banu, ahbapbet.net.net canlı destek asistanınızım. Size nasıl yardımcı olabilirim? 😊',
             time: now(),
         },
     ]);
@@ -163,8 +163,8 @@ const ChatBot: React.FC<ChatBotProps> = ({ open: externalOpen, onToggle }) => {
                 <div className="flex-shrink-0 flex items-center gap-3 px-4 py-3"
                     style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border-subtle)' }}>
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                        style={{ background: 'linear-gradient(135deg, #f0b90b, #d4a017)', boxShadow: '0 0 12px rgba(240,185,11,0.4)' }}>
-                        <span className="text-black font-black text-[8px] leading-tight uppercase text-center">724<br />BETS</span>
+                        style={{ background: 'linear-gradient(135deg, #06b6d4, #059669)', boxShadow: '0 0 12px rgba(16,185,129,0.4)' }}>
+                        <span className="text-black font-black text-[7px] leading-tight lowercase text-center">ahbab<br />bet</span>
                     </div>
                     <div className="flex-1 min-w-0">
                         <div className="font-black text-sm" style={{ color: 'var(--text-primary)' }}>Banu · Canlı Destek</div>

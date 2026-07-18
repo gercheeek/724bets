@@ -758,7 +758,7 @@ const PromoWheel: React.FC<PromoWheelProps> = ({ config, onConfigChange, isAdmin
                                 style={{
                                     width: '100%', padding: '10px 14px', borderRadius: 12,
                                     background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)',
-                                    color: '#60a5fa', fontWeight: 800, fontSize: 12, cursor: 'pointer',
+                                    color: '#34d399', fontWeight: 800, fontSize: 12, cursor: 'pointer',
                                     marginBottom: 8,
                                 }}
                             >

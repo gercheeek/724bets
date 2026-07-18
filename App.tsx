@@ -236,19 +236,8 @@ const AppContent: React.FC = () => {
     };
 
     window.addEventListener('internal-navigate', handleInternalNavigate as EventListener);
-    
-    const handleOpenSupportChat = () => {
-      if (window.innerWidth < 1280) {
-         setIsMobileChatOpen(true);
-      } else {
-         setIsChatOpen(prev => !prev);
-      }
-    };
-    window.addEventListener('openSupportChat', handleOpenSupportChat);
-
     return () => {
       window.removeEventListener('internal-navigate', handleInternalNavigate as EventListener);
-      window.removeEventListener('openSupportChat', handleOpenSupportChat);
     };
   }, []);
   
@@ -520,13 +509,13 @@ const AppContent: React.FC = () => {
   }, [siteUser]);
 
   const handleGlobalLogout = async () => {
-    try { await supabase.auth.signOut(); } catch (e) {}
     localStorage.removeItem('site_current_member');
     localStorage.removeItem('site_member');
     localStorage.removeItem('site_user_role');
     setSiteUser(null);
     setUserRole(null);
     if (view === 'admin') setView('home');
+    try { supabase.auth.signOut(); } catch (e) {} // Removed await so it doesn't block reload
     window.location.reload();
   };
 
@@ -633,19 +622,8 @@ const AppContent: React.FC = () => {
   // Automatically toggle sidebar and chat when view or login state changes (for desktop)
   useEffect(() => {
     if (window.innerWidth >= 1280) {
-      const isSportsPage = view === 'spor724' || view.startsWith('sports');
-      
-      if (isSportsPage) {
-        setIsSidebarOpen(true); // Always open left menu on sports
-        setIsChatOpen(true); // Always open chat on sports
-      } else {
-        setIsChatOpen(false); // Close chat on non-sports pages by default
-        if (siteUser) {
-          setIsSidebarOpen(false); // Close left menu when logged in on non-sports pages
-        } else {
-          setIsSidebarOpen(true); // Open left menu when logged out on non-sports pages
-        }
-      }
+      setIsSidebarOpen(true); // Always open left menu on desktop by default
+      setIsChatOpen(true); // Always open right chat on desktop by default
     }
   }, [siteUser, view]);
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -705,7 +683,7 @@ const AppContent: React.FC = () => {
             description: `⚽ **Bahis Detayları:**\n\n${selectionsText}`,
             timestamp: new Date().toISOString(),
             footer: {
-              text: "724BETS | Canlı Kupon Bildirim Sistemi"
+              text: "AHBAPBET | Canlı Kupon Bildirim Sistemi"
             }
           }
         ]
@@ -820,17 +798,17 @@ const AppContent: React.FC = () => {
 
     // 3. Branding Migration for Marquee & Popup
     const storedMarquee = localStorage.getItem('site_marquee_config');
-    if (storedMarquee && (/betlivo/i.test(storedMarquee) || /724bahis/i.test(storedMarquee) || /724FUTBOL/i.test(storedMarquee))) {
-      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724BETS').replace(/724bahis\.net/gi, '724BETS').replace(/724FUTBOL\.COM/gi, '724BETS'));
+    if (storedMarquee && (/betlivo/i.test(storedMarquee) || /ahbapbet/i.test(storedMarquee) || /724FUTBOL/i.test(storedMarquee))) {
+      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, 'AHBAPBET').replace(/ahbapbet\.net/gi, 'AHBAPBET').replace(/724FUTBOL\.COM/gi, 'AHBAPBET'));
       localStorage.setItem('site_marquee_config', JSON.stringify(parsedMarquee));
       setMarqueeConfig(parsedMarquee);
     }
 
     const storedWelcome = localStorage.getItem('site_welcome_popup');
-    if (storedWelcome && (/betlivo/i.test(storedWelcome) || /724bahis/i.test(storedWelcome) || /724FUTBOL/i.test(storedWelcome))) {
-      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724BETS').replace(/724bahis\.net/gi, '724BETS').replace(/724FUTBOL\.COM/gi, '724BETS'));
+    if (storedWelcome && (/betlivo/i.test(storedWelcome) || /ahbapbet/i.test(storedWelcome) || /724FUTBOL/i.test(storedWelcome))) {
+      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, 'AHBAPBET').replace(/ahbapbet\.net/gi, 'AHBAPBET').replace(/724FUTBOL\.COM/gi, 'AHBAPBET'));
       // Also catch the 'BETLIVOX' variant if it exists
-      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BAHİS.NETX/gi, '724BETS').replace(/724FUTBOL.COMX/gi, '724BETS'));
+      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/AHBAPBET.NETX/gi, 'AHBAPBET').replace(/724FUTBOL.COMX/gi, 'AHBAPBET'));
       localStorage.setItem('site_welcome_popup', JSON.stringify(cleanedWelcome));
       setWelcomePopupConfig(cleanedWelcome);
     }
@@ -852,7 +830,7 @@ const AppContent: React.FC = () => {
     return stored ? JSON.parse(stored) : demoCoupons;
   });
   const [showSearch, setShowSearch] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(window.location.pathname.startsWith('/spor'));
+  const [isChatOpen, setIsChatOpen] = useState(true);
   const [globalTvPip, setGlobalTvPip] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
@@ -869,6 +847,31 @@ const AppContent: React.FC = () => {
     const stored = localStorage.getItem('site_casino_wheel');
     return stored ? JSON.parse(stored) : DEFAULT_WHEEL_CONFIG;
   });
+
+  useEffect(() => {
+    const handleOpenSupportChat = () => {
+      if (window.innerWidth < 1280) {
+         setIsMobileChatOpen(true);
+      } else {
+         setIsChatOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('openSupportChat', handleOpenSupportChat);
+
+    return () => {
+      window.removeEventListener('openSupportChat', handleOpenSupportChat);
+    };
+  }, []);
+
+  // Sync isChatOpen with body class for global CSS styling (like FloatingBetSlip positioning)
+  useEffect(() => {
+    if (isChatOpen) {
+      document.body.classList.add('chat-open');
+    } else {
+      document.body.classList.remove('chat-open');
+    }
+    return () => document.body.classList.remove('chat-open');
+  }, [isChatOpen]);
 
 
   const handleWelcomePopupConfigChange = (cfg: WelcomePopupConfig) => {
@@ -909,7 +912,7 @@ const AppContent: React.FC = () => {
         }
       },
       steps: [
-        { popover: { title: "724bets'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
+        { popover: { title: "ahbapbet'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
         { element: '#tour-sidebar', popover: { title: 'Kategoriler & Spor Dalları', description: 'Buradan spor bahisleri, casino ve diğer popüler oyunlara tek tıkla ulaşabilirsiniz.', side: "right", align: 'start' }},
         { element: '#tour-user-panel', popover: { title: 'Bakiye & Kullanıcı İşlemleri', description: 'Güncel bakiyenizi takip edebilir, saniyeler içinde yatırım ve çekim yapabilirsiniz.', side: "bottom", align: 'center' }},
         { element: '#tour-chat', popover: { title: 'Canlı Sohbet', description: 'Sağ panelden diğer üyelerimizle sohbet edebilir, özel etkinlik kodlarını (gift) yakalayabilirsiniz!', side: "left", align: 'start' }},
@@ -973,7 +976,9 @@ const AppContent: React.FC = () => {
           if (savedCasinoLobby.includes('picsum.photos')) {
             localStorage.removeItem('site_casino_lobby_games');
           } else {
-            setCasinoLobbyGames(JSON.parse(savedCasinoLobby));
+            const parsed = JSON.parse(savedCasinoLobby);
+            const filtered = parsed.filter((g: any) => g.name !== 'Death Becomes You' && g.name !== 'Crazy Time' && g.name !== 'XXXTreme Lightning');
+            setCasinoLobbyGames(filtered);
           }
         }
 
@@ -1069,7 +1074,7 @@ const AppContent: React.FC = () => {
         if (globalGiveaway) setGiveawayConfig(globalGiveaway);
         
         if (globalMarquee) {
-          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724BETS').replace(/724bahis\.net/gi, '724BETS'));
+          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, 'AHBAPBET').replace(/ahbapbet\.net/gi, 'AHBAPBET'));
           setMarqueeConfig(cleaned);
         }
         
@@ -1077,7 +1082,7 @@ const AppContent: React.FC = () => {
         if (globalWheel) setWheelConfig(globalWheel);
         
         if (globalWelcome) {
-          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724BETS').replace(/724bahis\.net/gi, '724BETS').replace(/724BAHİS.NETX/gi, '724BETS').replace(/724FUTBOL\.COMX/gi, '724BETS'));
+          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, 'AHBAPBET').replace(/ahbapbet\.net/gi, 'AHBAPBET').replace(/AHBAPBET.NETX/gi, 'AHBAPBET').replace(/724FUTBOL\.COMX/gi, 'AHBAPBET'));
           setWelcomePopupConfig(cleaned);
         }
         
@@ -1109,8 +1114,9 @@ const AppContent: React.FC = () => {
         if (globalCasinoLobby && Array.isArray(globalCasinoLobby)) {
           const hasOldPicsum = globalCasinoLobby.some(g => g.image && g.image.includes('picsum.photos'));
           if (!hasOldPicsum) {
-            setCasinoLobbyGames(globalCasinoLobby);
-            localStorage.setItem('site_casino_lobby_games', JSON.stringify(globalCasinoLobby));
+            const filtered = globalCasinoLobby.filter((g: any) => g.name !== 'Death Becomes You' && g.name !== 'Crazy Time' && g.name !== 'XXXTreme Lightning');
+            setCasinoLobbyGames(filtered);
+            localStorage.setItem('site_casino_lobby_games', JSON.stringify(filtered));
           }
         }
 
@@ -1172,7 +1178,7 @@ const AppContent: React.FC = () => {
 
   // Hero brand for admin (keep backward compatibility)
   const heroDefault: Brand = {
-    id: '724bets', name: '724BETS', subtitle: 'CASINO & CANLI BAHİS',
+    id: 'ahbapbet', name: 'AHBAPBET', subtitle: 'CASINO & CANLI BAHİS',
     offerMain: '%280', offerSub: 'HOŞGELDİN BONUSU !!!',
     logo: 'https://picsum.photos/seed/bahisbey/400/400', link: 'https://bahisbey1438.com/?btag=59649488_330539', isSponsor: true,
   };
@@ -1259,13 +1265,13 @@ const AppContent: React.FC = () => {
       robotsMeta.setAttribute('content', 'index, follow');
     }
 
-    let title = "724Bahis - Güvenilir Bahis ve Canlı Casino";
-    let desc = "724Bahis ile en yüksek oranlarla spor bahisleri yapın, canlı casino oyunlarının keyfini çıkarın. Hemen üye olun, kazanmaya başlayın!";
+    let title = "Ahbapbet - Güvenilir Bahis ve Canlı Casino";
+    let desc = "Ahbapbet ile en yüksek oranlarla spor bahisleri yapın, canlı casino oyunlarının keyfini çıkarın. Hemen üye olun, kazanmaya başlayın!";
     
     switch(view) {
       case 'home':
-        title = "724Bahis | Canlı Bahis, Casino ve Canlı Casino Seçenekleri";
-        desc = "724Bahis ana sayfasında en güncel spor müsabakaları, popüler slot oyunları ve canlı casino masalarına hemen ulaşın.";
+        title = "Ahbapbet | Canlı Bahis, Casino ve Canlı Casino Seçenekleri";
+        desc = "Ahbapbet ana sayfasında en güncel spor müsabakaları, popüler slot oyunları ve canlı casino masalarına hemen ulaşın.";
         break;
       case 'sports':
       case 'sports2':
@@ -1275,8 +1281,8 @@ const AppContent: React.FC = () => {
       case 'spor724':
       case 'taraf':
       case 'mobile-bulletin':
-        title = "724Bahis | Spor Bahisleri ve Yüksek Oranlı Canlı Bahis";
-        desc = "Dünyanın her yerinden futbol, basketbol, tenis ve daha fazla spor dalına maç öncesi ve canlı bahis yapma fırsatı 724Bahis'te.";
+        title = "Ahbapbet | Spor Bahisleri ve Yüksek Oranlı Canlı Bahis";
+        desc = "Dünyanın her yerinden futbol, basketbol, tenis ve daha fazla spor dalına maç öncesi ve canlı bahis yapma fırsatı Ahbapbet'te.";
         break;
       case 'blackjack':
       case 'blackjack-pro':
@@ -1287,40 +1293,40 @@ const AppContent: React.FC = () => {
       case 'limbo':
       case 'chicken-run':
       case 'pool':
-        title = "724Bahis | Casino ve Canlı Casino Oyunları - Hızlı Kazanç";
-        desc = "724Bahis güvencesiyle rulet, blackjack, poker, baccarat ve binlerce popüler slot oyunu ile eğlenerek kazanın.";
+        title = "Ahbapbet | Casino ve Canlı Casino Oyunları - Hızlı Kazanç";
+        desc = "Ahbapbet güvencesiyle rulet, blackjack, poker, baccarat ve binlerce popüler slot oyunu ile eğlenerek kazanın.";
         break;
       case 'trusted-sites':
       case 'trusted-detail':
       case 'brands':
-        title = "724Bahis | Güvenilir Bahis Siteleri ve Şirket İncelemeleri";
-        desc = "Güvenilir bahis şirketleri listesi, detaylı incelemeler, oyuncu yorumları ve platform değerlendirmeleri 724Bahis kalitesiyle sizlerle.";
+        title = "Ahbapbet | Güvenilir Bahis Siteleri ve Şirket İncelemeleri";
+        desc = "Güvenilir bahis şirketleri listesi, detaylı incelemeler, oyuncu yorumları ve platform değerlendirmeleri Ahbapbet kalitesiyle sizlerle.";
         break;
       case 'analysis':
-        title = "724Bahis | Detaylı Maç Analizleri ve Banko Kuponlar";
-        desc = "Uzman kadromuzdan en güncel maç istatistikleri, oran analizleri ve banko tahminler 724Bahis Analiz sayfasında.";
+        title = "Ahbapbet | Detaylı Maç Analizleri ve Banko Kuponlar";
+        desc = "Uzman kadromuzdan en güncel maç istatistikleri, oran analizleri ve banko tahminler Ahbapbet Analiz sayfasında.";
         break;
       case 'coupons':
-        title = "724Bahis | Hazır Kuponlar ve Günün Kuponu";
+        title = "Ahbapbet | Hazır Kuponlar ve Günün Kuponu";
         desc = "Kazanma oranı yüksek günün hazır kuponları ve popüler bahis kombinasyonlarını hemen inceleyin.";
         break;
       case '724tv':
-        title = "724Bahis TV | Kesintisiz ve Şifresiz Canlı Maç İzle";
-        desc = "724Bahis TV üzerinden tüm spor karşılaşmalarını şifresiz, donmadan, full HD kalitede bedava izleyin.";
+        title = "Ahbapbet TV | Kesintisiz ve Şifresiz Canlı Maç İzle";
+        desc = "Ahbapbet TV üzerinden tüm spor karşılaşmalarını şifresiz, donmadan, full HD kalitede bedava izleyin.";
         break;
       case 'raffle':
       case 'cekilis':
       case 'giveaway':
-        title = "724Bahis | Çekilişler, Turnuvalar ve Büyük Ödüller";
-        desc = "724Bahis'in düzenlediği muhteşem çekilişlere katılın, nakit ödüller, free spinler ve dev hediyeler kazanma şansı yakalayın.";
+        title = "Ahbapbet | Çekilişler, Turnuvalar ve Büyük Ödüller";
+        desc = "Ahbapbet'in düzenlediği muhteşem çekilişlere katılın, nakit ödüller, free spinler ve dev hediyeler kazanma şansı yakalayın.";
         break;
       case 'loyalty':
-        title = "724Bahis | VIP Sadakat Programı - Size Özel Ayrıcalıklar";
-        desc = "Bahis yaptıkça puan toplayın, 724Bahis VIP ayrıcalıklarından ve sınırsız ödüllerden anında faydalanın.";
+        title = "Ahbapbet | VIP Sadakat Programı - Size Özel Ayrıcalıklar";
+        desc = "Bahis yaptıkça puan toplayın, Ahbapbet VIP ayrıcalıklarından ve sınırsız ödüllerden anında faydalanın.";
         break;
       case 'promo':
-        title = "724Bahis | Güncel Promosyonlar, Bonus ve Deneme Bonusu Kodu";
-        desc = "En güncel 724Bahis promosyon kodları, hoş geldin bonusları ve bedava bahis seçenekleri bu sayfada.";
+        title = "Ahbapbet | Güncel Promosyonlar, Bonus ve Deneme Bonusu Kodu";
+        desc = "En güncel Ahbapbet promosyon kodları, hoş geldin bonusları ve bedava bahis seçenekleri bu sayfada.";
         break;
     }
 
@@ -1336,13 +1342,6 @@ const AppContent: React.FC = () => {
     
   }, [view]);
 
-  // Auto-close sidebars when entering spor724 view
-  useEffect(() => {
-    if (view === 'spor724') {
-      setIsSidebarOpen(false);
-      setIsChatOpen(false);
-    }
-  }, [view]);
 
   // Hook to handle Kuponu Onayla tracking for sports2 view
   useEffect(() => {
@@ -1668,6 +1667,8 @@ const AppContent: React.FC = () => {
               setUserRole(user.role);
               localStorage.setItem('site_user_role', user.role);
             }
+            setIsSidebarOpen(true);
+            setIsChatOpen(true);
             setAuthModalMode(null);
           }}
           onAdminLogin={(role) => {
@@ -1692,7 +1693,7 @@ const AppContent: React.FC = () => {
               id: isGuest ? `guest_${guestUsername}` : 'admin-session',
               username: isGuest ? guestUsername : 'Yönetici',
               password: '',
-              email: isGuest ? `guest@724bets.com` : 'admin@724bets.com',
+              email: isGuest ? `guest@ahbapbet.com` : 'admin@ahbapbet.com',
               phone: '',
               createdAt: Date.now(),
               role: role as any,
@@ -1700,7 +1701,9 @@ const AppContent: React.FC = () => {
             };
             setSiteUser(adminUser);
             localStorage.setItem('site_current_member', JSON.stringify(adminUser));
-
+            
+            setIsSidebarOpen(true);
+            setIsChatOpen(true);
             setAuthModalMode(null);
             if (isGuest) {
               setView('home');
@@ -1788,7 +1791,7 @@ const AppContent: React.FC = () => {
         </InGameLayout>
       ) : (
         <div 
-          className="relative flex h-[100dvh] w-full bg-[#111317] text-white overflow-hidden" 
+          className="relative flex h-[100dvh] w-full bg-[#0B0E14] text-white overflow-hidden" 
           onPointerDown={() => setIsLogoSpinning(true)}
           onPointerUp={() => setIsLogoSpinning(false)}
           onPointerCancel={() => setIsLogoSpinning(false)}
@@ -1801,7 +1804,7 @@ const AppContent: React.FC = () => {
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'giveaway') && (
-            <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
+            <aside className={`hidden lg:flex flex-col bg-[#0B0E14] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen || view === 'blackjack'}
                 onToggle={() => setIsSidebarOpen(!isSidebarOpen)} 
@@ -1818,8 +1821,8 @@ const AppContent: React.FC = () => {
           {isMobileMenuOpen && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
               <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
-              <aside className="w-[280px] bg-[#111317] border-r border-[#1A1D24] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
-                <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#111317] border border-[#1A1D24] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
+              <aside className="w-[280px] bg-[#0B0E14] border-r border-[#14141a] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
+                <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#0B0E14] border border-[#14141a] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
                 <Sidebar
                   isOpen={true}
                   onToggle={() => setIsMobileMenuOpen(false)}
@@ -1846,7 +1849,7 @@ const AppContent: React.FC = () => {
             {view !== 'kral' && (
               <header 
                 id="mobile-top-header"
-                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1"
+                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#0B0E14]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1"
               >
                 <div className="flex items-center gap-2">
                   <button 
@@ -1856,12 +1859,18 @@ const AppContent: React.FC = () => {
                     <Menu className="w-6 h-6" />
                   </button>
                   <div 
-                    className="font-black text-2xl sm:text-3xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
+                    className="flex items-center cursor-pointer select-none ml-1 group"
                     onClick={() => setView('home')}
-                    style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
+                    style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}
                   >
-                    <SlotText text="724" className="text-white font-extrabold" isSpinning={isLogoSpinning} />
-                    <SlotText text="BETS" className="text-[#10B981] font-black" isSpinning={isLogoSpinning} />
+                    <span className="text-[#10B981] font-extrabold text-2xl sm:text-3xl tracking-tight lowercase">
+                      ahbapbet
+                    </span>
+                    <div className="flex items-center justify-center w-4 h-4 sm:w-4 sm:h-4 rounded-full border-[2px] border-[#10B981] ml-1 -mt-4">
+                      <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" className="text-[#10B981]">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                      </svg>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center shrink-0">
@@ -1869,7 +1878,7 @@ const AppContent: React.FC = () => {
                     <>
                       {/* 1. Gamdom Style Wallet (Pill) */}
                       <div 
-                        className="flex items-center bg-[#1A1F29] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
+                        className="flex items-center bg-[#14141a] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
                         <div className="w-7 h-7 rounded bg-[#10B981] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
@@ -1881,7 +1890,8 @@ const AppContent: React.FC = () => {
                         </svg>
                       </div>
                       
-                      {/* 2. Cüzdan Butonu (Sadece İkon) */}
+                      {/* 2. Cüzdan Butonu (Sadece İkon) - HIDDEN ON MOBILE PER USER REQUEST */}
+                      {/* 
                       <button 
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                         className="flex items-center justify-center w-10 h-10 bg-[#10B981] hover:bg-[#00e693] rounded-lg transition-colors ml-2 shadow-[0_0_15px_rgba(0,255,163,0.2)] active:scale-95"
@@ -1890,11 +1900,14 @@ const AppContent: React.FC = () => {
                           <path d="M21 7.5C21 5.567 19.433 4 17.5 4H6.5C4.567 4 3 5.567 3 7.5v9C3 18.433 4.567 20 6.5 20h11c1.933 0 3.5-1.567 3.5-3.5v-9zm-3.5 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
                         </svg>
                       </button>
+                      */}
                       
-                      {/* 3. Profil Avatarı */}
-                      <button onClick={() => handleViewChange('profile')} className="w-10 h-10 rounded-full border border-white/10 bg-[#1A1D24] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
+                      {/* 3. Profil Avatarı - HIDDEN ON MOBILE PER USER REQUEST */}
+                      {/*
+                      <button onClick={() => handleViewChange('profile')} className="w-10 h-10 rounded-full border border-white/10 bg-[#14141a] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
                         <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} alt="Avatar" className="w-full h-full object-cover" />
                       </button>
+                      */}
 
                       {/* 4. Çıkış Yap (Mobile) */}
                       <button 
@@ -1916,7 +1929,7 @@ const AppContent: React.FC = () => {
                       <div className="flex items-center rounded-lg border border-[#2B3544] h-[40px] shadow-sm overflow-hidden shrink-0 ml-1">
                         <button
                           onClick={() => setAuthModalMode('member')}
-                          className="flex items-center justify-center h-full bg-[#1A1D24] hover:bg-[#2A2E3D] text-white transition-colors px-4 font-bold text-sm whitespace-nowrap"
+                          className="flex items-center justify-center h-full bg-[#14141a] hover:bg-[#2A2E3D] text-white transition-colors px-4 font-bold text-sm whitespace-nowrap"
                         >
                           Giriş yap
                         </button>
@@ -1972,7 +1985,7 @@ const AppContent: React.FC = () => {
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'taraf' || view === 'limbo' || view === 'chicken-run' || view === 'originals') 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'taraf' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack') 
             ? 'p-0 w-full max-w-full mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
@@ -2045,41 +2058,15 @@ const AppContent: React.FC = () => {
           <div className="animate-fade-in w-full relative flex flex-col" style={{ height: 'calc(100vh - var(--header-height))' }}>
             
             {/* ── GAMDOM STYLE BANNER & MATCHES ── */}
-            <div className="w-full shrink-0 px-4 md:px-8 max-w-[1400px] mx-auto">
+            <div className="w-full shrink-0 px-4 md:px-8 max-w-[1400px] mx-auto hidden md:block">
               <WorldCupTeaser />
             </div>
 
-            {/* Custom Sports2 Header */}
-            <div className="w-full bg-[#161c28] rounded-t-2xl overflow-hidden shrink-0 shadow-lg relative z-20">
-               {/* Top Menu */}
-               <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-hide px-2 py-1">
-                  {([
-                    { label: 'SPOR', icon: <Dribbble size={18} />, url: 'https://bahisbey1438.com/tr/sport/?btag=59649488_330539' },
-                    { label: 'CANLI BAHİS', icon: <PlayCircle size={18} />, url: 'https://bahisbey1438.com/tr/sport/live/football/?btag=59649488_330539' },
-                    { label: 'E-SPOR', icon: <Gamepad2 size={18} />, url: 'https://bahisbey1438.com/tr/esport/?btag=59649488_330539' },
-                    { label: '3D SLOT SALONU', icon: <Diamond size={18} />, url: 'https://bahisbey1438.com/tr/lobby/casino/?btag=59649488_330539' },
-                    { label: 'CANLI CASINO', icon: <Dices size={18} />, url: 'https://bahisbey1438.com/tr/lobby/livecasino/?btag=59649488_330539' },
-                    { label: 'SANAL SPORLAR', icon: <MonitorPlay size={18} />, url: 'https://bahisbey1438.com/tr/lobby/virtualsport/main/?btag=59649488_330539' }
-                  ] as { label: string; icon: React.ReactNode; url: string; badge?: string }[]).map(item => (
-                    <button 
-                      key={item.label}
-                      onClick={() => { setIframeLoading(true); setSports2Url(item.url); }}
-                      className={`flex items-center gap-2 px-3 py-2 transition-colors rounded-lg group shrink-0 ${sports2Url.includes(item.url) ? 'bg-white/10 text-white' : 'text-zinc-300 hover:text-white hover:bg-white/5'}`}
-                    >
-                      <span className="text-emerald-500 group-hover:text-emerald-400">{item.icon}</span>
-                      <span className="text-[13px] font-bold">{item.label}</span>
-                      {item.badge && (
-                        <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded ml-1 animate-pulse">{item.badge}</span>
-                      )}
-                    </button>
-                  ))}
-            </div>
-          </div>
-
+            {/* Custom Sports2 Header Removed */}
             {/* Iframe Container */}
             <div 
               ref={sports2ContainerRef}
-              className="w-full flex-1 shadow-2xl bg-[#0F172A] relative rounded-b-2xl z-10"
+              className="w-full flex-1 shadow-2xl bg-[#0B0E14] relative rounded-b-2xl z-10"
               style={{
                 overflowX: isMobile ? 'auto' : 'hidden',
                 overflowY: 'hidden',
@@ -2124,8 +2111,8 @@ const AppContent: React.FC = () => {
 
 
               {/* Site theme color overlay (tinting the grey background to slate) */}
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" />
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0F172A]/20" />
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0B0E14]/40" />
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0B0E14]/20" />
             </div>
           </div>
         )}
@@ -2142,7 +2129,7 @@ const AppContent: React.FC = () => {
                 </div>
               </div>
             )}
-            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0F172A] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0B0E14] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
               <iframe 
                 src="https://sport.megobocteb.com/SportsBook/Home"
                 frameBorder="0"
@@ -2162,7 +2149,7 @@ const AppContent: React.FC = () => {
 
               {/* Site theme color overlay (tinting the grey background to slate) */}
               <div 
-                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0F172A]/40" 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0B0E14]/40" 
                 style={{ 
                   clipPath: isMobile 
                     ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
@@ -2170,7 +2157,7 @@ const AppContent: React.FC = () => {
                 }} 
               />
               <div 
-                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0F172A]/20" 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0B0E14]/20" 
                 style={{ 
                   clipPath: isMobile 
                     ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
@@ -2249,7 +2236,7 @@ const AppContent: React.FC = () => {
         )}
 
         {view === 'blackjack' && (
-          <div className="animate-fade-in w-full h-full relative z-[50]">
+          <div className="animate-fade-in w-full h-full relative z-[50] min-w-0">
             <CasinoLobby 
               customGames={casinoLobbyGames} 
               isLoggedIn={!!(siteUser || userRole)}
@@ -2269,7 +2256,7 @@ const AppContent: React.FC = () => {
         )}
 
         {view === 'spor724' && (
-          <div className="animate-fade-in w-full bg-[#0a0a0c] relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
             <Spor724View 
               onNavigate={(v: string) => setView(v)}
             />
@@ -2538,11 +2525,11 @@ const AppContent: React.FC = () => {
           onClick={() => setShowLiveScoreModal(false)}
         >
           <div 
-            className="relative w-full max-w-5xl h-[85vh] bg-[#1a1e29] rounded-lg shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-5xl h-[85vh] bg-[#14141a] rounded-lg shadow-2xl overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-[#12151e]">
+            <div className="flex items-center justify-between px-6 py-4 bg-[#0B0E14]">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
                 <span className="text-white font-black text-xs uppercase tracking-widest italic">CANLI SKOR & SONUÇLAR</span>
@@ -2555,7 +2542,7 @@ const AppContent: React.FC = () => {
               </button>
             </div>
             {/* Modal Content */}
-            <div className="flex-1 w-full overflow-hidden bg-[#12151e] relative">
+            <div className="flex-1 w-full overflow-hidden bg-[#0B0E14] relative">
               <iframe 
                 src="https://statsinfo.co/live?guid=a886190e-e01a-4155-85f4-e6daee231c8d&lg=en" 
                 frameBorder="0" 
@@ -2589,7 +2576,7 @@ const AppContent: React.FC = () => {
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
       {view !== 'admin' && !showLiveScoreModal && !isMobile && (
         <>
-          <aside className={`hidden xl:flex flex-col border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px] border-l' : 'w-0 border-l-0 overflow-hidden'} transition-all duration-300`}>
+          <aside className={`hidden xl:flex flex-col bg-[#0B0E14] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
             <ModernChat
               open={isChatOpen}
               onOpen={() => setIsChatOpen(true)}
@@ -2605,22 +2592,22 @@ const AppContent: React.FC = () => {
             <div className="hidden xl:flex fixed bottom-6 right-6 flex-col gap-2 z-50">
               <button 
                 onClick={() => setIsChatOpen(true)}
-                className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
+                className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
                 title="Canlı Sohbet"
               >
-                <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#111317] rounded-full"></div>
+                <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#0B0E14] rounded-full"></div>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
               </button>
               <button 
                 onClick={() => setShowSearch(true)}
-                className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
+                className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
                 title="Arama"
               >
                 <Search className="w-5 h-5 group-hover:text-white transition-colors" />
               </button>
               <button 
                 onClick={() => setIsChatOpen(true)}
-                className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
+                className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
                 title="Canlı Destek"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
@@ -2635,15 +2622,15 @@ const AppContent: React.FC = () => {
         <div className="flex xl:hidden fixed bottom-20 right-4 flex-col gap-2 z-50">
           <button 
             onClick={() => setIsMobileChatOpen(true)}
-            className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
+            className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
             title="Canlı Sohbet"
           >
-            <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#111317] rounded-full"></div>
+            <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#0B0E14] rounded-full"></div>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
           </button>
           <button 
             onClick={() => setShowSearch(true)}
-            className="w-11 h-11 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
+            className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
             title="Arama"
           >
             <Search className="w-5 h-5 group-hover:text-white transition-colors" />
@@ -2655,7 +2642,7 @@ const AppContent: React.FC = () => {
       {isMobileChatOpen && (
         <div className="fixed inset-0 z-[110] flex xl:hidden justify-end">
           <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileChatOpen(false)}></div>
-          <aside className="w-full h-full bg-[#0F1219] flex-shrink-0 relative z-10 animate-slide-in-right">
+          <aside className="w-full h-full bg-[#0B0E14] flex-shrink-0 relative z-10 animate-slide-in-right">
             <ModernChat
               open={true}
               onOpen={() => {}}
@@ -2672,7 +2659,7 @@ const AppContent: React.FC = () => {
     </div>
     )}
 
-      {/* 724BETS OVERLAY FOOTER REMOVED AS PER USER REQUEST */}
+      {/* AHBAPBET OVERLAY FOOTER REMOVED AS PER USER REQUEST */}
 
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav 

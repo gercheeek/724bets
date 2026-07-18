@@ -143,8 +143,8 @@ export default function RewardsView({ siteUser }: RewardsViewProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           
           {/* Instant Rakeback */}
-          <div className="bg-gradient-to-b from-[#161F36] to-[#0F1627] border border-white/5 rounded-2xl p-6 flex flex-col items-center text-center relative overflow-hidden group hover:border-blue-500/30 transition-colors">
-            <div className="absolute top-0 right-0 w-full h-full bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="bg-gradient-to-b from-[#161F36] to-[#0F1627] border border-white/5 rounded-2xl p-6 flex flex-col items-center text-center relative overflow-hidden group hover:border-[#10b981]/30 transition-colors">
+            <div className="absolute top-0 right-0 w-full h-full bg-[#10b981]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="flex items-center gap-1.5 text-blue-400 font-bold text-sm mb-1 z-10"><Zap className="w-4 h-4" /> Instant</div>
             <h3 className="text-2xl font-black text-white mb-6 z-10">Rakeback</h3>
             <div className="w-32 h-32 mb-6 relative z-10">
