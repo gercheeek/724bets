@@ -5,7 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 const Footer: React.FC = () => {
   const { t } = useLanguage();
   return (
-    <footer className="w-full bg-[#0f172a]/80 backdrop-blur-md border-t border-white/5 py-10 md:py-16 mt-auto font-sans relative z-10">
+    <footer className="w-full bg-transparent border-t border-white/5 py-10 md:py-16 mt-auto font-sans relative z-10">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Main Footer Content */}
