@@ -9,7 +9,11 @@ const TICKER_GAMES = [
   { name: "Keno", provider: 'ahbapbet', image: "/images/flat-keno.jpg", type: 'keno' as const, path: "keno", rules: "Şanslı sayılarınızı seçin. Ne kadar çok eşleşme yakalarsanız, kazancınız o kadar büyük olur." },
   { name: "Blackjack", provider: 'ahbapbet', image: "/images/flat-blackjack.jpg", type: 'blackjack' as const, path: "blackjack", rules: "Krupiyeyi 21'e en yakın skorla yenin. En popüler kart oyununda şansınızı deneyin." },
   { name: "Roulette", provider: 'ahbapbet', image: "/images/flat-roulette.jpg", type: 'slot' as const, path: "roulette", rules: "Şanslı rakamlarınızı seçin ve tekerleğin dönüşünü heyecanla bekleyin." },
-  { name: "Limbo", provider: 'ahbapbet', image: "/images/flat-keno.jpg", type: 'slot' as const, path: "limbo", rules: "Hedef çarpanınızı belirleyin. Roket belirlediğiniz çarpanın üzerine çıktığı an bahis tutarınız o çarpan ile çarpılır." }
+  { name: "Limbo", provider: 'ahbapbet', image: "/images/flat-keno.jpg", type: 'slot' as const, path: "limbo", rules: "Hedef çarpanınızı belirleyin. Roket belirlediğiniz çarpanın üzerine çıktığı an bahis tutarınız o çarpan ile çarpılır." },
+  { name: "Sugar Twist 1000", provider: "Pragmatic Play", image: "https://mediumrare.imgix.net/2782fa43a134b33c6c44f35edaa6850ef5cf9899a8a2efa9a2450ba5d30f5610?w=300&h=400&fit=min&auto=format", type: 'slot' as const, path: "sugar-twist-1000", rules: "Şeker dolu bir dünyaya adım atın ve 1000x çarpanlarla büyük kazançlar elde edin." },
+  { name: "Undead Farm", provider: "True Labs", image: "https://mediumrare.imgix.net/79a6b3ce1158894cb6b085dc8d6fed994321449e248d49796b52ff0e38a742e0?w=560&h=750&fit=min&auto=format", type: 'slot' as const, path: "undead-farm", rules: "Korkunç ama eğlenceli zombilerle dolu bu çiftlikte büyük ödülleri toplayın." },
+  { name: "Big Bass Rock and Roll", provider: "Pragmatic Play", image: "https://mediumrare.imgix.net/49950a8148c358e88455c78d8dd1abfbeb8d2dd31a7b7971f5515ae4091b6429?w=300&h=400&fit=min&auto=format", type: 'slot' as const, path: "big-bass-rock", rules: "Rock and Roll eşliğinde en büyük balıkları ve muhteşem ödülleri yakalayın." },
+  { name: "Sweet Bonanza 2500", provider: "Pragmatic Play", image: "https://mediumrare.imgix.net/76411df1039d658a8b9c9f90c14467c7ca7c240feeed97274ea73208d786484e?w=300&h=400&fit=min&auto=format", type: 'slot' as const, path: "sweet-bonanza-2500", rules: "Klasik Sweet Bonanza keyfi şimdi daha yüksek çarpanlar ve ödüllerle karşınızda." }
 ];
 
 const getRandom = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
