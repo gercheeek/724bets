@@ -49,7 +49,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ game, isOpen, 
             {/* Modal Content - Perfectly centered on both desktop and mobile */}
             <div className="fixed inset-0 pointer-events-none flex items-center justify-center p-4 sm:p-6">
                 <div 
-                    className={`pointer-events-auto relative w-full max-w-[90vw] md:max-w-[600px] lg:max-w-[650px] max-h-[90vh] bg-[#111317] rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.9)] border border-white/5 flex flex-col overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                    className={`pointer-events-auto relative w-full max-w-[90vw] md:max-w-[600px] lg:max-w-[650px] max-h-[90vh] bg-[#111317] rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.9)] md:border border-white/5 flex flex-col overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                 >
                     {/* Close Button */}
                     <button 

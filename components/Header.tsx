@@ -3,7 +3,7 @@ import {
   Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
   MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
   Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club,
-  Bell, Users, ShieldCheck, Lock, Link, FileText, Clover, Activity, Briefcase
+  Bell, Users, ShieldCheck, Lock, Link, FileText, Clover, Activity, Briefcase, Sun, Moon
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const walletDropdownRef = useRef<HTMLDivElement>(null);
   const [logoHoverCount, setLogoHoverCount] = useState(0);
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   const [depositUsername, setDepositUsername] = useState('');
   const [depositMsg, setDepositMsg] = useState({ type: '', text: '' });
@@ -352,7 +352,7 @@ const Header: React.FC<HeaderProps> = ({
             {/* Left: Hamburger & Logo & Desktop Tabs */}
             <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
               
-              {(siteUser || userRole) && !(activeView === 'home' || activeView === 'sporx' || activeView === 'sports' || activeView === 'sports3' || activeView === 'sports4' || activeView === 'sports5' || activeView === 'giveaway') && (
+              {!(activeView === 'sporx' || activeView === 'sports' || activeView === 'sports3' || activeView === 'sports4' || activeView === 'sports5' || activeView === 'giveaway') && (
                 <button 
                   onClick={onToggleSidebar}
                   className="hidden lg:flex w-10 h-10 items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors mr-2"
@@ -473,6 +473,15 @@ const Header: React.FC<HeaderProps> = ({
         {/* Right: Controls (Profile, Chat, Notifications) */}
         <div id="tour-user-panel" className="flex items-center justify-end flex-1 gap-1 md:gap-3 z-10">
           
+          {/* Theme Switcher */}
+          <button 
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/5 transition-colors text-zinc-300 hover:text-white mr-1"
+            title={theme === 'light' ? 'Koyu Tema' : 'Açık Tema'}
+          >
+            {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5 text-yellow-400 fill-yellow-400" />}
+          </button>
+
           {/* Language Switcher */}
           <div className="relative hidden sm:block" ref={langRef}>
             <button 
@@ -578,17 +587,17 @@ const Header: React.FC<HeaderProps> = ({
             </>
           ) : (
               <>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="flex items-center rounded-lg border border-[#2B3544] h-[42px] shadow-sm overflow-hidden">
                   <button
                     onClick={onMemberLoginClick}
-                    className="flex items-center justify-center bg-[#1A1D24] hover:bg-[#252A34] text-white font-bold text-[14px] h-[42px] w-[110px] rounded-lg transition-colors whitespace-nowrap"
+                    className="flex items-center justify-center bg-[#1A1D24] hover:bg-[#252A34] text-white font-bold text-[14px] h-full px-5 md:px-6 transition-colors whitespace-nowrap"
                   >
                     {t('login')}
                   </button>
                   <button
                     id="tour-register-btn"
                     onClick={onMemberRegisterClick}
-                    className="flex items-center justify-center bg-[#10B981] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-[42px] w-[110px] rounded-lg transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
+                    className="flex items-center justify-center bg-[#10B981] hover:bg-[#00E693] text-black font-extrabold text-[14px] h-full px-5 md:px-6 transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(0,255,163,0.15)]"
                   >
                     {t('register')}
                   </button>

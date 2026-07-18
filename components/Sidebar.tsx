@@ -1,24 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Menu, Home, Trophy, Star, Gamepad2, Plus, Minus,
-  HelpCircle, ShieldCheck, Globe, PlayCircle, List,
-  Activity, Target, Circle, Dribbble, Monitor, 
-  Crosshair, Tv, Gift, Shield, Ticket, Users, MessageSquare, Send, ChevronLeft,
-  BarChart3, Crown, Dices, Flame, ChevronUp, ChevronDown
+  Menu, Trophy, Star, 
+  Target, Gift, Ticket, MessageSquare, Globe, 
+  Crown, ChevronDown, Clock, Sparkles, Cherry, Percent, Headphones, FileText
 } from 'lucide-react';
 import { NavVisibility } from './Header';
 import { useLanguage } from '../contexts/LanguageContext';
-
-interface MenuItem {
-  id: string;
-  label: string;
-  icon?: React.ReactNode;
-  view?: string;
-  href?: string;
-  visKey?: keyof NavVisibility;
-  requireRole?: boolean;
-  subItems?: MenuItem[];
-}
 
 interface SidebarProps {
   isOpen: boolean;
@@ -35,389 +22,295 @@ const Sidebar: React.FC<SidebarProps> = ({
   onToggle,
   activeView,
   onViewChange,
-  userRole,
-  navVisibility,
-  onStartTour,
 }) => {
-  // Track open state of accordions
   const { t } = useLanguage();
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+  
+  // Accordion states
   const [isCasinoOpen, setIsCasinoOpen] = useState(false);
   const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
-  const [isSporOpen, setIsSporOpen] = useState(false);
-  const [isSponsorlukOpen, setIsSponsorlukOpen] = useState(false);
-
-  const topGrid: MenuItem[] = [
-    { id: 'canli', label: t('canli'), icon: <Flame className="w-5 h-5 mb-1" />, view: 'sports' },
-    { id: 'taraf', label: t('taraf'), icon: <Target className="w-5 h-5 mb-1 text-red-500" />, view: 'taraf' },
-    { id: 'casino', label: t('casino').toUpperCase(), icon: <Dices className="w-5 h-5 mb-1" />, view: 'blackjack' },
-  ];
-
-  const menuConfig: MenuItem[] = [
-    { 
-      id: 'senin-icin', 
-      label: t('senin_icin'), 
-      icon: <Star className="w-4 h-4 text-zinc-400" />,
-      subItems: [
-        { id: 'uefa', label: t('uefa'), icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
-        { id: 'wimbledon-w', label: t('wimbledon_w'), icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
-        { id: 'wimbledon-m', label: t('wimbledon_m'), icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
-        { id: 'conference', label: t('conference'), icon: <Globe className="w-4 h-4 text-[#10B981]/60" />, view: 'sports' },
-      ]
-    },
-    {
-      id: 'ana-sporlar',
-      label: t('ana_sporlar'),
-      icon: <Trophy className="w-4 h-4 text-zinc-400" />,
-      subItems: [
-        { id: 'futbol', label: t('futbol'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'tenis', label: t('tenis'), icon: <Circle className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'basketbol', label: t('basketbol'), icon: <Dribbble className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'beyzbol', label: t('beyzbol'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'mma', label: t('mma'), icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' }
-      ]
-    },
-    {
-      id: 'tum-sporlar',
-      label: t('tum_sporlar'),
-      icon: <List className="w-4 h-4 text-zinc-400" />,
-      subItems: [
-        { id: 'ragbi', label: t('ragbi'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'avustralya', label: t('avustralya'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'hentbol', label: t('hentbol'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'kriket', label: t('kriket'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'voleybol', label: t('voleybol'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'dart', label: t('dart'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'boks', label: t('boks'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'buz-hokeyi', label: t('buz_hokeyi'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-        { id: 'masa-tenisi', label: t('masa_tenisi'), icon: <Circle className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-      ]
-    },
-    {
-      id: 'tum-esporlar',
-      label: t('tum_esporlar'),
-      icon: <Gamepad2 className="w-4 h-4 text-zinc-400" />,
-      subItems: [
-        { id: 'efutbol', label: t('efutbol'), icon: <Globe className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'nba2k', label: t('nba2k'), icon: <Dribbble className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'cs2', label: t('cs2'), icon: <Crosshair className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'dota2', label: t('dota2'), icon: <Monitor className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'valorant', label: t('valorant'), icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-        { id: 'lol', label: t('lol'), icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'esports' },
-      ]
-    },
-    { id: 'analiz', label: t('analiz'), icon: <BarChart3 className="w-4 h-4 text-[#10B981]" />, view: 'analysis' },
-    { id: 'mobil-bulten', label: t('mobil_bulten'), icon: <Activity className="w-4 h-4 text-[#10B981]" />, view: 'mobile-bulletin' },
-    { id: 'at-yarisi', label: t('at_yarisi'), icon: <Activity className="w-4 h-4 text-zinc-400" />, view: 'sports' },
-    { id: 'sss', label: t('sss'), icon: <HelpCircle className="w-4 h-4 text-zinc-400" /> },
-    { id: 'kurallar', label: t('kurallar'), icon: <ShieldCheck className="w-4 h-4 text-zinc-400" /> },
-    { id: 'oran', label: t('oran'), icon: <Globe className="w-4 h-4 text-zinc-400" />, subItems: [] },
-  ];
-
-  const extrasConfig: MenuItem[] = [
-    {
-      id: 'diger',
-      label: t('diger'),
-      icon: <Target className="w-4 h-4 text-zinc-400" />,
-      subItems: [
-        { id: 'casino', label: t('casino724'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'blackjack', visKey: 'blackjack' },
-        { id: 'live-casino', label: t('live_casino'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'live-casino' },
-        { id: 'toto', label: t('toto'), icon: <Target className="w-4 h-4 text-zinc-400" />, view: 'pool', visKey: 'pool' },
-        { id: 'loyalty', label: t('gorevler'), icon: <Trophy className="w-4 h-4 text-zinc-400" />, view: 'loyalty', visKey: 'loyalty' },
-        { id: 'trusted-sites', label: t('guvenilir_siteler'), icon: <Shield className="w-4 h-4 text-zinc-400" />, view: 'trusted-sites', visKey: 'trustedSites' },
-        { id: 'giveaway', label: t('cekilis_yonetimi'), icon: <Gift className="w-4 h-4 text-zinc-400" />, view: 'giveaway', requireRole: true },
-      ]
-    }
-  ];
-
-  const filterItems = (items: MenuItem[]) => {
-    return items.filter((item) => {
-      if (item.visKey && navVisibility?.[item.visKey] === false) return false;
-      if (item.requireRole && !userRole) return false;
-      return true;
-    });
-  };
-
-  const renderNavList = (items: MenuItem[]) => {
-    return filterItems(items).map((item) => {
-      const hasSubItems = item.subItems && item.subItems.length > 0;
-      const isOpenAccordion = openGroups[item.id];
-      const isItemActive = item.view === activeView;
-      
-      return (
-        <div 
-          key={item.id} 
-          className={`group mb-2 transition-all duration-300 rounded-lg ${
-            item.subItems && isOpenAccordion 
-              ? 'border border-[#10B981]/50 shadow-[0_0_15px_rgba(0,255,163,0.15)] bg-[#1A1D24]' 
-              : 'border border-transparent hover:border-[#10B981]/30 hover:shadow-[0_0_15px_rgba(0,255,163,0.1)]'
-          }`}
-        >
-          <div 
-            onClick={() => {
-              if (item.subItems) {
-                setOpenGroups(prev => ({ ...prev, [item.id]: !prev[item.id] }));
-              } else if (item.href) {
-                window.open(item.href, '_blank');
-              } else if (item.view) {
-                onViewChange(item.view);
-              }
-            }}
-            className={isOpen 
-              ? `flex items-center justify-between px-4 py-3 cursor-pointer transition-all ${
-                  item.subItems 
-                    ? `bg-[#1A1D24] text-white rounded-t-lg border-b border-white/5` 
-                    : isItemActive 
-                      ? 'bg-[#1A253A] text-white border-l-2 border-[#10B981]' 
-                      : 'hover:bg-[#10B981]/10 hover:text-white text-white/70 border-l-2 border-transparent'
-                }`
-              : `flex items-center justify-center w-12 h-12 rounded-xl transition-all mx-auto mb-1 cursor-pointer ${!item.subItems && isItemActive ? 'bg-[#10B981] text-black' : 'text-white/70 hover:bg-[#1A253A] hover:text-white'}`
-            }
-            title={!isOpen ? item.label : undefined}
-          >
-            {isOpen ? (
-              <>
-                <div className="flex items-center gap-3">
-                  <span className={`flex-shrink-0 ${item.subItems || isItemActive ? 'text-white' : 'text-white/70'}`}>
-                    {item.icon}
-                  </span>
-                  <span className={`text-[15px] font-bold tracking-wide ${item.subItems || isItemActive ? 'text-white' : 'text-white/70'}`}>
-                    {item.label}
-                  </span>
-                </div>
-                {item.subItems && (
-                  <div className="flex items-center justify-center w-6 h-6 rounded bg-white/10 text-white hover:bg-white/20 transition-colors">
-                    {isOpenAccordion ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </div>
-                )}
-              </>
-            ) : (
-              item.icon
-            )}
-          </div>
-
-          {/* SubItems Render */}
-          {isOpen && item.subItems && isOpenAccordion && (
-            <div className="flex flex-col py-3 bg-[#161920] rounded-b-lg">
-              {filterItems(item.subItems).map(sub => {
-                const isSubActive = sub.view === activeView;
-                return (
-                  <div
-                    key={sub.id}
-                    onClick={() => sub.view && onViewChange(sub.view)}
-                    className={`flex items-center gap-3 py-2.5 px-4 cursor-pointer transition-all ${
-                      isSubActive ? 'text-[#10B981]' : 'text-zinc-200 hover:text-white hover:bg-[#10B981]/10 hover:text-white'
-                    }`}
-                  >
-                    <span className={`flex-shrink-0 ${isSubActive ? 'text-[#10B981]' : 'text-white/70'}`}>{sub.icon}</span>
-                    <span className="text-[14px] font-bold tracking-wide truncate">
-                      {sub.label}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      );
-    });
-  };
+  const [isPromosOpen, setIsPromosOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   return (
     <>
       <style>{`
-        .gamdom-sidebar-container {
+        .navy-sidebar-container {
           width: 100%;
-          background-color: #0F1219;
+          background-color: #171b26;
           display: flex;
           flex-direction: column;
           height: 100%;
           position: relative;
           z-index: 10;
+          color: #8b95a5;
         }
-        .gamdom-sidebar-inner {
+        .navy-sidebar-inner {
           width: 100%;
           height: 100%;
           overflow-x: hidden;
           overflow-y: auto;
           display: flex;
           flex-direction: column;
-          scrollbar-width: none; /* Hide scrollbar for Firefox */
-          -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+          scrollbar-width: none;
+          -ms-overflow-style: none;
         }
-        .gamdom-sidebar-inner::-webkit-scrollbar {
-          display: none; /* Hide scrollbar for Chrome/Safari/Opera */
+        .navy-sidebar-inner::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
 
       {/* Overlay for mobile */}
       <div className="sidebar-overlay" onClick={onToggle} style={{ display: 'none' }} />
 
-      <div className={`gamdom-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
-        <div className="gamdom-sidebar-inner pb-20">
+      <div className={`navy-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
+        <div className="navy-sidebar-inner pb-20">
           
-          {/* Top Switcher (Casino | Spor) */}
-          <div className="h-[70px] w-full shrink-0 flex items-center px-4 pt-2 relative z-50">
-              <div className="flex w-full bg-[#0F1219] rounded-md p-0.5 border border-white/5 shadow-inner">
-                <button 
-                  onClick={() => onViewChange('home')}
-                  className={`flex-1 py-2 rounded-md text-sm font-bold transition-all ${((activeView === 'home') || activeView === 'blackjack') ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
-                >
-                  Casino
+          {/* Header Toggle */}
+          <div className="h-[70px] w-full shrink-0 flex items-center px-4 pt-2 border-b border-white/5 relative z-50">
+             <div className="flex items-center w-full gap-2">
+                <button onClick={onToggle} className="text-white/70 hover:text-white p-1 lg:hidden">
+                  <Menu size={24} />
                 </button>
-                <button 
-                  onClick={() => onViewChange('sports')}
-                  className={`flex-1 py-2 rounded-md text-sm font-bold transition-all ${activeView === 'sports' || activeView === 'sports2' ? 'bg-[#1C2028] text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
-                >
-                  Spor
-                </button>
-              </div>
+                <div className="flex-1 flex bg-[#1e2330] rounded-md p-0.5 border border-white/5 shadow-inner relative overflow-hidden">
+                  <button 
+                    onClick={() => onViewChange('home')}
+                    className={`flex-1 py-2 rounded-md text-sm font-bold transition-all relative z-10 flex items-center justify-center gap-2 ${
+                      ((activeView === 'home') || activeView === 'blackjack' || activeView === 'originals') 
+                        ? 'bg-[#1e88e5] text-white shadow-md' 
+                        : 'text-[#8b95a5] hover:text-white'
+                    }`}
+                  >
+                    {((activeView === 'home') || activeView === 'blackjack' || activeView === 'originals') && (
+                      <Cherry className="absolute left-2 w-10 h-10 text-white/10 -rotate-12 pointer-events-none" />
+                    )}
+                    Casino
+                  </button>
+                  <button 
+                    onClick={() => onViewChange('spor724')}
+                    className={`flex-1 py-2 rounded-md text-sm font-bold transition-all relative z-10 ${
+                      activeView === 'spor724' 
+                        ? 'bg-[#1e88e5] text-white shadow-md' 
+                        : 'text-[#8b95a5] hover:text-white'
+                    }`}
+                  >
+                    Spor
+                  </button>
+                </div>
+             </div>
           </div>
 
-
-
-          {/* Unified 5 Menu Blocks (Casino, Spor, Kodu Kullan etc, Sponsorluk, Support) */}
-          {activeView !== 'kral' && (
-            <div className={`flex flex-col gap-1 px-3 py-2 ${!isOpen ? 'items-center' : ''}`}>
+          {isOpen && (
+            <div className="px-3 py-4 flex flex-col gap-4">
               
-              {/* Block 1: Casino Accordion */}
-              <div className={`flex flex-col ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div 
-                  onClick={() => setIsCasinoOpen(!isCasinoOpen)}
-                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Dices className="w-5 h-5 text-white/70 shrink-0" />
-                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Casino</span>}
-                  </div>
-                  {isOpen && <ChevronLeft className={`w-4 h-4 text-white/70 transition-transform ${isCasinoOpen ? '-rotate-90' : ''}`} />}
-                </div>
-                
-                {isOpen && isCasinoOpen && (
-                  <div className="flex flex-col py-1">
-                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#10B981]/10 hover:text-white text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">724Casino / Slotlar</span>
+              {/* Promo Banner */}
+              <div className="flex flex-col relative rounded-xl border border-yellow-500/20 overflow-hidden bg-gradient-to-br from-[#1e2330] to-[#171b26] p-3">
+                 <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-2">
+                       <Ticket className="text-yellow-500 w-8 h-8 shrink-0" />
+                       <div className="flex flex-col">
+                          <span className="text-white font-black text-lg italic tracking-tight leading-none">$20.000</span>
+                          <span className="text-yellow-500 font-black text-[10px] tracking-wider uppercase">Haftalık Çekiliş</span>
+                       </div>
                     </div>
-                    <div onClick={() => onViewChange('blackjack')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#10B981]/10 hover:text-white text-[#888] hover:text-zinc-200">
-                      <span className="text-[13px] font-medium tracking-wide">Canlı Casino</span>
+                    <div className="bg-[#171b26] border border-yellow-500/50 rounded-full px-2 py-0.5 shadow-[0_0_8px_rgba(234,179,8,0.3)]">
+                       <span className="text-white font-bold text-xs italic">20s</span>
                     </div>
-                  </div>
-                )}
+                 </div>
+                 
+                 <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
+                    <div className="flex flex-col items-center">
+                       <span className="text-[#8b95a5] text-[9px] font-bold uppercase tracking-wider">Günlük</span>
+                       <span className="text-white font-black text-sm italic">$25K</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                       <span className="text-[#8b95a5] text-[9px] font-bold uppercase tracking-wider">Haftalık</span>
+                       <span className="text-white font-black text-sm italic">$100K</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                       <span className="text-[#8b95a5] text-[9px] font-bold uppercase tracking-wider">Aylık</span>
+                       <span className="text-white font-black text-sm italic">$500K</span>
+                    </div>
+                 </div>
               </div>
 
-              {/* Block 1.5: Originals Accordion */}
-              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div 
-                  onClick={() => setIsOriginalsOpen(!isOriginalsOpen)}
-                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
+              {/* Main Navigation Links */}
+              <div className="flex flex-col gap-1 mt-2">
+                <button 
+                  onClick={() => onViewChange('home')}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                    activeView === 'home'
+                    ? 'bg-[#1c2438] text-white' 
+                    : 'text-[#8b95a5] hover:text-white hover:bg-[#1e2330]'
+                  }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <Target className="w-5 h-5 text-white/70 shrink-0" />
-                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Originals</span>}
-                  </div>
-                  {isOpen && <ChevronLeft className={`w-4 h-4 text-white/70 transition-transform ${isOriginalsOpen ? '-rotate-90' : ''}`} />}
-                </div>
-                
-                {isOpen && isOriginalsOpen && (
-                  <div className="flex flex-col py-1">
-                    <div onClick={() => onViewChange('originals')} className="flex items-center gap-3 py-2.5 px-4 pl-12 cursor-pointer hover:bg-[#10B981]/10 hover:text-white text-[#888] hover:text-zinc-200">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-[0_0_8px_rgba(0,255,163,0.8)]" />
-                      <span className="text-[13px] font-bold tracking-wide text-[#10B981]">724BETS Originals</span>
-                    </div>
-                  </div>
-                )}
+                  <Crown className={`w-5 h-5 ${activeView === 'home' ? 'text-[#3b82f6]' : ''}`} />
+                  <span className="font-bold text-[14px]">Anasayfa</span>
+                </button>
+
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-[#8b95a5] hover:text-white hover:bg-[#1e2330]">
+                  <Star className="w-5 h-5" />
+                  <span className="font-bold text-[14px]">Sık Kullanılanlar</span>
+                </button>
+
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-[#8b95a5] hover:text-white hover:bg-[#1e2330]">
+                  <Clock className="w-5 h-5" />
+                  <span className="font-bold text-[14px]">Son Oynanan</span>
+                </button>
+
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-[#8b95a5] hover:text-white hover:bg-[#1e2330]">
+                  <Sparkles className="w-5 h-5" />
+                  <span className="font-bold text-[14px]">Yeni Çıkanlar</span>
+                </button>
+
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-[#8b95a5] hover:text-white hover:bg-[#1e2330]">
+                  <Trophy className="w-5 h-5" />
+                  <span className="font-bold text-[14px] truncate w-40 text-left">FIFA Dünya Kupası 20...</span>
+                </button>
               </div>
 
-              {/* Block 2: Spor Link */}
-              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div onClick={() => onViewChange('sporx')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
-                  <Activity className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
-                  {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">Sporx</span>}
+              <div className="w-full h-px bg-white/5 my-1"></div>
+
+              {/* Accordions */}
+              <div className="flex flex-col gap-2">
+                {/* Casino */}
+                <div className="flex flex-col bg-[#1e2330] rounded-xl border border-white/5 overflow-hidden">
+                  <div 
+                    onClick={() => setIsCasinoOpen(!isCasinoOpen)}
+                    className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Cherry className="w-5 h-5 text-white" />
+                      <span className="font-bold text-white text-[14px]">Casino</span>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-[#8b95a5] transition-transform ${isCasinoOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {isCasinoOpen && (
+                    <div className="flex flex-col py-1 bg-[#171b26] border-t border-white/5">
+                      <button onClick={() => onViewChange('blackjack')} className="text-left px-11 py-2 text-[13px] font-bold text-[#8b95a5] hover:text-white transition-colors">Slotlar</button>
+                      <button onClick={() => onViewChange('blackjack')} className="text-left px-11 py-2 text-[13px] font-bold text-[#8b95a5] hover:text-white transition-colors">Canlı Casino</button>
+                    </div>
+                  )}
                 </div>
-                <div onClick={() => onViewChange('spor724')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
-                  <Target className={`text-zinc-500 group-hover:text-white transition-colors ${isOpen ? 'w-5 h-5' : 'w-6 h-6'}`} />
-                  {isOpen && <span className="font-semibold text-zinc-300 group-hover:text-white transition-colors text-[13px]">SPOR724</span>}
+
+                {/* Originals */}
+                <div className="flex flex-col bg-[#1e2330] rounded-xl border border-white/5 overflow-hidden">
+                  <div 
+                    onClick={() => setIsOriginalsOpen(!isOriginalsOpen)}
+                    className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Target className="w-5 h-5 text-white" />
+                      <span className="font-bold text-white text-[14px]">Originals</span>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-[#8b95a5] transition-transform ${isOriginalsOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {isOriginalsOpen && (
+                    <div className="flex flex-col py-1 bg-[#171b26] border-t border-white/5">
+                      <button onClick={() => onViewChange('originals')} className="text-left px-11 py-2 text-[13px] font-bold text-[#8b95a5] hover:text-white transition-colors">Zar (Dice)</button>
+                      <button onClick={() => onViewChange('originals')} className="text-left px-11 py-2 text-[13px] font-bold text-[#8b95a5] hover:text-white transition-colors">Plinko</button>
+                      <button onClick={() => onViewChange('originals')} className="text-left px-11 py-2 text-[13px] font-bold text-[#8b95a5] hover:text-white transition-colors">Mayınlar (Mines)</button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Promosyonlar */}
+                <div className="flex flex-col bg-[#1e2330] rounded-xl border border-white/5 overflow-hidden">
+                  <div 
+                    onClick={() => setIsPromosOpen(!isPromosOpen)}
+                    className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Percent className="w-5 h-5 text-white" />
+                      <span className="font-bold text-white text-[14px]">Promosyonlar</span>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-[#8b95a5] transition-transform ${isPromosOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {isPromosOpen && (
+                    <div className="flex flex-col py-1 bg-[#171b26] border-t border-white/5">
+                      <button onClick={() => onViewChange('promo')} className="text-left px-11 py-2 text-[13px] font-bold text-[#8b95a5] hover:text-white transition-colors">Hoşgeldin Bonusu</button>
+                      <button onClick={() => onViewChange('promo')} className="text-left px-11 py-2 text-[13px] font-bold text-[#8b95a5] hover:text-white transition-colors">Kayıp Bonusu</button>
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className="w-full h-px bg-white/5 my-2"></div>
 
-              {/* Block 3: Kodu Kullan etc. */}
-              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div onClick={() => onViewChange('promo')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
-                  <Ticket className="w-5 h-5 text-white/70 shrink-0" />
-                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Promosyonlar</span>}
-                </div>
-                <div onClick={() => onViewChange('referral')} className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
-                  <Users className="w-5 h-5 text-white/70 shrink-0" />
-                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Arkadaşını Davet Et</span>}
-                </div>
-                <div className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
-                  <Send className="w-5 h-5 text-white/70 shrink-0" />
-                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Telegram</span>}
-                </div>
-                <div className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
-                  <div className="w-5 h-5 text-white/70 shrink-0 flex items-center justify-center border border-zinc-300 rounded-sm">
-                    <span className="text-[10px] font-black leading-none">↓</span>
-                  </div>
-                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Uygulamayı İndir</span>}
-                </div>
-              </div>
-
-              <div className="w-full h-px bg-white/5 my-2"></div>
-
-              {/* Block 4: Sponsorluk Accordion */}
-              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div 
-                  onClick={() => setIsSponsorlukOpen(!isSponsorlukOpen)}
-                  className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Crown className="w-5 h-5 text-white/70 shrink-0" />
-                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Sponsorluk</span>}
-                  </div>
-                  {isOpen && <ChevronLeft className={`w-4 h-4 text-white/70 transition-transform ${isSponsorlukOpen ? '-rotate-90' : ''}`} />}
-                </div>
-                
-                {isOpen && isSponsorlukOpen && (
-                  <div className="flex flex-col py-1">
-                    <div className="flex items-center gap-3 py-2.5 px-4 pl-12 text-[#888] text-[13px] font-medium">
-                      <span>Sponsorluk Anlaşmaları Yakında...</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="w-full h-px bg-white/5 my-2"></div>
-
-              {/* Block 5: Canlı Destek & Türkçe */}
-              <div className={`flex flex-col mt-1 ${!isOpen ? 'w-12 items-center' : 'w-full'}`}>
-                <div 
+              {/* Footer Links */}
+              <div className="flex flex-col gap-1">
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-[#8b95a5] hover:text-white hover:bg-[#1e2330]">
+                  <Gift className="w-5 h-5" />
+                  <span className="font-bold text-[14px]">Ödüller</span>
+                </button>
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-[#8b95a5] hover:text-white hover:bg-[#1e2330]">
+                  <FileText className="w-5 h-5" />
+                  <span className="font-bold text-[14px]">Blog</span>
+                </button>
+                <button 
                   onClick={() => window.dispatchEvent(new Event('openSupportChat'))}
-                  className={`flex items-center gap-3 cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-[#8b95a5] hover:text-white hover:bg-[#1e2330]"
                 >
-                  <MessageSquare className="w-5 h-5 text-white/70 shrink-0 fill-current" />
-                  {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Canlı Destek</span>}
-                </div>
-                <div className={`flex items-center justify-between cursor-pointer rounded-xl hover:bg-[#10B981]/10 hover:text-white transition-colors ${isOpen ? 'py-3 px-3' : 'p-3 w-full justify-center'}`}>
+                  <Headphones className="w-5 h-5" />
+                  <span className="font-bold text-[14px]">Canlı Destek</span>
+                </button>
+                <div 
+                  onClick={() => setIsLangOpen(!isLangOpen)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-colors text-[#8b95a5] hover:text-white hover:bg-[#1e2330]"
+                >
                   <div className="flex items-center gap-3">
-                    <Globe className="w-5 h-5 text-white/70 shrink-0" />
-                    {isOpen && <span className="text-[13px] font-bold text-white tracking-wide">Türkçe</span>}
+                    <Globe className="w-5 h-5" />
+                    <span className="font-bold text-[14px]">Dil: Türkçe</span>
                   </div>
-                  {isOpen && <ChevronLeft className="w-4 h-4 text-white/70 -rotate-90" />}
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} />
                 </div>
               </div>
 
             </div>
           )}
 
-          {/* Extras / Other Games */}
-          {activeView === 'kral' && (
-            <div className="flex flex-col bg-[#0F1219]">
-              {renderNavList(extrasConfig)}
+          {!isOpen && (
+            <div className="flex flex-col items-center py-4 gap-4 w-full">
+              {/* Collapsed icons only */}
+              <button onClick={() => onViewChange('home')} className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${activeView === 'home' || activeView === 'blackjack' ? 'bg-[#1c2438] text-white border-l-2 border-[#3b82f6]' : 'text-[#8b95a5] hover:text-white hover:bg-[#1e2330]'}`}>
+                <Crown className={`w-5 h-5 ${activeView === 'home' ? 'text-[#3b82f6]' : ''}`} />
+              </button>
+              <button className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Star className="w-5 h-5" />
+              </button>
+              <button className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Clock className="w-5 h-5" />
+              </button>
+              <button className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Sparkles className="w-5 h-5" />
+              </button>
+              <button className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Trophy className="w-5 h-5" />
+              </button>
+              <div className="w-10 h-px bg-white/5 my-1"></div>
+              <button onClick={() => {onToggle(); setIsCasinoOpen(true);}} className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Cherry className="w-5 h-5" />
+              </button>
+              <button onClick={() => {onToggle(); setIsOriginalsOpen(true);}} className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Target className="w-5 h-5" />
+              </button>
+              <button onClick={() => {onToggle(); setIsPromosOpen(true);}} className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Percent className="w-5 h-5" />
+              </button>
+              <div className="w-10 h-px bg-white/5 my-1"></div>
+              <button className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Gift className="w-5 h-5" />
+              </button>
+              <button className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <FileText className="w-5 h-5" />
+              </button>
+              <button onClick={() => window.dispatchEvent(new Event('openSupportChat'))} className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Headphones className="w-5 h-5" />
+              </button>
+              <button onClick={() => {onToggle(); setIsLangOpen(!isLangOpen);}} className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8b95a5] hover:text-white hover:bg-[#1e2330] transition-colors">
+                <Globe className="w-5 h-5" />
+              </button>
             </div>
           )}
-
 
         </div>
       </div>

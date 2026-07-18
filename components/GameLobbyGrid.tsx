@@ -107,7 +107,13 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
       >
         <div className="flex gap-3 md:gap-4 min-w-max pb-4 pt-2">
           {games.map((game) => (
-            <div key={game.id} onClick={() => onGameClick?.(game)} className="flex flex-col gap-2 cursor-pointer relative" style={{ width: 'calc(100vw / 2.5 - 12px)', maxWidth: '170px', scrollSnapAlign: 'start' }}>
+            <div 
+              key={game.id} 
+              className="flex flex-col gap-2 cursor-pointer relative" 
+              style={{ width: 'calc(100vw / 2.5 - 12px)', maxWidth: '170px', scrollSnapAlign: 'start' }}
+              tabIndex={0}
+              onClick={() => {}} // Empty handler for iOS Safari hover
+            >
               
               <div className="relative group w-full h-full">
                 <div 

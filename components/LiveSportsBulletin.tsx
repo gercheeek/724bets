@@ -156,10 +156,7 @@ export const LiveSportsBulletin = () => {
         </div>
       </div>
 
-      {/* Right Sidebar (Bet Slip) */}
-      <div className="w-[320px] bg-[#15181E] border-l border-white/5 p-4 shrink-0 hidden xl:block">
-        <CustomBetSlip />
-      </div>
+      {/* Right Sidebar removed as we now use global FloatingBetSlip */}
 
     </div>
   );

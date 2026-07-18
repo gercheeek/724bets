@@ -6,6 +6,7 @@ import { ALL_GAMES } from '../data/games';
 
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
+  { id: 'popular', label: 'Popüler', icon: <Star size={16} /> },
   { id: 'slots', label: 'Slotlar', icon: <Flame size={16} /> },
   { id: 'originals', label: 'Orijinal Oyunlar', icon: <Crown size={16} /> },
   { id: 'live', label: 'Canlı Casino', icon: <MonitorPlay size={16} /> },
@@ -20,6 +21,8 @@ const BANNERS = [
 ];
 
 const DEMO_GAMES = [
+  { id: 1167, name: 'Big Bass Rock and Roll', provider: 'Pragmatic Play', img: 'https://mediumrare.imgix.net/49950a8148c358e88455c78d8dd1abfbeb8d2dd31a7b7971f5515ae4091b6429?w=300&h=400&fit=min&auto=format', category: 'popular', rtp: '96.50%', customDemoUrl: 'https://demogamesfree.mknyxfbxou.net/gs2c/html5Game.do?extGame=1&symbol=vs10bbrrh&gname=Big%20Bass%20Rock%20and%20Roll&jurisdictionID=99&lobbyUrl=https%3A%2F%2Fstake.com%2Fcasino%2Fhome&mgckey=stylename@rare_stake~SESSION@2686b1a0-7131-4bb4-876f-b16b67d01483' },
+  { id: 1168, name: 'Sweet Bonanza 2500', provider: 'Pragmatic Play', img: 'https://mediumrare.imgix.net/76411df1039d658a8b9c9f90c14467c7ca7c240feeed97274ea73208d786484e?w=300&h=400&fit=min&auto=format', category: 'popular', rtp: '96.48%', customDemoUrl: 'https://demogamesfree.mknyxfbxou.net/gs2c/html5Game.do?extGame=1&symbol=vs20swbon2500&gname=Sweet%20Bonanza%202500&jurisdictionID=99&lobbyUrl=https%3A%2F%2Fstake.com%2Fcasino%2Fhome&mgckey=stylename@rare_stake~SESSION@7066ab78-b1aa-4060-b2e2-6c141cd7723e' },
   { id: 101, name: 'Gates of Olympus', provider: 'Pragmatic Play', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Gates-of-Olympus-PragmaticPlay/Vertical/GatesofOlympus_20250328152430427.webp', category: 'slots', rtp: '96.50%' },
   { id: 102, name: 'Sweet Bonanza', provider: 'Pragmatic Play', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/Sweet-Bonanza-PragmaticPlay/VerticalSweetBonanza_20251014122142773.webp', category: 'slots', rtp: '96.48%' },
   { id: 103, name: 'Crazy Time', provider: 'Evolution', img: 'https://images.unsplash.com/photo-1606167668511-8785bbbe5761?w=500&q=80', category: 'live', rtp: '95.40%' },
@@ -29,12 +32,12 @@ const DEMO_GAMES = [
   { id: 107, name: 'Starlight Princess', provider: 'Pragmatic Play', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/partners/1217/Games/Starlight-Princess-1000-Pragmatic-Play/Vertical/StarlightPrincess1000_20250312174636784.webp', category: 'slots', rtp: '96.50%' },
   { id: 108, name: '40 Super Hot', provider: 'Amusnet', img: 'https://cdn.bahisbey1438.com/plat/prd/Img/Games/EGTDigital/Vertical/40SuperHotBellLink.webp', category: 'slots', rtp: '95.81%' },
   { id: 109, name: 'XXXTreme Lightning', provider: 'Evolution', img: 'https://images.unsplash.com/photo-1517594422361-5e18d033339f?w=500&q=80', category: 'live', rtp: '97.30%' },
-  { id: 110, name: 'Plinko', provider: 'Originals', img: '/images/neon-plinko.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 110, name: 'Plinko', provider: 'Originals', img: '/images/clean-plinko-v4.jpg', category: 'originals', rtp: '99.00%' },
   { id: 111, name: 'Keno', provider: 'Originals', img: '/images/neon-keno.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 112, name: 'Dice', provider: 'Originals', img: '/images/neon-dice.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 112, name: 'Dice', provider: 'Originals', img: '/images/clean-dice-v4.jpg', category: 'originals', rtp: '99.00%' },
   { id: 113, name: 'Mines', provider: 'Originals', img: '/images/neon-mines.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 114, name: 'War', provider: 'Originals', img: '/images/neon-war.jpg', category: 'originals', rtp: '99.00%' },
-  { id: 115, name: 'Hilo', provider: 'Originals', img: '/images/neon-hilo.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 114, name: 'War', provider: 'Originals', img: '/images/clean-war-v4.jpg', category: 'originals', rtp: '99.00%' },
+  { id: 115, name: 'Hilo', provider: 'Originals', img: '/images/clean-hilo-v4.jpg', category: 'originals', rtp: '99.00%' },
   { id: 116, name: 'Blackjack', provider: 'Originals', img: '/images/neon-blackjack.jpg', category: 'originals', rtp: '99.29%' },
   { id: 117, name: 'Roulette', provider: 'Originals', img: '/images/neon-roulette.jpg', category: 'originals', rtp: '97.30%' },
   { id: 118, name: 'Chicken Cross', provider: 'Originals', img: '/images/neon-chickencross.jpg', category: 'originals', rtp: '99.00%' },
@@ -261,8 +264,9 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
     <div className="flex flex-col">
       <div 
         className="group relative flex flex-col cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.6)] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:-translate-y-1" 
-        onClick={onClick}
         style={{ aspectRatio: '3/4', backgroundColor: '#111' }}
+        tabIndex={0}
+        onClick={() => {}} // Empty handler for iOS Safari hover
       >
         {/* Full Image */}
         <img 
@@ -271,25 +275,7 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
           className={`absolute inset-0 w-full h-full ${game.containImg ? 'object-contain' : 'object-cover'} object-center transition-transform duration-700 group-hover:scale-110 z-10 ${game.category === 'originals' ? 'mix-blend-lighten' : ''}`} 
         />
 
-        {/* Conditionally Render Massive 3D Badge Overlay for Originals */}
-        {game.category === 'originals' && (
-            <div className="absolute inset-x-0 bottom-4 flex flex-col items-center z-20 pointer-events-none transform scale-100 group-hover:scale-110 transition-transform duration-500 origin-bottom">
-                <div className="bg-gradient-to-b from-[#1a1f35] to-[#0d111d] ring-1 ring-white/30 border border-black/50 rounded-xl px-4 py-1.5 flex flex-col items-center shadow-[0_8px_15px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.2)]">
-                    <span 
-                        className="font-black text-xl md:text-2xl tracking-tighter leading-none"
-                        style={{
-                            background: 'linear-gradient(to bottom, #ffffff 20%, #b0b0b0 50%, #e0e0e0 80%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            filter: 'drop-shadow(0px 2px 1px rgba(0,0,0,0.8))'
-                        }}
-                    >
-                        {game.name.toUpperCase()}
-                    </span>
-                </div>
-                <span className="italic font-black text-white text-[10px] tracking-[0.2em] mt-1 drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)] opacity-95 -skew-x-12">724BETS</span>
-            </div>
-        )}
+
 
         {/* Play Overlay with Real and Demo Buttons */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/70 backdrop-blur-[2px]">
@@ -325,8 +311,9 @@ const NewGameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () =
   return (
     <div 
       className="group relative flex flex-col cursor-pointer rounded-[14px] overflow-hidden shadow-lg transition-transform duration-300 hover:-translate-y-1" 
-      onClick={onClick}
       style={{ aspectRatio: '4/5', backgroundColor: '#111' }}
+      tabIndex={0}
+      onClick={() => {}} // Empty handler for iOS Safari hover
     >
       <img 
         src={game.img || game.image} 
@@ -608,37 +595,29 @@ const CasinoLobby: React.FC<{ customGames?: CasinoLobbyGame[], isLoggedIn?: bool
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
             />
 
-            <SectionHeader title="Popüler Slotlar" icon={<Flame />} />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              {popularGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => handleGameClick(game)} onDemoClick={() => handleDemoClick(game)} />
-              ))}
-            </div>
+            <SliderSection 
+              title="Canlı Casino" 
+              icon={<MonitorPlay className="text-white" />} 
+              games={liveGames} 
+              onSelect={setSelectedGame}
+              onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
+            />
 
-            <SectionHeader title="Canlı Casino" icon={<MonitorPlay />} />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              {liveGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => handleGameClick(game)} onDemoClick={() => handleDemoClick(game)} />
-              ))}
-            </div>
+            <SliderSection 
+              title="Çok Kazandıranlar" 
+              icon={<Flame className="text-[#f0b90b]" />} 
+              games={allGames.filter(g => g.type === 'slot' || g.category === 'slots').sort((a, b) => b.players - a.players).slice(12, 24)} 
+              onSelect={setSelectedGame}
+              onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
+            />
 
-            <SectionHeader title="Çok Kazandıranlar" icon={<Flame className="text-[#f0b90b]" />} />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              {allGames
-                .filter(g => g.type === 'slot' || g.category === 'slots')
-                .sort((a, b) => b.players - a.players)
-                .slice(12, 24)
-                .map(game => (
-                <GameCard key={game.id} game={game} onClick={() => handleGameClick(game)} onDemoClick={() => handleDemoClick(game)} />
-              ))}
-            </div>
-
-            <SectionHeader title="Yeni Eklenenler" icon={<Sparkles />} />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              {newGames.map(game => (
-                <GameCard key={game.id} game={game} onClick={() => handleGameClick(game)} onDemoClick={() => handleDemoClick(game)} />
-              ))}
-            </div>
+            <SliderSection 
+              title="Yeni Eklenenler" 
+              icon={<Sparkles className="text-white" />} 
+              games={newGames} 
+              onSelect={setSelectedGame}
+              onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
+            />
           </div>
         )}
       </div>

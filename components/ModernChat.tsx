@@ -767,10 +767,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         return (
                         <div 
                             key={msg.id || i} 
-                            className={`px-4 py-2.5 flex flex-row gap-3 relative group text-left cursor-default transition-all duration-300 rounded-lg mx-2 ${
-                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-gradient-to-r from-emerald-500/10 to-transparent border-l-2 border-emerald-500' : 
-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-transparent' : 
-                                'bg-transparent hover:bg-white/[0.02]'
+                            className={`px-3 py-2 flex flex-col gap-1 relative group text-left cursor-default transition-all duration-300 rounded-xl mx-2 mb-2 ${
+                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-gradient-to-r from-emerald-500/10 to-[#1A1D24] border border-emerald-500/20' : 
+                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-[#1A1D24] border border-[#2A2E3D]' : 
+                                'bg-[#1A1D24] border border-[#2A2E3D] hover:bg-[#20242D]'
                             }`}
                             onContextMenu={(e) => {
                                 if (isAdmin) {
@@ -780,27 +780,22 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 }
                             }}
                         >
-                            {/* Avatar */}
-                            <div className={`w-8 h-8 rounded-full bg-[#1A1D24] flex-shrink-0 overflow-hidden mt-0.5 border ${msg.role?.toUpperCase() === 'ADMIN' ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-white/10'}`}>
-                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.username}`} alt={msg.username} className="w-full h-full object-cover" />
-                            </div>
-
-                            <div className="flex flex-col flex-1 min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap mb-1">
-                                    <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap">
-                                        {formatTime(msg.created_at)}
-                                    </span>
+                            <div className="flex flex-col min-w-0">
+                                <div className="flex items-center flex-wrap gap-1 mb-0.5">
                                     <span 
-                                        className="text-[13px] font-extrabold tracking-wide drop-shadow-sm flex items-center" 
+                                        className="text-[13px] font-bold tracking-wide drop-shadow-sm flex items-center" 
                                         style={{ color: getRoleColor(msg.role, msg.username, msg) }}
                                     >
-                                        {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
+                                        {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}:
+                                    </span>
+                                    <span className="text-[13px] text-gray-300 leading-relaxed break-words antialiased inline-block">
+                                        {renderMessageText(msg.message)}
                                     </span>
                                 </div>
-                                <div className={`text-[13px] leading-relaxed break-words pr-4 antialiased ${
-                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold text-white' : 'text-gray-300 font-medium'
-                                }`}>
-                                    {renderMessageText(msg.message)}
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] text-zinc-500 font-medium">
+                                        {formatTime(msg.created_at)}
+                                    </span>
                                 </div>
                             </div>
 
@@ -879,8 +874,8 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         <input 
                             type="text"
                             disabled
-                            placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
-                            className="w-full bg-[#1A1D24] border border-[#2A2E3D] text-[12px] font-bold text-center text-gray-500 rounded-xl px-4 py-3.5 cursor-not-allowed shadow-inner"
+                            placeholder="Mesaj göndermek için lütfen giriş yapın"
+                            className="w-full bg-[#13161C] border border-[#2A2E3D] text-[12px] font-medium text-center text-gray-500 rounded-xl px-4 py-3.5 cursor-not-allowed shadow-inner"
                         />
                     </div>
                 ) : (

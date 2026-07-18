@@ -77,7 +77,12 @@ const LIVE_GAMES = [
   }
 ];
 
-export default function LiveGamesSlider() {
+// Added onPlayGame to props
+interface LiveGamesSliderProps {
+  onPlayGame?: (game: any) => void;
+}
+
+export default function LiveGamesSlider({ onPlayGame }: LiveGamesSliderProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
 
@@ -137,6 +142,7 @@ export default function LiveGamesSlider() {
         {LIVE_GAMES.map((game) => (
           <div 
             key={game.id} 
+            onClick={() => onPlayGame?.(game)}
             className="relative flex-shrink-0 w-[160px] md:w-[185px] h-[240px] md:h-[280px] rounded-xl overflow-hidden group cursor-pointer snap-start shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
           >
             {/* Background Image */}

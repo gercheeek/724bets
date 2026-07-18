@@ -21,7 +21,7 @@ export default function OriginalGameContainer({
     onNavigate
 }: OriginalGameContainerProps) {
     return (
-        <div className="w-full relative flex flex-col bg-[#050505] overflow-hidden font-sans" style={{ height: 'calc(100dvh - var(--header-height, 60px))' }}>
+        <div className="w-full relative flex flex-col bg-[#050505] overflow-hidden font-sans">
             
             {/* ── BACKGROUND LAYER ── */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">

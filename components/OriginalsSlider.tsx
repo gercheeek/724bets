@@ -10,7 +10,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Plinko',
         desc: t("desc_plinko"),
         color: 'from-purple-600 to-purple-900',
-        image: '/images/neon-plinko.jpg',
+        image: '/images/clean-plinko-v4.jpg',
         path: 'plinko',
         icon: '🎯',
         players: 569,
@@ -19,134 +19,43 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         volatility: 'Yüksek'
     },
     {
-        id: 'keno',
-        name: 'Keno',
-        desc: t("desc_keno"),
-        color: 'from-orange-500 to-orange-800',
-        image: '/images/neon-keno.jpg',
-        path: 'keno',
-        icon: '🎱',
-        players: 318,
-        rtp: '%98.5',
-        maxWin: '500x',
-        volatility: 'Orta'
-    },
-    {
         id: 'dice',
         name: 'Dice',
         desc: t("desc_dice"),
         color: 'from-blue-600 to-blue-900',
-        image: '/images/neon-dice.jpg',
+        image: '/images/clean-dice-v4.jpg',
         path: 'dice',
         icon: '🎲',
         players: 482,
         rtp: '%99.0',
         maxWin: '9900x',
-        volatility: 'Çok Yüksek'
-    },
-    {
-        id: 'mines',
-        name: 'Mines',
-        desc: t("desc_mines"),
-        color: 'from-red-600 to-red-900',
-        image: '/images/neon-mines.jpg',
-        path: 'mines',
-        icon: '💣',
-        players: 356,
-        rtp: '%99.0',
-        maxWin: '5.1M x',
-        volatility: 'Yüksek'
+        volatility: 'Değişken'
     },
     {
         id: 'war',
         name: 'War',
         desc: t("desc_war"),
         color: 'from-red-600 to-red-900',
-        image: '/images/neon-war.jpg',
+        image: '/images/clean-war-v4.jpg',
         path: 'war',
         icon: '⚔️',
-        players: 481,
-        rtp: '%98.0',
+        players: 517,
+        rtp: '%98.5',
         maxWin: '2x',
         volatility: 'Düşük'
     },
     {
         id: 'hilo',
-        name: 'HiLo',
+        name: 'Hilo',
         desc: t("desc_hilo"),
-        color: 'from-pink-600 to-pink-900',
-        image: '/images/neon-hilo.jpg',
+        color: 'from-green-600 to-green-900',
+        image: '/images/clean-hilo-v4.jpg',
         path: 'hilo',
         icon: '🃏',
-        players: 517,
+        players: 481,
         rtp: '%99.0',
-        maxWin: 'Sınırsız',
-        volatility: 'Değişken'
-    },
-    {
-        id: 'blackjack',
-        name: 'Blackjack',
-        desc: t("desc_blackjack"),
-        color: 'from-emerald-600 to-emerald-900',
-        image: '/images/neon-blackjack.jpg',
-        path: 'blackjack-pro',
-        icon: '♠️',
-        players: 215,
-        rtp: '%99.5',
-        maxWin: '2.5x',
+        maxWin: 'Limitsiz',
         volatility: 'Düşük'
-    },
-    {
-        id: 'roulette',
-        name: 'Roulette',
-        desc: t("desc_roulette"),
-        color: 'from-emerald-600 to-emerald-900',
-        image: '/images/neon-roulette.jpg',
-        path: 'roulette',
-        icon: '🎡',
-        players: 352,
-        rtp: '%97.3',
-        maxWin: '35x',
-        volatility: 'Orta'
-    },
-    {
-        id: 'chicken-cross',
-        name: 'Chicken Cross',
-        desc: t("desc_chickencross"),
-        color: 'from-emerald-600 to-emerald-900',
-        image: '/images/neon-chickencross.jpg',
-        path: 'chicken-cross',
-        icon: '🐔',
-        players: 219,
-        rtp: '%98.0',
-        maxWin: '1000x',
-        volatility: 'Orta'
-    },
-    {
-        id: 'limbo',
-        name: 'Limbo',
-        desc: t("desc_limbo"),
-        color: 'from-red-600 to-red-900',
-        image: '/images/neon-limbo.jpg',
-        path: 'limbo',
-        icon: '🚀',
-        players: 325,
-        rtp: '%99.0',
-        maxWin: '1M x',
-        volatility: 'Maksimum'
-    },
-    {
-        id: 'chickenrun',
-        name: 'Chicken Run',
-        desc: 'Tavuğunla koş, engelleri aş, çarpanları yakala! Yeni ve çok eğlenceli.',
-        color: 'from-orange-500 to-red-600',
-        image: '/images/neon-chickenrun.jpg',
-        path: 'chicken-run',
-        icon: '🐔',
-        players: 185,
-        rtp: '%98.5',
-        maxWin: '2000x',
-        volatility: 'Orta'
     }
 ];
 
@@ -230,23 +139,7 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                             >
                                 <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out mix-blend-lighten" />
                                 
-                                {/* Massive 3D Badge Overlay */}
-                                <div className="absolute inset-x-0 bottom-3 flex flex-col items-center z-20 pointer-events-none transform scale-100 group-hover:scale-110 transition-transform duration-500 origin-bottom">
-                                    <div className="bg-gradient-to-b from-[#1a1f35] to-[#0d111d] ring-1 ring-white/30 border border-black/50 rounded-xl px-4 py-1.5 flex flex-col items-center shadow-[0_8px_15px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.2)]">
-                                        <span 
-                                            className="font-black text-lg md:text-xl tracking-tighter leading-none"
-                                            style={{
-                                                background: 'linear-gradient(to bottom, #ffffff 20%, #b0b0b0 50%, #e0e0e0 80%)',
-                                                WebkitBackgroundClip: 'text',
-                                                WebkitTextFillColor: 'transparent',
-                                                filter: 'drop-shadow(0px 2px 1px rgba(0,0,0,0.8))'
-                                            }}
-                                        >
-                                            {game.name.toUpperCase()}
-                                        </span>
-                                    </div>
-                                    <span className="italic font-black text-white text-[9px] tracking-[0.2em] mt-1 drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)] opacity-95 -skew-x-12">724BETS</span>
-                                </div>
+
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                                 {/* Play button appears on hover */}

@@ -7,7 +7,7 @@ import LanguageTransition from './components/LanguageTransition';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import Header from './components/Header';
-import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock, ShieldCheck, Wallet, Club, Search } from 'lucide-react';
+import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock, ShieldCheck, Wallet, Club, Search, Menu } from 'lucide-react';
 import { getFlagUrl } from './components/MatchResultsWidget';
 import AppLoader from './components/AppLoader';
 import BrandCard from './components/BrandCard';
@@ -74,7 +74,6 @@ import { PromoSlider } from './components/PromoSlider';
 import { WithdrawalHistory } from './components/WithdrawalHistory';
 import { DepositHistory } from './components/DepositHistory';
 import { LiveSportsBulletin } from './components/LiveSportsBulletin';
-import { SporxBulletin } from './components/SporxBulletin';
 import MobileBulletinView from './components/MobileBulletinView';
 import GameLobbyGrid from './components/GameLobbyGrid';
 import Sidebar from './components/Sidebar';
@@ -175,7 +174,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <div className="min-h-screen bg-[#0B0E14] text-gray-100 flex flex-col font-sans">
+        <div className="min-h-screen bg-theme-main text-theme-primary flex flex-col font-sans">
           <FomoNotifications />
           <AppContent />
         </div>
@@ -196,7 +195,7 @@ const AppContent: React.FC = () => {
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'sporx' | 'taraf' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger'>('home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'taraf' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger'>(window.location.pathname.startsWith('/spor') ? 'spor724' : 'home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -510,6 +509,16 @@ const AppContent: React.FC = () => {
   });
   const [authModalMode, setAuthModalMode] = useState<'member' | 'admin' | 'register' | null>(null);
 
+  useEffect(() => {
+    const handleOpenAuth = (e: any) => {
+      if (!siteUser) {
+        setAuthModalMode(e.detail || 'register');
+      }
+    };
+    window.addEventListener('openAuthModal', handleOpenAuth);
+    return () => window.removeEventListener('openAuthModal', handleOpenAuth);
+  }, [siteUser]);
+
   const handleGlobalLogout = async () => {
     try { await supabase.auth.signOut(); } catch (e) {}
     localStorage.removeItem('site_current_member');
@@ -621,16 +630,24 @@ const AppContent: React.FC = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Automatically toggle sidebar when login state changes (for desktop)
+  // Automatically toggle sidebar and chat when view or login state changes (for desktop)
   useEffect(() => {
     if (window.innerWidth >= 1280) {
-      if (siteUser) {
-        setIsSidebarOpen(false); // Close left menu when logged in
+      const isSportsPage = view === 'spor724' || view.startsWith('sports');
+      
+      if (isSportsPage) {
+        setIsSidebarOpen(true); // Always open left menu on sports
+        setIsChatOpen(true); // Always open chat on sports
       } else {
-        setIsSidebarOpen(true); // Open left menu when logged out
+        setIsChatOpen(false); // Close chat on non-sports pages by default
+        if (siteUser) {
+          setIsSidebarOpen(false); // Close left menu when logged in on non-sports pages
+        } else {
+          setIsSidebarOpen(true); // Open left menu when logged out on non-sports pages
+        }
       }
     }
-  }, [siteUser]);
+  }, [siteUser, view]);
   const [showDepositModal, setShowDepositModal] = useState(false);
 
   useEffect(() => {
@@ -835,7 +852,7 @@ const AppContent: React.FC = () => {
     return stored ? JSON.parse(stored) : demoCoupons;
   });
   const [showSearch, setShowSearch] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(window.location.pathname.startsWith('/spor'));
   const [globalTvPip, setGlobalTvPip] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
@@ -1256,7 +1273,6 @@ const AppContent: React.FC = () => {
       case 'sports4':
       case 'sports5':
       case 'spor724':
-      case 'sporx':
       case 'taraf':
       case 'mobile-bulletin':
         title = "724Bahis | Spor Bahisleri ve Yüksek Oranlı Canlı Bahis";
@@ -1468,6 +1484,17 @@ const AppContent: React.FC = () => {
   );
 
   const handleViewChange = (v: string) => {
+    // Update URL without reloading
+    const newUrl = v === 'home' ? '/' : (v === 'spor724' || v === 'sports' ? '/spor' : `/${v}`);
+    window.history.pushState(null, '', newUrl);
+
+    if (v === 'spor724' || v.startsWith('sports')) {
+      setIsChatOpen(true);
+      if (window.innerWidth >= 1280) {
+        setIsSidebarOpen(true);
+      }
+    }
+
     if (v === 'sports' || v === 'sports2' || v === 'sports3' || v === 'sports4' || v === 'sports5') {
       setShowLoader(true);
       setFadeOutLoader(false);
@@ -1514,6 +1541,8 @@ const AppContent: React.FC = () => {
       path = '/trusted-detail';
     } else if (v === 'blackjack') {
       path = '/casino';
+    } else if (v === 'spor724') {
+      path = '/spor';
     } else {
       path = `/${v}`;
     }
@@ -1771,7 +1800,7 @@ const AppContent: React.FC = () => {
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'sporx' || view === 'sports' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'giveaway') && (
+          {!(view === 'giveaway') && (
             <aside className={`hidden lg:flex flex-col bg-[#111317] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen || view === 'blackjack'}
@@ -1807,7 +1836,7 @@ const AppContent: React.FC = () => {
           {/* 2. ORTA ANA İÇERİK (Mobilde tam ekran, masaüstünde kalan alanı kaplar) */}
           <main 
             id="main-scroll-container"
-            className={appStage !== 'loading' ? 'app-reveal-mask flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col' : 'app-hidden-initial flex-1 w-full h-full overflow-y-auto overflow-x-hidden relative flex flex-col'}
+            className={appStage !== 'loading' ? `app-reveal-mask flex-1 w-full h-full overflow-x-hidden relative flex flex-col ${view === 'sports' ? 'overflow-hidden' : 'overflow-y-auto'}` : `app-hidden-initial flex-1 w-full h-full overflow-x-hidden relative flex flex-col ${view === 'sports' ? 'overflow-hidden' : 'overflow-y-auto'}`}
             onScroll={(e) => {
               // Scroll handler removed to prevent mobile header glitching
             }}
@@ -1819,14 +1848,23 @@ const AppContent: React.FC = () => {
                 id="mobile-top-header"
                 className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#111317]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1"
               >
-                <div 
-                  className="font-black text-2xl sm:text-3xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
-                  onClick={() => setView('home')}
-                  style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
-                >
-                  <SlotText text="724" className="text-white font-extrabold" isSpinning={isLogoSpinning} />
-                  <SlotText text="BETS" className="text-[#10B981] font-black" isSpinning={isLogoSpinning} />
-                </div><div className="flex items-center shrink-0">
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(true)}
+                    className="flex lg:hidden w-10 h-10 items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  >
+                    <Menu className="w-6 h-6" />
+                  </button>
+                  <div 
+                    className="font-black text-2xl sm:text-3xl tracking-tight flex items-center cursor-pointer select-none ml-1" 
+                    onClick={() => setView('home')}
+                    style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.02em' }}
+                  >
+                    <SlotText text="724" className="text-white font-extrabold" isSpinning={isLogoSpinning} />
+                    <SlotText text="BETS" className="text-[#10B981] font-black" isSpinning={isLogoSpinning} />
+                  </div>
+                </div>
+                <div className="flex items-center shrink-0">
                   {siteUser ? (
                     <>
                       {/* 1. Gamdom Style Wallet (Pill) */}
@@ -1875,18 +1913,20 @@ const AppContent: React.FC = () => {
                   ) : (
                     <>
                       {/* Gamdom Style Mobile Auth Buttons */}
-                      <button
-                        onClick={() => setAuthModalMode('member')}
-                        className="flex items-center justify-center h-[40px] bg-[#1A1D24] hover:bg-[#2A2E3D] text-white transition-colors px-5 rounded-[10px] font-bold text-sm"
-                      >
-                        Giriş yap
-                      </button>
-                      <button
-                        onClick={() => setAuthModalMode('register')}
-                        className="flex items-center justify-center h-[40px] bg-[#10B981] hover:bg-[#00E693] text-black transition-colors px-5 rounded-[10px] font-extrabold text-sm shadow-[0_0_10px_rgba(0,255,163,0.2)] ml-2"
-                      >
-                        Kaydolun
-                      </button>
+                      <div className="flex items-center rounded-lg border border-[#2B3544] h-[40px] shadow-sm overflow-hidden shrink-0 ml-1">
+                        <button
+                          onClick={() => setAuthModalMode('member')}
+                          className="flex items-center justify-center h-full bg-[#1A1D24] hover:bg-[#2A2E3D] text-white transition-colors px-4 font-bold text-sm whitespace-nowrap"
+                        >
+                          Giriş yap
+                        </button>
+                        <button
+                          onClick={() => setAuthModalMode('register')}
+                          className="flex items-center justify-center h-full bg-[#10B981] hover:bg-[#00E693] text-black transition-colors px-4 font-extrabold text-sm shadow-[0_0_10px_rgba(0,255,163,0.2)] whitespace-nowrap"
+                        >
+                          Kaydolun
+                        </button>
+                      </div>
                     </>
                   )}
                 </div>
@@ -1983,11 +2023,7 @@ const AppContent: React.FC = () => {
           </div>
         )}
 
-        {view === 'sporx' && (
-          <div className="animate-fade-in w-full bg-[#1C2128] relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
-            <SporxBulletin onBack={() => handleViewChange('home')} />
-          </div>
-        )}
+
 
         {view === 'sports' && (
           <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
@@ -2466,7 +2502,7 @@ const AppContent: React.FC = () => {
       </div>
       </div>
 
-      {view !== 'admin' && <Footer />}
+      {view !== 'admin' && view !== 'sports' && <Footer />}
           </main>
 
 
@@ -2551,7 +2587,7 @@ const AppContent: React.FC = () => {
       )}
 
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
-      {view !== 'admin' && view !== 'sports' && !showLiveScoreModal && !isMobile && (
+      {view !== 'admin' && !showLiveScoreModal && !isMobile && (
         <>
           <aside className={`hidden xl:flex flex-col border-gray-800 bg-[#1A1D24] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px] border-l' : 'w-0 border-l-0 overflow-hidden'} transition-all duration-300`}>
             <ModernChat

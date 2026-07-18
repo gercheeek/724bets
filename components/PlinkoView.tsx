@@ -63,7 +63,7 @@ export default function PlinkoView({ siteUser, setSiteUser, onAuthRequired }: an
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-full h-full bg-[#10171E] text-white font-sans overflow-y-auto md:overflow-hidden" style={{ height: 'calc(100dvh - var(--header-height, 60px))' }}>
+    <div className="flex flex-col md:flex-row w-full h-full bg-[#10171E] text-white font-sans overflow-y-auto md:overflow-hidden">
         
         {/* ── LEFT SIDEBAR (Controls) ── */}
         <div className="w-full md:w-[320px] bg-[#222E3A] border-r border-[#151D24] p-4 flex flex-col shrink-0 z-20 shadow-2xl order-2 md:order-1 h-auto md:h-full overflow-y-auto">

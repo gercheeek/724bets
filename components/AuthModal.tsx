@@ -277,7 +277,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
             <div className={`w-full max-w-4xl bg-[#111317] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col md:flex-row border border-white/5 ${showSplash ? 'h-[100dvh] rounded-none md:h-auto md:min-h-[640px] md:rounded-2xl' : 'h-auto min-h-[500px] max-h-[95vh] md:min-h-[640px] rounded-2xl md:rounded-2xl'}`}>
                 
                 {/* Left Side - Promo Graphic (Mobile Splash / Desktop Left Half) */}
-                <div className={`flex-col justify-end relative overflow-hidden h-full transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
+                <div className={`flex-col justify-end relative overflow-hidden transition-all duration-700 ease-in-out group ${showSplash ? 'flex w-full md:w-1/2 md:border-r border-white/5' : 'hidden md:flex w-1/2 border-r border-white/5'}`}>
                     
                     {/* Sleek, unobtrusive loading indicator for mobile splash */}
                     {showSplash && (
@@ -311,7 +311,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 </div>
 
                 {/* Right Side - Auth Form */}
-                <div className={`w-full md:w-1/2 p-5 sm:p-6 md:p-10 flex-col relative bg-[#151821] overflow-y-auto h-full scrollbar-hide animate-in fade-in slide-in-from-right-8 duration-700 ${showSplash ? 'hidden md:flex' : 'flex'}`}>
+                <div className={`w-full md:w-1/2 p-5 sm:p-6 md:p-10 flex-col relative bg-[#151821] overflow-y-auto scrollbar-hide animate-in fade-in slide-in-from-right-8 duration-700 ${showSplash ? 'hidden md:flex' : 'flex'}`}>
                     <button onClick={onClose} className="absolute top-4 right-4 md:top-6 md:right-6 w-8 h-8 rounded-full bg-[#1F232B] flex items-center justify-center text-zinc-400 hover:text-white transition-colors z-10 hover:bg-[#2A2E39]">
                         <X className="w-4 h-4" />
                     </button>

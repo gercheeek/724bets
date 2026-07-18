@@ -235,8 +235,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           <div className="lg:col-span-2 w-full h-auto lg:h-full flex flex-col gap-3 md:gap-4">
             
             {/* Top Third: Originals */}
-            <div onClick={() => onViewChange('originals')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-[#10B981]/30 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.3)] group/orig">
-                <img src="/images/neon-plinko.jpg" alt="Originals" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
+            <div onClick={() => onViewChange('originals')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.3)] group/orig">
+                <img src="/images/clean-plinko-v4.jpg" alt="Originals" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
                 <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-5 h-full px-5 lg:px-6">
                     <h3 className="text-[28px] sm:text-[32px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/orig:translate-x-1 transition-transform flex items-center gap-2"><span className="text-[#10B981]">724</span> ORIGINALS</h3>
@@ -245,7 +245,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
 
             {/* Middle Third: Casino */}
-            <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/casino">
+            <div onClick={() => onViewChange('blackjack')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/casino">
                 <img src="/images/casino_neon_banner.jpg" alt="Casino" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/casino:opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
                 <div className="relative z-20 flex flex-col justify-start items-start pt-4 sm:pt-5 h-full px-5 lg:px-6">
@@ -255,7 +255,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
 
             {/* Bottom Third: Sports */}
-            <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/sports">
+            <div onClick={() => onViewChange('sports')} className="relative flex-1 w-full min-h-[100px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#10B981,0_0_20px_rgba(16,185,129,0.15)] group/sports">
                 <img src="/images/green_sports_card_left.jpg" alt="Sports Betting" className="absolute inset-0 w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-80 group-hover/sports:opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-l from-[#0B0E14] via-[#0B0E14]/80 to-transparent"></div>
                 <div className="relative z-20 flex flex-col justify-end items-end pb-2 sm:pb-5 h-full pr-2 sm:pr-5 pl-5">
@@ -273,7 +273,21 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           </div>
 
           {/* Yeni Eklenenler Slider (Member View) */}
-          <NewGamesSlider2 onPlayGame={() => onViewChange('casino')} />
+          <NewGamesSlider2 onPlayGame={(game) => {
+            setSelectedGame({
+              id: game.id,
+              title: game.name,
+              name: game.name,
+              provider: game.provider,
+              image: game.img,
+              category: 'slots',
+              players: game.players,
+              customDemoUrl: game.customDemoUrl,
+              demoUrl: game.customDemoUrl,
+              demoSymbol: game.demoSymbol
+            } as any);
+            setShowDemoIframe(true);
+          }} />
 
         </>
       ) : (
@@ -323,7 +337,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   
                   {/* Top Third: Originals */}
                   <div onClick={() => onViewChange('originals')} className="relative h-[90px] md:h-[110px] w-full overflow-hidden cursor-pointer transition-all duration-300 group/orig border-b border-[#10B981]/30">
-                      <img src="/images/neon-plinko.jpg" alt="Originals" className="absolute inset-0 w-full h-full object-cover object-[center_right_-20%] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
+                      <img src="/images/clean-plinko-v4.jpg" alt="Originals" className="absolute inset-0 w-full h-full object-cover object-[center_right_-20%] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
                       <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/70 to-transparent"></div>
                       <div className="relative z-20 flex flex-col justify-center items-start h-full px-6 md:px-8">
                           <h3 className="text-[32px] sm:text-[40px] font-black text-white tracking-tighter leading-none mb-1 flex items-center gap-2"><span className="text-[#10B981]">724</span> ORIGINALS</h3>
@@ -411,7 +425,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
       {/* Live Games Slider */}
       <div className="w-full">
-        <LiveGamesSlider />
+        <LiveGamesSlider onPlayGame={(game) => { setSelectedGame(game); setShowDemoIframe(true); }} />
       </div>
 
       {/* Live Bets and Leaderboards */}
@@ -454,10 +468,10 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           }}
         >
           {showDemoIframe && getDemoUrl(selectedGame) ? (
-            <div className="relative w-full max-w-[1600px] w-[95vw] h-[90vh] bg-black rounded-xl md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col border border-white/5 m-auto">
-               <div className="h-12 md:h-14 bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 border-b border-white/5 flex-shrink-0">
+            <div className="relative w-full h-[100dvh] md:max-w-[1600px] md:w-[95vw] md:h-[90vh] bg-black md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:border border-white/5 m-auto">
+               <div className="h-12 md:h-14 bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 flex-shrink-0">
                   <div className="flex items-center gap-3">
-                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.name} <span className="text-[#10B981] font-black text-[10px] md:text-xs ml-2 border border-[#10B981]/30 bg-[#10B981]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
+                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.name || selectedGame.title} <span className="text-[#10B981] font-black text-[10px] md:text-xs ml-2 border border-[#10B981]/30 bg-[#10B981]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
                   </div>
                   <button onClick={() => { setShowDemoIframe(false); setSelectedGame(null); }} className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
                     <X className="w-5 h-5" />
@@ -472,7 +486,21 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   ></iframe>
                </div>
             </div>
-          ) : null}
+          ) : (
+            <div className="relative w-full md:max-w-[500px] bg-[#111317] md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:border border-white/5 m-auto p-6 md:p-8 text-center animate-fade-in">
+                <button onClick={() => { setShowDemoIframe(false); setSelectedGame(null); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
+                  <X className="w-4 h-4" />
+                </button>
+                <div className="w-[120px] h-[160px] md:w-[150px] md:h-[200px] shrink-0 mb-6 drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)] mx-auto relative group rounded-xl overflow-hidden border border-white/10">
+                    <img src={selectedGame.image || selectedGame.img} alt={selectedGame.title || selectedGame.name} className="w-full h-full object-cover" />
+                </div>
+                <h2 className="text-xl md:text-2xl font-black text-white mb-2">{selectedGame.title || selectedGame.name}</h2>
+                <p className="text-gray-400 mb-8 text-sm leading-relaxed">Bu oyun için demo versiyonu bulunmamaktadır. Gerçek parayla oynamak için lütfen hesabınıza bakiye yükleyin veya farklı bir oyun seçin.</p>
+                <button onClick={() => { setShowDemoIframe(false); setSelectedGame(null); }} className="px-6 py-3 w-full bg-[#10B981] hover:bg-[#0da070] text-black rounded-lg font-bold transition-colors shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                    Geri Dön
+                </button>
+            </div>
+          )}
         </div>,
         document.body
       )}
