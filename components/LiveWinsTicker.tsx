@@ -102,12 +102,12 @@ export default function LiveWinsTicker() {
       <div className="w-full relative flex items-center bg-transparent overflow-hidden pt-8 pb-5">
         
         {/* Canlı Kazançlar Badge top left */}
-        <div className="absolute top-2 left-4 flex items-center gap-2 z-10 bg-[#00E676]/10 px-3 py-1 rounded-full border border-[#00E676]/30 backdrop-blur-md">
+        <div className="absolute top-2 left-4 flex items-center gap-2 z-10 bg-black/40 px-3 py-1 rounded-full border border-white/5 backdrop-blur-md">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E676] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E676] shadow-[0_0_10px_#00E676]"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
           </span>
-          <span className="text-[#00E676] font-bold text-[10px] tracking-widest uppercase">{t('winners_title') || 'Canlı Kazançlar'}</span>
+          <span className="text-gray-200 font-bold text-[10px] tracking-widest uppercase">Canlı Kazançlar</span>
         </div>
 
         {/* Horizontal Scrolling List (Full Width) */}
@@ -138,7 +138,7 @@ export default function LiveWinsTicker() {
               </div>
               
               {/* Payout */}
-              <span className="text-[#00E676] font-black text-xs md:text-sm tracking-wide bg-[#00E676]/10 px-2 py-0.5 rounded-md drop-shadow-[0_0_5px_rgba(0,230,118,0.3)]">
+              <span className="text-emerald-400 font-black text-xs md:text-sm tracking-wide">
                  {win.payout}
               </span>
             </div>
