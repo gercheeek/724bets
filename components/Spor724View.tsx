@@ -318,7 +318,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     .slice(0, 6);
 
   return (
-    <div className="flex h-full w-full bg-[#0B0F19] text-[#e5e2e1] font-sans overflow-hidden">
+    <div className="flex h-full w-full bg-[#050505] text-[#e5e2e1] font-sans overflow-hidden">
       
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
@@ -483,9 +483,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
               return (
                 <div key={league} className="mb-6">
                   {/* League Header */}
-                  <div className="flex items-center gap-3 py-3 px-4 bg-[#0B0F19] rounded-t-xl sticky top-0 z-20 backdrop-blur-md mb-2">
+                  <div className="flex items-center gap-3 py-3 px-4 bg-[#050505] rounded-t-xl sticky top-0 z-20 backdrop-blur-md mb-2 border-b border-gray-800/50">
                     <span className="text-[18px] drop-shadow-md">{flag}</span>
-                    <span className="text-[14px] text-slate-300 font-bold truncate flex-1 uppercase tracking-wide">{league}</span>
+                    <span className="text-[14px] text-gray-400 font-bold truncate flex-1 uppercase tracking-wide">{league}</span>
                     <Star className="w-4 h-4 text-slate-500 hover:text-[#e9c349] transition-colors cursor-pointer" />
                   </div>
                   
@@ -494,7 +494,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                     {leagueMatches.map((match, idx) => (
                       <div 
                         key={match.id} 
-                        className="flex flex-col md:flex-row md:items-center bg-[#151C2C] rounded-xl p-3 md:p-4 gap-3 md:gap-4 transition-all duration-300 border border-transparent md:hover:border-[#10b981]/50 md:hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] group relative"
+                        className="flex flex-col md:flex-row md:items-center bg-[#121824] rounded-xl p-3 md:p-4 gap-3 md:gap-4 transition-all duration-300 border-b border-gray-800/50 md:hover:border-[#10b981]/50 md:hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] group relative"
                       >
                         {/* LEFT SECTION: Status */}
                         <div className="flex items-center md:flex-col md:justify-center gap-2 md:gap-1 shrink-0 md:w-[70px] border-b border-white/5 md:border-b-0 pb-2 md:pb-0 mb-1 md:mb-0">
@@ -523,7 +523,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                         </div>
 
                         {/* RIGHT SECTION: Odds */}
-                        <div className="flex items-center justify-between md:justify-end gap-1.5 shrink-0 mt-2 md:mt-0 pt-3 md:pt-0 border-t border-white/5 md:border-t-0">
+                        <div className="flex items-center justify-between md:justify-end gap-1.5 shrink-0 mt-2 md:mt-0 pt-3 md:pt-0 border-t border-gray-800/50 md:border-t-0">
                           {['1', 'X', '2'].map((oddType) => {
                             const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
                             const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
@@ -533,14 +533,14 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                               <button 
                                 key={oddType}
                                 onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, oddType); }}
-                                className={`flex-1 md:flex-none md:w-[65px] min-h-[44px] rounded-lg flex flex-col items-center justify-center transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-[#1e293b] hover:bg-[#334155] text-slate-300 hover:text-white border border-transparent md:hover:border-[#10b981]/30'}`}
+                                className={`flex-1 md:flex-none md:w-[65px] min-h-[44px] rounded-lg flex flex-col items-center justify-center transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-[#1E2538] hover:bg-[#2A3449] text-slate-300 hover:text-white border border-transparent md:hover:border-[#10b981]/30'}`}
                               >
-                                <span className="text-[10px] text-slate-400 font-bold mb-0.5">{oddType}</span>
+                                <span className="text-[10px] text-gray-400 font-bold mb-0.5">{oddType}</span>
                                 <span className="text-[13px] font-bold">{oddValue}</span>
                               </button>
                             );
                           })}
-                          <button className="min-h-[44px] min-w-[44px] md:w-[44px] rounded-lg bg-[#1e293b] hover:bg-[#334155] transition-colors flex items-center justify-center text-[12px] text-slate-400 hover:text-white font-bold ml-1">
+                          <button className="min-h-[44px] min-w-[44px] md:w-[44px] rounded-lg bg-[#1E2538] hover:bg-[#2A3449] transition-colors flex items-center justify-center text-[12px] text-gray-400 hover:text-white font-bold ml-1">
                             +{match.marketsCount}
                           </button>
                         </div>
