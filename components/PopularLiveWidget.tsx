@@ -1,60 +1,122 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flame, Activity, ChevronRight } from 'lucide-react';
+import { useBetting } from '../contexts/BettingContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface PopularLiveWidgetProps {
     onNavigate: (view: string) => void;
 }
 
+const mapCountryName = (name: string, lang: string) => {
+  if (!name) return '';
+  const norm = name.toLowerCase();
+  if (norm.includes('turkey') || norm.includes('türkiye')) return lang === 'tr' ? 'Türkiye' : 'Turkey';
+  if (norm.includes('germany') || norm.includes('almanya')) return lang === 'tr' ? 'Almanya' : 'Germany';
+  if (norm.includes('england') || norm.includes('ingiltere')) return lang === 'tr' ? 'İngiltere' : 'England';
+  if (norm.includes('spain') || norm.includes('ispanya')) return lang === 'tr' ? 'İspanya' : 'Spain';
+  if (norm.includes('italy') || norm.includes('italya')) return lang === 'tr' ? 'İtalya' : 'Italy';
+  if (norm.includes('france') || norm.includes('fransa')) return lang === 'tr' ? 'Fransa' : 'France';
+  if (norm.includes('international') || norm.includes('uluslararası')) return lang === 'tr' ? 'Uluslararası' : 'International';
+  return name;
+};
+
+const getTeamColor = (name: string) => {
+    const colors = ["#3B82F6", "#10B981", "#F97316", "#8B5CF6", "#0EA5E9", "#EF4444", "#F59E0B"];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+};
+
 export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate }) => {
-    
-    const demoMatches = [
-        {
-            league: "Uluslararası - World Cup",
-            time: "20'",
-            home: { name: "Spain", code: "SP", color: "#3B82F6" },
-            away: { name: "Argentina", code: "AR", color: "#3B82F6" },
-            score: "0 - 0"
-        },
-        {
-            league: "USA - MLB",
-            time: "Aug 15, 20:30",
-            home: { name: "Colorado Rockies", code: "CO", color: "#10B981" },
-            away: { name: "Cincinnati Reds", code: "CI", color: "#10B981" },
-            score: "0 - 5",
-            isUpcoming: true
-        },
-        {
-            league: "WTA - Palermo, Singles",
-            time: "2. Set",
-            home: { name: "Basiletti, Noemi", code: "BA", color: "#F97316" },
-            away: { name: "Shinikova, Isabella", code: "SH", color: "#3B82F6" },
-            score: "2 - 0",
-            bgImage: "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=600&auto=format&fit=crop"
-        },
-        {
-            league: "USA - MLB",
-            time: "Aug 15, 20:30",
-            home: { name: "Houston Astros", code: "HO", color: "#8B5CF6" },
-            away: { name: "Baltimore Orioles", code: "BA", color: "#0EA5E9" },
-            score: "1 - 2",
-            isUpcoming: true
-        },
-        {
-            league: "USA - MLB",
-            time: "Aug 15, 20:30",
-            home: { name: "Philadelphia Phillies", code: "PH", color: "#F97316" },
-            away: { name: "New York Mets", code: "NE", color: "#0EA5E9" },
-            score: "0 - 6",
-            isUpcoming: true
-        },
-        {
-            league: "Colombia - Liga A...",
-            time: "44'",
-            home: { name: "Deportivo Alexis Garcia", code: "DE", color: "#10B981" },
-            away: { name: "Politecnico JIC", code: "PO", color: "#EF4444" },
-            score: "3 - 0"
-        }
-    ];
+    const { events } = useBetting();
+    const { language } = useLanguage();
+    const [matches, setMatches] = useState<any[]>([]);
+
+    useEffect(() => {
+        if (!events || events.length === 0) return;
+
+        const parsedMatches: any[] = [];
+        events.forEach((ev: any) => {
+            const data = ev.data;
+            if (!data || !data.participants) return;
+            
+            const homeTeam = data.participants.home || 'Ev Sahibi';
+            const awayTeam = data.participants.away || 'Deplasman';
+            
+            let score = '-';
+            let minute = 'Yakında';
+            let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
+            let isLive = data.status === 'in_progress' || data.is_live_betting === true || isFinished;
+            
+            if (data.scores && Array.isArray(data.scores)) {
+                const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
+                if (currentScore) {
+                    const parts = currentScore.split('|');
+                    if (parts.length >= 4) {
+                        score = `${parts[2]} - ${parts[3]}`;
+                    }
+                } else if (data.current_score) {
+                    score = String(data.current_score || '').replace(':', ' - ');
+                }
+            }
+            if (isFinished) {
+                minute = language === 'tr' ? 'Bitti' : 'FT';
+            } else if (data.minute) {
+                minute = `${data.minute}'`;
+            } else if (data.extended_status) {
+                minute = String(data.extended_status || '').replace('s', '. Set');
+            }
+            
+            const countryName = mapCountryName(data.country?.name, language);
+            const tournamentName = data.tournament?.name || 'Turnuva';
+            const league = countryName ? `${countryName} - ${tournamentName}` : tournamentName;
+            
+            let homeOdd = '-';
+            let drawOdd = '-';
+            let awayOdd = '-';
+            
+            const markets = data.group_markets?.['full_event|0'] || data.group_markets?.['game_full_event|0'] || data.group_markets?.['set|1'] || [];
+            const market1x2 = markets.find((m: string) => m.includes('|12||') || m.includes('|1x2||') || m.includes('|oe||'));
+            if (market1x2) {
+                const parts = market1x2.split('|');
+                if (parts.length > 7) {
+                    const selections = parts[7].split('!');
+                    selections.forEach((sel: string) => {
+                        const sParts = sel.split('~');
+                        if (sParts.length >= 3) {
+                            const type = sParts[1].toLowerCase();
+                            const odd = parseFloat(sParts[2]).toFixed(2);
+                            if (type === 'home' || type === '1') { homeOdd = odd; }
+                            if (type === 'draw' || type === 'x') { drawOdd = odd; }
+                            if (type === 'away' || type === '2') { awayOdd = odd; }
+                        }
+                    });
+                }
+            }
+
+            parsedMatches.push({
+                id: ev.id,
+                league,
+                time: minute,
+                home: { name: homeTeam, code: homeTeam.substring(0, 2).toUpperCase(), color: getTeamColor(homeTeam) },
+                away: { name: awayTeam, code: awayTeam.substring(0, 2).toUpperCase(), color: getTeamColor(awayTeam) },
+                score,
+                isUpcoming: !isLive,
+                homeOdd,
+                drawOdd,
+                awayOdd
+            });
+        });
+        
+        // Show only the top 6 most relevant matches (live ones first)
+        const sorted = parsedMatches.sort((a, b) => (a.isUpcoming === b.isUpcoming ? 0 : a.isUpcoming ? 1 : -1));
+        setMatches(sorted.slice(0, 6));
+
+    }, [events, language]);
+
+    if (matches.length === 0) return null;
 
     return (
         <div className="w-full mb-8">
@@ -64,7 +126,7 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {demoMatches.map((match, idx) => (
+                {matches.map((match, idx) => (
                     <div 
                         key={idx} 
                         onClick={() => onNavigate('sports')}
@@ -75,18 +137,6 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                             boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
                         }}
                     >
-                        {/* Background Image Overlay if exists */}
-                        {match.bgImage && (
-                            <div 
-                                className="absolute inset-0 z-0 opacity-20 group-hover:opacity-30 transition-opacity"
-                                style={{
-                                    backgroundImage: `url(${match.bgImage})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center'
-                                }}
-                            />
-                        )}
-                        
                         <div className="relative z-10 p-4">
                             {/* Top row */}
                             <div className="flex items-center justify-between mb-4">
@@ -134,15 +184,15 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                             <div className="grid grid-cols-3 gap-2 mt-4">
                                 <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
                                     <span className="text-[11px] font-bold text-gray-500">1</span>
-                                    <span className="text-[12px] font-black">-</span>
+                                    <span className="text-[12px] font-black">{match.homeOdd}</span>
                                 </button>
                                 <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
                                     <span className="text-[11px] font-bold text-gray-500">Draw</span>
-                                    <span className="text-[12px] font-black">-</span>
+                                    <span className="text-[12px] font-black">{match.drawOdd}</span>
                                 </button>
                                 <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
                                     <span className="text-[11px] font-bold text-gray-500">2</span>
-                                    <span className="text-[12px] font-black">-</span>
+                                    <span className="text-[12px] font-black">{match.awayOdd}</span>
                                 </button>
                             </div>
                         </div>
