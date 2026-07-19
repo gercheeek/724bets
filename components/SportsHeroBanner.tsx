@@ -133,7 +133,7 @@ export const SportsHeroBanner: React.FC = () => {
   const currentMatch = heroMatches[activeIndex] || heroMatches[0];
 
   // Optional: Keep player backgrounds only if it's the specific Spain/Argentina match
-  const isSpainArgentina = currentMatch.homeTeam.includes('İspanya') || currentMatch.homeTeam.includes('Spain') || currentMatch.awayTeam.includes('Arjantin') || currentMatch.awayTeam.includes('Argentina');
+  const isSpainArgentina = (currentMatch.homeTeam?.includes?.('İspanya') || currentMatch.homeTeam?.includes?.('Spain')) || (currentMatch.awayTeam?.includes?.('Arjantin') || currentMatch.awayTeam?.includes?.('Argentina'));
 
   return (
     <div className="w-full relative px-4 pt-4 pb-2 group">
@@ -206,7 +206,7 @@ export const SportsHeroBanner: React.FC = () => {
             
             {/* Center Score / VS */}
             <div className="flex-shrink-0 mx-4 md:mx-8">
-              {(currentMatch.score !== '-' || currentMatch.isLive) ? (
+              {(currentMatch.score !== '-' && currentMatch.score.includes(' - ')) ? (
                 <div className="flex items-center justify-center gap-3 md:gap-5 bg-gradient-to-b from-black/80 to-black/40 border border-white/10 rounded-2xl px-6 md:px-8 py-3 md:py-4 backdrop-blur-xl shadow-[0_0_40px_rgba(0,0,0,0.8)] relative overflow-hidden group/score">
                    {/* Inner Glow */}
                    <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-50"></div>
