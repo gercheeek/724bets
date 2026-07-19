@@ -198,11 +198,12 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
       let homeOdd = '-';
       let drawOdd = '-';
       let awayOdd = '-';
-      let homeId = '';
+      let homeId = `h_${ev.id}`;
       let drawId = `d_${ev.id}`;
       let awayId = `a_${ev.id}`;
       
-      const rawMarkets = data.group_markets?.['full_event|0'] || data.group_markets?.['game_full_event|0'] || data.group_markets?.['set|1'];
+      const rawGroupMarkets = data.group_markets || ev.group_markets;
+      const rawMarkets = rawGroupMarkets?.['full_event|0'] || rawGroupMarkets?.['game_full_event|0'] || rawGroupMarkets?.['set|1'];
       const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
       
       for (const market of markets) {
