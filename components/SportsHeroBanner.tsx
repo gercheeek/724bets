@@ -21,9 +21,9 @@ export const SportsHeroBanner: React.FC = () => {
         {/* Left Player - Cinematic Fade (Hidden on mobile) */}
         <div className="hidden md:block absolute bottom-0 left-0 w-[45%] h-full pointer-events-none z-10" >
            <div 
-             className="absolute inset-0 bg-cover bg-center opacity-70 mix-blend-luminosity filter contrast-125"
+             className="absolute inset-0 bg-cover bg-top opacity-70 mix-blend-luminosity filter contrast-125"
              style={{
-               backgroundImage: `url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=800&auto=format&fit=crop')`,
+               backgroundImage: `url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Lamine_Yamal_France_v_Spain_7.24.26-142.jpg/960px-Lamine_Yamal_France_v_Spain_7.24.26-142.jpg')`,
                WebkitMaskImage: 'radial-gradient(circle at 40% 40%, black 20%, transparent 70%)',
                maskImage: 'radial-gradient(circle at 40% 40%, black 20%, transparent 70%)'
              }}
@@ -33,9 +33,9 @@ export const SportsHeroBanner: React.FC = () => {
         {/* Right Player - Cinematic Fade (Hidden on mobile) */}
         <div className="hidden md:block absolute bottom-0 right-0 w-[45%] h-full pointer-events-none z-10">
            <div 
-             className="absolute inset-0 bg-cover bg-center opacity-70 mix-blend-luminosity filter contrast-125"
+             className="absolute inset-0 bg-cover bg-top opacity-70 mix-blend-luminosity filter contrast-125"
              style={{
-               backgroundImage: `url('https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=800&auto=format&fit=crop')`,
+               backgroundImage: `url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg/960px-Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg')`,
                WebkitMaskImage: 'radial-gradient(circle at 60% 40%, black 20%, transparent 70%)',
                maskImage: 'radial-gradient(circle at 60% 40%, black 20%, transparent 70%)'
              }}
