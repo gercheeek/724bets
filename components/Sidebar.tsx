@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
   const [isPromosOpen, setIsPromosOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const [isFavLeaguesOpen, setIsFavLeaguesOpen] = useState(true);
+  const [isFavLeaguesOpen, setIsFavLeaguesOpen] = useState(false);
 
   return (
     <>
