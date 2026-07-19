@@ -627,9 +627,9 @@ async function startRainEvent() {
         
         let rewardOptions = ['100₺', '250₺', '500₺', '1000₺', '50 FreeSpin'];
         let reward = rewardOptions[Math.floor(Math.random() * rewardOptions.length)];
-        let winnerNames = winners.join(', ');
+        let winnerNames = winners.map(w => `@${w}`).join(', ');
         
-        await sendSystemMessage(`🎉 TEBRİKLER! ${reward} Kazananlar: ${winnerNames} !! Bakiyeleriniz anında eklendi! 💸🚀`);
+        await sendSystemMessage(`[RAIN_EVENT_END] 🎉 Yağmur bitti! Kesemize bereket! Kazanan şanslılar: ${winnerNames}... Gözünüz sohbette olsun, yenisi her an gelebilir!`);
     }
     
     // Sonraki saati kur

@@ -3,6 +3,7 @@ import { X, Send, Star, Shield, Trash2, Smile, MoreVertical, Menu, Trophy, Cpu }
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { SiteUser } from '../types';
 import { BetShareModal } from './BetShareModal';
+import confetti from 'canvas-confetti';
 
 interface ModernChatProps {
     open: boolean;
@@ -46,8 +47,10 @@ const isAuthorized = (role: string | null) => {
 };
 
 const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, type: 'Casino'|'Spor') => void) => {
-  const text = msg.message;
+  let text = msg.message;
   if (!text || typeof text !== 'string') return '';
+  
+  text = text.replace('[RAIN_EVENT_END] ', '');
 
   const betShareRegex = /^(Casino|Spor):\s*#([\d\.]+)\s+(.*)$/i;
   const match = text.match(betShareRegex);
@@ -296,10 +299,38 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         const settingsInterval = setInterval(loadChatSettings, 30000);
 
         // Realtime Subscription
+        const triggerRainAnimation = () => {
+            const duration = 4000;
+            const animationEnd = Date.now() + duration;
+
+            const frame = () => {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return;
+
+                confetti({
+                    particleCount: 5,
+                    angle: 90,
+                    spread: 90,
+                    origin: { x: Math.random(), y: -0.1 },
+                    colors: ['#FFD700', '#FFA500', '#00e701'], // Altın ve yeşil renkleri
+                    shapes: ['circle', 'square'],
+                    gravity: 1.5,
+                    scalar: 1.2,
+                    ticks: 400,
+                    zIndex: 9999
+                });
+                requestAnimationFrame(frame);
+            };
+            frame();
+        };
+
         const channel = supabase.channel('global-chat-room')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tv_chat' }, (payload) => {
                 const m = payload.new;
                 if (m.channel_id === activeLang.id && isMounted) {
+                    if (m.message && typeof m.message === 'string' && m.message.includes('[RAIN_EVENT_END]')) {
+                        triggerRainAnimation();
+                    }
                     setMessages(prev => {
                         if (prev.some(msg => msg.id === m.id)) return prev;
                         return [...prev, m];
