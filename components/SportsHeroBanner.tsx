@@ -1,59 +1,152 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useBetting } from '../contexts/BettingContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { AnimatedOdd } from './AnimatedOdd';
 
+const PLAYER_IMAGES: Record<string, string> = {
+  'ispanya': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Lamine_Yamal_France_v_Spain_7.24.26-142.jpg/960px-Lamine_Yamal_France_v_Spain_7.24.26-142.jpg',
+  'spain': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Lamine_Yamal_France_v_Spain_7.24.26-142.jpg/960px-Lamine_Yamal_France_v_Spain_7.24.26-142.jpg',
+  'arjantin': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg/960px-Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg',
+  'argentina': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg/960px-Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg',
+  'fransa': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/2022_FIFA_World_Cup_France_4%E2%80%931_Australia_-_%287%29_%28cropped%29.jpg/800px-2022_FIFA_World_Cup_France_4%E2%80%931_Australia_-_%287%29_%28cropped%29.jpg',
+  'france': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/2022_FIFA_World_Cup_France_4%E2%80%931_Australia_-_%287%29_%28cropped%29.jpg/800px-2022_FIFA_World_Cup_France_4%E2%80%931_Australia_-_%287%29_%28cropped%29.jpg',
+  'portekiz': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg/800px-Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg',
+  'portugal': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg/800px-Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg',
+  'ingiltere': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Jude_Bellingham_Real_Madrid.jpg/800px-Jude_Bellingham_Real_Madrid.jpg',
+  'england': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Jude_Bellingham_Real_Madrid.jpg/800px-Jude_Bellingham_Real_Madrid.jpg',
+  'brezilya': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Vinicius_Jr_2021.jpg/800px-Vinicius_Jr_2021.jpg',
+  'brazil': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Vinicius_Jr_2021.jpg/800px-Vinicius_Jr_2021.jpg'
+};
+
+const getPlayerImage = (teamName: string) => {
+  const normalized = teamName.toLowerCase();
+  for (const key of Object.keys(PLAYER_IMAGES)) {
+    if (normalized.includes(key)) return PLAYER_IMAGES[key];
+  }
+  return null;
+};
+
 export const SportsHeroBanner: React.FC = () => {
+  const { events } = useBetting();
   const { language } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // 3 Premium Mock Matches with their respective player cutouts
-  const heroMatches = [
-    {
-      id: 'mock-match-1',
-      homeTeam: 'İSPANYA',
-      awayTeam: 'ARJANTİN',
-      score: '1 - 0',
-      minute: "75'",
-      isLive: true,
-      homeOdd: '1.95',
-      drawOdd: '3.40',
-      awayOdd: '2.80',
-      homePlayerImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Lamine_Yamal_France_v_Spain_7.24.26-142.jpg/960px-Lamine_Yamal_France_v_Spain_7.24.26-142.jpg',
-      awayPlayerImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg/960px-Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg'
-    },
-    {
-      id: 'mock-match-2',
-      homeTeam: 'FRANSA',
-      awayTeam: 'PORTEKİZ',
-      score: '2 - 2',
-      minute: "88'",
-      isLive: true,
-      homeOdd: '2.45',
-      drawOdd: '2.10',
-      awayOdd: '4.20',
-      homePlayerImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/2022_FIFA_World_Cup_France_4%E2%80%931_Australia_-_%287%29_%28cropped%29.jpg/800px-2022_FIFA_World_Cup_France_4%E2%80%931_Australia_-_%287%29_%28cropped%29.jpg',
-      awayPlayerImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg/800px-Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg'
-    },
-    {
-      id: 'mock-match-3',
-      homeTeam: 'İNGİLTERE',
-      awayTeam: 'BREZİLYA',
-      score: '0 - 0',
-      minute: "12'",
-      isLive: true,
-      homeOdd: '2.80',
-      drawOdd: '3.10',
-      awayOdd: '2.30',
-      homePlayerImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Jude_Bellingham_Real_Madrid.jpg/800px-Jude_Bellingham_Real_Madrid.jpg',
-      awayPlayerImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Vinicius_Jr_2021.jpg/800px-Vinicius_Jr_2021.jpg'
-    }
-  ];
+  const heroMatches = useMemo(() => {
+    let baseEvents = events || [];
+
+    const extractOdds = (ev: any) => {
+      const data = ev.data;
+      let homeOdd = '-';
+      let drawOdd = '-';
+      let awayOdd = '-';
+
+      const rawGroupMarkets = data.group_markets || ev.group_markets;
+      const rawMarkets = rawGroupMarkets?.['full_event|0'] || rawGroupMarkets?.['game_full_event|0'] || rawGroupMarkets?.['set|1'];
+      const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
+      
+      for (const market of markets) {
+         const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
+         if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
+            const parts = market.split('|');
+            const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
+            
+            if (selectionsPart) {
+               const selections = selectionsPart.split('!');
+               selections.forEach((sel: string) => {
+                  const sParts = sel.split('~');
+                  if (sParts.length > 2) {
+                    const type = sParts[1].toLowerCase();
+                    const odd = parseFloat(sParts[2]);
+                    if (!isNaN(odd)) {
+                        const oddStr = odd.toFixed(2);
+                        if (type === 'home' || type === '1') { homeOdd = oddStr; }
+                        if (type === 'draw' || type === 'x') { drawOdd = oddStr; }
+                        if (type === 'away' || type === '2') { awayOdd = oddStr; }
+                    }
+                  }
+               });
+               if (homeOdd !== '-' || awayOdd !== '-' || drawOdd !== '-') {
+                  break;
+               }
+            }
+         }
+      }
+      return { homeOdd, drawOdd, awayOdd };
+    };
+
+    let validEvents = baseEvents.reduce((acc: any[], ev: any) => {
+      const data = ev.data;
+      if (!data || !data.participants) return acc;
+      
+      const isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
+      const isLive = data.status === 'in_progress' || data.is_live_betting === true;
+      
+      if (!isLive || isFinished) return acc;
+
+      const odds = extractOdds(ev);
+      // Filter out matches with no valid odds
+      if (odds.homeOdd === '-' && odds.awayOdd === '-') return acc;
+
+      acc.push({ ...ev, parsedOdds: odds, isLive: true, isFinished: false });
+      return acc;
+    }, []);
+
+    let topEvents = validEvents
+      .sort((a: any, b: any) => {
+         const aMarkets = Object.keys(a.data?.group_markets || {}).length || 0;
+         const bMarkets = Object.keys(b.data?.group_markets || {}).length || 0;
+         return bMarkets - aMarkets;
+      })
+      .slice(0, 3);
+
+    return topEvents.map((match: any) => {
+      const data = match.data;
+      const homeTeam = data.participants.home || 'EV SAHİBİ';
+      const awayTeam = data.participants.away || 'DEPLASMAN';
+      
+      let score = '-';
+      let minute = 'CANLI';
+      
+      if (data.scores && Array.isArray(data.scores)) {
+        const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
+        if (currentScore) {
+          const parts = currentScore.split('|');
+          if (parts.length >= 4) {
+             score = `${parts[2]} - ${parts[3]}`;
+          }
+        } else if (data.current_score) {
+          score = String(data.current_score || '').replace(':', ' - ');
+        }
+      }
+      
+      if (data.minute) {
+          minute = `${data.minute}'`;
+      }
+
+      const homePlayerImg = getPlayerImage(homeTeam);
+      const awayPlayerImg = getPlayerImage(awayTeam);
+
+      return {
+        id: match.id,
+        homeTeam,
+        awayTeam,
+        score,
+        minute,
+        isLive: true,
+        homeOdd: match.parsedOdds.homeOdd !== '-' ? match.parsedOdds.homeOdd : '2.10',
+        drawOdd: match.parsedOdds.drawOdd !== '-' ? match.parsedOdds.drawOdd : '3.00',
+        awayOdd: match.parsedOdds.awayOdd !== '-' ? match.parsedOdds.awayOdd : '2.80',
+        homePlayerImg,
+        awayPlayerImg
+      };
+    });
+  }, [events, language]);
 
   useEffect(() => {
     if (heroMatches.length <= 1) return;
     const interval = setInterval(() => {
       setActiveIndex((current) => (current + 1) % heroMatches.length);
-    }, 5000); // Rotate every 5 seconds
+    }, 5000);
     return () => clearInterval(interval);
   }, [heroMatches.length]);
 
