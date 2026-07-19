@@ -337,9 +337,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                 <span className="text-white font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Popüler' : 'Popular'}</span>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pb-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3 pb-3">
                 {featuredMatches.map(match => (
-                  <div key={`pop-${match.id}`} className="bg-[#050505] bg-gradient-to-b from-white/[0.08] to-transparent rounded-2xl p-4 flex flex-col gap-4 border border-white/[0.05] border-t-white/[0.15] hover:border-[#10b981]/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-500 cursor-pointer relative overflow-hidden shadow-2xl group backdrop-blur-2xl">
+                  <div key={`pop-${match.id}`} className="bg-[#050505] bg-gradient-to-b from-white/[0.08] to-transparent rounded-2xl p-3 flex flex-col gap-2.5 border border-white/[0.05] border-t-white/[0.15] hover:border-[#10b981]/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-500 cursor-pointer relative overflow-hidden shadow-2xl group backdrop-blur-2xl">
                     {/* Background Glow */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[150px] bg-[#10b981] opacity-[0.02] blur-[60px] group-hover:opacity-[0.06] transition-opacity duration-500 pointer-events-none"></div>
 
@@ -358,35 +358,35 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                     </div>
 
                     {/* VS Face-off */}
-                    <div className="flex items-start justify-between z-10 pt-1 pb-2 relative">
+                    <div className="flex items-start justify-between z-10 pt-1 pb-1 relative">
                       {/* Home */}
-                      <div className="flex flex-col items-center gap-2.5 flex-1 w-1/3">
-                        <div className="w-[52px] h-[52px] rounded-full bg-[#1a1a1a] p-1 border border-white/5 shadow-lg relative group-hover:border-white/10 transition-colors">
+                      <div className="flex flex-col items-center gap-2 flex-1 w-1/3">
+                        <div className="w-[42px] h-[42px] rounded-full bg-[#1a1a1a] p-1 border border-white/5 shadow-lg relative group-hover:border-white/10 transition-colors">
                           <img src={match.homeLogo} alt={match.home} className="w-full h-full rounded-full object-cover" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.home}&backgroundColor=050505&textColor=ffffff`; }} />
                         </div>
-                        <span className="text-[13.5px] text-white font-bold text-center leading-tight line-clamp-2 px-1">{match.home}</span>
+                        <span className="text-[12.5px] text-white font-bold text-center leading-tight line-clamp-2 px-1">{match.home}</span>
                       </div>
 
                       {/* Score / VS */}
-                      <div className="flex flex-col items-center justify-center shrink-0 w-1/3 pt-3">
+                      <div className="flex flex-col items-center justify-center shrink-0 w-1/3 pt-2">
                         {match.score !== '-' ? (
-                          <div className="flex items-center justify-center gap-2">
-                            <span className="text-[22px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[0]}</span>
-                            <span className="text-[14px] text-gray-600 font-black">-</span>
-                            <span className="text-[22px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[1]}</span>
+                          <div className="flex items-center justify-center gap-1.5">
+                            <span className="text-[18px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[0]}</span>
+                            <span className="text-[13px] text-gray-600 font-black">-</span>
+                            <span className="text-[18px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[1]}</span>
                           </div>
                         ) : (
-                          <span className="text-[18px] text-gray-700 font-black italic">VS</span>
+                          <span className="text-[16px] text-gray-700 font-black italic">VS</span>
                         )}
-                        <span className="text-[10px] text-gray-500 font-medium uppercase tracking-widest mt-1">{language === 'tr' ? 'Kazanan' : 'Winner'}</span>
+                        <span className="text-[9px] text-gray-500 font-medium uppercase tracking-widest mt-1">{language === 'tr' ? 'Kazanan' : 'Winner'}</span>
                       </div>
 
                       {/* Away */}
-                      <div className="flex flex-col items-center gap-2.5 flex-1 w-1/3">
-                        <div className="w-[52px] h-[52px] rounded-full bg-[#1a1a1a] p-1 border border-white/5 shadow-lg relative group-hover:border-white/10 transition-colors">
+                      <div className="flex flex-col items-center gap-2 flex-1 w-1/3">
+                        <div className="w-[42px] h-[42px] rounded-full bg-[#1a1a1a] p-1 border border-white/5 shadow-lg relative group-hover:border-white/10 transition-colors">
                           <img src={match.awayLogo} alt={match.away} className="w-full h-full rounded-full object-cover" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.away}&backgroundColor=050505&textColor=ffffff`; }} />
                         </div>
-                        <span className="text-[13.5px] text-white font-bold text-center leading-tight line-clamp-2 px-1">{match.away}</span>
+                        <span className="text-[12.5px] text-white font-bold text-center leading-tight line-clamp-2 px-1">{match.away}</span>
                       </div>
                     </div>
 
@@ -401,10 +401,10 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                           <button 
                             key={oddType}
                             onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, oddType); }}
-                            className={`flex-1 min-h-[46px] rounded-lg flex items-center justify-between px-3 md:px-4 transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]'}`}
+                            className={`flex-1 min-h-[38px] rounded-lg flex items-center justify-between px-2.5 md:px-3 transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]'}`}
                           >
-                            <span className="text-[12px] text-gray-400 font-bold">{oddType}</span>
-                            <span className="text-[14px] text-white font-bold">{oddValue}</span>
+                            <span className="text-[11px] text-gray-400 font-bold">{oddType}</span>
+                            <span className="text-[13px] text-white font-bold">{oddValue}</span>
                           </button>
                         );
                       })}
