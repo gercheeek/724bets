@@ -148,8 +148,11 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
           minute = data.extended_status.replace('s', '. Set');
       }
       
-      const homeLogoUrl = data.participants?.ByNumber?.['1']?.LogoPath || `https://api.dicebear.com/7.x/initials/svg?seed=${homeTeam}&backgroundColor=0f1422&textColor=e5e2e1`;
-      const awayLogoUrl = data.participants?.ByNumber?.['2']?.LogoPath || `https://api.dicebear.com/7.x/initials/svg?seed=${awayTeam}&backgroundColor=0f1422&textColor=e5e2e1`;
+      const homeTeamId = data.participants?.home_id || data.participants?.ByNumber?.['1']?.Id;
+      const awayTeamId = data.participants?.away_id || data.participants?.ByNumber?.['2']?.Id;
+      
+      const homeLogoUrl = data.participants?.ByNumber?.['1']?.LogoPath || (homeTeamId ? `https://opt.betconstruct.com/api/team/image/${homeTeamId}` : `https://api.dicebear.com/7.x/initials/svg?seed=${homeTeam}&backgroundColor=0f1422&textColor=e5e2e1`);
+      const awayLogoUrl = data.participants?.ByNumber?.['2']?.LogoPath || (awayTeamId ? `https://opt.betconstruct.com/api/team/image/${awayTeamId}` : `https://api.dicebear.com/7.x/initials/svg?seed=${awayTeam}&backgroundColor=0f1422&textColor=e5e2e1`);
       
       const countryName = mapCountryName(data.country?.name, language);
       const tournamentName = data.tournament?.name || 'Uluslararası Turnuva';
@@ -432,11 +435,21 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                         {/* Teams with Logos */}
                         <div className="flex-1 min-w-0 py-3.5 pr-4 pl-1">
                           <div className="flex items-center gap-2 mb-1.5">
-                            <img src={match.homeLogo} alt={match.home} className="w-4 h-4 rounded-full object-cover bg-white/[0.05]" />
+                            <img 
+                              src={match.homeLogo} 
+                              alt={match.home} 
+                              className="w-4 h-4 rounded-full object-cover bg-white/[0.05]" 
+                              onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.home}&backgroundColor=0f1422&textColor=e5e2e1`; }}
+                            />
                             <span className="text-[12.5px] text-white font-bold truncate group-hover:text-[#36ffc4] transition-colors">{match.home}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <img src={match.awayLogo} alt={match.away} className="w-4 h-4 rounded-full object-cover bg-white/[0.05]" />
+                            <img 
+                              src={match.awayLogo} 
+                              alt={match.away} 
+                              className="w-4 h-4 rounded-full object-cover bg-white/[0.05]" 
+                              onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.away}&backgroundColor=0f1422&textColor=e5e2e1`; }}
+                            />
                             <span className="text-[12.5px] text-white font-bold truncate group-hover:text-[#36ffc4] transition-colors">{match.away}</span>
                           </div>
                         </div>
