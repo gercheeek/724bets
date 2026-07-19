@@ -414,7 +414,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                       <div className="flex flex-col items-start gap-1.5 flex-1">
                         <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
                           <img 
-                            src={`/takimlogo/${(match.home || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
+                            src={match.homeLogo}
                             alt={match.home}
                             className="w-full h-full object-contain"
                             onError={(e) => {
@@ -442,7 +442,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                       <div className="flex flex-col items-end gap-1.5 flex-1">
                         <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
                           <img 
-                            src={`/takimlogo/${(match.away || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
+                            src={match.awayLogo}
                             alt={match.away}
                             className="w-full h-full object-contain"
                             onError={(e) => {
