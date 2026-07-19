@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useBetting } from '../contexts/BettingContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { SportsTriptychSlider } from './SportsTriptychSlider';
+import { SportsHeroBanner } from './SportsHeroBanner';
 import { 
   Search, ChevronRight, ChevronDown, X,
   Activity, Star, Flame, Clock, Trophy, Gamepad2, Target, Zap, TrendingUp
@@ -330,7 +330,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10" style={{ scrollbarWidth: 'thin', scrollbarColor: '#182030 #0A0A0A' }}>
           
-          <SportsTriptychSlider />
+          <SportsHeroBanner />
 
           {/* ═══════════ POPÜLER SECTION ═══════════ */}
           {featuredMatches.length > 0 && (
