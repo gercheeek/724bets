@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Flame, Activity, ChevronRight } from 'lucide-react';
+import { AnimatedOdd } from './AnimatedOdd';
 import { useBetting } from '../contexts/BettingContext';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -193,15 +194,15 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                             <div className="grid grid-cols-3 gap-2 mt-4">
                                 <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
                                     <span className="text-[11px] font-bold text-gray-500">1</span>
-                                    <span className="text-[12px] font-black">{match.homeOdd}</span>
+                                    <AnimatedOdd value={match.homeOdd} />
                                 </button>
                                 <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
                                     <span className="text-[11px] font-bold text-gray-500">Draw</span>
-                                    <span className="text-[12px] font-black">{match.drawOdd}</span>
+                                    <AnimatedOdd value={match.drawOdd} />
                                 </button>
                                 <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
                                     <span className="text-[11px] font-bold text-gray-500">2</span>
-                                    <span className="text-[12px] font-black">{match.awayOdd}</span>
+                                    <AnimatedOdd value={match.awayOdd} />
                                 </button>
                             </div>
                         </div>

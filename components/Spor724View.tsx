@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useBetting } from '../contexts/BettingContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { SportsHeroBanner } from './SportsHeroBanner';
+import { AnimatedOdd } from './AnimatedOdd';
 import { 
   Search, ChevronRight, ChevronDown, X,
-  Activity, Star, Flame, Clock, Trophy, Gamepad2, Target, Zap, TrendingUp
+  Activity, Star, Flame, Clock, Trophy, Gamepad2, Target, Zap, TrendingUp, PlayCircle, Lock
 } from 'lucide-react';
 
 interface BetSelection {
@@ -512,7 +513,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                             className={`flex-1 h-8 md:h-9 rounded-lg flex items-center justify-between px-2 group/odd transition-all backdrop-blur-md ${isSelected ? 'bg-[#10b981]/40 border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/30 shadow-lg'}`}
                           >
                             <span className={`text-[10px] font-bold capitalize ${isSelected ? 'text-white' : 'text-gray-300 group-hover/odd:text-white'}`}>{oddType}</span>
-                            <span className={`font-black text-[11px] md:text-[12px] ${isSelected ? 'text-white' : 'text-white'}`}>{oddValue}</span>
+                            <AnimatedOdd value={oddValue} />
                           </button>
                         );
                       })}
@@ -658,7 +659,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                                 className={`flex-1 md:flex-none w-auto md:w-[60px] h-[40px] md:h-[48px] rounded-lg flex flex-col items-center justify-center transition-all ${isSelected ? 'bg-[#10b981]/20 border border-[#10b981]' : 'bg-[#202029] hover:bg-[#2a2a35] border border-transparent hover:border-white/10'}`}
                               >
                                 <span className={`text-[11px] md:text-[12px] font-medium capitalize mb-0.5 ${isSelected ? 'text-[#10b981]' : 'text-gray-400 group-hover:text-white'}`}>{oddType}</span>
-                                <span className={`text-[12px] md:text-[13px] font-bold ${isSelected ? 'text-[#10b981]' : 'text-white'}`}>{oddValue}</span>
+                                <AnimatedOdd value={oddValue} />
                               </button>
                             );
                           })}
