@@ -231,8 +231,12 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                if (homeOdd !== '-' || awayOdd !== '-') {
                   break; // Found valid odds
                }
-            }
-         }
+             }
+          }
+      } // CLOSE FOR LOOP
+
+      if (homeOdd === '-' && awayOdd === '-') {
+        return;
       }
 
       const matchObj: MatchInfo = {
@@ -267,7 +271,13 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         homeTeam.toLowerCase().includes('esports') ||
         sport.toLowerCase().includes('e-sports');
         
-      if (!isFakeMatch) {
+      // Also filter out any API matches that duplicate our premium mock matches
+      const isDuplicateMock = 
+        (homeTeam.toLowerCase().includes('spain') || homeTeam.toLowerCase().includes('ispanya') || homeTeam.toLowerCase().includes('arjantin') || homeTeam.toLowerCase().includes('argentina')) ||
+        (homeTeam.toLowerCase().includes('france') || homeTeam.toLowerCase().includes('fransa') || homeTeam.toLowerCase().includes('portekiz') || homeTeam.toLowerCase().includes('portugal')) ||
+        (homeTeam.toLowerCase().includes('england') || homeTeam.toLowerCase().includes('ingiltere') || homeTeam.toLowerCase().includes('brezilya') || homeTeam.toLowerCase().includes('brazil'));
+        
+      if (!isFakeMatch && !isDuplicateMock) {
          parsedMatches.push(matchObj);
       }
     });
