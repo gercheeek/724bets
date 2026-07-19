@@ -335,79 +335,98 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
           {/* ═══════════ POPÜLER SECTION ═══════════ */}
           {featuredMatches.length > 0 && (
             <div className="px-4 pt-4 pb-2">
-              <div className="flex items-center gap-2 mb-4">
-                <Flame className="w-5 h-5 text-[#3ab4f2] drop-shadow-[0_0_8px_rgba(58,180,242,0.5)]" />
-                <span className="text-white font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Popüler' : 'Popular'}</span>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Flame className="w-5 h-5 text-[#10b981]" />
+                  <h2 className="text-white font-bold text-lg">Popüler Canlı</h2>
+                </div>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3 pb-3">
-                {featuredMatches.map(match => (
-                  <div key={`pop-${match.id}`} className="bg-[#050505] bg-gradient-to-b from-white/[0.08] to-transparent rounded-2xl p-3 flex flex-col gap-2.5 border border-white/[0.05] border-t-white/[0.15] hover:border-[#10b981]/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-500 cursor-pointer relative overflow-hidden shadow-2xl group backdrop-blur-2xl">
-                    {/* Background Glow */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[150px] bg-[#10b981] opacity-[0.02] blur-[60px] group-hover:opacity-[0.06] transition-opacity duration-500 pointer-events-none"></div>
 
-                    {/* Top Bar: League & Time */}
-                    <div className="flex items-center justify-between z-10">
-                      <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium tracking-wide">
-                        <span className="opacity-80 grayscale">{getCountryFlag(match.country)}</span>
-                        <span className="truncate max-w-[180px] uppercase tracking-wider">{match.league}</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {featuredMatches.map(match => (
+                  <div key={`pop-${match.id}`} className="bg-gradient-to-br from-[#1b1b22] to-[#121218] rounded-xl border border-white/[0.05] p-3 md:p-4 hover:border-[#10b981]/30 transition-all cursor-pointer shadow-lg relative overflow-hidden group">
+                    
+                    {/* Decorative Background for visual depth (matching reference style) */}
+                    <div className="absolute top-0 right-0 w-[150%] h-[150%] bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.06),transparent_50%)] pointer-events-none"></div>
+                    <div className="absolute -bottom-10 -left-10 w-[200px] h-[200px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.04),transparent_60%)] pointer-events-none"></div>
+
+                    {/* Header */}
+                    <div className="flex justify-between items-center mb-4 relative z-10">
+                      <div className="flex items-center gap-1.5">
+                        {getSportIcon(match.league)}
+                        <span className="text-gray-400 text-[11px] md:text-xs font-semibold truncate max-w-[150px] tracking-wide">{match.league}</span>
                       </div>
-                      <span className="text-[11px] text-gray-400 font-medium flex items-center gap-1.5">
-                        {match.isFinished ? (language === 'tr' ? 'Bitti' : 'FT') : (match.minute === 'Yakında' ? 'Bugün, 22:00' : match.minute)}
-                        {match.isLive && !match.isFinished && match.minute !== 'Yakında' && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-gray-400 text-[11px] md:text-xs font-semibold">{match.minute === 'Yakında' ? 'Aug 15, 20:30' : (match.isLive ? <span className="text-red-500 font-bold">{match.minute}</span> : match.minute)}</span>
+                        {match.isLive && !match.isFinished && (
+                          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
                         )}
-                      </span>
+                      </div>
                     </div>
 
-                    {/* VS Face-off */}
-                    <div className="flex items-start justify-between z-10 pt-1 pb-1 relative">
-                      {/* Home */}
-                      <div className="flex flex-col items-center gap-2 flex-1 w-1/3">
-                        <div className="w-[42px] h-[42px] rounded-full bg-[#1a1a1a] p-1 border border-white/5 shadow-lg relative group-hover:border-white/10 transition-colors">
-                          <img src={match.homeLogo} alt={match.home} className="w-full h-full rounded-full object-cover" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.home}&backgroundColor=050505&textColor=ffffff`; }} />
+                    {/* Teams Row */}
+                    <div className="flex items-start justify-between mb-2 relative z-10">
+                      {/* Home Team */}
+                      <div className="flex flex-col items-start gap-1.5 flex-1">
+                        <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center p-1.5 overflow-hidden">
+                          <img 
+                            src={`/takimlogo/${match.home.replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
+                            alt={match.home}
+                            className="w-full h-full object-contain"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[10px]">${match.home.substring(0, 2).toUpperCase()}</span>`;
+                            }}
+                          />
                         </div>
-                        <span className="text-[12.5px] text-white font-bold text-center leading-tight line-clamp-2 px-1">{match.home}</span>
+                        <span className="text-white font-bold text-[13px] md:text-sm text-left line-clamp-1">{match.home}</span>
                       </div>
 
-                      {/* Score / VS */}
-                      <div className="flex flex-col items-center justify-center shrink-0 w-1/3 pt-2">
+                      {/* Score / Center Label */}
+                      <div className="flex flex-col items-center justify-center shrink-0 w-16 pt-2">
                         {match.score !== '-' ? (
-                          <div className="flex items-center justify-center gap-1.5">
-                            <span className="text-[18px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[0]}</span>
-                            <span className="text-[13px] text-gray-600 font-black">-</span>
-                            <span className="text-[18px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[1]}</span>
+                          <div className="flex flex-col items-center">
+                            <span className="text-white font-black text-lg mb-1 drop-shadow-md">{match.score}</span>
+                            <span className="text-gray-500 text-[9px] font-bold tracking-widest uppercase">1x2</span>
                           </div>
                         ) : (
-                          <span className="text-[16px] text-gray-700 font-black italic">VS</span>
+                          <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase mt-4">1x2</span>
                         )}
-                        <span className="text-[9px] text-gray-500 font-medium uppercase tracking-widest mt-1">{language === 'tr' ? 'Kazanan' : 'Winner'}</span>
                       </div>
 
-                      {/* Away */}
-                      <div className="flex flex-col items-center gap-2 flex-1 w-1/3">
-                        <div className="w-[42px] h-[42px] rounded-full bg-[#1a1a1a] p-1 border border-white/5 shadow-lg relative group-hover:border-white/10 transition-colors">
-                          <img src={match.awayLogo} alt={match.away} className="w-full h-full rounded-full object-cover" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.away}&backgroundColor=050505&textColor=ffffff`; }} />
+                      {/* Away Team */}
+                      <div className="flex flex-col items-end gap-1.5 flex-1">
+                        <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center p-1.5 overflow-hidden">
+                          <img 
+                            src={`/takimlogo/${match.away.replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
+                            alt={match.away}
+                            className="w-full h-full object-contain"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[10px]">${match.away.substring(0, 2).toUpperCase()}</span>`;
+                            }}
+                          />
                         </div>
-                        <span className="text-[12.5px] text-white font-bold text-center leading-tight line-clamp-2 px-1">{match.away}</span>
+                        <span className="text-white font-bold text-[13px] md:text-sm text-right line-clamp-1">{match.away}</span>
                       </div>
                     </div>
 
-                    {/* Odds */}
-                    <div className="flex items-center gap-2 z-10 w-full mt-1">
-                      {['1', 'X', '2'].map((oddType) => {
-                        const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
-                        const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
+                    {/* Odds Buttons */}
+                    <div className="flex items-center gap-2 mt-4 relative z-10 w-full">
+                      {['1', 'draw', '2'].map((oddType, idx) => {
+                        const originalType = oddType === 'draw' ? 'X' : oddType;
+                        const oddValue = originalType === '1' ? match.homeOdd : originalType === 'X' ? match.drawOdd : match.awayOdd;
+                        const oddId = originalType === '1' ? match.homeId : originalType === 'X' ? match.drawId : match.awayId;
                         const isSelected = betSlip.some(s => s.id === oddId);
                         
                         return (
                           <button 
-                            key={oddType}
-                            onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, oddType); }}
-                            className={`flex-1 min-h-[38px] rounded-lg flex items-center justify-between px-2.5 md:px-3 transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]'}`}
+                            key={idx}
+                            onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, originalType); }}
+                            className={`flex-1 h-9 md:h-10 rounded-lg flex items-center justify-between px-2.5 group/odd transition-all ${isSelected ? 'bg-[#10b981]/20 border border-[#10b981]' : 'bg-[#2a2a35] hover:bg-[#323240] border border-transparent hover:border-white/10'}`}
                           >
-                            <span className="text-[11px] text-gray-400 font-bold">{oddType}</span>
-                            <span className="text-[13px] text-white font-bold">{oddValue}</span>
+                            <span className={`text-[11px] font-semibold capitalize ${isSelected ? 'text-[#10b981]' : 'text-gray-400 group-hover/odd:text-white'}`}>{oddType}</span>
+                            <span className={`font-bold text-xs md:text-[13px] ${isSelected ? 'text-[#10b981]' : 'text-white'}`}>{oddValue}</span>
                           </button>
                         );
                       })}
