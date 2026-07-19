@@ -293,6 +293,18 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     if (!isBetSlipOpen) setIsBetSlipOpen(true);
   };
 
+  const getSportBgImage = (sportName: string) => {
+    const name = (sportName || '').toLowerCase();
+    if (name.includes('basketbol') || name.includes('basketball')) return 'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800&auto=format&fit=crop';
+    if (name.includes('tenis') || name.includes('tennis')) return 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=800&auto=format&fit=crop';
+    if (name.includes('voleybol') || name.includes('volleyball')) return 'https://images.unsplash.com/photo-1592656094267-764a45160876?q=80&w=800&auto=format&fit=crop';
+    if (name.includes('buz hokeyi') || name.includes('ice hockey')) return 'https://images.unsplash.com/photo-1515703407324-5f753eedf996?q=80&w=800&auto=format&fit=crop';
+    if (name.includes('masa tenisi') || name.includes('table tennis')) return 'https://images.unsplash.com/photo-1534158914592-062992fbe900?q=80&w=800&auto=format&fit=crop';
+    if (name.includes('e-spor') || name.includes('esports')) return 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop';
+    if (name.includes('hentbol') || name.includes('handball')) return 'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?q=80&w=800&auto=format&fit=crop';
+    return 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=800&auto=format&fit=crop'; // Futbol fallback
+  };
+
   const getSportIcon = (sportName: string) => {
     const name = sportName.toLowerCase();
     if (name.includes('futbol') || name.includes('soccer')) return <Activity className="w-4 h-4" />;
@@ -351,7 +363,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                     <div 
                       className="absolute inset-0 z-0 opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700 pointer-events-none"
                       style={{
-                        backgroundImage: `url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=800&auto=format&fit=crop')`,
+                        backgroundImage: `url('${getSportBgImage(match.sport)}')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}
