@@ -938,28 +938,33 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     </div>
                     
                     {/* Right Column: Channels List */}
-                    <div style={{ width: isMobile ? '100%' : '340px', display: 'flex', flexDirection: 'column', background: isMobile ? 'transparent' : 'rgba(255,255,255,0.02)', border: isMobile ? 'none' : '1px solid rgba(255,255,255,0.06)', borderRadius: isMobile ? '0' : '8px', padding: isMobile ? '16px' : '16px', flexShrink: 0, height: isMobile ? 'auto' : 'auto', position: 'relative' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexShrink: 0 }}>
-                            <span style={{ fontSize: '11px', fontWeight: 900, color: '#6b7280', letterSpacing: '1px' }}>CANLI KANALLAR</span>
-                            <div style={{ position: 'relative', width: '150px' }}>
+                    <div className={`flex flex-col flex-shrink-0 relative transition-all duration-300 ${isMobile ? 'w-full bg-transparent' : 'w-[360px] bg-[#0a0f1a]/95 backdrop-blur-2xl border border-white/5 rounded-2xl p-5 shadow-2xl'}`}>
+                        <div className="flex items-center justify-between mb-4 flex-shrink-0">
+                            <span className="text-[11px] font-black text-gray-400 tracking-[2px] uppercase">CANLI KANALLAR</span>
+                            <div className="relative w-[160px] group">
                                 <input 
                                     type="text" 
                                     placeholder="Kanal ara..." 
                                     value={searchQuery}
                                     onChange={e => setSearchQuery(e.target.value)}
-                                    style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '6px 10px 6px 28px', color: '#fff', fontSize: '11px', outline: 'none' }}
+                                    className="w-full bg-[#111726] border border-white/5 rounded-xl py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-[#06b6d4]/50 focus:bg-[#151c2e] transition-all"
                                 />
-                                <Search style={{ width: 10, height: 10, color: '#6b7280', position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+                                <Search className="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2 group-focus-within:text-[#06b6d4] transition-colors" />
                             </div>
                         </div>
                         
                         {/* Scrollable list of channels */}
-                        <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
-                            <div className="custom-scrollbar" style={{ position: isMobile ? 'relative' : 'absolute', inset: isMobile ? 'auto' : 0, overflowY: isMobile ? 'visible' : 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: isMobile ? '0' : '4px' }}>
+                        <div className="flex-1 relative min-h-0">
+                            <div className={`custom-scrollbar flex flex-col gap-3 ${isMobile ? 'relative' : 'absolute inset-0 overflow-y-auto pr-2'}`}>
                                 {(() => {
                                     const filtered = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
                                     if (filtered.length === 0) {
-                                        return <div style={{ textAlign: 'center', padding: '20px 0', color: '#6b7280', fontSize: '12px' }}>Kanal bulunamadı.</div>;
+                                        return (
+                                            <div className="flex flex-col items-center justify-center py-10 opacity-60">
+                                                <Search className="w-8 h-8 text-gray-500 mb-3" />
+                                                <span className="text-gray-400 text-xs font-semibold">Kanal bulunamadı.</span>
+                                            </div>
+                                        );
                                     }
 
                                     // Group channels
@@ -978,9 +983,10 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     });
 
                                     return sortedGroupNames.map(groupName => (
-                                        <div key={groupName} style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
-                                            <div style={{ fontSize: '11px', fontWeight: 900, color: '#06b6d4', padding: '6px 4px 2px 4px', borderBottom: '1px solid rgba(0, 255, 163, 0.15)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                                                {groupName}
+                                        <div key={groupName} className="flex flex-col gap-2.5 mb-2">
+                                            <div className="flex items-center gap-2 px-1 pb-1">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-[#06b6d4]"></div>
+                                                <span className="text-[10px] font-black text-[#06b6d4] uppercase tracking-[1px]">{groupName}</span>
                                             </div>
                                             {groups[groupName].map(s => {
                                                 const isLive = s.is_live;
@@ -999,29 +1005,49 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                 fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
                                                             } as any);
                                                         }}
-                                                        style={{
-                                                            background: isActive ? 'linear-gradient(135deg, rgba(0, 255, 163, 0.15), rgba(0, 255, 163, 0.03))' : 'rgba(255,255,255,0.02)',
-                                                            border: '1px solid ' + (isActive ? '#06b6d4' : 'rgba(255,255,255,0.04)'),
-                                                            borderRadius: isMobile ? '12px' : '8px', padding: isMobile ? '12px 16px' : '10px 12px', cursor: 'pointer', transition: 'all 0.2s ease',
-                                                            display: 'flex', alignItems: 'center', gap: '12px', marginBottom: isMobile ? '8px' : '0'
-                                                        }}
-                                                        onMouseEnter={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
-                                                        onMouseLeave={e => { if(!isActive) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; }}
+                                                        className={`group relative flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 overflow-hidden ${
+                                                            isActive 
+                                                                ? 'bg-gradient-to-r from-[#06b6d4]/20 to-[#06b6d4]/5 border-[#06b6d4]/50' 
+                                                                : 'bg-[#111726]/80 border-white/5 hover:border-white/10 hover:bg-[#151d30]'
+                                                        } border`}
                                                     >
-                                                        <div style={{ width: isMobile ? '48px' : '40px', height: isMobile ? '48px' : '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: '2px' }}>
-                                                            <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                                        {isActive && (
+                                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#06b6d4] to-emerald-400" />
+                                                        )}
+                                                        <div className={`w-11 h-11 rounded-lg shrink-0 flex items-center justify-center p-1.5 transition-all ${
+                                                            isActive ? 'bg-black/40 border border-[#06b6d4]/30 shadow-[0_0_15px_rgba(6,182,212,0.3)]' : 'bg-black/20 border border-white/5 group-hover:bg-black/40'
+                                                        }`}>
+                                                            <img 
+                                                                src={getChannelLogo(s.name, s.avatar_url)} 
+                                                                alt={s.name} 
+                                                                className="w-full h-full object-contain"
+                                                                onError={(e) => {
+                                                                    e.currentTarget.onerror = null;
+                                                                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=1a2035&color=fff`;
+                                                                }}
+                                                            />
                                                         </div>
-                                                        <div style={{ flex: 1, minWidth: 0, marginLeft: '4px' }}>
-                                                            <div style={{ fontSize: isMobile ? '15px' : '14px', fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.name}</div>
-                                                            <div style={{ fontSize: '10px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px' }}>{s.platform_type}</div>
+                                                        <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                                            <div className={`text-sm font-bold truncate transition-colors ${isActive ? 'text-white' : 'text-gray-200 group-hover:text-white'}`}>
+                                                                {s.name}
+                                                            </div>
+                                                            <div className="flex items-center gap-1.5 mt-0.5">
+                                                                <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{s.platform_type || 'TV'}</span>
+                                                                {isLive && (
+                                                                    <>
+                                                                        <span className="w-1 h-1 rounded-full bg-gray-600"></span>
+                                                                        <span className="text-[9px] font-medium text-emerald-500/80">HD</span>
+                                                                    </>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                         {isLive ? (
-                                                            <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '8px', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#ef4444', animation: 'pulse 1.5s infinite' }} />
-                                                                <span style={{ fontSize: '9px', fontWeight: 900, color: '#ef4444' }}>CANLI</span>
+                                                            <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-2 py-1 rounded-md">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
+                                                                <span className="text-[9px] font-black text-red-500 tracking-wider">CANLI</span>
                                                             </div>
                                                         ) : (
-                                                            <span style={{ fontSize: '10px', color: '#4b5563', fontWeight: 800 }}>OFFLINE</span>
+                                                            <span className="text-[9px] font-bold text-gray-600 bg-black/30 px-2 py-1 rounded-md">OFFLINE</span>
                                                         )}
                                                     </div>
                                                 );
