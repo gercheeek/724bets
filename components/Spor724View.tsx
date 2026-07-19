@@ -444,7 +444,8 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                       })}
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
