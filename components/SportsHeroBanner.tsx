@@ -142,12 +142,6 @@ export const SportsHeroBanner: React.FC = () => {
           
           {/* Top Tag & Event Name */}
           <div className="flex flex-col items-center gap-2 mb-3 md:mb-4 animate-fade-in-up">
-            <div className="px-4 py-1 rounded-full bg-[#10b981]/20 border border-[#10b981]/30 backdrop-blur-md shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-              <span className="text-[#10b981] font-black text-[9px] md:text-[11px] tracking-[0.3em] uppercase">Günün Dev Maçı</span>
-            </div>
-            <h2 className="text-gray-300 font-black text-[10px] md:text-xs tracking-[0.4em] uppercase drop-shadow-lg">
-              Dünya Kupası Finali
-            </h2>
             {heroMatch && heroMatch.isLive && (
               <div className="flex items-center gap-1.5 mt-1">
                 {!heroMatch.isFinished && <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>}
