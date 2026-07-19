@@ -30,6 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
   const [isPromosOpen, setIsPromosOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [isFavLeaguesOpen, setIsFavLeaguesOpen] = useState(true);
 
   return (
     <>
@@ -168,17 +169,49 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <Radio className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
                   <span className="font-bold text-[14px]">Canlı Maçlar</span>
                 </button>
-
-                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
-                  <Trophy className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
-                  <span className="font-bold text-[14px] truncate w-40 text-left">Favori Ligler</span>
-                </button>
               </div>
 
               <div className="w-full h-px bg-white/5 my-4"></div>
 
               {/* Accordions */}
               <div className="flex flex-col gap-3">
+                {/* Popüler Ligler */}
+                <div className="flex flex-col bg-[#14141a] rounded-xl border border-white/5 overflow-hidden">
+                  <div 
+                    onClick={() => setIsFavLeaguesOpen(!isFavLeaguesOpen)}
+                    className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Trophy className="w-5 h-5 text-white icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
+                      <span className="font-bold text-white text-[14px]">Popüler Ligler</span>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isFavLeaguesOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {isFavLeaguesOpen && (
+                    <div className="flex flex-col py-2 bg-[#0B0E14] border-t border-white/5 gap-1">
+                      {[
+                        { name: 'Premier Lig', sub: 'Futbol, İngiltere', icon: '🇬🇧' },
+                        { name: 'UEFA Avrupa Ligi', sub: 'Futbol, Uluslararası (Kulüpler)', icon: '🌍' },
+                        { name: 'Şampiyonlar Ligi', sub: 'Futbol, Uluslararası (Kulüpler)', icon: '⚽' },
+                        { name: 'UEFA Avrupa Konferans Ligi', sub: 'Futbol, Uluslararası (Kulüpler)', icon: '🏆' },
+                        { name: 'Serie A', sub: 'Futbol, İtalya', icon: '🇮🇹' },
+                        { name: 'LaLiga', sub: 'Futbol, İspanya', icon: '🇪🇸' },
+                        { name: 'Bundesliga', sub: 'Futbol, Almanya', icon: '🇩🇪' },
+                        { name: 'Avrupa Kupası', sub: 'Futbol, Uluslararası', icon: '🌍' },
+                        { name: 'Lig 1', sub: 'Futbol, Fransa', icon: '🇫🇷' },
+                      ].map((league, idx) => (
+                        <button key={idx} onClick={() => onViewChange('spor724')} className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors text-left border-l-[3px] border-transparent hover:border-[#10b981] group">
+                          <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[15px] shrink-0 border border-white/10 group-hover:bg-white/10 shadow-sm">{league.icon}</div>
+                          <div className="flex flex-col">
+                            <span className="text-[13px] font-bold text-slate-300 group-hover:text-white transition-colors">{league.name}</span>
+                            <span className="text-[11px] text-slate-500 font-medium group-hover:text-slate-400">{league.sub}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 {/* Casino */}
                 <div className="flex flex-col bg-[#14141a] rounded-xl border border-white/5 overflow-hidden">
                   <div 
@@ -300,9 +333,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <Radio className="w-5 h-5" />
                 <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Canlı Maçlar</div>
               </button>
-              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button onClick={() => {onToggle(); setIsFavLeaguesOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
                 <Trophy className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Favori Ligler</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Popüler Ligler</div>
               </button>
               <div className="w-10 h-px bg-white/5 my-1"></div>
               <button onClick={() => {onToggle(); setIsCasinoOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
