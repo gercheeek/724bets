@@ -1,8 +1,8 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('wss://srv.tarafbet980.com/sport/?EIO=3&transport=websocket', {
+const ws = new WebSocket('wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket', {
     headers: {
-        'Origin': 'https://tarafbet980.com',
+        'Origin': 'https://tarafbet981.com',
         'User-Agent': 'Mozilla/5.0'
     }
 });

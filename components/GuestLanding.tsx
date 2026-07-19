@@ -477,7 +477,18 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             }
           }}
         >
-          {showDemoIframe && getDemoUrl(selectedGame) ? (
+          {selectedGame.title === 'VIP ROULETTE' ? (
+             <div className="relative w-full h-[100dvh] md:max-w-[1200px] md:w-[95vw] md:h-[80vh] bg-black md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col m-auto animate-fade-in">
+               <div className="flex-1 w-full relative bg-black">
+                  <iframe 
+                    src="https://www.youtube.com/embed/UC_DKcB38T0?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&disablekb=1&fs=0"
+                    className="absolute inset-0 w-full h-full border-none pointer-events-none"
+                    allowFullScreen
+                    allow="autoplay; fullscreen"
+                  ></iframe>
+               </div>
+             </div>
+          ) : showDemoIframe && getDemoUrl(selectedGame) ? (
             <div className="relative w-full h-[100dvh] md:max-w-[1600px] md:w-[95vw] md:h-[90vh] bg-black md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:border border-white/5 m-auto">
                <div className="h-12 md:h-14 bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 flex-shrink-0">
                   <div className="flex items-center gap-3">

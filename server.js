@@ -18,9 +18,9 @@ process.on('unhandledRejection', (reason, promise) => {
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
-const targetWsUrl = 'wss://srv.tarafbet980.com/sport/?EIO=3&transport=websocket';
+const targetWsUrlBase = 'wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket';
 const targetHeaders = {
-    'Origin': 'https://tarafbet980.com',
+    'Origin': 'https://tarafbet981.com',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
     'Cache-Control': 'no-cache',
     'Pragma': 'no-cache',
@@ -28,7 +28,19 @@ const targetHeaders = {
     'Accept-Language': 'tr,en-US;q=0.9,en;q=0.8'
 };
 
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req) => {
+    // Extract language from client request url (e.g. /?lang=tr)
+    let lang = 'tur'; // default
+    if (req.url && req.url.includes('lang=')) {
+        const params = new URLSearchParams(req.url.split('?')[1]);
+        if (params.get('lang') === 'tr') lang = 'tur';
+        else if (params.get('lang') === 'en') lang = 'en';
+        else if (params.get('lang')) lang = params.get('lang');
+    }
+    
+    const targetWsUrl = `${targetWsUrlBase}&language=${lang}&lang=${lang}`;
+    
+    console.log(`[${new Date().toISOString()}] New client connected with lang: ${lang}`);
     console.log('💻 [LOCAL] Frontend client connected. Opening new target connection...');
     
     const targetSocket = new WebSocket(targetWsUrl, { headers: targetHeaders });

@@ -108,20 +108,21 @@ const Footer: React.FC = () => {
             <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">{t("responsible_gaming")}</a>
             <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">{t("kyc_policy")}</a>
           </div>
-          <div className="flex flex-col items-center md:items-end gap-1">
+          <div className="flex flex-col items-center md:items-end gap-2">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#06b6d4]/50" />
               <span className="tracking-wide text-xs text-zinc-500">{t("all_rights_reserved")}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">ahbapbet v2.0.1</span>
-              <button 
-                onClick={() => window.dispatchEvent(new CustomEvent('open-admin'))}
-                className="text-[9px] sm:text-[10px] text-zinc-600 hover:text-emerald-500 font-mono transition-colors"
-              >
-                [ Yönetim ]
-              </button>
             </div>
+            <button 
+              onClick={() => window.dispatchEvent(new CustomEvent('open-admin'))}
+              className="mt-1 px-4 py-1.5 bg-zinc-900 border border-white/10 hover:border-[#10b981]/50 rounded-md text-[11px] sm:text-xs text-zinc-400 hover:text-[#10b981] font-bold transition-all flex items-center gap-2"
+            >
+              <Lock className="w-3 h-3" />
+              Yönetici ve Editör Girişi
+            </button>
           </div>
         </div>
 

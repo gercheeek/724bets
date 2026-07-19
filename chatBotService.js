@@ -506,12 +506,12 @@ async function sendNextMessage() {
                 fightIndex = 0;
                 normalMsgCount = 0;
             }
-            // Delay mantığı: Minimum 4 saniye, Maksimum 20 saniye
-            const minDelay = 4 * 1000;
-            const maxDelay = 20 * 1000;
-            // %20 ihtimalle hızlı tartışma
+            // Delay mantığı: 2-3 dk aralarında bazen 5 (120 sn ile 300 sn arası)
+            const minDelay = 120 * 1000;
+            const maxDelay = 300 * 1000;
+            // %20 ihtimalle hızlı tartışma (30-90 sn)
             delay = Math.random() < 0.20 
-                ? Math.floor(Math.random() * 3000) + 2000 // 2-5 sn
+                ? Math.floor(Math.random() * 60000) + 30000 // 30-90 sn
                 : Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 
         } else if (mode === 'FIGHT') {

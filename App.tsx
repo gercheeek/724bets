@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { BettingProvider } from './contexts/BettingContext';
 import LanguageTransition from './components/LanguageTransition';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -190,13 +191,15 @@ export default function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <div className="min-h-screen bg-theme-main text-theme-primary flex flex-col font-sans">
-          <AppContent setIsAdminPanelOpen={setIsAdminPanelOpen} />
-        </div>
+        <BettingProvider>
+          <div className="min-h-screen bg-theme-main text-theme-primary flex flex-col font-sans">
+            <AppContent setIsAdminPanelOpen={setIsAdminPanelOpen} />
+          </div>
 
-        {isAdminPanelOpen && (
-            <AdminPanel onClose={() => setIsAdminPanelOpen(false)} />
-        )}
+          {isAdminPanelOpen && (
+              <AdminPanel onClose={() => setIsAdminPanelOpen(false)} />
+          )}
+        </BettingProvider>
       </LanguageProvider>
     </ThemeProvider>
   );

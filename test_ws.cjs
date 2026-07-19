@@ -1,8 +1,8 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('wss://srv.tarafbet980.com/sport/?EIO=3&transport=websocket', {
+const ws = new WebSocket('wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket', {
     headers: {
-        'Origin': 'https://tarafbet980.com',
+        'Origin': 'https://tarafbet981.com',
         'User-Agent': 'Mozilla/5.0'
     }
 });
@@ -18,11 +18,18 @@ ws.on('message', (data) => {
     if (msg.startsWith('0{')) {
         ws.send('40');
         setTimeout(() => {
-            ws.send('42["subscribe-PreMatch",{"locale":"tr_TR"}]');
+            ws.send('42["subscribe-LiveEvents",{"locale":"tr_TR"}]');
         }, 1000);
-        setTimeout(() => {
-            ws.send('42["subscribe-PreMatchEvents",{"locale":"tr_TR"}]');
-        }, 2000);
+    }
+    if (msg.startsWith('42[')) {
+        try {
+            const parsed = JSON.parse(msg.substring(2));
+            const payload = parsed[1];
+            if (payload && payload.events) {
+                console.log(`BINGO! Found ${payload.events.length} live events.`);
+                process.exit(0);
+            }
+        } catch(e) {}
     }
 });
 

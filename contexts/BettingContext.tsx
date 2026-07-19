@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { useLanguage } from './LanguageContext';
 
 // Bet Slip Item Structure
 export interface BetSelection {
@@ -45,6 +46,7 @@ interface BettingContextType {
 const BettingContext = createContext<BettingContextType | undefined>(undefined);
 
 export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { language } = useLanguage();
   const [events, setEvents] = useState<WSEvent[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
@@ -87,13 +89,18 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // WebSocket Connection
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:4000');
+    // Reset events when language changes so UI clears out old language matches
+    setEvents([]);
+    
+    const ws = new WebSocket(`ws://localhost:4000/?lang=${language}`);
     wsRef.current = ws;
 
     ws.onopen = () => {
       console.log('✅ Connected to Local Proxy. Sending LiveEvents subscribe...');
       setIsConnected(true);
-      ws.send('42["subscribe-LiveEvents",{"locale":"tr_TR"}]');
+      
+      let loc = language === 'tr' ? 'tur' : 'en'; // Send tur for Turkish, en for English, etc to BetConstruct
+      ws.send(`42["subscribe-LiveEvents",{"locale":"${loc}"}]`);
     };
 
     ws.onmessage = (event) => {
@@ -179,7 +186,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return () => {
       ws.close();
     };
-  }, []);
+  }, [language]);
 
   return (
     <BettingContext.Provider value={{
