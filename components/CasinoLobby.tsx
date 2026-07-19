@@ -638,9 +638,6 @@ export default function CasinoLobby({
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
             />
 
-            {/* POPULAR LIVE WIDGET */}
-            <PopularLiveWidget onNavigate={onNavigate} />
-
             {/* POPULAR GAMES SLIDER SECTION */}
             <SliderSection 
               title="Popüler Oyunlar" 

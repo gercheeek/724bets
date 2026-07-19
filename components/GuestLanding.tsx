@@ -17,6 +17,7 @@ import { GameDetailModal, GameData } from './GameDetailModal';
 import { NewGamesSlider2 } from './NewGamesSlider2';
 import AnimatedCyberBackground from './AnimatedCyberBackground';
 import LiveWinsTicker from './LiveWinsTicker';
+import { PopularLiveWidget } from './PopularLiveWidget';
 
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
@@ -336,6 +337,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           }} />
 
           <div className="w-full mt-4">
+            {/* POPULAR LIVE WIDGET */}
+            <PopularLiveWidget onNavigate={onViewChange} />
             <LiveWinsTicker />
             <OriginalsSlider onNavigate={onViewChange} />
           </div>
@@ -412,6 +415,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     demoUrl: getDemoUrl(game),
                     fullDesc: `${game.name}, ${game.provider} tarafından sunulan popüler ve kazançlı bir slottur.`
                 })} />
+                
+                {/* POPULAR LIVE WIDGET */}
+                <div className="mt-8">
+                    <PopularLiveWidget onNavigate={onViewChange} />
+                </div>
             </div>
 
         </div>
