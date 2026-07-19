@@ -235,11 +235,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
          }
       }
 
-      if (homeOdd === '-' && awayOdd === '-') {
-        return;
-      }
-
-      const matchObj = {
+      const matchObj: MatchInfo = {
         id: ev.id,
         home: homeTeam,
         away: awayTeam,
@@ -261,11 +257,86 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         marketsCount: Object.keys(data.group_markets || {}).length || 1
       };
 
-      if (homeTeam.includes('Arjantin') || awayTeam.includes('Arjantin') || homeTeam.includes('Argentina') || awayTeam.includes('Argentina') || homeTeam.includes('İspanya') || awayTeam.includes('İspanya')) {
-          parsedMatches.unshift(matchObj);
-      } else {
-          parsedMatches.push(matchObj);
+      // Filter out Virtual/Cyber/Simulated matches because user considers them fake/non-existent
+      const isFakeMatch = 
+        league.toLowerCase().includes('cyber') || 
+        league.toLowerCase().includes('esoccer') ||
+        league.toLowerCase().includes('simulated') ||
+        league.toLowerCase().includes('srl') ||
+        league.toLowerCase().includes('virtual') ||
+        homeTeam.toLowerCase().includes('esports') ||
+        sport.toLowerCase().includes('e-sports');
+        
+      if (!isFakeMatch) {
+         parsedMatches.push(matchObj);
       }
+    });
+    
+    // Inject the 3 Premium Mock Matches to ensure they always appear in the list!
+    parsedMatches.unshift({
+      id: 'mock-match-3',
+      home: 'İNGİLTERE',
+      away: 'BREZİLYA',
+      isLive: true,
+      isFinished: false,
+      score: '0 - 0',
+      minute: "12'",
+      league: 'Hazırlık Maçı',
+      sport: 'Futbol',
+      country: 'Uluslararası',
+      homeOdd: '2.80',
+      drawOdd: '3.10',
+      awayOdd: '2.30',
+      homeId: 'sel-eng-home',
+      drawId: 'sel-eng-draw',
+      awayId: 'sel-eng-away',
+      homeLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Flag_of_England.svg/64px-Flag_of_England.svg.png',
+      awayLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/64px-Flag_of_Brazil.svg.png',
+      marketsCount: 89
+    });
+    
+    parsedMatches.unshift({
+      id: 'mock-match-2',
+      home: 'FRANSA',
+      away: 'PORTEKİZ',
+      isLive: true,
+      isFinished: false,
+      score: '2 - 2',
+      minute: "88'",
+      league: 'Avrupa Şampiyonası',
+      sport: 'Futbol',
+      country: 'Avrupa',
+      homeOdd: '2.45',
+      drawOdd: '2.10',
+      awayOdd: '4.20',
+      homeId: 'sel-fra-home',
+      drawId: 'sel-fra-draw',
+      awayId: 'sel-fra-away',
+      homeLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/64px-Flag_of_France.svg.png',
+      awayLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/64px-Flag_of_Portugal.svg.png',
+      marketsCount: 124
+    });
+    
+    parsedMatches.unshift({
+      id: 'mock-match-1',
+      home: 'İSPANYA',
+      away: 'ARJANTİN',
+      isLive: true,
+      isFinished: false,
+      score: '1 - 0',
+      minute: "75'",
+      league: 'Dünya Kupası',
+      sport: 'Futbol',
+      country: 'Uluslararası',
+      homeOdd: '1.95',
+      drawOdd: '3.40',
+      awayOdd: '2.80',
+      homeId: 'sel-spa-home',
+      drawId: 'sel-spa-draw',
+      awayId: 'sel-spa-away',
+      homeLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Spain.svg/64px-Flag_of_Spain.svg.png',
+      awayLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Argentina.svg/64px-Flag_of_Argentina.svg.png',
+      marketsCount: 156
     });
     
     setMatches(parsedMatches);
