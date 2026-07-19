@@ -489,7 +489,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
             </div>
           </div>
 
-          {/* ═══════════ MATCHES LIST GROUPED BY LEAGUE ═══════════ */}
+          {/* ═══════════ CANLI MATCHES GRID ═══════════ */}
           <div className="px-4 pb-8">
             
             {isLoading && (
@@ -503,93 +503,102 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                </div>
             )}
             
-            {!isLoading && sortedLeagues.map(league => {
-              const leagueMatches = groupedByLeague[league];
-              const firstMatch = leagueMatches[0];
-              const flag = getCountryFlag(firstMatch.country);
-              
-              return (
-                <div key={league} className="mb-6">
-                  {/* League Header */}
-                  <div className="flex items-center gap-3 py-2.5 px-4 bg-[#1b1b24] rounded-r-xl sticky top-0 z-20 mb-3 border-l-4 border-l-[#10b981] shadow-md border-y border-r border-white/5">
-                    <span className="text-[18px] drop-shadow-md">{flag}</span>
-                    <span className="text-[13px] text-gray-300 font-bold truncate flex-1 uppercase tracking-widest">{league}</span>
-                    <Star className="w-4 h-4 text-slate-500 hover:text-[#e9c349] transition-colors cursor-pointer" />
-                  </div>
+            {!isLoading && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                {filteredMatches.map(match => {
+                  const isGoal = false; // Logic can be extended if needed
                   
-                  {/* Match Rows */}
-                  <div className="flex flex-col gap-2">
-                    {leagueMatches.map((match, idx) => (
-                      <div 
-                        key={match.id} 
-                        className="flex flex-col md:flex-row md:items-center bg-[#15151c] rounded-xl p-3 md:p-3.5 gap-3 md:gap-4 transition-all duration-300 border border-white/[0.03] hover:border-[#10b981]/30 hover:bg-[#1a1a24] group relative overflow-hidden"
-                      >
-                        {/* Glow on hover */}
-                        <div className="absolute top-0 right-0 w-[250px] h-full bg-gradient-to-l from-[#10b981]/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                  return (
+                    <div 
+                      key={match.id} 
+                      className={`bg-[#15151c] rounded-xl border p-3 md:p-4 flex flex-col hover:border-[#10b981]/30 transition-all cursor-pointer shadow-lg relative overflow-hidden group border-white/[0.05]`}
+                    >
+                      {/* Header (League + Time) */}
+                      <div className="flex justify-between items-center mb-6">
+                        <div className="flex items-center gap-1.5 text-gray-400">
+                          <Activity className="w-4 h-4 shrink-0" />
+                          <span className="text-[11px] md:text-[12px] font-bold uppercase truncate tracking-wider">{match.league}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className={`text-[11px] md:text-[12px] font-bold ${match.isFinished ? 'text-gray-500' : 'text-red-500'}`}>{match.isFinished ? 'FT' : match.minute}</span>
+                          {!match.isFinished && (
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,1)]"></div>
+                          )}
+                        </div>
+                      </div>
 
-                        {/* LEFT SECTION: Status */}
-                        <div className="flex items-center md:flex-col md:justify-center shrink-0 w-[50px] md:w-[60px] border-r border-white/5 pr-3 md:pr-0 md:border-r-0 md:border-b-0 pb-0 z-10">
-                          {match.isFinished ? (
-                            <span className="text-[11px] text-gray-500 font-bold tracking-wide uppercase">FT</span>
-                          ) : (
-                            <div className="flex flex-col items-center justify-center gap-1.5">
-                               <span className="text-[13px] font-black text-red-500 tabular-nums">{match.minute}</span>
-                               <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+                      {/* Teams Row */}
+                      <div className="flex items-start justify-between mb-4 flex-1">
+                        {/* Home Team */}
+                        <div className="flex flex-col items-start gap-2 flex-1 w-1/3">
+                          <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center overflow-hidden bg-white/5 border border-white/10">
+                            <img 
+                              src={match.homeLogo}
+                              alt={match.home}
+                              className="w-full h-full object-contain p-1.5"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[12px]">${match.home.substring(0, 2).toUpperCase()}</span>`;
+                              }}
+                            />
+                          </div>
+                          <span className="text-white font-bold text-[13px] md:text-[14px] text-left line-clamp-2 leading-tight">{match.home}</span>
+                        </div>
+
+                        {/* Score / Center Label */}
+                        <div className="flex flex-col items-center justify-center shrink-0 w-20 pt-2">
+                          {match.score !== '-' ? (
+                            <div className="flex flex-col items-center">
+                              <span className={`font-black text-xl mb-1 tabular-nums text-white`}>{match.score}</span>
+                              <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase">1x2</span>
                             </div>
+                          ) : (
+                            <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase mt-4">1x2</span>
                           )}
                         </div>
 
-                        {/* MIDDLE SECTION: Teams & Scores */}
-                        <div className="flex-1 flex flex-col gap-2.5 min-w-0 pr-0 md:pr-4 z-10">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center p-1 overflow-hidden shadow-sm">
-                                <img src={match.homeLogo} alt={match.home} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[9px]">${match.home.substring(0, 2).toUpperCase()}</span>`; }} />
-                              </div>
-                              <span className="text-[13px] md:text-[14px] font-bold text-white truncate">{match.home}</span>
-                            </div>
-                            <span className="text-[14px] md:text-[16px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[0] || '-'}</span>
+                        {/* Away Team */}
+                        <div className="flex flex-col items-end gap-2 flex-1 w-1/3">
+                          <div className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center overflow-hidden bg-white/5 border border-white/10">
+                            <img 
+                              src={match.awayLogo}
+                              alt={match.away}
+                              className="w-full h-full object-contain p-1.5"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[12px]">${match.away.substring(0, 2).toUpperCase()}</span>`;
+                              }}
+                            />
                           </div>
-                          
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center p-1 overflow-hidden shadow-sm">
-                                <img src={match.awayLogo} alt={match.away} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[9px]">${match.away.substring(0, 2).toUpperCase()}</span>`; }} />
-                              </div>
-                              <span className="text-[13px] md:text-[14px] font-bold text-white truncate">{match.away}</span>
-                            </div>
-                            <span className="text-[14px] md:text-[16px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[1] || '-'}</span>
-                          </div>
-                        </div>
-
-                        {/* RIGHT SECTION: Odds */}
-                        <div className="flex items-center gap-1.5 shrink-0 mt-2 md:mt-0 pt-3 md:pt-0 border-t border-white/5 md:border-t-0 z-10 w-full md:w-auto">
-                          {['1', 'X', '2'].map((oddType) => {
-                            const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
-                            const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
-                            const isSelected = betSlip.some(s => s.id === oddId);
-                            
-                            return (
-                              <button 
-                                key={oddType}
-                                onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, oddType); }}
-                                className={`flex-1 md:flex-none w-auto md:w-[65px] h-[40px] md:h-[46px] rounded-lg flex flex-col items-center justify-center transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981]' : 'bg-[#2a2a35] hover:bg-[#323240] border border-transparent hover:border-white/10'}`}
-                              >
-                                <span className={`text-[10px] md:text-[11px] font-semibold ${isSelected ? 'text-[#10b981]' : 'text-gray-400 group-hover:text-white'}`}>{oddType}</span>
-                                <span className={`text-xs md:text-[13px] font-bold ${isSelected ? 'text-[#10b981]' : 'text-white'}`}>{oddValue}</span>
-                              </button>
-                            );
-                          })}
-                          <button className="h-[40px] md:h-[46px] min-w-[40px] md:min-w-[46px] rounded-lg bg-[#2a2a35] hover:bg-[#323240] border border-transparent hover:border-white/10 transition-colors flex items-center justify-center text-[11px] text-gray-400 hover:text-white font-bold ml-1">
-                            +{match.marketsCount}
-                          </button>
+                          <span className="text-white font-bold text-[13px] md:text-[14px] text-right line-clamp-2 leading-tight">{match.away}</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+
+                      {/* Odds Buttons */}
+                      <div className="flex items-center gap-1.5 w-full mt-2">
+                        {['1', 'draw', '2'].map((oddType, idx) => {
+                          const originalType = oddType === 'draw' ? 'X' : oddType;
+                          const oddValue = originalType === '1' ? match.homeOdd : originalType === 'X' ? match.drawOdd : match.awayOdd;
+                          const oddId = originalType === '1' ? match.homeId : originalType === 'X' ? match.drawId : match.awayId;
+                          const isSelected = betSlip.some(s => s.id === oddId);
+                          
+                          return (
+                            <button 
+                              key={idx}
+                              onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, originalType); }}
+                              className={`flex-1 h-9 md:h-[40px] rounded-lg flex items-center justify-between px-3 group/odd transition-all ${isSelected ? 'bg-[#10b981]/20 border border-[#10b981]' : 'bg-[#202029] hover:bg-[#2a2a35] border border-transparent hover:border-white/10'}`}
+                            >
+                              <span className={`text-[11px] font-semibold capitalize ${isSelected ? 'text-[#10b981]' : 'text-gray-400 group-hover:text-white'}`}>{oddType}</span>
+                              <span className={`text-[12px] md:text-[13px] font-bold ${isSelected ? 'text-[#10b981]' : 'text-white'}`}>{oddValue}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
 
