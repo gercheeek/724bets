@@ -12,59 +12,21 @@ export const SportsHeroBanner: React.FC = () => {
   const heroMatches = useMemo(() => {
     if (!events || !events.length) return [];
     
-    // Filter for live matches
-    const liveEvents = events.filter((ev: any) => {
+    // Filter for live matches with valid odds
+    const validLiveEvents = events.reduce((acc: any[], ev: any) => {
       const data = ev.data;
-      if (!data || !data.participants) return false;
+      if (!data || !data.participants) return acc;
+      
       const isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
       const isLive = data.status === 'in_progress' || data.is_live_betting === true;
-      return isLive && !isFinished;
-    });
-
-    // Sort by market count to get "popular" matches and take top 3
-    const topEvents = liveEvents
-      .sort((a: any, b: any) => {
-         const aMarkets = Object.keys(a.data?.group_markets || {}).length || 0;
-         const bMarkets = Object.keys(b.data?.group_markets || {}).length || 0;
-         return bMarkets - aMarkets;
-      })
-      .slice(0, 3);
-
-    if (topEvents.length === 0) return [];
-
-    return topEvents.map((match: any) => {
-      const data = match.data;
-      const homeTeam = data.participants.home || 'EV SAHİBİ';
-      const awayTeam = data.participants.away || 'DEPLASMAN';
       
-      let score = '-';
-      let minute = 'CANLI';
-      let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
-      let isLive = data.status === 'in_progress' || data.is_live_betting === true || isFinished;
-      
-      if (data.scores && Array.isArray(data.scores)) {
-        const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
-        if (currentScore) {
-          const parts = currentScore.split('|');
-          if (parts.length >= 4) {
-             score = `${parts[2]} - ${parts[3]}`;
-          }
-        } else if (data.current_score) {
-          score = String(data.current_score || '').replace(':', ' - ');
-        }
-      }
-      
-      if (isFinished) {
-          minute = language === 'tr' ? 'Maç Bitti' : 'FT';
-      } else if (data.minute) {
-          minute = `${data.minute}'`;
-      }
+      if (!isLive || isFinished) return acc;
 
       let homeOdd = '-';
       let drawOdd = '-';
       let awayOdd = '-';
 
-      const rawGroupMarkets = data.group_markets || match.group_markets;
+      const rawGroupMarkets = data.group_markets || ev.group_markets;
       const rawMarkets = rawGroupMarkets?.['full_event|0'] || rawGroupMarkets?.['game_full_event|0'] || rawGroupMarkets?.['set|1'];
       const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
       
@@ -96,20 +58,67 @@ export const SportsHeroBanner: React.FC = () => {
          }
       }
 
+      // Only include matches that have actual odds
+      if (homeOdd !== '-' && awayOdd !== '-') {
+        acc.push({
+           ...ev,
+           parsedOdds: { homeOdd, drawOdd, awayOdd }
+        });
+      }
+      return acc;
+    }, []);
+
+    // Sort by market count to get "popular" matches and take top 3
+    const topEvents = validLiveEvents
+      .sort((a: any, b: any) => {
+         const aMarkets = Object.keys(a.data?.group_markets || {}).length || 0;
+         const bMarkets = Object.keys(b.data?.group_markets || {}).length || 0;
+         return bMarkets - aMarkets;
+      })
+      .slice(0, 3);
+
+    if (topEvents.length === 0) return [];
+
+    return topEvents.map((match: any) => {
+      const data = match.data;
+      const homeTeam = data.participants.home || 'EV SAHİBİ';
+      const awayTeam = data.participants.away || 'DEPLASMAN';
+      
+      let score = '-';
+      let minute = 'CANLI';
+      
+      if (data.scores && Array.isArray(data.scores)) {
+        const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
+        if (currentScore) {
+          const parts = currentScore.split('|');
+          if (parts.length >= 4) {
+             score = `${parts[2]} - ${parts[3]}`;
+          }
+        } else if (data.current_score) {
+          score = String(data.current_score || '').replace(':', ' - ');
+        }
+      }
+      
+      if (data.minute) {
+          minute = `${data.minute}'`;
+      }
+
       return {
         id: match.id,
         homeTeam,
         awayTeam,
         score,
         minute,
-        isLive,
-        isFinished,
-        homeOdd,
-        drawOdd,
-        awayOdd
+        isLive: true,
+        isFinished: false,
+        homeOdd: match.parsedOdds.homeOdd,
+        drawOdd: match.parsedOdds.drawOdd,
+        awayOdd: match.parsedOdds.awayOdd
       };
     });
   }, [events, language]);
+
+
 
   useEffect(() => {
     if (heroMatches.length <= 1) return;
