@@ -113,7 +113,15 @@ const Footer: React.FC = () => {
               <CheckCircle2 className="w-3.5 h-3.5 text-[#06b6d4]/50" />
               <span className="tracking-wide text-xs text-zinc-500">{t("all_rights_reserved")}</span>
             </div>
-            <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">ahbapbet v2.0.1</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 font-mono tracking-wider">ahbapbet v2.0.1</span>
+              <button 
+                onClick={() => window.dispatchEvent(new CustomEvent('open-admin'))}
+                className="text-[9px] sm:text-[10px] text-zinc-600 hover:text-emerald-500 font-mono transition-colors"
+              >
+                [ Yönetim ]
+              </button>
+            </div>
           </div>
         </div>
 

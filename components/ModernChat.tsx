@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Star, Shield, Trash2, Smile, MoreVertical, Menu, Cpu } from 'lucide-react';
+import { X, Send, Star, Shield, Trash2, Smile, MoreVertical, Menu, Trophy, Cpu } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { SiteUser } from '../types';
+import { BetShareModal } from './BetShareModal';
 
 interface ModernChatProps {
     open: boolean;
@@ -44,8 +45,33 @@ const isAuthorized = (role: string | null) => {
     return ['KRAL', 'PATRON', 'ADMIN', 'MODERATOR'].includes(r);
 };
 
-const renderMessageText = (text: string) => {
-  if (!text) return '';
+const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, type: 'Casino'|'Spor') => void) => {
+  const text = msg.message;
+  if (!text || typeof text !== 'string') return '';
+
+  const betShareRegex = /^(Casino|Spor):\s*#([\d\.]+)\s+(.*)$/i;
+  const match = text.match(betShareRegex);
+  if (match && onBetClick) {
+      const type = match[1] as 'Casino' | 'Spor';
+      const betId = match[2];
+      const remainingText = match[3];
+
+      return (
+          <div className="flex flex-col gap-1.5 mt-0.5">
+              <div 
+                  onClick={() => onBetClick(betId, msg.username, type)}
+                  className="inline-flex items-center gap-1.5 bg-[#1f3643] hover:bg-[#2f4553] transition-colors rounded px-2.5 py-1 text-sm font-semibold cursor-pointer select-none text-white border border-[#00e701]/30 w-fit"
+              >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4 6H20M4 12H20M4 18H20" stroke="#00e701" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  {type}: #{betId}
+              </div>
+              <span className="mt-1">{remainingText}</span>
+          </div>
+      );
+  }
+
   const parts = text.split(/(:\w+:)/g);
   return parts.map((part, index) => {
     if (EMOTES[part]) {
@@ -83,7 +109,31 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     const [activePoll, setActivePoll] = useState<{ question: string; options: string[]; votes: number[]; isActive: boolean; } | null>(null);
     const [hasVoted, setHasVoted] = useState(false);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+    const [selectedBet, setSelectedBet] = useState<{ id: string, user: string, type: 'Casino' | 'Spor' } | null>(null);
     const [isEventCollapsed, setIsEventCollapsed] = useState(false);
+    const [onlineCount, setOnlineCount] = useState(1050);
+    const [liveWins, setLiveWins] = useState<any[]>([
+        { user: 'Yilmaz***', amount: '12.450 ₺', game: 'Sweet Bonanza' },
+        { user: 'Carlos***', amount: '46.060 ₺', game: 'Crazy Time' }
+    ]);
+
+    // Online Sayacı Simülasyonu (Zamana Göre Değişen 800 - 1200 Arası)
+    useEffect(() => {
+        const updateOnlineCount = () => {
+            setOnlineCount(prev => {
+                // Rastgele -30 ile +30 arası değişim
+                const change = Math.floor(Math.random() * 61) - 30;
+                let newCount = prev + change;
+                if (newCount < 800) newCount = 800;
+                if (newCount > 1200) newCount = 1200;
+                return newCount;
+            });
+        };
+        
+        // Her 20 saniyede bir sayıyı güncelle
+        const interval = setInterval(updateOnlineCount, 20000);
+        return () => clearInterval(interval);
+    }, []);
     const [isPollCollapsed, setIsPollCollapsed] = useState(false);
     const [showRules, setShowRules] = useState(false);
 
@@ -175,8 +225,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         let isMounted = true;
 
         const loadData = async () => {
+            if (isMounted) setIsConnected(true); // Yüklenme başlasa bile chat panelini açık göster (fallback)
+            console.log("loadData started");
             try {
                 // Fetch last 100 messages for global channel
+                console.log("fetching supabase tv_chat...");
                 const { data, error } = await supabase
                     .from('tv_chat')
                     .select('*')
@@ -184,10 +237,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     .order('created_at', { ascending: true })
                     .limit(100);
 
-                if (error) throw error;
+                console.log("supabase tv_chat fetched", { data, error });
 
                 if (isMounted) {
-                    setMessages(data || []);
+                    setMessages(prev => {
+                        const localBots = prev.filter(m => m.id && (m.id.startsWith('group_bot_') || m.id.startsWith('tip_')));
+                        const merged = [...(data || []), ...localBots];
+                        return merged.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+                    });
+                    console.log("Setting isConnected to true in try block");
                     setIsConnected(true);
                     // Scroll to bottom
                     setTimeout(() => {
@@ -198,7 +256,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                 }
             } catch (err) {
                 console.error('Error loading global chat:', err);
-                if (isMounted) setIsConnected(true);
+                if (isMounted) {
+                    console.log("Setting isConnected to true in catch block");
+                    setIsConnected(true);
+                }
             }
         };
 
@@ -310,51 +371,32 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         };
     }, [open, botsConfig]);
 
-    // Fake Tip Generator
+    // Local chat scenario simulation has been moved to chatBotService.js for 24/7 global synchronization.
+
+    // Fake Live Win Generator in Chat (Keeps wins permanently pinned and updating)
     useEffect(() => {
         if (!open) return;
         
         let timeoutId: NodeJS.Timeout;
 
         const USERS = ['kellyfart', 'gavinwithag', 'Sergey***', 'Yilmaz***', 'Carlos***', 'Maria***', 'Ali***', 'Metin***', 'Joao***'];
+        const GAMES = ['Sweet Bonanza', 'Zeus vs Hades', 'Gates of Olympus', 'Sugar Rush', 'Crazy Time', 'Lightning Roulette'];
         
-        const sendFakeTip = () => {
-            const sender = USERS[Math.floor(Math.random() * USERS.length)];
-            let receiver = USERS[Math.floor(Math.random() * USERS.length)];
-            while (receiver === sender) {
-                receiver = USERS[Math.floor(Math.random() * USERS.length)];
-            }
-            const amount = `$${(Math.random() * 50 + 1).toFixed(2).replace('.', ',')}`;
+        const sendFakeWin = () => {
+            const user = USERS[Math.floor(Math.random() * USERS.length)];
+            const game = GAMES[Math.floor(Math.random() * GAMES.length)];
+            const amount = `${(Math.random() * 50000 + 500).toLocaleString('tr-TR')} ₺`;
             
-            const newTipMsg = {
-                id: `tip_${Date.now()}_${Math.random().toString(36).substr(2,9)}`,
-                username: 'System',
-                role: 'system_tip',
-                message: 'tip',
-                tipData: { sender, amount, receiver },
-                created_at: new Date().toISOString(),
-                channel_id: activeLang.id
-            };
+            const newWin = { user, amount, game };
+            setLiveWins(prev => [newWin, ...prev].slice(0, 2)); // Keep the last 2 wins
             
-            setMessages(prev => {
-                const updated = [...prev, newTipMsg];
-                setTimeout(() => {
-                    if (chatContainerRef.current) {
-                        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-                    }
-                }, 50);
-                return updated;
-            });
-
-            // 3 to 5 times an hour means every 12 to 20 minutes (720,000 to 1,200,000 ms)
-            const nextDelay = Math.random() * (1200000 - 720000) + 720000; 
-            timeoutId = setTimeout(sendFakeTip, nextDelay);
+            // Random delay between 10s to 30s
+            const nextDelay = Math.floor(Math.random() * 20000) + 10000;
+            timeoutId = setTimeout(sendNextWin, nextDelay);
         };
 
-        // Trigger the first one relatively quickly so the user can verify it works (e.g. 5-15 seconds)
-        // Then subsequent ones will follow the 12-20 minute rule.
-        const initialDelay = Math.random() * 10000 + 5000;
-        timeoutId = setTimeout(sendFakeTip, initialDelay);
+        const sendNextWin = () => sendFakeWin();
+        timeoutId = setTimeout(sendNextWin, 15000); // initial delay
 
         return () => clearTimeout(timeoutId);
     }, [open]);
@@ -548,7 +590,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         const r = role?.toUpperCase();
         if (r === 'ADMIN') return '#F87171'; // Soft red for admin
         if (r === 'VIP') return '#38BDF8'; // Sky blue for VIP
-        if (r === 'SYSTEM' || r === 'BOT') return '#06b6d4'; // Emerald for bots
+        if (r === 'SYSTEM' || r === 'BOT') return '#10B981'; // Emerald for bots
         return '#E5E7EB'; // Light gray/white for normal users
     };
 
@@ -563,7 +605,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             );
         }
         if (r === 'SYSTEM' || r === 'BOT') {
-            const color = msgObj?.botColor || '#06b6d4';
+            const color = msgObj?.botColor || '#10B981';
             return (
                 <span 
                     className="inline-flex items-center gap-0.5 bg-black/20 px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none mr-1.5 uppercase border border-white/5"
@@ -588,14 +630,14 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0B0E14] border-l border-transparent shadow-2xl font-sans text-left relative">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0F1219] shadow-2xl font-sans text-left relative">
             
             {/* Chat Rules Overlay */}
             {showRules && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-[#14141a]/70 backdrop-blur-xl border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                    <div className="bg-[#1A1D24] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-sm shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
                         <div className="flex items-center gap-3 mb-6">
-                            <Shield className="w-6 h-6 text-[#06b6d4]" />
+                            <Shield className="w-6 h-6 text-[#10B981]" />
                             <h2 className="text-lg font-black text-white tracking-wider">SOHBET KURALLARI</h2>
                         </div>
                         <ul className="space-y-4 text-sm text-gray-300 font-medium">
@@ -622,7 +664,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         </ul>
                         <button 
                             onClick={() => setShowRules(false)}
-                            className="w-full mt-6 bg-[#06b6d4] hover:bg-[#059669] text-white font-black py-3.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                            className="w-full mt-6 bg-[#10B981] hover:bg-[#059669] text-black font-black py-3.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
                         >
                             Anladım, teşekkürler
                         </button>
@@ -631,11 +673,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             )}
 
             {/* Header */}
-            <div className="bg-[#0B0E14] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-transparent shadow-sm">
+            <div className="bg-[#0F1219] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5 shadow-sm">
                 <div className="flex items-center gap-3 relative">
                     <div 
                         onClick={() => setShowLangMenu(!showLangMenu)}
-                        className="flex items-center gap-2 bg-[#14141a] border border-transparent px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#1a1a22] hover:border-white/20 cursor-pointer transition-all shadow-inner relative z-20"
+                        className="flex items-center gap-2 bg-[#1A1D24] border border-[#2A2E3D] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#20242D] hover:border-white/20 cursor-pointer transition-all shadow-inner relative z-20"
                     >
                         <img src={`https://flagcdn.com/w20/${activeLang.flag}.png`} alt={activeLang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
                         <span className="text-gray-200">{activeLang.name}</span>
@@ -646,12 +688,12 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     {showLangMenu && (
                         <>
                             <div className="fixed inset-0 z-10" onClick={() => setShowLangMenu(false)}></div>
-                            <div className="absolute top-full mt-2 left-0 w-36 bg-[#14141a]/80 backdrop-blur-md border border-white/10 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="absolute top-full mt-2 left-0 w-36 bg-[#1A1D24] border border-[#2A2E3D] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-20 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                                 {LANGUAGES.map(lang => (
                                     <div 
                                         key={lang.id}
                                         onClick={() => { setActiveLang(lang); setShowLangMenu(false); }}
-                                        className={`flex items-center gap-2 px-3 py-2 text-xs font-bold cursor-pointer transition-colors ${activeLang.id === lang.id ? 'bg-[#06b6d4]/10 text-[#06b6d4]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                                        className={`flex items-center gap-2 px-3 py-2 text-xs font-bold cursor-pointer transition-colors ${activeLang.id === lang.id ? 'bg-[#10B981]/10 text-[#10B981]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
                                     >
                                         <img src={`https://flagcdn.com/w20/${lang.flag}.png`} alt={lang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
                                         <span>{lang.name}</span>
@@ -662,13 +704,13 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     )}
                 </div>
                 <div className="flex items-center gap-4 text-zinc-400">
-                    <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#14141a] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
+                    <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#1A1D24] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
                         <span className="relative flex h-2 w-2">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        <span className="text-gray-300">2.485</span>
+                        <span className="text-gray-300">{onlineCount.toLocaleString('tr-TR')}</span>
                     </div>
                     <button 
                         onClick={onClose} 
@@ -682,11 +724,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
             {/* Pinned Message Bar */}
             {pinnedMessage && pinnedMessage.text && (
-                <div className="bg-[#06b6d4]/10 px-4 py-3 flex items-center justify-between gap-3 text-left">
+                <div className="bg-[#10B981]/10 px-4 py-3 flex items-center justify-between gap-3 text-left">
                     <div className="flex items-start gap-2 min-w-0">
-                        <span className="text-[12px] mt-0.5 text-[#06b6d4]">📌</span>
+                        <span className="text-[12px] mt-0.5 text-[#10B981]">📌</span>
                         <div className="min-w-0">
-                            <div className="text-[10px] font-bold text-[#06b6d4] flex items-center gap-1">
+                            <div className="text-[10px] font-bold text-[#10B981] flex items-center gap-1">
                                 <span>Sabitlendi</span>
                                 <span className="text-[8px] text-zinc-500">•</span>
                                 <span style={{ color: getRoleColor(pinnedMessage.role) }}>{pinnedMessage.username}</span>
@@ -729,48 +771,17 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     </div>
                 ) : (
                     messages.map((msg, i) => {
-                        if (msg.role === 'system_tip' && msg.tipData) {
-                            return (
-                                <div key={msg.id || i} className="px-2 py-1 mx-1.5">
-                                    <div className="relative overflow-hidden rounded-md border border-yellow-500/80 bg-[#14141a] p-2.5 flex items-center justify-between text-left shadow-[0_2px_10px_rgba(234,179,8,0.15)] group cursor-default transition-all duration-300">
-                                        <div className="flex items-center gap-2.5 relative z-10 w-full">
-                                            <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-zinc-400 drop-shadow-sm"><path d="M12 2L2 12l10 10 10-10L12 2z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor" /></svg>
-                                            </div>
-                                            <div className="text-gray-100 text-[13px] font-medium leading-tight flex items-center flex-wrap gap-1.5 pr-8 tracking-wide">
-                                                <span className="text-white font-semibold">{msg.tipData.sender}</span> 
-                                                <span className="text-gray-300">gönderildi</span>
-                                                <span className="text-yellow-500 font-extrabold">{msg.tipData.amount}</span>
-                                                <span className="text-gray-300">'e</span>
-                                                <span className="text-white font-semibold">{msg.tipData.receiver}</span>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Floating Coins Effect */}
-                                        <div className="absolute right-0 top-0 h-full flex items-center pr-2 opacity-90 pointer-events-none transform group-hover:scale-110 transition-transform duration-300">
-                                            <div className="relative w-9 h-9 flex items-center justify-center">
-                                                <div className="absolute top-1 right-1 text-yellow-400 text-[9px] animate-pulse">✦</div>
-                                                <div className="absolute bottom-2 left-0 text-yellow-400 text-[7px] animate-pulse delay-150">✦</div>
-                                                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-600 border border-yellow-600 shadow-sm absolute transform -translate-x-1 -translate-y-1 z-10 flex items-center justify-center">
-                                                    <div className="w-3 h-3 border border-yellow-700/50 rounded-full"></div>
-                                                </div>
-                                                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-700 border border-yellow-700 shadow-sm absolute transform translate-x-1.5 translate-y-1.5 flex items-center justify-center">
-                                                    <div className="w-3 h-3 border border-yellow-800/50 rounded-full"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            );
+                        if (msg.role === 'system_win') {
+                            return null; // Do not render inside the scrollable message list
                         }
                         
                         return (
                         <div 
                             key={msg.id || i} 
-                            className={`px-3 py-2.5 flex flex-col gap-1 relative group text-left cursor-default transition-all duration-300 rounded-md mx-2 mb-2 ${
-                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-[#0B0E14] border border-emerald-500/20' : 
-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-[#0B0E14]' : 
-                                'bg-[#14141a] hover:bg-[#242938]'
+                            className={`px-4 py-2.5 flex flex-row gap-3 relative group text-left cursor-default transition-all duration-300 rounded-lg mx-2 ${
+                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-gradient-to-r from-emerald-500/10 to-transparent border-l-2 border-emerald-500' : 
+                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-transparent' : 
+                                'bg-transparent hover:bg-white/[0.02]'
                             }`}
                             onContextMenu={(e) => {
                                 if (isAdmin) {
@@ -780,22 +791,27 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 }
                             }}
                         >
-                            <div className="flex flex-col min-w-0">
-                                <div className="flex items-center flex-wrap gap-1 mb-0.5">
-                                    <span 
-                                        className="text-[13px] font-bold tracking-wide drop-shadow-sm flex items-center" 
-                                        style={{ color: getRoleColor(msg.role, msg.username, msg) }}
-                                    >
-                                        {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}:
-                                    </span>
-                                    <span className="text-[13px] text-gray-300 leading-relaxed break-words antialiased inline-block">
-                                        {renderMessageText(msg.message)}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[9px] text-zinc-500 font-medium">
+                            {/* Avatar */}
+                            <div className={`w-8 h-8 rounded-full bg-[#1A1D24] flex-shrink-0 overflow-hidden mt-0.5 border ${msg.role?.toUpperCase() === 'ADMIN' ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-white/10'}`}>
+                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.username}`} alt={msg.username} className="w-full h-full object-cover" />
+                            </div>
+
+                            <div className="flex flex-col flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap mb-1">
+                                    <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap">
                                         {formatTime(msg.created_at)}
                                     </span>
+                                    <span 
+                                        className="text-[13px] font-extrabold tracking-wide drop-shadow-sm flex items-center" 
+                                        style={{ color: getRoleColor(msg.role, msg.username, msg) }}
+                                    >
+                                        {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
+                                    </span>
+                                </div>
+                                <div className={`text-[13px] leading-relaxed break-words pr-4 antialiased ${
+                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold text-white' : 'text-gray-300 font-medium'
+                                }`}>
+                                    {renderMessageText(msg, (betId, user, type) => setSelectedBet({ id: betId, user, type }))}
                                 </div>
                             </div>
 
@@ -815,13 +831,13 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 </button>
 
                                 {activeMenuId === msg.id && (
-                                  <div className="absolute right-0 mt-1 bg-[#14141a] border border-white/5 rounded-lg shadow-2xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
+                                  <div className="absolute right-0 mt-1 bg-[#1A1D24] rounded-lg shadow-2xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
                                     <button 
                                       onClick={() => {
                                         handlePinMessage(msg.message, msg.username, msg.role || 'member');
                                         setActiveMenuId(null);
                                       }}
-                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-[#06b6d4] transition-colors flex items-center gap-1.5"
+                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-[#10B981] transition-colors flex items-center gap-1.5"
                                     >
                                       📌 Sabitle
                                     </button>
@@ -849,7 +865,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             )}
 
                             {activeMutePopup === msg.id && (
-                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#0B0E14', borderRadius: '8px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', minWidth: '220px' }}>
+                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#111317', borderRadius: '8px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', minWidth: '220px' }}>
                                     <div style={{ padding: '12px' }}>
                                         <input value={muteReason} onChange={(e) => setMuteReason(e.target.value)} placeholder="Ceza nedeni (zorunlu)" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', padding: '8px 10px', fontSize: '10px', color: '#fff', outline: 'none', border: 'none' }} />
                                     </div>
@@ -866,21 +882,52 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             )}
             </div>
 
+            {/* Canlı Kazananlar Sabit Penceresi */}
+            {liveWins.length > 0 && (
+                <div className="px-4 py-2.5 bg-[#0F1219] border-t border-b border-white/5 flex flex-col gap-2 relative z-20">
+                    <div className="flex items-center justify-between text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
+                        <span>Canlı Kazananlar</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                        {liveWins.map((win, idx) => (
+                            <div key={idx} className="relative overflow-hidden rounded-lg border border-[#06b6d4]/20 bg-[#06b6d4]/5 p-2 flex items-center gap-2.5 transition-all duration-300">
+                                <div className="shrink-0">
+                                    <div className="w-6 h-6 rounded-full bg-[#06b6d4]/10 border border-[#06b6d4]/30 flex items-center justify-center">
+                                        <Trophy className="w-3.5 h-3.5 text-[#06b6d4]" />
+                                    </div>
+                                </div>
+                                <div className="flex-1 min-w-0 flex items-center justify-between text-[11px]">
+                                    <div className="truncate">
+                                        <span className="text-gray-100 font-bold mr-1.5">{win.user}</span>
+                                        <span className="text-gray-400">az önce kazandı:</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                                        <span className="font-extrabold text-[#06b6d4] drop-shadow-[0_0_5px_rgba(6,182,212,0.3)]">{win.amount}</span>
+                                        <span className="text-[10px] text-zinc-500">({win.game})</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             {/* Input Footer Area */}
-            <div className="px-4 py-4 bg-[#0B0E14] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-transparent relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
+            <div className="px-4 py-4 bg-[#0F1219] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
                 {/* Message Input */}
                 {!siteUser ? (
                     <div className="flex flex-col items-center justify-center">
                         <input 
                             type="text"
                             disabled
-                            placeholder="Mesaj göndermek için lütfen giriş yapın"
-                            className="w-full bg-[#14141a] text-[12px] font-medium text-center text-zinc-400 rounded-md px-4 py-4 cursor-not-allowed"
+                            placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
+                            className="w-full bg-[#1A1D24] border border-[#2A2E3D] text-[12px] font-bold text-center text-gray-500 rounded-xl px-4 py-3.5 cursor-not-allowed shadow-inner"
                         />
                     </div>
                 ) : (
                     <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
-                        <div className="relative flex items-center bg-[#14141a] border border-transparent focus-within:border-[#10b981] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)] rounded-xl overflow-hidden transition-all duration-300">
+                        <div className="relative flex items-center bg-[#13161C] border border-[#2A2E3D] focus-within:border-[#10B981] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)] rounded-xl overflow-hidden transition-all duration-300">
                             <input
                                 type="text"
                                 value={newMessage}
@@ -895,7 +942,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 <button
                                     type="submit"
                                     disabled={!newMessage.trim()}
-                                    className="text-white bg-[#06b6d4] disabled:bg-[#2A2E3D] disabled:text-gray-500 hover:bg-[#059669] transition-all p-2 rounded-lg ml-1 shadow-[0_0_10px_rgba(16,185,129,0.2)] disabled:shadow-none"
+                                    className="text-black bg-[#10B981] disabled:bg-[#2A2E3D] disabled:text-gray-500 hover:bg-[#059669] transition-all p-2 rounded-lg ml-1 shadow-[0_0_10px_rgba(16,185,129,0.2)] disabled:shadow-none"
                                 >
                                     <Send className="w-4 h-4 ml-0.5" />
                                 </button>
@@ -904,6 +951,14 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     </form>
                 )}
             </div>
+            
+            <BetShareModal 
+                isOpen={!!selectedBet} 
+                onClose={() => setSelectedBet(null)}
+                betId={selectedBet?.id || ''}
+                username={selectedBet?.user || ''}
+                type={selectedBet?.type || 'Casino'}
+            />
         </div>
     );
 };

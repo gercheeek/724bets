@@ -1,118 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Menu, Search, ChevronLeft, ChevronRight, ChevronDown, 
-  Megaphone, Target, Gift, Shield, Gamepad2, Trophy, 
-  Activity, Star, Lock, Flame, Clock, PlayCircle, Calendar,
-  Home, FileText, Crosshair, Flag, Swords, Dribbble, Globe
+  Menu, Search, ChevronLeft, ChevronRight, ChevronDown, X,
+  Activity, Star, Lock, Flame, Clock, Calendar, Trophy
 } from 'lucide-react';
-import maclarData from '../maclar.json';
-import SportsBanners from './SportsBanners';
-import { FloatingBetSlip } from './FloatingBetSlip';
-import { useBetting } from '../contexts/BettingContext';
+
+interface BetSelection {
+  id: string;
+  matchId: string;
+  matchName: string;
+  marketName: string;
+  selectionName: string;
+  odd: number;
+}
 
 interface Spor724ViewProps {
   onNavigate: (view: string) => void;
-  isLoggedIn?: boolean;
 }
-
-const mockUpcomingMatches = [
-  {
-    id: 'u1',
-    date: 'Bugün',
-    time: '18:00',
-    home: 'Kuopion Palloseura',
-    away: 'FK Vardar Üsküp',
-    odds: [
-      { label: '1', value: '1.50' },
-      { label: 'X', value: '4.90' },
-      { label: '2', value: '6.25' },
-      { label: 'Diğer', value: '+92', isMarket: true }
-    ]
-  },
-  {
-    id: 'u2',
-    date: 'Bugün',
-    time: '19:00',
-    home: 'Inter Club de Escaldes',
-    away: 'Lincoln Red Imps',
-    odds: [
-      { label: '1', value: '1.75' },
-      { label: 'X', value: '4.40' },
-      { label: '2', value: '4.30' },
-      { label: 'Diğer', value: '+85', isMarket: true }
-    ]
-  },
-  {
-    id: 'u3',
-    date: 'Bugün',
-    time: '20:00',
-    home: 'Riga FC',
-    away: 'FC Ararat-Armenia',
-    odds: [
-      { label: '1', value: '1.73' },
-      { label: 'X', value: '4.00' },
-      { label: '2', value: '5.00' },
-      { label: 'Diğer', value: '+85', isMarket: true }
-    ]
-  },
-  {
-    id: 'u4',
-    date: 'Bugün',
-    time: '20:30',
-    home: 'PFC Levski Sofya',
-    away: 'FK Borac Banja Luka',
-    odds: [
-      { label: '1', value: '1.33' },
-      { label: 'X', value: '5.25' },
-      { label: '2', value: '11.00' },
-      { label: 'Diğer', value: '+84', isMarket: true }
-    ]
-  },
-  {
-    id: 'u5',
-    date: 'Bugün',
-    time: '19:00',
-    home: 'FC Iberia 1999',
-    away: 'Flora Tallinn',
-    odds: [
-      { label: '1', value: '1.53' },
-      { label: 'X', value: '4.90' },
-      { label: '2', value: '5.75' },
-      { label: 'Diğer', value: '+85', isMarket: true }
-    ]
-  }
-];
-
-const mockLiveMatches = [
-  {
-    id: 'l1',
-    minute: '75:58',
-    home: 'Zhejiang FC',
-    away: 'Qingdao Hainiu FC',
-    homeScore: '1',
-    awayScore: '0',
-    odds: [
-      { label: '1', value: '1.12' },
-      { label: 'X', value: '5.40' },
-      { label: '2', value: '15.50' },
-      { label: 'Diğer', value: '+32', isMarket: true }
-    ]
-  },
-  {
-    id: 'l2',
-    minute: '42:15',
-    home: 'Kashima Antlers',
-    away: 'Urawa Reds',
-    homeScore: '2',
-    awayScore: '2',
-    odds: [
-      { label: '1', value: '2.45' },
-      { label: 'X', value: '2.80' },
-      { label: '2', value: '2.60' },
-      { label: 'Diğer', value: '+45', isMarket: true }
-    ]
-  }
-];
 
 const mockMegaBoosts = [
   {
@@ -147,47 +50,233 @@ const mockMegaBoosts = [
   }
 ];
 
-export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724ViewProps) {
-  const { betSelections, toggleBetSelection } = useBetting();
-  const [activeSport, setActiveSport] = useState('Futbol');
-  const [activeMarket, setActiveMarket] = useState('Maç Sonucu 1x2');
-  const [isBetSlipOpen, setIsBetSlipOpen] = useState(false);
-
-  // Parse real data from maclar.json
-  const parsedMatches = React.useMemo(() => {
-    try {
-      if (!Array.isArray(maclarData)) return [];
-      return maclarData.slice(0, 15).map((ev: any) => {
-        const m1x2 = ev.markets?.find((m: any) => m.Name === 'Maç Sonucu 1X2');
-        if (!m1x2) return null;
-        
-        const homeSel = m1x2.Selections?.find((s: any) => s.OutcomeType?.trim() === 'Ev');
-        const drawSel = m1x2.Selections?.find((s: any) => s.OutcomeType?.trim() === 'Berabere');
-        const awaySel = m1x2.Selections?.find((s: any) => s.OutcomeType?.trim() === 'Deplasman');
-        
-        if (!homeSel || !awaySel) return null;
-        
-        return {
-          id: ev.id,
-          date: 'Bugün',
-          time: '21:00', // Mocking time as API only returned markets here
-          home: homeSel.Name || 'Ev Sahibi',
-          away: awaySel.Name || 'Deplasman',
-          odds: [
-            { label: '1', value: homeSel.TrueOdds?.toFixed(2) || '1.10' },
-            { label: 'X', value: drawSel?.TrueOdds?.toFixed(2) || '1.10' },
-            { label: '2', value: awaySel.TrueOdds?.toFixed(2) || '1.10' },
-            { label: 'Diğer', value: '+' + (ev.markets?.length || 15), isMarket: true }
-          ]
-        };
-      }).filter(Boolean).slice(0, 5);
-    } catch (e) {
-      console.error(e);
-      return [];
+// Deep Merge for Swarm API Deltas
+function isObject(item: any) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+function mergeDeep(target: any, ...sources: any[]): any {
+  if (!sources.length) return target;
+  const source = sources.shift();
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
     }
+  }
+  return mergeDeep(target, ...sources);
+}
+
+export default function Spor724View({ onNavigate }: Spor724ViewProps) {
+  const [activeSport, setActiveSport] = useState('Futbol');
+  const [isBetSlipOpen, setIsBetSlipOpen] = useState(false);
+  const [betSlip, setBetSlip] = useState<BetSelection[]>([]);
+  const [betAmount, setBetAmount] = useState<string>('');
+  
+  // Swarm State
+  const [swarmData, setSwarmData] = useState<any>({});
+  const [flashingOdds, setFlashingOdds] = useState<Record<string, 'up' | 'down'>>({});
+  
+  const swarmDataRef = useRef<any>({});
+  const wsRef = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    // Connect to our server.js proxy
+    const ws = new WebSocket('ws://localhost:4000');
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      console.log('✅ [SWARM] Connected, sending request_session');
+      ws.send(JSON.stringify({
+        command: "request_session",
+        params: { site_id: 1, language: "tur" },
+        rid: "session"
+      }));
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        // Engine.IO pings are handled natively or ignored, we only care about JSON
+        if (event.data === '2' || event.data === '3' || event.data.startsWith('0{') || event.data === '40') {
+           // Skip if somehow the server is still sending socket.io frames (shouldn't happen with raw proxy)
+           return;
+        }
+
+        const msg = JSON.parse(event.data);
+        
+        if (msg.rid === "session") {
+          console.log('✅ [SWARM] Session established, subscribing to live football...');
+          ws.send(JSON.stringify({
+            command: "get",
+            params: {
+              source: "betting",
+              what: {
+                sport: ["id", "name", "alias"],
+                region: ["id", "name", "alias"],
+                competition: ["id", "name"],
+                game: ["id", "start_ts", "team1_name", "team2_name", "type", "info", "markets_count"],
+                market: ["id", "type", "name", "express_id"],
+                event: ["id", "price", "type", "name", "order"]
+              },
+              where: {
+                sport: { id: 1 },
+                game: { type: 1 } // 1 = Live
+              },
+              subscribe: true
+            },
+            rid: "live_football"
+          }));
+        }
+
+        // Handle full data or deltas
+        if (msg.rid === "live_football" || (msg.data && msg.data.sport)) {
+          const newData = msg.rid === "live_football" ? msg.data.data : msg.data;
+          
+          // Track odd changes for flashing
+          const newFlashes: Record<string, 'up' | 'down'> = {};
+          
+          if (msg.rid !== "live_football" && newData.sport) {
+             Object.values(newData.sport).forEach((sport: any) => {
+               if(sport && sport.region) {
+                 Object.values(sport.region).forEach((region: any) => {
+                   if(region && region.competition) {
+                     Object.values(region.competition).forEach((comp: any) => {
+                       if(comp && comp.game) {
+                         Object.values(comp.game).forEach((game: any) => {
+                           if(game && game.market) {
+                             Object.values(game.market).forEach((market: any) => {
+                               if(market && market.event) {
+                                 Object.values(market.event).forEach((ev: any) => {
+                                   if(ev && ev.price !== undefined) {
+                                      try {
+                                        const oldPrice = swarmDataRef.current?.sport?.[sport.id || 1]?.region?.[region.id]?.competition?.[comp.id]?.game?.[game.id]?.market?.[market.id]?.event?.[ev.id]?.price;
+                                        if (oldPrice !== undefined) {
+                                           if (ev.price > oldPrice) newFlashes[ev.id] = 'up';
+                                           else if (ev.price < oldPrice) newFlashes[ev.id] = 'down';
+                                        }
+                                      } catch(e) {}
+                                   }
+                                 });
+                               }
+                             });
+                           }
+                         });
+                       }
+                     });
+                   }
+                 });
+               }
+             });
+          }
+
+          if (Object.keys(newFlashes).length > 0) {
+             setFlashingOdds(prev => ({...prev, ...newFlashes}));
+             setTimeout(() => {
+                setFlashingOdds(prev => {
+                   const next = {...prev};
+                   Object.keys(newFlashes).forEach(k => delete next[k]);
+                   return next;
+                });
+             }, 2000); // clear flash after 2s
+          }
+
+          // Deep merge the incoming delta with our local state
+          swarmDataRef.current = mergeDeep({...swarmDataRef.current}, newData);
+          setSwarmData({...swarmDataRef.current});
+        }
+      } catch(e) {
+         // Silently ignore non-JSON or weird frames
+      }
+    };
+
+    return () => ws.close();
   }, []);
 
-  const upcomingMatchesToUse = parsedMatches.length > 0 ? parsedMatches : mockUpcomingMatches;
+  // Parse mapped games for UI
+  const liveMatches = React.useMemo(() => {
+     if (!swarmData?.sport?.['1']?.region) return [];
+     const gamesList: any[] = [];
+     
+     Object.values(swarmData.sport['1'].region).forEach((region: any) => {
+        if (!region.competition) return;
+        Object.values(region.competition).forEach((comp: any) => {
+           if (!comp.game) return;
+           Object.values(comp.game).forEach((game: any) => {
+              if (game.type !== 1) return; // double check live
+              
+              // Find Match Result (1X2) market. Usually type "P1XP2"
+              let mainMarket = null;
+              if (game.market) {
+                 mainMarket = Object.values(game.market).find((m: any) => m.type === 'P1XP2' || m.name?.includes('Maç Sonucu'));
+              }
+
+              let odds = [
+                 { label: '1', value: '-', evId: null },
+                 { label: 'X', value: '-', evId: null },
+                 { label: '2', value: '-', evId: null },
+                 { label: 'Diğer', value: `+${game.markets_count || 0}`, isMarket: true }
+              ];
+
+              if (mainMarket && mainMarket.event) {
+                 const evs = Object.values(mainMarket.event) as any[];
+                 const p1 = evs.find(e => e.type === 'P1' || e.name === 'W1');
+                 const px = evs.find(e => e.type === 'X' || e.name === 'X');
+                 const p2 = evs.find(e => e.type === 'P2' || e.name === 'W2');
+                 if (p1) odds[0] = { label: '1', value: p1.price?.toFixed(2) || '-', evId: p1.id };
+                 if (px) odds[1] = { label: 'X', value: px.price?.toFixed(2) || '-', evId: px.id };
+                 if (p2) odds[2] = { label: '2', value: p2.price?.toFixed(2) || '-', evId: p2.id };
+              }
+
+              const info = game.info || {};
+              let minute = info.current_game_time || '00:00';
+              if (info.current_game_state === 'half-time') minute = 'IY';
+              
+              let homeScore = info.score1 || '0';
+              let awayScore = info.score2 || '0';
+
+              gamesList.push({
+                 id: game.id,
+                 minute,
+                 home: game.team1_name,
+                 away: game.team2_name,
+                 homeScore,
+                 awayScore,
+                 odds
+              });
+           });
+        });
+     });
+
+     return gamesList.slice(0, 30); // Limit to 30 matches
+  }, [swarmData]);
+
+  const toggleSelection = (match: any, odd: any) => {
+    if (!odd.evId || odd.value === '-') return;
+
+    setBetSlip(prev => {
+      const exists = prev.find(s => s.id === odd.evId);
+      if (exists) {
+        return prev.filter(s => s.id !== odd.evId);
+      }
+      
+      // Replace existing selection from the same match (single selection per match)
+      const filtered = prev.filter(s => s.matchId !== match.id);
+      
+      return [...filtered, {
+        id: odd.evId,
+        matchId: match.id,
+        matchName: `${match.home} - ${match.away}`,
+        marketName: 'Maç Sonucu',
+        selectionName: odd.label,
+        odd: parseFloat(odd.value)
+      }];
+    });
+    
+    if (!isBetSlipOpen) setIsBetSlipOpen(true);
+  };
 
   const megaBoostsRef = useRef<HTMLDivElement>(null);
 
@@ -213,7 +302,7 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
     return () => clearInterval(interval);
   }, []);
 
-  // Theme helper classes (Dark Mode ONLY)
+  // Theme helper classes
   const theme = {
     bg: 'bg-transparent',
     text: 'text-white',
@@ -249,679 +338,272 @@ export default function Spor724View({ onNavigate, isLoggedIn = false }: Spor724V
 
           <div className="p-4 md:p-6 w-full">
             
-            {/* New Rainbet-style Sports Menu */}
-            <div className={`w-full bg-white/5 backdrop-blur-md rounded-xl border border-white/10 shadow-lg mb-6 ${!isLoggedIn ? 'hidden md:block' : ''}`}>
-               <div className="flex items-center overflow-x-auto whitespace-nowrap scrollbar-hide px-2 py-1.5 h-[52px]">
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all"><Home size={18} /></button>
-                  <button className="h-10 px-2 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all relative group">
-                     <div className="border border-current rounded-[3px] px-1.5 py-[2px] text-[10px] font-bold group-hover:border-[#10b981] group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all">CANLI</div>
-                     <div className="absolute top-1 right-0 w-1.5 h-1.5 bg-[#10b981] rounded-full animate-ping"></div>
-                  </button>
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all"><Star size={18} /></button>
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all"><FileText size={18} /></button>
-                  
-                  <div className="w-px h-6 bg-[#2a3040] mx-1"></div>
+            {/* Hero Slider Banner */}
+            <div className="relative w-full h-[200px] md:h-[280px] rounded-2xl overflow-hidden mb-6 bg-gradient-to-r from-[#1a1c23] to-[#0b0c10] border border-white/5 flex items-center group cursor-pointer shadow-xl">
+              <div className="absolute inset-0 bg-[#A3E635]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <button className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center backdrop-blur z-20 hover:bg-[#A3E635] transition-colors"><ChevronLeft className="w-5 h-5"/></button>
+              <button className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center backdrop-blur z-20 hover:bg-[#A3E635] transition-colors"><ChevronRight className="w-5 h-5"/></button>
+              
+              <div className="relative z-10 p-6 md:p-12 w-full md:w-2/3 flex flex-col items-start">
+                <h2 className="text-2xl md:text-5xl font-black text-[#A3E635] uppercase tracking-tighter mb-1 md:mb-2 leading-none" style={{ textShadow: '0 0 20px rgba(163,230,53,0.3)' }}>GÜÇLÜ BAŞLAYIN</h2>
+                <h3 className="text-xl md:text-4xl font-bold text-white mb-1 md:mb-2">500$'A KADAR</h3>
+                <p className="text-sm md:text-lg text-zinc-300 font-medium mb-4 md:mb-6">Spor Bonusu Kazanın</p>
+                <button className="bg-[#A3E635] hover:bg-[#86c429] text-black font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg shadow-[0_0_20px_rgba(163,230,53,0.4)] transition-all hover:scale-105 active:scale-95 text-xs md:text-sm">ŞİMDİ YATIRIN</button>
+              </div>
+              
+              <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-30 pointer-events-none overflow-hidden">
+                 <div className="absolute top-[-50px] right-[-50px] w-[200px] md:w-[300px] h-[200px] md:h-[300px] border border-[#A3E635] rounded-full blur-[2px]"></div>
+                 <div className="absolute bottom-[-100px] right-[50px] w-[300px] md:w-[400px] h-[300px] md:h-[400px] border-2 border-[#A3E635] rounded-full blur-[4px]"></div>
+              </div>
+              <div className="absolute right-[5%] bottom-0 top-[10%] w-[40%] rounded-t-3xl border-2 border-[#A3E635]/20 bg-gradient-to-b from-[#A3E635]/10 to-transparent hidden md:block"></div>
+            </div>
 
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-white transition-colors">
-                     <div className="w-[22px] h-[22px] rounded-full bg-[#10b981] flex items-center justify-center border-[2px] border-white">
-                        <span className="text-[7px] font-black leading-none text-white">WC<br/>26</span>
-                     </div>
-                  </button>
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all">
-                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                  </button>
-                  <button className="w-10 h-10 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all"><Dribbble size={18} /></button>
-                  <button className="h-10 px-2 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:scale-110 transition-all">
-                     <span className="text-[14px] font-black tracking-tighter border-y-2 border-current px-0.5">MMA</span>
-                  </button>
+            {/* Öne Çıkanlar Header */}
+            <div className={`flex items-center gap-2 mb-4 mt-6`}>
+              <Flame className="w-5 h-5 text-orange-400" fill="currentColor" />
+              <h2 className="text-lg font-bold text-white tracking-wide">Öne Çıkanlar</h2>
+            </div>
+
+            {/* Öne Çıkanlar Grid */}
+            <div 
+              ref={megaBoostsRef}
+              className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6 overflow-x-auto snap-x snap-mandatory custom-scrollbar pb-2"
+            >
+              {mockMegaBoosts.map(boost => (
+                <div key={boost.id} className={`w-[85vw] min-w-[300px] max-w-[340px] md:w-auto md:min-w-0 md:max-w-none shrink-0 snap-center ${theme.cardBg} rounded-lg p-4 flex flex-col group transition-all ${theme.cardHover} cursor-pointer`}>
                   
-                  {[
-                     { icon: <Target size={18} /> },
-                     { icon: <Crosshair size={18} /> },
-                     { icon: <Activity size={18} /> },
-                     { icon: <Trophy size={18} /> },
-                     { icon: <Flag size={18} /> },
-                     { icon: <Swords size={18} /> },
-                     { icon: <Gamepad2 size={18} /> }
-                  ].map((item, i) => {
-                     const isActive = i === 0;
-                     return (
-                     <button key={i} className={`w-10 h-10 shrink-0 flex items-center justify-center transition-all ${isActive ? 'bg-[#10b981]/10 text-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.15)] border border-[#10b981]/20 rounded-lg' : 'text-[#94a3b8] hover:text-[#10b981] hover:scale-110'}`}>
-                        {item.icon}
+                  {/* Top Header */}
+                  <div className="flex items-center justify-between mb-4 text-[11px] font-medium text-[#94a3b8]">
+                    <div className="flex items-center gap-1.5">
+                       <Activity className="w-3.5 h-3.5" />
+                       <span className="text-white/80">{boost.title}</span>
+                       <span className="mx-1 opacity-50">•</span>
+                       <Clock className="w-3 h-3" />
+                       <span>Özel Oran</span>
+                    </div>
+                  </div>
+
+                  {/* Teams */}
+                  <div className="flex flex-col gap-2.5 mb-4">
+                     <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                           <span className="text-sm font-medium text-white/90">{boost.pick1}</span>
+                        </div>
+                     </div>
+                     <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                           <span className="text-sm font-medium text-white/90">{boost.pick2}</span>
+                        </div>
+                     </div>
+                  </div>
+
+                  {/* Odds Buttons */}
+                  <div className="flex items-center gap-2 mt-auto">
+                     <button className="flex-1 flex items-center justify-between bg-[#111317] hover:bg-[#2a3038] px-3 py-2.5 rounded-md transition-colors border border-[#A3E635]/20">
+                        <span className="text-xs text-[#94a3b8] font-medium line-through">{boost.oldOdd}</span>
+                        <span className="text-xs text-[#A3E635] font-bold">{boost.newOdd}</span>
                      </button>
-                     );
-                  })}
-
-                  <div className="flex-1 min-w-[20px]"></div>
-
-                  <button className="w-12 h-12 shrink-0 flex items-center justify-center text-[#94a3b8] hover:text-white hover:bg-white/5 rounded-full transition-colors"><Search size={20} /></button>
-               </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* Sub Pills */}
-            <div className={`flex overflow-x-auto scrollbar-hide items-center gap-3 mb-6 w-full ${!isLoggedIn ? 'hidden md:flex' : ''}`}>
-               <button className="shrink-0 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#10b981]/50 text-[#94a3b8] hover:text-white text-xs font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors active-spring backdrop-blur-sm">
-                  <div className="w-3 h-3 grid grid-cols-2 gap-[1px]">
-                     <div className="bg-[#10b981] rounded-sm"></div><div className="bg-[#10b981] rounded-sm"></div>
-                     <div className="bg-[#10b981] rounded-sm"></div><div className="bg-[#10b981] rounded-sm"></div>
-                  </div>
-                  ÖNE ÇIKANLAR
-               </button>
-               <button className="shrink-0 bg-[#10b981] text-black shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:bg-[#10b981]/90 text-xs font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors active-spring">
-                  <Activity size={14} />
-                  TAHMİNLER
-               </button>
-               <button className="shrink-0 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#10b981]/50 text-[#94a3b8] hover:text-white text-xs font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors active-spring backdrop-blur-sm">
-                  <Calendar size={14} />
-                  ETKİNLİK OLUŞTURUCU
-               </button>
-            </div>
-            
-
-
-            {/* Matches Carousel */}
-            <div className="mb-8 mt-2">
-               {/* Pagination Dots above carousel */}
-               <div className="flex items-center gap-1.5 mb-4 px-2">
-                  <div className="h-1 w-6 bg-[#10b981] rounded-full"></div>
-                  <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
-                  <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
-                  <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
-                  <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
-                  <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
-                  <div className="h-1 w-2 bg-[#2a3040] rounded-full"></div>
-               </div>
-
-               <div className="flex overflow-x-auto gap-4 scrollbar-hide snap-x snap-mandatory pb-4">
-                  {/* Card 1 */}
-                  <div className="min-w-[320px] max-w-[340px] bg-[#1e1c24]/60 backdrop-blur-md rounded-xl border border-white/10 hover:border-[#10b981]/50 shadow-lg flex flex-col p-4 snap-center shrink-0 transition-colors group">
-                     <div className="flex items-center justify-between text-[11px] text-[#94a3b8] mb-4">
-                        <div className="flex items-center gap-1.5">
-                           <Globe size={14} />
-                           <span>Uluslararası • Dünya Kupası</span>
-                        </div>
-                        <span className="flex items-center gap-1.5 text-red-500 font-bold tracking-wider">
-                           <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
-                           75' CANLI
-                        </span>
-                     </div>
-                     <div className="flex items-center justify-between mb-6 relative">
-                        <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                           1 - 0
-                        </div>
-                        <div className="flex flex-col items-center gap-2 z-10 w-20">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-2xl shadow-inner">
-                              🇪🇸
-                           </div>
-                           <span className="text-white font-bold text-[11px] text-center w-full truncate">İspanya</span>
-                        </div>
-                        <div className="text-[10px] text-[#94a3b8] font-bold mt-4 z-10">1x2</div>
-                        <div className="flex flex-col items-center gap-2 z-10 w-20">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-2xl shadow-inner">
-                              🇦🇷
-                           </div>
-                           <span className="text-white font-bold text-[11px] text-center w-full truncate">Arjantin</span>
-                        </div>
-                     </div>
-                     <div className="flex items-center gap-2 mt-auto">
-                        {[
-                          { odd: '-0.781', sel: 'İspanya', label: '1' },
-                          { odd: '-0.50', sel: 'Beraberlik', label: 'beraberli' },
-                          { odd: '-0.392', sel: 'Arjantin', label: '2' }
-                        ].map((btn, idx) => {
-                          const isSel = betSelections.some(b => b.matchId === 'card1' && b.marketName === '1x2' && b.selectionName === btn.sel);
-                          return (
-                            <button 
-                              key={idx}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleBetSelection({ id: 'card1' }, '1x2', btn.sel, parseFloat(btn.odd));
-                              }}
-                              className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-between text-[10px] transition-colors border ${
-                                isSel 
-                                  ? 'bg-[#10b981] border-[#10b981] text-black shadow-[#10b981]/20 active-spring'
-                                  : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-[#10b981]'
-                              }`}>
-                               <span className={`font-medium ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.label}</span>
-                               <span className={`font-bold ${isSel ? 'text-black' : 'text-white'}`}>{btn.odd}</span>
-                            </button>
-                          );
-                        })}
-                     </div>
-                  </div>
-
-                  {/* Card 2 */}
-                  <div className="min-w-[320px] max-w-[340px] bg-[#1e1c24]/60 backdrop-blur-md rounded-xl border border-white/10 hover:border-[#10b981]/50 shadow-lg flex flex-col p-4 snap-center shrink-0 transition-colors group">
-                     <div className="flex items-center justify-between text-[11px] text-[#94a3b8] mb-4">
-                        <div className="flex items-center gap-1.5">
-                           <Swords size={14} />
-                           <span>Counter-Strike 2 A...</span>
-                        </div>
-                        <span className="flex items-center gap-1.5 text-red-500 font-bold tracking-wider">
-                           <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
-                           CANLI
-                        </span>
-                     </div>
-                     <div className="flex items-center justify-between mb-6 relative">
-                        <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                           12 - 10
-                        </div>
-                        <div className="flex flex-col items-center gap-2 z-10 w-24">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-yellow-500/20 backdrop-blur-md border border-yellow-500/30 flex items-center justify-center text-xl font-black text-yellow-500 shadow-inner shadow-yellow-500/20">
-                              NIP
-                           </div>
-                           <span className="text-white font-bold text-[11px] text-center w-full truncate">Ninjas in Pyjamas</span>
-                        </div>
-                        <div className="text-[10px] text-[#94a3b8] font-bold mt-4 z-10">Kazanan</div>
-                        <div className="flex flex-col items-center gap-2 z-10 w-24">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-red-500/20 backdrop-blur-md border border-red-500/30 flex items-center justify-center text-xl font-black text-red-500 shadow-inner shadow-red-500/20">
-                              K27
-                           </div>
-                           <span className="text-white font-bold text-[11px] text-center w-full truncate">K27</span>
-                        </div>
-                     </div>
-                     <div className="flex items-center gap-2 mt-auto">
-                        {[
-                          { odd: '0.54', sel: 'Ninjas in Pyjamas', label: '1' },
-                          { odd: '-0.704', sel: 'K27', label: '2' }
-                        ].map((btn, idx) => {
-                          const isSel = betSelections.some(b => b.matchId === 'card2' && b.marketName === 'Kazanan' && b.selectionName === btn.sel);
-                          return (
-                            <button 
-                              key={idx}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleBetSelection({ id: 'card2' }, 'Kazanan', btn.sel, parseFloat(btn.odd));
-                              }}
-                              className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-between text-xs transition-colors border ${
-                                isSel 
-                                  ? 'bg-[#10b981] border-[#10b981] text-black shadow-[#10b981]/20 active-spring'
-                                  : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-[#10b981]'
-                              }`}>
-                               <span className={`font-medium ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.label}</span>
-                               <span className={`font-bold ${isSel ? 'text-black' : 'text-white'}`}>{btn.odd}</span>
-                            </button>
-                          );
-                        })}
-                     </div>
-                  </div>
-
-                  {/* Card 3 */}
-                  <div className="min-w-[320px] max-w-[340px] bg-[#1e1c24]/60 backdrop-blur-md rounded-xl border border-white/10 hover:border-[#10b981]/50 shadow-lg flex flex-col p-4 snap-center shrink-0 transition-colors group">
-                     <div className="flex items-center justify-between text-[11px] text-[#94a3b8] mb-4">
-                        <div className="flex items-center gap-1.5">
-                           <Target size={14} />
-                           <span>Uluslararası • Boks</span>
-                        </div>
-                        <span>Bugün, 17:00</span>
-                     </div>
-                     <div className="flex items-center justify-between mb-6 relative">
-                        <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none text-6xl font-black uppercase">
-                           BOX
-                        </div>
-                        <div className="flex flex-col items-center gap-2 z-10 w-24">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center text-2xl">
-                              🏴󠁧󠁢󠁥󠁮󠁧󠁿
-                           </div>
-                           <span className="text-white font-bold text-[11px] text-center w-full truncate">Harris, Matty</span>
-                        </div>
-                        <div className="text-[10px] text-[#94a3b8] font-bold mt-4 z-10">Kazanan</div>
-                        <div className="flex flex-col items-center gap-2 z-10 w-24">
-                           <div className="w-10 h-10 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center text-2xl">
-                              🏴󠁧󠁢󠁥󠁮󠁧󠁿
-                           </div>
-                           <span className="text-white font-bold text-[11px] text-center w-full truncate">Vickers, Ben</span>
-                        </div>
-                     </div>
-                     <div className="flex items-center gap-2 mt-auto">
-                        {[
-                          { odd: '0.04', sel: 'Harris, Matty', label: '1' },
-                          { odd: '-0.132', sel: 'Vickers, Ben', label: '2' }
-                        ].map((btn, idx) => {
-                          const isSel = betSelections.some(b => b.matchId === 'card3' && b.marketName === 'Kazanan' && b.selectionName === btn.sel);
-                          return (
-                            <button 
-                              key={idx}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleBetSelection({ id: 'card3' }, 'Kazanan', btn.sel, parseFloat(btn.odd));
-                              }}
-                              className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-between text-xs transition-colors border ${
-                                isSel 
-                                  ? 'bg-[#06b6d4] border-[#06b6d4] text-black shadow-[#06b6d4]/20'
-                                  : 'bg-[#1e2331] hover:bg-[#2a3040] border-[#2a3040]'
-                              }`}>
-                               <span className={`font-medium ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.label}</span>
-                               <span className={`font-bold ${isSel ? 'text-black' : 'text-white'}`}>{btn.odd}</span>
-                            </button>
-                          );
-                        })}
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            {/* Popüler Section */}
-            <div className="mb-6">
-               <div className="flex items-center gap-2 mb-4 px-2">
-                  <span className="text-yellow-500 text-xl">👑</span>
-                  <h2 className="text-lg font-bold text-white tracking-wide">Popüler</h2>
-               </div>
+            {/* LIVE MATCHES (BETCONSTRUCT) */}
+            <div className="flex flex-col mb-8 w-full bg-[#0b0e14] rounded-lg overflow-hidden border border-[#1f232b]">
                
-               <div className="flex items-center overflow-x-auto gap-2 scrollbar-hide px-2 pb-2">
-                  <button className="bg-[#10b981] text-black shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:bg-[#10b981]/90 rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
-                     <Activity size={14} /> Futbol
-                  </button>
-                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
-                     <Target size={14} /> Beyzbol
-                  </button>
-                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
-                     <Trophy size={14} /> Tenis
-                  </button>
-                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
-                     <Gamepad2 size={14} /> eFutbol
-                  </button>
-                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
-                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Dota 2
-                  </button>
-                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
-                     <Dribbble size={14} /> Basketbol
-                  </button>
-                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
-                     <Swords size={14} /> Counter-Strike
-                  </button>
-                  <button className="bg-white/5 border border-white/10 text-[#94a3b8] hover:text-white hover:border-[#10b981]/50 hover:bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold shrink-0 transition-colors">
-                     <Activity size={14} /> Buz Hokeyi
-                  </button>
+               {/* Column Headers */}
+               <div className="flex items-center justify-between px-4 py-2 border-b border-[#1f232b]">
+                 <div className="flex items-center gap-2">
+                    <span className="bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase animate-pulse">CANLI FUTBOL</span>
+                    <span className="text-[#a0a5b5] text-[10px] ml-2">({liveMatches.length} maç)</span>
+                 </div>
+                 <div className="flex items-center w-[250px] md:w-[300px] pr-2">
+                   <div className="flex-1 text-center text-[10px] font-bold text-[#5c677d] tracking-widest">1</div>
+                   <div className="flex-1 text-center text-[10px] font-bold text-[#5c677d] tracking-widest">X</div>
+                   <div className="flex-1 text-center text-[10px] font-bold text-[#5c677d] tracking-widest">2</div>
+                   <div className="w-[50px]"></div>
+                 </div>
                </div>
-            </div>
 
-            {/* Match Grid (Popüler) */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 w-full mb-10">
-               {[
-                  { id: 'p1', league: 'Uluslararası • Dünya Kupası', time: 'Yarın, 00:00', t1: 'Fransa', f1: '🇫🇷', t2: 'İngiltere', f2: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', odds: [{l:'1',v:'1.87',s:'Fransa'}, {l:'beraberlik',v:'3.90',s:'Beraberlik'}, {l:'2',v:'3.80',s:'İngiltere'}] },
-                  { id: 'p2', league: 'Uluslararası • Seçkin Kulüp Hazırlık Maçları', time: 'Bugün, 16:30', t1: 'FC Basel 1893', f1: '🇨🇭', t2: 'Juventus', f2: '🇮🇹', odds: [{l:'1',v:'4.20',s:'FC Basel'}, {l:'beraberlik',v:'3.65',s:'Beraberlik'}, {l:'2',v:'1.81',s:'Juventus'}] },
-                  { id: 'p3', league: 'Uluslararası • Seçkin Kulüp Hazırlık Maçları', time: 'Bugün, 17:00', t1: 'Celtic', f1: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', t2: 'Middlesbrough', f2: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', odds: [{l:'1',v:'2.18',s:'Celtic'}, {l:'beraberlik',v:'3.75',s:'Beraberlik'}, {l:'2',v:'2.98',s:'Middlesbrough'}] },
-                  { id: 'p4', league: 'Uluslararası • Seçkin Kulüp Hazırlık Maçları', time: 'Bugün, 18:00', t1: 'Manchester United FC', f1: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', t2: 'Wrexham', f2: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', odds: [{l:'1',v:'1.58',s:'Man Utd'}, {l:'beraberlik',v:'4.40',s:'Beraberlik'}, {l:'2',v:'4.80',s:'Wrexham'}] },
-                  { id: 'p5', league: 'Uluslararası • Seçkin Kulüp Hazırlık Maçları', time: 'Bugün, 18:00', t1: 'RW Oberhausen', f1: '🇩🇪', t2: 'Borussia Dortmund', f2: '🇩🇪', odds: [{l:'1',v:'11.00',s:'Oberhausen'}, {l:'beraberlik',v:'9.00',s:'Beraberlik'}, {l:'2',v:'1.16',s:'Dortmund'}] },
-                  { id: 'p6', league: 'Uluslararası • Seçkin Kulüp Hazırlık Maçları', time: 'Bugün, 20:00', t1: 'SK Rapid', f1: '🇦🇹', t2: 'Hamburger SV', f2: '🇩🇪', odds: [{l:'1',v:'2.54',s:'Rapid'}, {l:'beraberlik',v:'3.60',s:'Beraberlik'}, {l:'2',v:'2.54',s:'Hamburger'}] },
-               ].map((match) => (
-                  <div key={match.id} className="bg-[#1e1c24]/60 backdrop-blur-md rounded-xl p-4 flex flex-col justify-between border border-white/10 hover:border-[#10b981]/50 transition-colors shadow-lg group">
-                     <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
-                           <Globe size={12} />
-                           <span className="truncate max-w-[200px]">{match.league}</span>
-                        </div>
-                        <div className="text-[10px] font-bold text-zinc-500 shrink-0">{match.time}</div>
-                     </div>
-                     <div className="flex flex-col gap-2 mb-4">
-                        <div className="flex items-center gap-3">
-                           <span className="text-xl w-6 text-center">{match.f1}</span>
-                           <span className="text-sm font-black text-white truncate tracking-wide">{match.t1}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                           <span className="text-xl w-6 text-center">{match.f2}</span>
-                           <span className="text-sm font-black text-white truncate tracking-wide">{match.t2}</span>
-                        </div>
-                     </div>
-                     <div className="flex items-center gap-2 mt-auto">
-                        <div className="text-[10px] font-bold text-[#94a3b8] w-6 shrink-0">1x2</div>
-                        <div className="flex flex-1 gap-1.5">
-                           {match.odds.map((btn, idx) => {
-                              const isSel = betSelections.some(b => b.matchId === match.id && b.marketName === '1x2' && b.selectionName === btn.s);
-                              return (
-                                 <button 
-                                    key={idx}
-                                    onClick={(e) => {
-                                       e.stopPropagation();
-                                       toggleBetSelection({ id: match.id }, '1x2', btn.s, parseFloat(btn.v));
-                                    }}
-                                    className={`flex-1 py-1.5 px-1.5 sm:px-3 rounded flex flex-col sm:flex-row items-center justify-center sm:justify-between text-[10px] sm:text-[11px] transition-colors border group ${
-                                       isSel 
-                                          ? 'bg-[#10b981] border-[#10b981] text-black shadow-[#10b981]/20 active-spring'
-                                          : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-[#10b981]'
-                                    }`}>
-                                    <span className={`font-medium ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.l}</span>
-                                    <span className={`font-bold transition-transform group-hover:scale-110 ${isSel ? 'text-black' : 'text-white'}`}>{btn.v}</span>
-                                 </button>
-                              );
-                           })}
-                           <button className="w-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded text-[#94a3b8] transition-colors active-spring">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
-                           </button>
-                        </div>
-                     </div>
+               {/* Match Rows */}
+               {liveMatches.length === 0 && (
+                  <div className="text-center py-8 text-zinc-500 text-sm">
+                     Canlı maç verisi bekleniyor veya şu an canlı maç yok...
                   </div>
-               ))}
-            </div>
-
-            {/* Turnuva Section */}
-            <div className="mb-6">
-               <div className="flex items-center gap-2 mb-4 px-2">
-                  <span className="text-yellow-500 text-xl">🏆</span>
-                  <h2 className="text-lg font-bold text-white tracking-wide">Turnuva</h2>
-               </div>
-               <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-4">
-                  {/* Promo Banner */}
-                  <div className="relative rounded-xl overflow-hidden bg-[#1e1c24]/60 backdrop-blur-md border border-white/10 min-h-[300px] flex flex-col items-center justify-center p-8 text-center group shadow-lg hover:border-[#10b981]/50 transition-colors">
-                     {/* Background Image */}
-                     <div className="absolute inset-0 bg-[url('/football_macro_hero_1784349034576.jpg')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700"></div>
-                     <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-[#0b0e14]/80 to-transparent"></div>
+               )}
+               {liveMatches.map((match: any) => (
+                  <div key={match.id} className="flex flex-col md:flex-row md:items-center justify-between px-4 py-3 bg-[#0b0e14] border-b border-[#1f232b] hover:bg-[#12161f] transition-colors cursor-pointer group gap-4 md:gap-0">
                      
-                     <div className="absolute top-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-3 py-1 rounded cursor-pointer hover:bg-white/20 transition-colors z-10">
-                        KURALLARI OKUYUN
-                     </div>
-                     
-                     <div className="relative z-10 flex flex-col items-center max-w-md mx-auto">
-                        <h3 className="text-3xl font-black text-white mb-6 leading-tight drop-shadow-xl">
-                           World Cup 2026<br/>
-                           <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">$500,000 Tournament</span>
-                        </h3>
-                        
-                        <div className="flex flex-col items-center gap-2 mb-8">
-                           <div className="flex items-center gap-2 text-xs font-bold text-[#10b981] mb-1 uppercase tracking-widest">
-                              <div className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
-                              KALAN SÜRE
+                     {/* Left side: Teams & Scores */}
+                     <div className="flex flex-col gap-2 flex-1">
+                        <div className="flex items-center justify-between pr-4 md:pr-0">
+                           <div className="flex items-center gap-2">
+                              <div className="w-[18px] h-[18px] flex items-center justify-center shrink-0 opacity-70">
+                                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-[14px] h-[14px] text-white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                              </div>
+                              <span className="text-[12px] text-[#d1d5db] font-medium group-hover:text-white transition-colors tracking-wide">{match.home}</span>
                            </div>
-                           <div className="flex items-center gap-4">
-                              <div className="flex flex-col items-center">
-                                 <span className="text-3xl font-black text-white">01</span>
-                                 <span className="text-[9px] text-[#94a3b8] uppercase font-bold tracking-wider">GÜN</span>
-                              </div>
-                              <span className="text-2xl font-black text-[#475569] mb-4">:</span>
-                              <div className="flex flex-col items-center">
-                                 <span className="text-3xl font-black text-white">18</span>
-                                 <span className="text-[9px] text-[#94a3b8] uppercase font-bold tracking-wider">SAAT</span>
-                              </div>
-                              <span className="text-2xl font-black text-[#475569] mb-4">:</span>
-                              <div className="flex flex-col items-center">
-                                 <span className="text-3xl font-black text-white">08</span>
-                                 <span className="text-[9px] text-[#94a3b8] uppercase font-bold tracking-wider">DAKİKA</span>
-                              </div>
-                           </div>
+                           <span className="text-[13px] font-black text-[#10B981] block md:hidden">{match.homeScore}</span>
                         </div>
-                        
-                        <button className="bg-[#10b981] text-black font-black py-3 px-8 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all hover:scale-105 hover:bg-[#10b981]/90 active-spring tracking-wider">
-                           NASIL KATILIRIM
+                        <div className="flex items-center justify-between pr-4 md:pr-0">
+                           <div className="flex items-center gap-2">
+                              <div className="w-[18px] h-[18px] flex items-center justify-center shrink-0 opacity-80">
+                                 <div className="w-3 h-3 rounded bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-[6px] font-black text-white">V</div>
+                              </div>
+                              <span className="text-[12px] text-[#d1d5db] font-medium group-hover:text-white transition-colors tracking-wide">{match.away}</span>
+                           </div>
+                           <span className="text-[13px] font-black text-[#10B981] block md:hidden">{match.awayScore}</span>
+                        </div>
+                     </div>
+
+                     {/* Middle side: Live Time & Scores (Desktop) */}
+                     <div className="hidden md:flex items-center gap-6 pr-6 border-r border-[#1f232b]/50 mr-4 h-10">
+                        <div className="flex flex-col items-center gap-1 w-10">
+                           <span className="text-[10px] font-black text-[#10B981] animate-pulse">{match.minute}</span>
+                        </div>
+                        <div className="flex flex-col items-center gap-1.5 w-6">
+                           <span className="text-[12px] font-black text-[#10B981]">{match.homeScore}</span>
+                           <span className="text-[12px] font-black text-[#10B981]">{match.awayScore}</span>
+                        </div>
+                        <div className="flex items-center justify-center h-full ml-1 opacity-60">
+                           <svg viewBox="0 0 24 24" fill="currentColor" className="w-[13px] h-[13px] text-[#a0a5b5]"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                        </div>
+                     </div>
+
+                     {/* Right side: Odds */}
+                     <div className="flex items-center gap-2 w-full md:w-[300px] shrink-0">
+                        {match.odds.slice(0, 3).map((odd: any, idx: number) => {
+                           const isSelected = betSlip.some(s => s.id === odd.evId);
+                           const flashState = odd.evId ? flashingOdds[odd.evId] : null;
+                           
+                           let flashClass = isSelected 
+                              ? 'bg-[#A3E635] text-black border-[#A3E635]' 
+                              : 'bg-[#1a1e26] border-transparent text-[#f8f9fa]';
+
+                           if (!isSelected) {
+                              if (flashState === 'up') flashClass = 'bg-green-500/20 border-green-500/50 text-green-400';
+                              else if (flashState === 'down') flashClass = 'bg-red-500/20 border-red-500/50 text-red-400';
+                           }
+
+                           return (
+                             <button 
+                                key={idx} 
+                                onClick={(e) => { e.stopPropagation(); toggleSelection(match, odd); }}
+                                className={`flex-1 h-[38px] flex items-center justify-center rounded-[4px] transition-colors border ${flashClass} ${!isSelected && 'hover:bg-[#252a35]'}`}
+                             >
+                                <span className={`text-[12px] font-bold ${isSelected ? 'text-black' : ''}`}>{odd.value}</span>
+                             </button>
+                           );
+                        })}
+                        <button className="w-[45px] h-[38px] flex items-center justify-center rounded-[4px] bg-[#1a1e26] hover:bg-[#252a35] transition-colors border border-transparent hover:border-white/5 shrink-0 ml-1">
+                           <span className="text-[11px] font-bold text-[#f8f9fa]">{match.odds[3].value}</span>
                         </button>
                      </div>
                   </div>
-
-                  {/* Leaderboard Table */}
-                  <div className="bg-[#1e1c24]/60 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 flex flex-col h-[380px] lg:h-auto shadow-lg">
-                     <div className="p-4 border-b border-white/10 text-center text-sm font-bold text-white flex items-center justify-center gap-2 bg-black/20">
-                        🏆 Tam skor tablosu
-                     </div>
-                     <div className="flex-1 overflow-y-auto scrollbar-hide">
-                        <table className="w-full text-left border-collapse">
-                           <thead className="sticky top-0 bg-[#1a2130] z-10">
-                              <tr className="text-[9px] text-[#94a3b8] uppercase tracking-widest">
-                                 <th className="py-2 px-4 font-bold">#</th>
-                                 <th className="py-2 px-4 font-bold">OYUNCU</th>
-                                 <th className="py-2 px-4 font-bold text-right">SKOR</th>
-                                 <th className="py-2 px-4 font-bold text-right">ÖDÜL</th>
-                              </tr>
-                           </thead>
-                           <tbody className="text-xs">
-                              {[
-                                 { name: 'Lit******', score: '2058463', prize: '$50,000' },
-                                 { name: 'Maw******', score: '803206', prize: '$31,000' },
-                                 { name: 'Sof******', score: '685055', prize: '$21,000' },
-                                 { name: 'Lab******', score: '521676', prize: '$15,000' },
-                                 { name: 'Dar******', score: '485232', prize: '$10,000' },
-                                 { name: 'Xbo******', score: '451440', prize: '$8,000' },
-                                 { name: 'Dat******', score: '390991', prize: '$7,000' },
-                                 { name: 'Aap******', score: '374224', prize: '$6,500' },
-                                 { name: 'ozh******', score: '289029', prize: '$6,250' },
-                                 { name: 'Geo******', score: '282405', prize: '$6,000' },
-                                 { name: 'Win******', score: '270100', prize: '$5,500' },
-                                 { name: 'Max******', score: '260000', prize: '$5,000' },
-                              ].map((row, i) => (
-                                 <tr key={i} className={`border-b border-[#2a3040]/30 hover:bg-white/5 transition-colors ${i < 3 ? 'bg-[#1a2130]/30' : ''}`}>
-                                    <td className="py-2 px-4">
-                                       <span className={`w-5 h-5 flex items-center justify-center rounded text-[10px] font-bold ${
-                                          i === 0 ? 'bg-yellow-500/20 text-yellow-500' : 
-                                          i === 1 ? 'bg-zinc-300/20 text-zinc-300' : 
-                                          i === 2 ? 'bg-orange-400/20 text-orange-400' : 
-                                          'text-[#94a3b8]'
-                                       }`}>{i + 1}</span>
-                                    </td>
-                                    <td className="py-2 px-4 font-medium text-white/90">{row.name}</td>
-                                    <td className="py-2 px-4 text-right font-mono text-[#94a3b8]">{row.score}</td>
-                                    <td className="py-2 px-4 text-right font-bold text-white">{row.prize}</td>
-                                 </tr>
-                              ))}
-                           </tbody>
-                        </table>
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            {/* Bottom Dashboard Widgets */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-12">
-               
-               {/* Panel 1: Kazandıran Kombine */}
-               <div className="bg-[#161c28] rounded-xl border border-[#2a3040] p-4 flex flex-col relative overflow-hidden">
-                  <div className="flex items-center gap-2 mb-4">
-                     <span className="text-red-500">🔥</span>
-                     <h3 className="font-bold text-white text-sm">Kazandıran Kombine</h3>
-                  </div>
-                  
-                  <div className="flex flex-col gap-2 mb-4 flex-1">
-                     {[
-                        { t1: 'Philadelphia 76ers', t2: 'Milwaukee Bucks vs Philadelphia 76ers', o: '2.08' },
-                        { t1: 'Fransa', t2: 'Fransa vs İngiltere', o: '1.87' },
-                        { t1: 'AC Goianiense GO', t2: 'AC Goianiense GO vs Athletic Club MG', o: '1.92' },
-                        { t1: '2.5 üstü', t2: 'Maçta 2.5 golden fazla olur', o: '2.15' }
-                     ].map((l, i) => (
-                        <div key={i} className="flex justify-between items-center bg-[#1a2130] p-2.5 rounded-lg border border-[#2a3040]">
-                           <div className="flex flex-col">
-                              <span className="text-white text-xs font-bold">{l.t1}</span>
-                              <span className="text-[#94a3b8] text-[10px] truncate max-w-[150px] sm:max-w-[180px]">{l.t2}</span>
-                           </div>
-                           <span className="text-white font-bold text-xs bg-white/5 px-2 py-1 rounded">{l.o}</span>
-                        </div>
-                     ))}
-                     <div className="mt-2 bg-[#06b6d4]/10 border border-[#06b6d4]/30 rounded-lg p-2.5 flex justify-between items-center relative overflow-hidden">
-                        <div className="absolute top-0 right-0 bg-[#06b6d4] text-black text-[8px] font-black px-2 py-0.5 rounded-bl">KOMBİNE ÖZEL</div>
-                        <span className="text-[#06b6d4] text-xs font-bold mt-1">x1.15 Kombine Özel</span>
-                     </div>
-                  </div>
-
-                  <div className="mt-auto pt-4 border-t border-[#2a3040]">
-                     <div className="relative mb-3">
-                        <input type="text" value="1" readOnly className="w-full bg-[#0f172a] border border-[#2a3040] rounded-lg py-2.5 px-4 text-right text-white font-bold pr-8 outline-none" />
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94a3b8] font-bold">$</span>
-                     </div>
-                     <div className="flex gap-2 mb-4">
-                        {['1','10','25','100'].map(v => (
-                           <button key={v} className="flex-1 bg-[#1a2130] hover:bg-[#2a3040] py-2 rounded text-white text-xs font-bold transition-colors">{v}</button>
-                        ))}
-                     </div>
-                     <div className="flex justify-between items-center mb-1 text-xs">
-                        <span className="text-[#94a3b8]">Toplam Oran</span>
-                        <div className="flex items-center gap-2">
-                           <span className="text-[#94a3b8] font-bold line-through">14.04</span>
-                           <span className="text-[#06b6d4] font-bold text-sm">16.146</span>
-                        </div>
-                     </div>
-                     <div className="flex justify-between items-center mb-4 text-xs">
-                        <span className="text-[#94a3b8]">Muhtemel Kazanç</span>
-                        <span className="text-white font-bold text-sm">16.15 $</span>
-                     </div>
-                     <button className="w-full bg-[#1e2331] hover:bg-[#2a3040] text-white/50 font-bold py-3 rounded-lg transition-colors cursor-not-allowed text-xs">
-                        BAHİS YAP
-                     </button>
-                  </div>
-               </div>
-
-               {/* Panel 2: Önemli Maç */}
-               <div className="bg-[#161c28] rounded-xl border border-[#2a3040] p-4 flex flex-col relative overflow-hidden">
-                  <div className="flex items-center gap-2 mb-6">
-                     <span className="text-green-500">⚽</span>
-                     <h3 className="font-bold text-white text-sm">Önemli Maç</h3>
-                  </div>
-                  
-                  <div className="flex justify-between items-center text-xs text-[#94a3b8] mb-4">
-                     <div className="flex items-center gap-1.5">
-                        <Globe size={12}/>
-                        <span>Dünya Kupası</span>
-                     </div>
-                     <span>Yarın, 00:00</span>
-                  </div>
-
-                  <div className="flex flex-col items-center gap-2 mb-8">
-                     <span className="text-[10px] font-bold text-[#06b6d4] tracking-widest uppercase flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#06b6d4] animate-pulse"></div> BAŞLANGIÇ ZAMANI
-                     </span>
-                     <div className="flex items-center gap-3">
-                        <div className="flex flex-col items-center">
-                           <span className="text-2xl font-black text-white">00</span>
-                           <span className="text-[8px] text-[#94a3b8] font-bold">GÜN</span>
-                        </div>
-                        <span className="text-xl font-black text-[#475569] mb-3">:</span>
-                        <div className="flex flex-col items-center">
-                           <span className="text-2xl font-black text-white">15</span>
-                           <span className="text-[8px] text-[#94a3b8] font-bold">SAAT</span>
-                        </div>
-                        <span className="text-xl font-black text-[#475569] mb-3">:</span>
-                        <div className="flex flex-col items-center">
-                           <span className="text-2xl font-black text-white">08</span>
-                           <span className="text-[8px] text-[#94a3b8] font-bold">DAKİKA</span>
-                        </div>
-                        <span className="text-xl font-black text-[#475569] mb-3">:</span>
-                        <div className="flex flex-col items-center">
-                           <span className="text-2xl font-black text-white">54</span>
-                           <span className="text-[8px] text-[#94a3b8] font-bold">SANİYE</span>
-                        </div>
-                     </div>
-                  </div>
-
-                  <div className="flex justify-between items-center px-6 mb-8">
-                     <div className="flex flex-col items-center gap-2">
-                        <div className="w-14 h-14 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center text-4xl shadow-lg">🇫🇷</div>
-                        <span className="text-sm font-bold text-white">Fransa</span>
-                     </div>
-                     <span className="text-3xl font-black text-[#2a3040]">X</span>
-                     <div className="flex flex-col items-center gap-2">
-                        <div className="w-14 h-14 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center text-4xl shadow-lg">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
-                        <span className="text-sm font-bold text-white">İngiltere</span>
-                     </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 mb-6">
-                     {[
-                        { l: '1', v: '1.87', s: 'Fransa' },
-                        { l: 'X', v: '3.90', s: 'Beraberlik' },
-                        { l: '2', v: '3.80', s: 'İngiltere' }
-                     ].map((btn, idx) => {
-                        const isSel = betSelections.some(b => b.matchId === 'onemli_mac' && b.marketName === '1x2' && b.selectionName === btn.s);
-                        return (
-                           <button 
-                              key={idx}
-                              onClick={(e) => {
-                                 e.stopPropagation();
-                                 toggleBetSelection({ id: 'onemli_mac' }, '1x2', btn.s, parseFloat(btn.v));
-                              }}
-                              className={`flex-1 py-3 rounded-lg border flex flex-col items-center justify-center transition-colors ${
-                                 isSel 
-                                    ? 'bg-[#06b6d4] border-[#06b6d4] text-black shadow-[#06b6d4]/20'
-                                    : 'bg-[#1a2130] hover:bg-[#2a3040] border-[#2a3040]'
-                              }`}>
-                              <span className={`text-[10px] mb-0.5 ${isSel ? 'text-black/70' : 'text-[#94a3b8]'}`}>{btn.l}</span>
-                              <span className={`font-bold text-sm ${isSel ? 'text-black' : 'text-white'}`}>{btn.v}</span>
-                           </button>
-                        );
-                     })}
-                  </div>
-
-                  <div className="mt-auto">
-                     <div className="relative mb-3">
-                        <input type="text" value="1" readOnly className="w-full bg-[#0f172a] border border-[#2a3040] rounded-lg py-2.5 px-4 text-right text-white font-bold pr-8 outline-none" />
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94a3b8] font-bold">$</span>
-                     </div>
-                     <div className="flex gap-2 mb-4">
-                        {['1','10','25','100'].map(v => (
-                           <button key={v} className="flex-1 bg-[#1a2130] hover:bg-[#2a3040] py-2 rounded text-white text-xs font-bold transition-colors">{v}</button>
-                        ))}
-                     </div>
-                     <button className="w-full bg-[#1e2331] hover:bg-[#2a3040] text-white/50 font-bold py-3 rounded-lg transition-colors cursor-not-allowed text-xs">
-                        BAHİS YAP
-                     </button>
-                  </div>
-               </div>
-
-               {/* Panel 3: En iyi sonuçlar */}
-               <div className="bg-[#161c28] rounded-xl border border-[#2a3040] p-4 flex flex-col relative overflow-hidden h-[630px] lg:h-auto">
-                  <div className="flex items-center gap-2 mb-4">
-                     <span className="text-purple-500">🗓️</span>
-                     <h3 className="font-bold text-white text-sm">En iyi sonuçlar</h3>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 mb-2">
-                     <button className="bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-bold shrink-0 shadow-lg shadow-blue-600/20">Futbol</button>
-                     <button className="bg-[#1a2130] border border-[#2a3040] text-[#94a3b8] px-4 py-1.5 rounded-full text-xs font-bold shrink-0 hover:text-white transition-colors">Basketbol</button>
-                     <button className="bg-[#1a2130] border border-[#2a3040] text-[#94a3b8] px-4 py-1.5 rounded-full text-xs font-bold shrink-0 hover:text-white transition-colors">Buz Hokeyi</button>
-                     <button className="bg-[#1a2130] border border-[#2a3040] text-[#94a3b8] px-4 py-1.5 rounded-full text-xs font-bold shrink-0 hover:text-white transition-colors">Tenis</button>
-                  </div>
-
-                  <div className="flex flex-col items-center py-4 text-center border-b border-[#2a3040] mb-2">
-                     <h4 className="text-white font-bold text-sm tracking-wide">Uluslararası Dünya Kupası</h4>
-                     <span className="text-[#94a3b8] text-[11px] font-bold mt-1">Kazanan ve En Çok Gol Atan</span>
-                     <span className="text-blue-400 text-[10px] mt-2 font-bold px-3 py-1 bg-blue-400/10 rounded-full">Kapanış: Yarın, 00:00</span>
-                  </div>
-
-                  <div className="flex flex-col flex-1 overflow-y-auto scrollbar-hide pr-1">
-                     {[
-                        { k: 'Spain & Lionel Messi', v: '2.70' },
-                        { k: 'Argentina & Lionel Messi', v: '3.00' },
-                        { k: 'Spain & Kylian Mbappe', v: '3.20' },
-                        { k: 'Argentina & Kylian Mbappe', v: '4.50' },
-                        { k: 'Spain & Harry Kane', v: '61.00' },
-                        { k: 'Argentina & Harry Kane', v: '76.00' },
-                        { k: 'Spain & Mikel Oyarzabal', v: '116.0' },
-                     ].map((r, i) => (
-                        <div key={i} className="flex justify-between items-center py-3.5 border-b border-[#2a3040]/30 last:border-0 hover:bg-white/5 px-2 rounded transition-colors cursor-pointer group">
-                           <span className="text-xs text-[#94a3b8] font-bold group-hover:text-white transition-colors">{r.k}</span>
-                           <span className="text-xs text-white font-bold bg-[#1a2130] px-3 py-1.5 rounded border border-[#2a3040] group-hover:border-[#10b981]/50 group-hover:bg-[#10b981]/10 transition-colors">{r.v}</span>
-                        </div>
-                     ))}
-                  </div>
-                  
-                  <button className="mt-4 w-full py-2.5 flex items-center justify-center gap-1.5 text-xs text-[#94a3b8] font-bold hover:text-white hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-[#2a3040]">
-                     Sonuçlara git <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
-                  </button>
-               </div>
+               ))}
             </div>
 
           </div>
         </div>
       </div>
 
-      {/* Removed the old right sidebar, using the new global FloatingBetSlip below */}
-      <FloatingBetSlip />
+      {/* 3. Right Sidebar - Bet Slip (Collapsible) */}
+      <div className={`${theme.betSlipBg} flex flex-col flex-shrink-0 z-30 transition-all duration-300 ${isBetSlipOpen ? 'w-[300px]' : 'w-0 overflow-hidden'}`}>
+        <div className={`h-[60px] px-6 flex items-center justify-between ${theme.betSlipHeader} min-w-[300px]`}>
+          <div className="flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-[#A3E635]" />
+            <span className={`font-semibold ${theme.betSlipText} text-[13px] tracking-wide`}>BAHİS KUPONU</span>
+          </div>
+          <button 
+            onClick={() => setIsBetSlipOpen(false)}
+            className="w-7 h-7 rounded-full bg-white/[0.02] border-white/[0.05] hover:bg-white/10 flex items-center justify-center transition-colors border"
+          >
+            <ChevronRight className={`w-4 h-4 ${theme.betSlipMuted}`} />
+          </button>
+        </div>
+        <div className="flex-1 flex flex-col min-w-[300px]">
+          {betSlip.length === 0 ? (
+            <div className="flex-1 p-8 flex flex-col items-center justify-center text-center">
+              <div className="w-16 h-16 rounded-full bg-white/[0.02] border-white/[0.05] flex items-center justify-center mb-5 border">
+                <Trophy className={`w-6 h-6 ${theme.betSlipMuted}`} />
+              </div>
+              <h3 className={`${theme.betSlipText} font-medium text-sm mb-1`}>Kuponunuz Boş</h3>
+              <p className={`text-[11px] ${theme.betSlipMuted} leading-relaxed max-w-[180px]`}>
+                Bahis yapmak için listeden dilediğiniz oranlara tıklayın.
+              </p>
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                {betSlip.map(selection => (
+                  <div key={selection.id} className="bg-[#1a1d24] rounded-lg p-3 border border-white/5 relative group transition-colors hover:bg-[#20252b]">
+                    <button 
+                      onClick={() => setBetSlip(prev => prev.filter(s => s.id !== selection.id))}
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 text-zinc-500 hover:text-red-400"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                    <div className="text-[10px] text-[#94a3b8] mb-1.5 font-semibold">{selection.marketName}</div>
+                    <div className="flex justify-between items-center mb-1.5">
+                      <div className="font-bold text-white text-[13px]">{selection.selectionName}</div>
+                      <div className="font-black text-[#A3E635]">{selection.odd.toFixed(2)}</div>
+                    </div>
+                    <div className="text-[11px] text-zinc-400 font-medium truncate pr-4">{selection.matchName}</div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="p-4 bg-[#14161b] border-t border-white/[0.05] shadow-[0_-10px_20px_rgba(0,0,0,0.2)]">
+                 <div className="flex justify-between items-center mb-4">
+                    <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Toplam Oran</span>
+                    <span className="font-black text-[#A3E635] text-xl">
+                      {betSlip.reduce((acc, curr) => acc * curr.odd, 1).toFixed(2)}
+                    </span>
+                 </div>
+                 <div className="relative mb-4">
+                   <input 
+                      type="number" 
+                      value={betAmount}
+                      onChange={(e) => setBetAmount(e.target.value)}
+                      placeholder="Miktar"
+                      className="w-full bg-[#1a1d24] border border-white/10 rounded-lg py-3 px-4 text-white text-sm font-bold outline-none focus:border-[#A3E635]/50 transition-colors"
+                   />
+                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 text-xs font-bold">TL</span>
+                 </div>
+                 
+                 <div className="flex justify-between items-center mb-4 px-1">
+                    <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Olası Kazanç</span>
+                    <span className="font-bold text-white text-sm">
+                      {betAmount ? (parseFloat(betAmount) * betSlip.reduce((acc, curr) => acc * curr.odd, 1)).toFixed(2) : '0.00'} TL
+                    </span>
+                 </div>
+
+                 <button className="w-full bg-[#A3E635] hover:bg-[#86c429] text-black font-black py-3.5 rounded-lg transition-transform active:scale-95 text-sm uppercase tracking-wider shadow-[0_0_15px_rgba(163,230,53,0.3)]">
+                    BAHİS YAP
+                 </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Toggle Button for Bet Slip (Visible when closed) */}
+      {!isBetSlipOpen && (
+        <button 
+          onClick={() => setIsBetSlipOpen(true)}
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#14161b] hover:bg-[#1a1c23] border-white/[0.05] border border-r-0 p-3 rounded-l-xl shadow-lg transition-colors z-40 group"
+        >
+          <div className="flex flex-col items-center gap-3">
+            <Trophy className="w-5 h-5 text-[#A3E635] group-hover:scale-110 transition-transform" />
+            <span className={`text-[11px] font-bold ${theme.textMuted} tracking-widest rotate-180 [writing-mode:vertical-rl]`}>KUPON</span>
+            <div className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold">
+              {betSlip.length}
+            </div>
+          </div>
+        </button>
+      )}
 
     </div>
   );
 }
-
-const SidebarIcon = ({ icon, active }: { icon: React.ReactNode, active?: boolean }) => (
-  <button className={`w-12 h-12 flex items-center justify-center rounded-lg transition-colors relative group ${
-    active ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-white hover:bg-white/5'
-  }`}>
-    {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#A3E635] rounded-r-md"></div>}
-    {icon}
-  </button>
-);
-
-const SportIcon = ({ name }: { name: string }) => {
-  switch(name) {
-    case 'Futbol': return <Activity className="w-6 h-6 mb-1 opacity-70" />;
-    case 'Basketbol': return <Target className="w-6 h-6 mb-1 opacity-70" />;
-    case 'Tenis': return <Trophy className="w-6 h-6 mb-1 opacity-70" />;
-    case 'E-spor': return <Gamepad2 className="w-6 h-6 mb-1 opacity-70" />;
-    case 'Beyzbol': return <Star className="w-6 h-6 mb-1 opacity-70" />;
-    default: return <Lock className="w-6 h-6 mb-1 opacity-70" />;
-  }
-};

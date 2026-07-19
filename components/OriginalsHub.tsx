@@ -72,7 +72,12 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
 
                 {/* Gamification Panel Section */}
                 <div className="w-full">
-                    <GamificationPanel className="w-full" isLoggedIn={isLoggedIn} onLoginClick={() => onNavigate('login')} />
+                    <GamificationPanel 
+                      className="w-full" 
+                      isLoggedIn={isLoggedIn} 
+                      onLoginClick={() => onNavigate('login')} 
+                      onAdventureClick={() => onNavigate('adventure')}
+                    />
                 </div>
 
                 {/* Slider Header */}

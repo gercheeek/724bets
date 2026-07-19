@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
-import FomoNotifications from './components/FomoNotifications';
 import LanguageTransition from './components/LanguageTransition';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -98,6 +97,7 @@ import CrashTurboView from './components/CrashTurboView';
 import TurboMinesView from './components/TurboMinesView';
 import HacksawSlotView from './components/HacksawSlotView';
 import RedTigerSlotView from './components/RedTigerSlotView';
+import AdventureMap from './components/AdventureMap';
 const SITE_CACHE_VERSION = "2026.07.17_v2";
 
 const formatDateTR = (dateStr: string) => {
@@ -171,19 +171,31 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
 };
 
 export default function App() {
+  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
+  const [isDriverActive, setIsDriverActive] = useState(false);
+
+  useEffect(() => {
+    const handleOpenAdmin = () => setIsAdminPanelOpen(true);
+    window.addEventListener('open-admin', handleOpenAdmin);
+    return () => window.removeEventListener('open-admin', handleOpenAdmin);
+  }, []);
+
   return (
     <ThemeProvider>
       <LanguageProvider>
         <div className="min-h-screen bg-theme-main text-theme-primary flex flex-col font-sans">
-          <FomoNotifications />
-          <AppContent />
+          <AppContent setIsAdminPanelOpen={setIsAdminPanelOpen} />
         </div>
+
+        {isAdminPanelOpen && (
+            <AdminPanel onClose={() => setIsAdminPanelOpen(false)} />
+        )}
       </LanguageProvider>
     </ThemeProvider>
   );
 }
 
-const AppContent: React.FC = () => {
+const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({ setIsAdminPanelOpen }) => {
   const sports2ContainerRef = useRef<HTMLDivElement>(null);
   const sportsContainerRef = useRef<HTMLDivElement>(null);
   const sports3ContainerRef = useRef<HTMLDivElement>(null);
@@ -1236,7 +1248,7 @@ const AppContent: React.FC = () => {
         setView('sports');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'];
+        const validViews = ['adventure', 'blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -2012,6 +2024,12 @@ const AppContent: React.FC = () => {
               customGames={casinoLobbyGames}
             />
           </div>
+          )}
+
+          {view === 'adventure' && (
+            <div className="animate-fade-in w-full h-full">
+              <AdventureMap />
+            </div>
           )}
 
         {view === 'brands' && (
