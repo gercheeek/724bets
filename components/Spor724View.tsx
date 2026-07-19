@@ -205,7 +205,8 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
       const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
       
       for (const market of markets) {
-         if (market.includes('~home~') || market.includes('~away~')) {
+         const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
+         if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
             const parts = market.split('|');
             const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
             
