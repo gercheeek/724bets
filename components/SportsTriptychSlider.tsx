@@ -1,72 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const SLIDES = [
   {
     id: 1,
-    bgImage: 'https://images.unsplash.com/photo-1518605368461-1e1e38ce8058?auto=format&fit=crop&q=80&w=2000', // Stadium
-    overlay: 'from-[#4f1a9a]/95 via-[#3a0b76]/80 to-[#1a0b36]/90', // Vibrant purple
-    left: {
-      title: "FIFA WORLD CUP",
-      subtitle: "FİNALİ",
-      accent: "DÜNYA KUPASI 2026"
-    },
-    center: {
-      homeTeam: "İspanya",
-      homeFlag: "https://flagcdn.com/w80/es.png",
-      awayTeam: "Arjantin",
-      awayFlag: "https://flagcdn.com/w80/ar.png",
-      date: "YARIN, 22:00",
-      buttonText: "HEMEN BAHİS YAP"
-    },
-    right: {
-      trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3c6.svg", // Reliable SVG Trophy
-      bonusText: "100.000₺ ÖDÜL"
-    }
+    bgImage: 'https://images.unsplash.com/photo-1518605368461-1e1e38ce8058?auto=format&fit=crop&q=80&w=2000',
+    left: { title: "FIFA WORLD CUP", subtitle: "FINAL" },
+    center: { homeTeam: "Spain", homeFlag: "https://flagcdn.com/w160/es.png", awayTeam: "Argentina", awayFlag: "https://flagcdn.com/w160/ar.png", buttonText: "BET NOW" },
+    right: { trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3c6.svg" }
   },
   {
     id: 2,
-    bgImage: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&q=80&w=2000', // Tennis
-    overlay: 'from-[#065f46]/95 via-[#047857]/80 to-[#022c22]/90', // Vibrant green/emerald
-    left: {
-      title: "GRAND SLAM",
-      subtitle: "WIMBLEDON",
-      accent: "TEK ERKEKLER FİNALİ"
-    },
-    center: {
-      homeTeam: "Alcaraz",
-      homeFlag: "https://flagcdn.com/w80/es.png",
-      awayTeam: "Djokovic",
-      awayFlag: "https://flagcdn.com/w80/rs.png",
-      date: "PAZAR, 16:00",
-      buttonText: "CANLI İZLE & OYNA"
-    },
-    right: {
-      trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3be.svg", // Tennis
-      bonusText: "VIP AVANTAJLAR"
-    }
+    bgImage: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&q=80&w=2000',
+    left: { title: "GRAND SLAM", subtitle: "WIMBLEDON" },
+    center: { homeTeam: "Alcaraz", homeFlag: "https://flagcdn.com/w160/es.png", awayTeam: "Djokovic", awayFlag: "https://flagcdn.com/w160/rs.png", buttonText: "BET NOW" },
+    right: { trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3be.svg" }
   },
   {
     id: 3,
-    bgImage: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2000', // F1 / Racing
-    overlay: 'from-[#be123c]/95 via-[#e11d48]/80 to-[#4c0519]/90', // Vibrant Red
-    left: {
-      title: "FORMULA 1",
-      subtitle: "MONACO GP",
-      accent: "SEZONUN YARIŞI"
-    },
-    center: {
-      homeTeam: "Verstappen",
-      homeFlag: "https://flagcdn.com/w80/nl.png",
-      awayTeam: "Leclerc",
-      awayFlag: "https://flagcdn.com/w80/mc.png",
-      date: "24 TEMMUZ, 15:00",
-      buttonText: "EN YÜKSEK ORANLAR"
-    },
-    right: {
-      trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3ce.svg", // Racing
-      bonusText: "%20 KAYIP BONUSU"
-    }
+    bgImage: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2000',
+    left: { title: "FORMULA 1", subtitle: "MONACO GP" },
+    center: { homeTeam: "Verstappen", homeFlag: "https://flagcdn.com/w160/nl.png", awayTeam: "Leclerc", awayFlag: "https://flagcdn.com/w160/mc.png", buttonText: "BET NOW" },
+    right: { trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3ce.svg" }
   }
 ];
 
@@ -76,7 +31,7 @@ export const SportsTriptychSlider: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveIdx((prev) => (prev + 1) % SLIDES.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 
@@ -98,34 +53,36 @@ export const SportsTriptychSlider: React.FC = () => {
       {/* Slider Controls */}
       <button 
         onClick={handlePrev}
-        className="absolute left-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity z-30 hover:bg-[#10b981] hover:border-[#10b981]"
+        className="absolute left-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity z-30 hover:bg-[#a855f7] hover:border-[#a855f7]"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
       <button 
         onClick={handleNext}
-        className="absolute right-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity z-30 hover:bg-[#10b981] hover:border-[#10b981]"
+        className="absolute right-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity z-30 hover:bg-[#a855f7] hover:border-[#a855f7]"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
 
       {/* Triptych Container */}
-      <div className="flex flex-col md:flex-row gap-2 h-auto md:h-[180px] lg:h-[220px]">
+      <div className="flex flex-col md:flex-row gap-[6px] h-auto md:h-[180px] lg:h-[220px]">
         
         {/* Left Panel */}
         <div 
-          className="flex-1 md:flex-none md:w-[30%] lg:w-[28%] rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[140px] md:h-full border border-white/5"
+          key={`left-${slide.id}`}
+          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/50 animate-fade-in-up"
           style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '0% 50%', backgroundSize: '300% 100%' }}
         >
-          <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlay} backdrop-blur-[2px] transition-colors duration-700`}></div>
-          <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-center animate-fade-in-up">
-            <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-bold tracking-widest w-fit mb-3 border border-white/30 backdrop-blur-md">
-              {slide.left.accent}
-            </span>
-            <h2 className="text-white font-black text-xl md:text-2xl lg:text-3xl leading-none tracking-tight">
+          {/* Vibrant Purple Glow & Rays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#4f1a9a]/95 via-[#3a0b76]/80 to-[#1a0b36]/90 backdrop-blur-[1px]"></div>
+          <div className="absolute -bottom-24 -left-10 w-[200px] h-[200px] bg-[#a855f7] opacity-40 blur-[60px] pointer-events-none rounded-full"></div>
+          <div className="absolute bottom-0 left-0 w-full h-full bg-[linear-gradient(45deg,rgba(168,85,247,0.3)_0%,transparent_60%)] pointer-events-none"></div>
+          
+          <div className="absolute inset-0 p-5 md:p-8 flex flex-col justify-center items-start">
+            <h2 className="text-white font-black text-2xl md:text-[28px] lg:text-[34px] leading-none tracking-tighter uppercase drop-shadow-md">
               {slide.left.title}
             </h2>
-            <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70 font-black text-2xl md:text-3xl lg:text-4xl leading-none mt-1">
+            <h2 className="text-white font-black text-4xl md:text-5xl lg:text-6xl leading-none tracking-tighter uppercase mt-1 drop-shadow-lg">
               {slide.left.subtitle}
             </h2>
           </div>
@@ -133,34 +90,36 @@ export const SportsTriptychSlider: React.FC = () => {
 
         {/* Center Panel */}
         <div 
-          className="flex-1 rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[200px] md:h-full border border-white/10"
+          key={`center-${slide.id}`}
+          className="flex-1 rounded-xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl h-[200px] md:h-full border border-black/50 animate-fade-in-up"
           style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '50% 50%', backgroundSize: '300% 100%' }}
         >
-          <div className={`absolute inset-0 bg-gradient-to-t ${slide.overlay} backdrop-blur-[1px] transition-colors duration-700`}></div>
+          {/* Vibrant Purple Glow & Rays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#4f1a9a]/95 via-[#3a0b76]/80 to-[#1a0b36]/90 backdrop-blur-[1px]"></div>
+          <div className="absolute -bottom-24 -left-10 w-[300px] h-[200px] bg-[#a855f7] opacity-30 blur-[70px] pointer-events-none rounded-full"></div>
+          <div className="absolute bottom-0 left-0 w-full h-full bg-[linear-gradient(45deg,rgba(168,85,247,0.2)_0%,transparent_60%)] pointer-events-none"></div>
           
-          <div className="absolute inset-0 p-4 flex flex-col items-center justify-between animate-fade-in-up">
+          <div className="absolute inset-0 p-4 flex flex-col items-center justify-center mt-2">
             
             {/* Flags & Teams */}
-            <div className="flex items-center justify-center gap-4 md:gap-8 w-full mt-2">
-              <div className="flex flex-col items-center gap-2 flex-1">
-                <img src={slide.center.homeFlag} alt={slide.center.homeTeam} className="w-12 h-8 md:w-16 md:h-11 rounded-sm object-cover shadow-lg border border-white/10" />
-                <span className="text-white font-bold text-sm md:text-base">{slide.center.homeTeam}</span>
+            <div className="flex items-center justify-center gap-6 w-full">
+              <div className="flex flex-col items-center gap-2.5 flex-1">
+                <img src={slide.center.homeFlag} alt={slide.center.homeTeam} className="w-[70px] h-[46px] rounded-[3px] object-cover shadow-[0_5px_15px_rgba(0,0,0,0.5)] border border-white/10" />
+                <span className="text-white font-bold italic text-[15px] tracking-wide">{slide.center.homeTeam}</span>
               </div>
               
-              <div className="flex flex-col items-center justify-center shrink-0">
-                <span className="text-[#10b981] font-black text-xl italic drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">VS</span>
-                <span className="text-gray-400 text-[10px] font-bold tracking-widest mt-1">{slide.center.date}</span>
+              <div className="flex flex-col items-center justify-center shrink-0 mb-6">
+                <span className="text-[#ffd700] font-black text-[22px] italic drop-shadow-[0_0_15px_rgba(255,215,0,0.5)] tracking-widest">VS</span>
               </div>
 
-              <div className="flex flex-col items-center gap-2 flex-1">
-                <img src={slide.center.awayFlag} alt={slide.center.awayTeam} className="w-12 h-8 md:w-16 md:h-11 rounded-sm object-cover shadow-lg border border-white/10" />
-                <span className="text-white font-bold text-sm md:text-base">{slide.center.awayTeam}</span>
+              <div className="flex flex-col items-center gap-2.5 flex-1">
+                <img src={slide.center.awayFlag} alt={slide.center.awayTeam} className="w-[70px] h-[46px] rounded-[3px] object-cover shadow-[0_5px_15px_rgba(0,0,0,0.5)] border border-white/10" />
+                <span className="text-white font-bold italic text-[15px] tracking-wide">{slide.center.awayTeam}</span>
               </div>
             </div>
 
-            {/* CTA Button */}
-            <button className="w-full max-w-[240px] h-10 md:h-12 bg-gradient-to-r from-[#ffd700] to-[#ffaa00] rounded-xl flex items-center justify-center gap-2 text-black font-black text-sm md:text-base tracking-wider shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:scale-105 transition-transform">
-              <Play className="w-4 h-4 fill-black" />
+            {/* Solid Yellow CTA Button */}
+            <button className="mt-5 w-[160px] h-10 bg-[#ffd700] rounded-[6px] text-black font-black text-[13px] tracking-widest shadow-[0_5px_20px_rgba(255,215,0,0.3)] hover:scale-105 transition-transform uppercase">
               {slide.center.buttonText}
             </button>
 
@@ -169,31 +128,34 @@ export const SportsTriptychSlider: React.FC = () => {
 
         {/* Right Panel */}
         <div 
-          className="flex-1 md:flex-none md:w-[30%] lg:w-[28%] rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[140px] md:h-full border border-white/5"
+          key={`right-${slide.id}`}
+          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/50 animate-fade-in-up"
           style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '100% 50%', backgroundSize: '300% 100%' }}
         >
-          <div className={`absolute inset-0 bg-gradient-to-l ${slide.overlay} backdrop-blur-[2px] transition-colors duration-700`}></div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in-up">
-            <div className="w-16 h-16 md:w-24 md:h-24 relative">
-               <div className="absolute inset-0 bg-white opacity-20 blur-2xl rounded-full"></div>
-               <img src={slide.right.trophyImage} alt="Trophy" className="w-full h-full object-contain relative z-10 drop-shadow-2xl filter brightness-110" />
-            </div>
-            <div className="mt-3 flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
-              <span className="text-white font-bold tracking-widest text-xs md:text-sm">{slide.right.bonusText}</span>
-            </div>
+          {/* Vibrant Purple Glow & Rays */}
+          <div className="absolute inset-0 bg-gradient-to-l from-[#4f1a9a]/95 via-[#3a0b76]/80 to-[#1a0b36]/90 backdrop-blur-[1px]"></div>
+          <div className="absolute -bottom-24 -left-10 w-[200px] h-[200px] bg-[#a855f7] opacity-40 blur-[60px] pointer-events-none rounded-full"></div>
+          <div className="absolute bottom-0 left-0 w-full h-full bg-[linear-gradient(45deg,rgba(168,85,247,0.3)_0%,transparent_60%)] pointer-events-none"></div>
+          
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+             {/* Huge SVG emoji dropping shadow to look 3D */}
+             <img 
+               src={slide.right.trophyImage} 
+               alt="Trophy" 
+               className="h-[100px] md:h-[150px] object-contain relative z-10 filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)]" 
+             />
           </div>
         </div>
 
       </div>
 
       {/* Indicators */}
-      <div className="flex justify-center gap-2 mt-3">
+      <div className="flex justify-center gap-2 mt-4">
         {SLIDES.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setActiveIdx(idx)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${activeIdx === idx ? 'w-6 bg-[#10b981]' : 'w-1.5 bg-white/20'}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${activeIdx === idx ? 'w-8 bg-[#a855f7]' : 'w-2 bg-white/20'}`}
           />
         ))}
       </div>
