@@ -57,13 +57,13 @@ export const SportsHeroBanner: React.FC = () => {
 
           {/* Aggressive Typography for Teams */}
           <div className="flex items-center justify-center gap-3 md:gap-5 mb-6 md:mb-8 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] text-right leading-none">
+            <h1 className="text-transparent bg-clip-text bg-gradient-to-b from-[#c60b1e] via-[#ffc400] to-[#c60b1e] font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter filter drop-shadow-[0_5px_10px_rgba(0,0,0,0.8)] text-right leading-none pb-1">
               İSPANYA
             </h1>
             <div className="bg-[#10b981]/10 border border-[#10b981]/20 rounded-lg px-2 py-1 md:px-3 md:py-1.5 backdrop-blur-sm shadow-[0_0_15px_rgba(16,185,129,0.3)]">
               <span className="text-[#10b981] font-black italic text-lg md:text-2xl lg:text-[28px] drop-shadow-md leading-none">VS</span>
             </div>
-            <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] text-left leading-none">
+            <h1 className="text-transparent bg-clip-text bg-gradient-to-b from-[#43a1d5] via-white to-[#43a1d5] font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter filter drop-shadow-[0_5px_10px_rgba(0,0,0,0.8)] text-left leading-none pb-1">
               ARJANTİN
             </h1>
           </div>
