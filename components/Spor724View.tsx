@@ -109,7 +109,27 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   
   const [matches, setMatches] = useState<MatchInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [goalScoredMatches, setGoalScoredMatches] = useState<string[]>([]);
   const { events } = useBetting();
+
+  // Simulate goals for visual effect
+  useEffect(() => {
+    if (isLoading || matches.length === 0) return;
+    
+    const interval = setInterval(() => {
+      const liveMatches = matches.filter(m => m.isLive && !m.isFinished);
+      if (liveMatches.length > 0) {
+        const randomMatch = liveMatches[Math.floor(Math.random() * liveMatches.length)];
+        setGoalScoredMatches(prev => [...prev, randomMatch.id]);
+        
+        setTimeout(() => {
+          setGoalScoredMatches(prev => prev.filter(id => id !== randomMatch.id));
+        }, 4000);
+      }
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, [matches, isLoading]);
 
   useEffect(() => {
     if (!events || events.length === 0) {
@@ -138,15 +158,15 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
              score = `${parts[2]} - ${parts[3]}`;
           }
         } else if (data.current_score) {
-          score = data.current_score.replace(':', ' - ');
+          score = String(data.current_score || '').replace(':', ' - ');
         }
       }
       if (isFinished) {
           minute = language === 'tr' ? 'Bitti' : 'FT';
       } else if (data.minute) {
           minute = `${data.minute}'`;
-      } else if (data.extended_status && data.extended_status.includes('s')) {
-          minute = data.extended_status.replace('s', '. Set');
+      } else if (data.extended_status) {
+          minute = String(data.extended_status || '').replace('s', '. Set');
       }
       
       const homeTeamId = data.participants?.home_id || data.participants?.ByNumber?.['1']?.Id;
@@ -394,7 +414,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                       <div className="flex flex-col items-start gap-2 flex-1">
                         <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
                           <img 
-                            src={`/takimlogo/${match.home.replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
+                            src={`/takimlogo/${(match.home || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
                             alt={match.home}
                             className="w-full h-full object-contain"
                             onError={(e) => {
@@ -422,7 +442,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                       <div className="flex flex-col items-end gap-2 flex-1">
                         <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
                           <img 
-                            src={`/takimlogo/${match.away.replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
+                            src={`/takimlogo/${(match.away || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
                             alt={match.away}
                             className="w-full h-full object-contain"
                             onError={(e) => {
