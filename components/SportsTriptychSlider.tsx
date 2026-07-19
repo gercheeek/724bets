@@ -115,7 +115,7 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Left Panel */}
         <div 
           className="flex-1 md:flex-none md:w-[30%] lg:w-[28%] rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[140px] md:h-full border border-white/5"
-          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '0% 50%', backgroundSize: 'cover' }}
+          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '0% 50%', backgroundSize: '300% 100%' }}
         >
           <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlay} backdrop-blur-[2px] transition-colors duration-700`}></div>
           <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-center animate-fade-in-up">
@@ -134,7 +134,7 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Center Panel */}
         <div 
           className="flex-1 rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[200px] md:h-full border border-white/10"
-          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '50% 50%', backgroundSize: 'cover' }}
+          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '50% 50%', backgroundSize: '300% 100%' }}
         >
           <div className={`absolute inset-0 bg-gradient-to-t ${slide.overlay} backdrop-blur-[1px] transition-colors duration-700`}></div>
           
@@ -170,7 +170,7 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Right Panel */}
         <div 
           className="flex-1 md:flex-none md:w-[30%] lg:w-[28%] rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[140px] md:h-full border border-white/5"
-          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '100% 50%', backgroundSize: 'cover' }}
+          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '100% 50%', backgroundSize: '300% 100%' }}
         >
           <div className={`absolute inset-0 bg-gradient-to-l ${slide.overlay} backdrop-blur-[2px] transition-colors duration-700`}></div>
           <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in-up">
