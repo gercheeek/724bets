@@ -590,8 +590,15 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                         <div className="flex-1 flex flex-col gap-3 min-w-0 pr-0 md:pr-4 z-10">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white/5 flex items-center justify-center overflow-hidden">
-                                <img src={match.homeLogo} alt={match.home} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[9px]">${(match.home || '??').substring(0, 2).toUpperCase()}</span>`; }} />
+                              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center overflow-hidden shadow-sm border border-white/10">
+                                <img src={`/takimlogo/${(match.home || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`} alt={match.home} className="w-full h-full object-contain" onError={(e) => { 
+                                  if (e.currentTarget.src.includes('/takimlogo/')) {
+                                    e.currentTarget.src = match.homeLogo;
+                                  } else {
+                                    e.currentTarget.style.display = 'none'; 
+                                    e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center shadow-inner" style="background-color: ${getTeamColor(match.home || '')};"><span class="text-white font-bold text-[8px] drop-shadow-sm">${(match.home || '??').substring(0, 2).toUpperCase()}</span></div>`; 
+                                  }
+                                }} />
                               </div>
                               <span className="text-[13px] md:text-[14px] font-bold text-gray-200 truncate">{match.home}</span>
                             </div>
@@ -600,8 +607,15 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                           
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white/5 flex items-center justify-center overflow-hidden">
-                                <img src={match.awayLogo} alt={match.away} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[9px]">${(match.away || '??').substring(0, 2).toUpperCase()}</span>`; }} />
+                              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center overflow-hidden shadow-sm border border-white/10">
+                                <img src={`/takimlogo/${(match.away || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`} alt={match.away} className="w-full h-full object-contain" onError={(e) => { 
+                                  if (e.currentTarget.src.includes('/takimlogo/')) {
+                                    e.currentTarget.src = match.awayLogo;
+                                  } else {
+                                    e.currentTarget.style.display = 'none'; 
+                                    e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center shadow-inner" style="background-color: ${getTeamColor(match.away || '')};"><span class="text-white font-bold text-[8px] drop-shadow-sm">${(match.away || '??').substring(0, 2).toUpperCase()}</span></div>`; 
+                                  }
+                                }} />
                               </div>
                               <span className="text-[13px] md:text-[14px] font-bold text-gray-200 truncate">{match.away}</span>
                             </div>

@@ -7,6 +7,19 @@ interface MatchDetailViewProps {
 }
 
 export default function MatchDetailView({ match, onBack }: MatchDetailViewProps) {
+  const getTeamColor = (teamName: string) => {
+    const colors = [
+      '#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#10b981', 
+      '#14b8a6', '#06b6d4', '#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6', 
+      '#a855f7', '#d946ef', '#ec4899', '#f43f5e'
+    ];
+    let hash = 0;
+    for (let i = 0; i < teamName.length; i++) {
+      hash = teamName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+  };
+
   const [activeTab, setActiveTab] = useState('HEPSİ');
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({
     'Maç Sonucu': true,
@@ -202,9 +215,17 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1a1d24] border-2 border-[#2c313c] shadow-lg flex items-center justify-center shrink-0 relative overflow-hidden">
                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent z-10"></div>
                  <img 
-                   src={`https://ui-avatars.com/api/?name=${encodeURIComponent(match.home)}&background=1a1d24&color=ffffff&bold=true&font-size=0.4`} 
+                   src={`/takimlogo/${(match.home || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
                    alt={match.home}
                    className="w-full h-full object-cover relative z-0"
+                   onError={(e) => {
+                     if (e.currentTarget.src.includes('/takimlogo/')) {
+                       e.currentTarget.src = match.homeLogo;
+                     } else {
+                       e.currentTarget.style.display = 'none';
+                       e.currentTarget.parentElement!.innerHTML = `<div class="absolute inset-0 z-10 flex items-center justify-center shadow-inner" style="background-color: ${getTeamColor(match.home || '')};"><span class="text-white font-bold text-lg drop-shadow-md">${(match.home || '??').substring(0, 2).toUpperCase()}</span></div>`;
+                     }
+                   }}
                  />
               </div>
             </div>
@@ -232,9 +253,17 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1a1d24] border-2 border-[#2c313c] shadow-lg flex items-center justify-center shrink-0 relative overflow-hidden">
                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent z-10"></div>
                  <img 
-                   src={`https://ui-avatars.com/api/?name=${encodeURIComponent(match.away)}&background=1a1d24&color=ffffff&bold=true&font-size=0.4`} 
+                   src={`/takimlogo/${(match.away || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
                    alt={match.away}
                    className="w-full h-full object-cover relative z-0"
+                   onError={(e) => {
+                     if (e.currentTarget.src.includes('/takimlogo/')) {
+                       e.currentTarget.src = match.awayLogo;
+                     } else {
+                       e.currentTarget.style.display = 'none';
+                       e.currentTarget.parentElement!.innerHTML = `<div class="absolute inset-0 z-10 flex items-center justify-center shadow-inner" style="background-color: ${getTeamColor(match.away || '')};"><span class="text-white font-bold text-lg drop-shadow-md">${(match.away || '??').substring(0, 2).toUpperCase()}</span></div>`;
+                     }
+                   }}
                  />
               </div>
               <span className="text-white font-bold text-[14px] md:text-[18px] text-left tracking-wide line-clamp-2">{match.away}</span>
