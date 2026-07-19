@@ -70,7 +70,7 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Left Panel */}
         <div 
           key={`left-${slide.id}`}
-          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/50 animate-fade-in-up"
+          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/80 border-t-white/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] animate-fade-in-up group/panel cursor-pointer"
           style={{ 
             backgroundImage: `linear-gradient(to right, rgba(79,26,154,0.95) 0%, rgba(139,92,246,0.6) 50%, rgba(26,11,54,0.95) 100%), url(${slide.bgImage})`, 
             backgroundPosition: '0% 50%', 
@@ -78,7 +78,7 @@ export const SportsTriptychSlider: React.FC = () => {
           }}
         >
           {/* Content */}
-          <div className="absolute inset-0 p-5 md:p-8 flex flex-col justify-center items-start">
+          <div className="absolute inset-0 p-5 md:p-8 flex flex-col justify-center items-start group-hover/panel:scale-105 transition-transform duration-700 ease-out">
             <h2 className="text-white font-black text-2xl md:text-[28px] lg:text-[34px] leading-none tracking-tighter uppercase drop-shadow-md">
               {slide.left.title}
             </h2>
@@ -91,7 +91,7 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Center Panel */}
         <div 
           key={`center-${slide.id}`}
-          className="flex-1 rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[200px] md:h-full border border-black/50 animate-fade-in-up"
+          className="flex-1 rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[200px] md:h-full border border-black/80 border-t-white/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] animate-fade-in-up group/panel cursor-pointer"
           style={{ 
             backgroundImage: `linear-gradient(to right, rgba(79,26,154,0.95) 0%, rgba(139,92,246,0.6) 50%, rgba(26,11,54,0.95) 100%), url(${slide.bgImage})`, 
             backgroundPosition: '50% 50%', 
@@ -99,7 +99,7 @@ export const SportsTriptychSlider: React.FC = () => {
           }}
         >
           {/* Content */}
-          <div className="absolute inset-0 p-4 flex flex-col items-center justify-center mt-2">
+          <div className="absolute inset-0 p-4 flex flex-col items-center justify-center mt-2 group-hover/panel:scale-[1.02] transition-transform duration-700 ease-out">
             
             {/* Flags & Teams */}
             <div className="flex items-center justify-center gap-6 w-full">
@@ -118,9 +118,10 @@ export const SportsTriptychSlider: React.FC = () => {
               </div>
             </div>
 
-            {/* Solid Yellow CTA Button */}
-            <button className="mt-5 w-[160px] h-10 bg-[#ffd700] rounded-[6px] text-black font-black text-[13px] tracking-widest shadow-[0_5px_20px_rgba(255,215,0,0.3)] hover:scale-105 transition-transform uppercase">
-              {slide.center.buttonText}
+            {/* Solid Yellow CTA Button with Shine Effect */}
+            <button className="relative overflow-hidden mt-5 w-[160px] h-10 bg-[#ffd700] rounded-[6px] text-black font-black text-[13px] tracking-widest shadow-[0_5px_20px_rgba(255,215,0,0.3)] hover:scale-110 transition-transform duration-300 uppercase group/btn">
+              <span className="relative z-10">{slide.center.buttonText}</span>
+              <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-[-20deg] group-hover/btn:left-[200%] transition-all duration-700 ease-in-out"></div>
             </button>
 
           </div>
@@ -129,7 +130,7 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Right Panel */}
         <div 
           key={`right-${slide.id}`}
-          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/50 animate-fade-in-up"
+          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/80 border-t-white/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] animate-fade-in-up group/panel cursor-pointer"
           style={{ 
             backgroundImage: `linear-gradient(to right, rgba(79,26,154,0.95) 0%, rgba(139,92,246,0.6) 50%, rgba(26,11,54,0.95) 100%), url(${slide.bgImage})`, 
             backgroundPosition: '100% 50%', 
@@ -138,11 +139,11 @@ export const SportsTriptychSlider: React.FC = () => {
         >
           {/* Content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-             {/* Huge SVG emoji dropping shadow to look 3D */}
+             {/* Huge SVG emoji dropping shadow to look 3D, floats on hover */}
              <img 
                src={slide.right.trophyImage} 
                alt="Trophy" 
-               className="h-[100px] md:h-[150px] object-contain relative z-10 filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)]" 
+               className="h-[100px] md:h-[150px] object-contain relative z-10 filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] group-hover/panel:-translate-y-3 group-hover/panel:scale-110 group-hover/panel:drop-shadow-[0_25px_35px_rgba(0,0,0,0.8)] transition-all duration-700 ease-out" 
              />
           </div>
         </div>
