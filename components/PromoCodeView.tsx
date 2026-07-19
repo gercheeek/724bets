@@ -116,7 +116,7 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-gradient-to-b from-[#0B0E14] to-[#151821] min-h-screen relative">
+    <div className="flex-1 overflow-y-auto bg-gradient-to-b from-[#050505] to-[#151821] min-h-screen relative">
       {/* Background Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-[#06b6d4]/5 blur-[120px] pointer-events-none rounded-full" />
       

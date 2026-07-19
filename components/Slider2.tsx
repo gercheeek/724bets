@@ -91,7 +91,7 @@ const Slider2: React.FC<Slider2Props> = ({ config, onSlideChange, onInternalNavi
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      style={{ aspectRatio: '24 / 9', background: '#0F1219' }} // Match HeroSlider aspect ratio
+      style={{ aspectRatio: '24 / 9', background: '#050505' }} // Match HeroSlider aspect ratio
     >
       <div 
         className="flex w-full h-full transition-transform duration-500 ease-in-out"

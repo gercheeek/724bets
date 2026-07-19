@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <style>{`
         .navy-sidebar-container {
           width: 100%;
-          background-color: #0B0E14;
+          background-color: #050505;
           display: flex;
           flex-direction: column;
           height: 100%;
@@ -73,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <Menu size={24} />
                 </button>
                 {isOpen && (
-                  <div className="flex-1 flex bg-[#14141a] rounded-md p-0.5 border border-white/5 shadow-inner relative overflow-hidden">
+                  <div className="flex-1 flex bg-[#111111] rounded-md p-0.5 border border-white/5 shadow-inner relative overflow-hidden">
                     <button 
                       onClick={() => onViewChange('blackjack')}
                       className={`flex-1 py-2 rounded-md text-sm font-bold transition-all relative z-10 flex items-center justify-center gap-2 ${
@@ -120,7 +120,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                            <span className="text-amber-400 font-black text-[10px] tracking-wider uppercase drop-shadow-sm">Haftalık Çekiliş</span>
                        </div>
                     </div>
-                    <div className="bg-[#0B0E14] border border-amber-500/50 rounded-full px-2 py-0.5 shadow-[0_0_8px_rgba(251,191,36,0.3)]">
+                    <div className="bg-[#050505] border border-amber-500/50 rounded-full px-2 py-0.5 shadow-[0_0_8px_rgba(251,191,36,0.3)]">
                        <span className="text-white font-bold text-xs italic">20s</span>
                     </div>
                  </div>
@@ -147,25 +147,25 @@ const Sidebar: React.FC<SidebarProps> = ({
                   onClick={() => onViewChange('home')}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group ${
                     activeView === 'home'
-                    ? 'bg-[#14141a] text-white' 
-                    : 'text-slate-400 hover:text-white hover:bg-[#14141a]'
+                    ? 'bg-[#111111] text-white' 
+                    : 'text-slate-400 hover:text-white hover:bg-[#111111]'
                   }`}
                 >
                   <Crown className={`w-5 h-5 icon-wiggle ${activeView === 'home' ? 'text-[#06b6d4]' : ''}`} stroke="currentColor" fill="rgba(6,182,212,0.2)" strokeWidth={1.5} />
                   <span className="font-bold text-[14px]">Anasayfa</span>
                 </button>
 
-                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
                   <Star className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
                   <span className="font-bold text-[14px]">Sık Kullanılanlar</span>
                 </button>
 
-                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
                   <Copy className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
                   <span className="font-bold text-[14px]">Bahislerim</span>
                 </button>
 
-                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
                   <Radio className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
                   <span className="font-bold text-[14px]">Canlı Maçlar</span>
                 </button>
@@ -176,7 +176,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               {/* Accordions */}
               <div className="flex flex-col gap-3">
                 {/* Popüler Ligler */}
-                <div className="flex flex-col bg-[#14141a] rounded-xl border border-white/5 overflow-hidden">
+                <div className="flex flex-col bg-[#111111] rounded-xl border border-white/5 overflow-hidden">
                   <div 
                     onClick={() => setIsFavLeaguesOpen(!isFavLeaguesOpen)}
                     className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors group"
@@ -188,7 +188,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isFavLeaguesOpen ? 'rotate-180' : ''}`} />
                   </div>
                   {isFavLeaguesOpen && (
-                    <div className="flex flex-col py-2 bg-[#0B0E14] border-t border-white/5 gap-1">
+                    <div className="flex flex-col py-2 bg-[#050505] border-t border-white/5 gap-1">
                       {[
                         { name: 'Premier Lig', sub: 'Futbol, İngiltere', icon: '🇬🇧' },
                         { name: 'UEFA Avrupa Ligi', sub: 'Futbol, Uluslararası (Kulüpler)', icon: '🌍' },
@@ -213,7 +213,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
 
                 {/* Casino */}
-                <div className="flex flex-col bg-[#14141a] rounded-xl border border-white/5 overflow-hidden">
+                <div className="flex flex-col bg-[#111111] rounded-xl border border-white/5 overflow-hidden">
                   <div 
                     onClick={() => setIsCasinoOpen(!isCasinoOpen)}
                     className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors group"
@@ -231,7 +231,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isCasinoOpen ? 'rotate-180' : ''}`} />
                   </div>
                   {isCasinoOpen && (
-                    <div className="flex flex-col py-1 bg-[#0B0E14] border-t border-white/5">
+                    <div className="flex flex-col py-1 bg-[#050505] border-t border-white/5">
                       <button onClick={() => onViewChange('blackjack')} className="text-left px-11 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors">Slotlar</button>
                       <button onClick={() => onViewChange('blackjack')} className="text-left px-11 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors">Canlı Casino</button>
                     </div>
@@ -239,7 +239,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
 
                 {/* Originals */}
-                <div className="flex flex-col bg-[#14141a] rounded-xl border border-white/5 overflow-hidden">
+                <div className="flex flex-col bg-[#111111] rounded-xl border border-white/5 overflow-hidden">
                   <div 
                     onClick={() => setIsOriginalsOpen(!isOriginalsOpen)}
                     className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors group"
@@ -251,7 +251,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isOriginalsOpen ? 'rotate-180' : ''}`} />
                   </div>
                   {isOriginalsOpen && (
-                    <div className="flex flex-col py-1 bg-[#0B0E14] border-t border-white/5">
+                    <div className="flex flex-col py-1 bg-[#050505] border-t border-white/5">
                       <button onClick={() => onViewChange('originals')} className="text-left px-11 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors">Zar (Dice)</button>
                       <button onClick={() => onViewChange('originals')} className="text-left px-11 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors">Plinko</button>
                       <button onClick={() => onViewChange('originals')} className="text-left px-11 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors">Mayınlar (Mines)</button>
@@ -260,7 +260,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
 
                 {/* Promosyonlar */}
-                <div className="flex flex-col bg-[#14141a] rounded-xl border border-white/5 overflow-hidden">
+                <div className="flex flex-col bg-[#111111] rounded-xl border border-white/5 overflow-hidden">
                   <div 
                     onClick={() => setIsPromosOpen(!isPromosOpen)}
                     className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors group"
@@ -272,7 +272,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isPromosOpen ? 'rotate-180' : ''}`} />
                   </div>
                   {isPromosOpen && (
-                    <div className="flex flex-col py-1 bg-[#0B0E14] border-t border-white/5">
+                    <div className="flex flex-col py-1 bg-[#050505] border-t border-white/5">
                       <button onClick={() => onViewChange('promo')} className="text-left px-11 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors">Hoşgeldin Bonusu</button>
                       <button onClick={() => onViewChange('promo')} className="text-left px-11 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors">Kayıp Bonusu</button>
                     </div>
@@ -284,24 +284,24 @@ const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Footer Links */}
               <div className="flex flex-col gap-2 mb-6">
-                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
                   <Gift className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
                   <span className="font-bold text-[14px]">Ödüller</span>
                 </button>
-                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
+                <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
                   <FileText className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
                   <span className="font-bold text-[14px]">Blog</span>
                 </button>
                 <button 
                   onClick={() => window.dispatchEvent(new Event('openSupportChat'))}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group"
                 >
                   <Headphones className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
                   <span className="font-bold text-[14px]">Canlı Destek</span>
                 </button>
                 <div 
                   onClick={() => setIsLangOpen(!isLangOpen)}
-                  className="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-colors text-slate-400 hover:text-white hover:bg-[#14141a]"
+                  className="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-colors text-slate-400 hover:text-white hover:bg-[#111111]"
                 >
                   <div className="flex items-center gap-3">
                     <Globe className="w-5 h-5" />
@@ -317,55 +317,55 @@ const Sidebar: React.FC<SidebarProps> = ({
           {!isOpen && (
             <div className="flex flex-col items-center py-4 gap-4 w-full relative z-[100]">
               {/* Collapsed icons only */}
-              <button onClick={() => onViewChange('home')} className={`group relative w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${activeView === 'home' || activeView === 'blackjack' ? 'bg-[#14141a] text-white border-l-2 border-[#10b981]' : 'text-slate-400 hover:text-white hover:bg-[#14141a]'}`}>
+              <button onClick={() => onViewChange('home')} className={`group relative w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${activeView === 'home' || activeView === 'blackjack' ? 'bg-[#111111] text-white border-l-2 border-[#10b981]' : 'text-slate-400 hover:text-white hover:bg-[#111111]'}`}>
                 <Crown className={`w-5 h-5 ${activeView === 'home' ? 'text-[#10b981]' : ''}`} />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Anasayfa</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Anasayfa</div>
               </button>
-              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Star className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Sık Kullanılanlar</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Sık Kullanılanlar</div>
               </button>
-              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Copy className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Bahislerim</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Bahislerim</div>
               </button>
-              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Radio className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Canlı Maçlar</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Canlı Maçlar</div>
               </button>
-              <button onClick={() => {onToggle(); setIsFavLeaguesOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button onClick={() => {onToggle(); setIsFavLeaguesOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Trophy className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Popüler Ligler</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Popüler Ligler</div>
               </button>
               <div className="w-10 h-px bg-white/5 my-1"></div>
-              <button onClick={() => {onToggle(); setIsCasinoOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button onClick={() => {onToggle(); setIsCasinoOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Cherry className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Casino</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Casino</div>
               </button>
-              <button onClick={() => {onToggle(); setIsOriginalsOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button onClick={() => {onToggle(); setIsOriginalsOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Target className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Originals</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Originals</div>
               </button>
-              <button onClick={() => {onToggle(); setIsPromosOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button onClick={() => {onToggle(); setIsPromosOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Percent className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Promosyonlar</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Promosyonlar</div>
               </button>
               <div className="w-10 h-px bg-white/5 my-1"></div>
-              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Gift className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Ödüller</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Ödüller</div>
               </button>
-              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <FileText className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Blog</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Blog</div>
               </button>
-              <button onClick={() => window.dispatchEvent(new Event('openSupportChat'))} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button onClick={() => window.dispatchEvent(new Event('openSupportChat'))} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Headphones className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Canlı Destek</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Canlı Destek</div>
               </button>
-              <button onClick={() => {onToggle(); setIsLangOpen(!isLangOpen);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
+              <button onClick={() => {onToggle(); setIsLangOpen(!isLangOpen);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#111111] transition-colors">
                 <Globe className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Dil Seçimi</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#111111] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Dil Seçimi</div>
               </button>
             </div>
           )}

@@ -38,29 +38,29 @@ const Footer: React.FC = () => {
             <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-2 font-['Outfit']">{t("payment_methods")}</h3>
             <div className="flex flex-wrap gap-2 sm:gap-3">
               {/* Crypto */}
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#F7931A]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
+              <div className="bg-[#111111] border border-[#252A35] hover:border-[#F7931A]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
                 <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=029" alt="Bitcoin" className="h-5 w-auto group-hover:scale-110 transition-transform" />
               </div>
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#627EEA]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
+              <div className="bg-[#111111] border border-[#252A35] hover:border-[#627EEA]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
                 <img src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=029" alt="Ethereum" className="h-5 w-auto group-hover:scale-110 transition-transform" />
               </div>
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#26A17B]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
+              <div className="bg-[#111111] border border-[#252A35] hover:border-[#26A17B]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
                 <img src="https://cryptologos.cc/logos/tether-usdt-logo.svg?v=029" alt="Tether" className="h-5 w-auto group-hover:scale-110 transition-transform" />
               </div>
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#FF0013]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
+              <div className="bg-[#111111] border border-[#252A35] hover:border-[#FF0013]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
                 <img src="https://cryptologos.cc/logos/tron-trx-logo.svg?v=029" alt="Tron" className="h-5 w-auto group-hover:scale-110 transition-transform" />
               </div>
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#F3BA2F]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
+              <div className="bg-[#111111] border border-[#252A35] hover:border-[#F3BA2F]/50 rounded-lg w-14 h-10 flex items-center justify-center transition-colors group">
                 <img src="https://cryptologos.cc/logos/bnb-bnb-logo.svg?v=029" alt="Binance Coin" className="h-5 w-auto group-hover:scale-110 transition-transform" />
               </div>
               {/* Fiat/Bank */}
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#10b981]/30 rounded-lg w-14 h-10 flex items-center justify-center transition-colors">
+              <div className="bg-[#111111] border border-[#252A35] hover:border-[#10b981]/30 rounded-lg w-14 h-10 flex items-center justify-center transition-colors">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" className="h-3 w-auto brightness-200 grayscale" />
               </div>
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-red-500/30 rounded-lg w-14 h-10 flex items-center justify-center transition-colors">
+              <div className="bg-[#111111] border border-[#252A35] hover:border-red-500/30 rounded-lg w-14 h-10 flex items-center justify-center transition-colors">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" className="h-4 w-auto" />
               </div>
-              <div className="bg-[#1A1D24] border border-[#252A35] hover:border-[#06b6d4]/50 rounded-lg px-4 h-10 flex items-center justify-center transition-colors">
+              <div className="bg-[#111111] border border-[#252A35] hover:border-[#06b6d4]/50 rounded-lg px-4 h-10 flex items-center justify-center transition-colors">
                 <span className="text-white font-bold text-[10px] sm:text-xs tracking-wider">{t("bank_transfer")}</span>
               </div>
             </div>
@@ -80,13 +80,13 @@ const Footer: React.FC = () => {
             <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-2 font-['Outfit']">{t("responsible_gaming")}</h3>
             
             <div className="flex flex-wrap lg:justify-end gap-3 mb-2">
-              <div className="bg-[#1A1D24] border border-red-500/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.15)]">
+              <div className="bg-[#111111] border border-red-500/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.15)]">
                 <span className="text-red-500 font-black text-lg">18+</span>
               </div>
-              <div className="bg-[#1A1D24] border border-[#06b6d4]/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,163,0.1)]">
+              <div className="bg-[#111111] border border-[#06b6d4]/30 rounded-full w-12 h-12 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,163,0.1)]">
                 <Lock className="text-[#06b6d4] w-5 h-5" />
               </div>
-              <div className="bg-[#1A1D24] border border-[#252A35] rounded-full px-4 h-12 flex items-center justify-center gap-2">
+              <div className="bg-[#111111] border border-[#252A35] rounded-full px-4 h-12 flex items-center justify-center gap-2">
                 <ShieldAlert className="text-white w-4 h-4" />
                 <span className="text-white font-bold text-xs uppercase">GambleAware</span>
               </div>

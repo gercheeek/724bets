@@ -75,7 +75,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                      <Wallet className="w-4 h-4 text-white" />
                   </div>
                </div>
-               <button className="w-10 h-10 rounded-full bg-[#1A1D24] border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+               <button className="w-10 h-10 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
                   <User className="w-5 h-5 text-gray-300" />
                </button>
              </>

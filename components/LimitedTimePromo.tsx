@@ -87,7 +87,7 @@ const LimitedTimePromo = () => {
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
               placeholder="PROMO KODU"
-              className="bg-[#1A1D29] border border-[#2A2E3D] text-white placeholder-[#848B9D] text-[13px] font-bold tracking-widest uppercase rounded-lg px-5 py-3.5 w-[200px] focus:outline-none focus:border-[#06b6d4] focus:shadow-[0_0_15px_rgba(0,255,163,0.15)] transition-all"
+              className="bg-[#111111] border border-[#2A2E3D] text-white placeholder-[#848B9D] text-[13px] font-bold tracking-widest uppercase rounded-lg px-5 py-3.5 w-[200px] focus:outline-none focus:border-[#06b6d4] focus:shadow-[0_0_15px_rgba(0,255,163,0.15)] transition-all"
             />
           </div>
 
@@ -108,7 +108,7 @@ const LimitedTimePromo = () => {
             localStorage.setItem('promoClosed', 'true');
             setIsVisible(false);
           }}
-          className="absolute top-3 right-3 text-[#848B9D] hover:text-white transition-colors bg-[#1A1D29] rounded-full p-1 border border-[#2A2E3D]"
+          className="absolute top-3 right-3 text-[#848B9D] hover:text-white transition-colors bg-[#111111] rounded-full p-1 border border-[#2A2E3D]"
         >
           <X className="w-4 h-4" />
         </button>
@@ -118,7 +118,7 @@ const LimitedTimePromo = () => {
     {/* Terms Modal */}
     {showTerms && typeof document !== 'undefined' && createPortal(
       <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div className="bg-[#1A1D29] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-md relative shadow-2xl animate-in fade-in zoom-in duration-300">
+        <div className="bg-[#111111] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-md relative shadow-2xl animate-in fade-in zoom-in duration-300">
           <button 
             onClick={() => setShowTerms(false)}
             className="absolute top-4 right-4 text-[#848B9D] hover:text-white transition-colors"

@@ -24,7 +24,7 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({
 
   return (
     <div 
-      className={`w-full bg-[#0B0E14] rounded-2xl md:rounded-3xl border border-white/5 hover:border-emerald-500/30 shadow-2xl overflow-hidden flex flex-col relative group cursor-pointer transition-colors duration-500 ${className}`}
+      className={`w-full bg-[#050505] rounded-2xl md:rounded-3xl border border-white/5 hover:border-emerald-500/30 shadow-2xl overflow-hidden flex flex-col relative group cursor-pointer transition-colors duration-500 ${className}`}
       onClick={isLoggedIn ? onAdventureClick : onLoginClick}
     >
       {/* Background FX - Solid Dark with Subtle Glow */}

@@ -111,7 +111,7 @@ const LiveMatches: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {[1, 2, 3].map(i => (
             <div key={i} style={{
-              background: '#1A1D24',
+              background: '#111111',
               borderRadius: '8px',
               padding: '20px',
               animation: 'pulse 1.5s infinite'
@@ -175,7 +175,7 @@ const LiveMatches: React.FC = () => {
           <div
             key={match.mac_id}
             style={{
-              background: '#1A1D24',
+              background: '#111111',
               borderRadius: '8px',
               padding: '20px',
               position: 'relative',
@@ -189,7 +189,7 @@ const LiveMatches: React.FC = () => {
               (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(0, 255, 163, 0.08)';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = '#1A1D24';
+              (e.currentTarget as HTMLElement).style.background = '#111111';
               (e.currentTarget as HTMLElement).style.boxShadow = 'none';
             }}
           >

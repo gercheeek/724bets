@@ -359,10 +359,10 @@ const SectionHeader: React.FC<{ title: string, icon?: React.ReactNode }> = ({ ti
       <h2 className="text-white text-lg font-black tracking-tight">{title}</h2>
     </div>
     <div className="flex gap-2">
-      <button className="w-8 h-8 rounded bg-[#1A1D29] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+      <button className="w-8 h-8 rounded bg-[#111111] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
         <ChevronLeft size={18} />
       </button>
-      <button className="w-8 h-8 rounded bg-[#1A1D29] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+      <button className="w-8 h-8 rounded bg-[#111111] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
         <ChevronRight size={18} />
       </button>
     </div>
@@ -505,7 +505,7 @@ export default function CasinoLobby({
   return (
     <div className="w-full h-full flex flex-col bg-transparent text-white min-w-0">
       {/* 1. TOP NAVBAR (Gamdom Style) */}
-      <div className="sticky top-0 z-40 bg-[#0F121A]/95 backdrop-blur-md border-b border-[#1A1D29] px-4 md:px-8 py-0">
+      <div className="sticky top-0 z-40 bg-[#0F121A]/95 backdrop-blur-md border-b border-[#111111] px-4 md:px-8 py-0">
         <div className="max-w-[1600px] mx-auto flex items-center justify-center md:justify-center gap-4 md:gap-8 overflow-x-auto hide-scrollbar">
           {TABS.map(tab => (
             <button
@@ -528,7 +528,7 @@ export default function CasinoLobby({
       <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-6 min-w-0">
         {/* 2. HERO BANNER */}
         {activeTab === 'all' && !searchQuery && (
-          <div className="relative w-full aspect-[21/9] md:aspect-[32/9] rounded-xl overflow-hidden mb-8 group bg-[#1A1D29]">
+          <div className="relative w-full aspect-[21/9] md:aspect-[32/9] rounded-xl overflow-hidden mb-8 group bg-[#111111]">
             {BANNERS.map((banner, idx) => (
               <div 
                 key={banner.id}
@@ -565,7 +565,7 @@ export default function CasinoLobby({
 
         {/* 3. FILTERS AND SEARCH */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
-          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#1A1D29] hover:bg-[#2A2E3D] border border-[#2A2E3D] rounded-lg text-white font-bold transition-colors">
+          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#111111] hover:bg-[#2A2E3D] border border-[#2A2E3D] rounded-lg text-white font-bold transition-colors">
             <Filter size={18} className="text-[#848B9D]" />
             Sağlayıcılar
           </button>
@@ -577,7 +577,7 @@ export default function CasinoLobby({
               placeholder="Oyun Ara..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#1A1D29] border border-[#2A2E3D] rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:border-[#10b981] transition-colors font-medium"
+              className="w-full bg-[#111111] border border-[#2A2E3D] rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:border-[#10b981] transition-colors font-medium"
             />
           </div>
         </div>
@@ -729,13 +729,13 @@ export default function CasinoLobby({
               </div>
             </div>
           ) : (
-            <div className="relative m-auto z-10 bg-[#1A1D29] rounded-2xl border border-[#2A2E3D] w-full max-w-[400px] shadow-2xl overflow-hidden animate-fade-in">
+            <div className="relative m-auto z-10 bg-[#111111] rounded-2xl border border-[#2A2E3D] w-full max-w-[400px] shadow-2xl overflow-hidden animate-fade-in">
               <button onClick={() => { setSelectedGame(null); setShowDemoIframe(false); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/40 hover:bg-black/60 rounded-full text-white transition-all z-20 backdrop-blur-sm">✕</button>
               
               <div className="relative aspect-video w-full flex flex-col items-center justify-center">
                 <div className="absolute inset-0 bg-[#0F121A]">
                   <img src={selectedGame.img || selectedGame.image} className={`w-full h-full object-cover opacity-50 ${selectedGame.category === 'originals' ? 'mix-blend-lighten' : ''}`} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A1D29] to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111111] to-transparent" />
                 </div>
                 
                 <div className="relative z-10 w-24 h-24 mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">

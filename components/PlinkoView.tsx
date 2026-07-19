@@ -146,14 +146,14 @@ export default function PlinkoView({ siteUser, setSiteUser, onAuthRequired }: an
                     </span>
                 </div>
                 
-                <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#1A1D29] px-3 py-1.5 rounded-full border border-white/5 z-20">
+                <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111] px-3 py-1.5 rounded-full border border-white/5 z-20">
                     <ShieldCheck className="w-4 h-4 text-gray-400" />
                     <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
                 </div>
 
                 {/* Payout Notification */}
                 {lastPayout && !isBetting && (
-                    <div className="absolute top-20 right-6 bg-[#1A1D29] border border-[#262A36] px-4 py-2 rounded-lg animate-fade-in-up z-50">
+                    <div className="absolute top-20 right-6 bg-[#111111] border border-[#262A36] px-4 py-2 rounded-lg animate-fade-in-up z-50">
                         <span className="text-gray-400 text-xs block mb-1">Son Kazanç</span>
                         <span className={`text-lg font-black ${lastPayout.multiplier >= 1 ? 'text-[#27D26D]' : 'text-gray-300'}`}>
                             {lastPayout.multiplier >= 1 ? '+' : ''}{lastPayout.amount.toFixed(2)} ₺

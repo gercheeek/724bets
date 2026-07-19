@@ -60,7 +60,7 @@ const SportsBanners: React.FC = () => {
       <div className="absolute inset-0 z-0 flex justify-end">
         <div className="w-[80%] h-full relative">
           {/* Soft mask to blend the left edge of the image smoothly */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent z-10 w-[60%]"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent z-10 w-[60%]"></div>
           
           <img 
             src={banner.bgImage} 
@@ -70,7 +70,7 @@ const SportsBanners: React.FC = () => {
         </div>
         
         {/* Global Dark Gradient to guarantee text readability on the left */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/90 to-transparent z-10 w-full"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent z-10 w-full"></div>
         
         {/* Colored Ambient Glow based on banner theme */}
         <div className={`absolute inset-0 bg-gradient-to-br ${banner.accentColor} opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10 mix-blend-screen`}></div>

@@ -59,7 +59,7 @@ const AnalysisDrawer: React.FC<{
 
     return (
         <div
-            className="overflow-hidden transition-all duration-500 relative bg-[#1A1D24]/50"
+            className="overflow-hidden transition-all duration-500 relative bg-[#111111]/50"
             style={{ background: 'rgba(14,18,26,0.7)' }}
         >
             {/* Stadium Background Blurred Layer */}
@@ -111,7 +111,7 @@ const AnalysisDrawer: React.FC<{
                                 <Search className="w-3.5 h-3.5 text-[#06b6d4]" />
                                 <span className="text-gray-500 font-black text-[9px] uppercase tracking-widest">TAKTİK ÖZET</span>
                             </div>
-                            <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#1A1D24]/40 p-3 rounded">
+                            <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#111111]/40 p-3 rounded">
                                 {analysis.tacticalSummary}
                             </p>
                         </div>
@@ -122,7 +122,7 @@ const AnalysisDrawer: React.FC<{
                                 <Zap className="w-3.5 h-3.5 text-[#06b6d4]" />
                                 <span className="text-gray-500 font-black text-[9px] uppercase tracking-widest">MAÇIN KIRILMA ANI</span>
                             </div>
-                            <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#1A1D24]/40 p-3 rounded">
+                            <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#111111]/40 p-3 rounded">
                                 {analysis.breakingPoint}
                             </p>
                         </div>
@@ -134,12 +134,12 @@ const AnalysisDrawer: React.FC<{
                                 <span className="text-gray-500 font-black text-[9px] uppercase tracking-widest">BAHİS SENARYOSU</span>
                             </div>
                             {isLoggedIn ? (
-                                <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#1A1D24]/40 p-3 rounded">
+                                <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#111111]/40 p-3 rounded">
                                     {analysis.bettingScenario}
                                 </p>
                             ) : (
                                 <div className="relative">
-                                    <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#1A1D24]/40 p-3 rounded" style={{ filter: 'blur(5px)', userSelect: 'none' }}>
+                                    <p className="text-gray-300 text-[13px] leading-relaxed italic pl-6 ml-1.5 bg-[#111111]/40 p-3 rounded" style={{ filter: 'blur(5px)', userSelect: 'none' }}>
                                         {analysis.bettingScenario}
                                     </p>
                                     <div className="absolute inset-0 flex items-center pl-5">
@@ -167,7 +167,7 @@ const AnalysisDrawer: React.FC<{
                             </div>
                             <div className="space-y-2">
                                 {analysis.bookieOdds.map((bookie, bidx) => (
-                                    <div key={bidx} className={`p-4 rounded-lg transition-colors ${bookie.isHighest ? 'bg-[#22262F] shadow-[0_0_15px_rgba(0,255,163,0.05)]' : 'bg-[#1A1D24] hover:bg-[#22262F]'}`}>
+                                    <div key={bidx} className={`p-4 rounded-lg transition-colors ${bookie.isHighest ? 'bg-[#22262F] shadow-[0_0_15px_rgba(0,255,163,0.05)]' : 'bg-[#111111] hover:bg-[#22262F]'}`}>
                                         <div className="flex items-center justify-between mb-2">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-white font-black text-[11px] uppercase">{bookie.name}</span>
@@ -208,7 +208,7 @@ const AnalysisDrawer: React.FC<{
                             </div>
                             <div className="space-y-2" style={{ filter: 'blur(6px)', userSelect: 'none', pointerEvents: 'none' }}>
                                 {['REALBET', 'MARSBAHİS', 'BETS10'].map((name, i) => (
-                                    <div key={i} className="p-4 rounded-lg bg-[#1A1D24]">
+                                    <div key={i} className="p-4 rounded-lg bg-[#111111]">
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-white font-black text-[11px] uppercase">{name}</span>
                                             {i === 1 && <span className="bg-[#06b6d4] text-[#000000] text-[7px] font-black px-1.5 py-0.5 rounded">EN YÜKSEK</span>}
@@ -353,11 +353,11 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                     className={`flex flex-col items-center justify-center min-w-[80px] sm:min-w-[90px] py-3 px-4 rounded-lg transition-all duration-300 relative ${
                                         isSelected
                                             ? 'bg-[#06b6d4] text-[#000000] shadow-[0_0_20px_rgba(0,255,163,0.35)] font-black scale-105 z-10'
-                                            : 'bg-[#1A1D24] hover:bg-[#22262F] text-gray-400 hover:text-white'
+                                            : 'bg-[#111111] hover:bg-[#22262F] text-gray-400 hover:text-white'
                                     }`}
                                 >
                                     {isToday && (
-                                        <span className={`absolute top-1 right-1.5 w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#1A1D24]' : 'bg-[#06b6d4] animate-pulse'}`} />
+                                        <span className={`absolute top-1 right-1.5 w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#111111]' : 'bg-[#06b6d4] animate-pulse'}`} />
                                     )}
                                     <span className="text-[9px] uppercase tracking-widest font-black opacity-80 mb-0.5">
                                         {isToday ? 'Bugün' : d.toLocaleDateString('tr-TR', { weekday: 'short' })}
@@ -427,12 +427,12 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                 <div
                                                     key={analysis.id}
                                                     className="relative rounded-lg overflow-hidden transition-all duration-150 shadow-[0_0_15px_rgba(0,255,163,0.02)]"
-                                                    style={{ background: '#1A1D24' }}
+                                                    style={{ background: '#111111' }}
                                                 >
                                                     {/* Blurred preview */}
                                                     <div className="flex flex-col md:flex-row md:items-center justify-between p-6 gap-4 select-none" style={{ filter: 'blur(4px)', userSelect: 'none' }}>
                                                         <div className="flex flex-wrap items-center gap-3 flex-1 min-w-0">
-                                                            <span className="text-[11px] font-bold text-gray-400 px-3 py-1.5 rounded shrink-0" style={{ background: '#1A1D24' }}>
+                                                            <span className="text-[11px] font-bold text-gray-400 px-3 py-1.5 rounded shrink-0" style={{ background: '#111111' }}>
                                                                 🕐 {analysis.matchTime}
                                                             </span>
                                                             <span className="text-[10px] font-black text-[#06b6d4] uppercase px-3 py-1 rounded shrink-0" style={{ background: 'rgba(0,255,163,0.1)' }}>
@@ -445,7 +445,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                             </div>
                                                         </div>
                                                         <div className="flex items-center gap-2 shrink-0">
-                                                            <div className="px-4 py-2 rounded-lg text-center min-w-[60px]" style={{ background: '#1A1D24' }}>
+                                                            <div className="px-4 py-2 rounded-lg text-center min-w-[60px]" style={{ background: '#111111' }}>
                                                                 <span className="block text-[8px] text-gray-500 uppercase font-bold">GÜVEN</span>
                                                                 <span className="text-xs font-black text-[#00E676]">%{analysis.confidence}</span>
                                                             </div>
@@ -470,7 +470,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                         return (
                                             <div
                                                 key={analysis.id}
-                                                className={`relative rounded-lg overflow-hidden transition-all duration-200 ${isExpanded ? 'bg-[#22262F] shadow-[0_0_25px_rgba(0,255,163,0.1)]' : 'bg-[#1A1D24] hover:bg-[#22262F] shadow-[0_0_15px_rgba(0,255,163,0.03)]'}`}
+                                                className={`relative rounded-lg overflow-hidden transition-all duration-200 ${isExpanded ? 'bg-[#22262F] shadow-[0_0_25px_rgba(0,255,163,0.1)]' : 'bg-[#111111] hover:bg-[#22262F] shadow-[0_0_15px_rgba(0,255,163,0.03)]'}`}
                                             >
                                                 {/* Main Row */}
                                                 <div
@@ -480,7 +480,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
                                                     {/* Left: Time + League + Teams */}
                                                     <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
                                                         {/* Time badge */}
-                                                        <span className="text-[11px] font-bold text-gray-400 px-3 py-1.5 rounded shrink-0 flex items-center gap-1" style={{ background: '#1A1D24' }}>
+                                                        <span className="text-[11px] font-bold text-gray-400 px-3 py-1.5 rounded shrink-0 flex items-center gap-1" style={{ background: '#111111' }}>
                                                             🕐 {analysis.matchTime}
                                                         </span>
 
@@ -506,11 +506,11 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analyses = [], coupons = []
 
                                                     {/* Middle: Prediction / Odds / Confidence */}
                                                     <div className="flex items-center gap-2 shrink-0">
-                                                        <div className="px-4 py-2 rounded-lg text-center min-w-[70px]" style={{ background: '#1A1D24' }}>
+                                                        <div className="px-4 py-2 rounded-lg text-center min-w-[70px]" style={{ background: '#111111' }}>
                                                             <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">TAHMİN</span>
                                                             <span className="text-[11px] font-black text-[#00E676]">{analysis.prediction}</span>
                                                         </div>
-                                                        <div className="px-4 py-2 rounded-lg text-center min-w-[55px]" style={{ background: '#1A1D24' }}>
+                                                        <div className="px-4 py-2 rounded-lg text-center min-w-[55px]" style={{ background: '#111111' }}>
                                                             <span className="block text-[8px] text-gray-500 uppercase font-bold mb-0.5">ORAN</span>
                                                             <span className="text-[11px] font-black text-[#06b6d4]">{highestOdds?.odd1 || '—'}</span>
                                                         </div>

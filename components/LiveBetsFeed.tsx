@@ -179,7 +179,7 @@ const LiveBetsFeed: React.FC = () => {
           onClick={() => setActiveTab('recent')}
           className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all ${
             activeTab === 'recent' 
-            ? 'bg-[#1A1D24] text-white shadow-lg border border-[#2C2F3D]' 
+            ? 'bg-[#111111] text-white shadow-lg border border-[#2C2F3D]' 
             : 'text-gray-400 hover:text-white hover:bg-white/5'
           }`}
         >
@@ -189,7 +189,7 @@ const LiveBetsFeed: React.FC = () => {
           onClick={() => setActiveTab('big')}
           className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all ${
             activeTab === 'big' 
-            ? 'bg-[#1A1D24] text-white shadow-lg border border-[#2C2F3D]' 
+            ? 'bg-[#111111] text-white shadow-lg border border-[#2C2F3D]' 
             : 'text-gray-400 hover:text-white hover:bg-white/5'
           }`}
         >
@@ -201,7 +201,7 @@ const LiveBetsFeed: React.FC = () => {
       <div className="bg-[#12141A] rounded-xl border border-[#2C2F3D] overflow-hidden shadow-2xl">
         
         {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-[#1A1D24] border-b border-[#2C2F3D] text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+        <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-[#111111] border-b border-[#2C2F3D] text-[11px] font-bold text-gray-400 uppercase tracking-wider">
           <div className="col-span-4">Oyun</div>
           <div className="col-span-3">Kullanıcı</div>
           <div className="col-span-2 text-right">Bahis miktarı</div>
@@ -214,7 +214,7 @@ const LiveBetsFeed: React.FC = () => {
           {displayBets.map((bet, index) => (
             <div 
               key={bet.id}
-              className="grid grid-cols-12 gap-4 px-6 py-3.5 border-b border-[#2C2F3D]/50 hover:bg-[#1A1D24] transition-colors items-center animate-fade-in-down"
+              className="grid grid-cols-12 gap-4 px-6 py-3.5 border-b border-[#2C2F3D]/50 hover:bg-[#111111] transition-colors items-center animate-fade-in-down"
             >
               {/* Oyun */}
               <div className="col-span-4 flex items-center gap-2">

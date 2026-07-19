@@ -188,7 +188,7 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
 
           {/* Game Rules Section */}
           {data.rules && (
-            <div className="bg-[#0B0E14] rounded-lg p-3 flex items-start gap-3 border border-white/5">
+            <div className="bg-[#050505] rounded-lg p-3 flex items-start gap-3 border border-white/5">
               <Info className="w-4 h-4 text-[#06b6d4] shrink-0 mt-0.5" />
               <p className="text-gray-400 text-[11px] leading-relaxed">
                 {data.rules}
@@ -239,7 +239,7 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="bg-[#151821] px-5 py-3 border-t border-[#2A2E3D] flex justify-between items-center cursor-pointer hover:bg-[#1A1D29] transition-colors group">
+        <div className="bg-[#151821] px-5 py-3 border-t border-[#2A2E3D] flex justify-between items-center cursor-pointer hover:bg-[#111111] transition-colors group">
           <span className="text-gray-400 text-xs font-semibold group-hover:text-gray-300">Kanıtlanabilir Şekilde Adil (Provably Fair)</span>
           <ExternalLink className="w-3.5 h-3.5 text-gray-500 group-hover:text-gray-300" />
         </div>

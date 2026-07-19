@@ -666,12 +666,12 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
     const isAdmin = isAuthorized(userRole);
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0F1219] shadow-2xl font-sans text-left relative">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#050505] shadow-2xl font-sans text-left relative">
             
             {/* Chat Rules Overlay */}
             {showRules && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-[#1A1D24] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-sm shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                    <div className="bg-[#111111] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-sm shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
                         <div className="flex items-center gap-3 mb-6">
                             <Shield className="w-6 h-6 text-[#10B981]" />
                             <h2 className="text-lg font-black text-white tracking-wider">SOHBET KURALLARI</h2>
@@ -709,11 +709,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             )}
 
             {/* Header */}
-            <div className="bg-[#0F1219] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5 shadow-sm">
+            <div className="bg-[#050505] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5 shadow-sm">
                 <div className="flex items-center gap-3 relative">
                     <div 
                         onClick={() => setShowLangMenu(!showLangMenu)}
-                        className="flex items-center gap-2 bg-[#1A1D24] border border-[#2A2E3D] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#20242D] hover:border-white/20 cursor-pointer transition-all shadow-inner relative z-20"
+                        className="flex items-center gap-2 bg-[#111111] border border-[#2A2E3D] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#20242D] hover:border-white/20 cursor-pointer transition-all shadow-inner relative z-20"
                     >
                         <img src={`https://flagcdn.com/w20/${activeLang.flag}.png`} alt={activeLang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
                         <span className="text-gray-200">{activeLang.name}</span>
@@ -724,7 +724,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     {showLangMenu && (
                         <>
                             <div className="fixed inset-0 z-10" onClick={() => setShowLangMenu(false)}></div>
-                            <div className="absolute top-full mt-2 left-0 w-36 bg-[#1A1D24] border border-[#2A2E3D] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-20 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="absolute top-full mt-2 left-0 w-36 bg-[#111111] border border-[#2A2E3D] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-20 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                                 {LANGUAGES.map(lang => (
                                     <div 
                                         key={lang.id}
@@ -740,7 +740,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     )}
                 </div>
                 <div className="flex items-center gap-4 text-zinc-400">
-                    <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#1A1D24] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
+                    <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#111111] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
                         <span className="relative flex h-2 w-2">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -828,7 +828,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             }}
                         >
                             {/* Avatar */}
-                            <div className={`w-8 h-8 rounded-full bg-[#1A1D24] flex-shrink-0 overflow-hidden mt-0.5 border ${msg.role?.toUpperCase() === 'ADMIN' ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-white/10'}`}>
+                            <div className={`w-8 h-8 rounded-full bg-[#111111] flex-shrink-0 overflow-hidden mt-0.5 border ${msg.role?.toUpperCase() === 'ADMIN' ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-white/10'}`}>
                                 <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.username}`} alt={msg.username} className="w-full h-full object-cover" />
                             </div>
 
@@ -867,7 +867,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                                 </button>
 
                                 {activeMenuId === msg.id && (
-                                  <div className="absolute right-0 mt-1 bg-[#1A1D24] rounded-lg shadow-2xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
+                                  <div className="absolute right-0 mt-1 bg-[#111111] rounded-lg shadow-2xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
                                     <button 
                                       onClick={() => {
                                         handlePinMessage(msg.message, msg.username, msg.role || 'member');
@@ -920,7 +920,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
 
             {/* Canlı Kazananlar Sabit Penceresi */}
             {liveWins.length > 0 && (
-                <div className="px-4 py-2.5 bg-[#0F1219] border-t border-b border-white/5 flex flex-col gap-2 relative z-20">
+                <div className="px-4 py-2.5 bg-[#050505] border-t border-b border-white/5 flex flex-col gap-2 relative z-20">
                     <div className="flex items-center justify-between text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
                         <span>Canlı Kazananlar</span>
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -950,7 +950,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             )}
 
             {/* Input Footer Area */}
-            <div className="px-4 py-4 bg-[#0F1219] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
+            <div className="px-4 py-4 bg-[#050505] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
                 {/* Message Input */}
                 {!siteUser ? (
                     <div className="flex flex-col items-center justify-center">
@@ -958,7 +958,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             type="text"
                             disabled
                             placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
-                            className="w-full bg-[#1A1D24] border border-[#2A2E3D] text-[12px] font-bold text-center text-gray-500 rounded-xl px-4 py-3.5 cursor-not-allowed shadow-inner"
+                            className="w-full bg-[#111111] border border-[#2A2E3D] text-[12px] font-bold text-center text-gray-500 rounded-xl px-4 py-3.5 cursor-not-allowed shadow-inner"
                         />
                     </div>
                 ) : (

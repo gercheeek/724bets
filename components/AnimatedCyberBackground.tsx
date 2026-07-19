@@ -112,8 +112,8 @@ const AnimatedCyberBackground: React.FC = () => {
         className="absolute inset-0 w-full h-full opacity-30 mix-blend-screen"
       />
       {/* Overlay gradient to blend with the rest of the site */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/70 to-transparent w-[90%] md:w-[70%]"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E14] via-transparent to-transparent opacity-60"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/70 to-transparent w-[90%] md:w-[70%]"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-60"></div>
     </div>
   );
 };

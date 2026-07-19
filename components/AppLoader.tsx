@@ -38,7 +38,7 @@ const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false, onComplete, isRe
             </div>
           </span>
         </div>
-        <div className="mt-8 w-32 h-1 bg-[#1A1D29] rounded-full overflow-hidden">
+        <div className="mt-8 w-32 h-1 bg-[#111111] rounded-full overflow-hidden">
           <div className="h-full bg-[#06b6d4] w-1/2 rounded-full animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
         </div>
       </div>

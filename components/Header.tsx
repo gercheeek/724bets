@@ -347,7 +347,7 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[72px] bg-[#0B0E14] border-b border-transparent flex justify-center">
+      <div className="header-topbar relative w-full h-[72px] bg-[#050505] border-b border-transparent flex justify-center">
         <div className="w-full max-w-[1400px] px-2 md:px-4 h-full flex items-center justify-between">
             {/* Left: Hamburger & Logo & Desktop Tabs */}
             <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
@@ -384,7 +384,7 @@ const Header: React.FC<HeaderProps> = ({
         {/* Center: Wallet Pill (Only if logged in) */}
         <div className="hidden md:flex items-center justify-center flex-[1.5] z-10">
           {siteUser && (
-            <div className="relative flex items-center bg-[#14141a] rounded-lg md:rounded-xl pl-3 pr-0 py-0 border border-white/10 h-[36px] md:h-[44px] shadow-sm" ref={walletDropdownRef}>
+            <div className="relative flex items-center bg-[#111111] rounded-lg md:rounded-xl pl-3 pr-0 py-0 border border-white/10 h-[36px] md:h-[44px] shadow-sm" ref={walletDropdownRef}>
               
               {/* Balance Section */}
               <div 
@@ -408,7 +408,7 @@ const Header: React.FC<HeaderProps> = ({
               </button>
 
               {walletDropdownOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-[#0B0E14] border border-white/10 shadow-2xl text-left overflow-hidden">
+                <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-[#050505] border border-white/10 shadow-2xl text-left overflow-hidden">
                   
                   {/* Search bar */}
                   <div className="p-3 border-b border-white/10">
@@ -419,7 +419,7 @@ const Header: React.FC<HeaderProps> = ({
                         value={walletSearch}
                         onChange={(e) => setWalletSearch(e.target.value)}
                         placeholder={t("wallet_ara")} 
-                        className="w-full bg-[#14141a] border border-white/10 rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#1A7BF2] transition-colors placeholder-zinc-400"
+                        className="w-full bg-[#111111] border border-white/10 rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#1A7BF2] transition-colors placeholder-zinc-400"
                       />
                     </div>
                   </div>
@@ -437,7 +437,7 @@ const Header: React.FC<HeaderProps> = ({
                       { sym: 'XRP', icon: '✕', bg: '#23292F' },
                       { sym: 'TRX', icon: '💎', bg: '#FF0013' }
                     ].filter(c => c.sym.toLowerCase().includes(walletSearch.toLowerCase())).map((crypto, idx) => (
-                      <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#14141a] cursor-pointer transition-colors group">
+                      <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#111111] cursor-pointer transition-colors group">
                         <span className="text-white font-bold text-[14px] md:text-[15px] font-mono tracking-tight group-hover:text-white/90">{(crypto.sym === 'USDT' ? (siteUser.balance || 0) : 0).toFixed(8)}</span>
                         <div className="flex items-center gap-2">
                           <div 
@@ -453,7 +453,7 @@ const Header: React.FC<HeaderProps> = ({
                   </div>
 
                   {/* Footer Button */}
-                  <button className="w-full flex items-center justify-center gap-2 py-3.5 text-white bg-[#14141a] hover:bg-[#1a1a22] font-bold text-sm transition-colors border-t border-white/10">
+                  <button className="w-full flex items-center justify-center gap-2 py-3.5 text-white bg-[#111111] hover:bg-[#1a1a22] font-bold text-sm transition-colors border-t border-white/10">
                     <Briefcase className="w-4 h-4 text-zinc-400" />
                     {t('wallet_ayarlar')}
                   </button>
@@ -486,7 +486,7 @@ const Header: React.FC<HeaderProps> = ({
             </button>
             
             {langDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-32 bg-[#0B0E14] border border-white/5 rounded-xl shadow-2xl z-50 overflow-hidden py-2 animate-fade-in">
+              <div className="absolute right-0 mt-2 w-32 bg-[#050505] border border-white/5 rounded-xl shadow-2xl z-50 overflow-hidden py-2 animate-fade-in">
                 <button onClick={() => { setLanguage('tr'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'tr' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
                   <span className="text-base">🇹🇷</span>
                   <span className="font-semibold text-sm">TR</span>
@@ -517,13 +517,13 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   <img 
                     src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
-                    className="w-full h-full object-cover bg-[#14141a]" 
+                    className="w-full h-full object-cover bg-[#111111]" 
                     alt="avatar" 
                   />
                 </button>
 
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-[#0B0E14] border border-white/5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
+                  <div className="absolute right-0 mt-2 w-64 bg-[#050505] border border-white/5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
                     <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
                       <User className="w-5 h-5 text-zinc-400 group-hover:text-white" />
                       <span className="font-semibold text-sm">{t('profile_profil')}</span>

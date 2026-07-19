@@ -87,7 +87,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
 
   return (
     <div style={{
-      background: '#1A1D24',
+      background: '#111111',
       border: 'none',
       borderRadius: '8px',
       padding: '16px',

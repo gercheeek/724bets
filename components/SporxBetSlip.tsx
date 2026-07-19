@@ -12,7 +12,7 @@ export const SporxBetSlip = () => {
   return (
     <div className="w-[320px] flex-shrink-0 bg-[#20252D] flex flex-col h-full border-l border-white/5">
       {/* Header & Tabs */}
-      <div className="px-4 pt-4 pb-2 bg-[#1A1D24] border-b border-white/5">
+      <div className="px-4 pt-4 pb-2 bg-[#111111] border-b border-white/5">
         <div className="flex items-center gap-2 mb-4 justify-center text-[#06b6d4]">
           <Trophy className="w-5 h-5" />
           <span className="font-bold tracking-wide uppercase">Kuponum</span>
@@ -37,7 +37,7 @@ export const SporxBetSlip = () => {
       {betSelections.length > 0 ? (
         <div className="flex-1 flex flex-col p-3 gap-2 overflow-y-auto custom-scrollbar bg-[#161920]">
           {betSelections.map(bet => (
-            <div key={bet.id} className="bg-[#1A1D24] rounded-xl p-3 border border-white/5 relative group hover:border-white/10 transition-colors">
+            <div key={bet.id} className="bg-[#111111] rounded-xl p-3 border border-white/5 relative group hover:border-white/10 transition-colors">
               <button 
                 onClick={() => removeBetSelection(bet.id)}
                 className="absolute top-2 right-2 p-1.5 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-md transition-colors"
@@ -58,7 +58,7 @@ export const SporxBetSlip = () => {
           ))}
           
           <div className="mt-auto pt-4 flex flex-col gap-3">
-            <div className="bg-[#1A1D24] rounded-xl p-4 border border-white/5">
+            <div className="bg-[#111111] rounded-xl p-4 border border-white/5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-bold text-zinc-400">Toplam Oran</span>
                 <span className="text-lg font-black text-[#06b6d4]">{totalOdds.toFixed(2)}</span>
@@ -102,14 +102,14 @@ export const SporxBetSlip = () => {
           </p>
           
           <div className="w-full flex flex-col gap-2">
-            <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#1A1D24] border border-white/5 text-zinc-300 transition-colors group">
+            <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#111111] border border-white/5 text-zinc-300 transition-colors group">
               <div className="flex items-center gap-3">
                 <Activity className="w-5 h-5 text-[#06b6d4]" />
                 <span className="text-sm font-bold">Spor bahisleri</span>
               </div>
               <span className="text-zinc-600 group-hover:text-[#06b6d4] transition-colors">→</span>
             </button>
-            <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#1A1D24] border border-white/5 text-zinc-300 transition-colors group">
+            <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#111111] border border-white/5 text-zinc-300 transition-colors group">
               <div className="flex items-center gap-3">
                 <Star className="w-5 h-5 text-[#06b6d4]" />
                 <span className="text-sm font-bold">Canlı Bahis</span>

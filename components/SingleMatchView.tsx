@@ -74,7 +74,7 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
       <div className="flex items-center gap-4 px-6 py-4 border-b border-[#202532] bg-[#0E1116] sticky top-0 z-20">
         <button 
           onClick={onBack}
-          className="w-8 h-8 flex items-center justify-center rounded bg-[#1A1D24] text-zinc-400 hover:text-[#06b6d4] hover:bg-[#06b6d4]/10 transition-colors border border-transparent hover:border-[#06b6d4]/30"
+          className="w-8 h-8 flex items-center justify-center rounded bg-[#111111] text-zinc-400 hover:text-[#06b6d4] hover:bg-[#06b6d4]/10 transition-colors border border-transparent hover:border-[#06b6d4]/30"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
@@ -83,7 +83,7 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
           <span className="text-sm font-bold text-zinc-200">{match.home} - {match.away}</span>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <button className="w-8 h-8 flex items-center justify-center rounded bg-[#1A1D24] text-zinc-400 hover:text-yellow-400 hover:bg-yellow-400/10 transition-colors">
+          <button className="w-8 h-8 flex items-center justify-center rounded bg-[#111111] text-zinc-400 hover:text-yellow-400 hover:bg-yellow-400/10 transition-colors">
             <Star className="w-4 h-4" />
           </button>
         </div>
@@ -102,7 +102,7 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
           </div>
 
           <div className="flex flex-col items-center px-8">
-            <span className="text-zinc-400 text-xs font-bold mb-2 tracking-widest uppercase bg-[#1A1D24] px-3 py-1 rounded-full border border-[#202532] shadow-inner">{match.time}</span>
+            <span className="text-zinc-400 text-xs font-bold mb-2 tracking-widest uppercase bg-[#111111] px-3 py-1 rounded-full border border-[#202532] shadow-inner">{match.time}</span>
             {match.isLive ? (
               <div className="flex items-center gap-4 text-5xl font-black text-[#06b6d4] tracking-tighter drop-shadow-[0_0_15px_rgba(0,255,163,0.3)]">
                 <span>{match.scoreHome}</span>
@@ -138,7 +138,7 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
             className={`px-6 py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-all ${
               activeTab === cat 
                 ? 'border-[#06b6d4] text-[#06b6d4] bg-[#06b6d4]/5' 
-                : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-[#1A1D24]'
+                : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-[#111111]'
             }`}
           >
             {cat}
@@ -165,7 +165,7 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
                   </div>
                   <div className={`p-4 grid gap-2 ${market.selections.length > 3 ? 'grid-cols-3' : `grid-cols-${market.selections.length}`}`}>
                     {market.selections.map((opt: any, i: number) => (
-                      <button key={i} className="group relative flex flex-col items-center justify-center h-14 bg-[#1A1D24] border border-[#202532] rounded hover:border-[#06b6d4]/50 hover:bg-[#06b6d4]/5 transition-all overflow-hidden">
+                      <button key={i} className="group relative flex flex-col items-center justify-center h-14 bg-[#111111] border border-[#202532] rounded hover:border-[#06b6d4]/50 hover:bg-[#06b6d4]/5 transition-all overflow-hidden">
                         <span className="text-zinc-500 text-[10px] font-bold group-hover:text-zinc-300">{opt.label}</span>
                         <span className="text-white font-black mt-0.5 group-hover:text-[#06b6d4]">{opt.odds}</span>
                       </button>

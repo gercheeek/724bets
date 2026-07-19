@@ -203,12 +203,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           {/* Left Column: Premium VIP Progress Card */}
           <div 
             onClick={() => onViewChange('originals')}
-            className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_60px_rgba(234,179,8,0.15)] hover:border-yellow-500/30 overflow-hidden group cursor-pointer bg-[#0B0E14] transition-all duration-500"
+            className="relative rounded-xl border border-white/10 p-5 lg:p-6 flex flex-col justify-between h-auto min-h-[200px] lg:h-full shadow-[0_20px_60px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_60px_rgba(234,179,8,0.15)] hover:border-yellow-500/30 overflow-hidden group cursor-pointer bg-[#050505] transition-all duration-500"
           >
             {/* Background Image / Gradients */}
             <div className="absolute inset-0 z-0">
               <img src="/images/vip_bg.jpg" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-1000" alt="" />
-              <div className="absolute inset-0 bg-[#0B0E14]/50"></div>
+              <div className="absolute inset-0 bg-[#050505]/50"></div>
             </div>
             
             {/* Crown watermark */}
@@ -267,12 +267,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           <div className="lg:col-span-2 w-full grid grid-cols-2 lg:flex lg:flex-col gap-3 md:gap-4">
             
             {/* Top Third: Originals */}
-            <div onClick={() => onViewChange('originals')} className="col-span-2 lg:col-span-1 relative flex-1 w-full h-[90px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.3)] group/orig">
+            <div onClick={() => onViewChange('originals')} className="col-span-2 lg:col-span-1 relative flex-1 w-full h-[90px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.3)] group/orig">
                 <div className="absolute inset-0 z-0 flex justify-end">
                   <div className="w-[100%] sm:w-[80%] h-full relative">
                     <img src="/images/ai-generated/originals_card.jpg" alt="Originals" className="w-full h-full object-cover object-[center] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent w-full"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                 </div>
                 <div className="relative z-20 flex flex-col justify-center lg:justify-start items-start pt-0 lg:pt-5 h-full px-4 lg:px-6">
                     <h3 className="text-[22px] sm:text-[28px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/orig:translate-x-1 transition-transform flex flex-wrap items-center gap-1 sm:gap-2">
@@ -286,12 +286,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
 
             {/* Middle Third: Casino */}
-            <div onClick={() => onViewChange('blackjack')} className="col-span-1 relative flex-1 w-full h-[85px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/casino">
+            <div onClick={() => onViewChange('blackjack')} className="col-span-1 relative flex-1 w-full h-[85px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/casino">
                 <div className="absolute inset-0 z-0 flex justify-end">
                   <div className="w-[100%] sm:w-[80%] h-full relative">
                     <img src="/images/ai-generated/casino_card.jpg" alt="Casino" className="w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/casino:opacity-100" />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent w-full"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                 </div>
                 <div className="relative z-20 flex flex-col justify-center lg:justify-start items-start pt-0 lg:pt-5 h-full px-4 lg:px-6">
                     <h3 className="text-[20px] sm:text-[24px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-0.5 lg:pb-1 transform group-hover/casino:translate-x-1 transition-transform">Casino</h3>
@@ -300,12 +300,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
 
             {/* Bottom Third: Sports */}
-            <div onClick={() => onViewChange('sports')} className="col-span-1 relative flex-1 w-full h-[85px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/sports">
+            <div onClick={() => onViewChange('sports')} className="col-span-1 relative flex-1 w-full h-[85px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/sports">
                 <div className="absolute inset-0 z-0 flex justify-end">
                   <div className="w-[100%] sm:w-[80%] h-full relative">
                     <img src="/images/ai-generated/sports_card.jpg" alt="Sports Betting" className="w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/sports:opacity-100" />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent w-full"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                 </div>
                 <div className="relative z-20 flex flex-col justify-center lg:justify-start items-start pt-0 lg:pt-5 h-full px-4 lg:px-6">
                     <h3 className="text-[20px] sm:text-[24px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-0.5 lg:pb-1 transform group-hover/sports:translate-x-1 transition-transform">Spor</h3>
@@ -349,12 +349,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             {/* Category Navigation Cards (Web: 3 cols, Mobile: grid) */}
             <div className="w-full grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mt-6">
                 {/* Originals */}
-                <div onClick={() => onViewChange('originals')} className="col-span-2 md:col-span-1 relative w-full h-[90px] md:h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.3)] group/orig">
+                <div onClick={() => onViewChange('originals')} className="col-span-2 md:col-span-1 relative w-full h-[90px] md:h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.3)] group/orig">
                     <div className="absolute inset-0 z-0 flex justify-end">
                       <div className="w-[100%] sm:w-[80%] h-full relative">
                         <img src="/images/ai-generated/originals_card.jpg" alt="Originals" className="w-full h-full object-cover object-[center] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent w-full"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                     </div>
                     <div className="relative z-20 flex flex-col justify-center items-start h-full px-4 lg:px-6">
                         <h3 className="text-[24px] sm:text-[28px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/orig:translate-x-1 transition-transform flex flex-wrap items-center gap-1 sm:gap-2">
@@ -368,12 +368,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
 
                 {/* Casino */}
-                <div onClick={() => onViewChange('blackjack')} className="col-span-1 relative w-full h-[85px] md:h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/casino">
+                <div onClick={() => onViewChange('blackjack')} className="col-span-1 relative w-full h-[85px] md:h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/casino">
                     <div className="absolute inset-0 z-0 flex justify-end">
                       <div className="w-[100%] sm:w-[80%] h-full relative">
                         <img src="/images/ai-generated/casino_card.jpg" alt="Casino" className="w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/casino:opacity-100" />
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent w-full"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                     </div>
                     <div className="relative z-20 flex flex-col justify-center items-start h-full px-4 lg:px-6">
                         <h3 className="text-[20px] sm:text-[24px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-0.5 lg:pb-1 transform group-hover/casino:translate-x-1 transition-transform">Casino</h3>
@@ -382,12 +382,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
 
                 {/* Sports */}
-                <div onClick={() => onViewChange('sports')} className="col-span-1 relative w-full h-[85px] md:h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0B0E14] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/sports">
+                <div onClick={() => onViewChange('sports')} className="col-span-1 relative w-full h-[85px] md:h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/sports">
                     <div className="absolute inset-0 z-0 flex justify-end">
                       <div className="w-[100%] sm:w-[80%] h-full relative">
                         <img src="/images/ai-generated/sports_card.jpg" alt="Sports Betting" className="w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/sports:opacity-100" />
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/80 to-transparent w-full"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                     </div>
                     <div className="relative z-20 flex flex-col justify-center items-start h-full px-4 lg:px-6">
                         <h3 className="text-[20px] sm:text-[24px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-0.5 lg:pb-1 transform group-hover/sports:translate-x-1 transition-transform">Spor</h3>
@@ -448,9 +448,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       <div className="w-full px-4 pb-12 hidden md:block max-w-[1600px] mx-auto">
         <div className="grid grid-cols-3 gap-4">
           {promoCards.map((card, idx) => (
-            <div key={idx} className="relative overflow-hidden rounded-xl bg-[#0B0E14] border border-white/5 hover:border-[#06b6d4]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
+            <div key={idx} className="relative overflow-hidden rounded-xl bg-[#050505] border border-white/5 hover:border-[#06b6d4]/30 h-[130px] flex p-6 items-center shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_30px_rgba(0,255,163,0.15)] group cursor-pointer transition-all duration-300 hover:-translate-y-1">
               {/* Premium Background */}
-              <div className="absolute inset-0 z-0 bg-[#14141a] group-hover:bg-[#1a1a22] transition-colors duration-500">
+              <div className="absolute inset-0 z-0 bg-[#111111] group-hover:bg-[#1a1a22] transition-colors duration-500">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.05),transparent_70%)] group-hover:bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.1),transparent_70%)] transition-colors duration-500"></div>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
@@ -490,7 +490,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
              </div>
           ) : showDemoIframe && getDemoUrl(selectedGame) ? (
             <div className="relative w-full h-[100dvh] md:max-w-[1600px] md:w-[95vw] md:h-[90vh] bg-black md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:border border-white/5 m-auto">
-               <div className="h-12 md:h-14 bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 flex-shrink-0">
+               <div className="h-12 md:h-14 bg-[#050505] flex items-center justify-between px-4 md:px-6 flex-shrink-0">
                   <div className="flex items-center gap-3">
                      <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.name || selectedGame.title} <span className="text-[#06b6d4] font-black text-[10px] md:text-xs ml-2 border border-[#06b6d4]/30 bg-[#06b6d4]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
                   </div>
@@ -508,7 +508,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                </div>
             </div>
           ) : (
-            <div className="relative w-full md:max-w-[500px] bg-[#0B0E14] md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:border border-white/5 m-auto p-6 md:p-8 text-center animate-fade-in">
+            <div className="relative w-full md:max-w-[500px] bg-[#050505] md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:border border-white/5 m-auto p-6 md:p-8 text-center animate-fade-in">
                 <button onClick={() => { setShowDemoIframe(false); setSelectedGame(null); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
                   <X className="w-4 h-4" />
                 </button>

@@ -93,7 +93,7 @@ const BetBuilderCards: React.FC = () => {
         {cards.map((card) => (
           <div 
             key={card.id} 
-            className={`relative min-w-[300px] max-w-[320px] bg-[#1A1D24] rounded-xl border border-transparent p-4 flex flex-col hover:bg-[#1E222A] cursor-pointer transition-all ${card.borderClass}`}
+            className={`relative min-w-[300px] max-w-[320px] bg-[#111111] rounded-xl border border-transparent p-4 flex flex-col hover:bg-[#1E222A] cursor-pointer transition-all ${card.borderClass}`}
             style={{ 
               borderWidth: card.isSuper ? '2px' : '1px', 
               borderColor: card.isSuper ? '#f97316' : '#2A303D',

@@ -126,7 +126,7 @@ export default function LiveWinsTicker() {
               className="flex-shrink-0 flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-2 group w-[100px] md:w-[130px]"
             >
               {/* Game Cover */}
-              <div className="w-full aspect-[3/4] rounded-[12px] md:rounded-2xl overflow-hidden relative shadow-[0_5px_15px_rgba(0,0,0,0.5)] mb-3 bg-[#14141a] border border-white/10 group-hover:border-[#00E676]/50 group-hover:shadow-[0_0_20px_rgba(0,230,118,0.2)] transition-all">
+              <div className="w-full aspect-[3/4] rounded-[12px] md:rounded-2xl overflow-hidden relative shadow-[0_5px_15px_rgba(0,0,0,0.5)] mb-3 bg-[#111111] border border-white/10 group-hover:border-[#00E676]/50 group-hover:shadow-[0_0_20px_rgba(0,230,118,0.2)] transition-all">
                  <img 
                    src={win.image} 
                    alt={win.game} 

@@ -76,7 +76,7 @@ const WorldCupTeaser: React.FC<WorldCupTeaserProps> = ({ onMatchClick }) => {
                   className="w-full h-full object-cover object-center animate-pan"
                 />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/90 to-[#0B0E14]/20 group-hover:from-[#0B0E14] group-hover:via-[#0B0E14]/80 group-hover:to-transparent transition-colors duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-[#050505]/20 group-hover:from-[#050505] group-hover:via-[#050505]/80 group-hover:to-transparent transition-colors duration-500"></div>
               {/* Neon Green Glow Effect */}
               <div className="absolute top-0 left-0 w-1/2 h-full bg-[#06b6d4]/5 blur-[100px] pointer-events-none"></div>
             </div>

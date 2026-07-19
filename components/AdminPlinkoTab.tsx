@@ -98,7 +98,7 @@ export default function AdminPlinkoTab() {
 
       {/* Logs Table */}
       <div className="bg-[#151821] rounded-xl border border-white/5 overflow-hidden">
-        <div className="p-4 border-b border-white/5 bg-[#1A1D29]">
+        <div className="p-4 border-b border-white/5 bg-[#111111]">
           <h3 className="text-white font-bold">Son Oynananlar (Log)</h3>
         </div>
         <div className="overflow-x-auto">

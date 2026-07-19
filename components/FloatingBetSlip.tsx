@@ -39,13 +39,13 @@ export const FloatingBetSlip = () => {
   const potentialWin = totalOdds * totalBet * activeMultiplier;
 
   return createPortal(
-    <div className="floating-bet-slip fixed bottom-0 z-[60] flex flex-col items-end shadow-2xl font-sans w-full md:w-[350px] right-0 transition-all duration-300 border-l border-[#1A1D29]">
+    <div className="floating-bet-slip fixed bottom-0 z-[60] flex flex-col items-end shadow-2xl font-sans w-full md:w-[350px] right-0 transition-all duration-300 border-l border-[#111111]">
       
       {/* EXPANDED CONTENT */}
       {isOpen && (
-        <div className="w-full h-[calc(100vh-70px)] bg-[#0B0E14]/95 backdrop-blur-xl flex flex-col shadow-[-10px_0_40px_rgba(0,0,0,0.5)]">
+        <div className="w-full h-[calc(100vh-70px)] bg-[#050505]/95 backdrop-blur-xl flex flex-col shadow-[-10px_0_40px_rgba(0,0,0,0.5)]">
           {/* TABS */}
-          <div className="flex bg-[#0F121A] border-b border-[#1A1D29]">
+          <div className="flex bg-[#0F121A] border-b border-[#111111]">
             {['Tekli', 'Kombine', 'Sistem'].map(t => (
               <button 
                 key={t}
@@ -64,10 +64,10 @@ export const FloatingBetSlip = () => {
 
           {/* COMBINE BONUS BOX (Moved under tabs) */}
           {betTab === 'Kombine' && bets.length >= 3 && (
-            <div className="px-3 py-4 bg-[#0B0E14] border-b border-[#1A1D29]">
+            <div className="px-3 py-4 bg-[#050505] border-b border-[#111111]">
               <div className="border border-[#10b981]/20 rounded-lg p-4 relative bg-[#0F121A] overflow-hidden">
                 <div className="absolute top-0 right-0 flex -mt-0 mr-0 text-[9px] font-bold rounded-bl-lg overflow-hidden">
-                  <span className="bg-[#1A1D29] text-white px-2 py-1">MİN ORAN: 1.50</span>
+                  <span className="bg-[#111111] text-white px-2 py-1">MİN ORAN: 1.50</span>
                   <span className="bg-[#10b981] text-black px-2 py-1">KOMBİNE ÖZEL</span>
                 </div>
                 <p className="text-[#848B9D] text-xs font-semibold mt-4 mb-4">
@@ -85,7 +85,7 @@ export const FloatingBetSlip = () => {
                 <div className="flex gap-1 h-1.5 mt-2">
                   {[...Array(10)].map((_, i) => (
                     <div key={i} className={`flex-1 rounded-full transition-colors ${
-                      i < validComboBets ? 'bg-[#10b981] shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-[#1A1D29]'
+                      i < validComboBets ? 'bg-[#10b981] shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-[#111111]'
                     }`}></div>
                   ))}
                 </div>
@@ -95,7 +95,7 @@ export const FloatingBetSlip = () => {
 
           <div className="p-3 space-y-3 bg-[#0F121A] flex-1 overflow-y-auto">
             {bets.map(bet => (
-              <div key={bet.id} className="flex bg-[#1A1D29] rounded-xl overflow-hidden border border-[#2A2E3D] hover:border-[#10b981]/50 transition-all relative animate-[slideIn_0.3s_ease-out] opacity-0 group" style={{animationFillMode: 'forwards'}}>
+              <div key={bet.id} className="flex bg-[#111111] rounded-xl overflow-hidden border border-[#2A2E3D] hover:border-[#10b981]/50 transition-all relative animate-[slideIn_0.3s_ease-out] opacity-0 group" style={{animationFillMode: 'forwards'}}>
                 {/* Remove button (Left side in screenshot it's on left) */}
                 <button 
                   onClick={() => removeBetSelection(bet.id)}
@@ -121,7 +121,7 @@ export const FloatingBetSlip = () => {
           </div>
 
           {/* STAKE INPUT */}
-          <div className="px-4 py-5 bg-[#0B0E14] border-t border-[#1A1D29]">
+          <div className="px-4 py-5 bg-[#050505] border-t border-[#111111]">
             <div className="bg-[#0F121A] border border-[#2A2E3D] rounded-xl flex justify-end items-center px-4 py-3.5 mb-4 focus-within:border-[#10b981] transition-colors">
               <input 
                 type="text" 
@@ -140,7 +140,7 @@ export const FloatingBetSlip = () => {
                   className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${
                     amount === val.toString() 
                       ? 'bg-[#10b981] text-black shadow-[0_4px_15px_rgba(16,185,129,0.4)] translate-y-[-2px]' 
-                      : 'bg-[#1A1D29] border border-[#2A2E3D] text-[#848B9D] hover:text-[#10b981] hover:border-[#10b981]/30'
+                      : 'bg-[#111111] border border-[#2A2E3D] text-[#848B9D] hover:text-[#10b981] hover:border-[#10b981]/30'
                   }`}
                 >
                   {val}
@@ -162,7 +162,7 @@ export const FloatingBetSlip = () => {
                 <span className="font-black">x{currentMultiplier.toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between items-center mb-6 pt-5 border-t border-[#1A1D29]">
+            <div className="flex justify-between items-center mb-6 pt-5 border-t border-[#111111]">
               <span className="text-[#848B9D] font-bold text-xs uppercase tracking-widest">Muhtemel Kazanç</span>
               <span className="text-[#10b981] font-black text-2xl drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]">{potentialWin.toFixed(2)} $</span>
             </div>
@@ -213,13 +213,13 @@ export const FloatingBetSlip = () => {
           <button 
             onClick={() => setFastBet(!fastBet)}
             className={`w-[48px] h-[26px] rounded-full p-[3px] transition-colors flex items-center ${
-              fastBet ? 'bg-[#10b981]' : 'bg-[#1A1D29] border border-[#2A2E3D]'
+              fastBet ? 'bg-[#10b981]' : 'bg-[#111111] border border-[#2A2E3D]'
             }`}
           >
             <div className={`w-[20px] h-[20px] rounded-full flex items-center justify-center transition-transform shadow-md ${
               fastBet ? 'translate-x-[22px] bg-black' : 'translate-x-0 bg-[#848B9D]'
             }`}>
-              <Zap className={`w-3 h-3 ${fastBet ? 'text-[#10b981] fill-current' : 'text-[#1A1D29]'}`} />
+              <Zap className={`w-3 h-3 ${fastBet ? 'text-[#10b981] fill-current' : 'text-[#111111]'}`} />
             </div>
           </button>
         </div>
