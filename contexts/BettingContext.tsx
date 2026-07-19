@@ -175,9 +175,9 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
               const nextData = ev.data || {};
               
               const mergedGroupMarkets = { ...prevData.group_markets };
-              if (nextData.group_markets) {
-                for (const groupName in nextData.group_markets) {
-                  const newMarkets = nextData.group_markets[groupName];
+              if (ev.group_markets) {
+                for (const groupName in ev.group_markets) {
+                  const newMarkets = ev.group_markets[groupName];
                   if (!mergedGroupMarkets[groupName]) {
                     mergedGroupMarkets[groupName] = [...newMarkets];
                   } else {
