@@ -399,7 +399,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                             className="w-full h-full object-contain"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
-                              e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[12px]">${match.home.substring(0, 2).toUpperCase()}</span></div>`;
+                              e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[12px]">${(match.home || '??').substring(0, 2).toUpperCase()}</span></div>`;
                             }}
                           />
                         </div>
@@ -427,7 +427,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                             className="w-full h-full object-contain"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
-                              e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[12px]">${match.away.substring(0, 2).toUpperCase()}</span></div>`;
+                              e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[12px]">${(match.away || '??').substring(0, 2).toUpperCase()}</span></div>`;
                             }}
                           />
                         </div>
@@ -504,9 +504,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
             )}
             
             {!isLoading && sortedLeagues.map(league => {
-              const leagueMatches = groupedByLeague[league];
+              const leagueMatches = groupedByLeague[league] || [];
               const firstMatch = leagueMatches[0];
-              const flag = getCountryFlag(firstMatch.country);
+              const flag = getCountryFlag(firstMatch?.country || '');
               
               return (
                 <div key={league} className="mb-5">
@@ -550,21 +550,21 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                               <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white/5 flex items-center justify-center overflow-hidden">
-                                <img src={match.homeLogo} alt={match.home} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[9px]">${match.home.substring(0, 2).toUpperCase()}</span>`; }} />
+                                <img src={match.homeLogo} alt={match.home} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[9px]">${(match.home || '??').substring(0, 2).toUpperCase()}</span>`; }} />
                               </div>
                               <span className="text-[13px] md:text-[14px] font-bold text-gray-200 truncate">{match.home}</span>
                             </div>
-                            <span className={`text-[14px] md:text-[15px] font-black tabular-nums ${isGoal ? 'animate-score' : 'text-[#10b981]'}`}>{match.score.split(' - ')[0] || '-'}</span>
+                            <span className={`text-[14px] md:text-[15px] font-black tabular-nums ${isGoal ? 'animate-score' : 'text-[#10b981]'}`}>{String(match.score || '-').split(' - ')[0] || '-'}</span>
                           </div>
                           
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                               <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white/5 flex items-center justify-center overflow-hidden">
-                                <img src={match.awayLogo} alt={match.away} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[9px]">${match.away.substring(0, 2).toUpperCase()}</span>`; }} />
+                                <img src={match.awayLogo} alt={match.away} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[9px]">${(match.away || '??').substring(0, 2).toUpperCase()}</span>`; }} />
                               </div>
                               <span className="text-[13px] md:text-[14px] font-bold text-gray-200 truncate">{match.away}</span>
                             </div>
-                            <span className={`text-[14px] md:text-[15px] font-black tabular-nums ${isGoal ? 'animate-score' : 'text-[#10b981]'}`}>{match.score.split(' - ')[1] || '-'}</span>
+                            <span className={`text-[14px] md:text-[15px] font-black tabular-nums ${isGoal ? 'animate-score' : 'text-[#10b981]'}`}>{String(match.score || '-').split(' - ')[1] || '-'}</span>
                           </div>
                         </div>
 
@@ -573,7 +573,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                           {['1', 'X', '2'].map((oddType, idx) => {
                             const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
                             const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
-                            const isSelected = betSlip.some(s => s.id === oddId);
+                            const isSelected = betSlip.some(s => s.id === (oddId || ''));
                             
                             return (
                               <button 
