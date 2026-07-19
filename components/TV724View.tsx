@@ -339,19 +339,28 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     useEffect(() => {
         const fetchData = async () => {
             setIsDataLoading(true);
-            const { data: configData } = await supabase.from('site_configs').select('value').eq('key', 'site_tv_config').maybeSingle();
-            if (configData?.value) {
-                setCurrentConfig({
-                    ...configData.value,
-                    channels: DEFAULT_TV_CONFIG.channels
-                });
-            } else {
+            try {
+                const { data: configData } = await supabase.from('site_configs').select('value').eq('key', 'site_tv_config').maybeSingle();
+                if (configData?.value) {
+                    setCurrentConfig({
+                        ...configData.value,
+                        channels: DEFAULT_TV_CONFIG.channels
+                    });
+                } else {
+                    setCurrentConfig(DEFAULT_TV_CONFIG);
+                }
+            } catch (e) {
+                console.error('Config fetch error:', e);
                 setCurrentConfig(DEFAULT_TV_CONFIG);
             }
 
             let mergedStreamers: any[] = [];
-            const { data: streamersData } = await supabase.from('streamers').select('*').order('order_index', { ascending: true });
-            if (streamersData) mergedStreamers = [...streamersData];
+            try {
+                const { data: streamersData } = await supabase.from('streamers').select('*').order('order_index', { ascending: true });
+                if (streamersData) mergedStreamers = [...streamersData];
+            } catch (e) {
+                console.error('Streamers fetch error:', e);
+            }
 
             if (DEFAULT_TV_CONFIG.channels) {
                 DEFAULT_TV_CONFIG.channels.forEach((ch: any) => {
@@ -367,11 +376,16 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 if (live && !activeChannel) setActiveChannel({ id: live.id, name: live.name, slug: live.kick_username || '', platform: live.platform_type, streamUrl: live.kick_username || '', thumbnailUrl: live.avatar_url || '', category: (live.tags?.length > 0) ? live.tags[0] : 'CANLI YAYIN', isLive: live.is_live, isActive: true, order: live.order_index, sourceType: live.source_type, platformType: live.platform_type, platformUsername: live.kick_username, videoUrl: live.video_url, iframeUrl: live.iframe_url, fallbackType: live.fallback_type, fallbackVideoUrl: live.fallback_video_url, fallbackIframeUrl: live.fallback_iframe_url, viewer_count: live.viewer_count } as any);
             }
 
-            const { data: vodsData } = await supabase.from('vods').select('*').order('created_at', { ascending: false });
-            if (vodsData && vodsData.length > 0) {
-                setVods(vodsData);
-            } else if (configData?.value?.vods) {
-                setVods(configData.value.vods);
+            try {
+                const { data: vodsData } = await supabase.from('vods').select('*').order('created_at', { ascending: false });
+                if (vodsData && vodsData.length > 0) {
+                    setVods(vodsData);
+                } else if (DEFAULT_TV_CONFIG.vods) {
+                    setVods(DEFAULT_TV_CONFIG.vods);
+                }
+            } catch (e) {
+                console.error('Vods fetch error:', e);
+                if (DEFAULT_TV_CONFIG.vods) setVods(DEFAULT_TV_CONFIG.vods);
             }
 
             const { data: analysesConfig } = await supabase.from('site_configs').select('value').eq('key', 'site_analyses').maybeSingle();
