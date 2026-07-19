@@ -231,14 +231,19 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             if (isMounted) setIsConnected(true); // Yüklenme başlasa bile chat panelini açık göster (fallback)
             console.log("loadData started");
             try {
-                // Fetch last 100 messages for global channel
+                // Fetch last 25 messages for global channel
                 console.log("fetching supabase tv_chat...");
                 const { data, error } = await supabase
                     .from('tv_chat')
                     .select('*')
                     .eq('channel_id', activeLang.id)
-                    .order('created_at', { ascending: true })
-                    .limit(100);
+                    .order('created_at', { ascending: false })
+                    .limit(25);
+                
+                // Since we ordered by descending to get the LATEST 25, we need to reverse them back
+                if (data) {
+                    data.reverse();
+                }
 
                 console.log("supabase tv_chat fetched", { data, error });
 
