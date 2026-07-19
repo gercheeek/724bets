@@ -79,25 +79,29 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
             
             const rawMarkets = data.group_markets?.['full_event|0'] || data.group_markets?.['game_full_event|0'] || data.group_markets?.['set|1'];
             const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
-            const market1x2 = markets.find((m: string) => m.includes('|12|') || m.includes('|1x2|') || m.includes('|match_winner|') || m.includes('|oe|'));
             
-            if (market1x2) {
-                const parts = market1x2.split('|');
-                const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
-                if (selectionsPart) {
-                    const selections = selectionsPart.split('!');
-                    selections.forEach((sel: string) => {
-                        const sParts = sel.split('~');
-                        if (sParts.length > 2) {
-                            const type = sParts[1].toLowerCase();
-                            const odd = parseFloat(sParts[2]);
-                            if (!isNaN(odd)) {
-                                if (type === 'home' || type === '1') { homeOdd = odd.toFixed(2); }
-                                if (type === 'draw' || type === 'x') { drawOdd = odd.toFixed(2); }
-                                if (type === 'away' || type === '2') { awayOdd = odd.toFixed(2); }
+            for (const market of markets) {
+                if (market.includes('~home~') || market.includes('~away~')) {
+                    const parts = market.split('|');
+                    const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
+                    if (selectionsPart) {
+                        const selections = selectionsPart.split('!');
+                        selections.forEach((sel: string) => {
+                            const sParts = sel.split('~');
+                            if (sParts.length > 2) {
+                                const type = sParts[1].toLowerCase();
+                                const odd = parseFloat(sParts[2]);
+                                if (!isNaN(odd)) {
+                                    if (type === 'home' || type === '1') { homeOdd = odd.toFixed(2); }
+                                    if (type === 'draw' || type === 'x') { drawOdd = odd.toFixed(2); }
+                                    if (type === 'away' || type === '2') { awayOdd = odd.toFixed(2); }
+                                }
                             }
+                        });
+                        if (homeOdd !== '-' || awayOdd !== '-') {
+                            break; // Found valid odds
                         }
-                    });
+                    }
                 }
             }
 
