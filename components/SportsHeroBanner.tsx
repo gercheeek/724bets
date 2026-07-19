@@ -45,18 +45,28 @@ export const SportsHeroBanner: React.FC = () => {
         {/* Center Content Area */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pt-4 pb-4 px-4">
           
-          {/* Top Tag */}
-          <div className="px-4 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 backdrop-blur-md mb-2 md:mb-3 shadow-[0_0_20px_rgba(16,185,129,0.2)] animate-fade-in-up">
-            <span className="text-[#10b981] font-black text-[9px] md:text-[11px] tracking-[0.3em] uppercase">Günün Dev Maçı</span>
+          {/* Top Tag & Event Name */}
+          <div className="flex flex-col items-center gap-2 mb-3 md:mb-4 animate-fade-in-up">
+            <div className="px-4 py-1 rounded-full bg-[#10b981]/20 border border-[#10b981]/30 backdrop-blur-md shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+              <span className="text-[#10b981] font-black text-[9px] md:text-[11px] tracking-[0.3em] uppercase">Günün Dev Maçı</span>
+            </div>
+            <h2 className="text-gray-300 font-black text-[10px] md:text-xs tracking-[0.4em] uppercase drop-shadow-lg">
+              Dünya Kupası Finali
+            </h2>
           </div>
 
-          {/* Aggressive Typography */}
-          <h1 className="text-white font-black italic text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] text-center mb-0 leading-none animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            İSPANYA <span className="text-[#10b981] mx-1 md:mx-3 text-2xl md:text-4xl lg:text-[44px] drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">VS</span> ARJANTİN
-          </h1>
-          <h2 className="text-gray-400 font-black text-xs md:text-sm tracking-[0.3em] uppercase mt-2 md:mt-3 mb-6 md:mb-8 drop-shadow-lg animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            DÜNYA KUPASI FİNALİ
-          </h2>
+          {/* Aggressive Typography for Teams */}
+          <div className="flex items-center justify-center gap-3 md:gap-5 mb-6 md:mb-8 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] text-right leading-none">
+              İSPANYA
+            </h1>
+            <div className="bg-[#10b981]/10 border border-[#10b981]/20 rounded-lg px-2 py-1 md:px-3 md:py-1.5 backdrop-blur-sm shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+              <span className="text-[#10b981] font-black italic text-lg md:text-2xl lg:text-[28px] drop-shadow-md leading-none">VS</span>
+            </div>
+            <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] text-left leading-none">
+              ARJANTİN
+            </h1>
+          </div>
 
           {/* Dynamic Odds Buttons (Glassmorphism) */}
           <div className="flex items-center justify-center gap-2 md:gap-3 w-full max-w-[550px] animate-fade-in-up" style={{ animationDelay: '300ms' }}>
