@@ -10,7 +10,7 @@ import { CasinoLobbyGame, SiteUser } from '../types';
 import GameLobbyGrid from './GameLobbyGrid';
 import OriginalsSlider from './OriginalsSlider';
 import SportsBanners from './SportsBanners';
-import { PopularBetsPreview } from './PopularBetsPreview';
+
 import LimitedTimePromo from './LimitedTimePromo';
 import { useLanguage } from '../contexts/LanguageContext';
 import { GameDetailModal, GameData } from './GameDetailModal';
@@ -401,8 +401,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               <OriginalsSlider onNavigate={onViewChange} />
             </div>
 
-            {/* Popular Bets Preview (Guest Only) */}
-            <PopularBetsPreview />
 
             {/* Yeni Eklenenler Slider (Guest View) */}
             <div className="w-full mt-4">
