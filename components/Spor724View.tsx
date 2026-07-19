@@ -339,7 +339,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pb-3">
                 {featuredMatches.map(match => (
-                  <div key={`pop-${match.id}`} className="bg-[#0A0A0A] rounded-2xl p-4 flex flex-col gap-4 border border-white/5 hover:border-[#10b981]/30 transition-all cursor-pointer relative overflow-hidden shadow-lg group">
+                  <div key={`pop-${match.id}`} className="bg-[#050505] bg-gradient-to-b from-white/[0.08] to-transparent rounded-2xl p-4 flex flex-col gap-4 border border-white/[0.05] border-t-white/[0.15] hover:border-[#10b981]/40 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-500 cursor-pointer relative overflow-hidden shadow-2xl group backdrop-blur-2xl">
                     {/* Background Glow */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[150px] bg-[#10b981] opacity-[0.02] blur-[60px] group-hover:opacity-[0.06] transition-opacity duration-500 pointer-events-none"></div>
 
@@ -401,7 +401,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                           <button 
                             key={oddType}
                             onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, oddType); }}
-                            className={`flex-1 min-h-[46px] rounded-lg flex items-center justify-between px-3 md:px-4 transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-white/5'}`}
+                            className={`flex-1 min-h-[46px] rounded-lg flex items-center justify-between px-3 md:px-4 transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.05] border-t-white/[0.1] backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]'}`}
                           >
                             <span className="text-[12px] text-gray-400 font-bold">{oddType}</span>
                             <span className="text-[14px] text-white font-bold">{oddValue}</span>
@@ -475,7 +475,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                     {leagueMatches.map((match, idx) => (
                       <div 
                         key={match.id} 
-                        className="flex flex-col md:flex-row md:items-center bg-[#0A0A0A] rounded-xl p-3 md:p-4 gap-3 md:gap-4 transition-all duration-300 border-b border-white/5 md:hover:border-[#10b981]/50 md:hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] group relative"
+                        className="flex flex-col md:flex-row md:items-center bg-[#050505] bg-gradient-to-b from-white/[0.06] to-transparent rounded-xl p-3 md:p-4 gap-3 md:gap-4 transition-all duration-500 border border-white/[0.03] border-t-white/[0.1] shadow-lg md:hover:border-[#10b981]/40 md:hover:shadow-[0_0_20px_rgba(16,185,129,0.1)] group relative backdrop-blur-xl mb-1"
                       >
                         {/* LEFT SECTION: Status */}
                         <div className="flex items-center md:flex-col md:justify-center gap-2 md:gap-1 shrink-0 md:w-[70px] border-b border-white/5 md:border-b-0 pb-2 md:pb-0 mb-1 md:mb-0">
