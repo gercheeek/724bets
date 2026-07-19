@@ -70,14 +70,14 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Left Panel */}
         <div 
           key={`left-${slide.id}`}
-          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/50 animate-fade-in-up"
-          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '0% 50%', backgroundSize: '300% 100%' }}
+          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/50 animate-fade-in-up"
+          style={{ 
+            backgroundImage: `linear-gradient(to right, rgba(79,26,154,0.95) 0%, rgba(139,92,246,0.6) 50%, rgba(26,11,54,0.95) 100%), url(${slide.bgImage})`, 
+            backgroundPosition: '0% 50%', 
+            backgroundSize: '300% 100%' 
+          }}
         >
-          {/* Vibrant Purple Glow & Rays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#4f1a9a]/95 via-[#3a0b76]/80 to-[#1a0b36]/90 backdrop-blur-[1px]"></div>
-          <div className="absolute -bottom-24 -left-10 w-[200px] h-[200px] bg-[#a855f7] opacity-40 blur-[60px] pointer-events-none rounded-full"></div>
-          <div className="absolute bottom-0 left-0 w-full h-full bg-[linear-gradient(45deg,rgba(168,85,247,0.3)_0%,transparent_60%)] pointer-events-none"></div>
-          
+          {/* Content */}
           <div className="absolute inset-0 p-5 md:p-8 flex flex-col justify-center items-start">
             <h2 className="text-white font-black text-2xl md:text-[28px] lg:text-[34px] leading-none tracking-tighter uppercase drop-shadow-md">
               {slide.left.title}
@@ -91,14 +91,14 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Center Panel */}
         <div 
           key={`center-${slide.id}`}
-          className="flex-1 rounded-xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl h-[200px] md:h-full border border-black/50 animate-fade-in-up"
-          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '50% 50%', backgroundSize: '300% 100%' }}
+          className="flex-1 rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[200px] md:h-full border border-black/50 animate-fade-in-up"
+          style={{ 
+            backgroundImage: `linear-gradient(to right, rgba(79,26,154,0.95) 0%, rgba(139,92,246,0.6) 50%, rgba(26,11,54,0.95) 100%), url(${slide.bgImage})`, 
+            backgroundPosition: '50% 50%', 
+            backgroundSize: '300% 100%' 
+          }}
         >
-          {/* Vibrant Purple Glow & Rays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#4f1a9a]/95 via-[#3a0b76]/80 to-[#1a0b36]/90 backdrop-blur-[1px]"></div>
-          <div className="absolute -bottom-24 -left-10 w-[300px] h-[200px] bg-[#a855f7] opacity-30 blur-[70px] pointer-events-none rounded-full"></div>
-          <div className="absolute bottom-0 left-0 w-full h-full bg-[linear-gradient(45deg,rgba(168,85,247,0.2)_0%,transparent_60%)] pointer-events-none"></div>
-          
+          {/* Content */}
           <div className="absolute inset-0 p-4 flex flex-col items-center justify-center mt-2">
             
             {/* Flags & Teams */}
@@ -129,14 +129,14 @@ export const SportsTriptychSlider: React.FC = () => {
         {/* Right Panel */}
         <div 
           key={`right-${slide.id}`}
-          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/50 animate-fade-in-up"
-          style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '100% 50%', backgroundSize: '300% 100%' }}
+          className="flex-1 md:flex-none md:w-[32%] rounded-xl bg-no-repeat relative overflow-hidden shadow-2xl h-[140px] md:h-full border border-black/50 animate-fade-in-up"
+          style={{ 
+            backgroundImage: `linear-gradient(to right, rgba(79,26,154,0.95) 0%, rgba(139,92,246,0.6) 50%, rgba(26,11,54,0.95) 100%), url(${slide.bgImage})`, 
+            backgroundPosition: '100% 50%', 
+            backgroundSize: '300% 100%' 
+          }}
         >
-          {/* Vibrant Purple Glow & Rays */}
-          <div className="absolute inset-0 bg-gradient-to-l from-[#4f1a9a]/95 via-[#3a0b76]/80 to-[#1a0b36]/90 backdrop-blur-[1px]"></div>
-          <div className="absolute -bottom-24 -left-10 w-[200px] h-[200px] bg-[#a855f7] opacity-40 blur-[60px] pointer-events-none rounded-full"></div>
-          <div className="absolute bottom-0 left-0 w-full h-full bg-[linear-gradient(45deg,rgba(168,85,247,0.3)_0%,transparent_60%)] pointer-events-none"></div>
-          
+          {/* Content */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
              {/* Huge SVG emoji dropping shadow to look 3D */}
              <img 
