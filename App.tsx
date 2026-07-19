@@ -1834,7 +1834,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         </InGameLayout>
       ) : (
         <div 
-          className="relative flex h-[100dvh] w-full bg-[#0B0E14] text-white overflow-hidden" 
+          className="relative flex h-[100dvh] w-full bg-[#050505] text-white overflow-hidden" 
           onPointerDown={() => setIsLogoSpinning(true)}
           onPointerUp={() => setIsLogoSpinning(false)}
           onPointerCancel={() => setIsLogoSpinning(false)}
@@ -1847,7 +1847,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'giveaway') && (
-            <aside className={`hidden lg:flex flex-col bg-[#0B0E14] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
+            <aside className={`hidden lg:flex flex-col bg-[#050505] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen || view === 'blackjack'}
                 onToggle={() => setIsSidebarOpen(!isSidebarOpen)} 
@@ -1864,8 +1864,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           {isMobileMenuOpen && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
               <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
-              <aside className="w-[280px] bg-[#0B0E14] border-r border-[#14141a] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
-                <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#0B0E14] border border-[#14141a] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
+              <aside className="w-[280px] bg-[#050505] border-r border-[#111111] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
+                <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#050505] border border-[#111111] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
                 <Sidebar
                   isOpen={true}
                   onToggle={() => setIsMobileMenuOpen(false)}
@@ -1892,7 +1892,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {view !== 'kral' && (
               <header 
                 id="mobile-top-header"
-                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#0B0E14]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1"
+                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#050505]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1"
               >
                 <div className="flex items-center gap-2">
                   <button 
@@ -1921,7 +1921,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                     <>
                       {/* 1. Gamdom Style Wallet (Pill) */}
                       <div 
-                        className="flex items-center bg-[#14141a] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
+                        className="flex items-center bg-[#111111] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
                         <div className="w-7 h-7 rounded bg-[#10B981] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
@@ -1947,7 +1947,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                       
                       {/* 3. Profil Avatarı - HIDDEN ON MOBILE PER USER REQUEST */}
                       {/*
-                      <button onClick={() => handleViewChange('profile')} className="w-10 h-10 rounded-full border border-white/10 bg-[#14141a] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
+                      <button onClick={() => handleViewChange('profile')} className="w-10 h-10 rounded-full border border-white/10 bg-[#111111] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
                         <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} alt="Avatar" className="w-full h-full object-cover" />
                       </button>
                       */}
@@ -1972,7 +1972,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                       <div className="flex items-center rounded-lg border border-[#2B3544] h-[40px] shadow-sm overflow-hidden shrink-0 ml-1">
                         <button
                           onClick={() => setAuthModalMode('member')}
-                          className="flex items-center justify-center h-full bg-[#14141a] hover:bg-[#2A2E3D] text-white transition-colors px-4 font-bold text-sm whitespace-nowrap"
+                          className="flex items-center justify-center h-full bg-[#111111] hover:bg-[#2A2E3D] text-white transition-colors px-4 font-bold text-sm whitespace-nowrap"
                         >
                           Giriş yap
                         </button>
@@ -2115,7 +2115,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {/* Iframe Container */}
             <div 
               ref={sports2ContainerRef}
-              className="w-full flex-1 shadow-2xl bg-[#0B0E14] relative rounded-b-2xl z-10"
+              className="w-full flex-1 shadow-2xl bg-[#050505] relative rounded-b-2xl z-10"
               style={{
                 overflowX: isMobile ? 'auto' : 'hidden',
                 overflowY: 'hidden',
@@ -2160,8 +2160,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
 
               {/* Site theme color overlay (tinting the grey background to slate) */}
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0B0E14]/40" />
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0B0E14]/20" />
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#050505]/40" />
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#050505]/20" />
             </div>
           </div>
         )}
@@ -2178,7 +2178,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 </div>
               </div>
             )}
-            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0B0E14] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#050505] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
               <iframe 
                 src="https://sport.megobocteb.com/SportsBook/Home"
                 frameBorder="0"
@@ -2198,7 +2198,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
               {/* Site theme color overlay (tinting the grey background to slate) */}
               <div 
-                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0B0E14]/40" 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#050505]/40" 
                 style={{ 
                   clipPath: isMobile 
                     ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
@@ -2206,7 +2206,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 }} 
               />
               <div 
-                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0B0E14]/20" 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#050505]/20" 
                 style={{ 
                   clipPath: isMobile 
                     ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
@@ -2574,11 +2574,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           onClick={() => setShowLiveScoreModal(false)}
         >
           <div 
-            className="relative w-full max-w-5xl h-[85vh] bg-[#14141a] rounded-lg shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-5xl h-[85vh] bg-[#111111] rounded-lg shadow-2xl overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-[#0B0E14]">
+            <div className="flex items-center justify-between px-6 py-4 bg-[#050505]">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
                 <span className="text-white font-black text-xs uppercase tracking-widest italic">CANLI SKOR & SONUÇLAR</span>
@@ -2591,7 +2591,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               </button>
             </div>
             {/* Modal Content */}
-            <div className="flex-1 w-full overflow-hidden bg-[#0B0E14] relative">
+            <div className="flex-1 w-full overflow-hidden bg-[#050505] relative">
               <iframe 
                 src="https://statsinfo.co/live?guid=a886190e-e01a-4155-85f4-e6daee231c8d&lg=en" 
                 frameBorder="0" 
@@ -2625,7 +2625,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
       {view !== 'admin' && !showLiveScoreModal && !isMobile && (
         <>
-          <aside className={`hidden xl:flex flex-col bg-[#0B0E14] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
+          <aside className={`hidden xl:flex flex-col bg-[#050505] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
             <ModernChat
               open={isChatOpen}
               onOpen={() => setIsChatOpen(true)}
@@ -2641,22 +2641,22 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             <div className="hidden xl:flex fixed bottom-6 right-6 flex-col gap-2 z-50">
               <button 
                 onClick={() => setIsChatOpen(true)}
-                className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
+                className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
                 title="Canlı Sohbet"
               >
-                <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#0B0E14] rounded-full"></div>
+                <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#050505] rounded-full"></div>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
               </button>
               <button 
                 onClick={() => setShowSearch(true)}
-                className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
+                className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
                 title="Arama"
               >
                 <Search className="w-5 h-5 group-hover:text-white transition-colors" />
               </button>
               <button 
                 onClick={() => setIsChatOpen(true)}
-                className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
+                className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
                 title="Canlı Destek"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
@@ -2671,15 +2671,15 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         <div className="flex xl:hidden fixed bottom-20 right-4 flex-col gap-2 z-50">
           <button 
             onClick={() => setIsMobileChatOpen(true)}
-            className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
+            className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
             title="Canlı Sohbet"
           >
-            <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#0B0E14] rounded-full"></div>
+            <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#050505] rounded-full"></div>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
           </button>
           <button 
             onClick={() => setShowSearch(true)}
-            className="w-11 h-11 rounded-full bg-[#14141a] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
+            className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
             title="Arama"
           >
             <Search className="w-5 h-5 group-hover:text-white transition-colors" />
@@ -2691,7 +2691,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       {isMobileChatOpen && (
         <div className="fixed inset-0 z-[110] flex xl:hidden justify-end">
           <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileChatOpen(false)}></div>
-          <aside className="w-full h-full bg-[#0B0E14] flex-shrink-0 relative z-10 animate-slide-in-right">
+          <aside className="w-full h-full bg-[#050505] flex-shrink-0 relative z-10 animate-slide-in-right">
             <ModernChat
               open={true}
               onOpen={() => {}}

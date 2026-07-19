@@ -71,9 +71,9 @@
 
 /* ── Dark Theme ── */
 [data-theme="dark"] {
-  --bg-main: #0B0E14; /* Slate 900 */
-  --bg-elevated: #14141a; /* Slate 800 */
-  --bg-card: #14141a;
+  --bg-main: #050505; /* Slate 900 */
+  --bg-elevated: #111111; /* Slate 800 */
+  --bg-card: #111111;
   --bg-card-hover: #1a1a22; /* Slate 700 */
   --bg-input: rgba(255, 255, 255, 0.04);
   --bg-overlay: rgba(15, 23, 42, 0.85);
@@ -104,9 +104,9 @@
 
   /* Header Custom Variables (Dark) */
   --header-bg: transparent;
-  --header-bg-scrolled: color-mix(in srgb, #0B0E14 92%, transparent);
+  --header-bg-scrolled: color-mix(in srgb, #050505 92%, transparent);
   --header-border: transparent; /* Top border transparent */
-  --header-border-scrolled: #14141a;
+  --header-border-scrolled: #111111;
   --header-text: #FFFFFF;
   --header-text-hover: #FFFFFF;
   --header-text-active: var(--gold-primary);
@@ -138,7 +138,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active{
-    -webkit-box-shadow: 0 0 0 30px #1A1D24 inset !important;
+    -webkit-box-shadow: 0 0 0 30px #111111 inset !important;
     -webkit-text-fill-color: white !important;
     transition: background-color 5000s ease-in-out 0s;
 }
