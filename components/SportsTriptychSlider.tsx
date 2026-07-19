@@ -5,48 +5,29 @@ const SLIDES = [
   {
     id: 1,
     bgImage: 'https://images.unsplash.com/photo-1518605368461-1e1e38ce8058?auto=format&fit=crop&q=80&w=2000', // Stadium
+    overlay: 'from-[#4f1a9a]/95 via-[#3a0b76]/80 to-[#1a0b36]/90', // Vibrant purple
     left: {
-      title: "UEFA CHAMPIONS",
-      subtitle: "LEAGUE",
-      accent: "FINAL MATCH"
+      title: "FIFA WORLD CUP",
+      subtitle: "FİNALİ",
+      accent: "DÜNYA KUPASI 2026"
     },
     center: {
-      homeTeam: "R. Madrid",
+      homeTeam: "İspanya",
       homeFlag: "https://flagcdn.com/w80/es.png",
-      awayTeam: "Man City",
-      awayFlag: "https://flagcdn.com/w80/gb-eng.png",
+      awayTeam: "Arjantin",
+      awayFlag: "https://flagcdn.com/w80/ar.png",
       date: "YARIN, 22:00",
       buttonText: "HEMEN BAHİS YAP"
     },
     right: {
-      trophyImage: "https://cdn3d.iconscout.com/3d/premium/thumb/trophy-4990390-4158485.png",
+      trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3c6.svg", // Reliable SVG Trophy
       bonusText: "100.000₺ ÖDÜL"
     }
   },
   {
     id: 2,
-    bgImage: 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&q=80&w=2000', // Basketball Arena
-    left: {
-      title: "NBA PLAYOFFS",
-      subtitle: "FİNALLERİ",
-      accent: "ŞAMPİYONLUK MAÇI"
-    },
-    center: {
-      homeTeam: "Lakers",
-      homeFlag: "https://flagcdn.com/w80/us.png",
-      awayTeam: "Celtics",
-      awayFlag: "https://flagcdn.com/w80/us.png",
-      date: "BUGÜN, 03:00",
-      buttonText: "CANLI İZLE & OYNA"
-    },
-    right: {
-      trophyImage: "https://cdn3d.iconscout.com/3d/premium/thumb/basketball-4990395-4158490.png", // fallback to generic
-      bonusText: "%20 KAYIP BONUSU"
-    }
-  },
-  {
-    id: 3,
-    bgImage: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&q=80&w=2000', // Tennis/General
+    bgImage: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&q=80&w=2000', // Tennis
+    overlay: 'from-[#065f46]/95 via-[#047857]/80 to-[#022c22]/90', // Vibrant green/emerald
     left: {
       title: "GRAND SLAM",
       subtitle: "WIMBLEDON",
@@ -58,11 +39,33 @@ const SLIDES = [
       awayTeam: "Djokovic",
       awayFlag: "https://flagcdn.com/w80/rs.png",
       date: "PAZAR, 16:00",
+      buttonText: "CANLI İZLE & OYNA"
+    },
+    right: {
+      trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3be.svg", // Tennis
+      bonusText: "VIP AVANTAJLAR"
+    }
+  },
+  {
+    id: 3,
+    bgImage: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2000', // F1 / Racing
+    overlay: 'from-[#be123c]/95 via-[#e11d48]/80 to-[#4c0519]/90', // Vibrant Red
+    left: {
+      title: "FORMULA 1",
+      subtitle: "MONACO GP",
+      accent: "SEZONUN YARIŞI"
+    },
+    center: {
+      homeTeam: "Verstappen",
+      homeFlag: "https://flagcdn.com/w80/nl.png",
+      awayTeam: "Leclerc",
+      awayFlag: "https://flagcdn.com/w80/mc.png",
+      date: "24 TEMMUZ, 15:00",
       buttonText: "EN YÜKSEK ORANLAR"
     },
     right: {
-      trophyImage: "https://cdn3d.iconscout.com/3d/premium/thumb/tennis-racket-4990400-4158495.png", // fallback
-      bonusText: "VIP AVANTAJLAR"
+      trophyImage: "https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f3ce.svg", // Racing
+      bonusText: "%20 KAYIP BONUSU"
     }
   }
 ];
@@ -114,15 +117,15 @@ export const SportsTriptychSlider: React.FC = () => {
           className="flex-1 md:flex-none md:w-[30%] lg:w-[28%] rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[140px] md:h-full border border-white/5"
           style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '0% 50%', backgroundSize: 'cover' }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/90 to-[#0a0a0a]/60 backdrop-blur-[2px]"></div>
+          <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlay} backdrop-blur-[2px] transition-colors duration-700`}></div>
           <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-center animate-fade-in-up">
-            <span className="inline-block px-3 py-1 rounded-full bg-[#10b981]/20 text-[#10b981] text-[10px] font-bold tracking-widest w-fit mb-3 border border-[#10b981]/30">
+            <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-bold tracking-widest w-fit mb-3 border border-white/30 backdrop-blur-md">
               {slide.left.accent}
             </span>
             <h2 className="text-white font-black text-xl md:text-2xl lg:text-3xl leading-none tracking-tight">
               {slide.left.title}
             </h2>
-            <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500 font-black text-2xl md:text-3xl lg:text-4xl leading-none mt-1">
+            <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70 font-black text-2xl md:text-3xl lg:text-4xl leading-none mt-1">
               {slide.left.subtitle}
             </h2>
           </div>
@@ -133,7 +136,7 @@ export const SportsTriptychSlider: React.FC = () => {
           className="flex-1 rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[200px] md:h-full border border-white/10"
           style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '50% 50%', backgroundSize: 'cover' }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/95 via-[#050505]/70 to-[#050505]/40 backdrop-blur-[1px]"></div>
+          <div className={`absolute inset-0 bg-gradient-to-t ${slide.overlay} backdrop-blur-[1px] transition-colors duration-700`}></div>
           
           <div className="absolute inset-0 p-4 flex flex-col items-center justify-between animate-fade-in-up">
             
@@ -169,18 +172,14 @@ export const SportsTriptychSlider: React.FC = () => {
           className="flex-1 md:flex-none md:w-[30%] lg:w-[28%] rounded-2xl bg-cover bg-no-repeat relative overflow-hidden shadow-2xl transition-all duration-700 h-[140px] md:h-full border border-white/5"
           style={{ backgroundImage: `url(${slide.bgImage})`, backgroundPosition: '100% 50%', backgroundSize: 'cover' }}
         >
-          <div className="absolute inset-0 bg-gradient-to-l from-[#0a0a0a]/90 to-[#0a0a0a]/60 backdrop-blur-[2px]"></div>
+          <div className={`absolute inset-0 bg-gradient-to-l ${slide.overlay} backdrop-blur-[2px] transition-colors duration-700`}></div>
           <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in-up">
-            <div className="w-20 h-20 md:w-28 md:h-28 relative">
-               <div className="absolute inset-0 bg-[#ffd700] opacity-20 blur-2xl rounded-full"></div>
-               {/* Use a trophy emoji as fallback if image fails, but we use a reliable 3d icon url */}
-               <img src={slide.right.trophyImage} alt="Trophy" className="w-full h-full object-contain relative z-10 drop-shadow-2xl" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-               {!slide.right.trophyImage && (
-                 <div className="w-full h-full flex items-center justify-center text-5xl">🏆</div>
-               )}
+            <div className="w-16 h-16 md:w-24 md:h-24 relative">
+               <div className="absolute inset-0 bg-white opacity-20 blur-2xl rounded-full"></div>
+               <img src={slide.right.trophyImage} alt="Trophy" className="w-full h-full object-contain relative z-10 drop-shadow-2xl filter brightness-110" />
             </div>
-            <div className="mt-2 flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></div>
+            <div className="mt-3 flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
               <span className="text-white font-bold tracking-widest text-xs md:text-sm">{slide.right.bonusText}</span>
             </div>
           </div>
