@@ -282,11 +282,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     {/* Sleek, unobtrusive loading indicator for mobile splash */}
                     {showSplash && (
                         <div className="absolute bottom-32 left-0 w-full z-20 flex flex-col items-center justify-center md:hidden gap-3 px-4">
-                            <span className="text-[#06b6d4] font-bold tracking-[0.3em] uppercase text-[9px] drop-shadow-[0_0_8px_rgba(0,255,163,0.8)] animate-pulse">
+                            <span className="text-[#10b981] font-bold tracking-[0.3em] uppercase text-[9px] drop-shadow-[0_0_8px_rgba(0,255,163,0.8)] animate-pulse">
                                 SİSTEM BAĞLANTISI KURULUYOR...
                             </span>
                             <div className="w-48 h-[2px] bg-white/5 rounded-full overflow-hidden shadow-inner">
-                                <div className="h-full bg-[#06b6d4] w-1/3 rounded-full animate-[loading-bar_1.5s_ease-in-out_infinite]" style={{ boxShadow: '0 0 10px #06b6d4' }} />
+                                <div className="h-full bg-[#10b981] w-1/3 rounded-full animate-[loading-bar_1.5s_ease-in-out_infinite]" style={{ boxShadow: '0 0 10px #10b981' }} />
                             </div>
                         </div>
                     )}
@@ -304,7 +304,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         <div className="bg-black/50 backdrop-blur-md border border-white/10 px-6 py-4 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all hover:bg-black/60">
                             <p className="text-white/90 text-[11px] font-medium leading-relaxed max-w-[280px] text-center">
                                 Siteye erişerek, en az 18 yaşında olduğumu ve şunu okuduğumu beyan ederim: <br/>
-                                <span className="text-white font-bold cursor-pointer hover:text-[#06b6d4] transition-colors underline decoration-white/30 underline-offset-4 mt-1.5 inline-block">Şartlar ve Koşullar</span>
+                                <span className="text-white font-bold cursor-pointer hover:text-[#10b981] transition-colors underline decoration-white/30 underline-offset-4 mt-1.5 inline-block">Şartlar ve Koşullar</span>
                             </p>
                         </div>
                     </div>
@@ -320,13 +320,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     <div className="flex items-center gap-6 mb-8 border-b border-white/5 pb-2">
                         <button 
                             onClick={() => { setActiveTab('member'); setMemberMode('login'); }}
-                            className={`pb-2 px-1 text-sm font-bold transition-colors border-b-2 ${activeTab === 'member' && memberMode === 'login' ? 'border-[#06b6d4] text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}
+                            className={`pb-2 px-1 text-sm font-bold transition-colors border-b-2 ${activeTab === 'member' && memberMode === 'login' ? 'border-[#10b981] text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}
                         >
                             Giriş Yap
                         </button>
                         <button 
                             onClick={() => { setActiveTab('member'); setMemberMode('register'); }}
-                            className={`pb-2 px-1 text-sm font-bold transition-colors border-b-2 ${activeTab === 'member' && memberMode === 'register' ? 'border-[#06b6d4] text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}
+                            className={`pb-2 px-1 text-sm font-bold transition-colors border-b-2 ${activeTab === 'member' && memberMode === 'register' ? 'border-[#10b981] text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}
                         >
                             Kayıt Ol
                         </button>
@@ -345,8 +345,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     <>
                         {registrationPending ? (
                             <div className="text-center py-8 space-y-4">
-                                <div className="w-20 h-20 mx-auto bg-[#06b6d4]/10 rounded-full flex items-center justify-center mb-4">
-                                    <Clock className="w-10 h-10 text-[#06b6d4] animate-pulse" />
+                                <div className="w-20 h-20 mx-auto bg-[#10b981]/10 rounded-full flex items-center justify-center mb-4">
+                                    <Clock className="w-10 h-10 text-[#10b981] animate-pulse" />
                                 </div>
                                 <h3 className="text-white font-black text-xl">Kayıt Alındı!</h3>
                                 <p className="text-zinc-400 text-sm leading-relaxed">
@@ -366,7 +366,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                         <label className="text-xs text-zinc-400 font-medium">{memberMode === 'register' ? 'E-posta veya Telefon' : 'Kullanıcı adı'}</label>
                                         <input
                                             type="text" value={mUsername} onChange={e => setMUsername(e.target.value)} required
-                                            className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 text-white text-[14px] focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all outline-none placeholder-zinc-600"
+                                            className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 text-white text-[14px] focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-all outline-none placeholder-zinc-600"
                                             placeholder=""
                                         />
                                     </div>
@@ -384,7 +384,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                         <div className="relative">
                                             <input
                                                 type={showPassword ? "text" : "password"} value={mPassword} onChange={e => setMPassword(e.target.value)} required
-                                                className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 pl-4 pr-12 text-white text-[14px] focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all outline-none placeholder-zinc-600"
+                                                className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 pl-4 pr-12 text-white text-[14px] focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-all outline-none placeholder-zinc-600"
                                                 placeholder=""
                                             />
                                             <button 
@@ -401,17 +401,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                         <>
                                             {/* Password strength bars */}
                                             <div className="flex gap-1.5 mt-2">
-                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 0 ? 'bg-[#06b6d4]' : 'bg-zinc-800'}`}></div>
-                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 3 ? 'bg-[#06b6d4]' : 'bg-zinc-800'}`}></div>
-                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 5 ? 'bg-[#06b6d4]' : 'bg-zinc-800'}`}></div>
+                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 0 ? 'bg-[#10b981]' : 'bg-zinc-800'}`}></div>
+                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 3 ? 'bg-[#10b981]' : 'bg-zinc-800'}`}></div>
+                                                <div className={`h-1 flex-1 rounded-full ${mPassword.length > 5 ? 'bg-[#10b981]' : 'bg-zinc-800'}`}></div>
                                             </div>
 
                                             <label className="flex items-start gap-3 mt-4 cursor-pointer group">
-                                                <div className="relative flex items-center justify-center w-5 h-5 rounded bg-[#06b6d4] shrink-0 mt-0.5">
+                                                <div className="relative flex items-center justify-center w-5 h-5 rounded bg-[#10b981] shrink-0 mt-0.5">
                                                     <svg className="w-3.5 h-3.5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                 </div>
                                                 <p className="text-[13px] text-zinc-300 font-medium">
-                                                    18 yaşından büyüğüm, Kullanım Şartlarını okudum ve kabul ediyorum <a href="#" className="text-[#06b6d4] hover:underline">Şartlar ve Koşullar</a>
+                                                    18 yaşından büyüğüm, Kullanım Şartlarını okudum ve kabul ediyorum <a href="#" className="text-[#10b981] hover:underline">Şartlar ve Koşullar</a>
                                                 </p>
                                             </label>
                                         </>
@@ -438,10 +438,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                     )}
 
                                     {mError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded border border-red-500/20">{mError}</p>}
-                                    {mSuccess && <p className="text-[#06b6d4] text-xs font-bold text-center bg-[#06b6d4]/10 py-2 rounded border border-[#06b6d4]/20">{mSuccess}</p>}
+                                    {mSuccess && <p className="text-[#10b981] text-xs font-bold text-center bg-[#10b981]/10 py-2 rounded border border-[#10b981]/20">{mSuccess}</p>}
 
                                     <button type="submit" disabled={loading}
-                                        className="w-full bg-[#06b6d4] hover:bg-[#00e693] text-black font-black py-4 rounded-lg transition-all text-sm tracking-wide shadow-[0_0_15px_rgba(0,255,163,0.15)] disabled:opacity-50">
+                                        className="w-full bg-[#10b981] hover:bg-[#00E676] text-black font-black py-4 rounded-lg transition-all text-sm tracking-wide shadow-[0_0_15px_rgba(0,255,163,0.15)] disabled:opacity-50">
                                         {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : (memberMode === 'register' ? 'Hesap Oluştur' : 'Giriş Yap')}
                                     </button>
                                 </form>
@@ -468,7 +468,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                         {memberMode === 'register' ? 'Zaten bir hesabınız var mı?' : 'Hesabın yok mu?'}
                                         <button 
                                             onClick={() => { setMemberMode(memberMode === 'register' ? 'login' : 'register'); setMError(''); }} 
-                                            className="text-[#06b6d4] font-bold ml-1.5 hover:underline"
+                                            className="text-[#10b981] font-bold ml-1.5 hover:underline"
                                         >
                                             {memberMode === 'register' ? 'Giriş Yap' : 'Hemen Kayıt Ol'}
                                         </button>
@@ -485,7 +485,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                             <label className="text-xs text-zinc-400 font-medium">Kullanıcı adı</label>
                             <input
                                 type="text" value={aUsername} onChange={e => setAUsername(e.target.value)} required
-                                className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 text-white text-[14px] focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all outline-none placeholder-zinc-600"
+                                className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 text-white text-[14px] focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-all outline-none placeholder-zinc-600"
                                 placeholder=""
                             />
                         </div>
@@ -494,7 +494,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"} value={aPassword} onChange={e => setAPassword(e.target.value)} required
-                                    className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 pr-12 text-white text-[14px] focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all outline-none placeholder-zinc-600"
+                                    className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 pr-12 text-white text-[14px] focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-all outline-none placeholder-zinc-600"
                                     placeholder=""
                                 />
                                 <button 
@@ -508,7 +508,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         </div>
                         {aError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded border border-red-500/20">{aError}</p>}
                         <button type="submit"
-                            className="w-full bg-[#06b6d4] hover:bg-[#00e693] text-black font-black py-3 rounded-lg transition-all text-sm tracking-wide mt-4 shadow-[0_0_15px_rgba(0,255,163,0.15)]">
+                            className="w-full bg-[#10b981] hover:bg-[#00E676] text-black font-black py-3 rounded-lg transition-all text-sm tracking-wide mt-4 shadow-[0_0_15px_rgba(0,255,163,0.15)]">
                             Yönetici Girişi Yap
                         </button>
                     </form>
@@ -520,7 +520,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                             <label className="text-xs text-zinc-400 font-medium">Misafir Kullanıcı adı</label>
                             <input
                                 type="text" value={gUsername} onChange={e => setGUsername(e.target.value)} required
-                                className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 text-white text-[14px] focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all outline-none placeholder-zinc-600"
+                                className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 text-white text-[14px] focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-all outline-none placeholder-zinc-600"
                                 placeholder=""
                             />
                         </div>
@@ -529,7 +529,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"} value={gPassword} onChange={e => setGPassword(e.target.value)} required
-                                    className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 pr-12 text-white text-[14px] focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all outline-none placeholder-zinc-600"
+                                    className="w-full bg-[#111111] border border-[#252A35] rounded-lg py-3 px-4 pr-12 text-white text-[14px] focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981] transition-all outline-none placeholder-zinc-600"
                                     placeholder=""
                                 />
                                 <button 
@@ -543,7 +543,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         </div>
                         {gError && <p className="text-red-500 text-xs font-bold text-center bg-red-500/10 py-2 rounded border border-red-500/20">{gError}</p>}
                         <button type="submit"
-                            className="w-full bg-[#06b6d4] hover:bg-[#00e693] text-black font-black py-3 rounded-lg transition-all text-sm tracking-wide mt-4 shadow-[0_0_15px_rgba(0,255,163,0.15)]">
+                            className="w-full bg-[#10b981] hover:bg-[#00E676] text-black font-black py-3 rounded-lg transition-all text-sm tracking-wide mt-4 shadow-[0_0_15px_rgba(0,255,163,0.15)]">
                             Misafir Girişi Yap
                         </button>
                     </form>

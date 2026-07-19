@@ -22,6 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onToggle,
   activeView,
   onViewChange,
+  userRole,
 }) => {
   const { t } = useLanguage();
   
@@ -155,15 +156,19 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <span className="font-bold text-[13px] lg:text-[14px]">Anasayfa</span>
                 </button>
 
-                <button className="flex items-center gap-2.5 lg:gap-3 px-2.5 lg:px-3 py-2 lg:py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
-                  <Star className="w-4 h-4 lg:w-5 lg:h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
-                  <span className="font-bold text-[13px] lg:text-[14px]">Sık Kullanılanlar</span>
-                </button>
+                {userRole && userRole !== 'guest' && (
+                  <>
+                    <button className="flex items-center gap-2.5 lg:gap-3 px-2.5 lg:px-3 py-2 lg:py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
+                      <Star className="w-4 h-4 lg:w-5 lg:h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
+                      <span className="font-bold text-[13px] lg:text-[14px]">Sık Kullanılanlar</span>
+                    </button>
 
-                <button className="flex items-center gap-2.5 lg:gap-3 px-2.5 lg:px-3 py-2 lg:py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
-                  <Copy className="w-4 h-4 lg:w-5 lg:h-5 icon-wiggle" stroke="currentColor" fill="rgba(99,102,241,0.2)" strokeWidth={1.5} />
-                  <span className="font-bold text-[13px] lg:text-[14px]">Bahislerim</span>
-                </button>
+                    <button className="flex items-center gap-2.5 lg:gap-3 px-2.5 lg:px-3 py-2 lg:py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
+                      <Copy className="w-4 h-4 lg:w-5 lg:h-5 icon-wiggle" stroke="currentColor" fill="rgba(99,102,241,0.2)" strokeWidth={1.5} />
+                      <span className="font-bold text-[13px] lg:text-[14px]">Bahislerim</span>
+                    </button>
+                  </>
+                )}
                 
                 <button className="flex items-center gap-2.5 lg:gap-3 px-2.5 lg:px-3 py-2 lg:py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#111111] group">
                   <Radio className="w-4 h-4 lg:w-5 lg:h-5 icon-wiggle text-red-500" stroke="currentColor" fill="rgba(239,68,68,0.2)" strokeWidth={1.5} />
