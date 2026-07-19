@@ -78,17 +78,20 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
           <div key={game.id} className="shrink-0 snap-start flex flex-col items-center group">
             <div 
               onClick={() => onPlayGame(game)}
-              className="w-[130px] h-[175px] md:w-[140px] md:h-[190px] lg:w-[150px] lg:h-[200px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#06b6d4]/40"
+              className="w-[110px] h-[137px] sm:w-[120px] sm:h-[150px] md:w-[130px] md:h-[162px] lg:w-[140px] lg:h-[175px] xl:w-[150px] xl:h-[187px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_10px_40px_rgba(54,255,196,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/5 hover:border-[#36ffc4]/30 bg-[#1a1c24]"
             >
               
-              <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-fill transition-transform duration-700 ease-out group-hover:scale-110" />
+              <img src={game.img} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
               
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              {/* Glow behind image on hover */}
+              <div className="absolute inset-0 bg-[#36ffc4]/0 group-hover:bg-[#36ffc4]/10 transition-colors duration-500 mix-blend-overlay z-10"></div>
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
 
               {/* Play button appears on hover */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20">
-                      <Play className="w-5 h-5 text-white fill-current ml-1" />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-[#10b981] to-[#36ffc4] hover:from-[#00E676] hover:to-[#10b981] shadow-[0_0_20px_rgba(54,255,196,0.5)] flex items-center justify-center border border-white/20 transform scale-90 group-hover:scale-100 transition-all duration-300">
+                      <Play className="w-4 h-4 md:w-5 md:h-5 text-black fill-current ml-1" />
                   </div>
               </div>
             </div>

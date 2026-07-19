@@ -252,44 +252,34 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
   const players = game.players || randomPlayers;
   
   return (
-    <div className="flex flex-col">
-      <div 
-        className="group relative flex flex-col cursor-pointer rounded-xl overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.6)] transition-all duration-300 hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_15px_40px_rgba(0,0,0,0.5)] border border-transparent hover:border-white/10 hover:border-t-white/20 hover:border-l-white/20 hover:-translate-y-1" 
-        style={{ aspectRatio: '3/4', backgroundColor: '#111' }}
-        tabIndex={0}
-        onClick={() => onClick()} // Trigger play on card click
-      >
-        {/* Sweeping Light Beam on Hover */}
-        <div className="absolute top-0 left-[-100%] w-[50%] h-full bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] group-hover:left-[200%] transition-all duration-1000 ease-in-out pointer-events-none z-20"></div>
+    <div 
+      className="group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 hover:z-10 border border-white/5 hover:border-[#36ffc4]/30 shadow-[0_4px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_10px_40px_rgba(54,255,196,0.25)] hover:-translate-y-2 bg-[#1a1c24]"
+      tabIndex={0}
+      onClick={() => onClick()}
+    >
+      <div className="relative w-full aspect-[4/5] overflow-hidden">
+        <img src={game.img || game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
         
-        {/* Full Image */}
-        <img 
-          src={game.img || game.image} 
-          alt={game.name} 
-          className={`absolute inset-0 w-full h-full ${game.containImg ? 'object-contain' : 'object-cover'} object-center transition-transform duration-700 group-hover:scale-110 z-10 ${game.category === 'originals' ? 'mix-blend-lighten' : ''}`} 
-        />
-
-
-
+        {/* Glow behind image on hover */}
+        <div className="absolute inset-0 bg-[#36ffc4]/0 group-hover:bg-[#36ffc4]/10 transition-colors duration-500 mix-blend-overlay z-10"></div>
+        
         {/* Play Overlay with Real and Demo Buttons */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/70 backdrop-blur-[2px]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 bg-black/60 backdrop-blur-sm">
           <button 
             onClick={(e) => { e.stopPropagation(); onClick(); }}
-            className="bg-[#10b981] hover:bg-[#00E676] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(0,255,163,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+            className="bg-gradient-to-r from-[#10b981] to-[#36ffc4] hover:from-[#00E676] hover:to-[#10b981] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_20px_rgba(54,255,196,0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
           >
             GERÇEK OYNA
           </button>
           
           <button 
             onClick={(e) => { e.stopPropagation(); onDemoClick ? onDemoClick() : onClick(); }}
-            className="bg-[#2A2E3D] hover:bg-[#3A3F54] border border-white/10 text-white font-bold text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+            className="bg-[#2A2E3D]/80 hover:bg-[#3A3F54] border border-white/20 text-white font-bold text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_4px_10px_rgba(0,0,0,0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
           >
             EĞLENCE MODU
           </button>
         </div>
       </div>
-
-
     </div>
   );
 };
@@ -398,10 +388,10 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
         </div>
       </div>
       
-      <div ref={scrollRef} className="overflow-x-auto hide-scrollbar -mx-4 px-4 pb-4" style={{ scrollSnapType: 'x mandatory' }}>
-        <div className="flex gap-4 min-w-max">
+      <div ref={scrollRef} className="overflow-x-auto hide-scrollbar -mx-4 px-4 pb-6 pt-2" style={{ scrollSnapType: 'x mandatory' }}>
+        <div className="flex gap-3 md:gap-4 min-w-max">
           {games.map((game, i) => (
-            <div key={`${game.id}-${i}`} className="w-[130px] sm:w-[140px] md:w-[150px] lg:w-[160px]" style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
+            <div key={`${game.id}-${i}`} className="w-[110px] sm:w-[120px] md:w-[130px] lg:w-[140px] xl:w-[150px]" style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
               <GameCard game={game} onClick={() => onSelect(game)} onDemoClick={() => onDemo(game)} />
             </div>
           ))}
