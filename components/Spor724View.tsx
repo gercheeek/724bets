@@ -201,7 +201,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
       let drawId = `d_${ev.id}`;
       let awayId = `a_${ev.id}`;
       
-      const rawMarkets = ev.group_markets?.['full_event|0'] || ev.group_markets?.['game_full_event|0'] || ev.group_markets?.['set|1'];
+      const rawMarkets = data.group_markets?.['full_event|0'] || data.group_markets?.['game_full_event|0'] || data.group_markets?.['set|1'];
       const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
       
       for (const market of markets) {
