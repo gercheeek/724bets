@@ -153,32 +153,41 @@ export const SportsHeroBanner: React.FC = () => {
           </div>
 
           {/* Aggressive Typography for Teams & Score/VS */}
-          <div className="flex items-center justify-center gap-3 md:gap-5 mb-6 md:mb-8 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] text-right leading-none pb-1">
-              İSPANYA
-            </h1>
+          <div className="flex items-center justify-between w-full max-w-[800px] mb-8 md:mb-10 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            {/* Home Team */}
+            <div className="flex-1 flex justify-end">
+              <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_15px_25px_rgba(0,0,0,1)] text-right leading-none pb-1">
+                İSPANYA
+              </h1>
+            </div>
             
-            <div className="flex items-center justify-center min-w-[70px] md:min-w-[100px]">
+            {/* Center Score / VS */}
+            <div className="flex-shrink-0 mx-4 md:mx-8">
               {heroMatch && (heroMatch.score !== '-' || heroMatch.isLive) ? (
-                <div className="flex items-center gap-2 md:gap-4 bg-black/60 border border-white/10 rounded-xl px-4 py-2 md:py-3 backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                   <span className="text-white font-black text-3xl md:text-5xl lg:text-[42px] tabular-nums drop-shadow-lg leading-none">{heroMatch.score.split(' - ')[0] || '0'}</span>
-                   <span className="text-[#36ffc4] font-black text-xl md:text-2xl drop-shadow-md leading-none">-</span>
-                   <span className="text-white font-black text-3xl md:text-5xl lg:text-[42px] tabular-nums drop-shadow-lg leading-none">{heroMatch.score.split(' - ')[1] || '0'}</span>
+                <div className="flex items-center justify-center gap-3 md:gap-5 bg-gradient-to-b from-black/80 to-black/40 border border-white/10 rounded-2xl px-6 md:px-8 py-3 md:py-4 backdrop-blur-xl shadow-[0_0_40px_rgba(0,0,0,0.8)] relative overflow-hidden group/score">
+                   {/* Inner Glow */}
+                   <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-50"></div>
+                   <span className="text-white font-black text-4xl md:text-5xl lg:text-[52px] tabular-nums drop-shadow-2xl leading-none relative z-10">{heroMatch.score.split(' - ')[0] || '0'}</span>
+                   <span className="text-[#36ffc4] font-black text-2xl md:text-3xl drop-shadow-[0_0_15px_rgba(54,255,196,0.5)] leading-none relative z-10">-</span>
+                   <span className="text-white font-black text-4xl md:text-5xl lg:text-[52px] tabular-nums drop-shadow-2xl leading-none relative z-10">{heroMatch.score.split(' - ')[1] || '0'}</span>
                 </div>
               ) : (
-                <div className="bg-[#10b981]/10 border border-[#10b981]/20 rounded-lg px-2 py-1 md:px-3 md:py-1.5 backdrop-blur-sm shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                  <span className="text-[#10b981] font-black italic text-lg md:text-2xl lg:text-[28px] drop-shadow-md leading-none">VS</span>
+                <div className="bg-gradient-to-b from-[#10b981]/20 to-[#10b981]/5 border border-[#10b981]/30 rounded-2xl px-4 py-2 md:px-5 md:py-3 backdrop-blur-md shadow-[0_0_25px_rgba(16,185,129,0.3)]">
+                  <span className="text-[#36ffc4] font-black italic text-xl md:text-3xl lg:text-[32px] drop-shadow-[0_0_10px_rgba(54,255,196,0.6)] leading-none">VS</span>
                 </div>
               )}
             </div>
             
-            <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] text-left leading-none pb-1">
-              ARJANTİN
-            </h1>
+            {/* Away Team */}
+            <div className="flex-1 flex justify-start">
+              <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_15px_25px_rgba(0,0,0,1)] text-left leading-none pb-1">
+                ARJANTİN
+              </h1>
+            </div>
           </div>
 
           {/* Dynamic Odds Buttons (Glassmorphism) */}
-          <div className="flex items-center justify-center gap-2 md:gap-3 w-full max-w-[550px] animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+          <div className="flex items-center justify-center gap-3 w-full max-w-[600px] animate-fade-in-up" style={{ animationDelay: '300ms' }}>
              {[
                { label: '1 İSPANYA', odd: heroMatch?.homeOdd || '2.40' },
                { label: 'X BERABERLİK', odd: heroMatch?.drawOdd || '3.10' },
@@ -186,15 +195,15 @@ export const SportsHeroBanner: React.FC = () => {
              ].map((btn, idx) => (
                <button 
                  key={idx} 
-                 className="flex-1 h-[42px] md:h-[50px] rounded-xl bg-black/40 hover:bg-[#10b981]/10 border border-white/10 hover:border-[#10b981]/80 backdrop-blur-xl flex flex-col items-center justify-center gap-0.5 group/odd transition-all duration-300 shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:-translate-y-1 relative overflow-hidden"
+                 className="flex-1 h-[52px] md:h-[60px] rounded-xl bg-gradient-to-b from-white/[0.08] to-black/40 hover:from-[#10b981]/20 hover:to-black/60 border border-white/[0.08] hover:border-[#36ffc4]/50 backdrop-blur-xl flex flex-col items-center justify-center gap-1 group/odd transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_0_40px_rgba(54,255,196,0.2)] hover:-translate-y-1 relative overflow-hidden"
                >
                  {/* Inner Glow on Hover */}
-                 <div className="absolute inset-0 bg-gradient-to-t from-[#10b981]/20 to-transparent opacity-0 group-hover/odd:opacity-100 transition-opacity duration-300"></div>
+                 <div className="absolute inset-0 bg-gradient-to-t from-[#36ffc4]/10 to-transparent opacity-0 group-hover/odd:opacity-100 transition-opacity duration-300"></div>
                  {/* Shine effect */}
                  <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] group-hover/odd:left-[200%] transition-all duration-700 ease-in-out"></div>
                  
-                 <span className="text-gray-400 group-hover/odd:text-[#36ffc4] font-black text-[8px] md:text-[10px] uppercase tracking-widest transition-colors relative z-10">{btn.label}</span>
-                 <div className="relative z-10">
+                 <span className="text-[#a1a1aa] group-hover/odd:text-[#36ffc4] font-black text-[9px] md:text-[11px] uppercase tracking-[0.2em] transition-colors relative z-10">{btn.label}</span>
+                 <div className="relative z-10 text-white group-hover/odd:text-white font-black text-base md:text-xl tracking-wider drop-shadow-md">
                    <AnimatedOdd value={btn.odd} />
                  </div>
                </button>
