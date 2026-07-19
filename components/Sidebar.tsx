@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Menu, Trophy, Star, 
   Target, Gift, Ticket, MessageSquare, Globe, 
-  Crown, ChevronDown, Clock, Sparkles, Cherry, Percent, Headphones, FileText
+  Crown, ChevronDown, Clock, Sparkles, Cherry, Percent, Headphones, FileText, Copy, Radio
 } from 'lucide-react';
 import { NavVisibility } from './Header';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -160,18 +160,18 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </button>
 
                 <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
-                  <Clock className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
-                  <span className="font-bold text-[14px]">Son Oynanan</span>
+                  <Copy className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
+                  <span className="font-bold text-[14px]">Bahislerim</span>
                 </button>
 
                 <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
-                  <Sparkles className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
-                  <span className="font-bold text-[14px]">Yeni Çıkanlar</span>
+                  <Radio className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
+                  <span className="font-bold text-[14px]">Canlı Maçlar</span>
                 </button>
 
                 <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-[#14141a] group">
                   <Trophy className="w-5 h-5 icon-wiggle" stroke="currentColor" fill="rgba(16,185,129,0.2)" strokeWidth={1.5} />
-                  <span className="font-bold text-[14px] truncate w-40 text-left">FIFA Dünya Kupası 20...</span>
+                  <span className="font-bold text-[14px] truncate w-40 text-left">Favori Ligler</span>
                 </button>
               </div>
 
@@ -293,16 +293,16 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Sık Kullanılanlar</div>
               </button>
               <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
-                <Clock className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Son Oynanan</div>
+                <Copy className="w-5 h-5" />
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Bahislerim</div>
               </button>
               <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
-                <Sparkles className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Yeni Çıkanlar</div>
+                <Radio className="w-5 h-5" />
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Canlı Maçlar</div>
               </button>
               <button className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
                 <Trophy className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Popüler</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#1A1D29] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Favori Ligler</div>
               </button>
               <div className="w-10 h-px bg-white/5 my-1"></div>
               <button onClick={() => {onToggle(); setIsCasinoOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#14141a] transition-colors">
