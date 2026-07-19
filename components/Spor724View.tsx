@@ -3,6 +3,7 @@ import { useBetting } from '../contexts/BettingContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { SportsHeroBanner } from './SportsHeroBanner';
 import { AnimatedOdd } from './AnimatedOdd';
+import Footer from './Footer';
 import { 
   Search, ChevronRight, ChevronDown, X,
   Activity, Star, Flame, Clock, Trophy, Gamepad2, Target, Zap, TrendingUp, PlayCircle, Lock
@@ -676,7 +677,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
             })}
           </div>
 
-
+          <Footer />
 
         </div>
       </div>
