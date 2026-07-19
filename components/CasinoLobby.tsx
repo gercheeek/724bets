@@ -5,6 +5,7 @@ import { CasinoLobbyGame } from '../types';
 import { ALL_GAMES } from '../data/games';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getOriginalsData } from './OriginalsSlider';
+import { PopularLiveWidget } from './PopularLiveWidget';
 
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
@@ -636,6 +637,9 @@ export default function CasinoLobby({
               onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
             />
+
+            {/* POPULAR LIVE WIDGET */}
+            <PopularLiveWidget onNavigate={onNavigate} />
 
             {/* POPULAR GAMES SLIDER SECTION */}
             <SliderSection 
