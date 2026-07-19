@@ -180,7 +180,7 @@ export default function App() {
       if (role === 'admin') {
         setIsAdminPanelOpen(true);
       } else {
-        alert("Erişim Engellendi: Bu panel sadece yöneticiler içindir.");
+        window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'admin' }));
       }
     };
     window.addEventListener('open-admin', handleOpenAdmin);
@@ -1434,9 +1434,14 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <p style={{ color: '#9ca3af', fontSize: '15px', maxWidth: '400px', textAlign: 'center', lineHeight: 1.6, marginBottom: '24px' }}>
             Bu sayfaya (Yönetim Paneli) erişim yetkiniz bulunmamaktadır.
           </p>
-          <button onClick={() => { window.location.href = '/'; }} style={{ padding: '12px 24px', background: '#3b82f6', color: '#fff', borderRadius: '8px', fontWeight: 'bold' }}>
-            Ana Sayfaya Dön
-          </button>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <button onClick={() => { setAuthModalMode('admin'); }} style={{ padding: '12px 24px', background: '#10b981', color: '#fff', borderRadius: '8px', fontWeight: 'bold' }}>
+              Yönetici Girişi Yap
+            </button>
+            <button onClick={() => { window.location.href = '/'; }} style={{ padding: '12px 24px', background: '#3b82f6', color: '#fff', borderRadius: '8px', fontWeight: 'bold' }}>
+              Ana Sayfaya Dön
+            </button>
+          </div>
         </div>
       );
     }
