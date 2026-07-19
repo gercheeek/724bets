@@ -99,25 +99,24 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                                 }
                             }
                         });
-                        if (homeOdd !== '-' || awayOdd !== '-') {
-                            break; // Found valid odds
-                        }
                     }
                 }
             }
 
-            parsedMatches.push({
-                id: ev.id,
-                league,
-                time: minute,
-                home: { name: homeTeam, code: homeTeam.substring(0, 2).toUpperCase(), color: getTeamColor(homeTeam) },
-                away: { name: awayTeam, code: awayTeam.substring(0, 2).toUpperCase(), color: getTeamColor(awayTeam) },
-                score,
-                isUpcoming: !isLive,
-                homeOdd,
-                drawOdd,
-                awayOdd
-            });
+            if (homeOdd !== '-' || awayOdd !== '-') {
+                parsedMatches.push({
+                    id: ev.id,
+                    league,
+                    time: minute,
+                    home: { name: homeTeam, code: homeTeam.substring(0, 2).toUpperCase(), color: getTeamColor(homeTeam) },
+                    away: { name: awayTeam, code: awayTeam.substring(0, 2).toUpperCase(), color: getTeamColor(awayTeam) },
+                    score,
+                    isUpcoming: !isLive,
+                    homeOdd,
+                    drawOdd,
+                    awayOdd
+                });
+            }
         });
         
         // Show only the top 6 most relevant matches (live ones first)

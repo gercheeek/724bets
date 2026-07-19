@@ -232,6 +232,10 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
          }
       }
 
+      if (homeOdd === '-' && awayOdd === '-') {
+        return;
+      }
+
       const matchObj = {
         id: ev.id,
         home: homeTeam,
