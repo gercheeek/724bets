@@ -339,95 +339,76 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pb-3">
                 {featuredMatches.map(match => (
-                  <div key={`pop-${match.id}`} className="bg-[#161e31] rounded-xl p-3.5 flex flex-col gap-2.5 border border-white/[0.03] hover:border-white/10 transition-all cursor-pointer relative overflow-hidden shadow-sm">
-                    
-                    {/* Top Bar: League & Star */}
+                  <div key={`pop-${match.id}`} className="bg-[#121824] rounded-2xl p-4 flex flex-col gap-4 border border-gray-800/50 hover:border-[#10b981]/30 transition-all cursor-pointer relative overflow-hidden shadow-lg group">
+                    {/* Background Glow */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[150px] bg-[#10b981] opacity-[0.02] blur-[60px] group-hover:opacity-[0.06] transition-opacity duration-500 pointer-events-none"></div>
+
+                    {/* Top Bar: League & Time */}
                     <div className="flex items-center justify-between z-10">
-                      <div className="flex items-center gap-1.5 text-[11px] text-[#99907c] font-medium tracking-wide">
+                      <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium tracking-wide">
                         <span className="opacity-80 grayscale">{getCountryFlag(match.country)}</span>
-                        <span className="truncate max-w-[200px]">{match.league}</span>
+                        <span className="truncate max-w-[180px] uppercase tracking-wider">{match.league}</span>
                       </div>
-                      <Star className="w-3.5 h-3.5 text-[#99907c] hover:text-[#e9c349] transition-colors cursor-pointer shrink-0" />
-                    </div>
-                    
-                    {/* Status & Icons */}
-                    <div className="flex items-center justify-between z-10">
-                      <div className="flex items-center gap-2">
-                        <span className={`text-[12px] font-bold ${match.isFinished ? 'text-[#99907c]' : (!match.isLive ? 'text-[#99907c]' : 'text-[#3ab4f2]')}`}>
-                          {match.isFinished ? (language === 'tr' ? 'Bitti' : 'FT') : (match.minute === 'Yakında' ? 'Bugün, 22:00' : match.minute)}
-                        </span>
-                        {!match.isFinished && match.minute !== 'Yakında' && match.isLive && (
-                           <div className="flex items-center gap-1.5">
-                             <div className="w-4 h-3 bg-red-600 rounded-[3px] flex items-center justify-center shadow-sm">
-                                <div className="w-0 h-0 border-t-[3px] border-t-transparent border-l-[4px] border-l-white border-b-[3px] border-b-transparent ml-0.5"></div>
-                             </div>
-                             <span className="text-[10px] bg-[#3ab4f2]/20 text-[#3ab4f2] px-1 rounded font-bold">P</span>
-                             <Activity className="w-3.5 h-3.5 text-[#3ab4f2]" />
-                           </div>
+                      <span className="text-[11px] text-gray-400 font-medium flex items-center gap-1.5">
+                        {match.isFinished ? (language === 'tr' ? 'Bitti' : 'FT') : (match.minute === 'Yakında' ? 'Bugün, 22:00' : match.minute)}
+                        {match.isLive && !match.isFinished && match.minute !== 'Yakında' && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></span>
                         )}
-                      </div>
-                      {!match.isFinished && match.minute !== 'Yakında' && match.isLive && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
-                      )}
+                      </span>
                     </div>
-                    
-                    {/* Teams & Scores */}
-                    <div className="flex flex-col gap-2 mt-0.5 z-10">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5 min-w-0 pr-3">
-                          <img src={match.homeLogo} alt={match.home} className="w-5 h-5 rounded-full object-cover bg-white/[0.05] shrink-0" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.home}&backgroundColor=161e31&textColor=e5e2e1`; }} />
-                          <span className="text-[13px] text-white font-bold tracking-wide truncate">{match.home}</span>
+
+                    {/* VS Face-off */}
+                    <div className="flex items-start justify-between z-10 pt-1 pb-2 relative">
+                      {/* Home */}
+                      <div className="flex flex-col items-center gap-2.5 flex-1 w-1/3">
+                        <div className="w-[52px] h-[52px] rounded-full bg-[#1E2538] p-1 border border-gray-700/50 shadow-lg relative group-hover:border-gray-600 transition-colors">
+                          <img src={match.homeLogo} alt={match.home} className="w-full h-full rounded-full object-cover" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.home}&backgroundColor=050505&textColor=ffffff`; }} />
                         </div>
-                        {match.score !== '-' && (
-                          <div className="w-6 h-6 rounded-md bg-[#1f2937] flex items-center justify-center text-[13px] text-white font-bold border border-white/[0.03] shrink-0">
-                            {match.score.split(' - ')[0] || '0'}
-                          </div>
-                        )}
+                        <span className="text-[13.5px] text-white font-bold text-center leading-tight line-clamp-2 px-1">{match.home}</span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5 min-w-0 pr-3">
-                          <img src={match.awayLogo} alt={match.away} className="w-5 h-5 rounded-full object-cover bg-white/[0.05] shrink-0" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.away}&backgroundColor=161e31&textColor=e5e2e1`; }} />
-                          <span className="text-[13px] text-white font-bold tracking-wide truncate">{match.away}</span>
+
+                      {/* Score / VS */}
+                      <div className="flex flex-col items-center justify-center shrink-0 w-1/3 pt-3">
+                        {match.score !== '-' ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <span className="text-[22px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[0]}</span>
+                            <span className="text-[14px] text-gray-600 font-black">-</span>
+                            <span className="text-[22px] text-[#10b981] font-black tabular-nums">{match.score.split(' - ')[1]}</span>
+                          </div>
+                        ) : (
+                          <span className="text-[18px] text-gray-700 font-black italic">VS</span>
+                        )}
+                        <span className="text-[10px] text-gray-500 font-medium uppercase tracking-widest mt-1">{language === 'tr' ? 'Kazanan' : 'Winner'}</span>
+                      </div>
+
+                      {/* Away */}
+                      <div className="flex flex-col items-center gap-2.5 flex-1 w-1/3">
+                        <div className="w-[52px] h-[52px] rounded-full bg-[#1E2538] p-1 border border-gray-700/50 shadow-lg relative group-hover:border-gray-600 transition-colors">
+                          <img src={match.awayLogo} alt={match.away} className="w-full h-full rounded-full object-cover" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.away}&backgroundColor=050505&textColor=ffffff`; }} />
                         </div>
-                        {match.score !== '-' && (
-                          <div className="w-6 h-6 rounded-md bg-[#1f2937] flex items-center justify-center text-[13px] text-white font-bold border border-white/[0.03] shrink-0">
-                            {match.score.split(' - ')[1] || '0'}
-                          </div>
-                        )}
+                        <span className="text-[13.5px] text-white font-bold text-center leading-tight line-clamp-2 px-1">{match.away}</span>
                       </div>
                     </div>
-                    
-                    {/* Odds Section */}
-                    <div className="mt-1 flex flex-col gap-1.5 z-10">
-                      <span className="text-[9px] text-[#99907c] font-medium tracking-wide">1x2</span>
-                      <div className="flex items-center gap-1.5">
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.homeId, match.homeOdd, '1'); }}
-                          className={`flex-1 flex items-center justify-between px-2.5 py-2 rounded-md transition-all group ${betSlip.some(s => s.id === match.homeId) ? 'bg-[#3ab4f2]/10 border border-[#3ab4f2]/30' : 'bg-[#1f2937] hover:bg-[#374151] border border-transparent'}`}
-                        >
-                          <span className="text-[10px] text-[#99907c] font-medium group-hover:text-white transition-colors">1</span>
-                          <span className="text-[11.5px] text-white font-bold">{match.homeOdd}</span>
-                        </button>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.drawId, match.drawOdd, 'X'); }}
-                          className={`flex-1 flex items-center justify-between px-2.5 py-2 rounded-md transition-all group ${betSlip.some(s => s.id === match.drawId) ? 'bg-[#3ab4f2]/10 border border-[#3ab4f2]/30' : 'bg-[#1f2937] hover:bg-[#374151] border border-transparent'}`}
-                        >
-                          <span className="text-[10px] text-[#99907c] font-medium group-hover:text-white transition-colors">{language === 'tr' ? 'beraberlik' : 'draw'}</span>
-                          <span className="text-[11.5px] text-white font-bold">{match.drawOdd}</span>
-                        </button>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.awayId, match.awayOdd, '2'); }}
-                          className={`flex-1 flex items-center justify-between px-2.5 py-2 rounded-md transition-all group ${betSlip.some(s => s.id === match.awayId) ? 'bg-[#3ab4f2]/10 border border-[#3ab4f2]/30' : 'bg-[#1f2937] hover:bg-[#374151] border border-transparent'}`}
-                        >
-                          <span className="text-[10px] text-[#99907c] font-medium group-hover:text-white transition-colors">2</span>
-                          <span className="text-[11.5px] text-white font-bold">{match.awayOdd}</span>
-                        </button>
-                        <button className="w-8 h-[34px] shrink-0 bg-[#1f2937] hover:bg-[#374151] rounded-md flex items-center justify-center transition-colors">
-                          <ChevronDown className="w-3.5 h-3.5 text-[#99907c]" />
-                        </button>
-                      </div>
+
+                    {/* Odds */}
+                    <div className="flex items-center gap-2 z-10 w-full mt-1">
+                      {['1', 'X', '2'].map((oddType) => {
+                        const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
+                        const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
+                        const isSelected = betSlip.some(s => s.id === oddId);
+                        
+                        return (
+                          <button 
+                            key={oddType}
+                            onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, oddType); }}
+                            className={`flex-1 min-h-[46px] rounded-lg flex items-center justify-between px-3 md:px-4 transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-[#1E2538] hover:bg-[#2A3449] border border-transparent'}`}
+                          >
+                            <span className="text-[12px] text-gray-400 font-bold">{oddType}</span>
+                            <span className="text-[14px] text-white font-bold">{oddValue}</span>
+                          </button>
+                        );
+                      })}
                     </div>
-                    
                   </div>
                 ))}
               </div>
