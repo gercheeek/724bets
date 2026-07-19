@@ -77,20 +77,25 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
             let drawOdd = '-';
             let awayOdd = '-';
             
-            const markets = data.group_markets?.['full_event|0'] || data.group_markets?.['game_full_event|0'] || data.group_markets?.['set|1'] || [];
-            const market1x2 = markets.find((m: string) => m.includes('|12||') || m.includes('|1x2||') || m.includes('|oe||'));
+            const rawMarkets = data.group_markets?.['full_event|0'] || data.group_markets?.['game_full_event|0'] || data.group_markets?.['set|1'];
+            const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
+            const market1x2 = markets.find((m: string) => m.includes('|12|') || m.includes('|1x2|') || m.includes('|match_winner|') || m.includes('|oe|'));
+            
             if (market1x2) {
                 const parts = market1x2.split('|');
-                if (parts.length > 7) {
-                    const selections = parts[7].split('!');
+                const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
+                if (selectionsPart) {
+                    const selections = selectionsPart.split('!');
                     selections.forEach((sel: string) => {
                         const sParts = sel.split('~');
-                        if (sParts.length >= 3) {
+                        if (sParts.length > 2) {
                             const type = sParts[1].toLowerCase();
-                            const odd = parseFloat(sParts[2]).toFixed(2);
-                            if (type === 'home' || type === '1') { homeOdd = odd; }
-                            if (type === 'draw' || type === 'x') { drawOdd = odd; }
-                            if (type === 'away' || type === '2') { awayOdd = odd; }
+                            const odd = parseFloat(sParts[2]);
+                            if (!isNaN(odd)) {
+                                if (type === 'home' || type === '1') { homeOdd = odd.toFixed(2); }
+                                if (type === 'draw' || type === 'x') { drawOdd = odd.toFixed(2); }
+                                if (type === 'away' || type === '2') { awayOdd = odd.toFixed(2); }
+                            }
                         }
                     });
                 }
