@@ -175,7 +175,14 @@ export default function App() {
   const [isDriverActive, setIsDriverActive] = useState(false);
 
   useEffect(() => {
-    const handleOpenAdmin = () => setIsAdminPanelOpen(true);
+    const handleOpenAdmin = () => {
+      const role = localStorage.getItem('site_user_role');
+      if (role === 'admin') {
+        setIsAdminPanelOpen(true);
+      } else {
+        alert("Erişim Engellendi: Bu panel sadece yöneticiler içindir.");
+      }
+    };
     window.addEventListener('open-admin', handleOpenAdmin);
     return () => window.removeEventListener('open-admin', handleOpenAdmin);
   }, []);
@@ -1419,7 +1426,22 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     );
   }
 
-  if (view === 'admin') return (
+  if (view === 'admin') {
+    if (userRole !== 'admin') {
+      return (
+        <div style={{ width: '100vw', height: '100dvh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 900, color: '#ef4444', marginBottom: '16px' }}>Erişim Engellendi</h1>
+          <p style={{ color: '#9ca3af', fontSize: '15px', maxWidth: '400px', textAlign: 'center', lineHeight: 1.6, marginBottom: '24px' }}>
+            Bu sayfaya (Yönetim Paneli) erişim yetkiniz bulunmamaktadır.
+          </p>
+          <button onClick={() => { window.location.href = '/'; }} style={{ padding: '12px 24px', background: '#3b82f6', color: '#fff', borderRadius: '8px', fontWeight: 'bold' }}>
+            Ana Sayfaya Dön
+          </button>
+        </div>
+      );
+    }
+    
+    return (
     <ErrorBoundary>
       <AdminPanel
         brands={brands}
@@ -1493,6 +1515,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       />
     </ErrorBoundary>
   );
+}
 
   const handleViewChange = (v: string) => {
     // Update URL without reloading
