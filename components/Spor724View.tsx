@@ -220,6 +220,16 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
             });
          }
       }
+
+      // TEST: Sadece Arjantin maçına rastgele dalgalanan açık oran tanımlama
+      if (homeTeam.includes('Arjantin') || awayTeam.includes('Arjantin') || homeTeam.includes('Argentina') || awayTeam.includes('Argentina')) {
+         homeOdd = (2.45 + (Math.random() * 0.2 - 0.1)).toFixed(2);
+         drawOdd = (3.10 + (Math.random() * 0.2 - 0.1)).toFixed(2);
+         awayOdd = (2.85 + (Math.random() * 0.2 - 0.1)).toFixed(2);
+         if (homeId === `h_${ev.id}`) homeId = `h_arg_${ev.id}`;
+         if (drawId === `d_${ev.id}`) drawId = `d_arg_${ev.id}`;
+         if (awayId === `a_${ev.id}`) awayId = `a_arg_${ev.id}`;
+      }
       
       parsedMatches.push({
         id: ev.id,
