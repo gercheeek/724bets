@@ -318,7 +318,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     .slice(0, 6);
 
   return (
-    <div className="flex h-full w-full bg-[#0A0A0A] text-[#e5e2e1] font-sans overflow-hidden">
+    <div className="flex h-full w-full bg-[#0B0F19] text-[#e5e2e1] font-sans overflow-hidden">
       
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
@@ -481,87 +481,66 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
               const flag = getCountryFlag(firstMatch.country);
               
               return (
-                <div key={league} className="mb-4">
+                <div key={league} className="mb-6">
                   {/* League Header */}
-                  <div className="flex items-center gap-3 py-3 px-4 bg-gradient-to-r from-[#0f1422] to-transparent rounded-t-xl sticky top-0 z-20 backdrop-blur-md">
-                    <span className="text-[16px] drop-shadow-md">{flag}</span>
-                    <span className="text-[12.5px] text-[#e5e2e1] font-bold truncate flex-1 tracking-wider uppercase">{league}</span>
-                    <Star className="w-4 h-4 text-zinc-600 hover:text-[#e9c349] transition-colors cursor-pointer" />
+                  <div className="flex items-center gap-3 py-3 px-4 bg-[#0B0F19] rounded-t-xl sticky top-0 z-20 backdrop-blur-md mb-2">
+                    <span className="text-[18px] drop-shadow-md">{flag}</span>
+                    <span className="text-[14px] text-slate-300 font-bold truncate flex-1 uppercase tracking-wide">{league}</span>
+                    <Star className="w-4 h-4 text-slate-500 hover:text-[#e9c349] transition-colors cursor-pointer" />
                   </div>
                   
                   {/* Match Rows */}
-                  <div className="bg-[#0A0A0A] rounded-b-xl shadow-lg">
+                  <div className="flex flex-col gap-3">
                     {leagueMatches.map((match, idx) => (
                       <div 
                         key={match.id} 
-                        className={`flex items-center gap-1 hover:bg-[#0f1422] transition-colors group ${idx === leagueMatches.length - 1 ? 'rounded-b-xl' : ''}`}
+                        className="flex flex-col md:flex-row md:items-center bg-[#151C2C] rounded-xl p-3 md:p-4 gap-3 md:gap-4 transition-all duration-300 border border-transparent md:hover:border-[#10b981]/50 md:hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] group relative"
                       >
-                        {/* Live Indicator + Minute */}
-                        <div className="w-[65px] shrink-0 flex flex-col items-center justify-center py-3.5 gap-1">
-                          <span className={`text-[10.5px] font-black tracking-wide ${match.isFinished ? 'text-[#99907c]' : 'text-[#36ffc4] drop-shadow-[0_0_5px_rgba(54,255,196,0.3)]'}`}>{match.minute}</span>
+                        {/* LEFT SECTION: Status */}
+                        <div className="flex items-center md:flex-col md:justify-center gap-2 md:gap-1 shrink-0 md:w-[70px] border-b border-white/5 md:border-b-0 pb-2 md:pb-0 mb-1 md:mb-0">
+                          <span className={`text-[12px] md:text-[11px] font-black tracking-wide ${match.isFinished ? 'text-slate-400' : 'text-[#36ffc4] drop-shadow-[0_0_5px_rgba(54,255,196,0.3)]'}`}>{match.minute}</span>
                           {!match.isFinished && (
-                            <div className="flex items-center gap-1">
-                              <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
-                            </div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
                           )}
                         </div>
-                        
-                        {/* Teams with Logos */}
-                        <div className="flex-1 min-w-0 py-3.5 pr-4 pl-1">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <img 
-                              src={match.homeLogo} 
-                              alt={match.home} 
-                              className="w-4 h-4 rounded-full object-cover bg-white/[0.05]" 
-                              onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.home}&backgroundColor=0f1422&textColor=e5e2e1`; }}
-                            />
-                            <span className="text-[12.5px] text-white font-bold truncate group-hover:text-[#36ffc4] transition-colors">{match.home}</span>
+
+                        {/* MIDDLE SECTION: Teams */}
+                        <div className="flex-1 flex flex-col gap-2.5 min-w-0 pr-0 md:pr-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <img src={match.homeLogo} alt={match.home} className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover bg-white/5 shadow-sm" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.home}&backgroundColor=0B0F19&textColor=ffffff`; }} />
+                              <span className="text-[14px] md:text-[15px] font-semibold text-white truncate">{match.home}</span>
+                            </div>
+                            <span className="text-[14px] md:text-[15px] text-[#36ffc4] font-bold tabular-nums ml-2">{match.score.split(' - ')[0] || '-'}</span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <img 
-                              src={match.awayLogo} 
-                              alt={match.away} 
-                              className="w-4 h-4 rounded-full object-cover bg-white/[0.05]" 
-                              onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.away}&backgroundColor=0f1422&textColor=e5e2e1`; }}
-                            />
-                            <span className="text-[12.5px] text-white font-bold truncate group-hover:text-[#36ffc4] transition-colors">{match.away}</span>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <img src={match.awayLogo} alt={match.away} className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover bg-white/5 shadow-sm" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.away}&backgroundColor=0B0F19&textColor=ffffff`; }} />
+                              <span className="text-[14px] md:text-[15px] font-semibold text-white truncate">{match.away}</span>
+                            </div>
+                            <span className="text-[14px] md:text-[15px] text-[#36ffc4] font-bold tabular-nums ml-2">{match.score.split(' - ')[1] || '-'}</span>
                           </div>
                         </div>
-                        
-                        {/* Score */}
-                        <div className="w-[45px] shrink-0 flex flex-col items-center justify-center gap-1.5">
-                          <span className="text-[13px] text-[#36ffc4] font-black tabular-nums drop-shadow-[0_0_8px_rgba(54,255,196,0.4)]">{match.score.split(' - ')[0] || '-'}</span>
-                          <span className="text-[13px] text-[#36ffc4] font-black tabular-nums drop-shadow-[0_0_8px_rgba(54,255,196,0.4)]">{match.score.split(' - ')[1] || '-'}</span>
-                        </div>
 
-                        {/* Odds */}
-                        <div className="flex items-center gap-2 px-4 shrink-0">
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.homeId, match.homeOdd, '1'); }}
-                            className={`w-[60px] h-[40px] rounded-lg flex flex-col items-center justify-center text-[12px] font-bold transition-all shadow-inner ${betSlip.some(s => s.id === match.homeId) ? 'bg-gradient-to-b from-[#36ffc4]/20 to-[#36ffc4]/5 text-[#36ffc4] border border-[#36ffc4] shadow-[0_0_15px_rgba(54,255,196,0.15)]' : 'bg-gradient-to-b from-[#182030] to-[#131926] text-white hover:text-[#36ffc4] border border-white/[0.05] hover:border-white/20'}`}
-                          >
-                            <span className="text-[9.5px] text-[#99907c] font-bold uppercase tracking-widest mb-0.5 group-hover/btn:text-[#b0a999]">1</span>
-                            <span>{match.homeOdd}</span>
-                          </button>
-                          
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.drawId, match.drawOdd, 'X'); }}
-                            className={`w-[60px] h-[40px] rounded-lg flex flex-col items-center justify-center text-[12px] font-bold transition-all shadow-inner ${betSlip.some(s => s.id === match.drawId) ? 'bg-gradient-to-b from-[#36ffc4]/20 to-[#36ffc4]/5 text-[#36ffc4] border border-[#36ffc4] shadow-[0_0_15px_rgba(54,255,196,0.15)]' : 'bg-gradient-to-b from-[#182030] to-[#131926] text-white hover:text-[#36ffc4] border border-white/[0.05] hover:border-white/20'}`}
-                          >
-                            <span className="text-[9.5px] text-[#99907c] font-bold uppercase tracking-widest mb-0.5 group-hover/btn:text-[#b0a999]">X</span>
-                            <span>{match.drawOdd}</span>
-                          </button>
-                          
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.awayId, match.awayOdd, '2'); }}
-                            className={`w-[60px] h-[40px] rounded-lg flex flex-col items-center justify-center text-[12px] font-bold transition-all shadow-inner ${betSlip.some(s => s.id === match.awayId) ? 'bg-gradient-to-b from-[#36ffc4]/20 to-[#36ffc4]/5 text-[#36ffc4] border border-[#36ffc4] shadow-[0_0_15px_rgba(54,255,196,0.15)]' : 'bg-gradient-to-b from-[#182030] to-[#131926] text-white hover:text-[#36ffc4] border border-white/[0.05] hover:border-white/20'}`}
-                          >
-                            <span className="text-[9.5px] text-[#99907c] font-bold uppercase tracking-widest mb-0.5 group-hover/btn:text-[#b0a999]">2</span>
-                            <span>{match.awayOdd}</span>
-                          </button>
-
-                          {/* More Markets */}
-                          <button className="w-[40px] h-[40px] rounded-lg bg-gradient-to-b from-[#182030] to-[#131926] hover:from-[#202b40] hover:to-[#182030] transition-colors flex items-center justify-center text-[11px] text-[#99907c] hover:text-white font-bold border border-white/[0.05] hover:border-white/20 shadow-inner ml-1">
+                        {/* RIGHT SECTION: Odds */}
+                        <div className="flex items-center justify-between md:justify-end gap-1.5 shrink-0 mt-2 md:mt-0 pt-3 md:pt-0 border-t border-white/5 md:border-t-0">
+                          {['1', 'X', '2'].map((oddType) => {
+                            const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
+                            const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
+                            const isSelected = betSlip.some(s => s.id === oddId);
+                            
+                            return (
+                              <button 
+                                key={oddType}
+                                onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, oddType); }}
+                                className={`flex-1 md:flex-none md:w-[65px] min-h-[44px] rounded-lg flex flex-col items-center justify-center transition-all ${isSelected ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-[#1e293b] hover:bg-[#334155] text-slate-300 hover:text-white border border-transparent md:hover:border-[#10b981]/30'}`}
+                              >
+                                <span className="text-[10px] text-slate-400 font-bold mb-0.5">{oddType}</span>
+                                <span className="text-[13px] font-bold">{oddValue}</span>
+                              </button>
+                            );
+                          })}
+                          <button className="min-h-[44px] min-w-[44px] md:w-[44px] rounded-lg bg-[#1e293b] hover:bg-[#334155] transition-colors flex items-center justify-center text-[12px] text-slate-400 hover:text-white font-bold ml-1">
                             +{match.marketsCount}
                           </button>
                         </div>
