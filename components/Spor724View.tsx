@@ -343,76 +343,88 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {featuredMatches.map(match => (
-                  <div key={`pop-${match.id}`} className="bg-gradient-to-br from-[#1b1b22] to-[#121218] rounded-xl border border-white/[0.05] p-3 md:p-4 hover:border-[#10b981]/30 transition-all cursor-pointer shadow-lg relative overflow-hidden group">
+                {featuredMatches.map(match => {
+                  return (
+                  <div key={`pop-${match.id}`} className="bg-[#050505] rounded-xl border-[3px] border-[#0a0a0f] p-3 md:p-4 hover:border-[#10b981]/40 transition-all duration-500 cursor-pointer shadow-2xl relative overflow-hidden group">
                     
-                    {/* Decorative Background for visual depth (matching reference style) */}
-                    <div className="absolute top-0 right-0 w-[150%] h-[150%] bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.06),transparent_50%)] pointer-events-none"></div>
-                    <div className="absolute -bottom-10 -left-10 w-[200px] h-[200px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.04),transparent_60%)] pointer-events-none"></div>
+                    {/* Cinematic Background Image (Like the top slider) */}
+                    <div 
+                      className="absolute inset-0 z-0 opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700 pointer-events-none"
+                      style={{
+                        backgroundImage: `url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=800&auto=format&fit=crop')`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    />
+                    
+                    {/* Vignette & Gradients for text readability */}
+                    <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent pointer-events-none"></div>
+                    <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#050505]/90 via-transparent to-transparent pointer-events-none"></div>
+                    <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050505_120%)] pointer-events-none"></div>
 
                     {/* Header */}
-                    <div className="flex justify-between items-center mb-4 relative z-10">
+                    <div className="flex justify-between items-center mb-6 relative z-10">
                       <div className="flex items-center gap-1.5">
                         {getSportIcon(match.league)}
-                        <span className="text-gray-400 text-[11px] md:text-xs font-semibold truncate max-w-[150px] tracking-wide">{match.league}</span>
+                        <span className="text-white text-[12px] md:text-[13px] font-bold truncate max-w-[150px] tracking-wide">{match.league}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-gray-400 text-[11px] md:text-xs font-semibold">{match.minute === 'Yakında' ? 'Aug 15, 20:30' : (match.isLive ? <span className="text-red-500 font-bold">{match.minute}</span> : match.minute)}</span>
+                        <span className="text-gray-300 text-[12px] md:text-[13px] font-bold">{match.minute === 'Yakında' ? 'Aug 15, 20:30' : (match.isLive ? <span className="text-red-500">{match.minute}</span> : match.minute)}</span>
                         {match.isLive && !match.isFinished && (
-                          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
+                          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,1)]"></div>
                         )}
                       </div>
                     </div>
 
                     {/* Teams Row */}
-                    <div className="flex items-start justify-between mb-2 relative z-10">
+                    <div className="flex items-start justify-between mb-4 relative z-10">
                       {/* Home Team */}
-                      <div className="flex flex-col items-start gap-1.5 flex-1">
-                        <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center p-1.5 overflow-hidden">
+                      <div className="flex flex-col items-start gap-2 flex-1">
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
                           <img 
                             src={`/takimlogo/${match.home.replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
                             alt={match.home}
                             className="w-full h-full object-contain"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
-                              e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[10px]">${match.home.substring(0, 2).toUpperCase()}</span>`;
+                              e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[12px]">${match.home.substring(0, 2).toUpperCase()}</span></div>`;
                             }}
                           />
                         </div>
-                        <span className="text-white font-bold text-[13px] md:text-sm text-left line-clamp-1">{match.home}</span>
+                        <span className="text-white font-extrabold text-[15px] md:text-[17px] text-left line-clamp-2 drop-shadow-md leading-tight">{match.home}</span>
                       </div>
 
                       {/* Score / Center Label */}
-                      <div className="flex flex-col items-center justify-center shrink-0 w-16 pt-2">
+                      <div className="flex flex-col items-center justify-center shrink-0 w-20 pt-3">
                         {match.score !== '-' ? (
                           <div className="flex flex-col items-center">
-                            <span className="text-white font-black text-lg mb-1 drop-shadow-md">{match.score}</span>
-                            <span className="text-gray-500 text-[9px] font-bold tracking-widest uppercase">1x2</span>
+                            <span className="text-white font-black text-2xl mb-1 drop-shadow-lg tabular-nums">{match.score}</span>
+                            <span className="text-gray-400 text-[10px] font-bold tracking-widest uppercase drop-shadow-md">1x2</span>
                           </div>
                         ) : (
-                          <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase mt-4">1x2</span>
+                          <span className="text-gray-400 text-[11px] font-bold tracking-widest uppercase mt-6 drop-shadow-md">1x2</span>
                         )}
                       </div>
 
                       {/* Away Team */}
-                      <div className="flex flex-col items-end gap-1.5 flex-1">
-                        <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center p-1.5 overflow-hidden">
+                      <div className="flex flex-col items-end gap-2 flex-1">
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
                           <img 
                             src={`/takimlogo/${match.away.replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
                             alt={match.away}
                             className="w-full h-full object-contain"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
-                              e.currentTarget.parentElement!.innerHTML = `<span class="text-gray-400 font-bold text-[10px]">${match.away.substring(0, 2).toUpperCase()}</span>`;
+                              e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[12px]">${match.away.substring(0, 2).toUpperCase()}</span></div>`;
                             }}
                           />
                         </div>
-                        <span className="text-white font-bold text-[13px] md:text-sm text-right line-clamp-1">{match.away}</span>
+                        <span className="text-white font-extrabold text-[15px] md:text-[17px] text-right line-clamp-2 drop-shadow-md leading-tight">{match.away}</span>
                       </div>
                     </div>
 
                     {/* Odds Buttons */}
-                    <div className="flex items-center gap-2 mt-4 relative z-10 w-full">
+                    <div className="flex items-center gap-2 relative z-10 w-full mt-2">
                       {['1', 'draw', '2'].map((oddType, idx) => {
                         const originalType = oddType === 'draw' ? 'X' : oddType;
                         const oddValue = originalType === '1' ? match.homeOdd : originalType === 'X' ? match.drawOdd : match.awayOdd;
@@ -423,10 +435,10 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                           <button 
                             key={idx}
                             onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, originalType); }}
-                            className={`flex-1 h-9 md:h-10 rounded-lg flex items-center justify-between px-2.5 group/odd transition-all ${isSelected ? 'bg-[#10b981]/20 border border-[#10b981]' : 'bg-[#2a2a35] hover:bg-[#323240] border border-transparent hover:border-white/10'}`}
+                            className={`flex-1 h-10 md:h-11 rounded-lg flex items-center justify-between px-3 group/odd transition-all backdrop-blur-md ${isSelected ? 'bg-[#10b981]/40 border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/30 shadow-lg'}`}
                           >
-                            <span className={`text-[11px] font-semibold capitalize ${isSelected ? 'text-[#10b981]' : 'text-gray-400 group-hover/odd:text-white'}`}>{oddType}</span>
-                            <span className={`font-bold text-xs md:text-[13px] ${isSelected ? 'text-[#10b981]' : 'text-white'}`}>{oddValue}</span>
+                            <span className={`text-[12px] font-bold capitalize ${isSelected ? 'text-white' : 'text-gray-300 group-hover/odd:text-white'}`}>{oddType}</span>
+                            <span className={`font-black text-[13px] md:text-[14px] ${isSelected ? 'text-white' : 'text-white'}`}>{oddValue}</span>
                           </button>
                         );
                       })}
