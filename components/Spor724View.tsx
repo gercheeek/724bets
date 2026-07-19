@@ -304,8 +304,18 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     return <Activity className="w-4 h-4" />;
   };
 
-  // Featured matches for horizontal scroll (first 6 live matches)
-  const featuredMatches = matches.filter(m => m.isLive).slice(0, 6);
+  // Featured matches for Popüler grid (top 6 highest priority matches)
+  const featuredMatches = [...matches]
+    .sort((a, b) => {
+       const pA = getLeaguePriority(a.league);
+       const pB = getLeaguePriority(b.league);
+       if (pA !== pB) return pA - pB;
+       // if same tier, live matches first
+       if (a.isLive && !b.isLive) return -1;
+       if (!a.isLive && b.isLive) return 1;
+       return 0;
+    })
+    .slice(0, 6);
 
   return (
     <div className="flex h-full w-full bg-[#0A0A0A] text-[#e5e2e1] font-sans overflow-hidden">
@@ -319,46 +329,110 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10" style={{ scrollbarWidth: 'thin', scrollbarColor: '#182030 #0A0A0A' }}>
           
-          {/* ═══════════ FEATURED MATCHES HORIZONTAL SCROLL ═══════════ */}
-          <div className="px-4 pt-4 pb-2">
-            <div className="flex gap-3 overflow-x-auto pb-3 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
-              {featuredMatches.map(match => (
-                <div key={`feat-${match.id}`} className="min-w-[210px] bg-gradient-to-br from-[#0f1422] to-[#0a0e17] rounded-xl p-3.5 flex flex-col gap-2.5 border border-white/[0.04] hover:border-[#36ffc4]/30 shadow-lg hover:shadow-[0_8px_25px_rgba(54,255,196,0.1)] transition-all cursor-pointer shrink-0 group relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#36ffc4]/0 to-[#36ffc4]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                  
-                  <div className="text-[10px] text-[#99907c] font-bold truncate tracking-wide z-10">{match.league}</div>
-                  <div className="flex items-center justify-between gap-2 z-10">
-                    <span className="text-[11.5px] text-white font-bold truncate flex-1 group-hover:text-[#36ffc4] transition-colors">{match.home}</span>
-                    <span className="text-[13px] text-[#36ffc4] font-black tabular-nums drop-shadow-[0_0_8px_rgba(54,255,196,0.4)]">{match.score.split(' - ')[0]}</span>
+          {/* ═══════════ POPÜLER SECTION ═══════════ */}
+          {featuredMatches.length > 0 && (
+            <div className="px-4 pt-4 pb-2">
+              <div className="flex items-center gap-2 mb-4">
+                <Flame className="w-5 h-5 text-[#3ab4f2] drop-shadow-[0_0_8px_rgba(58,180,242,0.5)]" />
+                <span className="text-white font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Popüler' : 'Popular'}</span>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pb-3">
+                {featuredMatches.map(match => (
+                  <div key={`pop-${match.id}`} className="bg-[#161e31] rounded-xl p-3.5 flex flex-col gap-2.5 border border-white/[0.03] hover:border-white/10 transition-all cursor-pointer relative overflow-hidden shadow-sm">
+                    
+                    {/* Top Bar: League & Star */}
+                    <div className="flex items-center justify-between z-10">
+                      <div className="flex items-center gap-1.5 text-[11px] text-[#99907c] font-medium tracking-wide">
+                        <span className="opacity-80 grayscale">{getCountryFlag(match.country)}</span>
+                        <span className="truncate max-w-[200px]">{match.league}</span>
+                      </div>
+                      <Star className="w-3.5 h-3.5 text-[#99907c] hover:text-[#e9c349] transition-colors cursor-pointer shrink-0" />
+                    </div>
+                    
+                    {/* Status & Icons */}
+                    <div className="flex items-center justify-between z-10">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[12px] font-bold ${match.isFinished ? 'text-[#99907c]' : (!match.isLive ? 'text-[#99907c]' : 'text-[#3ab4f2]')}`}>
+                          {match.isFinished ? (language === 'tr' ? 'Bitti' : 'FT') : (match.minute === 'Yakında' ? 'Bugün, 22:00' : match.minute)}
+                        </span>
+                        {!match.isFinished && match.minute !== 'Yakında' && match.isLive && (
+                           <div className="flex items-center gap-1.5">
+                             <div className="w-4 h-3 bg-red-600 rounded-[3px] flex items-center justify-center shadow-sm">
+                                <div className="w-0 h-0 border-t-[3px] border-t-transparent border-l-[4px] border-l-white border-b-[3px] border-b-transparent ml-0.5"></div>
+                             </div>
+                             <span className="text-[10px] bg-[#3ab4f2]/20 text-[#3ab4f2] px-1 rounded font-bold">P</span>
+                             <Activity className="w-3.5 h-3.5 text-[#3ab4f2]" />
+                           </div>
+                        )}
+                      </div>
+                      {!match.isFinished && match.minute !== 'Yakında' && match.isLive && (
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
+                      )}
+                    </div>
+                    
+                    {/* Teams & Scores */}
+                    <div className="flex flex-col gap-2 mt-0.5 z-10">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2.5 min-w-0 pr-3">
+                          <img src={match.homeLogo} alt={match.home} className="w-5 h-5 rounded-full object-cover bg-white/[0.05] shrink-0" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.home}&backgroundColor=161e31&textColor=e5e2e1`; }} />
+                          <span className="text-[13px] text-white font-bold tracking-wide truncate">{match.home}</span>
+                        </div>
+                        {match.score !== '-' && (
+                          <div className="w-6 h-6 rounded-md bg-[#1f2937] flex items-center justify-center text-[13px] text-white font-bold border border-white/[0.03] shrink-0">
+                            {match.score.split(' - ')[0] || '0'}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2.5 min-w-0 pr-3">
+                          <img src={match.awayLogo} alt={match.away} className="w-5 h-5 rounded-full object-cover bg-white/[0.05] shrink-0" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${match.away}&backgroundColor=161e31&textColor=e5e2e1`; }} />
+                          <span className="text-[13px] text-white font-bold tracking-wide truncate">{match.away}</span>
+                        </div>
+                        {match.score !== '-' && (
+                          <div className="w-6 h-6 rounded-md bg-[#1f2937] flex items-center justify-center text-[13px] text-white font-bold border border-white/[0.03] shrink-0">
+                            {match.score.split(' - ')[1] || '0'}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Odds Section */}
+                    <div className="mt-1 flex flex-col gap-1.5 z-10">
+                      <span className="text-[9px] text-[#99907c] font-medium tracking-wide">1x2</span>
+                      <div className="flex items-center gap-1.5">
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.homeId, match.homeOdd, '1'); }}
+                          className={`flex-1 flex items-center justify-between px-2.5 py-2 rounded-md transition-all group ${betSlip.some(s => s.id === match.homeId) ? 'bg-[#3ab4f2]/10 border border-[#3ab4f2]/30' : 'bg-[#1f2937] hover:bg-[#374151] border border-transparent'}`}
+                        >
+                          <span className="text-[10px] text-[#99907c] font-medium group-hover:text-white transition-colors">1</span>
+                          <span className="text-[11.5px] text-white font-bold">{match.homeOdd}</span>
+                        </button>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.drawId, match.drawOdd, 'X'); }}
+                          className={`flex-1 flex items-center justify-between px-2.5 py-2 rounded-md transition-all group ${betSlip.some(s => s.id === match.drawId) ? 'bg-[#3ab4f2]/10 border border-[#3ab4f2]/30' : 'bg-[#1f2937] hover:bg-[#374151] border border-transparent'}`}
+                        >
+                          <span className="text-[10px] text-[#99907c] font-medium group-hover:text-white transition-colors">{language === 'tr' ? 'beraberlik' : 'draw'}</span>
+                          <span className="text-[11.5px] text-white font-bold">{match.drawOdd}</span>
+                        </button>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.awayId, match.awayOdd, '2'); }}
+                          className={`flex-1 flex items-center justify-between px-2.5 py-2 rounded-md transition-all group ${betSlip.some(s => s.id === match.awayId) ? 'bg-[#3ab4f2]/10 border border-[#3ab4f2]/30' : 'bg-[#1f2937] hover:bg-[#374151] border border-transparent'}`}
+                        >
+                          <span className="text-[10px] text-[#99907c] font-medium group-hover:text-white transition-colors">2</span>
+                          <span className="text-[11.5px] text-white font-bold">{match.awayOdd}</span>
+                        </button>
+                        <button className="w-8 h-[34px] shrink-0 bg-[#1f2937] hover:bg-[#374151] rounded-md flex items-center justify-center transition-colors">
+                          <ChevronDown className="w-3.5 h-3.5 text-[#99907c]" />
+                        </button>
+                      </div>
+                    </div>
+                    
                   </div>
-                  <div className="flex items-center justify-between gap-2 z-10">
-                    <span className="text-[11.5px] text-white font-bold truncate flex-1 group-hover:text-[#36ffc4] transition-colors">{match.away}</span>
-                    <span className="text-[13px] text-[#36ffc4] font-black tabular-nums drop-shadow-[0_0_8px_rgba(54,255,196,0.4)]">{match.score.split(' - ')[1]}</span>
-                  </div>
-                  <div className="flex gap-1.5 mt-1.5 z-10">
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.homeId, match.homeOdd, '1'); }}
-                      className={`flex-1 py-1.5 rounded-lg text-center text-[11px] font-bold transition-all shadow-inner ${betSlip.some(s => s.id === match.homeId) ? 'bg-gradient-to-b from-[#36ffc4]/20 to-[#36ffc4]/5 text-[#36ffc4] border border-[#36ffc4] shadow-[0_0_10px_rgba(54,255,196,0.15)]' : 'bg-gradient-to-b from-[#182030] to-[#131926] text-[#b0a999] hover:text-white border border-white/[0.05] hover:border-white/20'}`}
-                    >
-                      {match.homeOdd}
-                    </button>
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.drawId, match.drawOdd, 'X'); }}
-                      className={`flex-1 py-1.5 rounded-lg text-center text-[11px] font-bold transition-all shadow-inner ${betSlip.some(s => s.id === match.drawId) ? 'bg-gradient-to-b from-[#36ffc4]/20 to-[#36ffc4]/5 text-[#36ffc4] border border-[#36ffc4] shadow-[0_0_10px_rgba(54,255,196,0.15)]' : 'bg-gradient-to-b from-[#182030] to-[#131926] text-[#b0a999] hover:text-white border border-white/[0.05] hover:border-white/20'}`}
-                    >
-                      {match.drawOdd}
-                    </button>
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); toggleSelection(match, match.awayId, match.awayOdd, '2'); }}
-                      className={`flex-1 py-1.5 rounded-lg text-center text-[11px] font-bold transition-all shadow-inner ${betSlip.some(s => s.id === match.awayId) ? 'bg-gradient-to-b from-[#36ffc4]/20 to-[#36ffc4]/5 text-[#36ffc4] border border-[#36ffc4] shadow-[0_0_10px_rgba(54,255,196,0.15)]' : 'bg-gradient-to-b from-[#182030] to-[#131926] text-[#b0a999] hover:text-white border border-white/[0.05] hover:border-white/20'}`}
-                    >
-                      {match.awayOdd}
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* ═══════════ CANLI SECTION HEADER ═══════════ */}
           <div className="px-4 pt-4 pb-2">
