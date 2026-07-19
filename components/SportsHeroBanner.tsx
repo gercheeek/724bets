@@ -143,9 +143,9 @@ export const SportsHeroBanner: React.FC = () => {
           {/* Top Tag & Event Name */}
           <div className="flex flex-col items-center gap-2 mb-3 md:mb-4 animate-fade-in-up">
             {heroMatch && heroMatch.isLive && (
-              <div className="flex items-center gap-1.5 mt-1">
-                {!heroMatch.isFinished && <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>}
-                <span className={`text-[12px] font-black tracking-widest uppercase ${heroMatch.isFinished ? 'text-gray-300' : 'text-red-500'}`}>
+              <div className="flex items-center gap-2 md:gap-3 mt-1 bg-black/40 px-4 py-1.5 rounded-full border border-white/5 backdrop-blur-md">
+                {!heroMatch.isFinished && <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_12px_rgba(239,68,68,1)]"></div>}
+                <span className={`text-base md:text-lg font-black tracking-[0.2em] uppercase ${heroMatch.isFinished ? 'text-gray-300' : 'text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]'}`}>
                   {heroMatch.minute}
                 </span>
               </div>
