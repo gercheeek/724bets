@@ -414,12 +414,16 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                       <div className="flex flex-col items-start gap-1.5 flex-1">
                         <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
                           <img 
-                            src={match.homeLogo}
+                            src={`/takimlogo/${(match.home || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
                             alt={match.home}
                             className="w-full h-full object-contain"
                             onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[10px]">${(match.home || '??').substring(0, 2).toUpperCase()}</span></div>`;
+                              if (e.currentTarget.src.includes('/takimlogo/')) {
+                                e.currentTarget.src = match.homeLogo;
+                              } else {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[10px]">${(match.home || '??').substring(0, 2).toUpperCase()}</span></div>`;
+                              }
                             }}
                           />
                         </div>
@@ -442,12 +446,16 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                       <div className="flex flex-col items-end gap-1.5 flex-1">
                         <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
                           <img 
-                            src={match.awayLogo}
+                            src={`/takimlogo/${(match.away || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
                             alt={match.away}
                             className="w-full h-full object-contain"
                             onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[10px]">${(match.away || '??').substring(0, 2).toUpperCase()}</span></div>`;
+                              if (e.currentTarget.src.includes('/takimlogo/')) {
+                                e.currentTarget.src = match.awayLogo;
+                              } else {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20"><span class="text-white font-bold text-[10px]">${(match.away || '??').substring(0, 2).toUpperCase()}</span></div>`;
+                              }
                             }}
                           />
                         </div>
