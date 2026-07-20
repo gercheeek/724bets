@@ -99,7 +99,7 @@ import TurboMinesView from './components/TurboMinesView';
 import HacksawSlotView from './components/HacksawSlotView';
 import RedTigerSlotView from './components/RedTigerSlotView';
 import AdventureMap from './components/AdventureMap';
-const SITE_CACHE_VERSION = "2026.07.17_v2";
+const SITE_CACHE_VERSION = "2026.07.20_v3";
 
 const formatDateTR = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -316,6 +316,20 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       ];
       keysToClear.forEach(key => localStorage.removeItem(key));
       localStorage.setItem('site_cache_version', SITE_CACHE_VERSION);
+
+      // Unregister any active service workers to clear Safari PWAs/cached bundles
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (let registration of registrations) {
+            registration.unregister();
+          }
+        });
+      }
+
+      // Force a hard reload to pick up new bundles immediately
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
     }
   }, []);
 
