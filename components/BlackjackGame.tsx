@@ -369,7 +369,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                         <div className="flex items-center gap-2 mb-0.5">
                             <span className="text-2xl">🎴</span>
                             <h1 className="text-[var(--text-primary)] font-black text-2xl tracking-tight">
-                                <span className="lowercase">ahbapbet</span> <span style={{ color: '#06b6d4' }}>CASINO</span>
+                                <span className="lowercase">724bets</span> <span style={{ color: '#06b6d4' }}>CASINO</span>
                             </h1>
                         </div>
                         <div className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">Blackjack · Profesyonel Masa</div>
@@ -429,7 +429,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                                     🎩
                                 </div>
                                 <div className="text-center">
-                                    <div className="text-[#f0b90b] font-black text-sm uppercase tracking-wider">AHBAPBET Krupiyesi</div>
+                                    <div className="text-[#f0b90b] font-black text-sm uppercase tracking-wider">724BETS Krupiyesi</div>
                                     <div className="text-white text-sm font-bold mt-1 max-w-xs text-center italic">"{dealerMsg}"</div>
                                 </div>
                             </div>
@@ -542,7 +542,7 @@ const BlackjackGame: React.FC<BlackjackGameProps> = ({ config, onGameComplete, i
                 {/* Info strip */}
                 <div className="grid grid-cols-3 gap-2 mt-4">
                     {[
-                        { label: 'Krupiye', value: 'AHBAPBET' },
+                        { label: 'Krupiye', value: '724BETS' },
                         { label: 'El Hakkı', value: `Her ${cooldownHours} Saat` },
                         { label: 'Mod', value: 'Ücretsiz Demo' },
                     ].map((item, i) => (

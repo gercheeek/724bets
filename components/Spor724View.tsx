@@ -4,10 +4,13 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { SportsHeroBanner } from './SportsHeroBanner';
 import { AnimatedOdd } from './AnimatedOdd';
 import Footer from './Footer';
-import { 
-  Search, ChevronRight, ChevronDown, X,
-  Activity, Star, Flame, Clock, Trophy, Gamepad2, Target, Zap, TrendingUp, PlayCircle, Lock
-} from 'lucide-react';
+import { ArrowRight, Trophy, Star, Bell, Clock, Search, ShieldCheck, Zap, Activity, Target, Gamepad2, Flame } from 'lucide-react';
+import { SidebarMenu } from './sports/SidebarMenu';
+import { DualRightPanel } from './sports/DualRightPanel';
+import { MatchCard } from './sports/MatchCard';
+import { useBetSlip } from '../contexts/BetSlipContext';
+import { MatchInfo } from './sports/types';
+import { MessageCircle } from 'lucide-react';
 
 interface BetSelection {
   id: string;
@@ -16,28 +19,6 @@ interface BetSelection {
   marketName: string;
   selectionName: string;
   odd: number;
-}
-
-interface MatchInfo {
-  id: string;
-  home: string;
-  away: string;
-  isLive: boolean;
-  isFinished: boolean;
-  score: string;
-  minute: string;
-  league: string;
-  sport: string;
-  country: string;
-  homeOdd: string;
-  drawOdd: string;
-  awayOdd: string;
-  homeId: string;
-  drawId: string;
-  awayId: string;
-  homeLogo: string;
-  awayLogo: string;
-  marketsCount: number;
 }
 
 interface Spor724ViewProps {
@@ -118,9 +99,29 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   const { language } = useLanguage();
   const [activeSport, setActiveSport] = useState(language === 'tr' ? 'Futbol' : 'Soccer');
   const [activeCountry, setActiveCountry] = useState<string | null>(null);
-  const [isBetSlipOpen, setIsBetSlipOpen] = useState(false);
-  const [betSlip, setBetSlip] = useState<BetSelection[]>([]);
-  const [betAmount, setBetAmount] = useState<string>('');
+  
+  // Dual-mode panel toggled by a simple boolean or string on mobile, but since DualRightPanel handles it inside,
+  // we just need to know if the sidebar wrapper itself is open on mobile.
+  const [isSidebarOpenMobile, setIsSidebarOpenMobile] = useState(false);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth >= 1280) {
+      setIsSidebarOpenMobile(false); // On desktop it's always open statically
+    }
+
+    const handleOpenMobileChat = () => {
+      setIsSidebarOpenMobile(true);
+      setTimeout(() => {
+        window.dispatchEvent(new Event('setRightPanelToChat'));
+      }, 50);
+    };
+    window.addEventListener('openMobileChatPanel', handleOpenMobileChat);
+    return () => {
+      window.removeEventListener('openMobileChatPanel', handleOpenMobileChat);
+    };
+  }, []);
+  
+  const { betSlip } = useBetSlip();
   
   const [matches, setMatches] = useState<MatchInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -184,11 +185,18 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
           minute = String(data.extended_status || '').replace('s', '. Set');
       }
       
-      const homeTeamId = data.participants?.home_id || data.participants?.ByNumber?.['1']?.Id;
-      const awayTeamId = data.participants?.away_id || data.participants?.ByNumber?.['2']?.Id;
+      const homeTeamId = data.participants?.home_id || data.participants?.ByNumber?.['1']?.Id || '';
+      const awayTeamId = data.participants?.away_id || data.participants?.ByNumber?.['2']?.Id || '';
       
-      const homeLogoUrl = data.participants?.ByNumber?.['1']?.LogoPath || (homeTeamId ? `https://opt.betconstruct.com/api/team/image/${homeTeamId}` : `https://api.dicebear.com/7.x/initials/svg?seed=${homeTeam}&backgroundColor=0f1422&textColor=e5e2e1`);
-      const awayLogoUrl = data.participants?.ByNumber?.['2']?.LogoPath || (awayTeamId ? `https://opt.betconstruct.com/api/team/image/${awayTeamId}` : `https://api.dicebear.com/7.x/initials/svg?seed=${awayTeam}&backgroundColor=0f1422&textColor=e5e2e1`);
+      let homeLogoUrl = data.participants?.ByNumber?.['1']?.LogoPath || '';
+      if (!homeLogoUrl && homeTeamId) {
+        homeLogoUrl = `https://stb-images.betconstruct.com/team-logo/${homeTeamId}.png`;
+      }
+      
+      let awayLogoUrl = data.participants?.ByNumber?.['2']?.LogoPath || '';
+      if (!awayLogoUrl && awayTeamId) {
+        awayLogoUrl = `https://stb-images.betconstruct.com/team-logo/${awayTeamId}.png`;
+      }
       
       const countryName = mapCountryName(data.country?.name, language);
       const tournamentName = data.tournament?.name || 'Uluslararası Turnuva';
@@ -343,27 +351,6 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     return a.localeCompare(b);
   });
 
-  const toggleSelection = (match: MatchInfo, oddId: string, oddValue: string, selectionName: string) => {
-    if (!oddId || oddValue === '-') return;
-
-    setBetSlip(prev => {
-      const exists = prev.find(s => s.id === oddId);
-      if (exists) {
-        return prev.filter(s => s.id !== oddId);
-      }
-      const filtered = prev.filter(s => s.matchId !== match.id);
-      return [...filtered, {
-        id: oddId,
-        matchId: match.id,
-        matchName: `${match.home} - ${match.away}`,
-        marketName: 'Maç Sonucu 1X2',
-        selectionName,
-        odd: parseFloat(oddValue)
-      }];
-    });
-    if (!isBetSlipOpen) setIsBetSlipOpen(true);
-  };
-
   const getSportBgImage = (sportName: string) => {
     const name = (sportName || '').toLowerCase();
     if (name.includes('basketbol') || name.includes('basketball')) return 'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800&auto=format&fit=crop';
@@ -390,162 +377,33 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
 
   // Featured matches for Popüler grid (top 6 highest priority matches)
   const featuredMatches = [...matches]
+    .filter(m => m.isLive)
     .sort((a, b) => {
        const pA = getLeaguePriority(a.league);
        const pB = getLeaguePriority(b.league);
-       if (pA !== pB) return pA - pB;
-       // if same tier, live matches first
-       if (a.isLive && !b.isLive) return -1;
-       if (!a.isLive && b.isLive) return 1;
-       return 0;
+       return pA - pB;
     })
     .slice(0, 6);
 
   return (
-    <div className="flex h-full w-full bg-[#050505] text-[#e5e2e1] font-sans overflow-hidden">
+    <div className="flex h-full w-full bg-zinc-950 text-zinc-300 font-sans overflow-hidden">
       
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
+      {/* ═══════════ MAIN CONTENT AREA ═══════════ */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10 bg-zinc-950">
         
         {/* Ambient Glow */}
-        <div className="absolute top-[-200px] left-1/4 w-[600px] h-[600px] bg-[#36ffc4]/[0.02] rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute top-[-200px] left-1/4 w-[600px] h-[600px] bg-emerald-500/[0.03] rounded-full blur-[120px] pointer-events-none"></div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10" style={{ scrollbarWidth: 'thin', scrollbarColor: '#182030 #0A0A0A' }}>
+        <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10" style={{ scrollbarWidth: 'thin', scrollbarColor: '#27272a #09090b' }}>
           
           <SportsHeroBanner />
-
-          {/* ═══════════ POPÜLER SECTION ═══════════ */}
-          {featuredMatches.length > 0 && (
-            <div className="px-4 pt-4 pb-2">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <Flame className="w-5 h-5 text-[#10b981]" />
-                  <h2 className="text-white font-bold text-lg">Popüler Canlı</h2>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {featuredMatches.map(match => {
-                  return (
-                  <div key={`pop-${match.id}`} className="bg-[#050505] rounded-xl border-[3px] border-[#0a0a0f] p-2.5 md:p-3 hover:border-[#10b981]/40 transition-all duration-500 cursor-pointer shadow-2xl relative overflow-hidden group">
-                    
-                    {/* Cinematic Background Image (Like the top slider) */}
-                    <div 
-                      className="absolute inset-0 z-0 opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700 pointer-events-none"
-                      style={{
-                        backgroundImage: `url('${getSportBgImage(match.sport)}')`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                      }}
-                    />
-                    
-                    {/* Vignette & Gradients for text readability */}
-                    <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent pointer-events-none"></div>
-                    <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#050505]/90 via-transparent to-transparent pointer-events-none"></div>
-                    <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050505_120%)] pointer-events-none"></div>
-
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-3 relative z-10">
-                      <div className="flex items-center gap-1.5">
-                        {getSportIcon(match.league)}
-                        <span className="text-white text-[11px] md:text-[12px] font-bold truncate max-w-[130px] tracking-wide">{match.league}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-gray-300 text-[11px] md:text-[12px] font-bold">{match.minute === 'Yakında' ? 'Aug 15, 20:30' : (match.isLive ? <span className="text-red-500">{match.minute}</span> : match.minute)}</span>
-                        {match.isLive && !match.isFinished && (
-                          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,1)]"></div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Teams Row */}
-                    <div className="flex items-start justify-between mb-2 relative z-10">
-                      {/* Home Team */}
-                      <div className="flex flex-col items-start gap-1.5 flex-1">
-                        <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
-                          <img 
-                            src={`/takimlogo/${(match.home || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
-                            alt={match.home}
-                            className="w-full h-full object-contain"
-                            onError={(e) => {
-                              if (e.currentTarget.src.includes('/takimlogo/')) {
-                                e.currentTarget.src = match.homeLogo;
-                              } else {
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-inner" style="background-color: ${getTeamColor(match.home || '')};"><span class="text-white font-bold text-[11px] drop-shadow-md">${(match.home || '??').substring(0, 2).toUpperCase()}</span></div>`;
-                              }
-                            }}
-                          />
-                        </div>
-                        <span className="text-white font-bold text-[13px] md:text-[14px] text-left line-clamp-2 drop-shadow-md leading-tight">{match.home}</span>
-                      </div>
-
-                      {/* Score / Center Label */}
-                      <div className="flex flex-col items-center justify-center shrink-0 w-16 pt-2">
-                        {match.score !== '-' ? (
-                          <div className="flex flex-col items-center">
-                            <span className="text-white font-black text-lg mb-0.5 drop-shadow-lg tabular-nums">{match.score}</span>
-                            <span className="text-gray-400 text-[9px] font-bold tracking-widest uppercase drop-shadow-md">1x2</span>
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 text-[9px] font-bold tracking-widest uppercase mt-4 drop-shadow-md">1x2</span>
-                        )}
-                      </div>
-
-                      {/* Away Team */}
-                      <div className="flex flex-col items-end gap-1.5 flex-1">
-                        <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center overflow-hidden drop-shadow-2xl">
-                          <img 
-                            src={`/takimlogo/${(match.away || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
-                            alt={match.away}
-                            className="w-full h-full object-contain"
-                            onError={(e) => {
-                              if (e.currentTarget.src.includes('/takimlogo/')) {
-                                e.currentTarget.src = match.awayLogo;
-                              } else {
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-inner" style="background-color: ${getTeamColor(match.away || '')};"><span class="text-white font-bold text-[11px] drop-shadow-md">${(match.away || '??').substring(0, 2).toUpperCase()}</span></div>`;
-                              }
-                            }}
-                          />
-                        </div>
-                        <span className="text-white font-bold text-[13px] md:text-[14px] text-right line-clamp-2 drop-shadow-md leading-tight">{match.away}</span>
-                      </div>
-                    </div>
-
-                    {/* Odds Buttons */}
-                    <div className="flex items-center gap-1.5 relative z-10 w-full mt-2">
-                      {['1', 'draw', '2'].map((oddType, idx) => {
-                        const originalType = oddType === 'draw' ? 'X' : oddType;
-                        const oddValue = originalType === '1' ? match.homeOdd : originalType === 'X' ? match.drawOdd : match.awayOdd;
-                        const oddId = originalType === '1' ? match.homeId : originalType === 'X' ? match.drawId : match.awayId;
-                        const isSelected = betSlip.some(s => s.id === oddId);
-                        
-                        return (
-                          <button 
-                            key={idx}
-                            onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, originalType); }}
-                            className={`flex-1 h-8 md:h-9 rounded-lg flex items-center justify-between px-2 group/odd transition-all backdrop-blur-md ${isSelected ? 'bg-[#10b981]/40 border border-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/30 shadow-lg'}`}
-                          >
-                            <span className={`text-[10px] font-bold capitalize ${isSelected ? 'text-white' : 'text-gray-300 group-hover/odd:text-white'}`}>{oddType}</span>
-                            <AnimatedOdd value={oddValue} />
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
 
           {/* ═══════════ CANLI SECTION HEADER ═══════════ */}
           <div className="px-4 pt-4 pb-2">
             <div className="flex items-center gap-2 mb-5">
               <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
-              <span className="text-white font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Canlı' : 'Live'}</span>
+              <span className="text-zinc-100 font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Canlı' : 'Live'}</span>
             </div>
 
             {/* Sport Filter Tabs */}
@@ -558,9 +416,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                   <button 
                     key={sport}
                     onClick={() => { setActiveSport(sport); setActiveCountry(null); }}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-[12.5px] font-bold transition-all ${isActive ? 'bg-[#182030] text-white border border-[#36ffc4]/30 shadow-[0_0_15px_rgba(54,255,196,0.15)]' : 'bg-white/[0.02] border border-white/[0.05] text-[#99907c] hover:bg-white/[0.05] hover:text-white'}`}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-[12.5px] font-bold transition-all ${isActive ? 'bg-zinc-900 text-zinc-100 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
                   >
-                    <span className={isActive ? 'text-[#36ffc4]' : ''}>{getSportIcon(sport)}</span>
+                    <span className={isActive ? 'text-emerald-400' : ''}>{getSportIcon(sport)}</span>
                     <span className="tracking-wide">{sport}</span>
                   </button>
                 );
@@ -572,12 +430,12 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
           <div className="px-4 pb-8">
             
             {isLoading && (
-               <div className="text-center py-24 text-[#99907c] text-sm animate-pulse font-medium">
+               <div className="text-center py-24 text-zinc-500 text-sm animate-pulse font-medium">
                   {language === 'tr' ? 'Canlı veriler yükleniyor...' : 'Loading live data...'}
                </div>
             )}
             {!isLoading && filteredMatches.length === 0 && (
-               <div className="text-center py-24 text-[#99907c] text-sm font-medium">
+               <div className="text-center py-24 text-zinc-500 text-sm font-medium">
                   {language === 'tr' ? 'Bu branşta aktif canlı maç yok.' : 'No live matches in this sport.'}
                </div>
             )}
@@ -590,101 +448,22 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
               return (
                 <div key={league} className="mb-5">
                   {/* League Header */}
-                  <div className="flex items-center gap-3 py-2.5 px-4 bg-[#1b1b24] mb-1.5 border-l-4 border-l-[#10b981]">
-                    <span className="text-[16px] md:text-[18px] drop-shadow-md">{flag}</span>
-                    <span className="text-[12px] md:text-[13px] text-gray-300 font-bold truncate flex-1 uppercase tracking-widest">{league}</span>
-                    <Star className="w-4 h-4 text-slate-500 hover:text-[#e9c349] transition-colors cursor-pointer" />
+                  <div className="flex items-center gap-3 py-2.5 px-4 bg-gradient-to-r from-zinc-900 to-zinc-900/40 mb-3 border-l-[3px] border-l-emerald-500 rounded-r-xl relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <span className="text-[16px] md:text-[18px] drop-shadow-md relative z-10">{flag}</span>
+                    <span className="text-[11px] md:text-[12px] text-zinc-300 font-bold truncate flex-1 uppercase tracking-widest relative z-10">{league}</span>
+                    <Star className="w-4 h-4 text-zinc-600 hover:text-yellow-500 transition-all cursor-pointer relative z-10 hover:scale-110 drop-shadow-sm" />
                   </div>
                   
                   {/* Match Rows */}
-                  <div className="flex flex-col gap-1.5">
-                    {leagueMatches.map((match) => {
-                      const isGoal = goalScoredMatches.includes(match.id);
-                      return (
-                      <div 
-                        key={match.id} 
-                        className={`flex flex-col md:flex-row md:items-center bg-[#15151c] p-3 md:px-4 md:py-3 gap-3 md:gap-4 transition-all duration-300 border-l-[3px] hover:bg-[#1a1a24] group relative overflow-hidden ${isGoal ? 'animate-goal-card z-20 border-l-[#10b981]' : 'border-l-transparent'}`}
-                      >
-                        {/* Goal Badge */}
-                        {isGoal && (
-                          <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-[#10b981] text-white text-[9px] md:text-[10px] font-black px-3 py-1 rounded-full animate-bounce shadow-[0_0_15px_rgba(16,185,129,0.8)] z-50 tracking-widest uppercase">
-                            GOAL!
-                          </div>
-                        )}
-
-                        {/* LEFT SECTION: Status */}
-                        <div className="flex flex-col items-center justify-center shrink-0 w-[40px] md:w-[50px] z-10">
-                          {match.isFinished ? (
-                            <span className="text-[11px] text-gray-500 font-bold tracking-wide uppercase">FT</span>
-                          ) : (
-                            <div className="flex flex-col items-center justify-center gap-2">
-                               <span className="text-[12px] md:text-[13px] font-black text-red-500 tabular-nums">{match.minute}</span>
-                               <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* MIDDLE SECTION: Teams & Scores */}
-                        <div className="flex-1 flex flex-col gap-3 min-w-0 pr-0 md:pr-4 z-10">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center overflow-hidden shadow-sm border border-white/10">
-                                <img src={`/takimlogo/${(match.home || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`} alt={match.home} className="w-full h-full object-contain" onError={(e) => { 
-                                  if (e.currentTarget.src.includes('/takimlogo/')) {
-                                    e.currentTarget.src = match.homeLogo;
-                                  } else {
-                                    e.currentTarget.style.display = 'none'; 
-                                    e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center shadow-inner" style="background-color: ${getTeamColor(match.home || '')};"><span class="text-white font-bold text-[8px] drop-shadow-sm">${(match.home || '??').substring(0, 2).toUpperCase()}</span></div>`; 
-                                  }
-                                }} />
-                              </div>
-                              <span className="text-[13px] md:text-[14px] font-bold text-gray-200 truncate">{match.home}</span>
-                            </div>
-                            <span className={`text-[14px] md:text-[15px] font-black tabular-nums ${isGoal ? 'animate-score' : 'text-[#10b981]'}`}>{String(match.score || '-').split(' - ')[0] || '-'}</span>
-                          </div>
-                          
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center overflow-hidden shadow-sm border border-white/10">
-                                <img src={`/takimlogo/${(match.away || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`} alt={match.away} className="w-full h-full object-contain" onError={(e) => { 
-                                  if (e.currentTarget.src.includes('/takimlogo/')) {
-                                    e.currentTarget.src = match.awayLogo;
-                                  } else {
-                                    e.currentTarget.style.display = 'none'; 
-                                    e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center shadow-inner" style="background-color: ${getTeamColor(match.away || '')};"><span class="text-white font-bold text-[8px] drop-shadow-sm">${(match.away || '??').substring(0, 2).toUpperCase()}</span></div>`; 
-                                  }
-                                }} />
-                              </div>
-                              <span className="text-[13px] md:text-[14px] font-bold text-gray-200 truncate">{match.away}</span>
-                            </div>
-                            <span className={`text-[14px] md:text-[15px] font-black tabular-nums ${isGoal ? 'animate-score' : 'text-[#10b981]'}`}>{String(match.score || '-').split(' - ')[1] || '-'}</span>
-                          </div>
-                        </div>
-
-                        {/* RIGHT SECTION: Odds */}
-                        <div className="flex items-center gap-1.5 shrink-0 mt-3 md:mt-0 pt-3 md:pt-0 border-t border-white/5 md:border-t-0 z-10 w-full md:w-auto">
-                          {['1', 'X', '2'].map((oddType, idx) => {
-                            const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
-                            const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
-                            const isSelected = betSlip.some(s => s.id === (oddId || ''));
-                            
-                            return (
-                              <button 
-                                key={idx}
-                                onClick={(e) => { e.stopPropagation(); toggleSelection(match, oddId, oddValue, oddType); }}
-                                className={`flex-1 md:flex-none w-auto md:w-[60px] h-[40px] md:h-[48px] rounded-lg flex flex-col items-center justify-center transition-all ${isSelected ? 'bg-[#10b981]/20 border border-[#10b981]' : 'bg-[#202029] hover:bg-[#2a2a35] border border-transparent hover:border-white/10'}`}
-                              >
-                                <span className={`text-[11px] md:text-[12px] font-medium capitalize mb-0.5 ${isSelected ? 'text-[#10b981]' : 'text-gray-400 group-hover:text-white'}`}>{oddType}</span>
-                                <AnimatedOdd value={oddValue} />
-                              </button>
-                            );
-                          })}
-                          <button className="h-[40px] md:h-[48px] min-w-[40px] md:min-w-[48px] rounded-lg bg-[#202029] hover:bg-[#2a2a35] border border-transparent hover:border-white/10 transition-colors flex items-center justify-center text-[11px] text-gray-400 hover:text-white font-bold ml-1">
-                            +{match.marketsCount}
-                          </button>
-                        </div>
-                      </div>
-                    )})}
+                  <div className="flex flex-col gap-2">
+                    {leagueMatches.map((match) => (
+                      <MatchCard 
+                        key={match.id}
+                        match={match}
+                        isGoal={goalScoredMatches.includes(match.id)}
+                      />
+                    ))}
                   </div>
                 </div>
               );
@@ -692,109 +471,22 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
           </div>
 
           <Footer />
-
         </div>
       </div>
 
-      {/* ═══════════ RIGHT SIDEBAR - BET SLIP ═══════════ */}
-      <div className={`bg-black/60 backdrop-blur-2xl flex flex-col flex-shrink-0 z-40 transition-all duration-300 border-l border-white/[0.05] ${isBetSlipOpen ? 'w-[320px]' : 'w-0 overflow-hidden'}`}>
-        <div className="h-[70px] px-6 flex items-center justify-between bg-white/[0.02] border-b border-white/[0.05] min-w-[320px]">
-          <div className="flex items-center gap-2.5">
-            <Trophy className="w-4 h-4 text-[#e9c349]" />
-            <span className="font-bold text-white text-[14px] tracking-widest uppercase">{language === 'tr' ? 'KUPON' : 'BET SLIP'}</span>
-          </div>
-          <button 
-            onClick={() => setIsBetSlipOpen(false)}
-            className="w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 hover:bg-white/10 flex items-center justify-center transition-colors"
-          >
-            <ChevronRight className="w-4 h-4 text-[#99907c]" />
-          </button>
-        </div>
-        
-        <div className="flex-1 flex flex-col min-w-[320px]">
-          {betSlip.length === 0 ? (
-            <div className="flex-1 p-8 flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 rounded-full bg-white/[0.02] border border-white/[0.05] flex items-center justify-center mb-5">
-                <Trophy className="w-6 h-6 text-[#99907c] opacity-50" />
-              </div>
-              <h3 className="text-white/80 font-medium text-sm mb-2">{language === 'tr' ? 'Kuponunuz Boş' : 'Bet Slip is Empty'}</h3>
-              <p className="text-[12px] text-[#99907c] leading-relaxed max-w-[200px]">
-                {language === 'tr' ? 'Bahis yapmak için listeden dilediğiniz oranlara tıklayın.' : 'Click on odds to add selections.'}
-              </p>
-            </div>
-          ) : (
-            <div className="flex-1 flex flex-col">
-              <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-                {betSlip.map(selection => (
-                  <div key={selection.id} className="bg-white/[0.02] rounded-xl p-4 border border-white/[0.05] relative group transition-colors hover:bg-white/[0.04]">
-                    <button 
-                      onClick={() => setBetSlip(prev => prev.filter(s => s.id !== selection.id))}
-                      className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity p-1 text-[#99907c] hover:text-[#ffb4ab]"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                    <div className="text-[10px] text-[#99907c] mb-2 font-bold tracking-wider uppercase">{selection.marketName}</div>
-                    <div className="flex justify-between items-center mb-1.5">
-                      <div className="font-bold text-white text-[14px]">{selection.selectionName}</div>
-                      <div className="font-black text-[#36ffc4] text-[15px]">{selection.odd.toFixed(2)}</div>
-                    </div>
-                    <div className="text-[12px] text-[#e5e2e1] opacity-70 font-medium truncate pr-4">{selection.matchName}</div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="p-5 bg-black/40 border-t border-white/[0.05] shadow-[0_-20px_40px_rgba(0,0,0,0.3)] backdrop-blur-md">
-                 <div className="flex justify-between items-center mb-5">
-                    <span className="text-[11px] font-bold text-[#99907c] uppercase tracking-widest">{language === 'tr' ? 'Toplam Oran' : 'Total Odds'}</span>
-                    <span className="font-black text-[#e9c349] text-2xl drop-shadow-[0_0_10px_rgba(233,195,73,0.3)]">
-                      {betSlip.reduce((acc, curr) => acc * curr.odd, 1).toFixed(2)}
-                    </span>
-                 </div>
-                 
-                 <div className="relative mb-5">
-                   <input 
-                      type="number" 
-                      value={betAmount}
-                      onChange={(e) => setBetAmount(e.target.value)}
-                      placeholder={language === 'tr' ? 'Miktar Giriniz' : 'Enter Amount'}
-                      className="w-full bg-black/60 border border-white/10 rounded-lg py-3.5 px-4 text-white text-sm font-bold outline-none focus:border-[#e9c349]/50 focus:bg-black/80 transition-all placeholder:text-zinc-600"
-                   />
-                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 text-xs font-bold">TL</span>
-                 </div>
-                 
-                 <div className="flex justify-between items-center mb-5 px-1">
-                     <span className="text-[11px] font-bold text-[#99907c] uppercase tracking-widest">{language === 'tr' ? 'Olası Kazanç' : 'Potential Win'}</span>
-                     <span className="font-bold text-white text-[15px]">
-                       {betAmount ? (parseFloat(betAmount) * betSlip.reduce((acc, curr) => acc * curr.odd, 1)).toFixed(2) : '0.00'} TL
-                     </span>
-                 </div>
-
-                 <button className="w-full bg-[#36ffc4] hover:bg-[#00e1ab] text-black font-black py-4 rounded-lg transition-transform active:scale-95 text-[13px] uppercase tracking-widest shadow-[0_0_20px_rgba(54,255,196,0.3)]">
-                    {language === 'tr' ? 'BAHİS YAP' : 'PLACE BET'}
-                 </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Toggle Button for Bet Slip (Visible when closed) */}
-      {!isBetSlipOpen && (
-        <button 
-          onClick={() => setIsBetSlipOpen(true)}
-          className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 border-white/[0.1] border border-r-0 p-3 rounded-l-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all z-50 group hover:pr-4"
-        >
-          <div className="flex flex-col items-center gap-4">
-            <Trophy className="w-5 h-5 text-[#e9c349] group-hover:scale-110 transition-transform drop-shadow-[0_0_5px_rgba(233,195,73,0.5)]" />
-            <span className="text-[12px] font-bold text-[#e5e2e1] tracking-widest rotate-180 [writing-mode:vertical-rl]">{language === 'tr' ? 'KUPON' : 'SLIP'}</span>
-            {betSlip.length > 0 && (
-              <div className="w-5 h-5 rounded-full bg-[#36ffc4] text-black text-[10px] flex items-center justify-center font-black shadow-[0_0_10px_rgba(54,255,196,0.5)]">
-                {betSlip.length}
-              </div>
-            )}
-          </div>
-        </button>
-      )}
+      {/* ═══════════ DYNAMIC RIGHT PANEL ═══════════ */}
+      <DualRightPanel 
+        popularMatches={featuredMatches}
+        language={language}
+        isOpenMobile={isSidebarOpenMobile}
+        onCloseMobile={() => setIsSidebarOpenMobile(false)}
+      />
+      
+      {/* ═══════════ SMART FLOATING ACTION BUTTON (REMOVED) ═══════════ */}
+      {/* 
+        The floating action button has been removed. 
+        Toggle is now managed within the DualRightPanel's sticky bottom bar.
+      */}
 
     </div>
   );

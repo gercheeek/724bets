@@ -25,9 +25,9 @@ import MaintenanceScreen from './components/MaintenanceScreen';
 import GlobalToaster from './components/GlobalToaster';
 
 import LiveSupportModal from './components/LiveSupportModal';
-import ChatBot from './components/ChatBot';
+// Import removed
 import SlotText from './components/SlotText';
-import ModernChat from './components/ModernChat';
+// Import removed
 import PromoWheel from './components/PromoWheel';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
 import SearchModal from './components/SearchModal';
@@ -54,8 +54,8 @@ import Footer from './components/Footer';
 
 import LiveBetsFeed from './components/LiveBetsFeed';
 import CasinoLobby from './components/CasinoLobby';
-// removed UserBets
-// removed UserDashboard
+import { UserProvider } from './contexts/UserContext';
+import { BetSlipProvider } from './contexts/BetSlipContext';
 
 // Portal Components
 import CouponsView from './components/CouponsView';
@@ -75,6 +75,7 @@ import { WithdrawalHistory } from './components/WithdrawalHistory';
 import { DepositHistory } from './components/DepositHistory';
 import { LiveSportsBulletin } from './components/LiveSportsBulletin';
 import MobileBulletinView from './components/MobileBulletinView';
+import { UpcomingMatchesView } from './components/UpcomingMatchesView';
 import GameLobbyGrid from './components/GameLobbyGrid';
 import Sidebar from './components/Sidebar';
 import GuestLanding from './components/GuestLanding';
@@ -82,7 +83,6 @@ import HeroSection from './components/HeroSection';
 import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
 import Spor724View from './components/Spor724View';
-import TarafView from './components/TarafView';
 import InGameLayout from './components/InGameLayout';
 import ComingSoon from './components/ComingSoon';
 import PlinkoView from './components/PlinkoView';
@@ -217,7 +217,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'taraf' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger'>(window.location.pathname.startsWith('/spor') ? 'spor724' : 'home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches'>(window.location.pathname.startsWith('/spor') ? 'spor724' : 'home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -257,9 +257,18 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const handleOpenSupportChat = () => {
+      setView('spor724');
+      setTimeout(() => {
+        window.dispatchEvent(new Event('openMobileChatPanel'));
+      }, 150);
+    };
+
     window.addEventListener('internal-navigate', handleInternalNavigate as EventListener);
+    window.addEventListener('openSupportChat', handleOpenSupportChat);
     return () => {
       window.removeEventListener('internal-navigate', handleInternalNavigate as EventListener);
+      window.removeEventListener('openSupportChat', handleOpenSupportChat);
     };
   }, []);
   
@@ -268,7 +277,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isLogoSpinning, setIsLogoSpinning] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
+// State removed
 
 
   useEffect(() => {
@@ -645,7 +654,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   useEffect(() => {
     if (window.innerWidth >= 1280) {
       setIsSidebarOpen(true); // Always open left menu on desktop by default
-      setIsChatOpen(true); // Always open right chat on desktop by default
+
     }
   }, [siteUser, view]);
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -705,7 +714,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             description: `⚽ **Bahis Detayları:**\n\n${selectionsText}`,
             timestamp: new Date().toISOString(),
             footer: {
-              text: "AHBAPBET | Canlı Kupon Bildirim Sistemi"
+              text: "724BETS | Canlı Kupon Bildirim Sistemi"
             }
           }
         ]
@@ -820,17 +829,17 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
     // 3. Branding Migration for Marquee & Popup
     const storedMarquee = localStorage.getItem('site_marquee_config');
-    if (storedMarquee && (/betlivo/i.test(storedMarquee) || /ahbapbet/i.test(storedMarquee) || /724FUTBOL/i.test(storedMarquee))) {
-      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, 'AHBAPBET').replace(/ahbapbet\.net/gi, 'AHBAPBET').replace(/724FUTBOL\.COM/gi, 'AHBAPBET'));
+    if (storedMarquee && (/betlivo/i.test(storedMarquee) || /724bets/i.test(storedMarquee) || /724bets/i.test(storedMarquee) || /724FUTBOL/i.test(storedMarquee))) {
+      const parsedMarquee = JSON.parse(storedMarquee.replace(/betlivo/gi, '724BETS').replace(/724bets/gi, '724BETS').replace(/724FUTBOL\.COM/gi, '724BETS'));
       localStorage.setItem('site_marquee_config', JSON.stringify(parsedMarquee));
       setMarqueeConfig(parsedMarquee);
     }
 
     const storedWelcome = localStorage.getItem('site_welcome_popup');
-    if (storedWelcome && (/betlivo/i.test(storedWelcome) || /ahbapbet/i.test(storedWelcome) || /724FUTBOL/i.test(storedWelcome))) {
-      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, 'AHBAPBET').replace(/ahbapbet\.net/gi, 'AHBAPBET').replace(/724FUTBOL\.COM/gi, 'AHBAPBET'));
+    if (storedWelcome && (/betlivo/i.test(storedWelcome) || /724bets/i.test(storedWelcome) || /724bets/i.test(storedWelcome) || /724FUTBOL/i.test(storedWelcome))) {
+      const parsedWelcome = JSON.parse(storedWelcome.replace(/betlivo/gi, '724BETS').replace(/724bets/gi, '724BETS').replace(/724FUTBOL\.COM/gi, '724BETS'));
       // Also catch the 'BETLIVOX' variant if it exists
-      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/AHBAPBET.NETX/gi, 'AHBAPBET').replace(/724FUTBOL.COMX/gi, 'AHBAPBET'));
+      const cleanedWelcome = JSON.parse(JSON.stringify(parsedWelcome).replace(/724BETS.NETX/gi, '724BETS').replace(/724FUTBOL.COMX/gi, '724BETS'));
       localStorage.setItem('site_welcome_popup', JSON.stringify(cleanedWelcome));
       setWelcomePopupConfig(cleanedWelcome);
     }
@@ -852,7 +861,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     return stored ? JSON.parse(stored) : demoCoupons;
   });
   const [showSearch, setShowSearch] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(true);
+// State removed
   const [globalTvPip, setGlobalTvPip] = useState(false);
   const [loyaltyConfig, setLoyaltyConfig] = useState<LoyaltyConfig>(() => {
     const stored = localStorage.getItem('site_loyalty_config');
@@ -870,30 +879,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     return stored ? JSON.parse(stored) : DEFAULT_WHEEL_CONFIG;
   });
 
-  useEffect(() => {
-    const handleOpenSupportChat = () => {
-      if (window.innerWidth < 1280) {
-         setIsMobileChatOpen(true);
-      } else {
-         setIsChatOpen(prev => !prev);
-      }
-    };
-    window.addEventListener('openSupportChat', handleOpenSupportChat);
-
-    return () => {
-      window.removeEventListener('openSupportChat', handleOpenSupportChat);
-    };
-  }, []);
-
-  // Sync isChatOpen with body class for global CSS styling (like FloatingBetSlip positioning)
-  useEffect(() => {
-    if (isChatOpen) {
-      document.body.classList.add('chat-open');
-    } else {
-      document.body.classList.remove('chat-open');
-    }
-    return () => document.body.classList.remove('chat-open');
-  }, [isChatOpen]);
+// Effects removed
 
 
   const handleWelcomePopupConfigChange = (cfg: WelcomePopupConfig) => {
@@ -934,7 +920,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         }
       },
       steps: [
-        { popover: { title: "ahbapbet'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
+        { popover: { title: "724bets'e Hoş Geldiniz! 🚀", description: 'Sitemizi daha yakından tanımak ve kazanmaya başlamak için kısa turumuzu inceleyin.', align: 'center' } },
         { element: '#tour-sidebar', popover: { title: 'Kategoriler & Spor Dalları', description: 'Buradan spor bahisleri, casino ve diğer popüler oyunlara tek tıkla ulaşabilirsiniz.', side: "right", align: 'start' }},
         { element: '#tour-user-panel', popover: { title: 'Bakiye & Kullanıcı İşlemleri', description: 'Güncel bakiyenizi takip edebilir, saniyeler içinde yatırım ve çekim yapabilirsiniz.', side: "bottom", align: 'center' }},
         { element: '#tour-chat', popover: { title: 'Canlı Sohbet', description: 'Sağ panelden diğer üyelerimizle sohbet edebilir, özel etkinlik kodlarını (gift) yakalayabilirsiniz!', side: "left", align: 'start' }},
@@ -1096,7 +1082,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         if (globalGiveaway) setGiveawayConfig(globalGiveaway);
         
         if (globalMarquee) {
-          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, 'AHBAPBET').replace(/ahbapbet\.net/gi, 'AHBAPBET'));
+          const cleaned = JSON.parse(JSON.stringify(globalMarquee).replace(/betlivo/gi, '724BETS').replace(/724bets/gi, '724BETS').replace(/724bets/gi, '724BETS'));
           setMarqueeConfig(cleaned);
         }
         
@@ -1104,7 +1090,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         if (globalWheel) setWheelConfig(globalWheel);
         
         if (globalWelcome) {
-          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, 'AHBAPBET').replace(/ahbapbet\.net/gi, 'AHBAPBET').replace(/AHBAPBET.NETX/gi, 'AHBAPBET').replace(/724FUTBOL\.COMX/gi, 'AHBAPBET'));
+          const cleaned = JSON.parse(JSON.stringify(globalWelcome).replace(/betlivo/gi, '724BETS').replace(/724bets/gi, '724BETS').replace(/724BETS.NETX/gi, '724BETS').replace(/724FUTBOL\.COMX/gi, '724BETS'));
           setWelcomePopupConfig(cleaned);
         }
         
@@ -1200,7 +1186,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
   // Hero brand for admin (keep backward compatibility)
   const heroDefault: Brand = {
-    id: 'ahbapbet', name: 'AHBAPBET', subtitle: 'CASINO & CANLI BAHİS',
+    id: '724bets', name: '724BETS', subtitle: 'CASINO & CANLI BAHİS',
     offerMain: '%280', offerSub: 'HOŞGELDİN BONUSU !!!',
     logo: 'https://picsum.photos/seed/bahisbey/400/400', link: 'https://bahisbey1438.com/?btag=59649488_330539', isSponsor: true,
   };
@@ -1258,7 +1244,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         setView('sports');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['adventure', 'blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'taraf', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'];
+        const validViews = ['adventure', 'blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'upcomingMatches'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -1287,13 +1273,18 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       robotsMeta.setAttribute('content', 'index, follow');
     }
 
-    let title = "Ahbapbet - Güvenilir Bahis ve Canlı Casino";
-    let desc = "Ahbapbet ile en yüksek oranlarla spor bahisleri yapın, canlı casino oyunlarının keyfini çıkarın. Hemen üye olun, kazanmaya başlayın!";
+    let title = "724bets - Güvenilir Bahis ve Canlı Casino";
+    let desc = "724bets ile en yüksek oranlarla spor bahisleri yapın, canlı casino oyunlarının keyfini çıkarın. Hemen üye olun, kazanmaya başlayın!";
     
     switch(view) {
+      case 'upcomingMatches':
+        title = "724bets | Günün Maçları";
+        desc = "Günün en popüler maçlarını görüntüleyin.";
+        break;
       case 'home':
-        title = "Ahbapbet | Canlı Bahis, Casino ve Canlı Casino Seçenekleri";
-        desc = "Ahbapbet ana sayfasında en güncel spor müsabakaları, popüler slot oyunları ve canlı casino masalarına hemen ulaşın.";
+      default:
+        title = "724bets | Canlı Bahis, Casino ve Canlı Casino Seçenekleri";
+        desc = "724bets ana sayfasında en güncel spor müsabakaları, popüler slot oyunları ve canlı casino masalarına hemen ulaşın.";
         break;
       case 'sports':
       case 'sports2':
@@ -1301,10 +1292,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       case 'sports4':
       case 'sports5':
       case 'spor724':
-      case 'taraf':
       case 'mobile-bulletin':
-        title = "Ahbapbet | Spor Bahisleri ve Yüksek Oranlı Canlı Bahis";
-        desc = "Dünyanın her yerinden futbol, basketbol, tenis ve daha fazla spor dalına maç öncesi ve canlı bahis yapma fırsatı Ahbapbet'te.";
+        title = "724bets | Spor Bahisleri ve Yüksek Oranlı Canlı Bahis";
+        desc = "Dünyanın her yerinden futbol, basketbol, tenis ve daha fazla spor dalına maç öncesi ve canlı bahis yapma fırsatı 724bets'te.";
         break;
       case 'blackjack':
       case 'blackjack-pro':
@@ -1315,40 +1305,40 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       case 'limbo':
       case 'chicken-run':
       case 'pool':
-        title = "Ahbapbet | Casino ve Canlı Casino Oyunları - Hızlı Kazanç";
-        desc = "Ahbapbet güvencesiyle rulet, blackjack, poker, baccarat ve binlerce popüler slot oyunu ile eğlenerek kazanın.";
+        title = "724bets | Casino ve Canlı Casino Oyunları - Hızlı Kazanç";
+        desc = "724bets güvencesiyle rulet, blackjack, poker, baccarat ve binlerce popüler slot oyunu ile eğlenerek kazanın.";
         break;
       case 'trusted-sites':
       case 'trusted-detail':
       case 'brands':
-        title = "Ahbapbet | Güvenilir Bahis Siteleri ve Şirket İncelemeleri";
-        desc = "Güvenilir bahis şirketleri listesi, detaylı incelemeler, oyuncu yorumları ve platform değerlendirmeleri Ahbapbet kalitesiyle sizlerle.";
+        title = "724bets | Güvenilir Bahis Siteleri ve Şirket İncelemeleri";
+        desc = "Güvenilir bahis şirketleri listesi, detaylı incelemeler, oyuncu yorumları ve platform değerlendirmeleri 724bets kalitesiyle sizlerle.";
         break;
       case 'analysis':
-        title = "Ahbapbet | Detaylı Maç Analizleri ve Banko Kuponlar";
-        desc = "Uzman kadromuzdan en güncel maç istatistikleri, oran analizleri ve banko tahminler Ahbapbet Analiz sayfasında.";
+        title = "724bets | Detaylı Maç Analizleri ve Banko Kuponlar";
+        desc = "Uzman kadromuzdan en güncel maç istatistikleri, oran analizleri ve banko tahminler 724bets Analiz sayfasında.";
         break;
       case 'coupons':
-        title = "Ahbapbet | Hazır Kuponlar ve Günün Kuponu";
+        title = "724bets | Hazır Kuponlar ve Günün Kuponu";
         desc = "Kazanma oranı yüksek günün hazır kuponları ve popüler bahis kombinasyonlarını hemen inceleyin.";
         break;
       case '724tv':
-        title = "Ahbapbet TV | Kesintisiz ve Şifresiz Canlı Maç İzle";
-        desc = "Ahbapbet TV üzerinden tüm spor karşılaşmalarını şifresiz, donmadan, full HD kalitede bedava izleyin.";
+        title = "724bets TV | Kesintisiz ve Şifresiz Canlı Maç İzle";
+        desc = "724bets TV üzerinden tüm spor karşılaşmalarını şifresiz, donmadan, full HD kalitede bedava izleyin.";
         break;
       case 'raffle':
       case 'cekilis':
       case 'giveaway':
-        title = "Ahbapbet | Çekilişler, Turnuvalar ve Büyük Ödüller";
-        desc = "Ahbapbet'in düzenlediği muhteşem çekilişlere katılın, nakit ödüller, free spinler ve dev hediyeler kazanma şansı yakalayın.";
+        title = "724bets | Çekilişler, Turnuvalar ve Büyük Ödüller";
+        desc = "724bets'in düzenlediği muhteşem çekilişlere katılın, nakit ödüller, free spinler and dev hediyeler kazanma şansı yakalayın.";
         break;
       case 'loyalty':
-        title = "Ahbapbet | VIP Sadakat Programı - Size Özel Ayrıcalıklar";
-        desc = "Bahis yaptıkça puan toplayın, Ahbapbet VIP ayrıcalıklarından ve sınırsız ödüllerden anında faydalanın.";
+        title = "724bets | VIP Sadakat Programı - Size Özel Ayrıcalıklar";
+        desc = "Bahis yaptıkça puan toplayın, 724bets VIP ayrıcalıklarından ve sınırsız ödüllerden anında faydalanın.";
         break;
       case 'promo':
-        title = "Ahbapbet | Güncel Promosyonlar, Bonus ve Deneme Bonusu Kodu";
-        desc = "En güncel Ahbapbet promosyon kodları, hoş geldin bonusları ve bedava bahis seçenekleri bu sayfada.";
+        title = "724bets | Güncel Promosyonlar, Bonus ve Deneme Bonusu Kodu";
+        desc = "En güncel 724bets promosyon kodları, hoş geldin bonusları ve bedava bahis seçenekleri bu sayfada.";
         break;
     }
 
@@ -1531,7 +1521,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     window.history.pushState(null, '', newUrl);
 
     if (v === 'spor724' || v.startsWith('sports')) {
-      setIsChatOpen(true);
+
       if (window.innerWidth >= 1280) {
         setIsSidebarOpen(true);
       }
@@ -1682,8 +1672,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   };
 
   return (
-    <>
-      {/* Onboarding Popup Overlay */}
+    <UserProvider siteUser={siteUser} setSiteUser={setSiteUser}>
+      <BetSlipProvider>
+        <>
+          {/* Onboarding Popup Overlay */}
       {showOnboardingPopup && (
         <OnboardingPopup 
           onStartTour={() => {
@@ -1711,7 +1703,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               localStorage.setItem('site_user_role', user.role);
             }
             setIsSidebarOpen(true);
-            setIsChatOpen(true);
+
             setAuthModalMode(null);
           }}
           onAdminLogin={(role) => {
@@ -1736,7 +1728,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               id: isGuest ? `guest_${guestUsername}` : 'admin-session',
               username: isGuest ? guestUsername : 'Yönetici',
               password: '',
-              email: isGuest ? `guest@ahbapbet.com` : 'admin@ahbapbet.com',
+              email: isGuest ? `guest@724bets.com` : 'admin@724bets.com',
               phone: '',
               createdAt: Date.now(),
               role: role as any,
@@ -1746,7 +1738,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             localStorage.setItem('site_current_member', JSON.stringify(adminUser));
             
             setIsSidebarOpen(true);
-            setIsChatOpen(true);
+
             setAuthModalMode(null);
             if (isGuest) {
               setView('home');
@@ -1907,7 +1899,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                     style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}
                   >
                     <span className="text-[#10B981] font-extrabold text-2xl sm:text-3xl tracking-tight lowercase">
-                      ahbapbet
+                      724bets
                     </span>
                     <div className="flex items-center justify-center w-4 h-4 sm:w-4 sm:h-4 rounded-full border-[2px] border-[#10B981] ml-1 -mt-4">
                       <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" className="text-[#10B981]">
@@ -2009,10 +2001,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         onMemberRegisterClick={() => setAuthModalMode('register')}
         onMemberLogout={handleGlobalLogout}
         onSearchClick={() => setShowSearch(true)}
-        onSupportClick={() => setIsChatOpen(!isChatOpen)}
+        onSupportClick={() => {}}
         navVisibility={navVisibility}
         marqueeConfig={marqueeConfig}
-        isChatOpen={isChatOpen}
+        isChatOpen={false}
         isSidebarOpen={isSidebarOpen}
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         showFakeBetButton={view === 'sports2'}
@@ -2028,7 +2020,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'taraf' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack') 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack') 
             ? 'p-0 w-full max-w-full mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
@@ -2309,6 +2301,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             <Spor724View 
               onNavigate={(v: string) => setView(v)}
             />
+          </div>
+        )}
+
+        {view === 'upcomingMatches' && (
+          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
+            <UpcomingMatchesView />
           </div>
         )}
 
@@ -2622,93 +2620,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         </div>
       )}
 
-      {/* 3. SAĞ CANLI SOHBET (Geniş masaüstünde 350px sabit, alt çözünürlüklerde gizli) */}
-      {view !== 'admin' && !showLiveScoreModal && !isMobile && (
-        <>
-          <aside className={`hidden xl:flex flex-col bg-[#050505] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[350px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
-            <ModernChat
-              open={isChatOpen}
-              onOpen={() => setIsChatOpen(true)}
-              onClose={() => setIsChatOpen(false)}
-              siteUser={siteUser}
-              userRole={userRole}
-              isMobile={false} // Force desktop mode in this slot
-            />
-          </aside>
 
-          {/* Gamdom-style Floating Action Buttons (Desktop Only) */}
-          {!isChatOpen && (
-            <div className="hidden xl:flex fixed bottom-6 right-6 flex-col gap-2 z-50">
-              <button 
-                onClick={() => setIsChatOpen(true)}
-                className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
-                title="Canlı Sohbet"
-              >
-                <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#050505] rounded-full"></div>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-              </button>
-              <button 
-                onClick={() => setShowSearch(true)}
-                className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
-                title="Arama"
-              >
-                <Search className="w-5 h-5 group-hover:text-white transition-colors" />
-              </button>
-              <button 
-                onClick={() => setIsChatOpen(true)}
-                className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
-                title="Canlı Destek"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-              </button>
-            </div>
-          )}
-        </>
-      )}
-
-      {/* Gamdom-style Floating Action Buttons (Mobile Only) */}
-      {view !== 'admin' && !showLiveScoreModal && isMobile && !isMobileChatOpen && (
-        <div className="flex xl:hidden fixed bottom-20 right-4 flex-col gap-2 z-50">
-          <button 
-            onClick={() => setIsMobileChatOpen(true)}
-            className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group relative"
-            title="Canlı Sohbet"
-          >
-            <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#050505] rounded-full"></div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-white transition-colors"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          </button>
-          <button 
-            onClick={() => setShowSearch(true)}
-            className="w-11 h-11 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/20 transition-colors shadow-lg group"
-            title="Arama"
-          >
-            <Search className="w-5 h-5 group-hover:text-white transition-colors" />
-          </button>
-        </div>
-      )}
-
-      {/* MOBİL DRAWER - SOHBET */}
-      {isMobileChatOpen && (
-        <div className="fixed inset-0 z-[110] flex xl:hidden justify-end">
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileChatOpen(false)}></div>
-          <aside className="w-full h-full bg-[#050505] flex-shrink-0 relative z-10 animate-slide-in-right">
-            <ModernChat
-              open={true}
-              onOpen={() => {}}
-              onClose={() => setIsMobileChatOpen(false)}
-              siteUser={siteUser}
-              userRole={userRole}
-              isMobile={isMobile}
-              botsConfig={botsConfig}
-            />
-          </aside>
-        </div>
-      )}
 
     </div>
     )}
 
-      {/* AHBAPBET OVERLAY FOOTER REMOVED AS PER USER REQUEST */}
+
 
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav 
@@ -2725,6 +2642,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       />
       <GlobalToaster />
       <LanguageTransition />
-    </>
+        </>
+      </BetSlipProvider>
+    </UserProvider>
   );
 };

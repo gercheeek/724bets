@@ -156,7 +156,7 @@ const Header: React.FC<HeaderProps> = ({
         id: Date.now().toString(),
         userId: siteUser.id,
         username: siteUser.username,
-        content: `AHBAPBET Yatırım Bildirimi:\nAHBAPBET Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
+        content: `724BETS Yatırım Bildirimi:\n724BETS Kullanıcı Adı: ${depositUsername}\n\nBu kullanıcı yatırım yaptığını bildiriyor.`,
         isRead: false,
         createdAt: Date.now()
       };
@@ -368,8 +368,8 @@ const Header: React.FC<HeaderProps> = ({
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}
               >
                 <span className="font-extrabold text-2xl md:text-3xl tracking-tight lowercase">
-                  <span className="text-white">ahbap</span>
-                  <span className="text-[#10b981]">bet</span>
+                  <span className="text-white">724</span>
+                  <span className="text-[#10b981]">bets</span>
                 </span>
                 <div className="flex items-center justify-center w-4 h-4 md:w-4 md:h-4 rounded-full border-[2px] border-[#10b981] ml-1 -mt-4">
                   <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" className="text-[#10b981]">

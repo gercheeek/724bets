@@ -23,7 +23,7 @@ const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
   if (game.customDemoUrl) return game.customDemoUrl;
   if (game.demoSymbol) {
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://ahbapbet.net`;
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bets.net`;
   }
   return null;
 };
@@ -110,7 +110,7 @@ const heroSlides = [
         characterImg: "/images/haluk_fixed.png",
         badge: "iPhone 17 Pro Max Çekilişi",
         title: <>DEV ÇEKİLİŞ<br/>BAŞLADI!</>,
-        subtitle: "ahbapbet güvencesiyle büyük ödül seni bekliyor.",
+        subtitle: "724bets güvencesiyle büyük ödül seni bekliyor.",
         buttonText: "Çekilişe Katıl"
     },
     {
@@ -277,7 +277,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
                 <div className="relative z-20 flex flex-col justify-center lg:justify-start items-start pt-0 lg:pt-5 h-full px-4 lg:px-6">
                     <h3 className="text-[22px] sm:text-[28px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/orig:translate-x-1 transition-transform flex flex-wrap items-center gap-1 sm:gap-2">
-                        <span className="text-[#06b6d4] lowercase">ahbap</span> Orijinal
+                        <span className="text-[#06b6d4] lowercase">724games</span> Orijinal
                         <span className="bg-[#10b981] text-black text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse shrink-0 tracking-normal uppercase ml-1">
                             %99.2 RTP
                         </span>
@@ -361,7 +361,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     </div>
                     <div className="relative z-20 flex flex-col justify-center items-start h-full px-4 lg:px-6">
                         <h3 className="text-[24px] sm:text-[28px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/orig:translate-x-1 transition-transform flex flex-wrap items-center gap-1 sm:gap-2">
-                            <span className="text-[#06b6d4] lowercase">ahbap</span> Orijinal
+                            <span className="text-[#06b6d4] lowercase">724games</span> Orijinal
                             <span className="bg-[#10b981] text-black text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse shrink-0 tracking-normal uppercase ml-1">
                                 %99.2 RTP
                             </span>

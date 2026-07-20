@@ -57,7 +57,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
   const defaultMessages = [
     {
       id: 1,
-      title: "AHBAPBET'e Hoş Geldiniz! 🎉",
+      title: "724BETS'e Hoş Geldiniz! 🎉",
       date: "Az önce",
       content: "Aramıza katıldığınız için çok mutluyuz. Dünyanın en iyi oranları ve en popüler casino oyunlarıyla kazanmaya hazır olun! Herhangi bir sorunuz olursa Canlı Destek ekibimiz 7/24 hizmetinizdedir."
     },
@@ -71,7 +71,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
       id: 3,
       title: "⚠️ Taklit Sitelere Dikkat Edin",
       date: "Az önce",
-      content: "Değerli üyemiz, güvenliğiniz bizim için her şeyden önemli. Resmi sitemiz sadece ahbapbet.net ve ahbapbet.net'tir. Bizi taklit eden dolandırıcı sitelere (phishing) karşı dikkatli olun ve şifrenizi asla başka yerlerde paylaşmayın."
+      content: "Değerli üyemiz, güvenliğiniz bizim için her şeyden önemli. Resmi sitemiz sadece 724bets.net ve 724bets.net'tir. Bizi taklit eden dolandırıcı sitelere (phishing) karşı dikkatli olun ve şifrenizi asla başka yerlerde paylaşmayın."
     },
     {
       id: 4,

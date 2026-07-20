@@ -25,6 +25,17 @@ const getPlayerImage = (teamName: string) => {
   }
   return null;
 };
+const getSportBgImage = (sportName: any) => {
+  const name = String(sportName || '').toLowerCase();
+  if (name.includes('basketbol') || name.includes('basketball') || name === '2') return 'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=2000&auto=format&fit=crop';
+  if (name.includes('tenis') || name.includes('tennis') || name === '3') return 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=2000&auto=format&fit=crop';
+  if (name.includes('voleybol') || name.includes('volleyball') || name === '4') return 'https://images.unsplash.com/photo-1592656094267-764a45160876?q=80&w=2000&auto=format&fit=crop';
+  if (name.includes('buz hokeyi') || name.includes('ice hockey')) return 'https://images.unsplash.com/photo-1515703407324-5f753eedf996?q=80&w=2000&auto=format&fit=crop';
+  if (name.includes('masa tenisi') || name.includes('table tennis')) return 'https://images.unsplash.com/photo-1534158914592-062992fbe900?q=80&w=2000&auto=format&fit=crop';
+  if (name.includes('e-spor') || name.includes('esports')) return 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2000&auto=format&fit=crop';
+  if (name.includes('hentbol') || name.includes('handball')) return 'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?q=80&w=2000&auto=format&fit=crop';
+  return 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop'; // Futbol fallback
+};
 
 export const SportsHeroBanner: React.FC = () => {
   const { events } = useBetting();
@@ -91,18 +102,46 @@ export const SportsHeroBanner: React.FC = () => {
       return acc;
     }, []);
 
-    let topEvents = validEvents
-      .sort((a: any, b: any) => {
-         const aMarkets = Object.keys(a.data?.group_markets || {}).length || 0;
-         const bMarkets = Object.keys(b.data?.group_markets || {}).length || 0;
-         return bMarkets - aMarkets;
-      })
-      .slice(0, 3);
+    let sortedEvents = validEvents.sort((a: any, b: any) => {
+      const aMarkets = Object.keys(a.data?.group_markets || {}).length || 0;
+      const bMarkets = Object.keys(b.data?.group_markets || {}).length || 0;
+      return bMarkets - aMarkets;
+    });
+
+    let topEvents = [];
+    const usedSports = new Set();
+    
+    // First pass: Try to get 1 top match per unique sport
+    for (const ev of sortedEvents) {
+      const sportObj = ev.data?.sport;
+      const sportName = ev.data?.sport_name || (typeof sportObj === 'object' ? sportObj?.name : sportObj) || '';
+      const sport = String(sportName).toLowerCase();
+      
+      if (!usedSports.has(sport)) {
+        topEvents.push(ev);
+        usedSports.add(sport);
+      }
+      if (topEvents.length >= 3) break;
+    }
+
+    // Second pass: If we don't have 3 matches yet (e.g. only 1 sport is live), fill with remaining top matches
+    if (topEvents.length < 3) {
+      for (const ev of sortedEvents) {
+        if (!topEvents.includes(ev)) {
+          topEvents.push(ev);
+        }
+        if (topEvents.length >= 3) break;
+      }
+    }
 
     return topEvents.map((match: any) => {
       const data = match.data;
       const homeTeam = data.participants.home || 'EV SAHİBİ';
       const awayTeam = data.participants.away || 'DEPLASMAN';
+      
+      const sportObj = data.sport;
+      const sportName = data.sport_name || (typeof sportObj === 'object' ? sportObj?.name : sportObj) || '';
+      const sport = String(sportName);
       
       let score = '-';
       let minute = 'CANLI';
@@ -125,6 +164,7 @@ export const SportsHeroBanner: React.FC = () => {
 
       const homePlayerImg = getPlayerImage(homeTeam);
       const awayPlayerImg = getPlayerImage(awayTeam);
+      const bgImg = getSportBgImage(sport);
 
       return {
         id: match.id,
@@ -132,12 +172,14 @@ export const SportsHeroBanner: React.FC = () => {
         awayTeam,
         score,
         minute,
+        sport,
         isLive: true,
         homeOdd: match.parsedOdds.homeOdd !== '-' ? match.parsedOdds.homeOdd : '2.10',
         drawOdd: match.parsedOdds.drawOdd !== '-' ? match.parsedOdds.drawOdd : '3.00',
         awayOdd: match.parsedOdds.awayOdd !== '-' ? match.parsedOdds.awayOdd : '2.80',
         homePlayerImg,
-        awayPlayerImg
+        awayPlayerImg,
+        bgImg
       };
     });
   }, [events, language]);
@@ -160,8 +202,9 @@ export const SportsHeroBanner: React.FC = () => {
         
         {/* Background Stadium */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50 scale-100 group-hover/banner:scale-105 transition-transform duration-[10s] ease-out"
-          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1518605368461-1e1e38ce8058?auto=format&fit=crop&q=80&w=2000')` }}
+          key={`bg-${currentMatch.id}`}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50 scale-100 group-hover/banner:scale-105 transition-all duration-[10s] ease-out animate-fade-in"
+          style={{ backgroundImage: `url('${currentMatch.bgImg}')` }}
         ></div>
         
         {/* Dark Overlays for Cinematic Depth */}
@@ -202,47 +245,49 @@ export const SportsHeroBanner: React.FC = () => {
         {/* Center Content Area */}
         <div key={`content-${currentMatch.id}`} className="absolute inset-0 flex flex-col items-center justify-center z-20 pt-4 pb-4 px-4 animate-fade-in">
           
-          {/* Top Tag & Event Name */}
-          <div className="flex flex-col items-center gap-2 mb-3 md:mb-4 animate-fade-in-up">
-            {currentMatch.isLive && (
-              <div className="flex items-center gap-2 md:gap-3 mt-1 bg-black/40 px-4 py-1.5 rounded-full border border-white/5 backdrop-blur-md">
-                <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_12px_rgba(239,68,68,1)]"></div>
-                <span className="text-base md:text-lg font-black tracking-[0.2em] uppercase text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
-                  {currentMatch.minute}
-                </span>
-              </div>
-            )}
+          {/* Top Tag & Event Name (Moved LIVE badge to score box) */}
+          <div className="flex flex-col items-center gap-2 mb-2 md:mb-4 animate-fade-in-up">
+            {/* The Live badge is now integrated with the score below */}
           </div>
 
-          {/* Aggressive Typography for Teams & Score/VS */}
-          <div className="flex items-center justify-between w-full max-w-[800px] mb-8 md:mb-10 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          {/* Refined Typography for Teams & Score/VS */}
+          <div className="flex items-center justify-between w-full max-w-[900px] mb-8 md:mb-10 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
             {/* Home Team */}
             <div className="flex-1 flex justify-end">
-              <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_15px_25px_rgba(0,0,0,1)] text-right leading-none pb-1 line-clamp-2 max-w-[300px]">
+              <h1 className="text-white font-medium text-lg md:text-xl lg:text-2xl tracking-wide drop-shadow-[0_8px_15px_rgba(0,0,0,0.8)] text-right leading-snug pb-1 line-clamp-2 max-w-[200px] md:max-w-[280px]">
                 {currentMatch.homeTeam}
               </h1>
             </div>
             
             {/* Center Score / VS */}
-            <div className="flex-shrink-0 mx-4 md:mx-8">
-              {(currentMatch.score !== '-' && currentMatch.score.includes(' - ')) ? (
-                <div className="flex items-center justify-center gap-3 md:gap-5 bg-gradient-to-b from-black/80 to-black/40 border border-white/10 rounded-2xl px-6 md:px-8 py-3 md:py-4 backdrop-blur-xl shadow-[0_0_40px_rgba(0,0,0,0.8)] relative overflow-hidden group/score">
-                   {/* Inner Glow */}
-                   <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-50"></div>
-                   <span className="text-white font-black text-4xl md:text-5xl lg:text-[52px] tabular-nums drop-shadow-2xl leading-none relative z-10">{currentMatch.score.split(' - ')[0]}</span>
-                   <span className="text-[#36ffc4] font-black text-2xl md:text-3xl drop-shadow-[0_0_15px_rgba(54,255,196,0.5)] leading-none relative z-10">-</span>
-                   <span className="text-white font-black text-4xl md:text-5xl lg:text-[52px] tabular-nums drop-shadow-2xl leading-none relative z-10">{currentMatch.score.split(' - ')[1]}</span>
-                </div>
-              ) : (
-                <div className="bg-gradient-to-b from-[#10b981]/20 to-[#10b981]/5 border border-[#10b981]/30 rounded-2xl px-4 py-2 md:px-5 md:py-3 backdrop-blur-md shadow-[0_0_25px_rgba(16,185,129,0.3)]">
-                  <span className="text-[#36ffc4] font-black italic text-xl md:text-3xl lg:text-[32px] drop-shadow-[0_0_10px_rgba(54,255,196,0.6)] leading-none">VS</span>
-                </div>
-              )}
+            <div className="flex-shrink-0 mx-4 md:mx-6 flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center gap-1.5 bg-black/40 border border-white/5 rounded-2xl px-5 py-3 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                {currentMatch.isLive && (
+                  <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-2.5 py-0.5 rounded-full mb-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></div>
+                    <span className="text-[10px] md:text-[11px] font-bold tracking-widest uppercase text-red-400 drop-shadow-sm">
+                      {currentMatch.minute}
+                    </span>
+                  </div>
+                )}
+                
+                {(currentMatch.score !== '-' && currentMatch.score.includes(' - ')) ? (
+                  <div className="flex items-center justify-center gap-3 md:gap-4">
+                     <span className="text-white font-bold text-2xl md:text-3xl lg:text-4xl tabular-nums drop-shadow-md leading-none relative z-10">{currentMatch.score.split(' - ')[0]}</span>
+                     <span className="text-[#36ffc4]/60 font-medium text-lg md:text-xl leading-none relative z-10">-</span>
+                     <span className="text-white font-bold text-2xl md:text-3xl lg:text-4xl tabular-nums drop-shadow-md leading-none relative z-10">{currentMatch.score.split(' - ')[1]}</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center pt-1">
+                    <span className="text-[#36ffc4]/60 font-medium italic text-lg md:text-xl drop-shadow-sm leading-none">VS</span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Away Team */}
             <div className="flex-1 flex justify-start">
-              <h1 className="text-white font-black text-3xl md:text-5xl lg:text-[56px] uppercase tracking-tighter drop-shadow-[0_15px_25px_rgba(0,0,0,1)] text-left leading-none pb-1 line-clamp-2 max-w-[300px]">
+              <h1 className="text-white font-medium text-lg md:text-xl lg:text-2xl tracking-wide drop-shadow-[0_8px_15px_rgba(0,0,0,0.8)] text-left leading-snug pb-1 line-clamp-2 max-w-[200px] md:max-w-[280px]">
                 {currentMatch.awayTeam}
               </h1>
             </div>
@@ -257,15 +302,15 @@ export const SportsHeroBanner: React.FC = () => {
              ].map((btn, idx) => (
                <button 
                  key={idx} 
-                 className="flex-1 h-[52px] md:h-[60px] rounded-xl bg-gradient-to-b from-white/[0.08] to-black/40 hover:from-[#10b981]/20 hover:to-black/60 border border-white/[0.08] hover:border-[#36ffc4]/50 backdrop-blur-xl flex flex-col items-center justify-center gap-1 group/odd transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_0_40px_rgba(54,255,196,0.2)] hover:-translate-y-1 relative overflow-hidden"
+                 className="flex-1 h-[44px] md:h-[48px] rounded-lg bg-black/20 hover:bg-[#10b981]/10 border border-white/[0.05] hover:border-[#36ffc4]/30 backdrop-blur-md flex items-center justify-between px-4 group/odd transition-all duration-300 shadow-md hover:-translate-y-0.5 relative overflow-hidden"
                >
                  {/* Inner Glow on Hover */}
                  <div className="absolute inset-0 bg-gradient-to-t from-[#36ffc4]/10 to-transparent opacity-0 group-hover/odd:opacity-100 transition-opacity duration-300"></div>
                  {/* Shine effect */}
-                 <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] group-hover/odd:left-[200%] transition-all duration-700 ease-in-out"></div>
+                 <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-20deg] group-hover/odd:left-[200%] transition-all duration-700 ease-in-out"></div>
                  
-                 <span className="text-[#a1a1aa] group-hover/odd:text-[#36ffc4] font-black text-[9px] md:text-[11px] uppercase tracking-[0.1em] md:tracking-[0.2em] transition-colors relative z-10 truncate px-1 w-full text-center">{btn.label}</span>
-                 <div className="relative z-10 text-white group-hover/odd:text-white font-black text-base md:text-xl tracking-wider drop-shadow-md">
+                 <span className="text-gray-400 group-hover/odd:text-[#36ffc4] font-medium text-[10px] md:text-[11px] uppercase tracking-wide transition-colors relative z-10">{btn.label}</span>
+                 <div className="relative z-10 text-white group-hover/odd:text-white font-bold text-sm md:text-base tracking-wide drop-shadow-md">
                    <AnimatedOdd value={btn.odd} />
                  </div>
                </button>

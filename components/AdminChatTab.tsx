@@ -97,7 +97,7 @@ if (typeof window !== 'undefined' && !window.globalSimulation) {
               username: msg.username, 
               is_bot: true, 
               role: 'member',
-              email: `${msg.username.replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@ahbapbet.com`,
+              email: `${msg.username.replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@724bets.com`,
               password: 'bot_placeholder_pwd',
               status: 'active'
             }])
@@ -341,7 +341,7 @@ export default function AdminChatTab() {
           username: newBotName.trim(), 
           is_bot: true, 
           role: 'member',
-          email: `${newBotName.trim().replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@ahbapbet.com`,
+          email: `${newBotName.trim().replace(/\s+/g, '').toLowerCase()}_bot_${Date.now()}@724bets.com`,
           password: 'bot_placeholder_pwd',
           status: 'active'
         }])
@@ -390,7 +390,7 @@ export default function AdminChatTab() {
           username: randomName, 
           is_bot: true, 
           role: 'member',
-          email: `${randomName.toLowerCase()}_bot_${Date.now()}@ahbapbet.com`,
+          email: `${randomName.toLowerCase()}_bot_${Date.now()}@724bets.com`,
           password: 'bot_placeholder_pwd',
           status: 'active'
         }])
@@ -444,7 +444,7 @@ export default function AdminChatTab() {
           username: name,
           is_bot: true,
           role: 'member',
-          email: `${name.toLowerCase()}_bot_${Date.now()}_${Math.floor(Math.random()*1000)}@ahbapbet.com`,
+          email: `${name.toLowerCase()}_bot_${Date.now()}_${Math.floor(Math.random()*1000)}@724bets.com`,
           password: 'bot_placeholder_pwd',
           status: 'active'
         })))
@@ -602,7 +602,7 @@ export default function AdminChatTab() {
         : '';
 
       // 2. Prompt oluşturma
-      let systemPrompt = `Sen ahbapbet.com sitesinde takılan heyecanlı bir bahisçi ve spor analistisin. 
+      let systemPrompt = `Sen 724bets.com sitesinde takılan heyecanlı bir bahisçi ve spor analistisin. 
 Canlı maçları takip edip skorlara göre tepki veriyorsun. Asla bir yapay zeka olduğunu belli etme.
 Kısa, öz ve argo içermeyen sokak ağzıyla (kanka, aga, hoca vb.) spor/casino muhabbeti yap.
 Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino sitelerini öv.`;

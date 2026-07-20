@@ -85,7 +85,7 @@ const LOCKS = [
     tag: 'KİLİT 7',
     title: "APEX PREDATOR",
     subtitle: "Büyük Final",
-    description: "Efsaneler arasına girmeye tek adım kaldı. 5.000 TL'lik final darbesini vur ve Ahbapbet tahtına otur!",
+    description: "Efsaneler arasına girmeye tek adım kaldı. 5.000 TL'lik final darbesini vur ve 724Bets tahtına otur!",
     reward: "3.000 TL Nakit + 5 Altın Bilet + 'Apex' Rozeti",
     icon: Skull,
     color: 'legendary',
@@ -316,7 +316,7 @@ export default function AdventureMap() {
                 <span className="text-red-500/80 text-[10px] font-bold uppercase tracking-[0.3em]">7 Ölümcül Kilit</span>
               </div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-tight">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-fuchsia-500 to-purple-500">Ahbapbet</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-fuchsia-500 to-purple-500">724Bets</span>
                 <span className="text-white/90 ml-3">Serüveni</span>
               </h1>
               <p className="text-gray-500 mt-1 text-sm max-w-lg font-medium">

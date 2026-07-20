@@ -37,10 +37,10 @@ export default function OriginalGameContainer({
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#10b981]/10 blur-[120px] rounded-[100%]"></div>
             </div>
 
-            {/* ── AHBAPBET CORPORATE WATERMARK ── */}
+            {/* ── 724BETS CORPORATE WATERMARK ── */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none text-center w-full">
                 <h1 className="text-[100px] md:text-[160px] font-black italic tracking-tighter text-white opacity-[0.03] select-none">
-                    AHBAPBET
+                    724BETS
                 </h1>
             </div>
 
@@ -66,7 +66,7 @@ export default function OriginalGameContainer({
                     <span className="text-[#ffd700] font-black tracking-[0.3em] uppercase text-sm drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
                         {title}
                     </span>
-                    <span className="text-gray-500 text-[9px] uppercase tracking-widest mt-1">Ahbapbet Original</span>
+                    <span className="text-gray-500 text-[9px] uppercase tracking-widest mt-1">724Bets Original</span>
                 </div>
 
                 {/* Right: Provably Fair Badge */}

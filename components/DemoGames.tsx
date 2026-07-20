@@ -50,7 +50,7 @@ const DemoGames: React.FC = () => {
     setSelectedGame(game);
   };
 
-  const iframeSrc = `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${selectedGame.symbol}&jurisdiction=99&lobbyUrl=https://ahbapbet.net`;
+  const iframeSrc = `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${selectedGame.symbol}&jurisdiction=99&lobbyUrl=https://724bets.net`;
 
   return (
     <div className="w-full max-w-5xl mx-auto py-8 px-4 flex flex-col items-center relative">

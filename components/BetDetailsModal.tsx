@@ -101,7 +101,7 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
 
           {/* Logo Divider */}
           <div className="flex items-center justify-center -my-1">
-            <span className="text-gray-600 font-black tracking-widest text-lg opacity-40 lowercase">ahbapbet</span>
+            <span className="text-gray-600 font-black tracking-widest text-lg opacity-40 lowercase">724bets</span>
           </div>
 
           {/* Amounts Table */}

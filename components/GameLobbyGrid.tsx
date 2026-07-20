@@ -43,7 +43,7 @@ const liveCasinoGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'live')
 const getDemoUrl = (game: GameItem | null): string | null => {
   if (!game) return null;
   if (game.demoSymbol) {
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://ahbapbet.net`;
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bets.net`;
   }
   const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   let symbol = null;
@@ -54,7 +54,7 @@ const getDemoUrl = (game: GameItem | null): string | null => {
   else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
   else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
   if (!symbol) return null;
-  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://ahbapbet.net`;
+  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bets.net`;
 };
 
 interface BlockProps {

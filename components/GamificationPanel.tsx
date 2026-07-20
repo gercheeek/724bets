@@ -50,7 +50,7 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({
               <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">Premium Hazine Haritası</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all">
-              Ahbapbet Serüveni
+              724Bets Serüveni
             </h2>
             <p className="text-gray-400 text-sm mt-1 font-medium">7 noktalı haritayı tamamla, büyük ganimeti kap!</p>
           </div>

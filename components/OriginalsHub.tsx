@@ -39,10 +39,10 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
                                 <span className="text-[#06b6d4] text-xs font-bold uppercase tracking-widest">Premium Hub</span>
                             </div>
                             <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-3">
-                                <span className="lowercase">ahbapbet</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#06b6d4] to-[#00b372]">GAMES</span>
+                                <span className="lowercase">724bets</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#06b6d4] to-[#00b372]">GAMES</span>
                             </h1>
                             <p className="text-zinc-400 text-sm max-w-sm leading-relaxed">
-                                Sadece AHBAPBET'e özel premium oyunlar ve devasa çekilişler.
+                                Sadece 724BETS'e özel premium oyunlar ve devasa çekilişler.
                             </p>
                         </div>
                     </div>
@@ -131,7 +131,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn }: { onNavigate: (
                         <div>
                             <div className="flex items-center gap-2 mb-1">
                                 <span className="bg-red-500 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full">CANLI</span>
-                                <h3 className="text-xl font-black text-white"><span className="lowercase">ahbapbet</span> TV Özel Yayın</h3>
+                                <h3 className="text-xl font-black text-white"><span className="lowercase">724bets</span> TV Özel Yayın</h3>
                             </div>
                             <p className="text-zinc-400 text-sm">Tüm maçları kesintisiz HD izle.</p>
                         </div>

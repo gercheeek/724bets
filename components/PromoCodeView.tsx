@@ -16,14 +16,14 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate }) =
 
   const promos = [
     { title: 'Gece Bonusu (Çevrimsiz)', desc: 'Saat 02:00-05:00 arası yatırımlarınız freespinlerle ödüllendiriliyor.', icon: <Clock className="w-8 h-8 text-indigo-400" /> },
-    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: 'AHBAPBET\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-8 h-8 text-yellow-400" /> },
+    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: '724BETS\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-8 h-8 text-yellow-400" /> },
     { title: 'İlk Çekime 2 Katı Ödeme (Çevrimsiz)', desc: 'İlk çekiminizi yaparken kazancınızın 2 katını gönderiyoruz.', icon: <Wallet className="w-8 h-8 text-emerald-400" /> },
     { title: 'Günlük Prim (Çevrimsiz)', desc: 'Aktifliğinize göre hesabınızda her gün nakit bonuslar yatıyor.', icon: <Gift className="w-8 h-8 text-pink-400" /> },
     { title: 'Haftalık Jest Bonusu (Çevrimsiz)', desc: 'Tüm haftaki performansınız her cumartesi ödüllendiriliyor.', icon: <Calendar className="w-8 h-8 text-blue-400" /> },
     { title: 'Seviye Atlama Bonusu (Çevrimsiz)', desc: 'VIP seviyeniz yükseldikçe daha fazla ödül ve ayrıcalık sizi bekliyor.', icon: <TrendingUp className="w-8 h-8 text-green-400" /> },
     { title: 'Günlük Kayıp Bonusu (Çevrimsiz)', desc: 'Şanssız geçen her gün yeni bir başlangıça dönüşüyor.', icon: <RefreshCw className="w-8 h-8 text-red-400" /> },
     { title: 'Doğum Günü Bonusu (Çevrimsiz)', desc: 'Profil seviyenize özel nakit bonus hesabınıza otomatik ekleniyor.', icon: <Cake className="w-8 h-8 text-purple-400" /> },
-    { title: 'Aylık Kayıp Bonusu (Çevrimsiz)', desc: 'AHBAPBET\'te her kayıp miktarı yeni bir geriye dönüş fırsatı.', icon: <RefreshCw className="w-8 h-8 text-orange-400" /> },
+    { title: 'Aylık Kayıp Bonusu (Çevrimsiz)', desc: '724BETS\'te her kayıp miktarı yeni bir geriye dönüş fırsatı.', icon: <RefreshCw className="w-8 h-8 text-orange-400" /> },
   ];
 
   const handleCheckCode = async () => {

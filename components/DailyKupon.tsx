@@ -20,7 +20,7 @@ const LOW_RISK_COUPON = {
     { id: 'l1', league: 'DÜNYA KUPASI 2026', homeTeam: 'Hollanda', awayTeam: 'İsveç', prediction: 'MS 1', odd: '1.65' },
     { id: 'l2', league: 'DÜNYA KUPASI 2026', homeTeam: 'İspanya', awayTeam: 'Suudi Arabistan', prediction: 'MS 1', odd: '1.30' },
   ],
-  playLink: 'https://gamdom.com/r/ahbapbet',
+  playLink: 'https://gamdom.com/r/724bets',
   totalOdd: '2.15'
 };
 
@@ -30,7 +30,7 @@ const MEDIUM_RISK_COUPON = {
     { id: 'm1', league: 'UEFA AVRUPA LİGİ', homeTeam: 'Aston Villa', awayTeam: 'Bologna', prediction: 'M.S 1', odd: '1.54' },
     { id: 'm2', league: 'UEFA AVRUPA LİGİ', homeTeam: 'Nottingham Forest', awayTeam: 'Porto', prediction: '1.5 ÜST', odd: '1.43' },
   ],
-  playLink: 'https://gamdom.com/r/ahbapbet',
+  playLink: 'https://gamdom.com/r/724bets',
   totalOdd: '2.20'
 };
 
@@ -40,7 +40,7 @@ const HIGH_RISK_COUPON = {
     { id: 'h1', league: 'DÜNYA KUPASI 2026', homeTeam: 'Almanya', awayTeam: 'Fildişi Sahili', prediction: 'KG VAR', odd: '1.85' },
     { id: 'h2', league: 'DÜNYA KUPASI 2026', homeTeam: 'Ekvador', awayTeam: 'Curacao', prediction: 'HMS 1 (-1)', odd: '2.10' },
   ],
-  playLink: 'https://gamdom.com/r/ahbapbet',
+  playLink: 'https://gamdom.com/r/724bets',
   totalOdd: '3.89'
 };
 
@@ -75,7 +75,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
           return {
             title: cfg.title || 'GÜNÜN BANKO KUPONU',
             matches: cfg.matches,
-            playLink: cfg.playLink || 'https://gamdom.com/r/ahbapbet',
+            playLink: cfg.playLink || 'https://gamdom.com/r/724bets',
             totalOdd: totalCalculated.toFixed(2)
           };
         }

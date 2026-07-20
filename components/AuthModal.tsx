@@ -81,7 +81,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         id: 'guest_mersobahis',
                         username: uname === 'ecem' ? 'Ecem' : 'mersobahis',
                         password: mPassword || '123456',
-                        email: 'guest@ahbapbet.com',
+                        email: 'guest@724bets.com',
                         phone: '05555555555',
                         createdAt: Date.now(),
                         status: 'active',
@@ -111,7 +111,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         id: 'fallback_user',
                         username: mUsername.trim(),
                         password: mPassword,
-                        email: 'user@ahbapbet.com',
+                        email: 'user@724bets.com',
                         phone: '05555555555',
                         createdAt: Date.now(),
                         status: 'active',
@@ -173,7 +173,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                 try {
                     const { data: newUser, error: insertError } = await supabase.from('members').insert([{
                         username: mUsername.trim(),
-                        email: mUsername.trim().includes('@') ? mUsername.trim() : `${mUsername.trim().replace(/[^a-zA-Z0-9]/g, '')}@ahbapbet.com`,
+                        email: mUsername.trim().includes('@') ? mUsername.trim() : `${mUsername.trim().replace(/[^a-zA-Z0-9]/g, '')}@724bets.com`,
                         password: mPassword,
                         role: 'member',
                         status: 'active',

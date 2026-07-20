@@ -58,10 +58,10 @@ const translations: Translations = {
     pt: 'Experiência clássica de cassino, qualidade premium.'
   },
   desc_roulette: {
-    tr: 'Orijinal Ahbapbet Rulet heyecanı.',
-    en: 'Original Ahbapbet Roulette excitement.',
-    es: 'Emoción de Ruleta Original Ahbapbet.',
-    pt: 'Emoção da Roleta Original Ahbapbet.'
+    tr: 'Orijinal 724bets Rulet heyecanı.',
+    en: 'Original 724bets Roulette excitement.',
+    es: 'Emoción de Ruleta Original 724bets.',
+    pt: 'Emoção da Roleta Original 724bets.'
   },
   desc_chickencross: {
     tr: 'Tavuk karşıya geçebilecek mi?',
@@ -373,10 +373,10 @@ const translations: Translations = {
     pt: 'Política KYC'
   },
   all_rights_reserved: {
-    tr: '© 2026 AHBAPBET. Tüm Hakları Saklıdır.',
-    en: '© 2026 AHBAPBET. All Rights Reserved.',
-    es: '© 2026 AHBAPBET. Todos los derechos reservados.',
-    pt: '© 2026 AHBAPBET. Todos os direitos reservados.'
+    tr: '© 2026 724BETS. Tüm Hakları Saklıdır.',
+    en: '© 2026 724BETS. All Rights Reserved.',
+    es: '© 2026 724BETS. Todos los derechos reservados.',
+    pt: '© 2026 724BETS. Todos os direitos reservados.'
   },
 
   canli: {
@@ -560,10 +560,10 @@ const translations: Translations = {
     pt: 'League of Legends'
   },
   analiz: {
-    tr: 'AHBAPBET ANALİZ & CANLI BÜLTEN',
-    en: 'AHBAPBET ANALYSIS & LIVE BULLETIN',
-    es: 'AHBAPBET ANÁLISIS Y BOLETÍN',
-    pt: 'AHBAPBET ANÁLISE E BOLETIM'
+    tr: '724BETS ANALİZ & CANLI BÜLTEN',
+    en: '724BETS ANALYSIS & LIVE BULLETIN',
+    es: '724BETS ANÁLISIS Y BOLETÍN',
+    pt: '724BETS ANÁLISE E BOLETIM'
   },
   mobil_bulten: {
     tr: 'MOBİL BÜLTEN',
