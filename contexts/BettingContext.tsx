@@ -1067,8 +1067,11 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setIsConnected(true);
         reconnectAttemptsRef.current = 0;
         
-        // Remove fake live matches when connected (pre_, pop_, mock_)
-        setEvents(prev => prev.filter(e => !e.id.toString().startsWith('mock_') && !e.id.toString().startsWith('pre_') && !e.id.toString().startsWith('pop_')));
+        // Remove fake live matches when connected
+        setEvents(prev => prev.filter(e => {
+          const id = e.id.toString();
+          return !id.startsWith('mock_') && !id.startsWith('pre_') && !id.startsWith('pop_') && !id.startsWith('friendly_') && !id.startsWith('cl_');
+        }));
         
         let loc = language === 'tr' ? 'tur' : 'en'; // Send tur for Turkish, en for English, etc to BetConstruct
         ws.send(`42["subscribe-LiveEvents",{"locale":"${loc}"}]`);

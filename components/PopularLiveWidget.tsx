@@ -51,6 +51,9 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
             let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
             let isLive = data.status === 'in_progress' || data.is_live_betting === true || isFinished;
             
+            if (data.score && typeof data.score === 'string') {
+                score = data.score;
+            }
             if (data.scores && Array.isArray(data.scores)) {
                 const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
                 if (currentScore) {
@@ -58,9 +61,11 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                     if (parts.length >= 4) {
                         score = `${parts[2]} - ${parts[3]}`;
                     }
-                } else if (data.current_score) {
-                    score = String(data.current_score || '').replace(':', ' - ');
                 }
+            }
+            
+            if (score === '-' && data.current_score) {
+                score = String(data.current_score || '').replace(':', ' - ');
             }
             if (isFinished) {
                 minute = language === 'tr' ? 'Bitti' : 'FT';
