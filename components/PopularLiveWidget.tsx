@@ -3,7 +3,7 @@ import { Flame, Activity, ChevronRight } from 'lucide-react';
 import { AnimatedOdd } from './AnimatedOdd';
 import { useBetting } from '../contexts/BettingContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { PlayerLogo } from './sports/PlayerLogo';
+import { PlayerLogo, hasKnownLogo } from './sports/PlayerLogo';
 
 interface PopularLiveWidgetProps {
     onNavigate: (view: string) => void;
@@ -123,19 +123,24 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
             if (isLive) priority += 1000;
 
             if (homeOdd !== '-' || awayOdd !== '-') {
-                parsedMatches.push({
-                    id: ev.id,
-                    league,
-                    time: minute,
-                    home: { name: homeTeam, code: homeTeam.substring(0, 2).toUpperCase(), color: getTeamColor(homeTeam) },
-                    away: { name: awayTeam, code: awayTeam.substring(0, 2).toUpperCase(), color: getTeamColor(awayTeam) },
-                    score,
-                    isUpcoming: !isLive,
-                    homeOdd,
-                    drawOdd,
-                    awayOdd,
-                    priority
-                });
+                // Strictly require logos for the Popular Live Widget (Main Page)
+                const hasLogos = hasKnownLogo(hl) && hasKnownLogo(al);
+                
+                if (hasLogos) {
+                    parsedMatches.push({
+                        id: ev.id,
+                        league,
+                        time: minute,
+                        home: { name: homeTeam, code: homeTeam.substring(0, 2).toUpperCase(), color: getTeamColor(homeTeam) },
+                        away: { name: awayTeam, code: awayTeam.substring(0, 2).toUpperCase(), color: getTeamColor(awayTeam) },
+                        score,
+                        isUpcoming: !isLive,
+                        homeOdd,
+                        drawOdd,
+                        awayOdd,
+                        priority
+                    });
+                }
             }
         });
         

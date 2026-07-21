@@ -8,17 +8,7 @@ interface PlayerLogoProps {
 // Global cache to prevent re-fetching the same broken or valid URLs
 const logoCache: Record<string, string> = {};
 
-export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) => {
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
-  const [hasError, setHasError] = useState(false);
-  const [pipelineStep, setPipelineStep] = useState(0);
-
-  // Generate pipeline URLs for the team
-  const getPipelineUrls = (teamName: string, fbLogo: string) => {
-    const urls: string[] = [];
-    const teamKey = (teamName || '').toLowerCase().trim();
-    
-    const domainMap: Record<string, string> = {
+export const domainMap: Record<string, string> = {
       // Türkiye - Süper Lig & 1. Lig
       'galatasaray': 'galatasaray.org',
       'fenerbahçe': 'fenerbahce.org',
@@ -111,6 +101,12 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
       'schalke': 'schalke04.de',
       'hamburg': 'hsv.de',
       'koln': 'fc.de',
+      'sv elversberg': 'sv07elversberg.de',
+      'elversberg': 'sv07elversberg.de',
+      'hamburg sv': 'hsv.de',
+      'hamburger sv': 'hsv.de',
+      '1. fc köln': 'fc.de',
+      'fc köln': 'fc.de',
 
       // Italy
       'inter': 'inter.it',
@@ -155,8 +151,6 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
       'slaven belupo': 'nk-slaven-belupo.hr',
       'mamelodi sundowns': 'sundownsfc.co.za',
       'al ahly': 'alahlyegypt.com',
-
-      // Eastern Europe & International Cups
       'sabah baku': 'sabahfc.az',
       'sabah': 'sabahfc.az',
       'kups': 'kups.fi',
@@ -172,16 +166,12 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
       'fagiano okayama': 'fagiano-okayama.com',
       'bochum': 'vfl-bochum.de',
       'vfl bochum': 'vfl-bochum.de',
-
-      // Americas
       'flamengo': 'flamengo.com.br',
       'palmeiras': 'palmeiras.com.br',
       'sao paulo': 'saopaulofc.net',
       'boca juniors': 'bocajuniors.com.ar',
       'river plate': 'cariverplate.com.ar',
       'inter miami': 'intermiamicf.com',
-
-      // Austria Bundesliga
       'sc austria lustenau': 'austria-lustenau.at',
       'austria lustenau': 'austria-lustenau.at',
       'sv ried': 'svried.at',
@@ -202,14 +192,6 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
       'sk sturm graz': 'sksturm.at',
       'sturm graz': 'sksturm.at',
 
-      // Germany extra
-      'sv elversberg': 'sv07elversberg.de',
-      'elversberg': 'sv07elversberg.de',
-      'hamburg sv': 'hsv.de',
-      'hamburger sv': 'hsv.de',
-      '1. fc köln': 'fc.de',
-      'fc köln': 'fc.de',
-
       // NBA
       'lakers': 'lakers.com',
       'warriors': 'warriors.com',
@@ -221,6 +203,25 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
       '76ers': 'sixers.com',
       'mavericks': 'mavs.com',
       'clippers': 'clippers.com',
+};
+
+export const hasKnownLogo = (teamName: string): boolean => {
+    if (!teamName) return false;
+    const teamKey = teamName.toLowerCase().trim();
+    if (domainMap[teamKey]) return true;
+    const foundKey = Object.keys(domainMap).find(k => teamKey.includes(k) || k.includes(teamKey));
+    return !!foundKey;
+};
+
+export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) => {
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [hasError, setHasError] = useState(false);
+  const [pipelineStep, setPipelineStep] = useState(0);
+
+  // Generate pipeline URLs for the team
+  const getPipelineUrls = (teamName: string, fbLogo: string) => {
+    const urls: string[] = [];
+    const teamKey = (teamName || '').toLowerCase().trim();ppers.com',
     };
     
     // Step 1: Known domain mapping (Highest Priority - guarantees 100% correct HD logo)
