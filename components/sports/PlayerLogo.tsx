@@ -221,8 +221,7 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
   // Generate pipeline URLs for the team
   const getPipelineUrls = (teamName: string, fbLogo: string) => {
     const urls: string[] = [];
-    const teamKey = (teamName || '').toLowerCase().trim();ppers.com',
-    };
+    const teamKey = (teamName || '').toLowerCase().trim();
     
     // Step 1: Known domain mapping (Highest Priority - guarantees 100% correct HD logo)
     let matchedDomain = domainMap[teamKey];
