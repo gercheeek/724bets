@@ -272,23 +272,6 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
         .slice-active-content { opacity: 1 !important; transform: scale(1.15) !important; filter: brightness(1.3); pointer-events: auto; }
       `}</style>
 
-      {/* ═══════════ TOP BAR (Glassmorphism) ═══════════ */}
-      <div className="w-full flex items-center justify-between px-4 sm:px-6 py-3 shrink-0 z-20 border-b border-white/10 bg-slate-900/30 backdrop-blur-xl shadow-lg">
-        <div className="flex items-center bg-black/40 rounded-xl p-1 border border-white/5 shadow-inner">
-          <button onClick={() => setActiveTab('casino')} className={`px-6 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-300 ${activeTab === 'casino' ? 'bg-gradient-to-b from-emerald-400 to-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)] border border-emerald-300/30' : 'text-gray-400 hover:text-white border border-transparent'}`}>Casino</button>
-          <button onClick={() => setActiveTab('spor')} className={`px-6 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-300 ${activeTab === 'spor' ? 'bg-gradient-to-b from-emerald-400 to-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)] border border-emerald-300/30' : 'text-gray-400 hover:text-white border border-transparent'}`}>Spor</button>
-        </div>
-        <div className="flex items-center gap-2 bg-gradient-to-r from-slate-900/80 via-emerald-950/40 to-slate-900/80 border border-emerald-500/30 px-6 py-2 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur-md">
-          <Sparkles className="w-4 h-4 text-emerald-400 drop-shadow-[0_0_5px_rgba(16,185,129,0.8)]" />
-          <span className="text-sm font-black bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400 tracking-widest uppercase">WONDER WHEEL</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">Aktivite</span>
-          <div className={`w-11 h-6 rounded-xl relative cursor-pointer transition-colors duration-300 border ${promoScrollEnabled ? 'bg-emerald-500 border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.4)]' : 'bg-slate-800 border-slate-700'}`} onClick={() => setPromoScrollEnabled(!promoScrollEnabled)}>
-            <div className={`absolute top-0.5 w-4 h-4 rounded-xl bg-white shadow-md transition-transform duration-300 ${promoScrollEnabled ? 'left-[22px]' : 'left-1'}`}></div>
-          </div>
-        </div>
-      </div>
 
       {/* ═══════════ MAIN 3-COLUMN LAYOUT ═══════════ */}
       <div className="flex-1 flex min-h-0 overflow-hidden relative z-10">
