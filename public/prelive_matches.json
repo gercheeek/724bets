@@ -1,926 +1,113 @@
 [
   {
-    "id": "101",
+    "id": "ucl_20260721_1",
     "data": {
       "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Allsvenskan"
-      },
-      "country": {
-        "name": "İsveç"
-      },
-      "participants": {
-        "home": "Orgryte Goteborg",
-        "away": "Djurgarden"
-      },
-      "start_time": "2026-07-20T17:00:00.000Z",
+      "sport": { "name": "Futbol" },
+      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
+      "country": { "name": "Avrupa" },
+      "participants": { "home": "Fenerbahçe", "away": "Górnik Zabrze" },
+      "start_time": "2026-07-21T18:00:00.000Z",
       "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~7.70!~draw~5.25!~away~1.33"
-        ]
+        "full_event|0": ["|1x2|~home~1.42!~draw~4.50!~away~6.80"]
       }
     }
   },
   {
-    "id": "102",
+    "id": "ucl_20260721_2",
     "data": {
       "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Allsvenskan"
-      },
-      "country": {
-        "name": "İsveç"
-      },
-      "participants": {
-        "home": "Kalmar",
-        "away": "Malmo"
-      },
-      "start_time": "2026-07-20T17:00:00.000Z",
+      "sport": { "name": "Futbol" },
+      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
+      "country": { "name": "Avrupa" },
+      "participants": { "home": "Thun", "away": "Dinamo Zagreb" },
+      "start_time": "2026-07-21T18:00:00.000Z",
       "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.56!~draw~3.58!~away~2.49"
-        ]
+        "full_event|0": ["|1x2|~home~3.10!~draw~3.40!~away~2.15"]
       }
     }
   },
   {
-    "id": "103",
+    "id": "ucl_20260721_3",
     "data": {
       "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Premier Lig"
-      },
-      "country": {
-        "name": "Bulgaristan"
-      },
-      "participants": {
-        "home": "Slavia Sofia",
-        "away": "CSKA Sofia"
-      },
-      "start_time": "2026-07-20T16:15:00.000Z",
+      "sport": { "name": "Futbol" },
+      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
+      "country": { "name": "Avrupa" },
+      "participants": { "home": "Mjällby", "away": "Lincoln Red Imps" },
+      "start_time": "2026-07-21T16:00:00.000Z",
       "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~6.60!~draw~4.20!~away~1.45"
-        ]
+        "full_event|0": ["|1x2|~home~1.25!~draw~5.50!~away~11.00"]
       }
     }
   },
   {
-    "id": "104",
+    "id": "ucl_20260721_4",
     "data": {
       "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Premier Lig"
-      },
-      "country": {
-        "name": "Bulgaristan"
-      },
-      "participants": {
-        "home": "Botev Plovdiv",
-        "away": "Lokomotiv Sofia"
-      },
-      "start_time": "2026-07-20T18:30:00.000Z",
+      "sport": { "name": "Futbol" },
+      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
+      "country": { "name": "Avrupa" },
+      "participants": { "home": "Sabah", "away": "KuPS Kuopio" },
+      "start_time": "2026-07-21T16:00:00.000Z",
       "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.77!~draw~3.55!~away~4.30"
-        ]
+        "full_event|0": ["|1x2|~home~2.15!~draw~3.30!~away~3.20"]
       }
     }
   },
   {
-    "id": "105",
+    "id": "ucl_20260721_5",
     "data": {
       "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Serie A"
-      },
-      "country": {
-        "name": "Ekvador"
-      },
-      "participants": {
-        "home": "Mushuc Runa",
-        "away": "Orense"
-      },
-      "start_time": "2026-07-20T19:00:00.000Z",
+      "sport": { "name": "Futbol" },
+      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
+      "country": { "name": "Avrupa" },
+      "participants": { "home": "Aarhus", "away": "Lech Poznan" },
+      "start_time": "2026-07-21T17:00:00.000Z",
       "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.84!~draw~3.34!~away~3.74"
-        ]
+        "full_event|0": ["|1x2|~home~2.45!~draw~3.30!~away~2.75"]
       }
     }
   },
   {
-    "id": "106",
+    "id": "ucl_20260721_6",
     "data": {
       "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Veikkausliiga"
-      },
-      "country": {
-        "name": "Finlandiya"
-      },
-      "participants": {
-        "home": "Mariehamn",
-        "away": "Lahti"
-      },
-      "start_time": "2026-07-20T16:00:00.000Z",
+      "sport": { "name": "Futbol" },
+      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
+      "country": { "name": "Avrupa" },
+      "participants": { "home": "Sturm Graz", "away": "Hearts" },
+      "start_time": "2026-07-21T18:30:00.000Z",
       "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~5.75!~draw~4.40!~away~1.49"
-        ]
+        "full_event|0": ["|1x2|~home~1.75!~draw~3.60!~away~4.20"]
       }
     }
   },
   {
-    "id": "107",
+    "id": "ucl_20260721_7",
     "data": {
       "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Romanya 1. Ligi"
-      },
-      "country": {
-        "name": "Romanya"
-      },
-      "participants": {
-        "home": "Corvinul",
-        "away": "Csikszereda Miercurea Ciuc"
-      },
-      "start_time": "2026-07-20T15:30:00.000Z",
+      "sport": { "name": "Futbol" },
+      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
+      "country": { "name": "Avrupa" },
+      "participants": { "home": "Larne", "away": "Kızılyıldız" },
+      "start_time": "2026-07-21T19:00:00.000Z",
       "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.10!~draw~3.20!~away~3.44"
-        ]
+        "full_event|0": ["|1x2|~home~8.50!~draw~5.00!~away~1.32"]
       }
     }
   },
   {
-    "id": "108",
+    "id": "ucl_20260721_8",
     "data": {
       "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Romanya 1. Ligi"
-      },
-      "country": {
-        "name": "Romanya"
-      },
-      "participants": {
-        "home": "Rapid Bucharest",
-        "away": "Sepsi"
-      },
-      "start_time": "2026-07-20T18:30:00.000Z",
+      "sport": { "name": "Futbol" },
+      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
+      "country": { "name": "Avrupa" },
+      "participants": { "home": "Iberia Tiflis", "away": "Slovan Bratislava" },
+      "start_time": "2026-07-21T16:00:00.000Z",
       "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.69!~draw~3.64!~away~4.70"
-        ]
-      }
-    }
-  },
-  {
-    "id": "109",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Superettan"
-      },
-      "country": {
-        "name": "İsveç"
-      },
-      "participants": {
-        "home": "Norrby",
-        "away": "Sundsvall"
-      },
-      "start_time": "2026-07-20T17:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.95!~draw~3.42!~away~3.65"
-        ]
-      }
-    }
-  },
-  {
-    "id": "110",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Urvalsdeild"
-      },
-      "country": {
-        "name": "İzlanda"
-      },
-      "participants": {
-        "home": "Keflavik IF",
-        "away": "IA Akranes"
-      },
-      "start_time": "2026-07-20T19:15:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.32!~draw~3.64!~away~2.68"
-        ]
-      }
-    }
-  },
-  {
-    "id": "111",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Urvalsdeild"
-      },
-      "country": {
-        "name": "İzlanda"
-      },
-      "participants": {
-        "home": "FH Hafnarfjordur",
-        "away": "Breidablik"
-      },
-      "start_time": "2026-07-20T19:15:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.76!~draw~3.98!~away~2.15"
-        ]
-      }
-    }
-  },
-  {
-    "id": "112",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Ykkonen"
-      },
-      "country": {
-        "name": "Finlandiya"
-      },
-      "participants": {
-        "home": "KPV Kokkola",
-        "away": "Rovaniemi"
-      },
-      "start_time": "2026-07-20T15:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~9.20!~draw~5.70!~away~1.21"
-        ]
-      }
-    }
-  },
-  {
-    "id": "113",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Virsliga"
-      },
-      "country": {
-        "name": "Letonya"
-      },
-      "participants": {
-        "home": "Super Nova",
-        "away": "SC Grobina"
-      },
-      "start_time": "2026-07-20T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.51!~draw~2.97!~away~2.65"
-        ]
-      }
-    }
-  },
-  {
-    "id": "114",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "1. Lig"
-      },
-      "country": {
-        "name": "Rusya"
-      },
-      "participants": {
-        "home": "Rotor Volgograd",
-        "away": "SKA Khabarovsk"
-      },
-      "start_time": "2026-07-20T16:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.53!~draw~3.75!~away~6.30"
-        ]
-      }
-    }
-  },
-  {
-    "id": "115",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Hazırlık Maçları"
-      },
-      "country": {
-        "name": "Uluslararası (Kulüpler)"
-      },
-      "participants": {
-        "home": "Al-Sailiya SC",
-        "away": "Al Nasr"
-      },
-      "start_time": "2026-07-20T15:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~3.68!~draw~3.70!~away~1.75"
-        ]
-      }
-    }
-  },
-  {
-    "id": "116",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Hazırlık Maçları"
-      },
-      "country": {
-        "name": "Uluslararası (Kulüpler)"
-      },
-      "participants": {
-        "home": "Atus Velden",
-        "away": "Wolfsberger AC"
-      },
-      "start_time": "2026-07-20T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~16.50!~draw~11.25!~away~1.04"
-        ]
-      }
-    }
-  },
-  {
-    "id": "117",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Hazırlık Maçları"
-      },
-      "country": {
-        "name": "Uluslararası (Kulüpler)"
-      },
-      "participants": {
-        "home": "Epitsentr",
-        "away": "Al-Ula"
-      },
-      "start_time": "2026-07-20T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.56!~draw~4.20!~away~5.20"
-        ]
-      }
-    }
-  },
-  {
-    "id": "118",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Hazırlık Maçları"
-      },
-      "country": {
-        "name": "Uluslararası (Kulüpler)"
-      },
-      "participants": {
-        "home": "Biel",
-        "away": "Breitenrain"
-      },
-      "start_time": "2026-07-20T16:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.45!~draw~4.05!~away~5.65"
-        ]
-      }
-    }
-  },
-  {
-    "id": "119",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Hazırlık Maçları"
-      },
-      "country": {
-        "name": "Uluslararası (Kulüpler)"
-      },
-      "participants": {
-        "home": "Young Boys II",
-        "away": "FC Solothurn"
-      },
-      "start_time": "2026-07-20T18:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.73!~draw~4.15!~away~3.42"
-        ]
-      }
-    }
-  },
-  {
-    "id": "120",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Hazırlık Maçları"
-      },
-      "country": {
-        "name": "Uluslararası (Kulüpler)"
-      },
-      "participants": {
-        "home": "Redbridge",
-        "away": "Welwyn Garden City"
-      },
-      "start_time": "2026-07-20T18:45:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.80!~draw~3.55!~away~3.40"
-        ]
-      }
-    }
-  },
-  {
-    "id": "121",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Hazırlık Maçları"
-      },
-      "country": {
-        "name": "Uluslararası (Kulüpler)"
-      },
-      "participants": {
-        "home": "Sporting",
-        "away": "Strasbourg"
-      },
-      "start_time": "2026-07-20T19:15:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.65!~draw~4.10!~away~4.50"
-        ]
-      }
-    }
-  },
-  {
-    "id": "122",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Profesyonel Ligi"
-      },
-      "country": {
-        "name": "Bolivya"
-      },
-      "participants": {
-        "home": "SA Bulo Bulo",
-        "away": "Academia del Balompie"
-      },
-      "start_time": "2026-07-20T19:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.65!~draw~3.80!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "123",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "1. Lig"
-      },
-      "country": {
-        "name": "Letonya"
-      },
-      "participants": {
-        "home": "Tukums 2000 II",
-        "away": "RFS II"
-      },
-      "start_time": "2026-07-20T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.40!~draw~3.50!~away~2.35"
-        ]
-      }
-    }
-  },
-  {
-    "id": "124",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "1. Bölüm"
-      },
-      "country": {
-        "name": "İzlanda"
-      },
-      "participants": {
-        "home": "HK Kopavogur",
-        "away": "Vestri"
-      },
-      "start_time": "2026-07-20T19:15:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.42!~draw~4.75!~away~5.05"
-        ]
-      }
-    }
-  },
-  {
-    "id": "125",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Reserve League"
-      },
-      "country": {
-        "name": "Uruguay"
-      },
-      "participants": {
-        "home": "Deportivo Maldonado Reserve",
-        "away": "Oriental Reserve"
-      },
-      "start_time": "2026-07-20T17:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.68!~draw~3.48!~away~4.33"
-        ]
-      }
-    }
-  },
-  {
-    "id": "126",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Reserve League"
-      },
-      "country": {
-        "name": "Uruguay"
-      },
-      "participants": {
-        "home": "CA Progreso Reserve",
-        "away": "River Plate Montevideo Reserve"
-      },
-      "start_time": "2026-07-20T18:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.21!~draw~3.20!~away~2.88"
-        ]
-      }
-    }
-  },
-  {
-    "id": "127",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Reserve League"
-      },
-      "country": {
-        "name": "Uruguay"
-      },
-      "participants": {
-        "home": "CA Penarol Reserve",
-        "away": "Racing Montevideo Reserve"
-      },
-      "start_time": "2026-07-20T18:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.13!~draw~3.13!~away~3.10"
-        ]
-      }
-    }
-  },
-  {
-    "id": "128",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Reserve League"
-      },
-      "country": {
-        "name": "Uruguay"
-      },
-      "participants": {
-        "home": "Colon FC Reserve",
-        "away": "Boston River Reserve"
-      },
-      "start_time": "2026-07-20T18:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.95!~draw~3.18!~away~2.18"
-        ]
-      }
-    }
-  },
-  {
-    "id": "129",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Reserve League"
-      },
-      "country": {
-        "name": "Uruguay"
-      },
-      "participants": {
-        "home": "La Luz Reserve",
-        "away": "Defensor Sporting Reserve"
-      },
-      "start_time": "2026-07-20T18:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.64!~draw~3.45!~away~2.25"
-        ]
-      }
-    }
-  },
-  {
-    "id": "130",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Birinci Ligi"
-      },
-      "country": {
-        "name": "Litvanya"
-      },
-      "participants": {
-        "home": "Suduva",
-        "away": "Hegelmann Litauen"
-      },
-      "start_time": "2026-07-20T15:45:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.62!~draw~3.30!~away~5.25"
-        ]
-      }
-    }
-  },
-  {
-    "id": "131",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "İkinci Lig"
-      },
-      "country": {
-        "name": "Paraguay"
-      },
-      "participants": {
-        "home": "Tacuary",
-        "away": "Deportivo Capiata"
-      },
-      "start_time": "2026-07-20T20:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.60!~draw~2.95!~away~2.45"
-        ]
-      }
-    }
-  },
-  {
-    "id": "132",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Bayanlar Birinci Ligi"
-      },
-      "country": {
-        "name": "İzlanda"
-      },
-      "participants": {
-        "home": "Grindavik (w)",
-        "away": "Throttur Reykjavik (w)"
-      },
-      "start_time": "2026-07-20T19:15:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~3.10!~draw~3.40!~away~1.95"
-        ]
-      }
-    }
-  },
-  {
-    "id": "133",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "1. Ligi"
-      },
-      "country": {
-        "name": "Peru"
-      },
-      "participants": {
-        "home": "Pirata FC",
-        "away": "Deportivo San Martin"
-      },
-      "start_time": "2026-07-20T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~2.20!~draw~3.05!~away~2.85"
-        ]
-      }
-    }
-  },
-  {
-    "id": "134",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Paulista Kupası, 3. Grup"
-      },
-      "country": {
-        "name": "Brezilya"
-      },
-      "participants": {
-        "home": "Sao Caetano SP",
-        "away": "Sao Jose SP"
-      },
-      "start_time": "2026-07-20T18:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~6.25!~draw~3.65!~away~1.45"
-        ]
-      }
-    }
-  },
-  {
-    "id": "135",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Copa do Brasil (Kadınlar)"
-      },
-      "country": {
-        "name": "Brezilya"
-      },
-      "participants": {
-        "home": "Coritiba PR (w)",
-        "away": "SC Internacional RS (w)"
-      },
-      "start_time": "2026-07-20T19:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~7.60!~draw~5.15!~away~1.27"
-        ]
-      }
-    }
-  },
-  {
-    "id": "136",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Primera Division (Kadınlar)"
-      },
-      "country": {
-        "name": "Arjantin"
-      },
-      "participants": {
-        "home": "Union de Santa Fe (w)",
-        "away": "Newells Old Boys (w)"
-      },
-      "start_time": "2026-07-20T18:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~3.25!~draw~2.95!~away~2.05"
-        ]
-      }
-    }
-  },
-  {
-    "id": "137",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Soccer"
-      },
-      "tournament": {
-        "name": "Primera Division (Kadınlar)"
-      },
-      "country": {
-        "name": "Paraguay"
-      },
-      "participants": {
-        "home": "Cerro Porteno (w)",
-        "away": "Sportivo San Lorenzo (w)"
-      },
-      "start_time": "2026-07-20T16:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.05!~draw~9.90!~away~17.50"
-        ]
+        "full_event|0": ["|1x2|~home~3.40!~draw~3.30!~away~2.05"]
       }
     }
   }
