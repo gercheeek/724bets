@@ -41,6 +41,61 @@ const targetHeaders = {
     'Accept-Language': 'tr,en-US;q=0.9,en;q=0.8'
 };
 
+function parseAndFilterMessage(msg) {
+    if (!msg.startsWith('42[')) return msg;
+    try {
+        const parsed = JSON.parse(msg.substring(2));
+        const eventName = parsed[0];
+        let payload = parsed[1];
+
+        if (payload && (payload.events || payload.data?.events || Array.isArray(payload))) {
+            let events = payload.events || payload.data?.events || (Array.isArray(payload) ? payload : null);
+            if (events && Array.isArray(events)) {
+                const cleanedEvents = [];
+                for (const ev of events) {
+                    const sportName = (ev.sport?.name || ev.data?.sport?.name || '').toLowerCase();
+                    const isSupportedSport = ['soccer', 'futbol', 'football', 'basketball', 'basketbol', 'tennis', 'tenis', 'volleyball', 'voleybol', 'handball', 'hentbol', 'ice hockey', 'buz hokeyi', 'table tennis', 'masa tenisi', 'esports', 'e-spor', 'counter-strike', 'dota', 'league of legends', 'valorant'].some(s => sportName.includes(s));
+                    
+                    if (!isSupportedSport && sportName !== '') continue;
+
+                    const cleanedEv = {
+                        id: ev.id,
+                        group_markets: ev.group_markets,
+                        removed_markets: ev.removed_markets,
+                    };
+
+                    if (ev.data) {
+                        const d = ev.data;
+                        cleanedEv.data = {
+                            id: d.id,
+                            status: d.status,
+                            match_time: d.match_time,
+                            score: d.score,
+                            isLive: d.isLive,
+                            start_time: d.start_time,
+                            sport: d.sport ? { name: d.sport.name } : undefined,
+                            tournament: d.tournament ? { name: d.tournament.name } : undefined,
+                            country: d.country ? { name: d.country.name } : undefined,
+                            participants: d.participants ? { home: d.participants.home, away: d.participants.away } : undefined,
+                            group_markets: d.group_markets
+                        };
+                    }
+
+                    cleanedEvents.push(cleanedEv);
+                }
+
+                if (payload.events) payload.events = cleanedEvents;
+                else if (payload.data?.events) payload.data.events = cleanedEvents;
+                else if (Array.isArray(payload)) payload = cleanedEvents;
+            }
+        }
+        
+        return `42${JSON.stringify([eventName, payload])}`;
+    } catch (e) {
+        return msg;
+    }
+}
+
 wss.on('connection', (ws, req) => {
     ws.isAlive = true;
     ws.on('pong', () => {
@@ -108,7 +163,8 @@ wss.on('connection', (ws, req) => {
         }
 
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(msg);
+            const filteredMsg = parseAndFilterMessage(msg);
+            ws.send(filteredMsg);
         }
     });
 
