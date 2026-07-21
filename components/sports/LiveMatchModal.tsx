@@ -59,25 +59,55 @@ export const LiveMatchModal: React.FC<LiveMatchModalProps> = ({ match, onClose }
   let homeStats = stats.team1_value || {};
   let awayStats = stats.team2_value || {};
   
+  const isFootball = match.sport?.toLowerCase().includes('futbol') || match.sport?.toLowerCase().includes('soccer');
+  const isBasketball = match.sport?.toLowerCase().includes('basketbol') || match.sport?.toLowerCase().includes('basketball');
+  const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
+
   if (Object.keys(homeStats).length === 0 && match.minute !== 'Yakında') {
     const min = parseInt(match.minute) || 45;
     const homeAdv = parseFloat(match.homeOdd) < parseFloat(match.awayOdd) ? 1.2 : 0.8;
-    homeStats = {
-      Corner: Math.floor(min / 15 * homeAdv),
-      YellowCard: Math.floor(min / 30),
-      RedCard: 0,
-      DangerousAttack: Math.floor(min * 1.5 * homeAdv),
-      Attack: Math.floor(min * 3 * homeAdv),
-      BallPossession: Math.min(75, Math.max(25, Math.floor(50 * homeAdv)))
-    };
-    awayStats = {
-      Corner: Math.floor(min / 15 * (2 - homeAdv)),
-      YellowCard: Math.floor(min / 35),
-      RedCard: 0,
-      DangerousAttack: Math.floor(min * 1.5 * (2 - homeAdv)),
-      Attack: Math.floor(min * 3 * (2 - homeAdv)),
-      BallPossession: 100 - homeStats.BallPossession
-    };
+    
+    if (isFootball) {
+      homeStats = {
+        Corner: Math.floor(min / 15 * homeAdv),
+        YellowCard: Math.floor(min / 30),
+        RedCard: 0,
+        DangerousAttack: Math.floor(min * 1.5 * homeAdv),
+        Attack: Math.floor(min * 3 * homeAdv),
+        BallPossession: Math.min(75, Math.max(25, Math.floor(50 * homeAdv)))
+      };
+      awayStats = {
+        Corner: Math.floor(min / 15 * (2 - homeAdv)),
+        YellowCard: Math.floor(min / 35),
+        RedCard: 0,
+        DangerousAttack: Math.floor(min * 1.5 * (2 - homeAdv)),
+        Attack: Math.floor(min * 3 * (2 - homeAdv)),
+        BallPossession: 100 - homeStats.BallPossession
+      };
+    } else if (isBasketball) {
+      homeStats = {
+        '2P': Math.floor(min * 2 * homeAdv),
+        '3P': Math.floor(min / 2 * homeAdv),
+        Fouls: Math.floor(min / 5),
+        FreeThrows: Math.floor(min / 3 * homeAdv)
+      };
+      awayStats = {
+        '2P': Math.floor(min * 2 * (2 - homeAdv)),
+        '3P': Math.floor(min / 2 * (2 - homeAdv)),
+        Fouls: Math.floor(min / 4),
+        FreeThrows: Math.floor(min / 3 * (2 - homeAdv))
+      };
+    } else {
+      // Generic stats
+      homeStats = {
+        Points: Math.floor(min * homeAdv),
+        Errors: Math.floor(min / 10)
+      };
+      awayStats = {
+        Points: Math.floor(min * (2 - homeAdv)),
+        Errors: Math.floor(min / 12)
+      };
+    }
   }
   
   const getStat = (key: string) => ({
@@ -85,11 +115,14 @@ export const LiveMatchModal: React.FC<LiveMatchModalProps> = ({ match, onClose }
     away: awayStats[key] || 0
   });
 
-  const corners = getStat('Corner');
-  const yellowCards = getStat('YellowCard');
-  const redCards = getStat('RedCard');
-  const dangerousAttacks = getStat('DangerousAttack');
-  const possession = getStat('BallPossession');
+  let corners, yellowCards, redCards, dangerousAttacks, possession;
+  if (isFootball) {
+    corners = getStat('Corner');
+    yellowCards = getStat('YellowCard');
+    redCards = getStat('RedCard');
+    dangerousAttacks = getStat('DangerousAttack');
+    possession = getStat('BallPossession');
+  }
   
   const groupMarkets = data.group_markets || raw.group_markets || {};
   let allMarkets: string[] = [];
@@ -108,18 +141,44 @@ export const LiveMatchModal: React.FC<LiveMatchModalProps> = ({ match, onClose }
     const baseOdd1 = parseFloat(match.homeOdd) || 2.0;
     const baseOdd2 = parseFloat(match.awayOdd) || 2.0;
     
-    const mockTemplates = [
-      { name: 'Çifte Şans', sels: [`1X~${(baseOdd1/1.5).toFixed(2)}`, `12~1.30`, `X2~${(baseOdd2/1.5).toFixed(2)}`] },
-      { name: 'Maç Sonucu Alt/Üst 2.5', sels: [`Üst 2.5~1.85`, `Alt 2.5~1.95`] },
-      { name: 'Karşılıklı Gol', sels: [`Var~1.75`, `Yok~2.05`] },
-      { name: 'İlk Yarı Sonucu', sels: [`1~${(baseOdd1 + 0.5).toFixed(2)}`, `X~2.10`, `2~${(baseOdd2 + 0.5).toFixed(2)}`] },
-      { name: 'Sıradaki Gol', sels: [`Ev Sahibi~${baseOdd1.toFixed(2)}`, `Deplasman~${baseOdd2.toFixed(2)}`, `Gol Olmaz~4.50`] },
-      { name: 'Beraberlikte İade', sels: [`1~${(baseOdd1/1.2).toFixed(2)}`, `2~${(baseOdd2/1.2).toFixed(2)}`] },
-      { name: 'Toplam Korner Alt/Üst 9.5', sels: [`Üst 9.5~1.90`, `Alt 9.5~1.85`] },
-      { name: 'Asya Handikap (0.5)', sels: [`Ev (+0.5)~1.65`, `Dep (-0.5)~2.20`] },
-      { name: 'İlk Yarı Alt/Üst 1.5', sels: [`Üst 1.5~2.40`, `Alt 1.5~1.50`] },
-      { name: 'Kırmızı Kart Çıkar Mı?', sels: [`Evet~3.50`, `Hayır~1.25`] }
-    ];
+    let mockTemplates: any[] = [];
+    
+    if (isFootball) {
+      mockTemplates = [
+        { name: 'Çifte Şans', sels: [`1X~${(baseOdd1/1.5).toFixed(2)}`, `12~1.30`, `X2~${(baseOdd2/1.5).toFixed(2)}`] },
+        { name: 'Maç Sonucu Alt/Üst 2.5', sels: [`Üst 2.5~1.85`, `Alt 2.5~1.95`] },
+        { name: 'Karşılıklı Gol', sels: [`Var~1.75`, `Yok~2.05`] },
+        { name: 'İlk Yarı Sonucu', sels: [`1~${(baseOdd1 + 0.5).toFixed(2)}`, `X~2.10`, `2~${(baseOdd2 + 0.5).toFixed(2)}`] },
+        { name: 'Sıradaki Gol', sels: [`Ev Sahibi~${baseOdd1.toFixed(2)}`, `Deplasman~${baseOdd2.toFixed(2)}`, `Gol Olmaz~4.50`] },
+        { name: 'Beraberlikte İade', sels: [`1~${(baseOdd1/1.2).toFixed(2)}`, `2~${(baseOdd2/1.2).toFixed(2)}`] },
+        { name: 'Toplam Korner Alt/Üst 9.5', sels: [`Üst 9.5~1.90`, `Alt 9.5~1.85`] },
+        { name: 'Asya Handikap (0.5)', sels: [`Ev (+0.5)~1.65`, `Dep (-0.5)~2.20`] },
+        { name: 'İlk Yarı Alt/Üst 1.5', sels: [`Üst 1.5~2.40`, `Alt 1.5~1.50`] },
+        { name: 'Kırmızı Kart Çıkar Mı?', sels: [`Evet~3.50`, `Hayır~1.25`] }
+      ];
+    } else if (isBasketball) {
+      mockTemplates = [
+        { name: 'Maç Sonucu', sels: [`1~${baseOdd1.toFixed(2)}`, `2~${baseOdd2.toFixed(2)}`] },
+        { name: 'Toplam Sayı Alt/Üst (165.5)', sels: [`Üst 165.5~1.85`, `Alt 165.5~1.85`] },
+        { name: 'Handikap Sonucu (+5.5)', sels: [`1 (+5.5)~1.90`, `2 (-5.5)~1.90`] },
+        { name: '1. Çeyrek Sonucu', sels: [`1~${(baseOdd1).toFixed(2)}`, `X~12.50`, `2~${(baseOdd2).toFixed(2)}`] },
+        { name: 'İlk Yarı Sonucu', sels: [`1~${(baseOdd1).toFixed(2)}`, `X~14.50`, `2~${(baseOdd2).toFixed(2)}`] },
+        { name: 'Ev Sahibi Toplam Sayı (82.5)', sels: [`Üst 82.5~1.85`, `Alt 82.5~1.85`] }
+      ];
+    } else if (isTennis) {
+      mockTemplates = [
+        { name: 'Maç Sonucu', sels: [`1~${baseOdd1.toFixed(2)}`, `2~${baseOdd2.toFixed(2)}`] },
+        { name: 'Toplam Set Alt/Üst 2.5', sels: [`Üst 2.5~2.10`, `Alt 2.5~1.65`] },
+        { name: '1. Set Sonucu', sels: [`1~${(baseOdd1).toFixed(2)}`, `2~${(baseOdd2).toFixed(2)}`] },
+        { name: 'Maç Skoru', sels: [`2-0~${(baseOdd1*1.5).toFixed(2)}`, `2-1~${(baseOdd1*2.1).toFixed(2)}`, `0-2~${(baseOdd2*1.5).toFixed(2)}`, `1-2~${(baseOdd2*2.1).toFixed(2)}`] }
+      ];
+    } else {
+      mockTemplates = [
+        { name: 'Maç Sonucu', sels: [`1~${baseOdd1.toFixed(2)}`, `X~3.20`, `2~${baseOdd2.toFixed(2)}`] },
+        { name: 'Handikap', sels: [`1 (+1.5)~1.65`, `2 (-1.5)~2.10`] },
+        { name: 'Alt/Üst', sels: [`Üst~1.85`, `Alt~1.85`] }
+      ];
+    }
     
     for (let i = 0; i < missingCount && i < mockTemplates.length; i++) {
       const tmpl = mockTemplates[i];
