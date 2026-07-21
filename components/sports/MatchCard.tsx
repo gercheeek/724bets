@@ -22,38 +22,55 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, isGoal }) => {
         </div>
       )}
 
-      {/* LEFT SECTION: Status */}
-      <div className="flex flex-col items-center justify-center shrink-0 w-[40px] md:w-[50px] z-10">
+      {/* LEFT SECTION: Status & Start Time */}
+      <div className="flex flex-col items-center justify-center shrink-0 w-[48px] md:w-[56px] z-10">
         {match.isFinished ? (
           <span className="text-[11px] text-zinc-500 font-bold tracking-wide uppercase">FT</span>
-        ) : (
-          <div className="flex flex-col items-center justify-center gap-1.5 bg-[#000000]/50 rounded-lg py-1 px-2 border border-white/[0.02]">
+        ) : match.isLive ? (
+          <div className="flex flex-col items-center justify-center gap-1 bg-[#000000]/50 rounded-lg py-1 px-2 border border-white/[0.02] w-full text-center">
              <span className="text-[12px] md:text-[13px] font-black text-emerald-400 tabular-nums drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">{match.minute}</span>
              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center bg-zinc-900/90 rounded-lg py-1 px-1 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.05)] w-full text-center">
+             {match.matchDate && (
+               <span className="text-[9px] font-bold text-amber-500/90 tracking-tight uppercase leading-none mb-0.5">{match.matchDate}</span>
+             )}
+             <span className="text-[11px] md:text-[12px] font-black text-amber-400 tabular-nums tracking-tight leading-none">{match.startTime || match.minute}</span>
           </div>
         )}
       </div>
 
       {/* MIDDLE SECTION: Teams & Scores */}
-      <div className="flex-1 flex flex-col gap-3 min-w-0 pr-0 md:pr-4 z-10">
+      <div className="flex-1 flex flex-col gap-2.5 min-w-0 pr-0 md:pr-4 z-10">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center overflow-hidden bg-[#000000] shadow-inner">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center overflow-hidden bg-[#000000] shadow-inner shrink-0">
               <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} />
             </div>
             <span className="text-[13px] md:text-[15px] font-bold text-zinc-100 truncate tracking-tight">{match.home}</span>
           </div>
-          <span className={`text-[15px] md:text-[16px] font-black tabular-nums ${isGoal ? 'animate-score text-emerald-400' : 'text-zinc-200'}`}>{String(match.score || '-').split(' - ')[0] || '-'}</span>
+          {match.isLive ? (
+            <span className={`text-[15px] md:text-[16px] font-black tabular-nums ${isGoal ? 'animate-score text-emerald-400' : 'text-zinc-200'}`}>{String(match.score || '-').split(' - ')[0] || '-'}</span>
+          ) : (
+            <span className="text-[10.5px] font-bold text-amber-400/90 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 tabular-nums shrink-0 ml-2">
+              {match.matchDate ? `${match.matchDate} ${match.startTime || ''}` : (match.startTime || match.minute)}
+            </span>
+          )}
         </div>
         
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center overflow-hidden bg-[#000000] shadow-inner">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center overflow-hidden bg-[#000000] shadow-inner shrink-0">
               <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} />
             </div>
             <span className="text-[13px] md:text-[15px] font-bold text-zinc-100 truncate tracking-tight">{match.away}</span>
           </div>
-          <span className={`text-[15px] md:text-[16px] font-black tabular-nums ${isGoal ? 'animate-score text-emerald-400' : 'text-zinc-200'}`}>{String(match.score || '-').split(' - ')[1] || '-'}</span>
+          {match.isLive ? (
+            <span className={`text-[15px] md:text-[16px] font-black tabular-nums ${isGoal ? 'animate-score text-emerald-400' : 'text-zinc-200'}`}>{String(match.score || '-').split(' - ')[1] || '-'}</span>
+          ) : (
+            <span className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest shrink-0 ml-2">VS</span>
+          )}
         </div>
       </div>
 

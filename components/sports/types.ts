@@ -6,6 +6,9 @@ export interface MatchInfo {
   isFinished: boolean;
   score: string;
   minute: string;
+  startTime?: string;
+  matchDate?: string;
+  fullDate?: string;
   league: string;
   sport: string;
   country: string;
@@ -19,3 +22,4 @@ export interface MatchInfo {
   awayLogo: string;
   marketsCount: number;
 }
+

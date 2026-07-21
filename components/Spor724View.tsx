@@ -95,10 +95,203 @@ const getCountryFlag = (country: string) => {
   return flags[country] || '🏳️';
 };
 
+const parseMatchData = (ev: any, language: string): MatchInfo | null => {
+  const data = ev.data;
+  if (!data || !data.participants) return null;
+  
+  const homeTeam = data.participants.home || 'Ev Sahibi';
+  const awayTeam = data.participants.away || 'Deplasman';
+  
+  let score = '-';
+  let minute = 'Yakında';
+  let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
+  let isLive = data.status === 'in_progress' || data.is_live_betting === true || isFinished;
+  
+  if (data.scores && Array.isArray(data.scores)) {
+    const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
+    if (currentScore) {
+      const parts = currentScore.split('|');
+      if (parts.length >= 4) {
+         score = `${parts[2]} - ${parts[3]}`;
+      }
+    } else if (data.current_score) {
+      score = String(data.current_score || '').replace(':', ' - ');
+    }
+  }
+  let startTime = '';
+  let matchDate = '';
+  let fullDate = '';
+
+  const monthsTR = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+  const monthsEN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const rawStartTime = data.start_time || data.time || ev.start_time || ev.time;
+  let dateObj: Date | null = null;
+
+  if (rawStartTime) {
+    try {
+      const d = new Date(rawStartTime);
+      if (!isNaN(d.getTime())) dateObj = d;
+    } catch (e) {}
+  } else if (data.start_ts || ev.start_ts) {
+    try {
+      const ts = data.start_ts || ev.start_ts;
+      const d = new Date(ts * 1000);
+      if (!isNaN(d.getTime())) dateObj = d;
+    } catch (e) {}
+  }
+
+  if (dateObj) {
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const mins = String(dateObj.getMinutes()).padStart(2, '0');
+    startTime = `${hours}:${mins}`;
+
+    const dayNum = dateObj.getDate();
+    const monthIdx = dateObj.getMonth();
+    const monthName = language === 'tr' ? monthsTR[monthIdx] : monthsEN[monthIdx];
+    const monthNum = String(monthIdx + 1).padStart(2, '0');
+    const formattedDay = String(dayNum).padStart(2, '0');
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const matchDay = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+    const diffDays = Math.round((matchDay.getTime() - today.getTime()) / (1000 * 3600 * 24));
+
+    if (diffDays === 0) {
+      matchDate = language === 'tr' ? 'Bugün' : 'Today';
+    } else if (diffDays === 1) {
+      matchDate = language === 'tr' ? 'Yarın' : 'Tomorrow';
+    } else {
+      matchDate = `${formattedDay}.${monthNum}`;
+    }
+    fullDate = `${formattedDay} ${monthName}`;
+  }
+
+  if (isFinished) {
+      minute = language === 'tr' ? 'Bitti' : 'FT';
+  } else if (data.minute) {
+      minute = `${data.minute}'`;
+  } else if (data.extended_status) {
+      minute = String(data.extended_status || '').replace('s', '. Set');
+  } else if (startTime) {
+      minute = startTime;
+  }
+
+  const homeTeamId = data.participants?.home_id || data.participants?.ByNumber?.['1']?.Id || '';
+  const awayTeamId = data.participants?.away_id || data.participants?.ByNumber?.['2']?.Id || '';
+  
+  let homeLogoUrl = data.participants?.ByNumber?.['1']?.LogoPath || '';
+  if (!homeLogoUrl && homeTeamId) {
+    homeLogoUrl = `https://stb-images.betconstruct.com/team-logo/${homeTeamId}.png`;
+  }
+  
+  let awayLogoUrl = data.participants?.ByNumber?.['2']?.LogoPath || '';
+  if (!awayLogoUrl && awayTeamId) {
+    awayLogoUrl = `https://stb-images.betconstruct.com/team-logo/${awayTeamId}.png`;
+  }
+  
+  const countryName = mapCountryName(data.country?.name, language);
+  const tournamentName = data.tournament?.name || 'Uluslararası Turnuva';
+  const league = countryName ? `${countryName} - ${tournamentName}` : tournamentName;
+  const sport = mapSportName(data.sport?.name, language);
+  const country = countryName;
+  
+  let homeOdd = '-';
+  let drawOdd = '-';
+  let awayOdd = '-';
+  let homeId = `h_${ev.id}`;
+  let drawId = `d_${ev.id}`;
+  let awayId = `a_${ev.id}`;
+  
+  const rawGroupMarkets = data.group_markets || ev.group_markets;
+  const rawMarkets = rawGroupMarkets?.['full_event|0'] || rawGroupMarkets?.['game_full_event|0'] || rawGroupMarkets?.['set|1'];
+  const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
+  
+  for (const market of markets) {
+     const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
+     if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
+        const parts = market.split('|');
+        const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
+        
+        if (selectionsPart) {
+           const selections = selectionsPart.split('!');
+           selections.forEach((sel: string) => {
+              const sParts = sel.split('~');
+              if (sParts.length > 2) {
+                const type = sParts[1].toLowerCase();
+                const odd = parseFloat(sParts[2]);
+                if (!isNaN(odd)) {
+                    const oddStr = odd.toFixed(2);
+                    if (type === 'home' || type === '1') { homeOdd = oddStr; }
+                    if (type === 'draw' || type === 'x') { drawOdd = oddStr; }
+                    if (type === 'away' || type === '2') { awayOdd = oddStr; }
+                }
+              }
+           });
+           if (homeOdd !== '-' || awayOdd !== '-') {
+              break; // Found valid odds
+           }
+         }
+      }
+  }
+
+  if (homeOdd === '-' && awayOdd === '-') {
+    return null;
+  }
+
+  const matchObj: MatchInfo = {
+    id: ev.id,
+    home: homeTeam,
+    away: awayTeam,
+    isLive,
+    isFinished,
+    score,
+    minute,
+    startTime: startTime || minute,
+    matchDate,
+    fullDate,
+    league,
+    sport,
+    country,
+    homeOdd,
+    drawOdd,
+    awayOdd,
+    homeId,
+    drawId,
+    awayId,
+    homeLogo: homeLogoUrl,
+    awayLogo: awayLogoUrl,
+    marketsCount: Object.keys(data.group_markets || {}).length || 1
+  };
+
+  const virtualKeywords = [
+    'cyber', 'sanal', 'virtual', 'simulated', 'srl', 'esoccer', 'ebasketball', 'etennis',
+    'esports', 'e-sports', 'fifa', 'nba2k', 'gt sports', 'h2hgg', 'dota', 'counter-strike',
+    'cs:go', 'cs2', 'valorant', 'league of legends', 'rocket league', 'overwatch', 'starcraft',
+    'crossfire', 'king of glory', 'pubg', 'penaltı atışları', 'penalty shootout', 'sub soccer'
+  ];
+
+  const combinedSearchStr = `${sport} ${country} ${league} ${homeTeam} ${awayTeam}`.toLowerCase();
+  const isFakeMatch = virtualKeywords.some(kw => combinedSearchStr.includes(kw));
+
+  const isDuplicateMock = 
+    (homeTeam.toLowerCase().includes('spain') || homeTeam.toLowerCase().includes('ispanya') || homeTeam.toLowerCase().includes('arjantin') || homeTeam.toLowerCase().includes('argentina')) ||
+    (homeTeam.toLowerCase().includes('france') || homeTeam.toLowerCase().includes('fransa') || homeTeam.toLowerCase().includes('portekiz') || homeTeam.toLowerCase().includes('portugal')) ||
+    (homeTeam.toLowerCase().includes('england') || homeTeam.toLowerCase().includes('ingiltere') || homeTeam.toLowerCase().includes('brezilya') || homeTeam.toLowerCase().includes('brazil'));
+    
+  if (isFakeMatch || isDuplicateMock) {
+     return null;
+  }
+  
+  return matchObj;
+};
+
 export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   const { language } = useLanguage();
-  const [activeSport, setActiveSport] = useState(language === 'tr' ? 'Futbol' : 'Soccer');
+  const allSportsTabName = language === 'tr' ? 'Tüm Sporlar' : 'All Sports';
+  const [activeSport, setActiveSport] = useState(allSportsTabName);
   const [activeCountry, setActiveCountry] = useState<string | null>(null);
+  const [activeDateFilter, setActiveDateFilter] = useState<'all' | 'today' | 'tomorrow'>('all');
   
   // Dual-mode panel toggled by a simple boolean or string on mobile, but since DualRightPanel handles it inside,
   // we just need to know if the sidebar wrapper itself is open on mobile.
@@ -123,6 +316,10 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   
   const { betSlip } = useBetSlip();
   
+  const [viewMode, setViewMode] = useState<'live' | 'bulletin'>('live');
+  const [bulletinMatches, setBulletinMatches] = useState<MatchInfo[]>([]);
+  const [isBulletinLoading, setIsBulletinLoading] = useState(false);
+
   const [matches, setMatches] = useState<MatchInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [goalScoredMatches, setGoalScoredMatches] = useState<string[]>([]);
@@ -155,154 +352,52 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     
     const parsedMatches: MatchInfo[] = [];
     events.forEach((ev: any) => {
-      const data = ev.data;
-      if (!data || !data.participants) return;
-      
-      const homeTeam = data.participants.home || 'Ev Sahibi';
-      const awayTeam = data.participants.away || 'Deplasman';
-      
-      let score = '-';
-      let minute = 'Yakında';
-      let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
-      let isLive = data.status === 'in_progress' || data.is_live_betting === true || isFinished;
-      
-      if (data.scores && Array.isArray(data.scores)) {
-        const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
-        if (currentScore) {
-          const parts = currentScore.split('|');
-          if (parts.length >= 4) {
-             score = `${parts[2]} - ${parts[3]}`;
-          }
-        } else if (data.current_score) {
-          score = String(data.current_score || '').replace(':', ' - ');
-        }
-      }
-      if (isFinished) {
-          minute = language === 'tr' ? 'Bitti' : 'FT';
-      } else if (data.minute) {
-          minute = `${data.minute}'`;
-      } else if (data.extended_status) {
-          minute = String(data.extended_status || '').replace('s', '. Set');
-      }
-      
-      const homeTeamId = data.participants?.home_id || data.participants?.ByNumber?.['1']?.Id || '';
-      const awayTeamId = data.participants?.away_id || data.participants?.ByNumber?.['2']?.Id || '';
-      
-      let homeLogoUrl = data.participants?.ByNumber?.['1']?.LogoPath || '';
-      if (!homeLogoUrl && homeTeamId) {
-        homeLogoUrl = `https://stb-images.betconstruct.com/team-logo/${homeTeamId}.png`;
-      }
-      
-      let awayLogoUrl = data.participants?.ByNumber?.['2']?.LogoPath || '';
-      if (!awayLogoUrl && awayTeamId) {
-        awayLogoUrl = `https://stb-images.betconstruct.com/team-logo/${awayTeamId}.png`;
-      }
-      
-      const countryName = mapCountryName(data.country?.name, language);
-      const tournamentName = data.tournament?.name || 'Uluslararası Turnuva';
-      const league = countryName ? `${countryName} - ${tournamentName}` : tournamentName;
-      const sport = mapSportName(data.sport?.name, language);
-      const country = countryName;
-      
-      let homeOdd = '-';
-      let drawOdd = '-';
-      let awayOdd = '-';
-      let homeId = `h_${ev.id}`;
-      let drawId = `d_${ev.id}`;
-      let awayId = `a_${ev.id}`;
-      
-      const rawGroupMarkets = data.group_markets || ev.group_markets;
-      const rawMarkets = rawGroupMarkets?.['full_event|0'] || rawGroupMarkets?.['game_full_event|0'] || rawGroupMarkets?.['set|1'];
-      const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
-      
-      for (const market of markets) {
-         const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
-         if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
-            const parts = market.split('|');
-            const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
-            
-            if (selectionsPart) {
-               const selections = selectionsPart.split('!');
-               selections.forEach((sel: string) => {
-                  const sParts = sel.split('~');
-                  if (sParts.length > 2) {
-                    const type = sParts[1].toLowerCase();
-                    const odd = parseFloat(sParts[2]);
-                    if (!isNaN(odd)) {
-                        const oddStr = odd.toFixed(2);
-                        if (type === 'home' || type === '1') { homeOdd = oddStr; }
-                        if (type === 'draw' || type === 'x') { drawOdd = oddStr; }
-                        if (type === 'away' || type === '2') { awayOdd = oddStr; }
-                    }
-                  }
-               });
-               if (homeOdd !== '-' || awayOdd !== '-') {
-                  break; // Found valid odds
-               }
-             }
-          }
-      } // CLOSE FOR LOOP
-
-      if (homeOdd === '-' && awayOdd === '-') {
-        return;
-      }
-
-      const matchObj: MatchInfo = {
-        id: ev.id,
-        home: homeTeam,
-        away: awayTeam,
-        isLive,
-        isFinished,
-        score,
-        minute,
-        league,
-        sport,
-        country,
-        homeOdd,
-        drawOdd,
-        awayOdd,
-        homeId,
-        drawId,
-        awayId,
-        homeLogo: homeLogoUrl,
-        awayLogo: awayLogoUrl,
-        marketsCount: Object.keys(data.group_markets || {}).length || 1
-      };
-
-      // Filter out Virtual/Cyber/Simulated matches because user considers them fake/non-existent
-      const isFakeMatch = 
-        league.toLowerCase().includes('cyber') || 
-        league.toLowerCase().includes('esoccer') ||
-        league.toLowerCase().includes('simulated') ||
-        league.toLowerCase().includes('srl') ||
-        league.toLowerCase().includes('virtual') ||
-        homeTeam.toLowerCase().includes('esports') ||
-        sport.toLowerCase().includes('e-sports');
-        
-      // Also filter out any API matches that duplicate our premium mock matches
-      const isDuplicateMock = 
-        (homeTeam.toLowerCase().includes('spain') || homeTeam.toLowerCase().includes('ispanya') || homeTeam.toLowerCase().includes('arjantin') || homeTeam.toLowerCase().includes('argentina')) ||
-        (homeTeam.toLowerCase().includes('france') || homeTeam.toLowerCase().includes('fransa') || homeTeam.toLowerCase().includes('portekiz') || homeTeam.toLowerCase().includes('portugal')) ||
-        (homeTeam.toLowerCase().includes('england') || homeTeam.toLowerCase().includes('ingiltere') || homeTeam.toLowerCase().includes('brezilya') || homeTeam.toLowerCase().includes('brazil'));
-        
-      if (!isFakeMatch && !isDuplicateMock) {
-         parsedMatches.push(matchObj);
-      }
+      const matchObj = parseMatchData(ev, language);
+      if (matchObj) parsedMatches.push(matchObj);
     });
     
     setMatches(parsedMatches);
     setIsLoading(false);
   }, [events, language]);
 
-  const sportsList = Array.from(new Set(matches.map(m => m.sport)));
-  const getSportCount = (sport: string) => matches.filter(m => m.sport === sport && m.isLive).length;
+  useEffect(() => {
+    if (viewMode === 'bulletin' && bulletinMatches.length === 0) {
+      setIsBulletinLoading(true);
+      fetch('/prelive_matches.json')
+        .then(res => res.json())
+        .then(data => {
+           const parsed: MatchInfo[] = [];
+           data.forEach((ev: any) => {
+              const m = parseMatchData(ev, language);
+              if (m) parsed.push(m);
+           });
+           setBulletinMatches(parsed);
+        })
+        .catch(err => console.error("Error fetching prelive matches:", err))
+        .finally(() => setIsBulletinLoading(false));
+    }
+  }, [viewMode, language, bulletinMatches.length]);
 
-  const filteredMatches = matches.filter(m => {
-    if (!m.isLive) return false;
-    if (m.sport !== activeSport) return false;
+  const currentMatches = viewMode === 'live' ? matches : bulletinMatches;
+  const sportsList = Array.from(new Set(currentMatches.map(m => m.sport)));
+  const getSportCount = (sport: string) => currentMatches.filter(m => m.sport === sport).length;
+
+  const isAllSportsSelected = activeSport === 'Tüm Sporlar' || activeSport === 'All Sports' || !activeSport;
+
+  const filteredMatches = currentMatches.filter(m => {
+    if (viewMode === 'live' && !m.isLive) return false;
+    if (!isAllSportsSelected && m.sport !== activeSport) return false;
     if (activeCountry && m.country !== activeCountry) return false;
+    if (viewMode === 'bulletin' && activeDateFilter !== 'all') {
+      if (activeDateFilter === 'today' && m.matchDate !== 'Bugün' && m.matchDate !== 'Today') return false;
+      if (activeDateFilter === 'tomorrow' && m.matchDate !== 'Yarın' && m.matchDate !== 'Tomorrow') return false;
+    }
     return true;
   });
+
+  const displaySportsList = isAllSportsSelected
+    ? sportsList
+    : sportsList.filter(s => s === activeSport);
 
   // Group by league
   const groupedByLeague: Record<string, MatchInfo[]> = {};
@@ -399,72 +494,155 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
           
           <SportsHeroBanner />
 
-          {/* ═══════════ CANLI SECTION HEADER ═══════════ */}
+          {/* ═══════════ SECTION HEADER & TOGGLES ═══════════ */}
           <div className="px-4 pt-4 pb-2">
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
-              <span className="text-zinc-100 font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Canlı' : 'Live'}</span>
+            <div className="flex items-center gap-6 mb-5 border-b border-zinc-800 pb-2">
+              <div 
+                onClick={() => setViewMode('live')}
+                className={`flex items-center gap-2 cursor-pointer transition-all ${viewMode === 'live' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+              >
+                <div className={`w-2.5 h-2.5 rounded-full ${viewMode === 'live' ? 'bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-zinc-600'}`}></div>
+                <span className="text-zinc-100 font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Canlı Bahis' : 'Live Betting'}</span>
+              </div>
+              <div 
+                onClick={() => setViewMode('bulletin')}
+                className={`flex items-center gap-2 cursor-pointer transition-all ${viewMode === 'bulletin' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+              >
+                <div className={`w-2.5 h-2.5 rounded-full ${viewMode === 'bulletin' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-zinc-600'}`}></div>
+                <span className="text-zinc-100 font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Maç Bülteni' : 'Bulletin'}</span>
+              </div>
             </div>
+
+            {/* Date Filter Pills (Only in Bulletin Mode) */}
+            {viewMode === 'bulletin' && (
+              <div className="flex gap-2 mb-4 overflow-x-auto pb-1 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+                {[
+                  { id: 'all', label: language === 'tr' ? '📅 Tüm Tarihler' : '📅 All Dates' },
+                  { id: 'today', label: language === 'tr' ? '☀️ Bugün' : '☀️ Today' },
+                  { id: 'tomorrow', label: language === 'tr' ? '🌙 Yarın' : '🌙 Tomorrow' },
+                ].map(df => (
+                  <button
+                    key={df.id}
+                    onClick={() => setActiveDateFilter(df.id as any)}
+                    className={`px-3.5 py-1.5 rounded-xl text-[12px] font-bold transition-all whitespace-nowrap ${
+                      activeDateFilter === df.id
+                        ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+                        : 'bg-zinc-900/60 border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                    }`}
+                  >
+                    {df.label}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Sport Filter Tabs */}
             <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+              <button 
+                onClick={() => { setActiveSport(allSportsTabName); setActiveCountry(null); }}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-[12.5px] font-bold transition-all ${isAllSportsSelected ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
+              >
+                <span>🌟</span>
+                <span className="tracking-wide">{allSportsTabName}</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-800/80 text-zinc-300 font-bold">{currentMatches.length}</span>
+              </button>
+
               {sportsList.map(sport => {
                 const count = getSportCount(sport);
                 if (count === 0) return null;
-                const isActive = activeSport === sport;
+                const isActive = !isAllSportsSelected && activeSport === sport;
                 return (
                   <button 
                     key={sport}
                     onClick={() => { setActiveSport(sport); setActiveCountry(null); }}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-[12.5px] font-bold transition-all ${isActive ? 'bg-zinc-900 text-zinc-100 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-[12.5px] font-bold transition-all ${isActive ? 'bg-zinc-900 text-zinc-100 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
                   >
                     <span className={isActive ? 'text-emerald-400' : ''}>{getSportIcon(sport)}</span>
                     <span className="tracking-wide">{sport}</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400 font-bold">{count}</span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* ═══════════ CANLI MATCHES GRID ═══════════ */}
+          {/* ═══════════ MATCHES GRID ═══════════ */}
           <div className="px-4 pb-8">
             
-            {isLoading && (
+            {(isLoading || isBulletinLoading) && (
                <div className="text-center py-24 text-zinc-500 text-sm animate-pulse font-medium">
-                  {language === 'tr' ? 'Canlı veriler yükleniyor...' : 'Loading live data...'}
+                  {language === 'tr' ? 'Veriler yükleniyor...' : 'Loading data...'}
                </div>
             )}
-            {!isLoading && filteredMatches.length === 0 && (
+            {!(isLoading || isBulletinLoading) && filteredMatches.length === 0 && (
                <div className="text-center py-24 text-zinc-500 text-sm font-medium">
-                  {language === 'tr' ? 'Bu branşta aktif canlı maç yok.' : 'No live matches in this sport.'}
+                  {language === 'tr' ? 'Bu branşta maç bulunamadı.' : 'No matches found.'}
                </div>
             )}
             
-            {!isLoading && sortedLeagues.map(league => {
-              const leagueMatches = groupedByLeague[league] || [];
-              const firstMatch = leagueMatches[0];
-              const flag = getCountryFlag(firstMatch?.country || '');
-              
+            {!(isLoading || isBulletinLoading) && displaySportsList.map(sportName => {
+              const sportMatches = filteredMatches.filter(m => m.sport === sportName);
+              if (sportMatches.length === 0) return null;
+
+              const sportGroupedByLeague: Record<string, MatchInfo[]> = {};
+              sportMatches.forEach(match => {
+                if (!sportGroupedByLeague[match.league]) {
+                  sportGroupedByLeague[match.league] = [];
+                }
+                sportGroupedByLeague[match.league].push(match);
+              });
+
+              const sortedSportLeagues = Object.keys(sportGroupedByLeague).sort((a, b) => {
+                const priorityA = getLeaguePriority(a);
+                const priorityB = getLeaguePriority(b);
+                if (priorityA !== priorityB) return priorityA - priorityB;
+                return a.localeCompare(b);
+              });
+
               return (
-                <div key={league} className="mb-5">
-                  {/* League Header */}
-                  <div className="flex items-center gap-3 py-2.5 px-4 bg-gradient-to-r from-zinc-900 to-zinc-900/40 mb-3 border-l-[3px] border-l-emerald-500 rounded-r-xl relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <span className="text-[16px] md:text-[18px] drop-shadow-md relative z-10">{flag}</span>
-                    <span className="text-[11px] md:text-[12px] text-zinc-300 font-bold truncate flex-1 uppercase tracking-widest relative z-10">{league}</span>
-                    <Star className="w-4 h-4 text-zinc-600 hover:text-yellow-500 transition-all cursor-pointer relative z-10 hover:scale-110 drop-shadow-sm" />
+                <div key={sportName} className="mb-8">
+                  {/* SPORT SECTION HEADER */}
+                  <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-zinc-900 via-zinc-900/90 to-zinc-900/40 border border-zinc-800/80 rounded-xl mb-4 shadow-md">
+                    <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      {getSportIcon(sportName)}
+                    </div>
+                    <h3 className="text-[14px] md:text-[15px] font-black text-zinc-100 uppercase tracking-wider flex-1">
+                      {sportName}
+                    </h3>
+                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-zinc-800/90 text-emerald-400 border border-emerald-500/20">
+                      {sportMatches.length} {language === 'tr' ? 'Maç' : 'Matches'}
+                    </span>
                   </div>
-                  
-                  {/* Match Rows */}
-                  <div className="flex flex-col gap-2">
-                    {leagueMatches.map((match) => (
-                      <MatchCard 
-                        key={match.id}
-                        match={match}
-                        isGoal={goalScoredMatches.includes(match.id)}
-                      />
-                    ))}
-                  </div>
+
+                  {/* LEAGUES */}
+                  {sortedSportLeagues.map(league => {
+                    const leagueMatches = sportGroupedByLeague[league] || [];
+                    const firstMatch = leagueMatches[0];
+                    const flag = getCountryFlag(firstMatch?.country || '');
+                    
+                    return (
+                      <div key={league} className="mb-4 pl-0 md:pl-1">
+                        {/* League Header */}
+                        <div className="flex items-center gap-3 py-2.5 px-4 bg-gradient-to-r from-zinc-900 to-zinc-900/40 mb-3 border-l-[3px] border-l-emerald-500 rounded-r-xl relative overflow-hidden group">
+                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          <span className="text-[16px] md:text-[18px] drop-shadow-md relative z-10">{flag}</span>
+                          <span className="text-[11px] md:text-[12px] text-zinc-300 font-bold truncate flex-1 uppercase tracking-widest relative z-10">{league}</span>
+                          <Star className="w-4 h-4 text-zinc-600 hover:text-yellow-500 transition-all cursor-pointer relative z-10 hover:scale-110 drop-shadow-sm" />
+                        </div>
+                        
+                        {/* Match Rows */}
+                        <div className="flex flex-col gap-2">
+                          {leagueMatches.map((match) => (
+                            <MatchCard 
+                              key={match.id}
+                              match={match}
+                              isGoal={goalScoredMatches.includes(match.id)}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })}
