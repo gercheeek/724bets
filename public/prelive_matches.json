@@ -1,113 +1,5001 @@
 [
   {
-    "id": "ucl_20260721_1",
+    "id": "30342505",
     "data": {
       "status": "not_started",
-      "sport": { "name": "Futbol" },
-      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
-      "country": { "name": "Avrupa" },
-      "participants": { "home": "Fenerbahçe", "away": "Górnik Zabrze" },
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "U23 NPL Capital Territory"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Canberra Juventus U23",
+        "away": "Canberra Croatia FC U23"
+      },
+      "start_time": "2026-07-21T07:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30317300",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Ykkosliiga"
+      },
+      "country": {
+        "name": "Finlandiya"
+      },
+      "participants": {
+        "home": "Käpylän Pallo",
+        "away": "Klubi-04"
+      },
+      "start_time": "2026-07-21T16:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30288511",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 2"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Gimhae FC",
+        "away": "Chungbuk Cheongju FC"
+      },
+      "start_time": "2026-07-24T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30288512",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 2"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Seoul E-Land FC",
+        "away": "Cheonan City FC"
+      },
+      "start_time": "2026-07-24T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30297509",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 2"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Jeonnam Dragons",
+        "away": "Gyeongnam FC"
+      },
+      "start_time": "2026-07-25T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30297510",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 2"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Hwaseong FC",
+        "away": "Ansan Police FC"
+      },
+      "start_time": "2026-07-25T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30297511",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 2"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Daegu FC",
+        "away": "Suwon FC"
+      },
+      "start_time": "2026-07-25T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30297512",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 2"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Busan I Park",
+        "away": "Suwon Bluewings"
+      },
+      "start_time": "2026-07-25T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30306147",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 2"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Gimpo FC",
+        "away": "Yongin City FC"
+      },
+      "start_time": "2026-07-26T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30256078",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 1"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Jeju United FC",
+        "away": "Gangwon FC"
+      },
+      "start_time": "2026-07-21T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30256079",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 1"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Ulsan Hyundai FC",
+        "away": "Incheon United FC"
+      },
+      "start_time": "2026-07-21T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30256080",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 1"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Jeonbuk Motors",
+        "away": "Daejeon Citizen FC"
+      },
+      "start_time": "2026-07-21T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30264845",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 1"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Bucheon FC 1995",
+        "away": "FC Anyang"
+      },
+      "start_time": "2026-07-22T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30264846",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 1"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Gwangju FC",
+        "away": "Gimcheon Sangmu FC"
+      },
+      "start_time": "2026-07-22T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30264847",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "K - Lig 1"
+      },
+      "country": {
+        "name": "Güney Kore"
+      },
+      "participants": {
+        "home": "Seoul",
+        "away": "Pohang Steelers"
+      },
+      "start_time": "2026-07-22T10:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30273914",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "1. Lyga"
+      },
+      "country": {
+        "name": "Litvanya"
+      },
+      "participants": {
+        "home": "FC Hegelmann B",
+        "away": "FK Zalgiris B"
+      },
+      "start_time": "2026-07-21T16:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30347995",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Liga Bola Sepak IPT"
+      },
+      "country": {
+        "name": "Malezya"
+      },
+      "participants": {
+        "home": "UKM FC",
+        "away": "UniSZA"
+      },
+      "start_time": "2026-07-21T08:45:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30348332",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Myanmar Ligi - Kadınlar"
+      },
+      "country": {
+        "name": "Myanmar"
+      },
+      "participants": {
+        "home": "ISPE (Kadınlar)",
+        "away": "Yadanarbon FC (Kadınlar)"
+      },
+      "start_time": "2026-07-21T09:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350244",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "U19 Şampiyonası"
+      },
+      "country": {
+        "name": "Norveç"
+      },
+      "participants": {
+        "home": "Valerenga U19",
+        "away": "SK Brann U19"
+      },
+      "start_time": "2026-07-21T15:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30342074",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kupa"
+      },
+      "country": {
+        "name": "Paraguay"
+      },
+      "participants": {
+        "home": "29 de Septiembre",
+        "away": "Club 12 De Junio"
+      },
+      "start_time": "2026-07-21T16:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349604",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Premier Lig"
+      },
+      "country": {
+        "name": "Zimbabve"
+      },
+      "participants": {
+        "home": "Herentals College FC",
+        "away": "Manica Diamonds FC"
+      },
+      "start_time": "2026-07-21T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30306807",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Buz hokeyi"
+      },
+      "tournament": {
+        "name": "All Star game"
+      },
+      "country": {
+        "name": "Rusya"
+      },
+      "participants": {
+        "home": "Team Sergachev",
+        "away": "Team Panarin"
+      },
+      "start_time": "2026-07-25T15:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30316932",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Basketbol"
+      },
+      "tournament": {
+        "name": "WNBA. All-Star Game"
+      },
+      "country": {
+        "name": "Kuzey Amerika"
+      },
+      "participants": {
+        "home": "Team Spoon",
+        "away": "Team Coop"
+      },
+      "start_time": "2026-07-26T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30243253",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Basketbol"
+      },
+      "tournament": {
+        "name": "NBL"
+      },
+      "country": {
+        "name": "Yeni Zelanda"
+      },
+      "participants": {
+        "home": "Tauranga Whai",
+        "away": "Otago Nuggets"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349556",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Brisbane - Sert Kort"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Stefani Webb",
+        "away": "Nanari Katsumi"
+      },
+      "start_time": "2026-07-22T03:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349558",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Brisbane - Sert Kort"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Belle Thompson",
+        "away": "Tori Russell"
+      },
+      "start_time": "2026-07-21T23:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349563",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Brisbane - Sert Kort"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Ya-Yi Yang",
+        "away": "Jizelle Sibai"
+      },
+      "start_time": "2026-07-21T23:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349566",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Brisbane - Sert Kort"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Chia Yi Tsao",
+        "away": "Laquisa Khan"
+      },
+      "start_time": "2026-07-21T23:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349994",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "ATP Kitzbuhel - Toprak Kort"
+      },
+      "country": {
+        "name": "Avusturya"
+      },
+      "participants": {
+        "home": "Tomas Martin Etcheverry",
+        "away": "Jurij Rodionov"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350208",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "ATP Kitzbuhel - Toprak Kort"
+      },
+      "country": {
+        "name": "Avusturya"
+      },
+      "participants": {
+        "home": "Alexander Bublik",
+        "away": "Facundo Diaz Acosta"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30352551",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Ollersbach - Toprak Kort"
+      },
+      "country": {
+        "name": "Avusturya"
+      },
+      "participants": {
+        "home": "Aleksandr Braynin",
+        "away": "Alexander Wagner"
+      },
+      "start_time": "2026-07-21T16:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353604",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Ollersbach - Toprak Kort"
+      },
+      "country": {
+        "name": "Avusturya"
+      },
+      "participants": {
+        "home": "Kalin Ivanovski",
+        "away": "Aleksander Chayka"
+      },
+      "start_time": "2026-07-21T05:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353625",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Ollersbach - Toprak Kort"
+      },
+      "country": {
+        "name": "Avusturya"
+      },
+      "participants": {
+        "home": "Alexander Gschiel",
+        "away": "Sebastian Sorger"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353645",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Ollersbach - Toprak Kort"
+      },
+      "country": {
+        "name": "Avusturya"
+      },
+      "participants": {
+        "home": "Tommaso Compagnucci",
+        "away": "Petros Tsitsipas"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351157",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Oceane Babel",
+        "away": "Martina Capurro Taborda"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351158",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Victoria Bosio",
+        "away": "Justina Maria Gonzalez Daniele"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351159",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Luiza Fullana",
+        "away": "Pietra Rivoli"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351160",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Fernanda Labrana",
+        "away": "Mell Elizabeth Reasco Gonzalez"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351161",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Julia Riera",
+        "away": "Giovana Schincariol Delatorre Barbosa"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351162",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Jimar Geraldine Gerald Gonzalez",
+        "away": "Carolina Alves"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351163",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Georgia Pedone",
+        "away": "Daria Egorova"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351164",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Luciana Moyano",
+        "away": "Ana Candiotto"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351165",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Vacaria - Toprak Kort"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "Nauhany Vitoria Leme Da Silva",
+        "away": "Marjorie Souza"
+      },
+      "start_time": "2026-07-22T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349905",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA - Prag - Sert Kort"
+      },
+      "country": {
+        "name": "Çek Cumh."
+      },
+      "participants": {
+        "home": "Marie Bouzkova",
+        "away": "Carol Young Suh Lee"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350522",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA - Prag - Sert Kort"
+      },
+      "country": {
+        "name": "Çek Cumh."
+      },
+      "participants": {
+        "home": "Ayla Aksu",
+        "away": "Daria Snigur"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350646",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA - Prag - Sert Kort"
+      },
+      "country": {
+        "name": "Çek Cumh."
+      },
+      "participants": {
+        "home": "Dominika Salkova",
+        "away": "Oceane Dodin"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350509",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Women - Gentofte - Clay"
+      },
+      "country": {
+        "name": "Danimarka"
+      },
+      "participants": {
+        "home": "Rebecca Munk Mortensen",
+        "away": "Tahlia Kokkinis"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350511",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Women - Gentofte - Clay"
+      },
+      "country": {
+        "name": "Danimarka"
+      },
+      "participants": {
+        "home": "Marie Vogt",
+        "away": "Ann Akasha Ceuca"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350512",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Women - Gentofte - Clay"
+      },
+      "country": {
+        "name": "Danimarka"
+      },
+      "participants": {
+        "home": "Marie Weckerle",
+        "away": "Linea Bajraliu"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350514",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Women - Gentofte - Clay"
+      },
+      "country": {
+        "name": "Danimarka"
+      },
+      "participants": {
+        "home": "Valentina Ivanov",
+        "away": "Daria Yesypchuk"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350515",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Women - Gentofte - Clay"
+      },
+      "country": {
+        "name": "Danimarka"
+      },
+      "participants": {
+        "home": "Johanne Christine Svendsen",
+        "away": "Vilma Krebs Hyllested"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30342367",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Noah Boutleux",
+        "away": "Loann Massard"
+      },
+      "start_time": "2026-07-21T14:35:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30342372",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Nicolas Jadoun",
+        "away": "Hugo Car"
+      },
+      "start_time": "2026-07-21T16:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30342373",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Conor Gannon",
+        "away": "Alex Knaff"
+      },
+      "start_time": "2026-07-21T14:35:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30342562",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Younes Lalami Laaroussi",
+        "away": "Maxime Chazal"
+      },
+      "start_time": "2026-07-21T14:35:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30342563",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Zach Stephens",
+        "away": "Alexandre Reco"
+      },
+      "start_time": "2026-07-21T16:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30354340",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Clement Lemire",
+        "away": "Andrea Colombo"
+      },
+      "start_time": "2026-07-21T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30354341",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Loan Lestir",
+        "away": "Timofei Derepasko"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30354342",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Mae Malige",
+        "away": "Maxence Rivet"
+      },
+      "start_time": "2026-07-21T16:35:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30354344",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Lucas Marionneau",
+        "away": "Valentin Gonzalez-Galino"
+      },
+      "start_time": "2026-07-21T14:35:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30354346",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Julio Cesar Porras",
+        "away": "Ntungamili Raguin"
+      },
+      "start_time": "2026-07-21T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30354347",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Rognac - Sert Kort"
+      },
+      "country": {
+        "name": "Fransa"
+      },
+      "participants": {
+        "home": "Nicholas Godsick",
+        "away": "Aaron Gabet"
+      },
+      "start_time": "2026-07-21T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350189",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Horb - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "Anouck Vrancken Peeters",
+        "away": "Sapfo Sakellaridi"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350191",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Horb - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "Oana Georgeta Simion",
+        "away": "Dayeon Back"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350194",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Horb - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "Selena Janicijevic",
+        "away": "Charo Esquiva Banuls"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350195",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar - Horb - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "Sohyun Park",
+        "away": "Margaux Rouvroy"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30341108",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA - Hamburg - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "Katarzyna Kawa",
+        "away": "Paula Badosa Gibert"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30341113",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA - Hamburg - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "Simona Waltert",
+        "away": "Mayar Sherif"
+      },
+      "start_time": "2026-07-22T08:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350446",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Metzingen - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "Emilien Demanet",
+        "away": "Raphael Perot"
+      },
+      "start_time": "2026-07-21T11:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350447",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Metzingen - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "Johan Nikles",
+        "away": "Dimitris Sakellaridis"
+      },
+      "start_time": "2026-07-21T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30352546",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Metzingen - Toprak Kort"
+      },
+      "country": {
+        "name": "Almanya"
+      },
+      "participants": {
+        "home": "John Lithen Hallquist",
+        "away": "Yannik Kelm"
+      },
+      "start_time": "2026-07-21T12:05:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349298",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Bali - Sert Kort"
+      },
+      "country": {
+        "name": "Endonezya"
+      },
+      "participants": {
+        "home": "Shin Sanhui",
+        "away": "Gunawan Trismuwantara"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349304",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Bali - Sert Kort"
+      },
+      "country": {
+        "name": "Endonezya"
+      },
+      "participants": {
+        "home": "Sam Ryan Ziegann",
+        "away": "Anthony Susanto"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349305",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Bali - Sert Kort"
+      },
+      "country": {
+        "name": "Endonezya"
+      },
+      "participants": {
+        "home": "Ren Nakamura",
+        "away": "Keisuke Saitoh"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349306",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Bali - Sert Kort"
+      },
+      "country": {
+        "name": "Endonezya"
+      },
+      "participants": {
+        "home": "Azuma Visaya",
+        "away": "Alexander Chang"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349307",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Bali - Sert Kort"
+      },
+      "country": {
+        "name": "Endonezya"
+      },
+      "participants": {
+        "home": "Muhammad Rifqi Fitriadi",
+        "away": "Hitesh Chauhan"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30354701",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Bali - Sert Kort"
+      },
+      "country": {
+        "name": "Endonezya"
+      },
+      "participants": {
+        "home": "Yuttana Charoenphon",
+        "away": "Yuya Hirose"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30334593",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Ilary Pistola",
+        "away": "Lucia Bronzetti"
+      },
+      "start_time": "2026-07-21T16:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30334595",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Francesca Jones",
+        "away": "Darya Astakhova"
+      },
+      "start_time": "2026-07-21T15:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30334598",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Miriam Bulgaru",
+        "away": "Caijsa Wilda Hennemann"
+      },
       "start_time": "2026-07-21T18:00:00.000Z",
       "group_markets": {
-        "full_event|0": ["|1x2|~home~1.42!~draw~4.50!~away~6.80"]
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
       }
     }
   },
   {
-    "id": "ucl_20260721_2",
+    "id": "30334599",
     "data": {
       "status": "not_started",
-      "sport": { "name": "Futbol" },
-      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
-      "country": { "name": "Avrupa" },
-      "participants": { "home": "Thun", "away": "Dinamo Zagreb" },
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Anastasia Abbagnato",
+        "away": "Clara Burel"
+      },
       "start_time": "2026-07-21T18:00:00.000Z",
       "group_markets": {
-        "full_event|0": ["|1x2|~home~3.10!~draw~3.40!~away~2.15"]
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
       }
     }
   },
   {
-    "id": "ucl_20260721_3",
+    "id": "30334600",
     "data": {
       "status": "not_started",
-      "sport": { "name": "Futbol" },
-      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
-      "country": { "name": "Avrupa" },
-      "participants": { "home": "Mjällby", "away": "Lincoln Red Imps" },
-      "start_time": "2026-07-21T16:00:00.000Z",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Alice Rame",
+        "away": "Anastasia Tikhonova"
+      },
+      "start_time": "2026-07-21T16:30:00.000Z",
       "group_markets": {
-        "full_event|0": ["|1x2|~home~1.25!~draw~5.50!~away~11.00"]
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
       }
     }
   },
   {
-    "id": "ucl_20260721_4",
+    "id": "30334603",
     "data": {
       "status": "not_started",
-      "sport": { "name": "Futbol" },
-      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
-      "country": { "name": "Avrupa" },
-      "participants": { "home": "Sabah", "away": "KuPS Kuopio" },
-      "start_time": "2026-07-21T16:00:00.000Z",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Tamara Zidansek",
+        "away": "Alevtina Ibragimova"
+      },
+      "start_time": "2026-07-21T16:30:00.000Z",
       "group_markets": {
-        "full_event|0": ["|1x2|~home~2.15!~draw~3.30!~away~3.20"]
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
       }
     }
   },
   {
-    "id": "ucl_20260721_5",
+    "id": "30343787",
     "data": {
       "status": "not_started",
-      "sport": { "name": "Futbol" },
-      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
-      "country": { "name": "Avrupa" },
-      "participants": { "home": "Aarhus", "away": "Lech Poznan" },
-      "start_time": "2026-07-21T17:00:00.000Z",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Caroline Werner",
+        "away": "Mina Hodzic"
+      },
+      "start_time": "2026-07-21T15:00:00.000Z",
       "group_markets": {
-        "full_event|0": ["|1x2|~home~2.45!~draw~3.30!~away~2.75"]
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
       }
     }
   },
   {
-    "id": "ucl_20260721_6",
+    "id": "30343788",
     "data": {
       "status": "not_started",
-      "sport": { "name": "Futbol" },
-      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
-      "country": { "name": "Avrupa" },
-      "participants": { "home": "Sturm Graz", "away": "Hearts" },
-      "start_time": "2026-07-21T18:30:00.000Z",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Noemi Basiletti",
+        "away": "Tyra Caterina Grant"
+      },
+      "start_time": "2026-07-21T15:00:00.000Z",
       "group_markets": {
-        "full_event|0": ["|1x2|~home~1.75!~draw~3.60!~away~4.20"]
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
       }
     }
   },
   {
-    "id": "ucl_20260721_7",
+    "id": "30351450",
     "data": {
       "status": "not_started",
-      "sport": { "name": "Futbol" },
-      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
-      "country": { "name": "Avrupa" },
-      "participants": { "home": "Larne", "away": "Kızılyıldız" },
-      "start_time": "2026-07-21T19:00:00.000Z",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Jennifer Ruggeri",
+        "away": "Lola Radivojevic"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
       "group_markets": {
-        "full_event|0": ["|1x2|~home~8.50!~draw~5.00!~away~1.32"]
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
       }
     }
   },
   {
-    "id": "ucl_20260721_8",
+    "id": "30352775",
     "data": {
       "status": "not_started",
-      "sport": { "name": "Futbol" },
-      "tournament": { "name": "UEFA Şampiyonlar Ligi" },
-      "country": { "name": "Avrupa" },
-      "participants": { "home": "Iberia Tiflis", "away": "Slovan Bratislava" },
-      "start_time": "2026-07-21T16:00:00.000Z",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Ekaterine Gorgodze",
+        "away": "Yasmine Kabbaj"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
       "group_markets": {
-        "full_event|0": ["|1x2|~home~3.40!~draw~3.30!~away~2.05"]
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30352845",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTA Palermo  - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Fiona Ferro",
+        "away": "Erika Andreeva"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353638",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Segrate - Toprak Kort"
+      },
+      "country": {
+        "name": "İtalya"
+      },
+      "participants": {
+        "home": "Tognolini Andrea",
+        "away": "Gilberto Ravasio"
+      },
+      "start_time": "2026-07-21T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349418",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "ATP - Estoril - Toprak Kort"
+      },
+      "country": {
+        "name": "Portekiz"
+      },
+      "participants": {
+        "home": "Alejandro Tabilo",
+        "away": "Tiago Torres"
+      },
+      "start_time": "2026-07-22T10:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353071",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "ATP - Estoril - Toprak Kort"
+      },
+      "country": {
+        "name": "Portekiz"
+      },
+      "participants": {
+        "home": "Pedro Martinez",
+        "away": "Luciano Darderi"
+      },
+      "start_time": "2026-07-22T11:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351177",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Bacau - Toprak Kort"
+      },
+      "country": {
+        "name": "Romanya"
+      },
+      "participants": {
+        "home": "Fnu Nidunjianzan",
+        "away": "Nicolas Bruna"
+      },
+      "start_time": "2026-07-21T12:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351045",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Aurora Corvi",
+        "away": "Lucie Urbanova"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351046",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Charlotte Pikkaart",
+        "away": "Nina Radovanovic"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351047",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Felitsata Dorofeeva-Rybas",
+        "away": "Marianne Argyrokastriti"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351048",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Anastasia Mozgaleva",
+        "away": "Anja Stankovic"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351050",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Elena Milutinovic",
+        "away": "Emma Ottavia Ghirardato"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351051",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Mariia Masiianskaia",
+        "away": "Eugenia Zozaya Menendez"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351052",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Natalija Senic",
+        "away": "Lana Virc"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351053",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Ela Nala Milic",
+        "away": "Gala Ivanovic"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351055",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Andrea Obradovic",
+        "away": "Maria Golovina"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351056",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Ulyana Hrabavets",
+        "away": "Krystyna Pochtovyk"
+      },
+      "start_time": "2026-07-21T05:33:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351313",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Lejla Hana Golubovic",
+        "away": "Helena Stevic"
+      },
+      "start_time": "2026-07-22T07:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351377",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Andrea Fiorentini",
+        "away": "Pedro Vives Marcos"
+      },
+      "start_time": "2026-07-22T06:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351383",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Dusan Obradovic",
+        "away": "Jovan Bjelobrk"
+      },
+      "start_time": "2026-07-22T06:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351385",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler-Kursumlijska Banja-Toprak Kort"
+      },
+      "country": {
+        "name": "Sırbistan"
+      },
+      "participants": {
+        "home": "Gabriele Maria Noce",
+        "away": "Pierre Delage"
+      },
+      "start_time": "2026-07-22T06:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353605",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Erkekler - Denia - Toprak Kort"
+      },
+      "country": {
+        "name": "İspanya"
+      },
+      "participants": {
+        "home": "Andres Santamarta Roig",
+        "away": "Lorenzo Angelini"
+      },
+      "start_time": "2026-07-21T14:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30350611",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Las Palmas de Gran Canaria-Toprak Kort"
+      },
+      "country": {
+        "name": "İspanya"
+      },
+      "participants": {
+        "home": "Shannon Lam",
+        "away": "Eleonora Alvisi"
+      },
+      "start_time": "2026-07-21T11:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353587",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Las Palmas de Gran Canaria-Toprak Kort"
+      },
+      "country": {
+        "name": "İspanya"
+      },
+      "participants": {
+        "home": "Warona Mdlulwa",
+        "away": "Kristina Novak"
+      },
+      "start_time": "2026-07-21T11:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353608",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Las Palmas de Gran Canaria-Toprak Kort"
+      },
+      "country": {
+        "name": "İspanya"
+      },
+      "participants": {
+        "home": "Carlota Corte",
+        "away": "Silvia Bosch Armas"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353609",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Las Palmas de Gran Canaria-Toprak Kort"
+      },
+      "country": {
+        "name": "İspanya"
+      },
+      "participants": {
+        "home": "Meritxell Teixido Garcia",
+        "away": "Min Liu"
+      },
+      "start_time": "2026-07-21T11:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353613",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Las Palmas de Gran Canaria-Toprak Kort"
+      },
+      "country": {
+        "name": "İspanya"
+      },
+      "participants": {
+        "home": "Wozuko Mdlulwa",
+        "away": "Defne Cirpanli"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353619",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Las Palmas de Gran Canaria-Toprak Kort"
+      },
+      "country": {
+        "name": "İspanya"
+      },
+      "participants": {
+        "home": "Ariadna Garcia Patron Canals",
+        "away": "Noemi Maines"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353672",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Tenis"
+      },
+      "tournament": {
+        "name": "WTT Kadınlar-Las Palmas de Gran Canaria-Toprak Kort"
+      },
+      "country": {
+        "name": "İspanya"
+      },
+      "participants": {
+        "home": "Carmen Gallardo Guevara",
+        "away": "Carlotta Moccia"
+      },
+      "start_time": "2026-07-22T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30346195",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "CFL"
+      },
+      "country": {
+        "name": "Kanada"
+      },
+      "participants": {
+        "home": "Hamilton Tiger-Cats",
+        "away": "Montreal Alouettes"
+      },
+      "start_time": "2026-07-26T23:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30346196",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "CFL"
+      },
+      "country": {
+        "name": "Kanada"
+      },
+      "participants": {
+        "home": " Calgary Stampeders",
+        "away": "Winnipeg Bluebombers"
+      },
+      "start_time": "2026-07-25T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30346197",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "CFL"
+      },
+      "country": {
+        "name": "Kanada"
+      },
+      "participants": {
+        "home": "Edmonton Eskimos",
+        "away": " Saskatchewan Roughriders"
+      },
+      "start_time": "2026-07-24T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30346319",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "CFL"
+      },
+      "country": {
+        "name": "Kanada"
+      },
+      "participants": {
+        "home": " Toronto Argonauts",
+        "away": " BC Lions"
+      },
+      "start_time": "2026-07-25T23:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764107",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Ohio State Buckeyes ",
+        "away": " Texas Longhorns"
+      },
+      "start_time": "2026-09-12T23:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764108",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "NC State Wolfpack",
+        "away": "Virginia Cavaliers"
+      },
+      "start_time": "2026-08-29T19:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764110",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Baylor Bears",
+        "away": "Auburn Tigers"
+      },
+      "start_time": "2026-09-05T19:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764112",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Oklahoma Sooners",
+        "away": "Michigan Wolverines "
+      },
+      "start_time": "2026-09-12T16:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764114",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Wisconsin Badgers",
+        "away": "Notre Dame Fighting Irish"
+      },
+      "start_time": "2026-09-06T23:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764115",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "North Carolina Tar Heels ",
+        "away": "TCU Horned Frogs"
+      },
+      "start_time": "2026-08-29T16:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764116",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": " Clemson Tigers",
+        "away": "LSU Tigers"
+      },
+      "start_time": "2026-09-05T23:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764437",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Louisville Cardinals",
+        "away": "Ole Miss Rebels"
+      },
+      "start_time": "2026-09-06T23:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764438",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "UCLA Bruins ",
+        "away": "California Golden Bears"
+      },
+      "start_time": "2026-09-05T16:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29764439",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "SMU Mustangs",
+        "away": "Florida State Seminoles"
+      },
+      "start_time": "2026-09-07T23:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29880184",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "New Mexico State Aggies",
+        "away": "Florida State Seminoles"
+      },
+      "start_time": "2026-08-29T23:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30270909",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Hawaii Rainbow Warriors",
+        "away": "Stanford Cardinal "
+      },
+      "start_time": "2026-08-29T23:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30270910",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Sacramento State Hornets",
+        "away": "Eastern Michigan Eagles"
+      },
+      "start_time": "2026-08-29T22:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30270911",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": " San Jose State Spartans",
+        "away": " USC Trojans"
+      },
+      "start_time": "2026-08-29T19:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30270912",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Jacksonville State Gamecocks",
+        "away": "North Dakota State Bison"
+      },
+      "start_time": "2026-08-29T21:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30277152",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NCAA"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Memphis Tigers",
+        "away": "UNLV Rebels "
+      },
+      "start_time": "2026-08-30T02:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29914684",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Amerikan Futbolu"
+      },
+      "tournament": {
+        "name": "NFL Preseason"
+      },
+      "country": {
+        "name": "ABD"
+      },
+      "participants": {
+        "home": "Carolina Panthers",
+        "away": "Arizona Cardinals"
+      },
+      "start_time": "2026-08-07T00:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30305431",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Avustralya Futbolu"
+      },
+      "tournament": {
+        "name": "AFL"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Western Bulldogs",
+        "away": "Richmond Gomez-Herrera"
+      },
+      "start_time": "2026-07-25T09:40:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30305432",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Avustralya Futbolu"
+      },
+      "tournament": {
+        "name": "AFL"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Fremantle Dockers",
+        "away": "West Coast Eagles"
+      },
+      "start_time": "2026-07-24T10:10:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30305433",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Avustralya Futbolu"
+      },
+      "tournament": {
+        "name": "AFL"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Brisbane Lions",
+        "away": "Port Adelaide Power"
+      },
+      "start_time": "2026-07-26T03:10:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30305434",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Avustralya Futbolu"
+      },
+      "tournament": {
+        "name": "AFL"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Melbourne Demons",
+        "away": "Geelong Cats"
+      },
+      "start_time": "2026-07-24T09:40:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30305435",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Avustralya Futbolu"
+      },
+      "tournament": {
+        "name": "AFL"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Adelaide Crows",
+        "away": "Collingwood Magpies"
+      },
+      "start_time": "2026-07-23T09:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30305531",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Avustralya Futbolu"
+      },
+      "tournament": {
+        "name": "AFL"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Carlton Blues",
+        "away": "Gold Coast Suns"
+      },
+      "start_time": "2026-07-25T03:05:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30305533",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Avustralya Futbolu"
+      },
+      "tournament": {
+        "name": "AFL"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Hawthorn Hawks",
+        "away": "Essendon Bombers"
+      },
+      "start_time": "2026-07-25T06:15:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30305651",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Avustralya Futbolu"
+      },
+      "tournament": {
+        "name": "AFL"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "GWS Giants",
+        "away": "Sydney Swans"
+      },
+      "start_time": "2026-07-25T06:35:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349118",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Sen Lakshya",
+        "away": "Yushi Tanaka"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349119",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Popov C.",
+        "away": "Lee Cheuk Yiu"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349121",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Loh Kean Yew",
+        "away": "Kenta Nishimoto"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349122",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Toma Junior Popov",
+        "away": "Lee Chia Hao"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349126",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Yu Jen Chi",
+        "away": "Victor Lai"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349127",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Yudai Okimoto",
+        "away": "Christie J."
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349128",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Panitchaphon Teeraratsakul",
+        "away": "Koki Watanabe "
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349130",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Alwi Farhan",
+        "away": "Ayush Shetty"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349133",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Rasmus Gemke",
+        "away": "Kunlavut Vitidsarn"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349136",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Ke Yuan Hu/Xiang Yi Lin",
+        "away": "Daniel Lundgaard/Mads Vestergaard"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349137",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Hariharan Amsakarunan/M.R. Arjun",
+        "away": "Liang Wei Keng/Wang Chang"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349138",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Di Huang/Yang Liu",
+        "away": "Fajar Alfian/Muhammad Shohibul Fikri"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349139",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Takumi Nomura/Yuichi Shimogami",
+        "away": "Zhi Yi Chen/Presley Smith"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349140",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Ji Ting He/Ren Xiang Yu",
+        "away": "Sol Gyu Choi/Shem V Goh"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349143",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Min Hyuk Kang/Dong Ki Ju",
+        "away": "Kim Astrup/Anders Skaarup Rasmussen"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349144",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Popov C./Popov T.J.",
+        "away": "Takuro Hoki/Yugo Kobayashi"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349146",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Zhi Ray Chen/Yu Chieh Lin",
+        "away": "Goh Sze Fei/Nur Izzuddin"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349080",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Lin Hsiang Ti",
+        "away": "Pitchamon Opatniput"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349081",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Supanida Katethong",
+        "away": "Akane Yamaguchi"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349082",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Neslihan Arin",
+        "away": "Han Yue"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349084",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Kim Ga Eun",
+        "away": "Chiu Pin-Chian"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349085",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Kirsty Gilmour",
+        "away": "Zhi Yi Wang"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349090",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Yu-Hsun Huang",
+        "away": "Chochuwong Pornpawee"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349091",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Riko Gunji",
+        "away": "Shuo Yun Sung"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349096",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Wong Ling Ching",
+        "away": "Yu Jin Sim"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349100",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Luo Yi/ Wang Ting Ge",
+        "away": "Li Yi Jing/Luo Xu Min"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349101",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Kaho Osawa/Mai Tanabe",
+        "away": "Hinata Suzuki/Nao Yamakita"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349102",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Hsu Yin-Hui/Lin Jhih Yun",
+        "away": "Yuki Fukushima/Mayu Matsumoto"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349103",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Rachel Allessya Rose/Febi Setianingrum",
+        "away": "Jia Yi Fan/Zhang Shu Xian"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349108",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Hsu Ya Ching/Sung Yu-Hsuan",
+        "away": "Lauren Lam/Allison Lee"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349109",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Rui Hirokami/Sayaka Hobara",
+        "away": "Polina Buhrova/Yevheniia Kantemyr"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349110",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Ririna Hiramoto/Ishikawa Kokona",
+        "away": "Tan Pearly Koong Le/Thinaah Muralitharan"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349112",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Kim Hye Jeong/Kong Hee Yong",
+        "away": "Febriana Dwipuji Kusuma/Meilysa Trias Puspitasari"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349115",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık - Kadınlar (Çiftler)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Yeung Pui Lam/Yeung Nga Ting",
+        "away": "Lui Lok Lok/Hiu Yan Tsang"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30349333",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Ye Hong Wei/Nicole Gonzales Chan",
+        "away": "Jae Hyeon Kim/Ha Jeong Jang"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351182",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Tang Chun Man/Tse Ying Suet ",
+        "away": "Sayaka Hobara/Yuichi Shimogami"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351183",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Callum Hemming/Estelle Van Leeuwen",
+        "away": "Yuta Watanabe/Maya Taguchi"
+      },
+      "start_time": "2026-07-22T00:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351194",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Hiroki Midorikawa/Misaki Matsutomo",
+        "away": "Goh Soon Huat/Lai Shevon Jemie"
+      },
+      "start_time": "2026-07-22T00:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351195",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Marvin Seidel/Thuc Phuong Nguyen",
+        "away": "Chen Tang Jie/Clarissa San"
+      },
+      "start_time": "2026-07-22T00:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351196",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Presley Smith/Jennie Gai",
+        "away": "Zhen Bang Jiang/Wei Ya Xin"
+      },
+      "start_time": "2026-07-22T00:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351200",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Dhruv Kapila/Tanisha Crasto",
+        "away": "Guo Xin Wa/Chen Fang Hui"
+      },
+      "start_time": "2026-07-22T00:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30351221",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Chan Yin Chak/Ng Tsz Yau",
+        "away": "Xing Cheng/Chi Zhang"
+      },
+      "start_time": "2026-07-22T00:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30353540",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Badminton"
+      },
+      "tournament": {
+        "name": "Çin Açık (Karışık)"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Amri Syahnawi/Nita Violina Marwah",
+        "away": "Dechapol Puavaranukroh/Supissara Paewsampran"
+      },
+      "start_time": "2026-07-22T00:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30354023",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Beyzbol"
+      },
+      "tournament": {
+        "name": "LMB"
+      },
+      "country": {
+        "name": "Meksika"
+      },
+      "participants": {
+        "home": "Olmecas de Tabasco",
+        "away": "Pericos de Puebla"
+      },
+      "start_time": "2026-07-22T01:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29108238",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Floyd Mayweather Jr.",
+        "away": "Manny Pacquiao"
+      },
+      "start_time": "2026-09-20T04:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29631919",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Anthony Joshua",
+        "away": "Kristian Prenga"
+      },
+      "start_time": "2026-07-25T21:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29670850",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Tim Tszyu",
+        "away": "Errol Spence Jr"
+      },
+      "start_time": "2026-07-26T04:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29808924",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Alvarez Saul",
+        "away": "Christian Mbilli"
+      },
+      "start_time": "2026-09-12T21:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29899962",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "David Nyika",
+        "away": "Floyd Masson"
+      },
+      "start_time": "2026-08-08T09:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29899974",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Aaron McKenna",
+        "away": "Etinosa Oliha"
+      },
+      "start_time": "2026-08-08T20:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29952569",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Raymond Muratalla",
+        "away": "Robson Conceicao"
+      },
+      "start_time": "2026-08-02T02:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29994276",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Katie Taylor",
+        "away": "Flora Pili"
+      },
+      "start_time": "2026-09-05T21:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30001121",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Cherneka Johnson",
+        "away": "Dina Thorslund"
+      },
+      "start_time": "2026-08-09T03:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30001123",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Callum Walsh",
+        "away": "Tyler Denny"
+      },
+      "start_time": "2026-08-08T21:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30001332",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Troy Williamson",
+        "away": "Callum Simpson"
+      },
+      "start_time": "2026-08-08T21:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30010786",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Chantelle Cameron",
+        "away": "Mikaela Mayer"
+      },
+      "start_time": "2026-08-29T21:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30010788",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Boks"
+      },
+      "tournament": {
+        "name": "Profesyonel Boks"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Edgar Berlanga",
+        "away": "Steven Butler"
+      },
+      "start_time": "2026-07-27T02:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
       }
     }
   }
