@@ -218,6 +218,27 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <span className="font-bold text-[13px] lg:text-[14px]">Anasayfa</span>
                 </button>
 
+                {/* Seka Çark Button in Sidebar */}
+                <button 
+                  onClick={() => onViewChange('luckywheel')}
+                  className={`flex items-center gap-2.5 lg:gap-3 px-2.5 lg:px-3 py-2 lg:py-2.5 rounded-xl transition-all group relative overflow-hidden border ${
+                    activeView === 'luckywheel'
+                    ? 'bg-[#0ea5e9]/20 border-[#0ea5e9] text-white shadow-[0_0_15px_rgba(14,165,233,0.4)]' 
+                    : 'bg-gradient-to-r from-[#0ea5e9]/10 to-transparent border-[#0ea5e9]/30 text-white hover:bg-[#0ea5e9]/20 hover:border-[#0ea5e9]'
+                  }`}
+                >
+                  <div className="relative w-5 h-5 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-[#38bdf8] animate-pulse absolute" />
+                    <Sparkles className="w-4 h-4 text-[#0ea5e9] animate-spin duration-3000" />
+                  </div>
+                  <span className="font-black text-[13px] lg:text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-white to-[#7dd3fc] uppercase tracking-wide">
+                    Seka Çark
+                  </span>
+                  <span className="ml-auto text-[10px] font-black bg-[#0ea5e9] text-black px-1.5 py-0.5 rounded-md animate-pulse">
+                    YENİ
+                  </span>
+                </button>
+
                 {userRole && userRole !== 'guest' && (
                   <>
                     <button className="flex items-center gap-2.5 lg:gap-3 px-2.5 lg:px-3 py-2 lg:py-2.5 rounded-lg transition-colors text-zinc-400 hover:text-white hover:bg-zinc-900 group">

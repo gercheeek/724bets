@@ -267,6 +267,20 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     // ── Right panel tabs ──
     const [rightPanelTab, setRightPanelTab] = useState<'chat' | 'channels' | 'matches'>('chat');
     const [searchQuery, setSearchQuery] = useState('');
+    const [tvTab, setTvTab] = useState<'maclar' | 'kanallar' | 'sohbet'>('maclar');
+    const [tvMatches, setTvMatches] = useState<any[]>([]);
+
+    useEffect(() => {
+        fetch('/prelive_matches.json')
+            .then(res => res.json())
+            .then(data => {
+                if (data && Array.isArray(data)) {
+                    // Sadece en yakın 20 maçı alalım
+                    setTvMatches(data.slice(0, 20));
+                }
+            }).catch(e => console.log('Matches fetch error:', e));
+    }, []);
+
     const [activeTab, setActiveTab] = useState<'channels' | 'vods'>('channels');
     const swipeableRef = useRef<HTMLDivElement>(null);
 
@@ -380,12 +394,12 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 const { data: vodsData } = await supabase.from('vods').select('*').order('created_at', { ascending: false });
                 if (vodsData && vodsData.length > 0) {
                     setVods(vodsData);
-                } else if (DEFAULT_TV_CONFIG.vods) {
-                    setVods(DEFAULT_TV_CONFIG.vods);
+                } else if ((DEFAULT_TV_CONFIG as any).vods) {
+                    setVods((DEFAULT_TV_CONFIG as any).vods);
                 }
             } catch (e) {
                 console.error('Vods fetch error:', e);
-                if (DEFAULT_TV_CONFIG.vods) setVods(DEFAULT_TV_CONFIG.vods);
+                if ((DEFAULT_TV_CONFIG as any).vods) setVods((DEFAULT_TV_CONFIG as any).vods);
             }
 
             const { data: analysesConfig } = await supabase.from('site_configs').select('value').eq('key', 'site_analyses').maybeSingle();
@@ -561,7 +575,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             userId: msgObj.user_id,
             username: msgObj.username,
             message: msgObj.message,
-            role: msgObj.role,
+            role: msgObj.role as "admin" | "vip" | "user",
             timestamp: Date.now(),
             channelId: msgObj.channel_id
         };
@@ -654,7 +668,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 const host = window.location.hostname;
                 return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{loader}<iframe src={`https://player.twitch.tv/?channel=${id}&parent=${host}&autoplay=true&muted=${isMuted}&playsinline=true`} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={() => setIsIframeLoaded(true)} title={activeChannel.name} /></div>;
             }
-            if (platform === 'youtube') {
+            if ((platform as string) === "youtube") {
                 let parsedId = rawUsername.trim();
                 try {
                     if (parsedId.includes('youtube.com') || parsedId.includes('youtu.be')) {
@@ -733,330 +747,303 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     }
 
     return (
-        <div ref={wrapperRef} style={{ width: '100%', height: '100%', fontFamily: "'Inter', sans-serif" }}>
+        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in" style={{ width: '100%', minHeight: '100vh', fontFamily: "'Inter', sans-serif", backgroundColor: '#050505', backgroundImage: 'radial-gradient(circle at 50% 0%, #1a0505 0%, #050505 70%)', position: 'relative', overflow: 'hidden' }}>
+            {/* Neon glowing edges */}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', boxShadow: 'inset 0 0 100px rgba(239, 68, 68, 0.03)', zIndex: 0 }} />
+            
+            {/* Floating balls / chips effect (CSS only) */}
+            <div className="floating-elements" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.1, background: 'url(/splash-ball.png)', backgroundSize: '100px', animation: 'float-bg 60s linear infinite' }} />
+
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Outfit:wght@700;800;900&display=swap');
-
-                @keyframes floatUp { 0%{transform:translateY(20px) scale(0.5);opacity:0} 15%{opacity:1;transform:translateY(0) scale(1.2)} 80%{opacity:.8} 100%{transform:translateY(-240px) scale(.6);opacity:0} }
-                @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-                @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-                @keyframes pulse-slow { 0%,100%{opacity:.9;box-shadow:0 0 10px rgba(0, 255, 163,.05)} 50%{opacity:.6;box-shadow:0 0 25px rgba(0, 255, 163,.2)} }
-                @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-                @keyframes glow-live { 0%,100%{box-shadow:0 0 8px rgba(239,68,68,.4),0 0 20px rgba(239,68,68,.1)} 50%{box-shadow:0 0 20px rgba(239,68,68,.8),0 0 40px rgba(239,68,68,.3)} }
-                @keyframes card-active-glow { 0%{box-shadow:0 0 8px rgba(173,255,47,.3)} 100%{box-shadow:0 0 30px rgba(173,255,47,.9)} }
-                @keyframes hero-in { from{opacity:0;transform:scale(1.02)} to{opacity:1;transform:scale(1)} }
-                @keyframes badge-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
-                @keyframes skeleton-shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
-                @keyframes flash-in { from{opacity:0;transform:translate(-50%,-50%) scale(.85)} to{opacity:1;transform:translate(-50%,-50%) scale(1)} }
-                @keyframes toast-in { from{opacity:0;transform:translateX(120%)} to{opacity:1;transform:translateX(0)} }
-                @keyframes odds-flash-up { 0%{color:#22c55e;text-shadow:0 0 8px rgba(34,197,94,.6)} 100%{color:inherit;text-shadow:none} }
-                @keyframes slide-up { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-
-                .tv-wrap { max-width:1400px; margin:0 auto; width:100%; padding:0 16px; display:flex; flex-direction:column; gap:20px; padding-top:16px; }
-                .player-chat-row { display:flex; gap:20px; width:100%; align-items:stretch; }
-                .player-wrap { flex:1; aspect-ratio:16/9; min-width:280px; position:relative; }
-                .chat-wrap { width:340px; position:relative; flex-shrink:0; }
-                .chat-inner { position:absolute; inset:0; width:100%; height:100%; display:flex; flex-direction:column; }
-
-                .player-hover:hover .ctrl-bar { opacity:1!important; }
-                .fifa-card { transition:all .3s cubic-bezier(.25,.8,.25,1); }
-                .fifa-card:hover { transform:translateY(-10px) scale(1.05); filter:brightness(1.1); }
-                .fifa-card-active { animation:card-active-glow 2s ease-in-out infinite alternate; }
-                .vod-card:hover { transform:translateY(-4px)!important; border-color:rgba(0, 255, 163,.4)!important; box-shadow:0 8px 20px rgba(0, 255, 163,.1)!important; }
-                .hero-arrow:hover { background:rgba(255,255,255,.2)!important; transform:scale(1.1); }
-                .program-card:hover { border-color:rgba(255,255,255,.15)!important; transform:translateY(-2px); }
-                .chat-input-wrap:focus-within { border-color:rgba(173,255,47,.5)!important; }
-                .odds-btn:hover { filter:brightness(1.15); transform:scale(1.03); }
-                .odds-btn-selected { box-shadow:0 0 0 2px #06b6d4, 0 0 12px rgba(0, 255, 163,.3)!important; }
-                .section-label { font-size:11px; font-weight:900; color:#6b7280; text-transform:uppercase; letter-spacing:2px; display:flex; align-items:center; gap:8px; }
-                .section-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(255,255,255,.06),transparent); }
-
-                .custom-scrollbar::-webkit-scrollbar { height:4px; width:4px; }
-                .custom-scrollbar::-webkit-scrollbar-track { background:rgba(255,255,255,.01); border-radius:99px; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background:rgba(0, 255, 163,.2); border-radius:99px; }
-                .chat-message-row:hover .admin-msg-controls { display:flex!important; }
-
-                /* ── Mobile ── */
-                .mobile-only { display:none!important; }
-                .desktop-content { display:contents; }
-                @media (max-width: 900px) {
-                    .player-chat-row { flex-direction:column; }
-                    .chat-wrap { width:100%; height:380px; }
-                    .chat-inner { position:relative; }
-                }
-                @media (max-width: 700px) {
-                    .mobile-only { display:flex!important; }
-                    .desktop-player-chat { display:none!important; }
-                    .mobile-content-area { display:flex; flex-direction:column; }
-                    .tv-wrap { padding-bottom:80px; }
-                }
+                @keyframes float-bg { 0% { background-position: 0 0; } 100% { background-position: 1000px 1000px; } }
+                @keyframes pulse-red { 0%,100%{box-shadow:0 0 10px rgba(239,68,68,.2)} 50%{box-shadow:0 0 25px rgba(239,68,68,.5)} }
+                .custom-scrollbar::-webkit-scrollbar { width:4px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background:rgba(255,255,255,.02); border-radius:4px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background:rgba(239,68,68,.3); border-radius:4px; }
+                .custom-scrollbar:hover::-webkit-scrollbar-thumb { background:rgba(239,68,68,.5); }
+                .tv-tab-btn { transition: all 0.2s; position: relative; }
+                .tv-tab-btn::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: #ef4444; transform: scaleX(0); transition: transform 0.2s; }
+                .tv-tab-btn.active { color: #fff; }
+                .tv-tab-btn.active::after { transform: scaleX(1); }
             `}</style>
 
-
-
-            {/* ═══ FLASH EVENT POPUP ════════════════════════════════════════ */}
-            {flashEvent && flashCountdown > 0 && (
-                <div style={{ position: 'fixed', inset: 0, zIndex: 99998, background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
-                    onClick={(e) => { if (e.target === e.currentTarget) { setFlashEvent(null); } }}>
-                    <div style={{ background: 'linear-gradient(135deg, #0d0d14 0%, #111120 100%)', border: `1px solid ${flashEvent.color}44`, borderRadius: '8px', padding: '32px', maxWidth: '400px', width: '100%', position: 'relative', boxShadow: `0 0 60px ${flashEvent.color}22`, animation: 'flash-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
-                        {/* Countdown ring */}
-                        <div style={{ position: 'absolute', top: '16px', right: '16px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <div style={{ width: '36px', height: '36px', borderRadius: '50%', border: `2px solid ${flashEvent.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 900, color: flashEvent.color }}>{userRole === 'admin' ? '∞' : flashCountdown}</div>
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: isMobile ? '10px' : '20px', position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                
+                {/* Header Navbar (Like the screenshot) */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 20px', background: 'rgba(10, 10, 10, 0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Tv style={{ color: '#fff', width: 24, height: 24 }} />
                         </div>
-                        <button onClick={() => setFlashEvent(null)} style={{ position: 'absolute', top: '16px', left: '16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '50%', width: '28px', height: '28px', color: '#9ca3af', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X style={{ width: 13, height: 13 }} /></button>
-
-                        <div style={{ textAlign: 'center', marginTop: '8px' }}>
-                            <div style={{ fontSize: '48px', marginBottom: '12px' }}>{flashEvent.icon}</div>
-                            <div style={{ display: 'inline-block', background: `${flashEvent.color}22`, border: `1px solid ${flashEvent.color}44`, borderRadius: '8px', padding: '4px 14px', fontSize: '10px', fontWeight: 900, color: flashEvent.color, letterSpacing: '1px', marginBottom: '12px', animation: 'badge-pulse 1.5s infinite' }}>
-                                {flashEvent.type === 'quiz' ? '⚡ FLASH QUIZ' : flashEvent.type === 'bonus' ? '🎁 BONUS FIRSAT' : '🎡 ŞANS ÇEVİRMECESİ'}
-                            </div>
-                            <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#fff', marginBottom: '8px', fontFamily: "'Outfit', sans-serif" }}>{flashEvent.title}</h2>
-                            <p style={{ fontSize: '14px', color: '#9ca3af', marginBottom: '20px', lineHeight: 1.5 }}>{flashEvent.description}</p>
-
-                            {flashEvent.type === 'bonus' && (
-                                <div>
-                                    <div style={{ background: '#111116', border: `1px dashed ${flashEvent.color}88`, borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
-                                        <div style={{ fontSize: '11px', color: '#6b7280', marginBottom: '6px', fontWeight: 700 }}>BONUS KODU</div>
-                                        <div style={{ fontSize: '22px', fontWeight: 900, color: flashEvent.color, letterSpacing: '3px', fontFamily: "'Outfit', sans-serif" }}>{flashEvent.code}</div>
-                                    </div>
-                                    <button style={{ width: '100%', padding: '14px', borderRadius: '8px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}aa)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '14px', cursor: 'pointer', letterSpacing: '0.5px' }}>
-                                        KODU KOPYALA & KULLAN
-                                    </button>
-                                </div>
-                            )}
-
-                            {flashEvent.type === 'quiz' && flashEvent.options && (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
-                                    {flashEvent.options.map((opt, i) => (
-                                        <button key={i} onClick={() => setQuizAnswer(opt)}
-                                            style={{ padding: '12px', borderRadius: '8px', border: `1px solid ${quizAnswer === opt ? flashEvent.color : 'rgba(255,255,255,0.1)'}`, background: quizAnswer === opt ? `${flashEvent.color}22` : 'rgba(255,255,255,0.03)', color: quizAnswer === opt ? flashEvent.color : '#e5e7eb', fontWeight: 800, fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                            <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: `2px solid ${quizAnswer === opt ? flashEvent.color : 'rgba(255,255,255,0.2)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900, color: quizAnswer === opt ? flashEvent.color : '#6b7280' }}>{i + 1}</div>
-                                            {opt}
-                                        </button>
-                                    ))}
-                                    {quizAnswer && (
-                                        <button style={{ padding: '13px', borderRadius: '8px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}bb)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '13px', cursor: 'pointer', marginTop: '4px' }}>
-                                            {flashEvent.reward} — YANITI GÖNDER
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-
-                            {flashEvent.type === 'spin' && (
-                                <button onClick={() => setFlashEvent(null)} style={{ width: '100%', padding: '14px', borderRadius: '8px', background: `linear-gradient(135deg, ${flashEvent.color}, ${flashEvent.color}99)`, border: 'none', color: '#000', fontWeight: 900, fontSize: '14px', cursor: 'pointer' }}>
-                                    🎡 ÇARKI ÇEVİR — {flashEvent.reward}
+                        <span style={{ fontSize: '24px', fontWeight: 900, color: '#fff', letterSpacing: '-1px' }}>724<span style={{ color: '#ef4444' }}>TV</span></span>
+                    </div>
+                    
+                    {!isMobile && (
+                        <div style={{ display: 'flex', gap: '24px' }}>
+                            {['Ana Sayfa', 'Bahis', 'Canlı Bahis', 'Canlı Casino', 'Slot Oyunu', 'Bonuslar'].map((item, idx) => (
+                                <button key={idx} style={{ background: 'transparent', border: 'none', color: '#9ca3af', fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'color 0.2s' }} className="hover:text-white">
+                                    {item}
                                 </button>
-                            )}
-
-                            <div style={{ marginTop: '16px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', padding: '8px 12px', fontSize: '11px', color: '#6b7280', textAlign: 'center' }}>
-                                🏆 Ödül: <strong style={{ color: flashEvent.color }}>{flashEvent.reward}</strong>
-                            </div>
+                            ))}
                         </div>
+                    )}
+                </div>
 
-                        {/* Countdown bar */}
-                        <div style={{ marginTop: '16px', height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
-                            <div style={{ height: '100%', background: flashEvent.color, borderRadius: '99px', width: userRole === 'admin' ? '100%' : `${(flashCountdown / flashEvent.duration) * 100}%`, transition: 'width 1s linear', boxShadow: `0 0 8px ${flashEvent.color}` }} />
-                        </div>
+                {/* Top Promo Banner */}
+                <div style={{ width: '100%', background: 'linear-gradient(90deg, #110000 0%, #ef4444 50%, #110000 100%)', borderRadius: '12px', padding: '2px', animation: 'pulse-red 3s infinite' }}>
+                    <div style={{ background: '#050505', borderRadius: '10px', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#fff', fontWeight: 900, fontSize: isMobile ? '16px' : '22px' }}>%20 SINIRSIZ KAYIP BONUSU</span>
+                        <button style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '8px 20px', borderRadius: '6px', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}>Hemen Üye Ol</button>
                     </div>
                 </div>
-            )}
 
-            {/* ══════════════════════════════════════════════════════════════
-                MAIN CONTENT
-            ════════════════════════════════════════════════════════════════ */}
-            <div className="tv-wrap animate-fade-in" style={{ maxWidth: '1200px', margin: '0 auto', padding: isMobile ? '0' : '24px 16px', display: 'flex', flexDirection: 'column', gap: isMobile ? '0' : '24px' }}>
-                
-                {/* Side-by-Side: Video Player (left) + Channels List (right) */}
-                <div style={{ display: 'flex', gap: isMobile ? '0' : '20px', width: '100%', flexDirection: isMobile ? 'column' : 'row', alignItems: 'stretch' }}>
+                {/* Main 2-Column Layout */}
+                <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: '20px', alignItems: 'stretch' }}>
                     
-                    {/* Left Column: Video Player */}
-                    <div style={{ flex: 1.8, minWidth: isMobile ? '100%' : '320px', display: 'flex', flexDirection: 'column', gap: isMobile ? '0' : '16px', position: isMobile ? 'sticky' : 'relative', top: isMobile ? 0 : 'auto', zIndex: isMobile ? 100 : 1, background: isMobile ? '#000' : 'transparent', borderBottom: isMobile ? '1px solid rgba(255,255,255,0.05)' : 'none', boxShadow: isMobile ? '0 10px 30px rgba(0,0,0,0.8)' : 'none' }}>
-                        {!isMiniPlayer ? (
-                            <div ref={playerContainerRef} className={isMobile ? '' : 'player-hover'} style={{ width: '100%', aspectRatio: '16/9', position: 'relative', background: '#000', borderRadius: isMobile ? '0' : '8px', overflow: 'hidden', border: activeChannel?.isLive && !isMobile ? '1.5px solid rgba(239, 68, 68, 0.4)' : isMobile ? 'none' : '1px solid rgba(255, 255, 255, 0.08)', boxShadow: isMobile ? 'none' : '0 20px 50px rgba(0,0,0,0.7)', transition: 'all 0.3s ease' }}>
-                                <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                                    <div style={{ width: '100%', height: '100%', filter: showPaywall ? 'blur(8px)' : 'none', transition: 'filter 0.5s', pointerEvents: showPaywall ? 'none' : 'auto' }}>
-                                        {activeChannel ? (
-                                            getStreamEmbed()
-                                        ) : (
-                                            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#06b6d4', gap: '16px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
-                                                <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(0, 255, 163, 0.06)', border: '1px solid rgba(0, 255, 163, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse-slow 3s infinite' }}>
-                                                    <Tv style={{ width: 32, height: 32, color: '#06b6d4', opacity: 0.8 }} />
-                                                </div>
-                                                <p style={{ fontSize: '15px', color: '#9ca3af', fontWeight: 700, letterSpacing: '0.5px' }}>Lütfen bir kanal veya maç seçiniz</p>
+                    {/* LEFT: Video Player */}
+                    <div style={{ flex: 1.8, minWidth: isMobile ? '100%' : '60%', position: 'relative' }}>
+                        <div ref={playerContainerRef} style={{ width: '100%', aspectRatio: '16/9', background: '#000', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
+                            
+                            {!activeChannel ? (
+                                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1a0505 0%, #000 100%)' }}>
+                                    <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(239,68,68,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', border: '2px solid rgba(239,68,68,0.3)' }}>
+                                        <Play style={{ width: 32, height: 32, color: '#ef4444', marginLeft: '4px' }} />
+                                    </div>
+                                    <h2 style={{ fontSize: '32px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>YAYIN BAŞLIYOR</h2>
+                                    <p style={{ color: '#6b7280', fontSize: '14px', fontWeight: 600 }}>Lütfen sağ taraftan bir maç veya kanal seçin.</p>
+                                    <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', opacity: 0.3 }}>
+                                        <span style={{ fontSize: '20px', fontWeight: 900, color: '#fff' }}>724<span style={{ color: '#ef4444' }}>TV</span></span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div style={{ width: '100%', height: '100%' }}>
+                                    {getStreamEmbed()}
+                                    
+                                    {/* Custom Controls Bar */}
+                                    <div className="ctrl-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', opacity: isMobile ? 1 : 0, transition: 'opacity 0.2s' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                                            <button onClick={() => setIsPlaying(!isPlaying)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+                                                {isPlaying ? <Pause style={{ width: 18, height: 18 }} /> : <Play style={{ width: 18, height: 18 }} />}
+                                            </button>
+                                            <button onClick={() => setIsMuted(!isMuted)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+                                                {isMuted ? <VolumeX style={{ width: 18, height: 18, color: '#ef4444' }} /> : <Volume2 style={{ width: 18, height: 18, color: '#22c55e' }} />}
+                                            </button>
+                                            <span style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>{activeChannel.name}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(239,68,68,0.2)', padding: '4px 8px', borderRadius: '4px' }}>
+                                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444', animation: 'pulse 1.5s infinite' }} />
+                                                <span style={{ fontSize: '10px', fontWeight: 800, color: '#ef4444' }}>CANLI</span>
                                             </div>
-                                        )}
+                                            <button onClick={() => {
+                                                if (document.fullscreenElement) document.exitFullscreen();
+                                                else playerContainerRef.current?.requestFullscreen();
+                                            }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+                                                <Maximize style={{ width: 18, height: 18 }} />
+                                            </button>
+                                        </div>
                                     </div>
                                     
-                                    {showPaywall && (
-                                        <div style={{ position: 'absolute', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
-                                            <div style={{ background: 'rgba(15, 17, 26, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: isMobile ? '20px' : '30px 40px', borderRadius: '8px', textAlign: 'center', maxWidth: '400px', boxShadow: '0 20px 45px rgba(0,0,0,0.6)', margin: isMobile ? '16px' : '0' }}>
-                                                <h2 style={{ fontSize: isMobile ? '20px' : '24px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Heyecanı Kaçırma!</h2>
-                                                <p style={{ fontSize: '13px', color: '#d1d5db', marginBottom: '24px', lineHeight: 1.5 }}>15 saniyelik önizleme süren doldu. Ücretsiz üye ol, tüm canlı yayınlara ve özel sohbet odalarına anında erişim sağla.</p>
-                                                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-                                                    <button onClick={onLoginRequired} style={{ background: '#06b6d4', color: '#000', fontWeight: 900, padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '14px', transition: 'transform 0.2s' }} className="hover:scale-105">ÜYE GİRİŞİ</button>
+                                    {/* Watermark */}
+                                    <div style={{ position: 'absolute', top: '20px', right: '20px', opacity: 0.5, pointerEvents: 'none' }}>
+                                        <span style={{ fontSize: '16px', fontWeight: 900, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>724<span style={{ color: '#ef4444' }}>TV</span></span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* RIGHT: Sidebar (Tabs + Content) */}
+                    <div style={{ flex: 1, minWidth: isMobile ? '100%' : '340px', background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', display: 'flex', flexDirection: 'column', height: isMobile ? '500px' : 'auto' }}>
+                        
+                        {/* Tabs Header */}
+                        <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                            {[
+                                { id: 'maclar', label: 'MAÇLAR' },
+                                { id: 'kanallar', label: 'KANALLAR' },
+                                { id: 'sohbet', label: 'SOHBET' }
+                            ].map(t => (
+                                <button 
+                                    key={t.id} 
+                                    className={`tv-tab-btn ${tvTab === t.id ? 'active' : ''}`}
+                                    onClick={() => setTvTab(t.id as any)}
+                                    style={{ flex: 1, padding: '16px 0', background: 'transparent', border: 'none', fontSize: '12px', fontWeight: 900, letterSpacing: '1px', color: tvTab === t.id ? '#fff' : '#6b7280', cursor: 'pointer' }}
+                                >
+                                    {t.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Tabs Content */}
+                        <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+                            
+                            {/* MAÇLAR TAB */}
+                            {tvTab === 'maclar' && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    {tvMatches.length === 0 ? (
+                                        <div style={{ textAlign: 'center', padding: '40px 0', color: '#6b7280', fontSize: '13px', fontWeight: 600 }}>Yükleniyor...</div>
+                                    ) : (
+                                        tvMatches.map(m => {
+                                            const time = new Date(m.data.start_time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                                            const isLive = new Date(m.data.start_time).getTime() < Date.now();
+                                            
+                                            return (
+                                                <div key={m.id} style={{ background: '#111', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', padding: '12px', cursor: 'pointer', transition: 'all 0.2s' }} className="hover:bg-[#1a1a1a] hover:border-red-500/30">
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                                        <span style={{ fontSize: '10px', color: '#9ca3af', fontWeight: 700, textTransform: 'uppercase' }}>{m.data.sport?.name}</span>
+                                                        <span style={{ fontSize: '10px', color: isLive ? '#ef4444' : '#6b7280', fontWeight: 800 }}>{isLive ? 'CANLI' : time} | {m.data.tournament?.name}</span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                                                            <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>{m.data.participants?.home}</div>
+                                                            <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>{m.data.participants?.away}</div>
+                                                        </div>
+                                                        <div style={{ width: '32px', height: '32px', background: 'rgba(255,255,255,0.05)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                            <Play style={{ width: 14, height: 14, color: '#ef4444', marginLeft: '2px' }} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
+                            )}
+
+                            {/* KANALLAR TAB */}
+                            {tvTab === 'kanallar' && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <div style={{ position: 'relative', marginBottom: '10px' }}>
+                                        <input 
+                                            type="text" 
+                                            placeholder="Kanal ara..." 
+                                            value={searchQuery}
+                                            onChange={e => setSearchQuery(e.target.value)}
+                                            style={{ width: '100%', background: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '10px 10px 10px 36px', color: '#fff', fontSize: '12px', outline: 'none' }}
+                                        />
+                                        <Search style={{ width: 14, height: 14, color: '#6b7280', position: 'absolute', left: '12px', top: '11px' }} />
+                                    </div>
+                                    
+                                    {streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase())).map(s => {
+                                        const isActive = activeChannel?.id === s.id;
+                                        return (
+                                            <div 
+                                                key={s.id}
+                                                onClick={() => {
+                                                    setActiveChannel({
+                                                        id: s.id, name: s.name, slug: s.kick_username || '', platform: s.platform_type,
+                                                        streamUrl: s.kick_username || '', thumbnailUrl: s.avatar_url || '',
+                                                        category: s.tags?.[0] || 'CANLI YAYIN', isLive: s.is_live, isActive: true,
+                                                        order: s.order_index, sourceType: s.source_type, platformType: s.platform_type,
+                                                        platformUsername: s.kick_username, videoUrl: s.video_url, iframeUrl: s.iframe_url,
+                                                        fallbackType: s.fallback_type, fallbackVideoUrl: s.fallback_video_url,
+                                                        fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
+                                                    } as any);
+                                                }}
+                                                style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px', background: isActive ? 'rgba(239,68,68,0.1)' : '#111', border: `1px solid ${isActive ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.05)'}`, borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s' }}
+                                                className="hover:bg-[#1a1a1a]"
+                                            >
+                                                <img 
+                                                    src={getChannelLogo(s.name, s.avatar_url)} 
+                                                    alt={s.name} 
+                                                    style={{ width: '32px', height: '32px', borderRadius: '6px', objectFit: 'contain', background: '#000', padding: '4px' }}
+                                                    onError={(e) => {
+                                                        e.currentTarget.onerror = null;
+                                                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=111&color=fff`;
+                                                    }}
+                                                />
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ fontSize: '13px', fontWeight: 800, color: isActive ? '#fff' : '#e5e7eb' }}>{s.name}</div>
+                                                    <div style={{ fontSize: '10px', color: '#6b7280', fontWeight: 600 }}>{s.platform_type || 'TV'} {s.is_live ? '• CANLI' : ''}</div>
                                                 </div>
                                             </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+
+                            {/* SOHBET TAB */}
+                            {tvTab === 'sohbet' && (
+                                <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
+                                    {!activeChannel ? (
+                                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280', fontSize: '12px', fontWeight: 600 }}>
+                                            Sohbeti görmek için bir yayın seçin.
                                         </div>
-                                    )}
-                                    
-                                    {activeChannel && !showPaywall && (
-                                        <div className="ctrl-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, transparent 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '0 16px' : '0 24px', zIndex: 45, opacity: isMobile ? 1 : 0, transition: 'opacity 0.25s' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                <button onClick={() => setIsPlaying(!isPlaying)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>{isPlaying ? <Pause style={{ width: 16, height: 16 }} /> : <Play style={{ width: 16, height: 16 }} />}</button>
-                                                <button onClick={() => setIsMuted(!isMuted)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>{isMuted ? <VolumeX style={{ width: 16, height: 16, color: '#ef4444' }} /> : <Volume2 style={{ width: 16, height: 16, color: '#adff2f' }} />}</button>
-                                                <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', letterSpacing: '0.5px' }}>{activeChannel.name.toUpperCase()}</span>
+                                    ) : (
+                                        <>
+                                            <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingBottom: '60px' }}>
+                                                {messages.length === 0 ? (
+                                                    <div style={{ textAlign: 'center', padding: '20px', color: '#6b7280', fontSize: '12px' }}>Henüz mesaj yok. İlk yazan sen ol!</div>
+                                                ) : (
+                                                    messages.map(m => (
+                                                        <div key={m.id} style={{ display: 'flex', gap: '8px', fontSize: '13px' }}>
+                                                            <span style={{ color: '#6b7280', fontSize: '10px', marginTop: '2px' }}>{formatTime(m.timestamp)}</span>
+                                                            <div style={{ flex: 1 }}>
+                                                                <span style={{ fontWeight: 800, color: getRoleColor(m.role), marginRight: '6px' }}>{m.username}</span>
+                                                                <span style={{ color: '#d1d5db', wordBreak: 'break-word' }}>{m.message}</span>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                )}
+                                                <div ref={chatEndRef} />
                                             </div>
-                                            <div style={{ display: 'flex', gap: '8px' }}>
-                                                {isMobile && (
-                                                    <button onClick={() => {
-                                                        const el = playerContainerRef.current;
-                                                        if (el) {
-                                                            if (document.fullscreenElement) document.exitFullscreen();
-                                                            else el.requestFullscreen();
-                                                        }
-                                                    }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                                                        <Maximize style={{ width: 16, height: 16 }} />
+                                            
+                                            {/* Chat Input */}
+                                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: '#0a0a0a', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '10px' }}>
+                                                {siteUser ? (
+                                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                                        <input 
+                                                            type="text" 
+                                                            value={newMessage}
+                                                            onChange={e => setNewMessage(e.target.value)}
+                                                            onKeyDown={handleKeyDown}
+                                                            placeholder="Mesaj gönder..."
+                                                            style={{ flex: 1, background: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '10px', color: '#fff', fontSize: '13px', outline: 'none' }}
+                                                        />
+                                                        <button 
+                                                            onClick={() => sendMessage()}
+                                                            style={{ width: '38px', height: '38px', background: '#ef4444', border: 'none', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                                        >
+                                                            <Send style={{ width: 16, height: 16, color: '#fff' }} />
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <button onClick={onLoginRequired} style={{ width: '100%', padding: '10px', background: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#ef4444', fontSize: '12px', fontWeight: 800, cursor: 'pointer' }}>
+                                                        Sohbet etmek için giriş yapın
                                                     </button>
                                                 )}
                                             </div>
-                                        </div>
+                                        </>
                                     )}
                                 </div>
-                            </div>
-                        ) : (
-                            <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(0, 255, 163, 0.3)', borderRadius: isMobile ? '0' : '8px', background: 'rgba(0, 255, 163, 0.02)', gap: '16px', padding: '24px', textAlign: 'center' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(0, 255, 163, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Tv style={{ width: 20, height: 20, color: '#06b6d4' }} />
-                                </div>
-                                <div>
-                                    <h4 style={{ fontSize: '14px', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>Mini Oynatıcı Aktif</h4>
-                                    <p style={{ fontSize: '11px', color: '#6b7280' }}>Yayın ekranın sağ alt köşesinde ufak pencerede oynamaya devam ediyor.</p>
-                                </div>
-                                <button onClick={() => setIsMiniPlayer(false)} style={{ background: 'rgba(0, 255, 163, 0.1)', border: '1px solid rgba(0, 255, 163, 0.2)', borderRadius: '8px', color: '#06b6d4', fontSize: '12px', fontWeight: 800, padding: '8px 16px', cursor: 'pointer', transition: 'all 0.2s' }}>Oynatıcıyı Geri Getir</button>
-                            </div>
-                        )}
+                            )}
+
+                        </div>
                     </div>
-                    
-                    {/* Right Column: Channels List */}
-                    <div className={`flex flex-col flex-shrink-0 relative transition-all duration-300 ${isMobile ? 'w-full bg-transparent' : 'w-[360px] bg-[#0a0f1a]/95 backdrop-blur-2xl border border-white/5 rounded-2xl p-5 shadow-2xl'}`}>
-                        <div className="flex items-center justify-between mb-4 flex-shrink-0">
-                            <span className="text-[11px] font-black text-gray-400 tracking-[2px] uppercase">CANLI KANALLAR</span>
-                            <div className="relative w-[160px] group">
-                                <input 
-                                    type="text" 
-                                    placeholder="Kanal ara..." 
-                                    value={searchQuery}
-                                    onChange={e => setSearchQuery(e.target.value)}
-                                    className="w-full bg-[#111726] border border-white/5 rounded-xl py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-[#06b6d4]/50 focus:bg-[#151c2e] transition-all"
-                                />
-                                <Search className="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2 group-focus-within:text-[#06b6d4] transition-colors" />
-                            </div>
-                        </div>
-                        
-                        {/* Scrollable list of channels */}
-                        <div className="flex-1 relative min-h-0">
-                            <div className={`custom-scrollbar flex flex-col gap-3 ${isMobile ? 'relative' : 'absolute inset-0 overflow-y-auto pr-2'}`}>
-                                {(() => {
-                                    const filtered = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
-                                    if (filtered.length === 0) {
-                                        return (
-                                            <div className="flex flex-col items-center justify-center py-10 opacity-60">
-                                                <Search className="w-8 h-8 text-gray-500 mb-3" />
-                                                <span className="text-gray-400 text-xs font-semibold">Kanal bulunamadı.</span>
-                                            </div>
-                                        );
-                                    }
+                </div>
 
-                                    // Group channels
-                                    const groups: Record<string, Streamer[]> = {};
-                                    filtered.forEach(s => {
-                                        const grp = getChannelGroup(s.name);
-                                        if (!groups[grp]) groups[grp] = [];
-                                        groups[grp].push(s);
-                                    });
+                {/* Bottom Promo Banner */}
+                <div style={{ width: '100%', background: 'linear-gradient(90deg, #110000 0%, #ef4444 50%, #110000 100%)', borderRadius: '12px', padding: '2px', animation: 'pulse-red 3s infinite', marginTop: '10px' }}>
+                    <div style={{ background: '#050505', borderRadius: '10px', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#fff', fontWeight: 900, fontSize: isMobile ? '16px' : '22px' }}>%20 SINIRSIZ KAYIP BONUSU</span>
+                        <button style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '8px 20px', borderRadius: '6px', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}>Hemen Üye Ol</button>
+                    </div>
+                </div>
 
-                                    // Sort group keys based on GROUP_ORDER
-                                    const sortedGroupNames = Object.keys(groups).sort((a, b) => {
-                                        const idxA = GROUP_ORDER.indexOf(a);
-                                        const idxB = GROUP_ORDER.indexOf(b);
-                                        return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
-                                    });
+                {/* Bottom Links */}
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : 'repeat(6, 1fr)', gap: '10px', marginTop: '10px' }}>
+                    {['Bahis', 'Canlı Bahis', 'Casino', 'Canlı Casino', 'Slot Oyunu', 'Bonuslar'].map((item, idx) => (
+                        <button key={idx} style={{ background: '#111', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', padding: '12px', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s' }} className="hover:bg-[#1a1a1a] hover:border-white/10">
+                            {item}
+                        </button>
+                    ))}
+                </div>
 
-                                    return sortedGroupNames.map(groupName => (
-                                        <div key={groupName} className="flex flex-col gap-2.5 mb-2">
-                                            <div className="flex items-center gap-2 px-1 pb-1">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-[#06b6d4]"></div>
-                                                <span className="text-[10px] font-black text-[#06b6d4] uppercase tracking-[1px]">{groupName}</span>
-                                            </div>
-                                            {groups[groupName].map(s => {
-                                                const isLive = s.is_live;
-                                                const isActive = activeChannel?.id === s.id;
-                                                return (
-                                                    <div 
-                                                        key={s.id}
-                                                        onClick={() => {
-                                                            setActiveChannel({
-                                                                id: s.id, name: s.name, slug: s.kick_username || '', platform: s.platform_type,
-                                                                streamUrl: s.kick_username || '', thumbnailUrl: s.avatar_url || '',
-                                                                category: s.tags?.[0] || 'CANLI YAYIN', isLive: s.is_live, isActive: true,
-                                                                order: s.order_index, sourceType: s.source_type, platformType: s.platform_type,
-                                                                platformUsername: s.kick_username, videoUrl: s.video_url, iframeUrl: s.iframe_url,
-                                                                fallbackType: s.fallback_type, fallbackVideoUrl: s.fallback_video_url,
-                                                                fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
-                                                            } as any);
-                                                        }}
-                                                        className={`group relative flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 overflow-hidden ${
-                                                            isActive 
-                                                                ? 'bg-gradient-to-r from-[#06b6d4]/20 to-[#06b6d4]/5 border-[#06b6d4]/50' 
-                                                                : 'bg-[#111726]/80 border-white/5 hover:border-white/10 hover:bg-[#151d30]'
-                                                        } border`}
-                                                    >
-                                                        {isActive && (
-                                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#06b6d4] to-emerald-400" />
-                                                        )}
-                                                        <div className={`w-11 h-11 rounded-lg shrink-0 flex items-center justify-center p-1.5 transition-all ${
-                                                            isActive ? 'bg-black/40 border border-[#06b6d4]/30 shadow-[0_0_15px_rgba(6,182,212,0.3)]' : 'bg-black/20 border border-white/5 group-hover:bg-black/40'
-                                                        }`}>
-                                                            <img 
-                                                                src={getChannelLogo(s.name, s.avatar_url)} 
-                                                                alt={s.name} 
-                                                                className="w-full h-full object-contain"
-                                                                onError={(e) => {
-                                                                    e.currentTarget.onerror = null;
-                                                                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=1a2035&color=fff`;
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                                            <div className={`text-sm font-bold truncate transition-colors ${isActive ? 'text-white' : 'text-gray-200 group-hover:text-white'}`}>
-                                                                {s.name}
-                                                            </div>
-                                                            <div className="flex items-center gap-1.5 mt-0.5">
-                                                                <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{s.platform_type || 'TV'}</span>
-                                                                {isLive && (
-                                                                    <>
-                                                                        <span className="w-1 h-1 rounded-full bg-gray-600"></span>
-                                                                        <span className="text-[9px] font-medium text-emerald-500/80">HD</span>
-                                                                    </>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                        {isLive ? (
-                                                            <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-2 py-1 rounded-md">
-                                                                <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
-                                                                <span className="text-[9px] font-black text-red-500 tracking-wider">CANLI</span>
-                                                            </div>
-                                                        ) : (
-                                                            <span className="text-[9px] font-bold text-gray-600 bg-black/30 px-2 py-1 rounded-md">OFFLINE</span>
-                                                        )}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    ));
-                                })()}
-                            </div>
-                        </div>
+                {/* Bottom Center Logo */}
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '40px', opacity: 0.8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Tv style={{ color: '#ef4444', width: 32, height: 32 }} />
+                        <span style={{ fontSize: '32px', fontWeight: 900, color: '#fff', letterSpacing: '-1px' }}>724<span style={{ color: '#ef4444' }}>TV</span></span>
                     </div>
                 </div>
 
@@ -1064,5 +1051,4 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
         </div>
     );
 };
-
 export default TV724View;

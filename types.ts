@@ -1012,3 +1012,42 @@ export interface BettingMatch {
   };
   isActive: boolean;
 }
+
+export interface LuckyWheelPrize {
+  id: string;
+  name: string;
+  type: 'cash' | 'freespin' | 'physical' | 'special';
+  icon: string;
+  value: number;
+  weight: number;
+  color: string;
+}
+
+export interface LuckyWheelMission {
+  id: string;
+  description: string;
+  targetSymbol: string;
+  targetCount: number;
+  rewardText: string;
+}
+
+export interface LuckyWheelFakeWinner {
+  id: string;
+  username: string;
+  prizeName: string;
+  amount?: string;
+  time: string;
+}
+
+export interface LuckyWheelConfig {
+  prizes: LuckyWheelPrize[];
+  missions: LuckyWheelMission[];
+  fakeWinners: LuckyWheelFakeWinner[];
+  enableFakeFeed: boolean;
+  grandPrize: {
+    name: string;
+    image: string;
+    subtitle: string;
+  };
+  isActive: boolean;
+}

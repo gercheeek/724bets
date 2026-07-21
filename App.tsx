@@ -29,6 +29,7 @@ import LiveSupportModal from './components/LiveSupportModal';
 import SlotText from './components/SlotText';
 // Import removed
 import PromoWheel from './components/PromoWheel';
+import LuckyWheelView from './components/LuckyWheelView';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
 import SearchModal from './components/SearchModal';
 import LoyaltyPanel, { DEFAULT_LOYALTY_CONFIG } from './components/LoyaltyPanel';
@@ -40,8 +41,8 @@ import { seedEcosystemData } from './seedEcosystem';
 import { getGlobalConfig, updateGlobalConfig, supabase } from './utils/supabase';
 import { NavVisibility, DEFAULT_NAV_VISIBILITY } from './components/Header';
 import { BRANDS as INITIAL_BRANDS } from './constants';
-import { Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, Slider2Config, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany, ChatBotConfig, CasinoLobbyGame } from './types';
-import { DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG, DEFAULT_POPULAR_BETS_CONFIG, DEFAULT_TV_CONFIG, DEFAULT_LOADER_CONFIG } from './constants';
+import { LuckyWheelConfig, Brand, Coupon, BlackjackConfig, WheelConfig, SiteUser, LoyaltyConfig, PromoWheelConfig, GiveawayConfig, MarqueeConfig, WelcomePopupConfig, MatchAnalysis, SiteStatusConfig, HeroSliderConfig, Slider2Config, DailyKuponConfig, RaffleConfig, PopularBetsConfig, TVConfig, LoaderConfig, TrustedCompany, ChatBotConfig, CasinoLobbyGame } from './types';
+import { DEFAULT_LUCKY_WHEEL_CONFIG, DEFAULT_MARQUEE_CONFIG, DEFAULT_WELCOME_POPUP_CONFIG, DEFAULT_WHEEL_CONFIG, DEFAULT_SITE_STATUS_CONFIG, DEFAULT_RAFFLE_CONFIG, DEFAULT_POPULAR_BETS_CONFIG, DEFAULT_TV_CONFIG, DEFAULT_LOADER_CONFIG } from './constants';
 import { demoAnalyses, demoCoupons } from './demoData';
 import TrustedSitesView from './components/TrustedSitesView';
 import TrustedDetailView from './components/TrustedDetailView';
@@ -218,7 +219,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches'>(window.location.pathname.startsWith('/spor') ? 'spor724' : 'home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches'>(window.location.pathname.startsWith('/spor') ? 'spor724' : window.location.pathname.includes('lucky') ? 'luckywheel' : 'home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
@@ -368,6 +369,24 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   }, []);
 
   // Promo Wheel Config
+  
+  const [luckyWheelConfig, setLuckyWheelConfig] = useState<LuckyWheelConfig>(() => {
+    const saved = localStorage.getItem('luckyWheelConfig');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return DEFAULT_LUCKY_WHEEL_CONFIG;
+      }
+    }
+    return DEFAULT_LUCKY_WHEEL_CONFIG;
+  });
+
+  const handleLuckyWheelConfigChange = (cfg: LuckyWheelConfig) => {
+    setLuckyWheelConfig(cfg);
+    localStorage.setItem('luckyWheelConfig', JSON.stringify(cfg));
+  };
+
   const [promoWheelConfig, setPromoWheelConfig] = useState<PromoWheelConfig>(() => {
     const stored = localStorage.getItem('site_featured_wheel') || localStorage.getItem('site_21com_wheel');
     return stored ? JSON.parse(stored) : {
@@ -1258,9 +1277,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         setView('sports');
       } else if (cleanPath === '/canli') {
         setView('sports');
+      } else if (cleanPath === '/lucky-wheel' || cleanPath === '/luckywheel' || cleanPath === '/cark') {
+        setView('luckywheel');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['adventure', 'blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'upcomingMatches'];
+        const validViews = ['adventure', 'blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'luckywheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'upcomingMatches'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -1526,6 +1547,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         onSaveBotsConfig={handleBotsConfigChange}
         casinoLobbyGames={casinoLobbyGames}
         onSaveCasinoLobbyGames={handleCasinoLobbyGamesChange}
+        luckyWheelConfig={luckyWheelConfig}
+        onSaveLuckyWheelConfig={handleLuckyWheelConfigChange}
       />
     </ErrorBoundary>
   );
@@ -2036,7 +2059,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack') 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'luckywheel') 
             ? 'p-0 w-full max-w-full mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
@@ -2421,6 +2444,16 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               config={promoWheelConfig}
               onConfigChange={handlePromoWheelConfigChange}
               isAdmin={!!userRole}
+            />
+          </div>
+        )}
+
+        {view === 'luckywheel' && (
+          <div className="animate-fade-in min-h-screen w-full">
+            <LuckyWheelView
+              config={luckyWheelConfig}
+              siteUser={siteUser}
+              onNavigate={handleViewChange}
             />
           </div>
         )}

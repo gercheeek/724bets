@@ -278,9 +278,29 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 <div className="relative z-20 flex flex-col justify-center lg:justify-start items-start pt-0 lg:pt-5 h-full px-4 lg:px-6">
                     <h3 className="text-[22px] sm:text-[28px] lg:text-[38px] font-black text-white tracking-tighter leading-none font-['Outfit'] pb-1 transform group-hover/orig:translate-x-1 transition-transform flex flex-wrap items-center gap-1 sm:gap-2">
                         <span className="text-[#06b6d4] lowercase">724games</span> Orijinal
-                        <span className="bg-[#10b981] text-black text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse shrink-0 tracking-normal uppercase ml-1">
+                        <span className="bg-[#10b981] text-black text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse shrink-0 tracking-normal uppercase ml-1 mr-auto">
                             %99.2 RTP
                         </span>
+                        {/* Seka Çark Button inside GuestLanding */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onViewChange('luckywheel'); }}
+                          className="relative group/btn flex items-center justify-center px-3 py-1.5 ml-auto rounded-xl bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 border border-[#0ea5e9]/50 hover:border-[#38bdf8] shadow-[0_0_15px_rgba(14,165,233,0.35)] hover:shadow-[0_0_25px_rgba(14,165,233,0.7)] transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer z-50"
+                          title="Çarkıfelek Oyunu"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="relative w-5 h-5 flex items-center justify-center">
+                              <div className="absolute inset-0 bg-[#0ea5e9] blur-sm rounded-full animate-pulse opacity-80"></div>
+                              <svg className="w-4 h-4 text-white animate-[spin_8s_linear_infinite] relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <circle cx="12" cy="12" r="9" stroke="#38bdf8" strokeWidth="2" fill="none" />
+                                <path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4" stroke="#0ea5e9" strokeWidth="1.5" />
+                                <circle cx="12" cy="12" r="2.5" fill="#38bdf8" />
+                              </svg>
+                            </div>
+                            <span className="font-black text-xs tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-[#7dd3fc] to-[#0ea5e9] drop-shadow-[0_0_8px_rgba(14,165,233,0.6)] uppercase">
+                              Seka Çark
+                            </span>
+                          </div>
+                        </button>
                     </h3>
                     <div className="block"><ActivePlayersCounter type="casino" /></div>
                 </div>

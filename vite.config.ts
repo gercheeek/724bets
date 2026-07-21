@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
+      appType: 'spa',
       server: {
         port: 3000,
         strictPort: true,
@@ -13,6 +14,14 @@ export default defineConfig(({ mode }) => {
           '/api': {
             target: 'http://localhost:3001',
             changeOrigin: true,
+            configure: (proxy) => {
+              proxy.on('error', (err, req, res) => {
+                if (!res.headersSent) {
+                  res.writeHead(200, { 'Content-Type': 'application/json' });
+                  res.end(JSON.stringify({ success: false, message: 'Local API server unavailable' }));
+                }
+              });
+            }
           }
         }
       },
@@ -24,6 +33,13 @@ export default defineConfig(({ mode }) => {
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
+        }
+      },
+      build: {
+        rollupOptions: {
+          input: {
+            main: path.resolve(__dirname, 'index.html')
+          }
         }
       }
     };
