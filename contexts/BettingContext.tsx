@@ -1056,6 +1056,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // WebSocket Connection
   useEffect(() => {
+    const connectWs = () => {
       // VITE_WS_URL ortam değişkeni varsa onu kullan, yoksa yerel sunucuya bağlan
       const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:4000';
       const ws = new WebSocket(`${wsUrl}/?lang=${language}`);

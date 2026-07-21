@@ -230,8 +230,8 @@ wss.on('connection', (ws, req) => {
     });
 });
 
-const PORT = 4000;
-server.listen(PORT, () => {
-    console.log(`🚀 [PROXY] Server running on http://localhost:${PORT}`);
-    console.log(`🚀 [PROXY] WebSocket listening on ws://localhost:${PORT}`);
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 [PROXY] Server running on http://0.0.0.0:${PORT} (Accepting external connections)`);
+    console.log(`🚀 [PROXY] WebSocket listening on ws://0.0.0.0:${PORT}`);
 });
