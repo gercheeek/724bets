@@ -18,6 +18,19 @@ process.on('unhandledRejection', (reason, promise) => {
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
+// Heartbeat & Stale Connection Cleaner Interval
+const interval = setInterval(() => {
+    wss.clients.forEach((ws) => {
+        if (ws.isAlive === false) return ws.terminate();
+        ws.isAlive = false;
+        ws.ping();
+    });
+}, 30000);
+
+wss.on('close', () => {
+    clearInterval(interval);
+});
+
 const targetWsUrlBase = 'wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket';
 const targetHeaders = {
     'Origin': 'https://tarafbet981.com',
@@ -29,6 +42,11 @@ const targetHeaders = {
 };
 
 wss.on('connection', (ws, req) => {
+    ws.isAlive = true;
+    ws.on('pong', () => {
+        ws.isAlive = true;
+    });
+
     // Extract language from client request url (e.g. /?lang=tr)
     let lang = 'tur'; // default
     if (req.url && req.url.includes('lang=')) {
