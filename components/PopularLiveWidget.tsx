@@ -3,6 +3,7 @@ import { Flame, Activity, ChevronRight } from 'lucide-react';
 import { AnimatedOdd } from './AnimatedOdd';
 import { useBetting } from '../contexts/BettingContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { PlayerLogo } from './sports/PlayerLogo';
 
 interface PopularLiveWidgetProps {
     onNavigate: (view: string) => void;
@@ -188,11 +189,8 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                                 <div className="flex flex-col items-center gap-2 w-[80px] z-10">
-                                    <div 
-                                        className="w-11 h-11 rounded-full flex items-center justify-center text-white text-[13px] font-bold shadow-lg border border-white/20 backdrop-blur-sm"
-                                        style={{ backgroundColor: match.home.color }}
-                                    >
-                                        {match.home.code}
+                                    <div className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg border border-white/20 backdrop-blur-sm overflow-hidden bg-black/20">
+                                        <PlayerLogo name={match.home.name} fallbackLogo="" />
                                     </div>
                                     <span className="text-[12px] font-bold text-zinc-100 text-center leading-tight truncate w-full drop-shadow-sm">{match.home.name}</span>
                                 </div>
@@ -203,11 +201,8 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                                 </div>
                                 
                                 <div className="flex flex-col items-center gap-2 w-[80px] z-10">
-                                    <div 
-                                        className="w-11 h-11 rounded-full flex items-center justify-center text-white text-[13px] font-bold shadow-lg border border-white/20 backdrop-blur-sm"
-                                        style={{ backgroundColor: match.away.color }}
-                                    >
-                                        {match.away.code}
+                                    <div className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg border border-white/20 backdrop-blur-sm overflow-hidden bg-black/20">
+                                        <PlayerLogo name={match.away.name} fallbackLogo="" />
                                     </div>
                                     <span className="text-[12px] font-bold text-zinc-100 text-center leading-tight truncate w-full drop-shadow-sm">{match.away.name}</span>
                                 </div>
