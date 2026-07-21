@@ -6,7 +6,6 @@ import cors from 'cors';
 const app = express();
 app.use(cors());
 
-// Prevent proxy from crashing on unexpected errors
 process.on('uncaughtException', (err) => {
     console.error('🔥 [CRITICAL] Uncaught Exception:', err);
 });
@@ -31,14 +30,22 @@ wss.on('close', () => {
     clearInterval(interval);
 });
 
-const targetWsUrlBase = 'wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket';
-const targetHeaders = {
+// Primary (NoraBet - EIO=4) and Fallback (Tarafbet - EIO=3) configurations
+const PRIMARY_WS_BASE = 'wss://eu-swarm-newm.norabahis779.com/ws?organization_id=928d43dd-1219-4ab0-b33f-0e180215781e&x-region=us-south1&partnerId=55&EIO=4&transport=websocket';
+const FALLBACK_WS_BASE = 'wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket';
+
+const primaryHeaders = {
+    'Origin': 'https://norabahis779.com',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache'
+};
+
+const fallbackHeaders = {
     'Origin': 'https://tarafbet981.com',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
     'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache',
-    'Accept-Encoding': 'gzip, deflate, br, zstd',
-    'Accept-Language': 'tr,en-US;q=0.9,en;q=0.8'
+    'Pragma': 'no-cache'
 };
 
 function parseAndFilterMessage(msg) {
@@ -102,98 +109,115 @@ wss.on('connection', (ws, req) => {
         ws.isAlive = true;
     });
 
-    // Extract language from client request url (e.g. /?lang=tr)
-    let lang = 'tur'; // default
+    let lang = 'tur';
     if (req.url && req.url.includes('lang=')) {
         const params = new URLSearchParams(req.url.split('?')[1]);
         if (params.get('lang') === 'tr') lang = 'tur';
         else if (params.get('lang') === 'en') lang = 'en';
         else if (params.get('lang')) lang = params.get('lang');
     }
-    
-    const targetWsUrl = `${targetWsUrlBase}&language=${lang}&lang=${lang}`;
-    
+
     console.log(`[${new Date().toISOString()}] New client connected with lang: ${lang}`);
-    console.log('💻 [LOCAL] Frontend client connected. Opening new target connection...');
-    
-    const targetSocket = new WebSocket(targetWsUrl, { headers: targetHeaders });
+
+    let activeTargetSocket = null;
+    let isFallbackMode = false;
     let pingIntervalId = null;
     let messageBuffer = [];
     let isTargetReady = false;
 
-    targetSocket.on('open', () => {
-        console.log('✅ [PROXY] Connected to Tarafbet for client!');
-    });
-
-    targetSocket.on('message', (data) => {
-        const msg = data.toString();
+    const connectToTarget = (url, headers, isFallback = false) => {
+        console.log(`💻 [LOCAL] Connecting to ${isFallback ? 'FALLBACK (Tarafbet)' : 'PRIMARY (NoraBet Swarm)'}...`);
         
-        // Handle Engine.IO Ping/Pong
-        if (msg === '2' || msg === 'ping') {
-            targetSocket.send('3');
-            // Do NOT return here. Let the proxy forward the '2' to the frontend 
-            // so the frontend knows the connection is alive!
-        }
+        const socket = new WebSocket(url, { headers });
 
-        if (msg.startsWith('0{')) {
-            try {
-                const initData = JSON.parse(msg.substring(1));
-                if (initData.pingInterval) {
-                    pingIntervalId = setInterval(() => {
-                        if (targetSocket.readyState === WebSocket.OPEN) {
-                            targetSocket.send('2');
-                        }
-                    }, initData.pingInterval);
-                }
-                
-                // Send Socket.IO connect
-                if (targetSocket.readyState === WebSocket.OPEN) {
-                    targetSocket.send('40');
-                    isTargetReady = true;
-                    if (messageBuffer.length > 0) {
-                        for (const bmsg of messageBuffer) {
-                            targetSocket.send(bmsg);
-                        }
-                        messageBuffer = [];
-                    }
-                }
-            } catch (e) {
-                console.error('Parse error:', e);
+        socket.on('open', () => {
+            console.log(`✅ [PROXY] Connected to ${isFallback ? 'FALLBACK (Tarafbet)' : 'PRIMARY (NoraBet Swarm)'}!`);
+            activeTargetSocket = socket;
+            isFallbackMode = isFallback;
+        });
+
+        socket.on('message', (data) => {
+            const msg = data.toString();
+            
+            if (msg === '2' || msg === 'ping') {
+                socket.send('3');
             }
-        }
 
-        if (ws.readyState === WebSocket.OPEN) {
-            const filteredMsg = parseAndFilterMessage(msg);
-            ws.send(filteredMsg);
-        }
-    });
+            if (msg.startsWith('0{')) {
+                try {
+                    const initData = JSON.parse(msg.substring(1));
+                    if (initData.pingInterval) {
+                        if (pingIntervalId) clearInterval(pingIntervalId);
+                        pingIntervalId = setInterval(() => {
+                            if (socket.readyState === WebSocket.OPEN) {
+                                socket.send('2');
+                            }
+                        }, initData.pingInterval);
+                    }
+                    
+                    if (socket.readyState === WebSocket.OPEN) {
+                        socket.send('40');
+                        isTargetReady = true;
+                        if (messageBuffer.length > 0) {
+                            for (const bmsg of messageBuffer) {
+                                socket.send(bmsg);
+                            }
+                            messageBuffer = [];
+                        }
+                    }
+                } catch (e) {
+                    console.error('Parse error:', e);
+                }
+            }
 
-    targetSocket.on('close', () => {
-        console.log('⚠️ [PROXY] Target connection closed.');
-        if (pingIntervalId) clearInterval(pingIntervalId);
-        if (ws.readyState === WebSocket.OPEN) {
-            ws.close();
-        }
-    });
+            if (ws.readyState === WebSocket.OPEN) {
+                const filteredMsg = parseAndFilterMessage(msg);
+                ws.send(filteredMsg);
+            }
+        });
 
-    targetSocket.on('error', (err) => {
-        console.error('❌ [PROXY] Target error:', err.message);
-    });
+        socket.on('error', (err) => {
+            console.error(`❌ [PROXY] ${isFallback ? 'FALLBACK' : 'PRIMARY'} target error:`, err.message);
+            if (!isFallback && !activeTargetSocket) {
+                console.log('🔄 [FAILOVER] Primary connection failed on init. Switching to FALLBACK (Tarafbet)...');
+                const fallbackUrl = `${FALLBACK_WS_BASE}&language=${lang}&lang=${lang}`;
+                connectToTarget(fallbackUrl, fallbackHeaders, true);
+            }
+        });
+
+        socket.on('close', () => {
+            console.log(`⚠️ [PROXY] ${isFallback ? 'FALLBACK' : 'PRIMARY'} target connection closed.`);
+            if (pingIntervalId) clearInterval(pingIntervalId);
+            
+            if (!isFallback && !isFallbackMode) {
+                console.log('🔄 [FAILOVER] Primary (NoraBet) closed unexpectedly. Switching to FALLBACK (Tarafbet)...');
+                const fallbackUrl = `${FALLBACK_WS_BASE}&language=${lang}&lang=${lang}`;
+                connectToTarget(fallbackUrl, fallbackHeaders, true);
+            } else if (ws.readyState === WebSocket.OPEN) {
+                ws.close();
+            }
+        });
+
+        return socket;
+    };
+
+    const primaryUrl = `${PRIMARY_WS_BASE}&language=${lang}&lang=${lang}`;
+    connectToTarget(primaryUrl, primaryHeaders, false);
 
     ws.on('message', (message) => {
         const msg = message.toString();
-        if (isTargetReady && targetSocket.readyState === WebSocket.OPEN) {
-            targetSocket.send(msg);
+        if (isTargetReady && activeTargetSocket && activeTargetSocket.readyState === WebSocket.OPEN) {
+            activeTargetSocket.send(msg);
         } else {
             messageBuffer.push(msg);
         }
     });
 
     ws.on('close', () => {
-        console.log('💻 [LOCAL] Frontend disconnected. Closing target connection.');
+        console.log('💻 [LOCAL] Frontend disconnected.');
         if (pingIntervalId) clearInterval(pingIntervalId);
-        if (targetSocket.readyState === WebSocket.OPEN) {
-            targetSocket.close();
+        if (activeTargetSocket && activeTargetSocket.readyState === WebSocket.OPEN) {
+            activeTargetSocket.close();
         }
     });
 });
