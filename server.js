@@ -71,22 +71,30 @@ function parseAndFilterMessage(msg) {
                         removed_markets: ev.removed_markets,
                     };
 
-                    if (ev.data) {
-                        const d = ev.data;
-                        cleanedEv.data = {
-                            id: d.id,
-                            status: d.status,
-                            match_time: d.match_time,
-                            score: d.score,
-                            isLive: d.isLive,
-                            start_time: d.start_time,
-                            sport: d.sport ? { name: d.sport.name } : undefined,
-                            tournament: d.tournament ? { name: d.tournament.name } : undefined,
-                            country: d.country ? { name: d.country.name } : undefined,
-                            participants: d.participants ? { home: d.participants.home, away: d.participants.away } : undefined,
-                            group_markets: d.group_markets
-                        };
-                    }
+                        if (ev.data) {
+                            const d = ev.data;
+                            cleanedEv.data = {
+                                id: d.id,
+                                status: d.status,
+                                match_time: d.match_time,
+                                score: d.score,
+                                current_score: d.current_score,
+                                scores: d.scores,
+                                minute: d.minute,
+                                extended_status: d.extended_status,
+                                isLive: d.isLive,
+                                is_live_betting: d.is_live_betting,
+                                start_time: d.start_time,
+                                start_ts: d.start_ts,
+                                sport: d.sport ? { name: d.sport.name } : undefined,
+                                tournament: d.tournament ? { name: d.tournament.name } : undefined,
+                                country: d.country ? { name: d.country.name } : undefined,
+                                participants: d.participants,
+                                group_markets: d.group_markets,
+                                stats: d.stats,
+                                markets_count: d.markets_count
+                            };
+                        }
 
                     cleanedEvents.push(cleanedEv);
                 }

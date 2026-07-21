@@ -1,6 +1,7 @@
 import React from 'react';
 import { Star, Lock } from 'lucide-react';
 import { useBetting } from '../contexts/BettingContext';
+import { calculateMarketCount } from '../utils/marketUtils';
 
 export const MatchRow: React.FC<{ event: any }> = ({ event }) => {
   const { betSelections, toggleBetSelection, setSelectedMatch } = useBetting();
@@ -16,7 +17,7 @@ export const MatchRow: React.FC<{ event: any }> = ({ event }) => {
   let odd1 = "-", oddX = "-", odd2 = "-";
   let hasOdds = false;
   let isMatchLocked = false;
-  let extraMarkets = 0;
+  let extraMarkets = calculateMarketCount(event);
 
   if (data.group_markets) {
     const group = data.group_markets['full_event|0'] || data.group_markets['current|0'];
@@ -36,8 +37,6 @@ export const MatchRow: React.FC<{ event: any }> = ({ event }) => {
         }
       }
     }
-    const allGroups = Object.keys(data.group_markets).reduce((acc, k) => acc + data.group_markets[k].length, 0);
-    extraMarkets = allGroups > 0 ? allGroups : 0;
   }
   if (!hasOdds && data.status === 'started') {
     isMatchLocked = true;

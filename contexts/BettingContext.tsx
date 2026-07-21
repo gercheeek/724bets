@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useLanguage } from './LanguageContext';
+import { calculateMarketCount } from '../utils/marketUtils';
 
 // Bet Slip Item Structure
 export interface BetSelection {
@@ -47,6 +48,156 @@ interface BettingContextType {
 const BettingContext = createContext<BettingContextType | undefined>(undefined);
 
 const INITIAL_MOCK_EVENTS: WSEvent[] = [
+  // --- CLUB FRIENDLIES (Hazırlık Maçları) ---
+  {
+    id: 'friendly_1',
+    data: {
+      status: 'in_progress',
+      minute: 24,
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Real Madrid', away: 'AC Milan' },
+      score: '1 - 0',
+      start_time: new Date(Date.now() - 24 * 60000).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~1.85!~draw~3.60!~away~4.20']
+      }
+    }
+  },
+  {
+    id: 'friendly_2',
+    data: {
+      status: 'in_progress',
+      minute: 68,
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Galatasaray', away: 'Parma' },
+      score: '2 - 1',
+      start_time: new Date(Date.now() - 68 * 60000).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~1.45!~draw~4.10!~away~6.50']
+      }
+    }
+  },
+  {
+    id: 'friendly_3',
+    data: {
+      status: 'not_started',
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Fenerbahçe', away: 'Strasbourg' },
+      start_time: new Date(Date.now() + 3600000).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~1.60!~draw~3.80!~away~4.80']
+      }
+    }
+  },
+  {
+    id: 'friendly_4',
+    data: {
+      status: 'not_started',
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Bayern Munich', away: 'Tottenham' },
+      start_time: new Date(Date.now() + 7200000).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~1.95!~draw~3.50!~away~3.60']
+      }
+    }
+  },
+  {
+    id: 'friendly_5',
+    data: {
+      status: 'not_started',
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'PSG', away: 'Inter' },
+      start_time: new Date(Date.now() + 86400000).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~2.20!~draw~3.40!~away~3.10']
+      }
+    }
+  },
+  {
+    id: 'friendly_6',
+    data: {
+      status: 'not_started',
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Barcelona', away: 'Juventus' },
+      start_time: new Date(Date.now() + 86400000 * 2).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~2.10!~draw~3.50!~away~3.20']
+      }
+    }
+  },
+  {
+    id: 'friendly_7',
+    data: {
+      status: 'not_started',
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Arsenal', away: 'Bayer Leverkusen' },
+      start_time: new Date(Date.now() + 86400000 * 2).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~1.85!~draw~3.70!~away~3.90']
+      }
+    }
+  },
+  {
+    id: 'friendly_8',
+    data: {
+      status: 'in_progress',
+      minute: 12,
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Chelsea', away: 'Celtic' },
+      score: '0 - 0',
+      start_time: new Date(Date.now() - 12 * 60000).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~1.55!~draw~4.00!~away~5.50']
+      }
+    }
+  },
+  {
+    id: 'friendly_9',
+    data: {
+      status: 'in_progress',
+      minute: 85,
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Manchester City', away: 'AC Milan' },
+      score: '2 - 2',
+      start_time: new Date(Date.now() - 85 * 60000).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~2.40!~draw~1.90!~away~4.10']
+      }
+    }
+  },
+  {
+    id: 'friendly_10',
+    data: {
+      status: 'finished',
+      sport: { name: 'Soccer' },
+      tournament: { name: 'Club Friendlies' },
+      country: { name: 'World' },
+      participants: { home: 'Liverpool', away: 'Sevilla' },
+      score: '4 - 1',
+      start_time: new Date(Date.now() - 86400000).toISOString(),
+      group_markets: {
+        'full_event|0': ['|1x2|~home~1.40!~draw~4.50!~away~6.50']
+      }
+    }
+  },
   // Premier League Prelive Matches (From Screenshot)
   {
     id: 'pre_pl_1',
@@ -758,7 +909,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 awayId: `a_${item.id}`,
                 homeLogo: d.participants?.home_id ? `https://stb-images.betconstruct.com/team-logo/${d.participants.home_id}.png` : '',
                 awayLogo: d.participants?.away_id ? `https://stb-images.betconstruct.com/team-logo/${d.participants.away_id}.png` : '',
-                marketsCount: Object.keys(d.group_markets || {}).length || 1
+                marketsCount: calculateMarketCount(item)
               };
             });
             setScrapedMatches(formattedMatches);
@@ -974,16 +1125,22 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         // Filter out fake matches since we are connected and receiving socket data
         let newEvents = prev.filter(e => !e.id.toString().startsWith('mock_') && !e.id.toString().startsWith('pre_') && !e.id.toString().startsWith('pop_'));
         let hasChanges = false;
+
+        // Build O(1) fast lookup index map
+        const eventIndexMap = new Map<string | number, number>();
+        newEvents.forEach((item, index) => {
+          eventIndexMap.set(item.id, index);
+        });
         
         payloads.forEach(newEventsData => {
           if (!Array.isArray(newEventsData)) return;
           
           newEventsData.forEach((ev: any) => {
             if (!ev.data) return;
-            const idx = newEvents.findIndex(e => e.id === ev.id);
+            const idx = eventIndexMap.get(ev.id);
             hasChanges = true;
             
-            if (idx >= 0) {
+            if (idx !== undefined && idx >= 0) {
               const prevData = newEvents[idx].data || {};
               const nextData = ev.data || {};
               
@@ -1027,6 +1184,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 }
               };
             } else if (ev.data?.sport) {
+              eventIndexMap.set(ev.id, newEvents.length);
               newEvents.push(ev);
             }
           });

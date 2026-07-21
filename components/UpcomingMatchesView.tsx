@@ -6,6 +6,7 @@ import {
   ChevronLeft, ChevronRight, Star
 } from 'lucide-react';
 import { MatchInfo } from './sports/types';
+import { calculateMarketCount } from '../utils/marketUtils';
 
 const mapSportName = (name: string, lang: string) => {
   if (!name) return lang === 'tr' ? 'Futbol' : 'Soccer';
@@ -165,7 +166,7 @@ export const UpcomingMatchesView: React.FC = () => {
         awayId: `a_${ev.id}`,
         homeLogo: homeLogoUrl,
         awayLogo: awayLogoUrl,
-        marketsCount: Object.keys(data.group_markets || {}).length || 1
+        marketsCount: calculateMarketCount(ev)
       });
     });
     // Return parsed matches loaded dynamically from contexts

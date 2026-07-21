@@ -625,28 +625,19 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
                 {/* --- PRO CENTER HUB DESIGN (IMAGE BASED) --- */}
                 <button
                   onClick={siteUser ? handleSpin : handleRegisterClick}
-                  className={`spin-btn-v absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28%] h-[28%] z-20 rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-95 ${isSpinning ? 'pointer-events-none scale-95 opacity-90' : ''}`}
-                  style={{
-                    backgroundImage: `url("https://spider.betlivo303.com/Common/GetImage/000000000000000000000000e40936802367015d11bfbc010e16508d34d6282095844c7dc7f115548fd1037873fa6d422780ba5db908b58dc1da352d20382022ba09bb3d31cb37e34e/Button")`,
-                    backgroundSize: '100% 100%',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.9))',
-                    border: 'none',
-                    outline: 'none',
-                    boxShadow: 'none'
-                  }}
+                  className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[22%] h-[22%] z-20 rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-95 ${isSpinning ? 'pointer-events-none scale-95 opacity-90' : ''} bg-gradient-to-b from-[#082b15] to-[#021106] flex items-center justify-center shadow-[0_15px_35px_rgba(0,0,0,0.9),_inset_0_4px_10px_rgba(255,255,255,0.1),_inset_0_-10px_20px_rgba(0,0,0,0.9)] border-[2px] border-[#10b981]/20 overflow-hidden`}
                 >
-                  {/* Center Cover to hide old logo and show 3-leaf clover */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[42%] h-[42%] rounded-full bg-gradient-to-b from-[#062a14] to-[#041a0c] flex items-center justify-center shadow-[inset_0_4px_10px_rgba(0,0,0,0.9)] pointer-events-none border border-[#10b981]/20">
-                    <svg viewBox="0 0 100 100" className="w-[60%] h-[60%] text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" fill="currentColor">
+                    {/* Glassy Mirror Shine (Ayna Parlaması) */}
+                    <div className="absolute top-0 left-0 right-0 h-[45%] bg-gradient-to-b from-white/30 to-transparent rounded-t-full pointer-events-none z-0"></div>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none z-0 mix-blend-overlay"></div>
+
+                    <svg viewBox="0 0 100 100" className="w-[55%] h-[55%] text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] relative z-10" fill="currentColor">
                       {/* 3-leaf clover (Shamrock) */}
                       <path d="M 50,48 C 30,30 35,10 50,20 C 65,10 70,30 50,48 Z" />
                       <path d="M 46,52 C 30,35 10,40 20,55 C 10,70 30,75 46,52 Z" />
                       <path d="M 54,52 C 70,35 90,40 80,55 C 90,70 70,75 54,52 Z" />
                       <path d="M 50,52 Q 45,75 40,90 L 46,90 Q 51,75 50,52 Z" />
                     </svg>
-                  </div>
                 </button>
 
               </div>

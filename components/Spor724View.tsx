@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useBetting } from '../contexts/BettingContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { calculateMarketCount } from '../utils/marketUtils';
 import { SportsHeroBanner } from './SportsHeroBanner';
 import { AnimatedOdd } from './AnimatedOdd';
 import Footer from './Footer';
-import { ArrowRight, Trophy, Star, Bell, Clock, Search, ShieldCheck, Zap, Activity, Target, Gamepad2, Flame } from 'lucide-react';
+import { ArrowRight, Trophy, Star, Bell, Clock, Search, ShieldCheck, Zap, Activity, Target, Gamepad2, Flame, Volume2, VolumeX, ChevronDown } from 'lucide-react';
 import { SidebarMenu } from './sports/SidebarMenu';
 import { DualRightPanel } from './sports/DualRightPanel';
 import { MatchCard } from './sports/MatchCard';
+import { LiveMatchModal } from './sports/LiveMatchModal';
 import { useBetSlip } from '../contexts/BetSlipContext';
 import { MatchInfo } from './sports/types';
 import { MessageCircle } from 'lucide-react';
@@ -87,8 +89,29 @@ const getCountryFlag = (country: string) => {
     'Brezilya': '🇧🇷', 'Brazil': '🇧🇷',
     'İsveç': '🇸🇪', 'Sweden': '🇸🇪',
     'Kazakistan': '🇰🇿', 'Kazakhstan': '🇰🇿',
-    'Paraguay': '🇵🇾',
     'Finlandiya': '🇫🇮', 'Finland': '🇫🇮',
+    'Litvanya': '🇱🇹', 'Lithuania': '🇱🇹',
+    'Özbekistan': '🇺🇿', 'Uzbekistan': '🇺🇿',
+    'Estonya': '🇪🇪', 'Estonia': '🇪🇪',
+    'Meksika': '🇲🇽', 'Mexico': '🇲🇽',
+    'Norveç': '🇳🇴', 'Norway': '🇳🇴',
+    'Paraguay': '🇵🇾',
+    'Portekiz': '🇵🇹', 'Portugal': '🇵🇹',
+    'Hollanda': '🇳🇱', 'Netherlands': '🇳🇱',
+    'Belçika': '🇧🇪', 'Belgium': '🇧🇪',
+    'Yunanistan': '🇬🇷', 'Greece': '🇬🇷',
+    'Ukrayna': '🇺🇦', 'Ukraine': '🇺🇦',
+    'Avusturya': '🇦🇹', 'Austria': '🇦🇹',
+    'İsviçre': '🇨🇭', 'Switzerland': '🇨🇭',
+    'Danimarka': '🇩🇰', 'Denmark': '🇩🇰',
+    'İskoçya': '🏴󠁧󠁢󠁳󠁣󠁴󠁿', 'Scotland': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+    'Hırvatistan': '🇭🇷', 'Croatia': '🇭🇷',
+    'Arjantin': '🇦🇷', 'Argentina': '🇦🇷',
+    'ABD': '🇺🇸', 'USA': '🇺🇸',
+    'Japonya': '🇯🇵', 'Japan': '🇯🇵',
+    'Güney Kore': '🇰🇷', 'Korea': '🇰🇷',
+    'Suudi Arabistan': '🇸🇦', 'Saudi Arabia': '🇸🇦',
+    'Mısır': '🇪🇬', 'Egypt': '🇪🇬',
     'Uluslararası': '🌍', 'International': '🌍',
     'Uluslararası (Kulüpler)': '🏆', 'International Clubs': '🏆',
   };
@@ -182,12 +205,12 @@ const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   
   let homeLogoUrl = data.participants?.ByNumber?.['1']?.LogoPath || '';
   if (!homeLogoUrl && homeTeamId) {
-    homeLogoUrl = `https://stb-images.betconstruct.com/team-logo/${homeTeamId}.png`;
+    homeLogoUrl = `https://opt-images.betconstruct.com/team-logo/${homeTeamId}.png`;
   }
   
   let awayLogoUrl = data.participants?.ByNumber?.['2']?.LogoPath || '';
   if (!awayLogoUrl && awayTeamId) {
-    awayLogoUrl = `https://stb-images.betconstruct.com/team-logo/${awayTeamId}.png`;
+    awayLogoUrl = `https://opt-images.betconstruct.com/team-logo/${awayTeamId}.png`;
   }
   
   const countryName = mapCountryName(data.country?.name, language);
@@ -261,7 +284,8 @@ const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     awayId,
     homeLogo: homeLogoUrl,
     awayLogo: awayLogoUrl,
-    marketsCount: Object.keys(data.group_markets || {}).length || 1
+    marketsCount: data.markets_count || calculateMarketCount(ev),
+    rawEvent: ev,
   };
 
   const virtualKeywords = [
@@ -288,6 +312,9 @@ const parseMatchData = (ev: any, language: string): MatchInfo | null => {
 
 export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   const { language } = useLanguage();
+  const { isConnected, subscribeToSport, messages } = useBetting();
+  const [selectedMatch, setSelectedMatch] = useState<MatchInfo | null>(null);
+  const [activeTab, setActiveTab] = useState('live');
   const allSportsTabName = language === 'tr' ? 'Tüm Sporlar' : 'All Sports';
   const [activeSport, setActiveSport] = useState(allSportsTabName);
   const [activeCountry, setActiveCountry] = useState<string | null>(null);
@@ -325,7 +352,104 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   const [goalScoredMatches, setGoalScoredMatches] = useState<string[]>([]);
   const { events } = useBetting();
 
-  // Simulate goals for visual effect
+  // Collapsible Leagues State
+  const [collapsedLeagues, setCollapsedLeagues] = useState<Record<string, boolean>>({});
+
+  const toggleLeagueCollapse = (leagueName: string) => {
+    setCollapsedLeagues(prev => ({
+      ...prev,
+      [leagueName]: !prev[leagueName]
+    }));
+  };
+
+  // Goal Sound Toggle State (persisted in localStorage)
+  const [isGoalSoundEnabled, setIsGoalSoundEnabled] = useState<boolean>(() => {
+    return localStorage.getItem('724_goal_sound') !== 'false';
+  });
+
+  const playGoalSound = () => {
+    try {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) return;
+      const ctx = new AudioContextClass();
+
+      // Sound 1: Referee Whistle
+      const playWhistleNote = (freq: number, startTime: number, duration: number) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + startTime);
+        
+        gain.gain.setValueAtTime(0.25, ctx.currentTime + startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startTime + duration);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start(ctx.currentTime + startTime);
+        osc.stop(ctx.currentTime + startTime + duration);
+      };
+
+      // Double whistle: Beep-Beep!
+      playWhistleNote(2400, 0, 0.12);
+      playWhistleNote(2800, 0.14, 0.25);
+
+      // Sound 2: Stadium Cheer Chord (C5, E5, G5, C6)
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + 0.1 + i * 0.04);
+        
+        gain.gain.setValueAtTime(0.18, ctx.currentTime + 0.1 + i * 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7 + i * 0.04);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start(ctx.currentTime + 0.1 + i * 0.04);
+        osc.stop(ctx.currentTime + 0.7 + i * 0.04);
+      });
+    } catch (e) {
+      // Audio autoplay policy fallback
+    }
+  };
+
+  const toggleGoalSound = () => {
+    setIsGoalSoundEnabled(prev => {
+      const next = !prev;
+      localStorage.setItem('724_goal_sound', String(next));
+      if (next) playGoalSound();
+      return next;
+    });
+  };
+
+  // Track live score changes to trigger goal sound & highlight
+  const prevScoresRef = useRef<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!matches || matches.length === 0) return;
+
+    matches.forEach(m => {
+      if (m.isLive && m.score && m.score !== '-') {
+        const prev = prevScoresRef.current[m.id];
+        if (prev && prev !== m.score) {
+          // Goal scored!
+          setGoalScoredMatches(gPrev => [...gPrev, m.id]);
+          if (isGoalSoundEnabled) {
+            playGoalSound();
+          }
+          setTimeout(() => {
+            setGoalScoredMatches(gPrev => gPrev.filter(id => id !== m.id));
+          }, 4000);
+        }
+        prevScoresRef.current[m.id] = m.score;
+      }
+    });
+  }, [matches, isGoalSoundEnabled]);
+
+  // Goal simulation for visual demonstration
   useEffect(() => {
     if (isLoading || matches.length === 0) return;
     
@@ -334,15 +458,18 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
       if (liveMatches.length > 0) {
         const randomMatch = liveMatches[Math.floor(Math.random() * liveMatches.length)];
         setGoalScoredMatches(prev => [...prev, randomMatch.id]);
+        if (isGoalSoundEnabled) {
+          playGoalSound();
+        }
         
         setTimeout(() => {
           setGoalScoredMatches(prev => prev.filter(id => id !== randomMatch.id));
         }, 4000);
       }
-    }, 8000);
+    }, 10000);
 
     return () => clearInterval(interval);
-  }, [matches, isLoading]);
+  }, [matches, isLoading, isGoalSoundEnabled]);
 
   useEffect(() => {
     if (!events || events.length === 0) {
@@ -486,8 +613,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
       {/* ═══════════ MAIN CONTENT AREA ═══════════ */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10 bg-zinc-950">
         
-        {/* Ambient Glow */}
-        <div className="absolute top-[-200px] left-1/4 w-[600px] h-[600px] bg-emerald-500/[0.03] rounded-full blur-[120px] pointer-events-none"></div>
+        {/* Luxury Ambient Glows */}
+        <div className="absolute top-[-250px] left-1/4 w-[700px] h-[700px] bg-emerald-500/[0.04] rounded-full blur-[140px] pointer-events-none"></div>
+        <div className="absolute top-[250px] right-1/4 w-[500px] h-[500px] bg-purple-500/[0.02] rounded-full blur-[160px] pointer-events-none"></div>
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10" style={{ scrollbarWidth: 'thin', scrollbarColor: '#27272a #09090b' }}>
@@ -496,21 +624,48 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
 
           {/* ═══════════ SECTION HEADER & TOGGLES ═══════════ */}
           <div className="px-4 pt-4 pb-2">
-            <div className="flex items-center gap-6 mb-5 border-b border-zinc-800 pb-2">
-              <div 
-                onClick={() => setViewMode('live')}
-                className={`flex items-center gap-2 cursor-pointer transition-all ${viewMode === 'live' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-              >
-                <div className={`w-2.5 h-2.5 rounded-full ${viewMode === 'live' ? 'bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-zinc-600'}`}></div>
-                <span className="text-zinc-100 font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Canlı Bahis' : 'Live Betting'}</span>
+            <div className="flex items-center justify-between gap-4 mb-5 border-b border-zinc-800 pb-2">
+              <div className="flex items-center gap-6">
+                <div 
+                  onClick={() => setViewMode('live')}
+                  className={`flex items-center gap-2 cursor-pointer transition-all ${viewMode === 'live' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                >
+                  <div className={`w-2.5 h-2.5 rounded-full ${viewMode === 'live' ? 'bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-zinc-600'}`}></div>
+                  <span className="text-zinc-100 font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Canlı Bahis' : 'Live Betting'}</span>
+                </div>
+                <div 
+                  onClick={() => setViewMode('bulletin')}
+                  className={`flex items-center gap-2 cursor-pointer transition-all ${viewMode === 'bulletin' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+                >
+                  <div className={`w-2.5 h-2.5 rounded-full ${viewMode === 'bulletin' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-zinc-600'}`}></div>
+                  <span className="text-zinc-100 font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Maç Bülteni' : 'Bulletin'}</span>
+                </div>
               </div>
-              <div 
-                onClick={() => setViewMode('bulletin')}
-                className={`flex items-center gap-2 cursor-pointer transition-all ${viewMode === 'bulletin' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+
+              {/* Goal Sound Toggle Button */}
+              <button
+                onClick={toggleGoalSound}
+                title={isGoalSoundEnabled ? 'Gol Sesini Kapat' : 'Gol Sesini Aç'}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-sm cursor-pointer ${
+                  isGoalSoundEnabled
+                    ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)] hover:bg-emerald-500/20'
+                    : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800'
+                }`}
               >
-                <div className={`w-2.5 h-2.5 rounded-full ${viewMode === 'bulletin' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-zinc-600'}`}></div>
-                <span className="text-zinc-100 font-bold text-[16px] tracking-wide">{language === 'tr' ? 'Maç Bülteni' : 'Bulletin'}</span>
-              </div>
+                {isGoalSoundEnabled ? (
+                  <>
+                    <Volume2 size={15} className="text-emerald-400 animate-pulse shrink-0" />
+                    <span className="hidden sm:inline">Gol Sesi: Açık</span>
+                    <span className="sm:hidden">Ses: Açık</span>
+                  </>
+                ) : (
+                  <>
+                    <VolumeX size={15} className="text-zinc-500 shrink-0" />
+                    <span className="hidden sm:inline">Gol Sesi: Kapalı</span>
+                    <span className="sm:hidden">Ses: Kapalı</span>
+                  </>
+                )}
+              </button>
             </div>
 
             {/* Date Filter Pills (Only in Bulletin Mode) */}
@@ -536,15 +691,32 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
               </div>
             )}
 
-            {/* Sport Filter Tabs */}
-            <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+            {/* Sport Filter Tabs (Futuristic Modular Glass Cards) */}
+            <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
               <button 
                 onClick={() => { setActiveSport(allSportsTabName); setActiveCountry(null); }}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-[12.5px] font-bold transition-all ${isAllSportsSelected ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
+                className={`flex items-center gap-3.5 px-5 py-3.5 rounded-xl whitespace-nowrap text-[12.5px] font-black transition-all duration-300 border relative overflow-hidden group select-none ${
+                  isAllSportsSelected 
+                    ? 'bg-[#0f111a] border-[#202538] text-white shadow-[0_6px_20px_rgba(0,0,0,0.4)]' 
+                    : 'bg-[#09090b]/60 border-[#18181b]/35 text-zinc-500 hover:text-zinc-200 hover:border-zinc-800/80 hover:bg-[#121217]/50'
+                }`}
               >
-                <span>🌟</span>
-                <span className="tracking-wide">{allSportsTabName}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-800/80 text-zinc-300 font-bold">{currentMatches.length}</span>
+                <div className={`p-1.5 rounded-lg transition-colors ${
+                  isAllSportsSelected ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-[#18181b] text-zinc-600 border border-transparent'
+                }`}>
+                  🌟
+                </div>
+                <div className="flex flex-col items-start leading-none gap-1">
+                  <span className="tracking-widest uppercase text-[11px]">{allSportsTabName}</span>
+                  <span className={`text-[9.5px] font-black tracking-wider ${isAllSportsSelected ? 'text-emerald-400' : 'text-zinc-600'}`}>
+                    {currentMatches.length} {language === 'tr' ? 'MAÇ' : 'MATCHES'}
+                  </span>
+                </div>
+
+                {/* Bottom Neon Accent Underline */}
+                {isAllSportsSelected && (
+                  <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
+                )}
               </button>
 
               {sportsList.map(sport => {
@@ -555,11 +727,28 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                   <button 
                     key={sport}
                     onClick={() => { setActiveSport(sport); setActiveCountry(null); }}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-[12.5px] font-bold transition-all ${isActive ? 'bg-zinc-900 text-zinc-100 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
+                    className={`flex items-center gap-3.5 px-5 py-3.5 rounded-xl whitespace-nowrap text-[12.5px] font-black transition-all duration-300 border relative overflow-hidden group select-none ${
+                      isActive 
+                        ? 'bg-[#0f111a] border-[#202538] text-white shadow-[0_6px_20px_rgba(0,0,0,0.4)]' 
+                        : 'bg-[#09090b]/60 border-[#18181b]/35 text-zinc-500 hover:text-zinc-200 hover:border-zinc-800/80 hover:bg-[#121217]/50'
+                    }`}
                   >
-                    <span className={isActive ? 'text-emerald-400' : ''}>{getSportIcon(sport)}</span>
-                    <span className="tracking-wide">{sport}</span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400 font-bold">{count}</span>
+                    <div className={`p-1.5 rounded-lg transition-colors ${
+                      isActive ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-[#18181b] text-zinc-600 border border-transparent'
+                    }`}>
+                      {getSportIcon(sport)}
+                    </div>
+                    <div className="flex flex-col items-start leading-none gap-1">
+                      <span className="tracking-widest uppercase text-[11px]">{sport}</span>
+                      <span className={`text-[9.5px] font-black tracking-wider ${isActive ? 'text-emerald-400' : 'text-zinc-600'}`}>
+                        {count} {language === 'tr' ? 'MAÇ' : 'MATCHES'}
+                      </span>
+                    </div>
+
+                    {/* Bottom Neon Accent Underline */}
+                    {isActive && (
+                      <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
+                    )}
                   </button>
                 );
               })}
@@ -601,45 +790,88 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
 
               return (
                 <div key={sportName} className="mb-8">
-                  {/* SPORT SECTION HEADER */}
-                  <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-zinc-900 via-zinc-900/90 to-zinc-900/40 border border-zinc-800/80 rounded-xl mb-4 shadow-md">
-                    <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                      {getSportIcon(sportName)}
+                  {/* SPORT SECTION HEADER (Futuristic Gaming HUD Style) */}
+                  <div className="flex items-center justify-between mb-5 border-b border-[#27272a]/45 pb-3 mt-4 select-none">
+                    <div className="flex items-center gap-3">
+                      {/* Pulse Glow Line */}
+                      <div className="w-1.5 h-6 bg-emerald-500 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.85)] animate-pulse"></div>
+                      <div className="flex flex-col">
+                        <span className="text-[9px] font-black text-emerald-400/90 uppercase tracking-[0.25em] leading-none mb-1">
+                          {language === 'tr' ? 'BÜLTEN BAŞLIĞI' : 'BULLETIN SECTION'}
+                        </span>
+                        <h2 className="text-[19px] font-black text-white tracking-widest uppercase flex items-center gap-2.5">
+                          {sportName}
+                          <span className="text-[10px] font-black px-2 py-0.5 rounded bg-[#121217] text-emerald-400 border border-emerald-500/25 tracking-wider uppercase">
+                            {sportMatches.length} {language === 'tr' ? 'Maç' : 'Matches'}
+                          </span>
+                        </h2>
+                      </div>
                     </div>
-                    <h3 className="text-[14px] md:text-[15px] font-black text-zinc-100 uppercase tracking-wider flex-1">
-                      {sportName}
-                    </h3>
-                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-zinc-800/90 text-emerald-400 border border-emerald-500/20">
-                      {sportMatches.length} {language === 'tr' ? 'Maç' : 'Matches'}
-                    </span>
                   </div>
 
                   {/* LEAGUES */}
-                  {sortedSportLeagues.map(league => {
+                  {sortedSportLeagues.map((league, idx) => {
                     const leagueMatches = sportGroupedByLeague[league] || [];
                     const firstMatch = leagueMatches[0];
                     const flag = getCountryFlag(firstMatch?.country || '');
                     
+                    // First 3 leagues of each sport category are expanded (open) by default, rest are collapsed.
+                    // If user manually clicked, we respect the user's toggle choice.
+                    const isCollapsed = collapsedLeagues[league] !== undefined
+                      ? collapsedLeagues[league]
+                      : idx >= 3;
+                    
+                    // Fixed Turkish character toLocaleUpperCase('en-US') to prevent dotted İ bug on Turkish browsers
+                    const formattedLeagueName = league.toLocaleUpperCase('en-US');
+                    
                     return (
                       <div key={league} className="mb-4 pl-0 md:pl-1">
-                        {/* League Header */}
-                        <div className="flex items-center gap-3 py-2.5 px-4 bg-gradient-to-r from-zinc-900 to-zinc-900/40 mb-3 border-l-[3px] border-l-emerald-500 rounded-r-xl relative overflow-hidden group">
+                        {/* League Header (Collapsible Accordion) */}
+                        <div 
+                          onClick={() => toggleLeagueCollapse(league)}
+                          className={`flex items-center gap-3 py-3.5 px-4 bg-gradient-to-r mb-2.5 rounded-r-xl relative overflow-hidden group cursor-pointer transition-all duration-300 select-none border-l-[3px] ${
+                            isCollapsed
+                              ? 'from-zinc-950/80 via-zinc-900/50 to-transparent border-l-zinc-800 hover:border-l-emerald-500/30 hover:from-zinc-900/80 hover:to-zinc-900/10'
+                              : 'from-[#0f111a] via-[#090b11]/80 to-transparent border-l-emerald-500 shadow-[inset_1px_0_0_rgba(16,185,129,0.05),0_4px_12px_rgba(0,0,0,0.25)]'
+                          }`}
+                        >
                           <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                           <span className="text-[16px] md:text-[18px] drop-shadow-md relative z-10">{flag}</span>
-                          <span className="text-[11px] md:text-[12px] text-zinc-300 font-bold truncate flex-1 uppercase tracking-widest relative z-10">{league}</span>
-                          <Star className="w-4 h-4 text-zinc-600 hover:text-yellow-500 transition-all cursor-pointer relative z-10 hover:scale-110 drop-shadow-sm" />
+                          <span className="text-[11.5px] md:text-[12.5px] text-zinc-200 font-bold truncate flex-1 tracking-widest relative z-10">{formattedLeagueName}</span>
+                          
+                          <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full transition-all duration-300 relative z-10 border ${
+                            isCollapsed
+                              ? 'bg-zinc-900/80 text-zinc-500 border-white/[0.02]'
+                              : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25 shadow-[0_0_8px_rgba(16,185,129,0.1)]'
+                          }`}>
+                            {leagueMatches.length} {language === 'tr' ? 'maç' : 'matches'}
+                          </span>
+
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); }}
+                            className="p-1.5 text-zinc-600 hover:text-yellow-500 transition-all relative z-10 hover:scale-110"
+                          >
+                            <Star className="w-3.5 h-3.5 transition-colors" />
+                          </button>
+
+                          <div className="p-1 text-zinc-400 group-hover:text-white transition-transform relative z-10">
+                            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isCollapsed ? '-rotate-90 text-zinc-500' : 'rotate-0 text-emerald-400'}`} />
+                          </div>
                         </div>
                         
-                        {/* Match Rows */}
-                        <div className="flex flex-col gap-2">
-                          {leagueMatches.map((match) => (
-                            <MatchCard 
-                              key={match.id}
-                              match={match}
-                              isGoal={goalScoredMatches.includes(match.id)}
-                            />
-                          ))}
-                        </div>
+                        {/* Match Rows (Collapsible) */}
+                        {!isCollapsed && (
+                          <div className="flex flex-col gap-2 transition-all duration-300">
+                            {leagueMatches.map((match) => (
+                              <MatchCard 
+                                key={match.id}
+                                match={match}
+                                isGoal={goalScoredMatches.includes(match.id)}
+                                onSelect={setSelectedMatch}
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -666,6 +898,13 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         Toggle is now managed within the DualRightPanel's sticky bottom bar.
       */}
 
+      {/* Live Match Details Modal */}
+      {selectedMatch && (
+        <LiveMatchModal 
+          match={selectedMatch} 
+          onClose={() => setSelectedMatch(null)} 
+        />
+      )}
     </div>
   );
-}
+};

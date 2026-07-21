@@ -30,16 +30,23 @@ const AppLoader: React.FC<AppLoaderProps> = ({ fadeOut = false, onComplete, isRe
             fontWeight: 900,
             color: '#fff',
           }}>
-            <SlotText text="724bets" className="text-[#06b6d4] lowercase tracking-tight" onComplete={onComplete} isReady={isReady} />
-            <div className="flex items-center justify-center w-5 h-5 rounded-full border-[3px] border-[#06b6d4] ml-2 -mt-6">
-               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-[#06b6d4]">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            <div className="flex">
+               <SlotText text="724" className="text-white lowercase tracking-tight" />
+               <SlotText text="bets" className="text-[#10b981] lowercase tracking-tight" onComplete={onComplete} isReady={isReady} />
+            </div>
+            <div className="flex items-center justify-center w-8 h-8 ml-2 -mt-6">
+               <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#10b981] drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]">
+                  {/* 3-leaf clover (Shamrock) */}
+                  <path d="M 50,48 C 30,30 35,10 50,20 C 65,10 70,30 50,48 Z" />
+                  <path d="M 46,52 C 30,35 10,40 20,55 C 10,70 30,75 46,52 Z" />
+                  <path d="M 54,52 C 70,35 90,40 80,55 C 90,70 70,75 54,52 Z" />
+                  <path d="M 50,52 Q 45,75 40,90 L 46,90 Q 51,75 50,52 Z" />
                </svg>
             </div>
           </span>
         </div>
         <div className="mt-8 w-32 h-1 bg-[#111111] rounded-full overflow-hidden">
-          <div className="h-full bg-[#06b6d4] w-1/2 rounded-full animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
+          <div className="h-full bg-[#10b981] w-1/2 rounded-full animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
         </div>
       </div>
     </div>,

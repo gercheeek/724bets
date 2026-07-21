@@ -29,6 +29,7 @@ import LiveSupportModal from './components/LiveSupportModal';
 import SlotText from './components/SlotText';
 // Import removed
 import PromoWheel from './components/PromoWheel';
+import WheelDashboard from './components/WheelDashboard';
 import LuckyWheelView from './components/LuckyWheelView';
 import GiveawayView, { DEFAULT_GIVEAWAY_CONFIG } from './components/GiveawayView';
 import SearchModal from './components/SearchModal';
@@ -1583,10 +1584,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       setActiveCasinoGame(null);
     }
     // Lucky Wheel is members-only
-    if (v === 'wheel' && !siteUser && !userRole) {
-      setAuthModalMode('member');
-      return;
-    }
+    // Disabled login block to allow instant preview of WheelDashboard
 
     // Push new history state
     let path = '/';
@@ -1940,9 +1938,13 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                     <span className="text-[#10B981] font-extrabold text-2xl sm:text-3xl tracking-tight lowercase">
                       724bets
                     </span>
-                    <div className="flex items-center justify-center w-4 h-4 sm:w-4 sm:h-4 rounded-full border-[2px] border-[#10B981] ml-1 -mt-4">
-                      <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" className="text-[#10B981]">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 ml-1 -mt-4">
+                      <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#10B981] drop-shadow-[0_0_5px_rgba(16,185,129,0.8)]">
+                        {/* 3-leaf clover (Shamrock) */}
+                        <path d="M 50,48 C 30,30 35,10 50,20 C 65,10 70,30 50,48 Z" />
+                        <path d="M 46,52 C 30,35 10,40 20,55 C 10,70 30,75 46,52 Z" />
+                        <path d="M 54,52 C 70,35 90,40 80,55 C 90,70 70,75 54,52 Z" />
+                        <path d="M 50,52 Q 45,75 40,90 L 46,90 Q 51,75 50,52 Z" />
                       </svg>
                     </div>
                   </div>
@@ -2438,17 +2440,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
-        {view === 'wheel' && (
-          <div className="animate-fade-in">
-            <PromoWheel
-              config={promoWheelConfig}
-              onConfigChange={handlePromoWheelConfigChange}
-              isAdmin={!!userRole}
-            />
-          </div>
-        )}
-
-        {view === 'luckywheel' && (
+        {(view === 'wheel' || view === 'luckywheel') && (
           <div className="animate-fade-in min-h-screen w-full">
             <LuckyWheelView
               config={luckyWheelConfig}
