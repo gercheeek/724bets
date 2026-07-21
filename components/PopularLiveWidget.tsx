@@ -105,6 +105,17 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                 }
             }
 
+            let priority = 0;
+            const hl = homeTeam.toLowerCase();
+            const al = awayTeam.toLowerCase();
+            const lg = league.toLowerCase();
+            const isTurkish = hl.includes('galatasaray') || hl.includes('fenerbah') || hl.includes('beşiktaş') || hl.includes('besiktas') || hl.includes('trabzon') || lg.includes('türkiye') || lg.includes('turkey') || lg.includes('super lig') || lg.includes('süper');
+            const isMajor = lg.includes('champions') || lg.includes('premier') || lg.includes('la liga') || lg.includes('serie a') || lg.includes('bundesliga') || hl.includes('real madrid') || hl.includes('barcelona') || hl.includes('bayern') || hl.includes('city') || hl.includes('arsenal') || hl.includes('liverpool') || hl.includes('milan') || hl.includes('inter') || hl.includes('chelsea');
+
+            if (isTurkish) priority += 100;
+            if (isMajor) priority += 50;
+            if (isLive) priority += 1000;
+
             if (homeOdd !== '-' || awayOdd !== '-') {
                 parsedMatches.push({
                     id: ev.id,
@@ -116,14 +127,19 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                     isUpcoming: !isLive,
                     homeOdd,
                     drawOdd,
-                    awayOdd
+                    awayOdd,
+                    priority
                 });
             }
         });
         
-        // Show only the top 6 most relevant matches (live ones first)
-        const sorted = parsedMatches.sort((a, b) => (a.isUpcoming === b.isUpcoming ? 0 : a.isUpcoming ? 1 : -1));
-        setMatches(sorted.slice(0, 6));
+        // Prioritize Turkish/Major teams and Live matches
+        const sorted = parsedMatches.sort((a, b) => b.priority - a.priority);
+        
+        // Remove duplicates by ID (sometimes swarm sends multiple events for the same match)
+        const uniqueMatches = Array.from(new Map(sorted.map(m => [m.id, m])).values());
+        
+        setMatches(uniqueMatches.slice(0, 6));
 
     }, [events, language]);
 
@@ -141,69 +157,70 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                     <div 
                         key={idx} 
                         onClick={() => onNavigate('sports')}
-                        className="relative rounded-xl overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all duration-300"
-                        style={{ 
-                            background: '#0a0f16', 
-                            border: '1px solid rgba(255,255,255,0.03)',
-                            boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
-                        }}
+                        className="relative rounded-2xl overflow-hidden cursor-pointer group hover:-translate-y-1 transition-all duration-500 bg-white/5 backdrop-blur-xl border border-white/10 hover:border-emerald-500/30 hover:bg-white/10 hover:shadow-[0_8px_32px_0_rgba(16,185,129,0.15)] shadow-[0_4px_24px_-8px_rgba(0,0,0,0.5)]"
                     >
+                        {/* Shimmer/Reflection Effect */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.05] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform -translate-x-full group-hover:translate-x-full" style={{ transition: 'all 1.5s ease' }} />
+                        
                         <div className="relative z-10 p-4">
                             {/* Top row */}
                             <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-1.5 text-gray-400">
-                                    <Activity className="w-3.5 h-3.5" />
-                                    <span className="text-[11px] font-bold truncate max-w-[140px]">{match.league}</span>
+                                <div className="flex items-center gap-1.5 text-zinc-300">
+                                    <Activity className="w-3.5 h-3.5 text-emerald-400/70" />
+                                    <span className="text-[11px] font-bold truncate max-w-[140px] tracking-wide">{match.league}</span>
                                 </div>
-                                <div className="flex items-center gap-1.5">
-                                    <span className={`text-[11px] font-bold ${match.isUpcoming ? 'text-gray-400' : 'text-red-500'}`}>{match.time}</span>
+                                <div className="flex items-center gap-1.5 bg-black/30 px-2 py-0.5 rounded-full border border-white/5 backdrop-blur-md">
+                                    <span className={`text-[10px] font-bold ${match.isUpcoming ? 'text-zinc-400' : 'text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]'}`}>{match.time}</span>
                                     {!match.isUpcoming && (
-                                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                                     )}
                                 </div>
                             </div>
                             
                             {/* Teams & Score */}
-                            <div className="flex items-center justify-between px-2 mb-4">
-                                <div className="flex flex-col items-center gap-2 w-[80px]">
+                            <div className="flex items-center justify-between px-2 mb-4 relative">
+                                {/* Soft glow behind score */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                <div className="flex flex-col items-center gap-2 w-[80px] z-10">
                                     <div 
-                                        className="w-10 h-10 rounded-full flex items-center justify-center text-white text-[13px] font-bold shadow-lg"
+                                        className="w-11 h-11 rounded-full flex items-center justify-center text-white text-[13px] font-bold shadow-lg border border-white/20 backdrop-blur-sm"
                                         style={{ backgroundColor: match.home.color }}
                                     >
                                         {match.home.code}
                                     </div>
-                                    <span className="text-[12px] font-bold text-white text-center leading-tight truncate w-full">{match.home.name}</span>
+                                    <span className="text-[12px] font-bold text-zinc-100 text-center leading-tight truncate w-full drop-shadow-sm">{match.home.name}</span>
                                 </div>
                                 
-                                <div className="flex flex-col items-center justify-center">
-                                    <div className="text-[20px] font-black text-white tracking-widest">{match.score}</div>
-                                    <div className="text-[10px] text-gray-500 font-bold mt-1">1X2</div>
+                                <div className="flex flex-col items-center justify-center z-10">
+                                    <div className="text-[22px] font-black text-white tracking-widest drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]">{match.score}</div>
+                                    <div className="text-[9px] text-zinc-500 font-bold mt-0.5 tracking-[0.2em]">1X2</div>
                                 </div>
                                 
-                                <div className="flex flex-col items-center gap-2 w-[80px]">
+                                <div className="flex flex-col items-center gap-2 w-[80px] z-10">
                                     <div 
-                                        className="w-10 h-10 rounded-full flex items-center justify-center text-white text-[13px] font-bold shadow-lg"
+                                        className="w-11 h-11 rounded-full flex items-center justify-center text-white text-[13px] font-bold shadow-lg border border-white/20 backdrop-blur-sm"
                                         style={{ backgroundColor: match.away.color }}
                                     >
                                         {match.away.code}
                                     </div>
-                                    <span className="text-[12px] font-bold text-white text-center leading-tight truncate w-full">{match.away.name}</span>
+                                    <span className="text-[12px] font-bold text-zinc-100 text-center leading-tight truncate w-full drop-shadow-sm">{match.away.name}</span>
                                 </div>
                             </div>
                             
                             {/* Odds Buttons */}
-                            <div className="grid grid-cols-3 gap-2 mt-4">
-                                <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
-                                    <span className="text-[11px] font-bold text-gray-500">1</span>
-                                    <AnimatedOdd value={match.homeOdd} />
+                            <div className="grid grid-cols-3 gap-2 mt-5">
+                                <button className="bg-black/40 hover:bg-emerald-500/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
+                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-emerald-400/80 transition-colors">1</span>
+                                    <div className="text-zinc-200 group-hover/btn:text-white font-bold"><AnimatedOdd value={match.homeOdd} /></div>
                                 </button>
-                                <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
-                                    <span className="text-[11px] font-bold text-gray-500">Draw</span>
-                                    <AnimatedOdd value={match.drawOdd} />
+                                <button className="bg-black/40 hover:bg-emerald-500/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
+                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-emerald-400/80 transition-colors">X</span>
+                                    <div className="text-zinc-200 group-hover/btn:text-white font-bold"><AnimatedOdd value={match.drawOdd} /></div>
                                 </button>
-                                <button className="bg-[#1a202c] hover:bg-[#2d3748] transition-colors border border-white/5 rounded-lg py-2 flex items-center justify-center gap-1.5 text-gray-400">
-                                    <span className="text-[11px] font-bold text-gray-500">2</span>
-                                    <AnimatedOdd value={match.awayOdd} />
+                                <button className="bg-black/40 hover:bg-emerald-500/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
+                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-emerald-400/80 transition-colors">2</span>
+                                    <div className="text-zinc-200 group-hover/btn:text-white font-bold"><AnimatedOdd value={match.awayOdd} /></div>
                                 </button>
                             </div>
                         </div>
