@@ -51,6 +51,7 @@ import MyBetsModal from './components/MyBetsModal';
 import KralView from './components/KralView';
 import WorldCupTeaser from './components/WorldCupTeaser';
 import Footer from './components/Footer';
+import ModernChat from './components/ModernChat';
 
 import LiveBetsFeed from './components/LiveBetsFeed';
 import CasinoLobby from './components/CasinoLobby';
@@ -223,6 +224,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [loadId, setLoadId] = useState(0);
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isChatOpen, setIsChatOpen] = useState(true);
   
   // Custom URL for Sports2 iframe (to handle custom header navigation)
   const [sports2Url, setSports2Url] = useState("https://bahisbey1438.com/tr/sport/sports/football/flt-1-1239-52530/?btag=59649488_330539");
@@ -2015,10 +2017,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         onMemberRegisterClick={() => setAuthModalMode('register')}
         onMemberLogout={handleGlobalLogout}
         onSearchClick={() => setShowSearch(true)}
-        onSupportClick={() => {}}
+        onSupportClick={() => setIsChatOpen(prev => !prev)}
         navVisibility={navVisibility}
         marqueeConfig={marqueeConfig}
-        isChatOpen={false}
+        isChatOpen={isChatOpen}
         isSidebarOpen={isSidebarOpen}
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         showFakeBetButton={view === 'sports2'}
@@ -2552,6 +2554,19 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
       {view !== 'admin' && view !== 'sports' && <Footer />}
           </main>
+
+          {view !== 'admin' && view !== 'sports' && view !== 'spor724' && view !== 'upcomingMatches' && !showLiveScoreModal && !isMobile && (
+            <aside className={`hidden xl:flex flex-col border-l border-white/[0.02] bg-[#000000] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[320px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
+              <ModernChat
+                open={isChatOpen}
+                onOpen={() => setIsChatOpen(true)}
+                onClose={() => setIsChatOpen(false)}
+                siteUser={siteUser}
+                userRole={userRole}
+                isMobile={false}
+              />
+            </aside>
+          )}
 
 
 
