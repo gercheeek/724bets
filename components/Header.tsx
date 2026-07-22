@@ -347,21 +347,11 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[72px] bg-[#050505] border-b border-transparent flex justify-center">
+      <div className="header-topbar relative w-full h-[72px] bg-[#0b0e14] flex justify-center">
         <div className="w-full max-w-[1400px] px-2 md:px-4 h-full flex items-center justify-between">
-            {/* Left: Hamburger & Logo & Desktop Tabs */}
+            {/* Left: Logo & Desktop Tabs */}
             <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
               
-              {!(activeView === 'sporx' || activeView === 'sports' || activeView === 'sports3' || activeView === 'sports4' || activeView === 'sports5' || activeView === 'giveaway') && (
-                <button 
-                  onClick={onToggleSidebar}
-                  className="hidden lg:flex w-10 h-10 items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors mr-2"
-                  title="Menüyü Aç/Kapat"
-                >
-                  <Menu className="w-6 h-6" />
-                </button>
-              )}
-
               <div 
                 className="flex items-center cursor-pointer select-none ml-0 group"
                 onClick={() => onViewChange?.('home')}
@@ -385,230 +375,126 @@ const Header: React.FC<HeaderProps> = ({
 
             </div>
 
-        {/* Center: Wallet Pill (Only if logged in) */}
-        <div className="hidden md:flex items-center justify-center flex-[1.5] z-10">
-          {siteUser && (
-            <div className="relative flex items-center bg-[#111111] rounded-lg md:rounded-xl pl-3 pr-0 py-0 border border-white/10 h-[36px] md:h-[44px] shadow-sm" ref={walletDropdownRef}>
+                {/* Right: User Controls */}
+        <div id="tour-user-panel" className="flex items-center justify-end flex-[2] gap-1 md:gap-3 z-10">
+
+          {siteUser ? (
+            <div className="flex items-center gap-2 md:gap-3 ml-2">
               
-              {/* Balance Section */}
-              <div 
-                className="flex items-center cursor-pointer hover:bg-[#1a1a22] transition-colors rounded-l-lg py-1 pr-3 h-full"
-                onClick={() => setWalletDropdownOpen(prev => !prev)}
-              >
-                <span className="text-white font-bold text-[13px] md:text-[15px] tracking-tight mr-2 whitespace-nowrap">{(siteUser.balance || 0).toFixed(8)}</span>
-                <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#26A17B] flex items-center justify-center mr-2 flex-shrink-0">
-                  <span className="text-white font-black text-[11px] md:text-xs">₮</span>
-                </div>
-                <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-400 transition-transform flex-shrink-0 ${walletDropdownOpen ? 'rotate-180' : ''}`} />
-              </div>
-
-              {/* Deposit Button attached to pill */}
-              <button
-                onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                className="bg-[#1475E1] hover:bg-[#0f60c0] text-white font-bold w-[32px] h-[36px] md:w-auto md:px-5 md:h-[44px] rounded-r-lg text-[14px] md:text-[15px] transition-colors flex items-center justify-center flex-shrink-0 border-l border-[#1475E1] shadow-[0_0_15px_rgba(20,117,225,0.3)]"
-              >
-                <Wallet className="w-4 h-4 md:hidden" />
-                <span className="hidden md:block whitespace-nowrap">{t('wallet_cuzdan')}</span>
-              </button>
-
-              {walletDropdownOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-[#050505] border border-white/10 shadow-2xl text-left overflow-hidden">
-                  
-                  {/* Search bar */}
-                  <div className="p-3 border-b border-white/10">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-                      <input 
-                        type="text" 
-                        value={walletSearch}
-                        onChange={(e) => setWalletSearch(e.target.value)}
-                        placeholder={t("wallet_ara")} 
-                        className="w-full bg-[#111111] border border-white/10 rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#1A7BF2] transition-colors placeholder-zinc-400"
-                      />
-                    </div>
+              {/* Balance & Wallet Block */}
+              <div className="flex items-center gap-2">
+                <div className="relative" ref={walletDropdownRef}>
+                  <div 
+                    className="flex items-center bg-[#121721] hover:bg-[#181c2b] border border-[#1e2330] cursor-pointer transition-colors rounded-lg px-3 md:px-4 h-[38px] md:h-[42px]"
+                    onClick={() => setWalletDropdownOpen(prev => !prev)}
+                  >
+                    <span className="text-white font-bold text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap">${(siteUser.balance || 0).toFixed(2)}</span>
+                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-400 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
-
-                  {/* Crypto List */}
-                  <div className="flex flex-col max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#2B3544] scrollbar-track-transparent">
-                    {[
-                      { sym: 'USDT', icon: '₮', bg: '#26A17B' },
-                      { sym: 'BTC', icon: '₿', bg: '#F7931A' },
-                      { sym: 'ETH', icon: 'Ξ', bg: '#627EEA' },
-                      { sym: 'LTC', icon: 'Ł', bg: '#BFBBBB' },
-                      { sym: 'SOL', icon: 'S', bg: 'linear-gradient(45deg, #06b6d4, #03E1FF)' },
-                      { sym: 'DOGE', icon: 'Ð', bg: '#C2A633' },
-                      { sym: 'BCH', icon: '₿', bg: '#8DC351' },
-                      { sym: 'XRP', icon: '✕', bg: '#23292F' },
-                      { sym: 'TRX', icon: '💎', bg: '#FF0013' }
-                    ].filter(c => c.sym.toLowerCase().includes(walletSearch.toLowerCase())).map((crypto, idx) => (
-                      <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#111111] cursor-pointer transition-colors group">
-                        <span className="text-white font-bold text-[14px] md:text-[15px] font-mono tracking-tight group-hover:text-white/90">{(crypto.sym === 'USDT' ? (siteUser.balance || 0) : 0).toFixed(8)}</span>
-                        <div className="flex items-center gap-2">
-                          <div 
-                            className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-black shadow-sm"
-                            style={{ background: crypto.bg }}
-                          >
-                            {crypto.icon}
-                          </div>
-                          <span className="text-white font-bold text-sm tracking-wide">{crypto.sym}</span>
+                  
+                  {walletDropdownOpen && (
+                    <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-[#0b0e14] border border-[#1e2330] shadow-2xl text-left overflow-hidden">
+                      <div className="p-3 border-b border-[#1e2330]">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                          <input 
+                            type="text" 
+                            value={walletSearch}
+                            onChange={(e) => setWalletSearch(e.target.value)}
+                            placeholder={t("wallet_ara")} 
+                            className="w-full bg-[#121721] border border-[#1e2330] rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#10b981] transition-colors placeholder-zinc-400"
+                          />
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Footer Button */}
-                  <button className="w-full flex items-center justify-center gap-2 py-3.5 text-white bg-[#111111] hover:bg-[#1a1a22] font-bold text-sm transition-colors border-t border-white/10">
-                    <Briefcase className="w-4 h-4 text-zinc-400" />
-                    {t('wallet_ayarlar')}
-                  </button>
+                      <div className="flex flex-col max-h-[300px] overflow-y-auto">
+                        {[
+                          { sym: 'TRY', icon: '₺', bg: '#10B981', name: 'Türk Lirası' },
+                          { sym: 'USDT', icon: '₮', bg: '#26A17B', name: 'Tether' }
+                        ].map((crypto) => (
+                          <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#181c2b] cursor-pointer transition-colors group">
+                            <span className="text-white font-bold text-[14px] font-mono">{(crypto.sym === 'TRY' ? (siteUser.balance || 0) : 0).toFixed(2)}</span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-black" style={{ background: crypto.bg }}>{crypto.icon}</div>
+                              <span className="text-white font-bold text-sm">{crypto.sym}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+
+                <button
+                  onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
+                  className="bg-[#38b75e] hover:bg-[#2fa350] text-white font-bold h-[38px] md:h-[42px] px-3 md:px-5 rounded-lg text-[13px] md:text-[14px] transition-colors flex items-center justify-center gap-2"
+                >
+                  <Wallet className="w-4 h-4" />
+                  <span className="hidden md:block whitespace-nowrap">{t('wallet_cuzdan')}</span>
+                </button>
+              </div>
+
+              {/* Divider / Spacer */}
+              <div className="w-1 md:w-3"></div>
+
+              {/* Icon Buttons Group */}
+              <div className="flex items-center gap-1.5 md:gap-2">
+                <div className="relative" ref={profileRef}>
+                  <button 
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="w-[48px] h-[38px] md:w-[56px] md:h-[42px] flex items-center justify-center gap-1.5 bg-[#121721] hover:bg-[#181c2b] border border-[#1e2330] rounded-lg transition-colors"
+                  >
+                    <User className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {isProfileOpen && (
+                    <div className="absolute right-0 mt-2 w-56 bg-[#0b0e14] border border-[#1e2330] rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
+                      <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#181c2b] transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                        <User className="w-4 h-4 text-zinc-400 group-hover:text-white" />
+                        <span className="font-semibold text-sm">{t('profile_profil')}</span>
+                      </button>
+                      <button 
+                        onClick={() => { setIsProfileOpen(false); onMemberLogout?.(); }}
+                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-[#1e2330] mt-1"
+                      >
+                        <LogOut className="w-4 h-4 text-zinc-400 group-hover:text-red-400" />
+                        <span className="font-semibold text-sm">{t('profile_cikis')}</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Chat Button separated */}
+              <div className="ml-1 md:ml-3">
+                <button 
+                  onClick={onSupportClick}
+                  className={`w-[38px] h-[38px] md:w-[42px] md:h-[42px] flex items-center justify-center rounded-lg transition-colors ${isChatOpen ? 'bg-[#38b75e]/20 text-[#38b75e] border border-[#38b75e]/40' : 'bg-[#121721] hover:bg-[#181c2b] border border-[#1e2330] text-white'}`}
+                >
+                  <MessageSquare className="w-4 h-4 md:w-5 md:h-5" />
+                </button>
+              </div>
+
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={onMemberLoginClick}
+                className="flex items-center justify-center bg-transparent hover:bg-white/5 text-white border border-transparent rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-5 transition-all whitespace-nowrap"
+              >
+                {t('login')}
+              </button>
+              <button
+                onClick={onMemberRegisterClick}
+                className="flex items-center justify-center bg-[#38b75e] hover:bg-[#2fa350] text-white rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-5 transition-all whitespace-nowrap"
+              >
+                {t('register')}
+              </button>
             </div>
           )}
         </div>
-
-        {/* Right: Controls (Profile, Chat, Notifications) */}
-        <div id="tour-user-panel" className="flex items-center justify-end flex-1 gap-1 md:gap-3 z-10">
-          
-          {/* Theme Switcher */}
-          <button 
-            onClick={toggleTheme}
-            className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/5 transition-colors text-zinc-300 hover:text-white mr-1"
-            title={theme === 'light' ? 'Koyu Tema' : 'Açık Tema'}
-          >
-            {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5 text-yellow-400 fill-yellow-400" />}
-          </button>
-
-          {/* Language Switcher */}
-          <div className="relative hidden sm:block" ref={langRef}>
-            <button 
-              onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-              className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors text-zinc-300 hover:text-white"
-            >
-              <span className="text-sm font-bold uppercase">{language}</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${langDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {langDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-32 bg-[#050505] border border-white/5 rounded-xl shadow-2xl z-50 overflow-hidden py-2 animate-fade-in">
-                <button onClick={() => { setLanguage('tr'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'tr' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
-                  <span className="text-base">🇹🇷</span>
-                  <span className="font-semibold text-sm">TR</span>
-                </button>
-                <button onClick={() => { setLanguage('en'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'en' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
-                  <span className="text-base">🇬🇧</span>
-                  <span className="font-semibold text-sm">EN</span>
-                </button>
-                <button onClick={() => { setLanguage('es'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'es' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
-                  <span className="text-base">🇪🇸</span>
-                  <span className="font-semibold text-sm">ES</span>
-                </button>
-                <button onClick={() => { setLanguage('pt'); setLangDropdownOpen(false); }} className={`flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors w-full text-left ${language === 'pt' ? 'text-white bg-white/5' : 'text-zinc-400'}`}>
-                  <span className="text-base">🇧🇷</span>
-                  <span className="font-semibold text-sm">PT</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {siteUser ? (
-            <>
-              {/* Profile Dropdown */}
-              <div className="relative hidden md:block" ref={profileRef}>
-                <button 
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-transparent hover:border-[#10b981]/50 transition-colors cursor-pointer overflow-hidden flex-shrink-0"
-                >
-                  <img 
-                    src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} 
-                    className="w-full h-full object-cover bg-[#111111]" 
-                    alt="avatar" 
-                  />
-                </button>
-
-                {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-[#050505] border border-white/5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
-                    <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                      <User className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">{t('profile_profil')}</span>
-                    </button>
-                    
-                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                      <Bell className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">{t('profile_gelenkutusu')}</span>
-                    </button>
-
-                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                      <Users className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">{t('profile_istirakler')}</span>
-                    </button>
-
-                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                      <ShieldCheck className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">{t('profile_dogrulamalar')}</span>
-                    </button>
-
-                    <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                      <Settings className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">{t('profile_ayarlar')}</span>
-                    </button>
-
-                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                      <Lock className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">{t('profile_gizlilik')}</span>
-                    </button>
-
-                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                      <Link className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">{t('profile_baglantilar')}</span>
-                    </button>
-
-                    <button className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                      <FileText className="w-5 h-5 text-zinc-400 group-hover:text-white" />
-                      <span className="font-semibold text-sm">{t('profile_islemler')}</span>
-                    </button>
-
-                    <button 
-                      onClick={() => {
-                        setIsProfileOpen(false);
-                        onMemberLogout?.();
-                      }}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-white/5 mt-1"
-                    >
-                      <LogOut className="w-5 h-5 text-zinc-400 group-hover:text-red-400" />
-                      <span className="font-semibold text-sm">{t('profile_cikis')}</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-              <>
-                <div className="flex items-center rounded-lg border border-white/10 h-[42px] overflow-hidden shadow-sm backdrop-blur-sm bg-white/5 p-1 gap-1">
-                  <button
-                    onClick={onMemberLoginClick}
-                    className="flex items-center justify-center bg-transparent hover:bg-white/10 text-white border border-transparent hover:border-white/20 rounded-md font-bold text-[13px] h-full px-4 md:px-5 transition-all duration-300 whitespace-nowrap"
-                  >
-                    {t('login')}
-                  </button>
-                  <button
-                    id="tour-register-btn"
-                    onClick={onMemberRegisterClick}
-                    className="flex items-center justify-center bg-[#10b981] hover:bg-[#00E676] text-black rounded-md font-extrabold text-[13px] h-full px-4 md:px-5 transition-all duration-300 shadow-[0_0_15px_rgba(0,255,163,0.3)] whitespace-nowrap"
-                  >
-                    {t('register')}
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-
-
-
-        </div>
       </div>
+    </div>
+    </div>
     </>
   );
 };

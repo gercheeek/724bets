@@ -7,22 +7,22 @@
   padding: 0;
 }
 
-/* ── Light Theme (default) ── */
+/* ── Default Dark Theme ── */
 :root {
   --primary: #F5A623;
   --primary-rgb: 245, 166, 35;
 
-  --bg-main: #F8F9FA;
-  --bg-elevated: #F0F1F3;
-  --bg-card: #FFFFFF;
-  --bg-card-hover: #F0F1F3;
-  --bg-input: #F8F9FA;
-  --bg-overlay: rgba(0, 0, 0, 0.40);
+  --bg-main: #000000;
+  --bg-elevated: #050505;
+  --bg-card: #0a0a0a;
+  --bg-card-hover: #111111;
+  --bg-input: #111111;
+  --bg-overlay: rgba(0, 0, 0, 0.85);
 
-  --text-primary: #1A1A1A;
-  --text-secondary: #4B5563;
-  --text-muted: #6B7280;
-  --text-dim: #9CA3AF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
 
   --border-subtle: rgba(0, 0, 0, 0.06);
   --border-card: rgba(0, 0, 0, 0.08);

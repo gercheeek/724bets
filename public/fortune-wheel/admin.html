@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>724BETs – Çark Yönetim Paneli | Admin</title>
+  <meta name="description" content="724BETs Fortune Wheel Admin Management Panel - Segment editor, global settings, statistics." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- ══ SIDEBAR ══════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="sl-num">724</span><span class="sl-text">BETs</span>
+      <span class="sl-badge">ADMIN</span>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Genel</div>
+      <div class="nav-item" onclick="setPage('dashboard')">
+        <span class="nav-icon">📊</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="setPage('wheel')">
+        <span class="nav-icon">🎡</span> Şans Çarkı
+        <span class="nav-badge" id="pending-badge" style="display:none">!</span>
+      </div>
+      <div class="nav-item" onclick="setPage('users')">
+        <span class="nav-icon">👥</span> Kullanıcılar
+      </div>
+      <div class="nav-item" onclick="setPage('transactions')">
+        <span class="nav-icon">💳</span> İşlemler
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Sistem</div>
+      <div class="nav-item" onclick="setPage('settings')">
+        <span class="nav-icon">⚙️</span> Ayarlar
+      </div>
+      <div class="nav-item" onclick="window.open('index.html','_blank')">
+        <span class="nav-icon">🔗</span> Kullanıcı Sayfası
+      </div>
+      <div class="nav-item" onclick="setPage('logs')">
+        <span class="nav-icon">📋</span> Log Kayıtları
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="admin-identity">
+        <div class="ai-avatar">SA</div>
+        <div class="ai-info">
+          <span class="ai-name">Süper Admin</span>
+          <span class="ai-role">Tam Yetki</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══════════════════════════════════════════════ -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="admin-topbar">
+      <div class="topbar-title" id="topbar-title">
+        🎡 <span>Çark</span> Yönetim Paneli
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn" onclick="refreshData()">⟳ Yenile</button>
+        <button class="topbar-btn" onclick="window.open('index.html','_blank')">👁 Önizle</button>
+        <button class="topbar-btn primary" onclick="saveAllChanges()">💾 Değişiklikleri Kaydet</button>
+      </div>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="content-scroll" id="content-area">
+      <!-- Pages rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ══ SEGMENT MODAL ══════════════════════════════════════ -->
+<div class="modal-overlay" id="seg-modal" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="seg-modal-title">Segment Ekle</div>
+      <button class="modal-close" onclick="closeAdminModal('seg-modal')">✕</button>
+    </div>
+
+    <div class="modal-form-grid">
+      <div class="form-group">
+        <label class="form-label">Ödül Adı / Başlık</label>
+        <input type="text" id="seg-label" class="form-input" placeholder="50 TL Nakit" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ödül Değeri</label>
+        <div class="input-group">
+          <input type="number" id="seg-value" class="form-input" placeholder="0" min="0" />
+          <span class="input-suffix" id="seg-unit">TL</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ödül Türü</label>
+        <select id="seg-type" class="form-select" onchange="updateSegUnit()">
+          <option value="cash">💰 Nakit</option>
+          <option value="freespin">🎰 Freespin</option>
+          <option value="retry">🔄 Tekrar Dene</option>
+          <option value="bonus">🎁 Bonus</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Kazanma Ağırlığı</label>
+        <div class="input-group">
+          <input type="number" id="seg-weight" class="form-input" placeholder="10" min="1" max="100" />
+          <span class="input-suffix">/ 100</span>
+        </div>
+      </div>
+      <div class="form-group full-span">
+        <label class="form-label">Segment Rengi</label>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div class="color-picker-wrap">
+            <div class="color-preview" id="seg-color-preview" style="background:#D4AF37"></div>
+            <input type="color" id="seg-color" value="#D4AF37" oninput="updateColorPreview()" />
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="color-presets">
+            <!-- Preset colors injected by JS -->
+          </div>
+        </div>
+      </div>
+      <div class="form-group full-span" style="flex-direction:row;align-items:center;justify-content:space-between">
+        <div>
+          <div class="form-label">Segment Aktif</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-top:4px">Devre dışı segmentler çarkta görünmez</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="seg-active" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeAdminModal('seg-modal')">İptal</button>
+      <button class="btn btn-gold" onclick="saveSegment()">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DELETE CONFIRM MODAL ══════════════════════════════ -->
+<div class="modal-overlay" id="delete-modal" style="display:none">
+  <div class="modal-box" style="max-width:380px;text-align:center">
+    <div class="modal-header" style="justify-content:center">
+      <div class="modal-title" style="color:var(--red)">⚠ Segment Sil</div>
+    </div>
+    <p style="font-size:14px;color:var(--text-muted);margin-bottom:8px">
+      Bu segmenti silmek istediğinizden emin misiniz?
+    </p>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:24px" id="delete-seg-name">—</p>
+    <div class="modal-actions" style="justify-content:center">
+      <button class="btn btn-ghost" onclick="closeAdminModal('delete-modal')">İptal</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">🗑 Evet, Sil</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST CONTAINER ═══════════════════════════════════ -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="wheel.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

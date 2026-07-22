@@ -14,5 +14,5 @@ CREATE POLICY "Enable insert for anon users" ON members FOR INSERT WITH CHECK (t
 -- 2. Herkesin okumasına (SELECT) izin veren kural (giriş yaparken kontrol için)
 CREATE POLICY "Enable read access for all users" ON members FOR SELECT USING (true);
 
--- 3. Kullanıcıların kendi şifrelerini/bilgilerini güncellemesine izin veren kural
-CREATE POLICY "Enable update for users based on email" ON members FOR UPDATE USING (true);
+-- 3. Kullanıcıların (Frontend) doğrudan bakiye güncellemesini engelle! Sadece RPC kullanılsın.
+CREATE POLICY "Enable update for users based on email" ON members FOR UPDATE USING (false);

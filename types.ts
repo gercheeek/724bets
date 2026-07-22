@@ -13,6 +13,12 @@ export interface SiteUser {
   notes?: string;
   role?: 'admin' | 'editor' | 'author' | 'member';
   balance?: number;
+  totalWagered?: number;
+  netPnl?: number;
+  lastLoginAt?: number;
+  lastLoginIp?: string;
+  vipLevel?: string;
+  cryptoWallet?: string;
 }
 
 export interface UserMessage {

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase';
+import React, { useState } from 'react';
+import { useUser } from '../contexts/UserContext';
 import { ShieldCheck, ArrowUpRight, ArrowDownRight, Equal } from 'lucide-react';
 
 type Suit = '♠' | '♥' | '♦' | '♣';
@@ -14,44 +14,7 @@ interface Card {
 const SUITS: Suit[] = ['♠', '♥', '♦', '♣'];
 const RANKS: Rank[] = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
-function getCardValue(rank: Rank): number {
-    if (rank === 'A') return 14;
-    if (rank === 'K') return 13;
-    if (rank === 'Q') return 12;
-    if (rank === 'J') return 11;
-    return parseInt(rank);
-}
 
-function createDeck(): Card[] {
-    const deck: Card[] = [];
-    for (const suit of SUITS) {
-        for (const rank of RANKS) {
-            deck.push({ suit, rank, value: getCardValue(rank) });
-        }
-    }
-    return deck.sort(() => Math.random() - 0.5);
-}
-
-// Simple probability to calculate multiplier (house edge ~ 2%)
-function getMultipliers(currentCard: Card): { high: number, low: number, tie: number } {
-    const total = 51;
-    let higherCount = 0;
-    let lowerCount = 0;
-    let tieCount = 3;
-
-    for (const rank of RANKS) {
-        const val = getCardValue(rank);
-        if (val > currentCard.value) higherCount += 4;
-        if (val < currentCard.value) lowerCount += 4;
-    }
-
-    const houseEdge = 0.98;
-    return {
-        high: higherCount > 0 ? (total / higherCount) * houseEdge : 0,
-        low: lowerCount > 0 ? (total / lowerCount) * houseEdge : 0,
-        tie: tieCount > 0 ? (total / tieCount) * houseEdge : 0,
-    };
-}
 
 const CardUI = ({ card, hidden = false, className = '' }: { card?: Card; hidden?: boolean; className?: string }) => {
     if (hidden || !card) {
@@ -82,85 +45,69 @@ const CardUI = ({ card, hidden = false, className = '' }: { card?: Card; hidden?
     );
 };
 
-export default function HiLoView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function HiLoView({ siteUser, onAuthRequired }: any) {
+    const { startSessionGame, playSessionMove, cashoutSessionGame } = useUser();
+    const [gameId, setGameId] = useState<string | null>(null);
     const [betAmount, setBetAmount] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useState(false);
     
-    const [deck, setDeck] = useState<Card[]>([]);
     const [currentCard, setCurrentCard] = useState<Card | null>(null);
     const [history, setHistory] = useState<Card[]>([]);
     
     const [currentMultiplier, setCurrentMultiplier] = useState(1);
     const [winAmount, setWinAmount] = useState<number | null>(null);
 
-    const multipliers = currentCard ? getMultipliers(currentCard) : { high: 0, low: 0, tie: 0 };
-
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!siteUser) return onAuthRequired();
-        if (siteUser.balance < betAmount) {
-            alert('Yetersiz Bakiye');
-            return;
+
+        try {
+            const data = await startSessionGame(betAmount, 'HiLo', {});
+            setGameId(data.game_id);
+            setCurrentCard(data.state.currentCard);
+            setHistory([data.state.currentCard]);
+            setCurrentMultiplier(1.0);
+            setIsPlaying(true);
+            setWinAmount(null);
+        } catch (e: any) {
+            alert(e.message || 'Hata oluştu');
         }
-
-        const newBalance = siteUser.balance - betAmount;
-        setSiteUser({ ...siteUser, balance: newBalance });
-        supabase.from('site_users').update({ balance: newBalance }).eq('id', siteUser.id).then();
-
-        const newDeck = createDeck();
-        const firstCard = newDeck.pop()!;
-        
-        setDeck(newDeck);
-        setCurrentCard(firstCard);
-        setHistory([firstCard]);
-        setCurrentMultiplier(1);
-        setIsPlaying(true);
-        setWinAmount(null);
     };
 
-    const handleGuess = (guess: 'high' | 'low' | 'tie') => {
-        if (!isPlaying || !currentCard || deck.length === 0) return;
+    const handleGuess = async (guess: 'higher' | 'lower') => {
+        if (!isPlaying || !gameId) return;
 
-        const nextCard = deck.pop()!;
-        const nextDeck = [...deck];
-        
-        let won = false;
-        let stepMult = 0;
-
-        if (guess === 'high' && nextCard.value > currentCard.value) {
-            won = true;
-            stepMult = multipliers.high;
-        } else if (guess === 'low' && nextCard.value < currentCard.value) {
-            won = true;
-            stepMult = multipliers.low;
-        } else if (guess === 'tie' && nextCard.value === currentCard.value) {
-            won = true;
-            stepMult = multipliers.tie;
+        try {
+            const data = await playSessionMove(gameId, { action: guess });
+            
+            if (data.status === 'continue') {
+                const nextCard = data.state.currentCard;
+                setCurrentCard(nextCard);
+                setHistory(prev => [nextCard, ...prev]);
+                setCurrentMultiplier(data.state.multiplier);
+            } else {
+                // Bust
+                const bustCard = data.card;
+                setCurrentCard(bustCard);
+                setHistory(prev => [bustCard, ...prev]);
+                setIsPlaying(false);
+                setGameId(null);
+                setWinAmount(0);
+            }
+        } catch (e: any) {
+            alert(e.message || 'Hamle yapılamadı');
         }
+    };
 
-        setCurrentCard(nextCard);
-        setHistory(prev => [nextCard, ...prev]);
-        setDeck(nextDeck);
+    const handleCashout = async () => {
+        if (!isPlaying || !gameId) return;
 
-        if (won) {
-            setCurrentMultiplier(prev => prev * stepMult);
-        } else {
-            // Bust
+        try {
+            const data = await cashoutSessionGame(gameId);
+            setWinAmount(data.win_amount);
             setIsPlaying(false);
-            setWinAmount(0);
-        }
-    };
-
-    const handleCashOut = () => {
-        if (!isPlaying) return;
-        
-        const payout = betAmount * currentMultiplier;
-        setWinAmount(payout);
-        setIsPlaying(false);
-        
-        if (siteUser) {
-            const updatedBalance = siteUser.balance + payout;
-            setSiteUser({ ...siteUser, balance: updatedBalance });
-            supabase.from('site_users').update({ balance: updatedBalance }).eq('id', siteUser.id).then();
+            setGameId(null);
+        } catch (e: any) {
+            alert(e.message || 'Bozdurma işlemi başarısız');
         }
     };
 
@@ -217,42 +164,26 @@ export default function HiLoView({ siteUser, setSiteUser, onAuthRequired }: any)
                             Bahis
                         </button>
                     ) : (
-                        <>
-                            <div className="grid grid-cols-3 gap-2 mb-2">
-                                <button 
-                                    onClick={() => handleGuess('high')}
-                                    disabled={multipliers.high === 0}
-                                    className="flex flex-col items-center justify-center bg-[#151D24] hover:bg-[#1E2933] border border-[#2A3744] hover:border-emerald-500 text-emerald-400 py-3 rounded-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <ArrowUpRight className="w-5 h-5 mb-1" />
-                                    <span className="text-[10px] font-bold uppercase tracking-wider">Yüksek</span>
-                                    <span className="text-[10px] font-mono mt-1 text-white">{multipliers.high.toFixed(2)}x</span>
-                                </button>
-                                <button 
-                                    onClick={() => handleGuess('tie')}
-                                    className="flex flex-col items-center justify-center bg-[#151D24] hover:bg-[#1E2933] border border-[#2A3744] hover:border-orange-500 text-orange-400 py-3 rounded-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <Equal className="w-5 h-5 mb-1" />
-                                    <span className="text-[10px] font-bold uppercase tracking-wider">Aynı</span>
-                                    <span className="text-[10px] font-mono mt-1 text-white">{multipliers.tie.toFixed(2)}x</span>
-                                </button>
-                                <button 
-                                    onClick={() => handleGuess('low')}
-                                    disabled={multipliers.low === 0}
-                                    className="flex flex-col items-center justify-center bg-[#151D24] hover:bg-[#1E2933] border border-[#2A3744] hover:border-red-500 text-red-500 py-3 rounded-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <ArrowDownRight className="w-5 h-5 mb-1" />
-                                    <span className="text-[10px] font-bold uppercase tracking-wider">Düşük</span>
-                                    <span className="text-[10px] font-mono mt-1 text-white">{multipliers.low.toFixed(2)}x</span>
-                                </button>
-                            </div>
+                        <div className="grid grid-cols-2 gap-2 mt-auto">
                             <button 
-                                onClick={handleCashOut}
-                                className="w-full font-bold py-3.5 rounded-md transition-colors shadow-lg bg-emerald-500 hover:bg-emerald-600 text-white"
+                                onClick={() => handleGuess('higher')}
+                                className="bg-[#3D82F6] hover:bg-blue-600 text-white font-bold py-3 rounded-md transition-colors flex items-center justify-center gap-2"
                             >
-                                Bozdur (₺{(betAmount * currentMultiplier).toFixed(2)})
+                                <ArrowUpRight className="w-4 h-4" /> Daha Yüksek
                             </button>
-                        </>
+                            <button 
+                                onClick={() => handleGuess('lower')}
+                                className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-md transition-colors flex items-center justify-center gap-2"
+                            >
+                                <ArrowDownRight className="w-4 h-4" /> Daha Düşük
+                            </button>
+                            <button 
+                                onClick={handleCashout}
+                                className="col-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-md transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)] mt-2"
+                            >
+                                Bozdur ({(betAmount * currentMultiplier).toFixed(2)}₺)
+                            </button>
+                        </div>
                     )}
                 </div>
 

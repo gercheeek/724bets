@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
     return {
       appType: 'spa',
       server: {
-        port: 3000,
+        port: 3002,
         strictPort: true,
         host: '0.0.0.0',
         proxy: {

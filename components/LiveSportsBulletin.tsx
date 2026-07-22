@@ -18,7 +18,7 @@ export const LiveSportsBulletin = () => {
       setIsConnected(true);
       setError(null);
       
-      // Proxy sunucusuna (ve dolayısıyla Tarafbet'e) bağlandığımız anda subscribe mesajını gönder
+      // Proxy sunucusuna (ve dolayısıyla Sekabet'e) bağlandığımız anda subscribe mesajını gönder
       console.log('📡 Sending LiveEvents subscribe request...');
       ws.send('42["subscribe-LiveEvents",{"locale":"tr_TR"}]');
     };

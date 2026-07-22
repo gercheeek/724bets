@@ -1,6 +1,8 @@
 import React from 'react';
+import { useUser } from '../contexts/UserContext';
 
-export default function CrashTurboView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function CrashTurboView({ siteUser, onAuthRequired }: any) {
+    const { processGameBet } = useUser();
     // URL from the user
     const gameUrl = "https://crash.turbogfast.xyz/?token=&locale=tr&demo=true&sub_partner_id=LuckySplash&lobby_url=https%3A%2F%2F724bets.com&cid=hub88tgb&custom_styles=";
 

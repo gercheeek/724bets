@@ -284,7 +284,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
 
         {/* Right Panel: Chat */}
         <aside className={`
-          flex flex-col bg-[#0f172a]/80 backdrop-blur-xl border-l border-[#10b981]/15 hover:border-[#10b981]/30 transition-all duration-500 ease-in-out z-50
+          flex flex-col bg-[#0b0e14] border-l border-white/5 transition-all duration-500 ease-in-out z-50
           fixed inset-y-0 right-0 w-[80%] sm:w-[350px] md:relative md:w-[25%] xl:w-[20%] md:translate-x-0
           ${isMobileRightOpen ? 'translate-x-0 opacity-100 shadow-[-20px_0_50px_rgba(0,0,0,0.8)]' : 'translate-x-full opacity-0 md:opacity-100 md:shadow-none'}
           ${!showRightPanel ? 'md:translate-x-full md:opacity-0 md:absolute' : ''}

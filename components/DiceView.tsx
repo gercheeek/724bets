@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../utils/supabase';
-import { Info, ShieldCheck, Dice5 } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, Dice5 } from 'lucide-react';
+import { useUser } from '../contexts/UserContext';
 
-export default function DiceView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function DiceView({ siteUser, onAuthRequired }: any) {
+    const { playInstantGame } = useUser();
     const [betAmount, setBetAmount] = useState<number>(0);
     const [target, setTarget] = useState<number>(50);
     const [condition, setCondition] = useState<'over' | 'under'>('over');
@@ -15,40 +16,34 @@ export default function DiceView({ siteUser, setSiteUser, onAuthRequired }: any)
     const winChance = condition === 'over' ? 100 - target : target;
     const multiplier = winChance > 0 ? (99 / winChance) : 0;
 
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!siteUser) return onAuthRequired();
-        if (siteUser.balance < betAmount) {
-            alert('Yetersiz Bakiye');
-            return;
-        }
-
-        const newBalance = siteUser.balance - betAmount;
-        setSiteUser({ ...siteUser, balance: newBalance });
-        supabase.from('site_users').update({ balance: newBalance }).eq('id', siteUser.id).then();
-
+        
         setIsPlaying(true);
         setWinAmount(null);
-
-        // Simulate roll
-        setTimeout(() => {
-            const roll = parseFloat((Math.random() * 100).toFixed(2));
-            setRollResult(roll);
+        setIsRolling(true);
+        
+        try {
+            const data = await playInstantGame(betAmount, 'Dice', target, condition);
+            const serverRoll = data.roll;
+            const payout = data.win_amount;
             
-            const won = condition === 'over' ? roll > target : roll < target;
-            
-            if (won) {
-                const payout = betAmount * multiplier;
+            // Wait for visual animation
+            setTimeout(() => {
+                setRollResult(serverRoll);
                 setWinAmount(payout);
-                const updatedBalance = newBalance + payout;
-                setSiteUser({ ...siteUser, balance: updatedBalance });
-                supabase.from('site_users').update({ balance: updatedBalance }).eq('id', siteUser.id).then();
-            } else {
-                setWinAmount(0);
-            }
-
-            setHistory(prev => [{ roll, won }, ...prev].slice(0, 10));
+                const won = payout > 0;
+                setHistory(prev => [{ roll: serverRoll, won }, ...prev].slice(0, 10));
+                setIsRolling(false);
+                setIsPlaying(false);
+            }, 800);
+            
+        } catch (e: any) {
+            alert(e.message || 'Bakiye yetersiz veya bir hata oluştu.');
+            setIsRolling(false);
             setIsPlaying(false);
-        }, 600); // Quick 600ms animation delay
+            return;
+        }
     };
 
     return (

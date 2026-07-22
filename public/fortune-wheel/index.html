@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>724BETs – Şans Çarkı | Fortune Wheel</title>
+  <meta name="description" content="724BETs premium şans çarkı. Her 12 saatte bir çevir, altın ödüller kazan ve anında nakde çevir." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="wheel.css" />
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────── -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-num">724</span><span class="logo-text">BETs</span>
+      <span class="logo-badge">PREMIUM</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#">Bahisler</a>
+      <a href="#">Casino</a>
+      <a href="#" class="nav-active">Şans Çarkı</a>
+      <a href="#">Turnuvalar</a>
+    </nav>
+    <div class="header-user">
+      <div class="user-balance">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M17 12h.01M13 12h.01"/></svg>
+        <span id="header-balance">₺2,450.00</span>
+      </div>
+      <div class="user-avatar" id="user-avatar">AK</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO SECTION ────────────────────────────────────── -->
+<section class="hero-section">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="badge-pill pulse-badge">
+        <span class="pulse-dot"></span>
+        CANLI — 2,847 Kullanıcı Oynuyor
+      </div>
+      <h1 class="hero-title">
+        Şans <span class="gold-text">Çarkını</span> Çevir
+      </h1>
+      <p class="hero-sub">Her 12 saatte bir ücretsiz çevir. Altın ödüller, freespin'ler ve nakit bonuslar kazan.</p>
+
+      <div class="left-panels-stack">
+        <!-- Compact Recent Wins -->
+        <div class="recent-wins compact">
+          <div class="wins-header">
+            <span class="pulse-dot-small"></span>
+            <span class="wins-label">Son Kazananlar</span>
+          </div>
+          <div class="wins-list compact-list" id="wins-list">
+            <div class="win-item compact-item"><span class="win-user"><span class="gold-dot"></span>Mehmet K.</span><span class="win-prize gold-text">₺250</span></div>
+            <div class="win-item compact-item"><span class="win-user"><span class="gold-dot"></span>Ayşe S.</span><span class="win-prize cyan-text">50 FS</span></div>
+            <div class="win-item compact-item"><span class="win-user"><span class="gold-dot"></span>Emre T.</span><span class="win-prize gold-text">₺100</span></div>
+            <div class="win-item compact-item"><span class="win-user"><span class="gold-dot"></span>Fatma D.</span><span class="win-prize gold-text">₺500</span></div>
+          </div>
+        </div>
+
+        <!-- New Rewards Details Section -->
+        <div class="rewards-detail-card">
+          <div class="rewards-particles" id="rewards-particles"></div>
+          <h3 class="rewards-title">BU HAFTANIN BÜYÜK ÖDÜLLERİ</h3>
+          <ul class="rewards-list">
+            <li>
+              <div class="reward-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/></svg>
+              </div>
+              <span class="reward-text">₺2500 Nakit Büyük İkramiye (2 Kişi)</span>
+            </li>
+            <li>
+              <div class="reward-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5"><path d="M12 15l-2 5 2-1 2 1-2-5z"/><circle cx="12" cy="8" r="5"/></svg>
+              </div>
+              <span class="reward-text">1 Yıllık VIP Gold Üyelik</span>
+            </li>
+            <li>
+              <div class="reward-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              <span class="reward-text">₺5000 Nakit Bonus Paketi</span>
+            </li>
+            <li>
+              <div class="reward-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5"><path d="M22 12l-10-6-10 6 10 6 10-6z"/><path d="M22 12v6l-10 6-10-6v-6"/></svg>
+              </div>
+              <span class="reward-text">1000 Özel Freespin (10 Şanslı Üye)</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── WHEEL CONTAINER ───────────────────────────── -->
+    <div class="wheel-zone">
+      <div class="wheel-glow-ring"></div>
+      <div class="wheel-outer-ring">
+        <!-- Pointer -->
+        <div class="wheel-pointer" id="wheel-pointer">▼</div>
+
+        <canvas id="wheelCanvas" width="480" height="480"></canvas>
+      </div>
+
+      <!-- Spin Button / Countdown -->
+      <div class="spin-control" id="spin-control">
+        <button class="btn-spin" id="btn-spin" onclick="spinWheel()">
+          <span class="btn-spin-inner">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/><path d="M21 3v4.5M21 7.5h-4.5"/></svg>
+            ŞİMDİ ÇEVİR
+          </span>
+          <span class="btn-spin-glow"></span>
+        </button>
+
+        <div class="countdown-wrap" id="countdown-wrap" style="display:none">
+          <div class="countdown-label">Sonraki çevirme hakkın</div>
+          <div class="countdown-timer" id="countdown-timer">
+            <div class="ct-seg"><span class="ct-val" id="ct-h">08</span><span class="ct-unit">SA</span></div>
+            <div class="ct-sep">:</div>
+            <div class="ct-seg"><span class="ct-val" id="ct-m">42</span><span class="ct-unit">DK</span></div>
+            <div class="ct-sep">:</div>
+            <div class="ct-seg"><span class="ct-val" id="ct-s">17</span><span class="ct-unit">SN</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── WALLET WIDGET ─────────────────────────────── -->
+    <div class="wallet-panel">
+      <div class="wallet-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M17 12h.01M13 12h.01"/></svg>
+        <span>Ödül Cüzdanım</span>
+      </div>
+
+      <div class="wallet-balance">
+        <span class="wb-label">Toplam Kazanım</span>
+        <span class="wb-amount" id="wallet-total">₺750.00</span>
+      </div>
+
+      <div class="wallet-history">
+        <div class="wh-header">
+          <span>Son Ödüller</span>
+          <span class="wh-count" id="spin-count">3 Çevirme</span>
+        </div>
+        <ul class="wh-list" id="wh-list">
+          <li class="wh-item">
+            <div class="wh-icon gold">₺</div>
+            <div class="wh-info">
+              <span class="wh-name">50 TL Nakit</span>
+              <span class="wh-date">Bugün, 09:14</span>
+            </div>
+            <span class="wh-val gold-text">+₺50</span>
+          </li>
+          <li class="wh-item">
+            <div class="wh-icon cyan">FS</div>
+            <div class="wh-info">
+              <span class="wh-name">20 Freespin</span>
+              <span class="wh-date">Dün, 21:33</span>
+            </div>
+            <span class="wh-val cyan-text">+20 FS</span>
+          </li>
+          <li class="wh-item">
+            <div class="wh-icon gold">₺</div>
+            <div class="wh-info">
+              <span class="wh-name">100 TL Bonus</span>
+              <span class="wh-date">27 May, 14:05</span>
+            </div>
+            <span class="wh-val gold-text">+₺100</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="wallet-actions">
+        <button class="btn-withdraw" id="btn-withdraw" onclick="openWithdrawModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Nakde Çevir / Çek
+        </button>
+        <div class="convert-toggle" id="convert-toggle-wrap">
+          <span>Otomatik Dönüştür</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="auto-convert" onchange="toggleAutoConvert(this)"/>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ────────────────────────────────────── -->
+<section class="how-section">
+  <div class="section-inner">
+    <h2 class="section-title">Nasıl Çalışır?</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">🎰</div>
+        <h3>Ücretsiz Çevir</h3>
+        <p>Her 12 saatte bir ücretsiz çevirme hakkın var. Hesabın aktif olduğu sürece hiç ödeme yapmadan oyna.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">🏆</div>
+        <h3>Ödülünü Kazan</h3>
+        <p>Nakit bonuslar, freespin'ler ve özel VIP tekliflerinden birini kazan. Her çevirmede gerçek bir şansın var.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">💸</div>
+        <h3>Anında Çek</h3>
+        <p>Kazandıklarını anında cüzdanına aktar veya nakit çekim talebi oluştur. 7/24 ödeme garantisi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRIZE TABLE ─────────────────────────────────────── -->
+<section class="prizes-section">
+  <div class="section-inner">
+    <h2 class="section-title">Ödül Tablosu</h2>
+    <p class="section-sub">Aşağıdaki ödülleri kazanma ihtimalin var. Admin tarafından güncellenebilir.</p>
+    <div class="prize-table-wrap">
+      <table class="prize-table" id="prize-table">
+        <thead>
+          <tr>
+            <th>Ödül</th>
+            <th>Değer</th>
+            <th>Kazanma İhtimali</th>
+            <th>Durum</th>
+          </tr>
+        </thead>
+        <tbody id="prize-tbody">
+          <!-- Dynamically populated from shared segments data -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESULT MODAL ────────────────────────────────────── -->
+<div class="modal-overlay" id="result-modal" style="display:none">
+  <div class="modal-box">
+    <div class="modal-confetti" id="modal-confetti"></div>
+    <div class="modal-icon" id="modal-icon">🏆</div>
+    <h2 class="modal-title" id="modal-title">Tebrikler!</h2>
+    <p class="modal-reward" id="modal-reward">50 TL Nakit Kazandın!</p>
+    <p class="modal-sub">Ödülün otomatik olarak cüzdanına eklendi.</p>
+    <div class="modal-actions">
+      <button class="btn-modal-primary" onclick="closeModal('result-modal')">Harika!</button>
+      <button class="btn-modal-secondary" onclick="openWithdrawModal(); closeModal('result-modal')">Hemen Çek</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── WITHDRAW MODAL ──────────────────────────────────── -->
+<div class="modal-overlay" id="withdraw-modal" style="display:none">
+  <div class="modal-box">
+    <h2 class="modal-title">Ödülü Çek</h2>
+    <p class="modal-sub">Çekim için hesap bilgilerini gir.</p>
+    <div class="modal-form">
+      <div class="mf-group">
+        <label>IBAN / Hesap No</label>
+        <input type="text" placeholder="TR00 0000 0000 0000 0000 0000 00" id="iban-input" />
+      </div>
+      <div class="mf-group">
+        <label>Çekim Miktarı</label>
+        <input type="number" placeholder="₺0.00" id="withdraw-amount" />
+      </div>
+      <div class="withdraw-summary">
+        <span>Mevcut Bakiye</span>
+        <span class="gold-text" id="withdraw-available">₺750.00</span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-primary" onclick="submitWithdraw()">Çekim Talebi Oluştur</button>
+      <button class="btn-modal-secondary" onclick="closeModal('withdraw-modal')">İptal</button>
+    </div>
+  </div>
+</div>
+
+<script src="wheel.js"></script>
+</body>
+</html>

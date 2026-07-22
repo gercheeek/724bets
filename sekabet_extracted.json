@@ -1,0 +1,2710 @@
+[
+  {
+    "id": "867318203645431808",
+    "type": 1,
+    "createdAt": "2026-07-21T08:12:53.784Z",
+    "displaySettings": {
+      "backgroundImage": null,
+      "backgroundImageForLive": null
+    },
+    "event": {
+      "_id": "864089398151741440",
+      "BetslipLine": "Inter Miami CF karşı Chicago Fire",
+      "EventName": "Inter Miami CF karşı Chicago Fire",
+      "IsLive": false,
+      "IsSuspended": false,
+      "IsTopLeague": false,
+      "LeagueGroupId": "307",
+      "LeagueId": "803254019161419776",
+      "LeagueName": "ABD - MLS",
+      "LeagueOrder": 31000203,
+      "LiveGameState": {
+        "ClockRunning": false,
+        "ClockDirection": 0,
+        "UpdateDate": "0001-01-01T00:00:00.000Z"
+      },
+      "MarketGroups": [
+        "Main",
+        "Halves",
+        "Goals",
+        "Corners",
+        "Players",
+        "Cards",
+        "Specials",
+        "Period"
+      ],
+      "MasterLeagueId": "224",
+      "Metadata": {
+        "HasPlayerIncidentCoverage": "true",
+        "HasVARCoverage": "true",
+        "HasIncidentCoverage": "true"
+      },
+      "Participants": [
+        {
+          "_id": "196168155524919296",
+          "Name": "Inter Miami CF",
+          "VenueRole": "Home",
+          "Country": "Amerika Birleşik Devletleri"
+        },
+        {
+          "_id": "55230",
+          "Name": "Chicago Fire",
+          "VenueRole": "Away",
+          "Country": "Amerika Birleşik Devletleri"
+        }
+      ],
+      "RegionCode": "US",
+      "RegionId": "227",
+      "RegionName": "Amerika Birleşik Devletleri",
+      "Score": {
+        "AwayScore": "",
+        "HomeScore": "",
+        "CombinedSecondTierScores": [],
+        "AdditionalScores": {}
+      },
+      "Settings": {
+        "IsBetBuilderEnabled": true,
+        "IsCashOutEnabled": true,
+        "IsExposureEnabled": false,
+        "IsVIPExcludeEnabled": false,
+        "IsWBComboEnabled": false,
+        "IsWBSingleEnabled": false,
+        "EarlyPayout": 2
+      },
+      "SportId": "1",
+      "SportName": "Futbol",
+      "SportOrder": 1,
+      "Tags": [],
+      "TotalActiveMarketsCount": 108,
+      "TotalDynamicMarketsCount": 67,
+      "TotalMarketsCount": 60,
+      "Type": "Fixture",
+      "UrlEventName": "Inter-Miami-CF-karşı-Chicago-Fire",
+      "UrlLeagueName": "ABD-MLS",
+      "UrlRegionName": "Amerika-Birleşik-Devletleri",
+      "UrlSportName": "Futbol",
+      "ParentSportId": null,
+      "StartEventDate": "2026-07-22T23:30:00.000Z"
+    },
+    "markets": [
+      {
+        "_id": "0ML864089399334559744",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "864089398151741440",
+        "InMarketGroups": [
+          "Main"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "803254019161419776",
+        "MarketGroupOrder": 9,
+        "MarketOrder": 0,
+        "MarketType": {
+          "LineTypeId": 1,
+          "LineTypeName": "1X2",
+          "Name": "Maç Sonucu 1X2",
+          "_id": "ML0",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Maç Sonucu 1X2",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 1,
+            "Side": 1,
+            "Name": "Inter Miami CF",
+            "BetslipLine": "Inter Miami CF",
+            "OutcomeType": "Ev",
+            "TypeName": "1X2",
+            "IsDisabled": false,
+            "TrueOdds": 2.28,
+            "DisplayOdds": {
+              "Decimal": "2.28",
+              "Malay": "-0.781",
+              "HK": "1.28",
+              "Indo": "1.28",
+              "American": "128",
+              "Fractional": "23/18"
+            },
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.41523,
+            "ExtractionMethodId": 3,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0ML864089399334559744H",
+            "EventId": "864089398151741440",
+            "MarketId": "0ML864089399334559744",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 2934.2500000000005,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 783.7500000000001,
+              "SystemMaxBet": 783.7500000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 3,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3770783",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Maç Sonucu 1X2",
+        "LastUpdateDateTime": "2026-07-22T14:16:27.897Z",
+        "UPDATE_TIMESTAMP": "639203271379691756"
+      },
+      {
+        "_id": "0OU864089399334559780",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "864089398151741440",
+        "InMarketGroups": [
+          "Main",
+          "Goals"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "803254019161419776",
+        "MarketGroupOrder": 18,
+        "MarketOrder": 31,
+        "MarketType": {
+          "LineTypeId": 3,
+          "LineTypeName": "Total Goals O/U",
+          "Name": "Toplam Gol",
+          "_id": "OU200",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Toplam Gol",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 3,
+            "Side": 1,
+            "Name": "Üst",
+            "BetslipLine": "Üst 3.5",
+            "OutcomeType": "Üst",
+            "TypeName": "Total Goals O/U",
+            "IsDisabled": false,
+            "TrueOdds": 1.82,
+            "DisplayOdds": {
+              "Decimal": "1.82",
+              "Malay": "0.82",
+              "HK": "0.82",
+              "Indo": "-1.22",
+              "American": "-122",
+              "Fractional": "9/11"
+            },
+            "Points": 3.5,
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.5165145528575972,
+            "ExtractionMethodId": 2,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0OU864089399334559780OMM",
+            "EventId": "864089398151741440",
+            "MarketId": "0OU864089399334559780",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 1600.5000000000002,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 522.5,
+              "SystemMaxBet": 522.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 22,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3771087",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          },
+          {
+            "_id": "3771088",
+            "IsOptional": true,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Toplam Gol",
+        "LastUpdateDateTime": "2026-07-22T12:45:29.544Z",
+        "UPDATE_TIMESTAMP": "639203271379396617"
+      },
+      {
+        "_id": "0QA864089399334559809",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "864089398151741440",
+        "InMarketGroups": [
+          "Main",
+          "Players"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "803254019161419776",
+        "MarketGroupOrder": 26,
+        "MarketOrder": 13370,
+        "MarketType": {
+          "LineTypeId": 0,
+          "LineTypeName": "Goalscorer",
+          "Name": "Gol Atacak Oyuncu",
+          "_id": "QA1337",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Gol Atacak Oyuncu",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 0,
+            "Side": 1,
+            "Name": "German Berterame",
+            "BetslipLine": "German Berterame - Herhangi Bir Zamanda Gol Atan",
+            "TypeName": "Goalscorer",
+            "IsDisabled": false,
+            "TrueOdds": 2.19,
+            "DisplayOdds": {
+              "Decimal": "2.19",
+              "Malay": "-0.84",
+              "HK": "1.19",
+              "Indo": "1.19",
+              "American": "119",
+              "Fractional": "19/16"
+            },
+            "QAParam1": 3,
+            "QAParam2": 181602,
+            "IsOption": false,
+            "Payout": 69,
+            "Probability": 0.31031531531531525,
+            "ExtractionMethodId": 1,
+            "Tags": [],
+            "Metadata": {
+              "TeamSide": "1"
+            },
+            "IsClientSide": true,
+            "_id": "0QA864089399334559809Q3Q181602",
+            "EventId": "864089398151741440",
+            "MarketId": "0QA864089399334559809",
+            "OutcomeType": {},
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 800.2500000000001,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 183.15,
+              "SystemMaxBet": 104.50000000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 0,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "764097375483752532",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Gol Atacak Oyuncu",
+        "LastUpdateDateTime": "2026-07-22T14:25:43.029Z",
+        "UPDATE_TIMESTAMP": "639203271613495768"
+      }
+    ],
+    "BetBuilderSelection": {
+      "_id": "0VS0ML864089399334559744H|0OU864089399334559780OMM|0QA864089399334559809Q3Q181602",
+      "EventId": "864089398151741440",
+      "TrueOdds": 5.05,
+      "DisplayOdds": {
+        "Decimal": "5.05",
+        "Malay": "-0.247",
+        "HK": "4.05",
+        "Indo": "4.05",
+        "American": "405",
+        "Fractional": "4/1"
+      },
+      "DbTrueOdds": 5.05,
+      "DbDisplayOdds": {
+        "Decimal": "5.05",
+        "Malay": "-0.247",
+        "HK": "4.05",
+        "Indo": "4.05",
+        "American": "405",
+        "Fractional": "4/1"
+      }
+    },
+    "ownerLevel": 0
+  },
+  {
+    "id": "867318667334172672",
+    "type": 1,
+    "createdAt": "2026-07-21T08:14:44.333Z",
+    "displaySettings": {
+      "backgroundImage": null,
+      "backgroundImageForLive": null
+    },
+    "event": {
+      "_id": "847781002394017792",
+      "BetslipLine": "Coritiba karşı Palmeiras",
+      "EventName": "Coritiba karşı Palmeiras",
+      "IsLive": false,
+      "IsSuspended": false,
+      "IsTopLeague": false,
+      "LeagueGroupId": "307",
+      "LeagueId": "801347706789560320",
+      "LeagueName": "Brezilya - Serie A",
+      "LeagueOrder": 40001500,
+      "LiveGameState": {
+        "ClockRunning": false,
+        "ClockDirection": 0,
+        "UpdateDate": "0001-01-01T00:00:00.000Z"
+      },
+      "MarketGroups": [
+        "Main",
+        "Halves",
+        "Goals",
+        "Corners",
+        "Players",
+        "Cards",
+        "Specials",
+        "Period"
+      ],
+      "MasterLeagueId": "530",
+      "Metadata": {
+        "HasPlayerIncidentCoverage": "true",
+        "HasVARCoverage": "true",
+        "HasIncidentCoverage": "true"
+      },
+      "Participants": [
+        {
+          "_id": "2339",
+          "Name": "Coritiba",
+          "VenueRole": "Home",
+          "Country": "Uluslararası"
+        },
+        {
+          "_id": "1885",
+          "Name": "Palmeiras",
+          "VenueRole": "Away",
+          "Country": "Brezilya"
+        }
+      ],
+      "RegionCode": "BR",
+      "RegionId": "29",
+      "RegionName": "Brezilya",
+      "Score": {
+        "AwayScore": "",
+        "HomeScore": "",
+        "CombinedSecondTierScores": [],
+        "AdditionalScores": {}
+      },
+      "Settings": {
+        "IsBetBuilderEnabled": true,
+        "IsCashOutEnabled": true,
+        "IsExposureEnabled": false,
+        "IsVIPExcludeEnabled": false,
+        "IsWBComboEnabled": false,
+        "IsWBSingleEnabled": false,
+        "EarlyPayout": 2
+      },
+      "SportId": "1",
+      "SportName": "Futbol",
+      "SportOrder": 1,
+      "Tags": [],
+      "TotalActiveMarketsCount": 154,
+      "TotalDynamicMarketsCount": 63,
+      "TotalMarketsCount": 112,
+      "Type": "Fixture",
+      "UrlEventName": "Coritiba-karşı-Palmeiras",
+      "UrlLeagueName": "Brezilya-Serie-A",
+      "UrlRegionName": "Brezilya",
+      "UrlSportName": "Futbol",
+      "ParentSportId": null,
+      "StartEventDate": "2026-07-22T22:30:00.000Z"
+    },
+    "markets": [
+      {
+        "_id": "0ML847781007729139712",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781002394017792",
+        "InMarketGroups": [
+          "Main"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 9,
+        "MarketOrder": 0,
+        "MarketType": {
+          "LineTypeId": 1,
+          "LineTypeName": "1X2",
+          "Name": "Maç Sonucu 1X2",
+          "_id": "ML0",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Maç Sonucu 1X2",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 1,
+            "Side": 3,
+            "Name": "Palmeiras",
+            "BetslipLine": "Palmeiras",
+            "OutcomeType": "Deplasman",
+            "TypeName": "1X2",
+            "IsDisabled": false,
+            "TrueOdds": 2.01,
+            "DisplayOdds": {
+              "Decimal": "2.01",
+              "Malay": "-0.99",
+              "HK": "1.01",
+              "Indo": "1.01",
+              "American": "101",
+              "Fractional": "100/99"
+            },
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.47144,
+            "ExtractionMethodId": 3,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0ML847781007729139712A",
+            "EventId": "847781002394017792",
+            "MarketId": "0ML847781007729139712",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 2934.2500000000005,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 783.7500000000001,
+              "SystemMaxBet": 783.7500000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 3,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3770783",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Maç Sonucu 1X2",
+        "LastUpdateDateTime": "2026-07-22T14:26:54.155Z",
+        "UPDATE_TIMESTAMP": "639203272154791173"
+      },
+      {
+        "_id": "0OU847781007729139748",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781002394017792",
+        "InMarketGroups": [
+          "Main",
+          "Goals"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 18,
+        "MarketOrder": 31,
+        "MarketType": {
+          "LineTypeId": 3,
+          "LineTypeName": "Total Goals O/U",
+          "Name": "Toplam Gol",
+          "_id": "OU200",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Toplam Gol",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 3,
+            "Side": 1,
+            "Name": "Üst",
+            "BetslipLine": "Üst 2.5",
+            "OutcomeType": "Üst",
+            "TypeName": "Total Goals O/U",
+            "IsDisabled": false,
+            "TrueOdds": 2.16,
+            "DisplayOdds": {
+              "Decimal": "2.16",
+              "Malay": "-0.862",
+              "HK": "1.16",
+              "Indo": "1.16",
+              "American": "116",
+              "Fractional": "22/19"
+            },
+            "Points": 2.5,
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.4320055098978135,
+            "ExtractionMethodId": 2,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0OU847781007729139748OMM",
+            "EventId": "847781002394017792",
+            "MarketId": "0OU847781007729139748",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 1600.5000000000002,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 522.5,
+              "SystemMaxBet": 522.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 22,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3771087",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          },
+          {
+            "_id": "3771088",
+            "IsOptional": true,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Toplam Gol",
+        "LastUpdateDateTime": "2026-07-21T17:42:05.219Z",
+        "UPDATE_TIMESTAMP": "639203270087825462"
+      },
+      {
+        "_id": "0QA847781007729139777",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781002394017792",
+        "InMarketGroups": [
+          "Main",
+          "Players"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 26,
+        "MarketOrder": 13370,
+        "MarketType": {
+          "LineTypeId": 0,
+          "LineTypeName": "Goalscorer",
+          "Name": "Gol Atacak Oyuncu",
+          "_id": "QA1337",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Gol Atacak Oyuncu",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 0,
+            "Side": 3,
+            "Name": "Jose Manuel Lopez",
+            "BetslipLine": "Jose Manuel Lopez - Herhangi Bir Zamanda Gol Atan",
+            "TypeName": "Goalscorer",
+            "IsDisabled": false,
+            "TrueOdds": 2.33,
+            "DisplayOdds": {
+              "Decimal": "2.33",
+              "Malay": "-0.752",
+              "HK": "1.33",
+              "Indo": "1.33",
+              "American": "133",
+              "Fractional": "4/3"
+            },
+            "QAParam1": 3,
+            "QAParam2": 632989,
+            "IsOption": false,
+            "Payout": 69,
+            "Probability": 0.2906705385427666,
+            "ExtractionMethodId": 1,
+            "Tags": [],
+            "Metadata": {
+              "TeamSide": "3"
+            },
+            "IsClientSide": true,
+            "_id": "0QA847781007729139777Q3Q632989",
+            "EventId": "847781002394017792",
+            "MarketId": "0QA847781007729139777",
+            "OutcomeType": {},
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 800.2500000000001,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 183.15,
+              "SystemMaxBet": 104.50000000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 0,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "764097375483752532",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Gol Atacak Oyuncu",
+        "LastUpdateDateTime": "2026-07-22T14:01:56.037Z",
+        "UPDATE_TIMESTAMP": "639203272151563264"
+      }
+    ],
+    "BetBuilderSelection": {
+      "_id": "0VS0ML847781007729139712A|0OU847781007729139748OMM|0QA847781007729139777Q3Q632989",
+      "EventId": "847781002394017792",
+      "TrueOdds": 4.79,
+      "DisplayOdds": {
+        "Decimal": "4.79",
+        "Malay": "-0.264",
+        "HK": "3.79",
+        "Indo": "3.79",
+        "American": "379",
+        "Fractional": "19/5"
+      },
+      "DbTrueOdds": 4.79,
+      "DbDisplayOdds": {
+        "Decimal": "4.79",
+        "Malay": "-0.264",
+        "HK": "3.79",
+        "Indo": "3.79",
+        "American": "379",
+        "Fractional": "19/5"
+      }
+    },
+    "ownerLevel": 0
+  },
+  {
+    "id": "867319321578491904",
+    "type": 1,
+    "createdAt": "2026-07-21T08:17:20.315Z",
+    "displaySettings": {
+      "backgroundImage": null,
+      "backgroundImageForLive": null
+    },
+    "event": {
+      "_id": "847781001118949376",
+      "BetslipLine": "Chapecoense karşı Flamengo",
+      "EventName": "Chapecoense karşı Flamengo",
+      "IsLive": false,
+      "IsSuspended": false,
+      "IsTopLeague": false,
+      "LeagueGroupId": "307",
+      "LeagueId": "801347706789560320",
+      "LeagueName": "Brezilya - Serie A",
+      "LeagueOrder": 40001500,
+      "LiveGameState": {
+        "ClockRunning": false,
+        "ClockDirection": 0,
+        "UpdateDate": "0001-01-01T00:00:00.000Z"
+      },
+      "MarketGroups": [
+        "Main",
+        "Halves",
+        "Goals",
+        "Corners",
+        "Players",
+        "Cards",
+        "Specials",
+        "Period"
+      ],
+      "MasterLeagueId": "530",
+      "Metadata": {
+        "HomeShirtColorPrimary": "#00FF00",
+        "HasPlayerIncidentCoverage": "true",
+        "HasVARCoverage": "true",
+        "HasIncidentCoverage": "true"
+      },
+      "Participants": [
+        {
+          "_id": "47369",
+          "Name": "Chapecoense",
+          "VenueRole": "Home",
+          "Country": "Uluslararası"
+        },
+        {
+          "_id": "2026",
+          "Name": "Flamengo",
+          "VenueRole": "Away",
+          "Country": "Brezilya"
+        }
+      ],
+      "RegionCode": "BR",
+      "RegionId": "29",
+      "RegionName": "Brezilya",
+      "Score": {
+        "AwayScore": "",
+        "HomeScore": "",
+        "CombinedSecondTierScores": [],
+        "AdditionalScores": {}
+      },
+      "Settings": {
+        "IsBetBuilderEnabled": true,
+        "IsCashOutEnabled": true,
+        "IsExposureEnabled": false,
+        "IsVIPExcludeEnabled": false,
+        "IsWBComboEnabled": false,
+        "IsWBSingleEnabled": false,
+        "EarlyPayout": 2
+      },
+      "SportId": "1",
+      "SportName": "Futbol",
+      "SportOrder": 1,
+      "Tags": [],
+      "TotalActiveMarketsCount": 152,
+      "TotalDynamicMarketsCount": 79,
+      "TotalMarketsCount": 110,
+      "Type": "Fixture",
+      "UrlEventName": "Chapecoense-karşı-Flamengo",
+      "UrlLeagueName": "Brezilya-Serie-A",
+      "UrlRegionName": "Brezilya",
+      "UrlSportName": "Futbol",
+      "ParentSportId": null,
+      "StartEventDate": "2026-07-23T00:30:00.000Z"
+    },
+    "markets": [
+      {
+        "_id": "0ML847781003115438080",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781001118949376",
+        "InMarketGroups": [
+          "Main"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 9,
+        "MarketOrder": 0,
+        "MarketType": {
+          "LineTypeId": 1,
+          "LineTypeName": "1X2",
+          "Name": "Maç Sonucu 1X2",
+          "_id": "ML0",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Maç Sonucu 1X2",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 1,
+            "Side": 3,
+            "Name": "Flamengo",
+            "BetslipLine": "Flamengo",
+            "OutcomeType": "Deplasman",
+            "TypeName": "1X2",
+            "IsDisabled": false,
+            "TrueOdds": 1.45,
+            "DisplayOdds": {
+              "Decimal": "1.45",
+              "Malay": "0.45",
+              "HK": "0.45",
+              "Indo": "-2.22",
+              "American": "-222",
+              "Fractional": "9/20"
+            },
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.65931,
+            "ExtractionMethodId": 3,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0ML847781003115438080A",
+            "EventId": "847781001118949376",
+            "MarketId": "0ML847781003115438080",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 2934.2500000000005,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 783.7500000000001,
+              "SystemMaxBet": 783.7500000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 3,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3770783",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Maç Sonucu 1X2",
+        "LastUpdateDateTime": "2026-07-22T14:26:55.669Z",
+        "UPDATE_TIMESTAMP": "639203272159411326"
+      },
+      {
+        "_id": "0OU847781003115438116",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781001118949376",
+        "InMarketGroups": [
+          "Main",
+          "Goals"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 18,
+        "MarketOrder": 31,
+        "MarketType": {
+          "LineTypeId": 3,
+          "LineTypeName": "Total Goals O/U",
+          "Name": "Toplam Gol",
+          "_id": "OU200",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Toplam Gol",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 3,
+            "Side": 1,
+            "Name": "Üst",
+            "BetslipLine": "Üst 3.5",
+            "OutcomeType": "Üst",
+            "TypeName": "Total Goals O/U",
+            "IsDisabled": false,
+            "TrueOdds": 3.02,
+            "DisplayOdds": {
+              "Decimal": "3.02",
+              "Malay": "-0.495",
+              "HK": "2.02",
+              "Indo": "2.02",
+              "American": "202",
+              "Fractional": "2/1"
+            },
+            "Points": 3.5,
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": true,
+            "Payout": 93.5,
+            "Probability": 0.29960134192519333,
+            "ExtractionMethodId": 2,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0OU847781003115438116OP100",
+            "EventId": "847781001118949376",
+            "MarketId": "0OU847781003115438116",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 1600.5000000000002,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 522.5,
+              "SystemMaxBet": 522.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 22,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3771087",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          },
+          {
+            "_id": "3771088",
+            "IsOptional": true,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Toplam Gol",
+        "LastUpdateDateTime": "2026-07-22T14:22:36.144Z",
+        "UPDATE_TIMESTAMP": "639203272163602062"
+      },
+      {
+        "_id": "0QA847781003115438145",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781001118949376",
+        "InMarketGroups": [
+          "Main",
+          "Players"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 26,
+        "MarketOrder": 13370,
+        "MarketType": {
+          "LineTypeId": 0,
+          "LineTypeName": "Goalscorer",
+          "Name": "Gol Atacak Oyuncu",
+          "_id": "QA1337",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Gol Atacak Oyuncu",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 0,
+            "Side": 3,
+            "Name": "Pedro Guilherme",
+            "BetslipLine": "Pedro Guilherme - Herhangi Bir Zamanda Gol Atan",
+            "TypeName": "Goalscorer",
+            "IsDisabled": false,
+            "TrueOdds": 1.77,
+            "DisplayOdds": {
+              "Decimal": "1.77",
+              "Malay": "0.77",
+              "HK": "0.77",
+              "Indo": "-1.30",
+              "American": "-130",
+              "Fractional": "77/100"
+            },
+            "QAParam1": 3,
+            "QAParam2": 344076,
+            "IsOption": false,
+            "Payout": 69,
+            "Probability": 0.4081789140498632,
+            "ExtractionMethodId": 1,
+            "Tags": [],
+            "Metadata": {
+              "TeamSide": "3"
+            },
+            "IsClientSide": true,
+            "_id": "0QA847781003115438145Q3Q344076",
+            "EventId": "847781001118949376",
+            "MarketId": "0QA847781003115438145",
+            "OutcomeType": {},
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 800.2500000000001,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 183.15,
+              "SystemMaxBet": 104.50000000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 0,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "764097375483752532",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Gol Atacak Oyuncu",
+        "LastUpdateDateTime": "2026-07-22T13:26:17.061Z",
+        "UPDATE_TIMESTAMP": "639203272473485216"
+      }
+    ],
+    "BetBuilderSelection": {
+      "_id": "0VS0ML847781003115438080A|0OU847781003115438116OP100|0QA847781003115438145Q3Q344076",
+      "EventId": "847781001118949376",
+      "TrueOdds": 4.42,
+      "DisplayOdds": {
+        "Decimal": "4.42",
+        "Malay": "-0.292",
+        "HK": "3.42",
+        "Indo": "3.42",
+        "American": "342",
+        "Fractional": "17/5"
+      },
+      "DbTrueOdds": 4.42,
+      "DbDisplayOdds": {
+        "Decimal": "4.42",
+        "Malay": "-0.292",
+        "HK": "3.42",
+        "Indo": "3.42",
+        "American": "342",
+        "Fractional": "17/5"
+      }
+    },
+    "ownerLevel": 0
+  },
+  {
+    "id": "867319773334343680",
+    "type": 1,
+    "createdAt": "2026-07-21T08:19:08.025Z",
+    "displaySettings": {
+      "backgroundImage": null,
+      "backgroundImageForLive": null
+    },
+    "event": {
+      "_id": "847781001932582912",
+      "BetslipLine": "SC Internacional karşı Cruzeiro",
+      "EventName": "SC Internacional karşı Cruzeiro",
+      "IsLive": false,
+      "IsSuspended": false,
+      "IsTopLeague": false,
+      "LeagueGroupId": "307",
+      "LeagueId": "801347706789560320",
+      "LeagueName": "Brezilya - Serie A",
+      "LeagueOrder": 40001500,
+      "LiveGameState": {
+        "ClockRunning": false,
+        "ClockDirection": 0,
+        "UpdateDate": "0001-01-01T00:00:00.000Z"
+      },
+      "MarketGroups": [
+        "Main",
+        "Halves",
+        "Goals",
+        "Corners",
+        "Players",
+        "Cards",
+        "Specials",
+        "Period"
+      ],
+      "MasterLeagueId": "530",
+      "Metadata": {
+        "HomeShirtColorPrimary": "#FF0000",
+        "HasPlayerIncidentCoverage": "true",
+        "HasVARCoverage": "true",
+        "HasIncidentCoverage": "true"
+      },
+      "Participants": [
+        {
+          "_id": "197691843252482048",
+          "Name": "SC Internacional",
+          "VenueRole": "Home",
+          "Country": "Brezilya"
+        },
+        {
+          "_id": "2348",
+          "Name": "Cruzeiro",
+          "VenueRole": "Away",
+          "Country": "Uluslararası"
+        }
+      ],
+      "RegionCode": "BR",
+      "RegionId": "29",
+      "RegionName": "Brezilya",
+      "Score": {
+        "AwayScore": "",
+        "HomeScore": "",
+        "CombinedSecondTierScores": [],
+        "AdditionalScores": {}
+      },
+      "Settings": {
+        "IsBetBuilderEnabled": true,
+        "IsCashOutEnabled": true,
+        "IsExposureEnabled": false,
+        "IsVIPExcludeEnabled": false,
+        "IsWBComboEnabled": false,
+        "IsWBSingleEnabled": false,
+        "EarlyPayout": 2
+      },
+      "SportId": "1",
+      "SportName": "Futbol",
+      "SportOrder": 1,
+      "Tags": [],
+      "TotalActiveMarketsCount": 153,
+      "TotalDynamicMarketsCount": 67,
+      "TotalMarketsCount": 110,
+      "Type": "Fixture",
+      "UrlEventName": "SC-Internacional-karşı-Cruzeiro",
+      "UrlLeagueName": "Brezilya-Serie-A",
+      "UrlRegionName": "Brezilya",
+      "UrlSportName": "Futbol",
+      "ParentSportId": null,
+      "StartEventDate": "2026-07-23T00:30:00.000Z"
+    },
+    "markets": [
+      {
+        "_id": "0ML847781003128020992",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781001932582912",
+        "InMarketGroups": [
+          "Main"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 9,
+        "MarketOrder": 0,
+        "MarketType": {
+          "LineTypeId": 1,
+          "LineTypeName": "1X2",
+          "Name": "Maç Sonucu 1X2",
+          "_id": "ML0",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Maç Sonucu 1X2",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 1,
+            "Side": 1,
+            "Name": "SC Internacional",
+            "BetslipLine": "SC Internacional",
+            "OutcomeType": "Ev",
+            "TypeName": "1X2",
+            "IsDisabled": false,
+            "TrueOdds": 2.29,
+            "DisplayOdds": {
+              "Decimal": "2.29",
+              "Malay": "-0.775",
+              "HK": "1.29",
+              "Indo": "1.29",
+              "American": "129",
+              "Fractional": "9/7"
+            },
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.41352,
+            "ExtractionMethodId": 3,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0ML847781003128020992H",
+            "EventId": "847781001932582912",
+            "MarketId": "0ML847781003128020992",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 2934.2500000000005,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 783.7500000000001,
+              "SystemMaxBet": 783.7500000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 3,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3770783",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Maç Sonucu 1X2",
+        "LastUpdateDateTime": "2026-07-22T14:26:55.555Z",
+        "UPDATE_TIMESTAMP": "639203272158637600"
+      },
+      {
+        "_id": "0OU847781003128021028",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781001932582912",
+        "InMarketGroups": [
+          "Main",
+          "Goals"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 18,
+        "MarketOrder": 31,
+        "MarketType": {
+          "LineTypeId": 3,
+          "LineTypeName": "Total Goals O/U",
+          "Name": "Toplam Gol",
+          "_id": "OU200",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Toplam Gol",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 3,
+            "Side": 1,
+            "Name": "Üst",
+            "BetslipLine": "Üst 2.5",
+            "OutcomeType": "Üst",
+            "TypeName": "Total Goals O/U",
+            "IsDisabled": false,
+            "TrueOdds": 2.03,
+            "DisplayOdds": {
+              "Decimal": "2.03",
+              "Malay": "-0.971",
+              "HK": "1.03",
+              "Indo": "1.03",
+              "American": "103",
+              "Fractional": "34/33"
+            },
+            "Points": 2.5,
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.46044411240477073,
+            "ExtractionMethodId": 2,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0OU847781003128021028OMM",
+            "EventId": "847781001932582912",
+            "MarketId": "0OU847781003128021028",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 1600.5000000000002,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 522.5,
+              "SystemMaxBet": 522.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 22,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3771087",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          },
+          {
+            "_id": "3771088",
+            "IsOptional": true,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Toplam Gol",
+        "LastUpdateDateTime": "2026-07-21T08:15:40.012Z",
+        "UPDATE_TIMESTAMP": "639203256340275277"
+      },
+      {
+        "_id": "0QA847781003128021057",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781001932582912",
+        "InMarketGroups": [
+          "Main",
+          "Players"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 26,
+        "MarketOrder": 13370,
+        "MarketType": {
+          "LineTypeId": 0,
+          "LineTypeName": "Goalscorer",
+          "Name": "Gol Atacak Oyuncu",
+          "_id": "QA1337",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Gol Atacak Oyuncu",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 0,
+            "Side": 1,
+            "Name": "Alerrandro",
+            "BetslipLine": "Alerrandro - Herhangi Bir Zamanda Gol Atan",
+            "TypeName": "Goalscorer",
+            "IsDisabled": false,
+            "TrueOdds": 2.87,
+            "DisplayOdds": {
+              "Decimal": "2.87",
+              "Malay": "-0.535",
+              "HK": "1.87",
+              "Indo": "1.87",
+              "American": "187",
+              "Fractional": "15/8"
+            },
+            "QAParam1": 3,
+            "QAParam2": 175251,
+            "IsOption": false,
+            "Payout": 69,
+            "Probability": 0.23534334763948495,
+            "ExtractionMethodId": 1,
+            "Tags": [],
+            "Metadata": {
+              "TeamSide": "1"
+            },
+            "IsClientSide": true,
+            "_id": "0QA847781003128021057Q3Q175251",
+            "EventId": "847781001932582912",
+            "MarketId": "0QA847781003128021057",
+            "OutcomeType": {},
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 800.2500000000001,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 183.15,
+              "SystemMaxBet": 104.50000000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 0,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "764097375483752532",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Gol Atacak Oyuncu",
+        "LastUpdateDateTime": "2026-07-22T13:27:36.588Z",
+        "UPDATE_TIMESTAMP": "639203270503228462"
+      }
+    ],
+    "BetBuilderSelection": {
+      "_id": "0VS0ML847781003128020992H|0OU847781003128021028OMM|0QA847781003128021057Q3Q175251",
+      "EventId": "847781001932582912",
+      "TrueOdds": 5.7,
+      "DisplayOdds": {
+        "Decimal": "5.70",
+        "Malay": "-0.213",
+        "HK": "4.70",
+        "Indo": "4.70",
+        "American": "470",
+        "Fractional": "47/10"
+      },
+      "DbTrueOdds": 5.7,
+      "DbDisplayOdds": {
+        "Decimal": "5.70",
+        "Malay": "-0.213",
+        "HK": "4.70",
+        "Indo": "4.70",
+        "American": "470",
+        "Fractional": "47/10"
+      }
+    },
+    "ownerLevel": 0
+  },
+  {
+    "id": "867320144358359040",
+    "type": 1,
+    "createdAt": "2026-07-21T08:20:36.483Z",
+    "displaySettings": {
+      "backgroundImage": null,
+      "backgroundImageForLive": null
+    },
+    "event": {
+      "_id": "847781003006353408",
+      "BetslipLine": "Sao Paulo SP karşı Athletico Paranaense",
+      "EventName": "Sao Paulo SP karşı Athletico Paranaense",
+      "IsLive": false,
+      "IsSuspended": false,
+      "IsTopLeague": false,
+      "LeagueGroupId": "307",
+      "LeagueId": "801347706789560320",
+      "LeagueName": "Brezilya - Serie A",
+      "LeagueOrder": 40001500,
+      "LiveGameState": {
+        "ClockRunning": false,
+        "ClockDirection": 0,
+        "UpdateDate": "0001-01-01T00:00:00.000Z"
+      },
+      "MarketGroups": [
+        "Main",
+        "Halves",
+        "Goals",
+        "Corners",
+        "Players",
+        "Cards",
+        "Specials",
+        "Period"
+      ],
+      "MasterLeagueId": "530",
+      "Metadata": {
+        "HasPlayerIncidentCoverage": "true",
+        "HasVARCoverage": "true",
+        "HasIncidentCoverage": "true"
+      },
+      "Participants": [
+        {
+          "_id": "331470",
+          "Name": "Sao Paulo SP",
+          "VenueRole": "Home",
+          "Country": "Uluslararası"
+        },
+        {
+          "_id": "146377",
+          "Name": "Athletico Paranaense",
+          "VenueRole": "Away",
+          "Country": "Brezilya"
+        }
+      ],
+      "RegionCode": "BR",
+      "RegionId": "29",
+      "RegionName": "Brezilya",
+      "Score": {
+        "AwayScore": "",
+        "HomeScore": "",
+        "CombinedSecondTierScores": [],
+        "AdditionalScores": {}
+      },
+      "Settings": {
+        "IsBetBuilderEnabled": true,
+        "IsCashOutEnabled": true,
+        "IsExposureEnabled": false,
+        "IsVIPExcludeEnabled": false,
+        "IsWBComboEnabled": false,
+        "IsWBSingleEnabled": false,
+        "EarlyPayout": 2
+      },
+      "SportId": "1",
+      "SportName": "Futbol",
+      "SportOrder": 1,
+      "Tags": [],
+      "TotalActiveMarketsCount": 152,
+      "TotalDynamicMarketsCount": 63,
+      "TotalMarketsCount": 110,
+      "Type": "Fixture",
+      "UrlEventName": "Sao-Paulo-SP-karşı-Athletico-Paranaense",
+      "UrlLeagueName": "Brezilya-Serie-A",
+      "UrlRegionName": "Brezilya",
+      "UrlSportName": "Futbol",
+      "ParentSportId": null,
+      "StartEventDate": "2026-07-23T00:30:00.000Z"
+    },
+    "markets": [
+      {
+        "_id": "0ML847781004470165504",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781003006353408",
+        "InMarketGroups": [
+          "Main"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 9,
+        "MarketOrder": 0,
+        "MarketType": {
+          "LineTypeId": 1,
+          "LineTypeName": "1X2",
+          "Name": "Maç Sonucu 1X2",
+          "_id": "ML0",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Maç Sonucu 1X2",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 1,
+            "Side": 1,
+            "Name": "Sao Paulo SP",
+            "BetslipLine": "Sao Paulo SP",
+            "OutcomeType": "Ev",
+            "TypeName": "1X2",
+            "IsDisabled": false,
+            "TrueOdds": 2,
+            "DisplayOdds": {
+              "Decimal": "2.00",
+              "Malay": "1.00",
+              "HK": "1.00",
+              "Indo": "1.00",
+              "American": "100",
+              "Fractional": "1/1"
+            },
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.47536,
+            "ExtractionMethodId": 3,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0ML847781004470165504H",
+            "EventId": "847781003006353408",
+            "MarketId": "0ML847781004470165504",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 2934.2500000000005,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 783.7500000000001,
+              "SystemMaxBet": 783.7500000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 3,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3770783",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Maç Sonucu 1X2",
+        "LastUpdateDateTime": "2026-07-22T14:26:54.871Z",
+        "UPDATE_TIMESTAMP": "639203272156440925"
+      },
+      {
+        "_id": "0OU847781004470165540",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781003006353408",
+        "InMarketGroups": [
+          "Main",
+          "Goals"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 18,
+        "MarketOrder": 31,
+        "MarketType": {
+          "LineTypeId": 3,
+          "LineTypeName": "Total Goals O/U",
+          "Name": "Toplam Gol",
+          "_id": "OU200",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Toplam Gol",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 3,
+            "Side": 1,
+            "Name": "Üst",
+            "BetslipLine": "Üst 2.5",
+            "OutcomeType": "Üst",
+            "TypeName": "Total Goals O/U",
+            "IsDisabled": false,
+            "TrueOdds": 2.21,
+            "DisplayOdds": {
+              "Decimal": "2.21",
+              "Malay": "-0.826",
+              "HK": "1.21",
+              "Indo": "1.21",
+              "American": "121",
+              "Fractional": "23/19"
+            },
+            "Points": 2.5,
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.42095675508423186,
+            "ExtractionMethodId": 2,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0OU847781004470165540OMM",
+            "EventId": "847781003006353408",
+            "MarketId": "0OU847781004470165540",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 1600.5000000000002,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 522.5,
+              "SystemMaxBet": 522.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 22,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3771087",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          },
+          {
+            "_id": "3771088",
+            "IsOptional": true,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Toplam Gol",
+        "LastUpdateDateTime": "2026-07-22T10:59:34.950Z",
+        "UPDATE_TIMESTAMP": "639203270904855292"
+      },
+      {
+        "_id": "0QA847781004470165569",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "847781003006353408",
+        "InMarketGroups": [
+          "Main",
+          "Players"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "801347706789560320",
+        "MarketGroupOrder": 26,
+        "MarketOrder": 13370,
+        "MarketType": {
+          "LineTypeId": 0,
+          "LineTypeName": "Goalscorer",
+          "Name": "Gol Atacak Oyuncu",
+          "_id": "QA1337",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Gol Atacak Oyuncu",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 0,
+            "Side": 1,
+            "Name": "Jonathan Calleri",
+            "BetslipLine": "Jonathan Calleri - Herhangi Bir Zamanda Gol Atan",
+            "TypeName": "Goalscorer",
+            "IsDisabled": false,
+            "TrueOdds": 2.39,
+            "DisplayOdds": {
+              "Decimal": "2.39",
+              "Malay": "-0.719",
+              "HK": "1.39",
+              "Indo": "1.39",
+              "American": "139",
+              "Fractional": "25/18"
+            },
+            "QAParam1": 3,
+            "QAParam2": 594256,
+            "IsOption": false,
+            "Payout": 69,
+            "Probability": 0.283659793814433,
+            "ExtractionMethodId": 1,
+            "Tags": [],
+            "Metadata": {
+              "TeamSide": "1"
+            },
+            "IsClientSide": true,
+            "_id": "0QA847781004470165569Q3Q594256",
+            "EventId": "847781003006353408",
+            "MarketId": "0QA847781004470165569",
+            "OutcomeType": {},
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 800.2500000000001,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 183.15,
+              "SystemMaxBet": 104.50000000000001,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 0,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "764097375483752532",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Gol Atacak Oyuncu",
+        "LastUpdateDateTime": "2026-07-22T14:27:18.446Z",
+        "UPDATE_TIMESTAMP": "639203272386717550"
+      }
+    ],
+    "BetBuilderSelection": {
+      "_id": "0VS0ML847781004470165504H|0OU847781004470165540OMM|0QA847781004470165569Q3Q594256",
+      "EventId": "847781003006353408",
+      "TrueOdds": 4.78,
+      "DisplayOdds": {
+        "Decimal": "4.78",
+        "Malay": "-0.265",
+        "HK": "3.78",
+        "Indo": "3.78",
+        "American": "378",
+        "Fractional": "19/5"
+      },
+      "DbTrueOdds": 4.78,
+      "DbDisplayOdds": {
+        "Decimal": "4.78",
+        "Malay": "-0.265",
+        "HK": "3.78",
+        "Indo": "3.78",
+        "American": "378",
+        "Fractional": "19/5"
+      }
+    },
+    "ownerLevel": 0
+  },
+  {
+    "id": "867323265130221568",
+    "type": 1,
+    "createdAt": "2026-07-21T08:33:00.532Z",
+    "displaySettings": {
+      "backgroundImage": null,
+      "backgroundImageForLive": null
+    },
+    "event": {
+      "_id": "865279057871507456",
+      "BetslipLine": "Bodo/Glimt - Bodo/Glimt karşı Ham-Kam",
+      "EventName": "Bodo/Glimt - Bodo/Glimt karşı Ham-Kam",
+      "IsLive": false,
+      "IsSuspended": false,
+      "IsTopLeague": false,
+      "LeagueGroupId": "307",
+      "LeagueId": "817674416707416064",
+      "LeagueName": "Norveç - Eliteserien",
+      "LeagueOrder": 31000003,
+      "LiveGameState": {
+        "ClockRunning": false,
+        "ClockDirection": 0,
+        "UpdateDate": "0001-01-01T00:00:00.000Z"
+      },
+      "MarketGroups": [
+        "Main",
+        "Halves",
+        "Goals",
+        "Corners",
+        "Players",
+        "Cards",
+        "Specials",
+        "Period"
+      ],
+      "MasterLeagueId": "235",
+      "Metadata": {
+        "HomeShirtColorPrimary": "#FFFF80",
+        "AwayShirtColorPrimary": "#008000",
+        "HasPlayerIncidentCoverage": "true",
+        "HasVARCoverage": "true",
+        "HasIncidentCoverage": "true"
+      },
+      "Participants": [
+        {
+          "_id": "3137",
+          "Name": "Bodo/Glimt - Bodo/Glimt",
+          "VenueRole": "Home",
+          "Country": "Norveç"
+        },
+        {
+          "_id": "3003",
+          "Name": "Ham-Kam",
+          "VenueRole": "Away",
+          "Country": "Uluslararası"
+        }
+      ],
+      "RegionCode": "NO",
+      "RegionId": "163",
+      "RegionName": "Norveç",
+      "Score": {
+        "AwayScore": "",
+        "HomeScore": "",
+        "CombinedSecondTierScores": [],
+        "AdditionalScores": {}
+      },
+      "Settings": {
+        "IsBetBuilderEnabled": true,
+        "IsCashOutEnabled": true,
+        "IsExposureEnabled": false,
+        "IsVIPExcludeEnabled": false,
+        "IsWBComboEnabled": false,
+        "IsWBSingleEnabled": false,
+        "EarlyPayout": 3
+      },
+      "SportId": "1",
+      "SportName": "Futbol",
+      "SportOrder": 1,
+      "Tags": [],
+      "TotalActiveMarketsCount": 100,
+      "TotalDynamicMarketsCount": 99,
+      "TotalMarketsCount": 53,
+      "Type": "Fixture",
+      "UrlEventName": "Bodo-Glimt-Bodo-Glimt-karşı-Ham-Kam",
+      "UrlLeagueName": "Norveç-Eliteserien",
+      "UrlRegionName": "Norveç",
+      "UrlSportName": "Futbol",
+      "ParentSportId": null,
+      "StartEventDate": "2026-07-22T17:00:00.000Z"
+    },
+    "markets": [
+      {
+        "_id": "0ML865279059045920768",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "865279057871507456",
+        "InMarketGroups": [
+          "Main"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "817674416707416064",
+        "MarketGroupOrder": 9,
+        "MarketOrder": 0,
+        "MarketType": {
+          "LineTypeId": 1,
+          "LineTypeName": "1X2",
+          "Name": "Maç Sonucu 1X2",
+          "_id": "ML0",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Maç Sonucu 1X2",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 1,
+            "Side": 1,
+            "Name": "Bodo/Glimt - Bodo/Glimt",
+            "BetslipLine": "Bodo/Glimt - Bodo/Glimt",
+            "OutcomeType": "Ev",
+            "TypeName": "1X2",
+            "IsDisabled": false,
+            "TrueOdds": 1.08,
+            "DisplayOdds": {
+              "Decimal": "1.08",
+              "Malay": "0.08",
+              "HK": "0.08",
+              "Indo": "-12.50",
+              "American": "-1250",
+              "Fractional": "2/25"
+            },
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.89697,
+            "ExtractionMethodId": 3,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0ML865279059045920768H",
+            "EventId": "865279057871507456",
+            "MarketId": "0ML865279059045920768",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 4534.75,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 1211.25,
+              "SystemMaxBet": 1211.25,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 3,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3770783",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Maç Sonucu 1X2",
+        "LastUpdateDateTime": "2026-07-22T14:26:53.578Z",
+        "UPDATE_TIMESTAMP": "639203272155023693"
+      },
+      {
+        "_id": "0OU865279059045920804",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "865279057871507456",
+        "InMarketGroups": [
+          "Main",
+          "Goals"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "817674416707416064",
+        "MarketGroupOrder": 18,
+        "MarketOrder": 31,
+        "MarketType": {
+          "LineTypeId": 3,
+          "LineTypeName": "Total Goals O/U",
+          "Name": "Toplam Gol",
+          "_id": "OU200",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Toplam Gol",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 3,
+            "Side": 1,
+            "Name": "Üst",
+            "BetslipLine": "Üst 5.5",
+            "OutcomeType": "Üst",
+            "TypeName": "Total Goals O/U",
+            "IsDisabled": false,
+            "TrueOdds": 3.67,
+            "DisplayOdds": {
+              "Decimal": "3.67",
+              "Malay": "-0.375",
+              "HK": "2.67",
+              "Indo": "2.67",
+              "American": "267",
+              "Fractional": "45/17"
+            },
+            "Points": 5.5,
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": true,
+            "Payout": 93.5,
+            "Probability": 0.24232080982701057,
+            "ExtractionMethodId": 2,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0OU865279059045920804OP100",
+            "EventId": "865279057871507456",
+            "MarketId": "0OU865279059045920804",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 2473.5,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 807.5,
+              "SystemMaxBet": 807.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 22,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3771087",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          },
+          {
+            "_id": "3771088",
+            "IsOptional": true,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Toplam Gol",
+        "LastUpdateDateTime": "2026-07-22T14:26:53.992Z",
+        "UPDATE_TIMESTAMP": "639203272155025578"
+      },
+      {
+        "_id": "0QA865279059045920833",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "865279057871507456",
+        "InMarketGroups": [
+          "Main",
+          "Players"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "817674416707416064",
+        "MarketGroupOrder": 26,
+        "MarketOrder": 13370,
+        "MarketType": {
+          "LineTypeId": 0,
+          "LineTypeName": "Goalscorer",
+          "Name": "Gol Atacak Oyuncu",
+          "_id": "QA1337",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Gol Atacak Oyuncu",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 0,
+            "Side": 1,
+            "Name": "Kasper Hogh",
+            "BetslipLine": "Kasper Hogh - Herhangi Bir Zamanda Gol Atan",
+            "TypeName": "Goalscorer",
+            "IsDisabled": false,
+            "TrueOdds": 1.35,
+            "DisplayOdds": {
+              "Decimal": "1.35",
+              "Malay": "0.35",
+              "HK": "0.35",
+              "Indo": "-2.86",
+              "American": "-286",
+              "Fractional": "7/20"
+            },
+            "QAParam1": 3,
+            "QAParam2": 237587,
+            "IsOption": false,
+            "Payout": 69,
+            "Probability": 0.5863230007336756,
+            "ExtractionMethodId": 1,
+            "Tags": [],
+            "Metadata": {
+              "TeamSide": "1"
+            },
+            "IsClientSide": true,
+            "_id": "0QA865279059045920833Q3Q237587",
+            "EventId": "865279057871507456",
+            "MarketId": "0QA865279059045920833",
+            "OutcomeType": {},
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 1236.75,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 283.05,
+              "SystemMaxBet": 161.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 0,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "764097375483752532",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Gol Atacak Oyuncu",
+        "LastUpdateDateTime": "2026-07-22T14:06:15.849Z",
+        "UPDATE_TIMESTAMP": "639203259761997660"
+      }
+    ],
+    "BetBuilderSelection": {
+      "_id": "0VS0ML865279059045920768H|0OU865279059045920804OP100|0QA865279059045920833Q3Q237587",
+      "EventId": "865279057871507456",
+      "TrueOdds": 3.74,
+      "DisplayOdds": {
+        "Decimal": "3.74",
+        "Malay": "-0.365",
+        "HK": "2.74",
+        "Indo": "2.74",
+        "American": "274",
+        "Fractional": "11/4"
+      },
+      "DbTrueOdds": 3.74,
+      "DbDisplayOdds": {
+        "Decimal": "3.74",
+        "Malay": "-0.365",
+        "HK": "2.74",
+        "Indo": "2.74",
+        "American": "274",
+        "Fractional": "11/4"
+      }
+    },
+    "ownerLevel": 10
+  },
+  {
+    "id": "867323788453502976",
+    "type": 1,
+    "createdAt": "2026-07-21T08:35:05.301Z",
+    "displaySettings": {
+      "backgroundImage": null,
+      "backgroundImageForLive": null
+    },
+    "event": {
+      "_id": "866602189647515648",
+      "BetslipLine": "Lillestrøm karşı Viking",
+      "EventName": "Lillestrøm karşı Viking",
+      "IsLive": false,
+      "IsSuspended": false,
+      "IsTopLeague": false,
+      "LeagueGroupId": "307",
+      "LeagueId": "817674416707416064",
+      "LeagueName": "Norveç - Eliteserien",
+      "LeagueOrder": 31000003,
+      "LiveGameState": {
+        "ClockRunning": false,
+        "ClockDirection": 0,
+        "UpdateDate": "0001-01-01T00:00:00.000Z"
+      },
+      "MarketGroups": [
+        "Main",
+        "Halves",
+        "Goals",
+        "Corners",
+        "Players",
+        "Cards",
+        "Specials",
+        "Period"
+      ],
+      "MasterLeagueId": "235",
+      "Metadata": {
+        "HasPlayerIncidentCoverage": "true",
+        "HomeShirtColorPrimary": "#FFFF00",
+        "AwayShirtColorPrimary": "#FFFFFF",
+        "HasVARCoverage": "true",
+        "HasIncidentCoverage": "true"
+      },
+      "Participants": [
+        {
+          "_id": "2879",
+          "Name": "Lillestrøm",
+          "VenueRole": "Home",
+          "Country": "Uluslararası"
+        },
+        {
+          "_id": "3095",
+          "Name": "Viking",
+          "VenueRole": "Away",
+          "Country": "Uluslararası"
+        }
+      ],
+      "RegionCode": "NO",
+      "RegionId": "163",
+      "RegionName": "Norveç",
+      "Score": {
+        "AwayScore": "",
+        "HomeScore": "",
+        "CombinedSecondTierScores": [],
+        "AdditionalScores": {}
+      },
+      "Settings": {
+        "IsBetBuilderEnabled": true,
+        "IsCashOutEnabled": true,
+        "IsExposureEnabled": false,
+        "IsVIPExcludeEnabled": false,
+        "IsWBComboEnabled": false,
+        "IsWBSingleEnabled": false,
+        "EarlyPayout": 3
+      },
+      "SportId": "1",
+      "SportName": "Futbol",
+      "SportOrder": 1,
+      "Tags": [],
+      "TotalActiveMarketsCount": 97,
+      "TotalDynamicMarketsCount": 62,
+      "TotalMarketsCount": 54,
+      "Type": "Fixture",
+      "UrlEventName": "Lillestrøm-karşı-Viking",
+      "UrlLeagueName": "Norveç-Eliteserien",
+      "UrlRegionName": "Norveç",
+      "UrlSportName": "Futbol",
+      "ParentSportId": null,
+      "StartEventDate": "2026-07-22T17:00:00.000Z"
+    },
+    "markets": [
+      {
+        "_id": "0ML866602190977130496",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "866602189647515648",
+        "InMarketGroups": [
+          "Main"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "817674416707416064",
+        "MarketGroupOrder": 9,
+        "MarketOrder": 0,
+        "MarketType": {
+          "LineTypeId": 1,
+          "LineTypeName": "1X2",
+          "Name": "Maç Sonucu 1X2",
+          "_id": "ML0",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Maç Sonucu 1X2",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 1,
+            "Side": 3,
+            "Name": "Viking",
+            "BetslipLine": "Viking",
+            "OutcomeType": "Deplasman",
+            "TypeName": "1X2",
+            "IsDisabled": false,
+            "TrueOdds": 2.12,
+            "DisplayOdds": {
+              "Decimal": "2.12",
+              "Malay": "-0.893",
+              "HK": "1.12",
+              "Indo": "1.12",
+              "American": "112",
+              "Fractional": "9/8"
+            },
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": false,
+            "Payout": 94,
+            "Probability": 0.44614,
+            "ExtractionMethodId": 3,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0ML866602190977130496A",
+            "EventId": "866602189647515648",
+            "MarketId": "0ML866602190977130496",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 4534.75,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 1211.25,
+              "SystemMaxBet": 1211.25,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 3,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3770783",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Maç Sonucu 1X2",
+        "LastUpdateDateTime": "2026-07-22T14:16:15.914Z",
+        "UPDATE_TIMESTAMP": "639203265776231011"
+      },
+      {
+        "_id": "0OU866602190977130532",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "866602189647515648",
+        "InMarketGroups": [
+          "Main",
+          "Goals"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "817674416707416064",
+        "MarketGroupOrder": 18,
+        "MarketOrder": 31,
+        "MarketType": {
+          "LineTypeId": 3,
+          "LineTypeName": "Total Goals O/U",
+          "Name": "Toplam Gol",
+          "_id": "OU200",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Toplam Gol",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 3,
+            "Side": 1,
+            "Name": "Üst",
+            "BetslipLine": "Üst 2.5",
+            "OutcomeType": "Üst",
+            "TypeName": "Total Goals O/U",
+            "IsDisabled": false,
+            "TrueOdds": 1.53,
+            "DisplayOdds": {
+              "Decimal": "1.53",
+              "Malay": "0.53",
+              "HK": "0.53",
+              "Indo": "-1.89",
+              "American": "-189",
+              "Fractional": "53/100"
+            },
+            "Points": 2.5,
+            "QAParam1": 0,
+            "QAParam2": 0,
+            "IsOption": true,
+            "Payout": 93.5,
+            "Probability": 0.618304194122492,
+            "ExtractionMethodId": 2,
+            "Tags": [],
+            "Metadata": {},
+            "IsClientSide": true,
+            "_id": "0OU866602190977130532OM100",
+            "EventId": "866602189647515648",
+            "MarketId": "0OU866602190977130532",
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 2473.5,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 807.5,
+              "SystemMaxBet": 807.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 22,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "3771087",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          },
+          {
+            "_id": "3771088",
+            "IsOptional": true,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Toplam Gol",
+        "LastUpdateDateTime": "2026-07-22T10:40:57.005Z",
+        "UPDATE_TIMESTAMP": "639203259906841095"
+      },
+      {
+        "_id": "0QA866602190977130561",
+        "ComboBonuses": [
+          "810055048871862272"
+        ],
+        "EventId": "866602189647515648",
+        "InMarketGroups": [
+          "Main",
+          "Players"
+        ],
+        "IsClientSide": true,
+        "IsLive": false,
+        "IsRemoved": false,
+        "IsSuspended": false,
+        "LeagueId": "817674416707416064",
+        "MarketGroupOrder": 26,
+        "MarketOrder": 301,
+        "MarketType": {
+          "LineTypeId": 0,
+          "LineTypeName": "Goalscorer",
+          "Name": "Gol Atacak Oyuncu",
+          "_id": "QA1337",
+          "Tier": 1
+        },
+        "Metadata": {},
+        "Name": "Gol Atacak Oyuncu",
+        "ParticipantMapping": "",
+        "Selections": [
+          {
+            "Type": 0,
+            "Side": 3,
+            "Name": "Peter Christiansen",
+            "BetslipLine": "Peter Christiansen - Herhangi Bir Zamanda Gol Atan",
+            "TypeName": "Goalscorer",
+            "IsDisabled": false,
+            "TrueOdds": 2.37,
+            "DisplayOdds": {
+              "Decimal": "2.37",
+              "Malay": "-0.73",
+              "HK": "1.37",
+              "Indo": "1.37",
+              "American": "137",
+              "Fractional": "11/8"
+            },
+            "QAParam1": 3,
+            "QAParam2": 681598,
+            "IsOption": false,
+            "Payout": 69,
+            "Probability": 0.2866666666666667,
+            "ExtractionMethodId": 1,
+            "Tags": [],
+            "Metadata": {
+              "TeamSide": "3"
+            },
+            "IsClientSide": true,
+            "_id": "0QA866602190977130561Q3Q681598",
+            "EventId": "866602189647515648",
+            "MarketId": "0QA866602190977130561",
+            "OutcomeType": {},
+            "Settings": {
+              "MinBet": 0.09,
+              "MaxWin": 1236.75,
+              "ComboMinBet": 0.09,
+              "ComboMaxBet": 283.05,
+              "SystemMaxBet": 161.5,
+              "ComboMaxWin": 0,
+              "SystemMaxWin": 0,
+              "EnableCombos": true,
+              "EnableSingles": true,
+              "EnableSystems": true
+            },
+            "IsRemoved": false
+          }
+        ],
+        "SplitTypeId": 0,
+        "SportId": "1",
+        "Tags": [],
+        "TemplateCashoutSettings": [
+          {
+            "_id": "764097375483752532",
+            "IsOptional": false,
+            "ComboCashoutEnabled": true,
+            "SingleCashoutEnabled": true,
+            "PartialCashoutEnabled": true
+          }
+        ],
+        "BetslipLine": "Gol Atacak Oyuncu",
+        "LastUpdateDateTime": "2026-07-22T13:26:49.764Z",
+        "UPDATE_TIMESTAMP": "639203259919101226"
+      }
+    ],
+    "BetBuilderSelection": {
+      "_id": "0VS0ML866602190977130496A|0OU866602190977130532OM100|0QA866602190977130561Q3Q681598",
+      "EventId": "866602189647515648",
+      "TrueOdds": 3.92,
+      "DisplayOdds": {
+        "Decimal": "3.92",
+        "Malay": "-0.342",
+        "HK": "2.92",
+        "Indo": "2.92",
+        "American": "292",
+        "Fractional": "29/10"
+      },
+      "DbTrueOdds": 3.92,
+      "DbDisplayOdds": {
+        "Decimal": "3.92",
+        "Malay": "-0.342",
+        "HK": "2.92",
+        "Indo": "2.92",
+        "American": "292",
+        "Fractional": "29/10"
+      }
+    },
+    "ownerLevel": 10
+  }
+]

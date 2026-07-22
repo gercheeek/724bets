@@ -1,43 +1,53 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
-async function inspectDOM() {
-    const browser = await puppeteer.launch({ headless: "new", args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-    const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-    
-    const url = 'https://tarafbet982.com/tr/prelive/league/sport-soccer/premier_league-15542/default/all_time/';
-    
+(async () => {
+    const browser = await puppeteer.launch({ headless: "new", args: ['--no-sandbox'] });
     try {
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 45000 });
+        const page = await browser.newPage();
+        await page.goto('https://tarafbet982.com/tr/live/', { waitUntil: 'networkidle2', timeout: 30000 });
         await new Promise(r => setTimeout(r, 10000));
         
-        // Find elements containing "Arsenal" or "Chelsea" to see their structure
-        const targetElementsInfo = await page.evaluate(() => {
-            const matches = [];
-            const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, null, false);
-            let node;
-            while (node = walk.nextNode()) {
-                if (node.textContent.includes('Arsenal') || node.textContent.includes('Chelsea')) {
-                    // Check if it has a class and is relatively small (so we don't just get the body)
-                    if (node.className && node.textContent.length < 300) {
-                        matches.push({
-                            tagName: node.tagName,
-                            className: node.className,
-                            text: node.innerText.trim(),
-                            parentClass: node.parentElement ? node.parentElement.className : ''
-                        });
-                    }
+        const html = await page.evaluate(() => {
+            const rows = Array.from(document.querySelectorAll('[class*="event-row_"]'));
+            const logs = [];
+            
+            for (let i = 0; i < Math.min(3, rows.length); i++) {
+                const row = rows[i];
+                let current = row.previousElementSibling;
+                const prevTags = [];
+                while (current && prevTags.length < 3) {
+                    prevTags.push({
+                        tag: current.tagName,
+                        className: typeof current.className === 'string' ? current.className : '',
+                        text: current.innerText ? current.innerText.trim() : ''
+                    });
+                    current = current.previousElementSibling;
                 }
+                
+                let parent = row.parentElement;
+                let parentInfo = null;
+                if (parent) {
+                    parentInfo = {
+                        tag: parent.tagName,
+                        className: typeof parent.className === 'string' ? parent.className : '',
+                        textPrefix: parent.innerText ? parent.innerText.substring(0, 50).replace(/\n/g, ' ') : ''
+                    };
+                }
+
+                logs.push({
+                    rowClasses: typeof row.className === 'string' ? row.className : '',
+                    prevSiblings: prevTags,
+                    parent: parentInfo
+                });
             }
-            return matches.slice(0, 10);
+            return logs;
         });
         
-        console.log("Matches found in DOM:", JSON.stringify(targetElementsInfo, null, 2));
-    } catch (e) {
-        console.error(e.message);
+        console.log("DOM INFO:\n" + JSON.stringify(html, null, 2));
+    } catch(e) {
+        console.log("Error:", e.message);
     } finally {
         await browser.close();
     }
-}
-
-inspectDOM();
+})();

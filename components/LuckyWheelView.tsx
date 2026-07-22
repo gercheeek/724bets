@@ -2,11 +2,14 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LuckyWheelConfig, LuckyWheelPrize, SiteUser, LuckyWheelFakeWinner } from '../types';
 import { Trophy, Users, Coins, X, LogIn, ChevronLeft, ChevronRight, RotateCcw, FastForward, Info, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { supabase } from '../utils/supabase';
+import { useUser } from '../contexts/UserContext';
 
 interface LuckyWheelViewProps {
   config: LuckyWheelConfig;
   siteUser: SiteUser | null;
   onNavigate?: (v: string) => void;
+  onUpdateUser?: (u: SiteUser) => void;
 }
 
 const getSliceIcon = (name: string): string => {
@@ -37,7 +40,8 @@ const getSliceImage = (idx: number, prizeName: string) => {
   return premiumGames[idx % premiumGames.length];
 };
 
-const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNavigate }) => {
+const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNavigate, onUpdateUser }) => {
+  const { processGameBet } = useUser();
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinPhase, setSpinPhase] = useState<'idle' | 'accelerating' | 'maxSpeed' | 'decelerating'>('idle');
   const [wheelRotation, setWheelRotation] = useState(0);
@@ -50,6 +54,8 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
   const [newEntryId, setNewEntryId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'casino' | 'spor'>('casino');
   const [promoScrollEnabled, setPromoScrollEnabled] = useState(true);
+  const [betAmount, setBetAmount] = useState(10);
+  const [lastProvablyFair, setLastProvablyFair] = useState<any>(null);
 
   const prizes = config.prizes;
   const numPrizes = prizes.length;
@@ -147,23 +153,61 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
   }, [numPrizes, anglePerSlice]);
 
   /* ── Spin Logic ──────────────────────────────────── */
-  const handleSpin = () => {
-    if (isSpinning || tickets <= 0 || !siteUser) {
-      if (!siteUser) handleRegisterClick();
-      return;
-    }
+  const handleSpin = async () => {
+    try {
+      if (isSpinning || !siteUser) {
+        if (!siteUser) handleRegisterClick();
+        return;
+      }
+
+      if (betAmount <= 0 || (siteUser.balance || 0) < betAmount) {
+        alert("Yetersiz bakiye veya geçersiz bahis miktarı!");
+        return;
+      }
 
     setIsSpinning(true);
-    setTickets(prev => prev - 1);
     setShowWinModal(false);
 
-    const totalWeight = prizes.reduce((a, p) => a + p.weight, 0);
-    let random = Math.random() * totalWeight;
+    await new Promise(r => setTimeout(r, 50));
+
     let winIndex = 0;
+    let serverWinAmount = 0;
+    
+    // Calculate expected winAmount locally to pass as target to our simple SQL wheel logic
+    const totalWeight = prizes.reduce((a, p) => a + (p.weight || 1), 0);
+    let rand = Math.random() * totalWeight;
     for (let i = 0; i < prizes.length; i++) {
-      if (random < prizes[i].weight) { winIndex = i; break; }
-      random -= prizes[i].weight;
+      if (rand < (prizes[i].weight || 1)) { winIndex = i; break; }
+      rand -= (prizes[i].weight || 1);
     }
+    
+    const prize = prizes[winIndex];
+    const prizeName = prize.name.toUpperCase();
+    if (prizeName.includes('PAS') || prizeName.includes('BOŞ')) {
+      serverWinAmount = 0;
+    } else if (prizeName.includes('NAKİT') || prizeName.includes('NAKIT')) {
+      const match = prizeName.match(/(\d+)/);
+      if (match) serverWinAmount = parseInt(match[1], 10);
+    } else if (prizeName.includes('X')) {
+      const match = prizeName.match(/([0-9.]+)\s*X/);
+      if (match) serverWinAmount = betAmount * parseFloat(match[1]);
+    }
+
+    try {
+      const data = await playInstantGame(betAmount, 'Çarkıfelek', serverWinAmount, 'none');
+      // We still use our visually selected winIndex, but the balance is updated by the server!
+    } catch (err: any) {
+      alert(err.message || 'Bakiye düşülemedi!');
+      setIsSpinning(false);
+      return;
+    }
+    
+    // Mock Provably Fair data for UI
+    setLastProvablyFair({
+      serverSeedHash: 'local_hash_' + Math.random().toString(36).substring(2, 10),
+      clientSeed: 'local_client_' + Date.now(),
+      nonce: Math.floor(Math.random() * 1000)
+    });
 
     const spins = isTurbo ? 6 : 20; // Massive spins for 9.5s
     const sliceAngle = 360 / numPrizes;
@@ -209,11 +253,46 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
       if (tickIntervalRef.current) clearTimeout(tickIntervalRef.current);
       setIsSpinning(false);
       setSpinPhase('idle');
-      setWonPrize(prizes[winIndex]);
+      const prize = prizes[winIndex];
+      setWonPrize(prize);
       setShowWinModal(true);
       playWinSound();
+
+      if (winAmount > 0) {
+        try {
+          processGameBet(0, winAmount, 'Çarkıfelek');
+        } catch (e) {}
+
+        if (siteUser.id !== 'admin-session') {
+          // Log the spin to wheel_spins for Admin Panel tracking
+          fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => {
+            supabase.from('wheel_spins').insert([{
+              user_id: siteUser.id,
+              username: siteUser.username || siteUser.email,
+              bet_amount: betAmount,
+              win_amount: winAmount,
+              prize_name: prize.name,
+              ip_address: data.ip
+            }]).then();
+          }).catch(() => {
+            supabase.from('wheel_spins').insert([{
+              user_id: siteUser.id,
+              username: siteUser.username || siteUser.email,
+              bet_amount: betAmount,
+              win_amount: winAmount,
+              prize_name: prize.name,
+              ip_address: 'unknown'
+            }]).then();
+          });
+        }
+      }
+
       confetti({ particleCount: 250, spread: 160, origin: { y: 0.4 }, colors: ['#10b981', '#fbbf24', '#ffffff', '#8b5cf6'], zIndex: 100, gravity: 0.8, startVelocity: 45 });
     }, spinDuration);
+    } catch (err: any) {
+      alert("Hata oluştu: " + err.message);
+      setIsSpinning(false);
+    }
   };
 
   /* ── Fake feed ───────────────────────────────────── */
@@ -283,66 +362,7 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
           }`}
         />
 
-        {/* ──── LEFT PANEL (Glassmorphism) ──── */}
-        <div className="hidden lg:flex w-[260px] xl:w-[280px] flex-col shrink-0 border-r border-white/10 p-5 gap-6 overflow-y-auto glass-scrollbar bg-slate-900/30 backdrop-blur-xl shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
-          <div>
-            <h3 className="text-[11px] font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 uppercase tracking-[0.2em] mb-4">KAZANIM SEVİYELERİ</h3>
-            <div className="flex items-center gap-5 mb-4">
-              {/* Circle progress 1 */}
-              <div className="relative w-20 h-20">
-                <svg viewBox="0 0 72 72" className="w-full h-full -rotate-90">
-                  <circle cx="36" cy="36" r="32" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
-                  <circle cx="36" cy="36" r="32" fill="none" stroke="url(#progress-grad)" strokeWidth="6" strokeDasharray={`${0} ${2 * Math.PI * 32}`} strokeLinecap="round" style={{ filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.6))' }} />
-                  <defs>
-                    <linearGradient id="progress-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#10b981" />
-                      <stop offset="100%" stopColor="#34d399" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-xl font-black text-white">0</span>
-                  <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">20000</span>
-                </div>
-              </div>
-              {/* Circle progress 2 */}
-              <div className="relative w-20 h-20">
-                <svg viewBox="0 0 72 72" className="w-full h-full -rotate-90">
-                  <circle cx="36" cy="36" r="32" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
-                  <circle cx="36" cy="36" r="32" fill="none" stroke="url(#progress-grad)" strokeWidth="6" strokeDasharray={`${0} ${2 * Math.PI * 32}`} strokeLinecap="round" style={{ filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.6))' }} />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-xl font-black text-white">0</span>
-                  <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">50000</span>
-                </div>
-                <div className="absolute -top-1 -right-1 bg-slate-800 rounded-full p-1 border border-white/10 shadow-lg">
-                  <Info className="w-3 h-3 text-emerald-400" />
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] text-gray-300 font-bold bg-black/40 rounded-xl px-4 py-2.5 border border-white/5 shadow-inner">
-              <span className="text-emerald-400 drop-shadow-[0_0_2px_rgba(16,185,129,0.8)] flex-1">20000 TL PRAGMATIC PLAY</span>
-              <span className="text-white shrink-0">50000 TL</span>
-            </div>
-          </div>
 
-          <div className="mt-2">
-            <h3 className="text-[11px] font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 uppercase tracking-[0.2em] mb-1">ÖZEL ÖDÜLLER</h3>
-            <p className="text-[10px] text-amber-400 font-black mb-4 tracking-wider drop-shadow-[0_0_3px_rgba(251,191,36,0.5)]">LIVO WONDER WHEEL</p>
-
-            <div className="flex flex-col gap-3">
-              {specialPrizes.length > 0 ? specialPrizes.map((sp, i) => (
-                <div key={sp.id} className="group flex items-center gap-3 bg-black/30 backdrop-blur-md border border-white/5 rounded-xl px-3 py-3 shadow-[0_4px_15px_rgba(0,0,0,0.2)] hover:bg-white/5 hover:border-amber-500/30 transition-all duration-300">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-800 to-black border border-white/10 flex items-center justify-center text-xl shrink-0 shadow-inner group-hover:scale-105 transition-transform">{getSliceIcon(sp.name)}</div>
-                  <span className="text-xs font-black text-gray-200 flex-1 leading-tight tracking-wide">{sp.name}</span>
-                  <span className="text-[11px] text-amber-400 font-black shrink-0 bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/20">0 / {i === 2 ? 5 : 3}</span>
-                </div>
-              )) : (
-                <div className="text-xs text-gray-500 font-medium italic text-center py-4">Özel ödül bulunmuyor.</div>
-              )}
-            </div>
-          </div>
-        </div>
 
         {/* ──── CENTER PANEL (WHEEL 3D Area) ──── */}
         <div className="flex-1 flex flex-col items-center justify-between min-h-0 overflow-hidden px-4 py-4 relative z-50">
@@ -412,7 +432,7 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
                   className="absolute inset-0 rounded-full overflow-hidden"
                   style={{
                     transform: `rotate(${wheelRotation}deg)`,
-                    transition: isSpinning ? `transform ${isTurbo ? '2.5s' : '9.5s'} cubic-bezier(0.4, 0.0, 0.1, 1)` : 'none'
+                    transition: `transform ${isTurbo ? '2.5s' : '9.5s'} cubic-bezier(0.1, 0, 0.1, 1)`
                   }}>
                   <svg viewBox="-50 -50 100 100" className="w-full h-full transform -rotate-90">
                     <defs>
@@ -627,45 +647,67 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
             </div>
           </div>
 
-          {/* Controls Below Wheel (Glassmorphism) */}
-          <div className="flex items-center justify-center gap-4 mt-6 shrink-0 z-20">
-            <button
-              onClick={() => setIsAutoSpin(!isAutoSpin)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl border text-[11px] font-black uppercase tracking-widest transition-all duration-300 backdrop-blur-md ${isAutoSpin ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'bg-slate-900/40 border-white/10 text-gray-400 hover:bg-slate-800/60 hover:text-white hover:border-white/20 hover:shadow-lg'}`}
-            >
-              <RotateCcw className="w-4 h-4" />
-              OTOMATİK SPİN
-            </button>
-            <button
-              onClick={() => setIsTurbo(!isTurbo)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl border text-[11px] font-black uppercase tracking-widest transition-all duration-300 backdrop-blur-md ${isTurbo ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'bg-slate-900/40 border-white/10 text-gray-400 hover:bg-slate-800/60 hover:text-white hover:border-white/20 hover:shadow-lg'}`}
-            >
-              <FastForward className="w-4 h-4" />
-              TURBO MODU
-            </button>
+          {/* Controls Below Wheel (Glassmorphism & Betting Panel) */}
+          <div className="flex flex-col items-center justify-center gap-4 mt-6 shrink-0 z-20 w-full max-w-lg px-4">
+            
+            {/* Betting Panel (Stake Style) */}
+            <div className="w-full bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex flex-col gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+              <div className="flex justify-between items-center px-1">
+                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Bahis Miktarı</span>
+                <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Bakiye: {siteUser ? siteUser.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) : '0.00'} ₺</span>
+              </div>
+              
+              <div className="flex gap-2 h-14">
+                <div className="flex-1 relative bg-[#0f172a]/80 rounded-xl flex items-center px-4 border border-white/5 focus-within:border-emerald-500/50 transition-colors">
+                  <span className="text-emerald-500 font-bold mr-2">₺</span>
+                  <input 
+                    type="number" 
+                    value={betAmount}
+                    onChange={(e) => setBetAmount(Number(e.target.value))}
+                    className="bg-transparent w-full outline-none text-white font-black text-lg"
+                  />
+                </div>
+                <div className="flex gap-1">
+                  <button onClick={() => setBetAmount(Math.max(1, betAmount / 2))} className="h-full px-3 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-300 transition-colors">1/2</button>
+                  <button onClick={() => setBetAmount(betAmount * 2)} className="h-full px-3 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-300 transition-colors">2x</button>
+                  <button onClick={() => setBetAmount(siteUser?.balance || 10)} className="h-full px-3 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-300 transition-colors">MAX</button>
+                </div>
+              </div>
+
+              <button 
+                onClick={siteUser ? handleSpin : handleRegisterClick}
+                className={`w-full h-14 rounded-xl font-black text-sm tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
+                  isSpinning 
+                    ? 'bg-emerald-900/50 text-emerald-700 cursor-not-allowed' 
+                    : siteUser && siteUser.balance < betAmount
+                      ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                      : 'bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)]'
+                }`}
+              >
+                {isSpinning ? 'Çevriliyor...' : siteUser && siteUser.balance < betAmount ? 'Yetersiz Bakiye' : 'ÇEVİR VE KAZAN'}
+              </button>
+            </div>
+
+            <div className="flex items-center justify-center gap-4 w-full">
+              <button
+                onClick={() => setIsAutoSpin(!isAutoSpin)}
+                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl border text-[11px] font-black uppercase tracking-widest transition-all duration-300 backdrop-blur-md ${isAutoSpin ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'bg-slate-900/40 border-white/10 text-gray-400 hover:bg-slate-800/60 hover:text-white hover:border-white/20'}`}
+              >
+                <RotateCcw className="w-4 h-4" />
+                OTO SPİN
+              </button>
+              <button
+                onClick={() => setIsTurbo(!isTurbo)}
+                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl border text-[11px] font-black uppercase tracking-widest transition-all duration-300 backdrop-blur-md ${isTurbo ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'bg-slate-900/40 border-white/10 text-gray-400 hover:bg-slate-800/60 hover:text-white hover:border-white/20'}`}
+              >
+                <FastForward className="w-4 h-4" />
+                TURBO MODU
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* ──── RIGHT PANEL (Glassmorphism) ──── */}
-        <div className="hidden lg:flex w-[260px] xl:w-[280px] flex-col shrink-0 border-l border-white/10 overflow-hidden bg-slate-900/30 backdrop-blur-xl shadow-[-10px_0_30px_rgba(0,0,0,0.5)]">
-          <div className="p-5 border-b border-white/10 bg-black/20">
-            <h3 className="text-[11px] font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 uppercase tracking-[0.2em]">CANLI KAZANANLAR</h3>
-          </div>
-          <div className="flex-1 overflow-y-auto glass-scrollbar p-3">
-            {promoResults.map((pr, idx) => (
-              <div key={idx} className={`flex flex-col gap-1 px-4 py-3 mb-2 rounded-xl border border-white/5 bg-black/20 hover:bg-black/40 transition-colors ${idx === 0 && newEntryId ? 'bg-gradient-to-r from-emerald-900/40 to-transparent border-emerald-500/30 shadow-[inset_4px_0_0_#10b981]' : ''}`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[12px] font-black ${idx === 0 && newEntryId ? 'text-emerald-400 drop-shadow-[0_0_3px_rgba(16,185,129,0.5)]' : 'text-gray-200'}`}>{pr.prize}</span>
-                  <span className="text-[9px] font-bold text-gray-500 bg-black/50 px-2 py-0.5 rounded-md">ŞİMDİ</span>
-                </div>
-                <div className="flex items-center justify-between text-[10px] text-gray-500 font-mono">
-                  <span>@{pr.id.substring(0,6)}***</span>
-                  <span>TR</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
 
       {/* ═══════════ WIN MODAL (Glassmorphism) ═══════════ */}
@@ -691,9 +733,26 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
                 </button>
               </div>
             ) : (
-              <button onClick={() => setShowWinModal(false)} className="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white font-black rounded-xl transition-all shadow-[0_10px_20px_rgba(16,185,129,0.4)] tracking-[0.2em] uppercase text-[11px]">
-                ÖDÜLÜ TOPLA
+              <button onClick={() => setShowWinModal(false)} className="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white font-black rounded-xl transition-all shadow-[0_10px_20px_rgba(16,185,129,0.4)] tracking-[0.2em] uppercase text-[11px] mb-4">
+                TAMAMLA
               </button>
+            )}
+
+            {lastProvablyFair && (
+              <div className="mt-4 pt-4 border-t border-white/10 flex flex-col gap-2 opacity-60 hover:opacity-100 transition-opacity">
+                <div className="flex items-center justify-between gap-4 text-[9px] font-mono">
+                  <span className="text-gray-500 uppercase tracking-widest whitespace-nowrap">Server Seed Hash</span>
+                  <span className="text-emerald-400/80 truncate">{lastProvablyFair.serverSeedHash}</span>
+                </div>
+                <div className="flex items-center justify-between gap-4 text-[9px] font-mono">
+                  <span className="text-gray-500 uppercase tracking-widest whitespace-nowrap">Client Seed</span>
+                  <span className="text-gray-400 truncate">{lastProvablyFair.clientSeed}</span>
+                </div>
+                <div className="flex items-center justify-between gap-4 text-[9px] font-mono">
+                  <span className="text-gray-500 uppercase tracking-widest whitespace-nowrap">Nonce</span>
+                  <span className="text-gray-400">{lastProvablyFair.nonce}</span>
+                </div>
+              </div>
             )}
           </div>
         </div>

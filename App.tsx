@@ -12,6 +12,7 @@ import { getFlagUrl } from './components/MatchResultsWidget';
 import AppLoader from './components/AppLoader';
 import BrandCard from './components/BrandCard';
 import AdminPanel from './components/AdminPanel';
+import FinanceDashboard from './components/FinanceDashboard';
 import ErrorBoundary from './components/ErrorBoundary';
 import AuthModal from './components/AuthModal';
 import OnboardingPopup from './components/OnboardingPopup';
@@ -86,6 +87,7 @@ import HeroSection from './components/HeroSection';
 import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
 import Spor724View from './components/Spor724View';
+import GercekView from './components/sports/GercekView';
 import InGameLayout from './components/InGameLayout';
 import ComingSoon from './components/ComingSoon';
 import PlinkoView from './components/PlinkoView';
@@ -176,6 +178,7 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
 
 export default function App() {
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
+  const [isFinancePanelOpen, setIsFinancePanelOpen] = useState(false);
   const [isDriverActive, setIsDriverActive] = useState(false);
 
   useEffect(() => {
@@ -187,8 +190,20 @@ export default function App() {
         window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'admin' }));
       }
     };
+    const handleOpenFinance = () => {
+      const role = localStorage.getItem('site_user_role');
+      if (role === 'admin') {
+        setIsFinancePanelOpen(true);
+      } else {
+        window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'admin' }));
+      }
+    };
     window.addEventListener('open-admin', handleOpenAdmin);
-    return () => window.removeEventListener('open-admin', handleOpenAdmin);
+    window.addEventListener('open-finance', handleOpenFinance);
+    return () => {
+      window.removeEventListener('open-admin', handleOpenAdmin);
+      window.removeEventListener('open-finance', handleOpenFinance);
+    };
   }, []);
 
   return (
@@ -201,6 +216,10 @@ export default function App() {
 
           {isAdminPanelOpen && (
               <AdminPanel onClose={() => setIsAdminPanelOpen(false)} />
+          )}
+
+          {isFinancePanelOpen && (
+              <FinanceDashboard onClose={() => setIsFinancePanelOpen(false)} />
           )}
         </BettingProvider>
       </LanguageProvider>
@@ -299,6 +318,15 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     handleResize(); // Run on mount to ensure correct initial state
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Auto-open sidebar and right chat when entering sports section
+  useEffect(() => {
+    const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor'];
+    if (sportsViews.includes(view)) {
+      setIsSidebarOpen(true);
+      setIsChatOpen(true);
+    }
+  }, [view]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -449,8 +477,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [siteStatusConfig, setSiteStatusConfig] = useState<SiteStatusConfig>(() => {
     const stored = localStorage.getItem('site_status');
     const parsed = stored ? JSON.parse(stored) : DEFAULT_SITE_STATUS_CONFIG;
-    // Always default to false on mount to prevent flicker; DB will override if actually true
-    return { ...parsed, isMaintenanceMode: false };
+    return { ...parsed, isMaintenanceMode: true };
   });
 
   const handleSiteStatusConfigChange = (cfg: SiteStatusConfig) => {
@@ -586,6 +613,74 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     window.location.reload();
   };
 
+  const lastBalanceRef = useRef(siteUser?.balance);
+  const broadcastChannelRef = useRef<any>(null);
+
+  // Global Local Storage Sync for siteUser (Ensures games using setSiteUser directly don't lose balance)
+  useEffect(() => {
+    if (siteUser) {
+      const stored = localStorage.getItem('site_member');
+      const currentString = JSON.stringify(siteUser);
+      if (stored !== currentString) {
+        localStorage.setItem('site_member', currentString);
+        localStorage.setItem('site_current_member', currentString);
+      }
+      
+      // Broadcast if balance changed LOCALLY (prevent infinite loops)
+      if (lastBalanceRef.current !== undefined && lastBalanceRef.current !== siteUser.balance) {
+        if (broadcastChannelRef.current) {
+          broadcastChannelRef.current.send({
+            type: 'broadcast',
+            event: 'balance_update',
+            payload: { balance: siteUser.balance }
+          }).catch(() => {});
+        }
+      }
+      lastBalanceRef.current = siteUser.balance;
+    }
+  }, [siteUser]);
+
+  // Real-time Database & Broadcast Sync (Cross-Profile / Cross-Device)
+  useEffect(() => {
+    if (!siteUser?.id) return;
+
+    // 1. Listen for DB changes (Real members)
+    const dbChannel = supabase.channel(`public:members:id=eq.${siteUser.id}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'members', filter: `id=eq.${siteUser.id}` }, (payload: any) => {
+        const newBalance = payload.new.balance;
+        setSiteUser(prev => {
+          if (prev && prev.balance !== newBalance) {
+            lastBalanceRef.current = newBalance; // Prevent echo
+            return { ...prev, balance: newBalance };
+          }
+          return prev;
+        });
+      })
+      .subscribe();
+
+    // 2. Broadcast channel for Guest users & instant optimistic sync
+    const broadcastChannel = supabase.channel(`user_sync_${siteUser.id}`)
+      .on('broadcast', { event: 'balance_update' }, (payload: any) => {
+        const newBalance = payload.payload.balance;
+        setSiteUser(prev => {
+          if (prev && prev.balance !== newBalance) {
+            lastBalanceRef.current = newBalance; // Prevent echo
+            return { ...prev, balance: newBalance };
+          }
+          return prev;
+        });
+      });
+      
+    broadcastChannel.subscribe();
+    broadcastChannelRef.current = broadcastChannel;
+
+    return () => {
+      supabase.removeChannel(dbChannel);
+      supabase.removeChannel(broadcastChannel);
+      broadcastChannelRef.current = null;
+    };
+  }, [siteUser?.id]);
+
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       // If site_member is removed by another tab, sync logout here
@@ -593,6 +688,17 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         setSiteUser(null);
         setUserRole(null);
         window.location.reload();
+      }
+      if ((e.key === 'site_current_member' || e.key === 'site_member') && e.newValue) {
+        try {
+          const parsedUser = JSON.parse(e.newValue);
+          setSiteUser((prev) => {
+            if (!prev || prev.balance !== parsedUser.balance) {
+              return parsedUser;
+            }
+            return prev;
+          });
+        } catch {}
       }
     };
     window.addEventListener('storage', handleStorageChange);
@@ -689,8 +795,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   // Automatically toggle sidebar and chat when view or login state changes (for desktop)
   useEffect(() => {
     if (window.innerWidth >= 1280) {
-      setIsSidebarOpen(true); // Always open left menu on desktop by default
-
+      if (view === 'sports' || view === 'spor') {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true); // Always open left menu on desktop for main/casino
+      }
     }
   }, [siteUser, view]);
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -1171,8 +1280,18 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
     initData();
 
+    // Supabase Realtime Subscription for instant maintenance mode enforcement
+    const channel = supabase.channel('site_configs_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_configs' }, (payload: any) => {
+        if (payload.new && payload.new.key === 'site_status' && payload.new.value) {
+          setSiteStatusConfig(payload.new.value);
+        }
+      })
+      .subscribe();
+
     return () => {
       isMounted = false;
+      supabase.removeChannel(channel);
     };
   }, []);
 
@@ -1560,11 +1679,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     const newUrl = v === 'home' ? '/' : (v === 'spor724' || v === 'sports' ? '/spor' : `/${v}`);
     window.history.pushState(null, '', newUrl);
 
-    if (v === 'spor724' || v.startsWith('sports')) {
-
-      if (window.innerWidth >= 1280) {
-        setIsSidebarOpen(true);
-      }
+    const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor'];
+    if (sportsViews.includes(v)) {
+      setIsSidebarOpen(true);
+      setIsChatOpen(true);
     }
 
     if (v === 'sports' || v === 'sports2' || v === 'sports3' || v === 'sports4' || v === 'sports5') {
@@ -1634,7 +1752,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     }
   };
 
-  const isMaintenanceActive = siteStatusConfig.isMaintenanceMode && userRole !== 'admin' && userRole !== 'editor' && !userRole?.startsWith('guest_bypass');
+  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const isMaintenanceActive = !isLocalhost && userRole !== 'admin' && userRole !== 'editor' && !userRole?.startsWith('guest_bypass');
 
   const getNextThreeAnalyses = () => {
     const combined = analyses.length > 0 ? analyses : demoAnalyses;
@@ -1707,6 +1826,61 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     }
     return { flag: null, name: teamName.trim() };
   };
+
+  if (isMaintenanceActive && view !== 'admin') {
+    return (
+      <UserProvider siteUser={siteUser} setSiteUser={setSiteUser}>
+        <div className="relative w-full h-[100dvh] bg-[#050505] overflow-hidden">
+          {authModalMode && (
+            <AuthModal
+              mode={authModalMode === 'register' ? 'member' : authModalMode}
+              initialMemberMode={authModalMode === 'register' ? 'register' : 'login'}
+              onMemberLogin={(user) => {
+                setSiteUser(user);
+                localStorage.setItem('site_current_member', JSON.stringify(user));
+                if (user.role && user.role !== 'member') {
+                  setUserRole(user.role);
+                  localStorage.setItem('site_user_role', user.role);
+                }
+                setAuthModalMode(null);
+              }}
+              onAdminLogin={(role) => {
+                setUserRole(role);
+                localStorage.setItem('site_user_role', role);
+                const isGuest = role.startsWith('guest_');
+                const guestUsername = isGuest ? role.replace('guest_bypass_', '').replace('guest_', '') : '';
+                const adminUser: SiteUser = {
+                  id: isGuest ? `guest_${guestUsername}` : 'admin-session',
+                  username: isGuest ? guestUsername : 'Yönetici',
+                  password: '',
+                  email: isGuest ? `guest@724bets.com` : 'admin@724bets.com',
+                  createdAt: Date.now(),
+                  status: 'active',
+                  notes: isGuest ? 'Misafir Yöneticisi' : 'Ana Yönetici',
+                  role: role as any,
+                  balance: 1000
+                };
+                setSiteUser(adminUser);
+                localStorage.setItem('site_current_member', JSON.stringify(adminUser));
+                setAuthModalMode(null);
+                if (isGuest) {
+                  setView('home');
+                } else {
+                  setView('admin');
+                }
+              }}
+              onClose={() => setAuthModalMode(null)}
+              hideMemberLogin={true}
+            />
+          )}
+          <MaintenanceScreen 
+            message={siteStatusConfig.maintenanceMessage || "724bets.net ve 724bahis.net üzerinde sistem güncellemesi yapılmaktadır. Kısa süre sonra hizmetinizdeyiz."} 
+            onAdminLogin={() => setAuthModalMode('admin')}
+          />
+        </div>
+      </UserProvider>
+    );
+  }
 
   return (
     <UserProvider siteUser={siteUser} setSiteUser={setSiteUser}>
@@ -1792,12 +1966,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         <WalletModal onClose={() => setShowDepositModal(false)} />
       )}
 
-      {isMaintenanceActive && view !== 'admin' ? (
-        <MaintenanceScreen 
-          message={siteStatusConfig.maintenanceMessage} 
-          onAdminLogin={() => setAuthModalMode('admin')}
-        />
-      ) : (['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'].includes(view)) ? (
+      {(['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'].includes(view)) ? (
         <InGameLayout 
           siteUser={siteUser} 
           onViewChange={handleViewChange} 
@@ -1875,7 +2044,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'giveaway') && (
+          {!(view === 'giveaway' || view === 'spor724') && (
             <aside className={`hidden lg:flex flex-col bg-[#050505] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen || view === 'blackjack'}
@@ -1890,7 +2059,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           )}
 
           {/* MOBİL DRAWER - SOL MENÜ */}
-          {isMobileMenuOpen && (
+          {isMobileMenuOpen && !(view === 'spor724') && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
               <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
               <aside className="w-[280px] bg-[#050505] border-r border-[#111111] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
@@ -1911,7 +2080,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           {/* 2. ORTA ANA İÇERİK (Mobilde tam ekran, masaüstünde kalan alanı kaplar) */}
           <main 
             id="main-scroll-container"
-            className={appStage !== 'loading' ? `app-reveal-mask flex-1 w-full h-full overflow-x-hidden relative flex flex-col ${view === 'sports' ? 'overflow-hidden' : 'overflow-y-auto'}` : `app-hidden-initial flex-1 w-full h-full overflow-x-hidden relative flex flex-col ${view === 'sports' ? 'overflow-hidden' : 'overflow-y-auto'}`}
+            className={appStage !== 'loading' ? `app-reveal-mask flex-1 w-full h-full overflow-x-hidden relative flex flex-col overflow-y-auto` : `app-hidden-initial flex-1 w-full h-full overflow-x-hidden relative flex flex-col overflow-y-auto`}
             onScroll={(e) => {
               // Scroll handler removed to prevent mobile header glitching
             }}
@@ -1958,9 +2127,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
                         <div className="w-7 h-7 rounded bg-[#10B981] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
-                          <span className="text-[14px]">$</span>
+                          <span className="text-[14px]">₺</span>
                         </div>
-                        <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">${siteUser.balance?.toFixed(2) || '0.00'}</span>
+                        <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">₺{siteUser.balance?.toFixed(2) || '0.00'}</span>
                         <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M7 10l5 5 5-5z" />
                         </svg>
@@ -2121,14 +2290,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
 
         {view === 'sports' && (
-          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
-            <Spor724View 
-              onNavigate={(v: string) => handleViewChange(v)}
-            />
-          </div>
+          <GercekView onNavigate={handleViewChange} />
         )}
 
-
+        {view === 'gercek' && (
+          <GercekView onNavigate={handleViewChange} />
+        )}
 
         {view === 'originals' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
@@ -2338,11 +2505,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
 
         {view === 'spor724' && (
-          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
-            <Spor724View 
-              onNavigate={(v: string) => setView(v)}
-            />
-          </div>
+          <GercekView onNavigate={handleViewChange} />
         )}
 
         {view === 'upcomingMatches' && (
@@ -2446,6 +2609,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               config={luckyWheelConfig}
               siteUser={siteUser}
               onNavigate={handleViewChange}
+              onUpdateUser={(updatedUser) => {
+                setSiteUser(updatedUser);
+                localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+                localStorage.setItem('site_member', JSON.stringify(updatedUser));
+              }}
             />
           </div>
         )}
@@ -2580,7 +2748,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       {view !== 'admin' && view !== 'sports' && <Footer />}
           </main>
 
-          {view !== 'admin' && view !== 'sports' && view !== 'spor724' && view !== 'upcomingMatches' && !showLiveScoreModal && !isMobile && (
+          {view !== 'admin' && !showLiveScoreModal && !isMobile && (
             <aside className={`hidden xl:flex flex-col border-l border-white/[0.02] bg-[#000000] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[320px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
               <ModernChat
                 open={isChatOpen}

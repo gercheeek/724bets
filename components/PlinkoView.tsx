@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { ShieldCheck, Info } from 'lucide-react';
 import { usePlinkoEngine } from './usePlinkoEngine';
-import { supabase } from '../utils/supabase';
+import { useUser } from '../contexts/UserContext';
 
 const MULTIPLIERS = [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16];
 const WEIGHTS = [1, 16, 120, 560, 1820, 4368, 8008, 11440, 12870, 11440, 8008, 4368, 1820, 560, 120, 16, 1];
 const TOTAL_WEIGHT = 65536;
 
-export default function PlinkoView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function PlinkoView({ siteUser, onAuthRequired }: any) {
+  const { playInstantGame } = useUser();
   const [betAmount, setBetAmount] = useState('1.00');
   const [risk, setRisk] = useState<'low' | 'medium' | 'high'>('low');
   const [isBetting, setIsBetting] = useState(false);
@@ -32,34 +33,25 @@ export default function PlinkoView({ siteUser, setSiteUser, onAuthRequired }: an
       return;
     }
 
-    setIsBetting(true);
+    try {
+      const data = await playInstantGame(amount, 'Plinko');
+      
+      setIsBetting(true);
+      const targetBucket = data.result.bucket;
+      const winAmount = data.win_amount;
+      const multiplier = data.multiplier;
 
-    let rand = Math.floor(Math.random() * TOTAL_WEIGHT);
-    let targetBucket = 0;
-    for (let i = 0; i < WEIGHTS.length; i++) {
-      if (rand < WEIGHTS[i]) {
-        targetBucket = i;
-        break;
-      }
-      rand -= WEIGHTS[i];
+      dropBall(targetBucket);
+
+      setTimeout(() => {
+        setIsBetting(false);
+        setLastPayout({ amount: winAmount, multiplier });
+      }, 2000);
+
+    } catch (err: any) {
+      alert(err.message || 'Hata oluştu!');
+      return;
     }
-
-    const multiplier = MULTIPLIERS[targetBucket];
-    const winAmount = amount * multiplier;
-    
-    const newBalance = siteUser.balance - amount + winAmount;
-    setSiteUser({ ...siteUser, balance: newBalance });
-    
-    if (!siteUser.id.toString().startsWith('guest_')) {
-      supabase.from('members').update({ balance: newBalance }).eq('id', siteUser.id).then();
-    }
-
-    dropBall(targetBucket);
-
-    setTimeout(() => {
-      setIsBetting(false);
-      setLastPayout({ amount: winAmount, multiplier });
-    }, 3000); 
   };
 
   return (

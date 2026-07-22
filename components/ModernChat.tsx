@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Star, Shield, Trash2, Smile, MoreVertical, Menu, Trophy, Cpu } from 'lucide-react';
+import { X, Send, Shield, Smile, Cpu, Target } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { SiteUser } from '../types';
 import { BetShareModal } from './BetShareModal';
@@ -12,7 +12,7 @@ interface ModernChatProps {
     siteUser: SiteUser | null;
     userRole: string | null;
     isMobile?: boolean;
-    botsConfig?: any[]; // ChatBotConfig[]
+    botsConfig?: any[];
 }
 
 const LANGUAGES = [
@@ -25,20 +25,8 @@ const LANGUAGES = [
 
 const GLOBAL_CHANNEL_ID = LANGUAGES[0].id;
 
-// ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
 const sanitize = (msg: string) => msg.replace(/küfür1|argo1|kötükelime/gi, '***');
 const EMOTES: { [key: string]: string } = { ":hehe:": "/emotes/hehe.gif", ":dilMaymun:": "/emotes/dilMaymun.gif" };
-
-const getRoleBadge = (role: string) => {
-    switch (role?.toUpperCase()) {
-        case 'KRAL': return '👑 ';
-        case 'PATRON': return '💼 ';
-        case 'ADMIN': return '🛡️ ';
-        case 'MODERATOR': return '🔧 ';
-        case 'BOT': return '🤖 ';
-        default: return '';
-    }
-};
 
 const isAuthorized = (role: string | null) => {
     if (!role) return false;
@@ -63,7 +51,7 @@ const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, 
           <div className="flex flex-col gap-1.5 mt-0.5">
               <div 
                   onClick={() => onBetClick(betId, msg.username, type)}
-                  className="inline-flex items-center gap-1.5 bg-[#1f3643] hover:bg-[#2f4553] transition-colors rounded px-2.5 py-1 text-sm font-semibold cursor-pointer select-none text-white border border-[#00e701]/30 w-fit"
+                  className="inline-flex items-center gap-1.5 bg-[#050505] hover:bg-[#111] transition-colors rounded px-2.5 py-1 text-sm font-semibold cursor-pointer select-none text-white border border-emerald-500/20 text-emerald-400 w-fit"
               >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M4 6H20M4 12H20M4 18H20" stroke="#00e701" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -91,14 +79,11 @@ const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, 
   });
 };
 
-
-const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser, userRole, isMobile, botsConfig }) => {
+const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRole, isMobile, botsConfig }) => {
     const [messages, setMessages] = useState<any[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isConnected, setIsConnected] = useState(false);
     const [mutedUsers, setMutedUsers] = useState<any[]>([]);
-    const [activeMutePopup, setActiveMutePopup] = useState<string | null>(null);
-    const [muteReason, setMuteReason] = useState('');
     const [lastMsgTime, setLastMsgTime] = useState(0);
     const [chatEnabled, setChatEnabled] = useState(true);
     const [rateLimitSec, setRateLimitSec] = useState(15);
@@ -106,119 +91,29 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
     const [showLangMenu, setShowLangMenu] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
 
-    // Interactive States
-    const [pinnedMessage, setPinnedMessage] = useState<{ text: string; username: string; role: string; } | null>(null);
-    const [eventWidget, setEventWidget] = useState<{ show: boolean; title: string; brandName: string; promoName: string; prizeAmount: string; ctaText: string; ctaUrl: string; } | null>(null);
-    const [activePoll, setActivePoll] = useState<{ question: string; options: string[]; votes: number[]; isActive: boolean; } | null>(null);
-    const [hasVoted, setHasVoted] = useState(false);
-    const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
     const [selectedBet, setSelectedBet] = useState<{ id: string, user: string, type: 'Casino' | 'Spor' } | null>(null);
-    const [isEventCollapsed, setIsEventCollapsed] = useState(false);
-    const [onlineCount, setOnlineCount] = useState(1050);
-    const [liveWins, setLiveWins] = useState<any[]>([
-        { user: 'Yilmaz***', amount: '12.450 ₺', game: 'Sweet Bonanza' },
-        { user: 'Carlos***', amount: '46.060 ₺', game: 'Crazy Time' }
-    ]);
+    const [activeAnnouncement, setActiveAnnouncement] = useState<{ id?: string, text: string, timestamp: number } | null>(null);
 
-    // Online Sayacı Simülasyonu (Zamana Göre Değişen 800 - 1200 Arası)
-    useEffect(() => {
-        const updateOnlineCount = () => {
-            setOnlineCount(prev => {
-                // Rastgele -30 ile +30 arası değişim
-                const change = Math.floor(Math.random() * 61) - 30;
-                let newCount = prev + change;
-                if (newCount < 800) newCount = 800;
-                if (newCount > 1200) newCount = 1200;
-                return newCount;
-            });
-        };
+    const isSystemOrCountdown = (msg: any) => {
+        if (!msg || !msg.message || typeof msg.message !== 'string') return false;
+        const text = msg.message;
+        const role = (msg.role || '').toLowerCase();
+        const user = (msg.username || '').toLowerCase();
         
-        // Her 20 saniyede bir sayıyı güncelle
-        const interval = setInterval(updateOnlineCount, 20000);
-        return () => clearInterval(interval);
-    }, []);
-    const [isPollCollapsed, setIsPollCollapsed] = useState(false);
-    const [showRules, setShowRules] = useState(false);
-
-    useEffect(() => {
-        if (open && siteUser) {
-            setShowRules(true);
-        } else {
-            setShowRules(false);
-        }
-    }, [open, siteUser]);
-
-    useEffect(() => {
-        const handleOutsideClick = () => {
-            setActiveMenuId(null);
-        };
-        document.addEventListener('click', handleOutsideClick);
-        return () => document.removeEventListener('click', handleOutsideClick);
-    }, []);
-
-    useEffect(() => {
-        if (activePoll) {
-            const voted = localStorage.getItem(`poll_voted_${activePoll.question}`);
-            setHasVoted(!!voted);
-        }
-    }, [activePoll]);
-
-    const handlePinMessage = async (text: string, username: string, role: string) => {
-        const newPin = { text, username, role };
-        setPinnedMessage(newPin);
-        try {
-            const currentSettings = await getGlobalConfig('chat_settings') || {};
-            const updatedSettings = {
-                ...currentSettings,
-                pinnedMessage: newPin
-            };
-            await updateGlobalConfig('chat_settings', updatedSettings);
-        } catch (e) {
-            console.error("Failed to pin message:", e);
-        }
+        return (
+            role === 'system' ||
+            role === 'system_announcement' ||
+            user === 'system' ||
+            user === 'sistem' ||
+            text.includes('⏳') ||
+            /geri sayım/i.test(text) ||
+            /\[DUYURU\]/i.test(text) ||
+            /\[ANNOUNCEMENT\]/i.test(text) ||
+            /\[SİSTEM\]/i.test(text) ||
+            /^⏳\s*\d+/i.test(text)
+        );
     };
 
-    const handleUnpin = async () => {
-        setPinnedMessage(null);
-        try {
-            const currentSettings = await getGlobalConfig('chat_settings') || {};
-            const updatedSettings = {
-                ...currentSettings,
-                pinnedMessage: null
-            };
-            await updateGlobalConfig('chat_settings', updatedSettings);
-        } catch (e) {
-            console.error("Failed to unpin message:", e);
-        }
-    };
-
-    const handleVote = async (optionIdx: number) => {
-        if (!activePoll) return;
-        const updatedVotes = [...activePoll.votes];
-        updatedVotes[optionIdx] += 1;
-        
-        const newPoll = {
-            ...activePoll,
-            votes: updatedVotes
-        };
-        
-        setActivePoll(newPoll);
-        setHasVoted(true);
-        localStorage.setItem(`poll_voted_${activePoll.question}`, 'true');
-
-        try {
-            const currentSettings = await getGlobalConfig('chat_settings') || {};
-            const updatedSettings = {
-                ...currentSettings,
-                poll: newPoll
-            };
-            await updateGlobalConfig('chat_settings', updatedSettings);
-        } catch (e) {
-            console.error("Failed to submit vote:", e);
-        }
-    };
-
-    // Fetch messages & subscribe to realtime updates
     useEffect(() => {
         if (!open) {
             setIsConnected(false);
@@ -228,24 +123,18 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         let isMounted = true;
 
         const loadData = async () => {
-            if (isMounted) setIsConnected(true); // Yüklenme başlasa bile chat panelini açık göster (fallback)
-            console.log("loadData started");
+            if (isMounted) setIsConnected(true);
             try {
-                // Fetch last 25 messages for global channel
-                console.log("fetching supabase tv_chat...");
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from('tv_chat')
                     .select('*')
                     .eq('channel_id', activeLang.id)
                     .order('created_at', { ascending: false })
                     .limit(25);
                 
-                // Since we ordered by descending to get the LATEST 25, we need to reverse them back
                 if (data) {
                     data.reverse();
                 }
-
-                console.log("supabase tv_chat fetched", { data, error });
 
                 if (isMounted) {
                     setMessages(prev => {
@@ -253,9 +142,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         const merged = [...(data || []), ...localBots];
                         return merged.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
                     });
-                    console.log("Setting isConnected to true in try block");
                     setIsConnected(true);
-                    // Scroll to bottom
                     setTimeout(() => {
                         if (chatContainerRef.current) {
                             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -265,7 +152,6 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             } catch (err) {
                 console.error('Error loading global chat:', err);
                 if (isMounted) {
-                    console.log("Setting isConnected to true in catch block");
                     setIsConnected(true);
                 }
             }
@@ -278,23 +164,19 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     setMutedUsers(data.mutedUsers);
                 }
             } catch (e) {
-                console.error("Load mutes failed in global chat:", e);
+                console.error("Load mutes failed:", e);
             }
         };
 
         loadData();
         fetchMutes();
 
-        // Load chat settings for kill-switch and rate limit
         const loadChatSettings = async () => {
             try {
                 const settings = await getGlobalConfig('chat_settings');
                 if (settings && isMounted) {
                     setChatEnabled(settings.chat_enabled !== false);
                     setRateLimitSec(settings.rate_limit_seconds || 15);
-                    setPinnedMessage(settings.pinnedMessage || null);
-                    setEventWidget(settings.eventWidget || null);
-                    setActivePoll(settings.poll || null);
                 }
             } catch (e) {
                 console.error('Chat settings load error:', e);
@@ -303,7 +185,6 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         loadChatSettings();
         const settingsInterval = setInterval(loadChatSettings, 30000);
 
-        // Realtime Subscription
         const triggerRainAnimation = () => {
             const duration = 4000;
             const animationEnd = Date.now() + duration;
@@ -317,7 +198,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                     angle: 90,
                     spread: 90,
                     origin: { x: Math.random(), y: -0.1 },
-                    colors: ['#FFD700', '#FFA500', '#00e701'], // Altın ve yeşil renkleri
+                    colors: ['#FFD700', '#FFA500', '#00e701'],
                     shapes: ['circle', 'square'],
                     gravity: 1.5,
                     scalar: 1.2,
@@ -361,7 +242,6 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         };
     }, [open, activeLang.id]);
 
-    // Gelişmiş Bot Yönetimi Simülasyonu
     useEffect(() => {
         if (!open || !botsConfig || botsConfig.length === 0) return;
         
@@ -373,7 +253,6 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             bot.scenarios.forEach((scen: any) => {
                 if (!scen.isActive) return;
                 
-                // Interval dk -> milisaniye
                 const ms = (scen.intervalMinutes || 1) * 60 * 1000;
                 
                 const interval = setInterval(() => {
@@ -382,7 +261,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         username: bot.name,
                         role: bot.role,
                         message: scen.text,
-                        botColor: bot.color, // Özel rengini mesaja ekliyoruz
+                        botColor: bot.color,
                         created_at: new Date().toISOString(),
                         channel_id: GLOBAL_CHANNEL_ID
                     };
@@ -407,36 +286,6 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         };
     }, [open, botsConfig]);
 
-    // Local chat scenario simulation has been moved to chatBotService.js for 24/7 global synchronization.
-
-    // Fake Live Win Generator in Chat (Keeps wins permanently pinned and updating)
-    useEffect(() => {
-        if (!open) return;
-        
-        let timeoutId: NodeJS.Timeout;
-
-        const USERS = ['kellyfart', 'gavinwithag', 'Sergey***', 'Yilmaz***', 'Carlos***', 'Maria***', 'Ali***', 'Metin***', 'Joao***'];
-        const GAMES = ['Sweet Bonanza', 'Zeus vs Hades', 'Gates of Olympus', 'Sugar Rush', 'Crazy Time', 'Lightning Roulette'];
-        
-        const sendFakeWin = () => {
-            const user = USERS[Math.floor(Math.random() * USERS.length)];
-            const game = GAMES[Math.floor(Math.random() * GAMES.length)];
-            const amount = `${(Math.random() * 50000 + 500).toLocaleString('tr-TR')} ₺`;
-            
-            const newWin = { user, amount, game };
-            setLiveWins(prev => [newWin, ...prev].slice(0, 2)); // Keep the last 2 wins
-            
-            // Random delay between 10s to 30s
-            const nextDelay = Math.floor(Math.random() * 20000) + 10000;
-            timeoutId = setTimeout(sendNextWin, nextDelay);
-        };
-
-        const sendNextWin = () => sendFakeWin();
-        timeoutId = setTimeout(sendNextWin, 15000); // initial delay
-
-        return () => clearTimeout(timeoutId);
-    }, [open]);
-
     const handleSendMessage = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!newMessage.trim()) return;
@@ -445,13 +294,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         const myUsername = siteUser?.username || 'Misafir';
         const role = userRole || 'user';
 
-        // Kill-switch check
         if (!chatEnabled && userRole !== 'admin') {
             alert('Sohbet şu anda yönetici tarafından kapatılmıştır.');
             return;
         }
 
-        // Rate limiting (skip for admins)
         if (userRole !== 'admin') {
             const now = Date.now();
             const elapsed = (now - lastMsgTime) / 1000;
@@ -462,7 +309,6 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             }
         }
 
-        // Mute Check
         try {
             const mutesData = await getGlobalConfig('tv_mutes');
             const currentMutes = mutesData && Array.isArray(mutesData.mutedUsers) ? mutesData.mutedUsers : [];
@@ -517,221 +363,55 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
         }
     };
 
-    // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
-    const deleteMessage = async (msgId: string) => { await supabase.from('tv_chat').delete().eq('id', msgId); };
-    const banUser = async (userId: string) => { await supabase.from('profiles').update({ role: 'banned' }).eq('id', userId); };
-
-    // Admin commands
-    const handleBanUser = async (targetUserId: string, targetUsername: string) => {
-        try {
-            await banUser(targetUserId);
-            setActiveMutePopup(null);
-            alert(`${targetUsername} başarıyla yasaklandı (Ban).`);
-        } catch (e) {
-            console.error("Ban user error:", e);
-            alert("Kullanıcı yasaklanırken bir hata oluştu.");
-        }
-    };
-
-    const handleMuteUser = async (targetUserId: string, targetUsername: string, days: number) => {
-        if (!muteReason.trim()) {
-            alert('Ceza nedeni girmek zorunludur!');
-            return;
-        }
-        try {
-            const muteUntil = days === -1 ? null : new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-            const mutedUntilTs = days === -1 ? -1 : Date.now() + days * 24 * 60 * 60 * 1000;
-
-            let finalUserId = targetUserId;
-            if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(finalUserId)) {
-                const { data: memberData } = await supabase.from('members').select('id').eq('username', targetUsername).single();
-                if (memberData?.id) {
-                    finalUserId = memberData.id;
-                } else {
-                    alert('Kullanıcı veritabanında bulunamadı (Geçersiz UUID).');
-                    return;
-                }
+    useEffect(() => {
+        if (!messages || messages.length === 0) return;
+        const systemMsgs = messages.filter(isSystemOrCountdown);
+        if (systemMsgs.length > 0) {
+            const latest = systemMsgs[systemMsgs.length - 1];
+            const cleanText = (latest.message || '').replace('[RAIN_EVENT_END] ', '').trim();
+            if (cleanText) {
+                setActiveAnnouncement({
+                    id: latest.id,
+                    text: cleanText,
+                    timestamp: Date.now()
+                });
             }
-
-            // Insert into chat_bans table
-            await supabase.from('chat_bans').insert({
-                user_id: finalUserId,
-                username: targetUsername,
-                ban_type: 'mute',
-                mute_until: muteUntil,
-                reason: muteReason.trim(),
-                admin_id: 'admin',
-                admin_username: 'Yönetici',
-                is_active: true
-            });
-
-            // Insert log
-            await supabase.from('chat_moderation_logs').insert({
-                action: 'mute_user',
-                admin_id: 'admin',
-                admin_username: 'Yönetici',
-                target_user_id: finalUserId,
-                target_username: targetUsername,
-                details: { duration_days: days, reason: muteReason.trim() }
-            });
-
-            const mutesData = await getGlobalConfig('tv_mutes');
-            let currentMutes = mutesData && Array.isArray(mutesData.mutedUsers) ? mutesData.mutedUsers : [];
-            currentMutes = currentMutes.filter((m: any) => m.userId !== targetUserId);
-
-            currentMutes.push({ userId: targetUserId, username: targetUsername, mutedUntil: mutedUntilTs });
-
-            await updateGlobalConfig('tv_mutes', { mutedUsers: currentMutes });
-            setMutedUsers(currentMutes);
-            setActiveMutePopup(null);
-            setMuteReason('');
-            const durationText = days === -1 ? 'kalıcı olarak' : `${days} gün`;
-            alert(`${targetUsername} adlı kullanıcı ${durationText} susturuldu. Neden: ${muteReason.trim()}`);
-        } catch (e) {
-            console.error("Mute user error:", e);
         }
-    };
-
-    const handleUnmuteUser = async (targetUserId: string) => {
-        try {
-            const mutesData = await getGlobalConfig('tv_mutes');
-            let currentMutes = mutesData && Array.isArray(mutesData.mutedUsers) ? mutesData.mutedUsers : [];
-            currentMutes = currentMutes.filter((m: any) => m.userId !== targetUserId);
-
-            await updateGlobalConfig('tv_mutes', { mutedUsers: currentMutes });
-            setMutedUsers(currentMutes);
-            setActiveMutePopup(null);
-            alert("Kullanıcının cezası kaldırıldı.");
-        } catch (e) {
-            console.error("Unmute user error:", e);
-        }
-    };
-
-    const handleDeleteMessage = async (msgId: string) => {
-        try {
-            await deleteMessage(msgId);
-            setMessages(prev => prev.filter(m => m.id !== msgId));
-        } catch (error) {
-            console.error("Delete message error:", error);
-        }
-    };
-
-    const formatTime = (isoString?: string) => {
-        if (!isoString) return '';
-        return new Date(isoString).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-    };
-
-    const getRoleColor = (role: string, username?: string, msgObj?: any) => {
-        if (msgObj && msgObj.botColor) return msgObj.botColor;
-        const r = role?.toUpperCase();
-        if (r === 'ADMIN') return '#F87171'; // Soft red for admin
-        if (r === 'VIP') return '#38BDF8'; // Sky blue for VIP
-        if (r === 'SYSTEM' || r === 'BOT') return '#10B981'; // Emerald for bots
-        return '#E5E7EB'; // Light gray/white for normal users
-    };
-
-    const getRoleBadge = (role: string, msgObj?: any) => {
-        const r = role?.toUpperCase();
-        
-        if (r === 'ADMIN') {
-            return (
-                <span className="inline-flex items-center gap-0.5 bg-[#EF4444]/10 text-[#F87171] px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none mr-1.5 border border-[#EF4444]/20 uppercase">
-                    <Shield className="w-2.5 h-2.5" /> ADMIN
-                </span>
-            );
-        }
-        if (r === 'SYSTEM' || r === 'BOT') {
-            const color = msgObj?.botColor || '#10B981';
-            return (
-                <span 
-                    className="inline-flex items-center gap-0.5 bg-black/20 px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider leading-none mr-1.5 uppercase border border-white/5"
-                    style={{ color }}
-                >
-                    <Cpu className="w-2.5 h-2.5" /> BOT
-                </span>
-            );
-        }
-        if (r === 'VIP') {
-            return <Star className="w-2.5 h-2.5 text-sky-400 mr-1 flex-shrink-0 fill-sky-400" />;
-        }
-        return null;
-    };
-
-    const isLoggedIn = !!(siteUser || userRole);
+    }, [messages]);
 
     if (!open && !isMobile) {
         return null;
     }
 
-    // ANTYGRAVITY 2.0: MODERASYON VE GÜVENLİK MOTORU
-    const isAdmin = isAuthorized(userRole);
-    return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#050505] shadow-2xl font-sans text-left relative">
-            
-            {/* Chat Rules Overlay */}
-            {showRules && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-[#111111] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-sm shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-                        <div className="flex items-center gap-3 mb-6">
-                            <Shield className="w-6 h-6 text-[#10B981]" />
-                            <h2 className="text-lg font-black text-white tracking-wider">SOHBET KURALLARI</h2>
-                        </div>
-                        <ul className="space-y-4 text-sm text-gray-300 font-medium">
-                            <li className="flex gap-2">
-                                <span className="text-gray-500">-</span>
-                                <span>Her zaman kibar olun ve herkese saygı gösterin.</span>
-                            </li>
-                            <li className="flex gap-2">
-                                <span className="text-gray-500">-</span>
-                                <span>Nefret söylemini, ırkçılığı, cinsiyetçiliği veya benzer davranışları içeren her türlü hali tolere edilmez.</span>
-                            </li>
-                            <li className="flex gap-2">
-                                <span className="text-gray-500">-</span>
-                                <span>Spam yapmayı, dilenmeyi veya bahşiş istemeyi kaçının.</span>
-                            </li>
-                            <li className="flex gap-2">
-                                <span className="text-gray-500">-</span>
-                                <span>Ortaklık kodlarını, linkleri paylaşmak veya yayınınızı tanıtmak kabul edilmez.</span>
-                            </li>
-                            <li className="flex gap-2">
-                                <span className="text-gray-500">-</span>
-                                <span>Bu kuralları ihlal etmek, chat yasağına veya bazı durumlarda hesabınızın yasaklanmasına yol açabilir.</span>
-                            </li>
-                        </ul>
-                        <button 
-                            onClick={() => setShowRules(false)}
-                            className="w-full mt-6 bg-[#10B981] hover:bg-[#059669] text-black font-black py-3.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                        >
-                            Anladım, teşekkürler
-                        </button>
-                    </div>
-                </div>
-            )}
+    const displayMessages = messages.filter(m => !isSystemOrCountdown(m) && m.role !== 'system_win');
 
+    return (
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0a0e17] font-sans text-left relative">
+            
             {/* Header */}
-            <div className="bg-[#050505] px-4 py-4 text-white flex items-center justify-between flex-shrink-0 border-b border-white/5 shadow-sm">
+            <div className="bg-[#0a0e17] px-4 h-[64px] text-white flex items-center justify-between flex-shrink-0 border-b border-[#1b2335]">
                 <div className="flex items-center gap-3 relative">
                     <div 
                         onClick={() => setShowLangMenu(!showLangMenu)}
-                        className="flex items-center gap-2 bg-[#111111] border border-[#2A2E3D] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-[#20242D] hover:border-white/20 cursor-pointer transition-all shadow-inner relative z-20"
+                        className="flex items-center gap-2 bg-[#131926] border border-[#1b2335] px-3 py-1.5 rounded-md text-[13px] font-semibold hover:bg-[#1c2538] cursor-pointer transition-all shadow-inner relative z-20 text-slate-300"
                     >
                         <img src={`https://flagcdn.com/w20/${activeLang.flag}.png`} alt={activeLang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
-                        <span className="text-gray-200">{activeLang.name}</span>
-                        <span className="text-[10px] ml-1 text-gray-500">▼</span>
+                        <span className="text-gray-300">{activeLang.name}</span>
+                        <span className="text-[10px] ml-2 text-gray-500">▼</span>
                     </div>
 
                     {/* Language Dropdown */}
                     {showLangMenu && (
                         <>
                             <div className="fixed inset-0 z-10" onClick={() => setShowLangMenu(false)}></div>
-                            <div className="absolute top-full mt-2 left-0 w-36 bg-[#111111] border border-[#2A2E3D] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-20 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="absolute top-full mt-2 left-0 w-40 bg-[#050505] border border-white/[0.02] rounded-lg shadow-xl z-20 py-1 overflow-hidden">
                                 {LANGUAGES.map(lang => (
                                     <div 
                                         key={lang.id}
                                         onClick={() => { setActiveLang(lang); setShowLangMenu(false); }}
-                                        className={`flex items-center gap-2 px-3 py-2 text-xs font-bold cursor-pointer transition-colors ${activeLang.id === lang.id ? 'bg-[#10B981]/10 text-[#10B981]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                                        className={`flex items-center gap-3 px-4 py-2.5 text-[13px] font-semibold cursor-pointer transition-colors ${activeLang.id === lang.id ? 'bg-[#111] text-white' : 'text-gray-500 hover:bg-[#111] hover:text-white'}`}
                                     >
-                                        <img src={`https://flagcdn.com/w20/${lang.flag}.png`} alt={lang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
+                                        <img src={`https://flagcdn.com/w20/${lang.flag}.png`} alt={lang.code} className="w-5 h-3.5 rounded-sm object-cover shadow-sm" />
                                         <span>{lang.name}</span>
                                     </div>
                                 ))}
@@ -739,18 +419,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                         </>
                     )}
                 </div>
-                <div className="flex items-center gap-4 text-zinc-400">
-                    <div className="flex items-center gap-2 text-xs font-bold hover:text-white transition-colors cursor-pointer bg-[#111111] border border-transparent hover:border-white/10 px-2.5 py-1.5 rounded-lg">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        <span className="text-gray-300">{onlineCount.toLocaleString('tr-TR')}</span>
-                    </div>
+                <div className="flex items-center gap-4 text-zinc-500">
                     <button 
                         onClick={onClose} 
-                        className="p-1.5 hover:bg-white/10 active:scale-95 transition-all rounded-lg text-zinc-400 hover:text-white"
+                        className="w-8 h-8 flex items-center justify-center bg-[#050505] border border-white/[0.02] hover:bg-[#111] transition-all rounded-full text-zinc-500 hover:text-white"
                         title="Kapat"
                     >
                         <X className="w-4 h-4" />
@@ -758,30 +430,31 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                 </div>
             </div>
 
-            {/* Pinned Message Bar */}
-            {pinnedMessage && pinnedMessage.text && (
-                <div className="bg-[#10B981]/10 px-4 py-3 flex items-center justify-between gap-3 text-left">
-                    <div className="flex items-start gap-2 min-w-0">
-                        <span className="text-[12px] mt-0.5 text-[#10B981]">📌</span>
-                        <div className="min-w-0">
-                            <div className="text-[10px] font-bold text-[#10B981] flex items-center gap-1">
-                                <span>Sabitlendi</span>
-                                <span className="text-[8px] text-zinc-500">•</span>
-                                <span style={{ color: getRoleColor(pinnedMessage.role) }}>{pinnedMessage.username}</span>
+            {/* Sticky Announcement / Countdown Bar */}
+            {activeAnnouncement && (
+                <div className="bg-[#131926] border-b border-[#1b2335] px-3.5 py-2.5 flex items-center justify-between gap-2.5 shadow-lg relative z-20 shrink-0 animate-fade-in">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                        <div className="relative flex items-center justify-center w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 shrink-0">
+                            <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-amber-400 opacity-60"></span>
+                            <span className="text-amber-400 text-xs font-bold relative z-10">⏳</span>
+                        </div>
+                        <div className="flex flex-col min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5 mb-0.5">
+                                <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest leading-none">Sistem Duyurusu</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                             </div>
-                            <div className="text-xs text-gray-200 font-medium truncate max-w-[285px]" title={pinnedMessage.text}>
-                                {pinnedMessage.text}
-                            </div>
+                            <p className="text-xs text-slate-200 font-semibold truncate leading-snug">
+                                {activeAnnouncement.text}
+                            </p>
                         </div>
                     </div>
-                    {isAdmin && (
-                        <button 
-                            onClick={handleUnpin}
-                            className="text-[9px] font-black text-rose-400 hover:text-rose-500 uppercase tracking-wider flex-shrink-0"
-                        >
-                            Kaldır
-                        </button>
-                    )}
+                    <button 
+                        onClick={() => setActiveAnnouncement(null)} 
+                        className="text-slate-500 hover:text-slate-200 p-1.5 hover:bg-white/5 rounded-lg shrink-0 transition-colors"
+                        title="Duyuruyu Kapat"
+                    >
+                        <X className="w-3.5 h-3.5" />
+                    </button>
                 </div>
             )}
 
@@ -789,11 +462,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
             <div 
                 ref={chatContainerRef} 
                 id="new-chat-container" 
-                className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"
-                style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(0,255,163,0.12) transparent' }}
+                className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar bg-[#0a0e17]"
+                style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}
             >
-
-
                 {!isConnected ? (
                     <div className="flex items-center justify-center py-8">
                         <p className="text-xs text-gray-500 flex items-center gap-2">
@@ -801,188 +472,68 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onOpen, onClose, siteUser
                             Bağlanıyor...
                         </p>
                     </div>
-                ) : messages.length === 0 ? (
+                ) : displayMessages.length === 0 ? (
                     <div className="flex items-center justify-center py-8">
-                        <p className="text-xs text-gray-500">Henüz mesaj yok. İlk mesajı sen yaz!</p>
+                        <p className="text-xs text-gray-500">Henüz mesaj yok.</p>
                     </div>
                 ) : (
-                    messages.map((msg, i) => {
-                        if (msg.role === 'system_win') {
-                            return null; // Do not render inside the scrollable message list
-                        }
+                    displayMessages.map((msg, i) => {
+                        const isMod = msg.role?.toUpperCase() === 'ADMIN' || msg.role?.toUpperCase() === 'MODERATOR';
                         
                         return (
                         <div 
                             key={msg.id || i} 
-                            className={`px-4 py-2.5 flex flex-row gap-3 relative group text-left cursor-default transition-all duration-300 rounded-lg mx-2 ${
-                                msg.role?.toUpperCase() === 'ADMIN' ? 'bg-gradient-to-r from-emerald-500/10 to-transparent border-l-2 border-emerald-500' : 
-                                (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'BOT') ? 'bg-transparent' : 
-                                'bg-transparent hover:bg-white/[0.02]'
-                            }`}
-                            onContextMenu={(e) => {
-                                if (isAdmin) {
-                                    e.preventDefault();
-                                    setActiveMenuId(activeMenuId === msg.id ? null : msg.id);
-                                    setActiveMutePopup(null);
-                                }
-                            }}
+                            className="px-3 py-2.5 bg-[#0e1320] border border-[#1b2335] rounded-xl text-left text-[13px] text-slate-300 leading-relaxed shadow-sm"
                         >
-                            {/* Avatar */}
-                            <div className={`w-8 h-8 rounded-full bg-[#111111] flex-shrink-0 overflow-hidden mt-0.5 border ${msg.role?.toUpperCase() === 'ADMIN' ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-white/10'}`}>
-                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.username}`} alt={msg.username} className="w-full h-full object-cover" />
-                            </div>
-
-                            <div className="flex flex-col flex-1 min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap mb-1">
-                                    <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap">
-                                        {formatTime(msg.created_at)}
+                            <span className="inline-flex items-center gap-1.5 mr-1.5 align-middle">
+                                {isMod ? (
+                                    <span className="inline-flex items-center gap-0.5 bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-bold tracking-wider leading-none border border-emerald-500/20 uppercase">
+                                        <Shield className="w-3 h-3" /> MOD
                                     </span>
-                                    <span 
-                                        className="text-[13px] font-extrabold tracking-wide drop-shadow-sm flex items-center" 
-                                        style={{ color: getRoleColor(msg.role, msg.username, msg) }}
-                                    >
-                                        {getRoleBadge(msg.role, msg)}{msg.username || 'Misafir'}
-                                    </span>
-                                </div>
-                                <div className={`text-[13px] leading-relaxed break-words pr-4 antialiased ${
-                                    (msg.role?.toUpperCase() === 'SYSTEM' || msg.role?.toUpperCase() === 'ADMIN') ? 'font-bold text-white' : 'text-gray-300 font-medium'
-                                }`}>
-                                    {renderMessageText(msg, (betId, user, type) => setSelectedBet({ id: betId, user, type }))}
-                                </div>
-                            </div>
-
-                            {/* Admin actions block (Three Dots / Context Menu) */}
-                            {isAdmin && (
-                              <div className="absolute right-2 top-2 z-50">
-                                <button 
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setActiveMenuId(activeMenuId === msg.id ? null : msg.id);
-                                    setActiveMutePopup(null);
-                                  }}
-                                  className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-white transition-opacity p-0.5 rounded hover:bg-white/5"
-                                  title="İşlemler"
-                                >
-                                  <MoreVertical className="w-4 h-4" />
-                                </button>
-
-                                {activeMenuId === msg.id && (
-                                  <div className="absolute right-0 mt-1 bg-[#111111] rounded-lg shadow-2xl py-1 w-28 z-50 text-[10px] font-bold text-gray-200">
-                                    <button 
-                                      onClick={() => {
-                                        handlePinMessage(msg.message, msg.username, msg.role || 'member');
-                                        setActiveMenuId(null);
-                                      }}
-                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-[#10B981] transition-colors flex items-center gap-1.5"
-                                    >
-                                      📌 Sabitle
-                                    </button>
-                                    <button 
-                                      onClick={() => {
-                                        handleDeleteMessage(msg.id);
-                                        setActiveMenuId(null);
-                                      }}
-                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-red-400 transition-colors flex items-center gap-1.5"
-                                    >
-                                      🗑️ Sil
-                                    </button>
-                                    <button 
-                                      onClick={() => {
-                                        setActiveMutePopup(msg.id);
-                                        setActiveMenuId(null);
-                                      }}
-                                      className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 hover:text-yellow-400 transition-colors flex items-center gap-1.5"
-                                    >
-                                      🚫 Sustur
-                                    </button>
-                                  </div>
+                                ) : (
+                                    <span className="text-slate-500 flex-shrink-0"><Target className="w-3.5 h-3.5" /></span>
                                 )}
-                              </div>
-                            )}
-
-                            {activeMutePopup === msg.id && (
-                                <div style={{ position: 'absolute', right: '40px', bottom: '24px', background: '#111317', borderRadius: '8px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', minWidth: '220px' }}>
-                                    <div style={{ padding: '12px' }}>
-                                        <input value={muteReason} onChange={(e) => setMuteReason(e.target.value)} placeholder="Ceza nedeni (zorunlu)" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', padding: '8px 10px', fontSize: '10px', color: '#fff', outline: 'none', border: 'none' }} />
-                                    </div>
-                                    <button onClick={() => handleMuteUser(msg.user_id, msg.username, 7)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#fff', fontSize: '11px', textAlign: 'left', cursor: 'pointer' }}>1 Hafta Sustur</button>
-                                    <button onClick={() => handleMuteUser(msg.user_id, msg.username, 30)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#fff', fontSize: '11px', textAlign: 'left', cursor: 'pointer' }}>1 Ay Sustur</button>
-                                    <button onClick={() => handleMuteUser(msg.user_id, msg.username, 60)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#fff', fontSize: '11px', textAlign: 'left', cursor: 'pointer' }}>2 Ay Sustur</button>
-                                    <button onClick={() => handleMuteUser(msg.user_id, msg.username, -1)} style={{ padding: '8px 12px', background: 'transparent', border: 'none', color: '#ef4444', fontSize: '11px', textAlign: 'left', cursor: 'pointer' }}>Kalıcı Sustur</button>
-                                    <button onClick={() => handleUnmuteUser(msg.user_id)} style={{ padding: '10px 12px', background: 'rgba(255,255,255,0.02)', border: 'none', color: '#10b981', fontSize: '11px', textAlign: 'left', cursor: 'pointer', marginTop: '4px' }}>Cezayı Kaldır</button>
-                                </div>
-                            )}
+                                <span className={`font-semibold tracking-tight ${isMod ? 'text-emerald-400' : 'text-slate-200'}`}>
+                                    {msg.username || 'Misafir'}:
+                                </span>
+                            </span>
+                            <span className="break-words antialiased text-slate-300">
+                                {renderMessageText(msg, (betId, user, type) => setSelectedBet({ id: betId, user, type }))}
+                            </span>
                         </div>
-                    );
-                })
-            )}
+                    )})
+                )}
             </div>
 
-            {/* Canlı Kazananlar Sabit Penceresi */}
-            {liveWins.length > 0 && (
-                <div className="px-4 py-2.5 bg-[#050505] border-t border-b border-white/5 flex flex-col gap-2 relative z-20">
-                    <div className="flex items-center justify-between text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
-                        <span>Canlı Kazananlar</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                        {liveWins.map((win, idx) => (
-                            <div key={idx} className="relative overflow-hidden rounded-lg border border-[#06b6d4]/20 bg-[#06b6d4]/5 p-2 flex items-center gap-2.5 transition-all duration-300">
-                                <div className="shrink-0">
-                                    <div className="w-6 h-6 rounded-full bg-[#06b6d4]/10 border border-[#06b6d4]/30 flex items-center justify-center">
-                                        <Trophy className="w-3.5 h-3.5 text-[#06b6d4]" />
-                                    </div>
-                                </div>
-                                <div className="flex-1 min-w-0 flex items-center justify-between text-[11px]">
-                                    <div className="truncate">
-                                        <span className="text-gray-100 font-bold mr-1.5">{win.user}</span>
-                                        <span className="text-gray-400">az önce kazandı:</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                                        <span className="font-extrabold text-[#06b6d4] drop-shadow-[0_0_5px_rgba(6,182,212,0.3)]">{win.amount}</span>
-                                        <span className="text-[10px] text-zinc-500">({win.game})</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
             {/* Input Footer Area */}
-            <div className="px-4 py-4 bg-[#050505] flex flex-col gap-3 flex-shrink-0 mt-0 border-t border-white/5 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
-                {/* Message Input */}
+            <div className="p-3 bg-[#0a0e17] border-t border-[#1b2335] flex-shrink-0 z-10 relative">
                 {!siteUser ? (
-                    <div className="flex flex-col items-center justify-center">
-                        <input 
-                            type="text"
-                            disabled
-                            placeholder="Sohbete katılmak için Giriş Yap veya Üye Ol"
-                            className="w-full bg-[#111111] border border-[#2A2E3D] text-[12px] font-bold text-center text-gray-500 rounded-xl px-4 py-3.5 cursor-not-allowed shadow-inner"
-                        />
-                    </div>
+                    <input 
+                        type="text"
+                        disabled
+                        placeholder="Giriş Yap"
+                        className="w-full bg-[#131926] border border-[#1b2335] text-[13px] font-medium text-center text-slate-500 rounded-xl px-4 py-3 cursor-not-allowed"
+                    />
                 ) : (
-                    <form onSubmit={handleSendMessage} className="flex flex-col gap-2 w-full">
-                        <div className="relative flex items-center bg-[#13161C] border border-[#2A2E3D] focus-within:border-[#10B981] focus-within:shadow-[0_0_15px_rgba(16,185,129,0.15)] rounded-xl overflow-hidden transition-all duration-300">
-                            <input
-                                type="text"
-                                value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                placeholder="Mesajınızı yazın..."
-                                className="flex-1 bg-transparent text-sm font-medium text-white focus:outline-none placeholder-zinc-500 px-4 py-3.5"
-                            />
-                            <div className="flex items-center pr-2 gap-1 h-full">
-                                <button type="button" className="text-zinc-500 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5" title="Emoji">
-                                    <Smile className="w-5 h-5" />
-                                </button>
-                                <button
-                                    type="submit"
-                                    disabled={!newMessage.trim()}
-                                    className="text-black bg-[#10B981] disabled:bg-[#2A2E3D] disabled:text-gray-500 hover:bg-[#059669] transition-all p-2 rounded-lg ml-1 shadow-[0_0_10px_rgba(16,185,129,0.2)] disabled:shadow-none"
-                                >
-                                    <Send className="w-4 h-4 ml-0.5" />
-                                </button>
-                            </div>
+                    <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#131926] border border-[#1b2335] focus-within:border-[#3b8def]/50 rounded-xl overflow-hidden transition-all h-12 shadow-inner">
+                        <input
+                            type="text"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            placeholder="Bir mesaj gönder..."
+                            className="flex-1 bg-transparent text-[13px] font-medium text-white focus:outline-none placeholder-zinc-700 px-3"
+                        />
+                        <div className="flex items-center pr-1.5 gap-1 h-full shrink-0">
+                            <button type="button" className="text-zinc-600 hover:text-white transition-colors p-1.5 rounded-md hover:bg-white/5 bg-[#0a0a0a]">
+                                <Smile className="w-4 h-4" />
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={!newMessage.trim()}
+                                className="text-white bg-[#38b75e] disabled:bg-[#121212] disabled:text-gray-600 hover:bg-[#2fa350] transition-all p-2 rounded-md"
+                            >
+                                <Send className="w-4 h-4 ml-0.5" />
+                            </button>
                         </div>
                     </form>
                 )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../utils/supabase';
+import { useUser } from '../contexts/UserContext';
 
 // Simple Rocket SVG
 const RocketSVG = ({ isPlaying, crashed }: { isPlaying: boolean; crashed: boolean }) => (
@@ -13,7 +13,8 @@ const RocketSVG = ({ isPlaying, crashed }: { isPlaying: boolean; crashed: boolea
     </svg>
 );
 
-export default function LimboView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function LimboView({ siteUser, onAuthRequired }: any) {
+    const { playInstantGame } = useUser();
     const [betAmount, setBetAmount] = useState<number>(0);
     const [targetMultiplier, setTargetMultiplier] = useState<number>(2.00);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -55,39 +56,28 @@ export default function LimboView({ siteUser, setSiteUser, onAuthRequired }: any
             // Win
             const won = betAmount * targetMultiplier;
             setWinAmount(won);
-            if (siteUser) {
-                const newBalance = siteUser.balance + won;
-                setSiteUser({ ...siteUser, balance: newBalance });
-                supabase.from('site_users').update({ balance: newBalance }).eq('id', siteUser.id).then();
-            }
         } else {
             // Lose
             setWinAmount(0);
         }
     };
 
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!siteUser) return onAuthRequired();
-        if (siteUser.balance < betAmount) {
-            alert('Yetersiz Bakiye');
-            return;
-        }
-
-        const newBalance = siteUser.balance - betAmount;
-        setSiteUser({ ...siteUser, balance: newBalance });
-        supabase.from('site_users').update({ balance: newBalance }).eq('id', siteUser.id).then();
 
         setIsPlaying(true);
         setCrashed(false);
         setWinAmount(null);
         setCurrentMultiplier(1.00);
-        
-        // Generate random crash point (house edge ~1%)
-        const e = 2 ** 32;
-        const h = crypto.getRandomValues(new Uint32Array(1))[0];
-        const crashPoint = Math.max(1.00, (0.99 * e) / (e - h));
-        
-        startAnimation(crashPoint);
+
+        try {
+            const data = await playInstantGame(betAmount, 'Limbo', targetMultiplier);
+            const crashPoint = data.result.crash;
+            startAnimation(crashPoint);
+        } catch (e: any) {
+            alert(e.message || 'Hata oluştu');
+            setIsPlaying(false);
+        }
     };
 
     useEffect(() => {

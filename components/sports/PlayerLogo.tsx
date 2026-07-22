@@ -251,12 +251,12 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
     const cleanName = (teamName || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '');
     urls.push(`/takimlogo/${cleanName}.png`);
     
-    // Step 4: Tarafbet Scraping (using BetConstruct ID if available)
+    // Step 4: Sekabet Scraping (using BetConstruct ID if available)
     if (fbLogo && fbLogo.includes('team-logo')) {
       const matchId = fbLogo.match(/team-logo\/(\d+)\.png/);
       if (matchId && matchId[1]) {
-        urls.push(`https://tarafbet981.com/images/team-logo/${matchId[1]}.png`);
-        urls.push(`https://srv.tarafbet981.com/sport/images/team-logo/${matchId[1]}.png`);
+        urls.push(`https://sekabet1624.com/images/team-logo/${matchId[1]}.png`);
+        urls.push(`https://srv.sekabet1624.com/sport/images/team-logo/${matchId[1]}.png`);
         urls.push(`https://norabahis779.com/images/team-logo/${matchId[1]}.png`);
       }
     }

@@ -6,6 +6,11 @@ interface UserContextProps {
   siteUser: SiteUser | null;
   setSiteUser: React.Dispatch<React.SetStateAction<SiteUser | null>>;
   placeBet: (amount: number, selections: any[], totalOdds: number) => Promise<void>;
+  processGameBet: (betAmount: number, winAmount: number, gameName: string) => Promise<number>;
+  playInstantGame: (betAmount: number, gameName: string, target?: number, condition?: string, payload?: any) => Promise<any>;
+  startSessionGame: (betAmount: number, gameName: string, settings: any) => Promise<any>;
+  playSessionMove: (gameId: string, move: any) => Promise<any>;
+  cashoutSessionGame: (gameId: string) => Promise<any>;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -57,10 +62,16 @@ export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | 
     
     const newBalance = (siteUser.balance || 0) - amount;
     
-    // Update Supabase if real user
+    // Update Supabase using RPC if real user
     if (siteUser.id !== 'admin-session' && !String(siteUser.id).startsWith('guest_')) {
-      const { error } = await supabase.from('members').update({ balance: newBalance }).eq('id', siteUser.id);
-      if (error) throw new Error('Veritabanı bağlantı hatası: ' + error.message);
+      const { data: updatedBalance, error } = await supabase.rpc('process_game_bet', {
+        p_user_id: siteUser.id,
+        p_bet_amount: amount,
+        p_win_amount: 0,
+        p_game_name: 'Spor Bahisi'
+      });
+      if (error) throw new Error('Bakiye güncellenemedi: ' + error.message);
+      // RPC returns the new verified balance, but we use the optimistic one if we want
     }
     
     const newBet = {
@@ -86,8 +97,118 @@ export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | 
     localStorage.setItem('site_member', JSON.stringify(updatedUser));
   };
 
+  const processGameBet = async (betAmount: number, winAmount: number, gameName: string): Promise<number> => {
+    if (!siteUser) throw new Error('Oturum kapalı. Lütfen giriş yapın.');
+    if (betAmount > 0 && (siteUser.balance || 0) < betAmount) throw new Error('Yetersiz bakiye.');
+    
+    const optimisticBalance = (siteUser.balance || 0) - betAmount + winAmount;
+    
+    if (siteUser.id !== 'admin-session' && !String(siteUser.id).startsWith('guest_')) {
+      const { data: updatedBalance, error } = await supabase.rpc('process_game_bet', {
+        p_user_id: siteUser.id,
+        p_bet_amount: betAmount,
+        p_win_amount: winAmount,
+        p_game_name: gameName
+      });
+      
+      if (error) {
+        console.error("RPC Error:", error);
+        throw new Error('İşlem başarısız: ' + error.message);
+      }
+      
+      // Update local state with the AUTHORITATIVE balance from DB
+      const updatedUser = { ...siteUser, balance: updatedBalance };
+      setSiteUser(updatedUser);
+      localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+      localStorage.setItem('site_member', JSON.stringify(updatedUser));
+      return updatedBalance;
+    } else {
+      // For guest/admin, just use optimistic balance
+      const updatedUser = { ...siteUser, balance: optimisticBalance };
+      setSiteUser(updatedUser);
+      localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+      localStorage.setItem('site_member', JSON.stringify(updatedUser));
+      return optimisticBalance;
+    }
+  };
+
+  const playInstantGame = async (betAmount: number, gameName: string, target: number = 0, condition: string = 'none', payload: any = {}) => {
+    if (!siteUser) throw new Error('Oturum kapalı. Lütfen giriş yapın.');
+    if (betAmount > 0 && (siteUser.balance || 0) < betAmount) throw new Error('Yetersiz bakiye.');
+    
+    // UUID (v4) for bet_id
+    const betId = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15);
+    
+    const { data, error } = await supabase.rpc('play_instant_game', {
+      p_bet_id: betId,
+      p_user_id: siteUser.id,
+      p_bet_amount: betAmount,
+      p_game_name: gameName,
+      p_client_seed: 'seed123',
+      p_target: target,
+      p_condition: condition,
+      p_payload: payload
+    });
+    
+    if (error) throw new Error(error.message);
+    
+    if (data && data.success) {
+      const updatedUser = { ...siteUser, balance: data.new_balance };
+      setSiteUser(updatedUser);
+      localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+      localStorage.setItem('site_member', JSON.stringify(updatedUser));
+    }
+    
+    return data;
+  };
+
+  const startSessionGame = async (betAmount: number, gameName: string, settings: any) => {
+    if (!siteUser) throw new Error('Oturum kapalı.');
+    const { data, error } = await supabase.rpc('start_session_game', {
+      p_user_id: siteUser.id,
+      p_bet_amount: betAmount,
+      p_game_name: gameName,
+      p_settings: settings
+    });
+    if (error) throw new Error(error.message);
+    if (data && data.success) {
+      const updatedUser = { ...siteUser, balance: data.new_balance };
+      setSiteUser(updatedUser);
+      localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+      localStorage.setItem('site_member', JSON.stringify(updatedUser));
+    }
+    return data;
+  };
+
+  const playSessionMove = async (gameId: string, move: any) => {
+    if (!siteUser) throw new Error('Oturum kapalı.');
+    const { data, error } = await supabase.rpc('play_session_move', {
+      p_game_id: gameId,
+      p_user_id: siteUser.id,
+      p_move: move
+    });
+    if (error) throw new Error(error.message);
+    return data;
+  };
+
+  const cashoutSessionGame = async (gameId: string) => {
+    if (!siteUser) throw new Error('Oturum kapalı.');
+    const { data, error } = await supabase.rpc('cashout_session_game', {
+      p_game_id: gameId,
+      p_user_id: siteUser.id
+    });
+    if (error) throw new Error(error.message);
+    if (data && data.success) {
+      const updatedUser = { ...siteUser, balance: data.new_balance };
+      setSiteUser(updatedUser);
+      localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+      localStorage.setItem('site_member', JSON.stringify(updatedUser));
+    }
+    return data;
+  };
+
   return (
-    <UserContext.Provider value={{ siteUser, setSiteUser, placeBet }}>
+    <UserContext.Provider value={{ siteUser, setSiteUser, placeBet, processGameBet, playInstantGame, startSessionGame, playSessionMove, cashoutSessionGame }}>
       {children}
     </UserContext.Provider>
   );

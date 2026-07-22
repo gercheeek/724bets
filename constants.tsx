@@ -99,18 +99,26 @@ export const DEFAULT_LUCKY_WHEEL_CONFIG: LuckyWheelConfig = {
     subtitle: '100,000 TL Değerinde',
   },
   prizes: [
-    { id: '1', name: '100 TL Nakit', type: 'cash', icon: '💵', value: 100, weight: 10, color: '#0ea5e9' },
-    { id: '2', name: '50 FreeSpin', type: 'freespin', icon: '🎰', value: 50, weight: 15, color: '#8b5cf6' },
-    { id: '3', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 20, color: '#1e293b' },
-    { id: '4', name: '250 TL Bonus', type: 'cash', icon: '🎁', value: 250, weight: 5, color: '#f59e0b' },
-    { id: '5', name: '10 TL Nakit', type: 'cash', icon: '🪙', value: 10, weight: 15, color: '#10b981' },
-    { id: '6', name: 'JOKER', type: 'special', icon: '🃏', value: 0, weight: 5, color: '#10b981' },
-    { id: '7', name: '20 FreeSpin', type: 'freespin', icon: '🎰', value: 20, weight: 15, color: '#8b5cf6' },
-    { id: '8', name: '50 TL Nakit', type: 'cash', icon: '💵', value: 50, weight: 10, color: '#0ea5e9' },
-    { id: '9', name: 'Pas', type: 'pas', icon: '❌', value: 0, weight: 15, color: '#1e293b' },
-    { id: '10', name: '500 TL Freebet', type: 'freespin', icon: '🎟️', value: 500, weight: 2, color: '#f59e0b' },
-    { id: '11', name: '5 TL Nakit', type: 'cash', icon: '🪙', value: 5, weight: 20, color: '#10b981' },
-    { id: '12', name: 'iPhone 15', type: 'physical', icon: '📱', value: 100000, weight: 0.1, color: '#f59e0b' },
+    { id: '1', name: '1000x', type: 'multiplier', icon: '💎', value: 1000, weight: 0.01, color: '#f0b90b' },
+    { id: '2', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '3', name: '100x', type: 'multiplier', icon: '💰', value: 100, weight: 0.1, color: '#f59e0b' },
+    { id: '4', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '5', name: '50x', type: 'multiplier', icon: '💰', value: 50, weight: 0.2, color: '#0ea5e9' },
+    { id: '6', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '7', name: '25x', type: 'multiplier', icon: '💵', value: 25, weight: 0.4, color: '#10b981' },
+    { id: '8', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '9', name: '10x', type: 'multiplier', icon: '💵', value: 10, weight: 1.0, color: '#8b5cf6' },
+    { id: '10', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '11', name: '5x', type: 'multiplier', icon: '🪙', value: 5, weight: 3.0, color: '#ec4899' },
+    { id: '12', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '13', name: '3x', type: 'multiplier', icon: '🪙', value: 3, weight: 5.0, color: '#3b82f6' },
+    { id: '14', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '15', name: '2x', type: 'multiplier', icon: '🪙', value: 2, weight: 10.0, color: '#f59e0b' },
+    { id: '16', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '17', name: '1x', type: 'multiplier', icon: '🪙', value: 1, weight: 10.0, color: '#10b981' },
+    { id: '18', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
+    { id: '19', name: '1x', type: 'multiplier', icon: '🪙', value: 1, weight: 10.0, color: '#10b981' },
+    { id: '20', name: 'PAS', type: 'pas', icon: '❌', value: 0, weight: 3.01, color: '#1e293b' },
   ],
   missions: [
     { id: 'm1', description: '3 Elmas Topla', targetSymbol: 'Elmas', targetCount: 3, rewardText: '250 TL Bonus' }
@@ -124,8 +132,8 @@ export const DEFAULT_LUCKY_WHEEL_CONFIG: LuckyWheelConfig = {
 };
 
 export const DEFAULT_SITE_STATUS_CONFIG: SiteStatusConfig = {
-    isMaintenanceMode: false,
-    maintenanceMessage: 'Değerli üyelerimiz, sistemlerimizde planlı bir bakım çalışması yürütülmektedir. Çok kısa bir süre sonra tekrar sizinle olacağız!',
+    isMaintenanceMode: true,
+    maintenanceMessage: '724bets.net ve 724bahis.net üzerinde sistem güncellemesi ve altyapı çalışması yapılmaktadır. Çok yakında yeni yüzümüzle hizmetinizdeyiz!',
 };
 
 export const DEFAULT_LOADER_CONFIG: LoaderConfig = {

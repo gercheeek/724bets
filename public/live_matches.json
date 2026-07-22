@@ -1,0 +1,1406 @@
+[
+  {
+    "id": "live_KIKlaksvikw_PFCLudogoretsRazgradw_0_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Şampiyonlar Ligi Bayanlar Elemeler"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "KI Klaksvik (w)",
+        "away": "PFC Ludogorets Razgrad (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 2",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.572Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_KFFMitrovicaw_ZimbruChisinauw_0_1",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Şampiyonlar Ligi Bayanlar Elemeler"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "KFF Mitrovica (w)",
+        "away": "Zimbru Chisinau (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "7 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.572Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_PAOKSalonikiw_HapoelJerusalemw_0_2",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Şampiyonlar Ligi Bayanlar Elemeler"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "PAOK Saloniki (w)",
+        "away": "Hapoel Jerusalem (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/10791401.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~2.25!~draw~3.10!~away~3.10"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_FCKharkiv_Schalke_1_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "FC Kharkiv",
+        "away": "Schalke",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/10206254.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 2",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Bologna_Heidenheim_1_1",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Bologna",
+        "away": "Heidenheim",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/8066.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "1 - 1",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~7.40!~draw~1.17!~away~11.00"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_LokomotivTbilisi_BKMA_1_2",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Lokomotiv Tbilisi",
+        "away": "BKMA",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/12666.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 4",
+      "minute": "90'+1",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Palermo_Paradiso_1_3",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Palermo",
+        "away": "Paradiso",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/405107.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "3 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Sassuolo_Padova_1_4",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Sassuolo",
+        "away": "Padova",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/14803.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "2 - 1",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.30!~draw~4.80!~away~10.00"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_JablonecII_PribramII_1_5",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Jablonec II",
+        "away": "Pribram II",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "2 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_FeigniesAulnoye_Seraing_1_6",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Feignies-Aulnoye",
+        "away": "Seraing",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~2.75!~draw~3.10!~away~2.35"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Lecce_PolitehnicaTimisoara_1_7",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Lecce",
+        "away": "Politehnica Timisoara",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/12476.png?"
+          },
+          "2": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/1321998.png?"
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.28!~draw~4.90!~away~12.00"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Nantes_LaRoche_1_8",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Nantes",
+        "away": "La Roche",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.35!~draw~4.50!~away~7.50"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Torino_AlcioneMilano_1_9",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Torino",
+        "away": "Alcione Milano",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.17!~draw~7.30!~away~13.00"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Verona_VirtusVerona_1_10",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Verona",
+        "away": "Virtus Verona",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/11323.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_VysokeMyto_PardubiceII_1_11",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Vysoke Myto",
+        "away": "Pardubice II",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/416130.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_WerderBremen_FagianoOkayama_1_12",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Werder Bremen",
+        "away": "Fagiano Okayama",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~2.24!~draw~3.50!~away~2.95"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Beltinci_SharjahFC_1_13",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Beltinci",
+        "away": "Sharjah FC",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 1",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~8.60!~draw~5.30!~away~1.26"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_StPoltenw_1FCSlovackow_2_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları (Bayanlar)"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "St. Polten (w)",
+        "away": "1. FC Slovacko (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "4 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Grasshoppersw_Interw_2_1",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları (Bayanlar)"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Grasshoppers (w)",
+        "away": "Inter (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "2 - 3",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~34.00!~draw~11.00!~away~1.01"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_RecordBielskoBialaw_SlaviaPraguew_2_2",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları (Bayanlar)"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "Record Bielsko-Biala (w)",
+        "away": "Slavia Prague (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/8465379.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~10.00!~draw~4.70!~away~1.25"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_1FSVMainz05w_BorussiaDortmundw_2_3",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüpler Arası Hazırlık Maçları (Bayanlar)"
+      },
+      "country": {
+        "name": "Uluslararası (Kulüpler)"
+      },
+      "participants": {
+        "home": "1. FSV Mainz 05 (w)",
+        "away": "Borussia Dortmund (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "2 - 3",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~3.80!~draw~4.10!~away~1.69"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_MashalMubarek_NasafQarshi_3_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "PFL"
+      },
+      "country": {
+        "name": "Özbekistan"
+      },
+      "participants": {
+        "home": "Mashal Mubarek",
+        "away": "Nasaf Qarshi",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "1 - 1",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~10.00!~draw~3.20!~away~1.44"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_LokomotivTashkent_Andijan_3_1",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "PFL"
+      },
+      "country": {
+        "name": "Özbekistan"
+      },
+      "participants": {
+        "home": "Lokomotiv Tashkent",
+        "away": "Andijan",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "1 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.26!~draw~4.50!~away~11.00"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Kokand1912_AGMK_3_2",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "PFL"
+      },
+      "country": {
+        "name": "Özbekistan"
+      },
+      "participants": {
+        "home": "Kokand 1912",
+        "away": "AGMK",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~3.50!~draw~2.45!~away~2.60"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Hiiumaa_Tulevik_4_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kupa"
+      },
+      "country": {
+        "name": "Estonya"
+      },
+      "participants": {
+        "home": "Hiiumaa",
+        "away": "Tulevik",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "3 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.03!~draw~12.00!~away~19.00"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Tabasalu_Tamper_4_1",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kupa"
+      },
+      "country": {
+        "name": "Estonya"
+      },
+      "participants": {
+        "home": "Tabasalu",
+        "away": "Tamper",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 2",
+      "minute": "Live",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~8.10!~draw~5.50!~away~1.26"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_SpartakMinsk_FCNFKKrumkachy_5_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "League 2"
+      },
+      "country": {
+        "name": "Beyaz Rusya"
+      },
+      "participants": {
+        "home": "Spartak Minsk",
+        "away": "FC NFK Krumkachy",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/11135489.png?"
+          },
+          "2": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/180447.png?"
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~25.00!~draw~12.00!~away~1.01"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_FCTallinnU19_PolvaLootosU19_6_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "U19, Youth League"
+      },
+      "country": {
+        "name": "Estonya"
+      },
+      "participants": {
+        "home": "FC Tallinn U19",
+        "away": "Polva Lootos U19",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "10 - 1",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_IdaVirumaaFCAllianceU19_HarjuJKLaagriU19_6_1",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "U19, Youth League"
+      },
+      "country": {
+        "name": "Estonya"
+      },
+      "participants": {
+        "home": "Ida-Virumaa FC Alliance U19",
+        "away": "Harju JK Laagri U19",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 5",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_Scottland_BulawayoChiefs_7_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Premier Futbol Ligi"
+      },
+      "country": {
+        "name": "Zimbabve"
+      },
+      "participants": {
+        "home": "Scottland",
+        "away": "Bulawayo Chiefs",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/11114036.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "2 - 1",
+      "minute": "90'+3",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_ChikenInn_TelOne_7_1",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Premier Futbol Ligi"
+      },
+      "country": {
+        "name": "Zimbabve"
+      },
+      "participants": {
+        "home": "Chiken Inn",
+        "away": "TelOne",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "1 - 0",
+      "minute": "90'+3",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_BocaJuniorsw_TalleresdeCordobaw_8_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Primera Division, Kadınlar"
+      },
+      "country": {
+        "name": "Arjantin"
+      },
+      "participants": {
+        "home": "Boca Juniors (w)",
+        "away": "Talleres de Cordoba (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/10846750.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "1 - 1",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~8.20!~draw~1.16!~away~7.50"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_SocialAtleticoTelevisionw_FerroCarrilw_8_1",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Primera Division, Kadınlar"
+      },
+      "country": {
+        "name": "Arjantin"
+      },
+      "participants": {
+        "home": "Social Atletico Television (w)",
+        "away": "Ferro Carril (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "1 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.39!~draw~3.80!~away~7.70"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_JaroII_GBKKokkola_9_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kakkonen"
+      },
+      "country": {
+        "name": "Finlandiya"
+      },
+      "participants": {
+        "home": "Jaro II",
+        "away": "GBK Kokkola",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/10900942.png?"
+          },
+          "2": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/10852.png?"
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~2.15!~draw~3.80!~away~2.75"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_FakelKirov_FankomSSH5_10_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Regional League"
+      },
+      "country": {
+        "name": "Rusya"
+      },
+      "participants": {
+        "home": "Fakel Kirov",
+        "away": "Fankom SSH-5",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "1 - 3",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_RisalehToura_TripoliSC_11_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Division 2"
+      },
+      "country": {
+        "name": "Lübnan"
+      },
+      "participants": {
+        "home": "Risaleh Toura",
+        "away": "Tripoli SC",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "1 - 1",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~2.45!~draw~2.15!~away~4.10"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_ArcenCiel_ASGardeNationale_12_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Division 2"
+      },
+      "country": {
+        "name": "Moritanya"
+      },
+      "participants": {
+        "home": "Arc en Ciel",
+        "away": "AS Garde Nationale",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~4.10!~draw~3.20!~away~1.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_KaaPo_PargasIF_13_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kolmonen"
+      },
+      "country": {
+        "name": "Finlandiya"
+      },
+      "participants": {
+        "home": "KaaPo",
+        "away": "Pargas IF",
+        "ByNumber": {
+          "1": {
+            "LogoPath": "https://de-west3-1.stkcdn.com/tr/logo/big/8359210.png?"
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "2 - 0",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.573Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.53!~draw~4.10!~away~4.70"
+        ]
+      }
+    }
+  },
+  {
+    "id": "live_RealOrurow_CAIndependientedeChallapataw_14_0",
+    "data": {
+      "status": "in_progress",
+      "is_live_betting": true,
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Professional League, Women"
+      },
+      "country": {
+        "name": "Bolivya"
+      },
+      "participants": {
+        "home": "Real Oruro (w)",
+        "away": "CA Independiente de Challapata (w)",
+        "ByNumber": {
+          "1": {
+            "LogoPath": ""
+          },
+          "2": {
+            "LogoPath": ""
+          }
+        }
+      },
+      "current_score": "0 - 3",
+      "minute": "90'",
+      "start_time": "2026-07-22T15:47:26.574Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~-!~draw~-!~away~-"
+        ]
+      }
+    }
+  }
+]

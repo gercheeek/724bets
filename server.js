@@ -30,18 +30,9 @@ wss.on('close', () => {
     clearInterval(interval);
 });
 
-// Primary (NoraBet - EIO=4) and Fallback (Tarafbet - EIO=3) configurations
-const PRIMARY_WS_BASE = 'wss://eu-swarm-newm.norabahis779.com/ws?organization_id=928d43dd-1219-4ab0-b33f-0e180215781e&x-region=us-south1&partnerId=55&EIO=4&transport=websocket';
-const FALLBACK_WS_BASE = 'wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket';
+const PRIMARY_WS_BASE = 'wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket';
 
 const primaryHeaders = {
-    'Origin': 'https://norabahis779.com',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
-    'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache'
-};
-
-const fallbackHeaders = {
     'Origin': 'https://tarafbet981.com',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
     'Cache-Control': 'no-cache',
@@ -133,15 +124,14 @@ wss.on('connection', (ws, req) => {
     let messageBuffer = [];
     let isTargetReady = false;
 
-    const connectToTarget = (url, headers, isFallback = false) => {
-        console.log(`💻 [LOCAL] Connecting to ${isFallback ? 'FALLBACK (Tarafbet)' : 'PRIMARY (NoraBet Swarm)'}...`);
+    const connectToTarget = (url, headers) => {
+        console.log(`💻 [LOCAL] Connecting to PRIMARY (NoraBet Swarm)...`);
         
         const socket = new WebSocket(url, { headers });
 
         socket.on('open', () => {
-            console.log(`✅ [PROXY] Connected to ${isFallback ? 'FALLBACK (Tarafbet)' : 'PRIMARY (NoraBet Swarm)'}!`);
+            console.log(`✅ [PROXY] Connected to PRIMARY (NoraBet Swarm)!`);
             activeTargetSocket = socket;
-            isFallbackMode = isFallback;
         });
 
         socket.on('message', (data) => {
@@ -185,23 +175,14 @@ wss.on('connection', (ws, req) => {
         });
 
         socket.on('error', (err) => {
-            console.error(`❌ [PROXY] ${isFallback ? 'FALLBACK' : 'PRIMARY'} target error:`, err.message);
-            if (!isFallback && !activeTargetSocket) {
-                console.log('🔄 [FAILOVER] Primary connection failed on init. Switching to FALLBACK (Tarafbet)...');
-                const fallbackUrl = `${FALLBACK_WS_BASE}&language=${lang}&lang=${lang}`;
-                connectToTarget(fallbackUrl, fallbackHeaders, true);
-            }
+            console.error(`❌ [PROXY] PRIMARY target error:`, err.message);
         });
 
         socket.on('close', () => {
-            console.log(`⚠️ [PROXY] ${isFallback ? 'FALLBACK' : 'PRIMARY'} target connection closed.`);
+            console.log(`⚠️ [PROXY] PRIMARY target connection closed.`);
             if (pingIntervalId) clearInterval(pingIntervalId);
             
-            if (!isFallback && !isFallbackMode) {
-                console.log('🔄 [FAILOVER] Primary (NoraBet) closed unexpectedly. Switching to FALLBACK (Tarafbet)...');
-                const fallbackUrl = `${FALLBACK_WS_BASE}&language=${lang}&lang=${lang}`;
-                connectToTarget(fallbackUrl, fallbackHeaders, true);
-            } else if (ws.readyState === WebSocket.OPEN) {
+            if (ws.readyState === WebSocket.OPEN) {
                 ws.close();
             }
         });
@@ -210,7 +191,7 @@ wss.on('connection', (ws, req) => {
     };
 
     const primaryUrl = `${PRIMARY_WS_BASE}&language=${lang}&lang=${lang}`;
-    connectToTarget(primaryUrl, primaryHeaders, false);
+    connectToTarget(primaryUrl, primaryHeaders);
 
     ws.on('message', (message) => {
         const msg = message.toString();

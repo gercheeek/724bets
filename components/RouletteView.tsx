@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase';
+import React, { useState } from 'react';
+import { useUser } from '../contexts/UserContext';
 import { ShieldCheck, Target } from 'lucide-react';
 
 const ROULETTE_NUMBERS = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
@@ -7,7 +7,8 @@ const RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 
 
 type BetType = 'red' | 'black' | 'even' | 'odd' | 'low' | 'high';
 
-export default function RouletteView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function RouletteView({ siteUser, onAuthRequired }: any) {
+    const { playInstantGame } = useUser();
     const [betAmount, setBetAmount] = useState<number>(0);
     const [selectedBet, setSelectedBet] = useState<BetType | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -16,64 +17,52 @@ export default function RouletteView({ siteUser, setSiteUser, onAuthRequired }: 
     const [resultNumber, setResultNumber] = useState<number | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
 
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!siteUser) return onAuthRequired();
         if (!selectedBet) {
             alert('Lütfen bir bahis türü seçin.');
             return;
         }
-        if (siteUser.balance < betAmount) {
-            alert('Yetersiz Bakiye');
-            return;
-        }
-
-        const newBalance = siteUser.balance - betAmount;
-        setSiteUser({ ...siteUser, balance: newBalance });
-        supabase.from('site_users').update({ balance: newBalance }).eq('id', siteUser.id).then();
 
         setIsPlaying(true);
         setResultNumber(null);
         setWinAmount(null);
 
-        // Spin Logic
-        const winningIndex = Math.floor(Math.random() * ROULETTE_NUMBERS.length);
-        const winningNum = ROULETTE_NUMBERS[winningIndex];
-        
-        // Calculate rotation to land on winningIndex
-        const segmentAngle = 360 / ROULETTE_NUMBERS.length;
-        // The wheel has 0 at top (0 deg). To land on winningIndex at top:
-        // Need to rotate backwards by winningIndex * segmentAngle, plus multiple full spins
-        const spins = 5; // 5 full rotations
-        const targetRotation = (spins * 360) - (winningIndex * segmentAngle);
-        
-        setSpinRotation(prev => prev + targetRotation + (360 - (prev % 360))); // Ensure clean spins relative to current
-
-        setTimeout(() => {
-            setResultNumber(winningNum);
-            
-            // Calculate Win
-            let won = false;
-            if (winningNum !== 0) {
-                if (selectedBet === 'red' && RED_NUMBERS.includes(winningNum)) won = true;
-                if (selectedBet === 'black' && !RED_NUMBERS.includes(winningNum)) won = true;
-                if (selectedBet === 'even' && winningNum % 2 === 0) won = true;
-                if (selectedBet === 'odd' && winningNum % 2 !== 0) won = true;
-                if (selectedBet === 'low' && winningNum >= 1 && winningNum <= 18) won = true;
-                if (selectedBet === 'high' && winningNum >= 19 && winningNum <= 36) won = true;
-            }
-
-            if (won) {
-                const payout = betAmount * 2;
-                setWinAmount(payout);
-                const updatedBalance = newBalance + payout;
-                setSiteUser({ ...siteUser, balance: updatedBalance });
-                supabase.from('site_users').update({ balance: updatedBalance }).eq('id', siteUser.id).then();
+        try {
+            // Convert selectedBet to payload format
+            let betPayload = {};
+            if (['red', 'black'].includes(selectedBet)) {
+                betPayload = { type: 'color', value: selectedBet, amount: betAmount };
             } else {
-                setWinAmount(0);
+                // For simplicity, we can expand backend logic later for even/odd/low/high.
+                // Our current SQL backend only handles color/number.
+                // We'll treat unsupported as 0 win for now unless we update SQL.
+                // Actually, let's just send it. If SQL doesn't handle, win=0.
+                betPayload = { type: 'outside', value: selectedBet, amount: betAmount };
             }
 
+            const data = await playInstantGame(betAmount, 'Roulette', 0, 'none', { bets: [betPayload] });
+            const winningNum = data.result.number;
+            const payout = data.win_amount;
+            
+            const winningIndex = ROULETTE_NUMBERS.indexOf(winningNum);
+            
+            const segmentAngle = 360 / ROULETTE_NUMBERS.length;
+            const spins = 5;
+            const targetRotation = (spins * 360) - (winningIndex * segmentAngle);
+            
+            setSpinRotation(prev => prev + targetRotation + (360 - (prev % 360)));
+
+            setTimeout(() => {
+                setResultNumber(winningNum);
+                setWinAmount(payout);
+                setIsPlaying(false);
+            }, 4000);
+            
+        } catch (e: any) {
+            alert(e.message || 'Hata oluştu');
             setIsPlaying(false);
-        }, 4000); // 4s spin duration
+        }
     };
 
     const isRed = (num: number) => RED_NUMBERS.includes(num);

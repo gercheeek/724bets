@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase';
+import React, { useState } from 'react';
+import { useUser } from '../contexts/UserContext';
 import { ShieldCheck, Target, Sparkles } from 'lucide-react';
 
 const GRID_SIZE = 40;
@@ -18,7 +18,8 @@ const PAYOUTS: Record<number, number[]> = {
     10: [0, 0, 0, 0, 0, 2, 5, 25, 100, 1000, 10000]
 };
 
-export default function KenoView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function KenoView({ siteUser, onAuthRequired }: any) {
+    const { playInstantGame } = useUser();
     const [betAmount, setBetAmount] = useState<number>(0);
     const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
     const [drawnNumbers, setDrawnNumbers] = useState<number[]>([]);
@@ -50,59 +51,42 @@ export default function KenoView({ siteUser, setSiteUser, onAuthRequired }: any)
         setSelectedNumbers(picked);
     };
 
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!siteUser) return onAuthRequired();
         if (selectedNumbers.length === 0) {
             alert("Lütfen en az 1 numara seçin.");
             return;
         }
-        if (siteUser.balance < betAmount) {
-            alert('Yetersiz Bakiye');
-            return;
-        }
-
-        const newBalance = siteUser.balance - betAmount;
-        setSiteUser({ ...siteUser, balance: newBalance });
-        supabase.from('site_users').update({ balance: newBalance }).eq('id', siteUser.id).then();
 
         setIsPlaying(true);
         setDrawnNumbers([]);
         setWinAmount(null);
 
-        // Draw 10 numbers with a slight delay for animation
-        const available = Array.from({ length: 40 }, (_, i) => i + 1);
-        const drawn: number[] = [];
-        for (let i = 0; i < 10; i++) {
-            const r = Math.floor(Math.random() * available.length);
-            drawn.push(available[r]);
-            available.splice(r, 1);
-        }
+        try {
+            const data = await playInstantGame(betAmount, 'Keno', 0, 'none', { numbers: selectedNumbers });
+            const serverDrawn = data.result.drawn;
+            const payout = data.win_amount;
 
-        let currentDrawIndex = 0;
-        const drawInterval = setInterval(() => {
-            if (currentDrawIndex < 10) {
-                setDrawnNumbers(prev => [...prev, drawn[currentDrawIndex]]);
-                currentDrawIndex++;
-            } else {
-                clearInterval(drawInterval);
-                finishGame(drawn);
-            }
-        }, 150); // 150ms per number reveal
+            let currentDrawIndex = 0;
+            const drawInterval = setInterval(() => {
+                if (currentDrawIndex < 10) {
+                    setDrawnNumbers(prev => [...prev, serverDrawn[currentDrawIndex]]);
+                    currentDrawIndex++;
+                } else {
+                    clearInterval(drawInterval);
+                    finishGame(payout);
+                }
+            }, 150); // 150ms per number reveal
+
+        } catch (e: any) {
+            alert(e.message || 'Hata oluştu');
+            setIsPlaying(false);
+        }
     };
 
-    const finishGame = (finalDrawn: number[]) => {
-        const finalHits = finalDrawn.filter(n => selectedNumbers.includes(n)).length;
-        const payoutMult = PAYOUTS[selectedNumbers.length][finalHits] || 0;
-        const payout = betAmount * payoutMult;
-        
+    const finishGame = (payout: number) => {
         setWinAmount(payout);
-        if (payout > 0 && siteUser) {
-            const updatedBalance = siteUser.balance - betAmount + payout;
-            setSiteUser({ ...siteUser, balance: updatedBalance });
-            supabase.from('site_users').update({ balance: updatedBalance }).eq('id', siteUser.id).then();
-        }
-        
-        setTimeout(() => setIsPlaying(false), 500); // Small pause before unlocking
+        setTimeout(() => setIsPlaying(false), 500);
     };
 
     const activePayouts = selectedNumbers.length > 0 ? PAYOUTS[selectedNumbers.length] : [];

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import { ShieldCheck, Bomb, Diamond } from 'lucide-react';
+import { useUser } from '../contexts/UserContext';
 
 const GRID_SIZE = 25;
 
@@ -15,7 +16,9 @@ function calculateMultiplier(mines: number, hits: number): number {
     return multiplier * 0.99;
 }
 
-export default function MinesView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function MinesView({ siteUser, onAuthRequired }: any) {
+    const { startSessionGame, playSessionMove, cashoutSessionGame } = useUser();
+    const [gameId, setGameId] = useState<string | null>(null);
     const [betAmount, setBetAmount] = useState<number>(0);
     const [minesCount, setMinesCount] = useState<number>(3);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -30,86 +33,75 @@ export default function MinesView({ siteUser, setSiteUser, onAuthRequired }: any
     const currentMultiplier = hits > 0 ? calculateMultiplier(minesCount, hits) : 1;
     const nextMultiplier = calculateMultiplier(minesCount, hits + 1);
 
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!siteUser) return onAuthRequired();
-        if (siteUser.balance < betAmount) {
-            alert('Yetersiz Bakiye');
+        if (betAmount > (siteUser?.balance || 0)) {
+            alert("Yetersiz bakiye!");
             return;
         }
-
-        const newBalance = siteUser.balance - betAmount;
-        setSiteUser({ ...siteUser, balance: newBalance });
-        supabase.from('site_users').update({ balance: newBalance }).eq('id', siteUser.id).then();
-
-        // Generate mines
-        const newGrid = Array(GRID_SIZE).fill(false);
-        let placed = 0;
-        while (placed < minesCount) {
-            const r = Math.floor(Math.random() * GRID_SIZE);
-            if (!newGrid[r]) {
-                newGrid[r] = true;
-                placed++;
-            }
-        }
         
-        setGrid(newGrid);
-        setRevealed(Array(GRID_SIZE).fill(false));
-        setHits(0);
-        setIsPlaying(true);
-        setCrashed(false);
-        setWinAmount(null);
+        try {
+            const res = await startSessionGame(betAmount, 'Mines', { minesCount });
+            setGameId(res.game_id);
+            setIsPlaying(true);
+            setGameStatus('playing');
+            setWinAmount(null);
+            setGrid(Array(GRID_SIZE).fill(false));
+            setRevealed(Array(GRID_SIZE).fill(false));
+            setHits(0);
+        } catch (e: any) {
+            alert(e.message || 'Oyun başlatılamadı!');
+        }
     };
 
-    const handleTileClick = (index: number) => {
-        if (!isPlaying || crashed || revealed[index]) return;
+    const handleTileClick = async (index: number) => {
+        if (!isPlaying || revealed[index] || !gameId) return;
 
-        const newRevealed = [...revealed];
-        newRevealed[index] = true;
-        setRevealed(newRevealed);
-
-        if (grid[index]) {
-            // Hit a mine -> Bust
-            setCrashed(true);
-            setIsPlaying(false);
-            setWinAmount(0);
+        try {
+            const res = await playSessionMove(gameId, { tile: index });
             
-            // Reveal all mines (others faded)
-            setRevealed(Array(GRID_SIZE).fill(true));
-        } else {
-            // Safe -> Gem
-            const newHits = hits + 1;
-            setHits(newHits);
+            const newRevealed = [...revealed];
+            newRevealed[index] = true;
+            setRevealed(newRevealed);
 
-            // Auto cashout if all gems found
-            if (newHits === 25 - minesCount) {
-                const payout = betAmount * calculateMultiplier(minesCount, newHits);
-                setWinAmount(payout);
+            if (res.status === 'bust') {
+                // Show all mines from backend
+                const backendMines = res.mines || [];
+                const finalGrid = Array(GRID_SIZE).fill(false);
+                backendMines.forEach((m: number) => finalGrid[m] = true);
+                setGrid(finalGrid);
+                
+                setGameStatus('lost');
                 setIsPlaying(false);
-                if (siteUser) {
-                    const updatedBalance = siteUser.balance + payout;
-                    setSiteUser({ ...siteUser, balance: updatedBalance });
-                    supabase.from('site_users').update({ balance: updatedBalance }).eq('id', siteUser.id).then();
-                }
-                setRevealed(Array(GRID_SIZE).fill(true));
+                setGameId(null);
+                setRevealed(Array(GRID_SIZE).fill(true)); // Reveal all
+            } else {
+                setHits(res.hits);
             }
+        } catch (e: any) {
+            alert(e.message || 'Hamle yapılamadı');
         }
     };
 
-    const handleCashOut = () => {
-        if (!isPlaying || hits === 0) return;
+    const handleCashOut = async () => {
+        if (!isPlaying || hits === 0 || !gameId) return;
         
-        const payout = betAmount * currentMultiplier;
-        setWinAmount(payout);
-        setIsPlaying(false);
-        
-        if (siteUser) {
-            const updatedBalance = siteUser.balance + payout;
-            setSiteUser({ ...siteUser, balance: updatedBalance });
-            supabase.from('site_users').update({ balance: updatedBalance }).eq('id', siteUser.id).then();
-        }
+        try {
+            const res = await cashoutSessionGame(gameId);
+            setWinAmount(res.win_amount);
+            
+            const backendMines = res.mines || [];
+            const finalGrid = Array(GRID_SIZE).fill(false);
+            backendMines.forEach((m: number) => finalGrid[m] = true);
+            setGrid(finalGrid);
 
-        // Reveal the rest
-        setRevealed(Array(GRID_SIZE).fill(true));
+            setGameStatus('won');
+            setIsPlaying(false);
+            setGameId(null);
+            setRevealed(Array(GRID_SIZE).fill(true));
+        } catch (e: any) {
+            alert(e.message || 'Bozdurma işlemi başarısız');
+        }
     };
 
     return (

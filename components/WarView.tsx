@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase';
+import React, { useState } from 'react';
+import { useUser } from '../contexts/UserContext';
 import { ShieldCheck, Swords } from 'lucide-react';
 
 type Suit = '♠' | '♥' | '♦' | '♣';
@@ -12,24 +12,13 @@ interface Card {
 }
 
 const SUITS: Suit[] = ['♠', '♥', '♦', '♣'];
-const RANKS: Rank[] = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
-function getCardValue(rank: Rank): number {
-    if (rank === 'A') return 14;
-    if (rank === 'K') return 13;
-    if (rank === 'Q') return 12;
-    if (rank === 'J') return 11;
-    return parseInt(rank);
-}
-
-function createDeck(): Card[] {
-    const deck: Card[] = [];
-    for (const suit of SUITS) {
-        for (const rank of RANKS) {
-            deck.push({ suit, rank, value: getCardValue(rank) });
-        }
-    }
-    return deck.sort(() => Math.random() - 0.5);
+function getRankString(val: number): Rank {
+    if (val === 14) return 'A';
+    if (val === 13) return 'K';
+    if (val === 12) return 'Q';
+    if (val === 11) return 'J';
+    return val.toString() as Rank;
 }
 
 const CardUI = ({ card, hidden = false }: { card?: Card; hidden?: boolean }) => {
@@ -61,7 +50,8 @@ const CardUI = ({ card, hidden = false }: { card?: Card; hidden?: boolean }) => 
     );
 };
 
-export default function WarView({ siteUser, setSiteUser, onAuthRequired }: any) {
+export default function WarView({ siteUser, onAuthRequired }: any) {
+    const { playInstantGame } = useUser();
     const [betAmount, setBetAmount] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useState(false);
     
@@ -70,16 +60,8 @@ export default function WarView({ siteUser, setSiteUser, onAuthRequired }: any) 
     const [result, setResult] = useState<'win' | 'lose' | 'tie' | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
 
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!siteUser) return onAuthRequired();
-        if (siteUser.balance < betAmount) {
-            alert('Yetersiz Bakiye');
-            return;
-        }
-
-        const newBalance = siteUser.balance - betAmount;
-        setSiteUser({ ...siteUser, balance: newBalance });
-        supabase.from('site_users').update({ balance: newBalance }).eq('id', siteUser.id).then();
 
         setIsPlaying(true);
         setPlayerCard(null);
@@ -87,40 +69,37 @@ export default function WarView({ siteUser, setSiteUser, onAuthRequired }: any) 
         setResult(null);
         setWinAmount(null);
 
-        // Deal Cards
-        setTimeout(() => {
-            const deck = createDeck();
-            const pCard = deck.pop()!;
-            const dCard = deck.pop()!;
+        try {
+            const data = await playInstantGame(betAmount, 'War');
+            const pVal = data.result.player;
+            const dVal = data.result.dealer;
+            const payout = data.win_amount;
             
-            setPlayerCard(pCard);
-            setDealerCard(dCard);
+            // Randomly assign a suit just for visual since backend returned rank values
+            const pSuit = SUITS[Math.floor(Math.random() * 4)];
+            const dSuit = SUITS[Math.floor(Math.random() * 4)];
             
-            let payout = 0;
-            let currentResult: 'win' | 'lose' | 'tie' = 'lose';
+            const pCard: Card = { suit: pSuit, rank: getRankString(pVal), value: pVal };
+            const dCard: Card = { suit: dSuit, rank: getRankString(dVal), value: dVal };
 
-            if (pCard.value > dCard.value) {
-                payout = betAmount * 2; // Win
-                currentResult = 'win';
-            } else if (pCard.value === dCard.value) {
-                payout = betAmount; // Push on tie (standard)
-                currentResult = 'tie';
-            } else {
-                payout = 0; // Lose
-                currentResult = 'lose';
-            }
+            setTimeout(() => {
+                setPlayerCard(pCard);
+                setDealerCard(dCard);
+                
+                let currentResult: 'win' | 'lose' | 'tie' = 'lose';
+                if (pVal > dVal) currentResult = 'win';
+                else if (pVal === dVal) currentResult = 'tie';
+                else currentResult = 'lose';
 
-            setResult(currentResult);
-            setWinAmount(payout);
-
-            if (payout > 0) {
-                const updatedBalance = newBalance + payout;
-                setSiteUser({ ...siteUser, balance: updatedBalance });
-                supabase.from('site_users').update({ balance: updatedBalance }).eq('id', siteUser.id).then();
-            }
-
+                setResult(currentResult);
+                setWinAmount(payout);
+                setIsPlaying(false);
+            }, 1000);
+            
+        } catch (e: any) {
+            alert(e.message || 'Hata oluştu');
             setIsPlaying(false);
-        }, 800);
+        }
     };
 
     return (

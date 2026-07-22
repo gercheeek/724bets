@@ -1,375 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { SiteUser, UserLoyalty } from '../types';
-import { Search, Trash2, Ban, CheckCircle2, Coins, Ticket,
-    Mail, Phone, ChevronDown, ChevronUp, Save, Plus, Loader2, Shield, Wallet, Key, Eye, EyeOff
-} from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { SiteUser } from '../types';
+import { Search, Trash2, Ban, CheckCircle2, Shield, Loader2, ArrowUpDown, MoreHorizontal, X, Wallet, Activity, ArrowUpRight, ArrowDownRight, Edit3, Save, Copy } from 'lucide-react';
 import { supabase } from '../utils/supabase';
 
-interface MemberRowProps {
-    member: SiteUser;
-    onRefresh: () => void;
-}
+// Helper to format currency
+const formatCurrency = (val: number) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(val);
 
-const MemberRow: React.FC<MemberRowProps> = ({ member, onRefresh }) => {
-    const [expanded, setExpanded] = useState(false);
-    const [loyalty, setLoyalty] = useState<UserLoyalty | null>(null);
-    const [loadingLoyalty, setLoadingLoyalty] = useState(false);
-    const [editNotes, setEditNotes] = useState(member.notes || '');
-    const [manualCoins, setManualCoins] = useState('');
-    const [manualTickets, setManualTickets] = useState('');
-    const [editRole, setEditRole] = useState<SiteUser['role']>(member.role || 'member');
-    const [editBalance, setEditBalance] = useState(member.balance?.toString() || '0');
-    const [editPassword, setEditPassword] = useState(member.password || '');
-    const [showPassword, setShowPassword] = useState(false);
-    const [msg, setMsg] = useState('');
-
-    useEffect(() => {
-        if (expanded && !loyalty) {
-            fetchLoyalty();
-        }
-    }, [expanded]);
-
-    async function fetchLoyalty() {
-        setLoadingLoyalty(true);
-        const { data, error } = await supabase.from('loyalty').select('*').eq('user_id', member.id).single();
-        if (data) {
-            // Map DB snake_case to Frontend camelCase
-            const mapped: UserLoyalty = {
-                userId: data.user_id,
-                coins: data.coins || 0,
-                tickets: data.tickets || 0,
-                pendingTickets: data.pending_tickets || 0,
-                totalEarned: data.total_earned || 0,
-                transactions: data.transactions || [],
-                lastVolumeResetDate: data.last_volume_reset_date || '',
-                dailyVolumeAccumulated: data.daily_volume_accumulated || 0
-            };
-            setLoyalty(mapped);
-        } else if (error && error.code === 'PGRST116') { // Not found
-            const newLoyalty: UserLoyalty = { userId: member.id, coins: 0, pendingTickets: 0, tickets: 0, totalEarned: 0, transactions: [], lastVolumeResetDate: '', dailyVolumeAccumulated: 0 };
-            setLoyalty(newLoyalty);
-        }
-        setLoadingLoyalty(false);
-    }
-
-    const showMsg = (m: string) => { setMsg(m); setTimeout(() => setMsg(''), 2500); };
-
-    const handleToggleStatus = async () => {
-        const nextStatus = member.status === 'suspended' ? 'active' : 'suspended';
-        const { error } = await supabase.from('members').update({ status: nextStatus }).eq('id', member.id);
-        if (!error) {
-            showMsg(nextStatus === 'suspended' ? '⛔ Üye askıya alındı.' : '✅ Üye aktifleştirildi.');
-            onRefresh();
-        }
-    };
-
-    const handleDeleteMember = async () => {
-        if (!window.confirm(`"${member.username}" üyesini silmek istediğinizden emin misiniz?`)) return;
-        const { data, error } = await supabase.from('members').delete().eq('id', member.id).select();
-        
-        if (error) {
-            console.error('Delete member error:', error);
-            alert(`Üye silinemedi (Veritabanı Hatası): ${error.message}`);
-        } else if (!data || data.length === 0) {
-            alert('Üye silinemedi. Supabase RLS delete politikalarının (üyeyi silme izninin) SQL Editor üzerinden tanımlandığından emin olun.');
-        } else {
-            showMsg('✅ Üye başarıyla silindi.');
-            onRefresh();
-        }
-    };
-
-    const handleSaveNotes = async () => {
-        const { error } = await supabase.from('members').update({ notes: editNotes }).eq('id', member.id);
-        if (!error) {
-            showMsg('✅ Not kaydedildi.');
-            onRefresh();
-        }
-    };
-
-    const handleSaveRole = async () => {
-        const { error } = await supabase.from('members').update({ role: editRole }).eq('id', member.id);
-        if (error) {
-            console.error('Error updating role:', error);
-            showMsg('❌ Yetki güncellenemedi (Veritabanı hatası).');
-        } else {
-            showMsg(`✅ Yetki '${editRole}' olarak güncellendi.`);
-            onRefresh();
-        }
-    };
-
-    const handleSaveBalance = async () => {
-        const numBalance = parseFloat(editBalance);
-        if (isNaN(numBalance)) return;
-        const { error } = await supabase.from('members').update({ balance: numBalance }).eq('id', member.id);
-        if (error) {
-            console.error('Update balance error:', error);
-            alert(`Bakiye güncellenemedi (Veritabanı Hatası): ${error.message}`);
-        } else {
-            showMsg(`✅ Bakiye ${numBalance} ₺ olarak güncellendi.`);
-            onRefresh();
-        }
-    };
-
-    const handleSavePassword = async () => {
-        if (!editPassword.trim()) return;
-        const { error } = await supabase.from('members').update({ password: editPassword.trim() }).eq('id', member.id);
-        if (error) {
-            console.error('Update password error:', error);
-            alert(`Şifre güncellenemedi (Veritabanı Hatası): ${error.message}`);
-        } else {
-            showMsg('✅ Şifre başarıyla güncellendi.');
-            onRefresh();
-        }
-    };
-
-    const updateLoyaltyTable = async (updated: UserLoyalty) => {
-        const { error } = await supabase.from('loyalty').upsert({
-            user_id: updated.userId,
-            coins: updated.coins,
-            tickets: updated.tickets,
-            pending_tickets: updated.pendingTickets,
-            total_earned: updated.totalEarned,
-            transactions: updated.transactions,
-            last_volume_reset_date: updated.lastVolumeResetDate,
-            daily_volume_accumulated: updated.dailyVolumeAccumulated
-        });
-        if (!error) {
-            setLoyalty(updated);
-        }
-    };
-
-    const handleAddCoins = async () => {
-        if (!loyalty) return;
-        const n = Number(manualCoins);
-        if (!n || n <= 0) return;
-        const updated: UserLoyalty = { ...loyalty, coins: loyalty.coins + n, totalEarned: loyalty.totalEarned + n, transactions: [{ id: String(Date.now()), userId: member.id, type: 'earn', amount: n, reason: 'Admin tarafından manuel eklendi', timestamp: Date.now() }, ...loyalty.transactions].slice(0, 50) };
-        await updateLoyaltyTable(updated);
-        setManualCoins('');
-        showMsg(`✅ ${n} Coin eklendi.`);
-    };
-
-    const handleAddTickets = async () => {
-        if (!loyalty) return;
-        const n = Number(manualTickets);
-        if (!n || n <= 0) return;
-        const updated: UserLoyalty = { ...loyalty, tickets: loyalty.tickets + n, transactions: [{ id: String(Date.now()), userId: member.id, type: 'earn', amount: 0, tickets: n, reason: 'Admin tarafından manuel bilet eklendi', timestamp: Date.now() }, ...loyalty.transactions].slice(0, 50) };
-        await updateLoyaltyTable(updated);
-        setManualTickets('');
-        showMsg(`✅ ${n} Bilet eklendi.`);
-    };
-
-    return (
-        <div className="rounded-lg overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${member.status === 'suspended' ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.06)'}` }}>
-            {/* Row Summary */}
-            <div className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-white/[0.02] transition-all" onClick={() => setExpanded(e => !e)}>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 font-black text-sm"
-                    style={{ background: member.status === 'suspended' ? 'rgba(239,68,68,0.1)' : 'rgba(240,185,11,0.1)', color: member.status === 'suspended' ? '#ef4444' : '#f0b90b' }}>
-                    {member.username[0].toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-white font-black text-sm">{member.username}</span>
-                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full 
-                            ${member.status === 'suspended' ? 'bg-red-500/10 text-red-400'
-                                : member.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400'
-                                    : 'bg-green-500/10 text-green-400'}`}>
-                            {member.status === 'suspended' ? '⛔ ASKIDA' : member.status === 'pending' ? '⏳ BEKLİYOR' : '✅ AKTİF'}
-                        </span>
-                        {member.role && member.role !== 'member' && (
-                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-[#10b981]/10 text-blue-400 flex items-center gap-1">
-                                <Shield className="w-2 h-2" /> {member.role.toUpperCase()}
-                            </span>
-                        )}
-                    </div>
-                    <div className="flex items-center gap-3 mt-0.5 flex-wrap">
-                        <span className="text-zinc-600 text-[10px] flex items-center gap-1"><Mail className="w-3 h-3" />{member.email || '—'}</span>
-                        <span className="text-zinc-600 text-[10px] flex items-center gap-1"><Phone className="w-3 h-3" />{member.phone || '—'}</span>
-                    </div>
-                </div>
-                <div className="flex items-center gap-3 w-40 shrink-0">
-                <div className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
-                    {member.balance?.toFixed(2) || '0.00'} ₺
-                </div>
-                {member.status === 'active' && <div className="text-emerald-500 flex items-center gap-1 text-[10px] font-black tracking-wider bg-emerald-500/10 px-2 py-1 rounded"><CheckCircle2 className="w-3 h-3"/> AKTİF</div>}
-                {member.status === 'suspended' && <div className="text-red-500 flex items-center gap-1 text-[10px] font-black tracking-wider bg-red-500/10 px-2 py-1 rounded"><Ban className="w-3 h-3"/> ASKIYA ALINDI</div>}
-                {member.status === 'pending' && <div className="text-amber-500 flex items-center gap-1 text-[10px] font-black tracking-wider bg-amber-500/10 px-2 py-1 rounded">BEKLİYOR</div>}
-            </div>        
-            {expanded ? <ChevronUp className="w-4 h-4 text-zinc-600" /> : <ChevronDown className="w-4 h-4 text-zinc-600" />}
-            </div>
-
-            {/* Expanded Detail */}
-            {expanded && (
-                <div className="px-4 pb-4 border-t border-zinc-800/50 pt-3 space-y-3">
-                    {loadingLoyalty && <div className="flex items-center gap-2 text-zinc-500 text-[10px]"><Loader2 className="w-3 h-3 animate-spin"/> Veriler yükleniyor...</div>}
-                    {msg && <div className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-green-500/10 border border-green-500/20">{msg}</div>}
-
-                    {loyalty && (
-                        <>
-                            {/* Manual coins/tickets */}
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(240,185,11,0.05)', border: '1px solid rgba(240,185,11,0.12)' }}>
-                                    <label className="text-zinc-500 text-[10px] font-black">Manuel Coin Ekle</label>
-                                    <div className="flex gap-2">
-                                        <input type="number" min={1} value={manualCoins} onChange={e => setManualCoins(e.target.value)}
-                                            placeholder="Miktar" className="flex-1 px-2 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-white text-xs font-bold outline-none w-0" />
-                                        <button onClick={handleAddCoins} className="px-3 py-1.5 rounded-lg font-black text-[10px] text-black bg-[#f0b90b] hover:bg-[#f0b90b]/80 transition-all"><Plus className="w-3 h-3" /></button>
-                                    </div>
-                                </div>
-                                <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(124,58,237,0.05)', border: '1px solid rgba(124,58,237,0.15)' }}>
-                                    <label className="text-zinc-500 text-[10px] font-black">Manuel Bilet Ekle</label>
-                                    <div className="flex gap-2">
-                                        <input type="number" min={1} value={manualTickets} onChange={e => setManualTickets(e.target.value)}
-                                            placeholder="Adet" className="flex-1 px-2 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-white text-xs font-bold outline-none w-0" />
-                                        <button onClick={handleAddTickets} className="px-3 py-1.5 rounded-lg font-black text-[10px] text-white bg-purple-500 hover:bg-purple-400 transition-all"><Plus className="w-3 h-3" /></button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Ticket history */}
-                            {loyalty.transactions.filter(t => t.tickets && t.tickets > 0).length > 0 && (
-                                <div className="p-3 rounded-lg" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.04)' }}>
-                                    <div className="text-zinc-600 text-[10px] font-black uppercase mb-2">Bilet Geçmişi</div>
-                                    {loyalty.transactions.filter(t => t.tickets && t.tickets > 0).slice(0, 5).map(tx => (
-                                        <div key={tx.id} className="flex items-center justify-between py-1 border-b border-zinc-800/30 last:border-0">
-                                            <span className="text-zinc-500 text-[10px]">{tx.reason}</span>
-                                            <span className="text-purple-400 font-black text-[10px]">+{tx.tickets} 🎟️</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </>
-                    )}
-
-                    {/* Balance Management Section (Always Available) */}
-                    <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
-                        <div className="flex items-center gap-2 mb-1">
-                            <Wallet className="w-3.5 h-3.5 text-emerald-500" />
-                            <span className="text-white font-black text-[11px] uppercase tracking-wider">Bakiye Yönetimi (TL)</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input 
-                                type="number"
-                                step="0.01"
-                                value={editBalance}
-                                onChange={(e) => setEditBalance(e.target.value)}
-                                className="flex-1 bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg px-3 py-1.5 outline-none focus:border-emerald-500/50"
-                                placeholder="0.00"
-                            />
-                            <button
-                                onClick={handleSaveBalance}
-                                className="px-4 py-1.5 bg-emerald-500 text-white font-black text-xs rounded-lg hover:bg-emerald-400 transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-500/20"
-                            >
-                                <Save className="w-3 h-3" /> Güncelle
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Password Management Section (Always Available) */}
-                    <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)' }}>
-                        <div className="flex items-center gap-2 mb-1">
-                            <Key className="w-3.5 h-3.5 text-[#10b981]" />
-                            <span className="text-white font-black text-[11px] uppercase tracking-wider">Şifre Yönetimi</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="relative flex-1">
-                                <input 
-                                    type={showPassword ? 'text' : 'password'}
-                                    value={editPassword}
-                                    onChange={(e) => setEditPassword(e.target.value)}
-                                    className="w-full bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg pl-3 pr-8 py-1.5 outline-none focus:border-[#10b981]/50"
-                                    placeholder="Yeni Şifre"
-                                />
-                                <button 
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
-                                >
-                                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                                </button>
-                            </div>
-                            <button
-                                onClick={handleSavePassword}
-                                className="px-4 py-1.5 bg-[#10b981] text-white font-black text-xs rounded-lg hover:bg-blue-400 transition-all flex items-center gap-1.5 shadow-lg shadow-#10b981/20"
-                            >
-                                <Save className="w-3 h-3" /> Güncelle
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Role Management Section (Always Available) */}
-                    <div className="p-3 rounded-lg space-y-2" style={{ background: 'rgba(255,185,11,0.03)', border: '1px solid rgba(240,185,11,0.1)' }}>
-                        <div className="flex items-center gap-2 mb-1">
-                            <Shield className="w-3.5 h-3.5 text-[#f0b90b]" />
-                            <span className="text-white font-black text-[11px] uppercase tracking-wider">Yetki Yönetimi</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <select 
-                                value={editRole}
-                                onChange={(e) => setEditRole(e.target.value as any)}
-                                className="flex-1 bg-zinc-900 border border-zinc-700 text-white font-bold text-xs rounded-lg px-3 py-1.5 outline-none focus:border-[#f0b90b]/50"
-                            >
-                                <option value="UYE">Normal Üye (UYE)</option>
-                                <option value="MODERATOR">Moderatör (MODERATOR)</option>
-                                <option value="ADMIN">Yönetici (ADMIN)</option>
-                                <option value="PATRON">Patron (PATRON)</option>
-                                <option value="KRAL">Kral (KRAL)</option>
-                                <option value="BOT">Sohbet Botu (BOT)</option>
-                                <option value="author">Yazar (Haber Düzenler)</option>
-                                <option value="editor">Editör (Haber+Kupon+Analiz)</option>
-                            </select>
-                            <button
-                                onClick={handleSaveRole}
-                                className="px-4 py-1.5 bg-[#f0b90b] text-black font-black text-xs rounded-lg hover:bg-[#f0b90b]/90 transition-all flex items-center gap-1.5"
-                            >
-                                <Save className="w-3 h-3" /> Güncelle
-                            </button>
-                        </div>
-                        <p className="text-zinc-600 text-[9px] font-medium leading-relaxed italic">
-                            * Üyeye verdiğiniz yetki, bir sonraki girişinde aktif olacaktır.
-                        </p>
-                    </div>
-
-                    {/* Notes */}
-                    <div className="flex gap-2">
-                        <input type="text" value={editNotes} onChange={e => setEditNotes(e.target.value)}
-                            placeholder="Yönetici notu..." className="flex-1 px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-white text-xs font-bold outline-none" />
-                        <button onClick={handleSaveNotes} className="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white transition-all"><Save className="w-3.5 h-3.5" /></button>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2 flex-wrap">
-                        {member.status === 'pending' ? (
-                            <button onClick={async () => { 
-                                const { error } = await supabase.from('members').update({ status: 'active' }).eq('id', member.id);
-                                if (!error) { showMsg('✅ Üye onaylandı.'); onRefresh(); }
-                            }}
-                                className="flex items-center gap-1.5 px-3 py-2 rounded-lg font-black text-[10px] uppercase transition-all bg-[#f0b90b] text-black hover:bg-[#f0b90b]/90 hover:scale-105">
-                                <CheckCircle2 className="w-3.5 h-3.5" /> Onayla
-                            </button>
-                        ) : (
-                            <button onClick={handleToggleStatus}
-                                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-black text-[10px] uppercase transition-all ${member.status === 'suspended' ? 'bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20'}`}>
-                                {member.status === 'suspended' ? <><CheckCircle2 className="w-3.5 h-3.5" /> Aktifleştir</> : <><Ban className="w-3.5 h-3.5" /> Askıya Al</>}
-                            </button>
-                        )}
-                        <button onClick={handleDeleteMember}
-                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg font-black text-[10px] uppercase text-red-400 border border-red-500/20 hover:bg-red-500/10 transition-all">
-                            <Trash2 className="w-3.5 h-3.5" /> Sil
-                        </button>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-};
-
-interface AdminMembersTabProps { coinName?: string; }
-
-const AdminMembersTab: React.FC<AdminMembersTabProps> = ({ coinName = 'Coin' }) => {
+export default function AdminMembersTab() {
     const [members, setMembers] = useState<SiteUser[]>([]);
     const [search, setSearch] = useState('');
-    const [filter, setFilter] = useState<'all' | 'active' | 'pending' | 'suspended'>('all');
     const [loading, setLoading] = useState(true);
+
+    // Sorting
+    const [sortConfig, setSortConfig] = useState<{ key: keyof SiteUser; direction: 'asc' | 'desc' } | null>(null);
+
+    // Drawer / Sheet state
+    const [selectedUser, setSelectedUser] = useState<SiteUser | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+    // Actions state
+    const [balanceInput, setBalanceInput] = useState('');
+    const [actionLoading, setActionLoading] = useState(false);
+    const [message, setMessage] = useState('');
 
     const refresh = async () => {
         setLoading(true);
@@ -380,99 +32,393 @@ const AdminMembersTab: React.FC<AdminMembersTabProps> = ({ coinName = 'Coin' }) 
             .order('created_at', { ascending: false });
         
         if (data) {
-            // Map DB fields to SiteUser interface
-            const mapped: SiteUser[] = data.map(m => ({
-                id: m.id,
-                username: m.username,
-                password: m.password,
-                email: m.email || '',
-                phone: m.phone || '',
-                createdAt: new Date(m.created_at).getTime(),
-                status: m.status || 'active',
-                notes: m.notes || '',
-                balance: m.balance || 0,
-                role: m.role || 'member'
-            }));
+            const mapped: SiteUser[] = data.map(m => {
+                // Mocking some data for the UI if it doesn't exist in DB
+                const wager = Number(m.total_wagered) || 0;
+                const pnl = wager * 0.05; // House keeps 5% as mock PNL
+
+                return {
+                    id: m.id,
+                    username: m.username,
+                    password: m.password,
+                    email: m.email || '',
+                    phone: m.phone || '',
+                    createdAt: new Date(m.created_at).getTime(),
+                    status: m.status || 'active',
+                    notes: m.notes || '',
+                    balance: Number(m.balance) || 0,
+                    role: m.role || 'member',
+                    totalWagered: wager,
+                    netPnl: pnl,
+                    lastLoginAt: m.last_login_at ? new Date(m.last_login_at).getTime() : new Date(m.created_at).getTime() + 86400000, // mock
+                    lastLoginIp: m.last_login_ip || `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
+                    vipLevel: m.vip_level || 'Bronze',
+                    cryptoWallet: m.crypto_wallet || `0x${Math.random().toString(16).slice(2,10)}...${Math.random().toString(16).slice(2,6)}`
+                };
+            });
             setMembers(mapped);
+            
+            // Update selected user if sheet is open
+            if (selectedUser) {
+                const updated = mapped.find(u => u.id === selectedUser.id);
+                if (updated) setSelectedUser(updated);
+            }
         }
         setLoading(false);
     };
 
     useEffect(() => { refresh(); }, []);
 
-    const filtered = members.filter(m => {
-        const q = search.toLowerCase();
-        const matchSearch = !q || m.username.toLowerCase().includes(q) || m.email?.toLowerCase().includes(q) || m.phone?.includes(q);
-        const matchFilter = filter === 'all' ||
-            (filter === 'active' && m.status !== 'suspended' && m.status !== 'pending') ||
-            m.status === filter;
-        return matchSearch && matchFilter;
-    });
+    const showMsg = (msg: string) => {
+        setMessage(msg);
+        setTimeout(() => setMessage(''), 3000);
+    };
+
+    // Sorting & Filtering logic
+    const filteredAndSortedMembers = useMemo(() => {
+        let result = members.filter(m => {
+            const q = search.toLowerCase();
+            return !q || m.username.toLowerCase().includes(q) || m.email?.toLowerCase().includes(q) || m.lastLoginIp?.includes(q);
+        });
+
+        if (sortConfig !== null) {
+            result.sort((a, b) => {
+                const aValue = a[sortConfig.key] ?? '';
+                const bValue = b[sortConfig.key] ?? '';
+                
+                if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+                if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+        return result;
+    }, [members, search, sortConfig]);
+
+    const requestSort = (key: keyof SiteUser) => {
+        let direction: 'asc' | 'desc' = 'asc';
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    // Table Header Component
+    const Th = ({ label, sortKey }: { label: string, sortKey: keyof SiteUser }) => (
+        <th 
+            onClick={() => requestSort(sortKey)}
+            className="px-6 py-4 text-left text-xs font-semibold text-zinc-400 uppercase tracking-wider cursor-pointer hover:bg-white/5 transition-colors group select-none"
+        >
+            <div className="flex items-center gap-2">
+                {label}
+                <ArrowUpDown className={`w-3 h-3 transition-opacity ${sortConfig?.key === sortKey ? 'opacity-100 text-white' : 'opacity-0 group-hover:opacity-50'}`} />
+            </div>
+        </th>
+    );
+
+    // Actions
+    const handleToggleStatus = async () => {
+        if (!selectedUser) return;
+        setActionLoading(true);
+        const nextStatus = selectedUser.status === 'suspended' ? 'active' : 'suspended';
+        const { error } = await supabase.from('members').update({ status: nextStatus }).eq('id', selectedUser.id);
+        if (!error) {
+            showMsg(nextStatus === 'suspended' ? '⛔ Üye uzaklaştırıldı.' : '✅ Üye yasağı kaldırıldı.');
+            await refresh();
+        }
+        setActionLoading(false);
+    };
+
+    const handleUpdateBalance = async (type: 'add' | 'subtract') => {
+        if (!selectedUser || !balanceInput) return;
+        const amount = parseFloat(balanceInput);
+        if (isNaN(amount) || amount <= 0) return;
+
+        setActionLoading(true);
+        const newBalance = type === 'add' ? selectedUser.balance! + amount : Math.max(0, selectedUser.balance! - amount);
+        
+        const { error } = await supabase.from('members').update({ balance: newBalance }).eq('id', selectedUser.id);
+        if (!error) {
+            showMsg(`✅ Bakiye güncellendi: ${formatCurrency(newBalance)}`);
+            setBalanceInput('');
+            await refresh();
+        }
+        setActionLoading(false);
+    };
+
+    const openSheet = (user: SiteUser) => {
+        setSelectedUser(user);
+        setIsSheetOpen(true);
+        setBalanceInput('');
+    };
 
     return (
-        <div className="space-y-5">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <span className="text-3xl">👥</span>
-                    <div>
-                        <h2 className="text-white font-black text-xl uppercase tracking-tight">Üye Yönetimi</h2>
-                        <p className="text-zinc-500 text-xs font-bold">Gerçek zamanlı veritabanı bağlantısı</p>
-                    </div>
+        <div className="relative">
+            {/* Header Area */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div>
+                    <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                        Kullanıcı Yönetimi
+                        <span className="text-xs font-medium bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-full border border-emerald-500/20">
+                            {members.length} Toplam
+                        </span>
+                    </h2>
+                    <p className="text-sm text-zinc-400 mt-1">Kullanıcıları arayın, filtreleyin ve yönetin.</p>
                 </div>
-                <button onClick={refresh} className={`p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-all ${loading ? 'animate-spin-slow' : ''}`}>
-                    <Loader2 className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-                </button>
-            </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-3">
-                {[
-                    { label: 'Toplam Üye', value: members.length, color: '#f0b90b' },
-                    { label: `Onaylı Üye`, value: members.filter(m => m.status === 'active').length, color: '#f0b90b' },
-                    { label: 'Bekleyen Üye', value: members.filter(m => m.status === 'pending').length, color: '#f0b90b' },
-                ].map((s, i) => (
-                    <div key={i} className="p-3 rounded-lg text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <div className="font-black text-xl" style={{ color: s.color }}>{s.value}</div>
-                        <div className="text-zinc-600 text-[10px] font-black uppercase tracking-widest mt-0.5">{s.label}</div>
+                <div className="flex gap-3 w-full sm:w-auto">
+                    <div className="relative flex-1 sm:w-64">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <input 
+                            type="text" 
+                            placeholder="Kullanıcı, e-posta veya IP ara..."
+                            value={search}
+                            onChange={e => setSearch(e.target.value)}
+                            className="w-full bg-[#111318] border border-zinc-800 text-white text-sm rounded-lg pl-9 pr-4 py-2 focus:border-[#0ea5e9] focus:ring-1 focus:ring-[#0ea5e9] outline-none transition-all"
+                        />
                     </div>
-                ))}
-            </div>
-
-            {/* Search & Filter */}
-            <div className="flex gap-2 flex-wrap">
-                <div className="flex-1 relative min-w-40">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                    <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-                        placeholder="Kullanıcı adı, e-posta, telefon..." className="w-full pl-9 pr-3 py-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-white text-xs font-bold outline-none focus:border-zinc-700" />
+                    <button 
+                        onClick={refresh} 
+                        className="p-2 bg-[#111318] border border-zinc-800 rounded-lg text-zinc-400 hover:text-white hover:border-zinc-700 transition-all"
+                    >
+                        <Loader2 className={`w-5 h-5 ${loading ? 'animate-spin text-[#0ea5e9]' : ''}`} />
+                    </button>
                 </div>
-                {(['all', 'pending', 'active', 'suspended'] as const).map(f => {
-                    const count = f === 'all' ? members.length
-                        : f === 'active' ? members.filter(m => m.status !== 'suspended' && m.status !== 'pending').length
-                            : members.filter(m => m.status === f).length;
-
-                    return (
-                        <button key={f} onClick={() => setFilter(f)}
-                            className={`px-3 py-2 rounded-lg font-black text-[10px] uppercase transition-all ${filter === f ? 'bg-[#f0b90b] text-black' : 'bg-zinc-900 text-zinc-500 border border-zinc-800 hover:border-zinc-700'}`}>
-                            {f === 'all' ? 'Tümü' : f === 'pending' ? 'Bekleyen' : f === 'active' ? 'Aktif' : 'Askıda'} ({count})
-                        </button>
-                    )
-                })}
             </div>
 
-            {/* List */}
-            <div className="space-y-2">
-                {loading && members.length === 0 ? (
-                    <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 text-zinc-700 animate-spin" /></div>
-                ) : filtered.length === 0 ? (
-                    <div className="text-center py-12 text-zinc-700 font-bold text-sm">
-                        {members.length === 0 ? '👤 Henüz kayıtlı üye yok' : '🔍 Sonuç bulunamadı'}
+            {/* Data Table */}
+            <div className="bg-[#15171e] border border-zinc-800 rounded-xl overflow-hidden shadow-xl">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[1000px]">
+                        <thead>
+                            <tr className="bg-[#1a1d24] border-b border-zinc-800">
+                                <Th label="Kullanıcı" sortKey="username" />
+                                <Th label="Bakiye" sortKey="balance" />
+                                <Th label="Top. Hacim" sortKey="totalWagered" />
+                                <Th label="Net PNL" sortKey="netPnl" />
+                                <Th label="Kayıt Tarihi" sortKey="createdAt" />
+                                <Th label="Son Giriş" sortKey="lastLoginAt" />
+                                <Th label="Son IP" sortKey="lastLoginIp" />
+                                <th className="px-4 py-3 text-right"></th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-zinc-800/50">
+                            {loading && members.length === 0 ? (
+                                <tr>
+                                    <td colSpan={8} className="py-12 text-center text-zinc-500">
+                                        <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
+                                        Veriler yükleniyor...
+                                    </td>
+                                </tr>
+                            ) : filteredAndSortedMembers.length === 0 ? (
+                                <tr>
+                                    <td colSpan={8} className="py-12 text-center text-zinc-500 font-medium">
+                                        Kayıt bulunamadı.
+                                    </td>
+                                </tr>
+                            ) : (
+                                filteredAndSortedMembers.map(m => (
+                                    <tr 
+                                        key={m.id} 
+                                        onClick={() => openSheet(m)}
+                                        className="hover:bg-white/[0.02] transition-colors cursor-pointer group"
+                                    >
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-8 h-8 rounded flex items-center justify-center font-bold text-xs shrink-0 ${m.status === 'suspended' ? 'bg-red-500/10 text-red-500' : 'bg-[#0ea5e9]/10 text-[#0ea5e9]'}`}>
+                                                    {m.username.charAt(0).toUpperCase()}
+                                                </div>
+                                                <div>
+                                                    <div className="text-white font-medium flex items-center gap-2">
+                                                        {m.username}
+                                                        {m.status === 'suspended' && <Ban className="w-3 h-3 text-red-500" />}
+                                                    </div>
+                                                    <div className="text-zinc-500 text-xs">{m.email}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span className="text-white font-mono">{formatCurrency(m.balance!)}</span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span className="text-zinc-400 font-mono">{formatCurrency(m.totalWagered!)}</span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            {m.netPnl! > 0 ? (
+                                                <span className="text-emerald-400 font-mono flex items-center gap-1"><ArrowUpRight className="w-3 h-3"/> {formatCurrency(m.netPnl!)}</span>
+                                            ) : (
+                                                <span className="text-zinc-500 font-mono">{formatCurrency(0)}</span>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-zinc-400 text-sm">
+                                            {new Date(m.createdAt).toLocaleDateString('tr-TR')}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-zinc-400 text-sm">
+                                            {new Date(m.lastLoginAt!).toLocaleString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute:'2-digit' })}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-zinc-500 text-xs font-mono">
+                                            {m.lastLoginIp}
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <button className="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded transition-colors opacity-0 group-hover:opacity-100">
+                                                <MoreHorizontal className="w-5 h-5" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {/* Shadcn-like Sheet (Drawer) */}
+            {isSheetOpen && selectedUser && (
+                <>
+                    {/* Backdrop */}
+                    <div 
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] animate-in fade-in duration-200"
+                        onClick={() => setIsSheetOpen(false)}
+                    />
+                    
+                    {/* Sheet */}
+                    <div className="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-[#111318] border-l border-zinc-800 z-[200] shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+                        
+                        {/* Header */}
+                        <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between bg-[#15171e]">
+                            <div className="flex items-center gap-3">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg ${selectedUser.status === 'suspended' ? 'bg-red-500/20 text-red-500 border border-red-500/30' : 'bg-[#0ea5e9]/20 text-[#0ea5e9] border border-[#0ea5e9]/30'}`}>
+                                    {selectedUser.username.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-white leading-tight">{selectedUser.username}</h3>
+                                    <div className="flex items-center gap-2 text-xs font-medium">
+                                        <span className={selectedUser.status === 'suspended' ? 'text-red-400' : 'text-emerald-400'}>
+                                            {selectedUser.status === 'suspended' ? 'Askıda' : 'Aktif'}
+                                        </span>
+                                        <span className="text-zinc-600">•</span>
+                                        <span className="text-[#f0b90b] flex items-center gap-1">
+                                            <Shield className="w-3 h-3" /> VIP {selectedUser.vipLevel}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onClick={() => setIsSheetOpen(false)} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                            
+                            {/* Message Toast inside sheet */}
+                            {message && (
+                                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-sm font-medium flex items-center gap-2 animate-in slide-in-from-top-2">
+                                    <CheckCircle2 className="w-4 h-4" /> {message}
+                                </div>
+                            )}
+
+                            {/* Balance Section */}
+                            <div className="space-y-4">
+                                <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                    <Wallet className="w-4 h-4 text-[#0ea5e9]" />
+                                    Cüzdan & Bakiye
+                                </h4>
+                                <div className="bg-[#15171e] border border-zinc-800 p-4 rounded-xl flex items-center justify-between">
+                                    <div>
+                                        <div className="text-zinc-500 text-xs font-semibold mb-1">Mevcut Bakiye</div>
+                                        <div className="text-2xl font-black text-white font-mono">{formatCurrency(selectedUser.balance!)}</div>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="text-zinc-500 text-xs font-semibold mb-1">Net PNL (Kasa Karı)</div>
+                                        <div className="text-emerald-400 font-bold font-mono">+{formatCurrency(selectedUser.netPnl!)}</div>
+                                    </div>
+                                </div>
+
+                                {/* Manual Balance Adjustment */}
+                                <div className="flex gap-2">
+                                    <input 
+                                        type="number" 
+                                        placeholder="Tutar (₺)"
+                                        value={balanceInput}
+                                        onChange={e => setBalanceInput(e.target.value)}
+                                        className="flex-1 bg-[#15171e] border border-zinc-800 text-white rounded-lg px-3 py-2 outline-none focus:border-[#0ea5e9]"
+                                    />
+                                    <button 
+                                        onClick={() => handleUpdateBalance('subtract')}
+                                        disabled={actionLoading}
+                                        className="px-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-lg font-bold transition-colors disabled:opacity-50"
+                                    >
+                                        Çıkar
+                                    </button>
+                                    <button 
+                                        onClick={() => handleUpdateBalance('add')}
+                                        disabled={actionLoading}
+                                        className="px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 rounded-lg font-bold transition-colors disabled:opacity-50"
+                                    >
+                                        Ekle
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Wallet Info */}
+                            <div className="space-y-4">
+                                <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                    <Activity className="w-4 h-4 text-purple-400" />
+                                    Kripto Cüzdanı
+                                </h4>
+                                <div className="bg-[#15171e] border border-zinc-800 p-3 rounded-xl flex items-center justify-between group">
+                                    <div className="font-mono text-zinc-400 text-xs truncate max-w-[200px]">
+                                        {selectedUser.cryptoWallet}
+                                    </div>
+                                    <button className="text-zinc-500 hover:text-white p-1 rounded transition-colors" title="Kopyala">
+                                        <Copy className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Details */}
+                            <div className="space-y-4">
+                                <h4 className="text-sm font-bold text-white uppercase tracking-wider">Kullanıcı Bilgileri</h4>
+                                <div className="bg-[#15171e] border border-zinc-800 rounded-xl p-4 space-y-3">
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-zinc-500">Kayıt Tarihi</span>
+                                        <span className="text-zinc-300 font-medium">{new Date(selectedUser.createdAt).toLocaleDateString('tr-TR')}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-zinc-500">E-Posta</span>
+                                        <span className="text-zinc-300 font-medium">{selectedUser.email || 'Belirtilmedi'}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-zinc-500">Son Giriş IP</span>
+                                        <span className="text-zinc-300 font-mono">{selectedUser.lastLoginIp}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-zinc-500">Toplam Hacim (Wager)</span>
+                                        <span className="text-zinc-300 font-mono">{formatCurrency(selectedUser.totalWagered!)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer Actions */}
+                        <div className="p-6 border-t border-zinc-800 bg-[#15171e] mt-auto">
+                            <button 
+                                onClick={handleToggleStatus}
+                                disabled={actionLoading}
+                                className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg ${
+                                    selectedUser.status === 'suspended' 
+                                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20' 
+                                    : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
+                                } disabled:opacity-50`}
+                            >
+                                {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (selectedUser.status === 'suspended' ? <CheckCircle2 className="w-5 h-5" /> : <Ban className="w-5 h-5" />)}
+                                {selectedUser.status === 'suspended' ? 'Yasağı Kaldır ve Aktifleştir' : 'Kullanıcıyı Yasakla'}
+                            </button>
+                        </div>
+
                     </div>
-                ) : filtered.map(m => (
-                    <MemberRow key={m.id} member={m} onRefresh={refresh} />
-                ))}
-            </div>
+                </>
+            )}
         </div>
     );
-};
-
-export default AdminMembersTab;
+}

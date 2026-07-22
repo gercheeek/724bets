@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trophy, Clock, Search, ChevronRight, X, Flame, MessageCircle, Ticket } from 'lucide-react';
+import { Trophy, ChevronRight, ChevronUp, X, Flame, MessageCircle } from 'lucide-react';
 import { MatchInfo } from './types';
 import { useBetSlip } from '../../contexts/BetSlipContext';
 import { useUser } from '../../contexts/UserContext';
@@ -50,7 +50,7 @@ export const DualRightPanel: React.FC<{
     <div className={`fixed xl:static top-0 right-0 h-full z-50 flex flex-col w-[320px] shrink-0 bg-[#000000] border-l border-white/[0.02] transition-transform duration-300 ${isOpenMobile ? 'translate-x-0' : 'translate-x-full xl:translate-x-0'}`}>
       
       {/* ═══════════ MAIN CONTENT AREA (FLEX-1) ═══════════ */}
-      <div className="flex-1 flex flex-col min-h-0 relative overflow-hidden">
+      <div className="flex-1 flex flex-col min-h-0 relative overflow-hidden bg-[#000000]">
         {activePanel === 'coupon' ? (
           <>
             {/* POPÜLER LİGLER (Top Half) */}
@@ -185,28 +185,41 @@ export const DualRightPanel: React.FC<{
       </div>
 
       {/* ═══════════ STICKY BOTTOM TOGGLE BAR ═══════════ */}
-      <div className="shrink-0 p-4 bg-black/40 backdrop-blur-md border-t border-white/[0.02] flex items-center justify-center relative z-50 h-[80px]">
+      <div className="shrink-0 bg-[#000000] border-t border-white/[0.02] text-white flex items-center justify-between px-4 h-[56px] relative z-50 cursor-pointer shadow-lg">
         {activePanel === 'coupon' ? (
-          <button 
-            onClick={() => setActivePanel('chat')}
-            className="w-full h-full flex items-center justify-center gap-2 bg-[#050505] hover:bg-white/5 border border-white/[0.02] hover:border-white/10 text-white font-black rounded-xl transition-all shadow-lg active:scale-[0.98]"
-          >
-            <MessageCircle className="w-5 h-5 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-            <span className="tracking-widest uppercase">💬 SOHBETE GEÇ</span>
-          </button>
+          <div onClick={() => setActivePanel('chat')} className="flex items-center justify-between w-full h-full">
+            <div className="flex items-center gap-3">
+              <MessageCircle className="w-5 h-5 text-emerald-400" />
+              <span className="text-[15px] font-bold tracking-wide text-zinc-100">Sohbet</span>
+              <ChevronRight className="w-4 h-4 text-zinc-400" />
+            </div>
+          </div>
         ) : (
-          <button 
-            onClick={() => setActivePanel('coupon')}
-            className="w-full h-full flex items-center justify-center gap-2 bg-[#050505] hover:bg-white/5 border border-white/[0.02] hover:border-white/10 text-white font-black rounded-xl transition-all shadow-lg active:scale-[0.98] relative"
-          >
-            <Ticket className="w-5 h-5 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-            <span className="tracking-widest uppercase">🎫 KUPONA DÖN</span>
-            {betSlip.length > 0 && (
-              <span className="absolute right-4 bg-emerald-500 text-black w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black shadow-[0_0_10px_rgba(16,185,129,0.5)]">
-                {betSlip.length}
-              </span>
-            )}
-          </button>
+          <div onClick={() => setActivePanel('coupon')} className="flex items-center justify-between w-full h-full">
+            <div className="flex items-center gap-2">
+              <div className="bg-[#050505] p-1 rounded border border-white/5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-400"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              </div>
+              <span className="text-[15px] font-bold tracking-wide text-zinc-100">Kupon</span>
+              <div className="ml-1 bg-[#050505] p-0.5 rounded-full border border-white/5">
+                <ChevronUp className="w-3.5 h-3.5 text-zinc-400" />
+              </div>
+              {betSlip.length > 0 && (
+                <span className="ml-1 bg-emerald-500 text-black w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-black shadow-sm">
+                  {betSlip.length}
+                </span>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">HIZLI BAHİS</span>
+              <div className="w-10 h-6 bg-[#050505] border border-white/5 rounded-full p-1 flex items-center cursor-pointer shadow-inner">
+                <div className="w-4 h-4 bg-emerald-500 rounded-full shadow-md flex items-center justify-center transform translate-x-4 transition-transform">
+                  <Flame className="w-2.5 h-2.5 text-black" />
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

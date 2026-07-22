@@ -1,0 +1,135 @@
+[
+  {
+    "id": "864089398151741440",
+    "data": {
+      "status": "active",
+      "tournament": {
+        "name": "ABD - MLS"
+      },
+      "participants": {
+        "home": "Inter Miami CF",
+        "away": "Chicago Fire"
+      },
+      "start_time": "2026-07-22T23:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1~2.28!~draw~x~3.4!~away~2~3.8"
+        ]
+      }
+    }
+  },
+  {
+    "id": "847781002394017792",
+    "data": {
+      "status": "active",
+      "tournament": {
+        "name": "Brezilya - Serie A"
+      },
+      "participants": {
+        "home": "Coritiba",
+        "away": "Palmeiras"
+      },
+      "start_time": "2026-07-22T22:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1~1.85!~draw~x~3.4!~away~2~2.01"
+        ]
+      }
+    }
+  },
+  {
+    "id": "847781001118949376",
+    "data": {
+      "status": "active",
+      "tournament": {
+        "name": "Brezilya - Serie A"
+      },
+      "participants": {
+        "home": "Chapecoense",
+        "away": "Flamengo"
+      },
+      "start_time": "2026-07-23T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1~1.85!~draw~x~3.4!~away~2~1.45"
+        ]
+      }
+    }
+  },
+  {
+    "id": "847781001932582912",
+    "data": {
+      "status": "active",
+      "tournament": {
+        "name": "Brezilya - Serie A"
+      },
+      "participants": {
+        "home": "SC Internacional",
+        "away": "Cruzeiro"
+      },
+      "start_time": "2026-07-23T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1~2.29!~draw~x~3.4!~away~2~3.8"
+        ]
+      }
+    }
+  },
+  {
+    "id": "847781003006353408",
+    "data": {
+      "status": "active",
+      "tournament": {
+        "name": "Brezilya - Serie A"
+      },
+      "participants": {
+        "home": "Sao Paulo SP",
+        "away": "Athletico Paranaense"
+      },
+      "start_time": "2026-07-23T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1~2!~draw~x~3.4!~away~2~3.8"
+        ]
+      }
+    }
+  },
+  {
+    "id": "865279057871507456",
+    "data": {
+      "status": "active",
+      "tournament": {
+        "name": "Norveç - Eliteserien"
+      },
+      "participants": {
+        "home": "Bodo/Glimt - Bodo/Glimt",
+        "away": "Ham-Kam"
+      },
+      "start_time": "2026-07-22T17:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1~1.08!~draw~x~3.4!~away~2~3.8"
+        ]
+      }
+    }
+  },
+  {
+    "id": "866602189647515648",
+    "data": {
+      "status": "active",
+      "tournament": {
+        "name": "Norveç - Eliteserien"
+      },
+      "participants": {
+        "home": "Lillestrøm",
+        "away": "Viking"
+      },
+      "start_time": "2026-07-22T17:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1~1.85!~draw~x~3.4!~away~2~2.12"
+        ]
+      }
+    }
+  }
+]

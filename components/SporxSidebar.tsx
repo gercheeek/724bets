@@ -37,7 +37,7 @@ export const SporxSidebar = () => {
   }, [events, activeSport]);
 
   return (
-    <div className="w-[340px] flex flex-col bg-white/5 border border-white/5 rounded-xl p-4 flex-shrink-0 relative overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-transparent border-0 p-4 flex-shrink-0 relative overflow-hidden">
       <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <span className="text-xs font-black text-zinc-500 tracking-widest uppercase">
           TÜM LİGLER
@@ -45,7 +45,7 @@ export const SporxSidebar = () => {
         {activeLeague && (
           <button 
             onClick={() => setActiveLeague(null)}
-            className="text-[10px] text-[#06b6d4] hover:underline font-bold uppercase"
+            className="text-[10px] text-[#a981ff] hover:underline font-bold uppercase"
           >
             Temizle
           </button>
@@ -74,7 +74,7 @@ export const SporxSidebar = () => {
                     <span className="text-sm font-bold">{group.country}</span>
                   </div>
                   {isExpanded ? (
-                    <ChevronUp className="w-4 h-4 text-[#06b6d4]" />
+                    <ChevronUp className="w-4 h-4 text-[#a981ff]" />
                   ) : (
                     <ChevronDown className="w-4 h-4" />
                   )}
@@ -90,7 +90,7 @@ export const SporxSidebar = () => {
                           onClick={() => setActiveLeague(isActive ? null : league)}
                           className={`text-left px-3 py-2 text-xs font-semibold rounded-lg transition-all border-l-2 ${
                             isActive 
-                              ? 'bg-[#06b6d4]/10 text-[#06b6d4] border-[#06b6d4]' 
+                              ? 'bg-[#a981ff]/10 text-[#a981ff] border-[#a981ff]' 
                               : 'text-zinc-400 hover:text-white hover:bg-white/5 border-transparent'
                           }`}
                         >
