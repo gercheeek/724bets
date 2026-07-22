@@ -264,12 +264,25 @@ export const GercekView: React.FC = () => {
   };
 
   const filteredMatches = matches.filter(m => {
+    // 1. Sport and Search filters
     const matchSport = selectedCategory === 'all' || m.sport === selectedCategory;
     const matchSearch = searchQuery === '' || 
       m.team1.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       m.team2.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       m.league.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchSport && matchSearch;
+      
+    if (!matchSport || !matchSearch) return false;
+
+    // 2. Hide old/finished matches from Upcoming (Yaklaşan)
+    if (m.period !== 'Canlı' && m.startTs && m.startTs > 0) {
+      const now = Date.now();
+      // If the match started more than 15 minutes ago and is not live, assume it's finished or expired
+      if (m.startTs < now - 15 * 60 * 1000) {
+        return false;
+      }
+    }
+
+    return true;
   });
 
   return (
@@ -453,10 +466,15 @@ export const GercekView: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent w-full"></div>
             </div>
             <div className="relative z-20 flex flex-col justify-center items-start h-full px-6">
-                <h3 className="text-[28px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] transform group-hover/live:translate-x-1 transition-transform flex items-center gap-3">
-                  CANLI
-                  <span className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_12px_#ef4444] animate-pulse"></span>
-                </h3>
+                <div className="flex items-center gap-3 transform group-hover/live:translate-x-1 transition-transform">
+                  <h3 className="text-[28px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] flex items-center gap-3">
+                    CANLI
+                    <span className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_12px_#ef4444] animate-pulse"></span>
+                  </h3>
+                  <div className="bg-red-500/20 border border-red-500/30 text-red-500 px-2.5 py-1 rounded-lg text-xs md:text-sm font-black tracking-widest mt-1">
+                    {filteredMatches.filter(m => m.period === 'Canlı').length}
+                  </div>
+                </div>
             </div>
         </div>
 
@@ -475,10 +493,15 @@ export const GercekView: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent w-full"></div>
             </div>
             <div className="relative z-20 flex flex-col justify-center items-start h-full px-6">
-                <h3 className="text-[28px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] transform group-hover/upcoming:translate-x-1 transition-transform flex items-center gap-3">
-                  YAKLAŞAN
-                  <span className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_12px_#3b82f6]"></span>
-                </h3>
+                <div className="flex items-center gap-3 transform group-hover/upcoming:translate-x-1 transition-transform">
+                  <h3 className="text-[28px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] flex items-center gap-3">
+                    YAKLAŞAN
+                    <span className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_12px_#3b82f6]"></span>
+                  </h3>
+                  <div className="bg-blue-500/20 border border-blue-500/30 text-blue-500 px-2.5 py-1 rounded-lg text-xs md:text-sm font-black tracking-widest mt-1">
+                    {filteredMatches.filter(m => m.period !== 'Canlı').length}
+                  </div>
+                </div>
             </div>
         </div>
 
