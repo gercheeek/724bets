@@ -2045,9 +2045,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'giveaway' || view === 'spor724') && (
-            <aside className={`hidden lg:flex flex-col bg-[#050505] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
+            <aside className={`hidden lg:flex flex-col bg-[#050505] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack' || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))) ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
-                isOpen={isSidebarOpen || view === 'blackjack'}
+                isOpen={isSidebarOpen || view === 'blackjack' || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
                 onToggle={() => {
                   if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
                   setIsSidebarOpen(!isSidebarOpen);
@@ -2220,8 +2220,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         }}
         navVisibility={navVisibility}
         marqueeConfig={marqueeConfig}
-        isChatOpen={isChatOpen}
-        isSidebarOpen={isSidebarOpen}
+        isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
+        isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
         onToggleSidebar={() => {
           if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
           setIsSidebarOpen(!isSidebarOpen);
@@ -2758,9 +2758,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </main>
 
           {view !== 'admin' && !showLiveScoreModal && !isMobile && (
-            <aside className={`hidden xl:flex flex-col border-l border-white/[0.02] bg-[#000000] h-full flex-shrink-0 relative z-20 ${isChatOpen ? 'w-[320px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
+            <aside className={`hidden xl:flex flex-col border-l border-white/[0.02] bg-[#000000] h-full flex-shrink-0 relative z-20 ${(isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))) ? 'w-[320px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
               <ModernChat
-                open={isChatOpen}
+                open={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
                 onOpen={() => setIsChatOpen(true)}
                 onClose={() => setIsChatOpen(false)}
                 siteUser={siteUser}
