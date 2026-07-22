@@ -2048,7 +2048,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             <aside className={`hidden lg:flex flex-col bg-[#050505] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack') ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen || view === 'blackjack'}
-                onToggle={() => setIsSidebarOpen(!isSidebarOpen)} 
+                onToggle={() => {
+                  if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+                  setIsSidebarOpen(!isSidebarOpen);
+                }}
                 activeView={view}
                 onViewChange={handleViewChange}
                 userRole={userRole}
@@ -2211,12 +2214,18 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         onMemberRegisterClick={() => setAuthModalMode('register')}
         onMemberLogout={handleGlobalLogout}
         onSearchClick={() => setShowSearch(true)}
-        onSupportClick={() => setIsChatOpen(prev => !prev)}
+        onSupportClick={() => {
+          if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+          setIsChatOpen(prev => !prev);
+        }}
         navVisibility={navVisibility}
         marqueeConfig={marqueeConfig}
         isChatOpen={isChatOpen}
         isSidebarOpen={isSidebarOpen}
-        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        onToggleSidebar={() => {
+          if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+          setIsSidebarOpen(!isSidebarOpen);
+        }}
         showFakeBetButton={view === 'sports2'}
         onFakeBetClick={() => {
            if (!siteUser) setAuthModalMode('member');
