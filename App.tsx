@@ -104,7 +104,7 @@ import TurboMinesView from './components/TurboMinesView';
 import HacksawSlotView from './components/HacksawSlotView';
 import RedTigerSlotView from './components/RedTigerSlotView';
 import AdventureMap from './components/AdventureMap';
-const SITE_CACHE_VERSION = "2026.07.20_v3";
+const SITE_CACHE_VERSION = "2026.07.22_v4";
 
 const formatDateTR = (dateStr: string) => {
     const d = new Date(dateStr);
