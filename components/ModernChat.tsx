@@ -386,38 +386,11 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const displayMessages = messages.filter(m => !isSystemOrCountdown(m) && m.role !== 'system_win');
 
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0a0e17] font-sans text-left relative">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-black font-sans text-left relative">
             
             {/* Header */}
-            <div className="bg-[#0a0e17] px-4 h-[64px] text-white flex items-center justify-between flex-shrink-0 border-b border-[#1b2335]">
+            <div className="bg-black px-4 h-[64px] text-white flex items-center justify-between flex-shrink-0 border-b border-white/5">
                 <div className="flex items-center gap-3 relative">
-                    <div 
-                        onClick={() => setShowLangMenu(!showLangMenu)}
-                        className="flex items-center gap-2 bg-[#131926] border border-[#1b2335] px-3 py-1.5 rounded-md text-[13px] font-semibold hover:bg-[#1c2538] cursor-pointer transition-all shadow-inner relative z-20 text-slate-300"
-                    >
-                        <img src={`https://flagcdn.com/w20/${activeLang.flag}.png`} alt={activeLang.code} className="w-4 h-3 rounded-sm object-cover shadow-sm" />
-                        <span className="text-gray-300">{activeLang.name}</span>
-                        <span className="text-[10px] ml-2 text-gray-500">▼</span>
-                    </div>
-
-                    {/* Language Dropdown */}
-                    {showLangMenu && (
-                        <>
-                            <div className="fixed inset-0 z-10" onClick={() => setShowLangMenu(false)}></div>
-                            <div className="absolute top-full mt-2 left-0 w-40 bg-[#050505] border border-white/[0.02] rounded-lg shadow-xl z-20 py-1 overflow-hidden">
-                                {LANGUAGES.map(lang => (
-                                    <div 
-                                        key={lang.id}
-                                        onClick={() => { setActiveLang(lang); setShowLangMenu(false); }}
-                                        className={`flex items-center gap-3 px-4 py-2.5 text-[13px] font-semibold cursor-pointer transition-colors ${activeLang.id === lang.id ? 'bg-[#111] text-white' : 'text-gray-500 hover:bg-[#111] hover:text-white'}`}
-                                    >
-                                        <img src={`https://flagcdn.com/w20/${lang.flag}.png`} alt={lang.code} className="w-5 h-3.5 rounded-sm object-cover shadow-sm" />
-                                        <span>{lang.name}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </>
-                    )}
                 </div>
                 <div className="flex items-center gap-4 text-zinc-500">
                     <button 
@@ -432,7 +405,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
 
             {/* Sticky Announcement / Countdown Bar */}
             {activeAnnouncement && (
-                <div className="bg-[#131926] border-b border-[#1b2335] px-3.5 py-2.5 flex items-center justify-between gap-2.5 shadow-lg relative z-20 shrink-0 animate-fade-in">
+                <div className="bg-[#0f0f0f] border-b border-white/5 px-3.5 py-2.5 flex items-center justify-between gap-2.5 shadow-lg relative z-20 shrink-0 animate-fade-in">
                     <div className="flex items-center gap-2.5 min-w-0 flex-1">
                         <div className="relative flex items-center justify-center w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 shrink-0">
                             <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-amber-400 opacity-60"></span>
@@ -462,7 +435,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             <div 
                 ref={chatContainerRef} 
                 id="new-chat-container" 
-                className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar bg-[#0a0e17]"
+                className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar bg-black"
                 style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}
             >
                 {!isConnected ? (
@@ -483,7 +456,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                         return (
                         <div 
                             key={msg.id || i} 
-                            className="px-3 py-2.5 bg-[#0e1320] border border-[#1b2335] rounded-xl text-left text-[13px] text-slate-300 leading-relaxed shadow-sm"
+                            className="px-3 py-2.5 bg-[#111111] border border-white/5 rounded-xl text-left text-[13px] text-slate-300 leading-relaxed shadow-sm"
                         >
                             <span className="inline-flex items-center gap-1.5 mr-1.5 align-middle">
                                 {isMod ? (
@@ -506,16 +479,16 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             </div>
 
             {/* Input Footer Area */}
-            <div className="p-3 bg-[#0a0e17] border-t border-[#1b2335] flex-shrink-0 z-10 relative">
+            <div className="p-3 bg-black border-t border-white/5 flex-shrink-0 z-10 relative">
                 {!siteUser ? (
                     <input 
                         type="text"
                         disabled
                         placeholder="Giriş Yap"
-                        className="w-full bg-[#131926] border border-[#1b2335] text-[13px] font-medium text-center text-slate-500 rounded-xl px-4 py-3 cursor-not-allowed"
+                        className="w-full bg-[#0f0f0f] border border-white/5 text-[13px] font-medium text-center text-slate-500 rounded-xl px-4 py-3 cursor-not-allowed"
                     />
                 ) : (
-                    <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#131926] border border-[#1b2335] focus-within:border-[#3b8def]/50 rounded-xl overflow-hidden transition-all h-12 shadow-inner">
+                    <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#0f0f0f] border border-white/5 focus-within:border-[#3b8def]/50 rounded-xl overflow-hidden transition-all h-12 shadow-inner">
                         <input
                             type="text"
                             value={newMessage}

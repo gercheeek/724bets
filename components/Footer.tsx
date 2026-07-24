@@ -1,137 +1,121 @@
 import React from 'react';
-import { ShieldCheck, Lock, CheckCircle2, ShieldAlert, TrendingUp } from 'lucide-react';
+import { Activity, AlertOctagon, CheckCircle2, Lock, Shield, ShieldAlert, ShieldCheck, TrendingUp } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer: React.FC = () => {
   const { t } = useLanguage();
   return (
-    <footer className="w-full bg-[#050505] border-t border-[#1b2335] py-10 md:py-16 mt-auto font-sans relative z-10">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="w-full bg-[#090b10] border-t border-white/5 py-12 px-4 relative overflow-hidden z-10 font-sans">
+      <div className="max-w-[1400px] mx-auto relative z-10">
         
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        {/* Main Footer Flex */}
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 justify-between items-start mb-12">
           
-          {/* Brand & About */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-0.5 select-none" style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}>
-              <span className="text-[#06b6d4] font-extrabold text-2xl lowercase text-center">724bets</span>
-              <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full border-[2px] md:border-[3px] border-[#06b6d4] ml-1.5 -mt-3 md:-mt-4">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-[#06b6d4] w-3 h-3 md:w-3.5 md:h-3.5">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          {/* Brand & Curacao */}
+          <div className="flex flex-col max-w-xs">
+            {/* Logo */}
+            <div className="flex items-center gap-2 mb-6">
+              <span className="font-extrabold text-3xl tracking-tight lowercase text-[#00ff88] drop-shadow-[0_0_8px_rgba(0,255,136,0.3)]">
+                724bets
+              </span>
+              <div className="w-6 h-6 text-[#00ff88]">
+                <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full drop-shadow-[0_0_5px_rgba(0,255,136,0.6)]">
+                  <path d="M 50,48 C 30,30 35,10 50,20 C 65,10 70,30 50,48 Z" />
+                  <path d="M 46,52 C 30,35 10,40 20,55 C 10,70 30,75 46,52 Z" />
+                  <path d="M 54,52 C 70,35 90,40 80,55 C 90,70 70,75 54,52 Z" />
+                  <path d="M 50,52 Q 45,75 40,90 L 46,90 Q 51,75 50,52 Z" />
                 </svg>
               </div>
             </div>
-            <p className="text-[#848B9D] text-sm leading-relaxed">
-              {t("footer_desc")}
+            <p className="text-slate-400 text-sm mb-8 leading-relaxed">
+              En prestijli, güvenli ve lisanslı premium kripto bahis platformu. Şeffaflık, hız ve kanıtlanabilir adil sistemlerle oyun dünyasını yeniden tanımlıyoruz.
             </p>
-            {/* License text */}
-            <div className="flex items-start gap-3 mt-2 bg-[#11141D]/50 p-4 rounded-xl border border-white/5">
-              <ShieldCheck className="w-8 h-8 text-yellow-500 shrink-0" />
-              <p className="text-[11px] text-gray-400 leading-snug">
-                {t("footer_license")}
+            {/* License Box */}
+            <div className="flex items-start gap-4 p-4 rounded-xl bg-[#111622] border border-white/5 hover:border-[#00ff88]/30 transition-colors">
+              <div className="w-12 h-12 flex-shrink-0 bg-white/5 rounded-full flex items-center justify-center">
+                <Shield className="w-6 h-6 text-[#00ff88]" />
+              </div>
+              <p className="text-slate-500 text-[11px] leading-relaxed">
+                Bu web sitesi, Curacao Hükümeti tarafından yetkilendirilmiş ve düzenlenmiş Curacao eGaming (Lisans No: 1668/JAZ) altında faaliyet göstermektedir.
               </p>
             </div>
           </div>
 
-          {/* Payment Methods */}
-          <div className="flex flex-col gap-4 lg:col-span-2">
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-3 font-['Outfit']">{t("payment_methods")}</h3>
-            <div className="flex flex-wrap gap-2 sm:gap-3">
-              {/* Crypto */}
-              <div className="bg-[#0e1320] border border-[#1b2335] hover:border-[#F7931A]/50 rounded-xl w-14 h-10 flex items-center justify-center transition-colors shadow-sm group">
-                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=029" alt="Bitcoin" className="h-5 w-auto group-hover:scale-110 transition-transform" />
+          {/* Trust Badges & Payments */}
+          <div className="flex flex-col flex-1 max-w-2xl w-full">
+            <h4 className="text-white font-bold text-sm tracking-widest uppercase mb-6 flex items-center gap-2">
+              <Lock className="w-4 h-4 text-emerald-500" /> %100 Güvenli Ödemeler
+            </h4>
+            <div className="flex flex-wrap gap-2 mb-10">
+              {['btc', 'eth', 'usdt', 'trx', 'bnb'].map((coin) => (
+                 <div key={coin} className="w-12 h-12 bg-[#111622] rounded-lg border border-white/5 flex items-center justify-center hover:border-emerald-500/50 hover:-translate-y-1 transition-all cursor-pointer shadow-sm">
+                   <img src={`/images/coins/${coin}.png`} alt={coin} className="w-6 h-6 opacity-70 hover:opacity-100 transition-opacity" onError={(e) => { e.currentTarget.style.display='none' }} />
+                 </div>
+              ))}
+              <div className="px-4 h-12 bg-[#111622] rounded-lg border border-white/5 flex items-center justify-center text-slate-400 font-semibold text-xs hover:text-white transition-colors cursor-pointer">
+                Tümünü Gör
               </div>
-              <div className="bg-[#0e1320] border border-[#1b2335] hover:border-[#627EEA]/50 rounded-xl w-14 h-10 flex items-center justify-center transition-colors shadow-sm group">
-                <img src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=029" alt="Ethereum" className="h-5 w-auto group-hover:scale-110 transition-transform" />
+            </div>
+
+            <h4 className="text-white font-bold text-sm tracking-widest uppercase mb-6 flex items-center gap-2">
+              <Shield className="w-4 h-4 text-emerald-500" /> Sertifikalar & Sağlayıcılar
+            </h4>
+            <div className="flex flex-wrap gap-3">
+              <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-bold rounded flex items-center gap-2 uppercase tracking-widest">
+                <CheckCircle2 className="w-3 h-3" /> Provably Fair
               </div>
-              <div className="bg-[#0e1320] border border-[#1b2335] hover:border-[#26A17B]/50 rounded-xl w-14 h-10 flex items-center justify-center transition-colors shadow-sm group">
-                <img src="https://cryptologos.cc/logos/tether-usdt-logo.svg?v=029" alt="Tether" className="h-5 w-auto group-hover:scale-110 transition-transform" />
+              <div className="px-4 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] font-bold rounded flex items-center gap-2 uppercase tracking-widest">
+                <Lock className="w-3 h-3" /> 256-bit SSL Secure
               </div>
-              <div className="bg-[#0e1320] border border-[#1b2335] hover:border-[#FF0013]/50 rounded-xl w-14 h-10 flex items-center justify-center transition-colors shadow-sm group">
-                <img src="https://cryptologos.cc/logos/tron-trx-logo.svg?v=029" alt="Tron" className="h-5 w-auto group-hover:scale-110 transition-transform" />
-              </div>
-              <div className="bg-[#0e1320] border border-[#1b2335] hover:border-[#F3BA2F]/50 rounded-xl w-14 h-10 flex items-center justify-center transition-colors shadow-sm group">
-                <img src="https://cryptologos.cc/logos/bnb-bnb-logo.svg?v=029" alt="Binance Coin" className="h-5 w-auto group-hover:scale-110 transition-transform" />
-              </div>
-              {/* Fiat/Bank */}
-              <div className="bg-[#0e1320] border border-[#1b2335] hover:border-slate-500/30 rounded-xl w-14 h-10 flex items-center justify-center transition-colors shadow-sm">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" className="h-3 w-auto brightness-200 grayscale opacity-80" />
-              </div>
-              <div className="bg-[#0e1320] border border-[#1b2335] hover:border-slate-500/30 rounded-xl w-14 h-10 flex items-center justify-center transition-colors shadow-sm">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" className="h-4 w-auto opacity-80 grayscale" />
-              </div>
-              <div className="bg-[#0e1320] border border-[#1b2335] hover:border-[#06b6d4]/50 rounded-xl px-4 h-10 flex items-center justify-center transition-colors shadow-sm">
-                <span className="text-slate-300 font-bold text-[10px] sm:text-xs tracking-wider">{t("bank_transfer")}</span>
+              <div className="px-4 py-2 bg-purple-500/10 border border-purple-500/20 text-purple-500 text-[10px] font-bold rounded flex items-center gap-2 uppercase tracking-widest">
+                <Activity className="w-3 h-3" /> RNG Certified
               </div>
             </div>
             
-            {/* Providers */}
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider mt-6 mb-3 font-['Outfit']">{t("trusted_providers")}</h3>
-            <div className="flex flex-wrap gap-2 sm:gap-3 items-center">
-               <div className="px-3 py-1.5 bg-[#0e1320] border border-[#1b2335] rounded-lg text-[11px] font-bold text-slate-400 tracking-wider hover:text-white transition-colors cursor-default shadow-sm">PRAGMATIC PLAY</div>
-               <div className="px-3 py-1.5 bg-[#0e1320] border border-[#1b2335] rounded-lg text-[11px] font-bold text-slate-400 tracking-wider hover:text-white transition-colors cursor-default shadow-sm">HACKSAW</div>
-               <div className="px-3 py-1.5 bg-[#0e1320] border border-[#1b2335] rounded-lg text-[11px] font-bold text-slate-400 tracking-wider hover:text-white transition-colors cursor-default shadow-sm">EVOLUTION</div>
-               <div className="px-3 py-1.5 bg-[#0e1320] border border-[#1b2335] rounded-lg text-[11px] font-bold text-slate-400 tracking-wider hover:text-white transition-colors cursor-default shadow-sm">NOLIMIT CITY</div>
+            <div className="flex flex-wrap gap-2 mt-4">
+              {['PRAGMATIC PLAY', 'HACKSAW', 'EVOLUTION', 'NOLIMIT CITY'].map(prov => (
+                <div key={prov} className="px-3 py-1.5 bg-[#111622] border border-white/5 rounded text-slate-400 text-[10px] font-bold tracking-widest hover:text-white hover:border-white/20 transition-colors">
+                  {prov}
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Trust & Responsible Gaming */}
-          <div className="flex flex-col gap-4 lg:items-end lg:text-right">
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-2 font-['Outfit']">{t("responsible_gaming")}</h3>
-            
-            <div className="flex flex-wrap lg:justify-end gap-3 mb-2 mt-1">
-              <div className="bg-[#0e1320] border border-red-500/20 rounded-full w-12 h-12 flex items-center justify-center shadow-sm">
-                <span className="text-red-500/80 font-black text-lg">18+</span>
-              </div>
-              <div className="bg-[#0e1320] border border-[#1b2335] rounded-full w-12 h-12 flex items-center justify-center shadow-sm">
-                <Lock className="text-slate-400 w-5 h-5" />
-              </div>
-              <div className="bg-[#0e1320] border border-[#1b2335] rounded-full px-4 h-12 flex items-center justify-center gap-2 shadow-sm">
-                <ShieldAlert className="text-slate-400 w-4 h-4" />
-                <span className="text-slate-400 font-bold text-[11px] uppercase tracking-wider">GambleAware</span>
+          {/* Responsible Gaming */}
+          <div className="flex flex-col items-start lg:items-end max-w-xs w-full">
+            <h4 className="text-white font-bold text-sm tracking-widest uppercase mb-6">Sorumlu Oyun</h4>
+            <div className="flex gap-2 mb-6">
+              <div className="w-10 h-10 rounded-full border-2 border-red-500 flex items-center justify-center text-red-500 font-black text-sm">18+</div>
+              <div className="w-10 h-10 rounded-full bg-[#111622] flex items-center justify-center border border-white/5">
+                <Shield className="w-5 h-5 text-slate-400" />
               </div>
             </div>
-            
-            <div className="text-xs text-gray-500 max-w-xs border-l-2 lg:border-l-0 lg:border-r-2 border-red-500/50 pl-3 lg:pl-0 lg:pr-3 py-1">
-              <p className="mb-1 text-gray-400 font-medium">{t("gambling_addictive")}</p>
-              <p>{t('gambling_limits')} {t('gambling_help_1')} <a href="#" className="text-white hover:text-[#06b6d4] underline">{t('gambling_help_link')}</a> {t('gambling_help_2')}</p>
+            <div className="px-5 py-2.5 bg-black rounded-lg border border-white/10 flex items-center gap-3 mb-6 hover:border-white/30 transition-colors cursor-pointer">
+              <AlertOctagon className="w-4 h-4 text-amber-500" />
+              <span className="text-slate-300 font-bold text-xs tracking-wider">GAMBLEAWARE</span>
             </div>
+            <p className="text-slate-500 text-[10px] leading-relaxed lg:text-right">
+              Kumar bağımlılık yapabilir. Lütfen sınırlarınızı bilin ve sorumlu bir şekilde oynayın. Yardım için <a href="#" className="text-white underline hover:text-emerald-500">destek kurumlarına</a> başvurabilirsiniz.
+            </p>
           </div>
-
         </div>
 
         {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between pt-6 border-t border-[#1b2335] text-[11px] sm:text-xs text-slate-500 gap-4">
-          <div className="flex items-center flex-wrap justify-center gap-3 sm:gap-6">
-            <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">{t("terms_conditions")}</a>
-            <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">{t("privacy_policy")}</a>
-            <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">{t("responsible_gaming")}</a>
-            <a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">{t("kyc_policy")}</a>
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-8">
+            {['KULLANIM ŞARTLARI', 'GİZLİLİK POLİTİKASI', 'SORUMLU OYUN', 'KYC POLİTİKASI', 'AML POLİTİKASI'].map(link => (
+              <a key={link} href="#" className="text-slate-500 text-[11px] font-bold tracking-widest hover:text-white transition-colors">
+                {link}
+              </a>
+            ))}
           </div>
+          
           <div className="flex flex-col items-center md:items-end gap-2">
-            <div className="flex items-center gap-2 mb-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-slate-600" />
-              <span className="tracking-wide text-[11px] text-slate-500">{t("all_rights_reserved")}</span>
+            <div className="flex items-center gap-2 text-slate-500 text-xs">
+              <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+              &copy; {new Date().getFullYear()} 724BETS. Tüm Hakları Saklıdır.
             </div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[9px] sm:text-[10px] text-slate-600 font-mono tracking-wider">724bets v2.0.1</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => window.dispatchEvent(new CustomEvent('open-admin'))}
-                className="px-3 py-1.5 bg-[#0e1320] border border-[#1b2335] hover:border-slate-500/50 rounded-lg text-[10px] sm:text-[11px] text-slate-400 hover:text-white font-bold transition-all flex items-center gap-1.5 shadow-sm"
-              >
-                <Lock className="w-3 h-3" />
-                Yönetici
-              </button>
-              <button 
-                onClick={() => window.dispatchEvent(new CustomEvent('open-finance'))}
-                className="px-3 py-1.5 bg-[#0e1320] border border-[#1b2335] hover:border-slate-500/50 rounded-lg text-[10px] sm:text-[11px] text-slate-400 hover:text-white font-bold transition-all flex items-center gap-1.5 shadow-sm"
-              >
-                <TrendingUp className="w-3 h-3" />
-                Finans
-              </button>
-            </div>
+            <span className="text-slate-600 text-[10px] font-mono">v2.1.0-PRO</span>
           </div>
         </div>
 

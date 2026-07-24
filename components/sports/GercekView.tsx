@@ -177,6 +177,39 @@ const INITIAL_MATCHES: Match[] = [
   }
 ];
 
+const SPORTS_NAV = [
+  { id: 'futbol', name: 'Futbol', count: '99+', color: '#ffffff', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6l-3.5 5h7z"/><path d="M12 6V2"/><path d="M8.5 11L4 13.5"/><path d="M15.5 11l4.5 2.5"/><path d="M8 15h8l1.5 5h-11z"/><path d="M12 20v2"/></svg>
+  )},
+  { id: 'basketbol', name: 'Basketbol', count: '28', color: '#fb923c', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+  )},
+  { id: 'tenis', name: 'Tenis', count: '99+', color: '#bef264', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="6"/><path d="M16 16l4.5 4.5"/><path d="M13 13l3.5-3.5"/><path d="M10 10l4.5-4.5"/><path d="M8 14A6 6 0 0 0 14 8"/><path d="M18.5 18.5a1 1 0 1 0 1.41-1.41 1 1 0 0 0-1.41 1.41z"/><circle cx="19" cy="19" r="1" fill="currentColor" stroke="none"/></svg>
+  )},
+  { id: 'amfutbol', name: 'Am. Futbolu', count: '67', color: '#f87171', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><ellipse cx="12" cy="12" rx="6" ry="10"/><path d="M12 6v12"/><path d="M10 9h4"/><path d="M10 12h4"/><path d="M10 15h4"/><path d="M6 20h12"/></svg>
+  )},
+  { id: 'hokey', name: 'Hokey', count: '37', color: '#22d3ee', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 4l-6 12h-4a2 2 0 0 0 0 4h5l7-14z"/><circle cx="7" cy="12" r="2" fill="currentColor"/></svg>
+  )},
+  { id: 'beyzbol', name: 'Beyzbol', count: '14', color: '#fbbf24', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M6 6c3 3 3 9 0 12"/><path d="M18 6c-3 3-3 9 0 12"/></svg>
+  )},
+  { id: 'masatenisi', name: 'Masa Tenisi', count: '99+', color: '#4ade80', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10 14A6 6 0 1 0 10 2a6 6 0 0 0 0 12z"/><path d="M14 10l5 5"/><circle cx="18" cy="14" r="1" fill="currentColor" stroke="none"/></svg>
+  )},
+  { id: 'mma', name: 'Dövüş San.', count: '53', color: '#f43f5e', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 8l-4-4-5 5 2.5 2.5"/><path d="M9.5 11.5L12 14l4-4"/><path d="M12 14l5 5 4-4-5-5"/><path d="M7 16l-3 3 4 4 3-3"/></svg>
+  )},
+  { id: 'voleybol', name: 'Voleybol', count: '7', color: '#a78bfa', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+  )},
+  { id: 'kriket', name: 'Kriket', count: '1', color: '#fcd34d', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 10l6-6 4 4-6 6"/><path d="M14 10L6 18l-4-4 8-8"/><circle cx="18" cy="16" r="2" fill="currentColor" stroke="none"/></svg>
+  )}
+];
+
 export const GercekView: React.FC = () => {
   const { events } = useBetting();
   const [selectedCategory, setSelectedCategory] = useState<string>('futbol');
@@ -230,11 +263,11 @@ export const GercekView: React.FC = () => {
              color: '#3b82f6' 
            },
            odds: { 
-             home: parsed?.homeOdd !== '-' && parsed?.homeOdd ? parsed.homeOdd : (d.homeOdd || d.odds?.['1'] || '1.80'), 
-             draw: parsed?.drawOdd !== '-' && parsed?.drawOdd ? parsed.drawOdd : (d.drawOdd || d.odds?.['X'] || '3.20'), 
-             away: parsed?.awayOdd !== '-' && parsed?.awayOdd ? parsed.awayOdd : (d.awayOdd || d.odds?.['2'] || '4.50') 
+             home: parsed?.homeOdd !== '-' && parsed?.homeOdd ? parsed.homeOdd : (d.homeOdd || d.odds?.['1'] || '-'), 
+             draw: parsed?.drawOdd !== '-' && parsed?.drawOdd ? parsed.drawOdd : (d.drawOdd || d.odds?.['X'] || '-'), 
+             away: parsed?.awayOdd !== '-' && parsed?.awayOdd ? parsed.awayOdd : (d.awayOdd || d.odds?.['2'] || '-') 
            },
-           totalMarkets: d.markets_count || Math.floor(Math.random() * 50) + 10,
+           totalMarkets: d.markets_count || 10,
            isFavorite: false,
            startTs: parsed?.isLive ? 0 : (d.start_ts || (d.start_time ? new Date(d.start_time).getTime() : 0)),
            matchDate: parsed?.matchDate || '',
@@ -288,46 +321,38 @@ export const GercekView: React.FC = () => {
   return (
     <div className="w-full min-h-full bg-transparent text-slate-100 p-4 md:p-6 lg:px-8 selection:bg-blue-600 selection:text-white">
       
-      {/* ── HIGHLIGHTED PROMO BANNER ── */}
-      <div className="relative w-full h-48 md:h-64 lg:h-80 rounded-2xl overflow-hidden mb-4 flex-shrink-0 group cursor-pointer border border-[#2a3528]/50 shadow-2xl">
-        {/* Background Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d140b] via-[#152e12] to-[#123610] z-0"></div>
-        
-        {/* Boxer Image Overlay (Simulated via Unsplash & gradients) */}
-        <div className="absolute right-0 top-0 bottom-0 w-full md:w-3/4 lg:w-2/3 bg-[url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center mix-blend-luminosity opacity-40 z-0" style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 40%)', maskImage: 'linear-gradient(to right, transparent, black 40%)' }}></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e17] via-transparent to-transparent opacity-80 z-0"></div>
-
-        <div className="relative z-10 flex flex-col justify-center h-full p-6 md:px-10 lg:px-12 w-full md:w-3/4 lg:w-2/3">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-1 h-10 md:h-12 bg-[#4ade80] rounded-full shadow-[0_0_10px_rgba(74,222,128,0.5)]"></div>
-            <div>
-              <p className="text-[#4ade80] font-bold text-xs md:text-sm tracking-[0.2em] uppercase mb-0.5">BOXING PROMO</p>
-              <h2 className="text-white text-3xl md:text-5xl font-extrabold italic tracking-tight drop-shadow-md">Extra 50% Profit!</h2>
+      {/* ── TOP HORIZONTAL SPORTS NAV ── */}
+      <div className="w-full overflow-x-auto scrollbar-none mb-8 pb-2">
+        <div className="flex items-center gap-6 md:gap-8 lg:gap-10 min-w-max">
+          {SPORTS_NAV.map((sport) => (
+            <div 
+              key={sport.id} 
+              className="flex flex-col items-center gap-3 cursor-pointer group"
+              onClick={() => {
+                setSelectedCategory(sport.id);
+                const el = document.getElementById('canli-maclar');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+            >
+              <div className="relative">
+                <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] rounded-full bg-[#1a1f2e] border border-[#252b3b] shadow-lg flex items-center justify-center transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] group-hover:border-[#30374b] group-hover:bg-[#1f2638]">
+                  <div style={{ color: sport.color }}>
+                    {sport.icon}
+                  </div>
+                </div>
+                <div className="absolute -top-1 -right-2 bg-[#252b3b] text-white/80 text-[11px] md:text-xs font-black px-2 py-0.5 rounded-full border border-[#1a1f2e] shadow-sm">
+                  {sport.count}
+                </div>
+              </div>
+              <span className="text-sm md:text-[15px] font-black text-[#8a94a6] group-hover:text-white transition-colors">
+                {sport.name}
+              </span>
             </div>
-          </div>
-          <p className="text-white text-sm md:text-base font-medium mt-4 max-w-lg leading-relaxed drop-shadow-md">
-            Simply <span className="text-[#4ade80] font-bold">bet</span> on the <span className="text-[#4ade80] font-bold">fight</span> to go the <span className="text-[#4ade80] font-bold">distance</span> and enjoy an <span className="text-[#4ade80] font-bold">extra 50% profit</span> if it <span className="text-[#4ade80] font-bold">does</span>!
-          </p>
-          <p className="text-white/60 text-xs mt-4 max-w-xl leading-relaxed">
-            Will be issued as a Freebet from your highest betslip, valid only for 'Will the fight go the distance' market, up to <strong className="text-[#4ade80]">$500</strong> per user! Parlays and Live bets are not eligible.
-          </p>
-        </div>
-
-        {/* Brand Text */}
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-10 hidden lg:flex flex-col items-center">
-          <span className="text-white/90 text-6xl font-black italic tracking-tighter drop-shadow-2xl">BOXING</span>
-        </div>
-
-        {/* Pagination Dots */}
-        <div className="absolute bottom-4 left-6 flex items-center gap-1.5 z-10">
-          <div className="w-8 h-1 bg-[#3b82f6] rounded-full"></div>
-          <div className="w-3 h-1 bg-white/30 rounded-full hover:bg-white/50 transition-colors cursor-pointer"></div>
-          <div className="w-3 h-1 bg-white/30 rounded-full hover:bg-white/50 transition-colors cursor-pointer"></div>
-          <div className="w-3 h-1 bg-white/30 rounded-full hover:bg-white/50 transition-colors cursor-pointer"></div>
-          <div className="w-3 h-1 bg-white/30 rounded-full hover:bg-white/50 transition-colors cursor-pointer"></div>
-          <div className="w-3 h-1 bg-white/30 rounded-full hover:bg-white/50 transition-colors cursor-pointer"></div>
+          ))}
         </div>
       </div>
+
+
 
       {/* ── FEATURED MATCHES ROW ── */}
       <div className="w-full flex gap-3 md:gap-4 overflow-x-auto pb-6 mb-2 scrollbar-hide snap-x">

@@ -1,17 +1,17 @@
 const WebSocket = require('ws');
 const fs = require('fs');
 
-const url = 'wss://eu-swarm-newm.norabahis779.com/ws?organization_id=928d43dd-1219-4ab0-b33f-0e180215781e&x-region=us-south1';
-const headers = { 'Origin': 'https://norabahis779.com', 'User-Agent': 'Mozilla/5.0' };
+const url = 'wss://eu-swarm-newm.atekbet272.com/ws?language=tur';
+const headers = { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0' };
 const ws = new WebSocket(url, { headers });
 
 const formattedEventsMap = new Map();
 
 ws.on('open', () => {
-  console.log('Connecting to Norabahis Swarm API for real prematch data...');
+  console.log('Connecting to Atekbet Swarm API for real prematch data...');
   ws.send(JSON.stringify({
     command: 'request_session',
-    params: { site_id: 55, language: 'tur' },
+    params: { site_id: 1, language: 'tur' },
     rid: 'req_session'
   }));
 });
@@ -37,6 +37,10 @@ ws.on('message', (d) => {
      Object.values(sports).forEach(sport => {
         if (!sport.region) return;
         const sportName = (sport.name || '').trim();
+        const sName = sportName.toLowerCase();
+        if (!sName.includes('futbol') && !sName.includes('soccer') && !sName.includes('football')) {
+            return; // Skip non-football sports
+        }
         Object.values(sport.region).forEach(region => {
            regionsToFetch.push({ sportName, regionId: region.id, regionName: region.name });
         });
@@ -128,7 +132,7 @@ function saveAndExit() {
    if (saved) return;
    saved = true;
    const eventsArray = Array.from(formattedEventsMap.values());
-   console.log('SUCCESS: Extracted', eventsArray.length, 'real Norabahis pre-match events including UEFA & Champions League!');
+   console.log('SUCCESS: Extracted', eventsArray.length, 'real Atekbet pre-match events including UEFA & Champions League!');
    fs.writeFileSync('public/prelive_matches.json', JSON.stringify(eventsArray, null, 2));
    ws.close();
    process.exit(0);

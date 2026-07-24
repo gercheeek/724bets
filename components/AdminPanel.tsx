@@ -14,10 +14,11 @@ interface AdminPanelProps {
     luckyWheelConfig?: LuckyWheelConfig;
     onSaveLuckyWheelConfig?: (cfg: LuckyWheelConfig) => void;
     onClose: () => void;
+    onNavigateHome?: () => void;
 }
 
 export default function AdminPanel(props: AdminPanelProps) {
-    const { onClose } = props;
+    const { onClose, onNavigateHome } = props;
     const [config, setConfig] = useState({
         isActive: true,
         speedMin: 15000,
@@ -62,6 +63,14 @@ export default function AdminPanel(props: AdminPanelProps) {
         }
     };
 
+    const handleGoToSite = () => {
+        if (onNavigateHome) {
+            onNavigateHome();
+        }
+        onClose();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
             <div className="bg-[#1a1c24] w-[95vw] max-w-7xl rounded-2xl border border-gray-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -74,7 +83,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                         </div>
                         <h2 className="text-xl font-bold text-white">Yönetim Paneli</h2>
                         <button 
-                            onClick={onClose} 
+                            onClick={handleGoToSite} 
                             className="ml-3 px-3.5 py-1.5 bg-[#1e2330] hover:bg-emerald-500/20 border border-[#2b3548] hover:border-emerald-500/40 text-slate-200 hover:text-emerald-400 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-sm group cursor-pointer"
                             title="Siteye Git / Paneli Kapat"
                         >

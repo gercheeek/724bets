@@ -54,6 +54,7 @@ import MyBetsModal from './components/MyBetsModal';
 import KralView from './components/KralView';
 import WorldCupTeaser from './components/WorldCupTeaser';
 import Footer from './components/Footer';
+import RetroFooter from './components/RetroFooter';
 import ModernChat from './components/ModernChat';
 
 import LiveBetsFeed from './components/LiveBetsFeed';
@@ -72,7 +73,7 @@ import GameLobbyTeaser from './components/GameLobbyTeaser';
 import TV724View from './components/TV724View';
 import LiveMatches from './components/LiveMatches';
 import OriginalsHub from './components/OriginalsHub';
-
+import RetroLayout from './components/retro/RetroLayout';
 import MatchResultsWidget from './components/MatchResultsWidget';
 import { PromoSlider } from './components/PromoSlider';
 import { WithdrawalHistory } from './components/WithdrawalHistory';
@@ -98,6 +99,7 @@ import MinesView from './components/MinesView';
 import KenoView from './components/KenoView';
 import WarView from './components/WarView';
 import HiLoView from './components/HiLoView';
+import RewardsPage from './components/RewardsPage';
 import RouletteView from './components/RouletteView';
 import CrashTurboView from './components/CrashTurboView';
 import TurboMinesView from './components/TurboMinesView';
@@ -138,7 +140,6 @@ const getLeagueFlag = (league: string): string => {
     if (l.includes('wimbledon') || l.includes('roland') || l.includes('tenis')) return '🎾';
     return '🌍';
 };
-
 
 const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateStr, timeStr }) => {
   const [text, setText] = useState('');
@@ -239,37 +240,56 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches'>(window.location.pathname.startsWith('/spor') ? 'spor724' : window.location.pathname.includes('lucky') ? 'luckywheel' : 'home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards'>(window.location.pathname.startsWith('/spor') ? 'spor724' : window.location.pathname.includes('lucky') ? 'luckywheel' : 'home');
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isChatOpen, setIsChatOpen] = useState(true);
+
+  useEffect(() => {
+    if (view === 'raffle' || view === 'cekilis') {
+      setIsChatOpen(false);
+    }
+  }, [view]);
   
   // Custom URL for Sports2 iframe (to handle custom header navigation)
   const [sports2Url, setSports2Url] = useState("https://bahisbey1438.com/tr/sport/sports/football/flt-1-1239-52530/?btag=59649488_330539");
   const [showAgeWarning, setShowAgeWarning] = useState(false);
 
+  const previousViewRef = useRef(view);
+
   // Global Loader Logic (Initial Load & Transitions)
   useEffect(() => {
-    setShowLoader(true);
-    setFadeOutLoader(false);
+    const isSports = (v: string) => ['sports', 'sports2', 'sports3', 'sports4', 'sports5', 'spor724', 'gercek'].includes(v);
     
-    // Fallback timer just in case
-    const timer1 = setTimeout(() => {
-      setFadeOutLoader(true);
-    }, 5000); 
+    const isEnteringSports = isSports(view);
+    const isLeavingSports = isSports(previousViewRef.current) && !isEnteringSports;
     
-    const timer2 = setTimeout(() => {
-      setShowLoader(false);
+    // Yalnızca spor sayfasına girerken/çıkarken veya ilk yüklemede göster
+    if (isEnteringSports || isLeavingSports || previousViewRef.current === view) {
+      setShowLoader(true);
       setFadeOutLoader(false);
-    }, 3000); // Completely hide at 3s
-    
-    return () => { 
-      clearTimeout(timer1); 
-      clearTimeout(timer2); 
-    };
+      
+      // Fallback timer just in case
+      const timer1 = setTimeout(() => {
+        setFadeOutLoader(true);
+      }, 5000); 
+      
+      const timer2 = setTimeout(() => {
+        setShowLoader(false);
+        setFadeOutLoader(false);
+      }, 3000); // Completely hide at 3s
+      
+      previousViewRef.current = view;
+      return () => { 
+        clearTimeout(timer1); 
+        clearTimeout(timer2); 
+      };
+    } else {
+      previousViewRef.current = view;
+    }
   }, [view]);
 
   useEffect(() => {
@@ -301,7 +321,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [isLogoSpinning, setIsLogoSpinning] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 // State removed
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -542,8 +561,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     localStorage.setItem('site_popular_bets', JSON.stringify(cfg));
     updateGlobalConfig('site_popular_bets', cfg);
   };
-
-
 
   // 724TV Config - Safe Initialization (No Storage Flash)
   const [tvConfig, setTvConfig] = useState<TVConfig>(DEFAULT_TV_CONFIG);
@@ -1026,7 +1043,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
 // Effects removed
 
-
   const handleWelcomePopupConfigChange = (cfg: WelcomePopupConfig) => {
     setWelcomePopupConfig(cfg);
     localStorage.setItem('site_welcome_popup', JSON.stringify(cfg));
@@ -1047,7 +1063,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     localStorage.setItem('site_casino_lobby_games', JSON.stringify(games));
     updateGlobalConfig('site_casino_lobby_games', games);
   };
-
 
   const handleStartTour = () => {
     localStorage.removeItem('tour_completed');
@@ -1165,7 +1180,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             }
           }
         }
-
 
         // 3. Load Global Data from Supabase (Overrides Local) - PARALLEL FETCH
         const [
@@ -1510,7 +1524,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     metaDesc.setAttribute('content', desc);
     
   }, [view]);
-
 
   // Hook to handle Kuponu Onayla tracking for sports2 view
   useEffect(() => {
@@ -2023,6 +2036,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
            {view === 'turbo-mines' && (
              <TurboMinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
            )}
+
            {view === 'hacksaw' && (
              <HacksawSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
            )}
@@ -2045,7 +2059,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'giveaway' || view === 'spor724') && (
-            <aside className={`hidden lg:flex flex-col bg-[#050505] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack' || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))) ? 'w-[250px]' : 'w-[72px]'}`}>
+            <aside className={`hidden lg:flex flex-col bg-black bg-gradient-to-r from-white/[0.02] to-transparent border-r border-white/5 shadow-[15px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack' || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))) ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
                 isOpen={isSidebarOpen || view === 'blackjack' || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
                 onToggle={() => {
@@ -2065,7 +2079,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           {isMobileMenuOpen && !(view === 'spor724') && (
             <div className="fixed inset-0 z-50 flex lg:hidden">
               <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
-              <aside className="w-[280px] bg-[#050505] border-r border-[#111111] h-full shadow-[10px_0_30px_rgba(0,0,0,0.6)] flex-shrink-0 relative z-10 animate-slide-in-left">
+              <aside className="w-[280px] bg-black bg-gradient-to-r from-white/[0.02] to-transparent border-r border-white/5 h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
                 <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#050505] border border-[#111111] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
                 <Sidebar
                   isOpen={true}
@@ -2080,20 +2094,17 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             </div>
           )}
 
-          {/* 2. ORTA ANA İÇERİK (Mobilde tam ekran, masaüstünde kalan alanı kaplar) */}
-          <main 
-            id="main-scroll-container"
-            className={appStage !== 'loading' ? `app-reveal-mask flex-1 w-full h-full overflow-x-hidden relative flex flex-col overflow-y-auto` : `app-hidden-initial flex-1 w-full h-full overflow-x-hidden relative flex flex-col overflow-y-auto`}
-            onScroll={(e) => {
-              // Scroll handler removed to prevent mobile header glitching
-            }}
-          >
-            
+          {/* 2. SAĞ TARAF (Header + İçerik + Chat) */}
+          <div className={appStage !== 'loading' ? `app-reveal-mask flex-1 flex flex-col min-w-0 bg-black bg-gradient-to-br from-white/[0.05] via-transparent to-black w-full h-full relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]` : `app-hidden-initial flex-1 flex flex-col min-w-0 bg-black bg-gradient-to-br from-white/[0.05] via-transparent to-black w-full h-full relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]`}>
+             
+             {/* Glossy overlay for the entire center */}
+             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] pointer-events-none z-0 opacity-30 mix-blend-screen"></div>
+
             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
             {view !== 'kral' && (
               <header 
                 id="mobile-top-header"
-                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#050505]/95 backdrop-blur-xl border-b border-white/5 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden gap-1"
+                className="flex lg:hidden items-center justify-between p-3 px-4 bg-black/95 bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-xl border-b border-white/10 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-hidden gap-1"
               >
                 <div className="flex items-center gap-2">
                   <button 
@@ -2185,7 +2196,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                           onClick={() => setAuthModalMode('register')}
                           className="flex items-center justify-center h-full bg-[#10B981] hover:bg-[#00E693] text-black transition-colors px-4 font-extrabold text-sm shadow-[0_0_10px_rgba(0,255,163,0.2)] whitespace-nowrap"
                         >
-                          Kaydolun
+                          Bonusla Başla
                         </button>
                       </div>
                     </>
@@ -2231,15 +2242,29 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
            if (!siteUser) setAuthModalMode('member');
            else setShowFakeBetModal(true);
         }}
-        onMyBetsClick={() => setShowMyBetsModal(true)}
       />
               </div>
             )}
 
+          {/* İÇERİK VE CHAT KISMI YANYANA */}
+          <div className="flex flex-1 w-full overflow-hidden relative">
+            <main 
+              id="main-scroll-container"
+              className="flex-1 w-full h-full overflow-x-hidden relative flex flex-col overflow-y-auto"
+            >
+            {/* Gamdom Style Global Ambient Shading / Glows */}
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#00ffff]/[0.015] blur-[150px] rounded-full"></div>
+                <div className="absolute top-[30%] right-[-10%] w-[40%] h-[60%] bg-[#880088]/[0.015] blur-[150px] rounded-full"></div>
+                <div className="absolute bottom-[-20%] left-[20%] w-[60%] h-[40%] bg-[#00ff88]/[0.01] blur-[150px] rounded-full"></div>
+                {/* Global subtle radial gradient overlay */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,rgba(255,255,255,0.01),transparent_70%)]"></div>
+            </div>
+
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'luckywheel') 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis') 
             ? 'p-0 w-full max-w-full mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
@@ -2251,7 +2276,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)'
         } as React.CSSProperties}
       >
-
 
         <div className={`orchestrator-content ${isContentReady ? 'content-ready' : ''}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
 
@@ -2296,8 +2320,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
-
-
         {view === 'sports' && (
           <GercekView onNavigate={handleViewChange} />
         )}
@@ -2308,7 +2330,19 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
         {view === 'originals' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
-            <OriginalsHub onNavigate={handleViewChange} isLoggedIn={!!(siteUser || userRole)} />
+            <OriginalsHub onNavigate={handleViewChange} isLoggedIn={!!(siteUser || userRole)} siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+          </div>
+        )}
+
+        {view === 'retro-wheel' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <RetroLayout />
+          </div>
+        )}
+
+        {view === 'rewards' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <RewardsPage onBack={() => handleViewChange('home')} />
           </div>
         )}
 
@@ -2366,16 +2400,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 
               </div>
 
-
-
               {/* Site theme color overlay (tinting the grey background to slate) */}
               <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#050505]/40" />
               <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#050505]/20" />
             </div>
           </div>
         )}
-
-
 
         {view === 'sports4' && (
           <div className="animate-fade-in w-full h-full relative">
@@ -2402,8 +2432,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                   height: 'calc(100% + 165px)'
                 }}
               />
-              
-
 
               {/* Site theme color overlay (tinting the grey background to slate) */}
               <div 
@@ -2703,7 +2731,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           );
         })()}
 
-
         {view === '724tv' && (
           <TV724View
             config={tvConfig}
@@ -2715,13 +2742,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           />
         )}
 
-
         {view === 'demo' && (
           <div className="animate-fade-in">
             <DemoGames />
           </div>
         )}
-
 
         {view === 'mobile-bulletin' && (
           <MobileBulletinView onBack={() => setView('home')} />
@@ -2753,26 +2778,40 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
       </div>
       </div>
-
-      {view !== 'admin' && view !== 'sports' && <Footer />}
+      
+      {view !== 'admin' && view !== 'sports' && (view === 'originals' ? <RetroFooter /> : <Footer />)}
           </main>
 
           {view !== 'admin' && !showLiveScoreModal && !isMobile && (
-            <aside className={`hidden xl:flex flex-col border-l border-white/[0.02] bg-[#000000] h-full flex-shrink-0 relative z-20 ${(isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))) ? 'w-[320px]' : 'w-0 overflow-hidden'} transition-all duration-300`}>
-              <ModernChat
-                open={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
-                onOpen={() => setIsChatOpen(true)}
-                onClose={() => setIsChatOpen(false)}
-                siteUser={siteUser}
-                userRole={userRole}
-                isMobile={false}
-              />
-            </aside>
+            <>
+              {/* Floating Action Button for Chat */}
+              {!isChatOpen && (
+                <button 
+                  onClick={() => setIsChatOpen(!isChatOpen)}
+                  className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(245,166,35,0.6)] hover:scale-110 hover:shadow-[0_0_30px_rgba(245,166,35,0.8)] transition-all group"
+                >
+                  <svg className="w-7 h-7 text-black group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                </button>
+              )}
+
+              {/* Chat Sidebar (Pushes the layout instead of floating) */}
+              <aside className={`hidden xl:flex flex-col bg-[#14171d] border-l border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.8)] h-full flex-shrink-0 relative z-20 transition-all duration-300 ease-in-out ${isChatOpen ? 'w-[350px]' : 'w-0 overflow-hidden opacity-0'}`}>
+                <div className="flex-1 overflow-hidden relative">
+                  <ModernChat
+                    open={isChatOpen}
+                    onOpen={() => setIsChatOpen(true)}
+                    onClose={() => setIsChatOpen(false)}
+                    siteUser={siteUser}
+                    userRole={userRole}
+                    isMobile={false}
+                    activeView={view}
+                  />
+                </div>
+              </aside>
+            </>
           )}
-
-
-
-
+          </div>
+        </div>
 
       {/* ── Match Search Modal ── */}
       {showSearch && (
@@ -2851,12 +2890,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         </div>
       )}
 
-
-
     </div>
     )}
-
-
 
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav 

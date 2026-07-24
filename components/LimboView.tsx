@@ -170,7 +170,7 @@ export default function LimboView({ siteUser, onAuthRequired }: any) {
             </div>
 
             {/* ── RIGHT MAIN AREA (Centered Game Frame) ── */}
-            <div className="flex-1 bg-[#10171E] relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-12">
+            <div className="flex-1 bg-[#10171E] relative overflow-hidden flex flex-col items-center justify-center p-2 md:p-8 lg:p-12">
                 
                 {/* History Ticker */}
                 <div className="absolute top-4 right-4 flex gap-2 z-30">
@@ -184,7 +184,7 @@ export default function LimboView({ siteUser, onAuthRequired }: any) {
                 </div>
 
                 {/* ── CENTERED GAME CONTAINER ── */}
-                <div className="w-full max-w-5xl h-full max-h-[700px] bg-[#151C23] relative rounded-3xl shadow-2xl overflow-hidden flex flex-col items-center justify-center border-[6px] border-[#1C252D]">
+                <div className="w-full max-w-5xl min-h-[250px] md:min-h-[400px] h-full max-h-[700px] bg-[#151C23] relative rounded-3xl shadow-2xl overflow-hidden flex flex-col items-center justify-center border-[6px] border-[#1C252D]">
                     
                     {/* Background Grid */}
                     <div className="absolute inset-0 opacity-10"
@@ -198,12 +198,12 @@ export default function LimboView({ siteUser, onAuthRequired }: any) {
 
                     {/* Massive Multiplier Display */}
                     <div className="relative z-20 flex flex-col items-center">
-                        <div className={`font-mono font-black text-7xl md:text-9xl tracking-tighter transition-colors duration-200 ${
+                        <div className={`font-mono font-black text-5xl md:text-8xl lg:text-9xl tracking-tighter transition-colors duration-200 ${
                             isWinner ? 'text-emerald-400 drop-shadow-[0_0_30px_rgba(16,185,129,0.8)]' : 
                             crashed ? 'text-red-500 drop-shadow-[0_0_30px_rgba(239,68,68,0.8)]' : 
                             'text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]'
                         }`}>
-                            {currentMultiplier.toFixed(2)}<span className="text-4xl md:text-6xl text-gray-400 ml-2">x</span>
+                            {currentMultiplier.toFixed(2)}<span className="text-2xl md:text-5xl lg:text-6xl text-gray-400 ml-1 md:ml-2">x</span>
                         </div>
                         <div className="text-gray-400 mt-2 text-sm font-semibold tracking-widest uppercase">
                             Hedef: {targetMultiplier.toFixed(2)}x

@@ -29,14 +29,12 @@ const generateFakeBet = (): BetDetailData => {
   const user = `Üye #${userId}`;
   const userRank = Math.floor(Math.random() * 100);
   
-  // Mostly low bets between $1 and $20, occasionally up to $100
-  const isHighRoll = Math.random() > 0.85;
-  const betAmountRaw = isHighRoll ? (Math.random() * 80 + 20) : (Math.random() * 19 + 1);
+  // Sadece heyecan verici yüksek yatırımlar
+  const betAmountRaw = Math.random() * 80 + 20;
   
-  // Mostly low multipliers 1.2x to 5x, occasionally up to 1000x
-  const isMegaWin = Math.random() > 0.98;
-  const isBigWin = Math.random() > 0.85;
-  const multiplierRaw = isMegaWin ? (Math.random() * 500 + 50) : (isBigWin ? (Math.random() * 15 + 5) : (Math.random() * 3 + 1.2));
+  // Yüksek çarpanlar
+  const isMegaWin = Math.random() > 0.95;
+  const multiplierRaw = isMegaWin ? (Math.random() * 500 + 50) : (Math.random() * 15 + 3);
   
   const payoutRaw = betAmountRaw * multiplierRaw;
   
@@ -81,7 +79,7 @@ const generateFakeBet = (): BetDetailData => {
   return data;
 };
 
-export default function LiveWinsTicker() {
+export default function LiveWinsTicker({ guestTheme = "retro" }: { guestTheme?: "retro" | "luxury" }) {
   const [wins, setWins] = useState<BetDetailData[]>([]);
   const [selectedWin, setSelectedWin] = useState<BetDetailData | null>(null);
   const { t } = useLanguage();
@@ -102,31 +100,31 @@ export default function LiveWinsTicker() {
   }, []);
 
   return (
-    <div className="w-full flex flex-col mb-1 relative mt-2">
-      <div className="w-full relative flex items-center bg-transparent overflow-hidden pt-8 pb-5">
+    <div className="w-full flex flex-col mb-1 relative">
+      <div className="w-full relative flex items-center bg-transparent overflow-hidden pt-4 pb-2">
         
         {/* Canlı Kazançlar Badge top left */}
-        <div className="absolute top-2 left-4 flex items-center gap-2 z-10 bg-black/40 px-3 py-1 rounded-full border border-white/5 backdrop-blur-md">
+        <div className="absolute top-0 left-4 flex items-center gap-1.5 z-10 bg-black/40 px-2 py-0.5 rounded-full border border-white/5 backdrop-blur-md">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
           </span>
-          <span className="text-gray-200 font-bold text-[10px] tracking-widest uppercase">Canlı Kazançlar</span>
+          <span className="text-gray-200 font-bold text-[8px] tracking-widest uppercase">CANLI</span>
         </div>
 
         {/* Horizontal Scrolling List (Full Width) */}
         <div 
-          className="flex gap-2.5 md:gap-4 overflow-x-auto hide-scrollbar w-full px-4 md:px-8 scroll-smooth"
+          className="flex gap-4 md:gap-5 overflow-x-auto hide-scrollbar w-full px-2 md:px-4 scroll-smooth"
           style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
         >
           {wins.map((win) => (
             <div 
               key={win.id}
               onClick={() => setSelectedWin(win)}
-              className="flex-shrink-0 flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-2 group w-[100px] md:w-[130px]"
+              className="flex-shrink-0 flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 group w-[60px] md:w-[70px]"
             >
               {/* Game Cover */}
-              <div className="w-full aspect-[3/4] rounded-[12px] md:rounded-2xl overflow-hidden relative shadow-[0_5px_15px_rgba(0,0,0,0.5)] mb-3 bg-[#111111] border border-white/10 group-hover:border-[#00E676]/50 group-hover:shadow-[0_0_20px_rgba(0,230,118,0.2)] transition-all">
+              <div className={`w-full aspect-[3/4] rounded-lg md:rounded-[10px] overflow-hidden relative shadow-[0_4px_10px_rgba(0,0,0,0.4)] mb-1.5 bg-[#111111] border border-white/10 group-hover:border-[#00E676]/50 group-hover:shadow-[0_0_15px_rgba(0,230,118,0.2)] transition-all ${guestTheme === "luxury" ? "opacity-90 saturate-75 group-hover:saturate-100 group-hover:opacity-100 shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_20px_rgba(0,230,118,0.4)]" : ""}`}>
                  <img 
                    src={win.image} 
                    alt={win.game} 
@@ -137,12 +135,12 @@ export default function LiveWinsTicker() {
               </div>
 
               {/* User Info */}
-              <div className="flex items-center gap-1.5 w-full justify-center px-1 mb-1.5">
-                 <span className="text-gray-400 font-semibold text-[11px] md:text-xs truncate tracking-wide group-hover:text-white transition-colors">{win.user}</span>
+              <div className="flex items-center gap-1 w-full justify-center px-0.5 mb-0.5">
+                 <span className="text-gray-400 font-semibold text-[8px] md:text-[9px] truncate tracking-wide group-hover:text-white transition-colors">{win.user}</span>
               </div>
               
               {/* Payout */}
-              <span className="text-emerald-400 font-black text-xs md:text-sm tracking-wide">
+              <span className="text-emerald-400 font-black text-[9px] md:text-[10px] tracking-wide">
                  {win.payout}
               </span>
             </div>

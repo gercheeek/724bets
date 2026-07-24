@@ -222,9 +222,11 @@ const Header: React.FC<HeaderProps> = ({
     return activeView === cat.view;
   };
 
+  const isRetroVIP = activeView === 'raffle' || activeView === 'originals' || activeView === 'vip';
+
   return (
     <>
-      <div className={`header-wrapper ${isScrolled ? 'scrolled' : ''}`}>
+      <div className={`header-wrapper ${isScrolled ? 'scrolled' : ''} ${isRetroVIP ? 'retro-vip-header' : ''}`}>
         <style>{`
           @media (max-width: 768px) {
             .header-topbar-right .header-icon-btn {
@@ -345,31 +347,100 @@ const Header: React.FC<HeaderProps> = ({
           .header-icon-btn:hover {
             color: #10b981 !important;
           }
+          .retro-vip-header .header-topbar {
+            background: repeating-linear-gradient(to bottom, rgba(0, 255, 255, 0.03) 0px, rgba(0, 255, 255, 0.03) 1px, #050510 1px, #050510 3px), linear-gradient(180deg, #0a0a1a 0%, #03030a 100%) !important;
+            border-bottom: 1px solid rgba(255, 0, 255, 0.3) !important;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.1) !important;
+          }
+          .retro-vip-header .logo-text-724 span {
+            color: #00ffff !important;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff !important;
+          }
+          .retro-vip-header svg {
+            color: #ff00ff !important;
+          }
+          .retro-vip-header .balance-display {
+            font-family: monospace;
+            color: #00ff00 !important;
+          }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[72px] bg-[#0b0e14] flex justify-center">
+      <div className="header-topbar relative w-full h-[72px] bg-black bg-gradient-to-b from-white/[0.03] to-transparent border-b border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] flex justify-center z-50">
         <div className="w-full max-w-[1400px] px-2 md:px-4 h-full flex items-center justify-between">
             {/* Left: Logo & Desktop Tabs */}
             <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
               
               <div 
-                className="flex items-center cursor-pointer select-none ml-0 group"
+                className="flex items-center cursor-pointer select-none ml-0 group relative"
                 onClick={() => onViewChange?.('home')}
-                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}
+                style={{ fontFamily: ['originals', 'keno', 'roulette', 'blackjack', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'war', 'hilo'].includes(activeView || '') ? "'Press Start 2P', cursive" : "'Inter', sans-serif", letterSpacing: '-0.03em' }}
               >
-                <span className="font-extrabold text-2xl md:text-3xl tracking-tight lowercase">
-                  <span className="text-white">724</span>
-                  <span className="text-[#10b981]">bets</span>
-                </span>
-                <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 ml-1 -mt-4">
-                  <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#10b981] drop-shadow-[0_0_5px_rgba(16,185,129,0.8)]">
-                    {/* 3-leaf clover (Shamrock) */}
-                    <path d="M 50,48 C 30,30 35,10 50,20 C 65,10 70,30 50,48 Z" />
-                    <path d="M 46,52 C 30,35 10,40 20,55 C 10,70 30,75 46,52 Z" />
-                    <path d="M 54,52 C 70,35 90,40 80,55 C 90,70 70,75 54,52 Z" />
-                    <path d="M 50,52 Q 45,75 40,90 L 46,90 Q 51,75 50,52 Z" />
-                  </svg>
-                </div>
+                {['originals', 'keno', 'roulette', 'blackjack', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'war', 'hilo'].includes(activeView || '') ? (
+                   // ANIMATED CYBERPUNK LOGO
+                   <div className="flex items-center gap-1 group-hover:scale-105 transition-transform duration-300">
+                     <div className="relative flex items-center">
+                       <span className="text-[16px] md:text-[20px] font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00ffff] to-[#ff00ff] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] animate-pulse" style={{ fontFamily: "'Press Start 2P', cursive" }}>
+                         724
+                       </span>
+                       <span className="text-[16px] md:text-[20px] font-black text-[#ff00ff] drop-shadow-[0_0_8px_rgba(255,0,255,0.8)]" style={{ fontFamily: "'Press Start 2P', cursive", marginLeft: '4px' }}>
+                         BETS
+                       </span>
+                     </div>
+                     <style>{`
+                        @keyframes glitch-logo {
+                          0% { transform: translate(0) }
+                          20% { transform: translate(-2px, 1px) }
+                          40% { transform: translate(-1px, -1px) }
+                          60% { transform: translate(2px, 1px) }
+                          80% { transform: translate(1px, -1px) }
+                          100% { transform: translate(0) }
+                        }
+                        .group:hover .glitch-target {
+                           animation: glitch-logo 0.2s cubic-bezier(.25, .46, .45, .94) both infinite;
+                           text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+                        }
+                     `}</style>
+                     <div className="absolute inset-0 glitch-target opacity-0 group-hover:opacity-100 flex items-center pointer-events-none">
+                       <span className="text-[16px] md:text-[20px] font-black text-[#00ffff] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" style={{ fontFamily: "'Press Start 2P', cursive" }}>
+                         724
+                       </span>
+                       <span className="text-[16px] md:text-[20px] font-black text-[#ff00ff] drop-shadow-[0_0_8px_rgba(255,0,255,0.8)]" style={{ fontFamily: "'Press Start 2P', cursive", marginLeft: '4px' }}>
+                         BETS
+                       </span>
+                     </div>
+                   </div>
+                ) : (
+                   // OFFICIAL LOGO (From Image Reference)
+                   <div className="flex items-center group cursor-pointer relative font-black text-3xl md:text-4xl tracking-tight" style={{ WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility' }}>
+                      
+                      {/* 724 in Crisp White */}
+                      <span className="text-white">
+                        724
+                      </span>
+                      
+                      {/* bets in Solid Green (Lowercase) with Slot Reel Animation on Hover */}
+                      <span className="text-[#20d880] flex ml-[1px]">
+                        <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]">b</span>
+                        <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.1s' }}>e</span>
+                        <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.2s' }}>t</span>
+                        <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.3s' }}>s</span>
+                      </span>
+
+                      {/* Right-side 3-leaf clover with soft glow */}
+                      <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 ml-0 -mt-3">
+                        <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#20d880] drop-shadow-[0_0_8px_rgba(32,216,128,0.5)]">
+                          {/* Top leaf */}
+                          <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
+                          {/* Left leaf */}
+                          <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
+                          {/* Right leaf */}
+                          <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
+                          {/* Stem pointing down/left */}
+                          <path d="M 50,48 Q 48,70 42,85 Q 46,70 52,48 Z" />
+                        </svg>
+                      </div>
+                   </div>
+                )}
               </div>
 
 
@@ -385,24 +456,24 @@ const Header: React.FC<HeaderProps> = ({
               <div className="flex items-center gap-2">
                 <div className="relative" ref={walletDropdownRef}>
                   <div 
-                    className="flex items-center bg-[#121721] hover:bg-[#181c2b] border border-[#1e2330] cursor-pointer transition-colors rounded-lg px-3 md:px-4 h-[38px] md:h-[42px]"
+                    className="flex items-center bg-black hover:bg-white/5 border border-white/5 cursor-pointer transition-colors rounded-lg px-3 md:px-4 h-[38px] md:h-[42px]"
                     onClick={() => setWalletDropdownOpen(prev => !prev)}
                   >
-                    <span className="text-white font-bold text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap">${(siteUser.balance || 0).toFixed(2)}</span>
-                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-400 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
+                    <span className="balance-display text-white font-bold text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap">${(siteUser.balance || 0).toFixed(2)}</span>
+                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-gray-400 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
                   
                   {walletDropdownOpen && (
-                    <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-[#0b0e14] border border-[#1e2330] shadow-2xl text-left overflow-hidden">
-                      <div className="p-3 border-b border-[#1e2330]">
+                    <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-lg py-0 z-50 bg-black border border-white/5 shadow-2xl text-left overflow-hidden">
+                      <div className="p-3 border-b border-white/5">
                         <div className="relative">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                           <input 
                             type="text" 
                             value={walletSearch}
                             onChange={(e) => setWalletSearch(e.target.value)}
                             placeholder={t("wallet_ara")} 
-                            className="w-full bg-[#121721] border border-[#1e2330] rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#10b981] transition-colors placeholder-zinc-400"
+                            className="w-full bg-black border border-white/5 rounded-md py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-[#10b981] transition-colors placeholder-zinc-400"
                           />
                         </div>
                       </div>
@@ -411,7 +482,7 @@ const Header: React.FC<HeaderProps> = ({
                           { sym: 'TRY', icon: '₺', bg: '#10B981', name: 'Türk Lirası' },
                           { sym: 'USDT', icon: '₮', bg: '#26A17B', name: 'Tether' }
                         ].map((crypto) => (
-                          <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#181c2b] cursor-pointer transition-colors group">
+                          <div key={crypto.sym} className="flex items-center justify-between px-4 py-2.5 hover:bg-white/5 cursor-pointer transition-colors group">
                             <span className="text-white font-bold text-[14px] font-mono">{(crypto.sym === 'TRY' ? (siteUser.balance || 0) : 0).toFixed(2)}</span>
                             <div className="flex items-center gap-2">
                               <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-black" style={{ background: crypto.bg }}>{crypto.icon}</div>
@@ -426,7 +497,7 @@ const Header: React.FC<HeaderProps> = ({
 
                 <button
                   onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                  className="bg-[#38b75e] hover:bg-[#2fa350] text-white font-bold h-[38px] md:h-[42px] px-3 md:px-5 rounded-lg text-[13px] md:text-[14px] transition-colors flex items-center justify-center gap-2"
+                  className="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 font-bold h-[38px] md:h-[42px] px-3 md:px-5 rounded-lg text-[13px] md:text-[14px] transition-colors flex items-center justify-center gap-2 border border-emerald-500/20 hover:border-emerald-500/40"
                 >
                   <Wallet className="w-4 h-4" />
                   <span className="hidden md:block whitespace-nowrap">{t('wallet_cuzdan')}</span>
@@ -441,22 +512,22 @@ const Header: React.FC<HeaderProps> = ({
                 <div className="relative" ref={profileRef}>
                   <button 
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="w-[48px] h-[38px] md:w-[56px] md:h-[42px] flex items-center justify-center gap-1.5 bg-[#121721] hover:bg-[#181c2b] border border-[#1e2330] rounded-lg transition-colors"
+                    className="w-[48px] h-[38px] md:w-[56px] md:h-[42px] flex items-center justify-center gap-1.5 bg-black hover:bg-white/5 border border-white/5 rounded-lg transition-colors"
                   >
                     <User className="w-4 h-4 md:w-5 md:h-5 text-white" />
-                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {isProfileOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-[#0b0e14] border border-[#1e2330] rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
-                      <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#181c2b] transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                        <User className="w-4 h-4 text-zinc-400 group-hover:text-white" />
+                    <div className="absolute right-0 mt-2 w-56 bg-black border border-white/5 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
+                      <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
+                        <User className="w-4 h-4 text-gray-400 group-hover:text-white" />
                         <span className="font-semibold text-sm">{t('profile_profil')}</span>
                       </button>
                       <button 
                         onClick={() => { setIsProfileOpen(false); onMemberLogout?.(); }}
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-[#1e2330] mt-1"
+                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-white/5 mt-1"
                       >
-                        <LogOut className="w-4 h-4 text-zinc-400 group-hover:text-red-400" />
+                        <LogOut className="w-4 h-4 text-gray-400 group-hover:text-red-400" />
                         <span className="font-semibold text-sm">{t('profile_cikis')}</span>
                       </button>
                     </div>
@@ -468,7 +539,7 @@ const Header: React.FC<HeaderProps> = ({
               <div className="ml-1 md:ml-3">
                 <button 
                   onClick={onSupportClick}
-                  className={`w-[38px] h-[38px] md:w-[42px] md:h-[42px] flex items-center justify-center rounded-lg transition-colors ${isChatOpen ? 'bg-[#38b75e]/20 text-[#38b75e] border border-[#38b75e]/40' : 'bg-[#121721] hover:bg-[#181c2b] border border-[#1e2330] text-white'}`}
+                  className={`w-[38px] h-[38px] md:w-[42px] md:h-[42px] flex items-center justify-center rounded-lg transition-colors ${isChatOpen ? 'bg-blue-600/20 text-blue-500 border border-blue-500/40' : 'bg-black hover:bg-white/5 border border-white/5 text-zinc-300'}`}
                 >
                   <MessageSquare className="w-4 h-4 md:w-5 md:h-5" />
                 </button>
@@ -476,18 +547,18 @@ const Header: React.FC<HeaderProps> = ({
 
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mr-4 md:mr-12 lg:mr-24 xl:mr-40 2xl:mr-52">
               <button
                 onClick={onMemberLoginClick}
-                className="flex items-center justify-center bg-transparent hover:bg-white/5 text-white border border-transparent rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-5 transition-all whitespace-nowrap"
+                className="flex items-center justify-center bg-transparent hover:bg-white/5 text-zinc-300 border border-transparent rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-5 transition-all whitespace-nowrap"
               >
                 {t('login')}
               </button>
               <button
                 onClick={onMemberRegisterClick}
-                className="flex items-center justify-center bg-[#38b75e] hover:bg-[#2fa350] text-white rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-5 transition-all whitespace-nowrap"
+                className="flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 text-[#050505] shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-5 transition-all duration-300 whitespace-nowrap transform hover:-translate-y-0.5"
               >
-                {t('register')}
+                Bonusla Başla
               </button>
             </div>
           )}

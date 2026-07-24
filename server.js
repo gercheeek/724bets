@@ -17,202 +17,183 @@ process.on('unhandledRejection', (reason, promise) => {
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
-// Heartbeat & Stale Connection Cleaner Interval
-const interval = setInterval(() => {
-    wss.clients.forEach((ws) => {
-        if (ws.isAlive === false) return ws.terminate();
-        ws.isAlive = false;
-        ws.ping();
+let globalLiveEvents = new Map();
+
+// Atekbet Swarm Connection
+const SWARM_URL = 'wss://eu-swarm-newm.atekbet272.com/ws?language=tur';
+
+function startSwarmConnection() {
+    const ws = new WebSocket(SWARM_URL, {
+        headers: { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0' }
     });
-}, 30000);
+    
+    let pollInterval;
 
-wss.on('close', () => {
-    clearInterval(interval);
-});
-
-const PRIMARY_WS_BASE = 'wss://srv.tarafbet981.com/sport/?EIO=3&transport=websocket';
-
-const primaryHeaders = {
-    'Origin': 'https://tarafbet981.com',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
-    'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache'
-};
-
-function parseAndFilterMessage(msg) {
-    if (!msg.startsWith('42[')) return msg;
-    try {
-        const parsed = JSON.parse(msg.substring(2));
-        const eventName = parsed[0];
-        let payload = parsed[1];
-
-        if (payload && (payload.events || payload.data?.events || Array.isArray(payload))) {
-            let events = payload.events || payload.data?.events || (Array.isArray(payload) ? payload : null);
-            if (events && Array.isArray(events)) {
-                const cleanedEvents = [];
-                for (const ev of events) {
-                    const sportName = (ev.sport?.name || ev.data?.sport?.name || '').toLowerCase();
-                    const isSupportedSport = ['soccer', 'futbol', 'football', 'basketball', 'basketbol', 'tennis', 'tenis', 'volleyball', 'voleybol', 'handball', 'hentbol', 'ice hockey', 'buz hokeyi', 'table tennis', 'masa tenisi', 'esports', 'e-spor', 'counter-strike', 'dota', 'league of legends', 'valorant'].some(s => sportName.includes(s));
-                    
-                    if (!isSupportedSport && sportName !== '') continue;
-
-                    const cleanedEv = {
-                        id: ev.id,
-                        group_markets: ev.group_markets,
-                        removed_markets: ev.removed_markets,
-                    };
-
-                        if (ev.data) {
-                            const d = ev.data;
-                            cleanedEv.data = {
-                                id: d.id,
-                                status: d.status,
-                                match_time: d.match_time,
-                                score: d.score,
-                                current_score: d.current_score,
-                                scores: d.scores,
-                                minute: d.minute,
-                                extended_status: d.extended_status,
-                                isLive: d.isLive,
-                                is_live_betting: d.is_live_betting,
-                                start_time: d.start_time,
-                                start_ts: d.start_ts,
-                                sport: d.sport ? { name: d.sport.name } : undefined,
-                                tournament: d.tournament ? { name: d.tournament.name } : undefined,
-                                country: d.country ? { name: d.country.name } : undefined,
-                                participants: d.participants,
-                                group_markets: d.group_markets,
-                                stats: d.stats,
-                                markets_count: d.markets_count
-                            };
-                        }
-
-                    cleanedEvents.push(cleanedEv);
+    ws.on('open', () => {
+        console.log('✅ Connected to Atekbet Swarm API for LIVE data!');
+        ws.send(JSON.stringify({
+            command: 'request_session',
+            params: { site_id: 1, language: 'tur' },
+            rid: 'req_session'
+        }));
+    });
+    
+    ws.on('message', (d) => {
+        const msg = JSON.parse(d.toString());
+        if (msg.rid === 'req_session') {
+            console.log('✅ Session established. Starting live polling...');
+            pollInterval = setInterval(() => {
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        command: 'get',
+                        params: {
+                            source: 'betting',
+                            what: {
+                                sport: ['id', 'name'],
+                                region: ['id', 'name'],
+                                competition: ['id', 'name'],
+                                game: ['id', 'team1_name', 'team2_name', 'info', 'start_ts'],
+                                market: ['id', 'name', 'type_name'],
+                                event: ['id', 'name', 'price']
+                            },
+                            where: {
+                                game: { type: 1 } // LIVE
+                            }
+                        },
+                        rid: 'get_live'
+                    }));
                 }
+            }, 3000); // 3 saniyede bir canli veriyi çek
+        } else if (msg.rid === 'get_live') {
+            const data = msg.data?.data || msg.data || {};
+            const newEvents = new Map();
+            
+            if (data.sport) {
+                Object.values(data.sport).forEach(sport => {
+                    const sportName = sport.name || 'Futbol';
+                    
+                    // ONLY FOOTBALL FILTER
+                    const sName = sportName.toLowerCase();
+                    if (!sName.includes('futbol') && !sName.includes('soccer') && !sName.includes('football')) {
+                        return; // Skip non-football sports
+                    }
 
-                if (payload.events) payload.events = cleanedEvents;
-                else if (payload.data?.events) payload.data.events = cleanedEvents;
-                else if (Array.isArray(payload)) payload = cleanedEvents;
+                    if (!sport.region) return;
+                    Object.values(sport.region).forEach(region => {
+                        const regionName = region.name || 'Dünya';
+                        if (!region.competition) return;
+                        Object.values(region.competition).forEach(comp => {
+                            const tournamentName = comp.name || 'Lig';
+                            if (!comp.game) return;
+                            Object.values(comp.game).forEach(game => {
+                                if (!game.team1_name || !game.team2_name) return;
+                                
+                                // Filter out virtual/cyber/fake matches & FIFA player gamer tags
+                                const combinedStr = `${sportName} ${tournamentName} ${regionName} ${game.team1_name} ${game.team2_name}`.toLowerCase();
+                                const virtualKeywords = [
+                                    'cyber', 'sanal', 'virtual', 'simulated', 'srl', 'esoccer', 'ebasketball', 'etennis',
+                                    'e-sports', 'esports', 'electronic', 'fifa', 'nba 2k', 'volta', 'penalty', 'h2h', 'gt sports'
+                                ];
+                                if (virtualKeywords.some(kw => combinedStr.includes(kw))) {
+                                    return; // Skip virtual matches
+                                }
+
+                                // Skip FIFA gamer tag matches like "England (Douglas)" vs "Italy (Cristian)"
+                                const isGamerTag = (name) => {
+                                    const match = name.match(/\(([^)]+)\)/);
+                                    if (!match) return false;
+                                    const tag = match[1].toLowerCase();
+                                    return tag !== 'kadınlar' && tag !== 'women' && tag !== 'u19' && tag !== 'u21' && tag !== 'u23' && tag !== 'reserves';
+                                };
+
+                                if (isGamerTag(game.team1_name) || isGamerTag(game.team2_name)) {
+                                    return; // Skip console/esports player matches
+                                }
+                                
+                                let oddsStr = null;
+                                if (game.market) {
+                                    const mainMarket = Object.values(game.market).find(m => m.type_name === 'P1P2' || m.type_name === 'P1X2' || m.type_name === 'MatchResult' || m.name === 'Match Result' || m.name === 'Maç Sonucu');
+                                    if (mainMarket && mainMarket.event) {
+                                        const evs = Object.values(mainMarket.event);
+                                        const p1 = evs.find(e => e.name === 'W1' || e.name === '1')?.price;
+                                        const px = evs.find(e => e.name === 'X' || e.name === 'Draw')?.price;
+                                        const p2 = evs.find(e => e.name === 'W2' || e.name === '2')?.price;
+                                        if (p1 || px || p2) {
+                                            oddsStr = `|1x2|~home~${p1||'-'}!~draw~${px||'-'}!~away~${p2||'-'}`;
+                                        }
+                                    }
+                                }
+                                
+                                const ev = {
+                                    id: String(game.id),
+                                    data: {
+                                        status: 'started',
+                                        sport: { name: sportName },
+                                        tournament: { name: tournamentName },
+                                        country: { name: regionName },
+                                        participants: { home: game.team1_name, away: game.team2_name },
+                                        start_time: game.start_ts ? new Date(game.start_ts * 1000).toISOString() : new Date().toISOString(),
+                                        score: game.info ? `${game.info.score1 || 0}:${game.info.score2 || 0}` : '0:0',
+                                        minute: game.info ? game.info.current_game_time : 0,
+                                        isLive: true,
+                                        extended_status: 'live'
+                                    }
+                                };
+                                
+                                if (oddsStr) {
+                                    ev.data.group_markets = { 'full_event|0': [oddsStr] };
+                                    ev.group_markets = { 'full_event|0': [oddsStr] };
+                                }
+                                
+                                newEvents.set(ev.id, ev);
+                            });
+                        });
+                    });
+                });
+            }
+            
+            globalLiveEvents = newEvents;
+            
+            // Broadcast to all clients
+            if (globalLiveEvents.size > 0) {
+                const payload = Array.from(globalLiveEvents.values());
+                const socketIoString = `42["subscribe-LiveEvents",{"events":${JSON.stringify(payload)}}]`;
+                
+                wss.clients.forEach(client => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(socketIoString);
+                    }
+                });
             }
         }
-        
-        return `42${JSON.stringify([eventName, payload])}`;
-    } catch (e) {
-        return msg;
-    }
+    });
+    
+    ws.on('close', () => {
+        clearInterval(pollInterval);
+        console.log('❌ Swarm API disconnected. Reconnecting in 3s...');
+        setTimeout(startSwarmConnection, 3000);
+    });
+    ws.on('error', (err) => {
+        console.error('Swarm Error:', err.message);
+    });
 }
 
-wss.on('connection', (ws, req) => {
-    ws.isAlive = true;
-    ws.on('pong', () => {
-        ws.isAlive = true;
-    });
+startSwarmConnection();
 
-    let lang = 'tur';
-    if (req.url && req.url.includes('lang=')) {
-        const params = new URLSearchParams(req.url.split('?')[1]);
-        if (params.get('lang') === 'tr') lang = 'tur';
-        else if (params.get('lang') === 'en') lang = 'en';
-        else if (params.get('lang')) lang = params.get('lang');
+wss.on('connection', (ws) => {
+    console.log('💻 [LOCAL] Frontend connected.');
+    // Hemen mevcut canli maclari gonder
+    if (globalLiveEvents.size > 0) {
+        const payload = Array.from(globalLiveEvents.values());
+        ws.send(`42["subscribe-LiveEvents",{"events":${JSON.stringify(payload)}}]`);
     }
-
-    console.log(`[${new Date().toISOString()}] New client connected with lang: ${lang}`);
-
-    let activeTargetSocket = null;
-    let isFallbackMode = false;
-    let pingIntervalId = null;
-    let messageBuffer = [];
-    let isTargetReady = false;
-
-    const connectToTarget = (url, headers) => {
-        console.log(`💻 [LOCAL] Connecting to PRIMARY (NoraBet Swarm)...`);
-        
-        const socket = new WebSocket(url, { headers });
-
-        socket.on('open', () => {
-            console.log(`✅ [PROXY] Connected to PRIMARY (NoraBet Swarm)!`);
-            activeTargetSocket = socket;
-        });
-
-        socket.on('message', (data) => {
-            const msg = data.toString();
-            
-            if (msg === '2' || msg === 'ping') {
-                socket.send('3');
-            }
-
-            if (msg.startsWith('0{')) {
-                try {
-                    const initData = JSON.parse(msg.substring(1));
-                    if (initData.pingInterval) {
-                        if (pingIntervalId) clearInterval(pingIntervalId);
-                        pingIntervalId = setInterval(() => {
-                            if (socket.readyState === WebSocket.OPEN) {
-                                socket.send('2');
-                            }
-                        }, initData.pingInterval);
-                    }
-                    
-                    if (socket.readyState === WebSocket.OPEN) {
-                        socket.send('40');
-                        isTargetReady = true;
-                        if (messageBuffer.length > 0) {
-                            for (const bmsg of messageBuffer) {
-                                socket.send(bmsg);
-                            }
-                            messageBuffer = [];
-                        }
-                    }
-                } catch (e) {
-                    console.error('Parse error:', e);
-                }
-            }
-
-            if (ws.readyState === WebSocket.OPEN) {
-                const filteredMsg = parseAndFilterMessage(msg);
-                ws.send(filteredMsg);
-            }
-        });
-
-        socket.on('error', (err) => {
-            console.error(`❌ [PROXY] PRIMARY target error:`, err.message);
-        });
-
-        socket.on('close', () => {
-            console.log(`⚠️ [PROXY] PRIMARY target connection closed.`);
-            if (pingIntervalId) clearInterval(pingIntervalId);
-            
-            if (ws.readyState === WebSocket.OPEN) {
-                ws.close();
-            }
-        });
-
-        return socket;
-    };
-
-    const primaryUrl = `${PRIMARY_WS_BASE}&language=${lang}&lang=${lang}`;
-    connectToTarget(primaryUrl, primaryHeaders);
-
-    ws.on('message', (message) => {
-        const msg = message.toString();
-        if (isTargetReady && activeTargetSocket && activeTargetSocket.readyState === WebSocket.OPEN) {
-            activeTargetSocket.send(msg);
-        } else {
-            messageBuffer.push(msg);
-        }
-    });
-
-    ws.on('close', () => {
-        console.log('💻 [LOCAL] Frontend disconnected.');
-        if (pingIntervalId) clearInterval(pingIntervalId);
-        if (activeTargetSocket && activeTargetSocket.readyState === WebSocket.OPEN) {
-            activeTargetSocket.close();
-        }
+    
+    ws.on('message', () => {
+        // Istemci mesaj gönderirse yoksay, sadece broadcast yapıyoruz.
     });
 });
 
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 [PROXY] Server running on http://0.0.0.0:${PORT} (Accepting external connections)`);
-    console.log(`🚀 [PROXY] WebSocket listening on ws://0.0.0.0:${PORT}`);
 });

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState, useRef } from 'react';
 import { ChevronLeft, ShieldCheck, HelpCircle } from 'lucide-react';
 
 interface OriginalGameContainerProps {
@@ -20,26 +20,41 @@ export default function OriginalGameContainer({
     rightControls,
     onNavigate
 }: OriginalGameContainerProps) {
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        setMousePos({ x, y });
+    };
+
     return (
-        <div className="w-full relative flex flex-col bg-[#050505] overflow-hidden font-sans">
+        <div 
+            ref={containerRef}
+            onMouseMove={handleMouseMove}
+            className="w-full relative flex flex-col bg-[#050505] overflow-hidden font-sans min-h-[calc(100vh-60px)] arcade-cursor-global"
+        >
             
+            {/* Global Cursor Spotlight (Flashlight Effect) */}
+            <div 
+                className="absolute inset-0 pointer-events-none transition-opacity duration-300 z-10"
+                style={{
+                  background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(0, 255, 255, 0.05), transparent 50%)`
+                }}
+            ></div>
             {/* ── BACKGROUND LAYER ── */}
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                {/* Base color / Anthracite Radial Gradient */}
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(30,41,59,1)_0%,rgba(15,23,42,1)_100%)]"></div>
-                {/* Cyber Grid Texture */}
-                <div className="absolute inset-0 opacity-5"
-                     style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
-                </div>
-                {/* Vignette */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.7)_100%)]"></div>
-                {/* Subtle Electric Blue Center Glow */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#10b981]/10 blur-[120px] rounded-[100%]"></div>
+            <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden bg-[#020202]">
+                 {/* Subtle magenta glow top right */}
+                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#d946ef]/5 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
+                 <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
             </div>
 
             {/* ── 724BETS CORPORATE WATERMARK ── */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none text-center w-full">
-                <h1 className="text-[100px] md:text-[160px] font-black italic tracking-tighter text-white opacity-[0.03] select-none">
+                <h1 className="text-[100px] md:text-[160px] font-arcade italic tracking-tighter text-[#00ffff] opacity-[0.02] select-none" style={{ WebkitTextStroke: '1px #00ffff' }}>
                     724BETS
                 </h1>
             </div>
@@ -50,12 +65,12 @@ export default function OriginalGameContainer({
                 <div className="flex flex-col gap-2 pointer-events-auto">
                     <button 
                         onClick={() => onNavigate('originals')}
-                        className="flex items-center gap-2 bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-gray-300 hover:text-white px-4 py-2 rounded-full transition-all text-xs font-bold uppercase tracking-wider"
+                        className="flex items-center gap-2 bg-[#00ffff]/10 hover:bg-[#00ffff]/20 backdrop-blur-md border border-[#00ffff]/30 text-[#00ffff] px-4 py-2 rounded-full transition-all text-[10px] font-arcade uppercase tracking-wider shadow-[0_0_15px_rgba(0,255,255,0.2)] hover:shadow-[0_0_20px_rgba(0,255,255,0.4)]"
                     >
                         <ChevronLeft className="w-4 h-4" />
                         Lobiye Dön
                     </button>
-                    <button className="flex items-center gap-2 bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-full transition-all text-[10px] font-bold uppercase tracking-wider w-fit">
+                    <button className="flex items-center gap-2 bg-[#ff00ff]/10 hover:bg-[#ff00ff]/20 backdrop-blur-md border border-[#ff00ff]/30 text-[#ff00ff] px-4 py-1.5 rounded-full transition-all text-[8px] font-arcade uppercase tracking-wider w-fit shadow-[0_0_10px_rgba(255,0,255,0.2)] mt-1">
                         <HelpCircle className="w-3 h-3" />
                         Nasıl Oynanır
                     </button>
@@ -63,17 +78,17 @@ export default function OriginalGameContainer({
                 
                 {/* Center: Game Title */}
                 <div className="hidden md:flex flex-col items-center">
-                    <span className="text-[#ffd700] font-black tracking-[0.3em] uppercase text-sm drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
+                    <span className="text-[#00ffff] font-arcade tracking-[0.2em] uppercase text-xl drop-shadow-[0_0_10px_rgba(0,255,255,0.5)]">
                         {title}
                     </span>
-                    <span className="text-gray-500 text-[9px] uppercase tracking-widest mt-1">724Bets Original</span>
+                    <span className="text-[#ff00ff] text-[8px] font-arcade uppercase tracking-widest mt-2 drop-shadow-[0_0_5px_rgba(255,0,255,0.4)]">724Bets Original</span>
                 </div>
 
                 {/* Right: Provably Fair Badge */}
-                <div className="pointer-events-auto">
-                    <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-green-500/30 text-green-400 px-4 py-2 rounded-full shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                <div className="pointer-events-auto mt-1">
+                    <div className="flex items-center gap-2 bg-[#00ffff]/5 backdrop-blur-md border border-[#00ffff]/30 text-[#00ffff] px-4 py-2 rounded-full shadow-[0_0_15px_rgba(0,255,255,0.15)]">
                         <ShieldCheck className="w-4 h-4" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Provably Fair</span>
+                        <span className="text-[8px] font-arcade uppercase tracking-wider">Provably Fair</span>
                     </div>
                 </div>
             </div>

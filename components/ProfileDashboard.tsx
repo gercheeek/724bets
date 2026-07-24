@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { SiteUser } from '../types';
 import { supabase } from '../utils/supabase';
+import { getUserRank } from '../utils/ranks';
 
 interface ProfileDashboardProps {
   siteUser: SiteUser;
@@ -151,20 +152,19 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                     <div className="w-2 h-2 bg-white rounded-full" />
                   </div>
                 </h3>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                   <div className="w-3.5 h-3.5 bg-orange-300 rounded shadow-sm" />
-                   <span className="text-white/90 text-sm font-bold">Bronz 1</span>
+                <div className="flex items-center gap-2 mt-1">
+                   <div className="w-8 h-8 rounded-full overflow-hidden drop-shadow-md border border-white/10 shrink-0">
+                      <img src={getUserRank(siteUser.vipLevel).image} className="w-full h-full object-cover" alt="rank" />
+                   </div>
+                   <span className="text-white/90 text-sm font-bold uppercase tracking-wide">{getUserRank(siteUser.vipLevel).name}</span>
                 </div>
               </div>
             </div>
             
-            <div className="relative z-10 w-full">
+            <div className="relative z-10 w-full mt-2">
               <div className="flex items-center justify-between text-white font-bold text-xs mb-1.5">
                 <span>0.00%</span>
-                <div className="flex items-center gap-1">
-                  <div className="w-3.5 h-3.5 bg-orange-500 rounded shadow-sm" />
-                  <span>Bronz 2</span>
-                </div>
+                <span className="text-white/60">İlerleme</span>
               </div>
               <div className="w-full h-1.5 bg-black/30 rounded-full overflow-hidden">
                 <div className="h-full bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]" style={{ width: '0%' }} />

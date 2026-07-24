@@ -33,14 +33,16 @@ ws.on('message', (data) => {
                         "region": ["id", "name"],
                         "competition": ["id", "name"],
                         "game": [
-                            "id", "team1_name", "team2_name", "info", "stats", "markets_count", "is_live"
-                        ]
+                            "id", "team1_name", "team2_name", "info", "stats", "markets_count", "is_live", "start_ts"
+                        ],
+                        "market": ["id", "name", "type_name"],
+                        "event": ["id", "name", "price"]
                     },
                     "where": {
                         "game": { "type": 1 }
                     }
                 },
-                "subscribe": false
+                "subscribe": true
             }
         ];
         ws.send('42' + JSON.stringify(req));

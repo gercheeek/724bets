@@ -1,0 +1,126 @@
+/* Retro Arcade 8-bit CSS */
+
+.retro-font-primary {
+  font-family: 'Press Start 2P', monospace;
+}
+
+.retro-font-secondary {
+  font-family: 'VT323', monospace;
+}
+
+.crt-container {
+  background-color: #0a0a0a;
+  position: relative;
+  overflow: hidden;
+  color: #06b6d4;
+}
+
+/* CRT Scanlines */
+.crt-container::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* CRT Flicker */
+.crt-container::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(18, 16, 16, 0.1);
+  opacity: 0;
+  z-index: 100;
+  pointer-events: none;
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.02; }
+  50% { opacity: 0.05; }
+  100% { opacity: 0.02; }
+}
+
+/* Text glow */
+.retro-text-glow {
+  text-shadow: 0 0 5px #06b6d4, 0 0 10px #06b6d4;
+}
+
+.retro-text-glow-purple {
+  text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
+  color: #ff00ff;
+}
+
+.retro-text-glow-orange {
+  text-shadow: 0 0 5px #ff8c00, 0 0 10px #ff8c00;
+  color: #ff8c00;
+}
+
+/* Pixel Border */
+.pixel-border {
+  border: 4px solid #06b6d4;
+  box-shadow: 
+    inset 0 0 0 4px #0a0a0a,
+    inset 0 0 0 8px #06b6d4;
+  background: #0a0a0a;
+  padding: 12px;
+}
+
+/* Double Pixel Border */
+.pixel-border-double {
+  border: 4px solid #06b6d4;
+  border-image-slice: 2;
+  border-image-width: 2;
+  border-image-outset: 0;
+  box-shadow: inset 0 0 10px #06b6d4, 0 0 10px #06b6d4;
+}
+
+/* Custom Scrollbar for Retro Panel */
+.retro-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+.retro-scrollbar::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border-left: 2px solid #06b6d4;
+}
+.retro-scrollbar::-webkit-scrollbar-thumb {
+  background: #06b6d4;
+  border: 2px solid #0a0a0a;
+}
+
+/* Blinking animations for Retro Chat */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.animate-blink-fast {
+  animation: blink 0.5s step-end infinite;
+}
+
+@keyframes flash-bg {
+  0%, 100% { background-color: transparent; color: #ff00ff; }
+  50% { background-color: #ff00ff; color: #0a0a0a; }
+}
+
+.animate-flash-bg {
+  animation: flash-bg 0.8s step-end infinite;
+}

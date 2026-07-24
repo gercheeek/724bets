@@ -97,7 +97,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     const fetchScraped = async () => {
       try {
-        const res = await fetch('/sekabet_prelive_matches.json?v=' + new Date().getTime());
+        const res = await fetch('/prelive_matches.json?v=' + new Date().getTime());
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
@@ -221,7 +221,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     const connectWs = () => {
       // VITE_WS_URL ortam değişkeni varsa onu kullan, yoksa yerel sunucuya bağlan
-      const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:4000';
+      const wsUrl = (import.meta as any).env?.VITE_WS_URL || 'ws://localhost:4000';
       const ws = new WebSocket(`${wsUrl}/?lang=${language}`);
       wsRef.current = ws;
 

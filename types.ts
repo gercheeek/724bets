@@ -335,6 +335,7 @@ export interface CoinTransaction {
 export interface UserLoyalty {
   userId: string;
   coins: number;
+  deposit: number;
   tickets: number; // total earned tickets
   pendingTickets: number; // tickets waiting to be assigned to a slot
   totalEarned: number;

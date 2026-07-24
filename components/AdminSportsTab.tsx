@@ -195,17 +195,61 @@ export default function AdminSportsTab() {
                 setIsPushing(false);
                 setPushMessage('');
             }, 3000);
-        }, 3000); // Wait 3 seconds to simulate the "1 min" downtime mentioned by user
+        }, 3000);
     };
 
     const filteredPoolMatches = poolMatches.filter(m => 
         m?.data?.participants?.home?.toLowerCase().includes(searchQuery.toLowerCase()) || 
         m?.data?.participants?.away?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         m?.data?.tournament?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-    ).slice(0, 100); // Limit to 100 to prevent huge renders
+    ).slice(0, 100);
+
+    const nowTime = Date.now();
+    const livePoolMatches = filteredPoolMatches.filter(m => {
+        if (!m?.data?.start_time) return false;
+        const t = new Date(m.data.start_time).getTime();
+        return t <= nowTime + (4 * 60 * 60 * 1000);
+    });
+    const upcomingPoolMatches = filteredPoolMatches.filter(m => !livePoolMatches.includes(m));
+
+    const renderMatchRow = (m: PoolMatch) => {
+        const odds = extractOdds(m.data.group_markets?.['full_event|0'] || []);
+        return (
+            <tr key={m.id} className="hover:bg-white/[0.02] transition-colors group">
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-sm font-bold text-zinc-400 bg-zinc-800/50 px-3 py-1 rounded border border-zinc-700/50">{m?.data?.tournament?.name || 'Bilinmeyen Lig'}</span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-bold text-white flex items-center gap-2">
+                        {m?.data?.participants?.home || 'Ev'} <span className="text-zinc-600 text-xs">VS</span> {m?.data?.participants?.away || 'Dep'}
+                    </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-zinc-300">{m?.data?.start_time ? new Date(m.data.start_time).toLocaleDateString('tr-TR') : '-'}</div>
+                    <div className="text-xs text-zinc-500">{m?.data?.start_time ? new Date(m.data.start_time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute:'2-digit' }) : '-'}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center justify-center gap-2 font-mono text-sm opacity-70">
+                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-blue-400">{odds.ms1.toFixed(2)}</span>
+                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-zinc-400">{odds.msx.toFixed(2)}</span>
+                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-blue-400">{odds.ms2.toFixed(2)}</span>
+                    </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right">
+                    <button 
+                        onClick={() => handleOpenAddModal(m)}
+                        className="px-4 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold rounded transition-colors text-xs flex items-center justify-end gap-1 ml-auto"
+                    >
+                        <Check className="w-3 h-3" />
+                        Aktife Al
+                    </button>
+                </td>
+            </tr>
+        );
+    };
 
     return (
-        <div className="p-4 sm:p-6 text-white h-full flex flex-col relative overflow-hidden">
+        <div className="p-4 sm:p-6 text-white h-full flex flex-col relative overflow-y-auto">
             
             {/* Header & Tabs */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-4 border-b border-zinc-800 gap-4">
@@ -267,8 +311,8 @@ export default function AdminSportsTab() {
 
             {/* TAB: PROVIDER POOL */}
             {activeSubTab === 'pool' && (
-                <div className="flex-1 flex flex-col min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                    <div className="flex justify-between items-center mb-6">
+                <div className="flex-1 flex flex-col space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                    <div className="flex justify-between items-center">
                         <div className="relative w-64">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                             <input 
@@ -287,61 +331,115 @@ export default function AdminSportsTab() {
                         </button>
                     </div>
 
-                    <div className="flex-1 bg-[#111318] border border-zinc-800 rounded-2xl shadow-xl overflow-hidden flex flex-col min-h-0">
-                        <div className="overflow-x-auto flex-1">
-                            <table className="w-full text-left border-collapse min-w-[900px]">
-                                <thead>
-                                    <tr className="bg-[#1a1d24] border-b border-zinc-800">
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Lig</th>
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Karşılaşma</th>
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Tarih / Saat</th>
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider text-center">Ham Oranlar (1 - X - 2)</th>
-                                        <th className="px-6 py-4 text-right text-xs font-semibold text-zinc-500 uppercase tracking-wider">İşlem</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-zinc-800/50">
-                                    {filteredPoolMatches.length === 0 ? (
-                                        <tr>
-                                            <td colSpan={5} className="text-center py-10 text-zinc-500">Havuzda maç bulunamadı.</td>
-                                        </tr>
-                                    ) : filteredPoolMatches.map(m => {
-                                        const odds = extractOdds(m.data.group_markets?.['full_event|0'] || []);
-                                        return (
-                                            <tr key={m.id} className="hover:bg-white/[0.02] transition-colors group">
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className="text-sm font-bold text-zinc-400 bg-zinc-800/50 px-3 py-1 rounded border border-zinc-700/50">{m?.data?.tournament?.name || 'Bilinmeyen Lig'}</span>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm font-bold text-white flex items-center gap-2">
-                                                        {m?.data?.participants?.home || 'Ev'} <span className="text-zinc-600 text-xs">VS</span> {m?.data?.participants?.away || 'Dep'}
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm text-zinc-300">{m?.data?.start_time ? new Date(m.data.start_time).toLocaleDateString('tr-TR') : '-'}</div>
-                                                    <div className="text-xs text-zinc-500">{m?.data?.start_time ? new Date(m.data.start_time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute:'2-digit' }) : '-'}</div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex items-center justify-center gap-2 font-mono text-sm opacity-70">
-                                                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-blue-400">{odds.ms1.toFixed(2)}</span>
-                                                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-zinc-400">{odds.msx.toFixed(2)}</span>
-                                                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-blue-400">{odds.ms2.toFixed(2)}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-right">
-                                                    <button 
-                                                        onClick={() => handleOpenAddModal(m)}
-                                                        className="px-4 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold rounded transition-colors text-xs flex items-center justify-end gap-1 ml-auto"
-                                                    >
-                                                        <Check className="w-3 h-3" />
-                                                        Aktife Al
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                    {/* Window 1: Canlı Maçlar Window */}
+                    <div className="bg-[#111318] border border-emerald-500/30 rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                        <div className="px-6 py-4 bg-[#161a22] border-b border-zinc-800 flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                                <span className="relative flex h-3 w-3 mr-1">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                </span>
+                                <h3 className="text-base font-bold text-white tracking-wide uppercase flex items-center gap-2">
+                                    Canlı Maçlar (Havuz)
+                                </h3>
+                                <span className="ml-2 bg-emerald-500/20 text-emerald-400 text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                                    {livePoolMatches.length} Maç
+                                </span>
+                            </div>
+                            <button 
+                                onClick={() => setIsLiveWindowOpen(!isLiveWindowOpen)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-lg text-xs font-bold transition-all border border-zinc-700"
+                            >
+                                {isLiveWindowOpen ? (
+                                    <>
+                                        <ChevronUp className="w-4 h-4 text-emerald-400" />
+                                        <span>Pencereyi Kapat</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <ChevronDown className="w-4 h-4 text-emerald-400" />
+                                        <span>Pencereyi Aç</span>
+                                    </>
+                                )}
+                            </button>
                         </div>
+
+                        {isLiveWindowOpen && (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse min-w-[900px]">
+                                    <thead>
+                                        <tr className="bg-[#1a1d24] border-b border-zinc-800">
+                                            <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Lig</th>
+                                            <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Karşılaşma</th>
+                                            <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Tarih / Saat</th>
+                                            <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider text-center">Ham Oranlar (1 - X - 2)</th>
+                                            <th className="px-6 py-4 text-right text-xs font-semibold text-zinc-500 uppercase tracking-wider">İşlem</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-zinc-800/50">
+                                        {livePoolMatches.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={5} className="text-center py-8 text-zinc-500">Şu anda canlı oynanan maç bulunamadı.</td>
+                                            </tr>
+                                        ) : livePoolMatches.map(m => renderMatchRow(m))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Window 2: Gelecek Maçlar Window */}
+                    <div className="bg-[#111318] border border-blue-500/30 rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                        <div className="px-6 py-4 bg-[#161a22] border-b border-zinc-800 flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                                <Calendar className="w-5 h-5 text-blue-400 mr-1" />
+                                <h3 className="text-base font-bold text-white tracking-wide uppercase flex items-center gap-2">
+                                    Gelecek Maçlar (Bülten)
+                                </h3>
+                                <span className="ml-2 bg-blue-500/20 text-blue-400 text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-500/30">
+                                    {upcomingPoolMatches.length} Maç
+                                </span>
+                            </div>
+                            <button 
+                                onClick={() => setIsUpcomingWindowOpen(!isUpcomingWindowOpen)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-lg text-xs font-bold transition-all border border-zinc-700"
+                            >
+                                {isUpcomingWindowOpen ? (
+                                    <>
+                                        <ChevronUp className="w-4 h-4 text-blue-400" />
+                                        <span>Pencereyi Kapat</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <ChevronDown className="w-4 h-4 text-blue-400" />
+                                        <span>Pencereyi Aç</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
+
+                        {isUpcomingWindowOpen && (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse min-w-[900px]">
+                                    <thead>
+                                        <tr className="bg-[#1a1d24] border-b border-zinc-800">
+                                            <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Lig</th>
+                                            <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Karşılaşma</th>
+                                            <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Tarih / Saat</th>
+                                            <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider text-center">Ham Oranlar (1 - X - 2)</th>
+                                            <th className="px-6 py-4 text-right text-xs font-semibold text-zinc-500 uppercase tracking-wider">İşlem</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-zinc-800/50">
+                                        {upcomingPoolMatches.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={5} className="text-center py-8 text-zinc-500">Bültende gelecek maç bulunamadı.</td>
+                                            </tr>
+                                        ) : upcomingPoolMatches.map(m => renderMatchRow(m))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

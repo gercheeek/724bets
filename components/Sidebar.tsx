@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
   Menu, Trophy, Star, 
-  Target, Gift, Ticket, MessageSquare, Globe, 
-  Crown, ChevronDown, ChevronUp, Clock, Sparkles, Cherry, Percent, Headphones, FileText, Copy, Radio, Flame, CalendarDays, Activity, Gamepad2
+  Target, Gift, Ticket, Globe, 
+  Crown, ChevronDown, ChevronUp, Sparkles, Cherry, Percent, Headphones, FileText, Copy, Radio
 } from 'lucide-react';
 import { NavVisibility } from './Header';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -23,97 +23,25 @@ const Sidebar: React.FC<SidebarProps> = ({
   onToggle,
   activeView,
   onViewChange,
-  userRole,
 }) => {
-  const { t, language } = useLanguage();
-  const { setActiveLeague, activeSport, setActiveSport, events } = useBetting();
+  const { t } = useLanguage();
+  const { setActiveSport } = useBetting();
 
-  const [liveMatches, setLiveMatches] = useState<any[]>([]);
-
-  React.useEffect(() => {
-    if (!events || events.length === 0) {
-      fetch('/live_matches.json')
-        .then(res => res.json())
-        .then(data => setLiveMatches(data))
-        .catch(() => {});
-    }
-  }, [events]);
-
-  const sportsListWithCounts = useMemo(() => {
-    const sourceEvents = (events && events.length > 0) ? events : liveMatches;
-    if (!sourceEvents || sourceEvents.length === 0) return [];
-    
-    const sportCounts: Record<string, number> = {};
-    sourceEvents.forEach((ev: any) => {
-      const data = ev.data || ev; // Handle both wrapped and raw formats
-      if (!data || !data.participants) return;
-      
-      let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
-      let isLive = data.status === 'in_progress' || data.is_live_betting === true || isFinished;
-      if (!isLive) return;
-
-      const countryName = data.country?.name || '';
-      const tournamentName = data.tournament?.name || '';
-      const league = countryName ? `${countryName} - ${tournamentName}` : tournamentName;
-
-      const isFakeMatch = 
-        league.toLowerCase().includes('cyber') || 
-        league.toLowerCase().includes('esoccer') ||
-        league.toLowerCase().includes('simulated') ||
-        league.toLowerCase().includes('srl') ||
-        league.toLowerCase().includes('virtual') ||
-        (data.participants.home || '').toLowerCase().includes('esports') ||
-        (data.sport?.name || '').toLowerCase().includes('e-sports');
-        
-      if (isFakeMatch) return;
-
-      let sport = data.sport?.name || 'Soccer';
-      const n = sport.toLowerCase();
-      if (n.includes('futbol') || n.includes('soccer') || n.includes('football')) sport = 'Futbol';
-      else if (n.includes('basketbol') || n.includes('basketball')) sport = 'Basketbol';
-      else if (n.includes('tenis') || n.includes('tennis')) sport = 'Tenis';
-      else if (n.includes('voleybol') || n.includes('volleyball')) sport = 'Voleybol';
-      else if (n.includes('hentbol') || n.includes('handball')) sport = 'Hentbol';
-      else if (n.includes('buz hokeyi') || n.includes('ice hockey')) sport = 'Buz Hokeyi';
-      else if (n.includes('masa tenisi') || n.includes('table tennis')) sport = 'Masa Tenisi';
-      else if (n.includes('e-spor') || n.includes('esports')) sport = 'E-Spor';
-      else sport = 'Futbol'; // fallback
-
-      sportCounts[sport] = (sportCounts[sport] || 0) + 1;
-    });
-
-    return Object.keys(sportCounts).map(sport => ({
-      name: sport,
-      count: sportCounts[sport]
-    }));
-  }, [events, liveMatches]);
-
-  const getSportIcon = (sportName: string) => {
-    const name = sportName.toLowerCase();
-    if (name.includes('futbol') || name.includes('soccer')) return <Activity size={15} className="text-emerald-500 shrink-0" />;
-    if (name.includes('basketbol') || name.includes('basketball')) return <Target size={15} className="text-orange-500 shrink-0" />;
-    if (name.includes('tenis') || name.includes('tennis')) return <Trophy size={15} className="text-yellow-500 shrink-0" />;
-    if (name.includes('voleybol') || name.includes('volleyball')) return <Clock size={15} className="text-blue-500 shrink-0" />;
-    if (name.includes('e-spor') || name.includes('esports')) return <Gamepad2 size={15} className="text-purple-500 shrink-0" />;
-    if (name.includes('hentbol') || name.includes('handball')) return <Flame size={15} className="text-red-500 shrink-0" />;
-    return <Activity size={15} className="text-zinc-500 shrink-0" />;
-  };
+  const [activeTab, setActiveTab] = useState<'casino' | 'spor'>('casino');
   
-  // Accordion collapsible states
-  const [isQuickLinksOpen, setIsQuickLinksOpen] = useState(true);
-  const [isAllSportsOpen, setIsAllSportsOpen] = useState(true);
-  const [isFavLeaguesOpen, setIsFavLeaguesOpen] = useState(true);
+  // Accordion states
   const [isCasinoOpen, setIsCasinoOpen] = useState(false);
   const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
   const [isPromosOpen, setIsPromosOpen] = useState(false);
-  const [isLangOpen, setIsLangOpen] = useState(false);
+
+  const isRetroVIP = activeView === 'raffle' || activeView === 'originals' || activeView === 'vip';
 
   return (
     <>
       <style>{`
         .navy-sidebar-container {
           width: 100%;
-          background-color: #0b0e14;
+          background-color: #050505;
           display: flex;
           flex-direction: column;
           height: 100%;
@@ -144,292 +72,220 @@ const Sidebar: React.FC<SidebarProps> = ({
         .navy-sidebar-inner::-webkit-scrollbar-thumb:hover {
           background: rgba(255, 255, 255, 0.25);
         }
+        .nav-item {
+          display: flex;
+          align-items: center;
+          padding: 12px 16px;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 14px;
+          color: #94a3b8;
+          transition: all 0.2s;
+          cursor: pointer;
+        }
+        .nav-item:hover {
+          color: #fff;
+          background: rgba(255, 255, 255, 0.03);
+        }
+        .nav-item.active {
+          color: #fff;
+          background: var(--active-bg, #1e293b);
+          border-left: 4px solid var(--active-border, #10b981);
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+        }
+        .retro-vip-active .nav-item.active {
+          background-color: rgba(0, 255, 255, 0.1) !important;
+          border-left: 3px solid #00ffff !important;
+          color: #00ffff !important;
+          font-family: monospace;
+          text-shadow: 0 0 5px #00ffff;
+        }
+        .retro-vip-active .nav-item.active svg {
+          color: #ff00ff !important;
+        }
+        .retro-vip-active .nav-item {
+          font-family: monospace;
+        }
+        .collapsible-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 14px 16px;
+          font-weight: 800;
+          font-size: 12px;
+          color: #64748b;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: color 0.2s;
+        }
+        .collapsible-header:hover {
+          color: #fff;
+        }
+        .retro-vip-active-container {
+          background: repeating-linear-gradient(to bottom, rgba(0, 255, 255, 0.03) 0px, rgba(0, 255, 255, 0.03) 1px, #050510 1px, #050510 3px), linear-gradient(180deg, #0a0a1a 0%, #03030a 100%) !important;
+          border-right: 1px solid rgba(255, 0, 255, 0.2) !important;
+        }
       `}</style>
 
       {/* Mobile Overlay */}
       <div className="sidebar-overlay" onClick={onToggle} style={{ display: 'none' }} />
 
-      <div className={`navy-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
-        <div className="navy-sidebar-inner">
+      <div className={`navy-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'} ${isRetroVIP ? 'retro-vip-active retro-vip-active-container' : ''}`}>
+        <div className="navy-sidebar-inner pb-6">
           
-          {/* Header Toggle Section */}
-          <div className="h-[72px] w-full shrink-0 flex items-center px-3 relative z-50">
-             <div className="flex items-center w-full gap-3">
-                <button onClick={onToggle} className="text-zinc-300 hover:text-white p-1">
-                  <Menu size={24} />
-                </button>
-                {isOpen && (
-                  <div className="flex-1 flex bg-[#12141d] rounded-md p-0.5 border border-white/5 shadow-inner relative overflow-hidden">
-                    <button 
-                      onClick={() => onViewChange('blackjack')}
-                      className={`flex-1 py-1.5 rounded-md text-sm font-semibold transition-all relative z-10 flex items-center justify-center gap-1.5 ${
-                        (activeView === 'blackjack' || activeView === 'originals') 
-                          ? 'bg-[#1e2230] text-white shadow-md' 
-                          : 'text-zinc-300 hover:text-white'
-                      }`}
-                    >
-                      Casino
-                    </button>
-                    <button 
-                      onClick={() => onViewChange('spor724')}
-                      className={`flex-1 py-1.5 rounded-md text-sm font-semibold transition-all relative z-10 flex items-center justify-center gap-2 ${
-                        (activeView === 'spor724' || activeView === 'home' || activeView === 'gercek') 
-                          ? 'bg-[#f59e0b] text-white shadow-md' 
-                          : 'text-zinc-300 hover:text-white'
-                      }`}
-                    >
-                      <Target className="w-4 h-4 opacity-50" />
-                      Spor
-                    </button>
-                  </div>
-                )}
-             </div>
-          </div>
-
-          {/* Main Scrollable Content */}
-          {isOpen && (
-            <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
-              
-              {/* Promo Banner */}
-              <div 
-                onClick={() => onViewChange('raffle')}
-                className="flex flex-col relative rounded-xl border border-white/5 overflow-hidden bg-gradient-to-b from-[#141722] to-[#0c0d14] p-3 shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
-              >
-                 <div className="flex justify-between items-start relative z-10">
-                    <div className="flex items-center gap-2.5">
-                        <Ticket className="text-amber-400 w-8 h-8 shrink-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
-                        <div className="flex flex-col">
-                           <span className="text-white font-black text-lg italic tracking-tight leading-none drop-shadow-md">$20.000</span>
-                           <span className="text-amber-400 font-bold text-[11px] tracking-wider uppercase drop-shadow-sm">Haftalık Çekiliş</span>
-                       </div>
-                    </div>
-                    <div className="bg-transparent border border-amber-500/50 rounded-md px-2 py-0.5 shadow-[0_0_8px_rgba(251,191,36,0.15)]">
-                       <span className="text-white font-bold text-xs italic">3g</span>
-                    </div>
-                 </div>
-                 
-                 <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5 relative z-10">
-                    <div className="flex flex-col items-center">
-                       <span className="text-[#64748b] text-[10px] font-bold uppercase tracking-wider">Günlük</span>
-                       <span className="text-white font-black text-sm italic drop-shadow-md">$25K</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                       <span className="text-[#64748b] text-[10px] font-bold uppercase tracking-wider">Haftalık</span>
-                       <span className="text-white font-black text-sm italic drop-shadow-md">$100K</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                       <span className="text-[#64748b] text-[10px] font-bold uppercase tracking-wider">Aylık</span>
-                       <span className="text-white font-black text-sm italic drop-shadow-md">$500K</span>
-                    </div>
+          {isOpen ? (
+            <>
+              {/* Header Toggle Section */}
+              <div className="pt-4 px-3 mb-4">
+                 <div className="flex bg-[#131313] rounded-xl p-1 border border-white/5">
+                   <button 
+                     onClick={() => setActiveTab('casino')}
+                     className={`flex-1 py-2.5 rounded-lg text-[13px] font-bold transition-all flex items-center justify-center ${
+                       activeTab === 'casino' 
+                         ? 'bg-[#1e1e1e] text-white shadow-md' 
+                         : 'text-zinc-500 hover:text-zinc-300'
+                     }`}
+                   >
+                     Casino
+                   </button>
+                   <button 
+                     onClick={() => setActiveTab('spor')}
+                     className={`flex-1 py-2.5 rounded-lg text-[13px] font-bold transition-all flex items-center justify-center ${
+                       activeTab === 'spor' 
+                         ? 'bg-[#1e1e1e] text-white shadow-md' 
+                         : 'text-zinc-500 hover:text-zinc-300'
+                     }`}
+                   >
+                     Spor
+                   </button>
                  </div>
               </div>
 
-              {/* Navigation Links Group */}
-              <div className="space-y-1">
-                <button 
-                  onClick={() => onViewChange('home')}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                    activeView === 'home' 
-                      ? 'bg-[#181c2b] text-white shadow-md' 
-                      : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Crown className="w-5 h-5 text-zinc-400 shrink-0" />
-                    <span>Anasayfa</span>
-                  </div>
-                </button>
+              {/* Main Navigation Links */}
+              <div className="px-3 space-y-1 mb-4">
+                <div className={`nav-item ${activeView === 'home' ? 'active' : ''}`} onClick={() => onViewChange('home')}>
+                  <Crown className={`w-5 h-5 mr-3 ${activeView === 'home' ? 'text-emerald-400' : ''}`} />
+                  Anasayfa
+                </div>
 
-                <button 
-                  onClick={() => onViewChange('spor724')}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                    activeView === 'spor724' 
-                      ? 'bg-[#181c2b] text-white shadow-md' 
-                      : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Star className="w-5 h-5 text-zinc-400 shrink-0" />
-                    <span>Sık Kullanılanlar</span>
-                  </div>
-                </button>
+                <div className="nav-item" onClick={() => onViewChange('sports')}>
+                  <Star className="w-5 h-5 text-amber-400 mr-3" />
+                  Sık Kullanılanlar
+                </div>
 
-                <button 
-                  onClick={() => onViewChange('mybets')}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                    activeView === 'mybets' 
-                      ? 'bg-[#181c2b] text-white shadow-md' 
-                      : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Trophy className="w-5 h-5 text-zinc-400 shrink-0" />
-                    <span>Bahislerim</span>
-                  </div>
-                </button>
-
-                <button 
-                  onClick={() => onViewChange('gercek')}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                    (activeView === 'gercek' || activeView === 'spor724' || activeView === 'sports')
-                      ? 'bg-[#181c2b] text-white shadow-md' 
-                      : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Trophy className="w-5 h-5 text-emerald-400 shrink-0" />
-                    <span>Spor</span>
-                  </div>
-                  <span className="bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">
-                    CANLI & BÜLTEN
-                  </span>
-                </button>
-
-                <button 
-                  onClick={() => onViewChange('wheel')}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-sm transition-all ${
-                    (activeView === 'wheel' || activeView === 'luckywheel')
-                      ? 'bg-[#181c2b] text-white shadow-md' 
-                      : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
-                    <span>Şans Çarkı</span>
-                  </div>
-                </button>
+                <div className="nav-item" onClick={() => onViewChange('mybets')}>
+                  <Copy className="w-5 h-5 text-[#818cf8] mr-3" />
+                  Bahislerim
+                </div>
               </div>
 
               <div className="h-px bg-white/5 w-full my-2" />
 
-              {/* Spor Collapsible Accordion */}
-              <div className="space-y-1">
-                <button 
-                  onClick={() => setIsAllSportsOpen(!isAllSportsOpen)}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-[#64748b] hover:text-white transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Target className="w-4 h-4 text-amber-400" />
-                    <span>Spor</span>
+              {/* Accordions */}
+              <div className="px-3 space-y-1">
+                {/* Casino */}
+                <div>
+                  <div className="collapsible-header" onClick={() => setIsCasinoOpen(!isCasinoOpen)}>
+                    <div className="flex items-center gap-3">
+                      <Cherry className="w-5 h-5 text-zinc-400" />
+                      <span>CASİNO</span>
+                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_5px_rgba(16,185,129,0.5)]"></div>
+                    </div>
+                    {isCasinoOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </div>
-                  {isAllSportsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
+                  {isCasinoOpen && (
+                    <div className="pl-11 pr-2 pb-2 space-y-2">
+                      <div className="text-zinc-400 hover:text-white text-sm font-semibold cursor-pointer py-1" onClick={() => onViewChange('blackjack')}>Popüler Slotlar</div>
+                      <div className="text-zinc-400 hover:text-white text-sm font-semibold cursor-pointer py-1" onClick={() => onViewChange('blackjack')}>Canlı Casino</div>
+                      <div className="text-zinc-400 hover:text-white text-sm font-semibold cursor-pointer py-1" onClick={() => onViewChange('blackjack')}>Masa Oyunları</div>
+                    </div>
+                  )}
+                </div>
 
-                {isAllSportsOpen && (
-                  <div className="pl-2 space-y-1.5 pt-2 pb-1">
-                    {sportsListWithCounts.map((sport) => (
-                      <button
-                        key={sport.name}
-                        onClick={() => {
-                          setActiveSport(sport.name);
-                          onViewChange('spor724');
-                        }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 sm:py-3 rounded-xl text-sm transition-all ${
-                          activeSport === sport.name 
-                            ? 'bg-[#181c2b] text-white font-semibold shadow-md' 
-                            : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          {getSportIcon(sport.name)}
-                          <span className="truncate max-w-[150px] font-medium">{sport.name}</span>
-                        </div>
-                        <span className="text-xs text-[#94a3b8] font-bold px-2 py-0.5 rounded-md bg-[#131926] border border-[#1b2335] shrink-0 ml-1">{sport.count}</span>
-                      </button>
-                    ))}
+                <div className="h-px bg-white/5 w-[85%] mx-auto my-1" />
+
+                {/* Originals */}
+                <div>
+                  <div className="collapsible-header" onClick={() => setIsOriginalsOpen(!isOriginalsOpen)}>
+                    <div className="flex items-center gap-3">
+                      <Target className="w-5 h-5 text-zinc-400" />
+                      <span>ORİGİNALS</span>
+                    </div>
+                    {isOriginalsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </div>
-                )}
-              </div>
-
-              {/* Promosyonlar Collapsible Accordion */}
-              <div className="space-y-1">
-                <button 
-                  onClick={() => setIsPromosOpen(!isPromosOpen)}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-[#64748b] hover:text-white transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Percent className="w-4 h-4 text-emerald-400" />
-                    <span>Promosyonlar</span>
-                  </div>
-                  {isPromosOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
-
-                {isPromosOpen && (
-                  <div className="pl-2 space-y-0.5 pt-1">
-                    <button onClick={() => onViewChange('raffle')} className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-[#94a3b8] hover:text-white hover:bg-white/5 transition-all">
-                      <div className="flex items-center gap-2.5">
-                        <Gift className="w-4 h-4 text-amber-400" />
-                        <span>Haftalık Çekiliş</span>
+                  {isOriginalsOpen && (
+                    <div className="pl-11 pr-2 pb-2 space-y-2">
+                      <div className="text-zinc-400 hover:text-white text-sm font-semibold cursor-pointer py-1" onClick={() => onViewChange('originals')}>Plinko</div>
+                      <div className="text-zinc-400 hover:text-white text-sm font-semibold cursor-pointer py-1" onClick={() => onViewChange('originals')}>Crash</div>
+                      <div className="text-zinc-400 hover:text-white text-sm font-semibold cursor-pointer py-1" onClick={() => onViewChange('originals')}>Mines</div>
+                      <div className="text-fuchsia-400 hover:text-fuchsia-300 text-sm font-bold cursor-pointer py-1 flex items-center gap-2" onClick={() => onViewChange('retro-wheel')}>
+                        Çarkıfelek <span className="text-[10px] bg-fuchsia-500/20 px-1 rounded border border-fuchsia-500/50">YENİ</span>
                       </div>
-                    </button>
-                    <button onClick={() => onViewChange('raffle')} className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-[#94a3b8] hover:text-white hover:bg-white/5 transition-all">
-                      <div className="flex items-center gap-2.5">
-                        <Crown className="w-4 h-4 text-amber-400" />
-                        <span>VIP Bonusları</span>
-                      </div>
-                    </button>
-                  </div>
-                )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="h-px bg-white/5 w-[85%] mx-auto my-1" />
               </div>
 
-              <div className="h-px bg-white/5 w-full my-2" />
+              <div className="h-px bg-white/5 w-full my-4" />
 
-              {/* Bottom Menu Links */}
-              <div className="space-y-1 pt-1">
-                <button onClick={() => onViewChange('raffle')} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all text-[#94a3b8] hover:text-white hover:bg-white/5">
-                  <Gift className="w-5 h-5 shrink-0" />
-                  <span>Ödüller</span>
-                </button>
-                <button onClick={() => onViewChange('blog')} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all text-[#94a3b8] hover:text-white hover:bg-white/5">
-                  <FileText className="w-5 h-5 shrink-0" />
-                  <span>Blog</span>
-                </button>
-                <button onClick={() => window.dispatchEvent(new Event('openSupportChat'))} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all text-[#94a3b8] hover:text-white hover:bg-white/5">
-                  <Headphones className="w-5 h-5 shrink-0" />
-                  <span>Canlı Destek</span>
-                </button>
-                <button onClick={() => setIsLangOpen(!isLangOpen)} className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-all text-[#94a3b8] hover:text-white hover:bg-white/5">
-                  <div className="flex items-center gap-3">
-                    <Globe className="w-5 h-5 shrink-0" />
-                    <span>Dil: Türkçe</span>
+              {/* Footer Links */}
+              <div className="px-3 space-y-1 mt-2">
+                <div className="nav-item" onClick={() => onViewChange('rewards')}>
+                  <Gift className="w-5 h-5 text-[#0ea5e9] mr-3" />
+                  Ödüller
+                </div>
+                <div className="nav-item" onClick={() => onViewChange('loyalty')}>
+                  <Crown className="w-5 h-5 text-amber-500 mr-3" />
+                  VIP Kulübü
+                </div>
+                <div className="nav-item" onClick={() => window.dispatchEvent(new Event('openSupportChat'))}>
+                  <Headphones className="w-5 h-5 text-emerald-400 mr-3" />
+                  Canlı Destek
+                </div>
+                <div className="nav-item">
+                  <FileText className="w-5 h-5 text-zinc-400 mr-3" />
+                  Kurallar & Şartlar
+                </div>
+                
+                <div className="nav-item flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Globe className="w-5 h-5 text-zinc-400 mr-3" />
+                    Dil: Türkçe
                   </div>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
+                  <ChevronDown className="w-4 h-4 text-zinc-500" />
+                </div>
               </div>
-            </div>
-          )}
-
-          {/* Collapsed Sidebar Mode (Icons Only) */}
-          {!isOpen && (
-            <div className="flex flex-col items-center py-4 gap-4 w-full h-full bg-[#0b0e14] relative z-[100]">
-              <button onClick={onToggle} className="text-zinc-300 hover:text-white p-2 mb-2">
+            </>
+          ) : (
+            <div className="flex flex-col items-center py-4 gap-4 w-full h-full bg-[#050505] relative z-[100]">
+              <button onClick={onToggle} className="text-zinc-300 hover:text-[#10b981] p-2 mb-2">
                 <Menu size={24} />
               </button>
               
-              <button onClick={() => onViewChange('home')} className={`group relative w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${activeView === 'home' ? 'bg-[#181c2b] text-[#5b8def]' : 'text-[#94a3b8] hover:text-white hover:bg-white/5'}`}>
+              <button onClick={() => onViewChange('home')} className={`group relative w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${activeView === 'home' ? 'bg-[#181c2b] text-[#10b981]' : 'text-[#94a3b8] hover:text-[#10b981] hover:bg-white/5'}`}>
                 <Crown className="w-5 h-5" />
                 <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Anasayfa</div>
               </button>
-              <button onClick={() => onViewChange('gercek')} className={`group relative w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${(activeView === 'gercek' || activeView === 'spor724' || activeView === 'sports') ? 'bg-[#181c2b] text-[#5b8def]' : 'text-[#94a3b8] hover:text-white hover:bg-white/5'}`}>
-                <Trophy className="w-5 h-5 text-emerald-400" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Spor</div>
-              </button>
-              <button onClick={() => onViewChange('wheel')} className={`group relative w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${activeView === 'wheel' ? 'bg-[#181c2b] text-[#5b8def]' : 'text-[#94a3b8] hover:text-white hover:bg-white/5'}`}>
-                <Sparkles className="w-5 h-5 text-amber-400" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Şans Çarkı</div>
-              </button>
+              
               <div className="w-10 h-px bg-white/5 my-1"></div>
-              <button onClick={() => {onToggle(); setIsAllSportsOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-white hover:bg-white/5 transition-colors">
+              
+              <button onClick={() => {onToggle(); setIsCasinoOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:bg-white/5 transition-colors">
+                <Cherry className="w-5 h-5" />
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Casino</div>
+              </button>
+              <button onClick={() => {onToggle(); setIsOriginalsOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:bg-white/5 transition-colors">
                 <Target className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Spor</div>
+                <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Originals</div>
               </button>
-              <button onClick={() => {onToggle(); setIsPromosOpen(true);}} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-white hover:bg-white/5 transition-colors">
-                <Percent className="w-5 h-5" />
-                <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Promosyonlar</div>
-              </button>
+              
               <div className="w-10 h-px bg-white/5 my-1"></div>
-              <button onClick={() => window.dispatchEvent(new Event('openSupportChat'))} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-white hover:bg-white/5 transition-colors">
-                <Headphones className="w-5 h-5" />
+              
+              <button onClick={() => window.dispatchEvent(new Event('openSupportChat'))} className="group relative w-10 h-10 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#10b981] hover:bg-white/5 transition-colors">
+                <Headphones className="w-5 h-5 text-emerald-400" />
                 <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Canlı Destek</div>
               </button>
             </div>

@@ -660,4 +660,4 @@ supabase.channel('public:tv_chat')
     .subscribe();
 
 // Başlangıçta zamanlayıcıyı kur
-scheduleNextRain();
+// scheduleNextRain();

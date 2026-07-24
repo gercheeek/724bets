@@ -71,7 +71,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
     }
 ];
 
-export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string) => void }) {
+export default function OriginalsSlider({ onNavigate, guestTheme = "retro" }: { onNavigate: (v: string) => void, guestTheme?: "retro" | "luxury" }) {
   const { t } = useLanguage();
   const originalsData = getOriginalsData(t);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -165,7 +165,7 @@ export default function OriginalsSlider({ onNavigate }: { onNavigate: (v: string
                                 {/* Subtle Glass Highlight */}
                                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50 z-10 pointer-events-none mix-blend-overlay"></div>
                                 
-                                <img src={game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out z-0" />
+                                <img src={game.image} alt={game.name} className={`absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out z-0 ${guestTheme === "luxury" ? "opacity-90 saturate-75 group-hover:saturate-100 group-hover:opacity-100" : ""}`} />
                                 
                                 {/* Shine Effect */}
                                 <div className="absolute top-0 left-[-150%] w-[100%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-[30deg] group-hover:translate-x-[250%] transition-transform duration-[1.5s] ease-in-out z-20 pointer-events-none mobile-shine-anim"></div>
