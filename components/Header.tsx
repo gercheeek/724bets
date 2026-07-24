@@ -556,9 +556,10 @@ const Header: React.FC<HeaderProps> = ({
               </button>
               <button
                 onClick={onMemberRegisterClick}
-                className="flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 text-[#050505] shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-5 transition-all duration-300 whitespace-nowrap transform hover:-translate-y-0.5"
+                className="relative overflow-hidden group flex items-center justify-center bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#00E676] hover:to-[#10b981] border-none text-black shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:shadow-[0_0_35px_rgba(16,185,129,0.8)] rounded-lg font-black text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-5 md:px-6 transition-all duration-300 whitespace-nowrap transform hover:-translate-y-0.5 tracking-wider uppercase"
               >
-                Bonusla Başla
+                <span className="relative z-10 drop-shadow-md">Bonusla Başla</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
               </button>
             </div>
           )}

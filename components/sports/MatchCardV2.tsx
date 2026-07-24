@@ -21,13 +21,13 @@ export const MatchCardV2 = ({ match, onSelect }: MatchCardV2Props) => {
     return (
         <div 
             onClick={() => onSelect?.(match)}
-            className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-[#141621] hover:bg-[#1a1d2c] transition-colors border-b border-[#23273a] last:border-b-0 cursor-pointer group"
+            className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-[#101114] hover:bg-[#18191c] transition-colors border-b border-[#23273a] last:border-b-0 cursor-pointer group"
         >
             {/* Left side: Date and Teams */}
             <div className="flex flex-col mb-4 md:mb-0 md:w-1/2">
                 <div className="text-xs font-semibold mb-3">
                     {(match.isLive || (match.minute && match.minute !== "Live'" && match.minute !== "Bugün")) ? (
-                        <span className="text-red-500 animate-pulse">{match.minute || 'Live'}</span>
+                        <span className="text-[#10b981] animate-pulse">{match.minute || 'Live'}</span>
                     ) : (
                         <span className="text-zinc-500">{formattedDate}</span>
                     )}
@@ -73,15 +73,15 @@ export const MatchCardV2 = ({ match, onSelect }: MatchCardV2Props) => {
                 
                 {/* Odds Buttons */}
                 <div className="flex gap-2 w-full">
-                    <button className="flex-1 flex flex-col items-center justify-center bg-[#1c1e2d] hover:bg-[#25283d] border border-[#23273a] rounded-lg py-2 transition-colors">
+                    <button className="flex-1 flex flex-col items-center justify-center bg-[#18191c] hover:bg-[#25262b] border border-[#23273a] rounded-lg py-2 transition-colors">
                         <span className="text-[10px] text-zinc-400 font-semibold mb-0.5">1</span>
                         <span className="text-sm text-white font-bold">{ms1}</span>
                     </button>
-                    <button className="flex-1 flex flex-col items-center justify-center bg-[#1c1e2d] hover:bg-[#25283d] border border-[#23273a] rounded-lg py-2 transition-colors mx-1">
+                    <button className="flex-1 flex flex-col items-center justify-center bg-[#18191c] hover:bg-[#25262b] border border-[#23273a] rounded-lg py-2 transition-colors mx-1">
                         <span className="text-[10px] text-zinc-400 font-semibold mb-0.5">X</span>
                         <span className="text-sm text-white font-bold">{msx}</span>
                     </button>
-                    <button className="flex-1 flex flex-col items-center justify-center bg-[#1c1e2d] hover:bg-[#25283d] border border-[#23273a] rounded-lg py-2 transition-colors">
+                    <button className="flex-1 flex flex-col items-center justify-center bg-[#18191c] hover:bg-[#25262b] border border-[#23273a] rounded-lg py-2 transition-colors">
                         <span className="text-[10px] text-zinc-400 font-semibold mb-0.5">2</span>
                         <span className="text-sm text-white font-bold">{ms2}</span>
                     </button>

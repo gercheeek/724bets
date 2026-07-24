@@ -101,10 +101,10 @@ export default function LiveWinsTicker({ guestTheme = "retro" }: { guestTheme?: 
 
   return (
     <div className="w-full flex flex-col mb-1 relative">
-      <div className="w-full relative flex items-center bg-transparent overflow-hidden pt-4 pb-2">
+      <div className="w-full relative flex items-center bg-transparent overflow-hidden pt-7 pb-3">
         
         {/* Canlı Kazançlar Badge top left */}
-        <div className="absolute top-0 left-4 flex items-center gap-1.5 z-10 bg-black/40 px-2 py-0.5 rounded-full border border-white/5 backdrop-blur-md">
+        <div className="absolute top-0 left-4 md:left-6 flex items-center gap-1.5 z-10 bg-black/40 px-2 py-0.5 rounded-full border border-white/5 backdrop-blur-md">
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>

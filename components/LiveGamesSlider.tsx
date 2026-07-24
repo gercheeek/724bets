@@ -156,7 +156,7 @@ export default function LiveGamesSlider({ onPlayGame }: LiveGamesSliderProps) {
             <div className={`absolute inset-0 bg-gradient-to-t ${game.gradient} via-transparent to-transparent opacity-90`}></div>
             
             {/* Top Left Badges */}
-            <div className="absolute top-2 left-2 flex flex-col gap-1 items-start z-10">
+            <div className="absolute top-1 left-1 md:top-2 md:left-2 scale-90 origin-top-left flex flex-col gap-1 items-start z-10">
               {game.isExclusive && (
                 <div className="bg-[#10b981] text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider shadow-lg">
                   ÖZEL
@@ -168,7 +168,7 @@ export default function LiveGamesSlider({ onPlayGame }: LiveGamesSliderProps) {
             </div>
 
             {/* Top Right Heart & Viewers */}
-            <div className="absolute top-2 right-2 flex flex-col items-center gap-0.5 z-10">
+            <div className="absolute top-1 right-1 md:top-2 md:right-2 scale-90 origin-top-right flex flex-col items-center gap-0.5 z-10">
               <div className="bg-black/40 backdrop-blur-md rounded-md p-1 border border-white/10 hover:bg-black/60 transition-colors">
                 <Heart className="w-4 h-4 text-gray-300 group-hover:text-white transition-colors" />
               </div>

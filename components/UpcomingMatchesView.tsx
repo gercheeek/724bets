@@ -216,7 +216,7 @@ export const UpcomingMatchesView: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar relative z-10" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
         
         {/* Top Navbar */}
-        <div className="sticky top-0 z-50 bg-[#111111] border-b border-white/5 px-4 py-3 flex items-center justify-between shadow-sm">
+        <div className="sticky top-0 z-50 bg-[#18191c] border-b border-white/5 px-4 py-3 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-sm bg-[#10b981]"></div>
             <h1 className="text-white font-bold text-[15px] tracking-wide">
@@ -248,8 +248,8 @@ export const UpcomingMatchesView: React.FC = () => {
                    onClick={() => setActiveSport(sport)}
                    className={`flex flex-col items-center justify-center gap-1.5 min-w-[70px] h-[70px] rounded-lg transition-all ${
                      isActive 
-                     ? 'bg-[#10b981] text-white shadow-[0_4px_12px_rgba(16,185,129,0.3)] border border-[#10b981]' 
-                     : 'bg-[#111111] text-slate-400 hover:bg-white/[0.05] hover:text-gray-200 border border-white/5'
+                     ? 'bg-[#10b981] text-black shadow-md font-bold border-none' 
+                     : 'bg-[#18191c] text-slate-400 hover:bg-white/[0.05] hover:text-gray-200 border border-white/5'
                    }`}
                  >
                    {getSportIcon(sport)}
@@ -282,10 +282,10 @@ export const UpcomingMatchesView: React.FC = () => {
             return (
               <div key={league} className="mb-6">
                 {/* League Header */}
-                <div className="flex items-center justify-between px-3 py-2 bg-white/[0.02] rounded-t-lg border-b border-white/5">
+                <div className="flex items-center justify-between px-3 py-2.5 bg-[#18191c] rounded-t-xl border-t border-t-purple-500/30 border-b border-b-white/5 shadow-[0_-4px_20px_rgba(168,85,247,0.05)]">
                   <div className="flex items-center gap-2">
                     <span className="text-[14px]">{flag}</span>
-                    <span className="text-[12px] font-bold text-white tracking-wide uppercase">
+                    <span className="text-[12px] font-black text-transparent bg-clip-text bg-gradient-to-r from-[#a855f7] to-[#d946ef]  tracking-wide uppercase">
                       {activeSport} - {league}
                     </span>
                   </div>
@@ -298,7 +298,7 @@ export const UpcomingMatchesView: React.FC = () => {
                 </div>
 
                 {/* Match Rows */}
-                <div className="flex flex-col border border-white/5 rounded-b-lg overflow-hidden bg-[#111111]">
+                <div className="flex flex-col border border-white/5 border-t-0 rounded-b-xl overflow-hidden bg-[#18191c] shadow-xl">
                   {matchesInLeague.map((match, idx) => {
                     const isLast = idx === matchesInLeague.length - 1;
                     
@@ -313,7 +313,7 @@ export const UpcomingMatchesView: React.FC = () => {
                     return (
                       <div 
                         key={match.id} 
-                        className={`flex items-center px-3 py-3 hover:bg-white/[0.03] transition-colors ${!isLast ? 'border-b border-white/5' : ''}`}
+                        className={`flex items-center px-3 py-3 hover:bg-[#10b981]/5 hover:shadow-[inset_2px_0_0_#10b981] transition-all duration-300 cursor-pointer ${!isLast ? 'border-b border-white/5' : ''}`}
                       >
                         {/* Time */}
                         <div className="flex flex-col w-[70px] shrink-0">
@@ -358,7 +358,7 @@ export const UpcomingMatchesView: React.FC = () => {
                                   <button 
                                     key={oddType}
                                     onClick={() => handleBetClick(oddId || '', oddValue, oddType)}
-                                    className={`w-[45px] h-[32px] rounded border flex items-center justify-center transition-colors ${isSelected(oddId || '') ? 'bg-[#10b981]/10 border-[#10b981]/50 text-white shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'border-white/5 bg-white/[0.03] text-gray-300 hover:bg-white/[0.06] hover:border-white/[0.1] hover:text-[#10b981]'}`}
+                                    className={`w-[45px] h-[32px] rounded border flex items-center justify-center transition-colors ${isSelected(oddId || '') ? 'bg-[#10b981] text-black font-bold shadow-md border-none' : 'border-white/5 bg-[#25262b] text-white hover:bg-[#10b981]/10 hover:border-[#10b981]/50 hover:text-[#10b981] group/odd transition-all duration-300'}`}
                                   >
                                     <span className="text-[11px] font-bold tabular-nums">{oddValue}</span>
                                   </button>
@@ -374,8 +374,8 @@ export const UpcomingMatchesView: React.FC = () => {
                           )}
 
                           {/* More */}
-                          <button className="w-[50px] h-[32px] rounded border border-[#10b981]/30 bg-[#10b981]/10 flex items-center justify-center hover:bg-[#10b981]/20 transition-colors">
-                            <span className="text-[10px] font-bold text-[#10b981] tabular-nums">+{match.marketsCount}</span>
+                          <button className="w-[50px] h-[32px] rounded border border-purple-500/30 bg-purple-500/10 flex items-center justify-center hover:bg-purple-500/20 hover:border-purple-500/50 transition-colors">
+                            <span className="text-[10px] font-bold text-purple-400 tabular-nums">+{match.marketsCount}</span>
                           </button>
                         </div>
                       </div>

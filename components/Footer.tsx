@@ -95,7 +95,7 @@ const Footer: React.FC = () => {
               <span className="text-slate-300 font-bold text-xs tracking-wider">GAMBLEAWARE</span>
             </div>
             <p className="text-slate-500 text-[10px] leading-relaxed lg:text-right">
-              Kumar bağımlılık yapabilir. Lütfen sınırlarınızı bilin ve sorumlu bir şekilde oynayın. Yardım için <a href="#" className="text-white underline hover:text-emerald-500">destek kurumlarına</a> başvurabilirsiniz.
+              Kumar bağımlılık yapabilir. Lütfen sınırlarınızı bilin ve sorumlu bir şekilde oynayın. Yardım için <a href="https://www.begambleaware.org/" target="_blank" rel="noopener noreferrer" className="text-white underline hover:text-emerald-500">destek kurumlarına</a> başvurabilirsiniz.
             </p>
           </div>
         </div>
@@ -103,9 +103,15 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-8">
-            {['KULLANIM ŞARTLARI', 'GİZLİLİK POLİTİKASI', 'SORUMLU OYUN', 'KYC POLİTİKASI', 'AML POLİTİKASI'].map(link => (
-              <a key={link} href="#" className="text-slate-500 text-[11px] font-bold tracking-widest hover:text-white transition-colors">
-                {link}
+            {[
+              { label: 'KULLANIM ŞARTLARI', path: '/terms' },
+              { label: 'GİZLİLİK POLİTİKASI', path: '/privacy' },
+              { label: 'SORUMLU OYUN', path: '/responsible' },
+              { label: 'KYC POLİTİKASI', path: '/kyc' },
+              { label: 'AML POLİTİKASI', path: '/aml' }
+            ].map(link => (
+              <a key={link.label} href={link.path} onClick={(e) => e.preventDefault()} className="text-slate-500 text-[11px] font-bold tracking-widest hover:text-white transition-colors">
+                {link.label}
               </a>
             ))}
           </div>

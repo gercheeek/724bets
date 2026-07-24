@@ -35,7 +35,7 @@ export const SportsNavV2 = ({ activeTab, onTabChange, activeSport, onSportChange
     return (
         <div className="w-full flex flex-col">
             {/* Top Navigation Row */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#2a2e45]/50 bg-[#16192b]">
+            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#2a2e45]/50 bg-[#18191c]">
                 <div className="flex items-center overflow-x-auto no-scrollbar pl-4 md:pl-6">
                     {tabs.map((tab) => (
                         <button
@@ -58,14 +58,14 @@ export const SportsNavV2 = ({ activeTab, onTabChange, activeSport, onSportChange
                         <input
                             type="text"
                             placeholder={language === 'tr' ? 'Ara...' : 'Search'}
-                            className="bg-[#0f121d] text-sm text-white rounded-full pl-9 pr-4 py-2 w-full md:w-64 border border-[#2a2e45]/50 focus:border-yellow-500/50 outline-none transition-all placeholder:text-zinc-600"
+                            className="bg-[#101114] text-sm text-white rounded-full pl-9 pr-4 py-2 w-full md:w-64 border border-[#2a2e45]/50 focus:border-yellow-500/50 outline-none transition-all placeholder:text-zinc-600"
                         />
                     </div>
                 </div>
             </div>
 
             {/* Sub Navigation Row */}
-            <div className="flex items-center overflow-x-auto no-scrollbar bg-[#1c2033] border-b border-[#2a2e45]/50 px-4 md:px-6 py-2">
+            <div className="flex items-center overflow-x-auto no-scrollbar bg-[#25262b] border-b border-[#2a2e45]/50 px-4 md:px-6 py-2">
                 {sports.map((sport) => (
                     <button
                         key={sport.id}

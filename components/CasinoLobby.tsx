@@ -422,7 +422,13 @@ export default function CasinoLobby({
     path: game.path
   }));
 
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState(initialTab || 'all');
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentBanner, setCurrentBanner] = useState(0);
   const [selectedGame, setSelectedGame] = useState<any>(null);

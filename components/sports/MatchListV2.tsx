@@ -25,7 +25,7 @@ export const MatchListV2 = ({ leagueName, matches, onSelectMatch }: MatchListV2P
             </div>
             
             {/* Matches Container */}
-            <div className="bg-[#141621] rounded-xl overflow-hidden border border-[#23273a] shadow-lg">
+            <div className="bg-[#101114] rounded-xl overflow-hidden border border-[#23273a] shadow-lg">
                 {matches.map(match => (
                     <MatchCardV2 
                         key={match.id} 
@@ -35,7 +35,7 @@ export const MatchListV2 = ({ leagueName, matches, onSelectMatch }: MatchListV2P
                 ))}
                 
                 {/* See All footer */}
-                <div className="p-3 bg-[#1c1e2d]/50 hover:bg-[#1c1e2d] border-t border-[#23273a] text-center cursor-pointer transition-colors">
+                <div className="p-3 bg-[#18191c]/50 hover:bg-[#18191c] border-t border-[#23273a] text-center cursor-pointer transition-colors">
                     <span className="text-xs font-semibold text-zinc-400">
                         {language === 'tr' ? 'Tümünü Gör' : 'See All'}
                     </span>

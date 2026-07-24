@@ -410,9 +410,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                                                 <div className="relative flex items-center justify-center w-5 h-5 rounded bg-[#10b981] shrink-0 mt-0.5">
                                                     <svg className="w-3.5 h-3.5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                 </div>
-                                                <p className="text-[13px] text-zinc-300 font-medium">
-                                                    18 yaşından büyüğüm, Kullanım Şartlarını okudum ve kabul ediyorum <a href="#" className="text-[#10b981] hover:underline">Şartlar ve Koşullar</a>
-                                                </p>
+                                                <span className="text-zinc-400 text-xs">
+                                                    18 yaşından büyüğüm, Kullanım Şartlarını okudum ve kabul ediyorum <a href="/terms" onClick={(e) => e.preventDefault()} className="text-[#10b981] hover:underline">Şartlar ve Koşullar</a>
+                                                </span>
                                             </label>
                                         </>
                                     )}

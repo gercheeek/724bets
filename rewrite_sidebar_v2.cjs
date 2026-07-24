@@ -1,141 +1,24 @@
-import React, { useState } from 'react';
-import {
-  Menu, Trophy, Star, 
-  Target, Gift, Ticket, Globe, 
-  Crown, ChevronDown, ChevronUp, Sparkles, Cherry, Percent, Headphones, FileText, Copy, Radio, Flame, LayoutDashboard, Gamepad2, Zap, Diamond, Calendar, Tv, Dices, ChevronLeft } from 'lucide-react';
-import { NavVisibility } from './Header';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useBetting } from '../contexts/BettingContext';
+const fs = require('fs');
 
-interface SidebarProps {
-  isOpen: boolean;
-  onToggle: () => void;
-  activeView: string;
-  onViewChange: (view: string) => void;
-  userRole?: string | null;
-  navVisibility?: NavVisibility;
-  onStartTour?: () => void;
+let content = fs.readFileSync('components/Sidebar.tsx', 'utf8');
+
+// Ensure Menu, ChevronLeft are imported
+if (!content.includes('ChevronLeft')) {
+    content = content.replace("from 'lucide-react';", "ChevronLeft } from 'lucide-react';");
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  isOpen,
-  onToggle,
-  activeView,
-  onViewChange,
-}) => {
-  const { t } = useLanguage();
-  const { setActiveSport } = useBetting();
+const startTag = "          {isOpen ? (";
+const endTag = "        </div>\n      </div>\n    </>\n  );\n};\n\nexport default Sidebar;";
 
-  const [activeTab, setActiveTab] = useState<'casino' | 'spor'>('casino');
-  
-  // Accordion states
-  const [isCasinoOpen, setIsCasinoOpen] = useState(false);
-  const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
-  const [isPromosOpen, setIsPromosOpen] = useState(false);
+const startIdx = content.indexOf(startTag);
+const endIdx = content.indexOf(endTag);
 
-  const isRetroVIP = activeView === 'raffle' || activeView === 'originals' || activeView === 'vip';
+if (startIdx === -1 || endIdx === -1) {
+    console.error("Could not find boundaries");
+    process.exit(1);
+}
 
-  return (
-    <>
-      <style>{`
-        .navy-sidebar-container {
-          width: 100%;
-          background-color: #050505;
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          position: relative;
-          z-index: 10;
-          color: #d4d4d8;
-        }
-        .navy-sidebar-inner {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          overflow-x: hidden;
-          overflow-y: auto;
-          scrollbar-width: thin;
-          scrollbar-color: rgba(255,255,255,0.1) transparent;
-        }
-        .navy-sidebar-inner::-webkit-scrollbar {
-          width: 4px;
-        }
-        .navy-sidebar-inner::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .navy-sidebar-inner::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.12);
-          border-radius: 4px;
-        }
-        .navy-sidebar-inner::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.25);
-        }
-        .nav-item {
-          display: flex;
-          align-items: center;
-          padding: 12px 16px;
-          border-radius: 8px;
-          font-weight: 700;
-          font-size: 14px;
-          color: #94a3b8;
-          transition: all 0.2s;
-          cursor: pointer;
-        }
-        .nav-item:hover {
-          color: #fff;
-          background: rgba(255, 255, 255, 0.03);
-        }
-        .nav-item.active {
-          color: #fff;
-          background: linear-gradient(to right, rgba(16,185,129,0.08) 0%, transparent 100%);
-          border-left: 3px solid #10b981;
-          box-shadow: inset 15px 0 20px -15px rgba(16,185,129,0.2);
-          border-top-left-radius: 2px;
-          border-bottom-left-radius: 2px;
-        }
-        .retro-vip-active .nav-item.active {
-          background-color: rgba(0, 255, 255, 0.1) !important;
-          border-left: 3px solid #00ffff !important;
-          color: #00ffff !important;
-          font-family: monospace;
-          text-shadow: 0 0 5px #00ffff;
-        }
-        .retro-vip-active .nav-item.active svg {
-          color: #ff00ff !important;
-        }
-        .retro-vip-active .nav-item {
-          font-family: monospace;
-        }
-        .collapsible-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 14px 16px;
-          font-weight: 800;
-          font-size: 12px;
-          color: #64748b;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-          cursor: pointer;
-          transition: color 0.2s;
-        }
-        .collapsible-header:hover {
-          color: #fff;
-        }
-        .retro-vip-active-container {
-          background: repeating-linear-gradient(to bottom, rgba(0, 255, 255, 0.03) 0px, rgba(0, 255, 255, 0.03) 1px, #050510 1px, #050510 3px), linear-gradient(180deg, #0a0a1a 0%, #03030a 100%) !important;
-          border-right: 1px solid rgba(255, 0, 255, 0.2) !important;
-        }
-      `}</style>
-
-      {/* Mobile Overlay */}
-      <div className="sidebar-overlay" onClick={onToggle} style={{ display: 'none' }} />
-
-      <div className={`navy-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'} ${isRetroVIP ? 'retro-vip-active retro-vip-active-container' : ''}`}>
-        <div className="navy-sidebar-inner pb-6">
-          
-          {isOpen ? (
+const newMenu = `          {isOpen ? (
             <div className="flex flex-col h-full">
               {/* Toggle Button */}
               <div className="flex justify-end p-2 border-b border-white/5">
@@ -148,8 +31,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                 {/* SPOR GRUBU */}
                 <div className="text-[10px] font-bold text-zinc-500 tracking-widest pl-2 mb-2 whitespace-nowrap">SPOR</div>
                 
-                <div className={`nav-item ${activeView === 'home' ? 'active' : ''}`} onClick={() => onViewChange('home')}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner transition-colors ${activeView === 'home' ? 'bg-emerald-500/20 border border-emerald-500/30' : 'bg-[#131313] border border-white/5 group-hover:bg-[#1a1a1a]'}`}><LayoutDashboard className={`w-4 h-4 ${activeView === 'home' ? 'text-emerald-400' : 'text-zinc-400'}`} /></div>
+                <div className={\`nav-item \${activeView === 'home' ? 'active' : ''}\`} onClick={() => onViewChange('home')}>
+                  <div className={\`w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner transition-colors \${activeView === 'home' ? 'bg-emerald-500/20 border border-emerald-500/30' : 'bg-[#131313] border border-white/5 group-hover:bg-[#1a1a1a]'}\`}><LayoutDashboard className={\`w-4 h-4 \${activeView === 'home' ? 'text-emerald-400' : 'text-zinc-400'}\`} /></div>
                   Anasayfa
                 </div>
 
@@ -232,7 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </button>
               
               <div className="flex-1 space-y-4 w-full flex flex-col items-center">
-                <button onClick={() => onViewChange('home')} className={`group relative w-11 h-11 rounded-xl flex items-center justify-center transition-all ${activeView === 'home' ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-[#131313] border border-white/5 text-zinc-400 hover:bg-[#1a1a1a] hover:text-white shadow-inner'}`}>
+                <button onClick={() => onViewChange('home')} className={\`group relative w-11 h-11 rounded-xl flex items-center justify-center transition-all \${activeView === 'home' ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-[#131313] border border-white/5 text-zinc-400 hover:bg-[#1a1a1a] hover:text-white shadow-inner'}\`}>
                   <LayoutDashboard className="w-5 h-5" />
                   <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Anasayfa</div>
                 </button>
@@ -258,10 +141,8 @@ const Sidebar: React.FC<SidebarProps> = ({
               </div>
             </div>
           )}
-        </div>
-      </div>
-    </>
-  );
-};
+`;
 
-export default Sidebar;
+const newContent = content.substring(0, startIdx) + newMenu + endTag;
+fs.writeFileSync('components/Sidebar.tsx', newContent);
+console.log("Success");

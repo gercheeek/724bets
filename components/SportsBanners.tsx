@@ -41,7 +41,7 @@ const banners = [
     id: 'crypto_vip',
     bgImage: 'https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=800&auto=format&fit=crop',
     title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-600 drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]">KRİPTOYA ÖZEL</span> %300 BONUS</>,
-    subtitle: <span className="text-[#94a3b8]">Kripto ile yatır, limitlere takılma, <span className="text-[#00E701] font-bold drop-shadow-[0_0_8px_rgba(0,231,1,0.5)]">%300 bonusu kap!</span></span>,
+    subtitle: <span className="text-[#94a3b8]">Kripto ile yatır, limitlere takılma, <span className="text-white font-black drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">%300 bonusu kap!</span></span>,
     buttonText: 'HEMEN YATIR',
     accentColor: 'from-yellow-500/20 to-amber-600/20',
     borderColor: 'border-yellow-500',
@@ -69,10 +69,10 @@ const SportsBanners: React.FC = () => {
   const renderBannerContent = (banner: any) => (
     <>
       {/* Background Image Container */}
-      <div className="absolute inset-0 z-0 flex justify-end">
-        <div className="w-[90%] md:w-[75%] h-full relative">
-          {/* Soft mask to blend the left edge of the image smoothly */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/60 to-transparent z-10 w-[50%] md:w-[40%]"></div>
+      <div className="absolute inset-0 z-0">
+        <div className="w-full h-full relative">
+          {/* Strong mask on the left to cover the image under the text */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent z-10 w-[80%] md:w-[60%]"></div>
           
           <img 
             src={banner.bgImage} 
@@ -89,7 +89,7 @@ const SportsBanners: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-20 p-6 md:p-12 flex flex-col justify-center h-full w-[95%] md:w-[60%] lg:w-[50%] gap-3 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent">
+      <div className="relative z-20 p-6 md:p-12 flex flex-col justify-center h-full w-[95%] md:w-[70%] lg:w-[50%] gap-3">
         <div className="flex flex-col transform group-hover:translate-x-2 transition-transform duration-700">
           <h3 className="text-white text-[24px] md:text-[40px] lg:text-[48px] font-black leading-[1.1] mb-2 md:mb-4 font-['Outfit'] drop-shadow-lg tracking-tight">
             {banner.title}
@@ -102,7 +102,7 @@ const SportsBanners: React.FC = () => {
         <div className="mt-2 md:mt-4 transform group-hover:translate-x-2 transition-transform duration-700 delay-75">
           <button 
             onClick={handleRegisterClick}
-            className={`relative overflow-hidden group/btn bg-black/60 border border-white/20 hover:${banner.borderColor} ${banner.hoverBg} text-white font-bold px-8 py-3 md:px-10 md:py-4 text-[12px] md:text-[14px] tracking-[0.15em] rounded-xl transition-all duration-300 shadow-lg ${banner.hoverShadow} flex items-center justify-center uppercase w-max`}
+            className={`relative overflow-hidden group/btn bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#00E676] hover:to-[#10b981] text-black border-none shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] font-bold px-8 py-3 md:px-10 md:py-4 text-[12px] md:text-[14px] tracking-[0.15em] rounded-xl transition-all duration-300 shadow-lg ${banner.hoverShadow} flex items-center justify-center uppercase w-max`}
           >
             <span className="relative z-10">{banner.buttonText}</span>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
@@ -113,28 +113,27 @@ const SportsBanners: React.FC = () => {
   );
 
   return (
-    <div className="w-full relative h-[200px] md:h-[280px] lg:h-[340px] rounded-[20px] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.6)] border border-white/5 bg-[#050505]">
+    <div className="w-full relative h-[160px] md:h-[220px] lg:h-[260px] rounded-[20px] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.6)]  bg-[#050505]">
       {banners.map((banner, index) => (
         <div 
           key={banner.id}
           onClick={handleRegisterClick}
-          className={`absolute inset-0 w-full h-full cursor-pointer transition-opacity duration-1000 ease-in-out group ${
-            index === activeIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-          }`}
+          className={`absolute inset-0 w-full h-full cursor-pointer transition-all duration-1000 ease-in-out group ${index === activeIndex ? 'opacity-100 pointer-events-auto visible z-10' : 'opacity-0 pointer-events-none invisible z-0'}`}
+          
         >
            {renderBannerContent(banner)}
         </div>
       ))}
       
       {/* Premium Pagination Dots */}
-      <div className="absolute bottom-4 md:bottom-6 left-6 md:left-12 flex gap-2 z-30">
+      <div className="absolute bottom-8 md:bottom-12 left-6 md:left-12 flex gap-2 z-30">
         {banners.map((_, idx) => (
            <button 
              key={idx} 
              onClick={(e) => { e.stopPropagation(); setActiveIndex(idx); }}
              className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ${
                idx === activeIndex 
-                 ? 'w-8 md:w-12 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]' 
+                 ? 'w-8 md:w-12 bg-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.9)]' 
                  : 'w-2 bg-white/30 hover:bg-white/60'
              }`} 
            />

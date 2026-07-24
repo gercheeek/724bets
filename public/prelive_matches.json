@@ -1,55 +1,5 @@
 [
   {
-    "id": "30371995",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Eyüpspor",
-        "away": "İstanbulspor A.Ş."
-      },
-      "start_time": "2026-07-24T15:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30371996",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Rosenborg",
-        "away": "Manchester United"
-      },
-      "start_time": "2026-07-24T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
     "id": "30376560",
     "data": {
       "status": "not_started",
@@ -67,31 +17,6 @@
         "away": "AC Monza"
       },
       "start_time": "2026-07-24T18:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30376619",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Bournemouth",
-        "away": "St. Pauli"
-      },
-      "start_time": "2026-07-24T14:00:00.000Z",
       "group_markets": {
         "full_event|0": [
           "|1x2|~home~1.85!~draw~3.40!~away~3.80"
@@ -225,56 +150,6 @@
     }
   },
   {
-    "id": "30376682",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Al-Hilal Riyadh",
-        "away": "Mamelodi Sundowns"
-      },
-      "start_time": "2026-07-24T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30376684",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Derby County",
-        "away": "Freiburg"
-      },
-      "start_time": "2026-07-24T14:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
     "id": "30378420",
     "data": {
       "status": "not_started",
@@ -292,231 +167,6 @@
         "away": "Sunderland  "
       },
       "start_time": "2026-07-25T22:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378888",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Sportfreu. Lotte",
-        "away": "Werder Bremen II"
-      },
-      "start_time": "2026-07-24T15:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378889",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Austria Wien II",
-        "away": "Junge Wikinger Ried"
-      },
-      "start_time": "2026-07-24T15:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378891",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "MUKS Sokol Kolbuszowa Dolna",
-        "away": "Czarni Polaniec"
-      },
-      "start_time": "2026-07-24T15:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378892",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Aubagne FC",
-        "away": "SPC Bastia"
-      },
-      "start_time": "2026-07-24T15:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378893",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "NK Triglav Kranj",
-        "away": "HNK Segesta Sisak"
-      },
-      "start_time": "2026-07-24T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378894",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "US Cremonese",
-        "away": "AS Giana Erminio"
-      },
-      "start_time": "2026-07-24T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378895",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Birzebbuga St. Peters FC",
-        "away": "Balzan FC"
-      },
-      "start_time": "2026-07-24T16:15:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378896",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "LAC Inter",
-        "away": "Favoritner AC"
-      },
-      "start_time": "2026-07-24T16:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30378898",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "SV Langenrohr",
-        "away": "TWL Elektra"
-      },
-      "start_time": "2026-07-24T16:30:00.000Z",
       "group_markets": {
         "full_event|0": [
           "|1x2|~home~1.85!~draw~3.40!~away~3.80"
@@ -875,56 +525,6 @@
     }
   },
   {
-    "id": "30380053",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Feignies Aulnoye FC",
-        "away": "Royal Francs-Borains"
-      },
-      "start_time": "2026-07-24T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30380597",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "SV Gloggnitz",
-        "away": "Rapid Wien II"
-      },
-      "start_time": "2026-07-24T15:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
     "id": "30381188",
     "data": {
       "status": "not_started",
@@ -1225,31 +825,6 @@
     }
   },
   {
-    "id": "30384765",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "FC Gleisdorf 09",
-        "away": "SK Sturm Graz II"
-      },
-      "start_time": "2026-07-24T16:30:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
     "id": "30384842",
     "data": {
       "status": "not_started",
@@ -1267,31 +842,6 @@
         "away": "FC Sudtirol"
       },
       "start_time": "2026-07-25T09:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30385287",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "KS Gedania 1922",
-        "away": "MKS Czarni Pruszcz Gdanski"
-      },
-      "start_time": "2026-07-24T16:00:00.000Z",
       "group_markets": {
         "full_event|0": [
           "|1x2|~home~1.85!~draw~3.40!~away~3.80"
@@ -1341,7 +891,7 @@
         "home": "Wolverhampton Wanderers",
         "away": "Real Sociedad"
       },
-      "start_time": "2026-07-25T16:00:00.000Z",
+      "start_time": "2026-07-25T15:00:00.000Z",
       "group_markets": {
         "full_event|0": [
           "|1x2|~home~1.85!~draw~3.40!~away~3.80"
@@ -1350,7 +900,7 @@
     }
   },
   {
-    "id": "30386365",
+    "id": "30386271",
     "data": {
       "status": "not_started",
       "sport": {
@@ -1363,10 +913,135 @@
         "name": "Avrupa"
       },
       "participants": {
-        "home": "Arminia Bielefeld",
-        "away": "MSV Duisburg"
+        "home": "FC Stubai",
+        "away": "WSG Tirol II"
+      },
+      "start_time": "2026-07-25T08:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30386402",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Bromley",
+        "away": "Crystal Palace "
+      },
+      "start_time": "2026-07-25T14:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30288321",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "ASEAN Şampiyonası"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Myanmar",
+        "away": "Malezya"
+      },
+      "start_time": "2026-07-25T10:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30369333",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "CECAFA Kulüpler Kupası"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "APR FC Kigali",
+        "away": "Gor Mahia"
+      },
+      "start_time": "2026-07-24T17:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30377566",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "CECAFA Kulüpler Kupası"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Singida Black Stars SC",
+        "away": "Jamus FC"
       },
       "start_time": "2026-07-25T13:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30378499",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "CECAFA Kulüpler Kupası"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Simba SC",
+        "away": "Mogadishu City Club"
+      },
+      "start_time": "2026-07-25T16:00:00.000Z",
       "group_markets": {
         "full_event|0": [
           "|1x2|~home~1.85!~draw~3.40!~away~3.80"
@@ -1867,31 +1542,6 @@
         "away": "KÍ Klaksvík"
       },
       "start_time": "2026-07-29T16:00:00.000Z",
-      "group_markets": {
-        "full_event|0": [
-          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30353349",
-    "data": {
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Şampiyonlar Ligi Elemeleri"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "AC Sparta Prag",
-        "away": "Olympique Lyonnais"
-      },
-      "start_time": "2026-08-04T17:00:00.000Z",
       "group_markets": {
         "full_event|0": [
           "|1x2|~home~1.85!~draw~3.40!~away~3.80"
@@ -3242,6 +2892,381 @@
         "away": "Mgarr United FC (Kadınlar)"
       },
       "start_time": "2026-07-25T17:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30295095",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Sudamericana"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "CA Tigre BA",
+        "away": "Club Nacional  "
+      },
+      "start_time": "2026-07-28T22:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30301795",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Sudamericana"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "CR Vasco da Gama",
+        "away": "Medellín"
+      },
+      "start_time": "2026-07-29T22:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30311387",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Sudamericana"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Grêmio FB Porto Alegrense",
+        "away": "Club Bolívar"
+      },
+      "start_time": "2026-07-30T22:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30311388",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Sudamericana"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "RB Bragantino",
+        "away": "Sporting Cristal"
+      },
+      "start_time": "2026-07-29T20:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30311389",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Sudamericana"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Cienciano del Cusco",
+        "away": "CA Lanus"
+      },
+      "start_time": "2026-07-29T20:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30320417",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Sudamericana"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "O´Higgins FC",
+        "away": "Boca Juniors"
+      },
+      "start_time": "2026-07-31T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30375692",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Sudamericana"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Santos SP",
+        "away": "UCV FC"
+      },
+      "start_time": "2026-07-29T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29966477",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Libertadores"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Fluminense",
+        "away": "Independiente Rivadavia"
+      },
+      "start_time": "2026-08-11T22:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29966478",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Libertadores"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "CA Platense Buenos Aires",
+        "away": "Coquimbo Unido"
+      },
+      "start_time": "2026-08-12T22:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29966479",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Libertadores"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Estudiantes  La Plata",
+        "away": "CD Universidad Catolica"
+      },
+      "start_time": "2026-08-12T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29966480",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Libertadores"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Deportes Tolima",
+        "away": "Independiente del Valle"
+      },
+      "start_time": "2026-08-12T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29966481",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Libertadores"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "SE Palmeiras",
+        "away": "Cerro Porteno"
+      },
+      "start_time": "2026-08-12T22:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29966482",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Libertadores"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Mirassol FC",
+        "away": "LDU Quito"
+      },
+      "start_time": "2026-08-13T22:00:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29966483",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Libertadores"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "CA Rosario Central",
+        "away": "Corinthians SP"
+      },
+      "start_time": "2026-08-14T00:30:00.000Z",
+      "group_markets": {
+        "full_event|0": [
+          "|1x2|~home~1.85!~draw~3.40!~away~3.80"
+        ]
+      }
+    }
+  },
+  {
+    "id": "29966484",
+    "data": {
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Copa Libertadores"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Cruzeiro EC",
+        "away": "Regatas Flamengo RJ"
+      },
+      "start_time": "2026-08-13T00:30:00.000Z",
       "group_markets": {
         "full_event|0": [
           "|1x2|~home~1.85!~draw~3.40!~away~3.80"

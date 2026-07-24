@@ -56,6 +56,7 @@ import WorldCupTeaser from './components/WorldCupTeaser';
 import Footer from './components/Footer';
 import RetroFooter from './components/RetroFooter';
 import ModernChat from './components/ModernChat';
+import { DualRightPanel } from './components/sports/DualRightPanel';
 
 import LiveBetsFeed from './components/LiveBetsFeed';
 import CasinoLobby from './components/CasinoLobby';
@@ -496,7 +497,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [siteStatusConfig, setSiteStatusConfig] = useState<SiteStatusConfig>(() => {
     const stored = localStorage.getItem('site_status');
     const parsed = stored ? JSON.parse(stored) : DEFAULT_SITE_STATUS_CONFIG;
-    return { ...parsed, isMaintenanceMode: true };
+    return { ...parsed, isMaintenanceMode: false };
   });
 
   const handleSiteStatusConfigChange = (cfg: SiteStatusConfig) => {
@@ -829,6 +830,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [showFakeBetModal, setShowFakeBetModal] = useState(false);
   const [showLiveScoreModal, setShowLiveScoreModal] = useState(false);
   const [showMyBetsModal, setShowMyBetsModal] = useState(false);
+
+  useEffect(() => {
+    const handleOpenMyBets = () => setShowMyBetsModal(true);
+    window.addEventListener('openMyBetsModal', handleOpenMyBets);
+    return () => window.removeEventListener('openMyBetsModal', handleOpenMyBets);
+  }, []);
 
   useEffect(() => {
     const handleOpenLogin = () => setAuthModalMode('member');
@@ -2060,13 +2067,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           
           {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
           {!(view === 'giveaway' || view === 'spor724') && (
-            <aside className={`hidden lg:flex flex-col bg-black bg-gradient-to-r from-white/[0.02] to-transparent border-r border-white/5 shadow-[15px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${(isSidebarOpen || view === 'blackjack' || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))) ? 'w-[250px]' : 'w-[72px]'}`}>
+            <aside className={`hidden lg:flex flex-col bg-black bg-gradient-to-r from-white/[0.02] to-transparent border-r border-white/5 shadow-[15px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
               <Sidebar
-                isOpen={isSidebarOpen || view === 'blackjack' || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
-                onToggle={() => {
-                  if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-                  setIsSidebarOpen(!isSidebarOpen);
-                }}
+                isOpen={isSidebarOpen}
+                onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
                 activeView={view}
                 onViewChange={handleViewChange}
                 userRole={userRole}
@@ -2251,13 +2255,13 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <div className="flex flex-1 w-full overflow-hidden relative">
             <main 
               id="main-scroll-container"
-              className="flex-1 w-full h-full overflow-x-hidden relative flex flex-col overflow-y-auto"
+              className="flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col overflow-y-auto"
             >
             {/* Gamdom Style Global Ambient Shading / Glows */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#00ffff]/[0.015] blur-[150px] rounded-full"></div>
-                <div className="absolute top-[30%] right-[-10%] w-[40%] h-[60%] bg-[#880088]/[0.015] blur-[150px] rounded-full"></div>
-                <div className="absolute bottom-[-20%] left-[20%] w-[60%] h-[40%] bg-[#00ff88]/[0.01] blur-[150px] rounded-full"></div>
+                
+                
+                
                 {/* Global subtle radial gradient overlay */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,rgba(255,255,255,0.01),transparent_70%)]"></div>
             </div>
@@ -2265,7 +2269,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis') 
+          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis') 
             ? 'p-0 w-full max-w-full mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
@@ -2522,7 +2526,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
-        {view === 'blackjack' && (
+        {(view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites') && (
           <div className="animate-fade-in w-full h-full relative z-[50] min-w-0">
             <CasinoLobby 
               customGames={casinoLobbyGames} 
@@ -2590,7 +2594,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             ) : (
               <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-black">
                 <div className="text-7xl">🎯</div>
-                <h2 className="text-white font-black text-3xl uppercase tracking-tight">Günlük Görevler</h2>
+                <h2 className="text-black font-black text-3xl uppercase tracking-tight">Günlük Görevler</h2>
                 <p className="text-zinc-500 font-bold text-sm">Coin kazanmak ve marketi kullanmak için üye girişi gereklidir.</p>
                 <button onClick={() => setAuthModalMode('member')}
                   className="px-8 py-4 bg-[#10B981] text-black font-black text-sm rounded-lg uppercase tracking-widest hover:bg-[#10B981]/90 transition-all shadow-[0_0_25px_rgba(0,255,163,0.4)]">
@@ -2789,7 +2793,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               {!isChatOpen && (
                 <button 
                   onClick={() => setIsChatOpen(!isChatOpen)}
-                  className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(245,166,35,0.6)] hover:scale-110 hover:shadow-[0_0_30px_rgba(245,166,35,0.8)] transition-all group"
+                  className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-br from-[#10b981] to-[#00E676] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:scale-110 hover:shadow-[0_0_30px_rgba(16,185,129,0.7)] border border-white/20 transition-all group"
                 >
                   <svg className="w-7 h-7 text-black group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                 </button>
@@ -2798,15 +2802,24 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               {/* Chat Sidebar (Pushes the layout instead of floating) */}
               <aside className={`hidden xl:flex flex-col bg-[#14171d] border-l border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.8)] h-full flex-shrink-0 relative z-20 transition-all duration-300 ease-in-out ${isChatOpen ? 'w-[350px]' : 'w-0 overflow-hidden opacity-0'}`}>
                 <div className="flex-1 overflow-hidden relative">
-                  <ModernChat
-                    open={isChatOpen}
-                    onOpen={() => setIsChatOpen(true)}
-                    onClose={() => setIsChatOpen(false)}
-                    siteUser={siteUser}
-                    userRole={userRole}
-                    isMobile={false}
-                    activeView={view}
-                  />
+                  {view === 'sports' ? (
+                    <DualRightPanel 
+                      popularMatches={[]} 
+                      language={'tr'} 
+                      isOpenMobile={false} 
+                      onCloseMobile={() => setIsChatOpen(false)} 
+                    />
+                  ) : (
+                    <ModernChat
+                      open={isChatOpen}
+                      onOpen={() => setIsChatOpen(true)}
+                      onClose={() => setIsChatOpen(false)}
+                      siteUser={siteUser}
+                      userRole={userRole}
+                      isMobile={false}
+                      activeView={view}
+                    />
+                  )}
                 </div>
               </aside>
             </>
@@ -2850,7 +2863,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             <div className="flex items-center justify-between px-6 py-4 bg-[#050505]">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
-                <span className="text-white font-black text-xs uppercase tracking-widest italic">CANLI SKOR & SONUÇLAR</span>
+                <span className="text-black font-black text-xs uppercase tracking-widest italic">CANLI SKOR & SONUÇLAR</span>
               </div>
               <button 
                 onClick={() => setShowLiveScoreModal(false)}

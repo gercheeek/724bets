@@ -179,34 +179,71 @@ const INITIAL_MATCHES: Match[] = [
 
 const SPORTS_NAV = [
   { id: 'futbol', name: 'Futbol', count: '99+', color: '#ffffff', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6l-3.5 5h7z"/><path d="M12 6V2"/><path d="M8.5 11L4 13.5"/><path d="M15.5 11l4.5 2.5"/><path d="M8 15h8l1.5 5h-11z"/><path d="M12 20v2"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <polygon points="12 2 22 8 22 16 12 22 2 16 2 8 12 2" strokeLinejoin="round"/>
+      <polygon points="12 6 17 10 17 15 12 19 7 15 7 10 12 6" strokeDasharray="1 2"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+    </svg>
   )},
   { id: 'basketbol', name: 'Basketbol', count: '28', color: '#fb923c', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <circle cx="12" cy="12" r="10" strokeDasharray="4 2"/>
+      <path d="M12 2v20M2 12h20"/>
+      <path d="M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" strokeDasharray="1 4"/>
+    </svg>
   )},
   { id: 'tenis', name: 'Tenis', count: '99+', color: '#bef264', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="6"/><path d="M16 16l4.5 4.5"/><path d="M13 13l3.5-3.5"/><path d="M10 10l4.5-4.5"/><path d="M8 14A6 6 0 0 0 14 8"/><path d="M18.5 18.5a1 1 0 1 0 1.41-1.41 1 1 0 0 0-1.41 1.41z"/><circle cx="19" cy="19" r="1" fill="currentColor" stroke="none"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M12 2L2 12l10 10 10-10L12 2z"/>
+      <path d="M6 12h12M12 6v12" strokeDasharray="1 3"/>
+    </svg>
   )},
   { id: 'amfutbol', name: 'Am. Futbolu', count: '67', color: '#f87171', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><ellipse cx="12" cy="12" rx="6" ry="10"/><path d="M12 6v12"/><path d="M10 9h4"/><path d="M10 12h4"/><path d="M10 15h4"/><path d="M6 20h12"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M2 12C2 6 7 2 12 2s10 4 10 10-5 10-10 10S2 18 2 12z" strokeDasharray="5 2"/>
+      <path d="M12 6v12"/>
+      <path d="M9 10h6M9 14h6"/>
+    </svg>
   )},
   { id: 'hokey', name: 'Hokey', count: '37', color: '#22d3ee', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 4l-6 12h-4a2 2 0 0 0 0 4h5l7-14z"/><circle cx="7" cy="12" r="2" fill="currentColor"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M4 20L20 4M20 20L4 4" strokeLinecap="square"/>
+      <circle cx="12" cy="12" r="3" fill="currentColor"/>
+      <path d="M4 4h4v4H4z" fill="currentColor"/>
+    </svg>
   )},
   { id: 'beyzbol', name: 'Beyzbol', count: '14', color: '#fbbf24', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M6 6c3 3 3 9 0 12"/><path d="M18 6c-3 3-3 9 0 12"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M12 2L22 12L12 22L2 12Z" strokeDasharray="2 3"/>
+      <circle cx="12" cy="12" r="4" fill="currentColor"/>
+      <path d="M12 8v8M8 12h8"/>
+    </svg>
   )},
   { id: 'masatenisi', name: 'Masa Tenisi', count: '99+', color: '#4ade80', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10 14A6 6 0 1 0 10 2a6 6 0 0 0 0 12z"/><path d="M14 10l5 5"/><circle cx="18" cy="14" r="1" fill="currentColor" stroke="none"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <rect x="4" y="10" width="16" height="4" rx="1"/>
+      <path d="M12 14v6M10 20h4"/>
+      <circle cx="12" cy="6" r="2" fill="currentColor"/>
+    </svg>
   )},
   { id: 'mma', name: 'Dövüş San.', count: '53', color: '#f43f5e', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 8l-4-4-5 5 2.5 2.5"/><path d="M9.5 11.5L12 14l4-4"/><path d="M12 14l5 5 4-4-5-5"/><path d="M7 16l-3 3 4 4 3-3"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <polygon points="12 2 19 9 12 16 5 9 12 2" />
+      <polygon points="12 10 17 15 12 22 7 15 12 10" fill="currentColor"/>
+    </svg>
   )},
   { id: 'voleybol', name: 'Voleybol', count: '7', color: '#a78bfa', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <circle cx="12" cy="12" r="10" strokeDasharray="3 3"/>
+      <path d="M12 2c0 6 4 10 10 10M2 12c6 0 10 4 10 10M12 22c0-6-4-10-10-10M22 12c-6 0-10-4-10-10"/>
+    </svg>
   )},
   { id: 'kriket', name: 'Kriket', count: '1', color: '#fcd34d', icon: (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 10l6-6 4 4-6 6"/><path d="M14 10L6 18l-4-4 8-8"/><circle cx="18" cy="16" r="2" fill="currentColor" stroke="none"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M4 14l6-6M10 20l6-6" strokeDasharray="2 2"/>
+      <rect x="14" y="4" width="6" height="6" fill="currentColor" transform="rotate(45 17 7)"/>
+      <circle cx="6" cy="18" r="2"/>
+    </svg>
   )}
 ];
 
@@ -335,16 +372,16 @@ export const GercekView: React.FC = () => {
               }}
             >
               <div className="relative">
-                <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] rounded-full bg-[#1a1f2e] border border-[#252b3b] shadow-lg flex items-center justify-center transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] group-hover:border-[#30374b] group-hover:bg-[#1f2638]">
+                <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] rounded-full bg-gradient-to-b from-[#1a1b1e] to-[#0a0b0c] border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),_0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),_0_0_20px_rgba(16,185,129,0.3)] group-hover:border-[#10b981]/50 relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent before:h-1/2 before:rounded-t-full before:opacity-50">
                   <div style={{ color: sport.color }}>
                     {sport.icon}
                   </div>
                 </div>
-                <div className="absolute -top-1 -right-2 bg-[#252b3b] text-white/80 text-[11px] md:text-xs font-black px-2 py-0.5 rounded-full border border-[#1a1f2e] shadow-sm">
+                <div className="absolute -top-1 -right-1 backdrop-blur-md bg-white/10 text-white text-[10px] md:text-[11px] font-black px-2 py-0.5 rounded-full border border-white/10 shadow-xl">
                   {sport.count}
                 </div>
               </div>
-              <span className="text-sm md:text-[15px] font-black text-[#8a94a6] group-hover:text-white transition-colors">
+              <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-[#8a94a6] group-hover:text-white transition-colors">
                 {sport.name}
               </span>
             </div>
@@ -358,7 +395,7 @@ export const GercekView: React.FC = () => {
       <div className="w-full flex gap-3 md:gap-4 overflow-x-auto pb-6 mb-2 scrollbar-hide snap-x">
         
         {/* Match Card 1 */}
-        <div className="min-w-[300px] sm:min-w-[340px] md:min-w-[360px] bg-[#111621] rounded-xl p-4 flex flex-col gap-4 snap-center border border-white/5 shadow-lg">
+        <div className="min-w-[300px] sm:min-w-[340px] md:min-w-[360px] bg-gradient-to-b from-[#181a20] to-[#101114] rounded-xl p-4 flex flex-col gap-4 snap-center border border-[#00E676]/20 shadow-[0_0_25px_rgba(0,230,118,0.08)] relative overflow-hidden group hover:shadow-[0_0_35px_rgba(0,230,118,0.15)] transition-all duration-500">
           <div className="flex items-center justify-between text-xs text-white/50 font-medium gap-2">
             <div className="flex items-center gap-1.5 min-w-0 flex-1">
               <Gamepad2 className="w-3.5 h-3.5 shrink-0 text-blue-400" />
@@ -368,26 +405,26 @@ export const GercekView: React.FC = () => {
           </div>
           <div className="flex items-center justify-between mt-1">
             <div className="flex flex-col items-start gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#1c2230] flex items-center justify-center overflow-hidden">
+              <div className="w-8 h-8 rounded-full bg-[#18191c] flex items-center justify-center overflow-hidden">
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/91/Sinners_Esports_logo.png/220px-Sinners_Esports_logo.png" className="w-full h-full object-contain p-1.5" alt="Sinners" />
               </div>
               <span className="font-bold text-white text-sm">Sinners Esports</span>
             </div>
             <div className="flex flex-col items-end gap-2 text-right">
-              <div className="w-8 h-8 rounded-full bg-[#1c2230] flex items-center justify-center overflow-hidden">
+              <div className="w-8 h-8 rounded-full bg-[#18191c] flex items-center justify-center overflow-hidden">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/FUT_Esports_logo.png/220px-FUT_Esports_logo.png" className="w-full h-full object-contain p-1.5 invert" alt="FUT" />
               </div>
               <span className="font-bold text-white text-sm">FUT Esports</span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 mt-auto">
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#00E676]/10 blur-3xl rounded-full pointer-events-none group-hover:bg-[#00E676]/20 transition-all duration-700"></div><div className="flex flex-col gap-2 mt-auto relative z-10">
             <div className="text-center text-[10px] text-white/40 uppercase tracking-widest font-semibold">Kazanan</div>
             <div className="flex items-center gap-2">
-              <button className="flex-1 bg-[#1c2230] hover:bg-[#252d3d] transition-colors rounded-lg p-2.5 flex justify-between items-center group">
+              <button className="flex-1 bg-[#14161a] hover:bg-[#1a1e24] border border-white/5 hover:border-[#00E676]/30 transition-all duration-300 rounded-lg p-2.5 flex justify-between items-center group hover:shadow-[0_0_10px_rgba(0,230,118,0.1)]">
                 <span className="text-white/50 text-xs font-semibold group-hover:text-white transition-colors">1</span>
                 <span className="text-white font-bold text-sm">3.65</span>
               </button>
-              <button className="flex-1 bg-[#1c2230] hover:bg-[#252d3d] transition-colors rounded-lg p-2.5 flex justify-between items-center group">
+              <button className="flex-1 bg-[#14161a] hover:bg-[#1a1e24] border border-white/5 hover:border-[#00E676]/30 transition-all duration-300 rounded-lg p-2.5 flex justify-between items-center group hover:shadow-[0_0_10px_rgba(0,230,118,0.1)]">
                 <span className="text-white/50 text-xs font-semibold group-hover:text-white transition-colors">2</span>
                 <span className="text-white font-bold text-sm">1.29</span>
               </button>
@@ -396,7 +433,7 @@ export const GercekView: React.FC = () => {
         </div>
 
         {/* Match Card 2 */}
-        <div className="min-w-[300px] sm:min-w-[340px] md:min-w-[360px] bg-[#111621] rounded-xl p-4 flex flex-col gap-4 snap-center border border-white/5 shadow-lg">
+        <div className="min-w-[300px] sm:min-w-[340px] md:min-w-[360px] bg-gradient-to-b from-[#181a20] to-[#101114] rounded-xl p-4 flex flex-col gap-4 snap-center border border-[#00E676]/20 shadow-[0_0_25px_rgba(0,230,118,0.08)] relative overflow-hidden group hover:shadow-[0_0_35px_rgba(0,230,118,0.15)] transition-all duration-500">
           <div className="flex items-center justify-between text-xs text-white/50 font-medium gap-2">
             <div className="flex items-center gap-1.5 min-w-0 flex-1">
               <Flame className="w-3.5 h-3.5 shrink-0 text-amber-500" />
@@ -418,14 +455,14 @@ export const GercekView: React.FC = () => {
               <span className="font-bold text-white text-sm">Wach, Mariusz</span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 mt-auto">
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#00E676]/10 blur-3xl rounded-full pointer-events-none group-hover:bg-[#00E676]/20 transition-all duration-700"></div><div className="flex flex-col gap-2 mt-auto relative z-10">
             <div className="text-center text-[10px] text-white/40 uppercase tracking-widest font-semibold">Kazanan</div>
             <div className="flex items-center gap-2">
-              <button className="flex-1 bg-[#1c2230] hover:bg-[#252d3d] transition-colors rounded-lg p-2.5 flex justify-between items-center group">
+              <button className="flex-1 bg-[#14161a] hover:bg-[#1a1e24] border border-white/5 hover:border-[#00E676]/30 transition-all duration-300 rounded-lg p-2.5 flex justify-between items-center group hover:shadow-[0_0_10px_rgba(0,230,118,0.1)]">
                 <span className="text-white/50 text-xs font-semibold group-hover:text-white transition-colors">1</span>
                 <span className="text-white font-bold text-sm">1.01</span>
               </button>
-              <button className="flex-1 bg-[#1c2230] hover:bg-[#252d3d] transition-colors rounded-lg p-2.5 flex justify-between items-center group">
+              <button className="flex-1 bg-[#14161a] hover:bg-[#1a1e24] border border-white/5 hover:border-[#00E676]/30 transition-all duration-300 rounded-lg p-2.5 flex justify-between items-center group hover:shadow-[0_0_10px_rgba(0,230,118,0.1)]">
                 <span className="text-white/50 text-xs font-semibold group-hover:text-white transition-colors">2</span>
                 <span className="text-white font-bold text-sm">15.00</span>
               </button>
@@ -434,7 +471,7 @@ export const GercekView: React.FC = () => {
         </div>
 
         {/* Match Card 3 */}
-        <div className="min-w-[300px] sm:min-w-[340px] md:min-w-[360px] bg-[#111621] rounded-xl p-4 flex flex-col gap-4 snap-center border border-white/5 shadow-lg">
+        <div className="min-w-[300px] sm:min-w-[340px] md:min-w-[360px] bg-gradient-to-b from-[#181a20] to-[#101114] rounded-xl p-4 flex flex-col gap-4 snap-center border border-[#00E676]/20 shadow-[0_0_25px_rgba(0,230,118,0.08)] relative overflow-hidden group hover:shadow-[0_0_35px_rgba(0,230,118,0.15)] transition-all duration-500">
           <div className="flex items-center justify-between text-xs text-white/50 font-medium gap-2">
             <div className="flex items-center gap-1.5 min-w-0 flex-1">
               <Flame className="w-3.5 h-3.5 shrink-0 text-amber-500" />
@@ -456,14 +493,14 @@ export const GercekView: React.FC = () => {
               <span className="font-bold text-white text-sm">Wellem, A.</span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 mt-auto">
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#00E676]/10 blur-3xl rounded-full pointer-events-none group-hover:bg-[#00E676]/20 transition-all duration-700"></div><div className="flex flex-col gap-2 mt-auto relative z-10">
             <div className="text-center text-[10px] text-white/40 uppercase tracking-widest font-semibold">Kazanan</div>
             <div className="flex items-center gap-2">
-              <button className="flex-1 bg-[#1c2230] hover:bg-[#252d3d] transition-colors rounded-lg p-2.5 flex justify-between items-center group">
+              <button className="flex-1 bg-[#14161a] hover:bg-[#1a1e24] border border-white/5 hover:border-[#00E676]/30 transition-all duration-300 rounded-lg p-2.5 flex justify-between items-center group hover:shadow-[0_0_10px_rgba(0,230,118,0.1)]">
                 <span className="text-white/50 text-xs font-semibold group-hover:text-white transition-colors">1</span>
                 <span className="text-white font-bold text-sm">1.11</span>
               </button>
-              <button className="flex-1 bg-[#1c2230] hover:bg-[#252d3d] transition-colors rounded-lg p-2.5 flex justify-between items-center group">
+              <button className="flex-1 bg-[#14161a] hover:bg-[#1a1e24] border border-white/5 hover:border-[#00E676]/30 transition-all duration-300 rounded-lg p-2.5 flex justify-between items-center group hover:shadow-[0_0_10px_rgba(0,230,118,0.1)]">
                 <span className="text-white/50 text-xs font-semibold group-hover:text-white transition-colors">2</span>
                 <span className="text-white font-bold text-sm">5.50</span>
               </button>
@@ -494,9 +531,9 @@ export const GercekView: React.FC = () => {
                 <div className="flex items-center gap-3 transform group-hover/live:translate-x-1 transition-transform">
                   <h3 className="text-[28px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] flex items-center gap-3">
                     CANLI
-                    <span className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_12px_#ef4444] animate-pulse"></span>
+                    <span className="w-3 h-3 rounded-full bg-[#10b981] shadow-[0_0_12px_#ef4444] animate-pulse"></span>
                   </h3>
-                  <div className="bg-red-500/20 border border-red-500/30 text-red-500 px-2.5 py-1 rounded-lg text-xs md:text-sm font-black tracking-widest mt-1">
+                  <div className="bg-[#10b981]/20 border border-red-500/30 text-[#10b981] px-2.5 py-1 rounded-lg text-xs md:text-sm font-black tracking-widest mt-1">
                     {filteredMatches.filter(m => m.period === 'Canlı').length}
                   </div>
                 </div>
@@ -521,9 +558,9 @@ export const GercekView: React.FC = () => {
                 <div className="flex items-center gap-3 transform group-hover/upcoming:translate-x-1 transition-transform">
                   <h3 className="text-[28px] lg:text-[42px] font-black text-white tracking-tighter leading-none font-['Outfit'] flex items-center gap-3">
                     YAKLAŞAN
-                    <span className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_12px_#3b82f6]"></span>
+                    <span className="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_12px_#22d3ee]"></span>
                   </h3>
-                  <div className="bg-blue-500/20 border border-blue-500/30 text-blue-500 px-2.5 py-1 rounded-lg text-xs md:text-sm font-black tracking-widest mt-1">
+                  <div className="bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 px-2.5 py-1 rounded-lg text-xs md:text-sm font-black tracking-widest mt-1">
                     {filteredMatches.filter(m => m.period !== 'Canlı').length}
                   </div>
                 </div>
@@ -536,12 +573,12 @@ export const GercekView: React.FC = () => {
       <div id="canli-maclar" className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 scroll-mt-6">
         <div className="flex items-center gap-3">
           <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-red-600/20 border border-red-500/40 shrink-0">
-            <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-500 opacity-75"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500 relative z-10"></span>
+            <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-[#10b981] opacity-75"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#10b981] relative z-10"></span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-wide flex items-center gap-2">
             Canlı
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#10b981]/20 text-red-400 border border-red-500/30">
               {filteredMatches.length} MAÇ
             </span>
           </h1>
@@ -555,7 +592,7 @@ export const GercekView: React.FC = () => {
             placeholder="Takım, lig veya maç ara..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#121927] border border-[#1e283d] focus:border-blue-500 rounded-full pl-10 pr-4 py-2 text-xs text-white placeholder-slate-400 outline-none transition-all"
+            className="w-full bg-[#101114] border border-[#1e283d] focus:border-[#00E676] rounded-full pl-10 pr-4 py-2 text-xs text-white placeholder-slate-400 outline-none transition-all"
           />
         </div>
       </div>
@@ -566,8 +603,8 @@ export const GercekView: React.FC = () => {
           onClick={() => setSelectedCategory('all')}
           className={`px-4 py-2.5 rounded-full font-semibold text-xs sm:text-sm flex items-center gap-2 shrink-0 transition-all cursor-pointer ${
             selectedCategory === 'all'
-              ? 'bg-[#2563eb] text-white shadow-lg shadow-blue-500/25 border border-blue-400/40'
-              : 'bg-[#131926] hover:bg-[#1b2336] text-slate-300 border border-[#1e273a]'
+              ? 'bg-[#00E676] text-black shadow-lg shadow-[#00E676]/25 border border-[#00E676]/40'
+              : 'bg-[#101114] hover:bg-[#18191c] text-slate-300 border border-[#1e273a]'
           }`}
         >
           <Flame className="w-4 h-4 text-amber-400" />
@@ -582,8 +619,8 @@ export const GercekView: React.FC = () => {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-4 py-2.5 rounded-full font-medium text-xs sm:text-sm flex items-center gap-2 shrink-0 transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-[#2563eb] text-white font-bold shadow-lg shadow-blue-500/25 border border-blue-400/40'
-                  : 'bg-[#131926] hover:bg-[#1b2336] text-slate-300 border border-[#1e273a]'
+                  ? 'bg-[#00E676] text-black font-bold shadow-lg shadow-[#00E676]/25 border border-[#00E676]/40'
+                  : 'bg-[#101114] hover:bg-[#18191c] text-slate-300 border border-[#1e273a]'
               }`}
             >
               <span className="text-base leading-none">{cat.icon}</span>
@@ -595,7 +632,7 @@ export const GercekView: React.FC = () => {
 
       {/* ── MATCH CARDS GRID ── */}
       {filteredMatches.length === 0 ? (
-        <div className="py-16 text-center bg-[#0e1320] rounded-2xl border border-[#1b2335]">
+        <div className="py-16 text-center bg-[#101114] rounded-2xl border border-white/5">
           <Trophy className="w-12 h-12 text-slate-600 mx-auto mb-3" />
           <p className="text-slate-400 text-sm font-medium">Bu kategoride şu an maç bulunamadı.</p>
         </div>
@@ -617,30 +654,31 @@ export const GercekView: React.FC = () => {
             return (
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-3 px-1">
-                  <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.6)]" />
+                  <div className="w-2.5 h-2.5 bg-[#10b981] rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
                   <h3 className="text-xl font-black text-white tracking-wide">CANLI MAÇLAR</h3>
                 </div>
                 {Object.entries(grouped).map(([leagueName, leagueMatches]) => (
-                  <div key={leagueName} className="bg-[#0e1320] border border-[#1b2335] rounded-xl overflow-hidden shadow-lg">
+                  <div key={leagueName} className="bg-black/40 backdrop-blur-2xl border border-white/10 border-t-white/20 border-l-2 border-l-[#10b981]/80 rounded-xl overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.6),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.2)] hover:border-white/20">
                     {/* League Header */}
-                    <div className="bg-[#131926] px-4 py-3 border-b border-[#1b2335] flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-slate-400" />
+                    <div className="bg-gradient-to-r from-white/[0.05] to-transparent px-4 py-3 border-b border-white/5 flex items-center gap-2 relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/[0.03] before:to-transparent before:h-1/2 before:pointer-events-none">
+                      <svg className="w-4 h-4 text-[#10b981]/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M3 12h18M12 3v18" strokeDasharray="2 4" />
+    <circle cx="12" cy="12" r="3" fill="#10b981" stroke="none" opacity="0.5" />
+  </svg>
                       <span className="text-slate-200 font-bold text-sm tracking-wide">{leagueName}</span>
                     </div>
                     
                     {/* Match Rows */}
-                    <div className="flex flex-col divide-y divide-[#1b2335]/50">
+                    <div className="flex flex-col divide-y divide-white/5">
                       {leagueMatches.map(match => (
-                        <div key={match.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 hover:bg-[#131926]/40 transition-colors">
+                        <div key={match.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 even:bg-white/[0.01] odd:bg-transparent hover:bg-white/[0.03] hover:backdrop-blur-md hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-all duration-300 relative group overflow-hidden">
                           
                           {/* Time & Status */}
                           <div className="w-full md:w-32 flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center gap-1 shrink-0">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" title="Canlı" />
-                              <span className="text-[#3b82f6] text-xs font-bold">{match.minute}</span>
-                            </div>
+                            <div className="flex items-center gap-1.5 bg-[#10b981]/10 border border-red-500/20 px-2 py-0.5 rounded shadow-[0_0_10px_rgba(16,185,129,0.1)]"><div className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" /><span className="text-[#10b981] text-[11px] font-black tracking-widest">{match.minute}'</span></div>
                             <div className="flex gap-2">
-                               {match.hasStream && <Play className="w-3.5 h-3.5 text-red-500 hidden md:block" />}
+                               {match.hasStream && <Play className="w-3.5 h-3.5 text-[#10b981] hidden md:block" />}
                                {match.hasStats && <BarChart2 className="w-3.5 h-3.5 text-blue-400 hidden md:block" />}
                             </div>
                             {/* Mobile favorite icon */}
@@ -653,17 +691,17 @@ export const GercekView: React.FC = () => {
                           <div className="flex-1 flex flex-col gap-2 min-w-0">
                             <div className="flex items-center justify-between gap-3 pr-2 md:pr-6">
                               <div className="flex items-center gap-2.5 truncate">
-                                <span className="text-sm shrink-0">{match.team1.logo}</span>
-                                <span className="text-sm font-bold text-white truncate">{match.team1.name}</span>
+                                <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(match.team1.name)}&background=random&color=fff&rounded=true&bold=true&size=48`} className="w-5 h-5 md:w-6 md:h-6 rounded-full shadow-sm shrink-0" alt={match.team1.name} />
+                                <span className="text-[15px] font-black text-white truncate tracking-tight drop-shadow-md">{match.team1.name}</span>
                               </div>
-                              <span className="text-[#4ade80] font-black text-sm shrink-0">{match.team1.score}</span>
+                              <div className="bg-black/40 border border-white/10 rounded px-2.5 py-0.5 min-w-[32px] flex items-center justify-center backdrop-blur-sm shadow-inner"><span className="text-white font-black text-sm">{match.team1.score}</span></div>
                             </div>
                             <div className="flex items-center justify-between gap-3 pr-2 md:pr-6">
                               <div className="flex items-center gap-2.5 truncate">
-                                <span className="text-sm shrink-0">{match.team2.logo}</span>
-                                <span className="text-sm font-bold text-white truncate">{match.team2.name}</span>
+                                <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(match.team2.name)}&background=random&color=fff&rounded=true&bold=true&size=48`} className="w-5 h-5 md:w-6 md:h-6 rounded-full shadow-sm shrink-0" alt={match.team2.name} />
+                                <span className="text-[15px] font-black text-white truncate tracking-tight drop-shadow-md">{match.team2.name}</span>
                               </div>
-                              <span className="text-[#4ade80] font-black text-sm shrink-0">{match.team2.score}</span>
+                              <div className="bg-black/40 border border-white/10 rounded px-2.5 py-0.5 min-w-[32px] flex items-center justify-center backdrop-blur-sm shadow-inner"><span className="text-white font-black text-sm">{match.team2.score}</span></div>
                             </div>
                           </div>
 
@@ -679,35 +717,35 @@ export const GercekView: React.FC = () => {
                             <div className="flex gap-1.5 w-full md:w-auto">
                               <button
                                 onClick={() => selectBet(match.id, '1')}
-                                className={`flex-1 md:w-[65px] h-11 flex flex-col items-center justify-center rounded-lg border transition-all ${
-                                  selectedBets[match.id] === '1' ? 'bg-blue-600/30 border-blue-500 text-blue-300' : 'bg-[#151c2c] border-[#222d44] hover:bg-[#1f293e] text-slate-300'
+                                className={`flex-1 md:w-[65px] h-[46px] flex flex-col items-center justify-center rounded-md border transition-all ${
+                                  selectedBets[match.id] === '1' ? 'bg-[#10b981] text-black font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] border-transparent' : 'bg-[#16171a] border border-white/5 border-t-white/10 hover:bg-[#1c1d22] hover:border-white/20 text-slate-300 hover:text-white shadow-[0_2px_4px_rgba(0,0,0,0.2)]'
                                 }`}
                               >
-                                <span className="text-[10px] text-slate-500 font-medium leading-none mb-1">1</span>
-                                <span className="text-sm font-bold leading-none">{match.odds.home}</span>
+                                <span className="text-[10px] text-slate-500/70 font-bold leading-none mb-1">1</span>
+                                <span className="text-[15px] font-black leading-none tracking-tight">{match.odds.home}</span>
                               </button>
                               <button
                                 onClick={() => selectBet(match.id, 'X')}
-                                className={`flex-1 md:w-[65px] h-11 flex flex-col items-center justify-center rounded-lg border transition-all ${
-                                  selectedBets[match.id] === 'X' ? 'bg-blue-600/30 border-blue-500 text-blue-300' : 'bg-[#151c2c] border-[#222d44] hover:bg-[#1f293e] text-slate-300'
+                                className={`flex-1 md:w-[65px] h-[46px] flex flex-col items-center justify-center rounded-md border transition-all ${
+                                  selectedBets[match.id] === 'X' ? 'bg-[#10b981] text-black font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] border-transparent' : 'bg-[#16171a] border border-white/5 border-t-white/10 hover:bg-[#1c1d22] hover:border-white/20 text-slate-300 hover:text-white shadow-[0_2px_4px_rgba(0,0,0,0.2)]'
                                 }`}
                               >
-                                <span className="text-[10px] text-slate-500 font-medium leading-none mb-1">X</span>
-                                <span className="text-sm font-bold leading-none">{match.odds.draw}</span>
+                                <span className="text-[10px] text-slate-500/70 font-bold leading-none mb-1">X</span>
+                                <span className="text-[15px] font-black leading-none tracking-tight">{match.odds.draw}</span>
                               </button>
                               <button
                                 onClick={() => selectBet(match.id, '2')}
-                                className={`flex-1 md:w-[65px] h-11 flex flex-col items-center justify-center rounded-lg border transition-all ${
-                                  selectedBets[match.id] === '2' ? 'bg-blue-600/30 border-blue-500 text-blue-300' : 'bg-[#151c2c] border-[#222d44] hover:bg-[#1f293e] text-slate-300'
+                                className={`flex-1 md:w-[65px] h-[46px] flex flex-col items-center justify-center rounded-md border transition-all ${
+                                  selectedBets[match.id] === '2' ? 'bg-[#10b981] text-black font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] border-transparent' : 'bg-[#16171a] border border-white/5 border-t-white/10 hover:bg-[#1c1d22] hover:border-white/20 text-slate-300 hover:text-white shadow-[0_2px_4px_rgba(0,0,0,0.2)]'
                                 }`}
                               >
-                                <span className="text-[10px] text-slate-500 font-medium leading-none mb-1">2</span>
-                                <span className="text-sm font-bold leading-none">{match.odds.away}</span>
+                                <span className="text-[10px] text-slate-500/70 font-bold leading-none mb-1">2</span>
+                                <span className="text-[15px] font-black leading-none tracking-tight">{match.odds.away}</span>
                               </button>
                             </div>
                             
                             <button
-                              className="hidden md:flex w-11 h-11 bg-[#151c2c] hover:bg-[#1f293e] border border-[#222d44] rounded-lg items-center justify-center text-slate-400 hover:text-white transition-all cursor-pointer group-hover:border-slate-700"
+                              className="hidden md:flex w-11 h-11 bg-[#18191c] hover:bg-[#25262b] border border-white/5 rounded-lg items-center justify-center text-slate-400 hover:text-white transition-all cursor-pointer group-hover:border-slate-700"
                               title={`${match.totalMarkets} Bahis Seçeneği`}
                             >
                               <ChevronDown className="w-4 h-4" />
@@ -754,17 +792,21 @@ export const GercekView: React.FC = () => {
                   <h3 className="text-xl font-black text-white tracking-wide">YAKLAŞAN MAÇLAR</h3>
                 </div>
                 {sortedLeagues.map(([leagueName, leagueMatches]) => (
-                  <div key={leagueName} className="bg-[#0e1320] border border-[#1b2335] rounded-xl overflow-hidden shadow-lg opacity-90">
+                  <div key={leagueName} className="bg-[#101114] border border-white/5 rounded-xl overflow-hidden shadow-lg opacity-90">
                     {/* League Header */}
-                    <div className="bg-[#131926] px-4 py-3 border-b border-[#1b2335] flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-slate-400" />
+                    <div className="bg-gradient-to-r from-white/[0.05] to-transparent px-4 py-3 border-b border-white/5 flex items-center gap-2 relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/[0.03] before:to-transparent before:h-1/2 before:pointer-events-none">
+                      <svg className="w-4 h-4 text-[#10b981]/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M3 12h18M12 3v18" strokeDasharray="2 4" />
+    <circle cx="12" cy="12" r="3" fill="#10b981" stroke="none" opacity="0.5" />
+  </svg>
                       <span className="text-slate-200 font-bold text-sm tracking-wide">{leagueName}</span>
                     </div>
                     
                     {/* Match Rows */}
-                    <div className="flex flex-col divide-y divide-[#1b2335]/50">
+                    <div className="flex flex-col divide-y divide-white/5">
                       {leagueMatches.map(match => (
-                        <div key={match.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 hover:bg-[#131926]/40 transition-colors">
+                        <div key={match.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 even:bg-white/[0.01] odd:bg-transparent hover:bg-white/[0.03] hover:backdrop-blur-md hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-all duration-300 relative group overflow-hidden">
                           
                           {/* Time & Status */}
                           <div className="w-full md:w-32 flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center gap-1 shrink-0">
@@ -786,15 +828,15 @@ export const GercekView: React.FC = () => {
                           <div className="flex-1 flex flex-col gap-2 min-w-0">
                             <div className="flex items-center justify-between gap-3 pr-2 md:pr-6">
                               <div className="flex items-center gap-2.5 truncate">
-                                <span className="text-sm shrink-0">{match.team1.logo}</span>
-                                <span className="text-sm font-bold text-white truncate">{match.team1.name}</span>
+                                <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(match.team1.name)}&background=random&color=fff&rounded=true&bold=true&size=48`} className="w-5 h-5 md:w-6 md:h-6 rounded-full shadow-sm shrink-0" alt={match.team1.name} />
+                                <span className="text-[15px] font-black text-white truncate tracking-tight drop-shadow-md">{match.team1.name}</span>
                               </div>
                               <span className="text-slate-500 font-bold text-sm shrink-0">-</span>
                             </div>
                             <div className="flex items-center justify-between gap-3 pr-2 md:pr-6">
                               <div className="flex items-center gap-2.5 truncate">
-                                <span className="text-sm shrink-0">{match.team2.logo}</span>
-                                <span className="text-sm font-bold text-white truncate">{match.team2.name}</span>
+                                <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(match.team2.name)}&background=random&color=fff&rounded=true&bold=true&size=48`} className="w-5 h-5 md:w-6 md:h-6 rounded-full shadow-sm shrink-0" alt={match.team2.name} />
+                                <span className="text-[15px] font-black text-white truncate tracking-tight drop-shadow-md">{match.team2.name}</span>
                               </div>
                               <span className="text-slate-500 font-bold text-sm shrink-0">-</span>
                             </div>
@@ -812,35 +854,35 @@ export const GercekView: React.FC = () => {
                             <div className="flex gap-1.5 w-full md:w-auto">
                               <button
                                 onClick={() => selectBet(match.id, '1')}
-                                className={`flex-1 md:w-[65px] h-11 flex flex-col items-center justify-center rounded-lg border transition-all ${
-                                  selectedBets[match.id] === '1' ? 'bg-blue-600/30 border-blue-500 text-blue-300' : 'bg-[#151c2c] border-[#222d44] hover:bg-[#1f293e] text-slate-300'
+                                className={`flex-1 md:w-[65px] h-[46px] flex flex-col items-center justify-center rounded-md border transition-all ${
+                                  selectedBets[match.id] === '1' ? 'bg-[#10b981] text-black font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] border-transparent' : 'bg-[#16171a] border border-white/5 border-t-white/10 hover:bg-[#1c1d22] hover:border-white/20 text-slate-300 hover:text-white shadow-[0_2px_4px_rgba(0,0,0,0.2)]'
                                 }`}
                               >
-                                <span className="text-[10px] text-slate-500 font-medium leading-none mb-1">1</span>
-                                <span className="text-sm font-bold leading-none">{match.odds.home}</span>
+                                <span className="text-[10px] text-slate-500/70 font-bold leading-none mb-1">1</span>
+                                <span className="text-[15px] font-black leading-none tracking-tight">{match.odds.home}</span>
                               </button>
                               <button
                                 onClick={() => selectBet(match.id, 'X')}
-                                className={`flex-1 md:w-[65px] h-11 flex flex-col items-center justify-center rounded-lg border transition-all ${
-                                  selectedBets[match.id] === 'X' ? 'bg-blue-600/30 border-blue-500 text-blue-300' : 'bg-[#151c2c] border-[#222d44] hover:bg-[#1f293e] text-slate-300'
+                                className={`flex-1 md:w-[65px] h-[46px] flex flex-col items-center justify-center rounded-md border transition-all ${
+                                  selectedBets[match.id] === 'X' ? 'bg-[#10b981] text-black font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] border-transparent' : 'bg-[#16171a] border border-white/5 border-t-white/10 hover:bg-[#1c1d22] hover:border-white/20 text-slate-300 hover:text-white shadow-[0_2px_4px_rgba(0,0,0,0.2)]'
                                 }`}
                               >
-                                <span className="text-[10px] text-slate-500 font-medium leading-none mb-1">X</span>
-                                <span className="text-sm font-bold leading-none">{match.odds.draw}</span>
+                                <span className="text-[10px] text-slate-500/70 font-bold leading-none mb-1">X</span>
+                                <span className="text-[15px] font-black leading-none tracking-tight">{match.odds.draw}</span>
                               </button>
                               <button
                                 onClick={() => selectBet(match.id, '2')}
-                                className={`flex-1 md:w-[65px] h-11 flex flex-col items-center justify-center rounded-lg border transition-all ${
-                                  selectedBets[match.id] === '2' ? 'bg-blue-600/30 border-blue-500 text-blue-300' : 'bg-[#151c2c] border-[#222d44] hover:bg-[#1f293e] text-slate-300'
+                                className={`flex-1 md:w-[65px] h-[46px] flex flex-col items-center justify-center rounded-md border transition-all ${
+                                  selectedBets[match.id] === '2' ? 'bg-[#10b981] text-black font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] border-transparent' : 'bg-[#16171a] border border-white/5 border-t-white/10 hover:bg-[#1c1d22] hover:border-white/20 text-slate-300 hover:text-white shadow-[0_2px_4px_rgba(0,0,0,0.2)]'
                                 }`}
                               >
-                                <span className="text-[10px] text-slate-500 font-medium leading-none mb-1">2</span>
-                                <span className="text-sm font-bold leading-none">{match.odds.away}</span>
+                                <span className="text-[10px] text-slate-500/70 font-bold leading-none mb-1">2</span>
+                                <span className="text-[15px] font-black leading-none tracking-tight">{match.odds.away}</span>
                               </button>
                             </div>
                             
                             <button
-                              className="hidden md:flex w-11 h-11 bg-[#151c2c] hover:bg-[#1f293e] border border-[#222d44] rounded-lg items-center justify-center text-slate-400 hover:text-white transition-all cursor-pointer group-hover:border-slate-700"
+                              className="hidden md:flex w-11 h-11 bg-[#18191c] hover:bg-[#25262b] border border-white/5 rounded-lg items-center justify-center text-slate-400 hover:text-white transition-all cursor-pointer group-hover:border-slate-700"
                               title={`${match.totalMarkets} Bahis Seçeneği`}
                             >
                               <ChevronDown className="w-4 h-4" />
