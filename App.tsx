@@ -1889,6 +1889,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <MaintenanceScreen 
             message={siteStatusConfig.maintenanceMessage || "724bets.net ve 724bahis.net üzerinde sistem güncellemesi yapılmaktadır. Kısa süre sonra hizmetinizdeyiz."} 
             onAdminLogin={() => setAuthModalMode('admin')}
+            onBypass={() => setMaintenanceBypass(true)}
           />
         </div>
       </UserProvider>

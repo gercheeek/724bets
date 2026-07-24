@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Settings, Lock } from 'lucide-react';
 
 interface MaintenanceScreenProps {
   message?: string;
   onAdminLogin?: () => void;
+  onBypass?: () => void;
 }
 
-const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminLogin }) => {
+const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminLogin, onBypass }) => {
+  const [secretClicks, setSecretClicks] = useState(0);
+
+  const handleSecretClick = () => {
+    const newCount = secretClicks + 1;
+    if (newCount >= 3) {
+      const pwd = window.prompt('Giriş Şifresi:');
+      if (pwd === '373566' && onBypass) {
+        onBypass();
+      }
+      setSecretClicks(0);
+    } else {
+      setSecretClicks(newCount);
+    }
+  };
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6"
       style={{
@@ -70,7 +85,7 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminL
         </div>
 
         {/* Footer info */}
-        <p className="mt-8 text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
+        <p onClick={handleSecretClick} className="mt-8 text-zinc-600 text-[10px] font-bold uppercase tracking-widest cursor-pointer select-none">
            © 2026 724BAHİS.NET · Güven ve Hız Bir Arada
         </p>
       </div>
