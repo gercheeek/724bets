@@ -107,6 +107,7 @@ import TurboMinesView from './components/TurboMinesView';
 import HacksawSlotView from './components/HacksawSlotView';
 import RedTigerSlotView from './components/RedTigerSlotView';
 import AdventureMap from './components/AdventureMap';
+import SecretCurtain from './components/SecretCurtain';
 const SITE_CACHE_VERSION = "2026.07.25_v2";
 
 const formatDateTR = (dateStr: string) => {
@@ -212,6 +213,7 @@ export default function App() {
     <ThemeProvider>
       <LanguageProvider>
         <BettingProvider>
+          <SecretCurtain />
           <div className="min-h-screen bg-theme-main text-theme-primary flex flex-col font-sans">
             <AppContent setIsAdminPanelOpen={setIsAdminPanelOpen} />
           </div>
