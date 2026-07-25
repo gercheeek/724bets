@@ -19,6 +19,7 @@ import {
   Tv
 } from 'lucide-react';
 import { useBetting } from '../../contexts/BettingContext';
+import { useBetSlip } from '../../contexts/BetSlipContext';
 import { parseMatchData } from '../Spor724View';
 import SportsHeroBanner from './SportsHeroBanner';
 
@@ -258,7 +259,7 @@ export const GercekView: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('futbol');
   const [matches, setMatches] = useState<Match[]>(INITIAL_MATCHES);
   const [isParsing, setIsParsing] = useState<boolean>(false);
-  const [selectedBets, setSelectedBets] = useState<Record<string, string>>({});
+  const { betSlip, addSelection, removeSelection } = useBetSlip();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [visibleCount, setVisibleCount] = useState<number>(30);
 
@@ -338,16 +339,29 @@ export const GercekView: React.FC = () => {
   };
 
   const selectBet = (matchId: string, selection: string) => {
-    setSelectedBets(prev => {
-      const key = `${matchId}_${selection}`;
-      const next = { ...prev };
-      if (next[matchId] === selection) {
-        delete next[matchId];
-      } else {
-        next[matchId] = selection;
-      }
-      return next;
-    });
+    const match = matches.find(m => m.id === matchId);
+    if (!match) return;
+
+    let oddValue = 0;
+    let label = '';
+    if (selection === '1') { oddValue = parseFloat(match.odds.home); label = 'Maç Sonucu 1'; }
+    else if (selection === 'X') { oddValue = parseFloat(match.odds.draw); label = 'Maç Sonucu X'; }
+    else if (selection === '2') { oddValue = parseFloat(match.odds.away); label = 'Maç Sonucu 2'; }
+
+    const selectionId = `${matchId}_${selection}`;
+    const exists = betSlip.some(item => item.id === selectionId);
+
+    if (exists) {
+      removeSelection(selectionId);
+    } else {
+      addSelection({
+        id: selectionId,
+        matchId: match.id,
+        matchName: `${match.team1.name} - ${match.team2.name}`,
+        selection: label,
+        odds: oddValue
+      });
+    }
   };
 
   const filteredMatches = matches.filter(m => {
@@ -677,7 +691,7 @@ export const GercekView: React.FC = () => {
                               <button
                                 onClick={() => selectBet(match.id, '1')}
                                 className={`flex-1 md:w-[70px] h-[50px] flex flex-col items-center justify-center rounded-xl transition-all duration-300 ${
-                                  selectedBets[match.id] === '1' ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
+                                  betSlip.some(item => item.id === `${match.id}_1`) ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
                                 }`}
                               >
                                 <span className="text-[11px] text-inherit opacity-60 font-bold mb-0.5">1</span>
@@ -686,7 +700,7 @@ export const GercekView: React.FC = () => {
                               <button
                                 onClick={() => selectBet(match.id, 'X')}
                                 className={`flex-1 md:w-[70px] h-[50px] flex flex-col items-center justify-center rounded-xl transition-all duration-300 ${
-                                  selectedBets[match.id] === 'X' ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
+                                  betSlip.some(item => item.id === `${match.id}_X`) ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
                                 }`}
                               >
                                 <span className="text-[11px] text-inherit opacity-60 font-bold mb-0.5">X</span>
@@ -695,7 +709,7 @@ export const GercekView: React.FC = () => {
                               <button
                                 onClick={() => selectBet(match.id, '2')}
                                 className={`flex-1 md:w-[70px] h-[50px] flex flex-col items-center justify-center rounded-xl transition-all duration-300 ${
-                                  selectedBets[match.id] === '2' ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
+                                  betSlip.some(item => item.id === `${match.id}_2`) ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
                                 }`}
                               >
                                 <span className="text-[11px] text-inherit opacity-60 font-bold mb-0.5">2</span>
