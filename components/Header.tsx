@@ -599,23 +599,7 @@ const Header: React.FC<HeaderProps> = ({
           ) : (
             <div className="flex items-center gap-2 mr-1 md:mr-2">
               
-              {/* Search Button */}
-              <button 
-                onClick={onSearchClick}
-                className="hidden md:flex w-[38px] h-[38px] md:w-[42px] md:h-[42px] items-center justify-center bg-[#1b1e28] hover:bg-white/5 border border-white/5 rounded-lg text-zinc-300 transition-colors"
-                title={t('search')}
-              >
-                <Search className="w-4 h-4 md:w-5 md:h-5" />
-              </button>
 
-              {/* Gift / Promos Button */}
-              <button 
-                onClick={() => onViewChange?.('promotions')}
-                className="hidden md:flex w-[38px] h-[38px] md:w-[42px] md:h-[42px] items-center justify-center bg-[#1b1e28] hover:bg-white/5 border border-white/5 rounded-lg text-zinc-300 transition-colors"
-                title={t('promotions')}
-              >
-                <Gift className="w-4 h-4 md:w-5 md:h-5 text-[#10b981]" />
-              </button>
 
               {/* Login Button */}
               <button
