@@ -497,7 +497,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
                 {/* Right: User Controls */}
-        <div id="tour-user-panel" className="flex items-center justify-end flex-[2] gap-1 md:gap-3 z-10">
+        <div id="tour-user-panel" className="flex items-center justify-end flex-[2] gap-1 md:gap-3 z-10 pr-2 md:pr-16 lg:pr-32 xl:pr-48">
 
           {siteUser ? (
             <div className="flex items-center gap-2 md:gap-3 ml-2">
