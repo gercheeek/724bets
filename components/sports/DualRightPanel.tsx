@@ -29,6 +29,11 @@ export const DualRightPanel: React.FC<{
   }, []);
 
   const handlePlaceBet = async () => {
+    if (!siteUser) {
+      window.dispatchEvent(new CustomEvent('openLoginModal'));
+      return;
+    }
+
     try {
       await placeBet(parseFloat(betAmount.toString()) || 0, betSlip, totalOdds);
       triggerGlobalToast({ type: 'success', message: 'Bahis başarıyla oynandı!' });
@@ -205,7 +210,7 @@ export const DualRightPanel: React.FC<{
                         onClick={handlePlaceBet}
                         className="flex-1 h-12 bg-[#10b981] hover:bg-[#00c966] text-black font-black text-sm tracking-wide rounded-md shadow-md active:scale-[0.98] transition-all"
                       >
-                        {language === 'tr' ? 'Giriş yapmak' : 'Place Bet'}
+                        {!siteUser ? (language === 'tr' ? 'Giriş Yap' : 'Login') : (language === 'tr' ? 'Bahis Yap' : 'Place Bet')}
                       </button>
                     </div>
                   </div>
