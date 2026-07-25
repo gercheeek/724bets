@@ -2547,6 +2547,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               customGames={casinoLobbyGames} 
               isLoggedIn={!!(siteUser || userRole)}
               onNavigate={handleViewChange}
+              initialTab={view === 'slots' ? 'slots' : view === 'live-casino' ? 'live' : view === 'favorites' ? 'favorites' : 'all'}
             />
           </div>
         )}

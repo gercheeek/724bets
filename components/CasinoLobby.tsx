@@ -405,11 +405,13 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
 export default function CasinoLobby({ 
   onNavigate, 
   customGames = [],
-  isLoggedIn = false
+  isLoggedIn = false,
+  initialTab
 }: { 
   onNavigate: (view: string, gameData?: any) => void, 
   customGames?: any[],
-  isLoggedIn?: boolean 
+  isLoggedIn?: boolean,
+  initialTab?: string
 }) {
   const { t } = useLanguage();
   const dynamicOriginals = getOriginalsData(t).map((game, i) => ({
