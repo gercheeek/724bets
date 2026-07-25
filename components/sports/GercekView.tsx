@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Radio, 
+  Radio,
+  Calendar,
+  Clock, 
   Star, 
   Globe, 
   ChevronDown, 
@@ -182,6 +184,18 @@ const INITIAL_MATCHES: Match[] = [
     totalMarkets: 24,
     isFavorite: false
   }
+];
+
+
+const FEATURED_DUMMY = [
+  { id: 'f1', league: 'UFC Fight Night', time: '21 dakika içinde başlıyor', team1: 'Zaynukov, Magomed', team2: 'Rzepecki, Damian', date: 'Bugün', hour: '20:05', flag1: 'ru', flag2: 'pl', odds1: '1.40', odds2: '3.20' },
+  { id: 'f2', league: 'UFC Fight Night', time: '1 dakika içinde başlıyor', team1: 'Kuniev, Rizvan', team2: 'Fortune, Tyrell', date: 'Bugün', hour: '19:45', flag1: 'ru', flag2: 'us', odds1: '1.32', odds2: '3.65' },
+  { id: 'f3', league: 'UFC Fight Night', time: '1 saat içinde başlıyor', team1: 'Erceg, Steve', team2: 'Temirov, Ramazonbek', date: 'Bugün', hour: '20:45', flag1: 'au', flag2: 'uz', odds1: '1.88', odds2: '2.00' },
+  { id: 'f4', league: 'International Matchups', time: '4 saat içinde başlıyor', team1: 'Plex', team2: 'Fernanfloo', date: 'Yarın', hour: '00:00', flag1: 'es', flag2: 'mx', odds1: '1.10', odds2: '5.20' },
+  { id: 'f5', league: 'UFC Fight Night', time: '1 saat içinde başlıyor', team1: 'Ankalaev, Magomed', team2: 'Guskov, Bogdan', date: 'Bugün', hour: '21:05', flag1: 'ru', flag2: 'uz', odds1: '1.19', odds2: '5.20' },
+  { id: 'f6', league: 'International Matchups', time: '3 saat içinde başlıyor', team1: 'Lit Killah', team2: 'Kidd Keo', date: 'Bugün', hour: '23:00', flag1: 'ar', flag2: 'es', odds1: '1.43', odds2: '2.70' },
+  { id: 'f7', league: 'International Matchups', time: '2 saat içinde başlıyor', team1: 'Viruzz', team2: 'Arias, Gero', date: 'Bugün', hour: '22:00', flag1: 'es', flag2: 'ar', odds1: '2.22', odds2: '1.61' },
+  { id: 'f8', league: 'International Matchups', time: '4 saat içinde başlıyor', team1: 'Illojuan', team2: 'Thegrefg', date: 'Yarın', hour: '00:30', flag1: 'es', flag2: 'es', odds1: '3.85', odds2: '1.20' }
 ];
 
 const SPORTS_NAV = [
@@ -440,304 +454,191 @@ export const GercekView: React.FC = () => {
         </div>
       </div>
 
-      <div className="mb-8">
-        <SportsHeroBanner />
-      </div>
-
-
-
-
-      {/* ── FEATURED MATCHES ROW ── */}
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4 mb-4">
-        
-        {/* Match Card 1 */}
-        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <Gamepad2 className="w-4 h-4 shrink-0 text-white" />
-              <span className="truncate text-white/80">Counter-Strike 2 | BLAST Bounty</span>
-            </div>
-            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">Yarın, 15:30</span>
-          </div>
-          <div className="flex items-center justify-between mt-4 gap-2">
-            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-white/10 shadow-sm">
-                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Sinners&backgroundColor=000000" className="w-full h-full object-cover scale-125" alt="Sinners" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full">Sinners Esports</span>
-            </div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
-            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-white/10 shadow-sm">
-                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=FUT&backgroundColor=000000" className="w-full h-full object-cover scale-125" alt="FUT" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">FUT Esports</span>
-            </div>
-          </div>
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
-          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
-            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
-            <div className="flex items-center gap-2">
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">3.65</span>
-              </button>
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.29</span>
-              </button>
-            </div>
-          </div>
+      
+      {/* ── ÖNE ÇIKANLAR (FEATURED) ── */}
+      <div className="w-full mb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Flame className="w-5 h-5 text-orange-400" />
+          <h2 className="text-lg font-bold text-white tracking-wide">Öne Çıkanlar</h2>
         </div>
-
-        {/* Match Card 2 */}
-        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <Flame className="w-4 h-4 shrink-0 text-white" />
-              <span className="truncate text-white/80">Boks | Unvan Maçı</span>
-            </div>
-            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">Yarın, 13:30</span>
-          </div>
-          <div className="flex items-center justify-between mt-4 gap-2">
-            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
-                <img src="https://flagcdn.com/w80/gb.png" className="w-full h-full object-cover" alt="TF" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full">Fury, Tyson</span>
-            </div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
-            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
-                <img src="https://flagcdn.com/w80/pl.png" className="w-full h-full object-cover" alt="MW" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">Wach, Mariusz</span>
-            </div>
-          </div>
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
-          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
-            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
-            <div className="flex items-center gap-2">
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.01</span>
-              </button>
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">15.00</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Match Card 3 */}
-        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <Flame className="w-4 h-4 shrink-0 text-white" />
-              <span className="truncate text-white/80">Boks | Profesyonel Maç</span>
-            </div>
-            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">25 Ağu, 18:00</span>
-          </div>
-          <div className="flex items-center justify-between mt-4 gap-2">
-            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
-                <img src="https://flagcdn.com/w80/kz.png" className="w-full h-full object-cover" alt="AA" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full">Akhmedov, Ali</span>
-            </div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
-            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
-                <img src="https://flagcdn.com/w80/id.png" className="w-full h-full object-cover" alt="AW" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">Wellem, A.</span>
-            </div>
-          </div>
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
-          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
-            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
-            <div className="flex items-center gap-2">
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.11</span>
-              </button>
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">5.50</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      {/* ── SEARCH BAR (TOP OF LIST) ── */}
-      <div className="relative w-full mb-6">
-        <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-        <input 
-          type="text"
-          placeholder="Takım, lig veya maç ara..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-[#111] border border-white/10 focus:border-white hover:border-white/20 rounded-2xl pl-12 pr-4 py-4 text-sm text-white placeholder-white/40 outline-none transition-all"
-        />
-      </div>
-
-      {/* ── MATCH CARDS GRID ── */}
-      {isParsing ? (
-        <div className="py-24 flex flex-col items-center justify-center text-center bg-[#111216] rounded-2xl border border-white/5 shadow-inner">
-          <div className="relative w-12 h-12 mb-4">
-            <span className="animate-ping absolute inset-0 rounded-full bg-[#10b981] opacity-20"></span>
-            <div className="w-12 h-12 rounded-full border-2 border-[#10b981]/20 border-t-[#10b981] animate-spin"></div>
-          </div>
-          <h3 className="text-white text-base font-bold tracking-wide mb-1 animate-pulse">MAÇ BÜLTENİ YÜKLENİYOR...</h3>
-        </div>
-      ) : filteredMatches.length === 0 ? (
-        <div className="py-24 text-center bg-[#111216] rounded-2xl border border-white/5 shadow-[inset_0_4px_20px_rgba(0,0,0,0.5)]">
-          <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-lg">
-            <Trophy className="w-8 h-8 text-slate-600" />
-          </div>
-          <p className="text-white font-medium mb-1">Karşılaşma Bulunamadı</p>
-          <p className="text-slate-500 text-sm">Bu kategoride şu an aktif veya yaklaşan bir maç yok.</p>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-8">
-          
-          {/* CANLI MAÇLAR */}
-          {(() => {
-            const liveMatches = filteredMatches.filter(m => m.period === 'Canlı');
-            if (liveMatches.length === 0) return null;
-            
-            const grouped = liveMatches.reduce((acc, match) => {
-              const league = match.league || 'Diğer Ligler';
-              if (!acc[league]) acc[league] = [];
-              acc[league].push(match);
-              return acc;
-            }, {} as Record<string, Match[]>);
-
-            return (
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center gap-3 px-1">
-                  <div className="w-2.5 h-2.5 bg-[#10b981] rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
-                  <h3 className="text-xl font-black text-white tracking-wide">CANLI MAÇLAR</h3>
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          {FEATURED_DUMMY.map((match) => (
+            <div key={match.id} className="bg-[#1e232b] rounded-xl p-3 flex flex-col gap-3 border border-white/5 relative overflow-hidden transition-all hover:bg-[#252b36] cursor-pointer shadow-lg hover:border-white/10">
+              <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-white/5 pb-2">
+                <div className="flex items-center gap-1.5 truncate">
+                  <Gamepad2 className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">{match.league}</span>
                 </div>
-                {Object.entries(grouped).map(([leagueName, leagueMatches]) => (
-                  <div key={leagueName} className="bg-transparent border border-white/5 rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/10 mb-4">
-                    {/* League Header */}
-                    <div className="backdrop-blur-xl bg-white/[0.03] px-4 py-3 flex items-center gap-3 relative border-b border-white/5">
-                      <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full">
-                        <div className="w-1.5 h-1.5 bg-white/80 rounded-full" />
-                        <span className="text-white/80 font-bold text-[11px] uppercase tracking-wider">{leagueName}</span>
-                      </div>
-                    </div>
-                    
-                    {/* Match Rows */}
-                    <div className="flex flex-col">
-                      {leagueMatches.map((match, index) => (
-                        <div key={match.id} className={`flex flex-col md:flex-row md:items-center gap-4 p-5 hover:bg-white/[0.03] transition-all duration-300 relative group overflow-hidden ${index !== 0 ? 'border-t border-white/[0.03]' : ''}`}>
-                          
-                          {/* Time & Status */}
-                          <div className="w-full md:w-32 flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center gap-2 shrink-0">
-                            <div className="flex items-center gap-2 bg-[#10b981]/10 border border-[#10b981]/20 px-3 py-1.5 rounded-md">
-                              <div className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                              <span className="text-[#10b981] text-[13px] font-black tracking-widest">{match.minute}'</span>
-                            </div>
-                            <div className="flex gap-2 mt-1">
-                               {match.hasStream && <Play className="w-4 h-4 text-white/50 hover:text-white transition-colors hidden md:block cursor-pointer" />}
-                               {match.hasStats && <BarChart2 className="w-4 h-4 text-white/50 hover:text-white transition-colors hidden md:block cursor-pointer" />}
-                            </div>
-                            {/* Mobile favorite icon */}
-                            <button onClick={() => toggleFavorite(match.id)} className="md:hidden text-slate-500">
-                              <Star className={`w-4 h-4 ${match.isFavorite ? 'fill-amber-400 text-amber-400' : ''}`} />
-                            </button>
-                          </div>
-
-                          {/* Teams & Scores */}
-                          <div className="flex-1 flex flex-col gap-3 min-w-0">
-                            <div className="flex items-center justify-between gap-3 pr-2 md:pr-8">
-                              <div className="flex items-center gap-3 truncate">
-                                <img src={`https://flagcdn.com/w80/${['gb','de','es','it','fr','br','ar','pt','nl','be'][match.team1.name.length % 10]}.png`} className="w-6 h-6 md:w-7 md:h-7 rounded-full shadow-sm shrink-0 border border-white/10 object-cover" alt={match.team1.name} />
-                                <span className="text-[17px] font-black text-white truncate tracking-tight">{match.team1.name}</span>
-                              </div>
-                              <div className="bg-white/5 border border-white/10 rounded-lg px-3 py-1 min-w-[36px] flex items-center justify-center">
-                                <span className="text-white font-black text-[15px]">{match.team1.score}</span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between gap-3 pr-2 md:pr-8">
-                              <div className="flex items-center gap-3 truncate">
-                                <img src={`https://flagcdn.com/w80/${['it','fr','br','ar','pt','nl','be','gb','de','es'][match.team2.name.length % 10]}.png`} className="w-6 h-6 md:w-7 md:h-7 rounded-full shadow-sm shrink-0 border border-white/10 object-cover" alt={match.team2.name} />
-                                <span className="text-[17px] font-black text-white truncate tracking-tight">{match.team2.name}</span>
-                              </div>
-                              <div className="bg-white/5 border border-white/10 rounded-lg px-3 py-1 min-w-[36px] flex items-center justify-center">
-                                <span className="text-white font-black text-[15px]">{match.team2.score}</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Right side controls (Odds + Fav) */}
-                          <div className="flex items-center justify-between md:justify-end gap-5 shrink-0 mt-3 md:mt-0">
-                            
-                            {/* Desktop Icons */}
-                            <button onClick={() => toggleFavorite(match.id)} className="hidden md:flex text-slate-600 hover:text-white transition-colors">
-                              <Star className={`w-5 h-5 ${match.isFavorite ? 'fill-white text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]' : ''}`} />
-                            </button>
-
-                            {/* Odds */}
-                            <div className="flex gap-2 w-full md:w-auto">
-                              <button
-                                onClick={() => selectBet(match.id, '1')}
-                                className={`flex-1 md:w-[70px] h-[50px] flex flex-col items-center justify-center rounded-xl transition-all duration-300 ${
-                                  betSlip.some(item => item.id === `${match.id}_1`) ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
-                                }`}
-                              >
-                                <span className="text-[11px] text-inherit opacity-60 font-bold mb-0.5">1</span>
-                                <span className="text-[15px] font-black tracking-tight">{match.odds.home}</span>
-                              </button>
-                              <button
-                                onClick={() => selectBet(match.id, 'X')}
-                                className={`flex-1 md:w-[70px] h-[50px] flex flex-col items-center justify-center rounded-xl transition-all duration-300 ${
-                                  betSlip.some(item => item.id === `${match.id}_X`) ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
-                                }`}
-                              >
-                                <span className="text-[11px] text-inherit opacity-60 font-bold mb-0.5">X</span>
-                                <span className="text-[15px] font-black tracking-tight">{match.odds.draw}</span>
-                              </button>
-                              <button
-                                onClick={() => selectBet(match.id, '2')}
-                                className={`flex-1 md:w-[70px] h-[50px] flex flex-col items-center justify-center rounded-xl transition-all duration-300 ${
-                                  betSlip.some(item => item.id === `${match.id}_2`) ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105 z-10' : 'bg-[#1a1a1a] hover:bg-white text-white/70 hover:text-black transition-colors duration-200 rounded-lg'
-                                }`}
-                              >
-                                <span className="text-[11px] text-inherit opacity-60 font-bold mb-0.5">2</span>
-                                <span className="text-[15px] font-black tracking-tight">{match.odds.away}</span>
-                              </button>
-                            </div>
-                            
-                            <button
-                              className="hidden md:flex w-12 h-12 bg-transparent hover:bg-white/5 rounded-xl items-center justify-center text-slate-500 hover:text-white transition-all cursor-pointer"
-                              title={`${match.totalMarkets} Bahis Seçeneği`}
-                            >
-                              <ChevronDown className="w-5 h-5" />
-                            </button>
-
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>{match.time}</span>
+                  <BarChart2 className="w-3.5 h-3.5 ml-1" />
+                </div>
               </div>
-            );
-          })()}
-
-
-
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-2 flex-1 min-w-0 pr-2">
+                  <div className="flex items-center gap-2">
+                    <img src={`https://flagcdn.com/w20/${match.flag1}.png`} className="w-4 h-4 rounded-full object-cover shrink-0" />
+                    <span className="text-white font-medium text-xs truncate">{match.team1}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <img src={`https://flagcdn.com/w20/${match.flag2}.png`} className="w-4 h-4 rounded-full object-cover shrink-0" />
+                    <span className="text-white font-medium text-xs truncate">{match.team2}</span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-1 shrink-0 text-[11px] text-zinc-400">
+                  <div className="flex items-center gap-1">
+                     <span>{match.date}</span>
+                     <Calendar className="w-3 h-3" />
+                  </div>
+                  <div className="flex items-center gap-1">
+                     <span>{match.hour}</span>
+                     <Clock className="w-3 h-3" />
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 mt-auto">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); selectBet(match.id, '1'); }}
+                  className={`flex-1 flex justify-between items-center rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+                    betSlip.some(b => b.id === `${match.id}_1`) ? 'bg-[#00ff88] text-black shadow-[0_0_10px_rgba(0,255,136,0.2)]' : 'bg-[#15191f] text-zinc-300 hover:bg-[#2c3340]'
+                  }`}
+                >
+                  <span className="opacity-60">1</span>
+                  <span>{match.odds1}</span>
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); selectBet(match.id, '2'); }}
+                  className={`flex-1 flex justify-between items-center rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+                    betSlip.some(b => b.id === `${match.id}_2`) ? 'bg-[#00ff88] text-black shadow-[0_0_10px_rgba(0,255,136,0.2)]' : 'bg-[#15191f] text-zinc-300 hover:bg-[#2c3340]'
+                  }`}
+                >
+                  <span className="opacity-60">2</span>
+                  <span>{match.odds2}</span>
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
+
+      {/* ── CANLI MAÇLAR (LIVE MATCHES) ── */}
+      <div className="w-full">
+        <div className="flex items-center gap-2 mb-4">
+          <Play className="w-5 h-5 text-red-500 fill-red-500" />
+          <h2 className="text-lg font-bold text-white tracking-wide">Canlı Maçlar</h2>
+        </div>
+
+        {isParsing ? (
+          <div className="py-24 flex flex-col items-center justify-center text-center bg-[#1e232b] rounded-2xl border border-white/5 shadow-inner">
+            <div className="relative w-12 h-12 mb-4">
+              <span className="animate-ping absolute inset-0 rounded-full bg-[#10b981] opacity-20"></span>
+              <div className="w-12 h-12 rounded-full border-2 border-[#10b981]/20 border-t-[#10b981] animate-spin"></div>
+            </div>
+            <h3 className="text-white text-base font-bold tracking-wide mb-1 animate-pulse">MAÇ BÜLTENİ YÜKLENİYOR...</h3>
+          </div>
+        ) : filteredMatches.length === 0 ? (
+          <div className="py-24 text-center bg-[#1e232b] rounded-2xl border border-white/5 shadow-[inset_0_4px_20px_rgba(0,0,0,0.5)]">
+            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-lg">
+              <Trophy className="w-8 h-8 text-slate-600" />
+            </div>
+            <p className="text-white font-medium mb-1">Karşılaşma Bulunamadı</p>
+            <p className="text-slate-500 text-sm">Bu kategoride şu an aktif veya yaklaşan bir maç yok.</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {(() => {
+              const liveMatches = filteredMatches.filter(m => m.period === 'Canlı');
+              if (liveMatches.length === 0) return null;
+              
+              const grouped = liveMatches.reduce((acc, match) => {
+                const league = match.league || 'Diğer Ligler';
+                if (!acc[league]) acc[league] = [];
+                acc[league].push(match);
+                return acc;
+              }, {});
+
+              return Object.entries(grouped).map(([leagueName, leagueMatches]) => {
+                // generate a stable flag based on league name length
+                const flagCode = ['se','ch','gb','de','es','it','fr','br','ar','pt'][leagueName.length % 10];
+                return (
+                <div key={leagueName} className="mb-4">
+                  {/* League Header */}
+                  <div className="bg-[#1e232b] px-4 py-3 flex items-center justify-between border-b border-white/5 rounded-t-xl hover:bg-[#252b36] cursor-pointer transition-colors">
+                    <div className="flex items-center gap-2">
+                      <img src={`https://flagcdn.com/w20/${flagCode}.png`} className="w-4 h-4 rounded-full object-cover border border-white/10 shadow-sm" />
+                      <span className="text-white font-semibold text-[13px] tracking-wide">{leagueName}</span>
+                      <span className="text-zinc-500 text-[11px] font-bold px-1.5 py-0.5 bg-black/20 rounded ml-2">{leagueMatches.length}</span>
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-zinc-500" />
+                  </div>
+                  
+                  {/* Match Rows */}
+                  <div className="flex flex-col rounded-b-xl overflow-hidden shadow-lg border border-white/5 border-t-0">
+                    {leagueMatches.map((match, index) => {
+                      const flag1 = ['se','ch','gb','de','es','it','fr','br','ar','pt'][(match.team1.name.length * 3) % 10];
+                      const flag2 = ['se','ch','gb','de','es','it','fr','br','ar','pt'][(match.team2.name.length * 7) % 10];
+                      return (
+                      <div key={match.id} className={`flex flex-col lg:flex-row lg:items-center bg-[#161920] hover:bg-[#1a1e25] transition-all p-3 gap-4 ${index !== leagueMatches.length - 1 ? 'border-b border-white/[0.03]' : ''}`}>
+                        
+                        {/* Teams & Scores */}
+                        <div className="flex-1 flex flex-row items-center gap-4 min-w-0">
+                           <div className="flex-1 flex flex-col gap-2 min-w-0">
+                             <div className="flex items-center gap-3">
+                               <img src={`https://flagcdn.com/w20/${flag1}.png`} className="w-4 h-4 rounded-full object-cover shrink-0" />
+                               <span className="text-white font-medium text-[13px] truncate">{match.team1.name}</span>
+                             </div>
+                             <div className="flex items-center gap-3">
+                               <img src={`https://flagcdn.com/w20/${flag2}.png`} className="w-4 h-4 rounded-full object-cover shrink-0" />
+                               <span className="text-white font-medium text-[13px] truncate">{match.team2.name}</span>
+                             </div>
+                           </div>
+                           
+                           {/* Score / Status */}
+                           <div className="flex items-center gap-4 pl-4 border-l border-white/5 shrink-0">
+                             <div className="flex flex-col gap-2 text-center text-white font-bold text-[14px]">
+                               <span>{match.team1.score}</span>
+                               <span>{match.team2.score}</span>
+                             </div>
+                             <div className="flex flex-col items-center justify-center gap-1 min-w-[50px]">
+                               <span className="bg-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]">CANLI</span>
+                               <span className="text-zinc-400 text-[11px] font-medium">{match.minute}'</span>
+                             </div>
+                             <div className="flex flex-col sm:flex-row gap-2 shrink-0 opacity-70">
+                               <BarChart2 className="w-4 h-4 text-zinc-500 hover:text-white cursor-pointer transition-colors" />
+                               <Tv className="w-4 h-4 text-zinc-500 hover:text-white cursor-pointer transition-colors" />
+                             </div>
+                           </div>
+                        </div>
+
+                        {/* Odds Actions */}
+                        <div className="flex items-center gap-1 shrink-0 mt-3 lg:mt-0 justify-between lg:justify-end">
+                          <button onClick={() => selectBet(match.id, '1')} className={`flex-1 lg:w-[65px] h-[45px] flex flex-col items-center justify-center rounded bg-[#111419] hover:bg-[#252b36] transition-all border border-transparent hover:border-white/10 ${betSlip.some(b => b.id === match.id + '_1') ? '!bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.15)] scale-[1.02] z-10' : 'text-zinc-300'}`}>
+                            <span className="text-[10px] opacity-60 mb-0.5 font-bold">1</span>
+                            <span className="text-[13px] font-black">{match.odds.home}</span>
+                          </button>
+                          <button onClick={() => selectBet(match.id, 'X')} className={`flex-1 lg:w-[65px] h-[45px] flex flex-col items-center justify-center rounded bg-[#111419] hover:bg-[#252b36] transition-all border border-transparent hover:border-white/10 ${betSlip.some(b => b.id === match.id + '_X') ? '!bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.15)] scale-[1.02] z-10' : 'text-zinc-300'}`}>
+                            <span className="text-[10px] opacity-60 mb-0.5 font-bold">X</span>
+                            <span className="text-[13px] font-black">{match.odds.draw}</span>
+                          </button>
+                          <button onClick={() => selectBet(match.id, '2')} className={`flex-1 lg:w-[65px] h-[45px] flex flex-col items-center justify-center rounded bg-[#111419] hover:bg-[#252b36] transition-all border border-transparent hover:border-white/10 ${betSlip.some(b => b.id === match.id + '_2') ? '!bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.15)] scale-[1.02] z-10' : 'text-zinc-300'}`}>
+                            <span className="text-[10px] opacity-60 mb-0.5 font-bold">2</span>
+                            <span className="text-[13px] font-black">{match.odds.away}</span>
+                          </button>
+                          <button className="w-[45px] h-[45px] flex items-center justify-center rounded bg-transparent hover:bg-white/5 text-zinc-400 hover:text-white text-[11px] font-bold ml-1 transition-colors border border-transparent hover:border-white/10">
+                            +{match.totalMarkets}
+                          </button>
+                        </div>
+
+                      </div>
+                    )})}
+                  </div>
+                </div>
+              )});
+            })()}
+          </div>
+        )}
+      </div>
 
     </div>
   );
