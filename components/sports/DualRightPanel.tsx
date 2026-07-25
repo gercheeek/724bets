@@ -22,9 +22,14 @@ export const DualRightPanel: React.FC<{
     const handleSetChat = () => {
       setActivePanel('chat');
     };
+    const handleSetCoupon = () => {
+      setActivePanel('coupon');
+    };
     window.addEventListener('setRightPanelToChat', handleSetChat);
+    window.addEventListener('openBetSlip', handleSetCoupon);
     return () => {
       window.removeEventListener('setRightPanelToChat', handleSetChat);
+      window.removeEventListener('openBetSlip', handleSetCoupon);
     };
   }, []);
 

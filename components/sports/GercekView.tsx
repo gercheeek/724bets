@@ -451,14 +451,26 @@ export const GercekView: React.FC = () => {
   };
 
   const selectBet = (matchId: string, selection: string) => {
-    const match = matches.find(m => m.id === matchId);
-    if (!match) return;
-
     let oddValue = 0;
     let label = '';
-    if (selection === '1') { oddValue = parseFloat(match.odds.home); label = 'Maç Sonucu 1'; }
-    else if (selection === 'X') { oddValue = parseFloat(match.odds.draw); label = 'Maç Sonucu X'; }
-    else if (selection === '2') { oddValue = parseFloat(match.odds.away); label = 'Maç Sonucu 2'; }
+    let matchName = '';
+
+    const match = matches.find(m => m.id === matchId);
+    if (match) {
+      if (selection === '1') { oddValue = parseFloat(match.odds.home); label = 'Maç Sonucu 1'; }
+      else if (selection === 'X') { oddValue = parseFloat(match.odds.draw); label = 'Maç Sonucu X'; }
+      else if (selection === '2') { oddValue = parseFloat(match.odds.away); label = 'Maç Sonucu 2'; }
+      matchName = `${match.team1.name} - ${match.team2.name}`;
+    } else {
+      const dummyMatch = FEATURED_DUMMY.find(m => m.id === matchId);
+      if (dummyMatch) {
+        if (selection === '1') { oddValue = parseFloat(dummyMatch.odds1); label = 'Maç Sonucu 1'; }
+        else if (selection === '2') { oddValue = parseFloat(dummyMatch.odds2); label = 'Maç Sonucu 2'; }
+        matchName = `${dummyMatch.team1} - ${dummyMatch.team2}`;
+      } else {
+        return;
+      }
+    }
 
     const selectionId = `${matchId}_${selection}`;
     const exists = betSlip.some(item => item.id === selectionId);
@@ -468,11 +480,13 @@ export const GercekView: React.FC = () => {
     } else {
       addSelection({
         id: selectionId,
-        matchId: match.id,
-        matchName: `${match.team1.name} - ${match.team2.name}`,
+        matchId: matchId,
+        matchName: matchName,
         selection: label,
         odds: oddValue
       });
+      window.dispatchEvent(new CustomEvent('openBetSlip'));
+      window.dispatchEvent(new CustomEvent('openMobileChatPanel')); // also opens the mobile panel if on mobile
     }
   };
 
@@ -592,11 +606,11 @@ export const GercekView: React.FC = () => {
           <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
             <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
             <div className="flex items-center gap-2">
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy1', '1'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy1_1') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
                 <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
                 <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">3.65</span>
               </button>
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy1', '2'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy1_2') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
                 <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
                 <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.29</span>
               </button>
@@ -633,11 +647,11 @@ export const GercekView: React.FC = () => {
           <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
             <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
             <div className="flex items-center gap-2">
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy2', '1'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy2_1') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
                 <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
                 <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.01</span>
               </button>
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy2', '2'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy2_2') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
                 <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
                 <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">15.00</span>
               </button>
@@ -674,11 +688,11 @@ export const GercekView: React.FC = () => {
           <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
             <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
             <div className="flex items-center gap-2">
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy3', '1'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy3_1') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
                 <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
                 <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.11</span>
               </button>
-              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy3', '2'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy3_2') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
                 <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
                 <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">5.50</span>
               </button>
@@ -832,81 +846,86 @@ export const GercekView: React.FC = () => {
                   </div>
                   
                   {/* Match Rows */}
-                  <div className="flex flex-col">
-                    {leagueMatches.map((match, index) => {
+                  <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3 p-3">
+                    {leagueMatches.map((match) => {
                       return (
-                      <div key={match.id} className={`flex flex-col lg:flex-row lg:items-center p-3 gap-4 ${index !== leagueMatches.length - 1 ? 'border-b border-white/5' : ''}`}>
-                        
-                        {/* Teams */}
-                        <div className="flex-1 flex flex-col gap-2 min-w-0 pr-4">
-                           <div className="flex items-center gap-2">
-                             <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                               <div className="w-2.5 h-2.5 rounded-full border border-zinc-400/50"></div>
-                             </div>
-                             <span className="text-zinc-200 font-medium text-[13px] truncate">{match.team1.name}</span>
-                           </div>
-                           <div className="flex items-center gap-2">
-                             <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                               <div className="w-2.5 h-2.5 rounded-full border border-zinc-400/50"></div>
-                             </div>
-                             <span className="text-zinc-200 font-medium text-[13px] truncate">{match.team2.name}</span>
-                           </div>
-                        </div>
-                        
-                        {/* Score & Status */}
-                        <div className="flex items-center gap-4 lg:w-[200px] shrink-0 justify-end lg:justify-start">
-                          <div className="flex flex-col gap-2 text-right">
-                            <span className="text-emerald-500 font-bold text-[13px]">{match.team1.score}</span>
-                            <span className="text-emerald-500 font-bold text-[13px]">{match.team2.score}</span>
-                          </div>
-                          <div className="flex flex-col gap-2 text-right opacity-60">
-                            <span className="text-white font-medium text-[13px]">{Math.floor(Math.random() * 3)}</span>
-                            <span className="text-white font-medium text-[13px]">{Math.floor(Math.random() * 3)}</span>
+                        <div key={match.id} className="bg-[#11141a] rounded-xl p-3 flex flex-col gap-3 border border-white/5 hover:border-white/10 transition-all shadow-sm">
+                          {/* Header */}
+                          <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-white/5 pb-2">
+                            <div className="flex items-center gap-1.5 truncate">
+                              <img src={`https://flagcdn.com/w20/${flagCode}.png`} className="w-3.5 h-3.5 rounded-full object-cover shrink-0" />
+                              <span className="truncate">{leagueName}</span>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <Clock className="w-3.5 h-3.5" />
+                              <span>{match.minute}'</span>
+                              <BarChart2 className="w-3.5 h-3.5 ml-1" />
+                            </div>
                           </div>
                           
-                          <div className="flex items-center gap-2 ml-2">
-                            <div className="flex flex-col items-center gap-1">
+                          {/* Teams & Score */}
+                          <div className="flex justify-between items-center pr-1">
+                            <div className="flex flex-col gap-2 flex-1 min-w-0 pr-4">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2 truncate">
+                                  <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                                    <div className="w-2 h-2 rounded-full border border-zinc-400/50"></div>
+                                  </div>
+                                  <span className="text-zinc-200 font-medium text-[13px] truncate">{match.team1.name}</span>
+                                </div>
+                                <span className="text-emerald-500 font-bold text-[14px] shrink-0">{match.team1.score}</span>
+                              </div>
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2 truncate">
+                                  <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                                    <div className="w-2 h-2 rounded-full border border-zinc-400/50"></div>
+                                  </div>
+                                  <span className="text-zinc-200 font-medium text-[13px] truncate">{match.team2.name}</span>
+                                </div>
+                                <span className="text-emerald-500 font-bold text-[14px] shrink-0">{match.team2.score}</span>
+                              </div>
+                            </div>
+                            
+                            {/* Live Badge */}
+                            <div className="shrink-0 flex items-center justify-center pl-3 border-l border-white/5 h-full">
                                <span className="bg-red-500 text-white text-[9px] font-black px-1.5 py-[2px] rounded uppercase tracking-wider">CANLI</span>
-                               <span className="text-zinc-400 text-[11px] font-medium">{match.minute}'</span>
-                            </div>
-                            <div className="flex flex-col gap-1.5 opacity-60 ml-2">
-                               <BarChart2 className="w-3.5 h-3.5 text-zinc-300" />
-                               <Tv className="w-3.5 h-3.5 text-zinc-300" />
                             </div>
                           </div>
-                        </div>
 
-                        {/* Odds Actions */}
-                        <div className="flex flex-col gap-1 shrink-0 mt-3 lg:mt-0 lg:w-auto w-full relative">
-                          {/* Desktop Headers */}
-                          {index === 0 && (
-                            <div className="hidden lg:flex items-center justify-between px-6 text-[10px] text-zinc-500 font-medium mb-1 absolute -top-[18px] right-0 w-[275px]">
-                               <span className="w-[70px] text-center">1</span>
-                               <span className="w-[70px] text-center">X</span>
-                               <span className="w-[70px] text-center">2</span>
-                               <span className="w-[45px]"></span>
-                            </div>
-                          )}
-                          <div className="flex items-center gap-2 justify-between lg:justify-end">
-                            <button onClick={() => selectBet(match.id, '1')} className={`relative w-[70px] h-[36px] flex items-center justify-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border ${betSlip.some(b => b.id === match.id + '_1') ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'}`}>
+                          {/* Odds */}
+                          <div className="flex items-center gap-2 mt-1">
+                            <button 
+                              onClick={(e) => { e.stopPropagation(); selectBet(match.id, '1'); }}
+                              className={`flex-1 flex justify-between items-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border px-3 py-2 ${
+                                betSlip.some(b => b.id === `${match.id}_1`) ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'
+                              }`}
+                            >
+                              <span className="text-[11px] text-zinc-500 font-medium">1</span>
                               <span className="text-[13px] text-white font-medium">{match.odds.home}</span>
-                              {Math.random() > 0.5 && <div className="absolute top-1 right-1 w-0 h-0 border-l-[3px] border-l-transparent border-b-[4px] border-b-emerald-500 border-r-[3px] border-r-transparent"></div>}
                             </button>
-                            <button onClick={() => selectBet(match.id, 'X')} className={`relative w-[70px] h-[36px] flex items-center justify-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border ${betSlip.some(b => b.id === match.id + '_X') ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'}`}>
-                              <span className="text-[13px] text-white font-medium">{match.odds.draw}</span>
-                            </button>
-                            <button onClick={() => selectBet(match.id, '2')} className={`relative w-[70px] h-[36px] flex items-center justify-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border ${betSlip.some(b => b.id === match.id + '_2') ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'}`}>
+                            {match.odds.draw && match.odds.draw !== '-' && match.odds.draw !== '0' && (
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); selectBet(match.id, 'X'); }}
+                                className={`flex-1 flex justify-between items-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border px-3 py-2 ${
+                                  betSlip.some(b => b.id === `${match.id}_X`) ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'
+                                }`}
+                              >
+                                <span className="text-[11px] text-zinc-500 font-medium">X</span>
+                                <span className="text-[13px] text-white font-medium">{match.odds.draw}</span>
+                              </button>
+                            )}
+                            <button 
+                              onClick={(e) => { e.stopPropagation(); selectBet(match.id, '2'); }}
+                              className={`flex-1 flex justify-between items-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border px-3 py-2 ${
+                                betSlip.some(b => b.id === `${match.id}_2`) ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'
+                              }`}
+                            >
+                              <span className="text-[11px] text-zinc-500 font-medium">2</span>
                               <span className="text-[13px] text-white font-medium">{match.odds.away}</span>
-                              {Math.random() > 0.5 && <div className="absolute bottom-1 right-1 w-0 h-0 border-l-[3px] border-l-transparent border-t-[4px] border-t-red-500 border-r-[3px] border-r-transparent"></div>}
-                            </button>
-                            <button className="w-[45px] h-[36px] flex items-center justify-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border border-white/5 text-zinc-300 text-[11px] font-medium ml-1">
-                              +{match.totalMarkets}
                             </button>
                           </div>
                         </div>
-
-                      </div>
-                    )})}
+                      )})}
                   </div>
                 </div>
               )});
