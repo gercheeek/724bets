@@ -455,7 +455,154 @@ export const GercekView: React.FC = () => {
       </div>
 
       
-      {/* ── ÖNE ÇIKANLAR (FEATURED) ── */}
+      <div className="mb-8">
+        <SportsHeroBanner />
+      </div>
+
+
+
+
+      {/* ── FEATURED MATCHES ROW ── */}
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4 mb-4">
+        
+        {/* Match Card 1 */}
+        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <Gamepad2 className="w-4 h-4 shrink-0 text-white" />
+              <span className="truncate text-white/80">Counter-Strike 2 | BLAST Bounty</span>
+            </div>
+            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">Yarın, 15:30</span>
+          </div>
+          <div className="flex items-center justify-between mt-4 gap-2">
+            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
+              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-white/10 shadow-sm">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Sinners&backgroundColor=000000" className="w-full h-full object-cover scale-125" alt="Sinners" />
+              </div>
+              <span className="font-bold text-white/90 text-[13px] truncate w-full">Sinners Esports</span>
+            </div>
+            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
+            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
+              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-white/10 shadow-sm">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=FUT&backgroundColor=000000" className="w-full h-full object-cover scale-125" alt="FUT" />
+              </div>
+              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">FUT Esports</span>
+            </div>
+          </div>
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
+          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
+            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
+            <div className="flex items-center gap-2">
+              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
+                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">3.65</span>
+              </button>
+              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
+                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.29</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Match Card 2 */}
+        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <Flame className="w-4 h-4 shrink-0 text-white" />
+              <span className="truncate text-white/80">Boks | Unvan Maçı</span>
+            </div>
+            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">Yarın, 13:30</span>
+          </div>
+          <div className="flex items-center justify-between mt-4 gap-2">
+            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
+                <img src="https://flagcdn.com/w80/gb.png" className="w-full h-full object-cover" alt="TF" />
+              </div>
+              <span className="font-bold text-white/90 text-[13px] truncate w-full">Fury, Tyson</span>
+            </div>
+            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
+            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
+                <img src="https://flagcdn.com/w80/pl.png" className="w-full h-full object-cover" alt="MW" />
+              </div>
+              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">Wach, Mariusz</span>
+            </div>
+          </div>
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
+          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
+            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
+            <div className="flex items-center gap-2">
+              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
+                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.01</span>
+              </button>
+              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
+                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">15.00</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Match Card 3 */}
+        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <Flame className="w-4 h-4 shrink-0 text-white" />
+              <span className="truncate text-white/80">Boks | Profesyonel Maç</span>
+            </div>
+            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">25 Ağu, 18:00</span>
+          </div>
+          <div className="flex items-center justify-between mt-4 gap-2">
+            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
+                <img src="https://flagcdn.com/w80/kz.png" className="w-full h-full object-cover" alt="AA" />
+              </div>
+              <span className="font-bold text-white/90 text-[13px] truncate w-full">Akhmedov, Ali</span>
+            </div>
+            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
+            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
+                <img src="https://flagcdn.com/w80/id.png" className="w-full h-full object-cover" alt="AW" />
+              </div>
+              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">Wellem, A.</span>
+            </div>
+          </div>
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
+          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
+            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
+            <div className="flex items-center gap-2">
+              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
+                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.11</span>
+              </button>
+              <button className="flex-1 bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95">
+                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
+                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">5.50</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ── SEARCH BAR (TOP OF LIST) ── */}
+      <div className="relative w-full mb-6">
+        <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+        <input 
+          type="text"
+          placeholder="Takım, lig veya maç ara..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full bg-[#111] border border-white/10 focus:border-white hover:border-white/20 rounded-2xl pl-12 pr-4 py-4 text-sm text-white placeholder-white/40 outline-none transition-all"
+        />
+      </div>
+
+      \n      {/* ── ÖNE ÇIKANLAR (FEATURED) ── */}
       <div className="w-full mb-8">
         <div className="flex items-center gap-2 mb-4">
           <Flame className="w-5 h-5 text-orange-400" />
