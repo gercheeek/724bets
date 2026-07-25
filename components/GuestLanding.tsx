@@ -399,11 +399,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                                     Klasik Masa Oyunları
                                 </div>
 
-                                <div className="relative w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center shrink-0">
-                                    <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-[#06b6d4]/80 transition-colors duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)]"></div>
-                                    <div className="absolute inset-[4px] bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center group-hover:bg-[#06b6d4]/30 group-hover:border-[#06b6d4] shadow-[0_0_20px_rgba(6,182,212,0.3)] group-hover:shadow-[0_0_30px_rgba(6,182,212,0.9)] transition-all duration-500 cursor-pointer group-hover:scale-110">
-                                        <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white group-hover:text-white ml-0.5 transition-colors drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    </div>
+                                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#06b6d4] group-hover:scale-110 transition-all duration-300">
+                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
                             </div>
                         </div>
@@ -436,11 +433,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                                     Binlerce Oyun
                                 </div>
 
-                                <div className="relative w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center shrink-0">
-                                    <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-[#d946ef]/80 transition-colors duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)]"></div>
-                                    <div className="absolute inset-[4px] bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center group-hover:bg-[#d946ef]/30 group-hover:border-[#d946ef] shadow-[0_0_20px_rgba(217,70,239,0.3)] group-hover:shadow-[0_0_30px_rgba(217,70,239,0.9)] transition-all duration-500 cursor-pointer group-hover:scale-110">
-                                        <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white group-hover:text-white ml-0.5 transition-colors drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    </div>
+                                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#d946ef] group-hover:scale-110 transition-all duration-300">
+                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
                             </div>
                         </div>
@@ -473,11 +467,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                                     Canlı Bahisler
                                 </div>
 
-                                <div className="relative w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center shrink-0">
-                                    <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-[#10b981]/80 transition-colors duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)]"></div>
-                                    <div className="absolute inset-[4px] bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center group-hover:bg-[#10b981]/30 group-hover:border-[#10b981] shadow-[0_0_20px_rgba(16,185,129,0.3)] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.9)] transition-all duration-500 cursor-pointer group-hover:scale-110">
-                                        <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white group-hover:text-white ml-0.5 transition-colors drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    </div>
+                                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#10b981] group-hover:scale-110 transition-all duration-300">
+                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
                             </div>
                         </div>
@@ -510,11 +501,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                                     %99.2 RTP Özel
                                 </div>
 
-                                <div className="relative w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center shrink-0">
-                                    <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-[#eab308]/80 transition-colors duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)]"></div>
-                                    <div className="absolute inset-[4px] bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center group-hover:bg-[#eab308]/30 group-hover:border-[#eab308] shadow-[0_0_20px_rgba(234,179,8,0.3)] group-hover:shadow-[0_0_30px_rgba(234,179,8,0.9)] transition-all duration-500 cursor-pointer group-hover:scale-110">
-                                        <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white group-hover:text-white ml-0.5 transition-colors drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    </div>
+                                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#eab308] group-hover:scale-110 transition-all duration-300">
+                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
                             </div>
                         </div>
