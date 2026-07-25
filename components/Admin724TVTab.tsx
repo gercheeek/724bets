@@ -28,6 +28,7 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
     });
     const [editingStreamers, setEditingStreamers] = useState<Record<string, boolean>>({});
     const [uploadingId, setUploadingId] = useState<string | null>(null);
+    const [tvServer, setTvServer] = useState<'default' | 'marsbahis'>('default');
 
     const handleThumbnailUpload = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -184,10 +185,28 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
             if (g) giftsList = g;
         } catch (e) {}
 
+        try {
+            const { data: serverConfig } = await supabase.from('site_configs').select('value').eq('key', 'site_tv_server').maybeSingle();
+            if (serverConfig?.value === 'marsbahis' || serverConfig?.value === 'default') {
+                setTvServer(serverConfig.value);
+            }
+        } catch (e) {}
+
         setStreamers(streamersList);
         setVods(vodsList);
         setGifts(giftsList);
         setLoading(false);
+    };
+
+    const handleServerChange = async (server: 'default' | 'marsbahis') => {
+        setTvServer(server);
+        try {
+            const { error } = await supabase.from('site_configs').upsert({ key: 'site_tv_server', value: server }, { onConflict: 'key' });
+            if (error) throw error;
+        } catch (err) {
+            console.error('Server config error:', err);
+            alert('Sunucu ayarı güncellenirken hata oluştu.');
+        }
     };
 
     const handleSaveStreamer = async (s: Streamer) => {
@@ -539,6 +558,27 @@ const Admin724TVTab: React.FC<Admin724TVTabProps> = ({ config, onSave }) => {
                         <h2 style={{ fontSize: '18px', fontWeight: 900, color: '#fff', margin: 0 }}>GAMBLING TV YÖNETİMİ</h2>
                         <p style={{ fontSize: '11px', fontWeight: 600, color: '#666', margin: 0 }}>Yayıncılar, VOD'lar ve Sohbet Hediyeleri</p>
                     </div>
+                </div>
+            </div>
+
+            {/* Server Selection */}
+            <div style={{ background: '#111', border: '1px solid #333', borderRadius: '12px', padding: '16px', marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#fff', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Video size={16} color="#06b6d4" /> SUNUCU AYARLARI
+                </h3>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <button 
+                        onClick={() => handleServerChange('default')}
+                        style={{ flex: 1, padding: '12px', borderRadius: '8px', border: `2px solid ${tvServer === 'default' ? '#06b6d4' : '#333'}`, background: tvServer === 'default' ? 'rgba(6, 182, 212, 0.1)' : '#1a1a1a', color: '#fff', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s' }}
+                    >
+                        MEVCUT SUNUCU (XSlot)
+                    </button>
+                    <button 
+                        onClick={() => handleServerChange('marsbahis')}
+                        style={{ flex: 1, padding: '12px', borderRadius: '8px', border: `2px solid ${tvServer === 'marsbahis' ? '#10b981' : '#333'}`, background: tvServer === 'marsbahis' ? 'rgba(16, 185, 129, 0.1)' : '#1a1a1a', color: '#fff', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s' }}
+                    >
+                        MARSBAHİS SUNUCUSU
+                    </button>
                 </div>
             </div>
 

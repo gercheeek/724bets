@@ -263,7 +263,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
   // Global Loader Logic (Initial Load & Transitions)
   useEffect(() => {
-    const isSports = (v: string) => ['sports', 'sports2', 'sports3', 'sports4', 'sports5', 'spor724', 'gercek'].includes(v);
+    // Only use global loader for iframe-based sports views to hide iframe loading flashes
+    const isSports = (v: string) => ['sports2', 'sports3', 'sports4', 'sports5'].includes(v);
     
     const isEnteringSports = isSports(view);
     const isLeavingSports = isSports(previousViewRef.current) && !isEnteringSports;
@@ -318,7 +319,19 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1200);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1200) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const [isLogoSpinning, setIsLogoSpinning] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 // State removed
@@ -813,11 +826,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   // Automatically toggle sidebar and chat when view or login state changes (for desktop)
   useEffect(() => {
     if (window.innerWidth >= 1280) {
-      if (view === 'sports' || view === 'spor') {
-        setIsSidebarOpen(false);
-      } else {
-        setIsSidebarOpen(true); // Always open left menu on desktop for main/casino
-      }
+      setIsSidebarOpen(true); // Always open left menu on desktop
     }
   }, [siteUser, view]);
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -1705,7 +1714,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       setIsChatOpen(true);
     }
 
-    if (v === 'sports' || v === 'sports2' || v === 'sports3' || v === 'sports4' || v === 'sports5') {
+    if (v === 'sports2' || v === 'sports3' || v === 'sports4' || v === 'sports5') {
       setShowLoader(true);
       setFadeOutLoader(false);
       setIframeLoading(true);
@@ -2054,7 +2063,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         </InGameLayout>
       ) : (
         <div 
-          className="relative flex h-[100dvh] w-full bg-[#050505] text-white overflow-hidden" 
+          className="relative flex flex-col h-[100dvh] w-full bg-[#050505] text-white overflow-hidden" 
           onPointerDown={() => setIsLogoSpinning(true)}
           onPointerUp={() => setIsLogoSpinning(false)}
           onPointerCancel={() => setIsLogoSpinning(false)}
@@ -2065,42 +2074,86 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         >
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
-          {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-          {!(view === 'giveaway' || view === 'spor724') && (
-            <aside className={`hidden lg:flex flex-col bg-black bg-gradient-to-r from-white/[0.02] to-transparent border-r border-white/5 shadow-[15px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[250px]' : 'w-[72px]'}`}>
-              <Sidebar
-                isOpen={isSidebarOpen}
-                onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-                activeView={view}
+          {/* MASAÜSTÜ TAM GENİŞLİK HEADER */}
+          {view !== 'kral' && (
+            <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-black shadow-lg">
+              <Header
+                onAdminClick={() => {
+                  if (userRole) {
+                    setView('admin');
+                  } else {
+                    setAuthModalMode('admin');
+                  }
+                }}
                 onViewChange={handleViewChange}
+                activeView={view}
+                isAuthenticated={!!userRole}
                 userRole={userRole}
+                siteUser={siteUser}
+                onMemberLoginClick={() => setAuthModalMode('member')}
+                onMemberRegisterClick={() => setAuthModalMode('register')}
+                onMemberLogout={handleGlobalLogout}
+                onSearchClick={() => setShowSearch(true)}
+                onSupportClick={() => {
+                  if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+                  setIsChatOpen(prev => !prev);
+                }}
                 navVisibility={navVisibility}
-                onStartTour={handleStartTour}
+                marqueeConfig={marqueeConfig}
+                isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
+                isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
+                onToggleSidebar={() => {
+                  if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+                  setIsSidebarOpen(!isSidebarOpen);
+                }}
+                showFakeBetButton={view === 'sports2'}
+                onFakeBetClick={() => {
+                   if (!siteUser) setAuthModalMode('member');
+                   else setShowFakeBetModal(true);
+                }}
               />
-            </aside>
+            </div>
           )}
 
-          {/* MOBİL DRAWER - SOL MENÜ */}
-          {isMobileMenuOpen && !(view === 'spor724') && (
-            <div className="fixed inset-0 z-50 flex lg:hidden">
-              <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
-              <aside className="w-[280px] bg-black bg-gradient-to-r from-white/[0.02] to-transparent border-r border-white/5 h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
-                <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#050505] border border-[#111111] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
+          {/* MAIN FLEX LAYOUT (Sidebar + Content + Chat) */}
+          <div className="flex flex-1 w-full overflow-hidden relative">
+
+            {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
+            {!(view === 'giveaway') && (
+              <aside className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[260px]' : 'w-[78px]'}`}>
                 <Sidebar
-                  isOpen={true}
-                  onToggle={() => setIsMobileMenuOpen(false)}
+                  isOpen={isSidebarOpen}
+                  onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
                   activeView={view}
-                  onViewChange={(v) => { handleViewChange(v); setIsMobileMenuOpen(false); }}
+                  onViewChange={handleViewChange}
                   userRole={userRole}
                   navVisibility={navVisibility}
                   onStartTour={handleStartTour}
                 />
               </aside>
-            </div>
-          )}
+            )}
 
-          {/* 2. SAĞ TARAF (Header + İçerik + Chat) */}
-          <div className={appStage !== 'loading' ? `app-reveal-mask flex-1 flex flex-col min-w-0 bg-black bg-gradient-to-br from-white/[0.05] via-transparent to-black w-full h-full relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]` : `app-hidden-initial flex-1 flex flex-col min-w-0 bg-black bg-gradient-to-br from-white/[0.05] via-transparent to-black w-full h-full relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]`}>
+            {/* MOBİL DRAWER - SOL MENÜ */}
+            {isMobileMenuOpen && (
+              <div className="fixed inset-0 z-50 flex lg:hidden">
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
+                <aside className="w-[280px] bg-[#0A0D14] bg-gradient-to-r from-white/[0.02] to-transparent border-r border-white/5 h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
+                  <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#0A0D14] border border-[#111111] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
+                  <Sidebar
+                    isOpen={true}
+                    onToggle={() => setIsMobileMenuOpen(false)}
+                    activeView={view}
+                    onViewChange={(v) => { handleViewChange(v); setIsMobileMenuOpen(false); }}
+                    userRole={userRole}
+                    navVisibility={navVisibility}
+                    onStartTour={handleStartTour}
+                  />
+                </aside>
+              </div>
+            )}
+
+            {/* 2. ORTA İÇERİK */}
+            <div className={appStage !== 'loading' ? `app-reveal-mask flex-1 flex flex-col min-w-0 bg-[#050505] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]` : `app-hidden-initial flex-1 flex flex-col min-w-0 bg-[#050505] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]`}>
              
              {/* Glossy overlay for the entire center */}
              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] pointer-events-none z-0 opacity-30 mix-blend-screen"></div>
@@ -2210,47 +2263,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               </header>
             )}
 
-            {/* Masaüstü Header (Mobilde Gizli) */}
-            {view !== 'kral' && (
-              <div className="hidden lg:block shrink-0 sticky top-0 z-30">
-      <Header
-        onAdminClick={() => {
-          if (userRole) {
-            setView('admin');
-          } else {
-            setAuthModalMode('admin');
-          }
-        }}
-        onViewChange={handleViewChange}
-        activeView={view}
-        isAuthenticated={!!userRole}
-        userRole={userRole}
-        siteUser={siteUser}
-        onMemberLoginClick={() => setAuthModalMode('member')}
-        onMemberRegisterClick={() => setAuthModalMode('register')}
-        onMemberLogout={handleGlobalLogout}
-        onSearchClick={() => setShowSearch(true)}
-        onSupportClick={() => {
-          if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-          setIsChatOpen(prev => !prev);
-        }}
-        navVisibility={navVisibility}
-        marqueeConfig={marqueeConfig}
-        isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
-        isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
-        onToggleSidebar={() => {
-          if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-          setIsSidebarOpen(!isSidebarOpen);
-        }}
-        showFakeBetButton={view === 'sports2'}
-        onFakeBetClick={() => {
-           if (!siteUser) setAuthModalMode('member');
-           else setShowFakeBetModal(true);
-        }}
-      />
-              </div>
-            )}
-
+            {/* Masaüstü Header'ı Yukarı Taşıdığımız İçin Buradaki Header'ı Kaldırdık */}
           {/* İÇERİK VE CHAT KISMI YANYANA */}
           <div className="flex flex-1 w-full overflow-hidden relative">
             <main 
@@ -2800,9 +2813,16 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               )}
 
               {/* Chat Sidebar (Pushes the layout instead of floating) */}
-              <aside className={`hidden xl:flex flex-col bg-[#14171d] border-l border-white/5 shadow-[-20px_0_50px_rgba(0,0,0,0.8)] h-full flex-shrink-0 relative z-20 transition-all duration-300 ease-in-out ${isChatOpen ? 'w-[350px]' : 'w-0 overflow-hidden opacity-0'}`}>
-                <div className="flex-1 overflow-hidden relative">
-                  {view === 'sports' ? (
+              <aside className={`hidden xl:flex flex-col bg-[#0A0D14] h-full flex-shrink-0 absolute right-0 top-0 2xl:relative z-40 transition-all duration-300 ease-in-out ${isChatOpen ? 'w-[350px] shadow-[-20px_0_50px_rgba(0,0,0,0.8)]' : 'w-0'}`}>
+                {/* ── Toggle Button (Desktop Only) ── */}
+                <button 
+                  onClick={() => setIsChatOpen(!isChatOpen)}
+                  className="absolute -left-3 top-6 w-6 h-6 bg-[#0F141E] border border-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-[#1A2235] transition-all shadow-lg z-50"
+                >
+                  <svg className={`w-3 h-3 transition-transform duration-300 ${!isChatOpen ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+                <div className={`flex-1 overflow-hidden relative transition-opacity duration-300 ${isChatOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                  {view === 'sports' || view === 'spor724' || view === 'gercek' ? (
                     <DualRightPanel 
                       popularMatches={[]} 
                       language={'tr'} 
@@ -2824,6 +2844,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               </aside>
             </>
           )}
+          </div>
           </div>
         </div>
 

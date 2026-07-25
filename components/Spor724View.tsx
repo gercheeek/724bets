@@ -47,27 +47,29 @@ const getTeamColor = (teamName: string) => {
 };
 
 const mapSportName = (name: string, lang: string) => {
-  if (!name) return lang === 'tr' ? 'Futbol' : 'Soccer';
+  if (!name) return lang === 'tr' ? 'Futbol' : 'Football';
   const norm = name.toLowerCase();
-  if (norm.includes('soccer') || norm.includes('futbol')) return lang === 'tr' ? 'Futbol' : 'Soccer';
+  if (norm.includes('american') || norm.includes('amerikan')) return lang === 'tr' ? 'Am. Futbolu' : 'Am. Football';
+  if (norm.includes('soccer') || norm.includes('futbol') || norm.includes('football')) return lang === 'tr' ? 'Futbol' : 'Football';
   if (norm.includes('basketball') || norm.includes('basketbol')) return lang === 'tr' ? 'Basketbol' : 'Basketball';
   if (norm.includes('tennis') || norm.includes('tenis')) return lang === 'tr' ? 'Tenis' : 'Tennis';
   if (norm.includes('volleyball') || norm.includes('voleybol')) return lang === 'tr' ? 'Voleybol' : 'Volleyball';
   if (norm.includes('hockey')) return lang === 'tr' ? 'Buz Hokeyi' : 'Ice Hockey';
   if (norm.includes('handball')) return lang === 'tr' ? 'Hentbol' : 'Handball';
-  if (norm.includes('table tennis')) return lang === 'tr' ? 'Masa Tenisi' : 'Table Tennis';
+  if (norm.includes('table tennis') || norm.includes('masa')) return lang === 'tr' ? 'Masa Tenisi' : 'Table Tennis';
   return name;
 };
 
 const mapReverseSportName = (name: string) => {
   const norm = name.toLowerCase();
-  if (norm.includes('futbol') || norm.includes('soccer')) return 'soccer';
+  if (norm.includes('am.') || norm.includes('american')) return 'am. football';
+  if (norm.includes('futbol') || norm.includes('soccer') || norm.includes('football')) return 'football';
   if (norm.includes('basketbol') || norm.includes('basketball')) return 'basketball';
   if (norm.includes('tenis') || norm.includes('tennis')) return 'tennis';
   if (norm.includes('voleybol') || norm.includes('volleyball')) return 'volleyball';
   if (norm.includes('buz hokeyi') || norm.includes('ice hockey')) return 'ice-hockey';
   if (norm.includes('hentbol') || norm.includes('handball')) return 'handball';
-  if (norm.includes('masa tenisi') || name.includes('table tennis')) return 'table-tennis';
+  if (norm.includes('masa tenisi') || norm.includes('table tennis')) return 'table-tennis';
   if (norm.includes('boks') || norm.includes('boxing')) return 'boxing';
   if (norm.includes('beyzbol') || norm.includes('baseball')) return 'baseball';
   if (norm.includes('counter')) return 'cs';
@@ -149,7 +151,7 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   let score = '-';
   let minute = 'Yakında';
   let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
-  let isLive = data.status === 'in_progress' || data.is_live_betting === true || isFinished;
+  let isLive = false; // We will determine this after parsing the date
   
   if (data.scores && Array.isArray(data.scores)) {
     const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
@@ -161,6 +163,8 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     } else if (data.current_score) {
       score = String(data.current_score || '').replace(':', ' - ');
     }
+  } else if (data.score) {
+    score = String(data.score).replace(':', ' - ');
   }
   let startTime = '';
   let matchDate = '';
@@ -220,6 +224,22 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     fullDate = `${formattedDay} ${monthName}`;
   }
 
+  // Proper isLive Logic (Time Barrier & Status Check)
+  const activeStatuses = ['in_progress', 'started', 'halftime', 'playing'];
+  const hasActiveStatus = activeStatuses.includes(data.status);
+  
+  if (hasActiveStatus) {
+    if (dateObj) {
+      if (dateObj.getTime() <= Date.now()) {
+        isLive = true;
+      }
+    } else {
+      // Fallback if we have an active status but failed to parse date
+      isLive = true;
+    }
+  }
+
+
   if (isFinished) {
       minute = language === 'tr' ? 'Bitti' : 'FT';
   } else if (data.minute) {
@@ -262,6 +282,7 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
   
   for (const market of markets) {
+     if (!market) continue;
      const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
      if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
         const parts = market.split('|');
@@ -350,6 +371,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   const [activeSport, setActiveSport] = useState(allSportsTabName);
   const [activeCountry, setActiveCountry] = useState<string | null>(null);
   const [activeDateFilter, setActiveDateFilter] = useState<'all' | 'today' | 'tomorrow'>('all');
+  const [visibleCount, setVisibleCount] = useState<number>(30);
   
   // Dual-mode panel toggled by a simple boolean or string on mobile, but since DualRightPanel handles it inside,
   // we just need to know if the sidebar wrapper itself is open on mobile.
@@ -737,14 +759,24 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                 )}
                 
                 {!(isLoading || isBulletinLoading) && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {filteredMatches.slice(0, 50).map(match => (
-                            <RainbetMatchCard 
-                                key={match.id}
-                                match={match}
-                                onSelect={setSelectedMatch}
-                            />
-                        ))}
+                    <div className="flex flex-col gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {filteredMatches.slice(0, visibleCount).map(match => (
+                                <RainbetMatchCard 
+                                    key={match.id}
+                                    match={match}
+                                    onSelect={setSelectedMatch}
+                                />
+                            ))}
+                        </div>
+                        {filteredMatches.length > visibleCount && (
+                            <button 
+                                onClick={() => setVisibleCount(p => p + 30)}
+                                className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-bold transition-colors"
+                            >
+                                {language === 'tr' ? 'Daha Fazla Göster' : 'Show More'}
+                            </button>
+                        )}
                     </div>
                 )}
             </div>

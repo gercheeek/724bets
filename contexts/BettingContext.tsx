@@ -56,10 +56,14 @@ const normalizeEvent = (ev: any) => {
   
   if (d.sport && d.sport.name) {
     const sName = d.sport.name.toLowerCase();
-    if (sName.includes('soccer') || sName.includes('football') || sName.includes('futbol')) {
+    if (sName.includes('american') || sName.includes('amerikan')) {
+      d.sport.name = 'Am. Futbolu';
+    } else if (sName.includes('soccer') || sName.includes('football') || sName.includes('futbol')) {
       d.sport.name = 'Futbol';
     } else if (sName.includes('basket')) {
       d.sport.name = 'Basketbol';
+    } else if (sName.includes('masa') || sName.includes('table tennis')) {
+      d.sport.name = 'Masa Tenisi';
     } else if (sName.includes('tennis') || sName.includes('tenis')) {
       d.sport.name = 'Tenis';
     } else if (sName.includes('volley') || sName.includes('voley')) {
@@ -329,12 +333,13 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
                   } else {
                     const existingMarkets = [...mergedGroupMarkets[groupName]];
                     for (const newMStr of newMarkets) {
+                      if (!newMStr) continue;
                       const newMId = newMStr.split('|')[0];
-                      const mIdx = existingMarkets.findIndex((mStr: string) => mStr.startsWith(newMId + '|'));
+                      const mIdx = existingMarkets.findIndex((mStr: string) => mStr && mStr.startsWith(newMId + '|'));
                       if (mIdx >= 0) existingMarkets[mIdx] = newMStr;
                       else existingMarkets.push(newMStr);
                     }
-                    mergedGroupMarkets[groupName] = existingMarkets;
+                    mergedGroupMarkets[groupName] = existingMarkets.filter(Boolean);
                   }
                 }
               }

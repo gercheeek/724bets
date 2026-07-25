@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 console.log('🚀 724Bets Tüm Sistem Servisleri Başlatılıyor...\n');
 
 const services = [
-  { name: 'Vite Frontend', cmd: 'npx', args: ['vite'] },
+  { name: 'Vite Frontend', cmd: 'npx', args: ['vite', '--host'] },
   { name: 'Proxy Server', cmd: 'node', args: ['server.js'] }
 ];
 

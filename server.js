@@ -72,11 +72,8 @@ function startSwarmConnection() {
                 Object.values(data.sport).forEach(sport => {
                     const sportName = sport.name || 'Futbol';
                     
-                    // ONLY FOOTBALL FILTER
+                    // Bütün sporlara izin ver, filtreyi kaldırdık.
                     const sName = sportName.toLowerCase();
-                    if (!sName.includes('futbol') && !sName.includes('soccer') && !sName.includes('football')) {
-                        return; // Skip non-football sports
-                    }
 
                     if (!sport.region) return;
                     Object.values(sport.region).forEach(region => {
@@ -112,15 +109,56 @@ function startSwarmConnection() {
                                 
                                 let oddsStr = null;
                                 if (game.market) {
-                                    const mainMarket = Object.values(game.market).find(m => m.type_name === 'P1P2' || m.type_name === 'P1X2' || m.type_name === 'MatchResult' || m.name === 'Match Result' || m.name === 'Maç Sonucu');
+                                    const mainMarket = Object.values(game.market).find(m => {
+                                        const t = (m.type_name || '').toLowerCase();
+                                        const n = (m.name || '').toLowerCase();
+                                        return t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' ||
+                                               n === 'match result' || n === 'maç sonucu' || n === '1x2' || n === 'winner' || n === 'kazanan' || n === 'maçın kazananı';
+                                    });
                                     if (mainMarket && mainMarket.event) {
                                         const evs = Object.values(mainMarket.event);
-                                        const p1 = evs.find(e => e.name === 'W1' || e.name === '1')?.price;
-                                        const px = evs.find(e => e.name === 'X' || e.name === 'Draw')?.price;
-                                        const p2 = evs.find(e => e.name === 'W2' || e.name === '2')?.price;
+                                        const p1 = evs.find(e => {
+                                            const en = (e.name || '').toLowerCase().trim();
+                                            return en === 'w1' || en === '1' || en === 'p1' || en === 'team 1' || en === 'ev sahibi';
+                                        })?.price;
+                                        const px = evs.find(e => {
+                                            const en = (e.name || '').toLowerCase().trim();
+                                            return en === 'x' || en === 'draw' || en === 'beraberlik';
+                                        })?.price;
+                                        const p2 = evs.find(e => {
+                                            const en = (e.name || '').toLowerCase().trim();
+                                            return en === 'w2' || en === '2' || en === 'p2' || en === 'team 2' || en === 'deplasman';
+                                        })?.price;
                                         if (p1 || px || p2) {
                                             oddsStr = `|1x2|~home~${p1||'-'}!~draw~${px||'-'}!~away~${p2||'-'}`;
                                         }
+                                    }
+                                }
+
+                                // 🚨 STRICT LIVE FILTERING (Gerçek Canlı Kontrolleri)
+                                const nowTs = Date.now();
+                                const matchStartTs = game.start_ts ? game.start_ts * 1000 : 0;
+                                
+                                // 1. ZAMAN KONTROLU: Maç saati gelecekteyse canlı olamaz (60 sn tolerans)
+                                if (matchStartTs > nowTs + 60000) {
+                                    return; // SKIP: Henüz başlamamış
+                                }
+
+                                // 2. BİTMİŞ MAÇ KONTROLU: Maç bittiyse veya iptal edildiyse atla
+                                const matchPhase = (game.info?.current_game_state || '').toLowerCase();
+                                if (matchPhase === 'finished' || matchPhase === 'ended' || matchPhase === 'ft' || matchPhase === 'abandoned' || matchPhase === 'canceled' || matchPhase === 'not_started') {
+                                    return; // SKIP: Biten veya iptal olan maçlar
+                                }
+
+                                // 3. ZAMANLAYICI (TIMER) KONTROLU: Futbol ve Basketbolda zaman akmıyor ve skor yoksa (sıfırsa) başlamamıştır
+                                const isFootballOrBasketball = sportName.toLowerCase().includes('futbol') || sportName.toLowerCase().includes('basket');
+                                const matchTimer = game.info?.current_game_time || 0;
+                                const score1 = game.info?.score1;
+                                const score2 = game.info?.score2;
+
+                                if (isFootballOrBasketball) {
+                                    if ((!matchTimer || parseInt(matchTimer) === 0) && (!score1 || parseInt(score1) === 0) && (!score2 || parseInt(score2) === 0)) {
+                                        return; // SKIP: Zaman ilerlemiyor ve skor yok (Muhtemelen maça saatler var ama is_live=true gönderilmiş)
                                     }
                                 }
                                 
@@ -191,6 +229,69 @@ wss.on('connection', (ws) => {
     ws.on('message', () => {
         // Istemci mesaj gönderirse yoksay, sadece broadcast yapıyoruz.
     });
+});
+
+app.get('/api/marsbahis-tv', async (req, res) => {
+    try {
+        const targetUrl = req.query.url || 'https://www.marsbahistv400.com/';
+        const response = await fetch(targetUrl);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const html = await response.text();
+        
+        const channels = [];
+        const blocks = html.split('<a class="single-match show " href="channel?id=').slice(1);
+        
+        let order = 1000;
+        for (const block of blocks) {
+            const idMatch = block.match(/^([^"]+)"/);
+            if (!idMatch) continue;
+            const id = idMatch[1];
+            
+            const catMatch = block.match(/data-matchtype="([^"]+)"/);
+            const category = catMatch ? catMatch[1] : '';
+            
+            const homeMatch = block.match(/<div class="home">([^<]+)<\/div>/);
+            const home = homeMatch ? homeMatch[1].trim() : '';
+            
+            const awayMatch = block.match(/<div class="away"[^>]*>([\s\S]*?)<\/div>/);
+            let awayText = '';
+            let awayImg = '';
+            if (awayMatch) {
+                const awayContent = awayMatch[1];
+                const textMatch = awayContent.match(/^([^<]+)/);
+                if (textMatch) awayText = textMatch[1].trim();
+                const imgMatch = awayContent.match(/<img[^>]*src="([^"]+)"/);
+                if (imgMatch) awayImg = imgMatch[1];
+            }
+            
+            const livesMatch = block.match(/<span class="lives">([^<]+)<\/span>/);
+            const time = livesMatch ? livesMatch[1].trim() : '';
+            
+            let name = home;
+            if (awayText) name += ' vs ' + awayText;
+            
+            const thumbnailUrl = awayImg ? (awayImg.startsWith('http') ? awayImg : targetUrl.replace(/\/$/, '') + '/' + awayImg) : '';
+            
+            channels.push({
+                id: `mb_${id}`,
+                name: name,
+                kick_username: id, 
+                platform_type: 'marsbahis',
+                avatar_url: thumbnailUrl,
+                tags: [category, time].filter(Boolean),
+                is_live: true,
+                is_vip: false,
+                source_type: 'iframe',
+                iframe_url: targetUrl.replace(/\/$/, '') + '/channel?id=' + id,
+                order_index: order++
+            });
+        }
+        
+        res.json({ success: true, channels });
+    } catch (err) {
+        console.error('Marsbahis fetch error:', err);
+        res.status(500).json({ success: false, error: err.message });
+    }
 });
 
 const PORT = process.env.PORT || 4000;

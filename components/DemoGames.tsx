@@ -68,7 +68,7 @@ const DemoGames: React.FC = () => {
       </div>
 
       {/* Game Selector Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 w-full mb-10 relative z-10">
+      <div className="grid gap-4 w-full mb-10 relative z-10" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
         {GAMES.map((game) => {
           const isSelected = selectedGame.id === game.id;
           return (

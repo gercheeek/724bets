@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Menu, Trophy, Star, 
-  Target, Gift, Ticket, Globe, 
-  Crown, ChevronDown, ChevronUp, Sparkles, Cherry, Percent, Headphones, FileText, Copy, Radio, Flame, LayoutDashboard, Gamepad2, Zap, Diamond, Calendar, Tv, Dices, ChevronLeft } from 'lucide-react';
+  Menu, Trophy, Star, Target, Gift, Ticket, Globe, Crown, ChevronDown, ChevronUp, 
+  Sparkles, Cherry, Percent, Headphones, FileText, Copy, Radio, Flame, LayoutDashboard, 
+  Gamepad2, Zap, Diamond, Calendar, Tv, Dices, ChevronLeft, ChevronRight, Clock, Search, LogOut, Clover, Play
+} from 'lucide-react';
 import { NavVisibility } from './Header';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useBetting } from '../contexts/BettingContext';
@@ -26,239 +27,264 @@ const Sidebar: React.FC<SidebarProps> = ({
   const { t } = useLanguage();
   const { setActiveSport } = useBetting();
 
-  const [activeTab, setActiveTab] = useState<'casino' | 'spor'>('casino');
-  
   // Accordion states
   const [isCasinoOpen, setIsCasinoOpen] = useState(false);
   const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
-  const [isPromosOpen, setIsPromosOpen] = useState(false);
+  const [isPromoOpen, setIsPromoOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   const isRetroVIP = activeView === 'raffle' || activeView === 'originals' || activeView === 'vip';
+
+  const NavItem = ({ icon: Icon, label, isActive, onClick }: any) => (
+    <div 
+      className={`flex items-center py-3.5 mb-1 cursor-pointer transition-all duration-300 relative group mr-3 rounded-r-2xl
+        ${isActive ? 'bg-[#0F141E] text-[#10b981] pl-5 border-y border-r border-white/5 shadow-[4px_0_15px_rgba(0,0,0,0.5)]' : 'text-zinc-400 hover:text-white hover:bg-white/5 pl-[21px]'}
+      `}
+      onClick={onClick}
+    >
+      {isActive && <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#10b981] rounded-r-sm shadow-[0_0_10px_rgba(16,185,129,0.5)] z-10"></div>}
+      <Icon className={`w-5 h-5 min-w-[20px] transition-colors ${isActive ? 'text-emerald-400' : 'group-hover:text-emerald-400'}`} />
+      
+      <span className={`ml-3 font-bold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+        {label}
+      </span>
+      
+      {/* Flyout for collapsed state */}
+      {!isOpen && (
+        <div className="absolute left-[calc(100%+8px)] top-0 bg-[#0a0d14] text-white px-4 py-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all border border-white/10 font-bold text-sm">
+          {label}
+        </div>
+      )}
+    </div>
+  );
+
+  const AccordionItem = ({ icon: Icon, label, isOpenState, setIsOpenState, children }: any) => {
+    return (
+      <div className={`relative group mx-3 mb-2 transition-all duration-300 rounded-xl ${isOpen ? 'overflow-hidden' : ''} bg-[#0F121A] border ${isOpenState ? 'border-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.5)]' : 'border-white/5'}`}>
+        <div 
+          className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all duration-300
+            ${isOpenState ? 'text-[#10b981]' : 'text-zinc-400 hover:text-white bg-white/[0.02]'}
+          `}
+          onClick={() => {
+            if (isOpen) setIsOpenState(!isOpenState);
+          }}
+        >
+          <div className="flex items-center">
+            <Icon className={`w-5 h-5 min-w-[20px] transition-colors ${isOpenState ? 'text-emerald-400' : 'group-hover:text-emerald-400'}`} />
+            <span className={`ml-3 font-bold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
+              {label}
+            </span>
+          </div>
+          {isOpen && (
+            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpenState ? 'rotate-180' : ''}`} />
+          )}
+        </div>
+
+        {/* Submenu for Expanded State */}
+        {isOpen && isOpenState && (
+          <div className="pb-2 pt-1 px-1">
+            {children}
+          </div>
+        )}
+
+        {/* Flyout Submenu for Collapsed State */}
+        {!isOpen && (
+          <div className="absolute left-[calc(100%+8px)] top-0 bg-[#0a0d14] rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible z-[999] transition-all border border-white/10 min-w-[200px] overflow-hidden">
+            <div className="px-4 py-3 border-b border-white/5 bg-[#141424]">
+              <span className="font-bold text-white text-sm">{label}</span>
+            </div>
+            <div className="py-2">
+              {children}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const SubMenuItem = ({ label, isActive, onClick }: any) => (
+    <div 
+      className={`px-3 py-2 mx-2 rounded-lg cursor-pointer transition-colors whitespace-nowrap text-[13px] font-semibold flex items-center
+        ${isOpen ? 'pl-10 relative before:absolute before:left-[22px] before:top-1/2 before:w-1.5 before:h-1.5 before:bg-white/20 before:rounded-full before:-translate-y-1/2' : 'hover:bg-white/5'}
+        ${isActive ? 'text-emerald-400 before:!bg-emerald-400 bg-white/5' : 'text-zinc-400 hover:text-white hover:bg-white/5'}
+      `}
+      onClick={onClick}
+    >
+      {label}
+    </div>
+  );
 
   return (
     <>
       <style>{`
-        .navy-sidebar-container {
-          width: 100%;
-          background-color: #050505;
-          display: flex;
-          flex-direction: column;
-          height: 100%;
+        .codinglab-sidebar {
+          background-color: #0A0D14; /* Deep dark matching the rest of the site */
+          transition: all 0.4s ease;
           position: relative;
-          z-index: 10;
-          color: #d4d4d8;
-        }
-        .navy-sidebar-inner {
-          width: 100%;
-          height: 100%;
+          z-index: 100;
           display: flex;
           flex-direction: column;
-          overflow-x: hidden;
+          height: 100%;
+          width: 100%;
+        }
+        .codinglab-sidebar.open {
+          width: 100%;
+        }
+        .codinglab-sidebar.closed {
+          width: 100%;
+        }
+        /* Custom scrollbar */
+        .codinglab-sidebar-inner {
+          flex: 1;
+        }
+        .codinglab-sidebar.open .codinglab-sidebar-inner {
           overflow-y: auto;
-          scrollbar-width: thin;
-          scrollbar-color: rgba(255,255,255,0.1) transparent;
+          overflow-x: hidden;
         }
-        .navy-sidebar-inner::-webkit-scrollbar {
-          width: 4px;
+        .codinglab-sidebar.closed .codinglab-sidebar-inner {
+          overflow-y: visible;
+          overflow-x: visible;
         }
-        .navy-sidebar-inner::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .navy-sidebar-inner::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.12);
-          border-radius: 4px;
-        }
-        .navy-sidebar-inner::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.25);
-        }
-        .nav-item {
-          display: flex;
-          align-items: center;
-          padding: 12px 16px;
-          border-radius: 8px;
-          font-weight: 700;
-          font-size: 14px;
-          color: #94a3b8;
-          transition: all 0.2s;
-          cursor: pointer;
-        }
-        .nav-item:hover {
-          color: #fff;
-          background: rgba(255, 255, 255, 0.03);
-        }
-        .nav-item.active {
-          color: #fff;
-          background: linear-gradient(to right, rgba(16,185,129,0.08) 0%, transparent 100%);
-          border-left: 3px solid #10b981;
-          box-shadow: inset 15px 0 20px -15px rgba(16,185,129,0.2);
-          border-top-left-radius: 2px;
-          border-bottom-left-radius: 2px;
-        }
-        .retro-vip-active .nav-item.active {
-          background-color: rgba(0, 255, 255, 0.1) !important;
-          border-left: 3px solid #00ffff !important;
-          color: #00ffff !important;
-          font-family: monospace;
-          text-shadow: 0 0 5px #00ffff;
-        }
-        .retro-vip-active .nav-item.active svg {
-          color: #ff00ff !important;
-        }
-        .retro-vip-active .nav-item {
-          font-family: monospace;
-        }
-        .collapsible-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 14px 16px;
-          font-weight: 800;
-          font-size: 12px;
-          color: #64748b;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-          cursor: pointer;
-          transition: color 0.2s;
-        }
-        .collapsible-header:hover {
-          color: #fff;
-        }
-        .retro-vip-active-container {
-          background: repeating-linear-gradient(to bottom, rgba(0, 255, 255, 0.03) 0px, rgba(0, 255, 255, 0.03) 1px, #050510 1px, #050510 3px), linear-gradient(180deg, #0a0a1a 0%, #03030a 100%) !important;
-          border-right: 1px solid rgba(255, 0, 255, 0.2) !important;
+        .codinglab-sidebar-inner::-webkit-scrollbar {
+          width: 0px;
         }
       `}</style>
 
       {/* Mobile Overlay */}
-      <div className="sidebar-overlay" onClick={onToggle} style={{ display: 'none' }} />
+      {isOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={onToggle} />
+      )}
 
-      <div className={`navy-sidebar-container ${isOpen ? 'sidebar-open' : 'sidebar-collapsed'} ${isRetroVIP ? 'retro-vip-active retro-vip-active-container' : ''}`}>
-        <div className="navy-sidebar-inner pb-6">
-          
-          {isOpen ? (
-            <div className="flex flex-col h-full">
-              {/* Toggle Button */}
-              <div className="flex justify-end p-2 border-b border-white/5">
-                <button onClick={onToggle} className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-colors">
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-              </div>
+      <div className={`codinglab-sidebar ${isOpen ? 'open' : 'closed'} ${isRetroVIP ? 'bg-[#050510] border-r-fuchsia-500/20' : ''}`}>
+        {/* Spacer for top alignment if needed, or just start nav items */}
 
-              <div className="px-3 py-4 space-y-1 flex-1 overflow-y-auto">
-                {/* SPOR GRUBU */}
-                <div className="text-[10px] font-bold text-zinc-500 tracking-widest pl-2 mb-2 whitespace-nowrap">SPOR</div>
-                
-                <div className={`nav-item ${activeView === 'home' ? 'active' : ''}`} onClick={() => onViewChange('home')}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner transition-colors ${activeView === 'home' ? 'bg-emerald-500/20 border border-emerald-500/30' : 'bg-[#131313] border border-white/5 group-hover:bg-[#1a1a1a]'}`}><LayoutDashboard className={`w-4 h-4 ${activeView === 'home' ? 'text-emerald-400' : 'text-zinc-400'}`} /></div>
-                  Anasayfa
-                </div>
-
-                <div className="nav-item flex items-center justify-between" onClick={() => onViewChange('sports-live')}>
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-red-500/10 group-hover:border-red-500/30 transition-colors"><Radio className="w-4 h-4 text-red-500 drop-shadow-[0_0_5px_rgba(239,68,68,0.5)]" /></div>
-                    Canlı Bahis
-                  </div>
-                  <span className="text-[9px] font-bold bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded border border-red-500/50 shadow-[0_0_8px_rgba(239,68,68,0.4)] animate-pulse">CANLI</span>
-                </div>
-
-                <div className="nav-item" onClick={() => onViewChange('sports')}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-indigo-500/10 group-hover:border-indigo-500/30 transition-colors"><Calendar className="w-4 h-4 text-indigo-400 drop-shadow-[0_0_5px_rgba(99,102,241,0.5)]" /></div>
-                  Maç Bülteni
-                </div>
-
-                <div className="nav-item flex items-center justify-between" onClick={() => onViewChange('tv')}>
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-purple-500/10 group-hover:border-purple-500/30 transition-colors"><Tv className="w-4 h-4 text-purple-400 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]" /></div>
-                    724TV
-                  </div>
-                  <span className="text-[9px] font-bold bg-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded border border-purple-500/50">HD</span>
-                </div>
-
-                <div className="nav-item" onClick={() => onViewChange('mybets')}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-indigo-500/10 group-hover:border-indigo-500/30 transition-colors"><Ticket className="w-4 h-4 text-[#818cf8] drop-shadow-[0_0_5px_rgba(129,140,248,0.5)]" /></div>
-                  Bahislerim
-                </div>
-
-                <div className="nav-item" onClick={() => onViewChange('favorites')}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-amber-500/10 group-hover:border-amber-500/30 transition-colors"><Star className="w-4 h-4 text-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]" /></div>
-                  Sık Kullanılanlar
-                </div>
-
-                <div className="h-px bg-white/5 w-full my-4" />
-
-                {/* CASİNO GRUBU */}
-                <div className="text-[10px] font-bold text-zinc-500 tracking-widest pl-2 mb-2 mt-4 whitespace-nowrap">CASİNO</div>
-
-                <div className="nav-item" onClick={() => onViewChange('slots')}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-rose-500/10 group-hover:border-rose-500/30 transition-colors"><Cherry className="w-4 h-4 text-rose-400 drop-shadow-[0_0_5px_rgba(244,63,94,0.5)]" /></div>
-                  Slotlar
-                </div>
-
-                <div className="nav-item" onClick={() => onViewChange('live-casino')}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-colors"><Dices className="w-4 h-4 text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]" /></div>
-                  Canlı Casino
-                </div>
-
-                <div className="nav-item" onClick={() => onViewChange('originals')}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/30 transition-colors"><Zap className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]" /></div>
-                  724 Originals
-                </div>
-              </div>
-
-              {/* HESAP & DESTEK GRUBU (STICKY BOTTOM) */}
-              <div className="px-3 py-4 border-t border-white/5 bg-[#030303] mt-auto">
-                <div className="text-[10px] font-bold text-zinc-500 tracking-widest pl-2 mb-2 whitespace-nowrap">HESAP & DESTEK</div>
-                
-                <div className="nav-item" onClick={() => onViewChange('rewards')}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-sky-500/10 group-hover:border-sky-500/30 transition-colors"><Gift className="w-4 h-4 text-[#0ea5e9] drop-shadow-[0_0_5px_rgba(14,165,233,0.5)]" /></div>
-                  Ödüller & Promosyonlar
-                </div>
-
-                <div className="nav-item" onClick={() => onViewChange('loyalty')}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-[#131313] border border-white/5 group-hover:bg-amber-500/10 group-hover:border-amber-500/30 transition-colors"><Diamond className="w-4 h-4 text-amber-500 drop-shadow-[0_0_5px_rgba(245,158,11,0.5)]" /></div>
-                  VIP Kulübü
-                </div>
-
-                <div className="nav-item mt-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 font-bold shadow-[0_0_15px_rgba(16,185,129,0.15)] rounded-xl" onClick={() => window.dispatchEvent(new Event('openSupportChat'))}>
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mr-3 shadow-inner bg-emerald-500/20 border border-emerald-500/40"><Headphones className="w-4 h-4 text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.8)]" /></div>
-                  Canlı Destek
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center py-4 gap-4 w-full h-full bg-[#050505] relative z-[100]">
-              <button onClick={onToggle} className="text-zinc-300 hover:text-[#10b981] p-2 mb-2">
-                <Menu size={24} />
-              </button>
-              
-              <div className="flex-1 space-y-4 w-full flex flex-col items-center">
-                <button onClick={() => onViewChange('home')} className={`group relative w-11 h-11 rounded-xl flex items-center justify-center transition-all ${activeView === 'home' ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-[#131313] border border-white/5 text-zinc-400 hover:bg-[#1a1a1a] hover:text-white shadow-inner'}`}>
-                  <LayoutDashboard className="w-5 h-5" />
-                  <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Anasayfa</div>
-                </button>
-                
-                <div className="w-10 h-px bg-white/10 my-1"></div>
-                
-                <button onClick={() => {onToggle(); onViewChange('slots');}} className="group relative w-11 h-11 rounded-xl flex items-center justify-center text-[#94a3b8] hover:text-rose-400 hover:bg-[#131313] hover:border-rose-500/30 border border-transparent bg-transparent transition-all">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#131313] border border-white/5 shadow-inner group-hover:bg-rose-500/10 group-hover:border-rose-500/30 transition-all"><Cherry className="w-4 h-4 group-hover:drop-shadow-[0_0_5px_rgba(244,63,94,0.5)]" /></div>
-                  <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Slotlar</div>
-                </button>
-                <button onClick={() => {onToggle(); onViewChange('originals');}} className="group relative w-11 h-11 rounded-xl flex items-center justify-center text-[#94a3b8] hover:text-cyan-400 hover:bg-[#131313] hover:border-cyan-500/30 border border-transparent bg-transparent transition-all">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#131313] border border-white/5 shadow-inner group-hover:bg-cyan-500/10 group-hover:border-cyan-500/30 transition-all"><Zap className="w-4 h-4 group-hover:drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]" /></div>
-                  <div className="absolute left-full ml-4 px-2 py-1 bg-[#141722] text-white text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">724 Originals</div>
-                </button>
-              </div>
-              
-              <div className="w-full flex flex-col items-center gap-4 mt-auto">
-                <div className="w-10 h-px bg-white/10 my-1"></div>
-                <button onClick={() => window.dispatchEvent(new Event('openSupportChat'))} className="group relative w-11 h-11 rounded-xl flex items-center justify-center text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center"><Headphones className="w-5 h-5 drop-shadow-[0_0_5px_rgba(52,211,153,0.8)]" /></div>
-                  <div className="absolute left-full ml-4 px-2 py-1 bg-emerald-500 text-black text-xs font-bold rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 whitespace-nowrap z-50">Canlı Destek</div>
-                </button>
-              </div>
-            </div>
-          )}
+        {/* Toggle Button attached to the right edge */}
+        <div className="relative h-6 shrink-0 w-full">
+          <button 
+            onClick={onToggle} 
+            className="absolute top-2 -right-[12px] bg-[#111111] text-zinc-400 p-1.5 rounded-full shadow-[0_0_10px_rgba(0,0,0,0.5)] border border-white/10 hover:text-white hover:scale-110 transition-all z-50 hidden md:block"
+          >
+            {isOpen ? <ChevronLeft className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+          </button>
         </div>
+
+        {/* Navigation Items */}
+        <div className="codinglab-sidebar-inner pt-4">
+
+
+          {/* HAFTALIK ÇEKİLİŞ BANNER */}
+          <div className={`mx-4 mb-6 relative overflow-hidden rounded-xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-transparent p-3 cursor-pointer hover:border-yellow-500/40 transition-all ${!isOpen && 'hidden'}`}>
+             <div className="flex items-center gap-3">
+               <Ticket className="w-8 h-8 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
+               <div className="flex flex-col">
+                 <span className="text-white font-black text-lg italic leading-tight">$20.000</span>
+                 <span className="text-yellow-400 font-bold text-[11px] tracking-wider uppercase">HAFTALIK ÇEKİLİŞ</span>
+               </div>
+               <div className="ml-auto bg-black/50 border border-yellow-500/30 rounded px-2 py-0.5 text-white font-mono text-xs">
+                 15s
+               </div>
+             </div>
+             
+             {/* STATS */}
+             <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-yellow-500/10 text-center">
+                <div className="flex flex-col">
+                  <span className="text-zinc-500 text-[9px] font-black uppercase">Günlük</span>
+                  <span className="text-white font-bold text-xs">$25K</span>
+                </div>
+                <div className="flex flex-col border-x border-yellow-500/10">
+                  <span className="text-zinc-500 text-[9px] font-black uppercase">Haftalık</span>
+                  <span className="text-white font-bold text-xs">$100K</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-zinc-500 text-[9px] font-black uppercase">Aylık</span>
+                  <span className="text-white font-bold text-xs">$500K</span>
+                </div>
+             </div>
+          </div>
+
+          <NavItem icon={Crown} label="Anasayfa" isActive={activeView === 'home'} onClick={() => onViewChange('home')} />
+          <NavItem icon={Star} label="Sık Kullanılanlar" isActive={activeView === 'favorites'} onClick={() => onViewChange('favorites')} />
+          <NavItem icon={Clock} label="Son Oynanan" isActive={activeView === 'recent'} onClick={() => onViewChange('recent')} />
+          <NavItem icon={Sparkles} label="Yeni Çıkanlar" isActive={activeView === 'new'} onClick={() => onViewChange('new')} />
+
+          <div className="w-full h-px bg-white/5 my-3" />
+
+          {/* Collapsible Sections */}
+          <AccordionItem icon={Cherry} label="Casino" isOpenState={isCasinoOpen} setIsOpenState={setIsCasinoOpen}>
+            <SubMenuItem label="Tüm Oyunlar" isActive={activeView === 'casino'} onClick={() => onViewChange('casino')} />
+            <SubMenuItem label="Slotlar" isActive={activeView === 'slots'} onClick={() => onViewChange('slots')} />
+            <SubMenuItem label="Canlı Casino" isActive={activeView === 'live-casino'} onClick={() => onViewChange('live-casino')} />
+          </AccordionItem>
+
+          <AccordionItem icon={Radio} label="Originals" isOpenState={isOriginalsOpen} setIsOpenState={setIsOriginalsOpen}>
+            <SubMenuItem label="Tüm Originals" isActive={activeView === 'originals'} onClick={() => onViewChange('originals')} />
+            <SubMenuItem label="Crash" isActive={activeView === 'crash'} onClick={() => onViewChange('crash')} />
+            <SubMenuItem label="Plinko" isActive={activeView === 'plinko'} onClick={() => onViewChange('plinko')} />
+          </AccordionItem>
+
+          <AccordionItem icon={Percent} label="Promosyonlar" isOpenState={isPromoOpen} setIsOpenState={setIsPromoOpen}>
+            <SubMenuItem label="Bonuslar" isActive={activeView === 'promo'} onClick={() => onViewChange('promo')} />
+            <SubMenuItem label="Turnuvalar" isActive={activeView === 'tournaments'} onClick={() => onViewChange('tournaments')} />
+          </AccordionItem>
+
+          {/* Bottom Fixed Area */}
+        </div>
+
+        <div className="mt-auto w-full flex flex-col">
+          {/* 724 TV BANNER - MATCHED */}
+          <div className={`p-4 bg-[#0a0a0a] border-t border-white/5 transition-all duration-300 cursor-pointer hover:bg-[#141414] group ${!isOpen ? 'bg-transparent flex justify-center hover:bg-transparent border-transparent' : ''}`} onClick={() => onViewChange('724tv')}>
+            <div className={`flex items-center ${!isOpen ? 'justify-center' : 'justify-between'}`}>
+              <div className="flex items-center">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/30 relative transition-all group-hover:bg-amber-500/20 group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                  <Tv className="w-5 h-5 text-amber-400" />
+                  {!isOpen && (
+                    <div className="absolute left-[calc(100%+16px)] top-1/2 -translate-y-1/2 bg-[#1a1a2e] text-white px-4 py-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all border border-white/5 font-bold text-sm">
+                      724 TV
+                    </div>
+                  )}
+                </div>
+                <div className={`ml-3 flex flex-col transition-all duration-300 ${!isOpen && 'opacity-0 w-0 hidden'}`}>
+                  <span className="text-white font-bold text-sm whitespace-nowrap">724 TV</span>
+                  <span className="text-amber-400 text-[11px] font-bold whitespace-nowrap uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                    KESİNTİSİZ MAÇ
+                  </span>
+                </div>
+              </div>
+              {isOpen && (
+                <button className="text-zinc-500 group-hover:text-amber-400 transition-colors shrink-0 p-2 bg-white/5 rounded-lg group-hover:bg-amber-500/10">
+                  <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Profile/Bonus Card at Bottom (Unauthenticated State) */}
+          <div className={`p-4 bg-[#0a0a0a] border-t border-white/5 transition-all duration-300 cursor-pointer hover:bg-[#141414] group ${!isOpen ? 'bg-transparent flex justify-center hover:bg-transparent border-transparent' : ''}`} onClick={() => onViewChange('rewards')}>
+            <div className={`flex items-center ${!isOpen ? 'justify-center' : 'justify-between'}`}>
+              <div className="flex items-center">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/30 relative transition-all group-hover:bg-emerald-500/20 group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                  <Clover className="w-5 h-5 text-emerald-400" />
+                  {!isOpen && (
+                    <div className="absolute left-[calc(100%+16px)] top-1/2 -translate-y-1/2 bg-[#1a1a2e] text-white px-4 py-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all border border-white/5 font-bold text-sm">
+                      Bonuslar
+                    </div>
+                  )}
+                </div>
+                <div className={`ml-3 flex flex-col transition-all duration-300 ${!isOpen && 'opacity-0 w-0 hidden'}`}>
+                  <span className="text-white font-bold text-sm whitespace-nowrap">Bonuslar</span>
+                  <span className="text-emerald-400 text-[11px] font-bold whitespace-nowrap uppercase tracking-wider">Fırsatları Keşfet</span>
+                </div>
+              </div>
+              {isOpen && (
+                <button className="text-zinc-500 group-hover:text-emerald-400 transition-colors shrink-0 p-2 bg-white/5 rounded-lg group-hover:bg-emerald-500/10">
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
       </div>
     </>
   );

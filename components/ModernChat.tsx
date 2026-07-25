@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Shield, Smile, Cpu, Target } from 'lucide-react';
+import { X, Send, Shield, Smile, Cpu, Target, ChevronDown } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { SiteUser } from '../types';
 import { BetShareModal } from './BetShareModal';
@@ -386,16 +386,31 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const displayMessages = messages.filter(m => !isSystemOrCountdown(m) && m.role !== 'system_win');
 
     return (
-        <div id="tour-chat" className="h-full w-full flex flex-col bg-black font-sans text-left relative">
+        <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0A0D14] font-sans text-left relative shadow-[-5px_0_30px_rgba(0,0,0,0.5)]">
             
             {/* Header */}
-            <div className="bg-black px-4 h-[64px] text-white flex items-center justify-between flex-shrink-0 border-b border-white/5">
+            <div className="bg-[#0A0D14] px-4 h-[64px] text-white flex items-center justify-between flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.3)] z-10 border-b border-white/5">
                 <div className="flex items-center gap-3 relative">
+                     <button className="flex items-center gap-2 bg-[#0a0d14] border border-white/5 hover:border-white/10 px-3 py-1.5 rounded-xl transition-all text-sm font-semibold text-zinc-300 hover:text-white" onClick={() => setShowLangMenu(!showLangMenu)}>
+                         <span className="w-4 h-4 rounded-full overflow-hidden flex items-center justify-center text-[12px] opacity-90">🇹🇷</span>
+                         Türkçe
+                         <ChevronDown className="w-3.5 h-3.5 ml-1 text-zinc-500" />
+                     </button>
+                     {showLangMenu && (
+                        <div className="absolute top-full left-0 mt-2 bg-[#0a0d14] border border-white/10 rounded-xl shadow-2xl p-2 z-50 min-w-[150px]">
+                            {LANGUAGES.map(lang => (
+                                <div key={lang.id} className="px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer text-sm font-semibold text-slate-300 transition-colors flex items-center gap-2">
+                                    <span className="text-[12px] opacity-80">{lang.code === 'TR' ? '🇹🇷' : lang.code === 'EN' ? '🇬🇧' : lang.code === 'DE' ? '🇩🇪' : lang.code === 'ES' ? '🇪🇸' : '🇵🇹'}</span>
+                                    {lang.name}
+                                </div>
+                            ))}
+                        </div>
+                     )}
                 </div>
                 <div className="flex items-center gap-4 text-zinc-500">
                     <button 
                         onClick={onClose} 
-                        className="w-8 h-8 flex items-center justify-center bg-[#050505] border border-white/[0.02] hover:bg-[#111] transition-all rounded-full text-zinc-500 hover:text-white"
+                        className="w-8 h-8 flex items-center justify-center bg-[#0a0d14] border border-white/5 hover:bg-white/10 transition-all rounded-full text-zinc-400 hover:text-white"
                         title="Kapat"
                     >
                         <X className="w-4 h-4" />
@@ -435,7 +450,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             <div 
                 ref={chatContainerRef} 
                 id="new-chat-container" 
-                className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar bg-black"
+                className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar bg-[#0A0D14]"
                 style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}
             >
                 {!isConnected ? (
@@ -456,21 +471,21 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                         return (
                         <div 
                             key={msg.id || i} 
-                            className="px-3 py-2.5 bg-[#111111] border border-white/5 rounded-xl text-left text-[13px] text-slate-300 leading-relaxed shadow-sm"
+                            className="px-4 py-3 bg-[#161A24] border border-white/5 rounded-2xl text-left text-[13px] text-slate-300 leading-relaxed shadow-[0_4px_15px_rgba(0,0,0,0.4)] transition-all hover:bg-[#1b202c] hover:border-white/10 mb-2.5"
                         >
                             <span className="inline-flex items-center gap-1.5 mr-1.5 align-middle">
                                 {isMod ? (
-                                    <span className="inline-flex items-center gap-0.5 bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-bold tracking-wider leading-none border border-emerald-500/20 uppercase">
+                                    <span className="inline-flex items-center gap-1 bg-[#1a2e20] text-[#10b981] px-1.5 py-0.5 rounded-md flex-shrink-0 text-[10px] font-black tracking-wider leading-none border border-[#10b981]/20 uppercase">
                                         <Shield className="w-3 h-3" /> MOD
                                     </span>
                                 ) : (
-                                    <span className="text-slate-500 flex-shrink-0"><Target className="w-3.5 h-3.5" /></span>
+                                    <span className="text-slate-600 flex-shrink-0"><Target className="w-3.5 h-3.5" /></span>
                                 )}
-                                <span className={`font-semibold tracking-tight ${isMod ? 'text-emerald-400' : 'text-slate-200'}`}>
-                                    {msg.username || 'Misafir'}:
+                                <span className={`font-black tracking-tight text-[13.5px] ${isMod ? 'text-[#10b981]' : 'text-[#d4af37]'}`}>
+                                    {msg.username || 'Misafir'}
                                 </span>
                             </span>
-                            <span className="break-words antialiased text-slate-300">
+                            <span className="break-words antialiased text-slate-300 ml-1">
                                 {renderMessageText(msg, (betId, user, type) => setSelectedBet({ id: betId, user, type }))}
                             </span>
                         </div>
@@ -479,31 +494,31 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             </div>
 
             {/* Input Footer Area */}
-            <div className="p-3 bg-black border-t border-white/5 flex-shrink-0 z-10 relative">
+            <div className="p-4 bg-[#0A0D14] flex-shrink-0 z-10 relative border-t border-white/5">
                 {!siteUser ? (
                     <input 
                         type="text"
                         disabled
-                        placeholder="Giriş Yap"
-                        className="w-full bg-[#0f0f0f] border border-white/5 text-[13px] font-medium text-center text-slate-500 rounded-xl px-4 py-3 cursor-not-allowed"
+                        placeholder="Mesaj göndermek için lütfen giriş yapın"
+                        className="w-full bg-[#0a0d14] border border-white/10 text-[12px] font-semibold text-center text-slate-500 rounded-full px-5 py-3.5 cursor-not-allowed shadow-inner"
                     />
                 ) : (
-                    <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#0f0f0f] border border-white/5 focus-within:border-[#3b8def]/50 rounded-xl overflow-hidden transition-all h-12 shadow-inner">
+                    <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#0a0d14] border border-white/10 focus-within:border-emerald-500/50 rounded-full overflow-hidden transition-all h-[46px] shadow-inner">
                         <input
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder="Bir mesaj gönder..."
-                            className="flex-1 bg-transparent text-[13px] font-medium text-white focus:outline-none placeholder-zinc-700 px-3"
+                            className="flex-1 bg-transparent text-[13px] font-medium text-white focus:outline-none placeholder-zinc-600 pl-5 pr-3"
                         />
                         <div className="flex items-center pr-1.5 gap-1 h-full shrink-0">
-                            <button type="button" className="text-zinc-600 hover:text-white transition-colors p-1.5 rounded-md hover:bg-white/5 bg-[#0a0a0a]">
+                            <button type="button" className="text-zinc-500 hover:text-white transition-colors p-1.5 rounded-full hover:bg-white/5">
                                 <Smile className="w-4 h-4" />
                             </button>
                             <button
                                 type="submit"
                                 disabled={!newMessage.trim()}
-                                className="text-white bg-[#38b75e] disabled:bg-[#121212] disabled:text-gray-600 hover:bg-[#2fa350] transition-all p-2 rounded-md"
+                                className="text-white bg-[#10b981] disabled:bg-[#121212] disabled:text-gray-600 hover:bg-[#0e9f6e] transition-all p-2 rounded-full shadow-lg"
                             >
                                 <Send className="w-4 h-4 ml-0.5" />
                             </button>

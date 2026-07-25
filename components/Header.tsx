@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
-  MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2,
+  MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2, Dices,
   Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club,
   Bell, Users, ShieldCheck, Lock, Link, FileText, Clover, Activity, Briefcase, Sun, Moon
 } from 'lucide-react';
@@ -365,13 +365,63 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[72px] bg-black bg-gradient-to-b from-white/[0.03] to-transparent border-b border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] flex justify-center z-50">
-        <div className="w-full max-w-[1400px] px-2 md:px-4 h-full flex items-center justify-between">
-            {/* Left: Logo & Desktop Tabs */}
-            <div className="flex items-center justify-start flex-1 gap-1 md:gap-4 z-10">
+      <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
+        <div className="w-full h-full flex items-center justify-between">
+            
+            {/* Desktop Left: Casino/Sports Toggle (Perfectly Aligned with Sidebar) */}
+            <div className={`hidden lg:flex items-center h-full transition-all duration-300 shrink-0 ${isSidebarOpen ? 'w-[260px] pl-6 pr-4 justify-start' : 'w-[78px] px-0 justify-center'}`}>
               
+              {/* Premium Casino/Sports Toggle */}
+              <div className={`flex bg-[#14151b] p-1.5 rounded-xl shadow-inner shrink-0 items-center border border-white/5 h-[48px] transition-all duration-300 overflow-hidden ${isSidebarOpen ? 'w-[200px]' : 'w-[52px] p-1'}`}>
+                
+                {/* Full Toggle (when sidebar open) */}
+                {isSidebarOpen ? (
+                  <>
+                    <button
+                      onClick={() => onViewChange?.('home')}
+                      className={`flex items-center justify-center gap-2 w-1/2 h-full rounded-lg text-[14px] font-bold transition-all duration-300 ${activeView !== 'spor724' && activeView !== 'mobile-bulletin' ? 'bg-[#10b981] text-[#0a0a0a] shadow-[0_4px_12px_rgba(16,185,129,0.3)]' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
+                    >
+                      <Dices className="w-4 h-4" strokeWidth={activeView !== 'spor724' && activeView !== 'mobile-bulletin' ? 2.5 : 2} />
+                      <span>Casino</span>
+                    </button>
+                    <button
+                      onClick={() => onViewChange?.('spor724')}
+                      className={`flex items-center justify-center gap-2 w-1/2 h-full rounded-lg text-[14px] font-bold transition-all duration-300 ${activeView === 'spor724' || activeView === 'mobile-bulletin' ? 'bg-[#10b981] text-[#0a0a0a] shadow-[0_4px_12px_rgba(16,185,129,0.3)]' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
+                    >
+                      <Target className="w-4 h-4" strokeWidth={activeView === 'spor724' || activeView === 'mobile-bulletin' ? 2.5 : 2} />
+                      <span>Spor</span>
+                    </button>
+                  </>
+                ) : (
+                  /* Compact Toggle (when sidebar closed) - click to switch */
+                  <button 
+                    onClick={() => onViewChange?.(activeView === 'spor724' || activeView === 'mobile-bulletin' ? 'home' : 'spor724')}
+                    className="w-full h-full flex items-center justify-center bg-[#10b981] rounded-lg shadow-[0_4px_12px_rgba(16,185,129,0.3)] text-[#0a0a0a] transition-transform hover:scale-105"
+                  >
+                    {activeView === 'spor724' || activeView === 'mobile-bulletin' ? (
+                      <Target className="w-5 h-5" strokeWidth={2.5} />
+                    ) : (
+                      <Dices className="w-5 h-5" strokeWidth={2.5} />
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Mobile Left: Hamburger only */}
+            <div className="flex lg:hidden items-center justify-start px-2 h-full shrink-0 border-r border-white/5">
+              <button 
+                onClick={onToggleSidebar}
+                className="text-white hover:bg-white/10 transition-colors flex items-center justify-center p-2 rounded-lg"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Logo */}
+            <div className="flex items-center justify-start flex-1 pl-4 lg:pl-6 h-full">
               <div 
-                className="flex items-center cursor-pointer select-none ml-0 group relative"
+                className="flex items-center cursor-pointer select-none group relative"
                 onClick={() => onViewChange?.('home')}
                 style={{ fontFamily: ['originals', 'keno', 'roulette', 'blackjack', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'war', 'hilo'].includes(activeView || '') ? "'Press Start 2P', cursive" : "'Inter', sans-serif", letterSpacing: '-0.03em' }}
               >
@@ -547,20 +597,51 @@ const Header: React.FC<HeaderProps> = ({
 
             </div>
           ) : (
-            <div className="flex items-center gap-2 mr-4 md:mr-12 lg:mr-24 xl:mr-40 2xl:mr-52">
+            <div className="flex items-center gap-2 mr-1 md:mr-2">
+              
+              {/* Search Button */}
+              <button 
+                onClick={onSearchClick}
+                className="hidden md:flex w-[38px] h-[38px] md:w-[42px] md:h-[42px] items-center justify-center bg-[#1b1e28] hover:bg-white/5 border border-white/5 rounded-lg text-zinc-300 transition-colors"
+                title={t('search')}
+              >
+                <Search className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+
+              {/* Gift / Promos Button */}
+              <button 
+                onClick={() => onViewChange?.('promotions')}
+                className="hidden md:flex w-[38px] h-[38px] md:w-[42px] md:h-[42px] items-center justify-center bg-[#1b1e28] hover:bg-white/5 border border-white/5 rounded-lg text-zinc-300 transition-colors"
+                title={t('promotions')}
+              >
+                <Gift className="w-4 h-4 md:w-5 md:h-5 text-[#10b981]" />
+              </button>
+
+              {/* Login Button */}
               <button
                 onClick={onMemberLoginClick}
-                className="flex items-center justify-center bg-transparent hover:bg-white/5 text-zinc-300 border border-transparent rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-5 transition-all whitespace-nowrap"
+                className="flex items-center justify-center bg-[#1b1e28] hover:bg-white/5 text-white border border-white/5 rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-6 transition-all whitespace-nowrap ml-1 md:ml-2"
               >
                 {t('login')}
               </button>
+              
+              {/* Register Button */}
               <button
                 onClick={onMemberRegisterClick}
-                className="relative overflow-hidden group flex items-center justify-center bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#00E676] hover:to-[#10b981] border-none text-black shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:shadow-[0_0_35px_rgba(16,185,129,0.8)] rounded-lg font-black text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-5 md:px-6 transition-all duration-300 whitespace-nowrap transform hover:-translate-y-0.5 tracking-wider uppercase"
+                className="relative flex items-center justify-center bg-[#10b981] hover:bg-[#0ea5e9] border border-transparent text-black rounded-lg font-extrabold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-5 md:px-6 transition-all duration-300 whitespace-nowrap"
               >
-                <span className="relative z-10 drop-shadow-md">Bonusla Başla</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                KAYDOL
               </button>
+
+              {/* Chat Button */}
+              <button 
+                onClick={onSupportClick}
+                className={`hidden md:flex w-[38px] h-[38px] md:w-[42px] md:h-[42px] items-center justify-center rounded-lg transition-colors ml-1 md:ml-2 ${isChatOpen ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40' : 'bg-[#1b1e28] hover:bg-white/5 border border-white/5 text-zinc-300'}`}
+                title="Sohbet"
+              >
+                <MessageSquare className="w-4 h-4 md:w-5 md:h-5" />
+              </button>
+              
             </div>
           )}
         </div>

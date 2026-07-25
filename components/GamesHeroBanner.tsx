@@ -195,23 +195,19 @@ const HeroBanner = ({ onNavigate }: { onNavigate?: (v: string) => void }) => {
       {/* Content wrapper with Parallax Z-translation */}
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 items-center relative z-20" style={{ transform: 'translateZ(40px)' }}>
         {/* Left Column */}
-        <div className="flex flex-col items-start text-left space-y-2">
+        <div className="flex flex-col items-start text-left space-y-1">
           {/* Removed badge */}
           
-          <h1 className="text-xl md:text-2xl lg:text-3xl font-black tracking-tight text-white leading-[1.2] drop-shadow-[0_0_15px_rgba(0,255,136,0.5)] cursor-default mt-4">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-black tracking-tight text-white leading-[1.1] drop-shadow-[0_0_15px_rgba(0,255,136,0.5)] cursor-default">
             EN ÇOK KAZANDIRAN <br className="hidden md:block"/> 
             
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] via-white to-[#00ff88] drop-shadow-[0_0_20px_rgba(0,255,136,0.4)] ml-2 md:ml-0 glint-text hover:brightness-125 transition-all text-2xl md:text-3xl lg:text-4xl inline-block mt-2 font-arcade tracking-wider">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] via-white to-[#00ff88] drop-shadow-[0_0_20px_rgba(0,255,136,0.4)] ml-2 md:ml-0 glint-text hover:brightness-125 transition-all text-2xl md:text-3xl lg:text-4xl inline-block mt-1 font-arcade tracking-wider">
               OYUNLAR
             </span>
           </h1>
           
-          <p className="text-zinc-400 text-sm md:text-base mb-8 max-w-xl"></p>
-
-          {/* Removed button */}
-
           {/* Animated Jackpot */}
-          <div className="mt-8 mb-2 flex flex-col items-start gap-1">
+          <div className="mt-2 mb-1 flex flex-col items-start gap-1">
              <div className="text-[10px] text-zinc-500 font-arcade uppercase" style={{ fontFamily: "'Press Start 2P', monospace" }}>Toplam Dağıtılan Ödül</div>
              <div className="text-xl md:text-2xl lg:text-3xl font-arcade text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] to-[#a855f7] drop-shadow-[0_0_10px_rgba(255,0,255,0.8)] tracking-wider" style={{ fontFamily: "'Press Start 2P', monospace" }}>
                <AnimatedJackpot />
@@ -229,76 +225,75 @@ const HeroBanner = ({ onNavigate }: { onNavigate?: (v: string) => void }) => {
             { id: 'blackjack', name: 'BLACKJACK', color: 'text-white', image: '/images/flat-blackjack.jpg', players: 2150, maxWin: '2.5x' },
             { id: 'keno', name: 'KENO', color: 'text-yellow-400', image: '/images/flat-keno.jpg', players: 540, maxWin: '500x' },
           ].map((game, idx) => {
-            const isFocused = hoveredGameId ? game.id === hoveredGameId : idx === 0;
+            const isHovered = hoveredGameId ? game.id === hoveredGameId : idx === 0;
             
-          
-  const handlePlayGame = (gameId: string) => {
-    setIsLoadingGame(gameId);
-    setTimeout(() => {
-      setIsLoadingGame(null);
-      // Try to open standard game if possible, otherwise dispatch custom event
-      window.dispatchEvent(new CustomEvent('openGame', { detail: gameId }));
-      // Let's also dispatch navigate event since it might be an original game
-      const path = gameId;
-      if (onNavigate) { onNavigate(path); } else { window.history.pushState(null, '', '/' + path); window.dispatchEvent(new Event('popstate')); }
-    }, 3000);
-  };
+            const handlePlayGame = (gameId: string) => {
+              setIsLoadingGame(gameId);
+              setTimeout(() => {
+                setIsLoadingGame(null);
+                window.dispatchEvent(new CustomEvent('openGame', { detail: gameId }));
+                const path = gameId;
+                if (onNavigate) { onNavigate(path); } else { window.history.pushState(null, '', '/' + path); window.dispatchEvent(new Event('popstate')); }
+              }, 3000);
+            };
 
-  return (
-            <div 
-              key={game.id} 
-              className="stagger-enter touch-manipulation cursor-pointer group" 
-              style={{ animationDelay: `${idx * 150}ms` }}
-              onMouseEnter={() => setHoveredGameId(game.id)}
-              onMouseLeave={() => setHoveredGameId(null)}
-              onClick={() => handlePlayGame(game.id)}
-            >
-              <div className={`relative rounded-2xl p-[1px] transition-all duration-700 overflow-hidden tilt-card ${isFocused ? 'scale-105 z-10 my-2 shadow-[0_0_20px_rgba(0,255,136,0.3)]' : 'scale-95 opacity-[0.65] grayscale z-0'}`} style={{ transform: isFocused ? 'rotateX(0deg)' : (idx < 2 ? 'rotateX(5deg) translateY(5px)' : 'rotateX(-5deg) translateY(-5px)') }}>
-                 
-                 {/* Animated Border for Active Game */}
-                 {isFocused && (
-                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250%] h-[250%] bg-gradient-to-br from-[#00ff88]/0 via-[#00ff88]/80 to-[#a855f7]/0 opacity-70 animate-[spin-slow_4s_linear_infinite] pointer-events-none z-0"></div>
-                 )}
+            return (
+              <div 
+                key={game.id} 
+                className="stagger-enter touch-manipulation cursor-pointer group" 
+                style={{ animationDelay: `${idx * 150}ms` }}
+                onMouseEnter={() => setHoveredGameId(game.id)}
+                onMouseLeave={() => setHoveredGameId(null)}
+                onClick={() => handlePlayGame(game.id)}
+              >
+                <div 
+                  className={`relative rounded-2xl p-[1px] transition-all duration-700 overflow-hidden tilt-card ${isHovered ? 'scale-105 z-10 my-1 shadow-[0_0_20px_rgba(0,255,136,0.3)]' : 'scale-95 opacity-[0.65] grayscale z-0'}`} 
+                  style={{ transform: isHovered ? 'rotateX(0deg)' : (idx < 2 ? 'rotateX(5deg) translateY(5px)' : 'rotateX(-5deg) translateY(-5px)') }}
+                >
+                   {/* Animated Border for Active Game */}
+                   {isHovered && (
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250%] h-[250%] bg-gradient-to-br from-[#00ff88]/0 via-[#00ff88]/80 to-[#a855f7]/0 opacity-70 animate-[spin-slow_4s_linear_infinite] pointer-events-none z-0"></div>
+                   )}
 
-                 <div 
-                   className={`relative rounded-[calc(1rem-1px)] z-10 flex flex-col overflow-hidden transition-colors duration-500 ${isFocused ? 'border-none' : 'border border-white/5'}`}
-                 >
-                   {/* Background Image */}
                    <div 
-                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 ease-out"
-                      style={{ backgroundImage: `url(${game.image})`, transform: isFocused ? 'scale(1.1)' : 'scale(1.0)' }}
-                   />
-                   {/* Dark Negro Overlay (Lighter for more visibility) */}
-                   <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/90 via-[#050505]/60 to-transparent z-0 mix-blend-multiply"></div>
-                   <div className="absolute inset-0 bg-black/30 z-0 transition-opacity duration-500 group-hover:bg-black/10"></div>
+                     className={`relative rounded-[calc(1rem-1px)] z-10 flex flex-col overflow-hidden transition-colors duration-500 ${isHovered ? 'border-none' : 'border border-white/5'}`}
+                   >
+                     {/* Background Image */}
+                     <div 
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 ease-out"
+                        style={{ backgroundImage: `url(${game.image})`, transform: isHovered ? 'scale(1.1)' : 'scale(1.0)' }}
+                     />
+                     {/* Dark Negro Overlay (Lighter for more visibility) */}
+                     <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/90 via-[#050505]/60 to-transparent z-0 mix-blend-multiply"></div>
+                     <div className="absolute inset-0 bg-black/30 z-0 transition-opacity duration-500 group-hover:bg-black/10"></div>
 
-                   {/* Content */}
-                   <div className="relative z-10 p-3 md:p-4 flex flex-col">
-                      <div className="flex items-center gap-4">
-                         <div className="flex-1">
-                            <h4 className={`text-[14px] md:text-base font-black tracking-widest transition-colors ${isFocused ? 'text-[#00ff88] drop-shadow-[0_0_8px_rgba(0,255,136,0.8)]' : 'text-slate-200'}`}>{game.name}</h4>
-                            <div className="text-[10px] text-zinc-400 font-bold uppercase mt-1 tracking-wider flex items-center gap-1.5">
-                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_#00ff88]"></span>
-                               {game.players} Aktif Oyuncu
-                            </div>
-                         </div>
-                      </div>
+                     {/* Content */}
+                     <div className="relative z-10 p-2.5 md:p-3 flex flex-col">
+                        <div className="flex items-center gap-4">
+                           <div className="flex-1">
+                              <h4 className={`text-[13px] md:text-[15px] font-black tracking-widest transition-colors ${isHovered ? 'text-[#00ff88] drop-shadow-[0_0_8px_rgba(0,255,136,0.8)]' : 'text-slate-200'}`}>{game.name}</h4>
+                              <div className="text-[9px] md:text-[10px] text-zinc-400 font-bold uppercase mt-0.5 tracking-wider flex items-center gap-1.5">
+                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_#00ff88]"></span>
+                                 {game.players} Aktif Oyuncu
+                              </div>
+                           </div>
+                        </div>
 
-                      <div className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${isFocused ? 'max-h-[80px] opacity-100 mt-3 pt-3 border-t border-white/10' : 'max-h-0 opacity-0 mt-0 pt-0 border-t-0'}`}>
-                         <div className="flex justify-between items-center rounded-lg">
-                            <div className="flex flex-col">
-                               <span className="text-[9px] md:text-[10px] text-zinc-500 uppercase font-black tracking-wider drop-shadow-md">Max Kazanç</span>
-                               <span className="text-[12px] md:text-[14px] font-black text-[#a855f7] drop-shadow-[0_0_8px_rgba(168,85,247,1)]">{game.maxWin}</span>
-                            </div>
-                            <button onClick={(e) => { e.stopPropagation(); handlePlayGame(game.id); }} className="bg-[#00ff88]/10 hover:bg-[#00ff88]/30 text-[#00ff88] border border-[#00ff88]/50 px-4 py-2 rounded-md text-[11px] font-black uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(0,255,136,0.3)] hover:shadow-[0_0_25px_rgba(0,255,136,0.6)] backdrop-blur-md">
-                               Hemen Oyna
-                            </button>
-                         </div>
-                      </div>
+                        <div className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${isHovered ? 'max-h-[80px] opacity-100 mt-2 pt-2 border-t border-white/10' : 'max-h-0 opacity-0 mt-0 pt-0 border-t-0'}`}>
+                           <div className="flex justify-between items-center rounded-lg">
+                              <div className="flex flex-col">
+                                 <span className="text-[9px] md:text-[10px] text-zinc-500 uppercase font-black tracking-wider drop-shadow-md">Max Kazanç</span>
+                                 <span className="text-[12px] md:text-[14px] font-black text-[#a855f7] drop-shadow-[0_0_8px_rgba(168,85,247,1)]">{game.maxWin}</span>
+                              </div>
+                              <button onClick={(e) => { e.stopPropagation(); handlePlayGame(game.id); }} className="bg-[#00ff88]/10 hover:bg-[#00ff88]/30 text-[#00ff88] border border-[#00ff88]/50 px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(0,255,136,0.3)] hover:shadow-[0_0_25px_rgba(0,255,136,0.6)] backdrop-blur-md">
+                                 Hemen Oyna
+                              </button>
+                           </div>
+                        </div>
+                     </div>
                    </div>
-                 </div>
+                </div>
               </div>
-            </div>
             );
           })}
         </div>

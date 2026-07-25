@@ -618,7 +618,7 @@ export default function CasinoLobby({
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+              <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
                 {filteredGames.map(game => (
                   <GameCard key={game.id} game={game} onClick={() => handleGameSelect(game)} />
                 ))}

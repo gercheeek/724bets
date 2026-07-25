@@ -30,7 +30,7 @@ export const RainbetMatchCard = ({ match, onSelect }: RainbetMatchCardProps) => 
     return (
         <div 
             onClick={() => onSelect && onSelect(match)}
-            className="bg-[#18191c] rounded-xl border border-white/5 p-3 hover:border-purple-500/30  hover:-translate-y-0.5 transition-all duration-300 cursor-pointer flex flex-col relative overflow-hidden group"
+            className="bg-[#18191c] rounded-xl border border-white/5 p-3 hover:border-purple-500/30 hover:bg-[#1c1d22] transition-colors duration-200 cursor-pointer flex flex-col relative overflow-hidden group"
         >
             {/* Header */}
             <div className="flex justify-between items-center mb-2">
@@ -84,19 +84,19 @@ export const RainbetMatchCard = ({ match, onSelect }: RainbetMatchCardProps) => 
                 1x2
             </div>
             <div className="flex gap-1.5 mt-auto">
-                <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-all duration-300 text-white text-[12px] font-medium cursor-pointer group/odd">
+                <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-colors duration-200 text-white text-[12px] font-medium cursor-pointer group/odd">
                     <span className="text-[#8e939d] group-hover/odd:text-white transition-colors">1</span>
-                    <span className="group-hover/odd:text-[#10b981] group-hover/odd:drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] transition-all font-bold">{match.homeOdd}</span>
+                    <span className="group-hover/odd:text-[#10b981] transition-colors font-bold">{match.homeOdd}</span>
                 </div>
                 {match.drawOdd && match.drawOdd !== '0.00' && (
-                    <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-all duration-300 text-white text-[12px] font-medium cursor-pointer group/odd">
+                    <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-colors duration-200 text-white text-[12px] font-medium cursor-pointer group/odd">
                         <span className="text-[#8e939d] group-hover/odd:text-white transition-colors">X</span>
-                        <span className="group-hover/odd:text-[#10b981] group-hover/odd:drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] transition-all font-bold">{match.drawOdd}</span>
+                        <span className="group-hover/odd:text-[#10b981] transition-colors font-bold">{match.drawOdd}</span>
                     </div>
                 )}
-                <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-all duration-300 text-white text-[12px] font-medium cursor-pointer group/odd">
+                <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-colors duration-200 text-white text-[12px] font-medium cursor-pointer group/odd">
                     <span className="text-[#8e939d] group-hover/odd:text-white transition-colors">2</span>
-                    <span className="group-hover/odd:text-[#10b981] group-hover/odd:drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] transition-all font-bold">{match.awayOdd}</span>
+                    <span className="group-hover/odd:text-[#10b981] transition-colors font-bold">{match.awayOdd}</span>
                 </div>
             </div>
         </div>
