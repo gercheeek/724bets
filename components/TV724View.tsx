@@ -260,12 +260,14 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     const [mutedUsers, setMutedUsers] = useState<{ userId: string; username: string; mutedUntil: number }[]>([]);
     const [activeMutePopup, setActiveMutePopup] = useState<string | null>(null);
     const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({
-        'beIN SPORTS': true,
-        'S Sport': true,
-        'Smart Spor': true,
-        'Tivibu Spor': true,
-        'TRT': true,
-        'Ulusal': true,
+        '⚽ beIN SPORTS': true,
+        '🏅 S SPORT': true,
+        '🎯 SMART SPOR': true,
+        '🏀 TİVİBU SPOR': true,
+        '🌍 EUROSPORT': true,
+        '🎥 DİJİTAL PLATFORMLAR': true,
+        '📺 ULUSAL KANALLAR': true,
+        '📺 DİĞER KANALLAR': true,
     });
     const toggleGroup = (group: string) => {
         setCollapsedGroups(prev => ({ ...prev, [group]: !prev[group] }));
@@ -959,13 +961,13 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                 {/* Accordion Header */}
                                                 <div 
                                                     onClick={() => setCollapsedGroups(prev => ({ ...prev, [groupName]: !prev[groupName] }))}
-                                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', background: 'linear-gradient(90deg, rgba(255,255,255,0.03) 0%, transparent 100%)', cursor: 'pointer' }}
-                                                    className="hover:bg-white/5 transition-colors"
+                                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: '#13161C', cursor: 'pointer', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.02)' }}
+                                                    className="hover:bg-[#1A1D24] transition-colors"
                                                 >
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#e5e7eb', letterSpacing: '0.5px' }}>{groupName}</span>
+                                                        <span style={{ fontSize: '15px', fontWeight: 900, color: '#f3f4f6', letterSpacing: '0.5px' }}>{groupName}</span>
                                                     </div>
-                                                    {collapsedGroups[groupName] ? <ChevronDown style={{ width: 16, height: 16, color: '#6b7280' }} /> : <ChevronUp style={{ width: 16, height: 16, color: '#6b7280' }} />}
+                                                    {collapsedGroups[groupName] ? <ChevronDown style={{ width: 20, height: 20, color: '#9ca3af' }} /> : <ChevronUp style={{ width: 20, height: 20, color: '#9ca3af' }} />}
                                                 </div>
                                                 
                                                 {/* Accordion Content */}

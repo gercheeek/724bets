@@ -381,7 +381,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="w-full flex"
                 >
-                <div onClick={() => onViewChange('blackjack')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden">
+                <div onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden">
                     <div className="absolute inset-0 bg-[#05070a] flex flex-col z-10 overflow-hidden">
                         
                         <img src="/images/ai-generated/casino_card.jpg" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s] ease-out opacity-100 z-0" alt="Casino" />
@@ -412,7 +412,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="w-full flex"
                 >
-                <div onClick={() => onViewChange('slots')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden">
+                <div onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden">
                     <div className="absolute inset-0 bg-[#05070a] flex flex-col z-10 overflow-hidden">
                         
                         <img src="/images/ai-generated/slot_card.jpg" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s] ease-out opacity-100 z-0" alt="Slotlar" />
