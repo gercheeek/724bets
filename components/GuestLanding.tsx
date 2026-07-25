@@ -381,7 +381,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="w-full flex"
                 >
-                <div onClick={() => onViewChange('blackjack')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden border border-white/10 hover:border-[#06b6d4]/70 hover:shadow-[0_0_40px_rgba(6,182,212,0.4)]">
+                <div onClick={() => onViewChange('blackjack')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden">
                     <div className="absolute inset-0 bg-[#05070a] flex flex-col z-10 overflow-hidden">
                         
                         <img src="/images/ai-generated/casino_card.jpg" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s] ease-out opacity-100 z-0" alt="Casino" />
@@ -398,10 +398,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                                 <div className="text-[11px] lg:text-[13px] font-bold text-gray-200 group-hover:text-white transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                     Klasik Masa Oyunları
                                 </div>
-
-                                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#06b6d4] group-hover:scale-110 transition-all duration-300">
-                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -416,7 +412,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="w-full flex"
                 >
-                <div onClick={() => onViewChange('slots')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden border border-white/10 hover:border-[#d946ef]/70 hover:shadow-[0_0_40px_rgba(217,70,239,0.4)]">
+                <div onClick={() => onViewChange('slots')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden">
                     <div className="absolute inset-0 bg-[#05070a] flex flex-col z-10 overflow-hidden">
                         
                         <img src="/images/ai-generated/slot_card.jpg" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s] ease-out opacity-100 z-0" alt="Slotlar" />
@@ -432,10 +428,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                                 <div className="text-[11px] lg:text-[13px] font-bold text-gray-200 group-hover:text-white transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                     Binlerce Oyun
                                 </div>
-
-                                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#d946ef] group-hover:scale-110 transition-all duration-300">
-                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -450,7 +442,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="w-full flex"
                 >
-                <div onClick={() => onViewChange('sports')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden border border-white/10 hover:border-[#10b981]/70 hover:shadow-[0_0_40px_rgba(16,185,129,0.4)]">
+                <div onClick={() => onViewChange('sports')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden">
                     <div className="absolute inset-0 bg-[#05070a] flex flex-col z-10 overflow-hidden">
                         
                         <img src="/images/ai-generated/sports_card.jpg" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s] ease-out opacity-100 z-0" alt="Spor" />
@@ -466,10 +458,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                                 <div className="text-[11px] lg:text-[13px] font-bold text-gray-200 group-hover:text-white transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                     Canlı Bahisler
                                 </div>
-
-                                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#10b981] group-hover:scale-110 transition-all duration-300">
-                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -484,7 +472,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="w-full flex"
                 >
-                <div onClick={() => onViewChange('originals')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden border border-white/10 hover:border-[#eab308]/70 hover:shadow-[0_0_40px_rgba(234,179,8,0.4)]">
+                <div onClick={() => onViewChange('originals')} className="group relative w-full h-[160px] md:h-[130px] bg-[#050505] cursor-pointer transition-all duration-[500ms] hover:-translate-y-2 rounded-xl overflow-hidden">
                     <div className="absolute inset-0 bg-[#05070a] flex flex-col z-10 overflow-hidden">
                         
                         <img src="/images/ai-generated/originals_card.jpg" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s] ease-out opacity-100 z-0" alt="724Orijinal" />
@@ -499,10 +487,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                             <div className="flex items-center justify-between w-full mt-2">
                                 <div className="text-[11px] lg:text-[13px] font-bold text-gray-200 group-hover:text-white transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                     %99.2 RTP Özel
-                                </div>
-
-                                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#eab308] group-hover:scale-110 transition-all duration-300">
-                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
                             </div>
                         </div>
