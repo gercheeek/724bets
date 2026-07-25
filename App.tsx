@@ -2814,8 +2814,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 </button>
               )}
 
-              {/* Chat Sidebar (Pushes the layout instead of floating) */}
-              <aside className={`hidden xl:flex flex-col bg-[#0A0D14] h-full flex-shrink-0 absolute right-0 top-0 2xl:relative z-40 transition-all duration-300 ease-in-out ${isChatOpen ? 'w-[350px] shadow-[-20px_0_50px_rgba(0,0,0,0.8)]' : 'w-0'}`}>
+              {/* Chat Sidebar (Floats over the layout) */}
+              <aside className={`hidden xl:flex flex-col bg-[#0A0D14] h-[100dvh] flex-shrink-0 fixed right-0 top-0 z-[60] transition-all duration-300 ease-in-out ${isChatOpen ? 'w-[350px] shadow-[-20px_0_50px_rgba(0,0,0,0.8)]' : 'w-0'}`}>
                 {/* ── Toggle Button (Desktop Only) ── */}
                 <button 
                   onClick={() => setIsChatOpen(!isChatOpen)}
