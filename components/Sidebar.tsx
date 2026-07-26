@@ -45,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       `}
       onClick={onClick}
     >
-      {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] bg-[#1075fc] rounded-r-md z-10"></div>}
+      {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
       <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} strokeWidth={isActive ? 2.5 : 2} />
       
       <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
@@ -165,7 +165,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className={`codinglab-sidebar ${isOpen ? 'open' : 'closed'}`}>
 
         {/* SIDEBAR HEADER (Hamburger + Toggle) */}
-        <div className="flex items-center h-[60px] md:h-[72px] shrink-0 transition-all duration-300" style={{ paddingLeft: isOpen ? '16px' : '0', paddingRight: isOpen ? '16px' : '0' }}>
+        <div className="flex items-center h-[60px] md:h-[72px] shrink-0 transition-all duration-300" style={{ paddingLeft: isOpen ? '20px' : '0', paddingRight: isOpen ? '20px' : '0' }}>
           {/* Hamburger */}
           <button 
             onClick={onToggle}
@@ -175,7 +175,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
 
           {/* Horizontal Toggle */}
-          <div className={`flex items-center bg-[#0A0D14] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
+          <div className={`flex items-center bg-[#131823] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
             <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${!isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
               <Cherry className="w-4 h-4 mr-1.5" />
               Casino
@@ -206,7 +206,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <>
               {/* LOGGED IN USER MENU */}
               {/* HAFTALIK ÇEKİLİŞ BANNER */}
-              <div className={`mx-4 mt-2 mb-6 relative overflow-hidden rounded-xl bg-[#0A0D14] p-3 cursor-pointer transition-all ${!isOpen && 'hidden'}`}>
+              <div className={`mx-4 mt-2 mb-6 relative overflow-hidden rounded-xl bg-[#131823] p-3 cursor-pointer transition-all ${!isOpen && 'hidden'}`}>
                 <div className="flex items-center gap-3">
                   <Ticket className="w-8 h-8 text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
                   <div className="flex flex-col">
@@ -241,7 +241,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <NavItem icon={Clock} label="Son Oynanan" isActive={activeView === 'recent'} onClick={() => onViewChange('recent')} />
               <NavItem icon={Sparkles} label="Yeni Çıkanlar" isActive={activeView === 'new'} onClick={() => onViewChange('new')} />
 
-              <div className="w-full h-px bg-white/5 my-4" />
+              <div className="w-full mb-4" />
 
               {/* Collapsible Sections */}
               <AccordionItem icon={Cherry} label="Casino" isOpenState={isCasinoOpen} setIsOpenState={setIsCasinoOpen}>
