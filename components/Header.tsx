@@ -366,7 +366,7 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
-        <div className="w-full max-w-[1400px] mx-auto h-full flex items-center justify-between relative">
+        <div className="w-full px-2 md:px-4 h-full flex items-center justify-between relative">
             
             {/* Left Section: Hamburger & Toggle Links */}
             <div className="flex-1 flex items-center justify-start h-full pl-2 md:pl-4">
@@ -382,11 +382,10 @@ const Header: React.FC<HeaderProps> = ({
               {/* Rainbet-style Toggle Box for Navigation */}
               <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[10px] h-[44px]">
                 {[
-                  { id: 'originals', label: 'Originals', icon: <Gamepad2 className="w-4 h-4 mr-2 opacity-70" /> },
                   { id: 'casino', label: 'Casino', matches: ['casino', 'slots'], icon: <div className="flex -space-x-1 mr-2"><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/></div> },
                   { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'], icon: null }
                 ].map(nav => {
-                  const isActive = nav.matches ? nav.matches.includes(activeView || '') : activeView === nav.id;
+                  const isActive = (nav.matches && nav.matches.includes(activeView || '')) || activeView === nav.id || (activeView === 'home' && nav.id === 'casino');
                   return (
                     <button 
                       key={nav.id}
