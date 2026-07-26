@@ -458,7 +458,7 @@ const Header: React.FC<HeaderProps> = ({
             <div className="hidden lg:flex items-center gap-1 ml-10 h-full flex-1">
                {[
                  { id: 'originals', label: 'Originals' },
-                 { id: 'home', label: 'Casino', matches: ['home', 'casino', 'slots'] },
+                 { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'] },
                  { id: 'rewards', label: 'Ödüller' }
                ].map(nav => {
