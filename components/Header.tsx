@@ -379,21 +379,29 @@ const Header: React.FC<HeaderProps> = ({
                 <Menu className="w-5 h-5 lg:w-[20px] lg:h-[20px]" />
               </button>
 
-              {/* Rainbet-style Toggle Box for Navigation */}
-              <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[10px] h-[44px] ml-1 shrink-0">
+              {/* Stake-style Toggle Box for Navigation */}
+              <div className="hidden lg:flex items-center gap-2 h-[44px] ml-auto">
                 {[
-                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'], icon: <div className="flex -space-x-1 mr-2"><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/></div> },
-                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'], icon: null }
+                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
+                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'] }
                 ].map(nav => {
                   const isActive = (nav.matches && nav.matches.includes(activeView || '')) || activeView === nav.id || (activeView === 'home' && nav.id === 'casino');
                   return (
                     <button 
                       key={nav.id}
                       onClick={() => onViewChange?.(nav.id)} 
-                      className={`flex items-center px-4 h-full rounded-md font-semibold text-[14px] transition-all duration-200 ${isActive ? 'bg-[#0f7bff] text-white shadow-md' : 'text-zinc-400 hover:text-white'}`}
+                      className={`relative overflow-hidden flex items-center justify-center px-5 xl:px-6 h-[44px] rounded-[8px] font-extrabold text-[15px] transition-colors ${
+                        isActive 
+                          ? 'bg-[#2a3546] text-white shadow-md' 
+                          : 'bg-[#1b2230] text-zinc-300 hover:text-white hover:bg-[#252e42]'
+                      }`}
                     >
-                      {nav.icon}
-                      {nav.label}
+                      {isActive && (
+                        <div className="absolute inset-0 pointer-events-none" 
+                             style={{ background: 'linear-gradient(110deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.06) 45%, transparent 45.1%, transparent 100%)' }}>
+                        </div>
+                      )}
+                      <span className="relative z-10 tracking-wide">{nav.label}</span>
                     </button>
                   );
                 })}
