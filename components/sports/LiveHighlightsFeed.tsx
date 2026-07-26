@@ -58,7 +58,7 @@ export default function LiveHighlightsFeed() {
   const [activeCategory, setActiveCategory] = useState('futbol');
 
   return (
-    <div className="w-full mb-6">
+    <div className="w-full mb-2">
       {/* Cards Scroll Container */}
       <div className="flex gap-3 overflow-x-auto pb-4 custom-scrollbar snap-x hide-scrollbar-mobile">
         {mockHighlights.map((match) => (

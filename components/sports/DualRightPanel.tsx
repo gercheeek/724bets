@@ -107,7 +107,7 @@ export const DualRightPanel: React.FC<{
 
                 <div className="flex items-center gap-1.5 cursor-pointer bg-[#161920] px-2 py-1 rounded-full hover:bg-white/10 transition-all border border-white/5" onClick={() => setQuickBet(!quickBet)}>
                   <span className="text-zinc-300 font-bold text-[9px] uppercase tracking-wider">{language === 'tr' ? 'Hızlı' : 'Fast'}</span>
-                  <div className={`w-6 h-3 rounded-full p-0.5 transition-colors border ${quickBet ? 'bg-[#10b981] border-[#10b981]' : 'bg-[#1a1a1a] border-white/10'}`}>
+                  <div className={`w-6 h-3 rounded-full p-0.5 transition-colors border ${quickBet ? 'bg-[#1075fc] border-[#1075fc]' : 'bg-[#1a1a1a] border-white/10'}`}>
                     <div className={`w-2 h-2 rounded-full bg-white transition-transform ${quickBet ? 'translate-x-3' : 'translate-x-0'}`}></div>
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export const DualRightPanel: React.FC<{
             <div className="px-2 py-2 bg-[#0A0D14] border-b border-white/5">
               <div className="flex items-center p-1 bg-[#0f1118] rounded-xl border border-white/5 relative shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)] h-[44px]">
                 <div 
-                  className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-[#10b981] rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
+                  className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-[#1075fc] rounded-lg shadow-[0_0_15px_rgba(16,117,252,0.4)] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
                   style={{
                     transform: `translateX(${betType === 'tekli' ? '4px' : betType === 'kombine' ? 'calc(100% + 6px)' : 'calc(200% + 8px)'})`
                   }}
@@ -127,7 +127,7 @@ export const DualRightPanel: React.FC<{
                   <button 
                     key={type}
                     onClick={() => setBetType(type as any)}
-                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-black' : 'text-zinc-500 hover:text-white'}`}
+                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-white' : 'text-zinc-500 hover:text-white'}`}
                   >
                     {type}
                   </button>
@@ -142,17 +142,17 @@ export const DualRightPanel: React.FC<{
                   <div className="flex items-center gap-1">
                     <span className="text-[7px] text-zinc-400 font-bold tracking-wide uppercase">Kombine Bonusu</span>
                   </div>
-                  <span className="text-[9px] font-black text-[#10b981] drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">+{Math.round(accumulatorBoost * 100)}%</span>
+                  <span className="text-[9px] font-black text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.5)]">+{Math.round(accumulatorBoost * 100)}%</span>
                 </div>
                 <div className="w-full bg-[#161920] h-1 rounded-full overflow-hidden flex relative border border-white/5">
-                  <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-[#10b981] transition-all duration-500" style={{ width: `${Math.min(100, (betSlip.length / 5) * 100)}%` }}>
+                  <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-600 via-blue-400 to-[#1075fc] transition-all duration-500" style={{ width: `${Math.min(100, (betSlip.length / 5) * 100)}%` }}>
                      <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_50%,rgba(255,255,255,0)_100%)] animate-[shimmer_2s_infinite]"></div>
                   </div>
                 </div>
                 <div className="flex justify-between text-[7px] text-zinc-600 font-black px-1 mt-px">
-                  <span className={`transition-colors ${betSlip.length >= 3 ? 'text-[#10b981]' : ''}`}>3 Maç (%5)</span>
-                  <span className={`transition-colors ${betSlip.length >= 4 ? 'text-[#10b981]' : ''}`}>4 Maç (%10)</span>
-                  <span className={`transition-colors ${betSlip.length >= 5 ? 'text-[#10b981]' : ''}`}>5+ Maç (%15)</span>
+                  <span className={`transition-colors ${betSlip.length >= 3 ? 'text-[#1075fc]' : ''}`}>3 Maç (%5)</span>
+                  <span className={`transition-colors ${betSlip.length >= 4 ? 'text-[#1075fc]' : ''}`}>4 Maç (%10)</span>
+                  <span className={`transition-colors ${betSlip.length >= 5 ? 'text-[#1075fc]' : ''}`}>5+ Maç (%15)</span>
                 </div>
               </div>
             )}
@@ -201,8 +201,8 @@ export const DualRightPanel: React.FC<{
                            <span className="text-zinc-500 text-[7px] font-semibold uppercase tracking-wider">Seçim:</span>
                            <span className="text-white font-bold text-[9px]">{bet.selectionName}</span>
                         </div>
-                        <div className="bg-[#10b981]/10 px-1 py-px rounded border border-[#10b981]/20">
-                           <span className="text-[#10b981] font-black text-[9px]">{bet.odd.toFixed(2)}</span>
+                        <div className="bg-[#1075fc]/10 px-1 py-px rounded border border-[#1075fc]/20">
+                           <span className="text-[#1075fc] font-black text-[9px]">{bet.odd.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
@@ -218,8 +218,8 @@ export const DualRightPanel: React.FC<{
                       <span className="text-white font-black text-[12px]">{totalOdds.toFixed(2)}</span>
                     </div>
                     <div className="flex flex-col items-end">
-                      <span className="text-[#10b981] text-[8px] font-bold uppercase">{language === 'tr' ? 'Olası Kazanç' : 'Potential Win'}</span>
-                      <span className="text-[#10b981] font-black text-[12px]">{potentialPayout.toFixed(2)} ₺</span>
+                      <span className="text-[#1075fc] text-[8px] font-bold uppercase">{language === 'tr' ? 'Olası Kazanç' : 'Potential Win'}</span>
+                      <span className="text-[#1075fc] font-black text-[12px]">{potentialPayout.toFixed(2)} ₺</span>
                     </div>
                   </div>
 
@@ -228,9 +228,9 @@ export const DualRightPanel: React.FC<{
                      {showStamp && (
                         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded">
                           <div className="transform -rotate-12 scale-110 animate-pulse">
-                            <div className="border-[2px] border-[#10b981] rounded px-2 py-0.5 bg-[#10b981]/10 flex flex-col items-center">
-                              <CheckCircle2 className="w-4 h-4 text-[#10b981] mb-0.5" />
-                              <span className="text-[#10b981] font-black text-[10px] uppercase">ONAYLANDI</span>
+                            <div className="border-[2px] border-[#1075fc] rounded px-2 py-0.5 bg-[#1075fc]/10 flex flex-col items-center">
+                              <CheckCircle2 className="w-4 h-4 text-[#1075fc] mb-0.5" />
+                              <span className="text-[#1075fc] font-black text-[10px] uppercase">ONAYLANDI</span>
                             </div>
                           </div>
                         </div>
@@ -248,9 +248,9 @@ export const DualRightPanel: React.FC<{
                            />
                         </div>
                         <div className="flex items-center">
-                          <button onClick={() => handleQuickAmount(50)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#10b981]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">+50</button>
-                          <button onClick={() => handleQuickAmount(200)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#10b981]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">+200</button>
-                          <button onClick={() => handleQuickAmount(500)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#10b981]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">MAX</button>
+                          <button onClick={() => handleQuickAmount(50)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#1075fc]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">+50</button>
+                          <button onClick={() => handleQuickAmount(200)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#1075fc]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">+200</button>
+                          <button onClick={() => handleQuickAmount(500)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#1075fc]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">MAX</button>
                         </div>
                      </div>
                   </div>
@@ -265,10 +265,10 @@ export const DualRightPanel: React.FC<{
                       </button>
                       <button 
                         onClick={handlePlaceBet}
-                        className="flex-1 h-8 bg-[#10b981] text-black font-black text-[11px] rounded tracking-widest uppercase flex items-center justify-center hover:bg-[#0ea5e9] transition-colors gap-1 shadow-[0_3px_15px_rgba(16,185,129,0.3)] hover:shadow-[0_5px_20px_rgba(16,185,129,0.5)] active:scale-[0.98]"
+                        className="flex-1 h-8 bg-[#1075fc] text-white font-black text-[11px] rounded tracking-widest uppercase flex items-center justify-center hover:bg-[#0f6bed] transition-colors gap-1 shadow-[0_3px_15px_rgba(16,117,252,0.3)] hover:shadow-[0_5px_20px_rgba(16,117,252,0.5)] active:scale-[0.98]"
                       >
                         {!siteUser ? (language === 'tr' ? 'Giriş Yap' : 'Login') : (language === 'tr' ? 'Bahis Yap' : 'Place Bet')}
-                        {siteUser && <ChevronRight className="w-3.5 h-3.5" />}
+                        {siteUser && <ChevronRight className="w-3.5 h-3.5 text-white" />}
                       </button>
                   </div>
                 </div>
@@ -287,12 +287,12 @@ export const DualRightPanel: React.FC<{
         )}
       </div>
 
-      {/* ═══════════ STICKY BOTTOM TOGGLE BAR (Still needed to switch back to Chat!) ═══════════ */}
+      {/* ═══════════ STICKY BOTTOM TOGGLE BAR ═══════════ */}
       <div className="shrink-0 bg-[#0A0D14] border-t border-white/5 p-3 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)]">
         {activePanel === 'coupon' ? (
-          <button onClick={() => setActivePanel('chat')} className="w-full h-[46px] bg-[#10b981] hover:bg-[#0ea5e9] border border-transparent rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(16,185,129,0.3)] hover:shadow-[0_4px_20px_rgba(14,165,233,0.4)] group">
-            <MessageCircle className="w-5 h-5 text-black group-hover:scale-110 transition-transform" />
-            <span className="text-black text-[14px] font-extrabold tracking-wide uppercase">Sohbete Geç</span>
+          <button onClick={() => setActivePanel('chat')} className="w-full h-[46px] bg-[#1075fc] hover:bg-[#0f6bed] border border-transparent rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(16,117,252,0.3)] hover:shadow-[0_4px_20px_rgba(16,117,252,0.4)] group">
+            <MessageCircle className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+            <span className="text-white text-[14px] font-extrabold tracking-wide uppercase">Sohbete Geç</span>
           </button>
         ) : (
           <div className="flex items-center justify-between w-full h-full px-2">
