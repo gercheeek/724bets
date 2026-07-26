@@ -368,19 +368,16 @@ const Header: React.FC<HeaderProps> = ({
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
         <div className="w-full h-full flex items-center justify-between relative">
             
-            {/* Left Section (Mobile only) */}
-            <div className="flex items-center h-full lg:hidden shrink-0 pl-4">
-              {/* Hamburger Button */}
+            {/* Left Section: Hamburger (Mobile) & Logo */}
+            <div className="flex items-center h-full shrink-0 pl-4 lg:pl-6">
+              {/* Hamburger Button (Mobile only) */}
               <button 
                 onClick={onToggleSidebar}
-                className="text-gray-400 hover:text-white transition-colors flex items-center justify-center shrink-0 w-10 h-10"
+                className="lg:hidden text-gray-400 hover:text-white transition-colors flex items-center justify-center shrink-0 w-10 h-10 mr-2"
               >
                 <Menu className="w-5 h-5" />
               </button>
-            </div>
 
-            {/* Center Section: Logo */}
-            <div className="shrink-0 flex items-center justify-center h-full absolute left-1/2 -translate-x-1/2 top-0">
               {/* Logo */}
               <div 
                 className="flex items-center cursor-pointer select-none group relative font-black text-3xl md:text-4xl tracking-tight"
