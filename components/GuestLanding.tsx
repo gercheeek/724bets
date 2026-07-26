@@ -367,7 +367,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         </>
       ) : (
         // GUEST VIEW (NEW DESIGN - Matches reference)
-        <div className="w-full max-w-[1400px] mx-auto px-4 lg:px-6 pt-2 md:pt-3 pb-16 flex flex-col items-center">
+        <div className="w-full max-w-[1400px] mx-auto px-4 lg:px-6 pt-2 md:pt-3 pb-6 md:pb-16 flex flex-col items-center">
             {/* MAIN HERO SECTION */}
             <MainHero 
               onRegisterClick={onMemberRegisterClick} 
@@ -422,9 +422,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       </div>
 
       {/* Live Bets and Leaderboards */}
-      <div className="w-full pb-8">
-      </div>
-
+      {/* Removed empty pb-8 div to fix giant gap */}
       {/* Feature / Promo Cards (Moved to bottom) */}
       <div className="w-full px-4 pb-12 hidden md:block max-w-[1600px] mx-auto">
         <div className="grid grid-cols-3 gap-4">
@@ -508,7 +506,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       )}
 
       {/* Spacer to allow scrolling past bottom bar on mobile */}
-      <div className="h-[80px] md:h-0 w-full flex-shrink-0" />
+      <div className="h-[60px] md:h-0 w-full flex-shrink-0" />
     </div>
   );
 };
