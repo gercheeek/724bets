@@ -459,7 +459,7 @@ export default function CasinoLobby({
     if (isLoggedIn) {
       window.dispatchEvent(new Event('openDepositModal'));
     } else {
-      window.dispatchEvent(new CustomEvent('open-auth-modal'));
+      window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'login' }));
     }
   };
 
@@ -543,7 +543,7 @@ export default function CasinoLobby({
                   <p className="text-[#848B9D] text-sm md:text-lg mb-6 font-medium">
                     {banner.sub}
                   </p>
-                  <button className="bg-[#10b981] hover:bg-[#00E676] text-black px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(0,255,163,0.3)] mx-auto block">
+                  <button onClick={() => handleAction()} className="bg-[#10b981] hover:bg-[#00E676] text-black px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(0,255,163,0.3)] mx-auto block">
                     Hemen Katıl
                   </button>
                 </div>

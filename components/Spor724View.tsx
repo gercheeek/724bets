@@ -18,8 +18,9 @@ import { MatchListV2 } from './sports/MatchListV2';
 import { SporxSidebar } from './SporxSidebar';
 import ModernChat from './ModernChat';
 import { SporxBetSlip } from './SporxBetSlip';
-import { RainbetTopNav } from './sports/RainbetTopNav';
 import { RainbetMatchCard } from './sports/RainbetMatchCard';
+import SportsPromoSlider from './sports/SportsPromoSlider';
+import SportsIconNav from './sports/SportsIconNav';
 interface BetSelection {
   id: string;
   matchId: string;
@@ -673,9 +674,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   return (
     <div className="flex flex-col h-[calc(100vh-64px)] md:h-screen w-full bg-[#101114] text-zinc-300 font-sans overflow-hidden">
       
-      {/* Top Nav (Rainbet Style) */}
-      <RainbetTopNav />
-
+      {/* Top Nav (Rainbet Style) - Removed */ }
       {/* Main Content Scrollable Area */}
       <div className="flex-1 flex flex-row overflow-hidden relative z-10 bg-[#101114]">
       <div className="flex-1 overflow-y-auto no-scrollbar relative z-10 bg-[#101114]">
@@ -683,22 +682,17 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         {/* Container for centering the layout like Rainbet */}
         <div className="max-w-[1200px] mx-auto pb-24 md:pb-12">
             
-            {/* Hero Banner with UFC Promo (simulated) */}
-            <div className="px-4 md:px-6 pt-4">
-                <div className="w-full h-[180px] sm:h-[240px] md:h-[280px] rounded-xl overflow-hidden relative group cursor-pointer border border-white/5 shadow-lg mb-2">
-                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2000&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" alt="Promo" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f1016] via-[#0f1016]/40 to-transparent"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#0f1016] to-transparent w-2/3"></div>
-                    
-                    <div className="absolute bottom-6 left-6 z-10 max-w-md">
-                        <span className="bg-[#a981ff] text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider mb-3 inline-block">Yeni Etkinlik</span>
-                        <h2 className="text-3xl font-black text-white italic mb-1 uppercase leading-tight drop-shadow-md">
-                            BÜYÜK YÜZLEŞME
-                        </h2>
-                        <p className="text-zinc-300 text-sm font-medium drop-shadow-md">Bahis yapın ve anında ödülleri kazanın.</p>
-                    </div>
-                </div>
+            {/* Top Icon Navigation (Moved above slider) */}
+            <div className="px-4 md:px-6 pt-4 mb-4">
+                <SportsIconNav />
             </div>
+
+            {/* Max Tier Official Partner Banner (Professional Edition) -> Now a Slider */}
+            <div className="px-4 md:px-6 mb-4">
+                <SportsPromoSlider />
+            </div>
+
+            {/* ── CENTRAL FEED ── */}
 
             {/* Featured Matches Carousel (V2 updated) */}
             <FeaturedCarouselV2 matches={filteredMatches} onSelectMatch={setSelectedMatch} />

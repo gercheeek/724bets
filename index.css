@@ -1699,3 +1699,24 @@ input:-webkit-autofill:active{
   0% { transform: rotateX(0deg); }
   100% { transform: rotateX(-1440deg); }
 }
+
+/* Casino ve Spor ikonlarını ve yazılarını kaldırır */
+#top-left-navigation > div:nth-child(1) > span, 
+#top-left-navigation > div:nth-child(2) > span {
+    display: none !important;
+}
+
+/* Casino ve Spor linklerinin içeriğini (ikonları ve yazıları) gizler */
+#top-left-navigation a {
+    visibility: hidden;
+}
+
+/* Sol menüdeki tüm ikonları ve yazıları kaldırır */
+#sidebar-menu li > a {
+    display: none !important;
+}
+
+/* Üst menüdeki tüm linkleri ve yazıları kaldırır */
+#top-menu li > a {
+    display: none !important;
+}

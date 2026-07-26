@@ -321,7 +321,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1200);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -825,11 +825,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     return () => subscription.unsubscribe();
   }, []);
 
-  // Automatically toggle sidebar and chat when view or login state changes (for desktop)
+  // Automatically toggle chat when view or login state changes (for desktop)
   useEffect(() => {
-    if (window.innerWidth >= 1280) {
-      setIsSidebarOpen(true); // Always open left menu on desktop
-    }
+    // Logic removed to keep sidebar collapsed by default
   }, [siteUser, view]);
   const [showDepositModal, setShowDepositModal] = useState(false);
 
@@ -1712,7 +1710,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
     const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor'];
     if (sportsViews.includes(v)) {
-      setIsSidebarOpen(true);
       setIsChatOpen(true);
     }
 
@@ -2123,15 +2120,16 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
             {!(view === 'giveaway') && (
               <aside className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[260px]' : 'w-[78px]'}`}>
-                <Sidebar
-                  isOpen={isSidebarOpen}
-                  onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-                  activeView={view}
-                  onViewChange={handleViewChange}
-                  userRole={userRole}
-                  navVisibility={navVisibility}
-                  onStartTour={handleStartTour}
-                />
+                  <Sidebar
+                    isOpen={isSidebarOpen}
+                    onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+                    activeView={view}
+                    onViewChange={handleViewChange}
+                    userRole={userRole}
+                    siteUser={siteUser}
+                    navVisibility={navVisibility}
+                    onStartTour={handleStartTour}
+                  />
               </aside>
             )}
 
@@ -2147,6 +2145,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                     activeView={view}
                     onViewChange={(v) => { handleViewChange(v); setIsMobileMenuOpen(false); }}
                     userRole={userRole}
+                    siteUser={siteUser}
                     navVisibility={navVisibility}
                     onStartTour={handleStartTour}
                   />
@@ -2167,14 +2166,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 className="flex lg:hidden items-center justify-between p-3 px-4 bg-black/95 bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-xl border-b border-white/10 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-hidden gap-1"
               >
                 <div className="flex items-center gap-2">
-                  <button 
-                    onClick={() => setIsMobileMenuOpen(true)}
-                    className="flex lg:hidden w-10 h-10 items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-                  >
-                    <Menu className="w-6 h-6" />
-                  </button>
                   <div 
-                    className="flex items-center cursor-pointer select-none ml-1 group"
+                    className="flex items-center cursor-pointer select-none ml-2 group"
                     onClick={() => setView('home')}
                     style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}
                   >
@@ -2245,18 +2238,18 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                   ) : (
                     <>
                       {/* Gamdom Style Mobile Auth Buttons */}
-                      <div className="flex items-center rounded-lg border border-[#2B3544] h-[40px] shadow-sm overflow-hidden shrink-0 ml-1">
+                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-1">
                         <button
                           onClick={() => setAuthModalMode('member')}
-                          className="flex items-center justify-center h-full bg-[#111111] hover:bg-[#2A2E3D] text-white transition-colors px-4 font-bold text-sm whitespace-nowrap"
+                          className="flex items-center justify-center h-[34px] md:h-[36px] bg-[#1b1e28] hover:bg-white/5 text-white border border-white/5 rounded-md font-bold text-[12px] sm:text-[13px] px-3 transition-colors whitespace-nowrap"
                         >
                           Giriş yap
                         </button>
                         <button
                           onClick={() => setAuthModalMode('register')}
-                          className="flex items-center justify-center h-full bg-[#10B981] hover:bg-[#00E693] text-black transition-colors px-4 font-extrabold text-sm shadow-[0_0_10px_rgba(0,255,163,0.2)] whitespace-nowrap"
+                          className="flex items-center justify-center h-[34px] md:h-[36px] bg-[#10b981] hover:bg-[#00e693] text-black border border-transparent rounded-md font-extrabold text-[12px] sm:text-[13px] px-3 sm:px-4 transition-colors whitespace-nowrap"
                         >
-                          Bonusla Başla
+                          Kaydolun
                         </button>
                       </div>
                     </>
@@ -2284,7 +2277,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       <div 
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis') 
+          (view === 'gercek' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis') 
             ? 'p-0 w-full max-w-full mx-auto pb-[70px] md:pb-0' 
             : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
         }`}
@@ -2362,7 +2355,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
         {view === 'rewards' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
-            <RewardsPage onBack={() => handleViewChange('home')} />
+            <RewardsPage onBack={() => handleViewChange('home')} siteUser={siteUser} />
           </div>
         )}
 
@@ -2541,7 +2534,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
-        {(view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites') && (
+        {(view === 'casino' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites') && (
           <div className="animate-fade-in w-full h-full relative z-[50] min-w-0">
             <CasinoLobby 
               customGames={casinoLobbyGames} 
@@ -2562,14 +2555,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
-        {view === 'spor724' && (
-          <GercekView onNavigate={handleViewChange} />
-        )}
-
-        {view === 'upcomingMatches' && (
-          <div className="animate-fade-in w-full bg-transparent relative z-20" style={{ height: 'calc(100dvh - var(--header-height))' }}>
-            <UpcomingMatchesView />
-          </div>
+        {(view === 'spor724' || view === 'upcomingMatches') && (
+          <GercekView 
+            onNavigate={handleViewChange} 
+            initialTab={view === 'upcomingMatches' ? 'upcoming' : 'home'} 
+          />
         )}
 
         {view === 'casino2' && (
@@ -2825,7 +2815,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                   <svg className={`w-3 h-3 transition-transform duration-300 ${!isChatOpen ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                 </button>
                 <div className={`flex-1 overflow-hidden relative transition-opacity duration-300 ${isChatOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-                  {view === 'sports' || view === 'spor724' || view === 'gercek' ? (
+                  {view === 'sports' || view === 'spor724' || view === 'gercek' || view === 'upcomingMatches' ? (
                     <DualRightPanel 
                       popularMatches={[]} 
                       language={'tr'} 
@@ -2943,6 +2933,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             setShowMyBetsModal(true);
           }
         }}
+        onMenuClick={() => setIsMobileMenuOpen(true)}
       />
       <GlobalToaster />
       <LanguageTransition />

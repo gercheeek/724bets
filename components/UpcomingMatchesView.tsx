@@ -330,11 +330,11 @@ export const UpcomingMatchesView: React.FC = () => {
                            ) : (
                              <>
                                <div className="flex items-center gap-2">
-                                 <img src={`/takimlogo/${match.home.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.homeLogo; }} />
+                                 <img src={`/takimlogo/${match.home?.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.homeLogo; }} />
                                  <span className="text-[13px] font-semibold text-white truncate">{match.home}</span>
                                </div>
                                <div className="flex items-center gap-2">
-                                 <img src={`/takimlogo/${match.away.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.awayLogo; }} />
+                                 <img src={`/takimlogo/${match.away?.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.awayLogo; }} />
                                  <span className="text-[13px] font-semibold text-white truncate">{match.away}</span>
                                </div>
                              </>

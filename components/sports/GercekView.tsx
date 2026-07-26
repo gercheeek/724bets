@@ -1,939 +1,114 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Radio,
-  Calendar,
-  Clock, 
-  Star, 
-  Globe, 
-  ChevronDown, 
-  Play, 
-  BarChart2, 
-  Trophy,
-  Hexagon,
-  Target,
-  SquareDashed,
-  CircleDashed,
-  Crosshair,
-  Search,
-  Filter,
-  Flame,
-  Gamepad2,
-  Tv
-} from 'lucide-react';
 import { useBetting } from '../../contexts/BettingContext';
 import { useBetSlip } from '../../contexts/BetSlipContext';
+import { UpcomingMatchesView } from '../UpcomingMatchesView';
+import SportsPromoSlider from './SportsPromoSlider';
+import LiveHighlightsFeed from './LiveHighlightsFeed';
+import PremiumMatchFeed from './PremiumMatchFeed';
 import { parseMatchData } from '../Spor724View';
-import SportsHeroBanner from './SportsHeroBanner';
+import { Clock, Play, Trophy, Gamepad2, ChevronDown } from 'lucide-react';
 
-interface Match {
-  id: string;
-  sport: string;
-  league: string;
-  minute: string;
-  period: string;
-  hasStream: boolean;
-  hasStats: boolean;
-  team1: {
-    name: string;
-    score: number;
-    logo: string;
-    color: string;
-  };
-  team2: {
-    name: string;
-    score: number;
-    logo: string;
-    color: string;
-  };
-  odds: {
-    home: string;
-    draw: string;
-    away: string;
-  };
-  totalMarkets: number;
-  isFavorite?: boolean;
-  startTs?: number;
-  matchDate?: string;
-  startTime?: string;
+interface GercekViewProps {
+  onNavigate?: (view: string) => void;
+  initialTab?: string;
 }
 
-const CATEGORIES = [
-  { id: 'futbol', name: 'Futbol', icon: '⚽', count: 42 },
-  { id: 'basketbol', name: 'Basketbol', icon: '🏀', count: 18 },
-  { id: 'mma', name: 'Martial arts', icon: '🥋', count: 5 },
-  { id: 'boks', name: 'Boks', icon: '🥊', count: 3 },
-  { id: 'cs', name: 'Counter-Strike', icon: '🎮', count: 12 },
-  { id: 'hokey', name: 'Buz Hokeyi', icon: '🏒', count: 8 },
-  { id: 'tenis', name: 'Tenis', icon: '🎾', count: 15 },
-  { id: 'valorant', name: 'Valorant', icon: '🎯', count: 7 },
-  { id: 'amfutbol', name: 'Amerikan Futbolu', icon: '🏈', count: 4 },
-  { id: 'lol', name: 'League of Legends', icon: '⚔️', count: 9 },
-  { id: 'voleybol', name: 'Voleybol', icon: '🏐', count: 6 },
-];
+import SportsIconNav from './SportsIconNav';
 
-const INITIAL_MATCHES: Match[] = [
-  {
-    id: 'c_m0',
-    sport: 'futbol',
-    league: 'Türkiye › Trendyol Süper Lig',
-    minute: "72'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Galatasaray', score: 1, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'B. Dortmund', score: 3, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.53', draw: '4.13', away: '3.75' },
-    totalMarkets: 23,
-    isFavorite: false
-  },
-  {
-    id: 'c_m1',
-    sport: 'futbol',
-    league: 'İngiltere › Premier League',
-    minute: "18'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Fenerbahçe', score: 2, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'RB Leipzig', score: 1, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.62', draw: '2.54', away: '2.49' },
-    totalMarkets: 65,
-    isFavorite: false
-  },
-  {
-    id: 'c_m2',
-    sport: 'futbol',
-    league: 'İspanya › La Liga',
-    minute: "78'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Beşiktaş', score: 2, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'B. Leverkusen', score: 0, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.73', draw: '2.78', away: '2.14' },
-    totalMarkets: 36,
-    isFavorite: false
-  },
-  {
-    id: 'c_m3',
-    sport: 'futbol',
-    league: 'Almanya › Bundesliga',
-    minute: "47'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Trabzonspor', score: 2, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Juventus', score: 0, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '1.58', draw: '4.43', away: '3.65' },
-    totalMarkets: 48,
-    isFavorite: false
-  },
-  {
-    id: 'c_m4',
-    sport: 'futbol',
-    league: 'İtalya › Serie A',
-    minute: "14'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Arsenal', score: 2, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'AC Milan', score: 0, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '1.56', draw: '2.57', away: '1.92' },
-    totalMarkets: 22,
-    isFavorite: false
-  },
-  {
-    id: 'c_m5',
-    sport: 'futbol',
-    league: 'Fransa › Ligue 1',
-    minute: "82'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Chelsea', score: 1, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Inter', score: 1, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.62', draw: '3.19', away: '2.78' },
-    totalMarkets: 61,
-    isFavorite: false
-  },
-  {
-    id: 'c_m6',
-    sport: 'futbol',
-    league: 'Şampiyonlar Ligi › Son 16',
-    minute: "24'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Man City', score: 1, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Napoli', score: 0, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '1.41', draw: '3.59', away: '2.36' },
-    totalMarkets: 23,
-    isFavorite: false
-  },
-  {
-    id: 'c_m7',
-    sport: 'futbol',
-    league: 'Avrupa Ligi › Gruplar',
-    minute: "71'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Liverpool', score: 0, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'PSG', score: 1, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.43', draw: '3.52', away: '2.37' },
-    totalMarkets: 22,
-    isFavorite: false
-  },
-  {
-    id: 'c_m8',
-    sport: 'futbol',
-    league: 'Türkiye › Trendyol Süper Lig',
-    minute: "17'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Real Madrid', score: 1, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Marseille', score: 2, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.01', draw: '3.79', away: '3.53' },
-    totalMarkets: 26,
-    isFavorite: false
-  },
-  {
-    id: 'c_m9',
-    sport: 'futbol',
-    league: 'İngiltere › Premier League',
-    minute: "53'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Barcelona', score: 1, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Lyon', score: 2, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.82', draw: '2.51', away: '4.01' },
-    totalMarkets: 60,
-    isFavorite: false
-  },
-  {
-    id: 'c_m10',
-    sport: 'futbol',
-    league: 'İspanya › La Liga',
-    minute: "49'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Atletico Madrid', score: 1, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Lille', score: 3, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.42', draw: '4.44', away: '3.46' },
-    totalMarkets: 52,
-    isFavorite: false
-  },
-  {
-    id: 'c_m11',
-    sport: 'futbol',
-    league: 'Almanya › Bundesliga',
-    minute: "44'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Sevilla', score: 1, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Galatasaray', score: 0, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.43', draw: '3.52', away: '5.08' },
-    totalMarkets: 59,
-    isFavorite: false
-  },
-  {
-    id: 'c_m12',
-    sport: 'futbol',
-    league: 'İtalya › Serie A',
-    minute: "73'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'Bayern Munich', score: 2, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Fenerbahçe', score: 0, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '1.53', draw: '2.98', away: '3.07' },
-    totalMarkets: 44,
-    isFavorite: false
-  },
-  {
-    id: 'c_m13',
-    sport: 'futbol',
-    league: 'Fransa › Ligue 1',
-    minute: "3'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'B. Dortmund', score: 1, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Beşiktaş', score: 2, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '1.99', draw: '2.87', away: '2.23' },
-    totalMarkets: 33,
-    isFavorite: false
-  },
-  {
-    id: 'c_m14',
-    sport: 'futbol',
-    league: 'Şampiyonlar Ligi › Son 16',
-    minute: "0'",
-    period: 'Canlı',
-    hasStream: true,
-    hasStats: true,
-    team1: { name: 'RB Leipzig', score: 2, logo: '⚽', color: '#ef4444' },
-    team2: { name: 'Trabzonspor', score: 3, logo: '⚽', color: '#3b82f6' },
-    odds: { home: '2.41', draw: '3.48', away: '4.03' },
-    totalMarkets: 52,
-    isFavorite: false
-  }
-];
-
-
-const FEATURED_DUMMY = [
-  { id: 'f1', league: 'UFC Fight Night', time: '21 dakika içinde başlıyor', team1: 'Zaynukov, Magomed', team2: 'Rzepecki, Damian', date: 'Bugün', hour: '20:05', flag1: 'ru', flag2: 'pl', odds1: '1.40', odds2: '3.20' },
-  { id: 'f2', league: 'UFC Fight Night', time: '1 dakika içinde başlıyor', team1: 'Kuniev, Rizvan', team2: 'Fortune, Tyrell', date: 'Bugün', hour: '19:45', flag1: 'ru', flag2: 'us', odds1: '1.32', odds2: '3.65' },
-  { id: 'f3', league: 'UFC Fight Night', time: '1 saat içinde başlıyor', team1: 'Erceg, Steve', team2: 'Temirov, Ramazonbek', date: 'Bugün', hour: '20:45', flag1: 'au', flag2: 'uz', odds1: '1.88', odds2: '2.00' },
-  { id: 'f4', league: 'International Matchups', time: '4 saat içinde başlıyor', team1: 'Plex', team2: 'Fernanfloo', date: 'Yarın', hour: '00:00', flag1: 'es', flag2: 'mx', odds1: '1.10', odds2: '5.20' },
-  { id: 'f5', league: 'UFC Fight Night', time: '1 saat içinde başlıyor', team1: 'Ankalaev, Magomed', team2: 'Guskov, Bogdan', date: 'Bugün', hour: '21:05', flag1: 'ru', flag2: 'uz', odds1: '1.19', odds2: '5.20' },
-  { id: 'f6', league: 'International Matchups', time: '3 saat içinde başlıyor', team1: 'Lit Killah', team2: 'Kidd Keo', date: 'Bugün', hour: '23:00', flag1: 'ar', flag2: 'es', odds1: '1.43', odds2: '2.70' },
-  { id: 'f7', league: 'International Matchups', time: '2 saat içinde başlıyor', team1: 'Viruzz', team2: 'Arias, Gero', date: 'Bugün', hour: '22:00', flag1: 'es', flag2: 'ar', odds1: '2.22', odds2: '1.61' },
-  { id: 'f8', league: 'International Matchups', time: '4 saat içinde başlıyor', team1: 'Illojuan', team2: 'Thegrefg', date: 'Yarın', hour: '00:30', flag1: 'es', flag2: 'es', odds1: '3.85', odds2: '1.20' }
-];
-
-const SPORTS_NAV = [
-  { id: 'futbol', name: 'Futbol', count: '99+', color: '#ffffff', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <polygon points="12 2 22 8 22 16 12 22 2 16 2 8 12 2" strokeLinejoin="round"/>
-      <polygon points="12 6 17 10 17 15 12 19 7 15 7 10 12 6" strokeDasharray="1 2"/>
-      <circle cx="12" cy="12" r="2" fill="currentColor"/>
-    </svg>
-  )},
-  { id: 'basketbol', name: 'Basketbol', count: '28', color: '#fb923c', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="12" cy="12" r="10" strokeDasharray="4 2"/>
-      <path d="M12 2v20M2 12h20"/>
-      <path d="M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" strokeDasharray="1 4"/>
-    </svg>
-  )},
-  { id: 'tenis', name: 'Tenis', count: '99+', color: '#bef264', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M12 2L2 12l10 10 10-10L12 2z"/>
-      <path d="M6 12h12M12 6v12" strokeDasharray="1 3"/>
-    </svg>
-  )},
-  { id: 'amfutbol', name: 'Am. Futbolu', count: '67', color: '#f87171', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M2 12C2 6 7 2 12 2s10 4 10 10-5 10-10 10S2 18 2 12z" strokeDasharray="5 2"/>
-      <path d="M12 6v12"/>
-      <path d="M9 10h6M9 14h6"/>
-    </svg>
-  )},
-  { id: 'hokey', name: 'Hokey', count: '37', color: '#22d3ee', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M4 20L20 4M20 20L4 4" strokeLinecap="square"/>
-      <circle cx="12" cy="12" r="3" fill="currentColor"/>
-      <path d="M4 4h4v4H4z" fill="currentColor"/>
-    </svg>
-  )},
-  { id: 'beyzbol', name: 'Beyzbol', count: '14', color: '#fbbf24', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M12 2L22 12L12 22L2 12Z" strokeDasharray="2 3"/>
-      <circle cx="12" cy="12" r="4" fill="currentColor"/>
-      <path d="M12 8v8M8 12h8"/>
-    </svg>
-  )},
-  { id: 'masatenisi', name: 'Masa Tenisi', count: '99+', color: '#4ade80', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <rect x="4" y="10" width="16" height="4" rx="1"/>
-      <path d="M12 14v6M10 20h4"/>
-      <circle cx="12" cy="6" r="2" fill="currentColor"/>
-    </svg>
-  )},
-  { id: 'mma', name: 'Dövüş San.', count: '53', color: '#f43f5e', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <polygon points="12 2 19 9 12 16 5 9 12 2" />
-      <polygon points="12 10 17 15 12 22 7 15 12 10" fill="currentColor"/>
-    </svg>
-  )},
-  { id: 'voleybol', name: 'Voleybol', count: '7', color: '#a78bfa', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="12" cy="12" r="10" strokeDasharray="3 3"/>
-      <path d="M12 2c0 6 4 10 10 10M2 12c6 0 10 4 10 10M12 22c0-6-4-10-10-10M22 12c-6 0-10-4-10-10"/>
-    </svg>
-  )},
-  { id: 'kriket', name: 'Kriket', count: '1', color: '#fcd34d', icon: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M4 14l6-6M10 20l6-6" strokeDasharray="2 2"/>
-      <rect x="14" y="4" width="6" height="6" fill="currentColor" transform="rotate(45 17 7)"/>
-      <circle cx="6" cy="18" r="2"/>
-    </svg>
-  )}
-];
-
-export const GercekView: React.FC = () => {
+const GercekView: React.FC<GercekViewProps> = ({ onNavigate, initialTab = 'home' }) => {
   const { events } = useBetting();
-  const [selectedCategory, setSelectedCategory] = useState<string>('futbol');
-  const [matches, setMatches] = useState<Match[]>(INITIAL_MATCHES);
-  const [isParsing, setIsParsing] = useState<boolean>(false);
-  const { betSlip, addSelection, removeSelection } = useBetSlip();
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [visibleCount, setVisibleCount] = useState<number>(30);
-
-  useEffect(() => {
-    // GEÇİCİ OLARAK VERİ ÇEKMEYİ DURDURDUK (UI DÜZENLEMELERİ İÇİN)
-    /*
-    if (events && events.length > 0) {
-      setIsParsing(true);
-      const timer = setTimeout(() => {
-        const liveMatches = events.map((ev: any, idx: number) => {
-          const d = ev.data || ev;
-          const parsed = parseMatchData(ev, 'tr');
-          
-        const sportName = (parsed?.sport || d.sport?.name || d.sport_name || 'futbol').toLowerCase();
-        let cat = 'futbol';
-        if (sportName.includes('basket')) cat = 'basketbol';
-        else if (sportName.includes('tenis') || sportName.includes('tennis')) cat = 'tenis';
-        else if (sportName.includes('voley')) cat = 'voleybol';
-        else if (sportName.includes('masa')) cat = 'masatenisi';
-        else if (sportName.includes('buz')) cat = 'hokey';
-
-        let homeScore = 0;
-        let awayScore = 0;
-        if (parsed?.score && parsed.score !== '-') {
-           const scParts = parsed.score.split('-');
-           if (scParts.length === 2) {
-             homeScore = parseInt(scParts[0].trim()) || 0;
-             awayScore = parseInt(scParts[1].trim()) || 0;
-           }
-        }
-
-        return {
-           id: parsed?.id || d.id || `m${idx}`,
-           sport: cat,
-           league: parsed?.league || d.league || d.tournament?.name || 'Canlı Lig',
-           minute: String(parsed?.minute || d.minute || d.match_time || 'Canlı'),
-           period: (parsed?.isLive || d.is_live_betting || d.status === 'in_progress' || d.type === 'live' || (d.minute && String(d.minute).match(/\d+/))) ? 'Canlı' : '',
-           hasStream: true,
-           hasStats: true,
-           team1: { 
-             name: parsed?.home || d.team1 || d.participants?.home || 'Ev Sahibi', 
-             score: homeScore, 
-             logo: '🔴', 
-             color: '#ef4444' 
-           },
-           team2: { 
-             name: parsed?.away || d.team2 || d.participants?.away || 'Deplasman', 
-             score: awayScore, 
-             logo: '🔵', 
-             color: '#3b82f6' 
-           },
-           odds: { 
-             home: parsed?.homeOdd !== '-' && parsed?.homeOdd ? parsed.homeOdd : (d.homeOdd || d.odds?.['1'] || '-'), 
-             draw: parsed?.drawOdd !== '-' && parsed?.drawOdd ? parsed.drawOdd : (d.drawOdd || d.odds?.['X'] || '-'), 
-             away: parsed?.awayOdd !== '-' && parsed?.awayOdd ? parsed.awayOdd : (d.awayOdd || d.odds?.['2'] || '-') 
-           },
-           totalMarkets: d.markets_count || 10,
-           isFavorite: false,
-           startTs: d.start_ts,
-           matchDate: parsed?.matchDate,
-           startTime: parsed?.startTime
-        };
-      });
-      setMatches(liveMatches);
-      setIsParsing(false);
-      }, 50);
-
-      return () => clearTimeout(timer);
-    } else if (events && events.length === 0) {
-      setIsParsing(false);
-    }
-    */
+  const isParsing = false; // Add parsing state if needed later
+  
+  // Use parseMatchData for 100% compatibility with Spor724View UI components
+  const matches = React.useMemo(() => {
+    if (!events || events.length === 0) return [];
+    const parsedMatches: any[] = [];
+    events.forEach((ev: any) => {
+      const matchObj = parseMatchData(ev, 'tr');
+      if (matchObj) parsedMatches.push(matchObj);
+    });
+    return parsedMatches;
   }, [events]);
 
-  const toggleFavorite = (matchId: string) => {
-    setMatches(prev => prev.map(m => m.id === matchId ? { ...m, isFavorite: !m.isFavorite } : m));
-  };
+  const activeSportName = 'Tüm Sporlar'; // Fallback for All Sports view
+  const isAllSportsSelected = true;
+  const visibleCount = 50;
 
-  const selectBet = (matchId: string, selection: string) => {
-    let oddValue = 0;
-    let label = '';
-    let matchName = '';
+  const { betSlip, selectBet } = useBetSlip();
+  const [navTab, setNavTab] = useState(initialTab);
+  const [activeSport, setActiveSport] = useState('futbol');
 
-    const match = matches.find(m => m.id === matchId);
-    if (match) {
-      if (selection === '1') { oddValue = parseFloat(match.odds.home); label = 'Maç Sonucu 1'; }
-      else if (selection === 'X') { oddValue = parseFloat(match.odds.draw); label = 'Maç Sonucu X'; }
-      else if (selection === '2') { oddValue = parseFloat(match.odds.away); label = 'Maç Sonucu 2'; }
-      matchName = `${match.team1.name} - ${match.team2.name}`;
-    } else {
-      const dummyMatch = FEATURED_DUMMY.find(m => m.id === matchId);
-      if (dummyMatch) {
-        if (selection === '1') { oddValue = parseFloat(dummyMatch.odds1); label = 'Maç Sonucu 1'; }
-        else if (selection === '2') { oddValue = parseFloat(dummyMatch.odds2); label = 'Maç Sonucu 2'; }
-        matchName = `${dummyMatch.team1} - ${dummyMatch.team2}`;
-      } else {
-        return;
-      }
-    }
+  useEffect(() => {
+    setNavTab(initialTab);
+  }, [initialTab]);
 
-    const selectionId = `${matchId}_${selection}`;
-    const exists = betSlip.some(item => item.id === selectionId);
+  useEffect(() => {
+    const handleTabChange = (e: CustomEvent) => {
+      setNavTab(e.detail);
+    };
+    window.addEventListener('changeSportsTab', handleTabChange as EventListener);
+    return () => window.removeEventListener('changeSportsTab', handleTabChange as EventListener);
+  }, []);
 
-    if (exists) {
-      removeSelection(selectionId);
-    } else {
-      addSelection({
-        id: selectionId,
-        matchId: matchId,
-        matchName: matchName,
-        selection: label,
-        odds: oddValue
-      });
-      window.dispatchEvent(new CustomEvent('openBetSlip'));
-      window.dispatchEvent(new CustomEvent('openMobileChatPanel')); // also opens the mobile panel if on mobile
-    }
-  };
-
+  // Filter out finished matches
   const filteredMatches = matches.filter(m => {
-    // 1. Sport and Search filters
-    const matchSport = selectedCategory === 'all' || m.sport === selectedCategory;
-    const matchSearch = searchQuery === '' || 
-      m.team1.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.team2.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.league.toLowerCase().includes(searchQuery.toLowerCase());
-      
-    if (!matchSport || !matchSearch) return false;
-
-    // 2. Hide old/finished matches from Upcoming (Yaklaşan)
     if (m.period !== 'Canlı' && m.startTs && m.startTs > 0) {
       const now = Date.now();
-      // If the match started more than 15 minutes ago and is not live, assume it's finished or expired
       if (m.startTs < now - 15 * 60 * 1000) {
         return false;
       }
     }
-
     return true;
   });
 
   return (
     <div className="w-full min-h-full bg-transparent text-slate-100 p-4 md:p-6 lg:px-8 selection:bg-blue-600 selection:text-white">
-      {/* ── TOP HORIZONTAL SPORTS NAV ── */}
-      <div className="relative w-full mb-8">
-        {/* Scroll fade masks */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#050505] to-transparent pointer-events-none z-10"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#050505] to-transparent pointer-events-none z-10"></div>
-        
-        <div className="w-full overflow-x-auto scrollbar-none pb-2 relative">
-          <div className="flex items-center gap-6 md:gap-8 lg:gap-10 min-w-max px-2">
-            {SPORTS_NAV.map((sport) => {
-              const isActive = selectedCategory === sport.id;
-              return (
-                <div 
-                  key={sport.id} 
-                  className="relative group cursor-pointer transition-all duration-300"
-                  onClick={() => {
-                    setSelectedCategory(sport.id);
-                    const el = document.getElementById('canli-maclar');
-                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }}
-                >
-                  {/* Custom Skewed Background */}
-                  <div className={`absolute inset-0 -skew-x-12 transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-[#1a1a1a] border-b border-emerald-500/50 shadow-[0_2px_10px_-5px_rgba(16,185,129,0.2)]' 
-                      : 'bg-transparent border-b border-transparent group-hover:bg-white/5'
-                  }`}></div>
-                  
-                  {/* Content (Un-skewed) */}
-                  <div className="relative z-10 px-5 py-2.5 flex items-center gap-2">
-                    <div className={isActive ? 'text-emerald-400' : 'text-zinc-500 group-hover:text-zinc-300'}>
-                      {sport.icon}
-                    </div>
-                    <span className={`text-[12px] md:text-[13px] font-black uppercase tracking-widest whitespace-nowrap transition-colors ${
-                      isActive ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300'
-                    }`}>
-                      {sport.name}
-                    </span>
-                    <span className={`text-[10px] md:text-[11px] font-bold px-2 py-0.5 ml-1 transition-colors ${
-                      isActive 
-                        ? 'bg-emerald-500/10 text-emerald-400 skew-x-12' 
-                        : 'bg-zinc-800/50 text-zinc-400 group-hover:bg-zinc-700/50 skew-x-12'
-                    }`}>
-                      <div className="-skew-x-12">{sport.count}</div>
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
       
+      {/* ── TOP HORIZONTAL SPORTS NAV ── */}
+      <div className="w-full relative z-20 mb-6 pt-2">
+        <SportsIconNav />
+      </div>
+
+      {/* ── TOP HERO BANNER (SLIDER) ── */}
       <div className="mb-8">
-        <SportsHeroBanner />
+        <SportsPromoSlider />
       </div>
 
-
-
-
-      {/* ── FEATURED MATCHES ROW ── */}
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-4 mb-4">
-        
-        {/* Match Card 1 */}
-        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <Gamepad2 className="w-4 h-4 shrink-0 text-white" />
-              <span className="truncate text-white/80">Counter-Strike 2 | BLAST Bounty</span>
-            </div>
-            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">Yarın, 15:30</span>
-          </div>
-          <div className="flex items-center justify-between mt-4 gap-2">
-            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-white/10 shadow-sm">
-                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Sinners&backgroundColor=000000" className="w-full h-full object-cover scale-125" alt="Sinners" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full">Sinners Esports</span>
-            </div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
-            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center overflow-hidden border border-white/10 shadow-sm">
-                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=FUT&backgroundColor=000000" className="w-full h-full object-cover scale-125" alt="FUT" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">FUT Esports</span>
-            </div>
-          </div>
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
-          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
-            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
-            <div className="flex items-center gap-2">
-              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy1', '1'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy1_1') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">3.65</span>
-              </button>
-              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy1', '2'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy1_2') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.29</span>
-              </button>
-            </div>
-          </div>
+      {navTab === 'upcoming' ? (
+        <div className="w-full h-[calc(100vh-200px)] min-h-[600px] bg-[#0a0d14] rounded-2xl overflow-hidden mt-4 border border-white/5 shadow-2xl relative z-10">
+          <UpcomingMatchesView />
         </div>
+      ) : (
+        <div className="w-full">
+          <div className="flex items-center gap-2 mb-4">
+            <Play className="w-5 h-5 text-red-500 fill-red-500" />
+            <h2 className="text-lg font-bold text-white tracking-wide">Canlı Maçlar</h2>
+          </div>
 
-        {/* Match Card 2 */}
-        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <Flame className="w-4 h-4 shrink-0 text-white" />
-              <span className="truncate text-white/80">Boks | Unvan Maçı</span>
-            </div>
-            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">Yarın, 13:30</span>
-          </div>
-          <div className="flex items-center justify-between mt-4 gap-2">
-            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
-                <img src="https://flagcdn.com/w80/gb.png" className="w-full h-full object-cover" alt="TF" />
+          {isParsing ? (
+            <div className="py-24 flex flex-col items-center justify-center text-center bg-[#0b0e11] rounded-xl border border-white/5">
+              <div className="relative w-12 h-12 mb-4">
+                <span className="animate-ping absolute inset-0 rounded-full bg-[#10b981] opacity-20"></span>
+                <div className="w-12 h-12 rounded-full border-2 border-[#10b981]/20 border-t-[#10b981] animate-spin"></div>
               </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full">Fury, Tyson</span>
+              <h3 className="text-white text-base font-bold tracking-wide mb-1 animate-pulse">MAÇ BÜLTENİ YÜKLENİYOR...</h3>
             </div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
-            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
-                <img src="https://flagcdn.com/w80/pl.png" className="w-full h-full object-cover" alt="MW" />
+          ) : filteredMatches.length === 0 ? (
+            <div className="py-24 text-center bg-[#0b0e11] rounded-xl border border-white/5">
+              <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-lg">
+                <Trophy className="w-8 h-8 text-slate-600" />
               </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">Wach, Mariusz</span>
+              <p className="text-white font-medium mb-1">Karşılaşma Bulunamadı</p>
+              <p className="text-slate-500 text-sm">Bu kategoride şu an aktif veya yaklaşan bir maç yok.</p>
             </div>
-          </div>
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
-          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
-            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
-            <div className="flex items-center gap-2">
-              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy2', '1'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy2_1') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.01</span>
-              </button>
-              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy2', '2'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy2_2') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">15.00</span>
-              </button>
+          ) : (
+            <div className="flex flex-col gap-6">
+              <LiveHighlightsFeed />
+              <PremiumMatchFeed />
             </div>
-          </div>
+          )}
         </div>
-
-        {/* Match Card 3 */}
-        <div className="bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] rounded-2xl p-5 flex flex-col gap-4 border border-white/5 relative overflow-hidden transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center justify-between text-xs text-white/50 font-bold gap-2">
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <Flame className="w-4 h-4 shrink-0 text-white" />
-              <span className="truncate text-white/80">Boks | Profesyonel Maç</span>
-            </div>
-            <span className="shrink-0 bg-white/5 px-2 py-1 rounded-md text-white/70">25 Ağu, 18:00</span>
-          </div>
-          <div className="flex items-center justify-between mt-4 gap-2">
-            <div className="flex flex-col items-start gap-2 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
-                <img src="https://flagcdn.com/w80/kz.png" className="w-full h-full object-cover" alt="AA" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full">Akhmedov, Ali</span>
-            </div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-b from-white/60 to-white/10 font-black text-[15px] shrink-0 px-3 italic drop-shadow-md">VS</div>
-            <div className="flex flex-col items-end gap-2 text-right flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-white/10 shadow-sm bg-white/5">
-                <img src="https://flagcdn.com/w80/id.png" className="w-full h-full object-cover" alt="AW" />
-              </div>
-              <span className="font-bold text-white/90 text-[13px] truncate w-full text-right">Wellem, A.</span>
-            </div>
-          </div>
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-3xl rounded-full pointer-events-none transition-all duration-700"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
-          <div className="flex flex-col gap-4 mt-auto relative z-10 pt-4 border-t border-white/5">
-            <div className="text-center text-[11px] text-white/60 uppercase tracking-widest font-black mb-1">Maç Sonucu</div>
-            <div className="flex items-center gap-2">
-              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy3', '1'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy3_1') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">1</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">1.11</span>
-              </button>
-              <button onClick={(e) => { e.stopPropagation(); selectBet('dummy3', '2'); }} className={`flex-1 bg-gradient-to-b ${betSlip.some(b => b.id === 'dummy3_2') ? 'from-[#00ff88]/20 to-[#00ff88]/5 border-[#00ff88]' : 'from-[#2a2a2a] to-[#1a1a1a] border-white/10'} border-b-[#000] shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_2px_5px_rgba(0,0,0,0.5)] hover:from-[#363636] hover:to-[#222222] hover:border-[#00ff88]/50 hover:shadow-[0_0_15px_rgba(0,255,136,0.15)] transition-all duration-200 rounded-lg p-3 flex justify-between items-center group/btn cursor-pointer active:scale-95`}>
-                <span className="text-white/40 text-xs font-bold group-hover/btn:text-white transition-colors">2</span>
-                <span className="text-white font-black text-[15px] group-hover/btn:text-[#00ff88] transition-colors">5.50</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      {/* ── SEARCH BAR (TOP OF LIST) ── */}
-      <div className="relative w-full mb-6">
-        <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-        <input 
-          type="text"
-          placeholder="Takım, lig veya maç ara..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-[#111] border border-white/10 focus:border-white hover:border-white/20 rounded-2xl pl-12 pr-4 py-4 text-sm text-white placeholder-white/40 outline-none transition-all"
-        />
-      </div>
-
-      \n      {/* ── ÖNE ÇIKANLAR (FEATURED) ── */}
-      <div className="w-full mb-8">
-        <div className="flex items-center gap-2 mb-4">
-          <Flame className="w-5 h-5 text-orange-400" />
-          <h2 className="text-lg font-bold text-white tracking-wide">Öne Çıkanlar</h2>
-        </div>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-          {FEATURED_DUMMY.map((match) => (
-            <div key={match.id} className="bg-[#1e232b] rounded-xl p-3 flex flex-col gap-3 border border-white/5 relative overflow-hidden transition-all hover:bg-[#252b36] cursor-pointer shadow-lg hover:border-white/10">
-              <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-white/5 pb-2">
-                <div className="flex items-center gap-1.5 truncate">
-                  <Gamepad2 className="w-3.5 h-3.5 shrink-0" />
-                  <span className="truncate">{match.league}</span>
-                </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>{match.time}</span>
-                  <BarChart2 className="w-3.5 h-3.5 ml-1" />
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-2 flex-1 min-w-0 pr-2">
-                  <div className="flex items-center gap-2">
-                    <img src={`https://flagcdn.com/w20/${match.flag1}.png`} className="w-4 h-4 rounded-full object-cover shrink-0" />
-                    <span className="text-white font-medium text-xs truncate">{match.team1}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <img src={`https://flagcdn.com/w20/${match.flag2}.png`} className="w-4 h-4 rounded-full object-cover shrink-0" />
-                    <span className="text-white font-medium text-xs truncate">{match.team2}</span>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-1 shrink-0 text-[11px] text-zinc-400">
-                  <div className="flex items-center gap-1">
-                     <span>{match.date}</span>
-                     <Calendar className="w-3 h-3" />
-                  </div>
-                  <div className="flex items-center gap-1">
-                     <span>{match.hour}</span>
-                     <Clock className="w-3 h-3" />
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 mt-auto">
-                <button 
-                  onClick={(e) => { e.stopPropagation(); selectBet(match.id, '1'); }}
-                  className={`flex-1 flex justify-between items-center rounded-lg px-3 py-2 text-xs font-medium transition-all ${
-                    betSlip.some(b => b.id === `${match.id}_1`) ? 'bg-[#00ff88] text-black shadow-[0_0_10px_rgba(0,255,136,0.2)]' : 'bg-[#15191f] text-zinc-300 hover:bg-[#2c3340]'
-                  }`}
-                >
-                  <span className="opacity-60">1</span>
-                  <span>{match.odds1}</span>
-                </button>
-                <button 
-                  onClick={(e) => { e.stopPropagation(); selectBet(match.id, '2'); }}
-                  className={`flex-1 flex justify-between items-center rounded-lg px-3 py-2 text-xs font-medium transition-all ${
-                    betSlip.some(b => b.id === `${match.id}_2`) ? 'bg-[#00ff88] text-black shadow-[0_0_10px_rgba(0,255,136,0.2)]' : 'bg-[#15191f] text-zinc-300 hover:bg-[#2c3340]'
-                  }`}
-                >
-                  <span className="opacity-60">2</span>
-                  <span>{match.odds2}</span>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── CANLI MAÇLAR (LIVE MATCHES) ── */}
-      <div className="w-full">
-        <div className="flex items-center gap-2 mb-4">
-          <Play className="w-5 h-5 text-red-500 fill-red-500" />
-          <h2 className="text-lg font-bold text-white tracking-wide">Canlı Maçlar</h2>
-        </div>
-
-        {isParsing ? (
-          <div className="py-24 flex flex-col items-center justify-center text-center bg-[#0b0e11] rounded-xl border border-white/5">
-            <div className="relative w-12 h-12 mb-4">
-              <span className="animate-ping absolute inset-0 rounded-full bg-[#10b981] opacity-20"></span>
-              <div className="w-12 h-12 rounded-full border-2 border-[#10b981]/20 border-t-[#10b981] animate-spin"></div>
-            </div>
-            <h3 className="text-white text-base font-bold tracking-wide mb-1 animate-pulse">MAÇ BÜLTENİ YÜKLENİYOR...</h3>
-          </div>
-        ) : filteredMatches.length === 0 ? (
-          <div className="py-24 text-center bg-[#0b0e11] rounded-xl border border-white/5">
-            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-lg">
-              <Trophy className="w-8 h-8 text-slate-600" />
-            </div>
-            <p className="text-white font-medium mb-1">Karşılaşma Bulunamadı</p>
-            <p className="text-slate-500 text-sm">Bu kategoride şu an aktif veya yaklaşan bir maç yok.</p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-4">
-            {/* SPORT HEADER (DUMMY FUTBOL) */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between bg-[#11141a] px-4 py-3 rounded-lg border border-white/5">
-                <div className="flex items-center gap-2">
-                  <Gamepad2 className="w-4 h-4 text-zinc-400" />
-                  <span className="text-white font-semibold text-sm">Futbol</span>
-                </div>
-                <button className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10">
-                  <div className="w-2.5 h-0.5 bg-emerald-500 rounded-full"></div>
-                </button>
-              </div>
-
-            {(() => {
-              const liveMatches = filteredMatches.filter(m => m.period === 'Canlı');
-              if (liveMatches.length === 0) return null;
-              
-              const grouped = liveMatches.reduce((acc, match) => {
-                const league = match.league || 'Diğer Ligler';
-                if (!acc[league]) acc[league] = [];
-                acc[league].push(match);
-                return acc;
-              }, {});
-
-              return Object.entries(grouped).map(([leagueName, leagueMatches]) => {
-                const flagCode = ['se','ch','gb','de','es','it','fr','br','ar','pt'][leagueName.length % 10];
-                return (
-                <div key={leagueName} className="mb-4 bg-[#0b0e11] rounded-lg border border-white/5 overflow-hidden">
-                  {/* League Header */}
-                  <div className="bg-[#15191f] px-4 py-3 flex items-center justify-between border-b border-white/5">
-                    <div className="flex items-center gap-2">
-                      <img src={`https://flagcdn.com/w20/${flagCode}.png`} className="w-4 h-3 object-cover rounded-[2px]" />
-                      <span className="text-white font-medium text-[13px] tracking-wide">{leagueName}</span>
-                      <span className="text-zinc-400 text-[11px] font-bold px-1.5 py-0.5 bg-white/5 rounded ml-1">{leagueMatches.length}</span>
-                    </div>
-                    <button className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10">
-                      <div className="w-2.5 h-0.5 bg-emerald-500 rounded-full"></div>
-                    </button>
-                  </div>
-                  
-                  {/* Match Rows */}
-                  <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-3 p-3">
-                    {leagueMatches.map((match) => {
-                      return (
-                        <div key={match.id} className="bg-[#11141a] rounded-xl p-3 flex flex-col gap-3 border border-white/5 hover:border-white/10 transition-all shadow-sm">
-                          {/* Header */}
-                          <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-white/5 pb-2">
-                            <div className="flex items-center gap-1.5 truncate">
-                              <img src={`https://flagcdn.com/w20/${flagCode}.png`} className="w-3.5 h-3.5 rounded-full object-cover shrink-0" />
-                              <span className="truncate">{leagueName}</span>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0">
-                              <Clock className="w-3.5 h-3.5" />
-                              <span>{match.minute}'</span>
-                              <BarChart2 className="w-3.5 h-3.5 ml-1" />
-                            </div>
-                          </div>
-                          
-                          {/* Teams & Score */}
-                          <div className="flex justify-between items-center pr-1">
-                            <div className="flex flex-col gap-2 flex-1 min-w-0 pr-4">
-                              <div className="flex items-center justify-between gap-2">
-                                <div className="flex items-center gap-2 truncate">
-                                  <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                                    <div className="w-2 h-2 rounded-full border border-zinc-400/50"></div>
-                                  </div>
-                                  <span className="text-zinc-200 font-medium text-[13px] truncate">{match.team1.name}</span>
-                                </div>
-                                <span className="text-emerald-500 font-bold text-[14px] shrink-0">{match.team1.score}</span>
-                              </div>
-                              <div className="flex items-center justify-between gap-2">
-                                <div className="flex items-center gap-2 truncate">
-                                  <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                                    <div className="w-2 h-2 rounded-full border border-zinc-400/50"></div>
-                                  </div>
-                                  <span className="text-zinc-200 font-medium text-[13px] truncate">{match.team2.name}</span>
-                                </div>
-                                <span className="text-emerald-500 font-bold text-[14px] shrink-0">{match.team2.score}</span>
-                              </div>
-                            </div>
-                            
-                            {/* Live Badge */}
-                            <div className="shrink-0 flex items-center justify-center pl-3 border-l border-white/5 h-full">
-                               <span className="bg-red-500 text-white text-[9px] font-black px-1.5 py-[2px] rounded uppercase tracking-wider">CANLI</span>
-                            </div>
-                          </div>
-
-                          {/* Odds */}
-                          <div className="flex items-center gap-2 mt-1">
-                            <button 
-                              onClick={(e) => { e.stopPropagation(); selectBet(match.id, '1'); }}
-                              className={`flex-1 flex justify-between items-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border px-3 py-2 ${
-                                betSlip.some(b => b.id === `${match.id}_1`) ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'
-                              }`}
-                            >
-                              <span className="text-[11px] text-zinc-500 font-medium">1</span>
-                              <span className="text-[13px] text-white font-medium">{match.odds.home}</span>
-                            </button>
-                            {match.odds.draw && match.odds.draw !== '-' && match.odds.draw !== '0' && (
-                              <button 
-                                onClick={(e) => { e.stopPropagation(); selectBet(match.id, 'X'); }}
-                                className={`flex-1 flex justify-between items-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border px-3 py-2 ${
-                                  betSlip.some(b => b.id === `${match.id}_X`) ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'
-                                }`}
-                              >
-                                <span className="text-[11px] text-zinc-500 font-medium">X</span>
-                                <span className="text-[13px] text-white font-medium">{match.odds.draw}</span>
-                              </button>
-                            )}
-                            <button 
-                              onClick={(e) => { e.stopPropagation(); selectBet(match.id, '2'); }}
-                              className={`flex-1 flex justify-between items-center rounded bg-[#161920] hover:bg-[#1f242e] transition-all border px-3 py-2 ${
-                                betSlip.some(b => b.id === `${match.id}_2`) ? 'border-emerald-500/50' : 'border-white/5 hover:border-white/10'
-                              }`}
-                            >
-                              <span className="text-[11px] text-zinc-500 font-medium">2</span>
-                              <span className="text-[13px] text-white font-medium">{match.odds.away}</span>
-                            </button>
-                          </div>
-                        </div>
-                      )})}
-                  </div>
-                </div>
-              )});
-            })()}
-            </div>
-          </div>
-        )}
-      </div>
+      )}
 
     </div>
   );

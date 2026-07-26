@@ -294,6 +294,69 @@ app.get('/api/marsbahis-tv', async (req, res) => {
     }
 });
 
+app.get('/api/xslot-tv', async (req, res) => {
+    try {
+        const targetUrl = req.query.url || 'https://xslot116.live/';
+        const response = await fetch(targetUrl);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const html = await response.text();
+        
+        const channels = [];
+        const blocks = html.split('<a class="single-match show " href="channel?id=').slice(1);
+        
+        let order = 1000;
+        for (const block of blocks) {
+            const idMatch = block.match(/^([^"]+)"/);
+            if (!idMatch) continue;
+            const id = idMatch[1];
+            
+            const catMatch = block.match(/data-matchtype="([^"]+)"/);
+            const category = catMatch ? catMatch[1] : '';
+            
+            const homeMatch = block.match(/<div class="home">([^<]+)<\/div>/);
+            const home = homeMatch ? homeMatch[1].trim() : '';
+            
+            const awayMatch = block.match(/<div class="away"[^>]*>([\s\S]*?)<\/div>/);
+            let awayText = '';
+            let awayImg = '';
+            if (awayMatch) {
+                const awayContent = awayMatch[1];
+                const textMatch = awayContent.match(/^([^<]+)/);
+                if (textMatch) awayText = textMatch[1].trim();
+                const imgMatch = awayContent.match(/<img[^>]*src="([^"]+)"/);
+                if (imgMatch) awayImg = imgMatch[1];
+            }
+            
+            const livesMatch = block.match(/<span class="lives">([^<]+)<\/span>/);
+            const time = livesMatch ? livesMatch[1].trim() : '';
+            
+            let name = home;
+            if (awayText) name += ' vs ' + awayText;
+            
+            const thumbnailUrl = awayImg ? (awayImg.startsWith('http') ? awayImg : targetUrl.replace(/\/$/, '') + '/' + awayImg) : '';
+            
+            channels.push({
+                id: `xs_${id}`,
+                name: name,
+                kick_username: id, 
+                platform_type: 'xslot',
+                avatar_url: thumbnailUrl,
+                tags: [category, time].filter(Boolean),
+                is_live: true,
+                is_vip: false,
+                source_type: 'iframe',
+                iframe_url: targetUrl.replace(/\/$/, '') + '/channel?id=' + id,
+                order_index: order++
+            });
+        }
+        
+        res.json({ success: true, channels });
+    } catch (err) {
+        console.error('Xslot fetch error:', err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 [PROXY] Server running on http://0.0.0.0:${PORT} (Accepting external connections)`);

@@ -5,8 +5,12 @@ import {
   ChevronDown, UserPlus, Sword
 } from 'lucide-react';
 
+import { SiteUser } from '../types';
+import PromoCodeView from './PromoCodeView';
+
 interface RewardsPageProps {
   onBack?: () => void;
+  siteUser?: SiteUser | null;
 }
 
 const BrandShamrock = ({ className = "", style }: { className?: string, style?: React.CSSProperties }) => (
@@ -52,7 +56,7 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
 };
 
 
-const RewardsPage: React.FC<RewardsPageProps> = ({ onBack }) => {
+const RewardsPage: React.FC<RewardsPageProps> = ({ onBack, siteUser }) => {
   const [faqTab, setFaqTab] = useState('siralamalar');
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -76,6 +80,11 @@ const RewardsPage: React.FC<RewardsPageProps> = ({ onBack }) => {
 
         {/* START OF CONSTRAINED CONTENT */}
         <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex flex-col gap-12 pb-10">
+        
+        {/* EMBEDDED PROMO CODE SECTION */}
+        <section className="w-full -mx-4 sm:mx-0">
+           <PromoCodeView siteUser={siteUser || null} isEmbedded={true} />
+        </section>
 
         {/* 4. DAHASI DA VAR */}
         <section>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe } from 'lucide-react';
+import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe, Monitor } from 'lucide-react';
 import AdminLuckyWheelTab from './AdminLuckyWheelTab';
 import AdminMembersTab from './AdminMembersTab';
 import AdminRiskTab from './AdminRiskTab';
@@ -8,6 +8,7 @@ import AdminMarketingTab from './AdminMarketingTab';
 import AdminWithdrawalsTab from './AdminWithdrawalsTab';
 import AdminAuditLogsTab from './AdminAuditLogsTab';
 import AdminSportsTab from './AdminSportsTab';
+import AdminTVTab from './AdminTVTab';
 import { LuckyWheelConfig } from '../types';
 
 interface AdminPanelProps {
@@ -29,7 +30,7 @@ export default function AdminPanel(props: AdminPanelProps) {
     
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'audit' | 'sports'>('members');
+    const [activeTab, setActiveTab] = useState<'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'audit' | 'sports' | 'tv'>('members');
 
     // RBAC: Rol Bazlı Yetki Yönetimi
     const currentAdminRole = 'SUPER_ADMIN'; // test için 'SUPPORT' da yapılabilir.
@@ -158,6 +159,12 @@ export default function AdminPanel(props: AdminPanelProps) {
                                 >
                                     <Activity className="w-4 h-4" /> Spor Yönetimi
                                 </button>
+                                <button 
+                                    onClick={() => setActiveTab('tv')} 
+                                    className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'tv' ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.3)]' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
+                                >
+                                    <Monitor className="w-4 h-4" /> TV Ayarları
+                                </button>
                             </>
                         )}
                         
@@ -178,7 +185,7 @@ export default function AdminPanel(props: AdminPanelProps) {
 
                     {/* RBAC Yetki Kontrolü İçin Yardımcı Render Fonksiyonu */}
                     {(() => {
-                        const isRestricted = ['risk', 'withdrawals', 'audit', 'sports'].includes(activeTab);
+                        const isRestricted = ['risk', 'withdrawals', 'audit', 'sports', 'tv'].includes(activeTab);
                         
                         if (isRestricted && currentAdminRole !== 'SUPER_ADMIN') {
                             return (
@@ -242,6 +249,12 @@ export default function AdminPanel(props: AdminPanelProps) {
                                 {activeTab === 'sports' && (
                                     <div className="h-[75vh]">
                                         <AdminSportsTab />
+                                    </div>
+                                )}
+
+                                {activeTab === 'tv' && (
+                                    <div className="h-[75vh] overflow-y-auto">
+                                        <AdminTVTab />
                                     </div>
                                 )}
 

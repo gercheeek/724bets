@@ -391,7 +391,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 setCurrentConfig(DEFAULT_TV_CONFIG);
             }
 
-            let currentServer = 'default';
+            let currentServer = 'xslot'; // Xslot'u varsayılan yaptık
             try {
                 const { data: serverConfig } = await supabase.from('site_configs').select('value').eq('key', 'site_tv_server').maybeSingle();
                 if (serverConfig?.value) {
@@ -403,11 +403,14 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             }
             
             let marsbahisUrl = 'https://www.marsbahistv400.com';
+            let xslotUrl = 'https://xslot116.live'; // Fallback Xslot URL
+
             try {
                 const { data: urlConfig } = await supabase.from('site_configs').select('value').eq('key', 'site_tv_marsbahis_url').maybeSingle();
-                if (urlConfig?.value) {
-                    marsbahisUrl = urlConfig.value;
-                }
+                if (urlConfig?.value) marsbahisUrl = urlConfig.value;
+                
+                const { data: xslotConfig } = await supabase.from('site_configs').select('value').eq('key', 'site_tv_xslot_url').maybeSingle();
+                if (xslotConfig?.value) xslotUrl = xslotConfig.value;
             } catch (e) {}
 
             let mergedStreamers: any[] = [];
@@ -435,9 +438,26 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 } catch (e) {
                     console.error('Marsbahis API fetch error:', e);
                 }
+            } else if (currentServer === 'xslot') {
+                try {
+                    const host = window.location.hostname;
+                    const proto = window.location.protocol;
+                    const proxyUrl = host === 'localhost' ? 'http://localhost:4000' : `${proto}//${host}:4000`;
+                    const res = await fetch(`${proxyUrl}/api/xslot-tv?url=${encodeURIComponent(xslotUrl)}`);
+                    const data = await res.json();
+                    if (data.success && data.channels) {
+                        data.channels.forEach((ch: any) => {
+                            if (!mergedStreamers.find(s => s.kick_username === ch.kick_username)) {
+                                mergedStreamers.push(ch);
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.error('Xslot API fetch error:', e);
+                }
             }
 
-            if (currentServer !== 'marsbahis' && DEFAULT_TV_CONFIG.channels) {
+            if (currentServer !== 'marsbahis' && currentServer !== 'xslot' && DEFAULT_TV_CONFIG.channels) {
                 DEFAULT_TV_CONFIG.channels.forEach((ch: any) => {
                     const ms = { id: ch.id, name: ch.name, kick_username: ch.platformUsername || ch.slug || ch.streamUrl, platform_type: ch.platformType || ch.platform, avatar_url: ch.thumbnailUrl, tags: ch.tags || [ch.category], is_live: ch.isLive, is_vip: ch.isVip, source_type: ch.sourceType || 'iframe', video_url: ch.videoUrl, iframe_url: ch.iframeUrl, order_index: ch.order, fallback_type: ch.fallback_type, fallback_video_url: ch.fallback_video_url, fallback_iframe_url: ch.fallback_iframe_url };
                     if (!mergedStreamers.find(s => s.id === ch.id || (s.kick_username === ms.kick_username && ms.kick_username))) mergedStreamers.push(ms);

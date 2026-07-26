@@ -7,7 +7,9 @@ export default function SecretCurtain() {
     useEffect(() => {
         // Check session storage on mount
         const unlocked = sessionStorage.getItem('secret_curtain_unlocked');
-        if (!unlocked) {
+        if (unlocked || import.meta.env.DEV) {
+            setIsUnlocked(true);
+        } else {
             setIsUnlocked(false);
         }
     }, []);

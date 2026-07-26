@@ -6,6 +6,7 @@ const headers = { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0
 const ws = new WebSocket(url, { headers });
 
 const formattedEventsMap = new Map();
+const regionsMap = new Map();
 
 ws.on('open', () => {
   console.log('Connecting to Atekbet Swarm API for real prematch data...');
@@ -38,9 +39,6 @@ ws.on('message', (d) => {
         if (!sport.region) return;
         const sportName = (sport.name || '').trim();
         const sName = sportName.toLowerCase();
-        if (!sName.includes('futbol') && !sName.includes('soccer') && !sName.includes('football')) {
-            return; // Skip non-football sports
-        }
         Object.values(sport.region).forEach(region => {
            regionsToFetch.push({ sportName, regionId: region.id, regionName: region.name });
         });
@@ -66,14 +64,18 @@ ws.on('message', (d) => {
              },
              rid: `reg_${reg.regionId}_${idx}`
            }));
+           // Save mapping for later
+           regionsMap.set(String(reg.regionId), { sportName: reg.sportName, regionName: reg.regionName });
         }, idx * 15);
      });
 
      setTimeout(() => {
         saveAndExit();
-     }, Math.max(3000, regionsToFetch.length * 20));
+     }, Math.max(8000, regionsToFetch.length * 50));
 
   } else if (msg.rid && msg.rid.startsWith('reg_')) {
+     const regionId = msg.rid.split('_')[1];
+     const regMeta = regionsMap.get(regionId) || { sportName: 'Bilinmeyen Spor', regionName: 'Dünya' };
      const comps = msg.data?.data?.competition || msg.data?.competition || {};
 
      Object.values(comps).forEach(comp => {
@@ -96,31 +98,47 @@ ws.on('message', (d) => {
               return; // Skip virtual/cyber matches
            }
            
-           let oddsStr = '|1x2|~home~1.85!~draw~3.40!~away~3.80';
+           let oddsStr = null;
            if (game.market) {
-              const mainMarket = Object.values(game.market).find(m => m.type_name === 'P1P2' || m.type_name === 'P1X2' || m.name === 'Match Result' || m.name === 'Maç Sonucu');
+              const mainMarket = Object.values(game.market).find(m => {
+                  const t = (m.type_name || '').toLowerCase();
+                  const n = (m.name || '').toLowerCase();
+                  return t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' ||
+                         n === 'match result' || n === 'maç sonucu' || n === '1x2' || n === 'winner' || n === 'kazanan' || n === 'maçın kazananı';
+              });
               if (mainMarket && mainMarket.event) {
                  const evs = Object.values(mainMarket.event);
-                 const p1 = evs.find(e => e.name === 'W1' || e.name === '1')?.price || '1.85';
-                 const px = evs.find(e => e.name === 'X' || e.name === 'Draw')?.price || '3.40';
-                 const p2 = evs.find(e => e.name === 'W2' || e.name === '2')?.price || '3.80';
-                 oddsStr = `|1x2|~home~${p1}!~draw~${px}!~away~${p2}`;
+                 const p1 = evs.find(e => {
+                     const en = (e.name || '').toLowerCase().trim();
+                     return en === 'w1' || en === '1' || en === 'p1' || en === 'team 1' || en === 'ev sahibi';
+                 })?.price;
+                 const px = evs.find(e => {
+                     const en = (e.name || '').toLowerCase().trim();
+                     return en === 'x' || en === 'draw' || en === 'beraberlik';
+                 })?.price;
+                 const p2 = evs.find(e => {
+                     const en = (e.name || '').toLowerCase().trim();
+                     return en === 'w2' || en === '2' || en === 'p2' || en === 'team 2' || en === 'deplasman';
+                 })?.price;
+                 if (p1 || px || p2) {
+                     oddsStr = `|1x2|~home~${p1||'-'}!~draw~${px||'-'}!~away~${p2||'-'}`;
+                 }
               }
            }
 
            formattedEventsMap.set(String(game.id), {
-              id: String(game.id),
-              data: {
-                 status: 'not_started',
-                 sport: { name: 'Futbol' },
-                 tournament: { name: tournamentName },
-                 country: { name: 'Avrupa' },
-                 participants: { home: game.team1_name, away: game.team2_name },
-                 start_time: new Date(game.start_ts * 1000).toISOString(),
-                 group_markets: {
-                    'full_event|0': [oddsStr]
-                 }
-              }
+               id: String(game.id),
+               data: {
+                  status: 'not_started',
+                  sport: { name: regMeta.sportName },
+                  tournament: { name: tournamentName },
+                  country: { name: regMeta.regionName },
+                  participants: { home: game.team1_name, away: game.team2_name },
+                  start_time: new Date(game.start_ts * 1000).toISOString(),
+                  group_markets: {
+                     'full_event|0': [oddsStr]
+                  }
+               }
            });
         });
      });

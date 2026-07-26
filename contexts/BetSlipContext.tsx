@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { triggerGlobalToast } from '../components/GlobalToaster';
 
 export interface BetSelection {
   id: string; // The odd ID (e.g., h_123, d_123)
@@ -17,6 +18,7 @@ interface BetSlipContextProps {
   clearBetSlip: () => void;
   totalOdds: number;
   potentialPayout: number;
+  accumulatorBoost: number; // 0.05 for 5%, etc.
 }
 
 const BetSlipContext = createContext<BetSlipContextProps | undefined>(undefined);
@@ -34,9 +36,14 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
       }
       
       // 2. If a different selection from the SAME match is clicked, replace it (only 1 selection per match)
-      const filtered = prev.filter(s => s.matchId !== newSelection.matchId);
+      const sameMatchSelection = prev.find(s => s.matchId === newSelection.matchId);
+      if (sameMatchSelection) {
+        triggerGlobalToast({ type: 'warning', message: 'Aynı maçtan sadece bir tercih eklenebilir, eski tercihiniz değiştirildi.' });
+        const filtered = prev.filter(s => s.matchId !== newSelection.matchId);
+        return [...filtered, newSelection];
+      }
       
-      return [...filtered, newSelection];
+      return [...prev, newSelection];
     });
   };
 
@@ -50,7 +57,17 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const totalOdds = betSlip.length > 0 ? betSlip.reduce((acc, curr) => acc * curr.odd, 1) : 0;
-  const potentialPayout = totalOdds > 0 ? totalOdds * betAmount : 0;
+  
+  const getBoostPercentage = (count: number) => {
+    if (count >= 5) return 0.15;
+    if (count === 4) return 0.10;
+    if (count === 3) return 0.05;
+    return 0;
+  };
+
+  const accumulatorBoost = getBoostPercentage(betSlip.length);
+  const basePayout = totalOdds * betAmount;
+  const potentialPayout = totalOdds > 0 ? basePayout + (basePayout * accumulatorBoost) : 0;
 
   return (
     <BetSlipContext.Provider value={{
@@ -61,7 +78,8 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
       removeSelection, 
       clearBetSlip, 
       totalOdds, 
-      potentialPayout
+      potentialPayout,
+      accumulatorBoost
     }}>
       {children}
     </BetSlipContext.Provider>

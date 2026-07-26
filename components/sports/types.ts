@@ -6,6 +6,7 @@ export interface MatchInfo {
   isFinished: boolean;
   score: string;
   minute: string;
+  timestamp?: number;
   startTime?: string;
   matchDate?: string;
   fullDate?: string;
