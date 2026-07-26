@@ -238,68 +238,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <SubMenuItem label="Bonuslar" isActive={activeView === 'promo'} onClick={() => onViewChange('promo')} />
                 <SubMenuItem label="Turnuvalar" isActive={activeView === 'tournaments'} onClick={() => onViewChange('tournaments')} />
               </AccordionItem>
-              
-              <div className="mt-4 mb-2">
-                {/* VIP */}
-                <div 
-                  className={`flex items-center py-2.5 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3 hover:bg-[#242d40] ${activeView === 'vip' ? 'bg-[#242d40]' : ''}`}
-                  onClick={() => onViewChange('vip')}
-                >
-                  {activeView === 'vip' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] bg-[#1075fc] rounded-r-md z-10"></div>}
-                  <Trophy className="w-5 h-5 min-w-[20px] text-purple-400 ml-2 group-hover:text-purple-300" />
-                  <span className={`ml-4 font-bold text-[14px] text-white tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
-                    VIP
-                  </span>
-                  <div className={`ml-auto bg-transparent border border-purple-500/50 rounded px-2 py-0.5 text-white font-bold text-[10px] italic transition-all ${!isOpen && 'hidden'}`}>
-                    ÖZEL
-                  </div>
-                </div>
-
-                {/* Daily Race */}
-                <div 
-                  className={`flex items-center py-2.5 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3 hover:bg-[#242d40] mt-1`}
-                >
-                  <Crown className="w-6 h-6 min-w-[24px] text-yellow-500 ml-1.5 group-hover:text-yellow-400" />
-                  <div className={`ml-3.5 flex flex-col transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
-                    <span className="font-bold text-[14px] text-white tracking-tight leading-tight">$25K</span>
-                    <span className="text-[11px] text-[#8b92a5]">Günlük Ya...</span>
-                  </div>
-                  <div className={`ml-auto bg-transparent border border-yellow-500/50 rounded px-2 py-0.5 text-white font-mono text-[11px] transition-all ${!isOpen && 'hidden'}`}>
-                    04:36:43
-                  </div>
-                </div>
-                
-                {/* Weekly Race */}
-                <div 
-                  className={`flex items-center py-2.5 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3 hover:bg-[#242d40] mt-1`}
-                >
-                  <Crown className="w-6 h-6 min-w-[24px] text-yellow-500 ml-1.5 group-hover:text-yellow-400" />
-                  <div className={`ml-3.5 flex flex-col transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
-                    <span className="font-bold text-[14px] text-white tracking-tight leading-tight">$100K</span>
-                    <span className="text-[11px] text-[#8b92a5]">Haftalık Yarış</span>
-                  </div>
-                  <div className={`ml-auto bg-transparent border border-yellow-500/50 rounded px-2 py-0.5 text-white font-bold text-[11px] transition-all ${!isOpen && 'hidden'}`}>
-                    5g
-                  </div>
-                </div>
-                
-                {/* Monthly Race */}
-                <div 
-                  className={`flex items-center py-2.5 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3 hover:bg-[#242d40] mt-1`}
-                >
-                  <Crown className="w-6 h-6 min-w-[24px] text-yellow-500 ml-1.5 group-hover:text-yellow-400" />
-                  <div className={`ml-3.5 flex flex-col transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
-                    <span className="font-bold text-[14px] text-white tracking-tight leading-tight">$500K</span>
-                    <span className="text-[11px] text-[#8b92a5]">Aylık Yarış</span>
-                  </div>
-                  <div className={`ml-auto bg-transparent border border-yellow-500/50 rounded px-2 py-0.5 text-white font-bold text-[11px] transition-all ${!isOpen && 'hidden'}`}>
-                    5g
-                  </div>
-                </div>
-
-                <NavItem icon={Target} label="Meydan Okumalar" isActive={false} onClick={() => {}} />
-                <NavItem icon={Percent} label="Promosyonlar" isActive={false} onClick={() => {}} />
-              </div>
             </>
           )}
 
