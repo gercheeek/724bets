@@ -11,9 +11,9 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
     <div className="w-full max-w-[1300px] mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between pt-8 pb-6 lg:pt-14 lg:pb-12 relative z-20 px-4 lg:px-8 gap-8 lg:gap-12">
       
       {/* Left Content Area (Text + Buttons) */}
-      <div className="w-full lg:w-[45%] flex flex-col items-start text-left">
+      <div className="w-full lg:w-[40%] flex flex-col items-start text-left pr-0 lg:pr-8">
         {/* Title */}
-        <h1 className="text-[28px] sm:text-4xl lg:text-[46px] font-black text-white leading-[1.2] lg:leading-[1.1] mb-6 lg:mb-8 font-sans tracking-tight w-full">
+        <h1 className="text-[28px] sm:text-4xl lg:text-[40px] font-black text-white leading-[1.1] mb-6 lg:mb-8 font-sans tracking-tight w-full">
         Sınırları Olmayan Bahis Deneyimini <br className="hidden sm:block" /> Yaşayın
       </h1>
 
@@ -52,45 +52,47 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
     </div>
 
       {/* Cards Grid (Right Side on Desktop) */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 w-full lg:w-[55%] mt-2 lg:mt-0">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5 w-full lg:w-[60%] mt-2 lg:mt-0">
         {/* Casino Card */}
         <div 
           onClick={() => onNavigate('casino')} 
-          className="group relative w-full aspect-[4/5] sm:aspect-[4/3] rounded-xl lg:rounded-[1.25rem] overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5"
+          className="group relative w-full aspect-[3/4] sm:aspect-[4/5] rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#0d1421]">
              {/* Using mosaic_casino_bg.jpg if exists, else fallback gradient */}
             <div 
-              className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.05] opacity-90" 
-              style={{ backgroundImage: "url('/images/mosaic_casino_bg.jpg')", backgroundSize: "300%" }} 
+              className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.1] opacity-90" 
+              style={{ backgroundImage: "url('/images/mosaic_casino_bg.jpg')", backgroundSize: "400%" }} 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#26629F]/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#26629F]/80 to-transparent" />
           </div>
           {/* Bottom Bar */}
-          <div className="h-14 sm:h-16 bg-[#26629F] flex items-center px-5 sm:px-6 z-10 shrink-0">
-            <Gamepad2 className="w-6 h-6 sm:w-7 sm:h-7 text-white/80 mr-3" />
-            <span className="text-white font-bold text-lg sm:text-xl tracking-wide">Casino</span>
+          <div className="h-12 sm:h-14 lg:h-16 bg-[#26629F] flex items-center justify-center px-2 sm:px-4 z-10 shrink-0 gap-2">
+            <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 text-white/90" />
+            <span className="text-white font-bold text-base sm:text-lg tracking-wide">Casino</span>
+            <ArrowRight className="w-4 h-4 text-white/70 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
 
         {/* Sports Card */}
         <div 
           onClick={() => onNavigate('sports')} 
-          className="group relative w-full aspect-[4/5] sm:aspect-[4/3] rounded-xl lg:rounded-[1.25rem] overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5"
+          className="group relative w-full aspect-[4/5] sm:aspect-[4/3] lg:aspect-square xl:aspect-[5/4] rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
             <div 
-              className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.05] opacity-90" 
-              style={{ backgroundImage: "url('/images/mosaic_sports_bg.jpg')", backgroundSize: "300%" }} 
+              className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.1] opacity-90" 
+              style={{ backgroundImage: "url('/images/mosaic_sports_bg.jpg')", backgroundSize: "400%" }} 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#363E51]/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#363E51]/80 to-transparent" />
           </div>
           {/* Bottom Bar */}
-          <div className="h-14 sm:h-16 bg-[#363E51] flex items-center px-5 sm:px-6 z-10 shrink-0">
-            <Trophy className="w-6 h-6 sm:w-7 sm:h-7 text-white/80 mr-3" />
-            <span className="text-white font-bold text-lg sm:text-xl tracking-wide">Bahis Merkezi</span>
+          <div className="h-12 sm:h-14 lg:h-16 bg-[#363E51] flex items-center justify-center px-2 sm:px-4 z-10 shrink-0 gap-2">
+            <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-white/90" />
+            <span className="text-white font-bold text-base sm:text-lg tracking-wide whitespace-nowrap">Bahis Merkezi</span>
+            <ArrowRight className="w-4 h-4 text-white/70 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </div>
