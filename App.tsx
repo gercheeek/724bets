@@ -2164,20 +2164,30 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               >
                 <div className="flex items-center gap-2">
                   <div 
-                    className="flex items-center cursor-pointer select-none ml-2 group"
+                    className="flex items-center cursor-pointer select-none ml-2 group font-black text-2xl sm:text-3xl tracking-tight"
                     onClick={() => setView('home')}
-                    style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}
+                    style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em', WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility' }}
                   >
-                    <span className="text-[#10B981] font-extrabold text-2xl sm:text-3xl tracking-tight lowercase">
-                      724bets
+                    {/* 724 in Crisp White */}
+                    <span className="text-white">
+                      724
                     </span>
-                    <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 ml-1 -mt-4">
-                      <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#10B981] drop-shadow-[0_0_5px_rgba(16,185,129,0.8)]">
-                        {/* 3-leaf clover (Shamrock) */}
-                        <path d="M 50,48 C 30,30 35,10 50,20 C 65,10 70,30 50,48 Z" />
-                        <path d="M 46,52 C 30,35 10,40 20,55 C 10,70 30,75 46,52 Z" />
-                        <path d="M 54,52 C 70,35 90,40 80,55 C 90,70 70,75 54,52 Z" />
-                        <path d="M 50,52 Q 45,75 40,90 L 46,90 Q 51,75 50,52 Z" />
+                    
+                    {/* bets in Solid Blue (Lowercase) */}
+                    <span className="text-[#1075fc] flex ml-[1px]">
+                      <span>b</span>
+                      <span>e</span>
+                      <span>t</span>
+                      <span>s</span>
+                    </span>
+
+                    {/* Right-side 3-leaf clover with soft glow */}
+                    <div className="flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 ml-0 -mt-2">
+                      <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.3)]">
+                        <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
+                        <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
+                        <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
+                        <path d="M 50,50 C 45,65 40,75 35,70 C 45,70 50,60 50,50 Z" />
                       </svg>
                     </div>
                   </div>
@@ -2190,7 +2200,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                         className="flex items-center bg-[#111111] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
-                        <div className="w-7 h-7 rounded bg-[#10B981] text-black flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,255,163,0.4)]">
+                        <div className="w-7 h-7 rounded bg-[#1075fc] text-white flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(16,117,252,0.4)]">
                           <span className="text-[14px]">₺</span>
                         </div>
                         <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">₺{siteUser.balance?.toFixed(2) || '0.00'}</span>
@@ -2244,7 +2254,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                         </button>
                         <button
                           onClick={() => setAuthModalMode('register')}
-                          className="flex items-center justify-center h-[34px] md:h-[36px] bg-[#10b981] hover:bg-[#00e693] text-black border border-transparent rounded-md font-extrabold text-[12px] sm:text-[13px] px-3 sm:px-4 transition-colors whitespace-nowrap"
+                          className="flex items-center justify-center h-[34px] md:h-[36px] bg-[#1075fc] hover:bg-[#0f7bff] text-white border border-transparent rounded-md font-extrabold text-[12px] sm:text-[13px] px-3 sm:px-4 transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(15,123,255,0.3)]"
                         >
                           Kaydolun
                         </button>

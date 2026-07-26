@@ -44,10 +44,10 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                <div key={item.id} className="relative flex-1 flex justify-center -mt-8 z-50">
                  <button 
                    onClick={item.action} 
-                   className="w-[70px] h-[70px] bg-emerald-500 rounded-full flex flex-col items-center justify-center border-[5px] border-[#0A0D14] shadow-[0_0_25px_rgba(16,185,129,0.5)] animate-[pulse_2s_ease-in-out_infinite] active:scale-95 transition-transform group"
+                   className="w-[70px] h-[70px] bg-[#1075fc] rounded-full flex flex-col items-center justify-center border-[5px] border-[#0A0D14] shadow-[0_0_25px_rgba(16,117,252,0.5)] animate-[pulse_2s_ease-in-out_infinite] active:scale-95 transition-transform group"
                  >
-                    <Gift className="w-5 h-5 text-black mb-0.5" strokeWidth={2.5} />
-                    <span className="text-black font-black text-[12px] leading-tight text-center tracking-tight">KAYIT</span>
+                    <Gift className="w-5 h-5 text-white mb-0.5" strokeWidth={2.5} />
+                    <span className="text-white font-black text-[12px] leading-tight text-center tracking-tight">KAYIT</span>
                  </button>
                </div>
              )
@@ -64,13 +64,13 @@ const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             >
               {/* Active Indicator Line */}
               {isActive && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-[#10b981] shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-[#1075fc] shadow-[0_0_10px_rgba(16,117,252,0.8)]" />
               )}
               
-              <div className={`transition-all duration-300 ${isActive ? 'text-[#10b981] -translate-y-1' : 'text-[#8e98a5] group-hover:text-white'}`}>
-                <Icon size={22} className={isActive ? 'scale-110 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'opacity-80'} />
+              <div className={`transition-all duration-300 ${isActive ? 'text-[#1075fc] -translate-y-1' : 'text-[#8e98a5] group-hover:text-white'}`}>
+                <Icon size={22} className={isActive ? 'scale-110 drop-shadow-[0_0_8px_rgba(16,117,252,0.5)]' : 'opacity-80'} />
               </div>
-              <span className={`text-[10px] font-bold tracking-wide transition-colors ${isActive ? 'text-[#10b981]' : 'text-[#8e98a5] group-hover:text-white'}`}>
+              <span className={`text-[10px] font-bold tracking-wide transition-colors ${isActive ? 'text-[#1075fc]' : 'text-[#8e98a5] group-hover:text-white'}`}>
                 {item.label}
               </span>
             </button>
