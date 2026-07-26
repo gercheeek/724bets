@@ -8,10 +8,10 @@ interface MainHeroProps {
 
 export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps) {
   return (
-    <div className="w-full max-w-[900px] mx-auto flex flex-col items-center pt-8 pb-6 lg:pt-14 lg:pb-12 text-center relative z-20">
+    <div className="w-full max-w-[900px] mx-auto flex flex-col items-start lg:items-center pt-8 pb-6 lg:pt-14 lg:pb-12 text-left lg:text-center relative z-20 px-4">
       
       {/* Title */}
-      <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-black text-white leading-[1.2] mb-8 font-sans tracking-tight">
+      <h1 className="text-[28px] sm:text-4xl lg:text-[42px] font-black text-white leading-[1.2] mb-6 lg:mb-8 font-sans tracking-tight w-full">
         Sınırları Olmayan Bahis Deneyimini <br className="hidden sm:block" /> Yaşayın
       </h1>
 
@@ -49,11 +49,11 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full">
+      <div className="grid grid-cols-2 gap-3 sm:gap-6 w-full mt-2">
         {/* Casino Card */}
         <div 
           onClick={() => onNavigate('casino')} 
-          className="group relative w-full aspect-[16/10] sm:aspect-[4/3] rounded-[1.25rem] overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5"
+          className="group relative w-full aspect-[4/5] sm:aspect-[4/3] rounded-xl lg:rounded-[1.25rem] overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#0d1421]">
@@ -74,7 +74,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {/* Sports Card */}
         <div 
           onClick={() => onNavigate('sports')} 
-          className="group relative w-full aspect-[16/10] sm:aspect-[4/3] rounded-[1.25rem] overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5"
+          className="group relative w-full aspect-[4/5] sm:aspect-[4/3] rounded-xl lg:rounded-[1.25rem] overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
