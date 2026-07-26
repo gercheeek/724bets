@@ -79,6 +79,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
             <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/70 ml-0.5 lg:ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
+        </div>
 
         {/* Sports Card Wrapper for Floating (Delayed) */}
         <div className="animate-float-card" style={{ animationDelay: '1.5s' }}>
@@ -87,19 +88,20 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
             onClick={() => onNavigate('sports')} 
             className="group relative w-full aspect-[4/3] lg:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(54,62,81,0.6)] hover:border-white/20"
           >
-          {/* Main Image Area */}
-          <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
-            <div 
-              className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.1] opacity-90" 
-              style={{ backgroundImage: "url('/images/mosaic_sports_bg.jpg')", backgroundSize: "400%" }} 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#363E51]/80 to-transparent" />
-          </div>
-          {/* Bottom Bar */}
-          <div className="h-9 lg:h-16 bg-[#363E51] flex items-center justify-center px-1 lg:px-4 z-10 shrink-0 gap-1.5 lg:gap-2">
-            <Trophy className="w-3.5 h-3.5 lg:w-6 lg:h-6 text-white/90" />
-            <span className="text-white font-bold text-[12px] lg:text-lg tracking-wide whitespace-nowrap">Bahis Merkezi</span>
-            <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/70 ml-0.5 lg:ml-1 group-hover:translate-x-1 transition-transform" />
+            {/* Main Image Area */}
+            <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
+              <div 
+                className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.1] opacity-90" 
+                style={{ backgroundImage: "url('/images/mosaic_sports_bg.jpg')", backgroundSize: "400%" }} 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#363E51]/80 to-transparent" />
+            </div>
+            {/* Bottom Bar */}
+            <div className="h-9 lg:h-16 bg-[#363E51] flex items-center justify-center px-1 lg:px-4 z-10 shrink-0 gap-1.5 lg:gap-2">
+              <Trophy className="w-3.5 h-3.5 lg:w-6 lg:h-6 text-white/90" />
+              <span className="text-white font-bold text-[12px] lg:text-lg tracking-wide whitespace-nowrap">Bahis Merkezi</span>
+              <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/70 ml-0.5 lg:ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
         </div>
       </div>
