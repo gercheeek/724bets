@@ -368,34 +368,33 @@ const Header: React.FC<HeaderProps> = ({
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
         <div className="w-full max-w-[1400px] mx-auto h-full flex items-center justify-between relative">
             
-            {/* Left Section: Hamburger & Nav Links */}
+            {/* Left Section: Hamburger & Toggle Links */}
             <div className="flex-1 flex items-center justify-start h-full pl-2 md:pl-4">
               
-              {/* Hamburger Button (Mobile Only) */}
+              {/* Hamburger Button */}
               <button 
                 onClick={onToggleSidebar}
-                className="hidden lg:hidden text-white hover:bg-white/10 transition-colors flex items-center justify-center p-2 mr-2 md:mr-4 rounded-lg"
+                className="hidden lg:flex text-gray-400 hover:text-white transition-colors items-center justify-center p-2 mr-2 md:mr-6 rounded-lg"
               >
-                <Menu className="w-6 h-6" />
+                <Menu className="w-[22px] h-[22px]" />
               </button>
 
-              {/* Desktop Navigation Links */}
-              <div className="hidden lg:flex items-center gap-1 h-full mr-auto">
+              {/* Rainbet-style Toggle Box for Navigation */}
+              <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[10px] h-[44px]">
                 {[
-                  { id: 'originals', label: 'Originals' },
-                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
-                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'] },
-                  { id: 'rewards', label: 'Ödüller' }
+                  { id: 'originals', label: 'Originals', icon: <Gamepad2 className="w-4 h-4 mr-2 opacity-70" /> },
+                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'], icon: <div className="flex -space-x-1 mr-2"><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/></div> },
+                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'], icon: null }
                 ].map(nav => {
                   const isActive = nav.matches ? nav.matches.includes(activeView || '') : activeView === nav.id;
                   return (
                     <button 
                       key={nav.id}
                       onClick={() => onViewChange?.(nav.id)} 
-                      className={`px-4 py-2 rounded-lg font-bold text-[14px] transition-all duration-300 relative ${isActive ? 'text-white bg-white/5' : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'}`}
+                      className={`flex items-center px-4 h-full rounded-md font-semibold text-[14px] transition-all duration-200 ${isActive ? 'bg-[#0f7bff] text-white shadow-md' : 'text-zinc-400 hover:text-white'}`}
                     >
+                      {nav.icon}
                       {nav.label}
-                      {isActive && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />}
                     </button>
                   );
                 })}
@@ -479,17 +478,27 @@ const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Right: User Controls */}
-        <div id="tour-user-panel" className="flex-1 flex items-center justify-end gap-1 md:gap-3 z-10 pr-2 md:pr-4">
+            {/* Right: User Controls (Rainbet Style) */}
+        <div id="tour-user-panel" className="flex-1 flex items-center justify-end gap-2 md:gap-3 z-10 pr-2 md:pr-4">
 
           {siteUser ? (
             <div className="flex items-center gap-2 md:gap-3 ml-2">
               
+              {/* Search Icon */}
+              <button className="hidden lg:flex w-10 h-10 items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-lg text-gray-400 hover:text-white">
+                <Search className="w-5 h-5" />
+              </button>
+
+              {/* Ödüller (Gift Icon) */}
+              <button onClick={() => onViewChange?.('rewards')} className="hidden lg:flex w-10 h-10 items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-lg text-white">
+                <Gift className="w-5 h-5 text-emerald-400" />
+              </button>
+
               {/* Balance & Wallet Block */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 ml-2">
                 <div className="relative" ref={walletDropdownRef}>
                   <div 
-                    className="flex items-center bg-[#13161f] hover:bg-white/5 border border-white/5 cursor-pointer transition-colors rounded-lg px-3 md:px-4 h-[38px] md:h-[42px]"
+                    className="flex items-center bg-[#1b2230] hover:bg-[#252e42] cursor-pointer transition-colors rounded-lg px-3 md:px-4 h-[40px] md:h-[44px]"
                     onClick={() => setWalletDropdownOpen(prev => !prev)}
                   >
                     <span className="balance-display text-white font-bold text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap">${(siteUser.balance || 0).toFixed(2)}</span>
@@ -497,7 +506,7 @@ const Header: React.FC<HeaderProps> = ({
                   </div>
                   
                   {walletDropdownOpen && (
-                    <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-xl py-0 z-50 bg-[#13161f] border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)] text-left overflow-hidden">
+                    <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-xl py-0 z-50 bg-[#1b2230] border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)] text-left overflow-hidden">
                       <div className="p-3 border-b border-white/5">
                         <div className="relative">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -518,8 +527,10 @@ const Header: React.FC<HeaderProps> = ({
                           <div key={crypto.sym} className="flex items-center justify-between px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors group">
                             <span className="text-white font-bold text-[14px] font-mono">{(crypto.sym === 'TRY' ? (siteUser.balance || 0) : 0).toFixed(2)}</span>
                             <div className="flex items-center gap-2">
-                              <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-lg" style={{ background: crypto.bg }}>{crypto.icon}</div>
-                              <span className="text-zinc-300 font-bold text-sm group-hover:text-white transition-colors">{crypto.sym}</span>
+                              <span className="text-zinc-500 text-[12px] group-hover:text-zinc-400">{crypto.name}</span>
+                              <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-bold" style={{ backgroundColor: crypto.bg }}>
+                                {crypto.icon}
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -528,69 +539,111 @@ const Header: React.FC<HeaderProps> = ({
                   )}
                 </div>
 
-                <button
-                  onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
-                  className="bg-emerald-500 hover:bg-emerald-400 text-black shadow-[0_0_15px_rgba(16,185,129,0.3)] font-extrabold h-[38px] md:h-[42px] px-3 md:px-5 rounded-lg text-[13px] md:text-[14px] transition-all flex items-center justify-center gap-2"
+                {/* Deposit Button */}
+                <button 
+                  onClick={() => {
+                    const event = new CustomEvent('openWalletModal', { detail: 'deposit' });
+                    window.dispatchEvent(event);
+                  }}
+                  className="bg-[#0f7bff] hover:bg-[#0f7bff]/90 text-white font-bold text-[13px] md:text-[14px] h-[40px] md:h-[44px] px-4 md:px-5 rounded-lg transition-colors flex items-center shadow-lg"
                 >
-                  <Wallet className="w-4 h-4" />
-                  <span className="hidden md:block whitespace-nowrap">{t('wallet_cuzdan')}</span>
+                  <Wallet className="w-4 h-4 mr-2 hidden sm:block" />
+                  {t("cuzdan")}
                 </button>
               </div>
 
-              {/* Divider / Spacer */}
-              <div className="w-1 md:w-3"></div>
+              {/* Chat Icon */}
+              <button className="hidden lg:flex w-10 h-10 items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-lg text-gray-400 hover:text-white ml-2">
+                <MessageSquare className="w-5 h-5" />
+              </button>
 
-              {/* Icon Buttons Group */}
-              <div className="flex items-center gap-1.5 md:gap-2">
-                <div className="relative" ref={profileRef}>
-                  <button 
-                    onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="w-[48px] h-[38px] md:w-[56px] md:h-[42px] flex items-center justify-center gap-1.5 bg-[#13161f] hover:bg-white/5 border border-white/5 rounded-lg transition-colors"
-                  >
-                    <User className="w-4 h-4 md:w-5 md:h-5 text-zinc-300" />
-                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-zinc-500 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
-                  </button>
-                  {isProfileOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-[#13161f] border border-white/10 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col py-2 animate-fade-in">
-                      <button onClick={() => { setIsProfileOpen(false); onViewChange?.('profile'); }} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors w-full text-left text-zinc-300 hover:text-white group">
-                        <User className="w-4 h-4 text-zinc-400 group-hover:text-white" />
-                        <span className="font-semibold text-sm">{t('profile_profil')}</span>
-                      </button>
-                      <button 
-                        onClick={() => { setIsProfileOpen(false); onMemberLogout?.(); }}
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 transition-colors w-full text-left text-zinc-300 hover:text-red-400 group border-t border-white/5 mt-1"
-                      >
-                        <LogOut className="w-4 h-4 text-zinc-400 group-hover:text-red-400" />
-                        <span className="font-semibold text-sm">{t('profile_cikis')}</span>
-                      </button>
-                    </div>
-                  )}
+              <div className="relative" ref={userDropdownRef}>
+                {/* User Avatar Block */}
+                <div 
+                  className="flex items-center bg-[#1b2230] hover:bg-[#252e42] cursor-pointer transition-colors rounded-lg p-1 pr-2 md:pr-3 h-[40px] md:h-[44px] ml-1 md:ml-3"
+                  onClick={() => setUserDropdownOpen(prev => !prev)}
+                >
+                  <div className="w-7 h-7 md:w-9 md:h-9 rounded-md bg-emerald-500/20 text-emerald-500 flex items-center justify-center mr-2 md:mr-3 border border-emerald-500/30 overflow-hidden relative group-hover:border-emerald-500/50">
+                     <User className="w-4 h-4 md:w-5 md:h-5 z-10 relative" />
+                     <div className="absolute inset-0 bg-emerald-500/10 animate-pulse z-0"></div>
+                  </div>
+                  <div className="hidden sm:flex flex-col items-start mr-3">
+                    <span className="text-white font-bold text-[13px] md:text-[14px] leading-tight">{siteUser.username}</span>
+                    <span className="text-zinc-500 text-[10px] md:text-[11px] uppercase tracking-wider font-semibold">
+                      VIP Lvl {siteUser.loyalty?.level || 1}
+                    </span>
+                  </div>
+                  <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-gray-400 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                 </div>
+
+                {userDropdownOpen && (
+                  <div className="absolute right-0 top-[calc(100%+8px)] w-64 rounded-xl py-2 z-50 bg-[#1b2230] border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)] text-left">
+                    {/* VIP Progress */}
+                    <div className="px-4 py-3 border-b border-white/5 bg-black/20">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-emerald-400 font-bold text-[12px] uppercase">VIP {siteUser.loyalty?.tier || 'Bronze'}</span>
+                        <span className="text-white text-[12px]">{((siteUser.loyalty?.points || 0) % 1000) / 10}%</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-black/50 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500" style={{ width: `${((siteUser.loyalty?.points || 0) % 1000) / 10}%` }}></div>
+                      </div>
+                    </div>
+                    
+                    <button className="w-full text-left px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors flex items-center text-[14px]">
+                      <User className="w-4 h-4 mr-3 text-zinc-400" /> {t("hesabim")}
+                    </button>
+                    <button className="w-full text-left px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors flex items-center text-[14px]">
+                      <Settings className="w-4 h-4 mr-3 text-zinc-400" /> {t("ayarlar")}
+                    </button>
+                    <div className="h-[1px] w-full bg-white/5 my-1"></div>
+                    <button 
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors flex items-center text-[14px]"
+                    >
+                      <LogOut className="w-4 h-4 mr-3" /> {t("cikis_yap")}
+                    </button>
+                  </div>
+                )}
               </div>
-
-              {/* Chat Button separated */}
-
-
             </div>
           ) : (
-            <div className="flex items-center gap-2 mr-1 md:mr-2">
+            <div className="flex items-center gap-2 h-[40px] md:h-[44px]">
               
-              {/* Login Button */}
-              <button
-                onClick={onMemberLoginClick}
-                className="flex items-center justify-center bg-[#13161f] hover:bg-white/10 text-white border border-white/5 rounded-lg font-bold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-4 md:px-6 transition-all whitespace-nowrap ml-1 md:ml-2 shadow-sm"
-              >
-                Giriş yap
-              </button>
-              
-              {/* Register Button */}
-              <button
-                onClick={onMemberRegisterClick}
-                className="relative flex items-center justify-center bg-[#10b981] hover:bg-emerald-400 border border-transparent text-black rounded-lg font-extrabold text-[13px] md:text-[14px] h-[38px] md:h-[42px] px-5 md:px-6 transition-all duration-300 whitespace-nowrap shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]"
-              >
-                Kaydolun
+              {/* Search Icon */}
+              <button className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-gray-400 hover:text-white">
+                <Search className="w-5 h-5" />
               </button>
 
+              {/* Ödüller (Gift Icon) */}
+              <button onClick={() => onViewChange?.('rewards')} className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-white relative">
+                <Gift className="w-5 h-5" />
+                <div className="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full border border-[#1b2230]"></div>
+              </button>
+
+              <button 
+                onClick={() => {
+                  const event = new CustomEvent('openAuthModal', { detail: 'login' });
+                  window.dispatchEvent(event);
+                }}
+                className="bg-[#1b2230] hover:bg-[#252e42] text-white font-semibold text-[13px] md:text-[14px] h-full px-5 md:px-6 rounded-[8px] transition-colors ml-1"
+              >
+                Giriş Yap
+              </button>
+              
+              <button 
+                onClick={() => {
+                  const event = new CustomEvent('openAuthModal', { detail: 'register' });
+                  window.dispatchEvent(event);
+                }}
+                className="bg-[#0f7bff] hover:bg-[#0f7bff]/90 text-white font-semibold text-[13px] md:text-[14px] h-full px-5 md:px-6 rounded-[8px] transition-colors shadow-[0_0_15px_rgba(15,123,255,0.3)]"
+              >
+                Kaydol
+              </button>
+
+              {/* Chat Icon */}
+              <button className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-gray-400 hover:text-white ml-1">
+                <MessageSquare className="w-5 h-5" />
+              </button>
             </div>
           )}
         </div>
