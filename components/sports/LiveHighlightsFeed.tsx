@@ -64,10 +64,10 @@ export default function LiveHighlightsFeed() {
         {mockHighlights.map((match) => (
           <div 
             key={match.id} 
-            className="min-w-[280px] sm:min-w-[320px] max-w-[360px] flex-1 bg-gradient-to-br from-[#1a0f14] to-[#0c0f15] border border-white/5 rounded-xl p-3 sm:p-4 flex flex-col justify-between relative overflow-hidden snap-start shrink-0"
+            className="group min-w-[280px] sm:min-w-[320px] max-w-[360px] flex-1 bg-[#0f1522] hover:bg-[#131b2c] border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl p-3 sm:p-4 flex flex-col justify-between relative overflow-hidden snap-start shrink-0 shadow-lg hover:shadow-blue-500/10"
           >
             {/* Background Texture/Gradient */}
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-500/20 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/20 via-transparent to-transparent group-hover:opacity-40 transition-opacity"></div>
             
             <div className="relative z-10">
               {/* Header */}
@@ -77,12 +77,12 @@ export default function LiveHighlightsFeed() {
                   <span className="truncate max-w-[150px]">{match.league}</span>
                 </div>
                 {match.isLive ? (
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-blue-400 font-bold text-[11px]">{match.time}</span>
-                    <Play className="w-3.5 h-3.5 text-red-500 fill-red-500 animate-pulse" />
+                  <div className="flex items-center gap-1.5 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    <span className="text-emerald-400 font-bold text-[10px] tracking-wider uppercase">Canlı</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   </div>
                 ) : (
-                  <span className="text-zinc-300 font-medium text-[11px]">{match.time}</span>
+                  <span className="text-zinc-400 font-medium text-[11px] bg-white/5 px-2 py-0.5 rounded-full">{match.time}</span>
                 )}
               </div>
 
@@ -98,11 +98,11 @@ export default function LiveHighlightsFeed() {
                 <div className="flex items-center justify-center gap-1.5 w-[20%]">
                   {match.score1 !== null && match.score2 !== null ? (
                     <>
-                      <div className="w-7 h-8 bg-white/10 rounded flex items-center justify-center text-white font-bold text-sm border border-white/5">{match.score1}</div>
-                      <div className="w-7 h-8 bg-white/10 rounded flex items-center justify-center text-white font-bold text-sm border border-white/5">{match.score2}</div>
+                      <div className="w-7 h-8 bg-[#161f33] rounded flex items-center justify-center text-white font-black text-sm border border-white/10 shadow-inner">{match.score1}</div>
+                      <div className="w-7 h-8 bg-[#161f33] rounded flex items-center justify-center text-white font-black text-sm border border-white/10 shadow-inner">{match.score2}</div>
                     </>
                   ) : (
-                    <span className="text-zinc-500 font-bold text-xs">VS</span>
+                    <span className="text-zinc-600 font-bold text-xs">VS</span>
                   )}
                 </div>
 
@@ -114,16 +114,16 @@ export default function LiveHighlightsFeed() {
               </div>
 
               {/* Odds */}
-              <div className="w-full mt-auto">
-                <div className="text-center text-zinc-500 text-[10px] font-medium mb-1.5">Kazanan</div>
+              <div className="w-full mt-auto pt-2">
+                <div className="text-center text-zinc-500 text-[10px] font-medium mb-2 uppercase tracking-wider">Kazanan</div>
                 <div className="flex items-center gap-2">
-                  <button className="flex-1 bg-white/5 hover:bg-white/10 transition-colors rounded-md py-2 px-3 flex justify-between items-center border border-white/5">
-                    <span className="text-zinc-500 text-[11px] font-bold">1</span>
-                    <span className="text-white font-mono text-[12px] font-bold">{match.odds1}</span>
+                  <button className="flex-1 bg-[#161f33] hover:bg-[#1075fc] text-white transition-all duration-300 rounded-lg py-2.5 px-3 flex justify-between items-center border border-white/5 hover:border-transparent group/btn">
+                    <span className="text-zinc-400 group-hover/btn:text-white/90 text-[11px] font-bold transition-colors">1</span>
+                    <span className="font-mono text-[13px] font-black">{match.odds1}</span>
                   </button>
-                  <button className="flex-1 bg-white/5 hover:bg-white/10 transition-colors rounded-md py-2 px-3 flex justify-between items-center border border-white/5">
-                    <span className="text-zinc-500 text-[11px] font-bold">2</span>
-                    <span className="text-white font-mono text-[12px] font-bold">{match.odds2}</span>
+                  <button className="flex-1 bg-[#161f33] hover:bg-[#1075fc] text-white transition-all duration-300 rounded-lg py-2.5 px-3 flex justify-between items-center border border-white/5 hover:border-transparent group/btn">
+                    <span className="text-zinc-400 group-hover/btn:text-white/90 text-[11px] font-bold transition-colors">2</span>
+                    <span className="font-mono text-[13px] font-black">{match.odds2}</span>
                   </button>
                 </div>
               </div>
@@ -140,8 +140,8 @@ export default function LiveHighlightsFeed() {
             onClick={() => setActiveCategory(cat.id)}
             className={`whitespace-nowrap px-4 py-2 rounded-full flex items-center gap-2 transition-all font-semibold text-[13px] shrink-0 border ${
               activeCategory === cat.id 
-                ? 'bg-[#2a5c9f] text-white border-[#2a5c9f] shadow-md shadow-blue-500/20' 
-                : 'bg-[#15191f] text-zinc-400 border-white/5 hover:bg-white/5 hover:text-white'
+                ? 'bg-[#1075fc] text-white border-transparent shadow-lg shadow-blue-500/30' 
+                : 'bg-[#15191f] text-zinc-400 border-white/5 hover:bg-[#161f33] hover:text-white'
             }`}
           >
             {cat.icon}
