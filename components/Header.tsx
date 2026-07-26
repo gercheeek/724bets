@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Settings, User, Pen, LogOut, ChevronDown, ChevronUp, Search, Coins, Send, X,
   MessageSquare, Home, Ticket, BarChart3, Shield, Menu, Gamepad2, Dices, Crown,
-  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club,
+  Target, Spade, Trophy, TicketCheck, Gift, Tv, Diamond, Wallet, Club, Cherry,
   Bell, Users, ShieldCheck, Lock, Link, FileText, Clover, Activity, Briefcase, Sun, Moon
 } from 'lucide-react';
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
@@ -368,31 +368,37 @@ const Header: React.FC<HeaderProps> = ({
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
         <div className="w-full h-full flex items-center justify-between relative">
             
-            {/* Left Section: Hamburger & Toggle Links */}
-            <div className="flex items-center h-full lg:w-[260px] lg:border-r lg:border-white/5 px-2 shrink-0">
+            {/* Left Section: Hamburger & Exact Rainbet Toggle Links */}
+            <div className="flex items-center h-full lg:w-[260px] lg:border-r lg:border-white/5 px-4 shrink-0">
               
               {/* Hamburger Button */}
               <button 
                 onClick={onToggleSidebar}
-                className="text-gray-400 hover:text-white transition-colors flex items-center justify-center p-2.5 rounded-lg shrink-0"
+                className="text-gray-400 hover:text-white transition-colors flex items-center justify-center mr-4 shrink-0"
               >
-                <Menu className="w-5 h-5 lg:w-[20px] lg:h-[20px]" />
+                <Menu className="w-5 h-5 lg:w-[22px] lg:h-[22px]" />
               </button>
 
-              {/* Rainbet-style Toggle Box for Navigation (Aligned to Left text edge) */}
-              <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[10px] h-[44px] ml-0.5 shrink-0">
+              {/* Rainbet-style Toggle Box for Navigation (Fills remaining space) */}
+              <div className="hidden lg:flex items-center bg-[#1c2433] p-1 rounded-md h-[40px] flex-1">
                 {[
-                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'], icon: <div className="flex -space-x-1 mr-2"><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/></div> },
-                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'], icon: null }
+                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
+                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'] }
                 ].map(nav => {
                   const isActive = (nav.matches && nav.matches.includes(activeView || '')) || activeView === nav.id || (activeView === 'home' && nav.id === 'casino');
                   return (
                     <button 
                       key={nav.id}
                       onClick={() => onViewChange?.(nav.id)} 
-                      className={`flex items-center px-4 h-full rounded-md font-semibold text-[14px] transition-all duration-200 ${isActive ? 'bg-[#0f7bff] text-white shadow-md' : 'text-zinc-400 hover:text-white'}`}
+                      className={`flex-1 flex items-center justify-center h-full rounded-[4px] font-medium text-[13px] transition-all duration-200 ${
+                        isActive 
+                          ? 'bg-[#1075fc] text-white shadow-md' 
+                          : 'text-gray-400 hover:text-white'
+                      }`}
                     >
-                      {nav.icon}
+                      {nav.id === 'casino' && (
+                        <Cherry className="w-3.5 h-3.5 mr-1.5" />
+                      )}
                       {nav.label}
                     </button>
                   );
