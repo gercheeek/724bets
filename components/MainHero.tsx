@@ -55,7 +55,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {/* Casino Card */}
         <div 
           onClick={() => onNavigate('casino')} 
-          className="group relative w-full aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(38,98,159,0.4)] hover:border-white/20"
+          className="group relative w-full aspect-[4/3] lg:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(38,98,159,0.4)] hover:border-white/20"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#0d1421]">
@@ -67,17 +67,17 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
             <div className="absolute inset-0 bg-gradient-to-t from-[#26629F]/80 to-transparent" />
           </div>
           {/* Bottom Bar */}
-          <div className="h-12 sm:h-14 lg:h-16 bg-[#26629F] flex items-center justify-center px-2 sm:px-4 z-10 shrink-0 gap-2">
-            <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 text-white/90" />
-            <span className="text-white font-bold text-base sm:text-lg tracking-wide">Casino</span>
-            <ArrowRight className="w-4 h-4 text-white/70 ml-1 group-hover:translate-x-1 transition-transform" />
+          <div className="h-9 lg:h-16 bg-[#26629F] flex items-center justify-center px-1 lg:px-4 z-10 shrink-0 gap-1.5 lg:gap-2">
+            <Gamepad2 className="w-3.5 h-3.5 lg:w-6 lg:h-6 text-white/90" />
+            <span className="text-white font-bold text-[12px] lg:text-lg tracking-wide">Casino</span>
+            <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/70 ml-0.5 lg:ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
 
         {/* Sports Card */}
         <div 
           onClick={() => onNavigate('sports')} 
-          className="group relative w-full aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(54,62,81,0.5)] hover:border-white/20"
+          className="group relative w-full aspect-[4/3] lg:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(54,62,81,0.5)] hover:border-white/20"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
@@ -88,10 +88,10 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
             <div className="absolute inset-0 bg-gradient-to-t from-[#363E51]/80 to-transparent" />
           </div>
           {/* Bottom Bar */}
-          <div className="h-12 sm:h-14 lg:h-16 bg-[#363E51] flex items-center justify-center px-2 sm:px-4 z-10 shrink-0 gap-2">
-            <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-white/90" />
-            <span className="text-white font-bold text-base sm:text-lg tracking-wide whitespace-nowrap">Bahis Merkezi</span>
-            <ArrowRight className="w-4 h-4 text-white/70 ml-1 group-hover:translate-x-1 transition-transform" />
+          <div className="h-9 lg:h-16 bg-[#363E51] flex items-center justify-center px-1 lg:px-4 z-10 shrink-0 gap-1.5 lg:gap-2">
+            <Trophy className="w-3.5 h-3.5 lg:w-6 lg:h-6 text-white/90" />
+            <span className="text-white font-bold text-[12px] lg:text-lg tracking-wide whitespace-nowrap">Bahis Merkezi</span>
+            <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/70 ml-0.5 lg:ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </div>
