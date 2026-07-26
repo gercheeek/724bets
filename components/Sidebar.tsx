@@ -41,14 +41,14 @@ const Sidebar: React.FC<SidebarProps> = ({
   const NavItem = ({ icon: Icon, label, isActive, onClick, iconColor = 'text-[#8b92a5]', activeIconColor = 'text-white' }: any) => (
     <div 
       className={`flex items-center py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3
-        ${isActive ? 'bg-[#242d40] text-white shadow-sm' : 'text-[#8b92a5] hover:text-white hover:bg-[#242d40]'}
+        ${isActive ? 'bg-[#1b2230] text-white shadow-sm' : 'text-[#8b92a5] hover:text-white hover:bg-[#1b2230]'}
       `}
       onClick={onClick}
     >
       {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] bg-[#1075fc] rounded-r-md z-10"></div>}
-      <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} />
+      <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} />
       
-      <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+      <span className={`ml-4 font-bold text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
         {label}
       </span>
       
@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const AccordionItem = ({ icon: Icon, label, isOpenState, setIsOpenState, children }: any) => {
     return (
-      <div className={`relative group mx-3 mb-2 transition-all duration-300 rounded-lg ${isOpen ? 'overflow-hidden' : ''} bg-[#242d40] border ${isOpenState ? 'border-white/5' : 'border-transparent hover:border-white/5'}`}>
+      <div className={`relative group mx-3 mb-2 transition-all duration-300 rounded-lg ${isOpen ? 'overflow-hidden' : ''} bg-[#1b2230] border ${isOpenState ? 'border-white/5' : 'border-transparent hover:border-white/5'}`}>
         <div 
           className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all duration-300 text-white`}
           onClick={() => {
@@ -72,7 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
           <div className="flex items-center">
             <Icon className={`w-5 h-5 min-w-[20px] text-white`} />
-            <span className={`ml-4 font-semibold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
+            <span className={`ml-4 font-bold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
               {label}
             </span>
           </div>
@@ -165,22 +165,22 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className={`codinglab-sidebar ${isOpen ? 'open' : 'closed'}`}>
 
         {/* SIDEBAR HEADER (Hamburger + Toggle) */}
-        <div className="flex items-center h-[60px] md:h-[72px] shrink-0 border-b border-white/5 transition-all duration-300" style={{ paddingLeft: isOpen ? '16px' : '0', paddingRight: isOpen ? '16px' : '0' }}>
+        <div className="flex items-center h-[60px] md:h-[72px] shrink-0 transition-all duration-300" style={{ paddingLeft: isOpen ? '16px' : '0', paddingRight: isOpen ? '16px' : '0' }}>
           {/* Hamburger */}
           <button 
             onClick={onToggle}
-            className={`text-[#8b92a5] hover:text-white transition-colors flex items-center justify-center shrink-0 ${isOpen ? 'mr-3' : 'w-10 h-10 bg-[#1b2230] rounded-[8px] hover:bg-[#252e42] mx-auto'}`}
+            className={`text-[#8b92a5] hover:text-white transition-colors flex items-center justify-center shrink-0 w-10 h-10 rounded-lg hover:bg-white/5 ${isOpen ? 'mr-3' : 'mx-auto'}`}
           >
             <Menu className="w-5 h-5 lg:w-[22px] lg:h-[22px]" />
           </button>
 
           {/* Horizontal Toggle */}
           <div className={`flex items-center bg-[#1b2230] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
-            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-medium text-[13px] md:text-[14px] transition-all duration-200 ${!isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
-              <Cherry className="w-3.5 h-3.5 mr-1.5" />
+            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-bold text-[13px] md:text-[14px] transition-all duration-200 ${!isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
+              <Cherry className="w-4 h-4 mr-1.5" />
               Casino
             </button>
-            <button onClick={() => onViewChange('spor724')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-medium text-[13px] md:text-[14px] transition-all duration-200 ${isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
+            <button onClick={() => onViewChange('spor724')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-bold text-[13px] md:text-[14px] transition-all duration-200 ${isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
               Spor
             </button>
           </div>
@@ -206,7 +206,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <>
               {/* LOGGED IN USER MENU */}
               {/* HAFTALIK ÇEKİLİŞ BANNER */}
-              <div className={`mx-4 mb-6 relative overflow-hidden rounded-xl bg-[#1b2230] p-3 cursor-pointer transition-all ${!isOpen && 'hidden'}`}>
+              <div className={`mx-4 mt-4 mb-6 relative overflow-hidden rounded-xl bg-[#1b2230] p-3 cursor-pointer transition-all ${!isOpen && 'hidden'}`}>
                 <div className="flex items-center gap-3">
                   <Ticket className="w-8 h-8 text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
                   <div className="flex flex-col">
