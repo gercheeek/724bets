@@ -11,9 +11,12 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
     <div className="w-full max-w-[1300px] mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between pt-8 pb-6 lg:pt-14 lg:pb-6 relative z-20 px-4 lg:px-8 gap-8 lg:gap-12">
       
       {/* Left Content Area (Text + Buttons) */}
-      <div className="w-full lg:w-[50%] flex flex-col items-start text-left pr-0 lg:pr-8">
+      <div className="w-full lg:w-[50%] flex flex-col items-start text-left pr-0 lg:pr-8 relative">
+        {/* Ambient Blue Orb Behind Text */}
+        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#1075fc]/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" />
+        
         {/* Title */}
-        <h1 className="text-[32px] sm:text-4xl lg:text-[36px] xl:text-[46px] font-black text-white leading-[1.1] mb-6 lg:mb-10 font-sans tracking-tighter w-full drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)]">
+        <h1 className="text-[32px] sm:text-4xl lg:text-[36px] xl:text-[46px] font-black leading-[1.1] mb-6 lg:mb-10 font-sans tracking-tighter w-full drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-white via-[#b3d4ff] to-white bg-[length:200%_auto] animate-[bg-gradient_4s_linear_infinite]">
         Sınırları Olmayan Bahis <br className="hidden md:block" /> Deneyimini Yaşayın
       </h1>
 
@@ -22,9 +25,11 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {/* Register Button */}
         <button 
           onClick={onRegisterClick} 
-          className="bg-[#1075fc] hover:bg-[#0f7bff] text-white font-black py-4 px-8 sm:px-10 rounded-xl flex items-center gap-2 transition-all shadow-[0_0_30px_rgba(16,117,252,0.4)] hover:shadow-[0_0_40px_rgba(16,117,252,0.6)] hover:-translate-y-0.5 active:scale-95 text-[15px] uppercase tracking-wide"
+          className="relative overflow-hidden bg-[#1075fc] hover:bg-[#0f7bff] text-white font-black py-4 px-8 sm:px-10 rounded-xl flex items-center gap-2 transition-all shadow-[0_0_30px_rgba(16,117,252,0.4)] hover:shadow-[0_0_50px_rgba(16,117,252,0.8)] hover:-translate-y-1 active:scale-95 text-[15px] uppercase tracking-wide group z-10"
         >
-          Kaydol <ArrowRight className="w-5 h-5 ml-1" />
+          <span className="relative z-10 flex items-center gap-2">Kaydol <ArrowRight className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" /></span>
+          {/* Shimmer Effect overlay */}
+          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shine-sweep_1.5s_ease-in-out_infinite]" />
         </button>
         
         {/* Or Text */}
@@ -50,7 +55,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {/* Casino Card */}
         <div 
           onClick={() => onNavigate('casino')} 
-          className="group relative w-full aspect-[4/5] sm:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
+          className="group relative w-full aspect-[4/5] sm:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(38,98,159,0.4)] hover:border-white/20"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#0d1421]">
@@ -72,7 +77,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {/* Sports Card */}
         <div 
           onClick={() => onNavigate('sports')} 
-          className="group relative w-full aspect-[4/5] sm:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
+          className="group relative w-full aspect-[4/5] sm:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(54,62,81,0.5)] hover:border-white/20"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
