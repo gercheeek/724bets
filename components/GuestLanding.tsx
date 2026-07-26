@@ -379,9 +379,11 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
 
 
-            <div className="w-full mt-8 mb-8">
+            <div className="w-full mt-2 mb-2 sm:mt-6 sm:mb-4">
               <LiveWinsTicker />
-              <OriginalsSlider onNavigate={onViewChange} />
+              <div className="mt-4">
+                <OriginalsSlider onNavigate={onViewChange} />
+              </div>
             </div>
 
 
