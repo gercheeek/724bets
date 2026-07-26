@@ -380,7 +380,7 @@ const Header: React.FC<HeaderProps> = ({
               </button>
 
               {/* Rainbet-style Toggle Box for Navigation (Fills remaining space) */}
-              <div className="hidden lg:flex items-center bg-[#1c2433] p-1 rounded-md h-[40px] flex-1">
+              <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1">
                 {[
                   { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
                   { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'] }
@@ -390,9 +390,9 @@ const Header: React.FC<HeaderProps> = ({
                     <button 
                       key={nav.id}
                       onClick={() => onViewChange?.(nav.id)} 
-                      className={`flex-1 flex items-center justify-center h-full rounded-[4px] font-medium text-[13px] transition-all duration-200 ${
+                      className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-medium text-[13px] md:text-[14px] transition-all duration-200 ${
                         isActive 
-                          ? 'bg-[#1075fc] text-white shadow-md' 
+                          ? 'bg-[#0f7bff] text-white shadow-md' 
                           : 'text-gray-400 hover:text-white'
                       }`}
                     >
@@ -631,7 +631,7 @@ const Header: React.FC<HeaderProps> = ({
                   const event = new CustomEvent('openAuthModal', { detail: 'login' });
                   window.dispatchEvent(event);
                 }}
-                className="bg-[#1b2230] hover:bg-[#252e42] text-white font-semibold text-[13px] md:text-[14px] h-full px-5 md:px-6 rounded-[8px] transition-colors ml-1"
+                className="bg-[#1b2230] hover:bg-[#252e42] text-white font-semibold text-[13px] md:text-[14px] h-full px-4 md:px-5 rounded-[8px] transition-colors"
               >
                 Giriş Yap
               </button>
@@ -647,7 +647,7 @@ const Header: React.FC<HeaderProps> = ({
               </button>
 
               {/* Chat Icon */}
-              <button className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-gray-400 hover:text-white ml-1">
+              <button className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-gray-400 hover:text-white">
                 <MessageSquare className="w-5 h-5" />
               </button>
             </div>
