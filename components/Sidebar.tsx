@@ -266,7 +266,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Bottom Section (Sticky at bottom) */}
-        <div className="w-full flex flex-col pt-3 pb-3 gap-1 border-t border-white/5 bg-[#171e2e] relative z-20 mt-auto">
+        <div className="w-full flex flex-col pt-3 pb-3 gap-1 border-t border-white/5 bg-[#0A0D14] relative z-20 mt-auto">
           <NavItem icon={Gift} label="Ödüller" isActive={activeView === 'rewards'} onClick={() => onViewChange('rewards')} />
           <NavItem icon={FileText} label="Belge" isActive={false} onClick={() => {}} />
           <NavItem icon={Headphones} label="Canlı Destek" isActive={false} onClick={() => window.dispatchEvent(new CustomEvent('openMobileChatPanel'))} />

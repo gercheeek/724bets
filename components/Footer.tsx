@@ -11,16 +11,19 @@ const Footer: React.FC = () => {
           {/* Col 1: Brand Info */}
           <div className="col-span-2 md:col-span-4 lg:col-span-5 flex flex-col items-start">
              {/* Logo */}
-            <div className="flex items-center gap-2 mb-6">
-              <span className="font-extrabold text-3xl tracking-tight lowercase text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
-                724bets
+            <div className="flex items-center gap-2 mb-6 cursor-pointer select-none group font-black text-3xl tracking-tight" style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em' }}>
+              <span className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
+                724
               </span>
-              <div className="w-6 h-6 text-[#00ff88]">
-                <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full drop-shadow-[0_0_5px_rgba(0,255,136,0.6)]">
-                  <path d="M 50,48 C 30,30 35,10 50,20 C 65,10 70,30 50,48 Z" />
-                  <path d="M 46,52 C 30,35 10,40 20,55 C 10,70 30,75 46,52 Z" />
-                  <path d="M 54,52 C 70,35 90,40 80,55 C 90,70 70,75 54,52 Z" />
-                  <path d="M 50,52 Q 45,75 40,90 L 46,90 Q 51,75 50,52 Z" />
+              <span className="text-[#1075fc] flex ml-[1px]">
+                <span>b</span><span>e</span><span>t</span><span>s</span>
+              </span>
+              <div className="flex items-center justify-center w-5 h-5 ml-0 -mt-2">
+                <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.3)]">
+                  <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
+                  <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
+                  <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
+                  <path d="M 50,50 C 45,65 40,75 35,70 C 45,70 50,60 50,50 Z" />
                 </svg>
               </div>
             </div>
@@ -30,7 +33,7 @@ const Footer: React.FC = () => {
             
             <div className="flex flex-col gap-3 mb-8">
               <a href="mailto:support@724bets.com" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-[13px]">
-                <Mail className="w-4 h-4 text-[#00ff88]" /> support@724bets.com
+                <Mail className="w-4 h-4 text-[#1075fc]" /> support@724bets.com
               </a>
               <a href="mailto:marketing@724bets.com" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-[13px]">
                 <Mail className="w-4 h-4 text-[#a855f7]" /> marketing@724bets.com
@@ -38,13 +41,13 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00ff88]/50 transition-all hover:bg-[#00ff88]/10 hover:shadow-[0_0_15px_rgba(0,255,136,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#1075fc]/50 transition-all hover:bg-[#1075fc]/10 hover:shadow-[0_0_15px_rgba(16,117,252,0.2)]">
                 <Send className="w-4 h-4" /> {/* Telegram */}
               </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00ff88]/50 transition-all hover:bg-[#00ff88]/10 hover:shadow-[0_0_15px_rgba(0,255,136,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#1075fc]/50 transition-all hover:bg-[#1075fc]/10 hover:shadow-[0_0_15px_rgba(16,117,252,0.2)]">
                 <Twitter className="w-4 h-4" /> {/* X */}
               </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00ff88]/50 transition-all hover:bg-[#00ff88]/10 hover:shadow-[0_0_15px_rgba(0,255,136,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#1075fc]/50 transition-all hover:bg-[#1075fc]/10 hover:shadow-[0_0_15px_rgba(16,117,252,0.2)]">
                 <Instagram className="w-4 h-4" /> {/* Instagram */}
               </a>
             </div>
@@ -55,7 +58,7 @@ const Footer: React.FC = () => {
             <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">724BETS</h4>
             <div className="flex flex-col gap-3 md:gap-4">
               {['Ödüller', 'Promosyonlar', 'Kanıtlanabilir Şekilde Adil', 'Bize Ulaşın'].map(link => (
-                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#00ff88] transition-colors">{link}</a>
+                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#1075fc] transition-colors">{link}</a>
               ))}
             </div>
           </div>
@@ -65,7 +68,7 @@ const Footer: React.FC = () => {
             <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">KAYNAKLAR</h4>
             <div className="flex flex-col gap-3 md:gap-4">
               {['Sorumlu Kumar', 'Erişilebilirlik', 'Etik Kuralları', 'Şikayet Politikası'].map(link => (
-                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#00ff88] transition-colors">{link}</a>
+                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#1075fc] transition-colors">{link}</a>
               ))}
             </div>
           </div>
@@ -75,7 +78,7 @@ const Footer: React.FC = () => {
             <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">YASAL</h4>
             <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 md:gap-4">
               {['KPAM', 'Bahis Merkezi Kuralları', 'Çerez Politikası', 'Yayıncı Politikası', 'Feragatname', 'Gizlilik Politikası', 'Hizmet Şartları'].map(link => (
-                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#00ff88] transition-colors">{link}</a>
+                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#1075fc] transition-colors">{link}</a>
               ))}
             </div>
           </div>
