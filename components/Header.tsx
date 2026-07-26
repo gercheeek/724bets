@@ -366,7 +366,7 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
-        <div className="w-full h-full flex items-center justify-between">
+        <div className="w-full max-w-[1400px] mx-auto h-full flex items-center justify-between">
             
             {/* Left Section: Logo & Nav Links */}
             <div className="flex items-center h-full">
