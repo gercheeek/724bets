@@ -366,21 +366,44 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
-        <div className="w-full max-w-[1400px] mx-auto h-full flex items-center justify-between">
+        <div className="w-full max-w-[1400px] mx-auto h-full flex items-center justify-between relative">
             
-            {/* Left Section: Logo & Nav Links */}
-            <div className="flex items-center h-full">
-              {/* Left: Hamburger & Logo */}
-              <div className="flex items-center h-full shrink-0 pr-4 md:pr-6 pl-2 md:pl-4">
+            {/* Left Section: Hamburger & Nav Links */}
+            <div className="flex-1 flex items-center justify-start h-full pl-2 md:pl-4">
               
               {/* Hamburger Button (Mobile Only) */}
               <button 
                 onClick={onToggleSidebar}
-                className="hidden lg:hidden text-white hover:bg-white/10 transition-colors flex items-center justify-center p-2 mx-2 md:mx-4 rounded-lg"
+                className="hidden lg:hidden text-white hover:bg-white/10 transition-colors flex items-center justify-center p-2 mr-2 md:mr-4 rounded-lg"
               >
                 <Menu className="w-6 h-6" />
               </button>
 
+              {/* Desktop Navigation Links */}
+              <div className="hidden lg:flex items-center gap-1 h-full mr-auto">
+                {[
+                  { id: 'originals', label: 'Originals' },
+                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
+                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'] },
+                  { id: 'rewards', label: 'Ödüller' }
+                ].map(nav => {
+                  const isActive = nav.matches ? nav.matches.includes(activeView || '') : activeView === nav.id;
+                  return (
+                    <button 
+                      key={nav.id}
+                      onClick={() => onViewChange?.(nav.id)} 
+                      className={`px-4 py-2 rounded-lg font-bold text-[14px] transition-all duration-300 relative ${isActive ? 'text-white bg-white/5' : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'}`}
+                    >
+                      {nav.label}
+                      {isActive && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Center Section: Logo */}
+            <div className="shrink-0 flex items-center justify-center h-full absolute left-1/2 -translate-x-1/2 top-0">
               {/* Logo */}
               <div 
                 className="flex items-center cursor-pointer select-none group relative"
@@ -456,31 +479,8 @@ const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Desktop Navigation Links (Premium App Bar Style) */}
-            <div className="hidden lg:flex items-center gap-1 ml-4 lg:ml-6 h-full">
-               {[
-                 { id: 'originals', label: 'Originals' },
-                 { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
-                 { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'] },
-                 { id: 'rewards', label: 'Ödüller' }
-               ].map(nav => {
-                 const isActive = nav.matches ? nav.matches.includes(activeView || '') : activeView === nav.id;
-                 return (
-                   <button 
-                     key={nav.id}
-                     onClick={() => onViewChange?.(nav.id)} 
-                     className={`px-4 py-2 rounded-lg font-bold text-[14px] transition-all duration-300 relative ${isActive ? 'text-white bg-white/5' : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'}`}
-                   >
-                     {nav.label}
-                     {isActive && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />}
-                   </button>
-                 );
-               })}
-            </div>
-          </div>
-
             {/* Right: User Controls */}
-        <div id="tour-user-panel" className="flex items-center justify-end gap-1 md:gap-3 z-10 pr-2 md:pr-4">
+        <div id="tour-user-panel" className="flex-1 flex items-center justify-end gap-1 md:gap-3 z-10 pr-2 md:pr-4">
 
           {siteUser ? (
             <div className="flex items-center gap-2 md:gap-3 ml-2">
