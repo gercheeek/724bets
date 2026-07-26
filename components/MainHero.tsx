@@ -8,10 +8,12 @@ interface MainHeroProps {
 
 export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps) {
   return (
-    <div className="w-full max-w-[900px] mx-auto flex flex-col items-start lg:items-center pt-8 pb-6 lg:pt-14 lg:pb-12 text-left lg:text-center relative z-20 px-4">
+    <div className="w-full max-w-[1300px] mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between pt-8 pb-6 lg:pt-14 lg:pb-12 relative z-20 px-4 lg:px-8 gap-8 lg:gap-12">
       
-      {/* Title */}
-      <h1 className="text-[28px] sm:text-4xl lg:text-[42px] font-black text-white leading-[1.2] mb-6 lg:mb-8 font-sans tracking-tight w-full">
+      {/* Left Content Area (Text + Buttons) */}
+      <div className="w-full lg:w-[45%] flex flex-col items-start text-left">
+        {/* Title */}
+        <h1 className="text-[28px] sm:text-4xl lg:text-[46px] font-black text-white leading-[1.2] lg:leading-[1.1] mb-6 lg:mb-8 font-sans tracking-tight w-full">
         Sınırları Olmayan Bahis Deneyimini <br className="hidden sm:block" /> Yaşayın
       </h1>
 
@@ -47,9 +49,10 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-white ml-0 sm:ml-1" />
         </button>
       </div>
+    </div>
 
-      {/* Cards Grid */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-6 w-full mt-2">
+      {/* Cards Grid (Right Side on Desktop) */}
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 w-full lg:w-[55%] mt-2 lg:mt-0">
         {/* Casino Card */}
         <div 
           onClick={() => onNavigate('casino')} 
