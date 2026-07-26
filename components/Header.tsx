@@ -383,76 +383,36 @@ const Header: React.FC<HeaderProps> = ({
             <div className="shrink-0 flex items-center justify-center h-full absolute left-1/2 -translate-x-1/2 top-0">
               {/* Logo */}
               <div 
-                className="flex items-center cursor-pointer select-none group relative"
+                className="flex items-center cursor-pointer select-none group relative font-black text-3xl md:text-4xl tracking-tight"
                 onClick={() => onViewChange?.('home')}
-                style={{ fontFamily: ['originals', 'keno', 'roulette', 'blackjack', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'war', 'hilo'].includes(activeView || '') ? "'Press Start 2P', cursive" : "'Inter', sans-serif", letterSpacing: '-0.03em' }}
+                style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em', WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility' }}
               >
-                {['originals', 'keno', 'roulette', 'blackjack', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'war', 'hilo'].includes(activeView || '') ? (
-                   // ANIMATED CYBERPUNK LOGO
-                   <div className="flex items-center gap-1 group-hover:scale-105 transition-transform duration-300">
-                     <div className="relative flex items-center">
-                       <span className="text-[16px] md:text-[20px] font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00ffff] to-[#ff00ff] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] animate-pulse" style={{ fontFamily: "'Press Start 2P', cursive" }}>
-                         724
-                       </span>
-                       <span className="text-[16px] md:text-[20px] font-black text-[#ff00ff] drop-shadow-[0_0_8px_rgba(255,0,255,0.8)]" style={{ fontFamily: "'Press Start 2P', cursive", marginLeft: '4px' }}>
-                         BETS
-                       </span>
-                     </div>
-                     <style>{`
-                        @keyframes glitch-logo {
-                          0% { transform: translate(0) }
-                          20% { transform: translate(-2px, 1px) }
-                          40% { transform: translate(-1px, -1px) }
-                          60% { transform: translate(2px, 1px) }
-                          80% { transform: translate(1px, -1px) }
-                          100% { transform: translate(0) }
-                        }
-                        .group:hover .glitch-target {
-                           animation: glitch-logo 0.2s cubic-bezier(.25, .46, .45, .94) both infinite;
-                           text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
-                        }
-                     `}</style>
-                     <div className="absolute inset-0 glitch-target opacity-0 group-hover:opacity-100 flex items-center pointer-events-none">
-                       <span className="text-[16px] md:text-[20px] font-black text-[#00ffff] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" style={{ fontFamily: "'Press Start 2P', cursive" }}>
-                         724
-                       </span>
-                       <span className="text-[16px] md:text-[20px] font-black text-[#ff00ff] drop-shadow-[0_0_8px_rgba(255,0,255,0.8)]" style={{ fontFamily: "'Press Start 2P', cursive", marginLeft: '4px' }}>
-                         BETS
-                       </span>
-                     </div>
-                   </div>
-                ) : (
-                   // OFFICIAL LOGO (From Image Reference)
-                   <div className="flex items-center group cursor-pointer relative font-black text-3xl md:text-4xl tracking-tight" style={{ WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility' }}>
-                      
-                      {/* 724 in Crisp White */}
-                      <span className="text-white">
-                        724
-                      </span>
-                      
-                      {/* bets in Solid Green (Lowercase) with Slot Reel Animation on Hover */}
-                      <span className="text-[#20d880] flex ml-[1px]">
-                        <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]">b</span>
-                        <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.1s' }}>e</span>
-                        <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.2s' }}>t</span>
-                        <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.3s' }}>s</span>
-                      </span>
+                  {/* 724 in Crisp White */}
+                  <span className="text-white">
+                    724
+                  </span>
+                  
+                  {/* bets in Solid Blue (Lowercase) with Slot Reel Animation on Hover */}
+                  <span className="text-[#1075fc] flex ml-[1px]">
+                    <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]">b</span>
+                    <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.1s' }}>e</span>
+                    <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.2s' }}>t</span>
+                    <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.3s' }}>s</span>
+                  </span>
 
-                      {/* Right-side 3-leaf clover with soft glow */}
-                      <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 ml-0 -mt-3">
-                        <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#20d880] drop-shadow-[0_0_8px_rgba(32,216,128,0.5)]">
-                          {/* Top leaf */}
-                          <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
-                          {/* Left leaf */}
-                          <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
-                          {/* Right leaf */}
-                          <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
-                          {/* Stem pointing down/left */}
-                          <path d="M 50,48 Q 48,70 42,85 Q 46,70 52,48 Z" />
-                        </svg>
-                      </div>
-                   </div>
-                )}
+                  {/* Right-side 3-leaf clover with soft glow */}
+                  <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 ml-0 -mt-3">
+                    <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.3)]">
+                      {/* Top leaf */}
+                      <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
+                      {/* Left leaf */}
+                      <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
+                      {/* Right leaf */}
+                      <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
+                      {/* Stem pointing down/left */}
+                      <path d="M 50,50 C 45,65 40,75 35,70 C 45,70 50,60 50,50 Z" />
+                    </svg>
+                  </div>
               </div>
             </div>
 

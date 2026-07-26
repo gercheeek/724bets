@@ -504,20 +504,20 @@ export default function CasinoLobby({
   return (
     <div className="w-full h-full flex flex-col bg-transparent text-white min-w-0">
       {/* 1. TOP NAVBAR (Gamdom Style) */}
-      <div className="sticky top-0 z-40 bg-[#0F121A]/95 backdrop-blur-md border-b border-[#111111] px-4 md:px-8 py-0">
+      <div className="sticky top-0 z-40 bg-[#0A0D14]/95 backdrop-blur-md border-b border-white/5 px-4 md:px-8 py-0">
         <div className="max-w-[1600px] mx-auto flex items-center justify-center md:justify-center gap-4 md:gap-8 overflow-x-auto hide-scrollbar">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`relative flex items-center gap-2 py-4 px-2 whitespace-nowrap text-sm font-bold transition-colors ${
-                activeTab === tab.id ? 'text-[#10b981]' : 'text-[#848B9D] hover:text-white'
+                activeTab === tab.id ? 'text-[#1075fc]' : 'text-[#848B9D] hover:text-white'
               }`}
             >
               {tab.icon}
               {tab.label}
               {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#10b981] rounded-t-full shadow-[0_-2px_10px_rgba(0,255,163,0.5)]" />
+                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#1075fc] rounded-t-full shadow-[0_-2px_10px_rgba(16,117,252,0.5)]" />
               )}
             </button>
           ))}
@@ -543,7 +543,7 @@ export default function CasinoLobby({
                   <p className="text-[#848B9D] text-sm md:text-lg mb-6 font-medium">
                     {banner.sub}
                   </p>
-                  <button onClick={() => handleAction()} className="bg-[#10b981] hover:bg-[#00E676] text-black px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(0,255,163,0.3)] mx-auto block">
+                  <button onClick={() => handleAction()} className="bg-[#1075fc] hover:bg-[#0f7bff] text-white px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(16,117,252,0.3)] mx-auto block">
                     Hemen Katıl
                   </button>
                 </div>
@@ -555,7 +555,7 @@ export default function CasinoLobby({
                 <button 
                   key={idx} 
                   onClick={() => setCurrentBanner(idx)}
-                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#10b981]' : 'w-2 bg-white/20'}`}
+                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#1075fc]' : 'w-2 bg-white/20'}`}
                 />
               ))}
             </div>
@@ -564,7 +564,7 @@ export default function CasinoLobby({
 
         {/* 3. FILTERS AND SEARCH */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
-          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#111111] hover:bg-[#2A2E3D] border border-[#2A2E3D] rounded-lg text-white font-bold transition-colors">
+          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#131823] hover:bg-[#1f2638] border-none rounded-lg text-white font-bold transition-colors">
             <Filter size={18} className="text-[#848B9D]" />
             Sağlayıcılar
           </button>
@@ -576,7 +576,7 @@ export default function CasinoLobby({
               placeholder="Oyun Ara..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#111111] border border-[#2A2E3D] rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:border-[#10b981] transition-colors font-medium"
+              className="w-full bg-[#131823] border-none rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:ring-1 focus:ring-[#1075fc] transition-colors font-medium"
             />
           </div>
         </div>

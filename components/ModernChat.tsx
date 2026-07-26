@@ -503,7 +503,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                         className="w-full bg-[#0a0d14] border border-white/10 text-[12px] font-semibold text-center text-slate-500 rounded-full px-5 py-3.5 cursor-not-allowed shadow-inner"
                     />
                 ) : (
-                    <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#0a0d14] border border-white/10 focus-within:border-emerald-500/50 rounded-full overflow-hidden transition-all h-[46px] shadow-inner">
+                    <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#0a0d14] border border-white/10 focus-within:border-blue-500/50 rounded-full overflow-hidden transition-all h-[46px] shadow-inner">
                         <input
                             type="text"
                             value={newMessage}
@@ -518,7 +518,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             <button
                                 type="submit"
                                 disabled={!newMessage.trim()}
-                                className="text-white bg-[#10b981] disabled:bg-[#121212] disabled:text-gray-600 hover:bg-[#0e9f6e] transition-all p-2 rounded-full shadow-lg"
+                                className="text-white bg-[#1075fc] disabled:bg-[#121212] disabled:text-gray-600 hover:bg-[#0f7bff] transition-all p-2 rounded-full shadow-[0_2px_10px_rgba(16,117,252,0.3)]"
                             >
                                 <Send className="w-4 h-4 ml-0.5" />
                             </button>

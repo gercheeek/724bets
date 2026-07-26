@@ -2120,7 +2120,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
             {/* MASAÜSTÜ HEADER (Artık Orta İçerik'te, böylece sol menü en tepeye çıkabilir) */}
             {view !== 'kral' && (
-              <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-black shadow-lg">
+              <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-[#0A0D14] shadow-lg">
                 <Header
                   onAdminClick={() => {
                     if (userRole) setView('admin');
