@@ -16,12 +16,16 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] lg:w-[300px] lg:h-[300px] bg-[#1075fc]/20 rounded-full blur-[60px] lg:blur-[80px] pointer-events-none animate-pulse-slow" />
         
         {/* Title */}
-        <h1 className="text-[26px] sm:text-3xl lg:text-[36px] xl:text-[46px] font-black leading-[1.15] lg:leading-[1.1] mb-4 lg:mb-10 font-sans tracking-tighter w-full drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-white via-[#b3d4ff] to-white bg-[length:200%_auto] animate-[bg-gradient_4s_linear_infinite]">
+        <h1 
+          className="text-[26px] sm:text-3xl lg:text-[36px] xl:text-[46px] font-black leading-[1.15] lg:leading-[1.1] mb-4 lg:mb-10 font-sans tracking-tighter w-full drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-white via-[#b3d4ff] to-white bg-[length:200%_auto] animate-[bg-gradient_4s_linear_infinite,fade-in-up_0.8s_ease-out_forwards] opacity-0"
+        >
         Sınırları Olmayan Bahis <br className="hidden md:block" /> Deneyimini Yaşayın
       </h1>
 
       {/* Action Row */}
-      <div className="flex flex-row items-center gap-2 sm:gap-6 mb-6 lg:mb-14 w-full">
+      <div 
+        className="flex flex-row items-center gap-2 sm:gap-6 mb-6 lg:mb-14 w-full opacity-0 animate-[fade-in-up_0.8s_ease-out_0.2s_forwards]"
+      >
         {/* Register Button */}
         <button 
           onClick={onRegisterClick} 
@@ -51,12 +55,14 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
     </div>
 
       {/* Cards Grid (Right Side on Desktop) */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 w-full lg:w-[50%] mt-2 lg:mt-0">
-        {/* Casino Card */}
-        <div 
-          onClick={() => onNavigate('casino')} 
-          className="group relative w-full aspect-[4/3] lg:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(38,98,159,0.4)] hover:border-white/20"
-        >
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 w-full lg:w-[50%] mt-2 lg:mt-0 opacity-0 animate-[fade-in-up_1s_ease-out_0.4s_forwards]">
+        {/* Casino Card Wrapper for Floating */}
+        <div className="animate-float-card" style={{ animationDelay: '0s' }}>
+          {/* Casino Card */}
+          <div 
+            onClick={() => onNavigate('casino')} 
+            className="group relative w-full aspect-[4/3] lg:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(38,98,159,0.5)] hover:border-white/20"
+          >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#0d1421]">
              {/* Using mosaic_casino_bg.jpg if exists, else fallback gradient */}
@@ -74,11 +80,13 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
           </div>
         </div>
 
-        {/* Sports Card */}
-        <div 
-          onClick={() => onNavigate('sports')} 
-          className="group relative w-full aspect-[4/3] lg:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(54,62,81,0.5)] hover:border-white/20"
-        >
+        {/* Sports Card Wrapper for Floating (Delayed) */}
+        <div className="animate-float-card" style={{ animationDelay: '1.5s' }}>
+          {/* Sports Card */}
+          <div 
+            onClick={() => onNavigate('sports')} 
+            className="group relative w-full aspect-[4/3] lg:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(54,62,81,0.6)] hover:border-white/20"
+          >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
             <div 
