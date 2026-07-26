@@ -2073,47 +2073,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         >
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
-          {/* MASAÜSTÜ TAM GENİŞLİK HEADER */}
-          {view !== 'kral' && (
-            <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-black shadow-lg">
-              <Header
-                onAdminClick={() => {
-                  if (userRole) {
-                    setView('admin');
-                  } else {
-                    setAuthModalMode('admin');
-                  }
-                }}
-                onViewChange={handleViewChange}
-                activeView={view}
-                isAuthenticated={!!userRole}
-                userRole={userRole}
-                siteUser={siteUser}
-                onMemberLoginClick={() => setAuthModalMode('member')}
-                onMemberRegisterClick={() => setAuthModalMode('register')}
-                onMemberLogout={handleGlobalLogout}
-                onSearchClick={() => setShowSearch(true)}
-                onSupportClick={() => {
-                  if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-                  setIsChatOpen(prev => !prev);
-                }}
-                navVisibility={navVisibility}
-                marqueeConfig={marqueeConfig}
-                isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
-                isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
-                onToggleSidebar={() => {
-                  if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-                  setIsSidebarOpen(!isSidebarOpen);
-                }}
-                showFakeBetButton={view === 'sports2'}
-                onFakeBetClick={() => {
-                   if (!siteUser) setAuthModalMode('member');
-                   else setShowFakeBetModal(true);
-                }}
-              />
-            </div>
-          )}
-
           {/* MAIN FLEX LAYOUT (Sidebar + Content + Chat) */}
           <div className="flex flex-1 w-full overflow-hidden relative">
 
@@ -2153,11 +2112,49 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               </div>
             )}
 
-            {/* 2. ORTA İÇERİK */}
+             {/* 2. ORTA İÇERİK */}
             <div className={appStage !== 'loading' ? `app-reveal-mask flex-1 flex flex-col min-w-0 bg-[#050505] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]` : `app-hidden-initial flex-1 flex flex-col min-w-0 bg-[#050505] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]`}>
              
              {/* Glossy overlay for the entire center */}
              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] pointer-events-none z-0 opacity-30 mix-blend-screen"></div>
+
+            {/* MASAÜSTÜ HEADER (Artık Orta İçerik'te, böylece sol menü en tepeye çıkabilir) */}
+            {view !== 'kral' && (
+              <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-black shadow-lg">
+                <Header
+                  onAdminClick={() => {
+                    if (userRole) setView('admin');
+                    else setAuthModalMode('admin');
+                  }}
+                  onViewChange={handleViewChange}
+                  activeView={view}
+                  isAuthenticated={!!userRole}
+                  userRole={userRole}
+                  siteUser={siteUser}
+                  onMemberLoginClick={() => setAuthModalMode('member')}
+                  onMemberRegisterClick={() => setAuthModalMode('register')}
+                  onMemberLogout={handleGlobalLogout}
+                  onSearchClick={() => setShowSearch(true)}
+                  onSupportClick={() => {
+                    if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+                    setIsChatOpen(prev => !prev);
+                  }}
+                  navVisibility={navVisibility}
+                  marqueeConfig={marqueeConfig}
+                  isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
+                  isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
+                  onToggleSidebar={() => {
+                    if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+                    setIsSidebarOpen(!isSidebarOpen);
+                  }}
+                  showFakeBetButton={view === 'sports2'}
+                  onFakeBetClick={() => {
+                     if (!siteUser) setAuthModalMode('member');
+                     else setShowFakeBetModal(true);
+                  }}
+                />
+              </div>
+            )}
 
             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
             {view !== 'kral' && (

@@ -368,42 +368,15 @@ const Header: React.FC<HeaderProps> = ({
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
         <div className="w-full h-full flex items-center justify-between relative">
             
-            {/* Left Section: Hamburger & Exact Rainbet Toggle Links */}
-            <div className={`flex items-center h-full transition-all duration-300 shrink-0 ${isSidebarOpen ? 'lg:w-[280px] lg:border-r lg:border-white/5 pl-4 pr-1' : 'lg:w-[78px] lg:border-r lg:border-white/5 justify-center pl-0 pr-0'}`}>
-              
+            {/* Left Section (Mobile only) */}
+            <div className="flex items-center h-full lg:hidden shrink-0 pl-4">
               {/* Hamburger Button */}
               <button 
                 onClick={onToggleSidebar}
-                className={`text-gray-400 hover:text-white transition-colors flex items-center justify-center shrink-0 ${isSidebarOpen ? 'mr-4' : 'w-10 h-10 bg-[#1b2230] rounded-[8px] hover:bg-[#252e42]'}`}
+                className="text-gray-400 hover:text-white transition-colors flex items-center justify-center shrink-0 w-10 h-10"
               >
-                <Menu className="w-5 h-5 lg:w-[22px] lg:h-[22px]" />
+                <Menu className="w-5 h-5" />
               </button>
-
-              {/* Rainbet-style Toggle Box for Navigation (Fills remaining space) */}
-              <div className={`hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-opacity duration-300 ${!isSidebarOpen && 'opacity-0 hidden w-0'}`}>
-                {[
-                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
-                  { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'] }
-                ].map(nav => {
-                  const isActive = (nav.matches && nav.matches.includes(activeView || '')) || activeView === nav.id || (activeView === 'home' && nav.id === 'casino');
-                  return (
-                    <button 
-                      key={nav.id}
-                      onClick={() => onViewChange?.(nav.id)} 
-                      className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-medium text-[13px] md:text-[14px] transition-all duration-200 ${
-                        isActive 
-                          ? 'bg-[#0f7bff] text-white shadow-md' 
-                          : 'text-gray-400 hover:text-white'
-                      }`}
-                    >
-                      {nav.id === 'casino' && (
-                        <Cherry className="w-3.5 h-3.5 mr-1.5" />
-                      )}
-                      {nav.label}
-                    </button>
-                  );
-                })}
-              </div>
             </div>
 
             {/* Center Section: Logo */}

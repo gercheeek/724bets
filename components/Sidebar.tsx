@@ -164,6 +164,28 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <div className={`codinglab-sidebar ${isOpen ? 'open' : 'closed'}`}>
 
+        {/* SIDEBAR HEADER (Hamburger + Toggle) */}
+        <div className="flex items-center h-[60px] md:h-[72px] shrink-0 border-b border-white/5 transition-all duration-300" style={{ paddingLeft: isOpen ? '16px' : '0', paddingRight: isOpen ? '16px' : '0' }}>
+          {/* Hamburger */}
+          <button 
+            onClick={onToggle}
+            className={`text-[#8b92a5] hover:text-white transition-colors flex items-center justify-center shrink-0 ${isOpen ? 'mr-3' : 'w-10 h-10 bg-[#1b2230] rounded-[8px] hover:bg-[#252e42] mx-auto'}`}
+          >
+            <Menu className="w-5 h-5 lg:w-[22px] lg:h-[22px]" />
+          </button>
+
+          {/* Horizontal Toggle */}
+          <div className={`flex items-center bg-[#1b2230] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
+            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-medium text-[13px] md:text-[14px] transition-all duration-200 ${!isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
+              <Cherry className="w-3.5 h-3.5 mr-1.5" />
+              Casino
+            </button>
+            <button onClick={() => onViewChange('spor724')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-medium text-[13px] md:text-[14px] transition-all duration-200 ${isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
+              Spor
+            </button>
+          </div>
+        </div>
+
         <div className="codinglab-sidebar-inner pt-2 pb-4">
           
           {/* Vertical Toggle Box for Collapsed State */}
