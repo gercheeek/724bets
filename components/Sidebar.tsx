@@ -33,31 +33,28 @@ const Sidebar: React.FC<SidebarProps> = ({
   // Accordion states
   const [isCasinoOpen, setIsCasinoOpen] = useState(false);
   const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
-  const [isPromoOpen, setIsPromoOpen] = useState(false);
-  const [isLangOpen, setIsLangOpen] = useState(false);
-
-  const isRetroVIP = activeView === 'raffle' || activeView === 'originals' || activeView === 'vip';
+  const [isPromoOpen, setIsPromoOpen] = useState(true); // Promosyonlar expanded in screenshot
 
   const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches'].includes(activeView);
   const isCasinoView = ['casino', 'slots', 'live-casino', 'originals'].includes(activeView);
 
-  const NavItem = ({ icon: Icon, label, isActive, onClick }: any) => (
+  const NavItem = ({ icon: Icon, label, isActive, onClick, iconColor = 'text-[#8b92a5]', activeIconColor = 'text-white' }: any) => (
     <div 
-      className={`flex items-center py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group mx-2 rounded-lg
-        ${isActive ? 'bg-white/10 text-white shadow-sm' : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'}
+      className={`flex items-center py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3
+        ${isActive ? 'bg-[#242d40] text-white shadow-sm' : 'text-[#8b92a5] hover:text-white hover:bg-[#242d40]'}
       `}
       onClick={onClick}
     >
-      {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[3px] bg-emerald-500 rounded-r-md shadow-[0_0_8px_rgba(16,185,129,0.5)] z-10"></div>}
-      <Icon className={`w-[18px] h-[18px] min-w-[18px] transition-colors ml-4 ${isActive ? 'text-emerald-400' : 'text-zinc-400 group-hover:text-zinc-300'}`} />
+      {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] bg-[#1075fc] rounded-r-md z-10"></div>}
+      <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} />
       
-      <span className={`ml-3.5 font-semibold text-[13px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+      <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
         {label}
       </span>
       
       {/* Flyout for collapsed state */}
       {!isOpen && (
-        <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all border border-white/10 font-bold text-xs">
+        <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 bg-[#1b2230] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all border border-white/10 font-bold text-xs">
           {label}
         </div>
       )}
@@ -66,23 +63,21 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const AccordionItem = ({ icon: Icon, label, isOpenState, setIsOpenState, children }: any) => {
     return (
-      <div className={`relative group mx-3 mb-2 transition-all duration-300 rounded-xl ${isOpen ? 'overflow-hidden' : ''} bg-[#0F121A] border ${isOpenState ? 'border-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.5)]' : 'border-white/5'}`}>
+      <div className={`relative group mx-3 mb-2 transition-all duration-300 rounded-lg ${isOpen ? 'overflow-hidden' : ''} bg-[#242d40] border ${isOpenState ? 'border-white/5' : 'border-transparent hover:border-white/5'}`}>
         <div 
-          className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all duration-300
-            ${isOpenState ? 'text-[#10b981]' : 'text-zinc-400 hover:text-white bg-white/[0.02]'}
-          `}
+          className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all duration-300 text-white`}
           onClick={() => {
             if (isOpen) setIsOpenState(!isOpenState);
           }}
         >
           <div className="flex items-center">
-            <Icon className={`w-5 h-5 min-w-[20px] transition-colors ${isOpenState ? 'text-emerald-400' : 'group-hover:text-emerald-400'}`} />
-            <span className={`ml-3 font-bold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
+            <Icon className={`w-5 h-5 min-w-[20px] text-white`} />
+            <span className={`ml-4 font-semibold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
               {label}
             </span>
           </div>
           {isOpen && (
-            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpenState ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-4 h-4 text-[#8b92a5] transition-transform duration-300 ${isOpenState ? 'rotate-180' : ''}`} />
           )}
         </div>
 
@@ -95,8 +90,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Flyout Submenu for Collapsed State */}
         {!isOpen && (
-          <div className="absolute left-[calc(100%+8px)] top-0 bg-[#0a0d14] rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible z-[999] transition-all border border-white/10 min-w-[200px] overflow-hidden">
-            <div className="px-4 py-3 border-b border-white/5 bg-[#141424]">
+          <div className="absolute left-[calc(100%+8px)] top-0 bg-[#1b2230] rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible z-[999] transition-all border border-white/10 min-w-[200px] overflow-hidden">
+            <div className="px-4 py-3 border-b border-white/5 bg-[#141a25]">
               <span className="font-bold text-white text-sm">{label}</span>
             </div>
             <div className="py-2">
@@ -110,9 +105,9 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const SubMenuItem = ({ label, isActive, onClick }: any) => (
     <div 
-      className={`px-3 py-2 mx-2 rounded-lg cursor-pointer transition-colors whitespace-nowrap text-[13px] font-semibold flex items-center
-        ${isOpen ? 'pl-10 relative before:absolute before:left-[22px] before:top-1/2 before:w-1.5 before:h-1.5 before:bg-white/20 before:rounded-full before:-translate-y-1/2' : 'hover:bg-white/5'}
-        ${isActive ? 'text-emerald-400 before:!bg-emerald-400 bg-white/5' : 'text-zinc-400 hover:text-white hover:bg-white/5'}
+      className={`px-3 py-2 mx-2 rounded-md cursor-pointer transition-colors whitespace-nowrap text-[13px] font-semibold flex items-center
+        ${isOpen ? 'pl-11 relative before:absolute before:left-[24px] before:top-1/2 before:w-1.5 before:h-1.5 before:bg-[#4b5563] before:rounded-full before:-translate-y-1/2' : 'hover:bg-white/5'}
+        ${isActive ? 'text-white before:!bg-white bg-white/5' : 'text-[#8b92a5] hover:text-white hover:bg-white/5'}
       `}
       onClick={onClick}
     >
@@ -124,7 +119,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     <>
       <style>{`
         .codinglab-sidebar {
-          background-color: #0A0D14; /* Deep dark matching the rest of the site */
+          background-color: transparent;
           transition: all 0.4s ease;
           position: relative;
           z-index: 100;
@@ -139,7 +134,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         .codinglab-sidebar.closed {
           width: 100%;
         }
-        /* Custom scrollbar */
         .codinglab-sidebar-inner {
           flex: 1;
         }
@@ -152,7 +146,14 @@ const Sidebar: React.FC<SidebarProps> = ({
           overflow-x: visible;
         }
         .codinglab-sidebar-inner::-webkit-scrollbar {
-          width: 0px;
+          width: 4px;
+        }
+        .codinglab-sidebar-inner::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .codinglab-sidebar-inner::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 4px;
         }
       `}</style>
 
@@ -161,53 +162,64 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={onToggle} />
       )}
 
-      <div className={`codinglab-sidebar ${isOpen ? 'open' : 'closed'} ${isRetroVIP ? 'bg-[#050510] border-r-fuchsia-500/20' : ''}`}>
+      <div className={`codinglab-sidebar ${isOpen ? 'open' : 'closed'}`}>
 
-
-        {/* Navigation Items */}
-        <div className="codinglab-sidebar-inner pt-1">
+        <div className="codinglab-sidebar-inner pt-2 pb-4">
+          
+          {/* Vertical Toggle Box for Collapsed State */}
+          {!isOpen && (
+            <div className="flex flex-col items-center bg-[#1b2230] p-1 rounded-[8px] w-12 mx-auto mb-6">
+              <button onClick={() => onViewChange('casino')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors mb-1 ${activeView !== 'spor724' ? 'bg-[#0f7bff] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>
+                <Cherry className="w-5 h-5" />
+              </button>
+              <button onClick={() => onViewChange('spor724')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors ${activeView === 'spor724' ? 'bg-[#0f7bff] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>
+                <Target className="w-5 h-5" />
+              </button>
+            </div>
+          )}
 
           {isSportsView ? (
             <SportsSidebarContent isOpen={isOpen} onViewChange={onViewChange} />
-          ) : siteUser ? (
+          ) : (
             <>
               {/* LOGGED IN USER MENU */}
               {/* HAFTALIK ÇEKİLİŞ BANNER */}
-              <div className={`mx-4 mb-6 relative overflow-hidden rounded-xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-transparent p-3 cursor-pointer hover:border-yellow-500/40 transition-all ${!isOpen && 'hidden'}`}>
+              <div className={`mx-4 mb-6 relative overflow-hidden rounded-xl bg-[#1b2230] p-3 cursor-pointer transition-all ${!isOpen && 'hidden'}`}>
                 <div className="flex items-center gap-3">
-                  <Ticket className="w-8 h-8 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
+                  <Ticket className="w-8 h-8 text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
                   <div className="flex flex-col">
                     <span className="text-white font-black text-lg italic leading-tight">$20.000</span>
-                    <span className="text-yellow-400 font-bold text-[11px] tracking-wider uppercase">HAFTALIK ÇEKİLİŞ</span>
+                    <span className="text-yellow-500 font-bold text-[11px] tracking-wider uppercase">HAFTALIK ÇEKİLİŞ</span>
                   </div>
-                  <div className="ml-auto bg-black/50 border border-yellow-500/30 rounded px-2 py-0.5 text-white font-mono text-xs">
-                    15s
+                  <div className="ml-auto bg-[#141a25] rounded px-2 py-0.5 text-white font-bold text-xs">
+                    6g
                   </div>
                 </div>
                 
                 {/* STATS */}
-                <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-yellow-500/10 text-center">
+                <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/5 text-center">
                     <div className="flex flex-col">
-                      <span className="text-zinc-500 text-[9px] font-black uppercase">Günlük</span>
-                      <span className="text-white font-bold text-xs">$25K</span>
+                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">Günlük</span>
+                      <span className="text-white font-bold text-[13px]">$25K</span>
                     </div>
-                    <div className="flex flex-col border-x border-yellow-500/10">
-                      <span className="text-zinc-500 text-[9px] font-black uppercase">Haftalık</span>
-                      <span className="text-white font-bold text-xs">$100K</span>
+                    <div className="flex flex-col border-x border-white/5">
+                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">Haftalık</span>
+                      <span className="text-white font-bold text-[13px]">$100K</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-zinc-500 text-[9px] font-black uppercase">Aylık</span>
-                      <span className="text-white font-bold text-xs">$500K</span>
+                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">Aylık</span>
+                      <span className="text-white font-bold text-[13px]">$500K</span>
                     </div>
                 </div>
               </div>
 
+              {/* Main Links */}
               <NavItem icon={Crown} label="Anasayfa" isActive={activeView === 'home'} onClick={() => onViewChange('home')} />
               <NavItem icon={Star} label="Sık Kullanılanlar" isActive={activeView === 'favorites'} onClick={() => onViewChange('favorites')} />
               <NavItem icon={Clock} label="Son Oynanan" isActive={activeView === 'recent'} onClick={() => onViewChange('recent')} />
               <NavItem icon={Sparkles} label="Yeni Çıkanlar" isActive={activeView === 'new'} onClick={() => onViewChange('new')} />
 
-              <div className="w-full h-px bg-white/5 my-3" />
+              <div className="w-full h-px bg-white/5 my-4" />
 
               {/* Collapsible Sections */}
               <AccordionItem icon={Cherry} label="Casino" isOpenState={isCasinoOpen} setIsOpenState={setIsCasinoOpen}>
@@ -226,33 +238,79 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <SubMenuItem label="Bonuslar" isActive={activeView === 'promo'} onClick={() => onViewChange('promo')} />
                 <SubMenuItem label="Turnuvalar" isActive={activeView === 'tournaments'} onClick={() => onViewChange('tournaments')} />
               </AccordionItem>
-            </>
-          ) : (
-            <>
-              {isCasinoView ? (
-                <>
-                  <NavItem icon={Gamepad2} label="Slotlar" isActive={activeView === 'slots'} onClick={() => onViewChange('slots')} />
-                  <NavItem icon={Dices} label="Canlı Casino" isActive={activeView === 'live-casino'} onClick={() => onViewChange('live-casino')} />
-                  <NavItem icon={LayoutDashboard} label="Sağlayıcılar" isActive={false} onClick={() => {}} />
-                  <NavItem icon={Diamond} label="Orijinal Oyunlar" isActive={activeView === 'originals'} onClick={() => onViewChange('originals')} />
-                </>
-              ) : (
-                <>
-                  <NavItem icon={Crown} label="Anasayfa" isActive={activeView === 'home'} onClick={() => onViewChange('home')} />
-                  <NavItem icon={Target} label="Canlı Spor" isActive={activeView === 'spor724'} onClick={() => onViewChange('spor724')} />
-                  <NavItem icon={Gamepad2} label="Popüler Slotlar" isActive={activeView === 'slots'} onClick={() => onViewChange('slots')} />
-                  <NavItem icon={Dices} label="Canlı Casino" isActive={activeView === 'live-casino'} onClick={() => onViewChange('live-casino')} />
-                </>
-              )}
+              
+              <div className="mt-4 mb-2">
+                {/* VIP */}
+                <div 
+                  className={`flex items-center py-2.5 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3 hover:bg-[#242d40] ${activeView === 'vip' ? 'bg-[#242d40]' : ''}`}
+                  onClick={() => onViewChange('vip')}
+                >
+                  {activeView === 'vip' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] bg-[#1075fc] rounded-r-md z-10"></div>}
+                  <Trophy className="w-5 h-5 min-w-[20px] text-purple-400 ml-2 group-hover:text-purple-300" />
+                  <span className={`ml-4 font-bold text-[14px] text-white tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+                    VIP
+                  </span>
+                  <div className={`ml-auto bg-transparent border border-purple-500/50 rounded px-2 py-0.5 text-white font-bold text-[10px] italic transition-all ${!isOpen && 'hidden'}`}>
+                    ÖZEL
+                  </div>
+                </div>
+
+                {/* Daily Race */}
+                <div 
+                  className={`flex items-center py-2.5 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3 hover:bg-[#242d40] mt-1`}
+                >
+                  <Crown className="w-6 h-6 min-w-[24px] text-yellow-500 ml-1.5 group-hover:text-yellow-400" />
+                  <div className={`ml-3.5 flex flex-col transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+                    <span className="font-bold text-[14px] text-white tracking-tight leading-tight">$25K</span>
+                    <span className="text-[11px] text-[#8b92a5]">Günlük Ya...</span>
+                  </div>
+                  <div className={`ml-auto bg-transparent border border-yellow-500/50 rounded px-2 py-0.5 text-white font-mono text-[11px] transition-all ${!isOpen && 'hidden'}`}>
+                    04:36:43
+                  </div>
+                </div>
+                
+                {/* Weekly Race */}
+                <div 
+                  className={`flex items-center py-2.5 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3 hover:bg-[#242d40] mt-1`}
+                >
+                  <Crown className="w-6 h-6 min-w-[24px] text-yellow-500 ml-1.5 group-hover:text-yellow-400" />
+                  <div className={`ml-3.5 flex flex-col transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+                    <span className="font-bold text-[14px] text-white tracking-tight leading-tight">$100K</span>
+                    <span className="text-[11px] text-[#8b92a5]">Haftalık Yarış</span>
+                  </div>
+                  <div className={`ml-auto bg-transparent border border-yellow-500/50 rounded px-2 py-0.5 text-white font-bold text-[11px] transition-all ${!isOpen && 'hidden'}`}>
+                    5g
+                  </div>
+                </div>
+                
+                {/* Monthly Race */}
+                <div 
+                  className={`flex items-center py-2.5 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3 hover:bg-[#242d40] mt-1`}
+                >
+                  <Crown className="w-6 h-6 min-w-[24px] text-yellow-500 ml-1.5 group-hover:text-yellow-400" />
+                  <div className={`ml-3.5 flex flex-col transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+                    <span className="font-bold text-[14px] text-white tracking-tight leading-tight">$500K</span>
+                    <span className="text-[11px] text-[#8b92a5]">Aylık Yarış</span>
+                  </div>
+                  <div className={`ml-auto bg-transparent border border-yellow-500/50 rounded px-2 py-0.5 text-white font-bold text-[11px] transition-all ${!isOpen && 'hidden'}`}>
+                    5g
+                  </div>
+                </div>
+
+                <NavItem icon={Target} label="Meydan Okumalar" isActive={false} onClick={() => {}} />
+                <NavItem icon={Percent} label="Promosyonlar" isActive={false} onClick={() => {}} />
+              </div>
             </>
           )}
 
-          {/* Bottom Fixed Area */}
         </div>
 
-        <div className="mt-auto w-full flex flex-col pt-3 pb-3 gap-1 border-t border-white/10 bg-[#06080d] shadow-[0_-10px_20px_rgba(0,0,0,0.3)] z-20 relative">
+        {/* Bottom Section (Sticky at bottom) */}
+        <div className="w-full flex flex-col pt-3 pb-3 gap-1 border-t border-white/5 bg-[#171e2e] relative z-20 mt-auto">
+          <NavItem icon={Gift} label="Ödüller" isActive={activeView === 'rewards'} onClick={() => onViewChange('rewards')} />
+          <NavItem icon={FileText} label="Belge" isActive={false} onClick={() => {}} />
           <NavItem icon={Headphones} label="Canlı Destek" isActive={false} onClick={() => window.dispatchEvent(new CustomEvent('openMobileChatPanel'))} />
-          <NavItem icon={Gift} label="Promosyonlar" isActive={activeView === 'promo' || activeView === 'rewards'} onClick={() => onViewChange('promo')} />
+          <NavItem icon={Globe} label="Dil" isActive={false} onClick={() => {}} />
         </div>
 
       </div>

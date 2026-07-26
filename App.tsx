@@ -2119,7 +2119,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
             {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
             {!(view === 'giveaway') && (
-              <aside className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[78px]'}`}>
+              <aside className={`hidden lg:flex flex-col bg-[#171e2e] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[78px]'}`}>
                   <Sidebar
                     isOpen={isSidebarOpen}
                     onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -2137,7 +2137,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {isMobileMenuOpen && (
               <div className="fixed inset-0 z-50 flex lg:hidden">
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
-                <aside className="w-[280px] bg-[#0A0D14] bg-gradient-to-r from-white/[0.02] to-transparent border-r border-white/5 h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
+                <aside className="w-[280px] bg-[#171e2e] border-r border-white/5 h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
                   <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#0A0D14] border border-[#111111] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
                   <Sidebar
                     isOpen={true}
