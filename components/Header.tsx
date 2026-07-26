@@ -369,18 +369,18 @@ const Header: React.FC<HeaderProps> = ({
         <div className="w-full h-full flex items-center justify-between relative">
             
             {/* Left Section: Hamburger & Toggle Links */}
-            <div className="flex items-center h-full lg:w-[260px] lg:border-r lg:border-white/5 lg:px-4 px-2 shrink-0">
+            <div className="flex items-center h-full lg:w-[260px] lg:border-r lg:border-white/5 px-2 shrink-0">
               
               {/* Hamburger Button */}
               <button 
                 onClick={onToggleSidebar}
-                className="text-gray-400 hover:text-white transition-colors flex items-center justify-center p-2 mr-2 lg:mr-0 rounded-lg"
+                className="text-gray-400 hover:text-white transition-colors flex items-center justify-center p-2.5 rounded-lg shrink-0"
               >
-                <Menu className="w-6 h-6 lg:w-[22px] lg:h-[22px]" />
+                <Menu className="w-5 h-5 lg:w-[20px] lg:h-[20px]" />
               </button>
 
               {/* Rainbet-style Toggle Box for Navigation */}
-              <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[10px] h-[44px] ml-auto">
+              <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[10px] h-[44px] ml-1 shrink-0">
                 {[
                   { id: 'casino', label: 'Casino', matches: ['casino', 'slots'], icon: <div className="flex -space-x-1 mr-2"><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/></div> },
                   { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'], icon: null }
