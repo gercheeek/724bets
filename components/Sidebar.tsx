@@ -40,15 +40,15 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const NavItem = ({ icon: Icon, label, isActive, onClick, iconColor = 'text-[#8b92a5]', activeIconColor = 'text-white' }: any) => (
     <div 
-      className={`flex items-center py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 rounded-lg mx-3
-        ${isActive ? 'bg-[#1b2230] text-white shadow-sm' : 'text-[#8b92a5] hover:text-white hover:bg-[#1b2230]'}
+      className={`flex items-center py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3
+        ${isActive ? 'text-white' : 'text-[#8b92a5] hover:text-white'}
       `}
       onClick={onClick}
     >
       {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] bg-[#1075fc] rounded-r-md z-10"></div>}
-      <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} />
+      <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} strokeWidth={isActive ? 2.5 : 2} />
       
-      <span className={`ml-4 font-bold text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+      <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
         {label}
       </span>
       
@@ -63,16 +63,16 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const AccordionItem = ({ icon: Icon, label, isOpenState, setIsOpenState, children }: any) => {
     return (
-      <div className={`relative group mx-3 mb-2 transition-all duration-300 rounded-lg ${isOpen ? 'overflow-hidden' : ''} bg-[#1b2230] border ${isOpenState ? 'border-white/5' : 'border-transparent hover:border-white/5'}`}>
+      <div className={`relative group mx-3 mb-1 transition-all duration-300 ${isOpen ? 'overflow-hidden' : ''} bg-transparent`}>
         <div 
-          className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all duration-300 text-white`}
+          className={`flex items-center justify-between px-2 py-2.5 cursor-pointer transition-all duration-300 text-[#8b92a5] hover:text-white ${isOpenState ? 'text-white' : ''}`}
           onClick={() => {
             if (isOpen) setIsOpenState(!isOpenState);
           }}
         >
           <div className="flex items-center">
-            <Icon className={`w-5 h-5 min-w-[20px] text-white`} />
-            <span className={`ml-4 font-bold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
+            <Icon className={`w-5 h-5 min-w-[20px] ml-2.5`} strokeWidth={isOpenState ? 2.5 : 2} />
+            <span className={`ml-4 font-semibold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
               {label}
             </span>
           </div>
@@ -105,9 +105,9 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const SubMenuItem = ({ label, isActive, onClick }: any) => (
     <div 
-      className={`px-3 py-2 mx-2 rounded-md cursor-pointer transition-colors whitespace-nowrap text-[13px] font-semibold flex items-center
-        ${isOpen ? 'pl-11 relative before:absolute before:left-[24px] before:top-1/2 before:w-1.5 before:h-1.5 before:bg-[#4b5563] before:rounded-full before:-translate-y-1/2' : 'hover:bg-white/5'}
-        ${isActive ? 'text-white before:!bg-white bg-white/5' : 'text-[#8b92a5] hover:text-white hover:bg-white/5'}
+      className={`px-3 py-1.5 mx-2 cursor-pointer transition-colors whitespace-nowrap text-[13px] font-medium flex items-center
+        ${isOpen ? 'pl-12 relative before:absolute before:left-[30px] before:top-1/2 before:w-[5px] before:h-[5px] before:bg-[#4b5563] before:rounded-full before:-translate-y-1/2' : ''}
+        ${isActive ? 'text-white before:!bg-white' : 'text-[#8b92a5] hover:text-white'}
       `}
       onClick={onClick}
     >
@@ -171,16 +171,16 @@ const Sidebar: React.FC<SidebarProps> = ({
             onClick={onToggle}
             className={`text-[#8b92a5] hover:text-white transition-colors flex items-center justify-center shrink-0 w-10 h-10 rounded-lg hover:bg-white/5 ${isOpen ? 'mr-3' : 'mx-auto'}`}
           >
-            <Menu className="w-5 h-5 lg:w-[22px] lg:h-[22px]" />
+            <Menu className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px]" strokeWidth={1.5} />
           </button>
 
           {/* Horizontal Toggle */}
-          <div className={`flex items-center bg-[#1b2230] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
-            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-bold text-[13px] md:text-[14px] transition-all duration-200 ${!isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
+          <div className={`flex items-center bg-[#0A0D14] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
+            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${!isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
               <Cherry className="w-4 h-4 mr-1.5" />
               Casino
             </button>
-            <button onClick={() => onViewChange('spor724')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-bold text-[13px] md:text-[14px] transition-all duration-200 ${isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
+            <button onClick={() => onViewChange('spor724')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
               Spor
             </button>
           </div>
@@ -206,7 +206,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <>
               {/* LOGGED IN USER MENU */}
               {/* HAFTALIK ÇEKİLİŞ BANNER */}
-              <div className={`mx-4 mt-4 mb-6 relative overflow-hidden rounded-xl bg-[#1b2230] p-3 cursor-pointer transition-all ${!isOpen && 'hidden'}`}>
+              <div className={`mx-4 mt-2 mb-6 relative overflow-hidden rounded-xl bg-[#0A0D14] p-3 cursor-pointer transition-all ${!isOpen && 'hidden'}`}>
                 <div className="flex items-center gap-3">
                   <Ticket className="w-8 h-8 text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
                   <div className="flex flex-col">
@@ -219,17 +219,17 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
                 
                 {/* STATS */}
-                <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/5 text-center">
+                <div className="flex gap-4 mt-4 pt-4 border-t border-white/5">
                     <div className="flex flex-col">
-                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">Günlük</span>
+                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">GÜNLÜK</span>
                       <span className="text-white font-bold text-[13px]">$25K</span>
                     </div>
-                    <div className="flex flex-col border-x border-white/5">
-                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">Haftalık</span>
+                    <div className="flex flex-col">
+                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">HAFTALIK</span>
                       <span className="text-white font-bold text-[13px]">$100K</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">Aylık</span>
+                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">AYLIK</span>
                       <span className="text-white font-bold text-[13px]">$500K</span>
                     </div>
                 </div>
