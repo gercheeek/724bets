@@ -58,7 +58,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
       <div className="flex-1 overflow-y-auto custom-scrollbar pt-2 pb-20">
         
         {/* TOP SECTION */}
-        <div className="flex flex-col px-3 gap-1 mb-4">
+        <div className="flex flex-col gap-0 mb-4 mt-2">
           
           <button 
             onClick={() => { 
@@ -66,11 +66,12 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));
             }}
-            className={`flex items-center justify-between w-full p-2.5 rounded-lg transition-colors group ${activeMenu === 'canli' ? 'bg-[#233240] text-white' : 'hover:bg-white/5 text-slate-300'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${activeMenu === 'canli' ? 'text-white' : 'text-[#8b92a5] hover:text-white'}`}
           >
-            <div className="flex items-center gap-3">
-              <PlayCircle className={`w-[20px] h-[20px] shrink-0 ${activeMenu === 'canli' ? 'text-white' : 'group-hover:text-white'}`} fill={activeMenu === 'canli' ? 'currentColor' : 'none'} />
-              {isOpen && <span className={`text-[14px] font-bold ${activeMenu === 'canli' ? 'text-white' : 'group-hover:text-white'}`}>Canlı Etkinlikler</span>}
+            {activeMenu === 'canli' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+            <div className="flex items-center">
+              <PlayCircle className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'canli' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'canli' ? 2.5 : 2} fill={activeMenu === 'canli' ? 'currentColor' : 'none'} />
+              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Canlı Etkinlikler</span>}
             </div>
             {isOpen && (
               <div className="bg-[#0f62fe] px-2 py-0.5 rounded-full text-white text-[11px] font-bold">119</div>
@@ -88,10 +89,13 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               onViewChange('upcomingMatches'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'upcoming' }));
             }}
-            className={`flex items-center gap-3 w-full p-2.5 rounded-lg transition-colors group ${activeMenu === 'upcoming' ? 'bg-[#233240] text-white' : 'hover:bg-white/5 text-slate-300'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${activeMenu === 'upcoming' ? 'text-white' : 'text-[#8b92a5] hover:text-white'}`}
           >
-            <Clock className={`w-[20px] h-[20px] shrink-0 ${activeMenu === 'upcoming' ? 'text-white' : 'group-hover:text-white'}`} />
-            {isOpen && <span className={`text-[14px] font-bold truncate ${activeMenu === 'upcoming' ? 'text-white' : 'group-hover:text-white'}`}>Yakında Başlayacak ...</span>}
+            {activeMenu === 'upcoming' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+            <div className="flex items-center">
+              <Clock className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'upcoming' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'upcoming' ? 2.5 : 2} />
+              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Yakında Başlayacak ...</span>}
+            </div>
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
                  Yakında Başlayacak...
@@ -105,10 +109,13 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));
             }}
-            className={`flex items-center gap-3 w-full p-2.5 rounded-lg transition-colors group ${activeMenu === 'hepsi' ? 'bg-[#233240] text-white' : 'hover:bg-white/5 text-slate-300'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${activeMenu === 'hepsi' ? 'text-white' : 'text-[#8b92a5] hover:text-white'}`}
           >
-            <LayoutGrid className={`w-[20px] h-[20px] shrink-0 ${activeMenu === 'hepsi' ? 'text-white' : 'group-hover:text-white'}`} />
-            {isOpen && <span className={`text-[14px] font-bold ${activeMenu === 'hepsi' ? 'text-white' : 'group-hover:text-white'}`}>Hepsi</span>}
+            {activeMenu === 'hepsi' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+            <div className="flex items-center">
+              <LayoutGrid className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'hepsi' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'hepsi' ? 2.5 : 2} />
+              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Hepsi</span>}
+            </div>
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
                  Hepsi
@@ -118,10 +125,13 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
 
           <button 
             onClick={() => { setActiveMenu('bahislerim'); }}
-            className={`flex items-center gap-3 w-full p-2.5 rounded-lg transition-colors group ${activeMenu === 'bahislerim' ? 'bg-[#233240] text-white' : 'hover:bg-white/5 text-slate-300'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${activeMenu === 'bahislerim' ? 'text-white' : 'text-[#8b92a5] hover:text-white'}`}
           >
-            <Receipt className={`w-[20px] h-[20px] shrink-0 ${activeMenu === 'bahislerim' ? 'text-white' : 'group-hover:text-white'}`} />
-            {isOpen && <span className={`text-[14px] font-bold ${activeMenu === 'bahislerim' ? 'text-white' : 'group-hover:text-white'}`}>Bahislerim</span>}
+            {activeMenu === 'bahislerim' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+            <div className="flex items-center">
+              <Receipt className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'bahislerim' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'bahislerim' ? 2.5 : 2} />
+              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Bahislerim</span>}
+            </div>
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
                  Bahislerim
@@ -135,12 +145,12 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
 
         {/* EN IYI SPORLAR */}
         {isOpen && (
-           <div className="px-4 mb-2">
-             <span className="text-[13px] font-bold text-slate-500">En İyi Sporlar</span>
+           <div className="px-5 mx-3 mb-2">
+             <span className="text-[13px] font-bold text-[#64748b]">En İyi Sporlar</span>
            </div>
         )}
 
-        <div className="flex flex-col px-3 gap-0.5 mb-4">
+        <div className="flex flex-col gap-0 mb-4">
           {[
             { id: 'futbol', name: 'Futbol', Icon: SoccerIcon },
             { id: 'cs2', name: 'CS2', Icon: Crosshair },
@@ -156,13 +166,13 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
              <button
                key={sport.id}
                onClick={() => onViewChange('spor724')}
-               className={`flex items-center justify-between w-full p-2.5 rounded-lg transition-colors hover:bg-white/5 group relative ${!isOpen ? 'justify-center' : ''}`}
+               className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 text-[#8b92a5] hover:text-white ${!isOpen ? 'justify-center' : ''}`}
              >
-               <div className="flex items-center gap-3">
-                 <sport.Icon className="w-[18px] h-[18px] shrink-0 text-slate-400 group-hover:text-white" />
-                 {isOpen && <span className="text-[14px] font-medium text-slate-300 group-hover:text-white">{sport.name}</span>}
+               <div className="flex items-center">
+                 <sport.Icon className="w-5 h-5 min-w-[20px] transition-colors ml-2.5 text-[#8b92a5] group-hover:text-white" />
+                 {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors text-[#8b92a5] group-hover:text-white">{sport.name}</span>}
                </div>
-               {isOpen && <ChevronDown className="w-4 h-4 text-slate-500 group-hover:text-white" />}
+               {isOpen && <ChevronDown className="w-4 h-4 text-[#8b92a5] group-hover:text-white transition-colors" />}
                {!isOpen && (
                  <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
                    {sport.name}
@@ -176,7 +186,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
         <div className="h-[1px] w-[calc(100%-24px)] mx-auto bg-white/5 mb-4"></div>
 
         {/* BOTTOM SPORTS */}
-        <div className="flex flex-col px-3 gap-0.5">
+        <div className="flex flex-col gap-0">
           {[
             { id: 'spor', name: 'Spor', Icon: Dribbble },
             { id: 'espor', name: 'Tüm Espor Oyunları', Icon: Gamepad2 },
@@ -185,13 +195,13 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
              <button
                key={item.id}
                onClick={() => onViewChange('spor724')}
-               className={`flex items-center justify-between w-full p-2.5 rounded-lg transition-colors hover:bg-white/5 group relative ${!isOpen ? 'justify-center' : ''}`}
+               className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 text-[#8b92a5] hover:text-white ${!isOpen ? 'justify-center' : ''}`}
              >
-               <div className="flex items-center gap-3">
-                 <item.Icon className="w-[18px] h-[18px] shrink-0 text-slate-400 group-hover:text-white" />
-                 {isOpen && <span className="text-[14px] font-medium text-slate-300 group-hover:text-white">{item.name}</span>}
+               <div className="flex items-center">
+                 <item.Icon className="w-5 h-5 min-w-[20px] transition-colors ml-2.5 text-[#8b92a5] group-hover:text-white" />
+                 {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors text-[#8b92a5] group-hover:text-white">{item.name}</span>}
                </div>
-               {isOpen && <ChevronDown className="w-4 h-4 text-slate-500 group-hover:text-white" />}
+               {isOpen && <ChevronDown className="w-4 h-4 text-[#8b92a5] group-hover:text-white transition-colors" />}
                {!isOpen && (
                  <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
                    {item.name}
