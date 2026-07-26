@@ -2119,7 +2119,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
             {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
             {!(view === 'giveaway') && (
-              <aside className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[260px]' : 'w-[78px]'}`}>
+              <aside className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[78px]'}`}>
                   <Sidebar
                     isOpen={isSidebarOpen}
                     onToggle={() => setIsSidebarOpen(!isSidebarOpen)}

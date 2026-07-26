@@ -369,7 +369,7 @@ const Header: React.FC<HeaderProps> = ({
         <div className="w-full h-full flex items-center justify-between relative">
             
             {/* Left Section: Hamburger & Exact Rainbet Toggle Links */}
-            <div className="flex items-center h-full lg:w-[260px] lg:border-r lg:border-white/5 px-4 shrink-0">
+            <div className="flex items-center h-full lg:w-[280px] lg:border-r lg:border-white/5 pl-4 pr-1 shrink-0">
               
               {/* Hamburger Button */}
               <button 
