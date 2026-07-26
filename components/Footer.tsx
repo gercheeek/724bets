@@ -3,13 +3,13 @@ import { Mail, Send, Twitter, Instagram, Shield } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-[#0A0D14] border-t border-white/5 py-12 px-6 lg:px-12 relative z-10 font-sans">
+    <footer className="w-full bg-[#0A0D14] border-t border-white/5 pt-10 pb-28 md:py-12 px-6 lg:px-12 relative z-10 font-sans">
       <div className="max-w-[1200px] mx-auto">
         
         {/* Top Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-y-10 gap-x-6 lg:gap-6 mb-8 md:mb-16">
           {/* Col 1: Brand Info */}
-          <div className="lg:col-span-5 flex flex-col items-start">
+          <div className="col-span-2 md:col-span-4 lg:col-span-5 flex flex-col items-start">
              {/* Logo */}
             <div className="flex items-center gap-2 mb-6">
               <span className="font-extrabold text-3xl tracking-tight lowercase text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
@@ -51,9 +51,9 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Col 2: 724BETS */}
-          <div className="lg:col-span-2 flex flex-col">
-            <h4 className="text-white text-[13px] font-bold tracking-wider mb-6 uppercase">724BETS</h4>
-            <div className="flex flex-col gap-4">
+          <div className="col-span-1 lg:col-span-2 flex flex-col">
+            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">724BETS</h4>
+            <div className="flex flex-col gap-3 md:gap-4">
               {['Ödüller', 'Promosyonlar', 'Kanıtlanabilir Şekilde Adil', 'Bize Ulaşın'].map(link => (
                 <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#00ff88] transition-colors">{link}</a>
               ))}
@@ -61,9 +61,9 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Col 3: KAYNAKLAR */}
-          <div className="lg:col-span-2 flex flex-col mt-10 lg:mt-0">
-            <h4 className="text-white text-[13px] font-bold tracking-wider mb-6 uppercase">KAYNAKLAR</h4>
-            <div className="flex flex-col gap-4">
+          <div className="col-span-1 lg:col-span-2 flex flex-col">
+            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">KAYNAKLAR</h4>
+            <div className="flex flex-col gap-3 md:gap-4">
               {['Sorumlu Kumar', 'Erişilebilirlik', 'Etik Kuralları', 'Şikayet Politikası'].map(link => (
                 <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#00ff88] transition-colors">{link}</a>
               ))}
@@ -71,9 +71,9 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Col 4: YASAL */}
-          <div className="lg:col-span-3 flex flex-col mt-10 lg:mt-0">
-            <h4 className="text-white text-[13px] font-bold tracking-wider mb-6 uppercase">YASAL</h4>
-            <div className="flex flex-col gap-4">
+          <div className="col-span-2 md:col-span-4 lg:col-span-3 flex flex-col">
+            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">YASAL</h4>
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 md:gap-4">
               {['KPAM', 'Bahis Merkezi Kuralları', 'Çerez Politikası', 'Yayıncı Politikası', 'Feragatname', 'Gizlilik Politikası', 'Hizmet Şartları'].map(link => (
                 <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#00ff88] transition-colors">{link}</a>
               ))}
