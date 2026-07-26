@@ -366,21 +366,21 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
-        <div className="w-full px-2 md:px-4 h-full flex items-center justify-between relative">
+        <div className="w-full h-full flex items-center justify-between relative">
             
             {/* Left Section: Hamburger & Toggle Links */}
-            <div className="flex-1 flex items-center justify-start h-full pl-2 md:pl-4">
+            <div className="flex items-center h-full lg:w-[260px] lg:border-r lg:border-white/5 lg:px-4 px-2 shrink-0">
               
               {/* Hamburger Button */}
               <button 
                 onClick={onToggleSidebar}
-                className="hidden lg:flex text-gray-400 hover:text-white transition-colors items-center justify-center p-2 mr-2 md:mr-6 rounded-lg"
+                className="text-gray-400 hover:text-white transition-colors flex items-center justify-center p-2 mr-2 lg:mr-0 rounded-lg"
               >
-                <Menu className="w-[22px] h-[22px]" />
+                <Menu className="w-6 h-6 lg:w-[22px] lg:h-[22px]" />
               </button>
 
               {/* Rainbet-style Toggle Box for Navigation */}
-              <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[10px] h-[44px]">
+              <div className="hidden lg:flex items-center bg-[#1b2230] p-1 rounded-[10px] h-[44px] ml-auto">
                 {[
                   { id: 'casino', label: 'Casino', matches: ['casino', 'slots'], icon: <div className="flex -space-x-1 mr-2"><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/><div className="w-2.5 h-2.5 rounded-full bg-current opacity-70"/></div> },
                   { id: 'spor724', label: 'Spor', matches: ['spor724', 'mobile-bulletin'], icon: null }
@@ -477,8 +477,9 @@ const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Right: User Controls (Rainbet Style) */}
-        <div id="tour-user-panel" className="flex-1 flex items-center justify-end gap-2 md:gap-3 z-10 pr-2 md:pr-4">
+            {/* Right Section: User Controls */}
+            <div className="flex-1 flex justify-end h-full px-2 md:px-4">
+              <div className="flex items-center justify-end h-full gap-1 md:gap-3 z-10 pr-2 md:pr-4">
 
           {siteUser ? (
             <div className="flex items-center gap-2 md:gap-3 ml-2">
@@ -646,7 +647,8 @@ const Header: React.FC<HeaderProps> = ({
             </div>
           )}
         </div>
-      </div>
+    </div>
+    </div>
     </div>
     </div>
     </>
