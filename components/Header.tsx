@@ -368,8 +368,10 @@ const Header: React.FC<HeaderProps> = ({
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
         <div className="w-full h-full flex items-center justify-between">
             
-            {/* Left: Hamburger & Logo */}
-            <div className="flex items-center h-full shrink-0 pr-4 md:pr-6">
+            {/* Left Section: Logo & Nav Links */}
+            <div className="flex items-center h-full">
+              {/* Left: Hamburger & Logo */}
+              <div className="flex items-center h-full shrink-0 pr-4 md:pr-6 pl-2 md:pl-4">
               
               {/* Hamburger Button (Mobile Only) */}
               <button 
@@ -455,7 +457,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Desktop Navigation Links (Premium App Bar Style) */}
-            <div className="hidden lg:flex items-center gap-1 ml-10 h-full flex-1">
+            <div className="hidden lg:flex items-center gap-1 ml-4 xl:ml-8 h-full">
                {[
                  { id: 'originals', label: 'Originals' },
                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },
@@ -475,9 +477,10 @@ const Header: React.FC<HeaderProps> = ({
                  );
                })}
             </div>
+          </div>
 
             {/* Right: User Controls */}
-        <div id="tour-user-panel" className="flex items-center justify-end gap-1 md:gap-3 z-10 pr-2 md:pr-16 lg:pr-32 xl:pr-48">
+        <div id="tour-user-panel" className="flex items-center justify-end gap-1 md:gap-3 z-10 pr-2 md:pr-4">
 
           {siteUser ? (
             <div className="flex items-center gap-2 md:gap-3 ml-2">
