@@ -152,7 +152,7 @@ export default function OriginalsSlider({ onNavigate, guestTheme = "retro" }: { 
                 {/* Horizontal Scroll Area */}
                 <div 
                     ref={scrollRef}
-                    className="flex gap-4 overflow-x-auto pb-8 pt-2 px-2 snap-x snap-mandatory scrollbar-hide" 
+                    className="flex gap-2 md:gap-4 overflow-x-auto pb-8 pt-2 px-2 snap-x snap-mandatory scrollbar-hide" 
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                     {originalsData.map((game) => (

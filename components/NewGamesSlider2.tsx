@@ -71,7 +71,7 @@ export const NewGamesSlider2 = ({ onPlayGame }: NewGamesSlider2Props) => {
       {/* Slider Container */}
       <div 
         ref={scrollContainerRef}
-        className="flex overflow-x-auto hide-scrollbar gap-3 md:gap-4 snap-x snap-mandatory"
+        className="flex overflow-x-auto hide-scrollbar gap-2 md:gap-4 snap-x snap-mandatory"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {NEW_GAMES_2.map((game) => (

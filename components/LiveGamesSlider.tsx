@@ -128,7 +128,7 @@ export default function LiveGamesSlider({ onPlayGame }: LiveGamesSliderProps) {
       {/* Cards Slider */}
       <div 
         ref={scrollRef}
-        className="flex gap-3 overflow-x-auto custom-scrollbar pb-4 snap-x snap-mandatory hide-scrollbar"
+        className="flex gap-2 md:gap-3 overflow-x-auto custom-scrollbar pb-4 snap-x snap-mandatory hide-scrollbar"
       >
         <style dangerouslySetInnerHTML={{__html: `
           .hide-scrollbar::-webkit-scrollbar {
