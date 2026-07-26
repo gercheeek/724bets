@@ -457,7 +457,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Desktop Navigation Links (Premium App Bar Style) */}
-            <div className="hidden lg:flex items-center gap-1 ml-4 xl:ml-8 h-full">
+            <div className="hidden lg:flex items-center gap-1 ml-4 lg:ml-6 h-full">
                {[
                  { id: 'originals', label: 'Originals' },
                  { id: 'casino', label: 'Casino', matches: ['casino', 'slots'] },

@@ -8,13 +8,13 @@ interface MainHeroProps {
 
 export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps) {
   return (
-    <div className="w-full max-w-[1300px] mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between pt-8 pb-6 lg:pt-14 lg:pb-12 relative z-20 px-4 lg:px-8 gap-8 lg:gap-12">
+    <div className="w-full max-w-[1300px] mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between pt-8 pb-6 lg:pt-14 lg:pb-6 relative z-20 px-4 lg:px-8 gap-8 lg:gap-12">
       
       {/* Left Content Area (Text + Buttons) */}
-      <div className="w-full lg:w-[45%] flex flex-col items-start text-left pr-0 lg:pr-8">
+      <div className="w-full lg:w-[50%] flex flex-col items-start text-left pr-0 lg:pr-8">
         {/* Title */}
-        <h1 className="text-[28px] sm:text-3xl lg:text-[32px] xl:text-[42px] font-extrabold text-white leading-tight mb-6 lg:mb-8 font-sans tracking-tight w-full">
-        Sınırları Olmayan Bahis <br className="hidden xl:block" /> Deneyimini Yaşayın
+        <h1 className="text-[28px] sm:text-3xl lg:text-[28px] xl:text-[36px] font-extrabold text-white leading-[1.2] mb-6 lg:mb-8 font-sans tracking-tight w-full">
+        Sınırları Olmayan Bahis <br className="hidden md:block" /> Deneyimini Yaşayın
       </h1>
 
       {/* Action Row */}
@@ -46,11 +46,11 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
     </div>
 
       {/* Cards Grid (Right Side on Desktop) */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 w-full lg:w-[55%] mt-2 lg:mt-0">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 w-full lg:w-[50%] mt-2 lg:mt-0">
         {/* Casino Card */}
         <div 
           onClick={() => onNavigate('casino')} 
-          className="group relative w-full aspect-[4/5] sm:aspect-square lg:aspect-[6/5] xl:aspect-[4/3] rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
+          className="group relative w-full aspect-[4/5] sm:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#0d1421]">
@@ -72,7 +72,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {/* Sports Card */}
         <div 
           onClick={() => onNavigate('sports')} 
-          className="group relative w-full aspect-[4/5] sm:aspect-square lg:aspect-[6/5] xl:aspect-[4/3] rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
+          className="group relative w-full aspect-[4/5] sm:aspect-square rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-transform hover:-translate-y-1"
         >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
