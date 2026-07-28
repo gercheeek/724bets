@@ -88,6 +88,7 @@ export default function AdminSportsTab() {
     const extractOdds = (markets: string[]) => {
         let ms1 = 1.85, msx = 3.40, ms2 = 3.80;
         for (const market of markets) {
+            if (!market || typeof market !== 'string') continue;
             const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
             if (is1x2) {
                 const parts = market.split('|');

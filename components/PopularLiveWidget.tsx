@@ -89,6 +89,7 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
             const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
             
             for (const market of markets) {
+                if (!market || typeof market !== 'string') continue;
                 const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
                 if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
                     const parts = market.split('|');
@@ -194,7 +195,7 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                                 <div className="flex flex-col items-center gap-2 w-[80px] z-10">
-                                    <div className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg border border-white/20 backdrop-blur-sm overflow-hidden bg-black/20">
+                                    <div className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden">
                                         <PlayerLogo name={match.home.name} fallbackLogo="" />
                                     </div>
                                     <span className="text-[12px] font-bold text-zinc-100 text-center leading-tight truncate w-full drop-shadow-sm">{match.home.name}</span>
@@ -206,7 +207,7 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                                 </div>
                                 
                                 <div className="flex flex-col items-center gap-2 w-[80px] z-10">
-                                    <div className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg border border-white/20 backdrop-blur-sm overflow-hidden bg-black/20">
+                                    <div className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden">
                                         <PlayerLogo name={match.away.name} fallbackLogo="" />
                                     </div>
                                     <span className="text-[12px] font-bold text-zinc-100 text-center leading-tight truncate w-full drop-shadow-sm">{match.away.name}</span>

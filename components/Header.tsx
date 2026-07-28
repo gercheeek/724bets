@@ -366,7 +366,7 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
-        <div className="w-full h-full flex items-center justify-between relative">
+        <div className="w-full max-w-[1400px] mx-auto h-full flex items-center justify-between relative">
             
             {/* Left Section: Hamburger (Mobile) & Logo */}
             <div className="flex items-center h-full shrink-0 pl-4 lg:pl-6">
@@ -437,7 +437,7 @@ const Header: React.FC<HeaderProps> = ({
                     className="flex items-center bg-[#1b2230] hover:bg-[#252e42] cursor-pointer transition-colors rounded-lg px-3 md:px-4 h-[40px] md:h-[44px]"
                     onClick={() => setWalletDropdownOpen(prev => !prev)}
                   >
-                    <span className="balance-display text-white font-bold text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap">${(siteUser.balance || 0).toFixed(2)}</span>
+                    <span className="balance-display text-white font-bold text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap">${Number(siteUser.balance || 0).toFixed(2)}</span>
                     <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-gray-400 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
                   
@@ -461,7 +461,7 @@ const Header: React.FC<HeaderProps> = ({
                           { sym: 'USDT', icon: '₮', bg: '#26A17B', name: 'Tether' }
                         ].map((crypto) => (
                           <div key={crypto.sym} className="flex items-center justify-between px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors group">
-                            <span className="text-white font-bold text-[14px] font-mono">{(crypto.sym === 'TRY' ? (siteUser.balance || 0) : 0).toFixed(2)}</span>
+                            <span className="text-white font-bold text-[14px] font-mono">{Number(crypto.sym === 'TRY' ? (siteUser.balance || 0) : 0).toFixed(2)}</span>
                             <div className="flex items-center gap-2">
                               <span className="text-zinc-500 text-[12px] group-hover:text-zinc-400">{crypto.name}</span>
                               <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-bold" style={{ backgroundColor: crypto.bg }}>

@@ -1423,8 +1423,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         setView('trusted-detail');
       } else if (cleanPath === '/casino') {
         setView('blackjack');
-      } else if (cleanPath === '/spor') {
-        setView('sports');
+      } else if (cleanPath.startsWith('/spor')) {
+        setView('spor724');
       } else if (cleanPath === '/canli') {
         setView('sports');
       } else if (cleanPath === '/lucky-wheel' || cleanPath === '/luckywheel' || cleanPath === '/cark') {
@@ -2203,7 +2203,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                         <div className="w-7 h-7 rounded bg-[#1075fc] text-white flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(16,117,252,0.4)]">
                           <span className="text-[14px]">₺</span>
                         </div>
-                        <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">₺{siteUser.balance?.toFixed(2) || '0.00'}</span>
+                        <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">₺{Number(siteUser.balance || 0).toFixed(2)}</span>
                         <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M7 10l5 5 5-5z" />
                         </svg>
@@ -2285,8 +2285,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
           (view === 'gercek' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis') 
-            ? 'p-0 w-full max-w-full mx-auto pb-[70px] md:pb-0' 
-            : 'px-2 py-4 md:p-6 w-full max-w-[1400px] mx-auto pb-[80px] md:pb-6'
+            ? 'p-0 w-full max-w-[1280px] mx-auto pb-[70px] md:pb-0' 
+            : 'px-2 py-4 md:p-6 w-full max-w-[1280px] mx-auto pb-[80px] md:pb-6'
         }`}
         style={{ 
           position: 'relative', 
@@ -2370,7 +2370,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <div className="animate-fade-in w-full relative flex flex-col" style={{ height: 'calc(100vh - var(--header-height))' }}>
             
             {/* ── GAMDOM STYLE BANNER & MATCHES ── */}
-            <div className="w-full shrink-0 px-4 md:px-8 max-w-[1400px] mx-auto hidden md:block">
+            <div className="w-full shrink-0 px-4 md:px-6 max-w-[1280px] mx-auto hidden md:block">
               <WorldCupTeaser />
             </div>
 
@@ -2562,10 +2562,14 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
-        {(view === 'spor724' || view === 'upcomingMatches') && (
+        {view === 'spor724' && (
+          <Spor724View onNavigate={handleViewChange} />
+        )}
+        
+        {view === 'upcomingMatches' && (
           <GercekView 
             onNavigate={handleViewChange} 
-            initialTab={view === 'upcomingMatches' ? 'upcoming' : 'home'} 
+            initialTab="upcoming" 
           />
         )}
 

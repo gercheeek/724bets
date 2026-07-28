@@ -1,98 +1,14 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, Flame, BarChart3, Users, Zap, Search, ShieldCheck } from 'lucide-react';
+import { useBetSlip } from '../../contexts/BetSlipContext';
 
 // FAKE DATA
-const topMatches = [
-  {
-    id: 1,
-    time: "49d",
-    viewers: "6.340",
-    team1: "SK Brann",
-    team2: "Valerenga IF",
-    team1Logo: "https://flagcdn.com/w40/no.png", 
-    team2Logo: "https://flagcdn.com/w40/se.png",
-    firePercentage: 97,
-    fireTeam: "SK Brann",
-    odds: { home: "1,66", draw: "4,10", away: "4,30" }
-  },
-  {
-    id: 2,
-    time: "19d",
-    viewers: "5.961",
-    team1: "IK Sirius",
-    team2: "Goteborg",
-    team1Logo: "https://flagcdn.com/w40/se.png", 
-    team2Logo: "https://flagcdn.com/w40/dk.png",
-    firePercentage: 99,
-    fireTeam: "IK Sirius",
-    odds: { home: "1,44", draw: "4,80", away: "5,60" }
-  },
-  {
-    id: 3,
-    time: "5s",
-    viewers: "5.736",
-    team1: "Aalesunds FK",
-    team2: "Viking FK",
-    team1Logo: "https://flagcdn.com/w40/no.png", 
-    team2Logo: "https://flagcdn.com/w40/is.png",
-    firePercentage: 99,
-    fireTeam: "Viking FK",
-    odds: { home: "5,40", draw: "4,60", away: "1,48" }
-  }
-];
-
-const sgmMatches = [
-  {
-    id: 1,
-    time: "19d",
-    viewers: "146",
-    team1: "Zhejiang",
-    team2: "Dalian Yingbo",
-    team1Logo: "https://flagcdn.com/w40/cn.png",
-    team2Logo: "https://flagcdn.com/w40/cn.png",
-    legsCount: 5,
-    legs: [
-      { title: "Zhejiang", subtitle: "1x2", icon: "⚽" },
-      { title: "var", subtitle: "Karşılıklı gol", icon: "⚽" },
-      { title: "altı 10.5", subtitle: "Toplam korner sayısı", icon: "🎯" }
-    ],
-    totalOdds: "30,32"
-  },
-  {
-    id: 2,
-    time: "10s",
-    viewers: "142",
-    team1: "Deportivo Riestra",
-    team2: "Boca Juniors",
-    team1Logo: "https://flagcdn.com/w40/ar.png",
-    team2Logo: "https://flagcdn.com/w40/br.png",
-    legsCount: 5,
-    legs: [
-      { title: "1-3", subtitle: "Toplam gol", icon: "⚽" },
-      { title: "Boca Juniors", subtitle: "1st gol", icon: "🏆" },
-      { title: "tek", subtitle: "tek/çift", icon: "⚽" }
-    ],
-    totalOdds: "7,42"
-  },
-  {
-    id: 3,
-    time: "10s",
-    viewers: "99",
-    team1: "Deportivo Riestra",
-    team2: "Boca Juniors",
-    team1Logo: "https://flagcdn.com/w40/ar.png",
-    team2Logo: "https://flagcdn.com/w40/br.png",
-    legsCount: 4,
-    legs: [
-      { title: "var", subtitle: "Karşılıklı gol", icon: "⚽" },
-      { title: "Boca Juniors", subtitle: "1x2", icon: "🏆" },
-      { title: "Merentiel, Miguel", subtitle: "Gol atar", icon: "⚽" }
-    ],
-    totalOdds: "42,63"
-  }
-];
+const topMatches: any[] = [];
+const sgmMatches: any[] = [];
 
 export default function PremiumMatchFeed() {
+  const { addSelection } = useBetSlip();
+
   return (
     <div className="w-full flex flex-col gap-6 font-sans">
       
@@ -164,15 +80,24 @@ export default function PremiumMatchFeed() {
 
               {/* Odds Buttons */}
               <div className="grid grid-cols-3 gap-2 mt-auto relative z-10">
-                <button className="bg-[#161f33] hover:bg-[#1075fc] text-white transition-all duration-300 rounded-lg py-2 flex flex-col items-center justify-center border border-white/5 hover:border-transparent group/btn shadow-inner">
+                <button 
+                  onClick={() => addSelection({ id: `top-${match.id}_1`, matchId: `top-${match.id}`, matchName: `${match.team1} vs ${match.team2}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(match.odds.home.replace(',', '.')) })}
+                  className="bg-[#161f33] hover:bg-[#1075fc] text-white transition-all duration-300 rounded-lg py-2 flex flex-col items-center justify-center border border-white/5 hover:border-transparent group/btn shadow-inner"
+                >
                   <span className="text-[10px] text-zinc-400 group-hover/btn:text-white/90 font-medium mb-0.5 truncate w-full px-1 text-center transition-colors">1</span>
                   <span className="font-mono text-[13px] font-black">{match.odds.home}</span>
                 </button>
-                <button className="bg-[#161f33] hover:bg-[#1075fc] text-white transition-all duration-300 rounded-lg py-2 flex flex-col items-center justify-center border border-white/5 hover:border-transparent group/btn shadow-inner">
+                <button 
+                  onClick={() => addSelection({ id: `top-${match.id}_X`, matchId: `top-${match.id}`, matchName: `${match.team1} vs ${match.team2}`, selectionName: 'Maç Sonucu: X', odd: parseFloat(match.odds.draw.replace(',', '.')) })}
+                  className="bg-[#161f33] hover:bg-[#1075fc] text-white transition-all duration-300 rounded-lg py-2 flex flex-col items-center justify-center border border-white/5 hover:border-transparent group/btn shadow-inner"
+                >
                   <span className="text-[10px] text-zinc-400 group-hover/btn:text-white/90 font-medium mb-0.5 truncate w-full px-1 text-center transition-colors">X</span>
                   <span className="font-mono text-[13px] font-black">{match.odds.draw}</span>
                 </button>
-                <button className="bg-[#161f33] hover:bg-[#1075fc] text-white transition-all duration-300 rounded-lg py-2 flex flex-col items-center justify-center border border-white/5 hover:border-transparent group/btn shadow-inner">
+                <button 
+                  onClick={() => addSelection({ id: `top-${match.id}_2`, matchId: `top-${match.id}`, matchName: `${match.team1} vs ${match.team2}`, selectionName: 'Maç Sonucu: 2', odd: parseFloat(match.odds.away.replace(',', '.')) })}
+                  className="bg-[#161f33] hover:bg-[#1075fc] text-white transition-all duration-300 rounded-lg py-2 flex flex-col items-center justify-center border border-white/5 hover:border-transparent group/btn shadow-inner"
+                >
                   <span className="text-[10px] text-zinc-400 group-hover/btn:text-white/90 font-medium mb-0.5 truncate w-full px-1 text-center transition-colors">2</span>
                   <span className="font-mono text-[13px] font-black">{match.odds.away}</span>
                 </button>

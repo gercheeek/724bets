@@ -93,8 +93,10 @@ export const UpcomingMatchesView: React.FC = () => {
       let isLive = data.status === 'in_progress' || data.is_live_betting === true;
       let minute = 'Yakında';
       
+      let startTimestamp = 0;
       if (data.start_time && !isLive) {
           const date = new Date(data.start_time);
+          startTimestamp = date.getTime();
           const day = date.getDate().toString().padStart(2, '0');
           const month = (date.getMonth() + 1).toString().padStart(2, '0');
           const year = date.getFullYear();
@@ -117,6 +119,7 @@ export const UpcomingMatchesView: React.FC = () => {
       const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
       
       for (const market of markets) {
+         if (!market || typeof market !== 'string') continue;
          const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
          if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
             const parts = market.split('|');
@@ -166,7 +169,8 @@ export const UpcomingMatchesView: React.FC = () => {
         awayId: `a_${ev.id}`,
         homeLogo: homeLogoUrl,
         awayLogo: awayLogoUrl,
-        marketsCount: calculateMarketCount(ev)
+        marketsCount: calculateMarketCount(ev),
+        timestamp: startTimestamp || undefined
       });
     });
     // Return parsed matches loaded dynamically from contexts
@@ -175,18 +179,28 @@ export const UpcomingMatchesView: React.FC = () => {
 
   const sportsList = Array.from(new Set(matches.map(m => m.sport)));
 
-  // Filter for upcoming (not live)
-  const upcomingMatches = matches.filter(m => !m.isLive);
-  const filteredMatches = upcomingMatches.filter(m => m.sport === activeSport);
+  // Filter out already started matches and apply time filter
+  const now = new Date().getTime();
+  const [timeFilter, setTimeFilter] = useState<number | null>(null); // hours
 
-  // Group by league
-  const groupedByLeague: Record<string, MatchInfo[]> = {};
-  filteredMatches.forEach(match => {
-    if (!groupedByLeague[match.league]) {
-      groupedByLeague[match.league] = [];
+  const upcomingMatches = matches.filter(m => {
+    if (m.isLive || m.isFinished) return false;
+    if (m.timestamp) {
+       // Filter out if it has already started
+       if (m.timestamp <= now) return false;
+       
+       // Apply time filter
+       if (timeFilter !== null) {
+          const maxTime = now + (timeFilter * 60 * 60 * 1000);
+          if (m.timestamp > maxTime) return false;
+       }
     }
-    groupedByLeague[match.league].push(match);
+    return true;
   });
+
+  const filteredMatches = upcomingMatches
+    .filter(m => m.sport === activeSport)
+    .sort((a, b) => (a.timestamp || Number.MAX_SAFE_INTEGER) - (b.timestamp || Number.MAX_SAFE_INTEGER));
 
   const getSportIcon = (sportName: string) => {
     const name = sportName.toLowerCase();
@@ -211,29 +225,42 @@ export const UpcomingMatchesView: React.FC = () => {
     return date.toLocaleDateString(language === 'tr' ? 'tr-TR' : 'en-US', options);
   };
 
+  const timeFilters = [
+    { label: '15 Dk', value: 0.25 },
+    { label: '1 Saat', value: 1 },
+    { label: '3 Saat', value: 3 },
+    { label: '6 Saat', value: 6 },
+    { label: '24 Saat', value: 24 },
+    { label: '48 Saat', value: 48 },
+    { label: '72 Saat', value: 72 },
+    { label: 'Tümü', value: null }
+  ];
+
   return (
     <div className="flex h-full w-full bg-transparent text-slate-400 font-sans overflow-hidden">
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar relative z-10" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
         
         {/* Top Navbar */}
-        <div className="sticky top-0 z-50 bg-[#18191c] border-b border-white/5 px-4 py-3 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-sm bg-[#10b981]"></div>
-            <h1 className="text-white font-bold text-[15px] tracking-wide">
-              {language === 'tr' ? 'Günün Maçları' : 'Upcoming Matches'}
-            </h1>
+        <div className="sticky top-0 z-50 bg-[#18191c] border-b border-white/5 px-4 py-3 flex flex-col sm:flex-row items-center justify-between shadow-sm gap-3">
+          <div className="flex items-center justify-between w-full sm:w-auto">
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-sm bg-[#10b981]"></div>
+              <h1 className="text-white font-bold text-[15px] tracking-wide">
+                {language === 'tr' ? 'Yaklaşan Maçlar' : 'Upcoming Matches'}
+              </h1>
+            </div>
           </div>
           
-          <div className="flex items-center gap-3 bg-black/40 px-3 py-1.5 rounded-md border border-white/5">
-            <button onClick={() => changeDate(-1)} className="text-slate-400 hover:text-white transition-colors">
-              <ChevronLeft size={16} />
-            </button>
-            <span className="text-[12px] font-medium text-gray-300 min-w-[120px] text-center">
-              {formatDate(currentDate)}
-            </span>
-            <button onClick={() => changeDate(1)} className="text-slate-400 hover:text-white transition-colors">
-              <ChevronRight size={16} />
-            </button>
+          <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto scrollbar-none pb-1 sm:pb-0">
+            {timeFilters.map(tf => (
+              <button 
+                key={tf.label}
+                onClick={() => setTimeFilter(tf.value)}
+                className={`px-3 py-1.5 rounded-md text-[11px] font-bold tracking-wide whitespace-nowrap transition-colors ${timeFilter === tf.value ? 'bg-[#10b981] text-black shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'}`}
+              >
+                {tf.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -260,135 +287,118 @@ export const UpcomingMatchesView: React.FC = () => {
           </div>
         </div>
 
-        {/* Matches List */}
+        {/* Matches Flat List */}
         <div className="px-4 py-4 pb-12">
           
-          {/* Main Sport Header (e.g. Futbol ... 45) */}
           {filteredMatches.length > 0 && (
              <div className="flex items-center justify-between px-2 mb-4">
                <div className="flex items-center gap-2">
                  <div className="text-[#10b981]">{getSportIcon(activeSport)}</div>
                  <span className="text-white font-bold text-[15px]">{activeSport}</span>
                </div>
-               <span className="text-white font-bold text-[14px]">{filteredMatches.length}</span>
+               <span className="text-white font-bold text-[14px]">{filteredMatches.length} Maç</span>
              </div>
           )}
 
-          {Object.keys(groupedByLeague).map(league => {
-            const matchesInLeague = groupedByLeague[league];
-            const firstMatch = matchesInLeague[0];
-            const flag = getCountryFlag(firstMatch?.country || '');
-            
-            return (
-              <div key={league} className="mb-6">
-                {/* League Header */}
-                <div className="flex items-center justify-between px-3 py-2.5 bg-[#18191c] rounded-t-xl border-t border-t-purple-500/30 border-b border-b-white/5 shadow-[0_-4px_20px_rgba(168,85,247,0.05)]">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[14px]">{flag}</span>
-                    <span className="text-[12px] font-black text-transparent bg-clip-text bg-gradient-to-r from-[#a855f7] to-[#d946ef]  tracking-wide uppercase">
-                      {activeSport} - {league}
-                    </span>
-                  </div>
-                  <div className="flex gap-4 pr-[60px]">
-                    <span className="w-[45px] text-center text-[10px] font-bold text-slate-500">1</span>
-                    <span className="w-[45px] text-center text-[10px] font-bold text-slate-500">X</span>
-                    <span className="w-[45px] text-center text-[10px] font-bold text-slate-500">2</span>
-                    <span className="w-[50px] text-center text-[10px] font-bold text-slate-500">Diğer</span>
-                  </div>
-                </div>
+          {filteredMatches.length > 0 && (
+              <div className="flex flex-col border border-white/5 rounded-xl overflow-hidden bg-[#18191c] shadow-xl">
+                {filteredMatches.map((match, idx) => {
+                  const isLast = idx === filteredMatches.length - 1;
+                  const flag = getCountryFlag(match.country || '');
+                  
+                  const handleBetClick = (oddId: string, oddValue: string, selectionName: string) => {
+                    if (!oddId || oddValue === '-') return;
+                    // Pass to global context
+                    toggleBetSelection({ id: match.id }, 'Maç Sonucu 1X2', selectionName, parseFloat(oddValue));
+                  };
 
-                {/* Match Rows */}
-                <div className="flex flex-col border border-white/5 border-t-0 rounded-b-xl overflow-hidden bg-[#18191c] shadow-xl">
-                  {matchesInLeague.map((match, idx) => {
-                    const isLast = idx === matchesInLeague.length - 1;
-                    
-                    const handleBetClick = (oddId: string, oddValue: string, selectionName: string) => {
-                      if (!oddId || oddValue === '-') return;
-                      // Pass to global context
-                      toggleBetSelection({ id: match.id }, 'Maç Sonucu 1X2', selectionName, parseFloat(oddValue));
-                    };
+                  const isSelected = (id: string) => betSelections.some(s => s.id === id);
 
-                    const isSelected = (id: string) => betSelections.some(s => s.id === id);
-
-                    return (
-                      <div 
-                        key={match.id} 
-                        className={`flex items-center px-3 py-3 hover:bg-[#10b981]/5 hover:shadow-[inset_2px_0_0_#10b981] transition-all duration-300 cursor-pointer ${!isLast ? 'border-b border-white/5' : ''}`}
-                      >
-                        {/* Time */}
-                        <div className="flex flex-col w-[70px] shrink-0">
-                           <span className="text-[10px] text-slate-500 font-medium tracking-wider">{match.minute.split(' ')[0]}</span>
-                           <span className="text-[12px] text-gray-200 font-bold tabular-nums">{match.minute.split(' ')[1] || match.minute}</span>
-                        </div>
-                        
-                        {/* Teams */}
-                        <div className="flex-1 flex flex-col gap-1.5 min-w-0 pr-4">
-                           {match.away === '' ? (
+                  return (
+                    <div 
+                      key={match.id} 
+                      className={`flex flex-col sm:flex-row sm:items-center px-3 py-3 hover:bg-[#10b981]/5 hover:shadow-[inset_2px_0_0_#10b981] transition-all duration-300 cursor-pointer ${!isLast ? 'border-b border-white/5' : ''}`}
+                    >
+                      {/* Left: Time and League info */}
+                      <div className="flex items-center sm:w-[220px] shrink-0 mb-2 sm:mb-0">
+                         <div className="flex flex-col w-[60px] shrink-0">
+                            <span className="text-[10px] text-slate-500 font-medium tracking-wider">{match.minute.split(' ')[0]}</span>
+                            <span className="text-[12px] text-[#10b981] font-bold tabular-nums">{match.minute.split(' ')[1] || match.minute}</span>
+                         </div>
+                         <div className="flex flex-col flex-1 pl-2 border-l border-white/5 min-w-0">
+                            <div className="flex items-center gap-1.5">
+                               <span className="text-[12px]">{flag}</span>
+                               <span className="text-[10px] font-bold text-slate-400 truncate uppercase" title={match.league}>{match.league}</span>
+                            </div>
+                         </div>
+                      </div>
+                      
+                      {/* Teams */}
+                      <div className="flex-1 flex flex-col gap-1.5 min-w-0 pr-4 mt-1 sm:mt-0">
+                         {match.away === '' ? (
+                           <div className="flex items-center gap-2">
+                             <span className="text-[13px] font-semibold text-white truncate">{match.home}</span>
+                           </div>
+                         ) : (
+                           <>
                              <div className="flex items-center gap-2">
+                               <img src={`/takimlogo/${match.home?.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.homeLogo; }} />
                                <span className="text-[13px] font-semibold text-white truncate">{match.home}</span>
                              </div>
-                           ) : (
-                             <>
-                               <div className="flex items-center gap-2">
-                                 <img src={`/takimlogo/${match.home?.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.homeLogo; }} />
-                                 <span className="text-[13px] font-semibold text-white truncate">{match.home}</span>
-                               </div>
-                               <div className="flex items-center gap-2">
-                                 <img src={`/takimlogo/${match.away?.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.awayLogo; }} />
-                                 <span className="text-[13px] font-semibold text-white truncate">{match.away}</span>
-                               </div>
-                             </>
-                           )}
-                        </div>
-
-                        {/* Star */}
-                        <div className="w-[30px] flex justify-center shrink-0">
-                           <Star size={14} className="text-slate-600 hover:text-[#e3b341] cursor-pointer transition-colors" />
-                        </div>
-
-                        {/* Odds */}
-                        <div className="flex gap-2 shrink-0">
-                          {match.away !== '' ? (
-                            <>
-                              {['1', 'X', '2'].map((oddType) => {
-                                const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
-                                const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
-                                
-                                return (
-                                  <button 
-                                    key={oddType}
-                                    onClick={() => handleBetClick(oddId || '', oddValue, oddType)}
-                                    className={`w-[45px] h-[32px] rounded border flex items-center justify-center transition-colors ${isSelected(oddId || '') ? 'bg-[#10b981] text-black font-bold shadow-md border-none' : 'border-white/5 bg-[#25262b] text-white hover:bg-[#10b981]/10 hover:border-[#10b981]/50 hover:text-[#10b981] group/odd transition-all duration-300'}`}
-                                  >
-                                    <span className="text-[11px] font-bold tabular-nums">{oddValue}</span>
-                                  </button>
-                                );
-                              })}
-                            </>
-                          ) : (
-                            <div className="flex gap-2 opacity-0 select-none">
-                              <div className="w-[45px] h-[32px]" />
-                              <div className="w-[45px] h-[32px]" />
-                              <div className="w-[45px] h-[32px]" />
-                            </div>
-                          )}
-
-                          {/* More */}
-                          <button className="w-[50px] h-[32px] rounded border border-purple-500/30 bg-purple-500/10 flex items-center justify-center hover:bg-purple-500/20 hover:border-purple-500/50 transition-colors">
-                            <span className="text-[10px] font-bold text-purple-400 tabular-nums">+{match.marketsCount}</span>
-                          </button>
-                        </div>
+                             <div className="flex items-center gap-2">
+                               <img src={`/takimlogo/${match.away?.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.awayLogo; }} />
+                               <span className="text-[13px] font-semibold text-white truncate">{match.away}</span>
+                             </div>
+                           </>
+                         )}
                       </div>
-                    );
-                  })}
-                </div>
+
+                      {/* Star */}
+                      <div className="w-[30px] flex justify-center shrink-0 hidden sm:flex">
+                         <Star size={14} className="text-slate-600 hover:text-[#e3b341] cursor-pointer transition-colors" />
+                      </div>
+
+                      {/* Odds */}
+                      <div className="flex gap-2 shrink-0 mt-3 sm:mt-0 justify-between sm:justify-start">
+                        {match.away !== '' ? (
+                          <>
+                            {['1', 'X', '2'].map((oddType) => {
+                              const oddValue = oddType === '1' ? match.homeOdd : oddType === 'X' ? match.drawOdd : match.awayOdd;
+                              const oddId = oddType === '1' ? match.homeId : oddType === 'X' ? match.drawId : match.awayId;
+                              
+                              return (
+                                <button 
+                                  key={oddType}
+                                  onClick={() => handleBetClick(oddId || '', oddValue, oddType)}
+                                  className={`flex-1 sm:flex-none sm:w-[45px] h-[36px] sm:h-[32px] rounded border flex flex-col sm:flex-row items-center justify-center transition-colors ${isSelected(oddId || '') ? 'bg-[#10b981] text-black font-bold shadow-md border-none' : 'border-white/5 bg-[#25262b] text-white hover:bg-[#10b981]/10 hover:border-[#10b981]/50 hover:text-[#10b981] group/odd transition-all duration-300'}`}
+                                >
+                                  <span className="text-[11px] font-bold tabular-nums">{oddValue}</span>
+                                </button>
+                              );
+                            })}
+                          </>
+                        ) : (
+                          <div className="flex gap-2 opacity-0 select-none hidden sm:flex">
+                            <div className="w-[45px] h-[32px]" />
+                            <div className="w-[45px] h-[32px]" />
+                            <div className="w-[45px] h-[32px]" />
+                          </div>
+                        )}
+
+                        {/* More */}
+                        <button className="w-[50px] h-[36px] sm:h-[32px] rounded border border-purple-500/30 bg-purple-500/10 flex items-center justify-center hover:bg-purple-500/20 hover:border-purple-500/50 transition-colors">
+                          <span className="text-[10px] font-bold text-purple-400 tabular-nums">+{match.marketsCount}</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
+          )}
           
-          {Object.keys(groupedByLeague).length === 0 && (
-             <div className="text-center py-20 text-slate-500 font-medium text-sm">
-                {language === 'tr' ? 'Bu spor dalında günün maçı bulunmamaktadır.' : 'No upcoming matches found for this sport.'}
+          {filteredMatches.length === 0 && (
+             <div className="text-center py-20 text-slate-500 font-medium text-sm bg-[#18191c] rounded-xl border border-white/5">
+                {language === 'tr' ? 'Seçilen zaman diliminde maç bulunmamaktadır.' : 'No upcoming matches found for this timeframe.'}
              </div>
           )}
         </div>

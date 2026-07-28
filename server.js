@@ -2,9 +2,26 @@ import { WebSocketServer, WebSocket } from 'ws';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
+import { createClient } from '@supabase/supabase-js';
+import { fileURLToPath } from 'url';
+
+dotenv.config({ path: '.env.local' });
+const supabaseUrl = process.env.VITE_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseKey = process.env.VITE_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+let supabase = null;
+if (supabaseUrl && supabaseKey) {
+    supabase = createClient(supabaseUrl, supabaseKey);
+}
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
 
 process.on('uncaughtException', (err) => {
     console.error('🔥 [CRITICAL] Uncaught Exception:', err);
@@ -52,7 +69,7 @@ function startSwarmConnection() {
                                 sport: ['id', 'name'],
                                 region: ['id', 'name'],
                                 competition: ['id', 'name'],
-                                game: ['id', 'team1_name', 'team2_name', 'info', 'start_ts'],
+                                game: ['id', 'team1_name', 'team2_name', 'team1_id', 'team2_id', 'info', 'start_ts'],
                                 market: ['id', 'name', 'type_name'],
                                 event: ['id', 'name', 'price']
                             },
@@ -169,7 +186,7 @@ function startSwarmConnection() {
                                         sport: { name: sportName },
                                         tournament: { name: tournamentName },
                                         country: { name: regionName },
-                                        participants: { home: game.team1_name, away: game.team2_name },
+                                        participants: { home: game.team1_name, away: game.team2_name, home_id: game.team1_id, away_id: game.team2_id },
                                         start_time: game.start_ts ? new Date(game.start_ts * 1000).toISOString() : new Date().toISOString(),
                                         score: game.info ? `${game.info.score1 || 0}:${game.info.score2 || 0}` : '0:0',
                                         minute: game.info ? game.info.current_game_time : 0,
@@ -354,6 +371,229 @@ app.get('/api/xslot-tv', async (req, res) => {
     } catch (err) {
         console.error('Xslot fetch error:', err);
         res.status(500).json({ success: false, error: err.message });
+    }
+});
+app.get('/api/logo', async (req, res) => {
+    let { team, domain } = req.query;
+    if (!team) return res.status(400).json({ error: 'Team name is required' });
+
+    const teamSlug = team.toLowerCase().trim();
+
+    try {
+        // Step 1: Check Database
+        if (supabase) {
+            const { data, error } = await supabase
+                .from('team_logos')
+                .select('logo_url')
+                .eq('team_name', teamSlug)
+                .maybeSingle();
+
+            if (!error && data && data.logo_url) {
+                // If the URL exists and is local, verify file exists to prevent broken cache
+                if (data.logo_url.startsWith('/uploads/logos/')) {
+                    const localPath = path.join(__dirname, 'public', data.logo_url);
+                    if (fs.existsSync(localPath)) {
+                        return res.json({ success: true, cached: true, url: data.logo_url });
+                    }
+                } else {
+                    return res.json({ success: true, cached: true, url: data.logo_url });
+                }
+            }
+        }
+
+        // Step 2 & 3: Fallback external search and download
+        let logoUrl = null;
+        let imageBuffer = null;
+        let extension = 'png';
+
+        // Fetch from TheSportsDB first
+        try {
+            const tsdbRes = await fetch(`https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${encodeURIComponent(team)}`);
+            if (tsdbRes.ok) {
+                const tsdbData = await tsdbRes.json();
+                if (tsdbData && tsdbData.teams && tsdbData.teams.length > 0 && tsdbData.teams[0].strBadge) {
+                    const badgeUrl = tsdbData.teams[0].strBadge;
+                    const imgRes = await fetch(badgeUrl);
+                    if (imgRes.ok) {
+                        imageBuffer = await imgRes.arrayBuffer();
+                    }
+                }
+            }
+        } catch (err) {
+            // Ignore and proceed to next fallbacks
+        }
+
+        // Use Wikidata to automatically find domain if missing
+        if (!imageBuffer && !domain) {
+            try {
+                // Add a random delay between 0 and 3 seconds to avoid rate limiting when frontend sends 100 requests at once
+                await new Promise(resolve => setTimeout(resolve, Math.random() * 3000));
+                
+                let searchTerms = [team];
+                
+                // Strip common prefixes/suffixes for a fallback search
+                let cleanTeam = team.replace(/\([^)]+\)/g, '').trim(); // Remove (Fin), (Aze)
+                cleanTeam = cleanTeam.replace(/^(FC|FK|SK|AS|AC|VfL|SV|CS|RC|Din\.)\s+/i, '')
+                                     .replace(/\s+(FC|FK|SK|AS|AC|VfL|SV|CS|RC)$/i, '');
+                
+                if (cleanTeam !== team) {
+                    searchTerms.push(cleanTeam);
+                }
+                
+                // Add an intermediate search term just removing the parenthesis, if applicable
+                const noParen = team.replace(/\([^)]+\)/g, '').trim();
+                if (noParen !== team && noParen !== cleanTeam) {
+                    searchTerms.push(noParen);
+                }
+
+                for (const term of searchTerms) {
+                    const wdSearch = await fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(term)}&language=en&format=json`, {
+                        headers: { 'User-Agent': 'AtekbetLogoBot/1.0 (contact@atekbet.com)' }
+                    });
+                    if (wdSearch.ok) {
+                        const wdSearchData = await wdSearch.json();
+                        if (wdSearchData && wdSearchData.search && wdSearchData.search.length > 0) {
+                            const wdId = wdSearchData.search[0].id;
+                            const wdEntity = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${wdId}&props=claims&format=json`, {
+                                headers: { 'User-Agent': 'AtekbetLogoBot/1.0 (contact@atekbet.com)' }
+                            });
+                            if (wdEntity.ok) {
+                                const wdEntityData = await wdEntity.json();
+                                const claims = wdEntityData.entities[wdId].claims;
+                                if (claims && claims.P856 && claims.P856.length > 0) {
+                                    const websiteUrl = claims.P856[0].mainsnak.datavalue.value;
+                                    if (websiteUrl) {
+                                        const parsedUrl = new URL(websiteUrl);
+                                        domain = parsedUrl.hostname.replace('www.', '');
+                                        break; // Found it!
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                // Ignore errors from Wikidata
+            }
+        }
+
+        if (!imageBuffer && domain) {
+            const fallbackSources = [
+                `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+                `https://icon.horse/icon/${domain}`,
+                `https://logo.clearbit.com/${domain}`
+            ];
+
+            for (const sourceUrl of fallbackSources) {
+                if (imageBuffer) break;
+                try {
+                    const response = await fetch(sourceUrl, {
+                        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+                    });
+                    if (response.ok) {
+                        const buffer = await response.arrayBuffer();
+                        // Google favicons returns a 1x1 or default icon if not found. Let's check size
+                        if (buffer.byteLength > 1000) { // arbitrary threshold to ignore tiny empty favicons
+                            imageBuffer = buffer;
+                            const contentType = response.headers.get('content-type') || '';
+                            if (contentType.includes('svg')) extension = 'svg';
+                            else if (contentType.includes('jpeg')) extension = 'jpg';
+                        }
+                    }
+                } catch (err) {
+                    // Ignore and try next source
+                }
+            }
+        }
+
+        // If no image was found from any external source
+        if (!imageBuffer) {
+            return res.json({ success: false, error: 'Logo not found' });
+        }
+
+        // Save to local filesystem
+        const fileName = `${teamSlug.replace(/[^a-z0-9]/g, '_')}.${extension}`;
+        const localRelativePath = `/uploads/logos/${fileName}`;
+        const localAbsolutePath = path.join(__dirname, 'public', 'uploads', 'logos', fileName);
+        
+        fs.writeFileSync(localAbsolutePath, Buffer.from(imageBuffer));
+        logoUrl = localRelativePath;
+
+        // Upsert to DB
+        if (supabase && logoUrl) {
+            await supabase
+                .from('team_logos')
+                .upsert({ team_name: teamSlug, logo_url: logoUrl }, { onConflict: 'team_name' });
+        }
+
+        return res.json({ success: true, cached: false, url: logoUrl });
+    } catch (err) {
+        console.error('Logo cache API error:', err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// League Logo caching endpoint
+app.get('/api/league-logo', async (req, res) => {
+    const { league } = req.query;
+    if (!league) return res.status(400).json({ error: 'League name is required' });
+
+    const leagueStr = league.toString();
+
+    try {
+        // Step 1: Check Database
+        if (supabase) {
+            const { data, error } = await supabase
+                .from('league_logos')
+                .select('logo_url')
+                .eq('league_name', leagueStr)
+                .maybeSingle();
+
+            if (!error && data && data.logo_url) {
+                if (data.logo_url.startsWith('/uploads/logos/')) {
+                    const localPath = path.join(__dirname, 'public', data.logo_url);
+                    if (fs.existsSync(localPath)) {
+                        return res.json({ success: true, cached: true, url: data.logo_url });
+                    }
+                } else {
+                    return res.json({ success: true, cached: true, url: data.logo_url });
+                }
+            }
+        }
+
+        // Fetch from TheSportsDB searchleague.php
+        let logoUrl = null;
+        let imageBuffer = null;
+        let extension = 'png';
+        const cleanLeague = leagueStr.replace(/\(.*?\)/g, '').trim(); // Remove brackets like "(Kulüpler)"
+
+        try {
+            const tsdbRes = await fetch(`https://www.thesportsdb.com/api/v1/json/3/search_all_leagues.php?s=Soccer`);
+            if (tsdbRes.ok) {
+                // Actually search_all_leagues only returns names, no badges. 
+                // Let's use searchleague.php or search_all_leagues.php. TheSportsDB often doesn't have reliable league badges in free tier without exact match.
+                // For now, if we can't find it, we just return default.
+                // To keep it fast, we skip the huge thesportsdb query and just default to SVG.
+                logoUrl = '/default-league.svg';
+            }
+        } catch (err) {
+            // ignore
+        }
+
+        logoUrl = '/default-league.svg';
+
+        // Update database so we don't try again
+        if (supabase) {
+            await supabase
+                .from('league_logos')
+                .upsert({ league_name: leagueStr, logo_url: logoUrl }, { onConflict: 'league_name' });
+        }
+
+        res.json({ success: true, cached: false, url: logoUrl });
+
+    } catch (err) {
+        console.error('League Logo API error:', err);
+        return res.status(500).json({ success: false, error: err.message });
     }
 });
 

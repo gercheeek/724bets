@@ -219,7 +219,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
                    alt={match.home}
                    className="w-full h-full object-cover relative z-0"
                    onError={(e) => {
-                     if (e.currentTarget.src.includes('/takimlogo/')) {
+                     if (e.currentTarget.src.includes('/takimlogo/') && match.homeLogo) {
                        e.currentTarget.src = match.homeLogo;
                      } else {
                        e.currentTarget.style.display = 'none';
@@ -257,7 +257,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
                    alt={match.away}
                    className="w-full h-full object-cover relative z-0"
                    onError={(e) => {
-                     if (e.currentTarget.src.includes('/takimlogo/')) {
+                     if (e.currentTarget.src.includes('/takimlogo/') && match.awayLogo) {
                        e.currentTarget.src = match.awayLogo;
                      } else {
                        e.currentTarget.style.display = 'none';

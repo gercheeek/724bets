@@ -30,10 +30,50 @@ const Sidebar: React.FC<SidebarProps> = ({
   const { t } = useLanguage();
   const { setActiveSport } = useBetting();
 
-  // Accordion states
-  const [isCasinoOpen, setIsCasinoOpen] = useState(false);
-  const [isOriginalsOpen, setIsOriginalsOpen] = useState(false);
-  const [isPromoOpen, setIsPromoOpen] = useState(true); // Promosyonlar expanded in screenshot
+  // Dynamic Sidebar State
+  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({ promo_menu: true, casino_menu: true });
+
+  const toggleAccordion = (id: string) => {
+    setOpenAccordions(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const sidebarItems = [
+    { id: 'home', label: 'Anasayfa', icon: Crown, route: 'home' },
+    { id: 'favorites', label: 'Sık Kullanılanlar', icon: Star, route: 'favorites' },
+    { id: 'recent', label: 'Son Oynanan', icon: Clock, route: 'recent' },
+    { id: 'new', label: 'Yeni Çıkanlar', icon: Sparkles, route: 'new' },
+    { type: 'divider' },
+    {
+      id: 'casino_menu', label: 'Casino', icon: Cherry, route: 'casino',
+      children: [
+        { id: 'casino_all', label: 'Tüm Oyunlar', route: 'casino' },
+        { id: 'slots', label: 'Slotlar', route: 'slots' },
+        { id: 'live-casino', label: 'Canlı Casino', route: 'live-casino' }
+      ]
+    },
+    {
+      id: 'originals_menu', label: 'Originals', icon: Radio, route: 'originals',
+      children: [
+        { id: 'originals_all', label: 'Tüm Originals', route: 'originals' },
+        { id: 'crash', label: 'Crash', route: 'crash-turbo' },
+        { id: 'plinko', label: 'Plinko', route: 'plinko' }
+      ]
+    },
+    {
+      id: 'promo_menu', label: 'Promosyonlar', icon: Percent,
+      children: [
+        { id: 'promo_all', label: 'Bonuslar', route: 'promo' },
+        { id: 'tournaments', label: 'Turnuvalar', route: 'tournaments' }
+      ]
+    }
+  ];
+
+  const bottomItems = [
+    { id: 'rewards', label: 'Ödüller', icon: Gift, route: 'rewards' },
+    { id: 'docs', label: 'Belge', icon: FileText, route: 'docs' },
+    { id: 'support', label: 'Canlı Destek', icon: Headphones, action: 'openChat' },
+    { id: 'lang', label: 'Dil', icon: Globe, action: 'openLang' }
+  ];
 
   const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches'].includes(activeView);
   const isCasinoView = ['casino', 'slots', 'live-casino', 'originals'].includes(activeView);
@@ -61,13 +101,15 @@ const Sidebar: React.FC<SidebarProps> = ({
     </div>
   );
 
-  const AccordionItem = ({ icon: Icon, label, isOpenState, setIsOpenState, children }: any) => {
+  const AccordionItem = ({ icon: Icon, label, id, children, route }: any) => {
+    const isOpenState = openAccordions[id] || false;
     return (
       <div className={`relative group mx-3 mb-1 transition-all duration-300 ${isOpen ? 'overflow-hidden' : ''} bg-transparent`}>
         <div 
           className={`flex items-center justify-between px-2 py-2.5 cursor-pointer transition-all duration-300 text-[#8b92a5] hover:text-white ${isOpenState ? 'text-white' : ''}`}
           onClick={() => {
-            if (isOpen) setIsOpenState(!isOpenState);
+            if (isOpen) toggleAccordion(id);
+            if (route) onViewChange(route);
           }}
         >
           <div className="flex items-center">
@@ -176,7 +218,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Horizontal Toggle */}
           <div className={`flex items-center bg-[#131823] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
-            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${!isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
+            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isCasinoView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
               <Cherry className="w-4 h-4 mr-1.5" />
               Casino
             </button>
@@ -191,10 +233,10 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* Vertical Toggle Box for Collapsed State */}
           {!isOpen && (
             <div className="flex flex-col items-center bg-[#1b2230] p-1 rounded-[8px] w-12 mx-auto mb-6">
-              <button onClick={() => onViewChange('casino')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors mb-1 ${activeView !== 'spor724' ? 'bg-[#0f7bff] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>
+              <button onClick={() => onViewChange('casino')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors mb-1 ${isCasinoView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>
                 <Cherry className="w-5 h-5" />
               </button>
-              <button onClick={() => onViewChange('spor724')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors ${activeView === 'spor724' ? 'bg-[#0f7bff] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>
+              <button onClick={() => onViewChange('spor724')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors ${isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>
                 <Target className="w-5 h-5" />
               </button>
             </div>
@@ -235,31 +277,22 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
               </div>
 
-              {/* Main Links */}
-              <NavItem icon={Crown} label="Anasayfa" isActive={activeView === 'home'} onClick={() => onViewChange('home')} />
-              <NavItem icon={Star} label="Sık Kullanılanlar" isActive={activeView === 'favorites'} onClick={() => onViewChange('favorites')} />
-              <NavItem icon={Clock} label="Son Oynanan" isActive={activeView === 'recent'} onClick={() => onViewChange('recent')} />
-              <NavItem icon={Sparkles} label="Yeni Çıkanlar" isActive={activeView === 'new'} onClick={() => onViewChange('new')} />
-
-              <div className="w-full mb-4" />
-
-              {/* Collapsible Sections */}
-              <AccordionItem icon={Cherry} label="Casino" isOpenState={isCasinoOpen} setIsOpenState={setIsCasinoOpen}>
-                <SubMenuItem label="Tüm Oyunlar" isActive={activeView === 'casino'} onClick={() => onViewChange('casino')} />
-                <SubMenuItem label="Slotlar" isActive={activeView === 'slots'} onClick={() => onViewChange('slots')} />
-                <SubMenuItem label="Canlı Casino" isActive={activeView === 'live-casino'} onClick={() => onViewChange('live-casino')} />
-              </AccordionItem>
-
-              <AccordionItem icon={Radio} label="Originals" isOpenState={isOriginalsOpen} setIsOpenState={setIsOriginalsOpen}>
-                <SubMenuItem label="Tüm Originals" isActive={activeView === 'originals'} onClick={() => onViewChange('originals')} />
-                <SubMenuItem label="Crash" isActive={activeView === 'crash'} onClick={() => onViewChange('crash')} />
-                <SubMenuItem label="Plinko" isActive={activeView === 'plinko'} onClick={() => onViewChange('plinko')} />
-              </AccordionItem>
-
-              <AccordionItem icon={Percent} label="Promosyonlar" isOpenState={isPromoOpen} setIsOpenState={setIsPromoOpen}>
-                <SubMenuItem label="Bonuslar" isActive={activeView === 'promo'} onClick={() => onViewChange('promo')} />
-                <SubMenuItem label="Turnuvalar" isActive={activeView === 'tournaments'} onClick={() => onViewChange('tournaments')} />
-              </AccordionItem>
+              {/* Dynamic Menu Rendering */}
+              {sidebarItems.map((item, index) => {
+                if (item.type === 'divider') return <div key={'div-'+index} className="w-full mb-4" />;
+                if (item.children) {
+                  return (
+                    <AccordionItem key={item.id} id={item.id} icon={item.icon} label={item.label} route={item.route}>
+                      {item.children.map((child: any) => (
+                        <SubMenuItem key={child.id} label={child.label} isActive={activeView === child.route} onClick={() => onViewChange(child.route)} />
+                      ))}
+                    </AccordionItem>
+                  );
+                }
+                return (
+                  <NavItem key={item.id} icon={item.icon} label={item.label} isActive={activeView === item.route} onClick={() => onViewChange(item.route)} />
+                );
+              })}
             </>
           )}
 
@@ -267,10 +300,19 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Bottom Section (Sticky at bottom) */}
         <div className="w-full flex flex-col pt-3 pb-3 gap-1 border-t border-white/5 bg-[#0A0D14] relative z-20 mt-auto">
-          <NavItem icon={Gift} label="Ödüller" isActive={activeView === 'rewards'} onClick={() => onViewChange('rewards')} />
-          <NavItem icon={FileText} label="Belge" isActive={false} onClick={() => {}} />
-          <NavItem icon={Headphones} label="Canlı Destek" isActive={false} onClick={() => window.dispatchEvent(new CustomEvent('openMobileChatPanel'))} />
-          <NavItem icon={Globe} label="Dil" isActive={false} onClick={() => {}} />
+          {bottomItems.map(item => (
+            <NavItem 
+              key={item.id} 
+              icon={item.icon} 
+              label={item.label} 
+              isActive={item.route ? activeView === item.route : false} 
+              onClick={() => {
+                if (item.route) onViewChange(item.route);
+                else if (item.action === 'openChat') window.dispatchEvent(new CustomEvent('openMobileChatPanel'));
+                else if (item.action === 'openLang') {/* toggle lang */}
+              }} 
+            />
+          ))}
         </div>
 
       </div>

@@ -56,6 +56,7 @@ export const SportsHeroBanner: React.FC = () => {
       const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
       
       for (const market of markets) {
+         if (!market || typeof market !== 'string') continue;
          const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
          if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
             const parts = market.split('|');

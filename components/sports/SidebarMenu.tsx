@@ -81,13 +81,19 @@ export const SidebarMenu: React.FC<{
                 <span className="text-[13px] font-bold">Popüler Karşılaşmalar</span>
               </div>
             </button>
-            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-all group">
+            <button 
+              onClick={() => window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'favorites' }))}
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-all group"
+            >
               <div className="flex items-center gap-3">
                 <Star className="w-[18px] h-[18px] text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.4)]" />
                 <span className="text-[13px] font-bold">Favorilerim</span>
               </div>
             </button>
-            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-all group">
+            <button 
+              onClick={() => window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'upcoming' }))}
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-all group"
+            >
               <div className="flex items-center gap-3">
                 <Clock className="w-[18px] h-[18px] text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]" />
                 <span className="text-[13px] font-bold">Yaklaşan Maçlar</span>

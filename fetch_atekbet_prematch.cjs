@@ -54,7 +54,7 @@ ws.on('message', (d) => {
                source: 'betting',
                what: {
                  competition: ['id', 'name'],
-                 game: ['id', 'team1_name', 'team2_name', 'start_ts', 'type', 'is_live'],
+                 game: ['id', 'team1_name', 'team2_name', 'team1_id', 'team2_id', 'start_ts', 'type', 'is_live'],
                  market: ['id', 'name', 'type_name'],
                  event: ['id', 'name', 'price']
                },
@@ -133,7 +133,7 @@ ws.on('message', (d) => {
                   sport: { name: regMeta.sportName },
                   tournament: { name: tournamentName },
                   country: { name: regMeta.regionName },
-                  participants: { home: game.team1_name, away: game.team2_name },
+                  participants: { home: game.team1_name, away: game.team2_name, home_id: game.team1_id, away_id: game.team2_id },
                   start_time: new Date(game.start_ts * 1000).toISOString(),
                   group_markets: {
                      'full_event|0': [oddsStr]

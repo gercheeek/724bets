@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const Root = () => {
-  return <App />;
+  return (
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  );
 };
 
 const rootElement = document.getElementById('root');

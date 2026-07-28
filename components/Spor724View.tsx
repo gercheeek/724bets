@@ -7,10 +7,13 @@ import { AnimatedOdd } from './AnimatedOdd';
 import Footer from './Footer';
 import { ArrowRight, Trophy, Star, Bell, Clock, Search, ShieldCheck, Zap, Activity, Target, Gamepad2, Flame, Volume2, VolumeX, ChevronDown, Radio } from 'lucide-react';
 import { SidebarMenu } from './sports/SidebarMenu';
-import { DualRightPanel } from './sports/DualRightPanel';
-import { LiveMatchModal } from './sports/LiveMatchModal';
+import DualRightPanel from './sports/DualRightPanel';
+import FeaturedCombos from './sports/FeaturedCombos';
+import { useAuth } from '../contexts/AuthContext';
+import { LiveMatchInline } from './sports/LiveMatchInline';
 import { useBetSlip } from '../contexts/BetSlipContext';
 import { MatchInfo } from './sports/types';
+import { mockSportsData } from '../data/mockSportsData';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import { SportsNavV2 } from './sports/SportsNavV2';
 import { FeaturedCarouselV2 } from './sports/FeaturedCarouselV2';
@@ -18,9 +21,14 @@ import { MatchListV2 } from './sports/MatchListV2';
 import { SporxSidebar } from './SporxSidebar';
 import ModernChat from './ModernChat';
 import { SporxBetSlip } from './SporxBetSlip';
-import { RainbetMatchCard } from './sports/RainbetMatchCard';
+import { MatchCard } from './sports/MatchCard';
 import SportsPromoSlider from './sports/SportsPromoSlider';
+import { TopMatchesWidget } from './sports/TopMatchesWidget';
 import SportsIconNav from './sports/SportsIconNav';
+import FavoritesEmptyState from './sports/FavoritesEmptyState';
+import MyBetsEmptyState from './sports/MyBetsEmptyState';
+import { PopularEventsAccordion } from './sports/PopularEventsAccordion';
+
 interface BetSelection {
   id: string;
   matchId: string;
@@ -190,19 +198,10 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     } catch (e) {}
   }
 
-  if (dateObj) {
-    const now = new Date();
-    
-    // DEMO HACK: If the date is in the past (e.g. from a stale JSON file), 
-    // push it forward to today or tomorrow so the demo looks fresh
-    if (dateObj.getTime() < now.getTime() - 24 * 60 * 60 * 1000) {
-        dateObj.setDate(now.getDate() + (Math.random() > 0.5 ? 0 : 1));
-        dateObj.setMonth(now.getMonth());
-        dateObj.setFullYear(now.getFullYear());
-    }
-
-    const hours = String(dateObj.getHours()).padStart(2, '0');
-    const mins = String(dateObj.getMinutes()).padStart(2, '0');
+    if (dateObj) {
+      const now = new Date();
+      const hours = String(dateObj.getHours()).padStart(2, '0');
+      const mins = String(dateObj.getMinutes()).padStart(2, '0');
     startTime = `${hours}:${mins}`;
 
     const dayNum = dateObj.getDate();
@@ -256,14 +255,7 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   const awayTeamId = data.participants?.away_id || data.participants?.ByNumber?.['2']?.Id || '';
   
   let homeLogoUrl = data.participants?.ByNumber?.['1']?.LogoPath || '';
-  if (!homeLogoUrl && homeTeamId) {
-    homeLogoUrl = `https://opt-images.betconstruct.com/team-logo/${homeTeamId}.png`;
-  }
-  
   let awayLogoUrl = data.participants?.ByNumber?.['2']?.LogoPath || '';
-  if (!awayLogoUrl && awayTeamId) {
-    awayLogoUrl = `https://opt-images.betconstruct.com/team-logo/${awayTeamId}.png`;
-  }
   
   const countryName = mapCountryName(data.country?.name, language);
   const tournamentName = data.tournament?.name || 'Uluslararası Turnuva';
@@ -283,7 +275,7 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   const markets = Array.isArray(rawMarkets) ? rawMarkets : [];
   
   for (const market of markets) {
-     if (!market) continue;
+     if (!market || typeof market !== 'string') continue;
      const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
      if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
         const parts = market.split('|');
@@ -295,8 +287,11 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
               const sParts = sel.split('~');
               if (sParts.length > 2) {
                 const type = sParts[1].toLowerCase();
-                const odd = parseFloat(sParts[2]);
+                let odd = parseFloat(sParts[2]);
                 if (!isNaN(odd)) {
+                    if (odd < 0) odd = Math.abs(odd);
+                    if (odd < 1) odd += 1;
+                    if (odd < 1.01) odd = 1.01;
                     const oddStr = odd.toFixed(2);
                     if (type === 'home' || type === '1') { homeOdd = oddStr; }
                     if (type === 'draw' || type === 'x') { drawOdd = oddStr; }
@@ -323,6 +318,7 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     isFinished,
     score,
     minute,
+    timestamp: dateObj ? dateObj.getTime() : 0,
     startTime: startTime || minute,
     matchDate,
     fullDate,
@@ -341,25 +337,6 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     rawEvent: ev,
   };
 
-  const virtualKeywords = [
-    'cyber', 'sanal', 'virtual', 'simulated', 'srl', 'esoccer', 'ebasketball', 'etennis',
-    'esports', 'e-sports', 'fifa', 'nba2k', 'gt sports', 'h2hgg', 'dota', 'counter-strike',
-    'cs:go', 'cs2', 'valorant', 'league of legends', 'rocket league', 'overwatch', 'starcraft',
-    'crossfire', 'king of glory', 'pubg', 'penaltı atışları', 'penalty shootout', 'sub soccer'
-  ];
-
-  const combinedSearchStr = `${sport} ${country} ${league} ${homeTeam} ${awayTeam}`.toLowerCase();
-  const isFakeMatch = virtualKeywords.some(kw => combinedSearchStr.includes(kw));
-
-  const isDuplicateMock = 
-    (homeTeam.toLowerCase().includes('spain') || homeTeam.toLowerCase().includes('ispanya') || homeTeam.toLowerCase().includes('arjantin') || homeTeam.toLowerCase().includes('argentina')) ||
-    (homeTeam.toLowerCase().includes('france') || homeTeam.toLowerCase().includes('fransa') || homeTeam.toLowerCase().includes('portekiz') || homeTeam.toLowerCase().includes('portugal')) ||
-    (homeTeam.toLowerCase().includes('england') || homeTeam.toLowerCase().includes('ingiltere') || homeTeam.toLowerCase().includes('brezilya') || homeTeam.toLowerCase().includes('brazil'));
-    
-  if (isFakeMatch || isDuplicateMock) {
-     return null;
-  }
-  
   return matchObj;
 };
 
@@ -368,8 +345,30 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   const { isConnected, events } = useBetting();
   const [selectedMatch, setSelectedMatch] = useState<MatchInfo | null>(null);
   const [activeTab, setActiveTab] = useState('in-play');
+  const [navTab, setNavTab] = useState('home');
+  const isAuthenticated = typeof window !== 'undefined' ? !!localStorage.getItem('site_member') : false;
   const allSportsTabName = language === 'tr' ? 'Tüm Sporlar' : 'All Sports';
   const [activeSport, setActiveSport] = useState(allSportsTabName);
+  const [currentPath, setCurrentPath] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
+  
+  useEffect(() => {
+    const handleLocationChange = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
+
+  const activeSlug = currentPath.startsWith('/spor/') ? currentPath.split('/')[2] : '';
+
+  useEffect(() => {
+    if (activeSlug) {
+      const sportObj = mockSportsData.find(m => m.slug === activeSlug);
+      if (sportObj) {
+        setActiveSport(sportObj.sport);
+      }
+    } else {
+      setActiveSport(allSportsTabName);
+    }
+  }, [activeSlug, allSportsTabName]);
   const [activeCountry, setActiveCountry] = useState<string | null>(null);
   const [activeDateFilter, setActiveDateFilter] = useState<'all' | 'today' | 'tomorrow'>('all');
   const [visibleCount, setVisibleCount] = useState<number>(30);
@@ -389,15 +388,44 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         window.dispatchEvent(new Event('setRightPanelToChat'));
       }, 50);
     };
+
+    const handleSportsTabChange = (e: any) => {
+      const tab = e.detail;
+      if (tab === 'home' || tab === 'hepsi') {
+        setActiveTab('in-play');
+        setActiveSport(allSportsTabName);
+        setViewMode('home');
+        setNavTab('home');
+      } else if (tab === 'canli') {
+        setActiveTab('in-play');
+        setActiveSport(allSportsTabName);
+        setViewMode('live');
+        setNavTab('canli');
+      } else if (tab === 'upcoming') {
+        setActiveTab('pre-match');
+        setActiveSport(allSportsTabName);
+        setViewMode('bulletin');
+        setNavTab('upcoming');
+      } else if (tab === 'mybets') {
+        // Bahislerim is handled by right sidebar or another view typically
+        setNavTab('mybets');
+      } else {
+        // Specific sport selected (e.g. 'Futbol')
+        setActiveSport(tab);
+      }
+    };
+
     window.addEventListener('openMobileChatPanel', handleOpenMobileChat);
+    window.addEventListener('changeSportsTab', handleSportsTabChange);
     return () => {
       window.removeEventListener('openMobileChatPanel', handleOpenMobileChat);
+      window.removeEventListener('changeSportsTab', handleSportsTabChange);
     };
-  }, []);
+  }, [allSportsTabName]);
   
   const { betSlip } = useBetSlip();
   
-  const [viewMode, setViewMode] = useState<'live' | 'bulletin'>('live');
+  const [viewMode, setViewMode] = useState<'home' | 'live' | 'bulletin'>('home');
   const [bulletinMatches, setBulletinMatches] = useState<MatchInfo[]>([]);
   const [isBulletinLoading, setIsBulletinLoading] = useState(false);
 
@@ -514,7 +542,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
       abortController.abort(); // Cancel previous ongoing request to prevent race conditions
       abortController = new AbortController();
       
-      fetch(`/live_matches.json?t=${new Date().getTime()}`, { signal: abortController.signal })
+      const endpoint = (viewMode === 'live' || viewMode === 'home') ? '/live_matches.json' : '/prelive_matches.json';
+      
+      fetch(`${endpoint}?t=${new Date().getTime()}`, { signal: abortController.signal })
         .then(res => res.json())
         .then(data => {
            const parsed: MatchInfo[] = [];
@@ -531,16 +561,23 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
              });
            }
            if (parsed.length > 0) {
-              setMatches(prev => {
-                // Smooth merge: check if changed before replacing to avoid DOM flickering
-                if (JSON.stringify(prev) === JSON.stringify(parsed)) return prev;
-                return parsed;
-              });
+              if (viewMode === 'live' || viewMode === 'home') {
+                setMatches(prev => {
+                  // Smooth merge: check if changed before replacing to avoid DOM flickering
+                  if (JSON.stringify(prev) === JSON.stringify(parsed)) return prev;
+                  return parsed;
+                });
+              } else {
+                setBulletinMatches(prev => {
+                  if (JSON.stringify(prev) === JSON.stringify(parsed)) return prev;
+                  return parsed;
+                });
+              }
            }
         })
         .catch(err => {
           if (err.name !== 'AbortError') {
-             console.error("Error fetching live matches:", err);
+             console.error(`Error fetching ${viewMode} matches:`, err);
           }
         })
         .finally(() => setIsLoading(false));
@@ -557,10 +594,14 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         return parsedMatches;
       });
       setIsLoading(false);
-    } else if (viewMode === 'live') {
+    } else if (viewMode === 'live' || viewMode === 'home') {
       if (matches.length === 0) setIsLoading(true);
       fetchFromJSON();
       interval = setInterval(fetchFromJSON, 2000); // Smooth 2s polling
+    } else if (viewMode === 'bulletin') {
+      if (bulletinMatches.length === 0) setIsLoading(true);
+      fetchFromJSON();
+      interval = setInterval(fetchFromJSON, 10000); // Smooth 10s polling for pre-match
     }
     
     return () => {
@@ -569,14 +610,24 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     };
   }, [events, viewMode, language]);
 
-  const currentMatches = viewMode === 'live' ? matches : bulletinMatches;
+  const currentMatches = (viewMode === 'live' || viewMode === 'home') 
+    ? [...matches] 
+    : [...bulletinMatches];
+
   const sportsList = Array.from(new Set(currentMatches.map(m => m.sport)));
   const getSportCount = (sport: string) => currentMatches.filter(m => m.sport === sport).length;
+
+  const liveCountsMap: Record<string, number> = {};
+  matches.forEach(m => {
+    if (m.isLive) {
+       liveCountsMap[m.sport] = (liveCountsMap[m.sport] || 0) + 1;
+    }
+  });
 
   const isAllSportsSelected = activeSport === 'Tüm Sporlar' || activeSport === 'All Sports' || !activeSport;
 
   const filteredMatches = currentMatches.filter(m => {
-    if (viewMode === 'live' && !m.isLive) return false;
+    if ((viewMode === 'live' || viewMode === 'home') && !m.isLive) return false;
     if (!isAllSportsSelected && m.sport !== activeSport) return false;
     if (activeCountry && m.country !== activeCountry) return false;
     if (viewMode === 'bulletin' && activeDateFilter !== 'all') {
@@ -672,121 +723,182 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     .slice(0, 6);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-64px)] md:h-screen w-full bg-[#101114] text-zinc-300 font-sans overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-64px)] md:h-screen w-full bg-[#0a0c10] text-zinc-300 font-sans overflow-hidden relative">
       
-      {/* Top Nav (Rainbet Style) - Removed */ }
+      {/* Premium Luxury Background Layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Subtle Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+        
+        {/* Mesh Gradients (Soft Lights) */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#3b82f6]/5 blur-[120px] rounded-full mix-blend-screen"></div>
+        <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-[#6366f1]/5 blur-[120px] rounded-full mix-blend-screen"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-[600px] h-[600px] bg-[#3b82f6]/5 blur-[150px] rounded-full mix-blend-screen"></div>
+      </div>
+
       {/* Main Content Scrollable Area */}
-      <div className="flex-1 flex flex-row overflow-hidden relative z-10 bg-[#101114]">
-      <div className="flex-1 overflow-y-auto no-scrollbar relative z-10 bg-[#101114]">
+      <div className="flex-1 flex flex-row overflow-hidden relative z-10 bg-transparent">
+      <div className="flex-1 overflow-y-auto no-scrollbar relative z-10 bg-transparent">
         
         {/* Container for centering the layout like Rainbet */}
         <div className="max-w-[1200px] mx-auto pb-24 md:pb-12">
             
             {/* Top Icon Navigation (Moved above slider) */}
             <div className="px-4 md:px-6 pt-4 mb-4">
-                <SportsIconNav />
+                <SportsIconNav activeTab={navTab} liveCounts={liveCountsMap} onTabChange={(tab) => {
+                  setNavTab(tab);
+                  if (tab === 'canli') {
+                    setActiveTab('in-play');
+                    setViewMode('live');
+                  } else if (tab === 'home') {
+                    setActiveTab('in-play');
+                    setViewMode('home');
+                  } else if (tab === 'upcoming') {
+                    setActiveTab('pre-match');
+                    setViewMode('bulletin');
+                  }
+                }} />
             </div>
 
+            {selectedMatch ? (
+               <div className="px-2 md:px-4">
+                 <LiveMatchInline 
+                   match={selectedMatch} 
+                   onBack={() => setSelectedMatch(null)} 
+                   allLiveMatches={matches.filter(m => m.status === 'live' || m.minute)}
+                   onSelectAnotherMatch={setSelectedMatch} 
+                 />
+               </div>
+            ) : (
+               <>
             {/* Max Tier Official Partner Banner (Professional Edition) -> Now a Slider */}
-            <div className="px-4 md:px-6 mb-4">
-                <SportsPromoSlider />
-            </div>
-
-            {/* ── CENTRAL FEED ── */}
-
-            {/* Featured Matches Carousel (V2 updated) */}
-            <FeaturedCarouselV2 matches={filteredMatches} onSelectMatch={setSelectedMatch} />
-
-            {/* Sports Filter Pills (Rainbet Style) */}
-            <div className="px-4 md:px-6 mb-4">
-                <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-hide">
-                  <button
-                      onClick={() => setActiveSport(allSportsTabName)}
-                      className={`flex-shrink-0 px-4 py-2 text-[13px] font-bold rounded-full transition-colors whitespace-nowrap flex items-center gap-2 ${
-                        isAllSportsSelected
-                          ? 'bg-[#10b981] text-black font-bold shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                          : 'bg-[#18191c] text-[#8e939d] hover:bg-[#23273a] hover:text-white border border-white/5'
-                      }`}
-                  >
-                      {getSportIcon('Tüm Sporlar')}
-                      <span>{allSportsTabName}</span>
-                  </button>
-
-                  {sportsList.map(sport => (
-                    <button
-                      key={sport}
-                      onClick={() => setActiveSport(sport)}
-                      className={`flex-shrink-0 px-4 py-2 text-[13px] font-bold rounded-full transition-colors whitespace-nowrap flex items-center gap-2 ${
-                        activeSport === sport
-                          ? 'bg-[#10b981] text-black font-bold shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                          : 'bg-[#18191c] text-[#8e939d] hover:bg-[#23273a] hover:text-white border border-white/5'
-                      }`}
-                    >
-                      {getSportIcon(sport)}
-                      <span>{sport}</span>
-                    </button>
-                  ))}
-                </div>
-            </div>
-            
-            {/* Live Header */}
-            <div className="px-4 md:px-6 mb-4 flex items-center gap-2">
-                <Radio className="w-5 h-5 text-[#ef4444]" />
-                <h2 className="text-white text-xl font-black italic tracking-wide uppercase">Canlı</h2>
-            </div>
-
-            {/* Main Matches Area */}
-            <div className="px-4 md:px-6 pb-8">
-                {(isLoading || isBulletinLoading) && (
-                   <div className="text-center py-24 text-zinc-500 text-sm animate-pulse font-medium">
-                      {language === 'tr' ? 'Veriler yükleniyor...' : 'Loading data...'}
-                   </div>
-                )}
-                
-                {!(isLoading || isBulletinLoading) && filteredMatches.length === 0 && (
-                   <div className="text-center py-24 text-zinc-500 text-sm font-medium flex flex-col items-center justify-center bg-[#18191c] rounded-xl border border-white/5">
-                      <div className="w-16 h-16 bg-[#23273a] rounded-full flex items-center justify-center mb-4">
-                         <span className="text-2xl">⚽</span>
-                      </div>
-                      {language === 'tr' ? 'Bu sekmede veya branşta maç bulunamadı.' : 'No matches found in this section.'}
-                   </div>
-                )}
-                
-                {!(isLoading || isBulletinLoading) && (
-                    <div className="flex flex-col gap-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {filteredMatches.slice(0, visibleCount).map(match => (
-                                <RainbetMatchCard 
-                                    key={match.id}
-                                    match={match}
-                                    onSelect={setSelectedMatch}
-                                />
-                            ))}
-                        </div>
-                        {filteredMatches.length > visibleCount && (
-                            <button 
-                                onClick={() => setVisibleCount(p => p + 30)}
-                                className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-bold transition-colors"
-                            >
-                                {language === 'tr' ? 'Daha Fazla Göster' : 'Show More'}
-                            </button>
-                        )}
+            {navTab !== 'favorites' && navTab !== 'mybets' && (
+              <div className="px-4 md:px-6 mb-4">
+                  <SportsPromoSlider />
+                  
+                  {/* Featured Combos Widget */}
+                  {navTab !== 'canli' && viewMode !== 'bulletin' && (
+                    <div className="mt-8">
+                      <FeaturedCombos activeSport={activeSport} />
                     </div>
+                  )}
+              </div>
+            )}
+
+            {navTab === 'favorites' && !isAuthenticated ? (
+              <div className="px-4 md:px-6 mb-4">
+                <FavoritesEmptyState />
+              </div>
+            ) : navTab === 'mybets' && !isAuthenticated ? (
+              <div className="px-4 md:px-6 mb-4">
+                <MyBetsEmptyState />
+              </div>
+            ) : (
+              <>
+                {/* En İyi Maçlar Widget */}
+                {navTab === 'home' && (
+                  <div className="px-4 md:px-6 mb-4 mt-2 flex flex-col gap-6">
+                    <TopMatchesWidget matches={matches} />
+                    <PopularEventsAccordion matches={matches} onSelectMatch={setSelectedMatch} />
+                  </div>
                 )}
-            </div>
+                {/* ── CENTRAL FEED ── */}
+    
+                {/* Featured Matches Carousel (V2) removed per request */}
+
+            {/* LIVE AND BULLETIN MATCH LIST (Hidden on Home) */}
+            {viewMode !== 'home' && (
+              <>
+                {/* Removed Sports Filter Pills per request */}
+                
+                {/* Header */}
+                <div className="px-4 md:px-6 mb-4 flex items-center gap-2">
+                    {viewMode === 'live' ? (
+                        <>
+                            <Radio className="w-5 h-5 text-[#ef4444]" />
+                            <h2 className="text-white text-xl font-black italic tracking-wide uppercase">Canlı</h2>
+                        </>
+                    ) : (
+                        <>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-amber-500"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+                            <h2 className="text-white text-xl font-bold tracking-wide">Popüler</h2>
+                        </>
+                    )}
+                </div>
+
+                {/* Main Matches Area */}
+                <div className="px-4 md:px-6 pb-8">
+                    {(isLoading || isBulletinLoading) && (
+                       <div className="text-center py-24 text-zinc-500 text-sm animate-pulse font-medium">
+                          {language === 'tr' ? 'Veriler yükleniyor...' : 'Loading data...'}
+                       </div>
+                    )}
+                    
+                    {!(isLoading || isBulletinLoading) && filteredMatches.length === 0 && (
+                       <div className="text-center py-24 text-zinc-500 text-sm font-medium flex flex-col items-center justify-center bg-[#18191c] rounded-xl border border-white/5">
+                          <div className="w-16 h-16 bg-[#23273a] rounded-full flex items-center justify-center mb-4">
+                             <span className="text-2xl">⚽</span>
+                          </div>
+                          {language === 'tr' ? 'Bu sekmede veya branşta maç bulunamadı.' : 'No matches found in this section.'}
+                       </div>
+                    )}
+                    
+                    {!(isLoading || isBulletinLoading) && (
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-8">
+                                {Object.entries(
+                                  filteredMatches.slice(0, visibleCount).reduce((acc, match) => {
+                                      const sport = match.sport || 'Diğer';
+                                      if (!acc[sport]) acc[sport] = [];
+                                      acc[sport].push(match);
+                                      return acc;
+                                  }, {} as Record<string, typeof matches>)
+                                ).map(([sport, sportMatches]) => (
+                                    <div key={sport} className="flex flex-col gap-3">
+                                        <div className="flex items-center gap-2 px-1 border-b border-white/5 pb-2">
+                                            <div className="w-6 h-6 rounded-md bg-[#3b82f6]/10 text-[#3b82f6] flex items-center justify-center">
+                                                {getSportIcon(sport)}
+                                            </div>
+                                            <h3 className="text-white font-bold text-[15px] uppercase tracking-wide">{sport}</h3>
+                                            <div className="ml-auto text-xs font-bold text-zinc-500 bg-white/5 px-2 py-0.5 rounded-full">
+                                                {sportMatches.length}
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                                            {sportMatches.map(match => (
+                                                <MatchCard 
+                                                    key={match.id}
+                                                    match={match}
+                                                    isGoal={false}
+                                                    onSelect={setSelectedMatch}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            {filteredMatches.length > visibleCount && (
+                                <button 
+                                    onClick={() => setVisibleCount(p => p + 30)}
+                                    className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-bold transition-colors"
+                                >
+                                    {language === 'tr' ? 'Daha Fazla Göster' : 'Show More'}
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </div>
+              </>
+            )}
+              </>
+            )}
 
             <Footer />
+          </>
+        )}
         </div>
       </div>
       </div>
-
-      {/* Live Match Details Modal */}
-      {selectedMatch && (
-        <LiveMatchModal 
-          match={selectedMatch} 
-          onClose={() => setSelectedMatch(null)} 
-        />
-      )}
     </div>
   );
 };

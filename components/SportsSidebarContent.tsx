@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   PlayCircle, Clock, LayoutGrid, Receipt, 
   ChevronDown, Target, Gamepad2, Trophy, Flag,
@@ -52,6 +52,15 @@ const MmaIcon = ({ className }: { className?: string }) => (
 
 const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onViewChange }) => {
   const [activeMenu, setActiveMenu] = useState<string>('');
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  
+  useEffect(() => {
+    const handleLocationChange = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
+
+  const activeSlug = currentPath.startsWith('/spor/') ? currentPath.split('/')[2] : '';
 
   return (
     <div className="flex flex-col w-full h-full text-slate-300 bg-transparent">
@@ -64,11 +73,11 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
             onClick={() => { 
               setActiveMenu('canli'); 
               onViewChange('spor724'); 
-              window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));
+              window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'canli' }));
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${activeMenu === 'canli' ? 'text-white' : 'text-[#8b92a5] hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'canli' ? 'bg-gradient-to-r from-[#ef4444]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
-            {activeMenu === 'canli' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+            {activeMenu === 'canli' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#ef4444] to-transparent shadow-[0_0_15px_#ef4444] z-10"></div>}
             <div className="flex items-center">
               <PlayCircle className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'canli' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'canli' ? 2.5 : 2} fill={activeMenu === 'canli' ? 'currentColor' : 'none'} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Canlı Etkinlikler</span>}
@@ -86,12 +95,12 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
           <button 
             onClick={() => { 
               setActiveMenu('upcoming'); 
-              onViewChange('upcomingMatches'); 
+              onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'upcoming' }));
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${activeMenu === 'upcoming' ? 'text-white' : 'text-[#8b92a5] hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'upcoming' ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
-            {activeMenu === 'upcoming' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+            {activeMenu === 'upcoming' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6] z-10"></div>}
             <div className="flex items-center">
               <Clock className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'upcoming' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'upcoming' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Yakında Başlayacak ...</span>}
@@ -109,9 +118,9 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${activeMenu === 'hepsi' ? 'text-white' : 'text-[#8b92a5] hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'hepsi' ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
-            {activeMenu === 'hepsi' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+            {activeMenu === 'hepsi' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6] z-10"></div>}
             <div className="flex items-center">
               <LayoutGrid className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'hepsi' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'hepsi' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Hepsi</span>}
@@ -124,10 +133,14 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
           </button>
 
           <button 
-            onClick={() => { setActiveMenu('bahislerim'); }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${activeMenu === 'bahislerim' ? 'text-white' : 'text-[#8b92a5] hover:text-white'}`}
+            onClick={() => { 
+              setActiveMenu('bahislerim');
+              onViewChange('spor724');
+              window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'mybets' }));
+            }}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'bahislerim' ? 'bg-gradient-to-r from-[#10b981]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
-            {activeMenu === 'bahislerim' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+            {activeMenu === 'bahislerim' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#10b981] to-transparent shadow-[0_0_15px_#10b981] z-10"></div>}
             <div className="flex items-center">
               <Receipt className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'bahislerim' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'bahislerim' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Bahislerim</span>}
@@ -162,24 +175,31 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
             { id: 'masatenisi', name: 'Masa Tenisi', Icon: PingPongIcon },
             { id: 'formula1', name: 'Formula 1', Icon: Trophy },
             { id: 'mma', name: 'MMA', Icon: MmaIcon },
-          ].map((sport) => (
+          ].map((sport) => {
+             const isActive = activeSlug === sport.id;
+             return (
              <button
                key={sport.id}
-               onClick={() => onViewChange('spor724')}
-               className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 text-[#8b92a5] hover:text-white ${!isOpen ? 'justify-center' : ''}`}
+               onClick={() => {
+                 window.history.pushState(null, '', `/spor/${sport.id}`);
+                 window.dispatchEvent(new PopStateEvent('popstate'));
+               }}
+               className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${isActive ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'} ${!isOpen ? 'justify-center' : ''}`}
              >
+               {isActive && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6] z-10"></div>}
                <div className="flex items-center">
-                 <sport.Icon className="w-5 h-5 min-w-[20px] transition-colors ml-2.5 text-[#8b92a5] group-hover:text-white" />
-                 {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors text-[#8b92a5] group-hover:text-white">{sport.name}</span>}
+                 <sport.Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} />
+                 {isOpen && <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`}>{sport.name}</span>}
                </div>
-               {isOpen && <ChevronDown className="w-4 h-4 text-[#8b92a5] group-hover:text-white transition-colors" />}
+               {isOpen && <ChevronDown className={`w-4 h-4 transition-colors ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} />}
                {!isOpen && (
                  <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
                    {sport.name}
                  </div>
                )}
              </button>
-          ))}
+             );
+          })}
         </div>
 
         {/* Divider */}
@@ -194,7 +214,10 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
           ].map((item) => (
              <button
                key={item.id}
-               onClick={() => onViewChange('spor724')}
+               onClick={() => {
+                 window.history.pushState(null, '', `/spor/${item.id}`);
+                 window.dispatchEvent(new PopStateEvent('popstate'));
+               }}
                className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 text-[#8b92a5] hover:text-white ${!isOpen ? 'justify-center' : ''}`}
              >
                <div className="flex items-center">

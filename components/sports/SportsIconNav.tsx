@@ -1,88 +1,101 @@
 import React from 'react';
-import { Home, Star, Copy, Search, Dribbble, Gamepad2, ChevronDown } from 'lucide-react';
+import { Home, Star, Copy, Search, ChevronRight } from 'lucide-react';
 
 const navItems = [
-    { id: 'soccer', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    { id: 'soccer', title: 'Futbol', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 12l3-2.5 1 4.5-4 2-4-2 1-4.5z"/>
             <path d="M12 12V7"/><path d="M15 9.5l3-2.5"/><path d="M16 14l4 1"/><path d="M12 16v6"/><path d="M8 14l-4 1"/><path d="M9 9.5L6 7"/>
         </svg>
     ) },
-    { id: 'basketball', icon: <Dribbble className="w-5 h-5" /> },
-    { id: 'mma', text: 'MMA' },
-    { id: 'boxing', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 8a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4H8L6 8z"/>
-            <path d="M16 10h2a2 2 0 0 1 2 2v2a4 4 0 0 1-4 4h-2"/>
-            <path d="M8 14v4a2 2 0 0 0 2 2h2"/>
-        </svg>
-    ) },
-    { id: 'shooter', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    { id: 'tennis', title: 'Tenis', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/>
-            <circle cx="12" cy="12" r="2"/>
+            <path d="M12 2c-4.4 0-8 3.6-8 8"/>
+            <path d="M22 12c0 4.4-3.6 8-8 8"/>
         </svg>
     ) },
-    { id: 'hockey', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M16 2L8 16a2 2 0 0 0 2 2h6"/>
-            <circle cx="8" cy="20" r="2"/>
+    { id: 'baseball', title: 'Beyzbol', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M5 12c2.5 0 4-1.5 4-4"/>
+            <path d="M19 12c-2.5 0-4 1.5-4 4"/>
+            <path d="M8 7l1 1"/><path d="M7 9l1 1"/><path d="M16 17l-1-1"/><path d="M17 15l-1-1"/>
         </svg>
     ) },
-    { id: 'tennis', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="8"/>
-            <path d="M12 4c-4.4 0-8 3.6-8 8"/>
-            <path d="M20 12c0 4.4-3.6 8-8 8"/>
-            <path d="M4 12l4 4"/>
-            <path d="M20 12l-4-4"/>
+    { id: 'basketball', title: 'Basketbol', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2v20"/><path d="M2 12h20"/>
+            <path d="M12 2a15 15 0 0 1 0 20"/><path d="M12 2a15 15 0 0 0 0 20"/>
         </svg>
     ) },
-    { id: 'golf', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2v18"/>
-            <path d="M12 2l-4 4h8z"/>
-            <circle cx="16" cy="20" r="2"/>
+    { id: 'cricket', title: 'Kriket', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 14l-8-8 2-2 8 8-2 2z"/>
+            <path d="M12 16l4-4 2 2-4 4-2-2z"/>
+            <circle cx="18" cy="18" r="2"/>
         </svg>
     ) },
-    { id: 'valorant', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 4l-8 8 8 8V4z"/>
-            <path d="M16 6l6 6-6 6V6z"/>
+    { id: 'volleyball', title: 'Voleybol', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2c0 6 4 10 10 10"/><path d="M2 12c6 0 10 4 10 10"/><path d="M12 22c0-6-4-10-10-10"/><path d="M22 12c-6 0-10-4-10-10"/>
         </svg>
     ) },
-    { id: 'football', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    { id: 'tabletennis', title: 'Masa Tenisi', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M16 12l-6-6-4 4 6 6 4-4z"/>
+            <path d="M10 18l-2 4"/><path d="M14 14l4-2"/>
+            <circle cx="18" cy="18" r="2"/>
+        </svg>
+    ) },
+    { id: 'rugby', title: 'Ragbi', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <ellipse cx="12" cy="12" rx="10" ry="6" transform="rotate(45 12 12)"/>
-            <path d="M9 9l6 6"/>
-            <path d="M11 7l2 2"/>
-            <path d="M13 9l2 2"/>
-            <path d="M15 11l2 2"/>
+            <path d="M9 9l6 6"/><path d="M11 7l2 2"/><path d="M13 9l2 2"/><path d="M15 11l2 2"/>
         </svg>
     ) },
-    { id: 'dota', icon: <Gamepad2 className="w-5 h-5" /> },
-    { id: 'chess', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M8 20h8"/>
-            <path d="M10 20v-4h4v4"/>
-            <path d="M12 16v-6"/>
-            <path d="M10 10l2-4 2 4z"/>
+    { id: 'nba2k', title: 'NBA2K', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <text x="4" y="14" fontSize="11" fontWeight="900" fontFamily="sans-serif">NBA</text>
+            <text x="7" y="22" fontSize="9" fontWeight="900" fontFamily="sans-serif">2K</text>
         </svg>
     ) },
-    { id: 'f1', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 14h16l-4-4H8z"/>
-            <circle cx="7" cy="16" r="2"/>
-            <circle cx="17" cy="16" r="2"/>
-            <path d="M4 14v-2h4"/>
+    { id: 'aussie', title: 'Avustralya...', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <ellipse cx="12" cy="12" rx="10" ry="5" transform="rotate(-30 12 12)" fill="currentColor"/>
         </svg>
     ) },
-    { id: 'horse', icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 4c-2 0-4 2-4 4v4s-2 2-2 4h12c0-2-2-4-2-4V8c0-2-2-4-4-4z"/>
-            <path d="M14 6l2-2"/>
+    { id: 'efootball', title: 'eFutbol', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 12l3-2.5 1 4.5-4 2-4-2 1-4.5z"/>
+            <circle cx="16" cy="16" r="4" fill="#0f1422" stroke="none" />
+            <text x="14" y="19" fontSize="10" fontWeight="bold">e</text>
+        </svg>
+    ) },
+    { id: 'snooker', title: 'Snooker', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="8" r="2"/><circle cx="9" cy="13" r="2"/><circle cx="15" cy="13" r="2"/><circle cx="12" cy="18" r="2"/>
+            <circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>
+        </svg>
+    ) },
+    { id: 'ehockey', title: 'eBuz Hokeyi', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M16 4L8 16a2 2 0 0 0 2 2h6"/>
+            <circle cx="10" cy="20" r="2"/>
+        </svg>
+    ) },
+    { id: 'darts', title: 'Dart', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+        </svg>
+    ) },
+    { id: 'badminton', title: 'Badminton', icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2l3 6 4-2-2 6-4 2-1 6-1-6-4-2-2-6 4 2 3-6z"/>
         </svg>
     ) }
 ];
@@ -90,73 +103,140 @@ const navItems = [
 interface SportsIconNavProps {
     activeTab?: string;
     onTabChange?: (tab: string) => void;
+    liveCounts?: Record<string, number>;
 }
 
-export default function SportsIconNav({ activeTab = 'home', onTabChange = () => {} }: SportsIconNavProps) {
+export default function SportsIconNav({ activeTab = 'home', onTabChange = () => {}, liveCounts = {} }: SportsIconNavProps) {
     return (
-        <div className="w-full bg-[#162029] border border-white/5 rounded-xl flex items-center px-2 py-1 shadow-md mb-6 overflow-hidden">
+        <div className="w-full relative flex items-center mb-6 bg-[#0a0d14]/90 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.6)] py-1.5 pl-2 overflow-hidden rounded-xl">
+            
+            {/* Top Highlight Line for the container */}
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
             
             {/* Left Static Actions */}
-            <div className="flex items-center gap-1 sm:gap-2 pr-4 border-r border-white/10 shrink-0">
+            <div className="flex items-center gap-1.5 shrink-0 mr-3 pr-4 relative after:content-[''] after:absolute after:right-0 after:top-2 after:bottom-2 after:w-[1px] after:bg-gradient-to-b after:from-transparent after:via-white/5 after:to-transparent">
+                
                 <button 
                   onClick={() => onTabChange('home')}
-                  className={`p-2 sm:p-2.5 rounded-lg transition-colors group flex items-center justify-center relative ${
+                  className={`w-12 h-12 rounded-lg transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden ${
                     activeTab === 'home' 
-                      ? 'text-white bg-[#233240]' 
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                      ? 'bg-gradient-to-b from-[#3b82f6]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(59,130,246,0.3)]' 
+                      : 'bg-transparent hover:bg-white/[0.03]'
                   }`}
                 >
-                    <Home className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    {activeTab === 'home' && <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#0f62fe] animate-pulse"></div>}
+                    {activeTab === 'home' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6]"></div>}
+                    <Home className={`w-5 h-5 transition-all duration-300 ${activeTab === 'home' ? 'text-white drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]' : 'text-[#64748b] group-hover:text-white'}`} strokeWidth={1.8} />
+                    {activeTab === 'home' && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#3b82f6] shadow-[0_0_8px_#3b82f6]"></div>}
                 </button>
+
                 <button 
                   onClick={() => onTabChange('canli')}
-                  className={`p-2 sm:p-2.5 rounded-lg transition-colors group flex items-center gap-1 relative ${
+                  className={`w-14 h-12 rounded-lg transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden ${
                     activeTab === 'canli' 
-                      ? 'text-white bg-[#233240]' 
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                      ? 'bg-gradient-to-b from-[#ef4444]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(239,68,68,0.3)]' 
+                      : 'bg-transparent hover:bg-white/[0.03]'
                   }`}
                 >
-                    <span className="text-xs font-black tracking-widest uppercase">CANLI</span>
-                    {activeTab === 'canli' && <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#0f62fe] animate-pulse"></div>}
+                    {activeTab === 'canli' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ef4444] to-transparent shadow-[0_0_15px_#ef4444]"></div>}
+                    <div className="flex flex-col items-center gap-1">
+                        <div className={`w-2 h-2 rounded-full ${activeTab === 'canli' ? 'bg-[#ef4444] shadow-[0_0_10px_#ef4444] animate-pulse' : 'bg-[#ef4444]/40'}`}></div>
+                        <span className={`text-[9px] font-black tracking-widest uppercase transition-colors ${activeTab === 'canli' ? 'text-white drop-shadow-[0_0_5px_rgba(239,68,68,0.5)]' : 'text-[#64748b]'}`}>CANLI</span>
+                    </div>
                 </button>
-                <button className="p-2 sm:p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
-                    <Star className="w-5 h-5 group-hover:scale-110 transition-transform" />
+
+                <button 
+                  onClick={() => onTabChange('favorites')}
+                  className={`w-12 h-12 rounded-lg transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden ${
+                    activeTab === 'favorites' 
+                      ? 'bg-gradient-to-b from-[#eab308]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(234,179,8,0.3)]' 
+                      : 'bg-transparent hover:bg-white/[0.03]'
+                  }`}
+                >
+                    {activeTab === 'favorites' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#eab308] to-transparent shadow-[0_0_15px_#eab308]"></div>}
+                    <Star className={`w-5 h-5 transition-all duration-300 ${activeTab === 'favorites' ? 'text-white drop-shadow-[0_0_10px_rgba(234,179,8,0.8)]' : 'text-[#64748b] group-hover:text-white'}`} strokeWidth={1.8} />
+                    {activeTab === 'favorites' && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#eab308] shadow-[0_0_8px_#eab308]"></div>}
                 </button>
-                <button className="p-2 sm:p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors group relative">
-                    <Copy className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-[#162029]"></span>
+
+                <button 
+                  onClick={() => onTabChange('mybets')}
+                  className={`w-12 h-12 rounded-lg transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden ${
+                    activeTab === 'mybets' 
+                      ? 'bg-gradient-to-b from-[#10b981]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(16,185,129,0.3)]' 
+                      : 'bg-transparent hover:bg-white/[0.03]'
+                  }`}
+                >
+                    {activeTab === 'mybets' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#10b981] to-transparent shadow-[0_0_15px_#10b981]"></div>}
+                    <div className="relative">
+                        <Copy className={`w-5 h-5 transition-all duration-300 ${activeTab === 'mybets' ? 'text-white drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]' : 'text-[#64748b] group-hover:text-white'}`} strokeWidth={1.8} />
+                        {!activeTab === 'mybets' && <div className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_5px_#10b981]"></div>}
+                    </div>
+                    {activeTab === 'mybets' && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#10b981] shadow-[0_0_8px_#10b981]"></div>}
                 </button>
             </div>
 
             {/* Scrollable Sports List */}
-            <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-1 px-4">
-                {navItems.map((item, idx) => (
+            <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-1.5 px-1 py-1">
+                {navItems.map((item, idx) => {
+                    const isActive = typeof window !== 'undefined' && window.location.pathname.includes(item.id);
+                    const count = liveCounts[item.title] || 0;
+                    
+                    return (
                     <button 
                         key={idx}
-                        className="p-2 sm:p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors shrink-0 group flex items-center justify-center min-w-[40px]"
-                        title={item.id}
+                        onClick={() => {
+                            if (item.title) {
+                                window.history.pushState(null, '', `/spor/${item.id}`);
+                                window.dispatchEvent(new PopStateEvent('popstate'));
+                            }
+                        }}
+                        className={`group relative flex flex-col items-center justify-center min-w-[70px] h-[64px] rounded-xl transition-all duration-300 overflow-hidden ${
+                            isActive 
+                                ? 'bg-gradient-to-b from-[#3b82f6]/20 via-[#3b82f6]/5 to-transparent' 
+                                : 'bg-transparent hover:bg-white/[0.03]'
+                        }`}
+                        title={item.title || item.id}
                     >
-                        {item.text ? (
-                            <span className="text-sm font-black tracking-widest group-hover:scale-110 transition-transform">{item.text}</span>
-                        ) : (
-                            <div className="group-hover:scale-110 transition-transform">
-                                {item.icon}
-                            </div>
+                        {isActive && (
+                            <>
+                                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6]"></div>
+                                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#3b82f6]/20 via-transparent to-transparent opacity-60"></div>
+                            </>
                         )}
+                        {!isActive && (
+                            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:via-white/40 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] transition-all duration-500"></div>
+                        )}
+                        
+                        <div className="relative flex items-center justify-center mb-1.5 mt-1">
+                            {count > 0 && (
+                                <div className="absolute -top-1.5 -right-3.5 bg-gradient-to-b from-[#00ffaa] to-[#00c885] text-[#052e1f] text-[10px] font-black px-1.5 py-[1px] rounded-[4px] z-10 shadow-[inset_0_1px_rgba(255,255,255,0.5),_0_2px_8px_rgba(0,255,170,0.5)] border border-[#b3ffe0] leading-none">
+                                    {count}
+                                </div>
+                            )}
+                            
+                            <div className={`transition-all duration-300 z-10 ${
+                                isActive 
+                                    ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] scale-110' 
+                                    : 'text-[#64748b] group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'
+                            }`}>
+                                {React.cloneElement(item.icon as React.ReactElement, { width: 22, height: 22, strokeWidth: isActive ? 1.8 : 1.5 })}
+                            </div>
+                        </div>
+                        
+                        <span className={`text-[10px] font-bold tracking-wider uppercase z-10 transition-all duration-300 ${
+                            isActive 
+                                ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.6)]' 
+                                : 'text-[#64748b] group-hover:text-gray-300'
+                        }`}>
+                            {item.title}
+                        </span>
                     </button>
-                ))}
-                
-                {/* Expand Arrow */}
-                <button className="p-2 text-slate-400 hover:text-white shrink-0 ml-2">
-                    <ChevronDown className="w-4 h-4" />
-                </button>
+                )})}
             </div>
 
-            {/* Right Static Action (Search) */}
-            <div className="pl-4 border-l border-white/10 shrink-0">
-                <button className="p-2 sm:p-2.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
-                    <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            {/* Right Arrow (Fixed) */}
+            <div className="absolute right-0 top-0 bg-gradient-to-l from-[#0a0d14] via-[#0a0d14]/80 to-transparent w-16 h-full flex justify-end items-center pr-2 pointer-events-none z-20">
+                <button className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center pointer-events-auto transition-all duration-300 shadow-[0_4px_10px_rgba(0,0,0,0.3)] hover:scale-110">
+                    <ChevronRight className="w-5 h-5" />
                 </button>
             </div>
         </div>

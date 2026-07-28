@@ -118,7 +118,7 @@ export const DualRightPanel: React.FC<{
             <div className="px-2 py-2 bg-[#0A0D14] border-b border-white/5">
               <div className="flex items-center p-1 bg-[#0f1118] rounded-xl border border-white/5 relative shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)] h-[44px]">
                 <div 
-                  className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-[#1075fc] rounded-lg shadow-[0_0_15px_rgba(16,117,252,0.4)] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
+                  className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-[#1075fc]/15 border border-[#1075fc]/50 rounded-lg shadow-[0_0_15px_rgba(16,117,252,0.2)] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
                   style={{
                     transform: `translateX(${betType === 'tekli' ? '4px' : betType === 'kombine' ? 'calc(100% + 6px)' : 'calc(200% + 8px)'})`
                   }}
@@ -127,7 +127,7 @@ export const DualRightPanel: React.FC<{
                   <button 
                     key={type}
                     onClick={() => setBetType(type as any)}
-                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-white' : 'text-zinc-500 hover:text-white'}`}
+                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.8)]' : 'text-zinc-400 hover:text-white'}`}
                   >
                     {type}
                   </button>
@@ -160,7 +160,7 @@ export const DualRightPanel: React.FC<{
             {/* BET LIST */}
             {betSlip.length === 0 ? (
               <div className="flex-1 p-6 flex flex-col items-center justify-center text-center bg-transparent">
-                <div className="w-20 h-20 rounded-2xl bg-[#13161f] flex items-center justify-center mb-5 border border-white/5 shadow-[inset_0_2px_10px_rgba(255,255,255,0.02)]">
+                <div className="w-20 h-20 rounded-2xl bg-[#13161f] flex items-center justify-center mb-5 border border-white/5 shadow-[inset_0_2px_10px_rgba(255,255,255,0.02)] animate-pulse">
                   <FileText className="w-8 h-8 text-zinc-600/50" strokeWidth={1.5} />
                 </div>
                 <h3 className="text-white font-bold text-[15px] mb-1">
@@ -172,41 +172,44 @@ export const DualRightPanel: React.FC<{
               </div>
             ) : (
               <div className="flex-1 flex flex-col min-h-0 bg-transparent">
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-0.5 space-y-px">
-                  {betSlip.map((bet) => (
-                    <div key={bet.id} className="relative bg-[#161920] rounded-[4px] border border-white/5 p-1 group hover:border-white/10 hover:bg-[#1a1e27] transition-all overflow-hidden flex flex-col gap-0.5">
-                      
-                      {/* Left color bar */}
-                      <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[#10b981] shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-
-                      <div className="flex justify-between items-center pl-1.5">
-                        <div className="flex items-center gap-1 pr-5 w-full">
-                           <span className="w-1 h-1 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)] shrink-0" />
-                           <div className="text-white font-bold text-[9px] leading-tight truncate flex-1">
-                             {bet.matchName.replace(' vs ', ' - ')}
-                           </div>
-                        </div>
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-1 space-y-2">
+                  {betSlip.map((bet) => {
+                    const isSpacious = betSlip.length <= 3;
+                    return (
+                      <div key={bet.id} className={`relative bg-[#1a1e27] border border-white/5 group hover:border-white/10 hover:bg-[#1f2430] transition-all overflow-hidden flex flex-col justify-center ${isSpacious ? 'p-3.5 min-h-[90px] gap-3 rounded-xl' : 'p-1.5 min-h-[44px] gap-1 rounded-md'}`}>
                         
-                        {/* Delete button (Top Right) */}
-                        <button 
-                          onClick={() => removeSelection(bet.id)}
-                          className="absolute right-0.5 top-1 w-3.5 h-3.5 rounded bg-white/5 hover:bg-red-500/20 flex items-center justify-center text-zinc-500 hover:text-red-400 transition-colors"
-                        >
-                          <X className="w-2.5 h-2.5" />
-                        </button>
-                      </div>
+                        {/* Left color bar */}
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#10b981] shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
 
-                      <div className="flex items-center justify-between pl-1.5 pt-0.5 border-t border-white/5">
-                        <div className="flex items-center gap-1.5">
-                           <span className="text-zinc-500 text-[7px] font-semibold uppercase tracking-wider">Seçim:</span>
-                           <span className="text-white font-bold text-[9px]">{bet.selectionName}</span>
+                        <div className={`flex justify-between items-start ${isSpacious ? 'pl-2.5 pr-6' : 'pl-1.5 pr-5'}`}>
+                          <div className="flex items-start gap-1.5 w-full mt-0.5">
+                            <span className={`rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)] shrink-0 mt-[4px] ${isSpacious ? 'w-1.5 h-1.5' : 'w-1 h-1'}`} />
+                            <div className={`text-white font-bold leading-tight flex-1 ${isSpacious ? 'text-sm' : 'text-[10px] truncate'}`}>
+                              {bet.matchName.replace(' vs ', ' - ')}
+                            </div>
+                          </div>
+                          
+                          {/* Delete button (Top Right) */}
+                          <button 
+                            onClick={() => removeSelection(bet.id)}
+                            className={`absolute rounded bg-black/20 hover:bg-red-500/80 flex items-center justify-center text-zinc-400 hover:text-white transition-colors ${isSpacious ? 'right-2 top-2 w-6 h-6' : 'right-1 top-1 w-4 h-4'}`}
+                          >
+                            <X className={isSpacious ? 'w-4 h-4' : 'w-3 h-3'} />
+                          </button>
                         </div>
-                        <div className="bg-[#1075fc]/10 px-1 py-px rounded border border-[#1075fc]/20">
-                           <span className="text-[#1075fc] font-black text-[9px]">{bet.odd.toFixed(2)}</span>
+
+                        <div className={`flex items-center justify-between border-t border-white/5 ${isSpacious ? 'pl-2.5 pt-2' : 'pl-1.5 pt-1'}`}>
+                          <div className="flex items-center gap-1.5">
+                            <span className={`text-zinc-500 font-semibold uppercase tracking-wider ${isSpacious ? 'text-[10px]' : 'text-[8px]'}`}>Seçim:</span>
+                            <span className={`text-white font-bold ${isSpacious ? 'text-[13px]' : 'text-[10px]'}`}>{bet.selectionName}</span>
+                          </div>
+                          <div className={`bg-[#1075fc]/10 rounded border border-[#1075fc]/20 flex items-center justify-center ${isSpacious ? 'px-2 py-1 min-w-[48px]' : 'px-1 py-0.5 min-w-[32px]'}`}>
+                            <span className={`text-[#1075fc] font-black ${isSpacious ? 'text-[14px]' : 'text-[10px]'}`}>{bet.odd.toFixed(2)}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* BOTTOM SUMMARY & ACTIONS */}
@@ -236,15 +239,15 @@ export const DualRightPanel: React.FC<{
                         </div>
                       )}
 
-                     <div className="flex-1 bg-[#161920] border border-white/10 rounded overflow-hidden flex h-7 shadow-inner">
+                     <div className="flex-1 bg-[#1a1e27] border border-white/10 rounded overflow-hidden flex h-8 shadow-inner hover:border-white/20 transition-colors focus-within:border-[#1075fc]/50">
                         <div className="relative flex-1">
-                           <div className="absolute left-1.5 top-1/2 -translate-y-1/2 text-white font-black text-[10px]">₺</div>
+                           <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/50 font-black text-[11px]">₺</div>
                            <input 
                              type="number"
                              value={betAmount || ''}
                              onChange={(e) => setBetAmount(parseFloat(e.target.value) || 0)}
                              placeholder="0"
-                             className="w-full h-full bg-transparent pl-4 pr-1.5 text-white font-black text-[11px] outline-none"
+                             className="w-full h-full bg-transparent pl-6 pr-2 text-white font-black text-[13px] outline-none"
                            />
                         </div>
                         <div className="flex items-center">
@@ -288,14 +291,15 @@ export const DualRightPanel: React.FC<{
       </div>
 
       {/* ═══════════ STICKY BOTTOM TOGGLE BAR ═══════════ */}
-      <div className="shrink-0 bg-[#0A0D14] border-t border-white/5 p-3 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)]">
+      <div className={`shrink-0 bg-[#0A0D14] border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] transition-all duration-300 overflow-hidden ${activePanel === 'coupon' && betSlip.length > 0 ? 'h-0 p-0 border-t-0 opacity-0' : 'h-[70px] p-3 opacity-100'}`}>
         {activePanel === 'coupon' ? (
-          <button onClick={() => setActivePanel('chat')} className="w-full h-[46px] bg-[#1075fc] hover:bg-[#0f6bed] border border-transparent rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(16,117,252,0.3)] hover:shadow-[0_4px_20px_rgba(16,117,252,0.4)] group">
-            <MessageCircle className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
-            <span className="text-white text-[14px] font-extrabold tracking-wide uppercase">Sohbete Geç</span>
+          <button onClick={() => setActivePanel('chat')} className="w-full h-[46px] bg-gradient-to-b from-[#1075fc] to-[#0a5bc4] border border-[#1075fc]/50 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(16,117,252,0.3)] hover:shadow-[0_4px_25px_rgba(16,117,252,0.5)] group relative overflow-hidden">
+            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <MessageCircle className="w-5 h-5 text-white group-hover:scale-110 transition-transform relative z-10" />
+            <span className="text-white text-[14px] font-extrabold tracking-wide uppercase relative z-10">Sohbete Geç</span>
           </button>
         ) : (
-          <div className="flex items-center justify-between w-full h-full px-2">
+          <div className="flex items-center justify-between w-full h-full px-2 pb-2">
             <button className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1">
               <Home className="w-[18px] h-[18px]" />
               <span className="text-[9px] font-medium tracking-wide">Lobi</span>

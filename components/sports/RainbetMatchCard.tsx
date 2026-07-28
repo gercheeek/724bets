@@ -1,16 +1,45 @@
 import React from 'react';
 import { MatchInfo } from './types';
-import { Star, Radio, Globe } from 'lucide-react';
+import { Radio, Globe, Star, PlayCircle, Trophy, BarChart3, TrendingUp, MonitorPlay } from 'lucide-react';
+import { TeamLogoPlaceholder } from './TeamLogoPlaceholder';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useBetSlip } from '../../contexts/BetSlipContext';
 
 interface RainbetMatchCardProps {
     match: MatchInfo;
     onSelect?: (match: MatchInfo) => void;
 }
 
-export const RainbetMatchCard = ({ match, onSelect }: RainbetMatchCardProps) => {
+export const RainbetMatchCard: React.FC<RainbetMatchCardProps> = ({ match, onSelect }) => {
     const { language } = useLanguage();
+    const { addSelection, betSlip } = useBetSlip();
+
+    const cleanLeagueName = (league: string) => {
+        if (!league) return '';
+        const parts = league.split('-').map(p => p.trim());
+        const uniqueParts = parts.filter((item, pos) => parts.indexOf(item) === pos);
+        return uniqueParts.join(' • ');
+    };
     
+    // Format odds
+    const ms1 = parseFloat(match.homeOdd || '0').toFixed(2) || '0.00';
+    const msx = parseFloat(match.drawOdd || '0').toFixed(2) || '0.00';
+    const ms2 = parseFloat(match.awayOdd || '0').toFixed(2) || '0.00';
+
+    const handleOddClick = (e: React.MouseEvent, selectionName: string, oddId: string, oddValue: string) => {
+        e.stopPropagation();
+        const oddNum = parseFloat(oddValue);
+        if (isNaN(oddNum) || oddNum <= 0) return;
+        
+        addSelection({
+            id: oddId,
+            matchId: match.id,
+            matchName: `${match.home} vs ${match.away}`,
+            selectionName: selectionName,
+            odd: oddNum
+        });
+    };
+
     // Parse score
     let homeScore = '0';
     let awayScore = '0';
@@ -25,8 +54,6 @@ export const RainbetMatchCard = ({ match, onSelect }: RainbetMatchCardProps) => 
         awayScore = parts[1].trim();
     }
 
-    const fallbackLogo = 'https://www.tarafbet114.com/assets/images/sports/soccer.png';
-
     return (
         <div 
             onClick={() => onSelect && onSelect(match)}
@@ -34,9 +61,9 @@ export const RainbetMatchCard = ({ match, onSelect }: RainbetMatchCardProps) => 
         >
             {/* Header */}
             <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center gap-1.5 text-[#8e939d] text-[11px] font-medium tracking-wide truncate">
-                    <Globe className="w-3.5 h-3.5" />
-                    <span className="truncate">{match.country || 'Uluslararası'} • {match.league}</span>
+                <div className="flex items-center gap-1.5 text-zinc-400 text-[11px] font-medium max-w-[70%]">
+                    <Globe className="w-3 h-3 opacity-60 flex-shrink-0" />
+                    <span className="truncate">{cleanLeagueName(match.league)}</span>
                 </div>
                 <Star className="w-3.5 h-3.5 text-[#42475e] hover:text-white transition-colors flex-shrink-0" />
             </div>
@@ -47,57 +74,77 @@ export const RainbetMatchCard = ({ match, onSelect }: RainbetMatchCardProps) => 
                     {match.isLive ? `${match.minute || '1'}' 1. Devre` : (match.startTime || 'Bugün')}
                 </div>
                 {match.isLive && (
-                    <Radio className="w-3.5 h-3.5 text-[#ef4444]" />
+                    <Radio className="w-3.5 h-3.5 text-[#ef4444] animate-pulse" />
                 )}
             </div>
 
             {/* Teams & Scores */}
-            <div className="space-y-2 mb-4 flex-1">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2 overflow-hidden">
+            <div className="flex flex-col gap-2 mb-4 flex-1">
+                <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center">
+                    {match.homeLogo ? (
                         <img 
-                            src={match.homeLogo || fallbackLogo} 
+                            src={match.homeLogo} 
                             alt="" 
                             className="w-4 h-4 object-contain" 
-                            onError={(e) => { (e.target as HTMLImageElement).src = fallbackLogo; }} 
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} 
                         />
-                        <span className="text-[#e2e8f0] font-medium text-[13px] truncate">{match.home}</span>
-                    </div>
-                    {match.isLive && <span className="text-[#e2e8f0] font-bold text-[13px] bg-purple-500/20 text-purple-400 border border-purple-500/30 shadow-[0_0_10px_rgba(168,85,247,0.2)] px-2 py-0.5 rounded flex-shrink-0">{homeScore}</span>}
+                    ) : (
+                        <TeamLogoPlaceholder teamName={match.home} className="w-4 h-4" />
+                    )}
+                    <span className="text-[#e2e8f0] font-medium text-[13px] truncate">{match.home}</span>
+                    {match.isLive && <span className="text-[#e2e8f0] font-bold text-[13px] bg-white/5 text-white px-2 py-0.5 rounded min-w-[28px] text-center">{homeScore}</span>}
                 </div>
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2 overflow-hidden">
+                <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center">
+                    {match.awayLogo ? (
                         <img 
-                            src={match.awayLogo || fallbackLogo} 
+                            src={match.awayLogo} 
                             alt="" 
                             className="w-4 h-4 object-contain" 
-                            onError={(e) => { (e.target as HTMLImageElement).src = fallbackLogo; }} 
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} 
                         />
-                        <span className="text-[#e2e8f0] font-medium text-[13px] truncate">{match.away}</span>
-                    </div>
-                    {match.isLive && <span className="text-[#e2e8f0] font-bold text-[13px] bg-purple-500/20 text-purple-400 border border-purple-500/30 shadow-[0_0_10px_rgba(168,85,247,0.2)] px-2 py-0.5 rounded flex-shrink-0">{awayScore}</span>}
+                    ) : (
+                        <TeamLogoPlaceholder teamName={match.away} className="w-4 h-4" />
+                    )}
+                    <span className="text-[#e2e8f0] font-medium text-[13px] truncate">{match.away}</span>
+                    {match.isLive && <span className="text-[#e2e8f0] font-bold text-[13px] bg-white/5 text-white px-2 py-0.5 rounded min-w-[28px] text-center">{awayScore}</span>}
                 </div>
             </div>
 
             {/* Odds */}
-            <div className="text-[10px] text-[#8e939d] font-semibold mb-1">
-                1x2
-            </div>
-            <div className="flex gap-1.5 mt-auto">
-                <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-colors duration-200 text-white text-[12px] font-medium cursor-pointer group/odd">
-                    <span className="text-[#8e939d] group-hover/odd:text-white transition-colors">1</span>
-                    <span className="group-hover/odd:text-[#10b981] transition-colors font-bold">{match.homeOdd}</span>
-                </div>
-                {match.drawOdd && match.drawOdd !== '0.00' && (
-                    <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-colors duration-200 text-white text-[12px] font-medium cursor-pointer group/odd">
-                        <span className="text-[#8e939d] group-hover/odd:text-white transition-colors">X</span>
-                        <span className="group-hover/odd:text-[#10b981] transition-colors font-bold">{match.drawOdd}</span>
-                    </div>
-                )}
-                <div className="flex-1 flex justify-between items-center bg-[#25262b] border border-white/5 hover:border-[#10b981]/50 hover:bg-[#10b981]/10 px-2.5 py-1.5 rounded-lg transition-colors duration-200 text-white text-[12px] font-medium cursor-pointer group/odd">
-                    <span className="text-[#8e939d] group-hover/odd:text-white transition-colors">2</span>
-                    <span className="group-hover/odd:text-[#10b981] transition-colors font-bold">{match.awayOdd}</span>
-                </div>
+            <div className="flex gap-1.5 mt-auto pt-2">
+                <button 
+                    onClick={(e) => handleOddClick(e, 'MS 1', match.homeId || `${match.id}_1`, ms1)}
+                    className={`flex-1 flex flex-col items-center justify-center py-1.5 rounded-md transition-colors duration-200 group/odd ${
+                        betSlip.some(s => s.id === (match.homeId || `${match.id}_1`))
+                            ? 'bg-[#10b981] text-black shadow-[0_0_10px_rgba(16,185,129,0.3)]'
+                            : 'bg-[#2a2e38] hover:bg-[#323642] text-white'
+                    }`}
+                >
+                    <span className={`text-[10px] font-semibold mb-0.5 transition-colors ${betSlip.some(s => s.id === (match.homeId || `${match.id}_1`)) ? 'text-black/70' : 'text-[#8e939d]'}`}>1</span>
+                    <span className={`text-[13px] font-bold transition-colors ${betSlip.some(s => s.id === (match.homeId || `${match.id}_1`)) ? 'text-black' : 'text-white'}`}>{ms1 !== '0.00' ? ms1 : '-'}</span>
+                </button>
+                <button 
+                    onClick={(e) => handleOddClick(e, 'MS X', match.drawId || `${match.id}_X`, msx)}
+                    className={`flex-1 flex flex-col items-center justify-center py-1.5 rounded-md transition-colors duration-200 group/odd ${
+                        betSlip.some(s => s.id === (match.drawId || `${match.id}_X`))
+                            ? 'bg-[#10b981] text-black shadow-[0_0_10px_rgba(16,185,129,0.3)]'
+                            : 'bg-[#2a2e38] hover:bg-[#323642] text-white'
+                    }`}
+                >
+                    <span className={`text-[10px] font-semibold mb-0.5 transition-colors ${betSlip.some(s => s.id === (match.drawId || `${match.id}_X`)) ? 'text-black/70' : 'text-[#8e939d]'}`}>X</span>
+                    <span className={`text-[13px] font-bold transition-colors ${betSlip.some(s => s.id === (match.drawId || `${match.id}_X`)) ? 'text-black' : 'text-white'}`}>{msx !== '0.00' ? msx : '-'}</span>
+                </button>
+                <button 
+                    onClick={(e) => handleOddClick(e, 'MS 2', match.awayId || `${match.id}_2`, ms2)}
+                    className={`flex-1 flex flex-col items-center justify-center py-1.5 rounded-md transition-colors duration-200 group/odd ${
+                        betSlip.some(s => s.id === (match.awayId || `${match.id}_2`))
+                            ? 'bg-[#10b981] text-black shadow-[0_0_10px_rgba(16,185,129,0.3)]'
+                            : 'bg-[#2a2e38] hover:bg-[#323642] text-white'
+                    }`}
+                >
+                    <span className={`text-[10px] font-semibold mb-0.5 transition-colors ${betSlip.some(s => s.id === (match.awayId || `${match.id}_2`)) ? 'text-black/70' : 'text-[#8e939d]'}`}>2</span>
+                    <span className={`text-[13px] font-bold transition-colors ${betSlip.some(s => s.id === (match.awayId || `${match.id}_2`)) ? 'text-black' : 'text-white'}`}>{ms2 !== '0.00' ? ms2 : '-'}</span>
+                </button>
             </div>
         </div>
     );
