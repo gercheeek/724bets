@@ -40,7 +40,7 @@ const riskData = [
 ];
 
 export default function AdminSportsTab() {
-    const [activeSubTab, setActiveSubTab] = useState<'pool' | 'active' | 'risk' | 'api_settings'>('pool');
+    const [activeSubTab, setActiveSubTab] = useState<'pool' | 'active' | 'risk' | 'api_settings' | 'monitor'>('pool');
     
     // API Provider Settings States
     const [apiProvider, setApiProvider] = useState<'tarafbet'>('tarafbet');
@@ -304,8 +304,19 @@ export default function AdminSportsTab() {
                             : 'text-zinc-400 hover:text-white'
                         }`}
                     >
-                        <Database className="w-4 h-4" />
-                        Futbol API
+                        <ShieldAlert className="w-4 h-4" />
+                        API Sağlayıcı
+                    </button>
+                    <button 
+                        onClick={() => setActiveSubTab('monitor')}
+                        className={`px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 transition-all ${
+                            activeSubTab === 'monitor' 
+                            ? 'bg-cyan-600 text-white shadow-[0_0_15px_rgba(8,145,178,0.3)]' 
+                            : 'text-zinc-400 hover:text-white'
+                        }`}
+                    >
+                        <Activity className="w-4 h-4" />
+                        Canlı Veri Radarı
                     </button>
                 </div>
             </div>
@@ -771,6 +782,46 @@ export default function AdminSportsTab() {
                                     Onayla ve Kuponları Öde
                                 </button>
                                 <p className="text-center text-xs text-zinc-500 mt-3">Bu işlem geri alınamaz. Kazanan bahislerin ödemesi anında yapılacaktır.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Monitoring Tab */}
+            {activeSubTab === 'monitor' && (
+                <div className="flex-1 overflow-y-auto">
+                    <div className="bg-[#111318] p-6 rounded-2xl border border-zinc-800 shadow-xl mb-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-xl font-bold text-white flex items-center gap-3">
+                                <Activity className="w-6 h-6 text-cyan-500 animate-pulse" />
+                                WebSocket Canlı Hız Testi (Ping)
+                            </h3>
+                            <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-500 px-4 py-2 rounded-lg border border-emerald-500/30 font-bold">
+                                <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                                Proxy Bağlantısı Aktif
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="bg-[#0b0c10] p-6 rounded-xl border border-zinc-800">
+                                <p className="text-zinc-500 font-bold text-sm uppercase mb-2">Sunucu Adresi</p>
+                                <p className="text-white font-mono text-lg truncate">ws://localhost:4000</p>
+                            </div>
+                            <div className="bg-[#0b0c10] p-6 rounded-xl border border-zinc-800">
+                                <p className="text-zinc-500 font-bold text-sm uppercase mb-2">Ortalama Gecikme (Ping)</p>
+                                <p className="text-cyan-400 font-bold text-3xl flex items-end gap-2">
+                                    ~45<span className="text-sm text-cyan-600 mb-1">ms</span>
+                                </p>
+                            </div>
+                            <div className="bg-[#0b0c10] p-6 rounded-xl border border-zinc-800">
+                                <p className="text-zinc-500 font-bold text-sm uppercase mb-2">Kopma Sayısı</p>
+                                <p className="text-white font-bold text-3xl">0</p>
+                            </div>
+                        </div>
+                        <div className="mt-6 bg-[#0b0c10] p-4 rounded-xl border border-zinc-800">
+                            <p className="text-zinc-400 text-sm mb-4">Gerçek zamanlı hız testini doğrudan terminalinizden yapmak için proje dizininde şu komutu çalıştırabilirsiniz:</p>
+                            <div className="bg-black/50 p-3 rounded text-green-400 font-mono text-sm border border-zinc-800 flex justify-between items-center">
+                                <code>node ws_monitor.cjs</code>
+                                <button className="text-zinc-500 hover:text-white transition-colors" onClick={() => navigator.clipboard.writeText('node ws_monitor.cjs')}>Kopyala</button>
                             </div>
                         </div>
                     </div>

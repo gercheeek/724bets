@@ -88,6 +88,46 @@ export default function AdminRiskTab() {
                 </div>
             </div>
 
+            {/* Live Liability Radar */}
+            <div className="bg-[#1a1c24] border border-red-500/20 rounded-2xl p-6 relative overflow-hidden shadow-[0_0_30px_rgba(220,38,38,0.05)]">
+                <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <ShieldAlert className="w-5 h-5 text-red-400 animate-pulse" />
+                        Aktif Risk Radarı (Canlı)
+                    </h3>
+                    <span className="text-xs font-mono bg-red-500/10 text-red-400 px-2 py-1 rounded border border-red-500/20">
+                        Oto-Limit: AKTİF
+                    </span>
+                </div>
+
+                <div className="space-y-3">
+                    <div className="bg-[#111318] border border-red-500/30 rounded-xl p-4 flex items-center justify-between relative overflow-hidden">
+                        <div className="absolute inset-0 bg-red-500/5 animate-pulse"></div>
+                        <div>
+                            <div className="text-sm font-bold text-white mb-1">Galatasaray - Fenerbahçe</div>
+                            <div className="text-xs text-zinc-400">Piyasa: Maç Sonucu 1</div>
+                        </div>
+                        <div className="text-right relative z-10">
+                            <div className="text-lg font-black text-red-400 font-mono flex items-center gap-2 justify-end">
+                                <Activity className="w-4 h-4 animate-bounce" /> ₺1,250,000
+                            </div>
+                            <div className="text-[10px] text-red-500 font-bold uppercase mt-1">KRİTİK RİSK (LIMIT AŞIMI)</div>
+                        </div>
+                    </div>
+
+                    <div className="bg-[#111318] border border-orange-500/30 rounded-xl p-4 flex items-center justify-between">
+                        <div>
+                            <div className="text-sm font-bold text-white mb-1">Real Madrid - Barcelona</div>
+                            <div className="text-xs text-zinc-400">Piyasa: 2.5 Üst</div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-lg font-black text-orange-400 font-mono">₺450,000</div>
+                            <div className="text-[10px] text-orange-500 font-bold uppercase mt-1">YÜKSEK RİSK</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Custom Shadcn-like Dialog / Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">

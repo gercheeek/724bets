@@ -9,6 +9,13 @@ import AdminWithdrawalsTab from './AdminWithdrawalsTab';
 import AdminAuditLogsTab from './AdminAuditLogsTab';
 import AdminSportsTab from './AdminSportsTab';
 import AdminTVTab from './AdminTVTab';
+import AdminDashboardTab from './AdminDashboardTab';
+import AdminWhaleTab from './AdminWhaleTab';
+import AdminLiquidityTab from './AdminLiquidityTab';
+import AdminProviderTab from './AdminProviderTab';
+import AdminCommunityTab from './AdminCommunityTab';
+import AdminKralTab from './AdminKralTab';
+import { Target, Wallet, Gamepad2, MessageSquare } from 'lucide-react';
 import { LuckyWheelConfig } from '../types';
 
 interface AdminPanelProps {
@@ -30,7 +37,7 @@ export default function AdminPanel(props: AdminPanelProps) {
     
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'audit' | 'sports' | 'tv'>('members');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'audit' | 'sports' | 'tv' | 'whale' | 'liquidity' | 'provider' | 'community' | 'kral'>('dashboard');
 
     // RBAC: Rol Bazlı Yetki Yönetimi
     const currentAdminRole = 'SUPER_ADMIN'; // test için 'SUPPORT' da yapılabilir.
@@ -73,8 +80,7 @@ export default function AdminPanel(props: AdminPanelProps) {
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="bg-[#1a1c24] w-[95vw] max-w-7xl rounded-2xl border border-gray-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div className="w-full h-full min-h-[100dvh] flex flex-col bg-[#050608] overflow-hidden font-sans text-slate-300 relative z-[100]">
                 
                 {/* Header */}
                 <div className="px-6 py-4 border-b border-gray-800 flex justify-between items-center bg-[#15171e]">
@@ -83,6 +89,14 @@ export default function AdminPanel(props: AdminPanelProps) {
                             <Settings className="w-5 h-5 text-emerald-400" />
                         </div>
                         <h2 className="text-xl font-bold text-white">Yönetim Paneli</h2>
+                        
+                        <button 
+                            onClick={() => setActiveTab('kral')} 
+                            className={`ml-4 px-4 py-1.5 rounded-xl font-black italic tracking-widest text-sm transition-all flex items-center gap-2 shadow-lg hover:-translate-y-0.5 ${activeTab === 'kral' ? 'bg-gradient-to-r from-yellow-600 to-yellow-400 text-black shadow-[0_0_20px_rgba(234,179,8,0.4)]' : 'bg-[#1e2330] hover:bg-yellow-500/20 border border-yellow-500/30 text-yellow-500'}`}
+                        >
+                            👑 KRAL
+                        </button>
+
                         <button 
                             onClick={handleGoToSite} 
                             className="ml-3 px-3.5 py-1.5 bg-[#1e2330] hover:bg-emerald-500/20 border border-[#2b3548] hover:border-emerald-500/40 text-slate-200 hover:text-emerald-400 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-sm group cursor-pointer"
@@ -98,94 +112,125 @@ export default function AdminPanel(props: AdminPanelProps) {
                 </div>
 
                 {/* Content */}
-                <div className="p-6 overflow-y-auto flex-1">
-                    <div className="flex gap-2 mb-6 border-b border-gray-800 pb-4 overflow-x-auto">
+                <div className="flex flex-1 overflow-hidden">
+                    
+                    {/* Pro Sidebar Navigation */}
+                    <div className="w-64 bg-[#0d0e12] border-r border-white/5 p-4 flex flex-col gap-2 overflow-y-auto shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+                        <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] mb-2 px-2">ANA MENÜ</div>
+                        
+                        <button 
+                            onClick={() => setActiveTab('dashboard')} 
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'dashboard' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_15px_rgba(0,255,136,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <Activity className="w-4 h-4" /> Komuta Merkezi
+                        </button>
+                        
                         <button 
                             onClick={() => setActiveTab('members')} 
-                            className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'members' ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400'}`}
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'members' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            Üyeler
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-users w-4 h-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            Müşteri Yönetimi
                         </button>
+
+                        <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] mt-4 mb-2 px-2">STAKE ÖZEL</div>
+
+                        {currentAdminRole === 'SUPER_ADMIN' && (
+                            <button 
+                                onClick={() => setActiveTab('liquidity')} 
+                                className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'liquidity' ? 'bg-[#26a17b]/10 text-[#26a17b] border border-[#26a17b]/30 shadow-[0_0_15px_rgba(38,161,123,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                            >
+                                <Wallet className="w-4 h-4" /> Likidite Matrisi
+                            </button>
+                        )}
+                        
                         <button 
-                            onClick={() => setActiveTab('bot')} 
-                            className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'bot' ? 'bg-emerald-500 text-white' : 'bg-gray-800 text-gray-400'}`}
+                            onClick={() => setActiveTab('whale')} 
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'whale' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            <Bot className="w-4 h-4" /> Sohbet Botu
+                            <Target className="w-4 h-4" /> VIP Balina Radarı
                         </button>
+
                         <button 
-                            onClick={() => setActiveTab('luckywheel')} 
-                            className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'luckywheel' ? 'bg-[#0ea5e9] text-white' : 'bg-gray-800 text-gray-400'}`}
+                            onClick={() => setActiveTab('provider')} 
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'provider' ? 'bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 shadow-[0_0_15px_rgba(168,85,247,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            <Trophy className="w-4 h-4" /> Lucky Wheel
+                            <Gamepad2 className="w-4 h-4" /> Sağlayıcı RTP
                         </button>
+
+                        <button 
+                            onClick={() => setActiveTab('community')} 
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'community' ? 'bg-[#ec4899]/10 text-[#ec4899] border border-[#ec4899]/30 shadow-[0_0_15px_rgba(236,72,153,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <MessageSquare className="w-4 h-4" /> Topluluk & Drop
+                        </button>
+
+                        <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] mt-4 mb-2 px-2">OPERASYON</div>
+
                         {currentAdminRole === 'SUPER_ADMIN' && (
                             <button 
                                 onClick={() => setActiveTab('risk')} 
-                                className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'risk' ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.3)]' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
+                                className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_15px_rgba(239,68,68,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                             >
-                                Risk Yönetimi
+                                <ShieldCheck className="w-4 h-4" /> Risk Radarı
                             </button>
                         )}
+                        
                         <button 
                             onClick={() => setActiveTab('radar')} 
-                            className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'radar' ? 'bg-indigo-600 text-white shadow-[0_0_15px_rgba(79,70,229,0.3)]' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'radar' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_15px_rgba(139,92,246,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            Canlı Radar
+                            <Activity className="w-4 h-4" /> Canlı Maç Takip
                         </button>
+
                         <button 
-                            onClick={() => setActiveTab('marketing')} 
-                            className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'marketing' ? 'bg-purple-600 text-white shadow-[0_0_15px_rgba(147,51,234,0.3)]' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
+                            onClick={() => setActiveTab('sports')} 
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'sports' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            Etkinlik & Chat
+                            <Globe className="w-4 h-4" /> Spor Paneli
                         </button>
+
+                        <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] mt-4 mb-2 px-2">FİNANS & SİSTEM</div>
 
                         {currentAdminRole === 'SUPER_ADMIN' && (
                             <>
                                 <button 
                                     onClick={() => setActiveTab('withdrawals')} 
-                                    className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'withdrawals' ? 'bg-amber-600 text-white shadow-[0_0_15px_rgba(217,119,6,0.3)]' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
+                                    className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'withdrawals' ? 'bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/30 shadow-[0_0_15px_rgba(245,158,11,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                                 >
-                                    Çekim Talepleri
+                                    <TrendingUp className="w-4 h-4" /> Çekim Talepleri
                                 </button>
                                 <button 
                                     onClick={() => setActiveTab('audit')} 
-                                    className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'audit' ? 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
+                                    className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'audit' ? 'bg-zinc-100/10 text-white border border-white/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                                 >
-                                    <ShieldCheck className="w-4 h-4" /> İşlem Kayıtları
-                                </button>
-                                <button 
-                                    onClick={() => setActiveTab('sports')} 
-                                    className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'sports' ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
-                                >
-                                    <Activity className="w-4 h-4" /> Spor Yönetimi
-                                </button>
-                                <button 
-                                    onClick={() => setActiveTab('tv')} 
-                                    className={`px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap ${activeTab === 'tv' ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.3)]' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
-                                >
-                                    <Monitor className="w-4 h-4" /> TV Ayarları
+                                    <Monitor className="w-4 h-4" /> İşlem Kayıtları
                                 </button>
                             </>
                         )}
                         
-                        <div className="flex-1" />
-                        
-                        {currentAdminRole === 'SUPER_ADMIN' && (
-                            <button 
-                                onClick={() => {
-                                    props.onClose?.();
-                                    window.dispatchEvent(new CustomEvent('open-finance'));
-                                }} 
-                                className="px-4 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap bg-indigo-600 text-white hover:bg-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all ml-auto"
-                            >
-                                <TrendingUp className="w-4 h-4" /> Finans Paneli (Yeni)
-                            </button>
-                        )}
+                        <button 
+                            onClick={() => setActiveTab('bot')} 
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'bot' ? 'bg-[#14b8a6]/10 text-[#14b8a6] border border-[#14b8a6]/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <Bot className="w-4 h-4" /> AI Chatbot
+                        </button>
+
+                        <button 
+                            onClick={() => setActiveTab('marketing')} 
+                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'marketing' ? 'bg-[#ec4899]/10 text-[#ec4899] border border-[#ec4899]/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle w-4 h-4"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+                            Pazarlama
+                        </button>
                     </div>
 
-                    {/* RBAC Yetki Kontrolü İçin Yardımcı Render Fonksiyonu */}
+                    {/* Content Area */}
+                    <div className="flex-1 overflow-y-auto bg-[#050608] custom-scrollbar relative">
+                        
+                        {/* RBAC Yetki Kontrolü İçin Yardımcı Render Fonksiyonu */}
                     {(() => {
-                        const isRestricted = ['risk', 'withdrawals', 'audit', 'sports', 'tv'].includes(activeTab);
+                        const isRestricted = ['risk', 'withdrawals', 'audit', 'sports', 'tv', 'liquidity'].includes(activeTab);
                         
                         if (isRestricted && currentAdminRole !== 'SUPER_ADMIN') {
                             return (
@@ -204,6 +249,16 @@ export default function AdminPanel(props: AdminPanelProps) {
                         // Eğer yetki varsa veya sayfa herkese açıksa, ilgili tabı render et:
                         return (
                             <>
+                                {activeTab === 'dashboard' && (
+                                    <AdminDashboardTab />
+                                )}
+
+                                {activeTab === 'kral' && (
+                                    <div className="h-full w-full">
+                                        <AdminKralTab />
+                                    </div>
+                                )}
+
                                 {activeTab === 'members' && (
                                     <div className="h-[75vh]">
                                         <AdminMembersTab />
@@ -246,6 +301,22 @@ export default function AdminPanel(props: AdminPanelProps) {
                                     </div>
                                 )}
 
+                                {activeTab === 'whale' && (
+                                    <AdminWhaleTab />
+                                )}
+
+                                {activeTab === 'liquidity' && (
+                                    <AdminLiquidityTab />
+                                )}
+
+                                {activeTab === 'provider' && (
+                                    <AdminProviderTab />
+                                )}
+
+                                {activeTab === 'community' && (
+                                    <AdminCommunityTab />
+                                )}
+
                                 {activeTab === 'sports' && (
                                     <div className="h-[75vh]">
                                         <AdminSportsTab />
@@ -253,7 +324,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                 )}
 
                                 {activeTab === 'tv' && (
-                                    <div className="h-[75vh] overflow-y-auto">
+                                    <div className="h-full p-6">
                                         <AdminTVTab />
                                     </div>
                                 )}
@@ -358,6 +429,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                             </>
                         );
                     })()}
+                    </div>
                 </div>
 
                 {/* Footer */}
@@ -374,6 +446,5 @@ export default function AdminPanel(props: AdminPanelProps) {
                     </div>
                 )}
             </div>
-        </div>
     );
 }

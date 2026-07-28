@@ -54,7 +54,7 @@ async function runTest() {
     console.log('--- 🚀 HIZ VE PING TESTİ BAŞLIYOR ---\n');
     
     console.log('1. Atekbet (Yeni İstediğiniz Adres) Test Ediliyor...');
-    const atekbet = await measureSpeed('Atekbet', 'wss://eu-swarm-newm.atekbet272.com/ws?language=tur', 1);
+    const atekbet = await measureSpeed('Atekbet', 'wss://eu-swarm-newm.atekbet273.com/ws?language=tur', 1);
     
     console.log('\n2. NoraBahis (Şu Anki Mevcut Sistem) Test Ediliyor...');
     const norabahis = await measureSpeed('NoraBahis', 'wss://eu-swarm-newm.norabahis779.com/ws?organization_id=928d43dd-1219-4ab0-b33f-0e180215781e&x-region=us-south1', 55);

@@ -1,8 +1,8 @@
 const WebSocket = require('ws');
 const fs = require('fs');
 
-const url = 'wss://eu-swarm-newm.atekbet272.com/ws?language=tur';
-const headers = { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0' };
+const url = 'wss://eu-swarm-newm.atekbet273.com/ws?language=tur';
+const headers = { 'Origin': 'https://atekbet273.com', 'User-Agent': 'Mozilla/5.0' };
 const ws = new WebSocket(url, { headers });
 
 const formattedEventsMap = new Map();

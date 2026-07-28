@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('wss://eu-swarm-newm.atekbet272.com/ws?language=tur');
+const ws = new WebSocket('wss://eu-swarm-newm.atekbet273.com/ws?language=tur');
 let sId = '';
 
 ws.on('open', () => {

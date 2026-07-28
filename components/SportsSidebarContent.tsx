@@ -8,6 +8,7 @@ import {
 interface SportsSidebarContentProps {
   isOpen: boolean;
   onViewChange: (view: string) => void;
+  onToggle?: () => void;
 }
 
 // Reusable SVG icons for sports without direct lucide match
@@ -50,7 +51,7 @@ const MmaIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onViewChange }) => {
+const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onViewChange, onToggle }) => {
   const [activeMenu, setActiveMenu] = useState<string>('');
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   
@@ -74,16 +75,17 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               setActiveMenu('canli'); 
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'canli' }));
+              onToggle?.();
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'canli' ? 'bg-gradient-to-r from-[#ef4444]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'canli' ? 'bg-gradient-to-r from-[#00E5FF]/10 to-transparent text-[#00E5FF]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
-            {activeMenu === 'canli' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#ef4444] to-transparent shadow-[0_0_15px_#ef4444] z-10"></div>}
+            {activeMenu === 'canli' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF] z-10"></div>}
             <div className="flex items-center">
-              <PlayCircle className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'canli' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'canli' ? 2.5 : 2} fill={activeMenu === 'canli' ? 'currentColor' : 'none'} />
+              <PlayCircle className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'canli' ? 'text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]' : 'text-[#8b92a5] group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]'}`} strokeWidth={activeMenu === 'canli' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Canlı Etkinlikler</span>}
             </div>
             {isOpen && (
-              <div className="bg-[#0f62fe] px-2 py-0.5 rounded-full text-white text-[11px] font-bold">119</div>
+              <div className="bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2 py-0.5 rounded-full text-[#00E5FF] shadow-[0_0_8px_rgba(0,229,255,0.2)] text-[11px] font-black">119</div>
             )}
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
@@ -97,6 +99,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               setActiveMenu('upcoming'); 
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'upcoming' }));
+              onToggle?.();
             }}
             className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'upcoming' ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
@@ -117,6 +120,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               setActiveMenu('hepsi'); 
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));
+              onToggle?.();
             }}
             className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'hepsi' ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
@@ -137,6 +141,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               setActiveMenu('bahislerim');
               onViewChange('spor724');
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'mybets' }));
+              onToggle?.();
             }}
             className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'bahislerim' ? 'bg-gradient-to-r from-[#10b981]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
@@ -183,6 +188,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
                onClick={() => {
                  window.history.pushState(null, '', `/spor/${sport.id}`);
                  window.dispatchEvent(new PopStateEvent('popstate'));
+                 onToggle?.();
                }}
                className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${isActive ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'} ${!isOpen ? 'justify-center' : ''}`}
              >
@@ -217,6 +223,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
                onClick={() => {
                  window.history.pushState(null, '', `/spor/${item.id}`);
                  window.dispatchEvent(new PopStateEvent('popstate'));
+                 onToggle?.();
                }}
                className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 text-[#8b92a5] hover:text-white ${!isOpen ? 'justify-center' : ''}`}
              >

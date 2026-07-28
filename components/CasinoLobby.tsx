@@ -6,6 +6,7 @@ import { ALL_GAMES } from '../data/games';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getOriginalsData } from './OriginalsSlider';
 import { PopularLiveWidget } from './PopularLiveWidget';
+import { GamePlayView } from './GamePlayView';
 
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
@@ -254,31 +255,50 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
   
   return (
     <div 
-      className="group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 hover:z-10 border border-white/5 hover:border-[#36ffc4]/30 shadow-[0_4px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_10px_40px_rgba(54,255,196,0.25)] hover:-translate-y-2 bg-[#1a1c24]"
+      className="group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 hover:z-10 border border-white/5 hover:border-[#00E5FF]/50 shadow-[0_4px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_10px_40px_rgba(0,229,255,0.3)] hover:-translate-y-2 bg-[#0A0D14]"
       tabIndex={0}
       onClick={() => onClick()}
     >
-      <div className="relative w-full aspect-[4/5] overflow-hidden">
-        <img src={game.img || game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+      <div className="relative w-full aspect-[4/5] overflow-hidden rounded-2xl">
+        <img src={game.img || game.image} alt={game.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy" />
         
-        {/* Glow behind image on hover */}
-        <div className="absolute inset-0 bg-[#36ffc4]/0 group-hover:bg-[#36ffc4]/10 transition-colors duration-500 mix-blend-overlay z-10"></div>
+        {/* Inner Glow / Glassmorphism */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#00E5FF]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay z-10"></div>
+        <div className="absolute inset-0 ring-1 ring-inset ring-white/10 group-hover:ring-[#00E5FF]/50 rounded-2xl z-20 pointer-events-none transition-all duration-500"></div>
+
+        {/* Tags */}
+        <div className="absolute top-2 left-2 z-20 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {game.rtp && (
+            <div className="bg-[#0A0D14]/80 backdrop-blur-md border border-[#00E5FF]/30 text-[#00E5FF] text-[9px] sm:text-[10px] font-black px-2 py-1 rounded-md shadow-lg flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-pulse"></span>
+              RTP {game.rtp}
+            </div>
+          )}
+        </div>
         
         {/* Play Overlay with Real and Demo Buttons */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 bg-black/60 backdrop-blur-sm">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 bg-[#0A0D14]/70 backdrop-blur-[3px]">
           <button 
             onClick={(e) => { e.stopPropagation(); onClick(); }}
-            className="bg-gradient-to-r from-[#10b981] to-[#36ffc4] hover:from-[#00E676] hover:to-[#10b981] text-black font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_0_20px_rgba(54,255,196,0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+            className="bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2.5 rounded-lg shadow-[0_0_20px_rgba(0,229,255,0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%] flex items-center justify-center gap-2"
           >
+            <Play className="w-3.5 h-3.5 fill-current" />
             GERÇEK OYNA
           </button>
           
           <button 
             onClick={(e) => { e.stopPropagation(); onDemoClick ? onDemoClick() : onClick(); }}
-            className="bg-[#2A2E3D]/80 hover:bg-[#3A3F54] border border-white/20 text-white font-bold text-[11px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg shadow-[0_4px_10px_rgba(0,0,0,0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+            className="bg-[#1A1D24]/80 hover:bg-[#252A36] border border-white/10 hover:border-white/20 text-white font-bold text-[10px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
           >
             EĞLENCE MODU
           </button>
+        </div>
+        
+        {/* Provider Tag Bottom Right */}
+        <div className="absolute bottom-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="bg-[#0A0D14]/80 backdrop-blur-md border border-white/10 text-white/80 text-[8px] sm:text-[9px] font-bold px-2 py-1 rounded flex items-center gap-1 uppercase tracking-wider">
+            {game.provider?.charAt(0) || 'P'} {game.provider || 'Pragmatic'}
+          </div>
         </div>
       </div>
     </div>
@@ -289,55 +309,50 @@ const GameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => v
 const NewGameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () => void }> = ({ game, onClick, onDemoClick }) => {
   return (
     <div 
-      className="group relative flex flex-col cursor-pointer rounded-[14px] overflow-hidden shadow-lg transition-transform duration-300 hover:-translate-y-1" 
-      style={{ aspectRatio: '4/5', backgroundColor: '#111' }}
+      className="group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 hover:z-10 border border-white/5 hover:border-[#10B981]/50 shadow-[0_4px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_10px_40px_rgba(16,185,129,0.25)] hover:-translate-y-2 bg-[#0A0D14]"
+      style={{ aspectRatio: '4/5' }}
       tabIndex={0}
-      onClick={() => onClick()} // Trigger play on card click
+      onClick={() => onClick()}
     >
-      <img 
-        src={game.img || game.image} 
-        alt={game.name} 
-        className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" 
-      />
-      
-      {/* Dark gradient for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent z-10" />
+      <div className="relative w-full h-full overflow-hidden rounded-2xl">
+        <img 
+          src={game.img || game.image} 
+          alt={game.name} 
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy"
+        />
+        
+        {/* Inner Glow / Glassmorphism */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#10B981]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay z-10"></div>
+        <div className="absolute inset-0 ring-1 ring-inset ring-white/10 group-hover:ring-[#10B981]/50 rounded-2xl z-20 pointer-events-none transition-all duration-500"></div>
 
-      {/* Content overlay */}
-      <div className="absolute inset-x-0 bottom-0 p-3 z-20 flex flex-col items-center text-center">
-        {/* Game Title (Impact-style, large, white, uppercase) */}
-        <h3 className="text-white font-black text-[15px] leading-[1.1] tracking-tight uppercase mb-2 drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
-          {getDisplayGameName(game)}
-        </h3>
-
-        {/* Provider info row */}
-        <div className="w-full flex items-center justify-between mt-auto">
-          <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center text-[8px] font-bold text-white shrink-0">
-            {game.provider?.charAt(0) || 'P'}
-          </div>
-          <span className="text-[9px] font-bold text-white/80 uppercase tracking-wider mx-2 truncate flex-1 text-center">
-            {game.provider || 'Pragmatic Play'}
-          </span>
-          <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
-            i
+        {/* Content overlay */}
+        <div className="absolute inset-x-0 bottom-0 p-3 z-20 flex flex-col items-center text-center group-hover:opacity-0 transition-opacity duration-300 bg-gradient-to-t from-[#0A0D14] via-[#0A0D14]/80 to-transparent">
+          <h3 className="text-white font-black text-[13px] sm:text-[15px] leading-tight tracking-tight uppercase mb-1 drop-shadow-lg">
+            {getDisplayGameName(game)}
+          </h3>
+          <div className="w-full flex items-center justify-center">
+             <span className="text-[9px] font-bold text-white/60 uppercase tracking-wider truncate text-center">
+              {game.provider || 'Pragmatic Play'}
+            </span>
           </div>
         </div>
-      </div>
 
-      {/* Hover Play Overlay */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 bg-black/60 backdrop-blur-[2px]">
-        <button 
-          onClick={(e) => { e.stopPropagation(); onClick(); }}
-          className="bg-[#10b981] hover:bg-[#00E676] text-black font-black text-[11px] px-4 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
-        >
-          GERÇEK OYNA
-        </button>
-        <button 
-          onClick={(e) => { e.stopPropagation(); onDemoClick ? onDemoClick() : onClick(); }}
-          className="bg-[#2A2E3D] hover:bg-[#3A3F54] border border-white/10 text-white font-bold text-[11px] px-4 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
-        >
-          EĞLENCE MODU
-        </button>
+        {/* Hover Play Overlay */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 z-30 bg-[#0A0D14]/70 backdrop-blur-[3px]">
+          <button 
+            onClick={(e) => { e.stopPropagation(); onClick(); }}
+            className="bg-gradient-to-r from-[#10B981] to-[#00E676] hover:brightness-110 text-[#0A0D14] font-black text-[11px] sm:text-xs px-4 sm:px-6 py-2.5 rounded-lg shadow-[0_0_20px_rgba(16,185,129,0.5)] transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%] flex items-center justify-center gap-2"
+          >
+            <Play className="w-3.5 h-3.5 fill-current" />
+            GERÇEK OYNA
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); onDemoClick ? onDemoClick() : onClick(); }}
+            className="bg-[#1A1D24]/80 hover:bg-[#252A36] border border-white/10 hover:border-white/20 text-white font-bold text-[10px] sm:text-xs px-4 sm:px-6 py-2 rounded-lg transform scale-90 group-hover:scale-100 transition-all duration-300 w-[85%]"
+          >
+            EĞLENCE MODU
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -346,14 +361,14 @@ const NewGameCard: React.FC<{ game: any, onClick: () => void, onDemoClick?: () =
 const SectionHeader: React.FC<{ title: string, icon?: React.ReactNode }> = ({ title, icon }) => (
   <div className="flex items-center justify-between mb-4 mt-8">
     <div className="flex items-center gap-2">
-      {icon && <div className="text-[#10b981]">{icon}</div>}
-      <h2 className="text-white text-lg font-black tracking-tight">{title}</h2>
+      {icon && <div className="text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]">{icon}</div>}
+      <h2 className="text-white text-lg font-black tracking-tight drop-shadow-md">{title}</h2>
     </div>
     <div className="flex gap-2">
-      <button className="w-8 h-8 rounded bg-[#111111] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+      <button className="w-8 h-8 rounded bg-[#0A0D14] border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[0_0_10px_rgba(0,229,255,0.3)] flex items-center justify-center text-[#848B9D] hover:text-[#00E5FF] transition-all duration-300">
         <ChevronLeft size={18} />
       </button>
-      <button className="w-8 h-8 rounded bg-[#111111] hover:bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+      <button className="w-8 h-8 rounded bg-[#0A0D14] border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[0_0_10px_rgba(0,229,255,0.3)] flex items-center justify-center text-[#848B9D] hover:text-[#00E5FF] transition-all duration-300">
         <ChevronRight size={18} />
       </button>
     </div>
@@ -374,16 +389,16 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
       <div className="flex items-center justify-between mt-8">
         <div className="flex items-center gap-2">
           {icon && <div className="text-white">{icon}</div>}
-          <h2 className="text-white text-lg font-bold tracking-tight">{title}</h2>
+          <h2 className="text-white text-lg font-bold tracking-tight drop-shadow-md">{title}</h2>
         </div>
         <div className="flex gap-2 items-center">
-          <button className="px-3 h-8 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors text-[13px] font-medium">
+          <button className="px-3 h-8 flex items-center justify-center text-[#848B9D] hover:text-white hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] transition-all duration-300 text-[13px] font-medium">
             Tümünü gör
           </button>
-          <button onClick={() => scroll('left')} className="w-7 h-7 rounded bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+          <button onClick={() => scroll('left')} className="w-7 h-7 rounded bg-[#0A0D14] border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[0_0_10px_rgba(0,229,255,0.3)] flex items-center justify-center text-[#848B9D] hover:text-[#00E5FF] transition-all duration-300">
             <ChevronLeft size={16} />
           </button>
-          <button onClick={() => scroll('right')} className="w-7 h-7 rounded bg-[#2A2E3D] flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+          <button onClick={() => scroll('right')} className="w-7 h-7 rounded bg-[#0A0D14] border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[0_0_10px_rgba(0,229,255,0.3)] flex items-center justify-center text-[#848B9D] hover:text-[#00E5FF] transition-all duration-300">
             <ChevronRight size={16} />
           </button>
         </div>
@@ -452,6 +467,7 @@ export default function CasinoLobby({
       }
     } else {
       setSelectedGame(game);
+      setShowDemoIframe(true);
     }
   };
 
@@ -501,23 +517,39 @@ export default function CasinoLobby({
     setShowDemoIframe(true);
   };
 
+  if (selectedGame && showDemoIframe) {
+    return (
+      <GamePlayView 
+        game={selectedGame}
+        demoUrl={getDemoUrl(selectedGame) || ''}
+        onClose={() => { setShowDemoIframe(false); setSelectedGame(null); }}
+        onViewChange={onNavigate}
+      />
+    );
+  }
+
   return (
     <div className="w-full h-full flex flex-col bg-transparent text-white min-w-0">
-      {/* 1. TOP NAVBAR (Gamdom Style) */}
-      <div className="sticky top-0 z-40 bg-[#0A0D14]/95 backdrop-blur-md border-b border-white/5 px-4 md:px-8 py-0">
+      {/* 1. TOP NAVBAR (Neon Stake Style) */}
+      <div className="sticky top-0 z-40 bg-[#0A0D14]/90 backdrop-blur-xl border-b border-[#00E5FF]/10 px-4 md:px-8 py-0 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00E5FF]/20 to-transparent"></div>
         <div className="max-w-[1600px] mx-auto flex items-center justify-center md:justify-center gap-4 md:gap-8 overflow-x-auto hide-scrollbar">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex items-center gap-2 py-4 px-2 whitespace-nowrap text-sm font-bold transition-colors ${
-                activeTab === tab.id ? 'text-[#1075fc]' : 'text-[#848B9D] hover:text-white'
+              className={`relative flex items-center gap-2 py-4 px-2 whitespace-nowrap text-sm font-bold transition-all duration-300 ${
+                activeTab === tab.id 
+                  ? 'text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]' 
+                  : 'text-[#848B9D] hover:text-white hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]'
               }`}
             >
-              {tab.icon}
+              <div className={`transition-transform duration-300 ${activeTab === tab.id ? 'scale-110 text-[#00E5FF]' : ''}`}>
+                {tab.icon}
+              </div>
               {tab.label}
               {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#1075fc] rounded-t-full shadow-[0_-2px_10px_rgba(16,117,252,0.5)]" />
+                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] rounded-t-full shadow-[0_-2px_15px_rgba(0,229,255,0.7)]" />
               )}
             </button>
           ))}
@@ -543,7 +575,7 @@ export default function CasinoLobby({
                   <p className="text-[#848B9D] text-sm md:text-lg mb-6 font-medium">
                     {banner.sub}
                   </p>
-                  <button onClick={() => handleAction()} className="bg-[#1075fc] hover:bg-[#0f7bff] text-white px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-colors shadow-[0_0_20px_rgba(16,117,252,0.3)] mx-auto block">
+                  <button onClick={() => handleAction()} className="bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)] mx-auto block">
                     Hemen Katıl
                   </button>
                 </div>
@@ -555,7 +587,7 @@ export default function CasinoLobby({
                 <button 
                   key={idx} 
                   onClick={() => setCurrentBanner(idx)}
-                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#1075fc]' : 'w-2 bg-white/20'}`}
+                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#00E5FF] shadow-[0_0_8px_#00E5FF]' : 'w-2 bg-white/20'}`}
                 />
               ))}
             </div>
@@ -564,19 +596,19 @@ export default function CasinoLobby({
 
         {/* 3. FILTERS AND SEARCH */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
-          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#131823] hover:bg-[#1f2638] border-none rounded-lg text-white font-bold transition-colors">
-            <Filter size={18} className="text-[#848B9D]" />
+          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#0A0D14] hover:bg-[#111622] border border-white/5 hover:border-[#00E5FF]/30 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] rounded-lg text-white font-bold transition-all duration-300">
+            <Filter size={18} className="text-[#00E5FF]" />
             Sağlayıcılar
           </button>
 
-          <div className="relative w-full md:w-[320px]">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#848B9D]" size={18} />
+          <div className="relative w-full md:w-[320px] group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#848B9D] group-focus-within:text-[#00E5FF] transition-colors" size={18} />
             <input 
               type="text" 
               placeholder="Oyun Ara..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#131823] border-none rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:ring-1 focus:ring-[#1075fc] transition-colors font-medium"
+              className="w-full bg-[#0A0D14] shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] border border-white/5 focus:border-[#00E5FF]/50 rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:ring-1 focus:ring-[#00E5FF]/30 transition-all duration-300 font-medium"
             />
           </div>
         </div>
@@ -640,7 +672,7 @@ export default function CasinoLobby({
             {/* NEW GAMES SLIDER SECTION (Moved to top) */}
             <SliderSection 
               title="Yeni Eklenenler" 
-              icon={<Sparkles className="text-white" />} 
+              icon={<Sparkles className="text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.8)] animate-pulse" />} 
               games={newGames} 
               onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
@@ -649,7 +681,7 @@ export default function CasinoLobby({
             {/* POPULAR GAMES SLIDER SECTION */}
             <SliderSection 
               title="Popüler Oyunlar" 
-              icon={<Flame className="text-white" fill="white" />} 
+              icon={<Flame className="text-[#10B981] drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" fill="#10B981" />} 
               games={popularGames} 
               onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
@@ -658,7 +690,7 @@ export default function CasinoLobby({
 
             <SliderSection 
               title="Çok Kazandıranlar" 
-              icon={<Flame className="text-[#f0b90b]" />} 
+              icon={<Flame className="text-[#f0b90b] drop-shadow-[0_0_8px_rgba(240,185,11,0.8)]" fill="#f0b90b" />} 
               games={allGames.filter(g => g.type === 'slot' || g.category === 'slots').sort((a, b) => b.players - a.players).slice(12, 24)} 
               onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
@@ -667,130 +699,7 @@ export default function CasinoLobby({
         )}
       </div>
 
-      {/* GAME MODAL (Kept similar structure but adapted style) */}
-      {selectedGame && createPortal(
-        <div 
-          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setSelectedGame(null);
-              setShowDemoIframe(false);
-            }
-          }}
-        >
-          {showDemoIframe && getDemoUrl(selectedGame) ? (
-            <div id="game-iframe-container" className="relative m-auto z-10 w-full max-w-5xl h-[80vh] bg-black rounded-xl overflow-hidden shadow-2xl flex flex-col border border-white/5">
-              {/* HEADER (matching screenshot) */}
-              <div className="flex items-center justify-between px-4 h-12 bg-[#253646] relative select-none">
-                {/* Left: Toggle */}
-                <div className="flex items-center flex-1">
-                   <label className="relative inline-flex items-center cursor-pointer">
-                     <input type="checkbox" className="sr-only peer" disabled />
-                     <div className="w-10 h-5 bg-[#5D7082] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
-                     <span className="ml-3 text-[13px] font-medium text-white/90">Gerçek Para</span>
-                   </label>
-                </div>
-                
-                {/* Center: Title */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center whitespace-nowrap">
-                   <span className="text-white font-medium text-[14px] tracking-wide">{getDisplayGameName(selectedGame)}</span>
-                </div>
 
-                {/* Right: Controls */}
-                <div className="flex items-center gap-5 flex-1 justify-end text-[#9BA8B4]">
-                  <button onClick={() => {
-                     const elem = document.getElementById('game-iframe-container');
-                     if (elem) elem.requestFullscreen();
-                  }} className="hover:text-white transition-colors" title="Tam Ekran">
-                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
-                  </button>
-                  <button onClick={() => {
-                     const iframe = document.getElementById('game-iframe') as HTMLIFrameElement;
-                     if (iframe) iframe.src = iframe.src;
-                  }} className="hover:text-white transition-colors" title="Yenile">
-                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                  </button>
-                  <button onClick={() => setShowDemoIframe(false)} className="hover:text-white transition-colors" title="Kapat">
-                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* GAME FRAME */}
-              <div className="flex-1 w-full bg-black relative">
-                <iframe 
-                  id="game-iframe"
-                  src={getDemoUrl(selectedGame)!}
-                  className="absolute inset-0 w-full h-full border-0"
-                  allowFullScreen
-                  title={selectedGame.name || 'Demo Game'}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="relative m-auto z-10 bg-[#111111] rounded-2xl border border-[#2A2E3D] w-full max-w-[400px] shadow-2xl overflow-hidden animate-fade-in">
-              <button onClick={() => { setSelectedGame(null); setShowDemoIframe(false); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/40 hover:bg-black/60 rounded-full text-white transition-all z-20 backdrop-blur-sm">✕</button>
-              
-              <div className="relative aspect-video w-full flex flex-col items-center justify-center">
-                <div className="absolute inset-0 bg-[#0F121A]">
-                  <img src={selectedGame.img || selectedGame.image} className={`w-full h-full object-cover opacity-50 ${selectedGame.category === 'originals' ? 'mix-blend-lighten' : ''}`} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111111] to-transparent" />
-                </div>
-                
-                <div className="relative z-10 w-24 h-24 mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black">
-                  <img src={selectedGame.img || selectedGame.image} className={`w-full h-full object-cover ${selectedGame.category === 'originals' ? 'mix-blend-lighten' : ''}`} />
-                </div>
-              </div>
-
-              <div className="relative z-10 px-6 pb-8 pt-4 text-center flex flex-col items-center">
-                <h3 className="text-2xl font-black text-white mb-1">{getDisplayGameName(selectedGame)}</h3>
-                <p className="text-[#10b981] text-sm font-bold mb-6">{selectedGame.provider || 'Pragmatic Play'}</p>
-
-                <div className="w-full grid grid-cols-2 gap-3 mb-6 bg-[#0F121A] p-3 rounded-lg border border-[#2A2E3D]">
-                  <div className="flex flex-col items-center">
-                    <span className="text-[#848B9D] text-xs font-medium mb-1">RTP</span>
-                    <span className="text-white font-mono font-bold text-sm">{selectedGame.rtp || '96.50%'}</span>
-                  </div>
-                  <div className="flex flex-col items-center border-l border-[#2A2E3D]">
-                    <span className="text-[#848B9D] text-xs font-medium mb-1">Volatilite</span>
-                    <span className="text-white font-bold text-sm">Yüksek</span>
-                  </div>
-                </div>
-
-                <div className="w-full flex flex-col gap-3">
-                  <button 
-                     onClick={() => {
-                       setSelectedGame(null);
-                       setShowDemoIframe(false);
-                       if (selectedGame.category === 'originals' || selectedGame.name === 'Plinko') {
-                         if (onNavigate) {
-                           onNavigate('plinko');
-                         }
-                       } else {
-                         handleAction();
-                       }
-                     }}
-                     className="w-full py-3.5 rounded-lg font-black text-sm transition-all bg-[#10b981] text-black hover:bg-[#00E676] shadow-[0_0_15px_rgba(0,255,163,0.3)]"
-                   >
-                     Gerçek Parayla Oyna
-                   </button>
-
-                  {getDemoUrl(selectedGame) && (
-                    <button 
-                       onClick={() => setShowDemoIframe(true)}
-                       className="w-full py-3.5 rounded-lg font-bold text-sm transition-all bg-[#2A2E3D] text-white hover:bg-[#3A3F54] flex items-center justify-center gap-2"
-                     >
-                       <Play size={16} className="text-[#10b981]" fill="currentColor" />
-                       Eğlencesine Oyna
-                     </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>,
-        document.body
-      )}
     </div>
   );
 };

@@ -58,6 +58,11 @@ const LeagueLogo: React.FC<{ league: string; className?: string }> = ({ league, 
       setImgUrl('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%23E30A17" rx="100"/><circle cx="425" cy="400" r="200" fill="%23FFFFFF"/><circle cx="475" cy="400" r="160" fill="%23E30A17"/><polygon points="760,400 642,438 678,323 583,406 700,466" fill="%23FFFFFF"/></svg>');
       return;
     }
+    
+    if (league.includes('DÜNYA KULÜPLER')) {
+      setImgUrl('/assets/leagues/club-friendlies.png');
+      return;
+    }
 
     const normalizedName = league.toLocaleLowerCase('tr-TR').trim();
     let matchedLogo = null;
@@ -138,6 +143,11 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
     
     if (isTurkishTeam) {
        targetLeague = '🇹🇷 TÜRK TAKIMLARI ÖZEL';
+    } else {
+       const lName = match.league.toLocaleLowerCase('tr-TR');
+       if (lName.includes('dostluk') || lName.includes('friendly') || lName.includes('hazırlık') || lName.includes('1win')) {
+           targetLeague = '🌍 DÜNYA KULÜPLER DOSTLUK MAÇLARI';
+       }
     }
     
     if (!groupedByLeague[targetLeague]) {
@@ -165,8 +175,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
       'şampiyonlar ligi', 'champions league', 
       'avrupa ligi', 'europa league', 
       'konferans ligi', 'conference league', 
+      'dünya kulüpler dostluk', 'dostluk maçları', 'club friendlies', 'friendlies', 'hazırlık', 'club friendly games',
       'süper lig', 'super lig',
-      'dostluk maçları', 'club friendlies', 'friendlies', 'hazırlık', 'club friendly games',
       'premier league', 'premier lig', 'la liga', 'serie a', 'bundesliga', 'ligue 1', 
       'nba', 'euroleague', 'nfl', 'nhl', 'mlb', 'atp', 'wta'
     ];
@@ -175,8 +185,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
       if (l.includes(priorities[i])) {
         // Strict Turkish Super Lig matching
         if (priorities[i] === 'süper lig' || priorities[i] === 'super lig') {
-          if (l.includes('çin') || l.includes('china') || l.includes('isviçre') || l.includes('swiss')) {
-            continue; // Not Turkish Super Lig, keep checking other priorities
+          if (!l.includes('türkiye') && !l.includes('turkey')) {
+            continue; // Not Turkish Super Lig (e.g. Uzbekistan Super Lig), skip this high priority
           }
         }
         return i;
@@ -188,39 +198,13 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
 
   const getLeagueTheme = (name: string) => {
     const l = name.toLocaleLowerCase('tr-TR');
+    const baseTheme = { gradient: 'from-white/60 via-[#00E5FF]/30 to-transparent', accent: 'bg-[#00E5FF]', textColor: 'text-white' };
+    
     if (l.includes('türk takımları')) {
-      return { glow: 'from-[#ff0000]', accent: 'bg-[#ffffff]', textColor: 'text-white', isTurkish: true };
+      return { ...baseTheme, isTurkish: true, gradient: 'from-white/60 via-red-500/30 to-transparent', accent: 'bg-red-500' };
     }
-    if (l.includes('şampiyonlar') || l.includes('champions')) {
-      return { glow: 'from-[#0044ff]', accent: 'bg-[#0044ff]', textColor: 'text-white' };
-    }
-    if (l.includes('avrupa') || l.includes('europa')) {
-      return { glow: 'from-[#ff6a00]', accent: 'bg-[#ff6a00]', textColor: 'text-white' };
-    }
-    if (l.includes('konferans') || l.includes('conference')) {
-      return { glow: 'from-[#00ff44]', accent: 'bg-[#00ff44]', textColor: 'text-white' };
-    }
-    if (l.includes('süper lig')) {
-      if (!l.includes('çin') && !l.includes('china') && !l.includes('isviçre') && !l.includes('swiss') && !l.includes('kadın') && !l.includes('women') && !l.includes('u19') && !l.includes('u21')) {
-        return { glow: 'from-[#ff002b]', accent: 'bg-[#ff002b]', textColor: 'text-white' };
-      }
-    }
-    if (l.includes('dostluk maçları') || l.includes('hazırlık') || l.includes('friendlies')) {
-      return { glow: 'from-[#ffd700]', accent: 'bg-[#ffd700]', textColor: 'text-white' };
-    }
-    if (l.includes('premier')) {
-      return { glow: 'from-[#6a00ff]', accent: 'bg-[#6a00ff]', textColor: 'text-white' };
-    }
-    if (l.includes('la liga')) {
-      return { glow: 'from-[#ff0000]', accent: 'bg-[#ff0000]', textColor: 'text-white' };
-    }
-    if (l.includes('serie a')) {
-      return { glow: 'from-[#0088ff]', accent: 'bg-[#0088ff]', textColor: 'text-white' };
-    }
-    if (l.includes('bundesliga')) {
-      return { glow: 'from-[#ff0000]', accent: 'bg-[#ff0000]', textColor: 'text-white' };
-    }
-    return { glow: 'from-white/10', accent: 'bg-white/50', textColor: 'text-white' };
+    
+    return baseTheme;
   };
 
   const sortedLeagues = Object.keys(groupedByLeague).sort((a, b) => {
@@ -236,13 +220,13 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
   return (
     <div className="w-full flex flex-col gap-4">
       {/* Header Controls */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-row items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-zinc-300" />
-          <h2 className="text-white font-bold text-lg">Popüler Etkinlikler</h2>
+          <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-300" />
+          <h2 className="text-white font-bold text-base sm:text-lg whitespace-nowrap">Popüler Etkinlikler</h2>
         </div>
         
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-2 sm:gap-4 text-sm ml-auto">
           <div className="hidden sm:flex items-center gap-2">
             <Monitor className="w-4 h-4 text-zinc-400" />
             <span className="text-zinc-300 font-semibold">Görüntüle</span>
@@ -271,17 +255,23 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           const theme = getLeagueTheme(league);
           
           return (
-            <div key={league} className="group bg-[#14171e] rounded-lg overflow-hidden transition-all duration-300 shadow-lg border border-transparent hover:border-white/5 relative">
+            <div key={league} className="group bg-[#0b0e14]/80 backdrop-blur-md rounded-xl rounded-bl-sm overflow-hidden transition-all duration-500 shadow-xl hover:shadow-[0_8px_30px_rgba(0,0,0,0.6)] border border-white/[0.04] border-l-[3px] border-l-transparent hover:border-l-[#00E5FF] relative mt-2">
               <button 
                 onClick={() => toggleLeague(league)}
-                className={`w-full flex items-center justify-between px-5 py-4 relative overflow-hidden transition-all text-left bg-transparent group`}
+                className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative overflow-hidden transition-all text-left bg-transparent group`}
               >
-                {/* Ambient Radial Glow */}
-                <div className={`absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-500 bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] ${theme.glow} via-transparent to-transparent pointer-events-none`} />
+                {/* Advanced Ambient Radial Glow & Background Texture (Toned Down) */}
+                <div className={`absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-700 bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-white/10 via-[#0d1017] to-[#0d1017] pointer-events-none`} />
+                
+                {/* White to Blue (Cyan) Gradient behind the Logo */}
+                <div className={`absolute left-0 top-0 bottom-0 w-[300px] opacity-40 group-hover:opacity-60 transition-opacity duration-700 bg-gradient-to-r ${theme.gradient} pointer-events-none`} style={{ maskImage: 'linear-gradient(to right, black 20%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, black 20%, transparent 100%)' }} />
+                
+                {/* Secondary Blend Layer for Color Vibrancy */}
+                <div className={`absolute left-0 top-0 bottom-0 w-[200px] opacity-30 group-hover:opacity-50 transition-opacity duration-700 bg-gradient-to-r ${theme.gradient} pointer-events-none mix-blend-overlay`} />
                 
                 {/* Turkish Flag Watermark (Only for Turkish Teams) */}
                 {(theme as any).isTurkish && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 opacity-10 group-hover:opacity-20 transition-all duration-700 pointer-events-none overflow-hidden flex items-center justify-end pr-10">
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-72 h-72 opacity-[0.07] group-hover:opacity-[0.15] group-hover:scale-105 transition-all duration-700 pointer-events-none overflow-hidden flex items-center justify-end pr-8">
                     <svg viewBox="0 0 1200 800" className="w-full h-full fill-white mix-blend-overlay">
                       <circle cx="425" cy="400" r="200" fill="white"/>
                       <circle cx="475" cy="400" r="160" fill="black" style={{ mixBlendMode: 'destination-out' }}/>
@@ -290,40 +280,62 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                   </div>
                 )}
                 
-                {/* Huge Watermark Logo (For others) */}
+                {/* Scattered Watermark Logos (Brand Color Tinted & Toned Down) */}
                 {!(theme as any).isTurkish && (
-                  <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-48 h-48 opacity-[0.02] group-hover:opacity-[0.04] group-hover:scale-110 transition-all duration-700 pointer-events-none grayscale mix-blend-plus-lighter">
-                     <LeagueLogo league={league} className="w-full h-full object-contain" />
+                  <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-700 mix-blend-screen" style={{ filter: 'grayscale(100%) sepia(100%) hue-rotate(185deg) saturate(300%) brightness(0.8)' }}>
+                     {/* Scattered logos */}
+                     <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-64 h-64 group-hover:-translate-x-6 group-hover:rotate-12 transition-all duration-1000">
+                       <LeagueLogo league={league} className="w-full h-full object-contain" />
+                     </div>
+                     <div className="absolute right-1/4 -top-16 w-32 h-32 opacity-60 group-hover:translate-x-4 group-hover:-rotate-12 transition-all duration-1000">
+                       <LeagueLogo league={league} className="w-full h-full object-contain" />
+                     </div>
+                     <div className="absolute left-1/3 -bottom-10 w-40 h-40 opacity-40 group-hover:-translate-y-4 group-hover:rotate-6 transition-all duration-1000">
+                       <LeagueLogo league={league} className="w-full h-full object-contain" />
+                     </div>
+                     <div className="absolute right-1/2 top-4 w-24 h-24 opacity-30 group-hover:scale-110 transition-all duration-1000">
+                       <LeagueLogo league={league} className="w-full h-full object-contain" />
+                     </div>
                   </div>
                 )}
                 
-                {/* Left Accent Bar */}
-                <div className={`absolute left-0 top-1/2 -translate-y-1/2 h-0 w-1 ${theme.accent} group-hover:h-full transition-all duration-300 rounded-r-md`}></div>
+                {/* Left Accent Glow Bar - Thicker and Always Visible */}
+                <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${theme.accent} shadow-[0_0_15px_rgba(255,255,255,0.4)]`}></div>
                 
                 {/* Content */}
-                <div className="flex items-center gap-5 relative z-10">
-                  {/* Floating Logo without cheap circles */}
-                  <div className="w-10 h-10 flex items-center justify-center relative group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                <div className="flex items-center gap-4 relative z-10 pl-2">
+                  {/* Premium Medium Logo */}
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center relative group-hover:scale-105 group-hover:rotate-3 transition-transform duration-500">
                     {/* Subtle glow behind logo */}
-                    <div className={`absolute inset-0 blur-md opacity-20 ${theme.accent} rounded-full`} />
-                    <LeagueLogo league={league} className="w-8 h-8 object-contain relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" />
+                    <div className={`absolute inset-0 blur-lg opacity-20 ${theme.accent} rounded-full`} />
+                    <LeagueLogo league={league} className="w-8 h-8 sm:w-10 sm:h-10 object-contain relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" />
                   </div>
                   
-                  <span className={`${theme.textColor} font-bold text-[14px] sm:text-[15px] tracking-wider uppercase drop-shadow-md`}>
-                    {league}
-                  </span>
+                  <div className="flex flex-col items-start text-left">
+                    <span className={`${theme.textColor} font-bold text-[14px] sm:text-[16px] tracking-wider uppercase drop-shadow-md`}>
+                      {league}
+                    </span>
+                    <span className="text-zinc-500 text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase mt-0.5 group-hover:text-zinc-400 transition-colors">
+                      Öne Çıkan Turnuva
+                    </span>
+                  </div>
                 </div>
                 
                 {/* Right controls */}
-                <div className="flex items-center gap-4 relative z-10">
-                  <span className="bg-[#1a1d24] border border-white/5 text-zinc-400 text-[11px] sm:text-xs font-bold px-3 py-1.5 rounded-md shadow-inner group-hover:text-white group-hover:border-white/10 group-hover:bg-[#1f232b] transition-colors tracking-wide">
+                <div className="flex items-center gap-3 sm:gap-5 relative z-10">
+                  <div className="hidden sm:flex flex-col items-end mr-2">
+                     <span className="text-zinc-500 text-[10px] font-bold tracking-widest uppercase">Aktif</span>
+                     <span className="text-[#00E5FF] text-[13px] font-black tracking-wide group-hover:drop-shadow-[0_0_8px_rgba(0,229,255,0.6)] transition-all">{leagueMatches.length} MAÇ</span>
+                  </div>
+                  <span className="sm:hidden bg-[#00E5FF]/10 border border-[#00E5FF]/20 text-[#00E5FF] text-[11px] font-black px-3 py-1.5 rounded shadow-[0_0_10px_rgba(0,229,255,0.15)] group-hover:shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-all tracking-widest">
                     {leagueMatches.length} MAÇ
                   </span>
-                  <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#1a1d24] border border-white/5 group-hover:bg-white/10 transition-colors">
+                  
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#121620] border border-white/5 group-hover:bg-[#00E5FF]/10 group-hover:border-[#00E5FF]/30 transition-all shadow-lg group-hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
                     {isExpanded ? (
-                      <ChevronUp className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
+                      <ChevronUp className="w-5 h-5 text-zinc-300 group-hover:text-[#00E5FF] transition-colors" />
                     ) : (
-                      <ChevronDown className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white transition-colors" />
+                      <ChevronDown className="w-5 h-5 text-zinc-300 group-hover:text-[#00E5FF] transition-colors" />
                     )}
                   </div>
                 </div>

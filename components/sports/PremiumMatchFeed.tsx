@@ -3,8 +3,98 @@ import { ChevronLeft, ChevronRight, Flame, BarChart3, Users, Zap, Search, Shield
 import { useBetSlip } from '../../contexts/BetSlipContext';
 
 // FAKE DATA
-const topMatches: any[] = [];
-const sgmMatches: any[] = [];
+const topMatches = [
+  {
+    id: 1,
+    time: "20:00",
+    viewers: "12,450",
+    team1: "Galatasaray",
+    team2: "Fenerbahçe",
+    team1Logo: "https://upload.wikimedia.org/wikipedia/tr/3/37/Galatasaray_Star_Logo.png",
+    team2Logo: "https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbah%C3%A7e_SK.png",
+    odds: { home: "2.10", draw: "3.20", away: "3.15" },
+    firePercentage: 68,
+    fireTeam: "Galatasaray"
+  },
+  {
+    id: 2,
+    time: "22:00",
+    viewers: "45,210",
+    team1: "Real Madrid",
+    team2: "Barcelona",
+    team1Logo: "https://upload.wikimedia.org/wikipedia/tr/b/be/Real_Madrid_CF.png",
+    team2Logo: "https://upload.wikimedia.org/wikipedia/tr/c/c5/FC_Barcelona.png",
+    odds: { home: "1.95", draw: "3.40", away: "3.50" },
+    firePercentage: 72,
+    fireTeam: "Real Madrid"
+  },
+  {
+    id: 3,
+    time: "21:45",
+    viewers: "8,920",
+    team1: "Arsenal",
+    team2: "Chelsea",
+    team1Logo: "https://upload.wikimedia.org/wikipedia/tr/4/4b/Arsenal_logo.png",
+    team2Logo: "https://upload.wikimedia.org/wikipedia/tr/b/bf/Chelsea_FC_logo.png",
+    odds: { home: "2.25", draw: "3.10", away: "2.85" },
+    firePercentage: 55,
+    fireTeam: "Arsenal"
+  }
+];
+
+const sgmMatches = [
+  {
+    id: 1,
+    league: "Premier League",
+    time: "19:30",
+    viewers: "15,840",
+    team1: "Manchester City",
+    team2: "Liverpool",
+    team1Logo: "https://upload.wikimedia.org/wikipedia/tr/b/b4/Manchester_City.png",
+    team2Logo: "https://upload.wikimedia.org/wikipedia/tr/3/3f/150px-Liverpool_FC_logo.png",
+    legsCount: 3,
+    legs: [
+      { title: "Manchester City", subtitle: "Maç Sonucu", icon: "🏠" },
+      { title: "Evet", subtitle: "Karşılıklı Gol", icon: "⚽" },
+      { title: "2.5 Üst", subtitle: "Toplam Gol", icon: "📈" }
+    ],
+    totalOdds: "4.85"
+  },
+  {
+    id: 2,
+    league: "Serie A",
+    time: "22:45",
+    viewers: "12,100",
+    team1: "Juventus",
+    team2: "Milan",
+    team1Logo: "https://upload.wikimedia.org/wikipedia/tr/d/d2/Juventus_FC.png",
+    team2Logo: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
+    legsCount: 3,
+    legs: [
+      { title: "Beraberlik", subtitle: "İlk Yarı Sonucu", icon: "⚖️" },
+      { title: "2.5 Alt", subtitle: "Toplam Gol", icon: "📉" },
+      { title: "9.5 Üst", subtitle: "Toplam Korner", icon: "🚩" }
+    ],
+    totalOdds: "6.20"
+  },
+  {
+    id: 3,
+    league: "Ligue 1",
+    time: "21:00",
+    viewers: "18,450",
+    team1: "PSG",
+    team2: "Marsilya",
+    team1Logo: "https://upload.wikimedia.org/wikipedia/tr/6/6b/Paris_Saint-Germain_FC_logo.png",
+    team2Logo: "https://upload.wikimedia.org/wikipedia/tr/4/43/Olympique_de_Marseille_logo.svg.png",
+    legsCount: 3,
+    legs: [
+      { title: "PSG", subtitle: "Maç Sonucu", icon: "🏠" },
+      { title: "Mbappe", subtitle: "Gol Atar", icon: "🏃" },
+      { title: "3.5 Üst", subtitle: "Toplam Gol", icon: "📈" }
+    ],
+    totalOdds: "3.40"
+  }
+];
 
 export default function PremiumMatchFeed() {
   const { addSelection } = useBetSlip();

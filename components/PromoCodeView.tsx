@@ -16,16 +16,24 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate, isE
   const [activeTab, setActiveTab] = useState<'casino' | 'spor'>('casino');
 
   const promos = [
-    { title: 'Gece Bonusu (Çevrimsiz)', desc: 'Saat 02:00-05:00 arası yatırımlarınız freespinlerle ödüllendiriliyor.', icon: <Clock className="w-8 h-8 text-indigo-400" /> },
-    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: '724BETS\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-8 h-8 text-yellow-400" /> },
-    { title: 'İlk Çekime 2 Katı Ödeme (Çevrimsiz)', desc: 'İlk çekiminizi yaparken kazancınızın 2 katını gönderiyoruz.', icon: <Wallet className="w-8 h-8 text-emerald-400" /> },
-    { title: 'Günlük Prim (Çevrimsiz)', desc: 'Aktifliğinize göre hesabınızda her gün nakit bonuslar yatıyor.', icon: <Gift className="w-8 h-8 text-pink-400" /> },
-    { title: 'Haftalık Jest Bonusu (Çevrimsiz)', desc: 'Tüm haftaki performansınız her cumartesi ödüllendiriliyor.', icon: <Calendar className="w-8 h-8 text-blue-400" /> },
-    { title: 'Seviye Atlama Bonusu (Çevrimsiz)', desc: 'VIP seviyeniz yükseldikçe daha fazla ödül ve ayrıcalık sizi bekliyor.', icon: <TrendingUp className="w-8 h-8 text-green-400" /> },
-    { title: 'Günlük Kayıp Bonusu (Çevrimsiz)', desc: 'Şanssız geçen her gün yeni bir başlangıça dönüşüyor.', icon: <RefreshCw className="w-8 h-8 text-red-400" /> },
-    { title: 'Doğum Günü Bonusu (Çevrimsiz)', desc: 'Profil seviyenize özel nakit bonus hesabınıza otomatik ekleniyor.', icon: <Cake className="w-8 h-8 text-purple-400" /> },
-    { title: 'Aylık Kayıp Bonusu (Çevrimsiz)', desc: '724BETS\'te her kayıp miktarı yeni bir geriye dönüş fırsatı.', icon: <RefreshCw className="w-8 h-8 text-orange-400" /> },
+    { title: 'Gece Bonusu (Çevrimsiz)', desc: 'Saat 02:00-05:00 arası yatırımlarınız freespinlerle ödüllendiriliyor.', icon: <Clock className="w-6 h-6 text-indigo-400" />, image: '/images/promos/promo_night.jpg' },
+    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: '724BETS\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-6 h-6 text-yellow-400" />, image: '/images/promos/promo_welcome.jpg' },
+    { title: 'İlk Çekime 2 Katı Ödeme (Çevrimsiz)', desc: 'İlk çekiminizi yaparken kazancınızın 2 katını gönderiyoruz.', icon: <Wallet className="w-6 h-6 text-emerald-400" />, image: '/images/promos/promo_2x.jpg' },
+    { title: 'Günlük Prim (Çevrimsiz)', desc: 'Aktifliğinize göre hesabınızda her gün nakit bonuslar yatıyor.', icon: <Gift className="w-6 h-6 text-pink-400" />, image: '/images/promos/promo_gift.jpg' },
+    { title: 'Haftalık Jest Bonusu (Çevrimsiz)', desc: 'Tüm haftaki performansınız her cumartesi ödüllendiriliyor.', icon: <Calendar className="w-6 h-6 text-blue-400" />, image: '/images/promos/promo_gift.jpg' },
+    { title: 'Seviye Atlama Bonusu (Çevrimsiz)', desc: 'VIP seviyeniz yükseldikçe daha fazla ödül ve ayrıcalık sizi bekliyor.', icon: <TrendingUp className="w-6 h-6 text-green-400" />, image: '/images/promos/promo_levelup.jpg' },
+    { title: 'Günlük Kayıp Bonusu (Çevrimsiz)', desc: 'Şanssız geçen her gün yeni bir başlangıça dönüşüyor.', icon: <RefreshCw className="w-6 h-6 text-red-400" />, image: '/images/promos/promo_cashback.jpg' },
+    { title: 'Doğum Günü Bonusu (Çevrimsiz)', desc: 'Profil seviyenize özel nakit bonus hesabınıza otomatik ekleniyor.', icon: <Cake className="w-6 h-6 text-purple-400" />, image: '/images/promos/promo_birthday.jpg' },
+    { title: 'Aylık Kayıp Bonusu (Çevrimsiz)', desc: '724BETS\'te her kayıp miktarı yeni bir geriye dönüş fırsatı.', icon: <RefreshCw className="w-6 h-6 text-orange-400" />, image: '/images/promos/promo_cashback.jpg' },
   ];
+
+  const sporPromos = [
+    { title: 'Spor Hoş Geldin Bonusu', desc: 'Spor bahislerine özel 5.000 TL\'ye varan ekstra bakiye ve freebet.', icon: <PartyPopper className="w-6 h-6 text-blue-400" />, image: '/images/promos/promo_sports_welcome.jpg' },
+    { title: 'Kombine Çarpan Bonusu', desc: 'Kombine kuponlarınıza %50\'ye varan ekstra nakit kazanç şansı.', icon: <TrendingUp className="w-6 h-6 text-green-400" />, image: '/images/promos/promo_sports_combo.jpg' },
+    { title: 'Spor Kayıp Bonusu', desc: 'Sporda şansınız yaver gitmediyse kayıplarınızın anında iadesi.', icon: <RefreshCw className="w-6 h-6 text-red-400" />, image: '/images/promos/promo_sports_cashback.jpg' },
+  ];
+
+  const activePromos = activeTab === 'casino' ? promos : sporPromos;
 
   const handleCheckCode = async () => {
     if (!siteUser) {
@@ -110,134 +118,217 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate, isE
   };
 
   const content = (
-    <>
+    <div className="relative">
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-float-custom {
+          animation: float 5s ease-in-out infinite;
+        }
+        .animate-spin-slow {
+          animation: spin-slow 8s linear infinite;
+        }
+      `}</style>
+      
       {!isEmbedded && (
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-[#06b6d4]/5 blur-[120px] pointer-events-none rounded-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-[#00E5FF]/10 blur-[120px] pointer-events-none rounded-full" />
       )}
       
-      <div className={`max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 relative z-10 ${isEmbedded ? 'pt-0 pb-0' : 'pt-6 sm:pt-12'}`}>
-        <div className={`flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4 ${isEmbedded ? 'mb-6 sm:mb-8' : 'mb-8 sm:mb-12'}`}>
-          <div className="w-16 h-16 sm:w-24 sm:h-24 bg-[#111317] rounded-2xl flex items-center justify-center border border-white/5 shadow-[0_0_40px_rgba(0,0,0,0.5)] group relative">
-            <div className={`absolute inset-0 bg-gradient-to-tr ${isEmbedded ? 'from-emerald-500/20' : 'from-[#06b6d4]/20'} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
-            <Ticket className={`w-8 h-8 sm:w-12 sm:h-12 ${isEmbedded ? 'text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'text-[#06b6d4] drop-shadow-[0_0_15px_rgba(0,255,163,0.5)]'} transform group-hover:scale-110 transition-transform duration-500`} />
-          </div>
-          <h1 className={`font-black text-white uppercase tracking-tight drop-shadow-xl mt-4 ${isEmbedded ? 'text-3xl sm:text-4xl' : 'text-3xl sm:text-5xl'}`}>
-            Kodu <span className={isEmbedded ? 'text-emerald-400 drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]' : 'text-[#06b6d4] drop-shadow-[0_0_20px_rgba(0,255,163,0.4)]'}>Kullan</span>
-          </h1>
-          <p className="text-zinc-400 max-w-lg mx-auto text-sm sm:text-base px-2 font-medium">
-            Elindeki promosyon kodunu aşağıya gir ve anında bedava bakiye veya free spin kazan!
-          </p>
-        </div>
-
-        <div className="max-w-md mx-auto bg-[#111317] border border-white/5 p-6 sm:p-8 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] relative overflow-hidden group/form">
-          <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent ${isEmbedded ? 'via-emerald-500/30 group-hover/form:via-emerald-500/80' : 'via-[#06b6d4]/30 group-hover/form:via-[#06b6d4]/80'} to-transparent transition-all duration-700`}></div>
-          
-          <div className="space-y-5 sm:space-y-6 relative z-10">
-            <div>
-              <label className="block text-[11px] sm:text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2 ml-1">Promosyon Kodu</label>
-              <div className="relative group">
-                  <input 
-                    type="text" 
-                    value={code}
-                    onChange={(e) => setCode(e.target.value.toUpperCase())}
-                    placeholder="ÖRN: BONUS2026"
-                    className={`w-full bg-[#0A0C10] border-2 border-white/5 ${isEmbedded ? 'focus:border-emerald-500/50 focus:shadow-[0_0_20px_rgba(16,185,129,0.15)]' : 'focus:border-[#06b6d4]/50 focus:shadow-[0_0_20px_rgba(0,255,163,0.15)]'} rounded-2xl py-3.5 sm:py-4 px-4 text-white text-base sm:text-lg font-black tracking-[0.2em] text-center transition-all outline-none placeholder:text-zinc-700`}
-                  />
-                  <div className={`absolute inset-0 rounded-2xl ${isEmbedded ? 'bg-emerald-500/5' : 'bg-[#06b6d4]/5'} opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300`}></div>
+      <div className={`mx-auto relative z-10 ${isEmbedded ? 'w-full max-w-6xl' : 'max-w-5xl p-4 sm:p-6 lg:p-8 pt-6 sm:pt-12'}`}>
+        
+        {/* HERO SECTION */}
+        {isEmbedded ? (
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 w-full bg-[#0A0D14]/60 backdrop-blur-3xl border border-white/5 rounded-3xl p-3 shadow-2xl relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/10 via-transparent to-transparent pointer-events-none" />
+            
+            <div className="flex items-center gap-4 pl-4 z-10">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#00E5FF] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,229,255,0.4)]">
+                <Ticket className="w-5 h-5 text-black" />
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-white tracking-tight">KODU KULLAN</h2>
+                <p className="text-xs text-zinc-400 font-medium">Anında bakiye veya free spin</p>
               </div>
             </div>
 
-            <button 
-              onClick={handleCheckCode}
-              disabled={loading || !code.trim()}
-              className={`w-full ${isEmbedded ? 'bg-emerald-500 hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-[#06b6d4] hover:bg-[#00E693] shadow-[0_0_20px_rgba(0,255,163,0.2)] hover:shadow-[0_0_30px_rgba(0,255,163,0.5)]'} text-black font-black py-3.5 sm:py-4 rounded-2xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 text-sm sm:text-base`}
-            >
-              {loading ? <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" /> : 'KODU KONTROL ET'}
-            </button>
-          </div>
-
-          {result && (
-            <div className={`mt-6 p-5 rounded-2xl border ${result.success ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'} flex flex-col items-center justify-center text-center animate-in fade-in slide-in-from-bottom-2 duration-300 relative z-10`}>
-              {result.success ? (
-                <>
-                  <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-                    <Gift className="w-7 h-7 text-emerald-400" />
-                  </div>
-                  <h3 className="text-emerald-400 font-black text-lg mb-1">{result.message}</h3>
-                  <p className="text-zinc-400 text-xs">Ödül anında hesabınıza yansıtıldı. İyi oyunlar dileriz!</p>
-                </>
-              ) : (
-                <>
-                  <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
-                    <XCircle className="w-6 h-6 text-red-400" />
-                  </div>
-                  <h3 className="text-red-400 font-bold">{result.message}</h3>
-                </>
+            <div className="flex-1 w-full md:max-w-md relative z-10">
+              <div className="relative flex items-center w-full bg-[#05060A]/90 rounded-full border border-white/10 p-1.5 focus-within:border-[#00E5FF]/50 focus-within:shadow-[0_0_20px_rgba(0,229,255,0.15)] transition-all">
+                <input 
+                  type="text" 
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.toUpperCase())}
+                  placeholder="Kodu Buraya Girin..."
+                  className="flex-1 bg-transparent border-none outline-none px-4 text-white font-bold tracking-widest uppercase placeholder:text-zinc-600 text-sm"
+                />
+                <button 
+                  onClick={handleCheckCode}
+                  disabled={loading || !code.trim()}
+                  className="h-10 px-6 rounded-full bg-[#00E5FF] text-black font-black text-xs hover:brightness-110 disabled:opacity-50 transition-all flex items-center gap-2 shadow-[0_0_10px_rgba(0,229,255,0.3)]"
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'ONAYLA'}
+                </button>
+              </div>
+              
+              {result && (
+                <div className={`absolute top-full left-0 right-0 mt-2 p-2 rounded-xl text-center text-xs font-bold backdrop-blur-md border ${result.success ? 'bg-[#00E5FF]/10 border-[#00E5FF]/30 text-[#00E5FF]' : 'bg-red-500/10 border-red-500/30 text-red-400'}`}>
+                  {result.message}
+                </div>
               )}
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4 mb-10 sm:mb-16">
+              <div className="w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-b from-[#111317] to-[#0A0D14] rounded-3xl flex items-center justify-center border border-[#00E5FF]/20 shadow-[0_0_50px_rgba(0,229,255,0.2),inset_0_0_30px_rgba(0,229,255,0.1)] group relative overflow-hidden animate-float-custom">
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#00E5FF]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl" />
+                <Ticket className="w-10 h-10 sm:w-14 sm:h-14 text-[#00E5FF] drop-shadow-[0_0_20px_rgba(0,229,255,0.8)] transform group-hover:scale-110 transition-transform duration-700 relative z-10" />
+                <div className="absolute inset-1 border border-[#00E5FF]/10 rounded-[1.3rem] pointer-events-none"></div>
+              </div>
+              <h1 className="font-black text-white uppercase tracking-tight drop-shadow-xl mt-6 text-5xl sm:text-7xl">
+                Kodu <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-white drop-shadow-[0_0_30px_rgba(0,229,255,0.6)] relative inline-block group-hover:scale-105 transition-transform duration-500">Kullan</span>
+              </h1>
+              <p className="text-zinc-400 max-w-lg mx-auto text-sm sm:text-base px-2 font-medium leading-relaxed">
+                Sana özel promosyon kodunu aşağıya gir, <span className="text-[#00E5FF]">anında</span> bedava bakiye veya free spin şansını yakala!
+              </p>
+            </div>
+
+            <div className="max-w-lg mx-auto relative group/form">
+              <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r from-[#00E5FF]/0 via-[#00E5FF]/50 to-[#00E5FF]/0 opacity-30 group-hover/form:opacity-100 blur-lg transition-all duration-1000 animate-spin-slow"></div>
+              <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-b from-[#00E5FF]/0 via-[#00E5FF]/30 to-[#00E5FF]/0 opacity-30 group-hover/form:opacity-100 blur-md transition-all duration-1000 animate-spin-slow" style={{ animationDirection: 'reverse' }}></div>
+
+              <div className="bg-[#0A0D14]/90 backdrop-blur-3xl border border-white/10 p-6 sm:p-10 rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(0,229,255,0.05)] relative overflow-hidden z-10">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00E5FF]/50 group-hover/form:via-[#00E5FF] to-transparent transition-all duration-700"></div>
+                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                
+                <div className="space-y-6 sm:space-y-8 relative z-10">
+                  <div>
+                    <label className="block text-[11px] sm:text-xs font-black text-[#00E5FF]/70 uppercase tracking-[0.3em] mb-3 ml-1 text-center">Promosyon Kodu</label>
+                    <div className="relative group">
+                        <input 
+                          type="text" 
+                          value={code}
+                          onChange={(e) => setCode(e.target.value.toUpperCase())}
+                          placeholder="ÖRN: BONUS2026"
+                          className="w-full bg-[#111317]/80 backdrop-blur-md border-2 border-white/5 focus:border-[#00E5FF]/60 focus:shadow-[0_0_25px_rgba(0,229,255,0.2),inset_0_0_10px_rgba(0,229,255,0.1)] rounded-2xl py-3.5 sm:py-4 px-4 text-white text-base sm:text-lg font-black tracking-[0.2em] text-center transition-all outline-none placeholder:text-zinc-700 uppercase"
+                        />
+                        <div className="absolute inset-0 rounded-2xl bg-[#00E5FF]/5 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300"></div>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={handleCheckCode}
+                    disabled={loading || !code.trim()}
+                    className="w-full bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] font-black py-3.5 sm:py-4 rounded-2xl transition-all hover:brightness-110 shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_35px_rgba(0,229,255,0.7)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100 text-sm sm:text-base relative overflow-hidden group/btn active:scale-[0.98]"
+                  >
+                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:animate-[shine-sweep_2s_ease-in-out_infinite]" />
+                    <span className="relative z-10 flex items-center gap-2">
+                      {loading ? <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" /> : 'KODU KONTROL ET'}
+                    </span>
+                  </button>
+                </div>
+
+                {result && (
+                  <div className={`mt-6 p-5 rounded-2xl border ${result.success ? 'bg-[#00E5FF]/10 border-[#00E5FF]/30' : 'bg-red-500/10 border-red-500/30'} flex flex-col items-center justify-center text-center animate-in fade-in slide-in-from-bottom-2 duration-300 relative z-10`}>
+                    {result.success ? (
+                      <>
+                        <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                          <Gift className="w-7 h-7 text-emerald-400" />
+                        </div>
+                        <h3 className="text-emerald-400 font-black text-lg mb-1">{result.message}</h3>
+                        <p className="text-zinc-400 text-xs">Ödül anında hesabınıza yansıtıldı. İyi oyunlar dileriz!</p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+                          <XCircle className="w-6 h-6 text-red-400" />
+                        </div>
+                        <h3 className="text-red-400 font-bold">{result.message}</h3>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
         
-        <div className={`max-w-6xl mx-auto ${isEmbedded ? 'mt-8 sm:mt-10 pb-4' : 'mt-12 sm:mt-16 pb-12'}`}>
-          <div className="flex items-center gap-2 mb-8">
+        {/* PROMOSYON KARTLARI (TABS + GRID) */}
+        <div className={`mx-auto ${isEmbedded ? 'w-full mt-6 mb-2' : 'max-w-6xl mt-12 sm:mt-16 pb-12'}`}>
+          <div className="flex items-center gap-2 mb-6 sm:mb-8">
             <button 
               onClick={() => setActiveTab('casino')}
-              className={`px-8 py-2.5 rounded-full font-bold transition-all ${activeTab === 'casino' ? (isEmbedded ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-[#4361EE] text-white shadow-lg') : 'bg-[#2A2E3D] text-gray-400 hover:text-white hover:bg-[#3A3E4D]'}`}
+              className={`px-6 sm:px-8 py-2 sm:py-2.5 rounded-full font-bold transition-all text-sm sm:text-base ${activeTab === 'casino' ? 'bg-[#00E5FF] text-black shadow-[0_0_20px_rgba(0,229,255,0.4)]' : 'bg-[#2A2E3D] text-gray-400 hover:text-white hover:bg-[#3A3E4D]'}`}
             >
               Casino
             </button>
             <button 
               onClick={() => setActiveTab('spor')}
-              className={`px-8 py-2.5 rounded-full font-bold transition-all ${activeTab === 'spor' ? (isEmbedded ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-[#4361EE] text-white shadow-lg') : 'bg-[#2A2E3D] text-gray-400 hover:text-white hover:bg-[#3A3E4D]'}`}
+              className={`px-6 sm:px-8 py-2 sm:py-2.5 rounded-full font-bold transition-all text-sm sm:text-base ${activeTab === 'spor' ? 'bg-[#00E5FF] text-black shadow-[0_0_20px_rgba(0,229,255,0.4)]' : 'bg-[#2A2E3D] text-gray-400 hover:text-white hover:bg-[#3A3E4D]'}`}
             >
               Spor
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {promos.map((promo, idx) => (
-              <div key={idx} className="relative group cursor-pointer rounded-[2rem] overflow-hidden bg-[#0A0D14] border border-white/5 flex flex-col items-center p-6 sm:p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] hover:border-white/10 aspect-square sm:aspect-[4/5]">
+          <div className={`grid ${isEmbedded ? 'grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'}`}>
+            {activePromos.map((promo, idx) => (
+              <div key={idx} className={`relative group cursor-pointer overflow-hidden rounded-[1.2rem] bg-[#11131A]/60 border border-white/5 hover:border-[#00E5FF]/30 transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] ${isEmbedded ? 'h-32 sm:h-40 flex flex-row' : 'aspect-square sm:aspect-[4/5] flex-col'}`}>
                 
-                {/* Ambient Glow Background */}
-                <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent z-0 pointer-events-none"></div>
-                <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-[150px] rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none ${isEmbedded ? 'bg-emerald-500' : 'bg-[#06b6d4]'}`}></div>
-                
-                {/* Subtle Grid Pattern */}
-                <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] z-0"></div>
+                {/* Image Section - Left side for embedded, Top for standalone */}
+                <div className={`relative overflow-hidden ${isEmbedded ? 'w-2/5 sm:w-1/3 h-full flex-shrink-0' : 'w-full h-[60%] sm:h-[65%]'}`}>
+                  <img src={promo.image} alt={promo.title} className="w-full h-full object-cover object-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-700" />
+                  <div className={`absolute inset-0 bg-gradient-to-${isEmbedded ? 'r' : 't'} from-[#11131A]/90 to-transparent z-10`}></div>
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500 z-10"></div>
+                </div>
 
-                {/* Icon Container */}
-                <div className="relative z-10 mt-2 sm:mt-6 mb-auto group-hover:-translate-y-2 transition-transform duration-500">
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-[1.5rem] bg-gradient-to-br from-[#1A1F27] to-[#111317] border border-white/5 flex items-center justify-center shadow-2xl relative overflow-hidden">
-                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr ${isEmbedded ? 'from-emerald-500/10' : 'from-[#06b6d4]/10'} to-transparent`}></div>
-                    <div className="relative z-10 transform group-hover:scale-110 transition-transform duration-500">
-                      {React.cloneElement(promo.icon as React.ReactElement, { className: 'w-10 h-10 sm:w-12 sm:h-12' })}
+                {/* Content Section */}
+                <div className={`relative z-20 flex flex-col justify-center ${isEmbedded ? 'p-3 sm:p-4 flex-1' : 'p-6 sm:p-8 h-full justify-end'}`}>
+                  {/* Icon Badge - Only show in standalone */}
+                  {!isEmbedded && (
+                    <div className="absolute top-4 right-4 z-20">
+                      <div className="w-10 h-10 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center shadow-xl group-hover:bg-[#00E5FF]/20 group-hover:border-[#00E5FF]/50 transition-all duration-300">
+                        {promo.icon}
+                      </div>
                     </div>
+                  )}
+
+                  {/* Text Content */}
+                  <div className="flex flex-col gap-1 sm:gap-1.5 w-full">
+                    <h3 className={`font-black leading-tight text-white group-hover:text-[#00E5FF] transition-colors ${isEmbedded ? 'text-xs sm:text-sm line-clamp-2' : 'text-lg sm:text-xl'}`}>
+                      {promo.title.replace(' (Çevrimsiz)', '')}
+                    </h3>
+                    <p className={`text-zinc-500 font-medium ${isEmbedded ? 'text-[10px] sm:text-[11px] line-clamp-2' : 'text-sm line-clamp-3'}`}>
+                      {promo.desc}
+                    </p>
                   </div>
-                </div>
+                  
+                  {isEmbedded && (
+                     <div className="mt-2 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                       <span className="text-[10px] font-bold text-[#00E5FF] uppercase tracking-wider flex items-center gap-1">İncele &rarr;</span>
+                     </div>
+                  )}
 
-                {/* Text Content */}
-                <div className="relative z-10 w-full text-center flex flex-col gap-3 mt-8 transform group-hover:-translate-y-4 transition-transform duration-500">
-                  <h3 className={`font-black text-lg sm:text-xl leading-tight transition-colors ${isEmbedded ? 'text-white group-hover:text-emerald-400' : 'text-white group-hover:text-[#06b6d4]'}`}>
-                    {promo.title}
-                  </h3>
-                  <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3">
-                    {promo.desc}
-                  </p>
+                  {/* Standalone CTA */}
+                  {!isEmbedded && (
+                    <div className="absolute bottom-4 left-4 right-4 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-20">
+                       <button className="w-full rounded-xl font-black transition-all hover:scale-[1.02] active:scale-95 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-black shadow-[0_0_20px_rgba(0,229,255,0.5)] relative overflow-hidden group/cardbtn py-3.5 text-sm">
+                         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/cardbtn:animate-[shine-sweep_1.5s_ease-in-out_infinite]" />
+                         <span className="relative z-10">İncele</span>
+                       </button>
+                    </div>
+                  )}
                 </div>
-
-                {/* CTA Button overlay (appears on hover) */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-20">
-                   <button className={`w-full py-3.5 rounded-xl font-black text-sm transition-all hover:scale-[1.02] active:scale-95 ${isEmbedded ? 'bg-emerald-500 text-black shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'bg-[#06b6d4] text-black shadow-[0_0_20px_rgba(6,182,212,0.3)]'}`}>
-                     Fırsatı İncele
-                   </button>
-                </div>
-                
               </div>
             ))}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 
   if (isEmbedded) {

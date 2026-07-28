@@ -32,7 +32,7 @@ export default function LiveMatchGrid({ matches }: LiveMatchGridProps) {
       
       {/* HEADER: CANLI & Categories */}
       <div className="flex items-center gap-4 mb-5 overflow-x-auto custom-scrollbar hide-scrollbar-mobile pb-2">
-        <div className="flex items-center gap-2 text-[#1075fc] font-black text-xl mr-2 shrink-0">
+        <div className="flex items-center gap-2 text-[#00E5FF] font-black text-xl mr-2 shrink-0 drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]">
            <Activity className="w-6 h-6 animate-pulse" />
            <span>CANLI</span>
         </div>
@@ -43,8 +43,8 @@ export default function LiveMatchGrid({ matches }: LiveMatchGridProps) {
             onClick={() => setActiveCategory(cat.id)}
             className={`whitespace-nowrap px-4 py-2 rounded-full flex items-center gap-2 transition-all font-bold text-[13px] shrink-0 border ${
               activeCategory === cat.id 
-                ? 'bg-[#1075fc] text-white border-transparent shadow-[0_0_15px_rgba(16,117,252,0.4)]' 
-                : 'bg-[#151a25] text-zinc-300 border-white/5 hover:bg-[#1a2130] hover:text-white'
+                ? 'bg-[#00E5FF]/10 text-[#00E5FF] border-[#00E5FF]/30 shadow-[0_0_15px_rgba(0,229,255,0.2)]' 
+                : 'bg-[#151a25]/80 backdrop-blur text-zinc-300 border-white/5 hover:bg-[#00E5FF]/5 hover:text-white hover:border-[#00E5FF]/20'
             }`}
           >
             {cat.icon}
@@ -54,12 +54,15 @@ export default function LiveMatchGrid({ matches }: LiveMatchGridProps) {
       </div>
 
       {/* MATCH GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {displayMatches.map((match, idx) => (
           <div 
             key={match.id || idx}
-            className="bg-[#161925] hover:bg-[#1a1d29] border border-white/5 hover:border-white/10 rounded-xl p-4 flex flex-col transition-all duration-300 shadow-md"
+            className="group/card bg-[#0b0e14]/80 backdrop-blur-md border border-white/[0.04] border-l-[3px] border-l-transparent hover:border-l-[#00E5FF] rounded-xl p-4 flex flex-col transition-all duration-300 shadow-xl hover:shadow-[0_8px_30px_rgba(0,229,255,0.05)] relative overflow-hidden"
           >
+            {/* Ambient Background Glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#00E5FF]/[0.02] to-transparent pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+
             {/* League Info */}
             <div className="flex items-center gap-1.5 text-zinc-400 text-xs font-medium tracking-wide mb-3">
                <div className="w-3.5 h-3.5 rounded-full border border-zinc-500 opacity-50 flex items-center justify-center">
@@ -69,13 +72,13 @@ export default function LiveMatchGrid({ matches }: LiveMatchGridProps) {
             </div>
 
             {/* Time & Live */}
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-[12px] font-bold text-[#2b85fa] tracking-wide">
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <span className="text-[12px] font-bold text-[#00E5FF] tracking-wide drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]">
                 {match.time} {match.period === 'Canlı' ? '' : match.period}
               </span>
               {match.isLive && (
                 <div className="flex items-center justify-center">
-                  <Radio className="w-4 h-4 text-red-500" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-pulse shadow-[0_0_8px_#00E5FF]"></span>
                 </div>
               )}
             </div>
@@ -108,38 +111,37 @@ export default function LiveMatchGrid({ matches }: LiveMatchGridProps) {
             </div>
 
             {/* Odds */}
-            <div className="mt-auto">
+            <div className="mt-auto relative z-10">
               <div className="text-zinc-500 text-[10px] font-semibold mb-1.5 lowercase tracking-wider">1x2</div>
               <div className="flex gap-1.5 w-full">
                 <button 
                   onClick={() => addSelection({ id: `grid-${match.id}_1`, matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '1', odd: parseFloat(match.homeOdd?.replace(',', '.') || '1.00') })}
-                  className="flex-1 bg-[#212634] hover:bg-[#2a3040] transition-colors rounded-md px-2.5 py-2 flex justify-between items-center group/odd shadow-sm"
+                  className="flex-1 bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] transition-all rounded-md px-2.5 py-2 flex justify-between items-center group/odd active:scale-[0.98]"
                 >
-                  <span className="text-zinc-400 text-[11px] font-medium group-hover/odd:text-zinc-300">1</span>
-                  <span className="text-white text-[12px] font-bold">{match.homeOdd || '-'}</span>
+                  <span className="text-zinc-500 text-[11px] font-medium group-hover/odd:text-[#00E5FF] transition-colors">1</span>
+                  <span className="text-white text-[12px] font-bold group-hover/odd:text-white">{match.homeOdd || '-'}</span>
                 </button>
                 
                 {match.drawOdd && match.drawOdd !== '-' && (
                   <button 
                     onClick={() => addSelection({ id: `grid-${match.id}_X`, matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'X', odd: parseFloat(match.drawOdd?.replace(',', '.') || '1.00') })}
-                    className="flex-1 bg-[#212634] hover:bg-[#2a3040] transition-colors rounded-md px-2.5 py-2 flex justify-between items-center group/odd shadow-sm"
+                    className="flex-1 bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] transition-all rounded-md px-2.5 py-2 flex justify-between items-center group/odd active:scale-[0.98]"
                   >
-                    <span className="text-zinc-400 text-[11px] font-medium group-hover/odd:text-zinc-300">beraberlik</span>
-                    <span className="text-white text-[12px] font-bold">{match.drawOdd}</span>
+                    <span className="text-zinc-500 text-[11px] font-medium group-hover/odd:text-[#00E5FF] transition-colors">B</span>
+                    <span className="text-white text-[12px] font-bold group-hover/odd:text-white">{match.drawOdd}</span>
                   </button>
                 )}
                 
                 <button 
                   onClick={() => addSelection({ id: `grid-${match.id}_2`, matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2', odd: parseFloat(match.awayOdd?.replace(',', '.') || '1.00') })}
-                  className="flex-1 bg-[#212634] hover:bg-[#2a3040] transition-colors rounded-md px-2.5 py-2 flex justify-between items-center group/odd shadow-sm"
+                  className="flex-1 bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] transition-all rounded-md px-2.5 py-2 flex justify-between items-center group/odd active:scale-[0.98]"
                 >
-                  <span className="text-zinc-400 text-[11px] font-medium group-hover/odd:text-zinc-300">2</span>
-                  <span className="text-white text-[12px] font-bold">{match.awayOdd || '-'}</span>
+                  <span className="text-zinc-500 text-[11px] font-medium group-hover/odd:text-[#00E5FF] transition-colors">2</span>
+                  <span className="text-white text-[12px] font-bold group-hover/odd:text-white">{match.awayOdd || '-'}</span>
                 </button>
-
                 
-                <button className="bg-[#212634] hover:bg-[#2a3040] rounded-md w-8 flex justify-center items-center transition-colors group/btn shrink-0 shadow-sm">
-                  <ChevronDown className="w-4 h-4 text-zinc-400 group-hover/btn:text-white" />
+                <button className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 rounded-md w-8 flex justify-center items-center transition-all group/btn shrink-0 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] active:scale-[0.98]">
+                  <ChevronDown className="w-4 h-4 text-zinc-500 group-hover/btn:text-[#00E5FF]" />
                 </button>
               </div>
             </div>

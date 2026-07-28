@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('wss://eu-swarm-newm.atekbet272.com/ws?language=tur', {
-    headers: { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0' }
+const ws = new WebSocket('wss://eu-swarm-newm.atekbet273.com/ws?language=tur', {
+    headers: { 'Origin': 'https://atekbet273.com', 'User-Agent': 'Mozilla/5.0' }
 });
 
 ws.on('open', () => {

@@ -5,6 +5,91 @@ import { useUser } from '../../contexts/UserContext';
 import { triggerGlobalToast } from '../GlobalToaster';
 import ModernChat from '../ModernChat';
 
+const MOCK_MY_BETS = [
+  {
+    id: 1,
+    type: 'Geliştirilmiş Bahis',
+    title: 'GNK Dinamo Zagreb vs. FC Thun',
+    picks: [
+      { text: '+ Üstü 2.5', detail: 'Toplam gol' },
+      { text: '+ GNK Dinamo Zagreb', detail: '1x2' },
+      { text: '+ var', detail: 'İlk yarı - her iki takım da gol atar' }
+    ],
+    oldOdds: '4.71',
+    newOdds: '5.64',
+    players: '873'
+  },
+  {
+    id: 2,
+    type: 'Geliştirilmiş Bahis',
+    title: 'Heart of Midlothian FC vs. Sturm Graz',
+    picks: [
+      { text: '+ Sturm Graz', detail: '1x2' },
+      { text: '+ Üstü 0.5', detail: 'İlk Yarı - Toplam gol' },
+      { text: '+ var', detail: 'Sturm Graz gol yemez' }
+    ],
+    oldOdds: '10.07',
+    newOdds: '12.34',
+    players: '975'
+  }
+];
+
+const MyBetsPanel = () => {
+  return (
+    <div className="flex-1 overflow-y-auto bg-[#050608] flex flex-col p-3 gap-4">
+      <div className="flex items-center gap-2 px-1 mb-2">
+        <div className="w-5 h-5 bg-[#00E5FF] rounded-full flex items-center justify-center shadow-[0_0_10px_#00E5FF]">
+          <Target className="w-3 h-3 text-black" />
+        </div>
+        <h3 className="text-white font-bold text-sm">Bonuslu Bahisler</h3>
+      </div>
+
+      {MOCK_MY_BETS.map((bet) => (
+        <div key={bet.id} className="relative bg-gradient-to-br from-[#0d1512] to-[#0A0D14] border border-[#00ff88]/20 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,255,136,0.05)]">
+          {/* Header */}
+          <div className="p-3 pb-2 flex items-center justify-between">
+            <span className="text-[#00ff88] text-[10px] uppercase font-black tracking-wider drop-shadow-[0_0_5px_rgba(0,255,136,0.5)]">
+              {bet.type}
+            </span>
+            <div className="flex items-center gap-1 bg-black/40 px-2 py-0.5 rounded text-[9px] font-bold text-zinc-400">
+              <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse shadow-[0_0_5px_#00ff88]"></span>
+              {bet.players}
+            </div>
+          </div>
+
+          {/* Title */}
+          <div className="px-3 pb-3 border-b border-white/5 flex items-center gap-1.5">
+            <div className="w-4 h-4 bg-white/10 rounded-full flex items-center justify-center shrink-0">
+              <div className="w-2 h-2 bg-white/50 rounded-full"></div>
+            </div>
+            <h4 className="text-white font-bold text-[12px] leading-tight">{bet.title}</h4>
+          </div>
+
+          {/* Picks */}
+          <div className="p-3 flex flex-col gap-2">
+            {bet.picks.map((pick, i) => (
+              <div key={i} className="flex flex-col relative pl-2 border-l border-[#00ff88]/20">
+                <span className="text-[#00ff88] text-[11px] font-bold">{pick.text} <span className="text-zinc-500 font-normal">| {pick.detail}</span></span>
+              </div>
+            ))}
+          </div>
+
+          {/* Odds Footer */}
+          <div className="bg-[#11161d] p-3 flex items-center justify-between mt-2 border-t border-[#00ff88]/10">
+            <div className="w-full h-9 bg-black/40 rounded-lg flex items-center justify-center gap-3">
+              <span className="text-zinc-500 font-bold text-[12px]">{bet.oldOdds}</span>
+              <div className="w-[45%] h-[80%] rounded-full border border-[#00ff88] bg-[#00ff88]/10 flex items-center justify-center gap-1 shadow-[0_0_10px_rgba(0,255,136,0.2)]">
+                <Target className="w-3 h-3 text-[#00ff88]" />
+                <span className="text-white font-black text-[13px]">{bet.newOdds}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export const DualRightPanel: React.FC<{
   popularMatches?: any[];
   language: string;
@@ -13,7 +98,7 @@ export const DualRightPanel: React.FC<{
 }> = ({ language, isOpenMobile, onCloseMobile }) => {
   const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost } = useBetSlip();
   const { siteUser, placeBet } = useUser();
-  const [activePanel, setActivePanel] = useState<'coupon' | 'chat'>('coupon');
+  const [activePanel, setActivePanel] = useState<'coupon' | 'chat' | 'mybets'>('coupon');
   const [betType, setBetType] = useState<'tekli' | 'kombine' | 'sistem'>('kombine');
   const [quickBet, setQuickBet] = useState(false);
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
@@ -105,10 +190,10 @@ export const DualRightPanel: React.FC<{
                   <Share2 className="w-3.5 h-3.5 text-zinc-400 hover:text-white transition-colors" />
                 </div>
 
-                <div className="flex items-center gap-1.5 cursor-pointer bg-[#161920] px-2 py-1 rounded-full hover:bg-white/10 transition-all border border-white/5" onClick={() => setQuickBet(!quickBet)}>
+                  <div className="flex items-center gap-1.5 cursor-pointer bg-[#161920]/80 backdrop-blur px-2 py-1 rounded-full hover:bg-white/10 transition-all border border-[#00E5FF]/20" onClick={() => setQuickBet(!quickBet)}>
                   <span className="text-zinc-300 font-bold text-[9px] uppercase tracking-wider">{language === 'tr' ? 'Hızlı' : 'Fast'}</span>
-                  <div className={`w-6 h-3 rounded-full p-0.5 transition-colors border ${quickBet ? 'bg-[#1075fc] border-[#1075fc]' : 'bg-[#1a1a1a] border-white/10'}`}>
-                    <div className={`w-2 h-2 rounded-full bg-white transition-transform ${quickBet ? 'translate-x-3' : 'translate-x-0'}`}></div>
+                  <div className={`w-6 h-3 rounded-full p-0.5 transition-colors border ${quickBet ? 'bg-[#00E5FF]/20 border-[#00E5FF]' : 'bg-[#1a1a1a] border-white/10'}`}>
+                    <div className={`w-2 h-2 rounded-full transition-transform ${quickBet ? 'translate-x-3 bg-[#00E5FF] shadow-[0_0_5px_#00E5FF]' : 'translate-x-0 bg-white'}`}></div>
                   </div>
                 </div>
               </div>
@@ -116,9 +201,9 @@ export const DualRightPanel: React.FC<{
 
             {/* TABS (Premium Segmented Control) */}
             <div className="px-2 py-2 bg-[#0A0D14] border-b border-white/5">
-              <div className="flex items-center p-1 bg-[#0f1118] rounded-xl border border-white/5 relative shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)] h-[44px]">
+              <div className="flex items-center p-1 bg-[#0f1118]/80 backdrop-blur rounded-xl border border-white/5 relative shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)] h-[44px]">
                 <div 
-                  className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-[#1075fc]/15 border border-[#1075fc]/50 rounded-lg shadow-[0_0_15px_rgba(16,117,252,0.2)] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
+                  className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-gradient-to-b from-[#00E5FF]/30 to-[#00E5FF]/10 border border-[#00E5FF]/50 rounded-lg shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
                   style={{
                     transform: `translateX(${betType === 'tekli' ? '4px' : betType === 'kombine' ? 'calc(100% + 6px)' : 'calc(200% + 8px)'})`
                   }}
@@ -127,7 +212,7 @@ export const DualRightPanel: React.FC<{
                   <button 
                     key={type}
                     onClick={() => setBetType(type as any)}
-                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.8)]' : 'text-zinc-400 hover:text-white'}`}
+                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'text-zinc-400 hover:text-white'}`}
                   >
                     {type}
                   </button>
@@ -137,22 +222,22 @@ export const DualRightPanel: React.FC<{
 
             {/* ACCUMULATOR BOOST PROGRESS BAR */}
             {betSlip.length > 0 && betType === 'kombine' && (
-              <div className="px-1.5 py-1 bg-gradient-to-b from-[#111] to-[#0A0D14] border-b border-white/5 flex flex-col gap-0.5">
+              <div className="px-1.5 py-1 bg-gradient-to-b from-[#111]/80 to-[#0A0D14] backdrop-blur border-b border-white/5 flex flex-col gap-0.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1">
                     <span className="text-[7px] text-zinc-400 font-bold tracking-wide uppercase">Kombine Bonusu</span>
                   </div>
-                  <span className="text-[9px] font-black text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.5)]">+{Math.round(accumulatorBoost * 100)}%</span>
+                  <span className="text-[9px] font-black text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]">+{Math.round(accumulatorBoost * 100)}%</span>
                 </div>
                 <div className="w-full bg-[#161920] h-1 rounded-full overflow-hidden flex relative border border-white/5">
-                  <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-600 via-blue-400 to-[#1075fc] transition-all duration-500" style={{ width: `${Math.min(100, (betSlip.length / 5) * 100)}%` }}>
-                     <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.3)_50%,rgba(255,255,255,0)_100%)] animate-[shimmer_2s_infinite]"></div>
+                  <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#00E5FF]/40 via-[#00E5FF] to-[#00E5FF] transition-all duration-500 shadow-[0_0_10px_#00E5FF]" style={{ width: `${Math.min(100, (betSlip.length / 5) * 100)}%` }}>
+                     <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.8)_50%,rgba(255,255,255,0)_100%)] animate-[shimmer_2s_infinite]"></div>
                   </div>
                 </div>
                 <div className="flex justify-between text-[7px] text-zinc-600 font-black px-1 mt-px">
-                  <span className={`transition-colors ${betSlip.length >= 3 ? 'text-[#1075fc]' : ''}`}>3 Maç (%5)</span>
-                  <span className={`transition-colors ${betSlip.length >= 4 ? 'text-[#1075fc]' : ''}`}>4 Maç (%10)</span>
-                  <span className={`transition-colors ${betSlip.length >= 5 ? 'text-[#1075fc]' : ''}`}>5+ Maç (%15)</span>
+                  <span className={`transition-colors ${betSlip.length >= 3 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>3 Maç (%5)</span>
+                  <span className={`transition-colors ${betSlip.length >= 4 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>4 Maç (%10)</span>
+                  <span className={`transition-colors ${betSlip.length >= 5 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>5+ Maç (%15)</span>
                 </div>
               </div>
             )}
@@ -160,8 +245,8 @@ export const DualRightPanel: React.FC<{
             {/* BET LIST */}
             {betSlip.length === 0 ? (
               <div className="flex-1 p-6 flex flex-col items-center justify-center text-center bg-transparent">
-                <div className="w-20 h-20 rounded-2xl bg-[#13161f] flex items-center justify-center mb-5 border border-white/5 shadow-[inset_0_2px_10px_rgba(255,255,255,0.02)] animate-pulse">
-                  <FileText className="w-8 h-8 text-zinc-600/50" strokeWidth={1.5} />
+                <div className="w-20 h-20 rounded-2xl bg-[#0A0D14]/80 backdrop-blur flex items-center justify-center mb-5 border border-[#00E5FF]/20 shadow-[0_0_20px_rgba(0,229,255,0.05)] animate-pulse">
+                  <FileText className="w-8 h-8 text-[#00E5FF]/60 drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]" strokeWidth={1.5} />
                 </div>
                 <h3 className="text-white font-bold text-[15px] mb-1">
                   {language === 'tr' ? 'Kuponunuz Boş' : 'Bet Slip Empty'}
@@ -172,19 +257,19 @@ export const DualRightPanel: React.FC<{
               </div>
             ) : (
               <div className="flex-1 flex flex-col min-h-0 bg-transparent">
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-1 space-y-2">
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-2.5">
                   {betSlip.map((bet) => {
-                    const isSpacious = betSlip.length <= 3;
+                    const isCompact = betSlip.length >= 5;
                     return (
-                      <div key={bet.id} className={`relative bg-[#1a1e27] border border-white/5 group hover:border-white/10 hover:bg-[#1f2430] transition-all overflow-hidden flex flex-col justify-center ${isSpacious ? 'p-3.5 min-h-[90px] gap-3 rounded-xl' : 'p-1.5 min-h-[44px] gap-1 rounded-md'}`}>
+                      <div key={bet.id} className={`relative bg-[#0b0e14]/80 backdrop-blur border border-white/5 group hover:border-[#00E5FF]/20 hover:bg-[#1f2430]/60 transition-all overflow-hidden flex flex-col justify-center ${isCompact ? 'p-1.5 min-h-[44px] gap-1 rounded-md shadow' : 'p-3 min-h-[76px] gap-2.5 rounded-xl shadow-lg'} hover:shadow-[0_0_15px_rgba(0,229,255,0.05)]`}>
                         
                         {/* Left color bar */}
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#10b981] shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#00E5FF] to-[#00b3cc] shadow-[0_0_10px_rgba(0,229,255,0.6)]"></div>
 
-                        <div className={`flex justify-between items-start ${isSpacious ? 'pl-2.5 pr-6' : 'pl-1.5 pr-5'}`}>
-                          <div className="flex items-start gap-1.5 w-full mt-0.5">
-                            <span className={`rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)] shrink-0 mt-[4px] ${isSpacious ? 'w-1.5 h-1.5' : 'w-1 h-1'}`} />
-                            <div className={`text-white font-bold leading-tight flex-1 ${isSpacious ? 'text-sm' : 'text-[10px] truncate'}`}>
+                        <div className={`flex justify-between items-start ${isCompact ? 'pl-1.5 pr-5' : 'pl-2 pr-6'}`}>
+                          <div className={`flex items-start ${isCompact ? 'gap-1.5' : 'gap-2'} w-full mt-0.5`}>
+                            <span className={`rounded-full bg-[#00E5FF] shadow-[0_0_5px_rgba(0,229,255,0.8)] shrink-0 mt-[6px] ${isCompact ? 'w-1 h-1 mt-[5px]' : 'w-1.5 h-1.5'}`} />
+                            <div className={`text-white font-bold leading-tight flex-1 ${isCompact ? 'text-[11px] truncate' : 'text-[13px]'}`}>
                               {bet.matchName.replace(' vs ', ' - ')}
                             </div>
                           </div>
@@ -192,19 +277,20 @@ export const DualRightPanel: React.FC<{
                           {/* Delete button (Top Right) */}
                           <button 
                             onClick={() => removeSelection(bet.id)}
-                            className={`absolute rounded bg-black/20 hover:bg-red-500/80 flex items-center justify-center text-zinc-400 hover:text-white transition-colors ${isSpacious ? 'right-2 top-2 w-6 h-6' : 'right-1 top-1 w-4 h-4'}`}
+                            className={`absolute rounded-md bg-black/20 hover:bg-red-500/20 flex items-center justify-center text-zinc-500 hover:text-red-500 border border-transparent hover:border-red-500/50 hover:shadow-[0_0_10px_rgba(239,68,68,0.3)] transition-all group/del ${isCompact ? 'right-1 top-1 w-4 h-4' : 'right-2 top-2 w-6 h-6'}`}
                           >
-                            <X className={isSpacious ? 'w-4 h-4' : 'w-3 h-3'} />
+                            <X className={`${isCompact ? 'w-3 h-3' : 'w-4 h-4'} group-hover/del:scale-110 transition-transform`} />
                           </button>
                         </div>
 
-                        <div className={`flex items-center justify-between border-t border-white/5 ${isSpacious ? 'pl-2.5 pt-2' : 'pl-1.5 pt-1'}`}>
+                        <div className={`flex items-center justify-between border-t border-white/5 ${isCompact ? 'pl-1.5 pt-1.5' : 'pl-2 pt-2.5'}`}>
                           <div className="flex items-center gap-1.5">
-                            <span className={`text-zinc-500 font-semibold uppercase tracking-wider ${isSpacious ? 'text-[10px]' : 'text-[8px]'}`}>Seçim:</span>
-                            <span className={`text-white font-bold ${isSpacious ? 'text-[13px]' : 'text-[10px]'}`}>{bet.selectionName}</span>
+                            <span className={`text-zinc-500 font-semibold uppercase tracking-wider ${isCompact ? 'text-[8px]' : 'text-[10px]'}`}>Seçim:</span>
+                            <span className={`text-white font-bold ${isCompact ? 'text-[11px]' : 'text-[13px] ml-0.5'}`}>{bet.selectionName}</span>
                           </div>
-                          <div className={`bg-[#1075fc]/10 rounded border border-[#1075fc]/20 flex items-center justify-center ${isSpacious ? 'px-2 py-1 min-w-[48px]' : 'px-1 py-0.5 min-w-[32px]'}`}>
-                            <span className={`text-[#1075fc] font-black ${isSpacious ? 'text-[14px]' : 'text-[10px]'}`}>{bet.odd.toFixed(2)}</span>
+                          <div className={`bg-[#0b0e14] rounded border border-[#00E5FF]/40 shadow-[0_0_12px_rgba(0,229,255,0.1)] flex items-center justify-center relative overflow-hidden group-hover:border-[#00E5FF]/80 group-hover:shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-all ${isCompact ? 'px-1.5 py-0.5 min-w-[36px]' : 'px-2.5 py-1 min-w-[50px]'}`}>
+                            <div className="absolute inset-0 bg-[#00E5FF]/5 group-hover:bg-[#00E5FF]/10 transition-colors" />
+                            <span className={`text-[#00E5FF] font-black drop-shadow-[0_0_5px_rgba(0,229,255,0.6)] relative z-10 ${isCompact ? 'text-[11px]' : 'text-[14px]'}`}>{bet.odd.toFixed(2)}</span>
                           </div>
                         </div>
                       </div>
@@ -213,71 +299,86 @@ export const DualRightPanel: React.FC<{
                 </div>
 
                 {/* BOTTOM SUMMARY & ACTIONS */}
-                <div className="shrink-0 flex flex-col bg-[#0A0D14] border-t border-white/10 shadow-[0_-5px_15px_rgba(0,0,0,0.5)] z-20 p-1.5 gap-1.5">
+                <div className="shrink-0 flex flex-col bg-[#0A0D14] border-t border-white/10 shadow-[0_-5px_15px_rgba(0,0,0,0.5)] z-20 p-3 md:p-4 gap-3">
                   
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col">
-                      <span className="text-zinc-400 text-[8px] font-bold uppercase">{language === 'tr' ? 'Toplam Oran' : 'Total odds'}</span>
-                      <span className="text-white font-black text-[12px]">{totalOdds.toFixed(2)}</span>
+                      <span className="text-zinc-400 text-[10px] md:text-[11px] font-bold uppercase">{language === 'tr' ? 'Toplam Oran' : 'Total odds'}</span>
+                      <span className="text-white font-black text-[15px] md:text-[16px]">{totalOdds.toFixed(2)}</span>
                     </div>
                     <div className="flex flex-col items-end">
-                      <span className="text-[#1075fc] text-[8px] font-bold uppercase">{language === 'tr' ? 'Olası Kazanç' : 'Potential Win'}</span>
-                      <span className="text-[#1075fc] font-black text-[12px]">{potentialPayout.toFixed(2)} ₺</span>
+                      <span className="text-[#00E5FF] text-[10px] md:text-[11px] font-bold uppercase drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">{language === 'tr' ? 'Olası Kazanç' : 'Potential Win'}</span>
+                      <span className="text-[#00E5FF] font-black text-[15px] md:text-[16px] drop-shadow-[0_0_5px_rgba(0,229,255,0.6)]">{potentialPayout.toFixed(2)} ₺</span>
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-1 relative">
+                  <div className="flex flex-col gap-2 relative">
                      {/* Stamp Animation Overlay */}
                      {showStamp && (
-                        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded">
+                        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-lg">
                           <div className="transform -rotate-12 scale-110 animate-pulse">
-                            <div className="border-[2px] border-[#1075fc] rounded px-2 py-0.5 bg-[#1075fc]/10 flex flex-col items-center">
-                              <CheckCircle2 className="w-4 h-4 text-[#1075fc] mb-0.5" />
-                              <span className="text-[#1075fc] font-black text-[10px] uppercase">ONAYLANDI</span>
+                            <div className="border-[2px] border-[#00E5FF] rounded px-3 py-1 bg-[#00E5FF]/10 flex flex-col items-center shadow-[0_0_15px_rgba(0,229,255,0.3)]">
+                              <CheckCircle2 className="w-5 h-5 text-[#00E5FF] mb-1" />
+                              <span className="text-[#00E5FF] font-black text-[12px] uppercase drop-shadow-[0_0_3px_rgba(0,229,255,0.5)]">ONAYLANDI</span>
                             </div>
                           </div>
                         </div>
                       )}
 
-                     <div className="flex-1 bg-[#1a1e27] border border-white/10 rounded overflow-hidden flex h-8 shadow-inner hover:border-white/20 transition-colors focus-within:border-[#1075fc]/50">
+                     <div className="flex-1 bg-[#1a1e27]/80 backdrop-blur border border-white/10 rounded-lg overflow-hidden flex h-10 md:h-12 shadow-inner hover:border-white/20 transition-colors focus-within:border-[#00E5FF]/50 focus-within:shadow-[0_0_10px_rgba(0,229,255,0.1)]">
                         <div className="relative flex-1">
-                           <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/50 font-black text-[11px]">₺</div>
+                           <style>{`
+                             input[type=number]::-webkit-inner-spin-button, 
+                             input[type=number]::-webkit-outer-spin-button { 
+                               -webkit-appearance: none; 
+                               margin: 0; 
+                             }
+                             input[type=number] {
+                               -moz-appearance: textfield;
+                             }
+                           `}</style>
+                           <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#00E5FF]/50 font-black text-[13px] md:text-[15px]">₺</div>
                            <input 
                              type="number"
                              value={betAmount || ''}
                              onChange={(e) => setBetAmount(parseFloat(e.target.value) || 0)}
                              placeholder="0"
-                             className="w-full h-full bg-transparent pl-6 pr-2 text-white font-black text-[13px] outline-none"
+                             className="w-full h-full bg-transparent pl-8 pr-3 text-white font-black text-[15px] md:text-[17px] outline-none placeholder-[#00E5FF]/20"
                            />
                         </div>
                         <div className="flex items-center">
-                          <button onClick={() => handleQuickAmount(50)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#1075fc]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">+50</button>
-                          <button onClick={() => handleQuickAmount(200)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#1075fc]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">+200</button>
-                          <button onClick={() => handleQuickAmount(500)} className="h-full px-1.5 bg-[#1a1e27] hover:bg-[#1075fc]/15 border-l border-white/5 text-zinc-300 font-bold text-[9px] transition-all">MAX</button>
+                          <button onClick={() => handleQuickAmount(50)} className="h-full px-3 md:px-4 bg-[#1a1e27] hover:bg-[#00E5FF]/20 hover:text-[#00E5FF] hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] border-l border-white/5 text-zinc-400 font-bold text-[11px] md:text-[12px] transition-all">+50</button>
+                          <button onClick={() => handleQuickAmount(200)} className="h-full px-3 md:px-4 bg-[#1a1e27] hover:bg-[#00E5FF]/20 hover:text-[#00E5FF] hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] border-l border-white/5 text-zinc-400 font-bold text-[11px] md:text-[12px] transition-all">+200</button>
+                          <button onClick={() => handleQuickAmount(500)} className="h-full px-3 md:px-4 bg-[#1a1e27] hover:bg-[#00E5FF]/20 hover:text-[#00E5FF] hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] border-l border-white/5 text-zinc-400 font-bold text-[11px] md:text-[12px] transition-all">MAX</button>
                         </div>
                      </div>
                   </div>
 
-                  <div className="flex gap-1.5">
+                  <div className="flex gap-2">
                      <button 
                         onClick={() => clearBetSlip()}
-                        className="w-8 h-8 bg-[#161920] hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 rounded flex items-center justify-center text-zinc-500 hover:text-red-400 transition-all shrink-0 group"
+                        className="w-10 h-10 md:w-12 md:h-12 bg-[#161920] hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 rounded-lg flex items-center justify-center text-zinc-500 hover:text-red-400 transition-all shrink-0 group"
                         title="Kuponu Temizle"
                       >
-                        <Trash2 className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+                        <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
                       </button>
                       <button 
                         onClick={handlePlaceBet}
-                        className="flex-1 h-8 bg-[#1075fc] text-white font-black text-[11px] rounded tracking-widest uppercase flex items-center justify-center hover:bg-[#0f6bed] transition-colors gap-1 shadow-[0_3px_15px_rgba(16,117,252,0.3)] hover:shadow-[0_5px_20px_rgba(16,117,252,0.5)] active:scale-[0.98]"
+                        className="flex-1 h-10 md:h-12 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] font-black text-[13px] md:text-[15px] rounded-lg tracking-widest uppercase flex items-center justify-center hover:brightness-110 transition-all gap-1 shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)] active:scale-[0.98] relative overflow-hidden group/btn"
                       >
-                        {!siteUser ? (language === 'tr' ? 'Giriş Yap' : 'Login') : (language === 'tr' ? 'Bahis Yap' : 'Place Bet')}
-                        {siteUser && <ChevronRight className="w-3.5 h-3.5 text-white" />}
+                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:animate-[shine-sweep_2s_ease-in-out_infinite]" />
+                        <span className="relative z-10 flex items-center gap-1">
+                          {!siteUser ? (language === 'tr' ? 'Giriş Yap' : 'Login') : (language === 'tr' ? 'Bahis Yap' : 'Place Bet')}
+                          {siteUser && <ChevronRight className="w-4 h-4 text-[#0A0D14]" />}
+                        </span>
                       </button>
                   </div>
                 </div>
               </div>
             )}
           </>
+        ) : activePanel === 'mybets' ? (
+          <MyBetsPanel />
         ) : (
           <ModernChat 
             open={true}
@@ -293,10 +394,10 @@ export const DualRightPanel: React.FC<{
       {/* ═══════════ STICKY BOTTOM TOGGLE BAR ═══════════ */}
       <div className={`shrink-0 bg-[#0A0D14] border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] transition-all duration-300 overflow-hidden ${activePanel === 'coupon' && betSlip.length > 0 ? 'h-0 p-0 border-t-0 opacity-0' : 'h-[70px] p-3 opacity-100'}`}>
         {activePanel === 'coupon' ? (
-          <button onClick={() => setActivePanel('chat')} className="w-full h-[46px] bg-gradient-to-b from-[#1075fc] to-[#0a5bc4] border border-[#1075fc]/50 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(16,117,252,0.3)] hover:shadow-[0_4px_25px_rgba(16,117,252,0.5)] group relative overflow-hidden">
+          <button onClick={() => setActivePanel('chat')} className="w-full h-[46px] bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(0,229,255,0.4)] hover:shadow-[0_4px_25px_rgba(0,229,255,0.6)] group relative overflow-hidden active:scale-[0.98]">
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <MessageCircle className="w-5 h-5 text-white group-hover:scale-110 transition-transform relative z-10" />
-            <span className="text-white text-[14px] font-extrabold tracking-wide uppercase relative z-10">Sohbete Geç</span>
+            <MessageCircle className="w-5 h-5 text-[#0A0D14] group-hover:scale-110 transition-transform relative z-10" />
+            <span className="text-[#0A0D14] text-[14px] font-black tracking-wide uppercase relative z-10">Sohbete Geç</span>
           </button>
         ) : (
           <div className="flex items-center justify-between w-full h-full px-2 pb-2">
@@ -308,9 +409,12 @@ export const DualRightPanel: React.FC<{
               <Gamepad2 className="w-[18px] h-[18px]" />
               <span className="text-[9px] font-medium tracking-wide">E-Sporlar</span>
             </button>
-            <button className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1">
-              <Flag className="w-[18px] h-[18px]" />
-              <span className="text-[9px] font-medium tracking-wide">Bahislerim</span>
+            <button 
+              onClick={() => setActivePanel('mybets')}
+              className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1"
+            >
+              <Flag className={`w-[18px] h-[18px] ${activePanel === 'mybets' ? 'text-[#00E5FF]' : ''}`} />
+              <span className={`text-[9px] font-medium tracking-wide ${activePanel === 'mybets' ? 'text-[#00E5FF]' : ''}`}>Bahislerim</span>
             </button>
             <button 
               onClick={() => setActivePanel('coupon')}

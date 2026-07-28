@@ -518,7 +518,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             <button
                                 type="submit"
                                 disabled={!newMessage.trim()}
-                                className="text-white bg-[#1075fc] disabled:bg-[#121212] disabled:text-gray-600 hover:bg-[#0f7bff] transition-all p-2 rounded-full shadow-[0_2px_10px_rgba(16,117,252,0.3)]"
+                                className="text-[#0A0D14] bg-gradient-to-br from-[#00E5FF] to-[#00b3cc] disabled:bg-none disabled:bg-[#121212] disabled:text-gray-600 hover:brightness-110 transition-all p-2 rounded-full shadow-[0_2px_10px_rgba(0,229,255,0.3)]"
                             >
                                 <Send className="w-4 h-4 ml-0.5" />
                             </button>

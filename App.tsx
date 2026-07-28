@@ -188,7 +188,7 @@ export default function App() {
     const handleOpenAdmin = () => {
       const role = localStorage.getItem('site_user_role');
       if (role === 'admin') {
-        setIsAdminPanelOpen(true);
+        window.dispatchEvent(new CustomEvent('navigate-view', { detail: 'admin' }));
       } else {
         window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'admin' }));
       }
@@ -217,10 +217,6 @@ export default function App() {
           <div className="min-h-screen bg-theme-main text-theme-primary flex flex-col font-sans">
             <AppContent setIsAdminPanelOpen={setIsAdminPanelOpen} />
           </div>
-
-          {isAdminPanelOpen && (
-              <AdminPanel onClose={() => setIsAdminPanelOpen(false)} />
-          )}
 
           {isFinancePanelOpen && (
               <FinanceDashboard onClose={() => setIsFinancePanelOpen(false)} />
@@ -1861,7 +1857,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         <div className="relative w-full h-[100dvh] bg-[#050505] overflow-hidden">
           {authModalMode && (
             <AuthModal
-              mode={authModalMode === 'register' ? 'member' : authModalMode}
+              mode={authModalMode === 'admin' ? 'admin' : 'member'}
               initialMemberMode={authModalMode === 'register' ? 'register' : 'login'}
               onMemberLogin={(user) => {
                 setSiteUser(user);
@@ -1932,7 +1928,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       {/* Auth Modal Overlay */}
       {authModalMode && (
         <AuthModal
-          mode={authModalMode === 'register' ? 'member' : authModalMode}
+          mode={authModalMode === 'admin' ? 'admin' : 'member'}
           initialMemberMode={authModalMode === 'register' ? 'register' : 'login'}
           onMemberLogin={(user) => {
             setSiteUser(user);
@@ -1995,71 +1991,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         <WalletModal onClose={() => setShowDepositModal(false)} />
       )}
 
-      {(['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'].includes(view)) ? (
-        <InGameLayout 
-          siteUser={siteUser} 
-          onViewChange={handleViewChange} 
-          gameTitle={
-              view === 'limbo' ? 'Limbo' : 
-              view === 'chicken-run' ? 'Chicken Run' : 
-              view === 'plinko' ? 'Plinko' :
-              view === 'dice' ? 'Dice' :
-              view === 'mines' ? 'Mines' :
-              view === 'keno' ? 'Keno' :
-              view === 'war' ? 'Casino War' :
-              view === 'hilo' ? 'HiLo' :
-              view === 'roulette' ? 'Roulette' :
-              view === 'crash-turbo' ? 'Crash' :
-              view === 'turbo-mines' ? 'Turbo Mines' :
-              view === 'hacksaw' ? 'Hacksaw Slot' :
-              view === 'redtiger' ? 'Red Tiger Slot' :
-              'Blackjack Pro'
-          }
-        >
-           {view === 'blackjack-pro' && (
-             <BlackjackProView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'limbo' && (
-             <LimboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'chicken-run' && (
-             <ChickenRunView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'plinko' && (
-             <PlinkoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'dice' && (
-             <DiceView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'mines' && (
-             <MinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'keno' && (
-             <KenoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'war' && (
-             <WarView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'hilo' && (
-             <HiLoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'roulette' && (
-             <RouletteView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'crash-turbo' && (
-             <CrashTurboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'turbo-mines' && (
-             <TurboMinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-
-           {view === 'hacksaw' && (
-             <HacksawSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-           {view === 'redtiger' && (
-             <RedTigerSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-           )}
-        </InGameLayout>
+      {/* InGameLayout was removed from here. The games are now rendered inside the main layout below. */}
+      {(false) ? (
+        <></>
       ) : (
         <div 
           className="relative flex flex-col h-[100dvh] w-full bg-[#050505] text-white overflow-hidden" 
@@ -2174,7 +2108,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                     </span>
                     
                     {/* bets in Solid Blue (Lowercase) */}
-                    <span className="text-[#1075fc] flex ml-[1px]">
+                    <span className="text-[#00E5FF] flex ml-[1px]">
                       <span>b</span>
                       <span>e</span>
                       <span>t</span>
@@ -2183,7 +2117,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
                     {/* Right-side 3-leaf clover with soft glow */}
                     <div className="flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 ml-0 -mt-2">
-                      <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.3)]">
+                      <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.3)]">
                         <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
                         <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
                         <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
@@ -2200,7 +2134,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                         className="flex items-center bg-[#111111] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
-                        <div className="w-7 h-7 rounded bg-[#1075fc] text-white flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(16,117,252,0.4)]">
+                        <div className="w-7 h-7 rounded bg-gradient-to-br from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,229,255,0.4)]">
                           <span className="text-[14px]">₺</span>
                         </div>
                         <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">₺{Number(siteUser.balance || 0).toFixed(2)}</span>
@@ -2254,7 +2188,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                         </button>
                         <button
                           onClick={() => setAuthModalMode('register')}
-                          className="flex items-center justify-center h-[34px] md:h-[36px] bg-[#1075fc] hover:bg-[#0f7bff] text-white border border-transparent rounded-md font-extrabold text-[12px] sm:text-[13px] px-3 sm:px-4 transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(15,123,255,0.3)]"
+                          className="flex items-center justify-center h-[34px] md:h-[36px] bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] border border-transparent rounded-md font-extrabold text-[12px] sm:text-[13px] px-3 sm:px-4 transition-all whitespace-nowrap shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)]"
                         >
                           Kaydolun
                         </button>
@@ -2271,6 +2205,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             <main 
               id="main-scroll-container"
               className="flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col overflow-y-auto"
+              style={{ transform: 'translateZ(0)' }}
             >
             {/* Gamdom Style Global Ambient Shading / Glows */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -2341,7 +2276,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
 
         {view === 'sports' && (
-          <GercekView onNavigate={handleViewChange} />
+          <Spor724View onNavigate={handleViewChange} />
         )}
 
         {view === 'gercek' && (
@@ -2351,6 +2286,54 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         {view === 'originals' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
             <OriginalsHub onNavigate={handleViewChange} isLoggedIn={!!(siteUser || userRole)} siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+          </div>
+        )}
+
+        {/* --- ORIGINAL GAMES RENDERED IN MAIN LAYOUT --- */}
+        {['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'].includes(view) && (
+          <div className="animate-fade-in w-full h-full relative z-[50] rounded-2xl overflow-hidden shadow-2xl bg-[#0A0D14]">
+             {view === 'blackjack-pro' && (
+               <BlackjackProView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'limbo' && (
+               <LimboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'chicken-run' && (
+               <ChickenRunView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'plinko' && (
+               <PlinkoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'dice' && (
+               <DiceView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'mines' && (
+               <MinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'keno' && (
+               <KenoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'war' && (
+               <WarView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'hilo' && (
+               <HiLoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'roulette' && (
+               <RouletteView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'crash-turbo' && (
+               <CrashTurboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'turbo-mines' && (
+               <TurboMinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'hacksaw' && (
+               <HacksawSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'redtiger' && (
+               <RedTigerSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
           </div>
         )}
 
@@ -2424,6 +2407,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#050505]/40" />
               <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#050505]/20" />
             </div>
+          </div>
+        )}
+
+        {view === 'admin' && (
+          <div className="animate-fade-in w-full h-full min-h-screen relative z-[100] bg-[#050608]">
+            <AdminPanel onClose={() => handleViewChange('home')} onNavigateHome={() => handleViewChange('home')} />
           </div>
         )}
 
@@ -2826,24 +2815,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                   <svg className={`w-3 h-3 transition-transform duration-300 ${!isChatOpen ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                 </button>
                 <div className={`flex-1 overflow-hidden relative transition-opacity duration-300 ${isChatOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-                  {view === 'sports' || view === 'spor724' || view === 'gercek' || view === 'upcomingMatches' ? (
-                    <DualRightPanel 
-                      popularMatches={[]} 
-                      language={'tr'} 
-                      isOpenMobile={false} 
-                      onCloseMobile={() => setIsChatOpen(false)} 
-                    />
-                  ) : (
-                    <ModernChat
-                      open={isChatOpen}
-                      onOpen={() => setIsChatOpen(true)}
-                      onClose={() => setIsChatOpen(false)}
-                      siteUser={siteUser}
-                      userRole={userRole}
-                      isMobile={false}
-                      activeView={view}
-                    />
-                  )}
+                  <DualRightPanel 
+                    popularMatches={[]} 
+                    language={'tr'} 
+                    isOpenMobile={false} 
+                    onCloseMobile={() => setIsChatOpen(false)} 
+                  />
                 </div>
               </aside>
             </>

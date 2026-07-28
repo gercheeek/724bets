@@ -28,6 +28,7 @@ import SportsIconNav from './sports/SportsIconNav';
 import FavoritesEmptyState from './sports/FavoritesEmptyState';
 import MyBetsEmptyState from './sports/MyBetsEmptyState';
 import { PopularEventsAccordion } from './sports/PopularEventsAccordion';
+import { MyBetsView } from './sports/MyBetsView';
 
 interface BetSelection {
   id: string;
@@ -149,6 +150,7 @@ const getCountryFlag = (country: string) => {
   };
   return flags[country] || '🏳️';
 };
+const finishedMatchTimes: Record<string, number> = {};
 
 export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   const data = ev.data;
@@ -187,7 +189,14 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
 
   if (rawStartTime) {
     try {
-      const d = new Date(rawStartTime);
+      let timeStr = String(rawStartTime);
+      if (timeStr.includes(' ') && !timeStr.includes('T')) {
+        timeStr = timeStr.replace(' ', 'T');
+      }
+      if (!timeStr.endsWith('Z') && !timeStr.includes('+')) {
+        timeStr += 'Z';
+      }
+      const d = new Date(timeStr);
       if (!isNaN(d.getTime())) dateObj = d;
     } catch (e) {}
   } else if (data.start_ts || ev.start_ts) {
@@ -228,6 +237,8 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   const activeStatuses = ['in_progress', 'started', 'halftime', 'playing'];
   const hasActiveStatus = activeStatuses.includes(data.status);
   
+  const matchId = String(ev.id || data.id || Math.random());
+  
   if (hasActiveStatus) {
     if (dateObj) {
       if (dateObj.getTime() <= Date.now()) {
@@ -239,9 +250,18 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     }
   }
 
-
   if (isFinished) {
       minute = language === 'tr' ? 'Bitti' : 'FT';
+      
+      // Keep finished matches in 'Live' state for 3 minutes (180000 ms)
+      if (!finishedMatchTimes[matchId]) {
+        finishedMatchTimes[matchId] = Date.now();
+      }
+      if (Date.now() - finishedMatchTimes[matchId] < 180000) {
+        isLive = true;
+      }
+  } else if (data.status === 'halftime' || data.minute === 'HT') {
+      minute = 'DEVRE ARASI';
   } else if (data.minute) {
       const minStr = String(data.minute).trim();
       minute = /^\d+$/.test(minStr) ? `${minStr}'` : minStr;
@@ -744,20 +764,35 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         <div className="max-w-[1200px] mx-auto pb-24 md:pb-12">
             
             {/* Top Icon Navigation (Moved above slider) */}
-            <div className="px-4 md:px-6 pt-4 mb-4">
-                <SportsIconNav activeTab={navTab} liveCounts={liveCountsMap} onTabChange={(tab) => {
-                  setNavTab(tab);
-                  if (tab === 'canli') {
-                    setActiveTab('in-play');
-                    setViewMode('live');
-                  } else if (tab === 'home') {
-                    setActiveTab('in-play');
-                    setViewMode('home');
-                  } else if (tab === 'upcoming') {
-                    setActiveTab('pre-match');
-                    setViewMode('bulletin');
-                  }
-                }} />
+            <div className="px-4 md:px-6 pt-4 mb-4 flex items-center justify-between gap-2 md:gap-4">
+                <div className="flex-1 overflow-hidden">
+                  <SportsIconNav activeTab={navTab} liveCounts={liveCountsMap} onTabChange={(tab) => {
+                    setNavTab(tab);
+                    if (tab === 'canli') {
+                      setActiveTab('in-play');
+                      setViewMode('live');
+                    } else if (tab === 'home') {
+                      setActiveTab('in-play');
+                      setViewMode('home');
+                    } else if (tab === 'upcoming') {
+                      setActiveTab('pre-match');
+                      setViewMode('bulletin');
+                    }
+                  }} />
+                </div>
+                
+                {/* Goal Sound Toggle Button */}
+                <button 
+                  onClick={toggleGoalSound}
+                  className={`shrink-0 w-11 h-11 flex items-center justify-center rounded-xl border transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.3)] ${
+                    isGoalSoundEnabled 
+                      ? 'bg-[#10B981]/10 border-[#10B981]/50 text-[#10B981] hover:bg-[#10B981]/20 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]' 
+                      : 'bg-[#111111] border-white/10 text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                  }`}
+                  title={isGoalSoundEnabled ? "Gol Sesi Açık" : "Gol Sesi Kapalı"}
+                >
+                  {isGoalSoundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+                </button>
             </div>
 
             {selectedMatch ? (
@@ -789,10 +824,16 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
               <div className="px-4 md:px-6 mb-4">
                 <FavoritesEmptyState />
               </div>
-            ) : navTab === 'mybets' && !isAuthenticated ? (
-              <div className="px-4 md:px-6 mb-4">
-                <MyBetsEmptyState />
-              </div>
+            ) : navTab === 'mybets' ? (
+              !isAuthenticated ? (
+                <div className="px-4 md:px-6 mb-4">
+                  <MyBetsEmptyState />
+                </div>
+              ) : (
+                <div className="flex-1 w-full bg-[#0a0c10]">
+                  <MyBetsView />
+                </div>
+              )
             ) : (
               <>
                 {/* En İyi Maçlar Widget */}
@@ -892,9 +933,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
             )}
               </>
             )}
-
-            <Footer />
-          </>
+            </>
         )}
         </div>
       </div>

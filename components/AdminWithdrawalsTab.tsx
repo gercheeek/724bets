@@ -175,8 +175,11 @@ export default function AdminWithdrawalsTab() {
                                         </td>
                                         <td className="px-6 py-4">
                                             {req.riskScore === 'safe' ? (
-                                                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
-                                                    <ShieldCheck className="w-3.5 h-3.5" /> GÜVENLİ
+                                                <div className="inline-flex flex-col gap-1">
+                                                    <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00ff88] bg-[#00ff88]/10 px-2.5 py-1 rounded border border-[#00ff88]/20">
+                                                        <ShieldCheck className="w-3.5 h-3.5" /> GÜVENLİ (OTO-ONAY)
+                                                    </div>
+                                                    <span className="text-[10px] text-[#00ff88]/70">Yapay zeka onayı alındı.</span>
                                                 </div>
                                             ) : (
                                                 <div>
@@ -202,14 +205,20 @@ export default function AdminWithdrawalsTab() {
                                                     </button>
                                                     <button 
                                                         onClick={() => handleAction(req.id, 'approve')}
-                                                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-2"
+                                                        className={`px-3 py-2 rounded-lg font-bold flex items-center gap-2 transition-all ${
+                                                            req.riskScore === 'safe' 
+                                                            ? 'bg-[#00ff88]/20 text-[#00ff88] hover:bg-[#00ff88] hover:text-black border border-[#00ff88]/50 shadow-[0_0_10px_rgba(0,255,136,0.3)]' 
+                                                            : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white border border-emerald-500/30'
+                                                        }`}
                                                     >
-                                                        <Check className="w-4 h-4" /> Onayla
+                                                        <Check className="w-4 h-4" />
+                                                        {req.riskScore === 'safe' ? 'OTO ONAYLA' : 'ONAYLA'}
                                                     </button>
                                                 </div>
                                             ) : req.status === 'processing' ? (
-                                                <div className="inline-flex items-center gap-2 text-zinc-400 font-medium text-sm">
-                                                    <Loader2 className="w-4 h-4 animate-spin text-emerald-400" /> İşleniyor...
+                                                <div className="flex items-center justify-end gap-2 text-zinc-400 font-medium">
+                                                    <Loader2 className="w-5 h-5 animate-spin text-[#00ff88]" />
+                                                    İşleniyor...
                                                 </div>
                                             ) : req.status === 'approved' ? (
                                                 <div className="inline-flex items-center gap-2 text-emerald-400 font-bold text-sm">

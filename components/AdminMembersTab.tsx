@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { SiteUser } from '../types';
-import { Search, Trash2, Ban, CheckCircle2, Shield, Loader2, ArrowUpDown, MoreHorizontal, X, Wallet, Activity, ArrowUpRight, ArrowDownRight, Edit3, Save, Copy } from 'lucide-react';
+import { Search, Trash2, Ban, CheckCircle2, Shield, Loader2, ArrowUpDown, MoreHorizontal, X, Wallet, Activity, ArrowUpRight, ArrowDownRight, Edit3, Save, Copy, Send, Gift, AlertTriangle } from 'lucide-react';
 import { supabase } from '../utils/supabase';
 
 // Helper to format currency
@@ -400,19 +400,40 @@ export default function AdminMembersTab() {
                             </div>
                         </div>
 
-                        {/* Footer Actions */}
-                        <div className="p-6 border-t border-zinc-800 bg-[#15171e] mt-auto">
+                        {/* Footer Actions (Quick CRM Actions) */}
+                        <div className="p-6 border-t border-zinc-800 bg-[#15171e] mt-auto flex flex-col gap-3">
+                            <div className="grid grid-cols-2 gap-3">
+                                <button 
+                                    onClick={() => showMsg("Mesaj Paneli Açılıyor...")}
+                                    className="py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-[#3b82f6]/10 hover:bg-[#3b82f6]/20 text-[#3b82f6] border border-[#3b82f6]/30 transition-all text-xs"
+                                >
+                                    <Send className="w-4 h-4" /> Telegram / SMS
+                                </button>
+                                <button 
+                                    onClick={() => showMsg("VIP Bonus Tanımlandı")}
+                                    className="py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-[#10b981]/10 hover:bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/30 transition-all text-xs"
+                                >
+                                    <Gift className="w-4 h-4" /> VIP Bonus Ekle
+                                </button>
+                                <button 
+                                    onClick={() => showMsg("Risk Limiti Düşürüldü")}
+                                    className="col-span-2 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-[#f59e0b]/10 hover:bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/30 transition-all text-xs"
+                                >
+                                    <AlertTriangle className="w-4 h-4" /> Risk Limitini Düşür (Otomasyon)
+                                </button>
+                            </div>
+                            
                             <button 
                                 onClick={handleToggleStatus}
                                 disabled={actionLoading}
-                                className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg ${
+                                className={`w-full py-3 mt-2 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg ${
                                     selectedUser.status === 'suspended' 
                                     ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20' 
                                     : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
                                 } disabled:opacity-50`}
                             >
                                 {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (selectedUser.status === 'suspended' ? <CheckCircle2 className="w-5 h-5" /> : <Ban className="w-5 h-5" />)}
-                                {selectedUser.status === 'suspended' ? 'Yasağı Kaldır ve Aktifleştir' : 'Kullanıcıyı Yasakla'}
+                                {selectedUser.status === 'suspended' ? 'Yasağı Kaldır ve Aktifleştir' : 'Kullanıcıyı Yasakla (Ban)'}
                             </button>
                         </div>
 

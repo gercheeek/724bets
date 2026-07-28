@@ -85,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       `}
       onClick={onClick}
     >
-      {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-[#1075fc] rounded-r-md z-10"></div>}
+      {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-gradient-to-b from-[#00E5FF] to-[#00b3cc] shadow-[0_0_8px_#00E5FF] rounded-r-md z-10"></div>}
       <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} strokeWidth={isActive ? 2.5 : 2} />
       
       <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
@@ -218,11 +218,12 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Horizontal Toggle */}
           <div className={`flex items-center bg-[#131823] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
-            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isCasinoView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
-              <Cherry className="w-4 h-4 mr-1.5" />
+            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isCasinoView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-[#8b92a5] hover:text-white'}`}>
+              <Cherry className={`w-4 h-4 mr-2 ${isCasinoView ? 'text-[#0A0D14]' : 'text-[#8b92a5]'}`} />
               Casino
             </button>
-            <button onClick={() => onViewChange('spor724')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-[#8b92a5] hover:text-white'}`}>
+            <button onClick={() => onViewChange('spor724')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isSportsView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-[#8b92a5] hover:text-white'}`}>
+              <Target className={`w-4 h-4 mr-2 ${isSportsView ? 'text-[#0A0D14]' : 'text-[#8b92a5]'}`} />
               Spor
             </button>
           </div>
@@ -232,18 +233,18 @@ const Sidebar: React.FC<SidebarProps> = ({
           
           {/* Vertical Toggle Box for Collapsed State */}
           {!isOpen && (
-            <div className="flex flex-col items-center bg-[#1b2230] p-1 rounded-[8px] w-12 mx-auto mb-6">
-              <button onClick={() => onViewChange('casino')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors mb-1 ${isCasinoView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>
-                <Cherry className="w-5 h-5" />
+            <div className="flex flex-col items-center">
+              <button onClick={() => onViewChange('casino')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors mb-1 ${isCasinoView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-gray-400 hover:text-white'}`}>
+                <Cherry className={`w-5 h-5 ${isCasinoView ? 'text-black' : ''}`} />
               </button>
-              <button onClick={() => onViewChange('spor724')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors ${isSportsView ? 'bg-[#0f7bff] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>
-                <Target className="w-5 h-5" />
+              <button onClick={() => onViewChange('spor724')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors ${isSportsView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-gray-400 hover:text-white'}`}>
+                <Target className={`w-5 h-5 ${isSportsView ? 'text-black' : ''}`} />
               </button>
             </div>
           )}
 
           {isSportsView ? (
-            <SportsSidebarContent isOpen={isOpen} onViewChange={onViewChange} />
+            <SportsSidebarContent isOpen={isOpen} onViewChange={onViewChange} onToggle={onToggle} />
           ) : (
             <>
               {/* LOGGED IN USER MENU */}

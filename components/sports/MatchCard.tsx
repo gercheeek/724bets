@@ -38,7 +38,7 @@ export const MatchCard: React.FC<MatchCardProps> = React.memo(({ match, isGoal, 
           {match.isLive ? (
             <span className="text-emerald-400 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              CANLI {match.minute}
+              {match.minute === 'DEVRE ARASI' || match.minute === 'Bitti' || match.minute === 'FT' ? match.minute : `CANLI ${match.minute}`}
             </span>
           ) : (
             <span>{match.matchDate ? `${match.matchDate}, ${match.startTime}` : match.startTime}</span>

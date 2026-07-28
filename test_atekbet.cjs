@@ -3,8 +3,8 @@ const WebSocket = require('ws');
 // Test 1: Raw Swarm WebSocket (like Norabahis)
 function testRaw() {
     console.log('--- Test 1: Raw WebSocket ---');
-    const ws = new WebSocket('wss://eu-swarm-newm.atekbet272.com/ws?language=tur', {
-        headers: { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0' }
+    const ws = new WebSocket('wss://eu-swarm-newm.atekbet273.com/ws?language=tur', {
+        headers: { 'Origin': 'https://atekbet273.com', 'User-Agent': 'Mozilla/5.0' }
     });
 
     ws.on('open', () => {
@@ -31,8 +31,8 @@ function testRaw() {
 // Test 2: Socket.io EIO=3
 function testEio3() {
     console.log('\n--- Test 2: Socket.io EIO=3 ---');
-    const ws = new WebSocket('wss://eu-swarm-newm.atekbet272.com/sport/?EIO=3&transport=websocket', {
-        headers: { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0' }
+    const ws = new WebSocket('wss://eu-swarm-newm.atekbet273.com/sport/?EIO=3&transport=websocket', {
+        headers: { 'Origin': 'https://atekbet273.com', 'User-Agent': 'Mozilla/5.0' }
     });
 
     ws.on('open', () => {
@@ -54,8 +54,8 @@ function testEio3() {
 // Test 3: Socket.io EIO=4
 function testEio4() {
     console.log('\n--- Test 3: Socket.io EIO=4 ---');
-    const ws = new WebSocket('wss://eu-swarm-newm.atekbet272.com/ws?EIO=4&transport=websocket', {
-        headers: { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0' }
+    const ws = new WebSocket('wss://eu-swarm-newm.atekbet273.com/ws?EIO=4&transport=websocket', {
+        headers: { 'Origin': 'https://atekbet273.com', 'User-Agent': 'Mozilla/5.0' }
     });
 
     ws.on('open', () => {

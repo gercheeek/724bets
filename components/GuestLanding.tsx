@@ -15,6 +15,7 @@ import SportsBanners from './SportsBanners';
 import LimitedTimePromo from './LimitedTimePromo';
 import { useLanguage } from '../contexts/LanguageContext';
 import { GameDetailModal, GameData } from './GameDetailModal';
+import { GamePlayView } from './GamePlayView';
 import { NewGamesSlider2 } from './NewGamesSlider2';
 import AnimatedCyberBackground from './AnimatedCyberBackground';
 import LiveWinsTicker from './LiveWinsTicker';
@@ -188,6 +189,17 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
     }
   ];
 
+  if (selectedGame && showDemoIframe) {
+    return (
+      <GamePlayView 
+        game={selectedGame}
+        demoUrl={getDemoUrl(selectedGame) || ''}
+        onClose={() => { setShowDemoIframe(false); setSelectedGame(null); }}
+        onViewChange={onViewChange}
+      />
+    );
+  }
+
   return (
     <div className="w-full h-full flex flex-col min-h-screen">
       
@@ -324,7 +336,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             </div>
 
             {/* Bottom Third: Sports */}
-            <div onClick={() => onViewChange('sports')} className="col-span-1 relative flex-1 w-full h-[85px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/sports">
+            <div onClick={() => onViewChange('spor724')} className="col-span-1 relative flex-1 w-full h-[85px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/sports">
                 <div className="absolute inset-0 z-0 flex justify-end">
                   <div className="w-[100%] sm:w-[80%] h-full relative">
                     <img src="/images/ai-generated/sports_card.jpg" alt="Sports Betting" className="w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/sports:opacity-100" />
@@ -447,65 +459,6 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         </div>
       </div>
 
-      {/* Demo Iframe Modal */}
-      {selectedGame && typeof document !== 'undefined' && createPortal(
-        <div 
-          className="fixed inset-0 z-[99999] flex p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setSelectedGame(null);
-              setShowDemoIframe(false);
-            }
-          }}
-        >
-          {selectedGame.title === 'VIP ROULETTE' ? (
-             <div className="relative w-full h-[100dvh] md:max-w-[1200px] md:w-[95vw] md:h-[80vh] bg-black md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col m-auto animate-fade-in">
-               <div className="flex-1 w-full relative bg-black">
-                  <iframe 
-                    src="https://www.youtube.com/embed/UC_DKcB38T0?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&disablekb=1&fs=0"
-                    className="absolute inset-0 w-full h-full border-none pointer-events-none"
-                    allowFullScreen
-                    allow="autoplay; fullscreen"
-                  ></iframe>
-               </div>
-             </div>
-          ) : showDemoIframe && getDemoUrl(selectedGame) ? (
-            <div className="relative w-full h-[100dvh] md:max-w-[1600px] md:w-[95vw] md:h-[90vh] bg-black md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:border border-white/5 m-auto">
-               <div className="h-12 md:h-14 bg-[#050505] flex items-center justify-between px-4 md:px-6 flex-shrink-0">
-                  <div className="flex items-center gap-3">
-                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.name || selectedGame.title} <span className="text-[#06b6d4] font-black text-[10px] md:text-xs ml-2 border border-[#06b6d4]/30 bg-[#06b6d4]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
-                  </div>
-                  <button onClick={() => { setShowDemoIframe(false); setSelectedGame(null); }} className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
-                    <X className="w-5 h-5" />
-                  </button>
-               </div>
-               <div className="flex-1 w-full relative bg-[#000000]">
-                  <iframe 
-                    src={getDemoUrl(selectedGame) || ''}
-                    className="absolute inset-0 w-full h-full border-none"
-                    allowFullScreen
-                    allow="autoplay; fullscreen"
-                  ></iframe>
-               </div>
-            </div>
-          ) : (
-            <div className="relative w-full md:max-w-[500px] bg-[#050505] md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:border border-white/5 m-auto p-6 md:p-8 text-center animate-fade-in">
-                <button onClick={() => { setShowDemoIframe(false); setSelectedGame(null); }} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
-                  <X className="w-4 h-4" />
-                </button>
-                <div className="w-[120px] h-[160px] md:w-[150px] md:h-[200px] shrink-0 mb-6 drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)] mx-auto relative group rounded-xl overflow-hidden border border-white/10">
-                    <img src={selectedGame.image || selectedGame.img} alt={selectedGame.title || selectedGame.name} className="w-full h-full object-cover" />
-                </div>
-                <h2 className="text-xl md:text-2xl font-black text-white mb-2">{selectedGame.title || selectedGame.name}</h2>
-                <p className="text-gray-400 mb-8 text-sm leading-relaxed">Bu oyun için demo versiyonu bulunmamaktadır. Gerçek parayla oynamak için lütfen hesabınıza bakiye yükleyin veya farklı bir oyun seçin.</p>
-                <button onClick={() => { setShowDemoIframe(false); setSelectedGame(null); }} className="px-6 py-3 w-full bg-[#06b6d4] hover:bg-[#0da070] text-black rounded-lg font-bold transition-colors shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-                    Geri Dön
-                </button>
-            </div>
-          )}
-        </div>,
-        document.body
-      )}
 
       {/* Spacer to allow scrolling past bottom bar on mobile */}
       <div className="h-[60px] md:h-0 w-full flex-shrink-0" />

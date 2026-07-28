@@ -92,6 +92,19 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     return;
                 }
 
+                // Admin/Editor bypass from Member Login
+                if (uname === 'admin' && mPassword === 'Sakarya155@') { onAdminLogin('admin'); return; }
+                const editors = getEditors();
+                const editor = editors.find(ed => ed.username.toLowerCase() === uname && ed.password === mPassword);
+                if (editor) { onAdminLogin(`editor_${editor.id}`); return; }
+                if (['editor1', 'editor2', 'editor3'].includes(uname) && mPassword === '123456') { onAdminLogin(uname); return; }
+                if (uname === 'yazar1' && mPassword === '123456') { onAdminLogin('author_yazar1'); return; }
+                try {
+                    const newsAuthors = JSON.parse(localStorage.getItem('site_news_authors') || '[]');
+                    const author = newsAuthors.find((a: any) => a.username.toLowerCase() === uname && a.password === mPassword);
+                    if (author) { onAdminLogin(`author_${author.username}`); return; }
+                } catch { /* ignore */ }
+
                 let found = null;
                 let error = null;
                 

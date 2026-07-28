@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, Send, Twitter, Instagram, Shield } from 'lucide-react';
 
 const Footer: React.FC = () => {
+  const [adminClickCount, setAdminClickCount] = useState(0);
+
+  const handleAdminClick = (e: React.MouseEvent, link: string) => {
+    e.preventDefault();
+    if (link === 'Bize Ulaşın') {
+      const newCount = adminClickCount + 1;
+      setAdminClickCount(newCount);
+      if (newCount >= 10) {
+        window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'admin' }));
+        setAdminClickCount(0);
+      }
+    }
+  };
+
   return (
     <footer className="w-full bg-[#0A0D14] border-t border-white/5 pt-10 pb-28 md:py-12 px-6 lg:px-12 relative z-10 font-sans">
       <div className="max-w-[1200px] mx-auto">
@@ -41,13 +55,13 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#1075fc]/50 transition-all hover:bg-[#1075fc]/10 hover:shadow-[0_0_15px_rgba(16,117,252,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00E5FF]/50 transition-all hover:bg-[#00E5FF]/10 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
                 <Send className="w-4 h-4" /> {/* Telegram */}
               </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#1075fc]/50 transition-all hover:bg-[#1075fc]/10 hover:shadow-[0_0_15px_rgba(16,117,252,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00E5FF]/50 transition-all hover:bg-[#00E5FF]/10 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
                 <Twitter className="w-4 h-4" /> {/* X */}
               </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#1075fc]/50 transition-all hover:bg-[#1075fc]/10 hover:shadow-[0_0_15px_rgba(16,117,252,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00E5FF]/50 transition-all hover:bg-[#00E5FF]/10 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
                 <Instagram className="w-4 h-4" /> {/* Instagram */}
               </a>
             </div>
@@ -58,7 +72,14 @@ const Footer: React.FC = () => {
             <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">724BETS</h4>
             <div className="flex flex-col gap-3 md:gap-4">
               {['Ödüller', 'Promosyonlar', 'Kanıtlanabilir Şekilde Adil', 'Bize Ulaşın'].map(link => (
-                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#1075fc] transition-colors">{link}</a>
+                <a 
+                  key={link} 
+                  href="#" 
+                  onClick={(e) => link === 'Bize Ulaşın' ? handleAdminClick(e, link) : undefined}
+                  className="text-zinc-400 text-[13px] hover:text-[#00E5FF] transition-colors"
+                >
+                  {link}
+                </a>
               ))}
             </div>
           </div>
@@ -68,7 +89,7 @@ const Footer: React.FC = () => {
             <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">KAYNAKLAR</h4>
             <div className="flex flex-col gap-3 md:gap-4">
               {['Sorumlu Kumar', 'Erişilebilirlik', 'Etik Kuralları', 'Şikayet Politikası'].map(link => (
-                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#1075fc] transition-colors">{link}</a>
+                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#00E5FF] transition-colors">{link}</a>
               ))}
             </div>
           </div>

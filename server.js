@@ -37,11 +37,11 @@ const wss = new WebSocketServer({ server });
 let globalLiveEvents = new Map();
 
 // Atekbet Swarm Connection
-const SWARM_URL = 'wss://eu-swarm-newm.atekbet272.com/ws?language=tur';
+const SWARM_URL = 'wss://eu-swarm-newm.atekbet273.com/ws?language=tur';
 
 function startSwarmConnection() {
     const ws = new WebSocket(SWARM_URL, {
-        headers: { 'Origin': 'https://atekbet272.com', 'User-Agent': 'Mozilla/5.0' }
+        headers: { 'Origin': 'https://atekbet273.com', 'User-Agent': 'Mozilla/5.0' }
     });
     
     let pollInterval;

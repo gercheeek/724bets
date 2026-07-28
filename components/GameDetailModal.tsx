@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+
 import { X, Play, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -36,18 +36,18 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ game, isOpen, 
 
     if (!mounted || !game) return null;
 
-    return createPortal(
-        <div className="relative z-[99999]">
+    return (
+        <div className="fixed inset-0 z-[999] pointer-events-none flex items-center justify-center">
             {/* Backdrop */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
+                    className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 pointer-events-auto"
                     onClick={onClose}
                 />
             )}
 
             {/* Modal Content - Perfectly centered on both desktop and mobile */}
-            <div className="fixed inset-0 pointer-events-none flex items-center justify-center p-4 sm:p-6">
+            <div className="fixed z-10 pointer-events-none flex items-center justify-center p-4 sm:p-6 w-full max-h-full">
                 <div 
                     className={`pointer-events-auto relative w-full max-w-[90vw] md:max-w-[600px] lg:max-w-[650px] max-h-[90vh] bg-[#111317] rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.9)] md:border border-white/5 flex flex-col overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                 >
@@ -103,7 +103,6 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ game, isOpen, 
                     </div>
                 </div>
             </div>
-        </div>,
-        document.body
+        </div>
     );
 };

@@ -390,7 +390,7 @@ const Header: React.FC<HeaderProps> = ({
                   </span>
                   
                   {/* bets in Solid Blue (Lowercase) with Slot Reel Animation on Hover */}
-                  <span className="text-[#1075fc] flex ml-[1px]">
+                  <span className="text-[#00E5FF] flex ml-[1px]">
                     <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]">b</span>
                     <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.1s' }}>e</span>
                     <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.2s' }}>t</span>
@@ -399,7 +399,7 @@ const Header: React.FC<HeaderProps> = ({
 
                   {/* Right-side 3-leaf clover with soft glow */}
                   <div className="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 ml-0 -mt-3">
-                    <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.3)]">
+                    <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.3)]">
                       {/* Top leaf */}
                       <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
                       {/* Left leaf */}
@@ -489,15 +489,15 @@ const Header: React.FC<HeaderProps> = ({
               </div>
 
               {/* Chat Icon */}
-              <button className="hidden lg:flex w-10 h-10 items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-lg text-gray-400 hover:text-white ml-2">
+              <button onClick={onSupportClick} className="hidden lg:flex w-10 h-10 items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-lg text-gray-400 hover:text-white ml-2">
                 <MessageSquare className="w-5 h-5" />
               </button>
 
-              <div className="relative" ref={userDropdownRef}>
+              <div className="relative" ref={profileRef}>
                 {/* User Avatar Block */}
                 <div 
                   className="flex items-center bg-[#1b2230] hover:bg-[#252e42] cursor-pointer transition-colors rounded-lg p-1 pr-2 md:pr-3 h-[40px] md:h-[44px] ml-1 md:ml-3"
-                  onClick={() => setUserDropdownOpen(prev => !prev)}
+                  onClick={() => setIsProfileOpen(prev => !prev)}
                 >
                   <div className="w-7 h-7 md:w-9 md:h-9 rounded-md bg-emerald-500/20 text-emerald-500 flex items-center justify-center mr-2 md:mr-3 border border-emerald-500/30 overflow-hidden relative group-hover:border-emerald-500/50">
                      <User className="w-4 h-4 md:w-5 md:h-5 z-10 relative" />
@@ -509,10 +509,10 @@ const Header: React.FC<HeaderProps> = ({
                       VIP Lvl {siteUser.loyalty?.level || 1}
                     </span>
                   </div>
-                  <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-gray-400 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
                 </div>
 
-                {userDropdownOpen && (
+                {isProfileOpen && (
                   <div className="absolute right-0 top-[calc(100%+8px)] w-64 rounded-xl py-2 z-50 bg-[#1b2230] border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)] text-left">
                     {/* VIP Progress */}
                     <div className="px-4 py-3 border-b border-white/5 bg-black/20">
@@ -561,7 +561,7 @@ const Header: React.FC<HeaderProps> = ({
                   const event = new CustomEvent('openAuthModal', { detail: 'login' });
                   window.dispatchEvent(event);
                 }}
-                className="bg-[#1b2230] hover:bg-[#252e42] text-white font-semibold text-[13px] md:text-[14px] h-full px-4 md:px-5 rounded-[8px] transition-colors"
+                className="bg-[#1b2230] hover:bg-[#252e42] text-white font-semibold text-[12px] md:text-[14px] h-full px-3 md:px-5 rounded-[8px] transition-colors whitespace-nowrap"
               >
                 Giriş Yap
               </button>
@@ -571,13 +571,13 @@ const Header: React.FC<HeaderProps> = ({
                   const event = new CustomEvent('openAuthModal', { detail: 'register' });
                   window.dispatchEvent(event);
                 }}
-                className="bg-[#0f7bff] hover:bg-[#0f7bff]/90 text-white font-semibold text-[13px] md:text-[14px] h-full px-5 md:px-6 rounded-[8px] transition-colors shadow-[0_0_15px_rgba(15,123,255,0.3)]"
+                className="bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] font-black text-[12px] md:text-[14px] h-full px-3 md:px-6 rounded-[8px] transition-all shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)] whitespace-nowrap"
               >
-                Kaydol
+                Kayıt Ol
               </button>
 
               {/* Chat Icon */}
-              <button className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-gray-400 hover:text-white">
+              <button onClick={onSupportClick} className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-gray-400 hover:text-white">
                 <MessageSquare className="w-5 h-5" />
               </button>
             </div>

@@ -13,7 +13,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
       {/* Left Content Area (Text + Buttons) */}
       <div className="w-full lg:w-[50%] flex flex-col items-start text-left pr-0 lg:pr-8 relative">
         {/* Ambient Blue Orb Behind Text */}
-        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] lg:w-[300px] lg:h-[300px] bg-[#1075fc]/20 rounded-full blur-[60px] lg:blur-[80px] pointer-events-none animate-pulse-slow" />
+        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] lg:w-[300px] lg:h-[300px] bg-[#00E5FF]/20 rounded-full blur-[60px] lg:blur-[80px] pointer-events-none animate-pulse-slow" />
         
         {/* Title */}
         <h1 
@@ -29,7 +29,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {/* Register Button */}
         <button 
           onClick={onRegisterClick} 
-          className="relative overflow-hidden bg-[#1075fc] hover:bg-[#0f7bff] text-white font-black py-3 px-5 lg:py-4 lg:px-10 rounded-xl flex items-center gap-1.5 lg:gap-2 transition-all shadow-[0_0_20px_rgba(16,117,252,0.4)] lg:shadow-[0_0_30px_rgba(16,117,252,0.4)] hover:shadow-[0_0_50px_rgba(16,117,252,0.8)] hover:-translate-y-1 active:scale-95 text-[13px] lg:text-[15px] uppercase tracking-wide group z-10 shrink-0"
+          className="relative overflow-hidden bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] font-black py-3 px-5 lg:py-4 lg:px-10 rounded-xl flex items-center gap-1.5 lg:gap-2 transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] lg:shadow-[0_0_30px_rgba(0,229,255,0.4)] hover:shadow-[0_0_50px_rgba(0,229,255,0.6)] hover:-translate-y-1 active:scale-95 text-[13px] lg:text-[15px] uppercase tracking-wide group z-10 shrink-0"
         >
           <span className="relative z-10 flex items-center gap-1 lg:gap-2">Kaydol <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 ml-0.5 lg:ml-1 group-hover:translate-x-1 transition-transform" /></span>
           {/* Shimmer Effect overlay */}

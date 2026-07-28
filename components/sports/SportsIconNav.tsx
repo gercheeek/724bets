@@ -120,27 +120,27 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                   onClick={() => onTabChange('home')}
                   className={`w-12 h-12 rounded-lg transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden ${
                     activeTab === 'home' 
-                      ? 'bg-gradient-to-b from-[#3b82f6]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(59,130,246,0.3)]' 
+                      ? 'bg-gradient-to-b from-[#00E5FF]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(0,229,255,0.3)]' 
                       : 'bg-transparent hover:bg-white/[0.03]'
                   }`}
                 >
-                    {activeTab === 'home' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6]"></div>}
-                    <Home className={`w-5 h-5 transition-all duration-300 ${activeTab === 'home' ? 'text-white drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]' : 'text-[#64748b] group-hover:text-white'}`} strokeWidth={1.8} />
-                    {activeTab === 'home' && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#3b82f6] shadow-[0_0_8px_#3b82f6]"></div>}
+                    {activeTab === 'home' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF]"></div>}
+                    <Home className={`w-5 h-5 transition-all duration-300 ${activeTab === 'home' ? 'text-white drop-shadow-[0_0_10px_rgba(0,229,255,0.8)]' : 'text-[#64748b] group-hover:text-white'}`} strokeWidth={1.8} />
+                    {activeTab === 'home' && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF]"></div>}
                 </button>
 
                 <button 
                   onClick={() => onTabChange('canli')}
                   className={`w-14 h-12 rounded-lg transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden ${
                     activeTab === 'canli' 
-                      ? 'bg-gradient-to-b from-[#ef4444]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(239,68,68,0.3)]' 
+                      ? 'bg-gradient-to-b from-[#00E5FF]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(0,229,255,0.3)]' 
                       : 'bg-transparent hover:bg-white/[0.03]'
                   }`}
                 >
-                    {activeTab === 'canli' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ef4444] to-transparent shadow-[0_0_15px_#ef4444]"></div>}
+                    {activeTab === 'canli' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF]"></div>}
                     <div className="flex flex-col items-center gap-1">
-                        <div className={`w-2 h-2 rounded-full ${activeTab === 'canli' ? 'bg-[#ef4444] shadow-[0_0_10px_#ef4444] animate-pulse' : 'bg-[#ef4444]/40'}`}></div>
-                        <span className={`text-[9px] font-black tracking-widest uppercase transition-colors ${activeTab === 'canli' ? 'text-white drop-shadow-[0_0_5px_rgba(239,68,68,0.5)]' : 'text-[#64748b]'}`}>CANLI</span>
+                        <div className={`w-2 h-2 rounded-full ${activeTab === 'canli' ? 'bg-[#00E5FF] shadow-[0_0_10px_#00E5FF] animate-pulse' : 'bg-[#00E5FF]/40'}`}></div>
+                        <span className={`text-[9px] font-black tracking-widest uppercase transition-colors ${activeTab === 'canli' ? 'text-white drop-shadow-[0_0_5px_rgba(0,229,255,0.5)]' : 'text-[#64748b]'}`}>CANLI</span>
                     </div>
                 </button>
 
@@ -191,15 +191,15 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                         }}
                         className={`group relative flex flex-col items-center justify-center min-w-[70px] h-[64px] rounded-xl transition-all duration-300 overflow-hidden ${
                             isActive 
-                                ? 'bg-gradient-to-b from-[#3b82f6]/20 via-[#3b82f6]/5 to-transparent' 
+                                ? 'bg-gradient-to-b from-[#00E5FF]/20 via-[#00E5FF]/5 to-transparent' 
                                 : 'bg-transparent hover:bg-white/[0.03]'
                         }`}
                         title={item.title || item.id}
                     >
                         {isActive && (
                             <>
-                                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6]"></div>
-                                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#3b82f6]/20 via-transparent to-transparent opacity-60"></div>
+                                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF]"></div>
+                                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#00E5FF]/20 via-transparent to-transparent opacity-60"></div>
                             </>
                         )}
                         {!isActive && (
