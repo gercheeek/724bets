@@ -2012,7 +2012,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
             {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
             {!(view === 'giveaway') && (
-              <aside className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-all duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[78px]'}`}>
+              <aside 
+                className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-[width,box-shadow] duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[78px]'}`}
+                style={{ willChange: 'width' }}
+              >
                   <Sidebar
                     isOpen={isSidebarOpen}
                     onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -2806,7 +2809,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               )}
 
               {/* Chat Sidebar (Pushes the layout instead of floating) */}
-              <aside className={`hidden xl:flex flex-col bg-[#0A0D14] h-full flex-shrink-0 absolute right-0 top-0 2xl:relative z-40 transition-all duration-300 ease-in-out ${isChatOpen ? 'w-[350px] shadow-[-20px_0_50px_rgba(0,0,0,0.8)]' : 'w-0'}`}>
+              <aside 
+                className={`hidden xl:flex flex-col bg-[#0A0D14] h-full flex-shrink-0 absolute right-0 top-0 2xl:relative z-40 transition-[width,box-shadow] duration-300 ease-in-out ${isChatOpen ? 'w-[350px] shadow-[-20px_0_50px_rgba(0,0,0,0.8)]' : 'w-0'}`}
+                style={{ willChange: 'width' }}
+              >
                 {/* ── Toggle Button (Desktop Only) ── */}
                 <button 
                   onClick={() => setIsChatOpen(!isChatOpen)}

@@ -26,8 +26,8 @@ export default function SportsPromoSlider() {
                 }
 
                 @keyframes slowPan {
-                    0% { transform: scale(1.05) translateX(0) translateY(0); }
-                    100% { transform: scale(1.15) translateX(-2%) translateY(-1%); }
+                    0% { transform: scale(1.05) translate3d(0, 0, 0); }
+                    100% { transform: scale(1.15) translate3d(-2%, -1%, 0); }
                 }
                 @keyframes pulseGlow {
                     0%, 100% { opacity: 0.6; filter: blur(30px) scale(1); }
@@ -52,8 +52,14 @@ export default function SportsPromoSlider() {
                     100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); filter: blur(0); }
                 }
                 
-                .animate-slow-pan { animation: slowPan 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate; }
-                .animate-pulse-glow { animation: pulseGlow 5s ease-in-out infinite; }
+                .animate-slow-pan { 
+                    animation: slowPan 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate; 
+                    will-change: transform;
+                }
+                .animate-pulse-glow { 
+                    animation: pulseGlow 5s ease-in-out infinite; 
+                    will-change: transform, opacity;
+                }
                 
                 .anim-active .badge-anim { animation: badgePop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
                 .anim-active .title-anim { animation: titleSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards; opacity: 0; }

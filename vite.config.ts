@@ -42,6 +42,22 @@ export default defineConfig(({ mode }) => {
         rollupOptions: {
           input: {
             main: path.resolve(__dirname, 'index.html')
+          },
+          output: {
+            manualChunks(id) {
+              if (id.includes('node_modules')) {
+                if (id.includes('recharts') || id.includes('d3')) {
+                  return 'charts';
+                }
+                if (id.includes('framer-motion')) {
+                  return 'animation';
+                }
+                if (id.includes('supabase') || id.includes('postgrest')) {
+                  return 'supabase';
+                }
+                return 'vendor';
+              }
+            }
           }
         }
       }

@@ -80,7 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const NavItem = ({ icon: Icon, label, isActive, onClick, iconColor = 'text-[#8b92a5]', activeIconColor = 'text-white' }: any) => (
     <div 
-      className={`flex items-center py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3
+      className={`flex items-center py-2.5 mb-1 cursor-pointer transition-colors duration-200 relative group px-2 mx-3
         ${isActive ? 'text-white' : 'text-[#8b92a5] hover:text-white'}
       `}
       onClick={onClick}
@@ -88,7 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-gradient-to-b from-[#00E5FF] to-[#00b3cc] shadow-[0_0_8px_#00E5FF] rounded-r-md z-10"></div>}
       <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} strokeWidth={isActive ? 2.5 : 2} />
       
-      <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
+      <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-[opacity,transform,width] duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
         {label}
       </span>
       
@@ -104,9 +104,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   const AccordionItem = ({ icon: Icon, label, id, children, route }: any) => {
     const isOpenState = openAccordions[id] || false;
     return (
-      <div className={`relative group mx-3 mb-1 transition-all duration-300 ${isOpen ? 'overflow-hidden' : ''} bg-transparent`}>
+      <div className={`relative group mx-3 mb-1 transition-[height] duration-300 ${isOpen ? 'overflow-hidden' : ''} bg-transparent`}>
         <div 
-          className={`flex items-center justify-between px-2 py-2.5 cursor-pointer transition-all duration-300 text-[#8b92a5] hover:text-white ${isOpenState ? 'text-white' : ''}`}
+          className={`flex items-center justify-between px-2 py-2.5 cursor-pointer transition-colors duration-300 text-[#8b92a5] hover:text-white ${isOpenState ? 'text-white' : ''}`}
           onClick={() => {
             if (isOpen) toggleAccordion(id);
             if (route) onViewChange(route);
@@ -114,7 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
           <div className="flex items-center">
             <Icon className={`w-5 h-5 min-w-[20px] ml-2.5`} strokeWidth={isOpenState ? 2.5 : 2} />
-            <span className={`ml-4 font-semibold text-[14px] whitespace-nowrap transition-all duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
+            <span className={`ml-4 font-semibold text-[14px] whitespace-nowrap transition-[opacity,transform] duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
               {label}
             </span>
           </div>
@@ -207,7 +207,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className={`codinglab-sidebar ${isOpen ? 'open' : 'closed'}`}>
 
         {/* SIDEBAR HEADER (Hamburger + Toggle) */}
-        <div className="flex items-center h-[60px] md:h-[72px] shrink-0 transition-all duration-300" style={{ paddingLeft: isOpen ? '20px' : '0', paddingRight: isOpen ? '20px' : '0' }}>
+        <div className="flex items-center h-[60px] md:h-[72px] shrink-0 transition-[padding] duration-300" style={{ paddingLeft: isOpen ? '20px' : '0', paddingRight: isOpen ? '20px' : '0' }}>
           {/* Hamburger */}
           <button 
             onClick={onToggle}
@@ -217,7 +217,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
 
           {/* Horizontal Toggle */}
-          <div className={`flex items-center bg-[#131823] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
+          <div className={`flex items-center bg-[#131823] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-[opacity,width] duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
             <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isCasinoView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-[#8b92a5] hover:text-white'}`}>
               <Cherry className={`w-4 h-4 mr-2 ${isCasinoView ? 'text-[#0A0D14]' : 'text-[#8b92a5]'}`} />
               Casino
