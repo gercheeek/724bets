@@ -24,13 +24,14 @@ import ModernChat from './ModernChat';
 import { SporxBetSlip } from './SporxBetSlip';
 import { MatchCard } from './sports/MatchCard';
 import SportsPromoSlider from './sports/SportsPromoSlider';
+import BasketballPromoSlider from './sports/BasketballPromoSlider';
 import { TopMatchesWidget } from './sports/TopMatchesWidget';
 import SportsIconNav from './sports/SportsIconNav';
 import FavoritesEmptyState from './sports/FavoritesEmptyState';
 import MyBetsEmptyState from './sports/MyBetsEmptyState';
 import { PopularEventsAccordion } from './sports/PopularEventsAccordion';
 import { MyBetsView } from './sports/MyBetsView';
-import { PlayerLogo } from './sports/PlayerLogo';
+import { PlayerLogo, findBestLogoMatch } from './sports/PlayerLogo';
 
 interface BetSelection {
   id: string;
@@ -155,16 +156,16 @@ const getCountryFlag = (country: string) => {
 const finishedMatchTimes: Record<string, number> = {};
 
 export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
-  const data = ev.data;
+  const data = ev.data || ev;
   if (!data || !data.participants) return null;
   
-  const homeTeam = data.participants.home || 'Ev Sahibi';
-  const awayTeam = data.participants.away || 'Deplasman';
+  const homeTeam = data.participants.home?.name || data.participants.home || ev.home || 'Ev Sahibi';
+  const awayTeam = data.participants.away?.name || data.participants.away || ev.away || 'Deplasman';
   
   let score = '-';
   let minute = 'Yakında';
   let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
-  let isLive = false; // We will determine this after parsing the date
+  let isLive = !!ev.isLive; // Force live if marked by provider, else determine dynamically
   
   if (data.scores && Array.isArray(data.scores)) {
     const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
@@ -598,8 +599,8 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   const isAllSportsSelected = activeSport === 'Tüm Sporlar' || activeSport === 'All Sports' || !activeSport;
 
   const filteredMatches = React.useMemo(() => {
-    return currentMatches.filter(m => {
-      if ((viewMode === 'live' || viewMode === 'home') && !m.isLive) return false;
+    let result = currentMatches.filter(m => {
+      if (viewMode === 'live' && !m.isLive) return false;
       if (viewMode === 'bulletin') {
         if (m.isLive) return false;
         // Hide matches that have already started from the upcoming list
@@ -612,10 +613,26 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         if (activeDateFilter === 'tomorrow' && m.matchDate !== 'Yarın' && m.matchDate !== 'Tomorrow') return false;
       }
       return true;
-    }).sort((a, b) => {
-      if (a.isLive !== b.isLive) return a.isLive ? -1 : 1;
-      return (a.timestamp || 0) - (b.timestamp || 0);
     });
+
+    if (viewMode === 'live') {
+      result = result
+        .filter(m => findBestLogoMatch(m.home) && findBestLogoMatch(m.away))
+        .sort((a, b) => {
+          const scoreA = getMatchPriorityScore(a.home, a.away);
+          const scoreB = getMatchPriorityScore(b.home, b.away);
+          if (scoreA !== scoreB) return scoreB - scoreA;
+          return (a.timestamp || 0) - (b.timestamp || 0);
+        })
+        .slice(0, 5);
+    } else {
+      result = result.sort((a, b) => {
+        if (a.isLive !== b.isLive) return a.isLive ? -1 : 1;
+        return (a.timestamp || 0) - (b.timestamp || 0);
+      });
+    }
+
+    return result;
   }, [currentMatches, viewMode, activeSport, isAllSportsSelected, activeCountry, activeDateFilter]);
 
   const displaySportsList = isAllSportsSelected
@@ -775,9 +792,16 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                </div>
             ) : (
                <>
+               
+            {/* Tüm görünümlerde (home, live, bulletin) Slider'ları göster */}
+            {(viewMode === 'home' || viewMode === 'live' || viewMode === 'bulletin') && (isAllSportsSelected || activeSport === 'Futbol') && (
+              <div className="px-4 md:px-6 mb-2 mt-4">
+                <SportsPromoSlider matches={filteredMatches} />
+              </div>
+            )}
+
             {navTab === 'home' && (
               <div className="px-4 md:px-6 mb-4 transition-all duration-300">
-                  <SportsPromoSlider matches={filteredMatches} />
                   
                   {/* En İyi Maçlar Widget Moved Under Slider */}
                   <div className="mt-6 mb-2">
@@ -797,6 +821,17 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                       <FeaturedCombos activeSport={activeSport} matches={filteredMatches} onSelectMatch={setSelectedMatch} />
                     </div>
                   )}
+              </div>
+            )}
+
+            {navTab === 'basketball' && (
+              <div className="px-4 md:px-6 mb-4 transition-all duration-300">
+                  <BasketballPromoSlider matches={filteredMatches.filter(m => m.sport?.toLowerCase().includes('basket') || m.league?.toLowerCase().includes('nba'))} />
+                  
+                  {/* En İyi Maçlar Widget Moved Under Slider */}
+                  <div className="mt-6 mb-2">
+                    <TopMatchesWidget matches={filteredMatches.filter(m => m.sport?.toLowerCase().includes('basket') || m.league?.toLowerCase().includes('nba'))} onSelectMatch={setSelectedMatch} />
+                  </div>
               </div>
             )}
 
@@ -820,6 +855,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                 {/* ── CENTRAL FEED ── */}
     
                 {/* Featured Matches Carousel (V2) removed per request */}
+
+                {/* Featured Matches Carousel (V2) removed per request */}
+
 
             {/* LIVE AND BULLETIN MATCH LIST (Hidden on Home) */}
             {viewMode !== 'home' && (

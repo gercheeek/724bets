@@ -4,31 +4,30 @@ import { useBetting } from '../../contexts/BettingContext';
 import { PlayerLogo, findBestLogoMatch } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
 
-function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: 'fener'|'cl'|'el'|'conf', leagueName: string }) {
-    const { toggleBetSelection } = useBetting();
+function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: string, leagueName: string }) {
     const themes: any = {
-        'fener': {
+        'nba': {
             bgFrom: 'from-[#060d1a]', bgVia: 'via-[#0b162c]', bgTo: 'to-[#040812]',
-            blob1: 'bg-[#00E5FF]', blob2: 'bg-[#eab308]',
-            badgeBg: 'bg-[#00E5FF]',
-            leagueColor: 'text-[#eab308]',
-            bgLogo: 'https://upload.wikimedia.org/wikipedia/tr/9/90/Trendyol_S%C3%BCper_Lig_Logo.png'
+            blob1: 'bg-[#e53935]', blob2: 'bg-[#1e88e5]',
+            badgeBg: 'bg-[#e53935]',
+            leagueColor: 'text-[#e53935]',
+            bgLogo: 'https://upload.wikimedia.org/wikipedia/en/0/03/National_Basketball_Association_logo.svg'
         },
-        'cl': {
+        'euroleague': {
             bgFrom: 'from-[#020617]', bgVia: 'via-[#0f172a]', bgTo: 'to-[#020617]',
-            blob1: 'bg-[#3b82f6]', blob2: 'bg-[#0ea5e9]',
-            badgeBg: 'bg-[#3b82f6]',
-            leagueColor: 'text-[#3b82f6]',
-            bgLogo: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/UEFA_Champions_League_logo_2.svg'
+            blob1: 'bg-[#f57c00]', blob2: 'bg-[#000000]',
+            badgeBg: 'bg-[#f57c00]',
+            leagueColor: 'text-[#f57c00]',
+            bgLogo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/EuroLeague_logo.svg/1200px-EuroLeague_logo.svg.png'
         },
-        'el': {
+        'bsl': {
             bgFrom: 'from-[#1a0f0a]', bgVia: 'via-[#2c1a0b]', bgTo: 'to-[#120804]',
-            blob1: 'bg-[#f97316]', blob2: 'bg-[#ea580c]',
-            badgeBg: 'bg-[#f97316]',
-            leagueColor: 'text-[#f97316]',
-            bgLogo: 'https://upload.wikimedia.org/wikipedia/commons/1/15/UEFA_Europa_League_logo.svg'
+            blob1: 'bg-[#00c853]', blob2: 'bg-[#ffffff]',
+            badgeBg: 'bg-[#00c853]',
+            leagueColor: 'text-[#00c853]',
+            bgLogo: 'https://upload.wikimedia.org/wikipedia/tr/b/bd/T%C3%BCrkiye_Basketbol_S%C3%BCper_Ligi_logo.png'
         },
-        'conf': {
+        'fiba': {
             bgFrom: 'from-[#061a12]', bgVia: 'via-[#0b2c1f]', bgTo: 'to-[#04120a]',
             blob1: 'bg-[#10b981]', blob2: 'bg-[#059669]',
             badgeBg: 'bg-[#10b981]',
@@ -40,10 +39,7 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
     const t = themes[theme] || themes['fener'];
 
     return (
-        <div 
-            className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#0a0f1c] cursor-pointer"
-            onClick={() => toggleBetSelection(matchData.match, 'Maç Sonucu', matchData.home, parseFloat(matchData.homeOdd))}
-        >
+        <div className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#0a0f1c]">
             {/* PREMIUM BACKGROUND WITH GRID & GLOW */}
             <div className="absolute inset-0 z-0">
                 <div className={`absolute inset-0 bg-gradient-to-br ${t.bgFrom} ${t.bgVia} ${t.bgTo}`}></div>
@@ -65,21 +61,21 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                 {/* LEFT SIDE: Odds Typography */}
                 <div className="w-[35%] md:w-[35%] flex flex-col justify-center gap-1.5 md:gap-3 h-full pb-2 md:pb-4">
                     {/* Home */}
-                    <div className="flex flex-col cursor-pointer hover:opacity-80" onClick={(e) => { e.stopPropagation(); toggleBetSelection(matchData.match, 'Maç Sonucu', matchData.home, parseFloat(matchData.homeOdd)) }}>
+                    <div className="flex flex-col">
                         <span className="text-gray-300 font-bold text-[8px] md:text-[12px] uppercase tracking-widest leading-none mb-0.5 md:mb-1 truncate max-w-[100px] md:max-w-[150px] drop-shadow-md">{matchData.home}</span>
                         <div className="flex items-center gap-1 md:gap-2">
                             <span className="text-white font-black text-[18px] md:text-[38px] leading-none drop-shadow-md"><AnimatedOdd value={matchData.homeOdd} /></span>
                         </div>
                     </div>
                     {/* Draw */}
-                    <div className="flex flex-col cursor-pointer hover:opacity-80" onClick={(e) => { e.stopPropagation(); toggleBetSelection(matchData.match, 'Maç Sonucu', 'Beraberlik', parseFloat(matchData.drawOdd)) }}>
+                    <div className="flex flex-col">
                         <span className="text-gray-400 font-bold text-[8px] md:text-[12px] uppercase tracking-widest leading-none mb-0.5 md:mb-1 drop-shadow-md">BERABERE</span>
                         <div className="flex items-center gap-1 md:gap-2">
                             <span className="text-white font-black text-[18px] md:text-[38px] leading-none drop-shadow-md"><AnimatedOdd value={matchData.drawOdd} /></span>
                         </div>
                     </div>
                     {/* Away */}
-                    <div className="flex flex-col cursor-pointer hover:opacity-80" onClick={(e) => { e.stopPropagation(); toggleBetSelection(matchData.match, 'Maç Sonucu', matchData.away, parseFloat(matchData.awayOdd)) }}>
+                    <div className="flex flex-col">
                         <span className="text-gray-300 font-bold text-[8px] md:text-[12px] uppercase tracking-widest leading-none mb-0.5 md:mb-1 truncate max-w-[100px] md:max-w-[150px] drop-shadow-md">{matchData.away}</span>
                         <div className="flex items-center gap-1 md:gap-2">
                             <span className="text-white font-black text-[18px] md:text-[38px] leading-none drop-shadow-md"><AnimatedOdd value={matchData.awayOdd} /></span>
@@ -90,23 +86,19 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                 {/* RIGHT SIDE: Premium Logos & Date Composition */}
                 <div className="w-[65%] md:w-[65%] flex items-center justify-center relative h-full pr-2 md:pr-8">
                     <div className="w-full h-full flex flex-col items-center justify-center relative gap-1 md:gap-5">
-                        {matchData.isLive ? (
-                            <div className="flex items-center gap-1.5 md:gap-3 bg-black/60 backdrop-blur-md border border-[#ef4444]/30 rounded-full px-3 md:px-5 py-1 md:py-1.5 shadow-[0_0_20px_rgba(239,68,68,0.3)] z-40 mt-1 md:mt-2 scale-90 md:scale-100">
-                                <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#ef4444] shadow-[0_0_10px_#ef4444] animate-pulse"></div>
-                                <span className="text-white font-bold text-[10px] md:text-[14px] tracking-widest uppercase text-[#ef4444]">CANLI {matchData.minute}'</span>
-                                <span className="text-white font-black text-[12px] md:text-[16px] tracking-widest">{matchData.score}</span>
-                            </div>
-                        ) : (
-                            <div className="flex items-center gap-1.5 md:gap-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-3 md:px-5 py-1 md:py-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-40 mt-1 md:mt-2 scale-90 md:scale-100">
-                                <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${t.badgeBg} shadow-[0_0_8px_${t.badgeBg}] animate-ping opacity-75 absolute left-2 md:left-3.5`}></div>
-                                <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${t.badgeBg} shadow-[0_0_8px_${t.badgeBg}] relative z-10 mr-0.5 md:mr-1`}></div>
-                                <span className="text-white font-bold text-[8px] md:text-[12px] tracking-widest uppercase">{matchData.dateStr}</span>
-                                <span className="w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full"></span>
-                                <span className={`${t.leagueColor} font-black text-[9px] md:text-[13px] tracking-widest`}>{matchData.timeStr}</span>
-                            </div>
-                        )}
+                        
+                        {/* 1. TOP: Date Badge */}
+                        <div className="flex items-center gap-1.5 md:gap-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-3 md:px-5 py-1 md:py-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-40 mt-1 md:mt-2 scale-90 md:scale-100">
+                            <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${t.badgeBg} shadow-[0_0_8px_${t.badgeBg}] animate-ping opacity-75 absolute left-2 md:left-3.5`}></div>
+                            <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${t.badgeBg} shadow-[0_0_8px_${t.badgeBg}] relative z-10 mr-0.5 md:mr-1`}></div>
+                            <span className="text-white font-bold text-[8px] md:text-[12px] tracking-widest uppercase">{matchData.dateStr}</span>
+                            <span className="w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full"></span>
+                            <span className={`${t.leagueColor} font-black text-[9px] md:text-[13px] tracking-widest`}>{matchData.timeStr}</span>
+                        </div>
 
+                        {/* 2. MIDDLE: Logos and VS */}
                         <div className="flex items-center justify-center w-full relative z-20">
+                            {/* Home Logo & Name */}
                             <div className="flex flex-col items-center w-[80px] md:w-[180px]">
                                 <div className="relative w-14 h-14 md:w-28 md:h-28 lg:w-36 lg:h-36 z-20 hover:scale-110 transition-transform duration-500 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
                                     <div className={`absolute inset-0 ${t.badgeBg} opacity-20 blur-[10px] md:blur-[20px] rounded-full mix-blend-screen`}></div>
@@ -118,12 +110,16 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                                     </span>
                                 </div>
                             </div>
+
+                            {/* Stylish VS Badge */}
                             <div className="mx-1 md:mx-6 z-30 flex flex-col items-center justify-center relative">
                                 <div className="w-7 h-7 md:w-14 md:h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl rounded-lg md:rounded-2xl border border-white/30 flex items-center justify-center shadow-[0_0_40px_rgba(0,0,0,0.8)] rotate-45 relative overflow-hidden">
                                      <div className={`absolute inset-0 bg-gradient-to-tr ${t.bgFrom} to-transparent opacity-60`}></div>
                                     <span className="text-white font-black text-[10px] md:text-[20px] italic -rotate-45 block transform drop-shadow-lg relative z-10">VS</span>
                                 </div>
                             </div>
+
+                            {/* Away Logo & Name */}
                             <div className="flex flex-col items-center w-[80px] md:w-[180px]">
                                 <div className="relative w-14 h-14 md:w-28 md:h-28 lg:w-36 lg:h-36 z-20 hover:scale-110 transition-transform duration-500 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
                                     <div className={`absolute inset-0 ${t.badgeBg} opacity-20 blur-[10px] md:blur-[20px] rounded-full mix-blend-screen`}></div>
@@ -137,9 +133,11 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                             </div>
                         </div>
 
+                        {/* 3. BOTTOM: League Tag */}
                         <div className="z-40 mb-0 md:mb-2 mt-1 md:mt-0">
                             <span className={`${t.leagueColor} font-bold text-[8px] md:text-[13px] tracking-[0.4em] uppercase opacity-90 drop-shadow-md`}>{leagueName}</span>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -147,76 +145,80 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
     );
 }
 
-export default function SportsPromoSlider({ matches = [] }: { matches?: any[] }) {
+export default function BasketballPromoSlider({ matches = [] }: { matches?: any[] }) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const dynamicSlides = useMemo(() => {
         if (!matches || matches.length === 0) return [];
+        
         const slides = [];
-        const hasLogos = (m: any) => m.home && m.away && findBestLogoMatch(m.home) !== null && findBestLogoMatch(m.away) !== null;
 
-        const fenerMatch = matches.find((m: any) => {
-            const h = (m.home || '').toUpperCase();
-            const a = (m.away || '').toUpperCase();
-            return (h.includes('FENERBAH') || a.includes('FENERBAH')) && hasLogos(m);
-        });
-        if (fenerMatch) {
-            slides.push({
-                data: { match: fenerMatch, home: fenerMatch.home, away: fenerMatch.away, homeOdd: fenerMatch.homeOdd, drawOdd: fenerMatch.drawOdd, awayOdd: fenerMatch.awayOdd, dateStr: fenerMatch.matchDate || 'BUGÜN', timeStr: fenerMatch.startTime || '20:00', isLive: fenerMatch.isLive, score: fenerMatch.score, minute: fenerMatch.minute },
-                theme: 'fener', name: 'TÜRK TAKIMLARI ÖZEL', id: fenerMatch.id
-            });
-        }
+        // Helper to check if both teams have valid logos
+        const hasLogos = (m: any) => {
+            if (!m.home || !m.away) return false;
+            return findBestLogoMatch(m.home) !== null && findBestLogoMatch(m.away) !== null;
+        };
 
-        const clMatch = matches.find((m: any) => {
+        // 1. NBA
+        const nbaMatch = matches.find((m: any) => {
             const l = (m.league || '').toUpperCase();
-            return (l.includes('CHAMPIONS') || l.includes('ŞAMPİYONLAR') || l.includes('SAMPIYONLAR')) && m.id !== fenerMatch?.id && hasLogos(m);
+            return l.includes('NBA');
         });
-        if (clMatch) {
+        if (nbaMatch) {
             slides.push({
                 data: {
-                    match: clMatch,
-                    home: clMatch.home, away: clMatch.away,
-                    homeOdd: clMatch.homeOdd, drawOdd: clMatch.drawOdd, awayOdd: clMatch.awayOdd,
-                    dateStr: clMatch.matchDate || 'BUGÜN', timeStr: clMatch.startTime || '20:00',
-                    isLive: clMatch.isLive, score: clMatch.score, minute: clMatch.minute
+                    home: nbaMatch.home, away: nbaMatch.away,
+                    homeOdd: nbaMatch.homeOdd, drawOdd: nbaMatch.drawOdd, awayOdd: nbaMatch.awayOdd,
+                    dateStr: nbaMatch.matchDate || 'BUGÜN', timeStr: nbaMatch.startTime || '03:00'
                 },
-                theme: 'cl', name: 'ŞAMPİYONLAR LİGİ', id: clMatch.id
+                theme: 'nba', name: 'NBA', id: nbaMatch.id
             });
         }
 
-        // 3. EUROPA LEAGUE
+        // 2. EUROLEAGUE
         const elMatch = matches.find((m: any) => {
             const l = (m.league || '').toUpperCase();
-            return (l.includes('EUROPA') || l.includes('AVRUPA LİGİ') || l.includes('AVRUPA LIGI')) && !l.includes('KONFERANS') && !l.includes('CONFERENCE') && m.id !== fenerMatch?.id && m.id !== clMatch?.id && hasLogos(m);
+            return (l.includes('EUROLEAGUE') || l.includes('AVRUPA')) && m.id !== nbaMatch?.id;
         });
         if (elMatch) {
             slides.push({
                 data: {
-                    match: elMatch,
                     home: elMatch.home, away: elMatch.away,
                     homeOdd: elMatch.homeOdd, drawOdd: elMatch.drawOdd, awayOdd: elMatch.awayOdd,
-                    dateStr: elMatch.matchDate || 'BUGÜN', timeStr: elMatch.startTime || '20:00',
-                    isLive: elMatch.isLive, score: elMatch.score, minute: elMatch.minute
+                    dateStr: elMatch.matchDate || 'BUGÜN', timeStr: elMatch.startTime || '20:00'
                 },
-                theme: 'el', name: 'AVRUPA LİGİ', id: elMatch.id
+                theme: 'euroleague', name: 'EUROLEAGUE', id: elMatch.id
             });
         }
 
-        // 4. CONFERENCE LEAGUE
-        const confMatch = matches.find((m: any) => {
+        // 3. BSL
+        const bslMatch = matches.find((m: any) => {
             const l = (m.league || '').toUpperCase();
-            return (l.includes('KONFERANS') || l.includes('CONFERENCE')) && m.id !== fenerMatch?.id && m.id !== clMatch?.id && m.id !== elMatch?.id && hasLogos(m);
+            return (l.includes('BSL') || l.includes('SÜPER LİG') || l.includes('TURKEY')) && m.id !== nbaMatch?.id && m.id !== elMatch?.id;
+        });
+        if (bslMatch) {
+            slides.push({
+                data: {
+                    home: bslMatch.home, away: bslMatch.away,
+                    homeOdd: bslMatch.homeOdd, drawOdd: bslMatch.drawOdd, awayOdd: bslMatch.awayOdd,
+                    dateStr: bslMatch.matchDate || 'BUGÜN', timeStr: bslMatch.startTime || '20:00'
+                },
+                theme: 'bsl', name: 'BASKETBOL SÜPER LİGİ', id: bslMatch.id
+            });
+        }
+
+        // 4. Any other match
+        const confMatch = matches.find((m: any) => {
+            return m.id !== nbaMatch?.id && m.id !== elMatch?.id && m.id !== bslMatch?.id;
         });
         if (confMatch) {
             slides.push({
                 data: {
-                    match: confMatch,
                     home: confMatch.home, away: confMatch.away,
                     homeOdd: confMatch.homeOdd, drawOdd: confMatch.drawOdd, awayOdd: confMatch.awayOdd,
-                    dateStr: confMatch.matchDate || 'BUGÜN', timeStr: confMatch.startTime || '20:00',
-                    isLive: confMatch.isLive, score: confMatch.score, minute: confMatch.minute
+                    dateStr: confMatch.matchDate || 'BUGÜN', timeStr: confMatch.startTime || '20:00'
                 },
-                theme: 'conf', name: 'KONFERANS LİGİ', id: confMatch.id
+                theme: 'fiba', name: 'GÜNÜN MAÇI', id: confMatch.id
             });
         }
 

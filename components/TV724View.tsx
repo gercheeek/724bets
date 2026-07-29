@@ -457,11 +457,13 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 }
             }
 
-            if (currentServer !== 'marsbahis' && currentServer !== 'xslot' && DEFAULT_TV_CONFIG.channels) {
-                DEFAULT_TV_CONFIG.channels.forEach((ch: any) => {
-                    const ms = { id: ch.id, name: ch.name, kick_username: ch.platformUsername || ch.slug || ch.streamUrl, platform_type: ch.platformType || ch.platform, avatar_url: ch.thumbnailUrl, tags: ch.tags || [ch.category], is_live: ch.isLive, is_vip: ch.isVip, source_type: ch.sourceType || 'iframe', video_url: ch.videoUrl, iframe_url: ch.iframeUrl, order_index: ch.order, fallback_type: ch.fallback_type, fallback_video_url: ch.fallback_video_url, fallback_iframe_url: ch.fallback_iframe_url };
-                    if (!mergedStreamers.find(s => s.id === ch.id || (s.kick_username === ms.kick_username && ms.kick_username))) mergedStreamers.push(ms);
-                });
+            if ((currentServer !== 'marsbahis' && currentServer !== 'xslot') || mergedStreamers.length === 0) {
+                if (DEFAULT_TV_CONFIG.channels) {
+                    DEFAULT_TV_CONFIG.channels.forEach((ch: any) => {
+                        const ms = { id: ch.id, name: ch.name, kick_username: ch.platformUsername || ch.slug || ch.streamUrl, platform_type: ch.platformType || ch.platform, avatar_url: ch.thumbnailUrl, tags: ch.tags || [ch.category], is_live: ch.isLive, is_vip: ch.isVip, source_type: ch.sourceType || 'iframe', video_url: ch.videoUrl, iframe_url: ch.iframeUrl, order_index: ch.order, fallback_type: ch.fallback_type, fallback_video_url: ch.fallback_video_url, fallback_iframe_url: ch.fallback_iframe_url };
+                        if (!mergedStreamers.find(s => s.id === ch.id || (s.kick_username === ms.kick_username && ms.kick_username))) mergedStreamers.push(ms);
+                    });
+                }
             }
 
             if (mergedStreamers.length > 0) {

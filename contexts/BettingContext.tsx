@@ -110,11 +110,12 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
           const data = await res.json();
             if (Array.isArray(data) && data.length > 0) {
               const formattedMatches = data.map((item: any, index: number) => {
-                // Herkese açık canlı demo için ilk 15 maçı "CANLI" (isLive: true) olarak işaretliyoruz
                 const isDemoLive = index < 15;
                 
                 return normalizeEvent({
                   ...item,
+                  home: item.participants?.home || item.data?.participants?.home || item.home,
+                  away: item.participants?.away || item.data?.participants?.away || item.away,
                   isScraped: true,
                   isLive: isDemoLive,
                   timeStr: isDemoLive ? `${Math.floor(Math.random() * 80) + 5}'` : item.timeStr
@@ -232,7 +233,19 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       // Backend bot sends the full parsed array of live matches
       if (Array.isArray(payload)) {
         const normalizedPayload = payload.map(ev => normalizeEvent(ev));
-        setEvents(normalizedPayload);
+        
+        setEvents(prevEvents => {
+            // Keep the pre-match / scraped events
+            const scrapedEvents = prevEvents.filter(e => e.isScraped || e.id.toString().startsWith('scraped_'));
+            
+            const mergedMap = new Map();
+            scrapedEvents.forEach(e => mergedMap.set(e.id, e));
+            
+            // Overwrite with fresh live events
+            normalizedPayload.forEach(e => mergedMap.set(e.id, e));
+            
+            return Array.from(mergedMap.values());
+        });
       }
     });
 

@@ -4,6 +4,7 @@ import {
   ChevronDown, ChevronUp, Target, Gamepad2, Trophy, Flag,
   Crosshair, Dribbble, Globe, Timer
 } from 'lucide-react';
+import { useBetting } from '../contexts/BettingContext';
 
 interface SportsSidebarContentProps {
   isOpen: boolean;
@@ -52,6 +53,9 @@ const MmaIcon = ({ className }: { className?: string }) => (
 );
 
 const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onViewChange, onToggle }) => {
+  const { events } = useBetting();
+  const liveCount = events.filter((e: any) => e.isLive).length;
+  
   const [activeMenu, setActiveMenu] = useState<string>('');
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const [isTopSportsOpen, setIsTopSportsOpen] = useState(false);
@@ -87,7 +91,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Canlı Etkinlikler</span>}
             </div>
             {isOpen && (
-              <div className="bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2 py-0.5 rounded-full text-[#00E5FF] shadow-[0_0_8px_rgba(0,229,255,0.2)] text-[11px] font-black">119</div>
+              <div className="bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2 py-0.5 rounded-full text-[#00E5FF] shadow-[0_0_8px_rgba(0,229,255,0.2)] text-[11px] font-black">{liveCount}</div>
             )}
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">

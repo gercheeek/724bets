@@ -9,12 +9,13 @@ interface PlayerLogoProps {
 
 const normalize = (str: string) => {
   if (!str) return '';
-  return str.toLowerCase()
-    // Suffixes
+  const charMap: Record<string, string> = { 'ğ':'g', 'ü':'u', 'ş':'s', 'ı':'i', 'ö':'o', 'ç':'c' };
+  let s = str.toLowerCase();
+  s = s.replace(/[ğüşıöç]/g, m => charMap[m]);
+  return s
     .replace(/\s+(fc|afc|sc|asd|cf|fk|nk|hnk|us|as|sk|ik)$/i, '')
-    // Prefixes
     .replace(/^(fc|afc|sc|asd|cf|fk|nk|hnk|us|as|sk|ik|cd|sd)\s+/i, '')
-    .replace(/[^\w\sğüşıöç]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-');
 };
@@ -92,7 +93,7 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
       <img 
         src={currentUrl} 
         alt={name} 
-        className={`w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.7)] hover:scale-110 transition-transform duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.7)] hover:scale-110 transition-transform duration-300"
         onError={handleError}
         onLoad={handleLoad}
       />
