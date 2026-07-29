@@ -104,15 +104,20 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const res = await fetch('/prelive_matches.json?v=' + new Date().getTime());
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            const formattedMatches = data.map((item: any) => {
-              return normalizeEvent({
-                ...item,
-                isScraped: true
+            if (Array.isArray(data) && data.length > 0) {
+              const formattedMatches = data.map((item: any, index: number) => {
+                // Herkese açık canlı demo için ilk 15 maçı "CANLI" (isLive: true) olarak işaretliyoruz
+                const isDemoLive = index < 15;
+                
+                return normalizeEvent({
+                  ...item,
+                  isScraped: true,
+                  isLive: isDemoLive,
+                  timeStr: isDemoLive ? `${Math.floor(Math.random() * 80) + 5}'` : item.timeStr
+                });
               });
-            });
-            setScrapedMatches(formattedMatches);
-            console.log(`🤖 [CONTEXT] Loaded and formatted ${formattedMatches.length} scraped matches dynamically.`);
+              setScrapedMatches(formattedMatches);
+              console.log(`🤖 [CONTEXT] Loaded and formatted ${formattedMatches.length} scraped matches dynamically. (15 mapped as Live)`);
           }
         }
       } catch (e) {
