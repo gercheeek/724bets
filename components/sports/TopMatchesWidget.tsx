@@ -180,8 +180,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
         
         // Zaman olarak en yakın olan öne (Canlılar ve yakın saattekiler)
         return (a.timestamp || 0) - (b.timestamp || 0);
-      })
-      .slice(0, 5); // User requested 5 matches
+      });
   }, [matches]);
 
   if (topMatches.length === 0) return null;
