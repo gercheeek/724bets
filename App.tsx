@@ -768,7 +768,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 email: u.email,
                 phone: '05555555555',
                 password: 'google_oauth_' + u.id,
-                status: 'active'
+                status: 'active',
+                role: 'member',
+                balance: 0
            }]).select().single();
            
            newUser = insertedUser;
@@ -815,6 +817,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         if (finalUser) {
           setSiteUser(finalUser);
           localStorage.setItem('site_member', JSON.stringify(finalUser));
+          localStorage.setItem('site_current_member', JSON.stringify(finalUser));
           setAuthModalMode(null);
         }
       }
