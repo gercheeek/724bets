@@ -777,24 +777,24 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                <>
             {navTab === 'home' && (
               <div className="px-4 md:px-6 mb-4 transition-all duration-300">
-                  <SportsPromoSlider matches={matches} />
+                  <SportsPromoSlider matches={filteredMatches} />
                   
                   {/* En İyi Maçlar Widget Moved Under Slider */}
                   <div className="mt-6 mb-2">
-                    <TopMatchesWidget matches={matches} onSelectMatch={setSelectedMatch} />
+                    <TopMatchesWidget matches={filteredMatches} onSelectMatch={setSelectedMatch} />
                   </div>
 
                   {/* Popular Events Accordion Moved Here for Home */}
                   {navTab === 'home' && (
                     <div className="mt-4 mb-2">
-                      <PopularEventsAccordion matches={matches} onSelectMatch={setSelectedMatch} />
+                      <PopularEventsAccordion matches={filteredMatches} onSelectMatch={setSelectedMatch} />
                     </div>
                   )}
                   
                   {/* Featured Combos Widget */}
                   {viewMode !== 'bulletin' && (
                     <div className="mt-8">
-                      <FeaturedCombos activeSport={activeSport} matches={matches} onSelectMatch={setSelectedMatch} />
+                      <FeaturedCombos activeSport={activeSport} matches={filteredMatches} onSelectMatch={setSelectedMatch} />
                     </div>
                   )}
               </div>

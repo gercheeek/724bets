@@ -66,6 +66,13 @@ function startSwarmConnection() {
             if (data.sport) {
                 Object.values(data.sport).forEach(sport => {
                     const sportName = sport.name || 'Futbol';
+                    
+                    // SADECE FUTBOL KONTROLÜ
+                    const lowerSport = sportName.toLowerCase();
+                    if (!lowerSport.includes('futbol') && !lowerSport.includes('football') && !lowerSport.includes('soccer')) {
+                        return; // Futbol dışındaki tüm sporları (Basketbol, Tenis, Espor vb.) reddet
+                    }
+
                     if (!sport.region) return;
                     Object.values(sport.region).forEach(region => {
                         const regionName = region.name || 'Dünya';
@@ -76,7 +83,18 @@ function startSwarmConnection() {
                             Object.values(comp.game).forEach(game => {
                                 if (!game.team1_name || !game.team2_name) return;
                                 
+                                // E-SPOR / SANAL / CYBER KONTROLÜ (KESİN FİLTRE)
                                 const combinedStr = `${sportName} ${tournamentName} ${regionName} ${game.team1_name} ${game.team2_name}`.toLowerCase();
+                                const virtualKeywords = ['cyber', 'sanal', 'virtual', 'simulated', 'srl', 'esoccer', 'ebasketball', 'etennis', 'e-sports', 'esports', 'electronic', 'fifa', 'nba 2k', 'volta', 'penalty', 'h2h', 'gt sports'];
+                                if (virtualKeywords.some(kw => combinedStr.includes(kw))) return;
+                                
+                                const isGamerTag = (name) => {
+                                    const match = name.match(/\(([^)]+)\)/);
+                                    if (!match) return false;
+                                    const tag = match[1].toLowerCase();
+                                    return tag !== 'kadınlar' && tag !== 'women' && tag !== 'u19' && tag !== 'u21' && tag !== 'u23' && tag !== 'reserves';
+                                };
+                                if (isGamerTag(game.team1_name) || isGamerTag(game.team2_name)) return;
                                 
                                 let oddsStr = null;
                                 if (game.market) {
