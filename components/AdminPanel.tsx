@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe, Monitor } from 'lucide-react';
+import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe, Monitor, Users, ShieldAlert, Gift, Network, Lock, ArrowDownToLine, Gamepad2, MessageSquare, Wallet, Target } from 'lucide-react';
 import AdminLuckyWheelTab from './AdminLuckyWheelTab';
 import AdminMembersTab from './AdminMembersTab';
 import AdminRiskTab from './AdminRiskTab';
@@ -8,6 +8,7 @@ import AdminMarketingTab from './AdminMarketingTab';
 import AdminWithdrawalsTab from './AdminWithdrawalsTab';
 import AdminAuditLogsTab from './AdminAuditLogsTab';
 import AdminSportsTab from './AdminSportsTab';
+import AdminOddsEngineTab from './AdminOddsEngineTab';
 import AdminTVTab from './AdminTVTab';
 import AdminDashboardTab from './AdminDashboardTab';
 import AdminWhaleTab from './AdminWhaleTab';
@@ -15,7 +16,6 @@ import AdminLiquidityTab from './AdminLiquidityTab';
 import AdminProviderTab from './AdminProviderTab';
 import AdminCommunityTab from './AdminCommunityTab';
 import AdminKralTab from './AdminKralTab';
-import { Target, Wallet, Gamepad2, MessageSquare } from 'lucide-react';
 import { LuckyWheelConfig } from '../types';
 
 interface AdminPanelProps {
@@ -37,7 +37,7 @@ export default function AdminPanel(props: AdminPanelProps) {
     
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'audit' | 'sports' | 'tv' | 'whale' | 'liquidity' | 'provider' | 'community' | 'kral'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'audit' | 'sports' | 'tv' | 'whale' | 'liquidity' | 'provider' | 'community' | 'kral' | 'odds'>('dashboard');
 
     // RBAC: Rol Bazlı Yetki Yönetimi
     const currentAdminRole = 'SUPER_ADMIN'; // test için 'SUPPORT' da yapılabilir.
@@ -115,113 +115,134 @@ export default function AdminPanel(props: AdminPanelProps) {
                 <div className="flex flex-1 overflow-hidden">
                     
                     {/* Pro Sidebar Navigation */}
-                    <div className="w-64 bg-[#0d0e12] border-r border-white/5 p-4 flex flex-col gap-2 overflow-y-auto shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
-                        <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] mb-2 px-2">ANA MENÜ</div>
+                    <div className="w-56 bg-[#090a0f] border-r border-white/5 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)] custom-scrollbar">
                         
+                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-2">CASINO YÖNETİMİ</div>
                         <button 
                             onClick={() => setActiveTab('dashboard')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'dashboard' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_15px_rgba(0,255,136,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            <Activity className="w-4 h-4" /> Komuta Merkezi
+                            <Activity className="w-3.5 h-3.5" /> Casino Komuta
                         </button>
-                        
                         <button 
-                            onClick={() => setActiveTab('members')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'members' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                            onClick={() => setActiveTab('provider')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'provider' ? 'bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 shadow-[0_0_10px_rgba(168,85,247,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-users w-4 h-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                            Müşteri Yönetimi
+                            <Gamepad2 className="w-3.5 h-3.5" /> Sağlayıcı RTP
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('risk')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <ShieldCheck className="w-3.5 h-3.5" /> Casino Risk
                         </button>
 
-                        <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] mt-4 mb-2 px-2">STAKE ÖZEL</div>
+                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">PAZARLAMA & BONUS</div>
+                        <button 
+                            onClick={() => setActiveTab('bonus')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bonus' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <Gift className="w-3.5 h-3.5" /> Bonus & Kampanya
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('affiliate')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'affiliate' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <Network className="w-3.5 h-3.5" /> Affiliate (Bayi)
+                        </button>
 
+                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">SPOR YÖNETİMİ</div>
+                        <button 
+                            onClick={() => setActiveTab('sports')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <Trophy className="w-4 h-4" /> SPOR YÖNETİMİ
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('odds')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'odds' ? 'bg-[#06b6d4]/10 text-[#06b6d4] border border-[#06b6d4]/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <Settings className="w-4 h-4" /> ORAN MOTORU
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('radar')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'radar' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_10px_rgba(139,92,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <Target className="w-3.5 h-3.5" /> Canlı Oran Takip
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('sports-risk')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports-risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <ShieldAlert className="w-3.5 h-3.5" /> Kupon Radarı
+                        </button>
+
+                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">GÜVENLİK & FRAUD</div>
+                        <button 
+                            onClick={() => setActiveTab('fraud')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'fraud' ? 'bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/30 shadow-[0_0_10px_rgba(220,38,38,0.2)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                        >
+                            <Lock className="w-3.5 h-3.5" /> Fraud Radarı
+                        </button>
+
+                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">FİNANS & MÜŞTERİ</div>
                         {currentAdminRole === 'SUPER_ADMIN' && (
                             <button 
                                 onClick={() => setActiveTab('liquidity')} 
-                                className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'liquidity' ? 'bg-[#26a17b]/10 text-[#26a17b] border border-[#26a17b]/30 shadow-[0_0_15px_rgba(38,161,123,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                                className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'liquidity' ? 'bg-[#26a17b]/10 text-[#26a17b] border border-[#26a17b]/30 shadow-[0_0_10px_rgba(38,161,123,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                             >
-                                <Wallet className="w-4 h-4" /> Likidite Matrisi
+                                <Wallet className="w-3.5 h-3.5" /> Likidite Matrisi
                             </button>
                         )}
-                        
                         <button 
                             onClick={() => setActiveTab('whale')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'whale' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_15px_rgba(59,130,246,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'whale' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            <Target className="w-4 h-4" /> VIP Balina Radarı
+                            <Target className="w-3.5 h-3.5" /> VIP Balina Radarı
                         </button>
-
                         <button 
-                            onClick={() => setActiveTab('provider')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'provider' ? 'bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 shadow-[0_0_15px_rgba(168,85,247,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                            onClick={() => setActiveTab('members')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'members' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            <Gamepad2 className="w-4 h-4" /> Sağlayıcı RTP
+                            <Users className="w-3.5 h-3.5" /> Müşteri & KYC
                         </button>
 
-                        <button 
-                            onClick={() => setActiveTab('community')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'community' ? 'bg-[#ec4899]/10 text-[#ec4899] border border-[#ec4899]/30 shadow-[0_0_15px_rgba(236,72,153,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <MessageSquare className="w-4 h-4" /> Topluluk & Drop
-                        </button>
-
-                        <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] mt-4 mb-2 px-2">OPERASYON</div>
-
-                        {currentAdminRole === 'SUPER_ADMIN' && (
-                            <button 
-                                onClick={() => setActiveTab('risk')} 
-                                className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_15px_rgba(239,68,68,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                            >
-                                <ShieldCheck className="w-4 h-4" /> Risk Radarı
-                            </button>
-                        )}
-                        
-                        <button 
-                            onClick={() => setActiveTab('radar')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'radar' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_15px_rgba(139,92,246,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Activity className="w-4 h-4" /> Canlı Maç Takip
-                        </button>
-
-                        <button 
-                            onClick={() => setActiveTab('sports')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'sports' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Globe className="w-4 h-4" /> Spor Paneli
-                        </button>
-
-                        <div className="text-[10px] font-black text-zinc-500 tracking-[0.2em] mt-4 mb-2 px-2">FİNANS & SİSTEM</div>
-
+                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">SİSTEM</div>
                         {currentAdminRole === 'SUPER_ADMIN' && (
                             <>
                                 <button 
                                     onClick={() => setActiveTab('withdrawals')} 
-                                    className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'withdrawals' ? 'bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/30 shadow-[0_0_15px_rgba(245,158,11,0.15)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                                    className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'withdrawals' ? 'bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/30 shadow-[0_0_10px_rgba(245,158,11,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                                 >
-                                    <TrendingUp className="w-4 h-4" /> Çekim Talepleri
+                                    <TrendingUp className="w-3.5 h-3.5" /> Çekim Talepleri
+                                </button>
+                                <button 
+                                    onClick={() => setActiveTab('deposits')} 
+                                    className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'deposits' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                                >
+                                    <ArrowDownToLine className="w-3.5 h-3.5" /> Yatırım Talepleri
                                 </button>
                                 <button 
                                     onClick={() => setActiveTab('audit')} 
-                                    className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'audit' ? 'bg-zinc-100/10 text-white border border-white/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                                    className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'audit' ? 'bg-zinc-100/10 text-white border border-white/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                                 >
-                                    <Monitor className="w-4 h-4" /> İşlem Kayıtları
+                                    <Monitor className="w-3.5 h-3.5" /> İşlem Kayıtları
                                 </button>
                             </>
                         )}
                         
                         <button 
                             onClick={() => setActiveTab('bot')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'bot' ? 'bg-[#14b8a6]/10 text-[#14b8a6] border border-[#14b8a6]/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bot' ? 'bg-[#14b8a6]/10 text-[#14b8a6] border border-[#14b8a6]/30 shadow-[0_0_10px_rgba(20,184,166,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            <Bot className="w-4 h-4" /> AI Chatbot
+                            <Bot className="w-3.5 h-3.5" /> AI Chatbot
                         </button>
 
                         <button 
-                            onClick={() => setActiveTab('marketing')} 
-                            className={`px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-all ${activeTab === 'marketing' ? 'bg-[#ec4899]/10 text-[#ec4899] border border-[#ec4899]/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
+                            onClick={() => setActiveTab('community')} 
+                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'community' ? 'bg-[#ec4899]/10 text-[#ec4899] border border-[#ec4899]/30 shadow-[0_0_10px_rgba(236,72,153,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle w-4 h-4"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-                            Pazarlama
+                            <MessageSquare className="w-3.5 h-3.5" /> Topluluk & Chat
                         </button>
                     </div>
 
@@ -230,7 +251,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                         
                         {/* RBAC Yetki Kontrolü İçin Yardımcı Render Fonksiyonu */}
                     {(() => {
-                        const isRestricted = ['risk', 'withdrawals', 'audit', 'sports', 'tv', 'liquidity'].includes(activeTab);
+                        const isRestricted = ['risk', 'withdrawals', 'audit', 'sports', 'tv', 'liquidity', 'odds'].includes(activeTab);
                         
                         if (isRestricted && currentAdminRole !== 'SUPER_ADMIN') {
                             return (
@@ -251,6 +272,19 @@ export default function AdminPanel(props: AdminPanelProps) {
                             <>
                                 {activeTab === 'dashboard' && (
                                     <AdminDashboardTab />
+                                )}
+
+                                {/* İleri Düzey Modüller (Placeholders) */}
+                                {['bonus', 'affiliate', 'fraud', 'deposits'].includes(activeTab) && (
+                                    <div className="h-full flex items-center justify-center text-center p-8">
+                                        <div className="max-w-md bg-[#0b0c10] border border-white/5 rounded-2xl p-8 shadow-2xl">
+                                            <div className="w-16 h-16 bg-[#06b6d4]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#06b6d4]/30">
+                                                <Lock className="w-8 h-8 text-[#06b6d4]" />
+                                            </div>
+                                            <h2 className="text-xl font-black text-white mb-2 uppercase tracking-wider">Modül Hazırlanıyor</h2>
+                                            <p className="text-sm text-zinc-400">Bu modül (Pazarlama/Güvenlik) şu anda geliştirme aşamasındadır. Ana komuta merkezindeki (Casino Komuta) SLA ve API sağlık durumlarını inceleyebilirsiniz.</p>
+                                        </div>
+                                    </div>
                                 )}
 
                                 {activeTab === 'kral' && (
@@ -318,8 +352,14 @@ export default function AdminPanel(props: AdminPanelProps) {
                                 )}
 
                                 {activeTab === 'sports' && (
-                                    <div className="h-[75vh]">
+                                    <div className="animate-fade-in h-full">
                                         <AdminSportsTab />
+                                    </div>
+                                )}
+                                
+                                {activeTab === 'odds' && (
+                                    <div className="animate-fade-in h-full">
+                                        <AdminOddsEngineTab />
                                     </div>
                                 )}
 

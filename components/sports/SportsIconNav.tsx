@@ -108,7 +108,7 @@ interface SportsIconNavProps {
 
 export default function SportsIconNav({ activeTab = 'home', onTabChange = () => {}, liveCounts = {} }: SportsIconNavProps) {
     return (
-        <div className="w-full relative flex items-center mb-6 bg-[#0a0d14]/90 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.6)] py-1.5 pl-2 overflow-hidden rounded-xl">
+        <div className="w-full relative flex items-center py-1 md:py-1.5 pl-2 overflow-hidden">
             
             {/* Top Highlight Line for the container */}
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>

@@ -1,0 +1,371 @@
+{
+  "most_popular_logos": [
+    {
+      "team": "FIFA World Cup 2026",
+      "country": "tournaments",
+      "logo_url": "https://assets.football-logos.cc/logos/tournaments/256x256/fifa-world-cup-2026.7b4f6a98.png",
+      "png_download": "https://assets.football-logos.cc/logos/tournaments/256x256/fifa-world-cup-2026.7b4f6a98.png",
+      "svg_download": "https://assets.football-logos.cc/logos/tournaments/256x256/fifa-world-cup-2026.7b4f6a98.svg"
+    },
+    {
+      "team": "Spain National Team",
+      "country": "spain",
+      "logo_url": "https://assets.football-logos.cc/logos/spain/256x256/spain-national-team.a42d399e.png",
+      "png_download": "https://assets.football-logos.cc/logos/spain/256x256/spain-national-team.a42d399e.png",
+      "svg_download": "https://assets.football-logos.cc/logos/spain/256x256/spain-national-team.a42d399e.svg"
+    },
+    {
+      "team": "Argentina National Team",
+      "country": "argentina",
+      "logo_url": "https://assets.football-logos.cc/logos/argentina/256x256/argentina-national-team.7041952f.png",
+      "png_download": "https://assets.football-logos.cc/logos/argentina/256x256/argentina-national-team.7041952f.png",
+      "svg_download": "https://assets.football-logos.cc/logos/argentina/256x256/argentina-national-team.7041952f.svg"
+    },
+    {
+      "team": "Liverpool FC",
+      "country": "england",
+      "logo_url": "https://assets.football-logos.cc/logos/england/256x256/liverpool.99c48ae3.png",
+      "png_download": "https://assets.football-logos.cc/logos/england/256x256/liverpool.99c48ae3.png",
+      "svg_download": "https://assets.football-logos.cc/logos/england/256x256/liverpool.99c48ae3.svg"
+    },
+    {
+      "team": "Chelsea",
+      "country": "england",
+      "logo_url": "https://assets.football-logos.cc/logos/england/256x256/chelsea.ede8a2a7.png",
+      "png_download": "https://assets.football-logos.cc/logos/england/256x256/chelsea.ede8a2a7.png",
+      "svg_download": "https://assets.football-logos.cc/logos/england/256x256/chelsea.ede8a2a7.svg"
+    },
+    {
+      "team": "Manchester United",
+      "country": "england",
+      "logo_url": "https://assets.football-logos.cc/logos/england/256x256/manchester-united.7ab9d343.png",
+      "png_download": "https://assets.football-logos.cc/logos/england/256x256/manchester-united.7ab9d343.png",
+      "svg_download": "https://assets.football-logos.cc/logos/england/256x256/manchester-united.7ab9d343.svg"
+    },
+    {
+      "team": "Manchester City",
+      "country": "england",
+      "logo_url": "https://assets.football-logos.cc/logos/england/256x256/manchester-city.62f9d1f2.png",
+      "png_download": "https://assets.football-logos.cc/logos/england/256x256/manchester-city.62f9d1f2.png",
+      "svg_download": "https://assets.football-logos.cc/logos/england/256x256/manchester-city.62f9d1f2.svg"
+    },
+    {
+      "team": "Real Madrid",
+      "country": "spain",
+      "logo_url": "https://assets.football-logos.cc/logos/spain/256x256/real-madrid.5ce15611.png",
+      "png_download": "https://assets.football-logos.cc/logos/spain/256x256/real-madrid.5ce15611.png",
+      "svg_download": "https://assets.football-logos.cc/logos/spain/256x256/real-madrid.5ce15611.svg"
+    },
+    {
+      "team": "Paris Saint-Germain (PSG)",
+      "country": "france",
+      "logo_url": "https://assets.football-logos.cc/logos/france/256x256/paris-saint-germain.7d591ccb.png",
+      "png_download": "https://assets.football-logos.cc/logos/france/256x256/paris-saint-germain.7d591ccb.png",
+      "svg_download": "https://assets.football-logos.cc/logos/france/256x256/paris-saint-germain.7d591ccb.svg"
+    },
+    {
+      "team": "Arsenal",
+      "country": "england",
+      "logo_url": "https://assets.football-logos.cc/logos/england/256x256/arsenal.e5528ede.png",
+      "png_download": "https://assets.football-logos.cc/logos/england/256x256/arsenal.e5528ede.png",
+      "svg_download": "https://assets.football-logos.cc/logos/england/256x256/arsenal.e5528ede.svg"
+    },
+    {
+      "team": "Bayern Munich",
+      "country": "germany",
+      "logo_url": "https://assets.football-logos.cc/logos/germany/256x256/bayern-munchen.6c38f13a.png",
+      "png_download": "https://assets.football-logos.cc/logos/germany/256x256/bayern-munchen.6c38f13a.png",
+      "svg_download": "https://assets.football-logos.cc/logos/germany/256x256/bayern-munchen.6c38f13a.svg"
+    },
+    {
+      "team": "Barcelona",
+      "country": "spain",
+      "logo_url": "https://assets.football-logos.cc/logos/spain/256x256/barcelona.481f5fb3.png",
+      "png_download": "https://assets.football-logos.cc/logos/spain/256x256/barcelona.481f5fb3.png",
+      "svg_download": "https://assets.football-logos.cc/logos/spain/256x256/barcelona.481f5fb3.svg"
+    },
+    {
+      "team": "Juventus",
+      "country": "italy",
+      "logo_url": "https://assets.football-logos.cc/logos/italy/256x256/juventus.a8baf848.png",
+      "png_download": "https://assets.football-logos.cc/logos/italy/256x256/juventus.a8baf848.png",
+      "svg_download": "https://assets.football-logos.cc/logos/italy/256x256/juventus.a8baf848.svg"
+    },
+    {
+      "team": "Inter",
+      "country": "italy",
+      "logo_url": "https://assets.football-logos.cc/logos/italy/256x256/inter.3a7ce90c.png",
+      "png_download": "https://assets.football-logos.cc/logos/italy/256x256/inter.3a7ce90c.png",
+      "svg_download": "https://assets.football-logos.cc/logos/italy/256x256/inter.3a7ce90c.svg"
+    },
+    {
+      "team": "UEFA Champions League",
+      "country": "tournaments",
+      "logo_url": "https://assets.football-logos.cc/logos/tournaments/256x256/uefa-champions-league.9cf50c73.png",
+      "png_download": "https://assets.football-logos.cc/logos/tournaments/256x256/uefa-champions-league.9cf50c73.png",
+      "svg_download": "https://assets.football-logos.cc/logos/tournaments/256x256/uefa-champions-league.9cf50c73.svg"
+    },
+    {
+      "team": "English Premier League",
+      "country": "england",
+      "logo_url": "https://assets.football-logos.cc/logos/england/256x256/english-premier-league.d2af2256.png",
+      "png_download": "https://assets.football-logos.cc/logos/england/256x256/english-premier-league.d2af2256.png",
+      "svg_download": "https://assets.football-logos.cc/logos/england/256x256/english-premier-league.d2af2256.svg"
+    },
+    {
+      "team": "Serie A",
+      "country": "italy",
+      "logo_url": "https://assets.football-logos.cc/logos/italy/256x256/serie-a.0f13bb03.png",
+      "png_download": "https://assets.football-logos.cc/logos/italy/256x256/serie-a.0f13bb03.png",
+      "svg_download": "https://assets.football-logos.cc/logos/italy/256x256/serie-a.0f13bb03.svg"
+    },
+    {
+      "team": "La Liga",
+      "country": "spain",
+      "logo_url": "https://assets.football-logos.cc/logos/spain/256x256/la-liga.f431b6b0.png",
+      "png_download": "https://assets.football-logos.cc/logos/spain/256x256/la-liga.f431b6b0.png",
+      "svg_download": "https://assets.football-logos.cc/logos/spain/256x256/la-liga.f431b6b0.svg"
+    },
+    {
+      "team": "Bundesliga",
+      "country": "germany",
+      "logo_url": "https://assets.football-logos.cc/logos/germany/256x256/bundesliga.fe50b6c0.png",
+      "png_download": "https://assets.football-logos.cc/logos/germany/256x256/bundesliga.fe50b6c0.png",
+      "svg_download": "https://assets.football-logos.cc/logos/germany/256x256/bundesliga.fe50b6c0.svg"
+    },
+    {
+      "team": "Ligue 1",
+      "country": "france",
+      "logo_url": "https://assets.football-logos.cc/logos/france/256x256/ligue-1.5be98861.png",
+      "png_download": "https://assets.football-logos.cc/logos/france/256x256/ligue-1.5be98861.png",
+      "svg_download": "https://assets.football-logos.cc/logos/france/256x256/ligue-1.5be98861.svg"
+    }
+  ],
+  "trending_today": [
+    {
+      "rank": "1",
+      "team": "DPMM FC",
+      "country": "🇲🇾  Malaysia",
+      "growth": "+287%"
+    },
+    {
+      "rank": "2",
+      "team": "Leganés",
+      "country": "🇪🇸  Spain",
+      "growth": "+159%"
+    },
+    {
+      "rank": "3",
+      "team": "Hearts",
+      "country": "🏴󠁧󠁢󠁳󠁣󠁴󠁿  Scotland",
+      "growth": "+130%"
+    },
+    {
+      "rank": "4",
+      "team": "Górnik Zabrze",
+      "country": "🇵🇱  Poland",
+      "growth": "+119%"
+    },
+    {
+      "rank": "5",
+      "team": "Sturm Graz",
+      "country": "🇦🇹  Austria",
+      "growth": "+90%"
+    },
+    {
+      "rank": "6",
+      "team": "Fenerbahçe",
+      "country": "🇹🇷  Turkey",
+      "growth": "+69%"
+    },
+    {
+      "rank": "7",
+      "team": "Getafe",
+      "country": "🇪🇸  Spain",
+      "growth": "+62%"
+    },
+    {
+      "rank": "8",
+      "team": "Persib Bandung",
+      "country": "🇮🇩  Indonesia",
+      "growth": "+60%"
+    },
+    {
+      "rank": "9",
+      "team": "Villarreal",
+      "country": "🇪🇸  Spain",
+      "growth": "+54%"
+    },
+    {
+      "rank": "10",
+      "team": "PSV Eindhoven",
+      "country": "🇳🇱  Netherlands",
+      "growth": "+50%"
+    }
+  ],
+  "categories": {
+    "logos_by_country": [
+      {
+        "country": "Italy",
+        "count": 266
+      },
+      {
+        "country": "England",
+        "count": 198
+      },
+      {
+        "country": "Spain",
+        "count": 164
+      },
+      {
+        "country": "Brazil",
+        "count": 162
+      },
+      {
+        "country": "Germany",
+        "count": 150
+      },
+      {
+        "country": "Portugal",
+        "count": 147
+      },
+      {
+        "country": "France",
+        "count": 108
+      },
+      {
+        "country": "USA",
+        "count": 94
+      },
+      {
+        "country": "Turkey",
+        "count": 82
+      },
+      {
+        "country": "Argentina",
+        "count": 70
+      },
+      {
+        "country": "Scotland",
+        "count": 67
+      },
+      {
+        "country": "Japan",
+        "count": 64
+      },
+      {
+        "country": "Netherlands",
+        "count": 58
+      },
+      {
+        "country": "Denmark",
+        "count": 45
+      },
+      {
+        "country": "Wales",
+        "count": 45
+      },
+      {
+        "country": "Poland",
+        "count": 44
+      },
+      {
+        "country": "Russia",
+        "count": 43
+      },
+      {
+        "country": "Greece",
+        "count": 42
+      },
+      {
+        "country": "Czech Republic",
+        "count": 41
+      },
+      {
+        "country": "Indonesia",
+        "count": 41
+      },
+      {
+        "country": "Belgium",
+        "count": 39
+      },
+      {
+        "country": "Sweden",
+        "count": 39
+      },
+      {
+        "country": "Norway",
+        "count": 38
+      },
+      {
+        "country": "Ukraine",
+        "count": 38
+      },
+      {
+        "country": "Mexico",
+        "count": 37
+      },
+      {
+        "country": "Austria",
+        "count": 36
+      },
+      {
+        "country": "Saudi Arabia",
+        "count": 34
+      },
+      {
+        "country": "Hungary",
+        "count": 32
+      },
+      {
+        "country": "South Korea",
+        "count": 32
+      },
+      {
+        "country": "Bulgaria",
+        "count": 26
+      },
+      {
+        "country": "Israel",
+        "count": 26
+      },
+      {
+        "country": "Republic of Ireland",
+        "count": 26
+      },
+      {
+        "country": "Romania",
+        "count": 26
+      },
+      {
+        "country": "Switzerland",
+        "count": 26
+      },
+      {
+        "country": "Colombia",
+        "count": 25
+      },
+      {
+        "country": "Finland",
+        "count": 24
+      },
+      {
+        "country": "Serbia",
+        "count": 24
+      },
+      {
+        "country": "Belarus",
+        "count": 23
+      },
+      {
+        "country": "Cyprus",
+        "count": 23
+      },
+      {
+        "country": "Egypt",
+        "count": 23
+      }
+    ],
+    "logos_by_league": []
+  }
+}

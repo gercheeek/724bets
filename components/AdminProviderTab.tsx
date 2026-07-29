@@ -42,9 +42,23 @@ export default function AdminProviderTab() {
                                     contentStyle={{ backgroundColor: '#111318', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
                                     formatter={(value: number) => [`%${value}`, 'Gerçekleşen RTP']}
                                 />
+                                <defs>
+                                    <filter id="glow-purple" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="4" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                    <filter id="glow-red" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="4" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                </defs>
                                 <Bar dataKey="rtp" radius={[4, 4, 0, 0]}>
                                     {providerData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.rtp > 100 ? '#ef4444' : '#a855f7'} />
+                                        <Cell 
+                                            key={`cell-${index}`} 
+                                            fill={entry.rtp > 100 ? '#ef4444' : '#a855f7'} 
+                                            style={{ filter: entry.rtp > 100 ? 'url(#glow-red)' : 'url(#glow-purple)' }}
+                                        />
                                     ))}
                                 </Bar>
                             </BarChart>
@@ -73,17 +87,26 @@ export default function AdminProviderTab() {
 
                     <h4 className="text-xs text-zinc-500 font-bold uppercase mb-3">En Çok Kâr Bırakan Sağlayıcılar</h4>
                     <div className="space-y-3 flex-1 overflow-y-auto custom-scrollbar">
-                        {providerData.sort((a, b) => a.rtp - b.rtp).map((p, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-3 bg-[#111216] border border-white/5 rounded-lg">
-                                <div>
-                                    <div className="font-bold text-white text-sm">{p.name}</div>
-                                    <div className="text-xs text-zinc-500 mt-0.5">Hacim: ₺{(p.volume/1000).toFixed(0)}k</div>
+                        {[...providerData].sort((a, b) => a.rtp - b.rtp).map((p, idx) => {
+                            const iconMap: Record<string, string> = { 'Pragmatic Play': '🎰', 'Hacksaw': '🔪', 'Evolution': '🎲', 'Play\'n GO': '🃏', 'NoLimit City': '💥' };
+                            const icon = iconMap[p.name] || '🎮';
+                            return (
+                                <div key={idx} className="flex items-center justify-between p-3 bg-[#111216] border border-white/5 rounded-lg group hover:border-white/10 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-lg group-hover:bg-white/10 transition-colors">
+                                            {icon}
+                                        </div>
+                                        <div>
+                                            <div className="font-bold text-white text-sm">{p.name}</div>
+                                            <div className="text-xs text-zinc-500 mt-0.5">Hacim: ₺{(p.volume/1000).toFixed(0)}k</div>
+                                        </div>
+                                    </div>
+                                    <div className={`text-sm font-bold font-mono ${p.rtp > 100 ? 'text-[#ef4444] drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]' : 'text-[#00ff88] drop-shadow-[0_0_5px_rgba(0,255,136,0.8)]'}`}>
+                                        %{p.rtp}
+                                    </div>
                                 </div>
-                                <div className={`text-sm font-bold font-mono ${p.rtp > 100 ? 'text-[#ef4444]' : 'text-[#00ff88]'}`}>
-                                    %{p.rtp}
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>

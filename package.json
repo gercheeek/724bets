@@ -8,7 +8,8 @@
     "dev:single": "vite",
     "dev:all": "node start_all.cjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "scrape-logos": "node scraper.cjs"
   },
   "dependencies": {
     "@ant-design/icons": "^6.3.2",

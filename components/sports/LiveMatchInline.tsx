@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { MatchInfo } from './types';
 import { PlayerLogo } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
+import { ODDS_ENGINE_CONFIG } from '../../utils/oddsEngineConfig';
 import { useBetSlip } from '../../contexts/BetSlipContext';
+import { generateDetailedMarkets } from '../../utils/oddsGenerator';
 import { 
   PlayCircle, Clock, ChevronDown, ChevronUp, Star, Tv, Activity, Flame, 
   MapPin, Trophy, Flag, Pin, BarChart2, Scale
 } from 'lucide-react';
+import { isEliteTeam } from '../../utils/eliteTeams';
 
 interface LiveMatchInlineProps {
   match: MatchInfo;
@@ -97,37 +100,45 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
   
   let markets = Array.from(new Set(allMarkets)).filter(m => m && typeof m === 'string' && m.includes('|'));
   
-  // Fake some markets if empty for demonstration
-  if (markets.length < match.marketsCount) {
-    const missingCount = match.marketsCount - markets.length;
-    const baseOdd1 = parseFloat(match.homeOdd) || 2.0;
-    const baseOdd2 = parseFloat(match.awayOdd) || 2.0;
-    let mockTemplates: any[] = [];
-    
-    if (isFootball) {
-      mockTemplates = [
-        { name: '1x2', sels: [`1~${baseOdd1.toFixed(2)}`, `X~3.10`, `2~${baseOdd2.toFixed(2)}`] },
-        { name: 'Çifte Şans', sels: [`1X~${(baseOdd1/1.5).toFixed(2)}`, `12~1.30`, `X2~${(baseOdd2/1.5).toFixed(2)}`] },
-        { name: 'Toplam', sels: [`2.5 üstü~1.85`, `2.5 altı~1.95`] },
-        { name: 'Beraberlikte iade', sels: [`1~${(baseOdd1/1.2).toFixed(2)}`, `2~${(baseOdd2/1.2).toFixed(2)}`] },
-        { name: 'Handikap', sels: [`(-1) 1~3.50`, `(+1) 2~1.25`] },
-        { name: 'Handikap (Asya)', sels: [`(-0.5) 1~1.95`, `(+0.5) 2~1.85`] },
-        { name: 'Toplam (Asya)', sels: [`2.75 üstü~1.72`, `2.75 altı~2.00`] },
-        { name: 'Sıradaki Gol', sels: [`1~${baseOdd1.toFixed(2)}`, `Hiçbiri~4.50`, `2~${baseOdd2.toFixed(2)}`] }
-      ];
-    } else {
-       mockTemplates = [
-        { name: '1x2', sels: [`1~${baseOdd1.toFixed(2)}`, `2~${baseOdd2.toFixed(2)}`] },
-        { name: 'Toplam', sels: [`Üst~1.85`, `Alt~1.85`] }
-       ];
-    }
-    
-    for (let i = 0; i < missingCount && i < mockTemplates.length; i++) {
-      const tmpl = mockTemplates[i];
-      const selectionsStr = tmpl.sels.map((s, idx) => `m_${i}_${idx}~${s}`).join('!');
-      markets.push(`market|${tmpl.name}|${selectionsStr}`);
-    }
+  // Calculate current total goals for dynamic odds generation
+  let currentTotalGoals = 0;
+  if (match.score) {
+     const cleanScore = match.score.replace(/[^0-9:-]/g, '');
+     if (cleanScore.includes(':')) {
+        const p = cleanScore.split(':');
+        currentTotalGoals = (parseInt(p[0]) || 0) + (parseInt(p[1]) || 0);
+     } else if (cleanScore.includes('-')) {
+        const p = cleanScore.split('-');
+        currentTotalGoals = (parseInt(p[0]) || 0) + (parseInt(p[1]) || 0);
+     }
   }
+  
+  const parsedMinute = parseInt(match.minute?.replace(/[^0-9]/g, '') || '0');
+  const totalCorners = (parseInt(corners.home) || 0) + (parseInt(corners.away) || 0);
+
+  // Procedurally generate markets for lower-tier / mock matches if data is missing or it's an elite match
+  if ((markets.length < 5 || isEliteTeam(match.home) || isEliteTeam(match.away)) && match.homeOdd && match.drawOdd && match.awayOdd) {
+    const generated = generateDetailedMarkets(
+      parseFloat(match.homeOdd.toString()), 
+      parseFloat(match.drawOdd.toString()), 
+      parseFloat(match.awayOdd.toString()), 
+      match.home, 
+      match.away,
+      currentTotalGoals,
+      parsedMinute,
+      totalCorners
+    );
+    
+    const existingNames = new Set(markets.map(m => (m.split('|')[1] || '').toLowerCase().trim()));
+    generated.forEach(g => {
+       const gName = (g.split('|')[1] || '').toLowerCase().trim();
+       if (!existingNames.has(gName)) {
+           markets.push(g);
+       }
+    });
+  }
+  
+
 
   // State for expanded accordions
   const [expandedMarkets, setExpandedMarkets] = useState<Record<number, boolean>>({});
@@ -196,23 +207,23 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
              <button 
                key={m.id || idx}
                onClick={() => onSelectAnotherMatch && onSelectAnotherMatch(m)}
-               className={`shrink-0 flex flex-col justify-center px-3 py-1.5 rounded-lg border transition-all duration-200 min-w-[140px] ${
+               className={`shrink-0 flex flex-col justify-center px-4 py-2.5 rounded-lg border transition-all duration-200 min-w-[180px] md:min-w-[200px] ${
                  m.id === match.id 
-                 ? 'bg-[#1a1d29] border-[#3b82f6]/40' 
-                 : 'bg-[#101114] border-[#1f222d] hover:border-[#3b82f6]/30'
+                 ? 'bg-[#1a1d29] border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
+                 : 'bg-[#101114] border-[#1f222d] hover:border-[#06b6d4]/30 hover:bg-[#1a1d29]/50'
                }`}
              >
-                <div className="flex items-center gap-1.5 text-[10px] font-black tracking-wider text-[#ef4444] mb-1 uppercase">
-                   <div className="w-1.5 h-1.5 rounded-full bg-[#ef4444] animate-pulse"></div>
+                <div className="flex items-center gap-2 text-[11px] font-bold tracking-wider text-[#ef4444] mb-2 uppercase">
+                   <div className="w-1.5 h-1.5 rounded-full bg-[#ef4444] animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
                    {m.minute}
                 </div>
-                <div className="flex items-center justify-between text-xs font-bold text-white mb-0.5">
-                   <span className="truncate max-w-[80px]">{m.home}</span>
-                   <span className="text-[#3b82f6]">{String(m.score).split('-')[0] || 0}</span>
+                <div className="flex items-center justify-between text-[13px] font-semibold text-zinc-100 mb-1.5">
+                   <span className="truncate max-w-[120px] md:max-w-[140px]">{m.home}</span>
+                   <span className="text-[#06b6d4] font-black">{String(m.score).split('-')[0] || 0}</span>
                 </div>
-                <div className="flex items-center justify-between text-xs font-bold text-white">
-                   <span className="truncate max-w-[80px]">{m.away}</span>
-                   <span className="text-[#3b82f6]">{String(m.score).split('-')[1] || 0}</span>
+                <div className="flex items-center justify-between text-[13px] font-semibold text-zinc-100">
+                   <span className="truncate max-w-[120px] md:max-w-[140px]">{m.away}</span>
+                   <span className="text-[#06b6d4] font-black">{String(m.score).split('-')[1] || 0}</span>
                 </div>
              </button>
            ))}
@@ -226,7 +237,11 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
          <div className="flex-1 flex flex-col min-w-0">
             
             {/* SCOREBOARD BLOCK */}
-            <div className="bg-[#1a1d29] border border-[#222635] rounded-xl p-4 md:p-5 flex flex-col relative overflow-hidden shadow-lg mb-4">
+            <div className="bg-[#1a1d29] border border-[#222635] rounded-xl p-4 md:p-5 flex flex-col relative overflow-hidden shadow-lg mb-4 group">
+               {/* Dynamic Mesh Gradient Background */}
+               <div className="absolute inset-0 bg-gradient-to-br from-[#06b6d4]/5 via-transparent to-[#3b82f6]/5 opacity-50"></div>
+               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#06b6d4]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+               
                {/* Breadcrumb / League Name */}
                <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-400 mb-6 z-10">
                  <Flag className="w-3.5 h-3.5" />
@@ -240,22 +255,35 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                      <div className="w-10 h-10 md:w-14 md:h-14 bg-white/5 rounded-full flex items-center justify-center p-1.5 mb-3 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
                        <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} />
                      </div>
-                     <span className="text-[13px] md:text-[15px] font-bold text-white leading-tight mb-2 truncate">{match.home}</span>
-                     <div className="flex items-center gap-1">
-                        <div className="w-2.5 h-3.5 bg-[#ef4444] rounded-[1px]"></div>
-                        <span className="text-white text-[10px] font-bold mx-1">{redCards.home}</span>
-                        <div className="w-2.5 h-3.5 bg-yellow-500 rounded-[1px]"></div>
-                        <span className="text-white text-[10px] font-bold mx-1">{yellowCards.home}</span>
-                        <Flag className="w-3 h-3 text-zinc-400 ml-1" />
-                        <span className="text-white text-[10px] font-bold ml-0.5">{corners.home}</span>
+                     <span className="text-[13px] md:text-[15px] font-bold text-white leading-tight mb-2 line-clamp-2 pr-2 break-words">{match.home}</span>
+                     <div className="flex items-center gap-1 h-4">
+                        {match.isLive && (
+                           <>
+                              <div className="w-2.5 h-3.5 bg-[#ef4444] rounded-[1px]"></div>
+                              <span className="text-white text-[10px] font-bold mx-1">{redCards.home}</span>
+                              <div className="w-2.5 h-3.5 bg-yellow-500 rounded-[1px]"></div>
+                              <span className="text-white text-[10px] font-bold mx-1">{yellowCards.home}</span>
+                              <Flag className="w-3 h-3 text-zinc-400 ml-1" />
+                              <span className="text-white text-[10px] font-bold ml-0.5">{corners.home}</span>
+                           </>
+                        )}
                      </div>
                   </div>
 
                   {/* Score & Time */}
                   <div className="flex flex-col items-center justify-start flex-1 shrink-0 mt-[-30px]">
-                     <div className="flex items-center justify-center gap-1 text-[11px] font-black text-[#ef4444] tracking-widest uppercase mb-3">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#ef4444] animate-pulse"></div>
-                        <span>{match.minute}</span>
+                     <div className={`flex items-center justify-center gap-1.5 text-[11px] font-black tracking-widest uppercase mb-3 ${match.isLive ? 'text-[#ef4444] drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'text-zinc-400'}`}>
+                        {match.isLive ? (
+                          <>
+                             <div className="relative flex h-2.5 w-2.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef4444] opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#ef4444]"></span>
+                             </div>
+                             <span>{match.minute || 'CANLI'}</span>
+                          </>
+                        ) : (
+                          <span>{match.startTime || match.minute || 'BAŞLAMADI'}</span>
+                        )}
                      </div>
                      <div className="flex items-center gap-2 md:gap-4 text-3xl md:text-5xl font-black text-white tabular-nums drop-shadow-md">
                         <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner">
@@ -266,9 +294,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                            {String(match.score).split('-')[1]?.trim() || '0'}
                         </div>
                      </div>
-                     <div className="text-[11px] text-zinc-400 font-bold mt-3">
-                        1. Devre 2:2
-                     </div>
+
                   </div>
 
                   {/* Away */}
@@ -276,44 +302,67 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                      <div className="w-10 h-10 md:w-14 md:h-14 bg-white/5 rounded-full flex items-center justify-center p-1.5 mb-3 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
                        <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} />
                      </div>
-                     <span className="text-[13px] md:text-[15px] font-bold text-white leading-tight mb-2 truncate">{match.away}</span>
-                     <div className="flex items-center justify-end gap-1">
-                        <div className="w-2.5 h-3.5 bg-[#ef4444] rounded-[1px]"></div>
-                        <span className="text-white text-[10px] font-bold mx-1">{redCards.away}</span>
-                        <div className="w-2.5 h-3.5 bg-yellow-500 rounded-[1px]"></div>
-                        <span className="text-white text-[10px] font-bold mx-1">{yellowCards.away}</span>
-                        <Flag className="w-3 h-3 text-zinc-400 ml-1" />
-                        <span className="text-white text-[10px] font-bold ml-0.5">{corners.away}</span>
+                     <span className="text-[13px] md:text-[15px] font-bold text-white leading-tight mb-2 line-clamp-2 pl-2 break-words">{match.away}</span>
+                     <div className="flex items-center justify-end gap-1 h-4">
+                        {match.isLive && (
+                           <>
+                              <div className="w-2.5 h-3.5 bg-[#ef4444] rounded-[1px]"></div>
+                              <span className="text-white text-[10px] font-bold mx-1">{redCards.away}</span>
+                              <div className="w-2.5 h-3.5 bg-yellow-500 rounded-[1px]"></div>
+                              <span className="text-white text-[10px] font-bold mx-1">{yellowCards.away}</span>
+                              <Flag className="w-3 h-3 text-zinc-400 ml-1" />
+                              <span className="text-white text-[10px] font-bold ml-0.5">{corners.away}</span>
+                           </>
+                        )}
                      </div>
                   </div>
                </div>
             </div>
 
-            {/* CATEGORY TABS */}
-            <div className="flex items-center gap-4 overflow-x-auto no-scrollbar border-b border-[#222635] mb-4 pb-2 px-1">
+            {/* CATEGORY TABS (GLOW TAB V2) */}
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-[#222635] mb-4 px-1">
                {categories.map((cat, idx) => (
                   <button 
                     key={idx}
                     onClick={() => setActiveCategory(cat)}
-                    className={`whitespace-nowrap pb-2 font-bold text-[13px] transition-colors relative ${
-                       activeCategory === cat ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
+                    className={`whitespace-nowrap px-4 py-3 text-[13px] font-black transition-all relative rounded-t-lg overflow-hidden ${
+                       activeCategory === cat ? 'text-[#06b6d4] bg-[#06b6d4]/10' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
                     }`}
                   >
-                     <div className="flex items-center gap-1.5">
-                       {cat === 'Bahis sihirbazı' && <Star className="w-3.5 h-3.5 text-[#3b82f6]" fill="currentColor" />}
+                     <div className="relative z-10 flex items-center gap-1.5">
+                       {cat === 'Bahis sihirbazı' && <Star className={`w-3.5 h-3.5 ${activeCategory === cat ? 'text-[#06b6d4]' : 'text-zinc-500'}`} fill="currentColor" />}
                        {cat}
-                       {idx === 0 && <span className="bg-white/10 text-white text-[10px] px-1.5 py-0.5 rounded ml-1">15</span>}
+                       {idx === 0 && <span className={`text-[10px] px-1.5 py-0.5 rounded ml-1 ${activeCategory === cat ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'bg-white/10 text-white'}`}>15</span>}
                      </div>
                      {activeCategory === cat && (
-                       <div className="absolute -bottom-[9px] left-0 w-full h-[2px] bg-[#3b82f6] shadow-[0_0_10px_#3b82f6]"></div>
+                       <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#06b6d4] shadow-[0_0_15px_rgba(6,182,212,0.8)]"></div>
                      )}
                   </button>
                ))}
             </div>
-
-            {/* MARKETS ACCORDION LIST */}
-            <div className="flex flex-col gap-3">
-               {markets.map((market: string, idx: number) => {
+            
+            {/* MATCH FINISHED / LOCKED STATE */}
+            {(match.isFinished || ODDS_ENGINE_CONFIG.rules.lockKeywords.includes(match.minute || '')) ? (
+               <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#12141c] rounded-xl border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
+                  <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+                     <span className="text-3xl">🔒</span>
+                  </div>
+                  <h3 className="text-xl font-black text-white mb-2 tracking-wide uppercase">Bahisler Kapandı</h3>
+                  <p className="text-zinc-500 text-sm text-center max-w-sm">
+                     Bu karşılaşma sona ermiş veya askıya alınmıştır. Şu an için yeni bahis alımı kapalıdır.
+                  </p>
+               </div>
+            ) : (
+               <div className="flex flex-col gap-3">
+               {markets.filter(market => {
+                  const parts = market.split('|');
+                  const marketName = translateMarket(parts[1] || '');
+                  if (activeCategory === 'Ana Seçenekler') return ['1x2', 'Çifte Şans', 'Beraberlikte iade', 'Handikap', 'Karşılıklı Gol'].includes(marketName);
+                  if (activeCategory === 'Toplam') return marketName.includes('Toplam');
+                  if (activeCategory === 'Yarılar') return marketName.includes('Yarı');
+                  if (activeCategory === 'Kornerler') return marketName.includes('Korner');
+                  return true; // Default fallback for other tabs
+               }).map((market: string, idx: number) => {
                   const parts = market.split('|');
                   const rawMarketName = parts[1] || 'Bahis Türü';
                   const marketName = translateMarket(rawMarketName);
@@ -376,16 +425,16 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                                        odd: oddValue
                                      });
                                    }}
-                                   className={`min-h-[46px] rounded-md flex items-center justify-between px-3 md:px-4 transition-all duration-200 border-b-2 ${
+                                   className={`min-h-[46px] rounded-md flex items-center justify-between px-3 md:px-4 transition-all duration-300 border-b-2 border-t border-x border-t-transparent border-x-transparent ${
                                      isSelected 
-                                       ? 'bg-[#3b82f6]/20 border-[#3b82f6] shadow-[0_4px_12px_rgba(59,130,246,0.15)]' 
-                                       : 'bg-[#151924] border-[#151924] hover:bg-[#1a1f2e] hover:border-[#2a3045]'
+                                       ? 'bg-[#06b6d4]/20 border-b-[#06b6d4] shadow-[0_4px_15px_rgba(6,182,212,0.25)] -translate-y-0.5' 
+                                       : 'bg-[#1f222d] border-b-[#1f222d] hover:bg-[#06b6d4]/10 hover:border-[#06b6d4] hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:-translate-y-0.5'
                                    }`}
                                  >
-                                   <span className={`text-[11px] md:text-[12px] font-bold leading-tight text-left pr-2 ${isSelected ? 'text-white' : 'text-zinc-300'}`}>
+                                   <span className={`text-[11px] md:text-[12px] font-bold leading-tight text-left pr-2 transition-colors ${isSelected ? 'text-[#06b6d4]' : 'text-zinc-300'}`}>
                                      {typeLabel}
                                    </span>
-                                   <span className="text-[13px] md:text-[14px] font-black text-white tabular-nums shrink-0">
+                                   <span className={`text-[13px] md:text-[14px] font-black tabular-nums shrink-0 transition-colors ${isSelected ? 'text-[#06b6d4] drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]' : 'text-white'}`}>
                                      <AnimatedOdd value={oddValue.toFixed(2)} />
                                    </span>
                                  </button>
@@ -397,6 +446,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                   );
                })}
             </div>
+            )}
 
          </div>
 
@@ -508,19 +558,22 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                    <div className="flex-1 relative overflow-hidden bg-[#0a0c10]">
                      
                      {animTab === 'pitch' && (
-                       <div className="absolute inset-0 bg-[#2b7132] flex flex-col">
-                         {/* Pitch Lines */}
-                         <div className="absolute inset-4 border-2 border-white/30 rounded"></div>
-                         <div className="absolute top-4 bottom-4 left-1/2 w-0.5 bg-white/30 -translate-x-1/2"></div>
-                         <div className="absolute top-1/2 left-1/2 w-16 h-16 border-2 border-white/30 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-                         <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-white/50 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+                       <div className="absolute inset-0 bg-[#050608] flex flex-col relative overflow-hidden">
+                         {/* Cyber Grid Background */}
+                         <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.05)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+                         
+                         {/* Pitch Lines (Cyber Neon) */}
+                         <div className="absolute inset-4 border-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)] rounded-lg"></div>
+                         <div className="absolute top-4 bottom-4 left-1/2 w-0.5 bg-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.3)] -translate-x-1/2"></div>
+                         <div className="absolute top-1/2 left-1/2 w-16 h-16 border-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+                         <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-[#06b6d4] shadow-[0_0_10px_rgba(6,182,212,0.8)] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                          
                          {/* Penalty Boxes */}
-                         <div className="absolute top-1/4 bottom-1/4 left-4 w-12 border-y-2 border-r-2 border-white/30"></div>
-                         <div className="absolute top-1/4 bottom-1/4 right-4 w-12 border-y-2 border-l-2 border-white/30"></div>
+                         <div className="absolute top-1/4 bottom-1/4 left-4 w-12 border-y-2 border-r-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]"></div>
+                         <div className="absolute top-1/4 bottom-1/4 right-4 w-12 border-y-2 border-l-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]"></div>
                          
-                         <div className="absolute top-1/3 bottom-1/3 left-4 w-6 border-y-2 border-r-2 border-white/30"></div>
-                         <div className="absolute top-1/3 bottom-1/3 right-4 w-6 border-y-2 border-l-2 border-white/30"></div>
+                         <div className="absolute top-1/3 bottom-1/3 left-4 w-6 border-y-2 border-r-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]"></div>
+                         <div className="absolute top-1/3 bottom-1/3 right-4 w-6 border-y-2 border-l-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]"></div>
                          
                          {/* Dynamic Content Overlay */}
                          {(match as any).currentAction && (
@@ -603,8 +656,8 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                          <button 
                            key={tab.id}
                            onClick={() => setAnimTab(tab.id as any)}
-                           className={`flex-1 flex items-center justify-center py-3 border-r border-[#222635] last:border-0 transition-colors ${
-                             isActive ? 'bg-[#1a1d29] text-[#3b82f6]' : 'text-zinc-500 hover:text-zinc-300 hover:bg-[#1a1d29]/50'
+                           className={`flex-1 flex items-center justify-center py-3 border-r border-[#222635] last:border-0 transition-all ${
+                             isActive ? 'bg-[#06b6d4]/10 text-[#06b6d4] shadow-[inset_0_-2px_0_#06b6d4]' : 'text-zinc-500 hover:text-[#06b6d4]/70 hover:bg-[#1a1d29]/50'
                            }`}
                          >
                            <Icon className="w-4 h-4" />

@@ -54,36 +54,40 @@ export default function AdminRiskTab() {
                 <div className="space-y-8">
                     <div className="flex items-center gap-6">
                         <div className="flex-1">
-                            <input 
-                                type="range" 
-                                min="90" 
-                                max="99" 
-                                step="0.1"
-                                value={rtp}
-                                onChange={(e) => setRtp(parseFloat(e.target.value))}
-                                className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-red-500"
-                            />
+                            <div className="relative w-full">
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 rounded-lg bg-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.5)] pointer-events-none" style={{ width: `${((rtp - 90) / 9) * 100}%` }}></div>
+                                <input 
+                                    type="range" 
+                                    min="90" 
+                                    max="99" 
+                                    step="0.1"
+                                    value={rtp}
+                                    onChange={(e) => setRtp(parseFloat(e.target.value))}
+                                    className="w-full h-2 bg-[#111216] rounded-lg appearance-none cursor-pointer outline-none relative z-10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-red-500 [&::-webkit-slider-thumb]:shadow-[0_0_15px_rgba(239,68,68,1)] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white transition-all bg-transparent"
+                                />
+                            </div>
                             <div className="flex justify-between text-xs text-gray-500 mt-2 font-mono">
                                 <span>%90.0 (Max Kar)</span>
                                 <span>%99.0 (Max Oyuncu)</span>
                             </div>
                         </div>
-                        <div className="w-24 bg-black/50 border border-gray-700 rounded-xl px-3 py-2 text-center">
-                            <span className="text-2xl font-black text-red-400">%{rtp.toFixed(1)}</span>
+                        <div className="w-24 bg-red-500/10 border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.2)] rounded-xl px-3 py-2 text-center flex items-center justify-center">
+                            <span className="text-2xl font-black text-red-400 drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]">%{rtp.toFixed(1)}</span>
                         </div>
                     </div>
 
                     <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex gap-3 text-sm text-red-200">
-                        <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+                        <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5 animate-pulse" />
                         <p><strong>Dikkat:</strong> Bu değeri değiştirmek sitenin tüm oyunlarındaki genel kazandırma algoritmasını anında etkiler. Kar marjınızı doğrudan belirler.</p>
                     </div>
 
                     <button 
                         onClick={handleSaveRequest}
-                        className="w-full py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all flex items-center justify-center gap-2"
+                        className="w-full py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-black uppercase tracking-widest rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.6)] animate-pulse hover:animate-none transition-all flex items-center justify-center gap-3 relative overflow-hidden group"
                     >
-                        <Save className="w-5 h-5" />
-                        Değişiklikleri Uygula
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
+                        <Save className="w-5 h-5 relative z-10" />
+                        <span className="relative z-10">Değişiklikleri Uygula</span>
                     </button>
                 </div>
             </div>
@@ -108,20 +112,20 @@ export default function AdminRiskTab() {
                             <div className="text-xs text-zinc-400">Piyasa: Maç Sonucu 1</div>
                         </div>
                         <div className="text-right relative z-10">
-                            <div className="text-lg font-black text-red-400 font-mono flex items-center gap-2 justify-end">
+                            <div className="text-xl font-black text-red-400 font-mono flex items-center gap-2 justify-end drop-shadow-[0_0_8px_rgba(248,113,113,0.8)]">
                                 <Activity className="w-4 h-4 animate-bounce" /> ₺1,250,000
                             </div>
                             <div className="text-[10px] text-red-500 font-bold uppercase mt-1">KRİTİK RİSK (LIMIT AŞIMI)</div>
                         </div>
                     </div>
 
-                    <div className="bg-[#111318] border border-orange-500/30 rounded-xl p-4 flex items-center justify-between">
+                    <div className="bg-[#111318] border border-orange-500/30 rounded-xl p-4 flex items-center justify-between group hover:border-orange-500/50 transition-colors">
                         <div>
                             <div className="text-sm font-bold text-white mb-1">Real Madrid - Barcelona</div>
                             <div className="text-xs text-zinc-400">Piyasa: 2.5 Üst</div>
                         </div>
                         <div className="text-right">
-                            <div className="text-lg font-black text-orange-400 font-mono">₺450,000</div>
+                            <div className="text-xl font-black text-orange-400 font-mono drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]">₺450,000</div>
                             <div className="text-[10px] text-orange-500 font-bold uppercase mt-1">YÜKSEK RİSK</div>
                         </div>
                     </div>

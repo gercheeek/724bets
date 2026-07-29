@@ -366,10 +366,10 @@ const Header: React.FC<HeaderProps> = ({
         `}</style>
 
       <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
-        <div className="w-full max-w-[1400px] mx-auto h-full flex items-center justify-between relative">
+        <div className="w-full max-w-[1300px] mx-auto h-full flex items-center justify-between relative px-4 lg:px-8">
             
             {/* Left Section: Hamburger (Mobile) & Logo */}
-            <div className="flex items-center h-full shrink-0 pl-4 lg:pl-6">
+            <div className="flex items-center h-full shrink-0">
               {/* Hamburger Button (Mobile only) */}
               <button 
                 onClick={onToggleSidebar}
@@ -413,9 +413,9 @@ const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Right Section: User Controls */}
-            <div className="flex-1 flex justify-end h-full px-2 md:px-4">
-              <div className="flex items-center justify-end h-full gap-1 md:gap-3 z-10 pr-2 md:pr-4">
+            {/* Right Section: Actions & Auth */}
+            <div className="header-topbar-right flex items-center justify-end h-full shrink-0 relative overflow-visible">
+              <div className="flex items-center justify-end h-full gap-1 md:gap-3 z-10">
 
           {siteUser ? (
             <div className="flex items-center gap-2 md:gap-3 ml-2">
@@ -481,7 +481,7 @@ const Header: React.FC<HeaderProps> = ({
                     const event = new CustomEvent('openWalletModal', { detail: 'deposit' });
                     window.dispatchEvent(event);
                   }}
-                  className="bg-[#0f7bff] hover:bg-[#0f7bff]/90 text-white font-bold text-[13px] md:text-[14px] h-[40px] md:h-[44px] px-4 md:px-5 rounded-lg transition-colors flex items-center shadow-lg"
+                  className="bg-[#06b6d4] hover:bg-[#06b6d4]/90 text-[#09090b] font-black tracking-wide text-[13px] md:text-[14px] h-[40px] md:h-[44px] px-4 md:px-5 rounded-lg transition-all duration-300 flex items-center shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)]"
                 >
                   <Wallet className="w-4 h-4 mr-2 hidden sm:block" />
                   {t("cuzdan")}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
     Medal, Plus, CheckCircle2, AlertTriangle, Search, Filter, 
-    X, TrendingDown, TrendingUp, ShieldAlert, Activity, Database, Check
+    X, TrendingDown, TrendingUp, ShieldAlert, Activity, Database, Check, ChevronDown
 } from 'lucide-react';
 import { 
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend 
@@ -41,9 +41,11 @@ const riskData = [
 
 export default function AdminSportsTab() {
     const [activeSubTab, setActiveSubTab] = useState<'pool' | 'active' | 'risk' | 'api_settings' | 'monitor'>('pool');
+    const [isLiveWindowOpen, setIsLiveWindowOpen] = useState(false);
     
     // API Provider Settings States
-    const [apiProvider, setApiProvider] = useState<'tarafbet'>('tarafbet');
+    const [apiProvider, setApiProvider] = useState<'tarafbet' | 'atekbet' | 'bahiks'>('atekbet');
+    const [autoFailover, setAutoFailover] = useState(true);
     const [isPushing, setIsPushing] = useState(false);
     const [pushMessage, setPushMessage] = useState('');
 
@@ -549,10 +551,11 @@ export default function AdminSportsTab() {
                             </div>
                         </div>
 
-                        <div className="space-y-4 mb-8">
+                        <div className="space-y-4 mb-6">
+                            {/* Atekbet Server */}
                             <label 
                                 className={`flex items-center p-4 rounded-xl border cursor-pointer transition-all ${
-                                    apiProvider === 'tarafbet' 
+                                    apiProvider === 'atekbet' 
                                     ? 'bg-emerald-500/10 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]' 
                                     : 'bg-[#1a1d24] border-zinc-800 hover:border-zinc-700'
                                 }`}
@@ -560,20 +563,66 @@ export default function AdminSportsTab() {
                                 <input 
                                     type="radio" 
                                     name="apiProvider" 
-                                    value="tarafbet" 
-                                    checked={apiProvider === 'tarafbet'} 
-                                    onChange={() => setApiProvider('tarafbet')}
+                                    value="atekbet" 
+                                    checked={apiProvider === 'atekbet'} 
+                                    onChange={() => setApiProvider('atekbet')}
                                     className="hidden"
                                 />
                                 <div className="flex-1">
                                     <div className="flex items-center justify-between mb-1">
-                                        <h4 className="font-bold text-white text-lg">Tarafbet API (WebSocket)</h4>
-                                        {apiProvider === 'tarafbet' && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
+                                        <div className="flex items-center gap-2">
+                                            <h4 className="font-bold text-white text-lg">Atekbet Swarm (Birincil Sunucu)</h4>
+                                            {apiProvider === 'atekbet' && <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Aktif</span>}
+                                        </div>
+                                        {apiProvider === 'atekbet' && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
                                     </div>
-                                    <p className="text-sm text-zinc-400">Canlı ve bülten verileri için resmi Tarafbet Socket.IO canlı beslemesi.</p>
-                                    <div className="mt-2 text-xs font-mono text-emerald-300/70 bg-emerald-500/10 inline-block px-2 py-1 rounded">wss://srv.tarafbet981.com/sport/?EIO=3...</div>
+                                    <p className="text-sm text-zinc-400">Ana BetConstruct WSS beslemesi. Standart trafiği karşılar.</p>
+                                    <div className="mt-2 text-xs font-mono text-emerald-300/70 bg-emerald-500/10 inline-block px-2 py-1 rounded">wss://swarm.atekbet.com/</div>
                                 </div>
                             </label>
+
+                            {/* Bahiks211 Server */}
+                            <label 
+                                className={`flex items-center p-4 rounded-xl border cursor-pointer transition-all ${
+                                    apiProvider === 'bahiks' 
+                                    ? 'bg-blue-500/10 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.15)]' 
+                                    : 'bg-[#1a1d24] border-zinc-800 hover:border-zinc-700'
+                                }`}
+                            >
+                                <input 
+                                    type="radio" 
+                                    name="apiProvider" 
+                                    value="bahiks" 
+                                    checked={apiProvider === 'bahiks'} 
+                                    onChange={() => setApiProvider('bahiks')}
+                                    className="hidden"
+                                />
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <div className="flex items-center gap-2">
+                                            <h4 className="font-bold text-white text-lg">Bahiks211 Swarm (Yedek Sunucu)</h4>
+                                            {apiProvider === 'bahiks' && <span className="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Aktif</span>}
+                                        </div>
+                                        {apiProvider === 'bahiks' && <CheckCircle2 className="w-5 h-5 text-blue-400" />}
+                                    </div>
+                                    <p className="text-sm text-zinc-400">Yedek (Failover) BetConstruct WSS beslemesi. Yüksek hızlı EU sunucusu.</p>
+                                    <div className="mt-2 text-xs font-mono text-blue-300/70 bg-blue-500/10 inline-block px-2 py-1 rounded">wss://eu-swarm-newm.bahiks211.com/</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        {/* Failover Toggle */}
+                        <div className="bg-[#1a1d24] rounded-xl p-4 border border-zinc-800 mb-8 flex items-center justify-between">
+                            <div>
+                                <h4 className="font-bold text-white mb-0.5">Akıllı Sunucu Geçişi (Auto-Failover)</h4>
+                                <p className="text-xs text-zinc-400">Eğer aktif sunucudan veri akışı kesilirse veya ping 500ms'yi aşarsa otomatik olarak diğerine bağlanır.</p>
+                            </div>
+                            <button 
+                                onClick={() => setAutoFailover(!autoFailover)}
+                                className={`w-12 h-6 rounded-full transition-colors relative flex items-center shrink-0 ${autoFailover ? 'bg-emerald-500' : 'bg-zinc-700'}`}
+                            >
+                                <div className={`w-4 h-4 rounded-full bg-white absolute transition-transform ${autoFailover ? 'translate-x-7' : 'translate-x-1'}`}></div>
+                            </button>
                         </div>
 
                         {/* Push Action Area */}

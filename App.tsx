@@ -89,7 +89,9 @@ import HeroSection from './components/HeroSection';
 import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
 import Spor724View from './components/Spor724View';
-import GercekView from './components/sports/GercekView';
+import AffiliateView from './components/AffiliateView';
+import VIPClubView from './components/VIPClubView';
+
 import InGameLayout from './components/InGameLayout';
 import ComingSoon from './components/ComingSoon';
 import PlinkoView from './components/PlinkoView';
@@ -1604,6 +1606,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   if (view === 'admin') {
     if (userRole !== 'admin') {
       return (
+        <>
         <div style={{ width: '100vw', height: '100dvh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif' }}>
           <h1 style={{ fontSize: '32px', fontWeight: 900, color: '#ef4444', marginBottom: '16px' }}>Erişim Engellendi</h1>
           <p style={{ color: '#9ca3af', fontSize: '15px', maxWidth: '400px', textAlign: 'center', lineHeight: 1.6, marginBottom: '24px' }}>
@@ -1618,7 +1621,42 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             </button>
           </div>
         </div>
-      );
+        {authModalMode === 'admin' && (
+          <AuthModal
+            mode="admin"
+            initialMemberMode="login"
+            onMemberLogin={() => {}}
+            onAdminLogin={(role) => {
+              setUserRole(role);
+              localStorage.setItem('site_user_role', role);
+              const isGuest = role.startsWith('guest_');
+              const guestUsername = isGuest ? role.replace('guest_bypass_', '').replace('guest_', '') : '';
+              const adminUser: SiteUser = {
+                id: isGuest ? `guest_${guestUsername}` : 'admin-session',
+                username: isGuest ? guestUsername : 'Yönetici',
+                password: '',
+                email: isGuest ? `guest@724bets.com` : 'admin@724bets.com',
+                createdAt: Date.now(),
+                status: 'active',
+                notes: isGuest ? 'Misafir Yöneticisi' : 'Ana Yönetici',
+                role: role as any,
+                balance: 1000
+              };
+              setSiteUser(adminUser);
+              localStorage.setItem('site_current_member', JSON.stringify(adminUser));
+              setAuthModalMode(null);
+              if (isGuest) {
+                setView('home');
+              } else {
+                setView('admin');
+              }
+            }}
+            onClose={() => setAuthModalMode(null)}
+            hideMemberLogin={true}
+          />
+        )}
+      </>
+    );
     }
     
     return (
@@ -2013,7 +2051,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
             {!(view === 'giveaway') && (
               <aside 
-                className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-20 transition-[width,box-shadow] duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[78px]'}`}
+                className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-[99999] pointer-events-auto transition-[width,box-shadow] duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[78px]'}`}
                 style={{ willChange: 'width' }}
               >
                   <Sidebar
@@ -2118,15 +2156,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                       <span>s</span>
                     </span>
 
-                    {/* Right-side 3-leaf clover with soft glow */}
-                    <div className="flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 ml-0 -mt-2">
-                      <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.3)]">
-                        <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
-                        <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
-                        <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
-                        <path d="M 50,50 C 45,65 40,75 35,70 C 45,70 50,60 50,50 Z" />
-                      </svg>
-                    </div>
                   </div>
                 </div>
                 <div className="flex items-center shrink-0">
@@ -2284,9 +2313,21 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
+        {view === 'affiliate/overview' && (
+          <div className="animate-fade-in w-full h-full">
+            <AffiliateView onNavigate={handleViewChange} onAuthRequired={() => setAuthModalMode('member')} />
+          </div>
+        )}
+
+        {view === 'vip-club' && (
+          <div className="animate-fade-in w-full h-full">
+            <VIPClubView onNavigate={handleViewChange} siteUser={siteUser} />
+          </div>
+        )}
+
         {view === 'gercek' && (
           <div className="animate-fade-in w-full h-full">
-            <GercekView onNavigate={handleViewChange} />
+            <Spor724View onNavigate={handleViewChange} />
           </div>
         )}
 
@@ -2353,6 +2394,42 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         {view === 'rewards' && (
           <div className="animate-fade-in w-full h-full relative z-[50]">
             <RewardsPage onBack={() => handleViewChange('home')} siteUser={siteUser} />
+          </div>
+        )}
+
+        {view === 'promo' && (
+          <div className="animate-fade-in w-full h-full relative z-[50] flex flex-col items-center justify-center text-center p-8">
+            <div className="w-20 h-20 bg-[#00E5FF]/10 rounded-full flex items-center justify-center mb-6">
+              <Percent className="w-10 h-10 text-[#00E5FF]" />
+            </div>
+            <h1 className="text-4xl font-black text-white mb-4">Promosyonlar</h1>
+            <p className="text-[#8b92a5] max-w-lg">
+              En güncel bonuslar, kayıp iadeleri ve bedava dönüş fırsatları (Freespin) çok yakında burada listelenecek. Harika sürprizlere hazır olun!
+            </p>
+          </div>
+        )}
+
+        {view === 'docs' && (
+          <div className="animate-fade-in w-full h-full relative z-[50] flex flex-col items-center p-10 overflow-y-auto">
+            <h1 className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-4 w-full max-w-3xl text-center">Kullanım Şartları ve Gizlilik</h1>
+            <div className="max-w-3xl text-[#8b92a5] space-y-6 text-left text-sm md:text-base bg-[#131823] p-8 rounded-2xl border border-white/5">
+              <p className="text-white font-semibold text-lg mb-2">Platformumuzu kullanmadan önce lütfen aşağıdaki şartları dikkatlice okuyunuz.</p>
+              
+              <div className="space-y-2">
+                <h3 className="text-white font-bold">1. Genel Kurallar</h3>
+                <p>Sitemiz yalnızca 18 yaşından büyük ve yasal olarak bahis oynama ehliyetine sahip kullanıcılara hizmet vermektedir.</p>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-white font-bold">2. Güvenlik ve Gizlilik</h3>
+                <p>Kullanıcı verileriniz, şifreleriniz ve finansal işlemleriniz uçtan uca şifrelenmiş sunucularımızda (SSL) en üst düzey güvenlik protokolleriyle saklanmaktadır. Üçüncü şahıslarla asla paylaşılmaz.</p>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-white font-bold">3. Sorumlu Oyun</h3>
+                <p>Bahis bir eğlence aracıdır. Limitlerinizi aşmayınız ve kaybetmeyi göze alamayacağınız tutarlarla oynamayınız.</p>
+              </div>
+            </div>
           </div>
         )}
 
@@ -2563,10 +2640,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
         
         {view === 'upcomingMatches' && (
-          <GercekView 
-            onNavigate={handleViewChange} 
-            initialTab="upcoming" 
-          />
+          <Spor724View onNavigate={handleViewChange} />
         )}
 
         {view === 'casino2' && (
@@ -2797,7 +2871,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       </div>
       </div>
       
-      {view !== 'admin' && view !== 'sports' && (view === 'originals' ? <RetroFooter /> : <Footer />)}
+      {view !== 'admin' && view !== 'sports' && view !== 'spor724' && view !== 'upcomingMatches' && (view === 'originals' ? <RetroFooter /> : <Footer />)}
           </main>
 
           {view !== 'admin' && !showLiveScoreModal && !isMobile && (

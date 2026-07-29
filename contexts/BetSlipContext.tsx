@@ -7,12 +7,19 @@ export interface BetSelection {
   matchName: string; // e.g., Team A vs Team B
   selectionName: string; // e.g., Maç Sonucu : 1
   odd: number;
+  isSpecialCombo?: boolean;
+  legs?: { match: string; selection: string; market: string }[];
 }
+
+export type BetType = 'tekli' | 'kombine' | 'sistem';
 
 interface BetSlipContextProps {
   betSlip: BetSelection[];
   betAmount: number;
   setBetAmount: (amount: number) => void;
+  betType: BetType;
+  setBetType: (type: BetType) => void;
+  isLocked: boolean;
   addSelection: (selection: BetSelection) => void;
   removeSelection: (id: string) => void;
   clearBetSlip: () => void;
@@ -26,8 +33,29 @@ const BetSlipContext = createContext<BetSlipContextProps | undefined>(undefined)
 export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [betSlip, setBetSlip] = useState<BetSelection[]>([]);
   const [betAmount, setBetAmount] = useState<number>(0);
+  const [betType, setBetType] = useState<BetType>('kombine');
+
+  const isLocked = betSlip.length === 1 && !!betSlip[0].isSpecialCombo;
 
   const addSelection = (newSelection: BetSelection) => {
+    // If trying to add a special combo
+    if (newSelection.isSpecialCombo) {
+      if (betSlip.length === 1 && betSlip[0].id === newSelection.id) {
+        // Toggle it off
+        setBetSlip([]);
+        return;
+      }
+      setBetSlip([newSelection]);
+      setBetType('sistem'); // Switch to Sistem tab
+      return;
+    }
+
+    // If the bet slip is locked by a special combo, prevent normal additions
+    if (isLocked) {
+      triggerGlobalToast({ type: 'warning', message: 'Sistem kuponu aktifken ekleme yapamazsınız.' });
+      return;
+    }
+
     setBetSlip(prev => {
       // 1. If exactly the same selection is clicked again, remove it (toggle off)
       const existingSelection = prev.find(s => s.id === newSelection.id);
@@ -65,7 +93,7 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
     return 0;
   };
 
-  const accumulatorBoost = getBoostPercentage(betSlip.length);
+  const accumulatorBoost = isLocked ? 0 : getBoostPercentage(betSlip.length);
   const basePayout = totalOdds * betAmount;
   const potentialPayout = totalOdds > 0 ? basePayout + (basePayout * accumulatorBoost) : 0;
 
@@ -73,7 +101,10 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
     <BetSlipContext.Provider value={{
       betSlip, 
       betAmount, 
-      setBetAmount, 
+      setBetAmount,
+      betType,
+      setBetType,
+      isLocked,
       addSelection, 
       removeSelection, 
       clearBetSlip, 

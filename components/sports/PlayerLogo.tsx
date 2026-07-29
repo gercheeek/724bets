@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ProceduralLogo } from './ProceduralLogo';
+import logoIndex from '../../public/assets/logo-index.json';
 
 interface PlayerLogoProps {
   name: string;
@@ -9,45 +10,92 @@ interface PlayerLogoProps {
 const normalize = (str: string) => {
   if (!str) return '';
   return str.toLowerCase()
-    .replace(/ fc$/i, '')
-    .replace(/ afc$/i, '')
-    .replace(/^fc /i, '')
+    // Suffixes
+    .replace(/\s+(fc|afc|sc|asd|cf|fk|nk|hnk|us|as|sk|ik)$/i, '')
+    // Prefixes
+    .replace(/^(fc|afc|sc|asd|cf|fk|nk|hnk|us|as|sk|ik|cd|sd)\s+/i, '')
     .replace(/[^\w\sğüşıöç]/g, '')
     .trim()
     .replace(/\s+/g, '-');
 };
 
+const logoCache = new Map<string, string | null>();
+
+export const findBestLogoMatch = (rawName: string) => {
+  if (!rawName) return null;
+  
+  if (logoCache.has(rawName)) {
+    return logoCache.get(rawName);
+  }
+
+  const norm = normalize(rawName);
+  let match: string | null = null;
+  
+  // 1. Birebir tam eşleşme (örn: "fenerbahçe" -> "fenerbahçe.png")
+  if (logoIndex.includes(norm)) {
+    match = norm;
+  } 
+  // 2. Prefix eşleşmesi
+  else if (logoIndex.find((file: string) => file.startsWith(norm + '-'))) {
+    match = logoIndex.find((file: string) => file.startsWith(norm + '-')) || null;
+  }
+  // 3. İçinde geçme eşleşmesi
+  else if (logoIndex.find((file: string) => norm.includes(file))) {
+    match = logoIndex.find((file: string) => norm.includes(file)) || null;
+  }
+  // 4. En uzun kelimeden fuzzy (esnek) arama
+  else {
+    const words = norm.split('-');
+    const longestWord = [...words].sort((a, b) => b.length - a.length)[0];
+    
+    if (longestWord && longestWord.length > 4) {
+        const partialMatch = logoIndex.find((file: string) => file.includes(longestWord));
+        if (partialMatch) match = partialMatch;
+    }
+  }
+  
+  logoCache.set(rawName, match);
+  return match;
+}
+
 export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) => {
   const [hasError, setHasError] = useState(false);
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    if (!name) {
-       setHasError(true);
-       return;
-    }
-    
-    // We only use the explicitly downloaded logos in public/assets/logos/
-    const normalizedName = normalize(name);
-    setImgUrl(`/assets/logos/${normalizedName}.png`);
-    setHasError(false);
-  }, [name]);
+  // Akıllı eşleşme algoritması ile lokal dosyayı bul
+  const bestMatch = findBestLogoMatch(name);
+  const localImgUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
+
+  const urls = [localImgUrl, fallbackLogo].filter(Boolean) as string[];
+  const [pipelineStep, setPipelineStep] = useState(0);
+  const currentUrl = urls[pipelineStep];
 
   const handleError = () => {
-    setHasError(true);
+    const nextStep = pipelineStep + 1;
+    if (nextStep < urls.length) {
+      setPipelineStep(nextStep);
+    } else {
+      setHasError(true);
+    }
+  };
+  
+  const handleLoad = () => {
+    setIsLoaded(true);
   };
 
-  if (hasError || !imgUrl) {
+  if (hasError || !currentUrl) {
     return <ProceduralLogo name={name} />;
   }
 
   return (
-    <img 
-      src={imgUrl} 
-      alt={name} 
-      className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.7)] hover:scale-110 transition-transform duration-300"
-      onError={handleError}
-      loading="lazy"
-    />
+    <div className="relative w-full h-full flex items-center justify-center">
+      <img 
+        src={currentUrl} 
+        alt={name} 
+        className={`w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.7)] hover:scale-110 transition-transform duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+        onError={handleError}
+        onLoad={handleLoad}
+      />
+    </div>
   );
 };

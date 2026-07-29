@@ -1,0 +1,4198 @@
+[
+  {
+    "team": "Liga MX All Stars",
+    "norm": "liga-mx-all-stars"
+  },
+  {
+    "team": "SC Trestina ASD",
+    "norm": "trestina"
+  },
+  {
+    "team": "AS Saint-Étienne",
+    "norm": "sainttienne"
+  },
+  {
+    "team": "Royale Union Hutoise",
+    "norm": "royale-union-hutoise"
+  },
+  {
+    "team": "RFC Meux",
+    "norm": "rfc-meux"
+  },
+  {
+    "team": "Al-Dhafra",
+    "norm": "aldhafra"
+  },
+  {
+    "team": "Jamaika (Kadınlar)",
+    "norm": "jamaika-kadınlar"
+  },
+  {
+    "team": "Kolombiya (Kadınlar)",
+    "norm": "kolombiya-kadınlar"
+  },
+  {
+    "team": "Kosta Rika (Kadınlar)",
+    "norm": "kosta-rika-kadınlar"
+  },
+  {
+    "team": "Venezuela (Kadınlar)",
+    "norm": "venezuela-kadınlar"
+  },
+  {
+    "team": "Meksika (Kadınlar)",
+    "norm": "meksika-kadınlar"
+  },
+  {
+    "team": "Porto Riko (Kadınlar)",
+    "norm": "porto-riko-kadınlar"
+  },
+  {
+    "team": "El Salvador (Kadınlar)",
+    "norm": "el-salvador-kadınlar"
+  },
+  {
+    "team": "Dominik Cumhuriyeti (Kadınlar)",
+    "norm": "dominik-cumhuriyeti-kadınlar"
+  },
+  {
+    "team": "Vietnam",
+    "norm": "vietnam"
+  },
+  {
+    "team": "Singapur",
+    "norm": "singapur"
+  },
+  {
+    "team": "Rayon Sports FC",
+    "norm": "rayon-sports"
+  },
+  {
+    "team": "Kamerun (Kadınlar)",
+    "norm": "kamerun-kadınlar"
+  },
+  {
+    "team": "Mali (Kadınlar)",
+    "norm": "mali-kadınlar"
+  },
+  {
+    "team": "Gana (Kadınlar)",
+    "norm": "gana-kadınlar"
+  },
+  {
+    "team": "Cape Verde (Kadınlar)",
+    "norm": "cape-verde-kadınlar"
+  },
+  {
+    "team": "Fas (Kadınlar)",
+    "norm": "fas-kadınlar"
+  },
+  {
+    "team": "Cezayir (Kadınlar)",
+    "norm": "cezayir-kadınlar"
+  },
+  {
+    "team": "Senegal (Kadınlar)",
+    "norm": "senegal-kadınlar"
+  },
+  {
+    "team": "Kenya (Kadınlar)",
+    "norm": "kenya-kadınlar"
+  },
+  {
+    "team": "Estudiantes  La Plata",
+    "norm": "estudiantes-la-plata"
+  },
+  {
+    "team": "CD Universidad Catolica",
+    "norm": "universidad-catolica"
+  },
+  {
+    "team": "LDU Quito",
+    "norm": "ldu-quito"
+  },
+  {
+    "team": "Jagiellonia Bialystok",
+    "norm": "jagiellonia-bialystok"
+  },
+  {
+    "team": "Dinamo Kiev",
+    "norm": "dinamo-kiev"
+  },
+  {
+    "team": "Lech Poznan",
+    "norm": "lech-poznan"
+  },
+  {
+    "team": "SK Slovan Bratislava",
+    "norm": "slovan-bratislava"
+  },
+  {
+    "team": "FC Kairat Almaty",
+    "norm": "kairat-almaty"
+  },
+  {
+    "team": "Omonia Nicosia",
+    "norm": "omonia-nicosia"
+  },
+  {
+    "team": "Fk Spyris Kaunas",
+    "norm": "spyris-kaunas"
+  },
+  {
+    "team": "AC Sparta Prag",
+    "norm": "ac-sparta-prag"
+  },
+  {
+    "team": "Olympiacos Piraeus",
+    "norm": "olympiacos-piraeus"
+  },
+  {
+    "team": "NK Celje",
+    "norm": "celje"
+  },
+  {
+    "team": "FC Kopenhag",
+    "norm": "kopenhag"
+  },
+  {
+    "team": "FK Ludogorets Razgrad",
+    "norm": "ludogorets-razgrad"
+  },
+  {
+    "team": "Paksi SE",
+    "norm": "paksi-se"
+  },
+  {
+    "team": "FK Panevezys",
+    "norm": "panevezys"
+  },
+  {
+    "team": "FC Zimbru Chisinau",
+    "norm": "zimbru-chisinau"
+  },
+  {
+    "team": "Valur Reykjavik FC",
+    "norm": "valur-reykjavik"
+  },
+  {
+    "team": "KS Rakow Czestochowa",
+    "norm": "ks-rakow-czestochowa"
+  },
+  {
+    "team": "FK Auda",
+    "norm": "auda"
+  },
+  {
+    "team": "FK Borac Banja Luka",
+    "norm": "borac-banja-luka"
+  },
+  {
+    "team": "FC Atert Bissen",
+    "norm": "atert-bissen"
+  },
+  {
+    "team": "FK ML Vitebsk",
+    "norm": "ml-vitebsk"
+  },
+  {
+    "team": "FK Velež Mostar",
+    "norm": "vele-mostar"
+  },
+  {
+    "team": "FK DAC Dunajska Streda",
+    "norm": "dac-dunajska-streda"
+  },
+  {
+    "team": "Fc Luka Koper",
+    "norm": "luka-koper"
+  },
+  {
+    "team": "NK Bravo",
+    "norm": "bravo"
+  },
+  {
+    "team": "Rapid Wien",
+    "norm": "rapid-wien"
+  },
+  {
+    "team": "Ajax Amsterdam",
+    "norm": "ajax-amsterdam"
+  },
+  {
+    "team": "FK Vojvodina",
+    "norm": "vojvodina"
+  },
+  {
+    "team": "NK Aluminij Kidricevo",
+    "norm": "aluminij-kidricevo"
+  },
+  {
+    "team": "AC d'Escaldes",
+    "norm": "ac-descaldes"
+  },
+  {
+    "team": "FK Partizan Belgrad",
+    "norm": "partizan-belgrad"
+  },
+  {
+    "team": "FK Liepaja",
+    "norm": "liepaja"
+  },
+  {
+    "team": "Hibernian Edinburgh FC",
+    "norm": "hibernian-edinburgh"
+  },
+  {
+    "team": "FC Malisheva",
+    "norm": "malisheva"
+  },
+  {
+    "team": "FC Belshina Bobruisk",
+    "norm": "belshina-bobruisk"
+  },
+  {
+    "team": "FC Minks",
+    "norm": "minks"
+  },
+  {
+    "team": "SC Austria Lustenau",
+    "norm": "austria-lustenau"
+  },
+  {
+    "team": "Schwarz-Weis Bregenz",
+    "norm": "schwarzweis-bregenz"
+  },
+  {
+    "team": "FC Blau Weiss Linz",
+    "norm": "blau-weiss-linz"
+  },
+  {
+    "team": "Rapid Wien II",
+    "norm": "rapid-wien-ii"
+  },
+  {
+    "team": "SK Sturm Graz II",
+    "norm": "sturm-graz-ii"
+  },
+  {
+    "team": "RAAL La Louviere",
+    "norm": "raal-la-louviere"
+  },
+  {
+    "team": "Standard Liege",
+    "norm": "standard-liege"
+  },
+  {
+    "team": "Lommel SK",
+    "norm": "lommel"
+  },
+  {
+    "team": "San Martin de Tucuman",
+    "norm": "san-martin-de-tucuman"
+  },
+  {
+    "team": "CA Acassuso",
+    "norm": "ca-acassuso"
+  },
+  {
+    "team": "CA San Telmo",
+    "norm": "ca-san-telmo"
+  },
+  {
+    "team": "CA San Miguel",
+    "norm": "ca-san-miguel"
+  },
+  {
+    "team": "Ciudad de Bolivar",
+    "norm": "ciudad-de-bolivar"
+  },
+  {
+    "team": "CA Mitre",
+    "norm": "ca-mitre"
+  },
+  {
+    "team": "Club Almagro",
+    "norm": "club-almagro"
+  },
+  {
+    "team": "CA Ferrocarril Midland",
+    "norm": "ca-ferrocarril-midland"
+  },
+  {
+    "team": "CA Temperley",
+    "norm": "ca-temperley"
+  },
+  {
+    "team": "Club Gimnasia y Tiro Salta",
+    "norm": "club-gimnasia-y-tiro-salta"
+  },
+  {
+    "team": "Quilmes AC",
+    "norm": "quilmes-ac"
+  },
+  {
+    "team": "CD Maipu",
+    "norm": "maipu"
+  },
+  {
+    "team": "CA Atlanta",
+    "norm": "ca-atlanta"
+  },
+  {
+    "team": "CS Deportivo Madryn",
+    "norm": "cs-deportivo-madryn"
+  },
+  {
+    "team": "CA Guemes",
+    "norm": "ca-guemes"
+  },
+  {
+    "team": "Tristan Suarez",
+    "norm": "tristan-suarez"
+  },
+  {
+    "team": "CA Chaco For Ever",
+    "norm": "ca-chaco-for-ever"
+  },
+  {
+    "team": "Deportivo Moron",
+    "norm": "deportivo-moron"
+  },
+  {
+    "team": "CA Huracan",
+    "norm": "ca-huracan"
+  },
+  {
+    "team": "Atletico Tucuman",
+    "norm": "atletico-tucuman"
+  },
+  {
+    "team": "Newells Old Boys",
+    "norm": "newells-old-boys"
+  },
+  {
+    "team": "AA Estudiantes",
+    "norm": "aa-estudiantes"
+  },
+  {
+    "team": "Timbuense",
+    "norm": "timbuense"
+  },
+  {
+    "team": "Central Cordoba de Rosario",
+    "norm": "central-cordoba-de-rosario"
+  },
+  {
+    "team": "CA Los Andes (Altyapı)",
+    "norm": "ca-los-andes-altyapı"
+  },
+  {
+    "team": "Almirante Brown (Altyapı)",
+    "norm": "almirante-brown-altyapı"
+  },
+  {
+    "team": "Chacarita Juniors (Altyapı)",
+    "norm": "chacarita-juniors-altyapı"
+  },
+  {
+    "team": "CA Talleres (Altyapı)",
+    "norm": "ca-talleres-altyapı"
+  },
+  {
+    "team": "CA Nueva Chicago (Altyapı)",
+    "norm": "ca-nueva-chicago-altyapı"
+  },
+  {
+    "team": "CA Colegiales (Altyapı)",
+    "norm": "ca-colegiales-altyapı"
+  },
+  {
+    "team": "CA Acassuso (Altyapı)",
+    "norm": "ca-acassuso-altyapı"
+  },
+  {
+    "team": "CA San Miguel (Altyapı)",
+    "norm": "ca-san-miguel-altyapı"
+  },
+  {
+    "team": "CA Atlas (Altyapı)",
+    "norm": "ca-atlas-altyapı"
+  },
+  {
+    "team": "CD Juventud Unida San Miguel (Altyapı)",
+    "norm": "juventud-unida-san-miguel-altyapı"
+  },
+  {
+    "team": "CA Argentino de Rosario (Altyapı)",
+    "norm": "ca-argentino-de-rosario-altyapı"
+  },
+  {
+    "team": "AS YD JJ Urquiza (Altyapı)",
+    "norm": "yd-jj-urquiza-altyapı"
+  },
+  {
+    "team": "Canuelas FC (Altyapı)",
+    "norm": "canuelas-fc-altyapı"
+  },
+  {
+    "team": "Club Estrella Del Sur (Altyapı)",
+    "norm": "club-estrella-del-sur-altyapı"
+  },
+  {
+    "team": "CA Defensores Unidos (Altyapı)",
+    "norm": "ca-defensores-unidos-altyapı"
+  },
+  {
+    "team": "Deportivo Merlo (Altyapı)",
+    "norm": "deportivo-merlo-altyapı"
+  },
+  {
+    "team": "CA Brown Adrogue (Altyapı)",
+    "norm": "ca-brown-adrogue-altyapı"
+  },
+  {
+    "team": "CA Villa San Carlos (Altyapı)",
+    "norm": "ca-villa-san-carlos-altyapı"
+  },
+  {
+    "team": "CA Puerto Nuevo (Altyapı)",
+    "norm": "ca-puerto-nuevo-altyapı"
+  },
+  {
+    "team": "Centro Espanol (Altyapı)",
+    "norm": "centro-espanol-altyapı"
+  },
+  {
+    "team": "CSD Yupanqui (Altyapı)",
+    "norm": "csd-yupanqui-altyapı"
+  },
+  {
+    "team": "Berazategui (Altyapı)",
+    "norm": "berazategui-altyapı"
+  },
+  {
+    "team": "CA Lugano (Altyapı)",
+    "norm": "ca-lugano-altyapı"
+  },
+  {
+    "team": "CSyD Central Ballester (Altyapı)",
+    "norm": "csyd-central-ballester-altyapı"
+  },
+  {
+    "team": "Comunicaciones Buenos Aires (Altyapı)",
+    "norm": "comunicaciones-buenos-aires-altyapı"
+  },
+  {
+    "team": "Club Sportivo Dock Sud (Altyapı)",
+    "norm": "club-sportivo-dock-sud-altyapı"
+  },
+  {
+    "team": "Deportivo Laferrere (Altyapı)",
+    "norm": "deportivo-laferrere-altyapı"
+  },
+  {
+    "team": "CSD Liniers (Altyapı)",
+    "norm": "csd-liniers-altyapı"
+  },
+  {
+    "team": "Remo PA",
+    "norm": "remo-pa"
+  },
+  {
+    "team": "Atletico Mineiro",
+    "norm": "atletico-mineiro"
+  },
+  {
+    "team": "Sao Paulo FC U20 (Kadınlar)",
+    "norm": "sao-paulo-fc-u20-kadınlar"
+  },
+  {
+    "team": "SE Palmeiras U20 (Kadınlar)",
+    "norm": "se-palmeiras-u20-kadınlar"
+  },
+  {
+    "team": "ADAG Gloriense",
+    "norm": "adag-gloriense"
+  },
+  {
+    "team": "AD Aracaju",
+    "norm": "ad-aracaju"
+  },
+  {
+    "team": "Cherno More Varna",
+    "norm": "cherno-more-varna"
+  },
+  {
+    "team": "FK Arda Kardzhali",
+    "norm": "arda-kardzhali"
+  },
+  {
+    "team": "Shenzhen Peng City",
+    "norm": "shenzhen-peng-city"
+  },
+  {
+    "team": "Liaoning Tieren",
+    "norm": "liaoning-tieren"
+  },
+  {
+    "team": "Shanghai Greenland  ",
+    "norm": "shanghai-greenland"
+  },
+  {
+    "team": "Qingdao West Coast FC",
+    "norm": "qingdao-west-coast"
+  },
+  {
+    "team": "Qingdao Hainiu FC",
+    "norm": "qingdao-hainiu"
+  },
+  {
+    "team": "CD Cobresal",
+    "norm": "cobresal"
+  },
+  {
+    "team": "CD Union La Calera",
+    "norm": "union-la-calera"
+  },
+  {
+    "team": "CD Huachipato",
+    "norm": "huachipato"
+  },
+  {
+    "team": "CD Colo Colo",
+    "norm": "colo-colo"
+  },
+  {
+    "team": "CD Palestino",
+    "norm": "palestino"
+  },
+  {
+    "team": "CD La Serena",
+    "norm": "la-serena"
+  },
+  {
+    "team": "Deportes Temuco (Kadınlar)",
+    "norm": "deportes-temuco-kadınlar"
+  },
+  {
+    "team": "CD Universidad Catolica Santiago (Kadınlar)",
+    "norm": "universidad-catolica-santiago-kadınlar"
+  },
+  {
+    "team": "CD San Luis de Quillota (Kadınlar)",
+    "norm": "san-luis-de-quillota-kadınlar"
+  },
+  {
+    "team": "Everton Vina del Mar (Kadınlar)",
+    "norm": "everton-vina-del-mar-kadınlar"
+  },
+  {
+    "team": "CD Cobresal (Kadınlar)",
+    "norm": "cobresal-kadınlar"
+  },
+  {
+    "team": "CD Union La Calera (Kadınlar)",
+    "norm": "union-la-calera-kadınlar"
+  },
+  {
+    "team": "AD San Carlos",
+    "norm": "ad-san-carlos"
+  },
+  {
+    "team": "CS Cartagines",
+    "norm": "cs-cartagines"
+  },
+  {
+    "team": "Atletico Nacional",
+    "norm": "atletico-nacional"
+  },
+  {
+    "team": "America de Cali",
+    "norm": "america-de-cali"
+  },
+  {
+    "team": "Boyaca Chico",
+    "norm": "boyaca-chico"
+  },
+  {
+    "team": "Internacional FC de Palmira",
+    "norm": "internacional-fc-de-palmira"
+  },
+  {
+    "team": "Internacional de Bogota",
+    "norm": "internacional-de-bogota"
+  },
+  {
+    "team": "CD Barranquilla FC",
+    "norm": "barranquilla"
+  },
+  {
+    "team": "Real Cartagena",
+    "norm": "real-cartagena"
+  },
+  {
+    "team": "HNK Gorica",
+    "norm": "gorica"
+  },
+  {
+    "team": "1. FC Slovacko",
+    "norm": "1-fc-slovacko"
+  },
+  {
+    "team": "SK Artis Brno",
+    "norm": "artis-brno"
+  },
+  {
+    "team": "SK Slavia Prague",
+    "norm": "slavia-prague"
+  },
+  {
+    "team": "FC Viktoria Plzen",
+    "norm": "viktoria-plzen"
+  },
+  {
+    "team": "FK Mlada Boleslav",
+    "norm": "mlada-boleslav"
+  },
+  {
+    "team": "TJ Hluboka nad Vltavou",
+    "norm": "tj-hluboka-nad-vltavou"
+  },
+  {
+    "team": "Spartak Sobeslav",
+    "norm": "spartak-sobeslav"
+  },
+  {
+    "team": "FSC Stara Rise",
+    "norm": "fsc-stara-rise"
+  },
+  {
+    "team": "FC Slovan Havlickuv Brod",
+    "norm": "slovan-havlickuv-brod"
+  },
+  {
+    "team": "CD Municipal Limeno",
+    "norm": "municipal-limeno"
+  },
+  {
+    "team": "CD Inca",
+    "norm": "inca"
+  },
+  {
+    "team": "CD Luis Angel Firpo",
+    "norm": "luis-angel-firpo"
+  },
+  {
+    "team": "Fuerte San Francisco",
+    "norm": "fuerte-san-francisco"
+  },
+  {
+    "team": "Orense SC",
+    "norm": "orense"
+  },
+  {
+    "team": "Mushuc Runa SC",
+    "norm": "mushuc-runa"
+  },
+  {
+    "team": "CD Universidad Catolica Quito",
+    "norm": "universidad-catolica-quito"
+  },
+  {
+    "team": "Tecnico Universitario",
+    "norm": "tecnico-universitario"
+  },
+  {
+    "team": "SD Aucas",
+    "norm": "aucas"
+  },
+  {
+    "team": "CD River Plate Ecuador",
+    "norm": "river-plate-ecuador"
+  },
+  {
+    "team": "CD Leones Del Norte",
+    "norm": "leones-del-norte"
+  },
+  {
+    "team": "Delfin SC",
+    "norm": "delfin"
+  },
+  {
+    "team": "Vinotinto FC Ecuador",
+    "norm": "vinotinto-fc-ecuador"
+  },
+  {
+    "team": "El San Antonio FC",
+    "norm": "el-san-antonio"
+  },
+  {
+    "team": "Gualaceo SC",
+    "norm": "gualaceo"
+  },
+  {
+    "team": "FC Jazz Pori",
+    "norm": "jazz-pori"
+  },
+  {
+    "team": "KuPS Akatemia",
+    "norm": "kups-akatemia"
+  },
+  {
+    "team": "Turun Palloseura",
+    "norm": "turun-palloseura"
+  },
+  {
+    "team": "Seinajoen JK",
+    "norm": "seinajoen-jk"
+  },
+  {
+    "team": "IPS Edustus",
+    "norm": "ips-edustus"
+  },
+  {
+    "team": "KJP Kouvola",
+    "norm": "kjp-kouvola"
+  },
+  {
+    "team": "TiPS",
+    "norm": "tips"
+  },
+  {
+    "team": "Valtti",
+    "norm": "valtti"
+  },
+  {
+    "team": "Jyvaskylan Seudun Palloseura",
+    "norm": "jyvaskylan-seudun-palloseura"
+  },
+  {
+    "team": "FCJ Blackbird",
+    "norm": "fcj-blackbird"
+  },
+  {
+    "team": "KPV Akatemia",
+    "norm": "kpv-akatemia"
+  },
+  {
+    "team": "Lapuan Virkiä",
+    "norm": "lapuan-virki"
+  },
+  {
+    "team": "LAUTP",
+    "norm": "lautp"
+  },
+  {
+    "team": "MP/SavU",
+    "norm": "mpsavu"
+  },
+  {
+    "team": "Mikkelin Palloilijat",
+    "norm": "mikkelin-palloilijat"
+  },
+  {
+    "team": "Käpylän Pallo",
+    "norm": "kpyln-pallo"
+  },
+  {
+    "team": "JIPPO",
+    "norm": "jippo"
+  },
+  {
+    "team": "Järvenpään Palloseura",
+    "norm": "jrvenpn-palloseura"
+  },
+  {
+    "team": "Kotkan Tyovaen Palloilijat",
+    "norm": "kotkan-tyovaen-palloilijat"
+  },
+  {
+    "team": "Kerho 07",
+    "norm": "kerho-07"
+  },
+  {
+    "team": "Ekenas IF",
+    "norm": "ekenas-if"
+  },
+  {
+    "team": "Klubi-04",
+    "norm": "klubi04"
+  },
+  {
+    "team": "PK-35 Helsinki",
+    "norm": "pk35-helsinki"
+  },
+  {
+    "team": "AS Monaco",
+    "norm": "monaco"
+  },
+  {
+    "team": "Marsilya",
+    "norm": "marsilya"
+  },
+  {
+    "team": "Puskas Academy",
+    "norm": "puskas-academy"
+  },
+  {
+    "team": "Budapest Honvéd",
+    "norm": "budapest-honvd"
+  },
+  {
+    "team": "MTK Budapest FC",
+    "norm": "mtk-budapest"
+  },
+  {
+    "team": "Hamburg SV",
+    "norm": "hamburg-sv"
+  },
+  {
+    "team": "Borussia Monchengladbach",
+    "norm": "borussia-monchengladbach"
+  },
+  {
+    "team": "IBV Vestmannaeyjar (Kadınlar)",
+    "norm": "ibv-vestmannaeyjar-kadınlar"
+  },
+  {
+    "team": "Thor/KA Akureyri (Kadınlar)",
+    "norm": "thorka-akureyri-kadınlar"
+  },
+  {
+    "team": "IBV Vestmannaeyjar",
+    "norm": "ibv-vestmannaeyjar"
+  },
+  {
+    "team": "UMF Selfoss",
+    "norm": "umf-selfoss"
+  },
+  {
+    "team": "Dalvik/Reynir",
+    "norm": "dalvikreynir"
+  },
+  {
+    "team": "Magni Grenivik",
+    "norm": "magni-grenivik"
+  },
+  {
+    "team": "KFA Austfjarda",
+    "norm": "kfa-austfjarda"
+  },
+  {
+    "team": "Haukar Hafnarfjordur",
+    "norm": "haukar-hafnarfjordur"
+  },
+  {
+    "team": "KFG Gardabaer",
+    "norm": "kfg-gardabaer"
+  },
+  {
+    "team": "Víkingur Ólafsvík",
+    "norm": "vkingur-lafsvk"
+  },
+  {
+    "team": "Fjolnir",
+    "norm": "fjolnir"
+  },
+  {
+    "team": "FC Kari",
+    "norm": "kari"
+  },
+  {
+    "team": "Kormakur/hvöt",
+    "norm": "kormakurhvöt"
+  },
+  {
+    "team": "UMF Throttur Vogum",
+    "norm": "umf-throttur-vogum"
+  },
+  {
+    "team": "Hviti Riddarinn",
+    "norm": "hviti-riddarinn"
+  },
+  {
+    "team": "Fylkir Reykjavik",
+    "norm": "fylkir-reykjavik"
+  },
+  {
+    "team": "Völsungur",
+    "norm": "völsungur"
+  },
+  {
+    "team": "UMF Grindavik",
+    "norm": "umf-grindavik"
+  },
+  {
+    "team": "Leiknir Reykjavík",
+    "norm": "leiknir-reykjavk"
+  },
+  {
+    "team": "Throttur Reykjavik",
+    "norm": "throttur-reykjavik"
+  },
+  {
+    "team": "UMF Afturelding",
+    "norm": "umf-afturelding"
+  },
+  {
+    "team": "HK Kopavogur (Kadınlar)",
+    "norm": "hk-kopavogur-kadınlar"
+  },
+  {
+    "team": "UMF Selfoss (Kadınlar)",
+    "norm": "umf-selfoss-kadınlar"
+  },
+  {
+    "team": "Vidir Gardur",
+    "norm": "vidir-gardur"
+  },
+  {
+    "team": "KF Fjallabyggdar",
+    "norm": "kf-fjallabyggdar"
+  },
+  {
+    "team": "Knattspyrnufelag Vesturbaejar",
+    "norm": "knattspyrnufelag-vesturbaejar"
+  },
+  {
+    "team": "Reynir Sandgerdi",
+    "norm": "reynir-sandgerdi"
+  },
+  {
+    "team": "Maccabi Petach Tikva ",
+    "norm": "maccabi-petach-tikva"
+  },
+  {
+    "team": "Hapoel Petach Tikva",
+    "norm": "hapoel-petach-tikva"
+  },
+  {
+    "team": "St. Patricks Athletic",
+    "norm": "st-patricks-athletic"
+  },
+  {
+    "team": "Galway FC",
+    "norm": "galway"
+  },
+  {
+    "team": "Athlone  ",
+    "norm": "athlone"
+  },
+  {
+    "team": "UC Dublin",
+    "norm": "uc-dublin"
+  },
+  {
+    "team": "FC Kaisar Kyzylorda",
+    "norm": "kaisar-kyzylorda"
+  },
+  {
+    "team": "FK Zhenys",
+    "norm": "zhenys"
+  },
+  {
+    "team": "Inter Milan",
+    "norm": "inter-milan"
+  },
+  {
+    "team": "AC Monza",
+    "norm": "ac-monza"
+  },
+  {
+    "team": "SSC Napoli",
+    "norm": "ssc-napoli"
+  },
+  {
+    "team": "FC Parma Calcio 1913",
+    "norm": "parma-calcio-1913"
+  },
+  {
+    "team": "AC Milan",
+    "norm": "ac-milan"
+  },
+  {
+    "team": "Burgan SC",
+    "norm": "burgan"
+  },
+  {
+    "team": "Al Jazira Kuwait",
+    "norm": "al-jazira-kuwait"
+  },
+  {
+    "team": "Sulaibikhat SC",
+    "norm": "sulaibikhat"
+  },
+  {
+    "team": "Al Shamiya FC",
+    "norm": "al-shamiya"
+  },
+  {
+    "team": "Sporty FC",
+    "norm": "sporty"
+  },
+  {
+    "team": " Al Yarmouk SC",
+    "norm": "al-yarmouk"
+  },
+  {
+    "team": "Al Sahel SC Abu Halifa",
+    "norm": "al-sahel-sc-abu-halifa"
+  },
+  {
+    "team": "Khaitan",
+    "norm": "khaitan"
+  },
+  {
+    "team": "FK Tukums 2000/Telms",
+    "norm": "tukums-2000telms"
+  },
+  {
+    "team": "SK Super Nova Salaspils 2",
+    "norm": "super-nova-salaspils-2"
+  },
+  {
+    "team": "Riga Mariners",
+    "norm": "riga-mariners"
+  },
+  {
+    "team": "Busan I Park",
+    "norm": "busan-i-park"
+  },
+  {
+    "team": "Paju Citizen FC",
+    "norm": "paju-citizen"
+  },
+  {
+    "team": "Ulsan Hyundai FC",
+    "norm": "ulsan-hyundai"
+  },
+  {
+    "team": "Daejeon Citizen FC",
+    "norm": "daejeon-citizen"
+  },
+  {
+    "team": "Chivas Guadalajara",
+    "norm": "chivas-guadalajara"
+  },
+  {
+    "team": "Pumas UNAM",
+    "norm": "pumas-unam"
+  },
+  {
+    "team": "Atletico San Luis",
+    "norm": "atletico-san-luis"
+  },
+  {
+    "team": "Querétaro FC",
+    "norm": "quertaro"
+  },
+  {
+    "team": "Club León",
+    "norm": "club-len"
+  },
+  {
+    "team": "Cruz Azul AC",
+    "norm": "cruz-azul-ac"
+  },
+  {
+    "team": "SC Cambuur Leeuwarden",
+    "norm": "cambuur-leeuwarden"
+  },
+  {
+    "team": "Excelsior",
+    "norm": "excelsior"
+  },
+  {
+    "team": "SC Heerenveen",
+    "norm": "heerenveen"
+  },
+  {
+    "team": "Feyenoord Rotterdam",
+    "norm": "feyenoord-rotterdam"
+  },
+  {
+    "team": "Idukki Phoenix",
+    "norm": "idukki-phoenix"
+  },
+  {
+    "team": "Blasters Cochin",
+    "norm": "blasters-cochin"
+  },
+  {
+    "team": "Noel Larwig",
+    "norm": "noel-larwig"
+  },
+  {
+    "team": "Bruno Kokot",
+    "norm": "bruno-kokot"
+  },
+  {
+    "team": "Hermes DVS",
+    "norm": "hermes-dvs"
+  },
+  {
+    "team": "VCC 1",
+    "norm": "vcc-1"
+  },
+  {
+    "team": "ECC LK",
+    "norm": "ecc-lk"
+  },
+  {
+    "team": "Maastricht LK 2",
+    "norm": "maastricht-lk-2"
+  },
+  {
+    "team": "Bloemendaal",
+    "norm": "bloemendaal"
+  },
+  {
+    "team": "Hoofddorp Jaguars LK",
+    "norm": "hoofddorp-jaguars-lk"
+  },
+  {
+    "team": "South Africa Emerging Team",
+    "norm": "south-africa-emerging-team"
+  },
+  {
+    "team": "USSA",
+    "norm": "ussa"
+  },
+  {
+    "team": "Ariana CC 1",
+    "norm": "ariana-cc-1"
+  },
+  {
+    "team": "Rising Phoenix",
+    "norm": "rising-phoenix"
+  },
+  {
+    "team": "Sponga United",
+    "norm": "sponga-united"
+  },
+  {
+    "team": "Boras",
+    "norm": "boras"
+  },
+  {
+    "team": "Uppsala Granby",
+    "norm": "uppsala-granby"
+  },
+  {
+    "team": "Angelholms",
+    "norm": "angelholms"
+  },
+  {
+    "team": "Kandy Royals",
+    "norm": "kandy-royals"
+  },
+  {
+    "team": "MI London",
+    "norm": "mi-london"
+  },
+  {
+    "team": "London Spirit",
+    "norm": "london-spirit"
+  },
+  {
+    "team": "Southern Brave",
+    "norm": "southern-brave"
+  },
+  {
+    "team": "Southern Brave (Kadınlar)",
+    "norm": "southern-brave-kadınlar"
+  },
+  {
+    "team": "Trent Rockets (Kadınlar)",
+    "norm": "trent-rockets-kadınlar"
+  },
+  {
+    "team": "Lancashire",
+    "norm": "lancashire"
+  },
+  {
+    "team": "Nottinghamshire",
+    "norm": "nottinghamshire"
+  },
+  {
+    "team": "Downpatrick 3rd XI",
+    "norm": "downpatrick-3rd-xi"
+  },
+  {
+    "team": "NIMACC 2nd XI",
+    "norm": "nimacc-2nd-xi"
+  },
+  {
+    "team": "Arches 2nd XI",
+    "norm": "arches-2nd-xi"
+  },
+  {
+    "team": "Waringstown XI",
+    "norm": "waringstown-xi"
+  },
+  {
+    "team": "North Down XI",
+    "norm": "north-down-xi"
+  },
+  {
+    "team": "Muckamore 1",
+    "norm": "muckamore-1"
+  },
+  {
+    "team": "Saint Lucia Kings",
+    "norm": "saint-lucia-kings"
+  },
+  {
+    "team": "St Kitts and Nevis Patriots",
+    "norm": "st-kitts-and-nevis-patriots"
+  },
+  {
+    "team": "Trinbago Knight Riders",
+    "norm": "trinbago-knight-riders"
+  },
+  {
+    "team": "Jamaica Kingsmen",
+    "norm": "jamaica-kingsmen"
+  },
+  {
+    "team": "Barbados Royals",
+    "norm": "barbados-royals"
+  },
+  {
+    "team": "AD Jaragua",
+    "norm": "ad-jaragua"
+  },
+  {
+    "team": "CER Atlantico Erechim",
+    "norm": "cer-atlantico-erechim"
+  },
+  {
+    "team": "America RN",
+    "norm": "america-rn"
+  },
+  {
+    "team": "Associacao Sao Lourenco",
+    "norm": "associacao-sao-lourenco"
+  },
+  {
+    "team": "Andrew Novak",
+    "norm": "andrew-novak"
+  },
+  {
+    "team": "Nick Taylor",
+    "norm": "nick-taylor"
+  },
+  {
+    "team": "Ben Griffin",
+    "norm": "ben-griffin"
+  },
+  {
+    "team": "Ryan Gerard",
+    "norm": "ryan-gerard"
+  },
+  {
+    "team": "Akshay Bhatia",
+    "norm": "akshay-bhatia"
+  },
+  {
+    "team": "Michael Thorbjornsen",
+    "norm": "michael-thorbjornsen"
+  },
+  {
+    "team": "Austin Smotherman",
+    "norm": "austin-smotherman"
+  },
+  {
+    "team": "Matthias Schmid",
+    "norm": "matthias-schmid"
+  },
+  {
+    "team": "Beau Hossler",
+    "norm": "beau-hossler"
+  },
+  {
+    "team": "William Mouw",
+    "norm": "william-mouw"
+  },
+  {
+    "team": "David Thompson",
+    "norm": "david-thompson"
+  },
+  {
+    "team": "Corey Conners",
+    "norm": "corey-conners"
+  },
+  {
+    "team": "Cameron Young",
+    "norm": "cameron-young"
+  },
+  {
+    "team": "Xander Schauffele",
+    "norm": "xander-schauffele"
+  },
+  {
+    "team": "Christopher Gotterup",
+    "norm": "christopher-gotterup"
+  },
+  {
+    "team": "Ben Kohles",
+    "norm": "ben-kohles"
+  },
+  {
+    "team": "Emiliano Grillo",
+    "norm": "emiliano-grillo"
+  },
+  {
+    "team": "Jordan L Smith",
+    "norm": "jordan-l-smith"
+  },
+  {
+    "team": "Chris Kirk",
+    "norm": "chris-kirk"
+  },
+  {
+    "team": "Lee Hodges",
+    "norm": "lee-hodges"
+  },
+  {
+    "team": "Kevin Yu",
+    "norm": "kevin-yu"
+  },
+  {
+    "team": "Jesper Svensson",
+    "norm": "jesper-svensson"
+  },
+  {
+    "team": "Jacob Bridgeman",
+    "norm": "jacob-bridgeman"
+  },
+  {
+    "team": "JJ Spaun",
+    "norm": "jj-spaun"
+  },
+  {
+    "team": "Jake Knapp",
+    "norm": "jake-knapp"
+  },
+  {
+    "team": "Hideki Matsuyama",
+    "norm": "hideki-matsuyama"
+  },
+  {
+    "team": "Russell Henley",
+    "norm": "russell-henley"
+  },
+  {
+    "team": "Mac Meissner",
+    "norm": "mac-meissner"
+  },
+  {
+    "team": "Jackson Suber",
+    "norm": "jackson-suber"
+  },
+  {
+    "team": "Dan McCarthy",
+    "norm": "dan-mccarthy"
+  },
+  {
+    "team": "Harry Hall",
+    "norm": "harry-hall"
+  },
+  {
+    "team": "Sung-Jae Im",
+    "norm": "sungjae-im"
+  },
+  {
+    "team": "Bradley Keegan",
+    "norm": "bradley-keegan"
+  },
+  {
+    "team": "Eric Cole",
+    "norm": "eric-cole"
+  },
+  {
+    "team": "Lucas Glover",
+    "norm": "lucas-glover"
+  },
+  {
+    "team": "Zac Blair",
+    "norm": "zac-blair"
+  },
+  {
+    "team": "Jackson Koivun",
+    "norm": "jackson-koivun"
+  },
+  {
+    "team": "Mackenzie Hughes",
+    "norm": "mackenzie-hughes"
+  },
+  {
+    "team": "Christiaan Bezuidenhout",
+    "norm": "christiaan-bezuidenhout"
+  },
+  {
+    "team": "Marco Penge",
+    "norm": "marco-penge"
+  },
+  {
+    "team": "Jordan Spieth",
+    "norm": "jordan-spieth"
+  },
+  {
+    "team": "Max McGreevy",
+    "norm": "max-mcgreevy"
+  },
+  {
+    "team": "Rico Hoey",
+    "norm": "rico-hoey"
+  },
+  {
+    "team": "Matt Mccarty",
+    "norm": "matt-mccarty"
+  },
+  {
+    "team": "Ricky Castillo",
+    "norm": "ricky-castillo"
+  },
+  {
+    "team": "Matt Wallace",
+    "norm": "matt-wallace"
+  },
+  {
+    "team": "Pierceson Coody",
+    "norm": "pierceson-coody"
+  },
+  {
+    "team": "Rasmus Hojgaard",
+    "norm": "rasmus-hojgaard"
+  },
+  {
+    "team": "Stephan Jaeger",
+    "norm": "stephan-jaeger"
+  },
+  {
+    "team": "Patrick Cantlay",
+    "norm": "patrick-cantlay"
+  },
+  {
+    "team": "Rasmus Neergaard-Petersen",
+    "norm": "rasmus-neergaardpetersen"
+  },
+  {
+    "team": "Ben James",
+    "norm": "ben-james"
+  },
+  {
+    "team": "Nicolai Hojgaard",
+    "norm": "nicolai-hojgaard"
+  },
+  {
+    "team": "Harris English",
+    "norm": "harris-english"
+  },
+  {
+    "team": "Michael Brennan",
+    "norm": "michael-brennan"
+  },
+  {
+    "team": "Michael Kim",
+    "norm": "michael-kim"
+  },
+  {
+    "team": "Aldrich Potgieter",
+    "norm": "aldrich-potgieter"
+  },
+  {
+    "team": "Si Woo Kim",
+    "norm": "si-woo-kim"
+  },
+  {
+    "team": "Wyndham Clark",
+    "norm": "wyndham-clark"
+  },
+  {
+    "team": "Ryo Hisatsune",
+    "norm": "ryo-hisatsune"
+  },
+  {
+    "team": "Doug Ghim",
+    "norm": "doug-ghim"
+  },
+  {
+    "team": "Tony Finau",
+    "norm": "tony-finau"
+  },
+  {
+    "team": "John Keefer",
+    "norm": "john-keefer"
+  },
+  {
+    "team": "Taylor Moore",
+    "norm": "taylor-moore"
+  },
+  {
+    "team": "Steven Fisk",
+    "norm": "steven-fisk"
+  },
+  {
+    "team": "Rickie Fowler",
+    "norm": "rickie-fowler"
+  },
+  {
+    "team": "Sudarshan Yellamaraju",
+    "norm": "sudarshan-yellamaraju"
+  },
+  {
+    "team": "Taylor Pendrith",
+    "norm": "taylor-pendrith"
+  },
+  {
+    "team": "Seamus Power",
+    "norm": "seamus-power"
+  },
+  {
+    "team": "Billy Horschel",
+    "norm": "billy-horschel"
+  },
+  {
+    "team": "Max Greyserman",
+    "norm": "max-greyserman"
+  },
+  {
+    "team": "Guatemala (Kadınlar)",
+    "norm": "guatemala-kadınlar"
+  },
+  {
+    "team": "Küba (Kadınlar)",
+    "norm": "küba-kadınlar"
+  },
+  {
+    "team": "Nikaragua (Kadınlar)",
+    "norm": "nikaragua-kadınlar"
+  },
+  {
+    "team": "University of Salerno",
+    "norm": "university-of-salerno"
+  },
+  {
+    "team": "Oslo Üniversitesi",
+    "norm": "oslo-üniversitesi"
+  },
+  {
+    "team": "University of Minho",
+    "norm": "university-of-minho"
+  },
+  {
+    "team": "University of Zagreb",
+    "norm": "university-of-zagreb"
+  },
+  {
+    "team": "İngiltere U21",
+    "norm": "ingiltere-u21"
+  },
+  {
+    "team": "Netherlands U21",
+    "norm": "netherlands-u21"
+  },
+  {
+    "team": "Spain U21",
+    "norm": "spain-u21"
+  },
+  {
+    "team": "Avusturya U21",
+    "norm": "avusturya-u21"
+  },
+  {
+    "team": "Ukrayna U21",
+    "norm": "ukrayna-u21"
+  },
+  {
+    "team": "Lithuania U21",
+    "norm": "lithuania-u21"
+  },
+  {
+    "team": "Galler U21",
+    "norm": "galler-u21"
+  },
+  {
+    "team": "Czechia U21",
+    "norm": "czechia-u21"
+  },
+  {
+    "team": "Keighley Cougars",
+    "norm": "keighley-cougars"
+  },
+  {
+    "team": "Dewsbury Rams",
+    "norm": "dewsbury-rams"
+  },
+  {
+    "team": "Huddersfield Giants",
+    "norm": "huddersfield-giants"
+  },
+  {
+    "team": "Hull FC",
+    "norm": "hull"
+  },
+  {
+    "team": "Melbourne Storm",
+    "norm": "melbourne-storm"
+  },
+  {
+    "team": "Brisbane Broncos",
+    "norm": "brisbane-broncos"
+  },
+  {
+    "team": "Penrith Panthers",
+    "norm": "penrith-panthers"
+  },
+  {
+    "team": "Canberra Raiders",
+    "norm": "canberra-raiders"
+  },
+  {
+    "team": "New Zealand Warriors",
+    "norm": "new-zealand-warriors"
+  },
+  {
+    "team": "Wests Tigers",
+    "norm": "wests-tigers"
+  },
+  {
+    "team": "Parramatta Eels",
+    "norm": "parramatta-eels"
+  },
+  {
+    "team": "Cronulla Sharks",
+    "norm": "cronulla-sharks"
+  },
+  {
+    "team": "Tasman Makos",
+    "norm": "tasman-makos"
+  },
+  {
+    "team": "North Harbour Rugby",
+    "norm": "north-harbour-rugby"
+  },
+  {
+    "team": "Canterbury Rugby Union",
+    "norm": "canterbury-rugby-union"
+  },
+  {
+    "team": "Auckland Rugby",
+    "norm": "auckland-rugby"
+  },
+  {
+    "team": "Rugby Southland",
+    "norm": "rugby-southland"
+  },
+  {
+    "team": "Otago Rugby",
+    "norm": "otago-rugby"
+  },
+  {
+    "team": "Counties Manukau",
+    "norm": "counties-manukau"
+  },
+  {
+    "team": "Taranaki Bulls",
+    "norm": "taranaki-bulls"
+  },
+  {
+    "team": "Mark James Williams",
+    "norm": "mark-james-williams"
+  },
+  {
+    "team": "Adamiak Grzegorz",
+    "norm": "adamiak-grzegorz"
+  },
+  {
+    "team": "Kacper Kwiatkowski",
+    "norm": "kacper-kwiatkowski"
+  },
+  {
+    "team": "Andriej Fomin",
+    "norm": "andriej-fomin"
+  },
+  {
+    "team": "Kamil Delikatny",
+    "norm": "kamil-delikatny"
+  },
+  {
+    "team": "Michal Machelski",
+    "norm": "michal-machelski"
+  },
+  {
+    "team": "Kuzmicz Jakub",
+    "norm": "kuzmicz-jakub"
+  },
+  {
+    "team": "Michal Durda",
+    "norm": "michal-durda"
+  },
+  {
+    "team": "Kamil Kowalski",
+    "norm": "kamil-kowalski"
+  },
+  {
+    "team": "Kazimierz Rybak",
+    "norm": "kazimierz-rybak"
+  },
+  {
+    "team": "Mateusz Rutkowski",
+    "norm": "mateusz-rutkowski"
+  },
+  {
+    "team": "Patryk Jendrzejewski",
+    "norm": "patryk-jendrzejewski"
+  },
+  {
+    "team": "Zochniak Jakub",
+    "norm": "zochniak-jakub"
+  },
+  {
+    "team": "Adam Staniczek",
+    "norm": "adam-staniczek"
+  },
+  {
+    "team": "Lukasz Pietraszko",
+    "norm": "lukasz-pietraszko"
+  },
+  {
+    "team": "Jakub Glanowski",
+    "norm": "jakub-glanowski"
+  },
+  {
+    "team": "Evgeniy Sokoltsov",
+    "norm": "evgeniy-sokoltsov"
+  },
+  {
+    "team": "Kulishov Grigoriy",
+    "norm": "kulishov-grigoriy"
+  },
+  {
+    "team": "Nikita Smirnov",
+    "norm": "nikita-smirnov"
+  },
+  {
+    "team": "Sergey Kalenik",
+    "norm": "sergey-kalenik"
+  },
+  {
+    "team": "Orest Gura",
+    "norm": "orest-gura"
+  },
+  {
+    "team": "Olexandr Vladimirovich Kovalchuk 1974",
+    "norm": "olexandr-vladimirovich-kovalchuk-1974"
+  },
+  {
+    "team": "Alexander Mishchenko",
+    "norm": "alexander-mishchenko"
+  },
+  {
+    "team": "Pavlo Ishchyk",
+    "norm": "pavlo-ishchyk"
+  },
+  {
+    "team": "Andrii Fastov",
+    "norm": "andrii-fastov"
+  },
+  {
+    "team": "Vitaly Ananyev",
+    "norm": "vitaly-ananyev"
+  },
+  {
+    "team": "Jan Botka",
+    "norm": "jan-botka"
+  },
+  {
+    "team": "Andrey Lifanov",
+    "norm": "andrey-lifanov"
+  },
+  {
+    "team": "Vitaliy Sydorenko",
+    "norm": "vitaliy-sydorenko"
+  },
+  {
+    "team": "Aleksandr Maslovskiy",
+    "norm": "aleksandr-maslovskiy"
+  },
+  {
+    "team": "Belanchik D.",
+    "norm": "belanchik-d"
+  },
+  {
+    "team": "Berezinskiy S.",
+    "norm": "berezinskiy-s"
+  },
+  {
+    "team": "Yaroslav Stepanchuk",
+    "norm": "yaroslav-stepanchuk"
+  },
+  {
+    "team": "Roman Konkulovskiy",
+    "norm": "roman-konkulovskiy"
+  },
+  {
+    "team": "Oleksandr Pohonov",
+    "norm": "oleksandr-pohonov"
+  },
+  {
+    "team": "Anton Shipilov",
+    "norm": "anton-shipilov"
+  },
+  {
+    "team": "Oleksandr Zhyrnov",
+    "norm": "oleksandr-zhyrnov"
+  },
+  {
+    "team": "Daniil Gabrelyan",
+    "norm": "daniil-gabrelyan"
+  },
+  {
+    "team": "Valeriy Vlasenko",
+    "norm": "valeriy-vlasenko"
+  },
+  {
+    "team": "Serhii Chuliukov",
+    "norm": "serhii-chuliukov"
+  },
+  {
+    "team": "Dmitry Kim",
+    "norm": "dmitry-kim"
+  },
+  {
+    "team": "Mykhailo Skliar",
+    "norm": "mykhailo-skliar"
+  },
+  {
+    "team": "Bogdan Chaikovskyi",
+    "norm": "bogdan-chaikovskyi"
+  },
+  {
+    "team": "Yurii Hrekh",
+    "norm": "yurii-hrekh"
+  },
+  {
+    "team": "Viktor Slozka",
+    "norm": "viktor-slozka"
+  },
+  {
+    "team": "Ladislav Hendrych",
+    "norm": "ladislav-hendrych"
+  },
+  {
+    "team": "Karel Farsky",
+    "norm": "karel-farsky"
+  },
+  {
+    "team": "Sergey Ponomarenko",
+    "norm": "sergey-ponomarenko"
+  },
+  {
+    "team": "Roman Horokh",
+    "norm": "roman-horokh"
+  },
+  {
+    "team": "Vitaliy Kobets",
+    "norm": "vitaliy-kobets"
+  },
+  {
+    "team": "Dmitry Neborak",
+    "norm": "dmitry-neborak"
+  },
+  {
+    "team": "Illia Hermakivskyi",
+    "norm": "illia-hermakivskyi"
+  },
+  {
+    "team": "Mykola Treschetka",
+    "norm": "mykola-treschetka"
+  },
+  {
+    "team": "Oleh Maksymkiv",
+    "norm": "oleh-maksymkiv"
+  },
+  {
+    "team": "Torgachev Igor",
+    "norm": "torgachev-igor"
+  },
+  {
+    "team": "Sergey Handetskiy",
+    "norm": "sergey-handetskiy"
+  },
+  {
+    "team": "Konstantin Grinenko",
+    "norm": "konstantin-grinenko"
+  },
+  {
+    "team": "Tadeas Bertho",
+    "norm": "tadeas-bertho"
+  },
+  {
+    "team": "Aleksandr Melashenko",
+    "norm": "aleksandr-melashenko"
+  },
+  {
+    "team": "Varlamov Oleg",
+    "norm": "varlamov-oleg"
+  },
+  {
+    "team": "Evhenii Hrytsenko",
+    "norm": "evhenii-hrytsenko"
+  },
+  {
+    "team": "Frantisek Schmidtmayer",
+    "norm": "frantisek-schmidtmayer"
+  },
+  {
+    "team": "Makienko Mykhailo",
+    "norm": "makienko-mykhailo"
+  },
+  {
+    "team": "Andrey Romanenko",
+    "norm": "andrey-romanenko"
+  },
+  {
+    "team": "Alexander Bondarchuk",
+    "norm": "alexander-bondarchuk"
+  },
+  {
+    "team": "Aleksandr Ivchuk",
+    "norm": "aleksandr-ivchuk"
+  },
+  {
+    "team": "Sergey Maksimiv",
+    "norm": "sergey-maksimiv"
+  },
+  {
+    "team": "Vojtech Toman",
+    "norm": "vojtech-toman"
+  },
+  {
+    "team": "Victor Sharpay",
+    "norm": "victor-sharpay"
+  },
+  {
+    "team": "Yevgeniy Bielokon",
+    "norm": "yevgeniy-bielokon"
+  },
+  {
+    "team": "Pavel Oplt",
+    "norm": "pavel-oplt"
+  },
+  {
+    "team": "Adam Radkovsky",
+    "norm": "adam-radkovsky"
+  },
+  {
+    "team": "Pavel Plakushchyi",
+    "norm": "pavel-plakushchyi"
+  },
+  {
+    "team": "Loboda Miroslav",
+    "norm": "loboda-miroslav"
+  },
+  {
+    "team": "Marasek Dominik",
+    "norm": "marasek-dominik"
+  },
+  {
+    "team": "Martin Vana",
+    "norm": "martin-vana"
+  },
+  {
+    "team": "Krishtal D.",
+    "norm": "krishtal-d"
+  },
+  {
+    "team": "Vitaliy Krokhmal",
+    "norm": "vitaliy-krokhmal"
+  },
+  {
+    "team": "Danylo Kasian",
+    "norm": "danylo-kasian"
+  },
+  {
+    "team": "Yaroslav Vorsulyak",
+    "norm": "yaroslav-vorsulyak"
+  },
+  {
+    "team": "Eduard Rubtsov",
+    "norm": "eduard-rubtsov"
+  },
+  {
+    "team": "Sergey Pryadko",
+    "norm": "sergey-pryadko"
+  },
+  {
+    "team": "Anton Yakovenko",
+    "norm": "anton-yakovenko"
+  },
+  {
+    "team": "Igor Sukovatyi",
+    "norm": "igor-sukovatyi"
+  },
+  {
+    "team": "Petr Maly",
+    "norm": "petr-maly"
+  },
+  {
+    "team": "Boklag R.",
+    "norm": "boklag-r"
+  },
+  {
+    "team": "Serhii Kushnirenko",
+    "norm": "serhii-kushnirenko"
+  },
+  {
+    "team": "Maksuta  V.",
+    "norm": "maksuta-v"
+  },
+  {
+    "team": "Maksym Deynega",
+    "norm": "maksym-deynega"
+  },
+  {
+    "team": "Lukas Veigl",
+    "norm": "lukas-veigl"
+  },
+  {
+    "team": "Stepan Rejent",
+    "norm": "stepan-rejent"
+  },
+  {
+    "team": "Shkurupiy A.",
+    "norm": "shkurupiy-a"
+  },
+  {
+    "team": "Jan Krames Sr",
+    "norm": "jan-krames-sr"
+  },
+  {
+    "team": "Mezera Ondrej",
+    "norm": "mezera-ondrej"
+  },
+  {
+    "team": "Jaroslav Dohnal",
+    "norm": "jaroslav-dohnal"
+  },
+  {
+    "team": "Martin Zajicek",
+    "norm": "martin-zajicek"
+  },
+  {
+    "team": "Jakub Rolik",
+    "norm": "jakub-rolik"
+  },
+  {
+    "team": "Nemec Michal",
+    "norm": "nemec-michal"
+  },
+  {
+    "team": "Michal Brozek",
+    "norm": "michal-brozek"
+  },
+  {
+    "team": "David Vesecky",
+    "norm": "david-vesecky"
+  },
+  {
+    "team": "David Sykora",
+    "norm": "david-sykora"
+  },
+  {
+    "team": "Jan Hendrych",
+    "norm": "jan-hendrych"
+  },
+  {
+    "team": "Lukas Vich",
+    "norm": "lukas-vich"
+  },
+  {
+    "team": "Marek Dlask",
+    "norm": "marek-dlask"
+  },
+  {
+    "team": "Adam Vitasek",
+    "norm": "adam-vitasek"
+  },
+  {
+    "team": "Jan Gembala",
+    "norm": "jan-gembala"
+  },
+  {
+    "team": "Karel Zeman",
+    "norm": "karel-zeman"
+  },
+  {
+    "team": "Filip Theodor",
+    "norm": "filip-theodor"
+  },
+  {
+    "team": "David Bochnak",
+    "norm": "david-bochnak"
+  },
+  {
+    "team": "Milan Dvorak",
+    "norm": "milan-dvorak"
+  },
+  {
+    "team": "Marek Kulisek",
+    "norm": "marek-kulisek"
+  },
+  {
+    "team": "Jiri Vanous",
+    "norm": "jiri-vanous"
+  },
+  {
+    "team": "Zdenek Dusek",
+    "norm": "zdenek-dusek"
+  },
+  {
+    "team": "Molin Vojtech",
+    "norm": "molin-vojtech"
+  },
+  {
+    "team": "Jiri Cerny",
+    "norm": "jiri-cerny"
+  },
+  {
+    "team": "Christian Kratochvil",
+    "norm": "christian-kratochvil"
+  },
+  {
+    "team": "Jonas Rak",
+    "norm": "jonas-rak"
+  },
+  {
+    "team": "Filip Sikora",
+    "norm": "filip-sikora"
+  },
+  {
+    "team": "Jan Vidourek",
+    "norm": "jan-vidourek"
+  },
+  {
+    "team": "Jan Kabelka",
+    "norm": "jan-kabelka"
+  },
+  {
+    "team": "Dominik Lengal",
+    "norm": "dominik-lengal"
+  },
+  {
+    "team": "Martin Mastera",
+    "norm": "martin-mastera"
+  },
+  {
+    "team": "Patrik Klusacek",
+    "norm": "patrik-klusacek"
+  },
+  {
+    "team": "Jaroslav Sindler",
+    "norm": "jaroslav-sindler"
+  },
+  {
+    "team": "Lukas Krupnik Jr",
+    "norm": "lukas-krupnik-jr"
+  },
+  {
+    "team": "Karel Filip",
+    "norm": "karel-filip"
+  },
+  {
+    "team": "Ivan Jemelka",
+    "norm": "ivan-jemelka"
+  },
+  {
+    "team": "Richard Jancak",
+    "norm": "richard-jancak"
+  },
+  {
+    "team": "Filip Mandrysz",
+    "norm": "filip-mandrysz"
+  },
+  {
+    "team": "Tomas Beran Jr.",
+    "norm": "tomas-beran-jr"
+  },
+  {
+    "team": "Martin Chmelicek",
+    "norm": "martin-chmelicek"
+  },
+  {
+    "team": "Vladimir Mukhorovskii",
+    "norm": "vladimir-mukhorovskii"
+  },
+  {
+    "team": "Konstantin Atomanchik",
+    "norm": "konstantin-atomanchik"
+  },
+  {
+    "team": "Aleksei Zhuk",
+    "norm": "aleksei-zhuk"
+  },
+  {
+    "team": "Vadim Nekhvedovich",
+    "norm": "vadim-nekhvedovich"
+  },
+  {
+    "team": "Roman Hudeczek",
+    "norm": "roman-hudeczek"
+  },
+  {
+    "team": "Marek Golub",
+    "norm": "marek-golub"
+  },
+  {
+    "team": "Petr Sebera",
+    "norm": "petr-sebera"
+  },
+  {
+    "team": "Denis Hofman",
+    "norm": "denis-hofman"
+  },
+  {
+    "team": "Jiri Louda",
+    "norm": "jiri-louda"
+  },
+  {
+    "team": "Michal Vondrak",
+    "norm": "michal-vondrak"
+  },
+  {
+    "team": "Michal Chalupa",
+    "norm": "michal-chalupa"
+  },
+  {
+    "team": "Daniel Tomica",
+    "norm": "daniel-tomica"
+  },
+  {
+    "team": "Radim Urbaniec",
+    "norm": "radim-urbaniec"
+  },
+  {
+    "team": "Michal Kratochvil",
+    "norm": "michal-kratochvil"
+  },
+  {
+    "team": "Martin Stefek",
+    "norm": "martin-stefek"
+  },
+  {
+    "team": "Jan Framberk",
+    "norm": "jan-framberk"
+  },
+  {
+    "team": "Julius Didi",
+    "norm": "julius-didi"
+  },
+  {
+    "team": "Tomas Regner",
+    "norm": "tomas-regner"
+  },
+  {
+    "team": "Tibor Kolenic",
+    "norm": "tibor-kolenic"
+  },
+  {
+    "team": "Yurii Holovatiuk",
+    "norm": "yurii-holovatiuk"
+  },
+  {
+    "team": "Vaclav Hruska Senior",
+    "norm": "vaclav-hruska-senior"
+  },
+  {
+    "team": "Jiri Svec",
+    "norm": "jiri-svec"
+  },
+  {
+    "team": "Lukas Kern",
+    "norm": "lukas-kern"
+  },
+  {
+    "team": "Michal Syroha",
+    "norm": "michal-syroha"
+  },
+  {
+    "team": "Jiri Grohsgott",
+    "norm": "jiri-grohsgott"
+  },
+  {
+    "team": "Marcel Heczko",
+    "norm": "marcel-heczko"
+  },
+  {
+    "team": "Levicky Jakub",
+    "norm": "levicky-jakub"
+  },
+  {
+    "team": "Vaclav Zidek",
+    "norm": "vaclav-zidek"
+  },
+  {
+    "team": "Tomas Milota",
+    "norm": "tomas-milota"
+  },
+  {
+    "team": "Miroslav Novotny",
+    "norm": "miroslav-novotny"
+  },
+  {
+    "team": "Vaclav Kosar",
+    "norm": "vaclav-kosar"
+  },
+  {
+    "team": "Jan Zajicek",
+    "norm": "jan-zajicek"
+  },
+  {
+    "team": "Josef Medek",
+    "norm": "josef-medek"
+  },
+  {
+    "team": "Tomas Kos",
+    "norm": "tomas-kos"
+  },
+  {
+    "team": "Bilek Zdenek",
+    "norm": "bilek-zdenek"
+  },
+  {
+    "team": "Jan Trefny",
+    "norm": "jan-trefny"
+  },
+  {
+    "team": "Michal Vedmoch",
+    "norm": "michal-vedmoch"
+  },
+  {
+    "team": "Daniel Tuma",
+    "norm": "daniel-tuma"
+  },
+  {
+    "team": "Richard Krejci",
+    "norm": "richard-krejci"
+  },
+  {
+    "team": "Alesh Bayer",
+    "norm": "alesh-bayer"
+  },
+  {
+    "team": "Martin Vizek",
+    "norm": "martin-vizek"
+  },
+  {
+    "team": "Jiri Dedek",
+    "norm": "jiri-dedek"
+  },
+  {
+    "team": "Michal Zahradka",
+    "norm": "michal-zahradka"
+  },
+  {
+    "team": "Richard Wagner",
+    "norm": "richard-wagner"
+  },
+  {
+    "team": "Jiri Ruzicka",
+    "norm": "jiri-ruzicka"
+  },
+  {
+    "team": "Oleksandr Kolisnyk",
+    "norm": "oleksandr-kolisnyk"
+  },
+  {
+    "team": "Dmitro Parhomenko",
+    "norm": "dmitro-parhomenko"
+  },
+  {
+    "team": "Martin Biolek",
+    "norm": "martin-biolek"
+  },
+  {
+    "team": "Jan Dzida",
+    "norm": "jan-dzida"
+  },
+  {
+    "team": "Tkachenko A.",
+    "norm": "tkachenko-a"
+  },
+  {
+    "team": "Tomas Kucera",
+    "norm": "tomas-kucera"
+  },
+  {
+    "team": "Milan Regner",
+    "norm": "milan-regner"
+  },
+  {
+    "team": "Jan Szotkowski",
+    "norm": "jan-szotkowski"
+  },
+  {
+    "team": "Zika Tadeas",
+    "norm": "zika-tadeas"
+  },
+  {
+    "team": "David Szotek",
+    "norm": "david-szotek"
+  },
+  {
+    "team": "Cesta Havrda",
+    "norm": "cesta-havrda"
+  },
+  {
+    "team": "Lubos Forman",
+    "norm": "lubos-forman"
+  },
+  {
+    "team": "Tomas Andrle",
+    "norm": "tomas-andrle"
+  },
+  {
+    "team": "Milan Chalupnicek",
+    "norm": "milan-chalupnicek"
+  },
+  {
+    "team": "Josef Toth",
+    "norm": "josef-toth"
+  },
+  {
+    "team": "Michal Derco",
+    "norm": "michal-derco"
+  },
+  {
+    "team": "Michal Cabis",
+    "norm": "michal-cabis"
+  },
+  {
+    "team": "Tomas Dousek",
+    "norm": "tomas-dousek"
+  },
+  {
+    "team": "Martin Skotnica",
+    "norm": "martin-skotnica"
+  },
+  {
+    "team": "Matej Grundel",
+    "norm": "matej-grundel"
+  },
+  {
+    "team": "Machander Dalimil",
+    "norm": "machander-dalimil"
+  },
+  {
+    "team": "Jan Pleskot",
+    "norm": "jan-pleskot"
+  },
+  {
+    "team": "Libor Prikasky",
+    "norm": "libor-prikasky"
+  },
+  {
+    "team": "Jakub Vales",
+    "norm": "jakub-vales"
+  },
+  {
+    "team": "Michal Regner",
+    "norm": "michal-regner"
+  },
+  {
+    "team": "Martin Parizek",
+    "norm": "martin-parizek"
+  },
+  {
+    "team": "Mark Robin Wagner",
+    "norm": "mark-robin-wagner"
+  },
+  {
+    "team": "Pavel Gireth",
+    "norm": "pavel-gireth"
+  },
+  {
+    "team": "Lukas Tonar",
+    "norm": "lukas-tonar"
+  },
+  {
+    "team": "Jakub Tazler",
+    "norm": "jakub-tazler"
+  },
+  {
+    "team": "Lukasz Martinak",
+    "norm": "lukasz-martinak"
+  },
+  {
+    "team": "Petr Bradach",
+    "norm": "petr-bradach"
+  },
+  {
+    "team": "Zdenek Kasinski",
+    "norm": "zdenek-kasinski"
+  },
+  {
+    "team": "Pavel Kulhanek",
+    "norm": "pavel-kulhanek"
+  },
+  {
+    "team": "Erik Mares",
+    "norm": "erik-mares"
+  },
+  {
+    "team": "Michal Vavrecka",
+    "norm": "michal-vavrecka"
+  },
+  {
+    "team": "Vojtech Koubek",
+    "norm": "vojtech-koubek"
+  },
+  {
+    "team": "Kycelt Jakub",
+    "norm": "kycelt-jakub"
+  },
+  {
+    "team": "Viktor Vejvoda",
+    "norm": "viktor-vejvoda"
+  },
+  {
+    "team": "Karel Kapras",
+    "norm": "karel-kapras"
+  },
+  {
+    "team": "Ladislav Havel 1956",
+    "norm": "ladislav-havel-1956"
+  },
+  {
+    "team": "Ludek Madle",
+    "norm": "ludek-madle"
+  },
+  {
+    "team": "Miroslav Stolba",
+    "norm": "miroslav-stolba"
+  },
+  {
+    "team": "Ivan Kolenciak",
+    "norm": "ivan-kolenciak"
+  },
+  {
+    "team": "Revay Radomir",
+    "norm": "revay-radomir"
+  },
+  {
+    "team": "Mecl Jan Junior",
+    "norm": "mecl-jan-junior"
+  },
+  {
+    "team": "Kanera Jan",
+    "norm": "kanera-jan"
+  },
+  {
+    "team": "Jiri Zuzanek",
+    "norm": "jiri-zuzanek"
+  },
+  {
+    "team": "Matyas Navedla",
+    "norm": "matyas-navedla"
+  },
+  {
+    "team": "Paril Ondrej",
+    "norm": "paril-ondrej"
+  },
+  {
+    "team": "Marcel Pikous",
+    "norm": "marcel-pikous"
+  },
+  {
+    "team": "Ales Barton",
+    "norm": "ales-barton"
+  },
+  {
+    "team": "Milan Kolar",
+    "norm": "milan-kolar"
+  },
+  {
+    "team": "Tomas Petrek",
+    "norm": "tomas-petrek"
+  },
+  {
+    "team": "Jakub Pilch",
+    "norm": "jakub-pilch"
+  },
+  {
+    "team": "David Horak",
+    "norm": "david-horak"
+  },
+  {
+    "team": "Grishaev E.",
+    "norm": "grishaev-e"
+  },
+  {
+    "team": "Dmitriy Pishchuk",
+    "norm": "dmitriy-pishchuk"
+  },
+  {
+    "team": "Artem Denisov",
+    "norm": "artem-denisov"
+  },
+  {
+    "team": "Ambrosimov F.",
+    "norm": "ambrosimov-f"
+  },
+  {
+    "team": "Vitaly Demchenko",
+    "norm": "vitaly-demchenko"
+  },
+  {
+    "team": "Vasily Rudenko",
+    "norm": "vasily-rudenko"
+  },
+  {
+    "team": "Stanislav Andreev",
+    "norm": "stanislav-andreev"
+  },
+  {
+    "team": "Pavel Vorontsov",
+    "norm": "pavel-vorontsov"
+  },
+  {
+    "team": "Aleksandr Kruglov",
+    "norm": "aleksandr-kruglov"
+  },
+  {
+    "team": "Evgeniy Telnov",
+    "norm": "evgeniy-telnov"
+  },
+  {
+    "team": "Evgeny Samokha",
+    "norm": "evgeny-samokha"
+  },
+  {
+    "team": "Alexander Kononenko",
+    "norm": "alexander-kononenko"
+  },
+  {
+    "team": "Mikhail Biserov",
+    "norm": "mikhail-biserov"
+  },
+  {
+    "team": "Andrei Kogotkov",
+    "norm": "andrei-kogotkov"
+  },
+  {
+    "team": "Gennady Shipitsyn",
+    "norm": "gennady-shipitsyn"
+  },
+  {
+    "team": "Viktor Kochergin",
+    "norm": "viktor-kochergin"
+  },
+  {
+    "team": "Oleg Orlov",
+    "norm": "oleg-orlov"
+  },
+  {
+    "team": "Khaperskii Iurii Nikolaevich",
+    "norm": "khaperskii-iurii-nikolaevich"
+  },
+  {
+    "team": "Yakovlev A.",
+    "norm": "yakovlev-a"
+  },
+  {
+    "team": "Troyanov Y.",
+    "norm": "troyanov-y"
+  },
+  {
+    "team": "Tsvetkov V.",
+    "norm": "tsvetkov-v"
+  },
+  {
+    "team": "Taras Kononenko",
+    "norm": "taras-kononenko"
+  },
+  {
+    "team": "Valeriy Ayupov",
+    "norm": "valeriy-ayupov"
+  },
+  {
+    "team": "Danila Andreev",
+    "norm": "danila-andreev"
+  },
+  {
+    "team": "Aleksey Shershnev",
+    "norm": "aleksey-shershnev"
+  },
+  {
+    "team": "Roman Malinovskiy",
+    "norm": "roman-malinovskiy"
+  },
+  {
+    "team": "Alexander Poprotsky",
+    "norm": "alexander-poprotsky"
+  },
+  {
+    "team": "Vasily Goncharik",
+    "norm": "vasily-goncharik"
+  },
+  {
+    "team": "Danila Mikhailov",
+    "norm": "danila-mikhailov"
+  },
+  {
+    "team": "Aleksei Zubov",
+    "norm": "aleksei-zubov"
+  },
+  {
+    "team": "Aleksandr Fedorov",
+    "norm": "aleksandr-fedorov"
+  },
+  {
+    "team": "Oleg Moshnikov",
+    "norm": "oleg-moshnikov"
+  },
+  {
+    "team": "Roman Sitnikov",
+    "norm": "roman-sitnikov"
+  },
+  {
+    "team": "Viktor Rakhmanovskiy",
+    "norm": "viktor-rakhmanovskiy"
+  },
+  {
+    "team": "Oleg Kolunov",
+    "norm": "oleg-kolunov"
+  },
+  {
+    "team": "Yunanistan U20 (Kadınlar)",
+    "norm": "yunanistan-u20-kadınlar"
+  },
+  {
+    "team": "Hollanda U20 (Kadınlar)",
+    "norm": "hollanda-u20-kadınlar"
+  },
+  {
+    "team": "Rusya U20 (Kadınlar)",
+    "norm": "rusya-u20-kadınlar"
+  },
+  {
+    "team": "İtalya U20 (Kadınlar)",
+    "norm": "italya-u20-kadınlar"
+  },
+  {
+    "team": "Mackenzie Dern",
+    "norm": "mackenzie-dern"
+  },
+  {
+    "team": "Islam Makhachev",
+    "norm": "islam-makhachev"
+  },
+  {
+    "team": "Ian Machado Garry",
+    "norm": "ian-machado-garry"
+  },
+  {
+    "team": "Umar Nurmagomedov",
+    "norm": "umar-nurmagomedov"
+  },
+  {
+    "team": "Song Yadong",
+    "norm": "song-yadong"
+  },
+  {
+    "team": "Uros Medic",
+    "norm": "uros-medic"
+  },
+  {
+    "team": "Daniel Rodriguez",
+    "norm": "daniel-rodriguez"
+  },
+  {
+    "team": "Mateusz Rebecki",
+    "norm": "mateusz-rebecki"
+  },
+  {
+    "team": "Kyle Prepolec",
+    "norm": "kyle-prepolec"
+  },
+  {
+    "team": "Dusko Todorovic",
+    "norm": "dusko-todorovic"
+  },
+  {
+    "team": "Vlasto Cepo",
+    "norm": "vlasto-cepo"
+  },
+  {
+    "team": "Gilbert Urbina",
+    "norm": "gilbert-urbina"
+  },
+  {
+    "team": "Rakic A.",
+    "norm": "rakic-a"
+  },
+  {
+    "team": "Marcin Tybura",
+    "norm": "marcin-tybura"
+  },
+  {
+    "team": "Ludovit Klein",
+    "norm": "ludovit-klein"
+  },
+  {
+    "team": "Dennis Buzukia",
+    "norm": "dennis-buzukia"
+  },
+  {
+    "team": "Bogdan Grad",
+    "norm": "bogdan-grad"
+  },
+  {
+    "team": "Navajo Stirling",
+    "norm": "navajo-stirling"
+  },
+  {
+    "team": "Nina Milosevic",
+    "norm": "nina-milosevic"
+  },
+  {
+    "team": "Hailey Cowan",
+    "norm": "hailey-cowan"
+  },
+  {
+    "team": "Alexander Poppeck",
+    "norm": "alexander-poppeck"
+  },
+  {
+    "team": "Milos Janicic",
+    "norm": "milos-janicic"
+  },
+  {
+    "team": "Marina Spasic",
+    "norm": "marina-spasic"
+  },
+  {
+    "team": "Stephanie Luciano",
+    "norm": "stephanie-luciano"
+  },
+  {
+    "team": "Buzukja Dennis",
+    "norm": "buzukja-dennis"
+  },
+  {
+    "team": "Mark Vologdin",
+    "norm": "mark-vologdin"
+  },
+  {
+    "team": "Borislav Nikolic",
+    "norm": "borislav-nikolic"
+  },
+  {
+    "team": "Shinichi Watanabe",
+    "norm": "shinichi-watanabe"
+  },
+  {
+    "team": "Nongbia LaoLaneXang",
+    "norm": "nongbia-laolanexang"
+  },
+  {
+    "team": "Asahi Shinagawa",
+    "norm": "asahi-shinagawa"
+  },
+  {
+    "team": "Salvador Velazquez",
+    "norm": "salvador-velazquez"
+  },
+  {
+    "team": "Nonglek Krudamgym",
+    "norm": "nonglek-krudamgym"
+  },
+  {
+    "team": "Olivia Bahsous",
+    "norm": "olivia-bahsous"
+  },
+  {
+    "team": "Ramadan Ondash",
+    "norm": "ramadan-ondash"
+  },
+  {
+    "team": "Muhammad Johan Ghazali",
+    "norm": "muhammad-johan-ghazali"
+  },
+  {
+    "team": "Elbek Alyshov",
+    "norm": "elbek-alyshov"
+  },
+  {
+    "team": "Enkh-Orgil Baatarkhuu",
+    "norm": "enkhorgil-baatarkhuu"
+  },
+  {
+    "team": "Klinphaka Por Thaisong",
+    "norm": "klinphaka-por-thaisong"
+  },
+  {
+    "team": "Islay Erika Bomogao",
+    "norm": "islay-erika-bomogao"
+  },
+  {
+    "team": "Abdallah Ondash",
+    "norm": "abdallah-ondash"
+  },
+  {
+    "team": "Chokpreecha P.K.Saenchai",
+    "norm": "chokpreecha-pksaenchai"
+  },
+  {
+    "team": "Thongchai Jeabramintra",
+    "norm": "thongchai-jeabramintra"
+  },
+  {
+    "team": "Kongmeechai Sor Bangrajan",
+    "norm": "kongmeechai-sor-bangrajan"
+  },
+  {
+    "team": "Diogo Miguel Silva",
+    "norm": "diogo-miguel-silva"
+  },
+  {
+    "team": "Rahim Tcherchaiko",
+    "norm": "rahim-tcherchaiko"
+  },
+  {
+    "team": "Adham Ruziev",
+    "norm": "adham-ruziev"
+  },
+  {
+    "team": "Ganchai Jitmuangnon",
+    "norm": "ganchai-jitmuangnon"
+  },
+  {
+    "team": "Akram Hamidi",
+    "norm": "akram-hamidi"
+  },
+  {
+    "team": "Watcharapon PK Saenchai",
+    "norm": "watcharapon-pk-saenchai"
+  },
+  {
+    "team": "Nongkhailek DrKnotmuaythai",
+    "norm": "nongkhailek-drknotmuaythai"
+  },
+  {
+    "team": "Arsoonnoi Sitjasing",
+    "norm": "arsoonnoi-sitjasing"
+  },
+  {
+    "team": "Kevin Pedro Lazaro Perdomo",
+    "norm": "kevin-pedro-lazaro-perdomo"
+  },
+  {
+    "team": "Philemon Britus Jeb",
+    "norm": "philemon-britus-jeb"
+  },
+  {
+    "team": "Usman Nurmagomedov",
+    "norm": "usman-nurmagomedov"
+  },
+  {
+    "team": "Archie Colgan",
+    "norm": "archie-colgan"
+  },
+  {
+    "team": "Jonathan Piersma",
+    "norm": "jonathan-piersma"
+  },
+  {
+    "team": "Omar El Dafrawy",
+    "norm": "omar-el-dafrawy"
+  },
+  {
+    "team": "Sean Gauci",
+    "norm": "sean-gauci"
+  },
+  {
+    "team": "Allan Begosso",
+    "norm": "allan-begosso"
+  },
+  {
+    "team": "Amru Magomedov",
+    "norm": "amru-magomedov"
+  },
+  {
+    "team": "Angel Alvarez",
+    "norm": "angel-alvarez"
+  },
+  {
+    "team": "Khabib Nabiev",
+    "norm": "khabib-nabiev"
+  },
+  {
+    "team": "Jamelle Jones",
+    "norm": "jamelle-jones"
+  },
+  {
+    "team": "Montana De La Rosa",
+    "norm": "montana-de-la-rosa"
+  },
+  {
+    "team": "Tatyana Postarnakova",
+    "norm": "tatyana-postarnakova"
+  },
+  {
+    "team": "Dakota Ditcheva",
+    "norm": "dakota-ditcheva"
+  },
+  {
+    "team": "Denise Kielholtz",
+    "norm": "denise-kielholtz"
+  },
+  {
+    "team": "Moustapha Diakhate",
+    "norm": "moustapha-diakhate"
+  },
+  {
+    "team": "Zacharia Nishimwe",
+    "norm": "zacharia-nishimwe"
+  },
+  {
+    "team": "Raufeon Stots",
+    "norm": "raufeon-stots"
+  },
+  {
+    "team": "Lazaro Dayron",
+    "norm": "lazaro-dayron"
+  },
+  {
+    "team": "Dovletdzhan Yagshimuradov",
+    "norm": "dovletdzhan-yagshimuradov"
+  },
+  {
+    "team": "Simeon Powell",
+    "norm": "simeon-powell"
+  },
+  {
+    "team": "Darren Till",
+    "norm": "darren-till"
+  },
+  {
+    "team": "Yoel Romero",
+    "norm": "yoel-romero"
+  },
+  {
+    "team": "Lucia Szabova",
+    "norm": "lucia-szabova"
+  },
+  {
+    "team": "Lucie Pudilova",
+    "norm": "lucie-pudilova"
+  },
+  {
+    "team": "Will Fleury",
+    "norm": "will-fleury"
+  },
+  {
+    "team": "Makhmud Muradov",
+    "norm": "makhmud-muradov"
+  },
+  {
+    "team": "Jakub Batfalsky",
+    "norm": "jakub-batfalsky"
+  },
+  {
+    "team": "Vojtech Khol",
+    "norm": "vojtech-khol"
+  },
+  {
+    "team": "Miroslav Broz",
+    "norm": "miroslav-broz"
+  },
+  {
+    "team": "Rafael Aronov",
+    "norm": "rafael-aronov"
+  },
+  {
+    "team": "Roman Paulus",
+    "norm": "roman-paulus"
+  },
+  {
+    "team": "Harun Kurt",
+    "norm": "harun-kurt"
+  },
+  {
+    "team": "Tomas Mudroch",
+    "norm": "tomas-mudroch"
+  },
+  {
+    "team": "Hafeni Nafuka",
+    "norm": "hafeni-nafuka"
+  },
+  {
+    "team": "Jakub Tichota",
+    "norm": "jakub-tichota"
+  },
+  {
+    "team": "Firas Daud",
+    "norm": "firas-daud"
+  },
+  {
+    "team": "David Kozma",
+    "norm": "david-kozma"
+  },
+  {
+    "team": "David Zawada",
+    "norm": "david-zawada"
+  },
+  {
+    "team": "Daniel Schwindt",
+    "norm": "daniel-schwindt"
+  },
+  {
+    "team": "David Hosek",
+    "norm": "david-hosek"
+  },
+  {
+    "team": "Ivan Klevets",
+    "norm": "ivan-klevets"
+  },
+  {
+    "team": "Kevin Enz",
+    "norm": "kevin-enz"
+  },
+  {
+    "team": "Seyedmostafa Salehizadeh",
+    "norm": "seyedmostafa-salehizadeh"
+  },
+  {
+    "team": "Roggers Souza",
+    "norm": "roggers-souza"
+  },
+  {
+    "team": "Tommy Morrisson",
+    "norm": "tommy-morrisson"
+  },
+  {
+    "team": "Jesus Gutierrez",
+    "norm": "jesus-gutierrez"
+  },
+  {
+    "team": "Raul Flores",
+    "norm": "raul-flores"
+  },
+  {
+    "team": "Diego Santos",
+    "norm": "diego-santos"
+  },
+  {
+    "team": "Harda Karim",
+    "norm": "harda-karim"
+  },
+  {
+    "team": "Leo Bonin",
+    "norm": "leo-bonin"
+  },
+  {
+    "team": "Liam Macfadyen",
+    "norm": "liam-macfadyen"
+  },
+  {
+    "team": "Tarcisio Romano",
+    "norm": "tarcisio-romano"
+  },
+  {
+    "team": "Camillo Avellan",
+    "norm": "camillo-avellan"
+  },
+  {
+    "team": "Martin Leon",
+    "norm": "martin-leon"
+  },
+  {
+    "team": "Shelmaliers",
+    "norm": "shelmaliers"
+  },
+  {
+    "team": "Naomh Eanna",
+    "norm": "naomh-eanna"
+  },
+  {
+    "team": "St Martins",
+    "norm": "st-martins"
+  },
+  {
+    "team": "Faythe Harriers",
+    "norm": "faythe-harriers"
+  },
+  {
+    "team": "St Annes Rathangan",
+    "norm": "st-annes-rathangan"
+  },
+  {
+    "team": "Fethard",
+    "norm": "fethard"
+  },
+  {
+    "team": "Rathnure",
+    "norm": "rathnure"
+  },
+  {
+    "team": "Oulart The Ballagh",
+    "norm": "oulart-the-ballagh"
+  },
+  {
+    "team": "Rapparees",
+    "norm": "rapparees"
+  },
+  {
+    "team": "Ferns St. Aidans",
+    "norm": "ferns-st-aidans"
+  },
+  {
+    "team": "Chongqing Wolves (Mobile)",
+    "norm": "chongqing-wolves-mobile"
+  },
+  {
+    "team": "Elevate (Mobile)",
+    "norm": "elevate-mobile"
+  },
+  {
+    "team": "OUG (Mobile)",
+    "norm": "oug-mobile"
+  },
+  {
+    "team": "GodLike (Mobile)",
+    "norm": "godlike-mobile"
+  },
+  {
+    "team": "TDK",
+    "norm": "tdk"
+  },
+  {
+    "team": "Nemiga Gaming",
+    "norm": "nemiga-gaming"
+  },
+  {
+    "team": "The Empress Knights",
+    "norm": "the-empress-knights"
+  },
+  {
+    "team": "Blue Gem Keepers",
+    "norm": "blue-gem-keepers"
+  },
+  {
+    "team": "HAVU Gaming",
+    "norm": "havu-gaming"
+  },
+  {
+    "team": "Rounds",
+    "norm": "rounds"
+  },
+  {
+    "team": "KUUSAMO.gg",
+    "norm": "kuusamogg"
+  },
+  {
+    "team": "SINQU",
+    "norm": "sinqu"
+  },
+  {
+    "team": "BOJONG",
+    "norm": "bojong"
+  },
+  {
+    "team": "Just Players",
+    "norm": "just-players"
+  },
+  {
+    "team": "G 2 Ares",
+    "norm": "g-2-ares"
+  },
+  {
+    "team": "Inner Circle Academy",
+    "norm": "inner-circle-academy"
+  },
+  {
+    "team": "GenOne",
+    "norm": "genone"
+  },
+  {
+    "team": "VP.Prodigy",
+    "norm": "vpprodigy"
+  },
+  {
+    "team": "Mellren",
+    "norm": "mellren"
+  },
+  {
+    "team": "gribo4ki",
+    "norm": "gribo4ki"
+  },
+  {
+    "team": "GameSport",
+    "norm": "gamesport"
+  },
+  {
+    "team": "Sleepless Gaming",
+    "norm": "sleepless-gaming"
+  },
+  {
+    "team": "163ON",
+    "norm": "163on"
+  },
+  {
+    "team": "Atreides",
+    "norm": "atreides"
+  },
+  {
+    "team": "9INE",
+    "norm": "9ine"
+  },
+  {
+    "team": "Brute",
+    "norm": "brute"
+  },
+  {
+    "team": "Lilmix",
+    "norm": "lilmix"
+  },
+  {
+    "team": "Acend",
+    "norm": "acend"
+  },
+  {
+    "team": "6666",
+    "norm": "6666"
+  },
+  {
+    "team": "HOTU",
+    "norm": "hotu"
+  },
+  {
+    "team": "XCLAN",
+    "norm": "xclan"
+  },
+  {
+    "team": "Team Liquid",
+    "norm": "team-liquid"
+  },
+  {
+    "team": "atputies",
+    "norm": "atputies"
+  },
+  {
+    "team": "Johnny Speeds",
+    "norm": "johnny-speeds"
+  },
+  {
+    "team": "Chicken Coop",
+    "norm": "chicken-coop"
+  },
+  {
+    "team": "Iowa Stormboar",
+    "norm": "iowa-stormboar"
+  },
+  {
+    "team": "Shinden",
+    "norm": "shinden"
+  },
+  {
+    "team": "Galorys",
+    "norm": "galorys"
+  },
+  {
+    "team": "MIBR",
+    "norm": "mibr"
+  },
+  {
+    "team": "Yakult Brothers",
+    "norm": "yakult-brothers"
+  },
+  {
+    "team": "Zero Tenacity",
+    "norm": "zero-tenacity"
+  },
+  {
+    "team": " Vici Gaming",
+    "norm": "vici-gaming"
+  },
+  {
+    "team": "Amaru Gaming",
+    "norm": "amaru-gaming"
+  },
+  {
+    "team": "L1ga Team",
+    "norm": "l1ga-team"
+  },
+  {
+    "team": "REKONIX",
+    "norm": "rekonix"
+  },
+  {
+    "team": "Yellow Submarine",
+    "norm": "yellow-submarine"
+  },
+  {
+    "team": "Execration",
+    "norm": "execration"
+  },
+  {
+    "team": "Enjoy",
+    "norm": "enjoy"
+  },
+  {
+    "team": "GLYPH",
+    "norm": "glyph"
+  },
+  {
+    "team": "Xtreme Gaming",
+    "norm": "xtreme-gaming"
+  },
+  {
+    "team": "LGD Gaming",
+    "norm": "lgd-gaming"
+  },
+  {
+    "team": "Team Resilience",
+    "norm": "team-resilience"
+  },
+  {
+    "team": "PlayTime",
+    "norm": "playtime"
+  },
+  {
+    "team": "Team Stray",
+    "norm": "team-stray"
+  },
+  {
+    "team": "Team Travoman",
+    "norm": "team-travoman"
+  },
+  {
+    "team": "Team Rostik",
+    "norm": "team-rostik"
+  },
+  {
+    "team": "Team Avice",
+    "norm": "team-avice"
+  },
+  {
+    "team": "Team Daxak",
+    "norm": "team-daxak"
+  },
+  {
+    "team": "FTS",
+    "norm": "fts"
+  },
+  {
+    "team": "Team Jenz",
+    "norm": "team-jenz"
+  },
+  {
+    "team": "Nigma Galaxy",
+    "norm": "nigma-galaxy"
+  },
+  {
+    "team": "1WIN",
+    "norm": "1win"
+  },
+  {
+    "team": "MOUZ",
+    "norm": "mouz"
+  },
+  {
+    "team": "Nemiga",
+    "norm": "nemiga"
+  },
+  {
+    "team": "Syntax",
+    "norm": "syntax"
+  },
+  {
+    "team": "Natus Vincere",
+    "norm": "natus-vincere"
+  },
+  {
+    "team": "Karmine Corp",
+    "norm": "karmine-corp"
+  },
+  {
+    "team": "Movistar KOI",
+    "norm": "movistar-koi"
+  },
+  {
+    "team": "Team Heretics",
+    "norm": "team-heretics"
+  },
+  {
+    "team": "Team Vitality",
+    "norm": "team-vitality"
+  },
+  {
+    "team": "GIANTX",
+    "norm": "giantx"
+  },
+  {
+    "team": "SK Gaming",
+    "norm": "gaming"
+  },
+  {
+    "team": "Team Orange Gaming",
+    "norm": "team-orange-gaming"
+  },
+  {
+    "team": "Eintracht Spandau",
+    "norm": "eintracht-spandau"
+  },
+  {
+    "team": "Rossmann Centaurs",
+    "norm": "rossmann-centaurs"
+  },
+  {
+    "team": "Fukuoka SoftBank Hawks Gaming",
+    "norm": "fukuoka-softbank-hawks-gaming"
+  },
+  {
+    "team": "Deep Cross Gaming",
+    "norm": "deep-cross-gaming"
+  },
+  {
+    "team": "Ground Zero Gaming",
+    "norm": "ground-zero-gaming"
+  },
+  {
+    "team": "Cloud9",
+    "norm": "cloud9"
+  },
+  {
+    "team": "Team Dignitas",
+    "norm": "team-dignitas"
+  },
+  {
+    "team": "Sentinels",
+    "norm": "sentinels"
+  },
+  {
+    "team": "Blue Otter",
+    "norm": "blue-otter"
+  },
+  {
+    "team": "Conviction",
+    "norm": "conviction"
+  },
+  {
+    "team": "Dorado Gaming",
+    "norm": "dorado-gaming"
+  },
+  {
+    "team": "CCG",
+    "norm": "ccg"
+  },
+  {
+    "team": "Keyd Stars",
+    "norm": "keyd-stars"
+  },
+  {
+    "team": "Los Grandes",
+    "norm": "los-grandes"
+  },
+  {
+    "team": "Red Canids",
+    "norm": "red-canids"
+  },
+  {
+    "team": "paiN Gaming Academy",
+    "norm": "pain-gaming-academy"
+  },
+  {
+    "team": "7REX",
+    "norm": "7rex"
+  },
+  {
+    "team": "Team Solid",
+    "norm": "team-solid"
+  },
+  {
+    "team": "Vivo Keyd Stars Academy",
+    "norm": "vivo-keyd-stars-academy"
+  },
+  {
+    "team": "RMD Gaming",
+    "norm": "rmd-gaming"
+  },
+  {
+    "team": "World Elite",
+    "norm": "world-elite"
+  },
+  {
+    "team": "Bilibili Gaming",
+    "norm": "bilibili-gaming"
+  },
+  {
+    "team": "Anyone's Legend",
+    "norm": "anyones-legend"
+  },
+  {
+    "team": "EDward Gaming",
+    "norm": "edward-gaming"
+  },
+  {
+    "team": "Ninjas in Pyjamas",
+    "norm": "ninjas-in-pyjamas"
+  },
+  {
+    "team": "Weibo Gaming",
+    "norm": "weibo-gaming"
+  },
+  {
+    "team": "TT Gaming",
+    "norm": "tt-gaming"
+  },
+  {
+    "team": "JingDong Gaming",
+    "norm": "jingdong-gaming"
+  },
+  {
+    "team": "Invictus Gaming",
+    "norm": "invictus-gaming"
+  },
+  {
+    "team": "Solary",
+    "norm": "solary"
+  },
+  {
+    "team": "Esprit Shonen",
+    "norm": "esprit-shonen"
+  },
+  {
+    "team": "TLN Pirates",
+    "norm": "tln-pirates"
+  },
+  {
+    "team": "ZYB",
+    "norm": "zyb"
+  },
+  {
+    "team": "Karmine Corp Blue",
+    "norm": "karmine-corp-blue"
+  },
+  {
+    "team": "Ici Japon Corp. Esport",
+    "norm": "ici-japon-corp-esport"
+  },
+  {
+    "team": "Vitality.Bee",
+    "norm": "vitalitybee"
+  },
+  {
+    "team": "DN SOOPers",
+    "norm": "dn-soopers"
+  },
+  {
+    "team": "Hanjin Brion",
+    "norm": "hanjin-brion"
+  },
+  {
+    "team": "Kiwoom DRX",
+    "norm": "kiwoom-drx"
+  },
+  {
+    "team": "Kiwoom DRX Challengers",
+    "norm": "kiwoom-drx-challengers"
+  },
+  {
+    "team": "Hanjin Brion Challengers",
+    "norm": "hanjin-brion-challengers"
+  },
+  {
+    "team": "KT Rolster Challengers",
+    "norm": "kt-rolster-challengers"
+  },
+  {
+    "team": "DN SOOPers Challengers",
+    "norm": "dn-soopers-challengers"
+  },
+  {
+    "team": "LUA Gaming",
+    "norm": "lua-gaming"
+  },
+  {
+    "team": "Los Heretics",
+    "norm": "los-heretics"
+  },
+  {
+    "team": "9z Team",
+    "norm": "9z-team"
+  },
+  {
+    "team": "Twisted Minds",
+    "norm": "twisted-minds"
+  },
+  {
+    "team": "Weibo",
+    "norm": "weibo"
+  },
+  {
+    "team": "Whipsnakes LC",
+    "norm": "whipsnakes-lc"
+  },
+  {
+    "team": "Denver Outlaws",
+    "norm": "denver-outlaws"
+  },
+  {
+    "team": "Redwoods LC",
+    "norm": "redwoods-lc"
+  },
+  {
+    "team": "Archers",
+    "norm": "archers"
+  },
+  {
+    "team": "Boston Cannons",
+    "norm": "boston-cannons"
+  },
+  {
+    "team": "Waterdogs",
+    "norm": "waterdogs"
+  },
+  {
+    "team": "Carolina Chaos",
+    "norm": "carolina-chaos"
+  },
+  {
+    "team": "Owen Sound North Stars",
+    "norm": "owen-sound-north-stars"
+  },
+  {
+    "team": "Brooklin LC",
+    "norm": "brooklin-lc"
+  },
+  {
+    "team": "Oakville Rock",
+    "norm": "oakville-rock"
+  },
+  {
+    "team": "AG Super Play",
+    "norm": "ag-super-play"
+  },
+  {
+    "team": "JDG",
+    "norm": "jdg"
+  },
+  {
+    "team": "Hero JiuJing",
+    "norm": "hero-jiujing"
+  },
+  {
+    "team": "SYGaming",
+    "norm": "sygaming"
+  },
+  {
+    "team": "LGD NBW",
+    "norm": "lgd-nbw"
+  },
+  {
+    "team": "Rogue Warriors",
+    "norm": "rogue-warriors"
+  },
+  {
+    "team": "KuaiShow Gaming",
+    "norm": "kuaishow-gaming"
+  },
+  {
+    "team": "EDGM",
+    "norm": "edgm"
+  },
+  {
+    "team": "Elevate Academy",
+    "norm": "elevate-academy"
+  },
+  {
+    "team": "ENX",
+    "norm": "enx"
+  },
+  {
+    "team": "Türkiye (U23)",
+    "norm": "türkiye-u23"
+  },
+  {
+    "team": "Austria U23",
+    "norm": "austria-u23"
+  },
+  {
+    "team": "Hungary U23",
+    "norm": "hungary-u23"
+  },
+  {
+    "team": "Hollanda U23",
+    "norm": "hollanda-u23"
+  },
+  {
+    "team": "İrlanda Cumhuriyeti U23 (Kadınlar)",
+    "norm": "irlanda-cumhuriyeti-u23-kadınlar"
+  },
+  {
+    "team": "Türkiye U23 (Kadınlar)",
+    "norm": "türkiye-u23-kadınlar"
+  },
+  {
+    "team": "Avusturya U23 (Kadınlar)",
+    "norm": "avusturya-u23-kadınlar"
+  },
+  {
+    "team": "Hollanda U23 (Kadınlar)",
+    "norm": "hollanda-u23-kadınlar"
+  },
+  {
+    "team": "Yeni Zelanda",
+    "norm": "yeni-zelanda"
+  },
+  {
+    "team": "Scotland",
+    "norm": "scotland"
+  },
+  {
+    "team": "İngiltere",
+    "norm": "ingiltere"
+  },
+  {
+    "team": "Avustralya",
+    "norm": "avustralya"
+  },
+  {
+    "team": "Dallas Power",
+    "norm": "dallas-power"
+  },
+  {
+    "team": "Miami 305",
+    "norm": "miami-305"
+  },
+  {
+    "team": "Boston Ball Hogs",
+    "norm": "boston-ball-hogs"
+  },
+  {
+    "team": "DMV Trilogy",
+    "norm": "dmv-trilogy"
+  },
+  {
+    "team": "Chicago Triplets",
+    "norm": "chicago-triplets"
+  },
+  {
+    "team": "LA Riot",
+    "norm": "la-riot"
+  },
+  {
+    "team": "Houston Rig Hands",
+    "norm": "houston-rig-hands"
+  },
+  {
+    "team": "Gentle Mates GC",
+    "norm": "gentle-mates-gc"
+  },
+  {
+    "team": "GIANTX GC",
+    "norm": "giantx-gc"
+  },
+  {
+    "team": "SK Nebula",
+    "norm": "nebula"
+  },
+  {
+    "team": "G 2 Gozen",
+    "norm": "g-2-gozen"
+  },
+  {
+    "team": "1 Belçika",
+    "norm": "1-belçika"
+  },
+  {
+    "team": "1 Brezilya",
+    "norm": "1-brezilya"
+  },
+  {
+    "team": "2 İtalya",
+    "norm": "2-italya"
+  },
+  {
+    "team": "1 İngiltere",
+    "norm": "1-ingiltere"
+  },
+  {
+    "team": "2 Almanya",
+    "norm": "2-almanya"
+  },
+  {
+    "team": "1 İspanya",
+    "norm": "1-ispanya"
+  },
+  {
+    "team": "2 Arjantin",
+    "norm": "2-arjantin"
+  },
+  {
+    "team": "1 Arjantin",
+    "norm": "1-arjantin"
+  },
+  {
+    "team": "2 Belçika",
+    "norm": "2-belçika"
+  },
+  {
+    "team": "1 Almanya",
+    "norm": "1-almanya"
+  },
+  {
+    "team": "2 İspanya",
+    "norm": "2-ispanya"
+  },
+  {
+    "team": "1 İtalya",
+    "norm": "1-italya"
+  },
+  {
+    "team": "2 İngiltere",
+    "norm": "2-ingiltere"
+  },
+  {
+    "team": "2 Brezilya",
+    "norm": "2-brezilya"
+  },
+  {
+    "team": "VARREL",
+    "norm": "varrel"
+  },
+  {
+    "team": "Team Secret",
+    "norm": "team-secret"
+  },
+  {
+    "team": "Paper Rex",
+    "norm": "paper-rex"
+  },
+  {
+    "team": "RRQ",
+    "norm": "rrq"
+  },
+  {
+    "team": "ZETA DIVISION",
+    "norm": "zeta-division"
+  },
+  {
+    "team": "JD Gaming",
+    "norm": "jd-gaming"
+  },
+  {
+    "team": "Cloud9 Blue",
+    "norm": "cloud9-blue"
+  },
+  {
+    "team": "100 Thieves",
+    "norm": "100-thieves"
+  },
+  {
+    "team": "Evil Geniuses",
+    "norm": "evil-geniuses"
+  },
+  {
+    "team": "MiBR",
+    "norm": "mibr"
+  },
+  {
+    "team": "Leviatan",
+    "norm": "leviatan"
+  },
+  {
+    "team": "NRG",
+    "norm": "nrg"
+  },
+  {
+    "team": "Team Envy",
+    "norm": "team-envy"
+  },
+  {
+    "team": "Semyon Zaitsev",
+    "norm": "semyon-zaitsev"
+  },
+  {
+    "team": "Denis Kolosov",
+    "norm": "denis-kolosov"
+  },
+  {
+    "team": "Frogger",
+    "norm": "frogger"
+  },
+  {
+    "team": "Bloodshot",
+    "norm": "bloodshot"
+  },
+  {
+    "team": "Wheezy",
+    "norm": "wheezy"
+  },
+  {
+    "team": "Bruno",
+    "norm": "bruno"
+  },
+  {
+    "team": "Bluedini",
+    "norm": "bluedini"
+  },
+  {
+    "team": "Shadow",
+    "norm": "shadow"
+  },
+  {
+    "team": "Roadkill",
+    "norm": "roadkill"
+  },
+  {
+    "team": "Team Vamos",
+    "norm": "team-vamos"
+  },
+  {
+    "team": "Team Spirit",
+    "norm": "team-spirit"
+  },
+  {
+    "team": "Aurora Gaming",
+    "norm": "aurora-gaming"
+  },
+  {
+    "team": "ONIC",
+    "norm": "onic"
+  },
+  {
+    "team": "Peter Truchlik",
+    "norm": "peter-truchlik"
+  },
+  {
+    "team": "Jaidan Fa'anana",
+    "norm": "jaidan-faanana"
+  },
+  {
+    "team": "Damien Dibbell",
+    "norm": "damien-dibbell"
+  },
+  {
+    "team": "Dorian Perez",
+    "norm": "dorian-perez"
+  },
+  {
+    "team": "Djordje Tomic",
+    "norm": "djordje-tomic"
+  },
+  {
+    "team": "Adnan Alic",
+    "norm": "adnan-alic"
+  },
+  {
+    "team": "Vasilii Kamotskii",
+    "norm": "vasilii-kamotskii"
+  },
+  {
+    "team": "Dawid Zalewski",
+    "norm": "dawid-zalewski"
+  },
+  {
+    "team": "Louis Robinson",
+    "norm": "louis-robinson"
+  },
+  {
+    "team": "Pavol Horelikan",
+    "norm": "pavol-horelikan"
+  },
+  {
+    "team": "Darren Godfrey",
+    "norm": "darren-godfrey"
+  },
+  {
+    "team": "Daniyar Toktarov",
+    "norm": "daniyar-toktarov"
+  },
+  {
+    "team": "Sheena Bathory",
+    "norm": "sheena-bathory"
+  },
+  {
+    "team": "Abby Montes",
+    "norm": "abby-montes"
+  },
+  {
+    "team": "Nadja Milijancevic",
+    "norm": "nadja-milijancevic"
+  },
+  {
+    "team": "Robyn Wereshchuk",
+    "norm": "robyn-wereshchuk"
+  },
+  {
+    "team": "Eldar Bubenko",
+    "norm": "eldar-bubenko"
+  },
+  {
+    "team": "Georgi Tsvetkov",
+    "norm": "georgi-tsvetkov"
+  },
+  {
+    "team": "Oleg Zhokh",
+    "norm": "oleg-zhokh"
+  },
+  {
+    "team": "Luka Tsinadze",
+    "norm": "luka-tsinadze"
+  },
+  {
+    "team": "Vitaily Laletin",
+    "norm": "vitaily-laletin"
+  },
+  {
+    "team": "Alizhan Muratov",
+    "norm": "alizhan-muratov"
+  },
+  {
+    "team": "Ibragim Sagov",
+    "norm": "ibragim-sagov"
+  },
+  {
+    "team": "Yordan Tsonev",
+    "norm": "yordan-tsonev"
+  },
+  {
+    "team": "Krasimir Kostadinov",
+    "norm": "krasimir-kostadinov"
+  },
+  {
+    "team": "Nurdaulet Aidarkhan",
+    "norm": "nurdaulet-aidarkhan"
+  },
+  {
+    "team": "Vladislavs Krasovskis",
+    "norm": "vladislavs-krasovskis"
+  },
+  {
+    "team": "Artyom Popov",
+    "norm": "artyom-popov"
+  },
+  {
+    "team": "Ryan Belanger",
+    "norm": "ryan-belanger"
+  },
+  {
+    "team": "Vala Ichqiti",
+    "norm": "vala-ichqiti"
+  },
+  {
+    "team": "Tim Tallmadge",
+    "norm": "tim-tallmadge"
+  },
+  {
+    "team": "Irina Driaeva",
+    "norm": "irina-driaeva"
+  }
+]

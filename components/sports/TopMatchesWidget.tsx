@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Users, BarChart3, TrendingUp, Flame } from 'lucide-react';
 import { MatchInfo } from './types';
 import { useBetSlip } from '../../contexts/BetSlipContext';
-import { PlayerLogo } from './PlayerLogo';
+import { isEliteTeam, getMatchPriorityScore } from '../../utils/eliteTeams';
+import { PlayerLogo, findBestLogoMatch } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
 
 interface TopMatchesWidgetProps {
   matches: MatchInfo[];
+  onSelectMatch: (match: MatchInfo) => void;
 }
 
 // Helper to get dummy viewers based on match ID for consistency
@@ -61,13 +63,19 @@ const ELITE_LEAGUES = [
   'konferans ligi', 'conference league', 'dünya kupası', 'world cup', 'avrupa şampiyonası'
 ];
 
-const POPULAR_TEAMS = ['galatasaray', 'fenerbahçe', 'beşiktaş', 'trabzonspor', 'real madrid', 'barcelona', 'manchester', 'bayern', 'arsenal', 'liverpool', 'psg', 'juventus', 'inter', 'milan', 'chelsea'];
-
-export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches }) => {
+export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onSelectMatch }) => {
   const { addSelection } = useBetSlip();
   const [now, setNow] = useState(Date.now());
   const [scrollIdx, setScrollIdx] = useState(0);
+  const [activeMarket, setActiveMarket] = useState(0); // 0: 1x2, 1: Alt/Üst, 2: KG
   const [oddsOverride, setOddsOverride] = useState<Record<string, any>>({});
+
+  useEffect(() => {
+    const marketTimer = setInterval(() => {
+      setActiveMarket(prev => (prev + 1) % 3);
+    }, 3000);
+    return () => clearInterval(marketTimer);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
@@ -117,25 +125,57 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches }) =
     return matches
       .filter(m => {
         if (!m.homeOdd || m.homeOdd === '-') return false;
-        return true; // allow all matches to have a bigger pool, we'll sort by popular
+        
+        // Eğer her iki takımın da logosu yoksa, maçı widget'a alma
+        const hasHomeLogo = !!findBestLogoMatch(m.home);
+        const hasAwayLogo = !!findBestLogoMatch(m.away);
+        if (!hasHomeLogo && !hasAwayLogo) return false;
+        
+        // En fazla 24 saat uzağındaki maçlar
+        if (m.timestamp && !m.isLive) {
+           const diff = m.timestamp - Date.now();
+           if (diff > 86400000) return false;
+        }
+        
+        return true; 
       })
       .sort((a, b) => {
-        const aPop = POPULAR_TEAMS.some(t => a.home.toLowerCase().includes(t) || a.away.toLowerCase().includes(t));
-        const bPop = POPULAR_TEAMS.some(t => b.home.toLowerCase().includes(t) || b.away.toLowerCase().includes(t));
+        const getPriorityScore = (match: MatchInfo) => {
+          let score = 0;
+          const t = match.home.toLowerCase() + ' ' + match.away.toLowerCase();
+          const l = match.league.toLowerCase();
+          
+          // 1. Türk takımlarına ve Türkiye liglerine devasa öncelik
+          const turkishTeams = ['galatasaray', 'fenerbahçe', 'fenerbahce', 'beşiktaş', 'besiktas', 'trabzonspor', 'başakşehir', 'basaksehir', 'konyaspor', 'adana demirspor', 'sivasspor', 'göztepe'];
+          if (turkishTeams.some(tt => t.includes(tt))) score += 15000;
+          if (l.includes('süper lig') || l.includes('super lig') || l.includes('türkiye kupası') || l.includes('1. lig')) score += 12000;
+          
+          // 2. Avrupa 5 Büyük Lig
+          const top5Leagues = ['premier', 'la liga', 'serie a', 'bundesliga', 'ligue 1'];
+          if (top5Leagues.some(el => l.includes(el))) score += 8000;
+          
+          // 3. Avrupa Kupaları
+          if (l.includes('şampiyonlar ligi') || l.includes('champions league') || l.includes('avrupa ligi') || l.includes('europa league')) score += 5000;
+          
+          // VIP takımlar (Real Madrid, City vs. + Diğer elite)
+          const eliteScore = getMatchPriorityScore(match.home, match.away);
+          if (eliteScore > 0) score += (eliteScore * 2000);
+          
+          if (ELITE_LEAGUES.some(el => l.includes(el))) score += 500;
+          
+          if (match.isLive) score += 200; // Live maçlar öne
+          
+          return score;
+        };
+
+        const scoreA = getPriorityScore(a);
+        const scoreB = getPriorityScore(b);
         
-        // 1. Live Popular
-        if (a.isLive && aPop && !(b.isLive && bPop)) return -1;
-        if (!(a.isLive && aPop) && b.isLive && bPop) return 1;
+        if (scoreA !== scoreB) {
+           return scoreB - scoreA; // Highest score first
+        }
         
-        // 2. Any Live
-        if (a.isLive && !b.isLive) return -1;
-        if (!a.isLive && b.isLive) return 1;
-        
-        // 3. Pre-match Popular
-        if (aPop && !bPop) return -1;
-        if (!aPop && bPop) return 1;
-        
-        // 4. Time
+        // Zaman olarak en yakın olan öne (Canlılar ve yakın saattekiler)
         return (a.timestamp || 0) - (b.timestamp || 0);
       })
       .slice(0, 15);
@@ -196,7 +236,27 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches }) =
       {/* Grid / Slider Container */}
       <div className="overflow-x-auto no-scrollbar pb-2">
         <div className="flex gap-4" style={{ transform: `translateX(-${scrollIdx * (340 + 16)}px)`, transition: 'transform 0.4s ease-out' }}>
-          {topMatches.map((match) => {
+          {topMatches.length === 0 ? (
+            // Skeleton loader to prevent layout shift
+            Array.from({ length: 4 }).map((_, idx) => (
+              <div key={idx} className="min-w-[260px] w-[280px] shrink-0 h-[220px] bg-[#0b0e14]/80 rounded-xl border border-white/[0.04] p-3 flex flex-col animate-pulse">
+                <div className="w-16 h-4 bg-white/5 rounded mb-4"></div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-white/5"></div>
+                  <div className="w-24 h-4 bg-white/5 rounded"></div>
+                </div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 rounded-full bg-white/5"></div>
+                  <div className="w-24 h-4 bg-white/5 rounded"></div>
+                </div>
+                <div className="flex gap-2 mt-auto">
+                  <div className="flex-1 h-10 bg-white/5 rounded"></div>
+                  <div className="flex-1 h-10 bg-white/5 rounded"></div>
+                  <div className="flex-1 h-10 bg-white/5 rounded"></div>
+                </div>
+              </div>
+            ))
+          ) : topMatches.map((match) => {
             const fire = getDummyFireStats(match);
             const ts = match.timestamp || (Date.now() + 1000 * 60 * 60 * 2); // default +2 hours if no ts
             
@@ -213,7 +273,11 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches }) =
             const ngOdd = ov?.ng || baseGg.ng;
 
             return (
-              <div key={match.id} className="min-w-[260px] w-[280px] shrink-0 bg-[#0b0e14]/80 backdrop-blur-md rounded-xl border border-white/[0.04] border-l-[3px] border-l-transparent hover:border-l-[#00E5FF] flex flex-col p-3 shadow-xl hover:shadow-[0_8px_30px_rgba(0,229,255,0.05)] transition-all duration-300 relative group/card overflow-hidden">
+              <div 
+                key={match.id} 
+                onClick={() => onSelectMatch?.(match)}
+                className="cursor-pointer min-w-[260px] w-[280px] shrink-0 bg-[#0b0e14]/80 backdrop-blur-md rounded-xl border border-white/[0.04] border-l-[3px] border-l-transparent hover:border-l-[#00E5FF] flex flex-col p-3 shadow-xl hover:shadow-[0_8px_30px_rgba(0,229,255,0.05)] transition-all duration-300 relative group/card overflow-hidden"
+              >
                 
                 {/* Ambient Background Glow */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#00E5FF]/[0.02] to-transparent pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
@@ -255,98 +319,105 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches }) =
                   </div>
                 </div>
 
-                {/* Scrollable Odds Container */}
-                <div className="mt-auto relative z-10 w-full group/odds">
+                {/* Auto-rotating Odds Container */}
+                <div className="mt-auto relative z-10 w-full h-[60px] overflow-hidden">
                   
-                  {/* Swipe Hint Indicator (Always visible, bouncing) */}
-                  <div className="absolute -top-3 right-1 text-[9px] text-[#00E5FF]/90 font-bold uppercase tracking-wider flex items-center gap-1 z-20 pointer-events-none">
-                     <span className="animate-pulse">Kaydır</span>
-                     <ChevronRight className="w-3 h-3 animate-bounce-x text-[#00E5FF]" />
+                  {/* Page 1: 1X2 */}
+                  <div className={`absolute inset-0 w-full transition-all duration-500 transform ${activeMarket === 0 ? 'translate-x-0 opacity-100 z-10' : activeMarket > 0 ? '-translate-x-full opacity-0 z-0' : 'translate-x-full opacity-0 z-0'}`}>
+                    <div className="flex justify-between items-center mb-1.5 px-1">
+                      <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">Maç Sonucu</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSelection({ id: match.homeId || match.id+'_1', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(hOdd.toString().replace(',','.')) });
+                        }}
+                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                      >
+                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">1</span>
+                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={hOdd} /></div>
+                      </button>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSelection({ id: match.drawId || match.id+'_x', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: X', odd: parseFloat(dOdd.toString().replace(',','.')) });
+                        }}
+                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                      >
+                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">X</span>
+                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={dOdd} /></div>
+                      </button>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSelection({ id: match.awayId || match.id+'_2', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 2', odd: parseFloat(aOdd.toString().replace(',','.')) });
+                        }}
+                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                      >
+                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">2</span>
+                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={aOdd} /></div>
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="flex w-full overflow-x-auto snap-x snap-mandatory no-scrollbar hide-scrollbar gap-3 pb-2 pt-1 pr-4">
-                    
-                    {/* Page 1: 1X2 */}
-                    <div className="w-[88%] shrink-0 snap-start snap-always">
-                      <div className="flex justify-between items-center mb-1.5 px-1">
-                        <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">Maç Sonucu</span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-1.5">
-                        <button 
-                          onClick={() => addSelection({ id: match.homeId || match.id+'_1', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(hOdd.replace(',','.')) })}
-                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                        >
-                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">1</span>
-                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={hOdd} /></div>
-                        </button>
-                        <button 
-                          onClick={() => addSelection({ id: match.drawId || match.id+'_x', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: X', odd: parseFloat(dOdd.replace(',','.')) })}
-                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                        >
-                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">X</span>
-                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={dOdd} /></div>
-                        </button>
-                        <button 
-                          onClick={() => addSelection({ id: match.awayId || match.id+'_2', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 2', odd: parseFloat(aOdd.replace(',','.')) })}
-                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                        >
-                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">2</span>
-                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={aOdd} /></div>
-                        </button>
-                      </div>
+                  {/* Page 2: Alt/Üst 2.5 */}
+                  <div className={`absolute inset-0 w-full transition-all duration-500 transform ${activeMarket === 1 ? 'translate-x-0 opacity-100 z-10' : activeMarket > 1 ? '-translate-x-full opacity-0 z-0' : 'translate-x-full opacity-0 z-0'}`}>
+                    <div className="flex justify-between items-center mb-1.5 px-1">
+                      <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">2.5 Alt / Üst</span>
                     </div>
-
-                    {/* Page 2: Alt/Üst 2.5 */}
-                    <div className="w-[88%] shrink-0 snap-start snap-always">
-                      <div className="flex justify-between items-center mb-1.5 px-1">
-                        <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">2.5 Alt / Üst</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-1.5">
-                        <button 
-                          onClick={() => addSelection({ id: match.id+'_under', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2.5 Alt', odd: parseFloat(underOdd) })}
-                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                        >
-                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Alt</span>
-                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={underOdd} /></div>
-                        </button>
-                        <button 
-                          onClick={() => addSelection({ id: match.id+'_over', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2.5 Üst', odd: parseFloat(overOdd) })}
-                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                        >
-                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Üst</span>
-                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={overOdd} /></div>
-                        </button>
-                      </div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSelection({ id: match.id+'_under', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2.5 Alt', odd: parseFloat(underOdd) });
+                        }}
+                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                      >
+                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Alt</span>
+                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={underOdd} /></div>
+                      </button>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSelection({ id: match.id+'_over', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2.5 Üst', odd: parseFloat(overOdd) });
+                        }}
+                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                      >
+                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Üst</span>
+                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={overOdd} /></div>
+                      </button>
                     </div>
-
-                    {/* Page 3: KG Var/Yok */}
-                    <div className="w-[88%] shrink-0 snap-start snap-always">
-                      <div className="flex justify-between items-center mb-1.5 px-1">
-                        <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">Karşılıklı Gol</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-1.5">
-                        <button 
-                          onClick={() => addSelection({ id: match.id+'_gg', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Var', odd: parseFloat(ggOdd) })}
-                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                        >
-                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Var</span>
-                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={ggOdd} /></div>
-                        </button>
-                        <button 
-                          onClick={() => addSelection({ id: match.id+'_ng', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Yok', odd: parseFloat(ngOdd) })}
-                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                        >
-                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Yok</span>
-                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={ngOdd} /></div>
-                        </button>
-                      </div>
-                    </div>
-                    
                   </div>
-                  
-                  {/* Fade Edge for Scroll Indication */}
-                  <div className="absolute right-0 top-0 bottom-2 w-8 bg-gradient-to-l from-[#0b0e14] to-transparent pointer-events-none opacity-80 z-10"></div>
-                  
+
+                  {/* Page 3: KG Var/Yok */}
+                  <div className={`absolute inset-0 w-full transition-all duration-500 transform ${activeMarket === 2 ? 'translate-x-0 opacity-100 z-10' : activeMarket > 2 ? '-translate-x-full opacity-0 z-0' : 'translate-x-full opacity-0 z-0'}`}>
+                    <div className="flex justify-between items-center mb-1.5 px-1">
+                      <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">Karşılıklı Gol</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSelection({ id: match.id+'_gg', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Var', odd: parseFloat(ggOdd) });
+                        }}
+                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                      >
+                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Var</span>
+                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={ggOdd} /></div>
+                      </button>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSelection({ id: match.id+'_ng', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Yok', odd: parseFloat(ngOdd) });
+                        }}
+                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                      >
+                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Yok</span>
+                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={ngOdd} /></div>
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
               </div>

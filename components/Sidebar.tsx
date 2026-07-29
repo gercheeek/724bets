@@ -1,323 +1,178 @@
-import React, { useState } from 'react';
-import {
-  Menu, Trophy, Star, Target, Gift, Ticket, Globe, Crown, ChevronDown, ChevronUp, 
-  Sparkles, Cherry, Percent, Headphones, FileText, Copy, Radio, Flame, LayoutDashboard, 
-  Gamepad2, Zap, Diamond, Calendar, Tv, Dices, ChevronLeft, ChevronRight, Clock, Search, LogOut, Clover, Play
+"use client";
+import React from 'react';
+import { 
+  Crown, Cherry, Tv, Radio, Percent, Diamond, Users, Gift, FileText, Headphones, Target, Menu, Globe, Ticket
 } from 'lucide-react';
-import { NavVisibility } from './Header';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useBetting } from '../contexts/BettingContext';
 import SportsSidebarContent from './SportsSidebarContent';
 
 interface SidebarProps {
   isOpen: boolean;
-  onToggle: () => void;
+  onToggle?: () => void;
   activeView: string;
   onViewChange: (view: string) => void;
-  userRole?: string | null;
-  siteUser?: any | null;
-  navVisibility?: NavVisibility;
-  onStartTour?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  isOpen,
-  onToggle,
-  activeView,
-  onViewChange,
-  siteUser
-}) => {
-  const { t } = useLanguage();
-  const { setActiveSport } = useBetting();
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewChange }) => {
+  const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches'].includes(activeView);
+  const isCasinoView = ['casino', 'slots', 'live-casino', 'originals'].includes(activeView);
 
-  // Dynamic Sidebar State
-  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({ promo_menu: true, casino_menu: true });
-
-  const toggleAccordion = (id: string) => {
-    setOpenAccordions(prev => ({ ...prev, [id]: !prev[id] }));
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, route: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (route === 'openChat') {
+      window.dispatchEvent(new CustomEvent('openSupportChat'));
+    } else if (route === 'openLang') {
+      // Dil degistirme eylemi
+    } else {
+      onViewChange(route);
+    }
+    
+    if (window.innerWidth < 1024 && onToggle) {
+      onToggle();
+    }
   };
 
-  const sidebarItems = [
+  const menuItems = [
     { id: 'home', label: 'Anasayfa', icon: Crown, route: 'home' },
-    { id: 'favorites', label: 'Sık Kullanılanlar', icon: Star, route: 'favorites' },
-    { id: 'recent', label: 'Son Oynanan', icon: Clock, route: 'recent' },
-    { id: 'new', label: 'Yeni Çıkanlar', icon: Sparkles, route: 'new' },
-    { type: 'divider' },
-    {
-      id: 'casino_menu', label: 'Casino', icon: Cherry, route: 'casino',
-      children: [
-        { id: 'casino_all', label: 'Tüm Oyunlar', route: 'casino' },
-        { id: 'slots', label: 'Slotlar', route: 'slots' },
-        { id: 'live-casino', label: 'Canlı Casino', route: 'live-casino' }
-      ]
-    },
-    {
-      id: 'originals_menu', label: 'Originals', icon: Radio, route: 'originals',
-      children: [
-        { id: 'originals_all', label: 'Tüm Originals', route: 'originals' },
-        { id: 'crash', label: 'Crash', route: 'crash-turbo' },
-        { id: 'plinko', label: 'Plinko', route: 'plinko' }
-      ]
-    },
-    {
-      id: 'promo_menu', label: 'Promosyonlar', icon: Percent,
-      children: [
-        { id: 'promo_all', label: 'Bonuslar', route: 'promo' },
-        { id: 'tournaments', label: 'Turnuvalar', route: 'tournaments' }
-      ]
-    }
+    { type: 'spacer', height: 'h-3' },
+    { id: 'live-casino', label: 'Canlı Casino', icon: Tv, route: 'live-casino' },
+    { id: 'originals', label: 'Originals', icon: Radio, route: 'originals' },
+    { id: 'promo', label: 'Promosyonlar', icon: Percent, route: 'promo' },
+    { type: 'spacer', height: 'h-4' },
+    { id: 'vip-club', label: 'VIP Kulübü', icon: Diamond, route: 'vip-club' },
+    { id: 'affiliate', label: 'İş Ortaklığı', icon: Users, route: 'affiliate/overview' },
   ];
 
   const bottomItems = [
     { id: 'rewards', label: 'Ödüller', icon: Gift, route: 'rewards' },
-    { id: 'docs', label: 'Belge', icon: FileText, route: 'docs' },
-    { id: 'support', label: 'Canlı Destek', icon: Headphones, action: 'openChat' },
-    { id: 'lang', label: 'Dil', icon: Globe, action: 'openLang' }
+    { id: 'docs', label: 'Kullanım Şartları', icon: FileText, route: 'docs' },
+    { id: 'support', label: 'Canlı Destek', icon: Headphones, route: 'openChat' },
+    { id: 'lang', label: 'Dil', icon: Globe, route: 'openLang' }
   ];
 
-  const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches'].includes(activeView);
-  const isCasinoView = ['casino', 'slots', 'live-casino', 'originals'].includes(activeView);
+  const renderLink = (item: any) => {
+    if (item.type === 'spacer') {
+      return <div key={Math.random()} className={`w-full ${item.height} relative z-[9999]`} />;
+    }
 
-  const NavItem = ({ icon: Icon, label, isActive, onClick, iconColor = 'text-[#8b92a5]', activeIconColor = 'text-white' }: any) => (
-    <div 
-      className={`flex items-center py-2.5 mb-1 cursor-pointer transition-colors duration-200 relative group px-2 mx-3
-        ${isActive ? 'text-white' : 'text-[#8b92a5] hover:text-white'}
-      `}
-      onClick={onClick}
-    >
-      {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-gradient-to-b from-[#00E5FF] to-[#00b3cc] shadow-[0_0_8px_#00E5FF] rounded-r-md z-10"></div>}
-      <Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? activeIconColor : iconColor + ' group-hover:text-white'}`} strokeWidth={isActive ? 2.5 : 2} />
-      
-      <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-[opacity,transform,width] duration-300 ${!isOpen && 'opacity-0 translate-x-4 w-0 hidden'}`}>
-        {label}
-      </span>
-      
-      {/* Flyout for collapsed state */}
-      {!isOpen && (
-        <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 bg-[#1b2230] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all border border-white/10 font-bold text-xs">
-          {label}
-        </div>
-      )}
-    </div>
-  );
+    const isActive = activeView === item.route;
+    const href = item.route === 'home' ? '/' : (['openChat', 'openLang'].includes(item.route) ? '#' : `/${item.route}`);
 
-  const AccordionItem = ({ icon: Icon, label, id, children, route }: any) => {
-    const isOpenState = openAccordions[id] || false;
     return (
-      <div className={`relative group mx-3 mb-1 transition-[height] duration-300 ${isOpen ? 'overflow-hidden' : ''} bg-transparent`}>
-        <div 
-          className={`flex items-center justify-between px-2 py-2.5 cursor-pointer transition-colors duration-300 text-[#8b92a5] hover:text-white ${isOpenState ? 'text-white' : ''}`}
-          onClick={() => {
-            if (isOpen) toggleAccordion(id);
-            if (route) onViewChange(route);
-          }}
-        >
-          <div className="flex items-center">
-            <Icon className={`w-5 h-5 min-w-[20px] ml-2.5`} strokeWidth={isOpenState ? 2.5 : 2} />
-            <span className={`ml-4 font-semibold text-[14px] whitespace-nowrap transition-[opacity,transform] duration-300 ${!isOpen && 'opacity-0 hidden'}`}>
-              {label}
-            </span>
-          </div>
-          {isOpen && (
-            <ChevronDown className={`w-4 h-4 text-[#8b92a5] transition-transform duration-300 ${isOpenState ? 'rotate-180' : ''}`} />
-          )}
-        </div>
+      <a
+        key={item.id}
+        href={href}
+        onClick={(e) => handleNavClick(e, item.route)}
+        className={`w-full flex items-center py-3 cursor-pointer transition-colors duration-200 relative group text-left border-none bg-transparent outline-none z-[9999] pointer-events-auto
+          ${isActive ? 'text-white' : 'text-[#8b92a5] hover:text-white'}
+          ${isOpen ? 'px-6' : 'px-4 justify-center'}
+        `}
+      >
+        {/* Active Pill Indicator */}
+        {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-[3px] bg-[#00E5FF] shadow-[0_0_10px_#00E5FF] rounded-r-md z-10" />}
+        
+        <item.icon className={`w-[22px] h-[22px] min-w-[22px] transition-colors ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'} ${!isOpen ? 'mx-auto' : ''}`} strokeWidth={isActive ? 2.5 : 2} />
+        
+        <span className={`ml-4 font-semibold text-[15px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen ? 'opacity-0 translate-x-4 w-0 hidden' : 'opacity-100'}`}>
+          {item.label}
+        </span>
 
-        {/* Submenu for Expanded State */}
-        {isOpen && isOpenState && (
-          <div className="pb-2 pt-1 px-1">
-            {children}
-          </div>
-        )}
-
-        {/* Flyout Submenu for Collapsed State */}
+        {/* Tooltip for collapsed mode */}
         {!isOpen && (
-          <div className="absolute left-[calc(100%+8px)] top-0 bg-[#1b2230] rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible z-[999] transition-all border border-white/10 min-w-[200px] overflow-hidden">
-            <div className="px-4 py-3 border-b border-white/5 bg-[#141a25]">
-              <span className="font-bold text-white text-sm">{label}</span>
-            </div>
-            <div className="py-2">
-              {children}
-            </div>
+          <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 bg-[#1b2230] text-white px-3 py-1.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[99999] transition-all border border-white/10 font-bold text-xs pointer-events-none">
+            {item.label}
           </div>
         )}
-      </div>
+      </a>
     );
   };
 
-  const SubMenuItem = ({ label, isActive, onClick }: any) => (
-    <div 
-      className={`px-3 py-1.5 mx-2 cursor-pointer transition-colors whitespace-nowrap text-[13px] font-medium flex items-center
-        ${isOpen ? 'pl-12 relative before:absolute before:left-[30px] before:top-1/2 before:w-[5px] before:h-[5px] before:bg-[#4b5563] before:rounded-full before:-translate-y-1/2' : ''}
-        ${isActive ? 'text-white before:!bg-white' : 'text-[#8b92a5] hover:text-white'}
-      `}
-      onClick={onClick}
-    >
-      {label}
-    </div>
-  );
-
   return (
-    <>
-      <style>{`
-        .codinglab-sidebar {
-          background-color: transparent;
-          transition: all 0.4s ease;
-          position: relative;
-          z-index: 100;
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          width: 100%;
-        }
-        .codinglab-sidebar.open {
-          width: 100%;
-        }
-        .codinglab-sidebar.closed {
-          width: 100%;
-        }
-        .codinglab-sidebar-inner {
-          flex: 1;
-        }
-        .codinglab-sidebar.open .codinglab-sidebar-inner {
-          overflow-y: auto;
-          overflow-x: hidden;
-        }
-        .codinglab-sidebar.closed .codinglab-sidebar-inner {
-          overflow-y: visible;
-          overflow-x: visible;
-        }
-        .codinglab-sidebar-inner::-webkit-scrollbar {
-          width: 4px;
-        }
-        .codinglab-sidebar-inner::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .codinglab-sidebar-inner::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-        }
-      `}</style>
+    <div className={`relative z-[99999] pointer-events-auto flex flex-col h-full bg-[#0A0D14] transition-[width] duration-300 ${isOpen ? 'w-[280px]' : 'w-[78px]'}`}>
+      
+      {/* Top Header: Menu Toggle + Horizontal Nav Toggle */}
+      <div className={`h-[72px] flex items-center px-4 shrink-0 transition-all duration-300 relative z-[99999] pointer-events-auto gap-3`}>
+        <button 
+          onClick={onToggle}
+          className={`w-10 h-10 flex flex-shrink-0 items-center justify-center text-[#8b92a5] hover:text-white rounded-xl transition-all relative z-[99999] pointer-events-auto cursor-pointer`}
+        >
+          <Menu className="w-[26px] h-[26px]" strokeWidth={2} />
+        </button>
 
-      {/* Mobile Overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={onToggle} />
-      )}
-
-      <div className={`codinglab-sidebar ${isOpen ? 'open' : 'closed'}`}>
-
-        {/* SIDEBAR HEADER (Hamburger + Toggle) */}
-        <div className="flex items-center h-[60px] md:h-[72px] shrink-0 transition-[padding] duration-300" style={{ paddingLeft: isOpen ? '20px' : '0', paddingRight: isOpen ? '20px' : '0' }}>
-          {/* Hamburger */}
+        {/* Horizontal Toggle for Casino / Spor */}
+        <div className={`flex-1 flex items-center bg-[#131823] p-1 rounded-xl h-[44px] transition-all duration-300 relative z-[99999] pointer-events-auto border border-white/5 ${!isOpen ? 'opacity-0 w-0 hidden' : 'opacity-100'}`}>
           <button 
-            onClick={onToggle}
-            className={`text-[#8b92a5] hover:text-white transition-colors flex items-center justify-center shrink-0 w-10 h-10 rounded-lg hover:bg-white/5 ${isOpen ? 'mr-3' : 'mx-auto'}`}
+            onClick={() => { onViewChange('casino'); if (window.innerWidth < 1024) onToggle?.(); }}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-300 cursor-pointer pointer-events-auto z-[99999] ${isCasinoView ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'text-[#8b92a5] hover:text-white border border-transparent'}`}
           >
-            <Menu className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px]" strokeWidth={1.5} />
+            <Cherry className={`w-[18px] h-[18px] mr-2 transition-colors ${isCasinoView ? 'text-purple-400' : ''}`} />
+            Casino
           </button>
-
-          {/* Horizontal Toggle */}
-          <div className={`flex items-center bg-[#131823] p-1 rounded-[8px] h-[40px] md:h-[44px] flex-1 transition-[opacity,width] duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 hidden w-0'}`}>
-            <button onClick={() => onViewChange('casino')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isCasinoView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-[#8b92a5] hover:text-white'}`}>
-              <Cherry className={`w-4 h-4 mr-2 ${isCasinoView ? 'text-[#0A0D14]' : 'text-[#8b92a5]'}`} />
-              Casino
-            </button>
-            <button onClick={() => onViewChange('spor724')} className={`flex-1 flex items-center justify-center h-full rounded-[6px] font-semibold text-[13px] md:text-[14px] transition-all duration-200 ${isSportsView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-[#8b92a5] hover:text-white'}`}>
-              <Target className={`w-4 h-4 mr-2 ${isSportsView ? 'text-[#0A0D14]' : 'text-[#8b92a5]'}`} />
-              Spor
-            </button>
-          </div>
+          <button 
+            onClick={() => { onViewChange('spor724'); if (window.innerWidth < 1024) onToggle?.(); }}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-300 cursor-pointer pointer-events-auto z-[99999] ${isSportsView ? 'bg-gradient-to-r from-[#22c55e]/20 to-[#10b981]/20 border border-[#22c55e]/30 text-white shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'text-[#8b92a5] hover:text-white border border-transparent'}`}
+          >
+            <Target className={`w-[18px] h-[18px] mr-2 transition-colors ${isSportsView ? 'text-[#22c55e]' : ''}`} />
+            Spor
+          </button>
         </div>
+      </div>
 
-        <div className="codinglab-sidebar-inner pt-2 pb-4">
-          
-          {/* Vertical Toggle Box for Collapsed State */}
-          {!isOpen && (
-            <div className="flex flex-col items-center">
-              <button onClick={() => onViewChange('casino')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors mb-1 ${isCasinoView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-gray-400 hover:text-white'}`}>
-                <Cherry className={`w-5 h-5 ${isCasinoView ? 'text-black' : ''}`} />
-              </button>
-              <button onClick={() => onViewChange('spor724')} className={`w-10 h-10 flex items-center justify-center rounded-[6px] transition-colors ${isSportsView ? 'bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] shadow-[0_0_15px_rgba(0,229,255,0.4)]' : 'text-gray-400 hover:text-white'}`}>
-                <Target className={`w-5 h-5 ${isSportsView ? 'text-black' : ''}`} />
-              </button>
-            </div>
-          )}
-
-          {isSportsView ? (
-            <SportsSidebarContent isOpen={isOpen} onViewChange={onViewChange} onToggle={onToggle} />
-          ) : (
-            <>
-              {/* LOGGED IN USER MENU */}
-              {/* HAFTALIK ÇEKİLİŞ BANNER */}
-              <div className={`mx-4 mt-2 mb-6 relative overflow-hidden rounded-xl bg-[#131823] p-3 cursor-pointer transition-all ${!isOpen && 'hidden'}`}>
-                <div className="flex items-center gap-3">
-                  <Ticket className="w-8 h-8 text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]" />
-                  <div className="flex flex-col">
-                    <span className="text-white font-black text-lg italic leading-tight">$20.000</span>
-                    <span className="text-yellow-500 font-bold text-[11px] tracking-wider uppercase">HAFTALIK ÇEKİLİŞ</span>
-                  </div>
-                  <div className="ml-auto bg-[#141a25] rounded px-2 py-0.5 text-white font-bold text-xs">
-                    6g
-                  </div>
-                </div>
-                
-                {/* STATS */}
-                <div className="flex gap-4 mt-4 pt-4 border-t border-white/5">
-                    <div className="flex flex-col">
-                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">GÜNLÜK</span>
-                      <span className="text-white font-bold text-[13px]">$25K</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">HAFTALIK</span>
-                      <span className="text-white font-bold text-[13px]">$100K</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[#8b92a5] text-[9px] font-black uppercase tracking-wider mb-0.5">AYLIK</span>
-                      <span className="text-white font-bold text-[13px]">$500K</span>
-                    </div>
-                </div>
+      <div className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden pt-2 pb-4 relative z-[99999] pointer-events-auto">
+        
+        {/* Weekly Giveaway Banner */}
+        {(!isSportsView) && (
+          <div className={`mx-4 mb-6 mt-2 relative overflow-hidden rounded-2xl bg-[#131823] p-4 cursor-pointer transition-all border border-white/5 ${!isOpen && 'hidden'}`} onClick={() => onViewChange('cekilis')}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-[42px] h-[32px] flex flex-shrink-0 items-center justify-center">
+                 <Ticket className="w-8 h-8 text-[#FFB800]" strokeWidth={2} />
               </div>
+              <div className="flex-1">
+                <div className="text-white font-black text-[22px] leading-none tracking-tight">$20.000</div>
+                <div className="text-[#FFB800] text-[10px] font-bold tracking-widest mt-1">HAFTALIK ÇEKİLİŞ</div>
+              </div>
+              <div className="text-white font-bold text-[13px] bg-white/5 px-2.5 py-1 rounded-md">
+                6g
+              </div>
+            </div>
+            <div className="w-full h-[1px] bg-white/5 mb-3" />
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-[#8b92a5] text-[9px] font-bold tracking-wider mb-0.5">GÜNLÜK</span>
+                <span className="text-white font-bold text-[13px]">$25K</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[#8b92a5] text-[9px] font-bold tracking-wider mb-0.5">HAFTALIK</span>
+                <span className="text-white font-bold text-[13px]">$100K</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[#8b92a5] text-[9px] font-bold tracking-wider mb-0.5">AYLIK</span>
+                <span className="text-white font-bold text-[13px]">$500K</span>
+              </div>
+            </div>
+          </div>
+        )}
 
-              {/* Dynamic Menu Rendering */}
-              {sidebarItems.map((item, index) => {
-                if (item.type === 'divider') return <div key={'div-'+index} className="w-full mb-4" />;
-                if (item.children) {
-                  return (
-                    <AccordionItem key={item.id} id={item.id} icon={item.icon} label={item.label} route={item.route}>
-                      {item.children.map((child: any) => (
-                        <SubMenuItem key={child.id} label={child.label} isActive={activeView === child.route} onClick={() => onViewChange(child.route)} />
-                      ))}
-                    </AccordionItem>
-                  );
-                }
-                return (
-                  <NavItem key={item.id} icon={item.icon} label={item.label} isActive={activeView === item.route} onClick={() => onViewChange(item.route)} />
-                );
-              })}
-            </>
-          )}
-
-        </div>
-
-        {/* Bottom Section (Sticky at bottom) */}
-        <div className="w-full flex flex-col pt-3 pb-3 gap-1 border-t border-white/5 bg-[#0A0D14] relative z-20 mt-auto">
-          {bottomItems.map(item => (
-            <NavItem 
-              key={item.id} 
-              icon={item.icon} 
-              label={item.label} 
-              isActive={item.route ? activeView === item.route : false} 
-              onClick={() => {
-                if (item.route) onViewChange(item.route);
-                else if (item.action === 'openChat') window.dispatchEvent(new CustomEvent('openMobileChatPanel'));
-                else if (item.action === 'openLang') {/* toggle lang */}
-              }} 
-            />
-          ))}
-        </div>
+        {/* Main Menu Items or Sports Content */}
+        {isSportsView ? (
+          <SportsSidebarContent isOpen={isOpen} onViewChange={onViewChange} onToggle={onToggle} />
+        ) : (
+          <nav className="flex flex-col w-full relative z-[99999] pointer-events-auto">
+            {menuItems.map(item => renderLink(item))}
+          </nav>
+        )}
 
       </div>
-    </>
+
+      {/* Bottom Sticky Section */}
+      <div className="w-full flex flex-col pt-4 pb-4 gap-1 border-t border-white/5 bg-[#0A0D14] mt-auto relative z-[99999] pointer-events-auto">
+        <nav className="flex flex-col w-full relative z-[99999] pointer-events-auto">
+          {bottomItems.map(item => renderLink(item))}
+        </nav>
+      </div>
+
+    </div>
   );
 };
 

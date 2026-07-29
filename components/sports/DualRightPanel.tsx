@@ -96,10 +96,9 @@ export const DualRightPanel: React.FC<{
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
 }> = ({ language, isOpenMobile, onCloseMobile }) => {
-  const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost } = useBetSlip();
+  const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost, betType, setBetType, isLocked } = useBetSlip();
   const { siteUser, placeBet } = useUser();
   const [activePanel, setActivePanel] = useState<'coupon' | 'chat' | 'mybets'>('coupon');
-  const [betType, setBetType] = useState<'tekli' | 'kombine' | 'sistem'>('kombine');
   const [quickBet, setQuickBet] = useState(false);
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
   const [showStamp, setShowStamp] = useState(false);
@@ -211,8 +210,11 @@ export const DualRightPanel: React.FC<{
                 {['tekli', 'kombine', 'sistem'].map(type => (
                   <button 
                     key={type}
-                    onClick={() => setBetType(type as any)}
-                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'text-zinc-400 hover:text-white'}`}
+                    onClick={() => {
+                      if (!isLocked) setBetType(type as any);
+                    }}
+                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'text-zinc-400'} ${isLocked && betType !== type ? 'opacity-30 cursor-not-allowed' : 'hover:text-white'}`}
+                    disabled={isLocked && betType !== type}
                   >
                     {type}
                   </button>
@@ -261,16 +263,36 @@ export const DualRightPanel: React.FC<{
                   {betSlip.map((bet) => {
                     const isCompact = betSlip.length >= 5;
                     return (
-                      <div key={bet.id} className={`relative bg-[#0b0e14]/80 backdrop-blur border border-white/5 group hover:border-[#00E5FF]/20 hover:bg-[#1f2430]/60 transition-all overflow-hidden flex flex-col justify-center ${isCompact ? 'p-1.5 min-h-[44px] gap-1 rounded-md shadow' : 'p-3 min-h-[76px] gap-2.5 rounded-xl shadow-lg'} hover:shadow-[0_0_15px_rgba(0,229,255,0.05)]`}>
+                      <div key={bet.id} className={`relative backdrop-blur border group transition-all overflow-hidden flex flex-col justify-center ${isCompact ? 'p-1.5 min-h-[44px] gap-1 rounded-md shadow' : 'p-3 min-h-[76px] gap-2.5 rounded-xl shadow-lg'} ${bet.isSpecialCombo ? 'bg-gradient-to-br from-[#0b0e14] to-[#1a140a] border-[#f0b90b]/30 shadow-[0_0_20px_rgba(240,185,11,0.1)]' : 'bg-[#0b0e14]/80 border-white/5 hover:border-[#00E5FF]/20 hover:bg-[#1f2430]/60 hover:shadow-[0_0_15px_rgba(0,229,255,0.05)]'}`}>
                         
                         {/* Left color bar */}
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#00E5FF] to-[#00b3cc] shadow-[0_0_10px_rgba(0,229,255,0.6)]"></div>
+                        <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${bet.isSpecialCombo ? 'from-[#f0b90b] to-[#c79600] shadow-[0_0_10px_rgba(240,185,11,0.6)]' : 'from-[#00E5FF] to-[#00b3cc] shadow-[0_0_10px_rgba(0,229,255,0.6)]'}`}></div>
 
                         <div className={`flex justify-between items-start ${isCompact ? 'pl-1.5 pr-5' : 'pl-2 pr-6'}`}>
                           <div className={`flex items-start ${isCompact ? 'gap-1.5' : 'gap-2'} w-full mt-0.5`}>
-                            <span className={`rounded-full bg-[#00E5FF] shadow-[0_0_5px_rgba(0,229,255,0.8)] shrink-0 mt-[6px] ${isCompact ? 'w-1 h-1 mt-[5px]' : 'w-1.5 h-1.5'}`} />
-                            <div className={`text-white font-bold leading-tight flex-1 ${isCompact ? 'text-[11px] truncate' : 'text-[13px]'}`}>
-                              {bet.matchName.replace(' vs ', ' - ')}
+                            <span className={`rounded-full ${bet.isSpecialCombo ? 'bg-[#f0b90b] shadow-[0_0_5px_rgba(240,185,11,0.8)]' : 'bg-[#00E5FF] shadow-[0_0_5px_rgba(0,229,255,0.8)]'} shrink-0 mt-[6px] ${isCompact ? 'w-1 h-1 mt-[5px]' : 'w-1.5 h-1.5'}`} />
+                            <div className={`text-white font-bold leading-tight flex-1 flex flex-col gap-0.5 ${isCompact ? 'text-[11px] truncate' : 'text-[13px]'}`}>
+                              {bet.isSpecialCombo && (
+                                <span className="text-[9px] text-[#f0b90b] font-black tracking-widest uppercase flex items-center gap-1">
+                                  <Target className="w-3 h-3" /> ÖZEL SİSTEM SEÇİMİ
+                                </span>
+                              )}
+                              <span>{bet.matchName.replace(' vs ', ' - ')}</span>
+                              
+                              {/* Show Legs if special combo */}
+                              {bet.isSpecialCombo && bet.legs && bet.legs.length > 0 && (
+                                <div className="mt-2 flex flex-col gap-1.5 w-[95%]">
+                                  {bet.legs.map((leg, idx) => (
+                                    <div key={idx} className="bg-black/30 border border-white/5 rounded pl-1.5 pr-2 py-1.5 flex flex-col">
+                                      <span className="text-[9px] text-zinc-500 font-bold mb-0.5 truncate">{leg.match.replace(' vs ', ' - ')}</span>
+                                      <div className="flex justify-between items-center gap-2">
+                                        <span className="text-[10px] text-white font-semibold truncate">{leg.selection}</span>
+                                        <span className="text-[9px] text-[#00E5FF] font-black shrink-0">{leg.market}</span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           </div>
                           
@@ -288,9 +310,9 @@ export const DualRightPanel: React.FC<{
                             <span className={`text-zinc-500 font-semibold uppercase tracking-wider ${isCompact ? 'text-[8px]' : 'text-[10px]'}`}>Seçim:</span>
                             <span className={`text-white font-bold ${isCompact ? 'text-[11px]' : 'text-[13px] ml-0.5'}`}>{bet.selectionName}</span>
                           </div>
-                          <div className={`bg-[#0b0e14] rounded border border-[#00E5FF]/40 shadow-[0_0_12px_rgba(0,229,255,0.1)] flex items-center justify-center relative overflow-hidden group-hover:border-[#00E5FF]/80 group-hover:shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-all ${isCompact ? 'px-1.5 py-0.5 min-w-[36px]' : 'px-2.5 py-1 min-w-[50px]'}`}>
-                            <div className="absolute inset-0 bg-[#00E5FF]/5 group-hover:bg-[#00E5FF]/10 transition-colors" />
-                            <span className={`text-[#00E5FF] font-black drop-shadow-[0_0_5px_rgba(0,229,255,0.6)] relative z-10 ${isCompact ? 'text-[11px]' : 'text-[14px]'}`}>{bet.odd.toFixed(2)}</span>
+                          <div className={`bg-[#0b0e14] rounded border shadow-[0_0_12px_rgba(0,229,255,0.1)] flex items-center justify-center relative overflow-hidden transition-all ${isCompact ? 'px-1.5 py-0.5 min-w-[36px]' : 'px-2.5 py-1 min-w-[50px]'} ${bet.isSpecialCombo ? 'border-[#f0b90b]/40 group-hover:border-[#f0b90b]/80 shadow-[0_0_12px_rgba(240,185,11,0.1)] group-hover:shadow-[0_0_15px_rgba(240,185,11,0.3)]' : 'border-[#00E5FF]/40 group-hover:border-[#00E5FF]/80 group-hover:shadow-[0_0_15px_rgba(0,229,255,0.3)]'}`}>
+                            <div className={`absolute inset-0 transition-colors ${bet.isSpecialCombo ? 'bg-[#f0b90b]/5 group-hover:bg-[#f0b90b]/10' : 'bg-[#00E5FF]/5 group-hover:bg-[#00E5FF]/10'}`} />
+                            <span className={`font-black relative z-10 ${isCompact ? 'text-[11px]' : 'text-[14px]'} ${bet.isSpecialCombo ? 'text-[#f0b90b] drop-shadow-[0_0_5px_rgba(240,185,11,0.6)]' : 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.6)]'}`}>{bet.odd.toFixed(2)}</span>
                           </div>
                         </div>
                       </div>

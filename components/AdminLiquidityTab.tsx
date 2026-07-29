@@ -27,57 +27,57 @@ export default function AdminLiquidityTab() {
                 </div>
             </div>
 
-            {/* KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-[#0b0c10] border border-white/5 rounded-xl p-5 shadow-lg relative overflow-hidden group">
-                    <div className="flex justify-between items-start mb-4">
-                        <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Toplam Sıcak Cüzdan (Assets)</p>
-                        <ShieldCheck className="w-4 h-4 text-[#00ff88]" />
+            {/* KPIs - Compact V3 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="bg-[#0b0c10] border border-white/5 rounded-lg p-3 shadow-md relative overflow-hidden group hover:border-[#00ff88]/30 transition-all">
+                    <div className="flex justify-between items-start mb-2">
+                        <p className="text-zinc-500 text-[10px] font-black uppercase tracking-wider">Toplam Sıcak Cüzdan (Assets)</p>
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#00ff88]" />
                     </div>
                     <div className="flex items-end gap-2">
-                        <h3 className="text-3xl font-black text-white font-mono">₺{(totalAssets / 1000000).toFixed(1)}M</h3>
+                        <h3 className="text-xl font-black text-white font-mono">₺{(totalAssets / 1000000).toFixed(1)}M</h3>
                     </div>
                 </div>
 
-                <div className="bg-[#0b0c10] border border-[#ef4444]/20 rounded-xl p-5 shadow-lg relative overflow-hidden group">
-                    <div className="flex justify-between items-start mb-4">
-                        <p className="text-[#ef4444] text-xs font-bold uppercase tracking-wider">Toplam Kullanıcı Bakiyesi (Liabilities)</p>
-                        <AlertTriangle className="w-4 h-4 text-[#ef4444]" />
+                <div className="bg-[#0b0c10] border border-[#ef4444]/20 rounded-lg p-3 shadow-md relative overflow-hidden group hover:border-[#ef4444]/50 transition-all">
+                    <div className="flex justify-between items-start mb-2">
+                        <p className="text-[#ef4444] text-[10px] font-black uppercase tracking-wider">Kullanıcı Bakiyesi (Liabilities)</p>
+                        <AlertTriangle className="w-3.5 h-3.5 text-[#ef4444]" />
                     </div>
                     <div className="flex items-end gap-2">
-                        <h3 className="text-3xl font-black text-white font-mono">₺{(totalLiabilities / 1000000).toFixed(1)}M</h3>
+                        <h3 className="text-xl font-black text-white font-mono">₺{(totalLiabilities / 1000000).toFixed(1)}M</h3>
                     </div>
                 </div>
 
-                <div className="bg-[#0b0c10] border border-[#3b82f6]/20 rounded-xl p-5 shadow-lg relative overflow-hidden group">
-                    <div className="flex justify-between items-start mb-4">
-                        <p className="text-[#3b82f6] text-xs font-bold uppercase tracking-wider">Likidite Karşılama Oranı</p>
-                        <TrendingUp className="w-4 h-4 text-[#3b82f6]" />
+                <div className="bg-[#0b0c10] border border-[#3b82f6]/20 rounded-lg p-3 shadow-md relative overflow-hidden group hover:border-[#3b82f6]/50 transition-all">
+                    <div className="flex justify-between items-start mb-2">
+                        <p className="text-[#3b82f6] text-[10px] font-black uppercase tracking-wider">Likidite Karşılama Oranı</p>
+                        <TrendingUp className="w-3.5 h-3.5 text-[#3b82f6]" />
                     </div>
                     <div className="flex items-end gap-2">
-                        <h3 className="text-3xl font-black text-[#00ff88] font-mono">%{liquidityRatio}</h3>
-                        <span className="text-zinc-400 text-xs font-bold mb-1">GÜVENLİ BÖLGE</span>
+                        <h3 className="text-xl font-black text-[#00ff88] font-mono">%{liquidityRatio}</h3>
+                        <span className="text-zinc-400 text-[10px] font-bold mb-0.5">GÜVENLİ BÖLGE</span>
                     </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-[400px]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
                 {/* Hot Wallets Distribution */}
-                <div className="bg-[#0b0c10] border border-white/5 rounded-xl p-5 shadow-lg flex flex-col">
-                    <h3 className="text-zinc-400 text-sm font-bold uppercase tracking-wider mb-6 flex items-center gap-2">
-                        <PieChart className="w-4 h-4" />
+                <div className="bg-[#0b0c10] border border-white/5 rounded-lg p-3 shadow-md flex flex-col">
+                    <h3 className="text-zinc-400 text-[10px] font-black uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <PieChart className="w-3.5 h-3.5" />
                         Sıcak Cüzdan Dağılımı
                     </h3>
-                    <div className="flex-1 w-full min-h-[300px]">
+                    <div className="flex-1 w-full min-h-[180px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <RechartsPieChart>
                                 <Pie
                                     data={cryptoBalances}
                                     cx="50%"
                                     cy="50%"
-                                    innerRadius={80}
-                                    outerRadius={120}
-                                    paddingAngle={5}
+                                    innerRadius={50}
+                                    outerRadius={80}
+                                    paddingAngle={3}
                                     dataKey="value"
                                 >
                                     {cryptoBalances.map((entry, index) => (
@@ -86,30 +86,28 @@ export default function AdminLiquidityTab() {
                                 </Pie>
                                 <RechartsTooltip 
                                     formatter={(value: number) => `₺${(value/1000000).toFixed(1)}M`}
-                                    contentStyle={{ backgroundColor: '#111318', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                                    contentStyle={{ backgroundColor: '#111318', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', fontSize: '11px' }}
                                     itemStyle={{ fontWeight: 'bold' }}
                                 />
-                                <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                                <Legend verticalAlign="bottom" height={24} iconType="circle" wrapperStyle={{ fontSize: '10px' }} />
                             </RechartsPieChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
 
                 {/* Network Fees & Status */}
-                <div className="bg-[#0b0c10] border border-white/5 rounded-xl p-5 shadow-lg flex flex-col">
-                     <h3 className="text-zinc-400 text-sm font-bold uppercase tracking-wider mb-6">Ağ Durumu ve Gas Ücretleri</h3>
-                     <div className="flex-1 flex flex-col gap-4">
+                <div className="bg-[#0b0c10] border border-white/5 rounded-lg p-3 shadow-md flex flex-col">
+                     <h3 className="text-zinc-400 text-[10px] font-black uppercase tracking-wider mb-3">Ağ Durumu ve Gas Ücretleri</h3>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                          {cryptoBalances.map((coin, idx) => (
-                             <div key={idx} className="flex items-center justify-between p-4 bg-[#111216] border border-white/5 rounded-xl">
-                                 <div className="flex items-center gap-3">
-                                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: coin.color }}></div>
-                                     <span className="font-bold text-white">{coin.name}</span>
+                             <div key={idx} className="flex flex-col justify-center p-2 bg-[#111216] border border-white/5 rounded-lg">
+                                 <div className="flex items-center gap-2 mb-1">
+                                     <div className="w-2 h-2 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.2)]" style={{ backgroundColor: coin.color, boxShadow: `0 0 8px ${coin.color}80` }}></div>
+                                     <span className="font-bold text-white text-[11px]">{coin.name}</span>
                                  </div>
-                                 <div className="text-right">
-                                     <div className="text-sm font-mono text-zinc-300">
-                                         Ağ Yoğunluğu: <span className={idx === 1 ? 'text-[#ef4444]' : 'text-[#00ff88]'}>{idx === 1 ? 'YÜKSEK' : 'NORMAL'}</span>
-                                     </div>
-                                     <div className="text-xs text-zinc-500 mt-1">Tahmini Onay: {idx === 0 ? '10-20 dk' : idx === 3 ? 'Anında' : '1-3 dk'}</div>
+                                 <div className="flex justify-between items-center">
+                                     <span className="text-[9px] text-zinc-500">Ağ: <span className={`font-bold ${idx === 1 ? 'text-[#ef4444]' : 'text-[#00ff88]'}`}>{idx === 1 ? 'YÜKSEK' : 'NORMAL'}</span></span>
+                                     <span className="text-[9px] text-zinc-400">{idx === 0 ? '10-20 dk' : idx === 3 ? 'Anında' : '1-3 dk'}</span>
                                  </div>
                              </div>
                          ))}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { PlayerLogo } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
 import { MatchInfo } from './types';
@@ -11,13 +11,13 @@ interface MatchCardProps {
   onSelect?: (match: MatchInfo) => void;
 }
 
-export const MatchCard: React.FC<MatchCardProps> = React.memo(({ match, isGoal, onSelect }) => {
+export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSelect }) => {
   const { betSlip, addSelection } = useBetSlip();
 
   return (
     <div 
       onClick={() => {
-        if (match.isLive && onSelect) {
+        if (onSelect) {
           onSelect(match);
         }
       }}

@@ -22,6 +22,8 @@ import LiveWinsTicker from './LiveWinsTicker';
 import VIPHeroBanner from './VIPHeroBanner';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import MainHero from './MainHero';
+import FeaturedCombos from './sports/FeaturedCombos';
+import { useBetting } from '../contexts/BettingContext';
 
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
@@ -142,6 +144,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   const [detailModalGame, setDetailModalGame] = useState<GameData | null>(null);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
   const { t } = useLanguage();
+  const { matches, setSelectedMatch } = useBetting();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -374,6 +377,16 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
           <div className="w-full mt-4">
 
             <LiveWinsTicker />
+            <div className="mt-4 mb-4 w-full px-4 lg:px-6">
+              <FeaturedCombos 
+                activeSport="Tüm Sporlar" 
+                matches={matches} 
+                onSelectMatch={(m) => {
+                  setSelectedMatch(m);
+                  onViewChange('sports');
+                }} 
+              />
+            </div>
             <OriginalsSlider onNavigate={onViewChange} />
           </div>
         </>
@@ -393,6 +406,16 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
             <div className="w-full mt-2 mb-2 sm:mt-6 sm:mb-4">
               <LiveWinsTicker />
+              <div className="mt-4 mb-4 w-full">
+                <FeaturedCombos 
+                  activeSport="Tüm Sporlar" 
+                  matches={matches} 
+                  onSelectMatch={(m) => {
+                    setSelectedMatch(m);
+                    onViewChange('sports');
+                  }} 
+                />
+              </div>
               <div className="mt-4">
                 <OriginalsSlider onNavigate={onViewChange} />
               </div>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   PlayCircle, Clock, LayoutGrid, Receipt, 
-  ChevronDown, Target, Gamepad2, Trophy, Flag,
-  Crosshair, Dribbble
+  ChevronDown, ChevronUp, Target, Gamepad2, Trophy, Flag,
+  Crosshair, Dribbble, Globe, Timer
 } from 'lucide-react';
 
 interface SportsSidebarContentProps {
@@ -54,6 +54,8 @@ const MmaIcon = ({ className }: { className?: string }) => (
 const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onViewChange, onToggle }) => {
   const [activeMenu, setActiveMenu] = useState<string>('');
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [isTopSportsOpen, setIsTopSportsOpen] = useState(false);
+  const [isFutbolOpen, setIsFutbolOpen] = useState(false);
   
   useEffect(() => {
     const handleLocationChange = () => setCurrentPath(window.location.pathname);
@@ -64,8 +66,8 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
   const activeSlug = currentPath.startsWith('/spor/') ? currentPath.split('/')[2] : '';
 
   return (
-    <div className="flex flex-col w-full h-full text-slate-300 bg-transparent">
-      <div className="flex-1 overflow-y-auto custom-scrollbar pt-2 pb-20">
+    <div className="flex flex-col w-full text-slate-300 bg-transparent">
+      <div className="flex flex-col w-full pt-2">
         
         {/* TOP SECTION */}
         <div className="flex flex-col gap-0 mb-4 mt-2">
@@ -75,7 +77,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               setActiveMenu('canli'); 
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'canli' }));
-              onToggle?.();
+              if (window.innerWidth < 1024) onToggle?.();
             }}
             className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'canli' ? 'bg-gradient-to-r from-[#00E5FF]/10 to-transparent text-[#00E5FF]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
@@ -99,18 +101,18 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               setActiveMenu('upcoming'); 
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'upcoming' }));
-              onToggle?.();
+              if (window.innerWidth < 1024) onToggle?.();
             }}
             className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'upcoming' ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
             {activeMenu === 'upcoming' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6] z-10"></div>}
             <div className="flex items-center">
               <Clock className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'upcoming' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'upcoming' ? 2.5 : 2} />
-              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Yakında Başlayacak ...</span>}
+              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Yaklaşanlar</span>}
             </div>
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
-                 Yakında Başlayacak...
+                 Yaklaşanlar
                </div>
             )}
           </button>
@@ -120,7 +122,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               setActiveMenu('hepsi'); 
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));
-              onToggle?.();
+              if (window.innerWidth < 1024) onToggle?.();
             }}
             className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'hepsi' ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
@@ -141,18 +143,18 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               setActiveMenu('bahislerim');
               onViewChange('spor724');
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'mybets' }));
-              onToggle?.();
+              if (window.innerWidth < 1024) onToggle?.();
             }}
             className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'bahislerim' ? 'bg-gradient-to-r from-[#10b981]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
             {activeMenu === 'bahislerim' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#10b981] to-transparent shadow-[0_0_15px_#10b981] z-10"></div>}
             <div className="flex items-center">
               <Receipt className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'bahislerim' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'bahislerim' ? 2.5 : 2} />
-              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Bahislerim</span>}
+              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Takip Ettiklerim</span>}
             </div>
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
-                 Bahislerim
+                 Takip Ettiklerim
                </div>
             )}
           </button>
@@ -163,12 +165,20 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
 
         {/* EN IYI SPORLAR */}
         {isOpen && (
-           <div className="px-5 mx-3 mb-2">
-             <span className="text-[13px] font-bold text-[#64748b]">En İyi Sporlar</span>
+           <div 
+             className="px-5 mx-3 mb-3 mt-1 flex items-center justify-between cursor-pointer group"
+             onClick={(e) => {
+               e.stopPropagation();
+               setIsTopSportsOpen(!isTopSportsOpen);
+             }}
+           >
+             <span className="text-[11px] font-bold text-[#4b5563] uppercase tracking-[0.1em] group-hover:text-white transition-colors">EN İYİ SPORLAR</span>
+             <ChevronDown className={`w-4 h-4 text-[#4b5563] group-hover:text-white transition-transform duration-300 ${isTopSportsOpen ? 'rotate-180' : ''}`} />
            </div>
         )}
 
-        <div className="flex flex-col gap-0 mb-4">
+        {(isTopSportsOpen || !isOpen) && (
+        <div className="flex flex-col gap-1 mb-4">
           {[
             { id: 'futbol', name: 'Futbol', Icon: SoccerIcon },
             { id: 'cs2', name: 'CS2', Icon: Crosshair },
@@ -188,16 +198,15 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
                onClick={() => {
                  window.history.pushState(null, '', `/spor/${sport.id}`);
                  window.dispatchEvent(new PopStateEvent('popstate'));
-                 onToggle?.();
+                 if (window.innerWidth < 1024) onToggle?.();
                }}
-               className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${isActive ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'} ${!isOpen ? 'justify-center' : ''}`}
+               className={`flex items-center justify-between py-3 mb-1.5 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${isActive ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'} ${!isOpen ? 'justify-center' : ''}`}
              >
                {isActive && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6] z-10"></div>}
                <div className="flex items-center">
                  <sport.Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} />
                  {isOpen && <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`}>{sport.name}</span>}
                </div>
-               {isOpen && <ChevronDown className={`w-4 h-4 transition-colors ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} />}
                {!isOpen && (
                  <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
                    {sport.name}
@@ -207,14 +216,73 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
              );
           })}
         </div>
+        )}
 
         {/* Divider */}
         <div className="h-[1px] w-[calc(100%-24px)] mx-auto bg-white/5 mb-4"></div>
 
         {/* BOTTOM SPORTS */}
         <div className="flex flex-col gap-0">
+          
+          {/* Futbol Accordion (Formerly Spor) */}
+          <div className="flex flex-col">
+            <button
+              onClick={() => {
+                if (isOpen) {
+                  setIsFutbolOpen(!isFutbolOpen);
+                } else {
+                  window.history.pushState(null, '', `/spor/futbol`);
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                  if (window.innerWidth < 1024) onToggle?.();
+                }
+              }}
+              className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 ${isFutbolOpen ? 'text-white' : 'text-[#8b92a5] hover:text-white'} ${!isOpen ? 'justify-center' : ''}`}
+            >
+              <div className="flex items-center">
+                <SoccerIcon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isFutbolOpen ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} />
+                {isOpen && <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors ${isFutbolOpen ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`}>Futbol</span>}
+              </div>
+              {isOpen && (
+                 isFutbolOpen 
+                 ? <ChevronUp className="w-4 h-4 text-white transition-colors" /> 
+                 : <ChevronDown className="w-4 h-4 text-[#8b92a5] group-hover:text-white transition-colors" />
+              )}
+              {!isOpen && (
+                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
+                  Futbol
+                </div>
+              )}
+            </button>
+            
+            {/* Submenu for Futbol */}
+            {isOpen && isFutbolOpen && (
+              <div className="flex flex-col pl-6 ml-5 border-l border-white/10 mb-2 relative">
+                {[
+                  { id: 'yaklasan', name: 'Yaklaşan', Icon: PlayCircle },
+                  { id: 'uzun-vadeli', name: 'Uzun Vadeli Bahis...', Icon: Timer },
+                  { id: 'uefa', name: 'UEFA Şampiyonla...', Icon: Globe, color: 'text-green-400' },
+                  { id: 'kulup', name: 'Kulüp Hazırlık Ma...', Icon: Globe, color: 'text-green-400' },
+                  { id: 'conmebol', name: 'CONMEBOL Suda...', Icon: Globe, color: 'text-green-400' },
+                  { id: 'tumunu-goruntule', name: 'Tümünü Görüntüle', Icon: LayoutGrid },
+                ].map(sub => (
+                  <button
+                    key={sub.id}
+                    onClick={() => {
+                      window.history.pushState(null, '', `/spor/futbol/${sub.id}`);
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                      if (window.innerWidth < 1024) onToggle?.();
+                    }}
+                    className="flex items-center py-2.5 mt-0.5 cursor-pointer text-[#8b92a5] hover:text-white transition-colors group"
+                  >
+                    <sub.Icon className={`w-5 h-5 min-w-[20px] mr-3 ${sub.color ? sub.color : 'text-[#8b92a5] group-hover:text-white'} transition-colors ${sub.color ? 'bg-blue-500/20 rounded-full' : ''}`} />
+                    <span className="font-bold text-[13px] tracking-tight">{sub.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {[
-            { id: 'spor', name: 'Spor', Icon: Dribbble },
             { id: 'espor', name: 'Tüm Espor Oyunları', Icon: Gamepad2 },
             { id: 'yaris', name: 'Tüm Yarışlar', Icon: Flag },
           ].map((item) => (
@@ -223,7 +291,7 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
                onClick={() => {
                  window.history.pushState(null, '', `/spor/${item.id}`);
                  window.dispatchEvent(new PopStateEvent('popstate'));
-                 onToggle?.();
+                 if (window.innerWidth < 1024) onToggle?.();
                }}
                className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-200 relative group px-2 mx-3 text-[#8b92a5] hover:text-white ${!isOpen ? 'justify-center' : ''}`}
              >
