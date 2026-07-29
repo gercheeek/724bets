@@ -400,28 +400,43 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                     <div className="flex justify-between items-center mb-1.5 px-1">
                       <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">Karşılıklı Gol</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addSelection({ id: match.id+'_gg', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Var', odd: parseFloat(ggOdd) });
-                        }}
-                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                      >
-                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Var</span>
-                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={ggOdd} /></div>
-                      </button>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addSelection({ id: match.id+'_ng', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Yok', odd: parseFloat(ngOdd) });
-                        }}
-                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                      >
-                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Yok</span>
-                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={ngOdd} /></div>
-                      </button>
-                    </div>
+                    
+                    {(() => {
+                      const matchScore = match.score || '0 - 0';
+                      const [hS, aS] = matchScore.split('-').map(s => parseInt(s.trim(), 10) || 0);
+                      const isGgResolved = hS > 0 && aS > 0;
+                      
+                      return (
+                        <div className="grid grid-cols-2 gap-1.5">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (isGgResolved) return;
+                              addSelection({ id: match.id+'_gg', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Var', odd: parseFloat(ggOdd) });
+                            }}
+                            className={`bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed grayscale' : 'hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] cursor-pointer active:scale-[0.98]'}`}
+                          >
+                            <span className={`text-[10px] text-[#8e939d] font-medium tracking-wide transition-colors ${!isGgResolved && 'group-hover:text-[#00E5FF]'}`}>Var</span>
+                            <div className={`text-[12px] transition-colors ${!isGgResolved && 'group-hover:text-white'}`}>
+                              {isGgResolved ? <span className="text-gray-500 font-bold text-[9px] tracking-wider">KİLİTLİ</span> : <AnimatedOdd value={ggOdd} />}
+                            </div>
+                          </button>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (isGgResolved) return;
+                              addSelection({ id: match.id+'_ng', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Yok', odd: parseFloat(ngOdd) });
+                            }}
+                            className={`bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed grayscale' : 'hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] cursor-pointer active:scale-[0.98]'}`}
+                          >
+                            <span className={`text-[10px] text-[#8e939d] font-medium tracking-wide transition-colors ${!isGgResolved && 'group-hover:text-[#00E5FF]'}`}>Yok</span>
+                            <div className={`text-[12px] transition-colors ${!isGgResolved && 'group-hover:text-white'}`}>
+                              {isGgResolved ? <span className="text-gray-500 font-bold text-[9px] tracking-wider">KİLİTLİ</span> : <AnimatedOdd value={ngOdd} />}
+                            </div>
+                          </button>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 
