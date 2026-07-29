@@ -77,16 +77,6 @@ function startSwarmConnection() {
                                 if (!game.team1_name || !game.team2_name) return;
                                 
                                 const combinedStr = `${sportName} ${tournamentName} ${regionName} ${game.team1_name} ${game.team2_name}`.toLowerCase();
-                                const virtualKeywords = ['cyber', 'sanal', 'virtual', 'simulated', 'srl', 'esoccer', 'ebasketball', 'etennis', 'e-sports', 'esports', 'electronic', 'fifa', 'nba 2k', 'volta', 'penalty', 'h2h', 'gt sports'];
-                                if (virtualKeywords.some(kw => combinedStr.includes(kw))) return;
-                                
-                                const isGamerTag = (name) => {
-                                    const match = name.match(/\(([^)]+)\)/);
-                                    if (!match) return false;
-                                    const tag = match[1].toLowerCase();
-                                    return tag !== 'kadınlar' && tag !== 'women' && tag !== 'u19' && tag !== 'u21' && tag !== 'u23' && tag !== 'reserves';
-                                };
-                                if (isGamerTag(game.team1_name) || isGamerTag(game.team2_name)) return;
                                 
                                 let oddsStr = null;
                                 if (game.market) {
@@ -104,22 +94,6 @@ function startSwarmConnection() {
                                     }
                                 }
 
-                                const nowTs = Date.now();
-                                const matchStartTs = game.start_ts ? game.start_ts * 1000 : 0;
-                                if (matchStartTs > nowTs + 60000) return;
-
-                                const matchPhase = (game.info?.current_game_state || '').toLowerCase();
-                                if (['finished', 'ended', 'ft', 'abandoned', 'canceled', 'not_started'].includes(matchPhase)) return;
-
-                                const isFootballOrBasketball = sportName.toLowerCase().includes('futbol') || sportName.toLowerCase().includes('basket');
-                                const matchTimer = game.info?.current_game_time || 0;
-                                const score1 = game.info?.score1;
-                                const score2 = game.info?.score2;
-
-                                if (isFootballOrBasketball && (!matchTimer || parseInt(matchTimer) === 0) && (!score1 || parseInt(score1) === 0) && (!score2 || parseInt(score2) === 0)) {
-                                    return;
-                                }
-                                
                                 const ev = {
                                     id: String(game.id),
                                     isScraped: true,

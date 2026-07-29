@@ -82,6 +82,9 @@ const normalizeEvent = (ev: any) => {
     d.sport = { name: 'Diğer' };
   }
   
+  // Sychronize root level ev.sport with the translated d.sport.name
+  ev.sport = d.sport.name;
+  
   if (d.tournament && !d.tournament.name) {
     d.tournament.name = 'Diğer Ligler';
   } else if (!d.tournament) {
@@ -228,7 +231,8 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setIsConnected(true);
       // Backend bot sends the full parsed array of live matches
       if (Array.isArray(payload)) {
-        setEvents(payload);
+        const normalizedPayload = payload.map(ev => normalizeEvent(ev));
+        setEvents(normalizedPayload);
       }
     });
 
