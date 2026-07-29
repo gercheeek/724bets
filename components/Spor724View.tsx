@@ -795,6 +795,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                 </button>
             </div>
 
+            <div key={selectedMatch ? `match-${selectedMatch.id}` : `tab-${navTab}`} className="animate-fade-in w-full h-full">
             {selectedMatch ? (
                <div className="px-2 md:px-4">
                  <LiveMatchInline 
@@ -935,6 +936,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
             )}
             </>
         )}
+        </div>
         </div>
       </div>
       </div>

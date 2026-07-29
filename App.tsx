@@ -2279,11 +2279,15 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
 
         {view === 'sports' && (
-          <Spor724View onNavigate={handleViewChange} />
+          <div className="animate-fade-in w-full h-full">
+            <Spor724View onNavigate={handleViewChange} />
+          </div>
         )}
 
         {view === 'gercek' && (
-          <GercekView onNavigate={handleViewChange} />
+          <div className="animate-fade-in w-full h-full">
+            <GercekView onNavigate={handleViewChange} />
+          </div>
         )}
 
         {view === 'originals' && (
