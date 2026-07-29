@@ -223,6 +223,27 @@ export default function SportsPromoSlider({ matches = [] }: { matches?: any[] })
             });
         }
 
+        // 5. Fill remaining slots up to 5 with top matches
+        const existingIds = new Set(slides.map(s => s.id));
+        for (const m of matches) {
+            if (slides.length >= 5) break;
+            if (!existingIds.has(m.id) && hasLogos(m)) {
+                slides.push({
+                    data: {
+                        match: m,
+                        home: m.home, away: m.away,
+                        homeOdd: m.homeOdd, drawOdd: m.drawOdd, awayOdd: m.awayOdd,
+                        dateStr: m.matchDate || 'BUGÜN', timeStr: m.startTime || '20:00',
+                        isLive: m.isLive, score: m.score, minute: m.minute
+                    },
+                    theme: 'fener', // fallback theme
+                    name: 'GÜNÜN ÖNE ÇIKAN MAÇI', 
+                    id: m.id
+                });
+                existingIds.add(m.id);
+            }
+        }
+
         return slides;
     }, [matches]);
 
