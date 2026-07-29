@@ -525,15 +525,21 @@ const Header: React.FC<HeaderProps> = ({
                       </div>
                     </div>
                     
-                    <button className="w-full text-left px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors flex items-center text-[14px]">
+                    <button 
+                      onClick={() => { if(onViewChange) onViewChange('profile'); setIsProfileOpen(false); }}
+                      className="w-full text-left px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors flex items-center text-[14px]"
+                    >
                       <User className="w-4 h-4 mr-3 text-zinc-400" /> {t("hesabim")}
                     </button>
-                    <button className="w-full text-left px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors flex items-center text-[14px]">
+                    <button 
+                      onClick={() => { if(onViewChange) onViewChange('profile'); setIsProfileOpen(false); }}
+                      className="w-full text-left px-4 py-2.5 text-zinc-300 hover:text-white hover:bg-white/5 transition-colors flex items-center text-[14px]"
+                    >
                       <Settings className="w-4 h-4 mr-3 text-zinc-400" /> {t("ayarlar")}
                     </button>
                     <div className="h-[1px] w-full bg-white/5 my-1"></div>
                     <button 
-                      onClick={handleLogout}
+                      onClick={onMemberLogout}
                       className="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors flex items-center text-[14px]"
                     >
                       <LogOut className="w-4 h-4 mr-3" /> {t("cikis_yap")}
