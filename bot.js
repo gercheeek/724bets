@@ -49,7 +49,7 @@ function startSwarmConnection() {
                                 sport: ['id', 'name'],
                                 region: ['id', 'name'],
                                 competition: ['id', 'name'],
-                                game: ['id', 'team1_name', 'team2_name', 'team1_id', 'team2_id', 'info', 'start_ts'],
+                                game: ['id', 'team1_name', 'team2_name', 'team1_id', 'team2_id', 'info', 'start_ts', 'stats'],
                                 market: ['id', 'name', 'type_name'],
                                 event: ['id', 'name', 'price']
                             },
@@ -125,7 +125,8 @@ function startSwarmConnection() {
                                         score: game.info ? `${game.info.score1 || 0}:${game.info.score2 || 0}` : '0:0',
                                         minute: game.info ? game.info.current_game_time : 0,
                                         isLive: true,
-                                        extended_status: 'live'
+                                        extended_status: 'live',
+                                        stats: game.stats || {}
                                     }
                                 };
                                 

@@ -26,10 +26,10 @@ export const LiveTimer: React.FC<{ minute: string; hidePrefix?: boolean }> = ({ 
   if (!minute) return <span>{hidePrefix ? '' : 'CANLI'}</span>;
   const cleanMinute = minute.replace(/['"]/g, '').trim();
 
-  if (['ht', 'devre arası', 'devre', 'yarı', '45', 'half time'].includes(cleanMinute.toLowerCase())) {
+  if (['ht', 'devre arası', 'devre', 'yarı', 'half time'].includes(cleanMinute.toLowerCase())) {
     return <span>DEVRE ARASI</span>;
   }
-  if (['ft', 'bitti', 'ms', '90'].includes(cleanMinute.toLowerCase())) {
+  if (['ft', 'bitti', 'ms'].includes(cleanMinute.toLowerCase())) {
     return <span>BİTTİ</span>;
   }
 
