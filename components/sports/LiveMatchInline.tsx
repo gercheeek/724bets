@@ -595,12 +595,12 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                      {animTab === 'stats' && (
                        <div className="absolute inset-0 overflow-y-auto custom-scrollbar p-3 flex flex-col gap-3">
                          {[
-                           { label: 'Toplam Şutlar', h: (match as any).homeStats?.totalShots, a: (match as any).awayStats?.totalShots },
-                           { label: 'İsabetli Şutlar', h: (match as any).homeStats?.shotsOnTarget, a: (match as any).awayStats?.shotsOnTarget },
-                           { label: 'İsabetsiz Şutlar', h: (match as any).homeStats?.shotsOffTarget, a: (match as any).awayStats?.shotsOffTarget },
-                           { label: 'Kornerler', h: (match as any).homeStats?.corners, a: (match as any).awayStats?.corners },
-                           { label: 'Sarı Kartlar', h: (match as any).homeStats?.yellowCards, a: (match as any).awayStats?.yellowCards },
-                           { label: 'Kırmızı Kart', h: (match as any).homeStats?.redCards, a: (match as any).awayStats?.redCards },
+                           { label: 'Toplam Şutlar', h: homeStats?.Shot || homeStats?.totalShots, a: awayStats?.Shot || awayStats?.totalShots },
+                           { label: 'İsabetli Şutlar', h: homeStats?.ShotOnTarget || homeStats?.shotsOnTarget, a: awayStats?.ShotOnTarget || awayStats?.shotsOnTarget },
+                           { label: 'İsabetsiz Şutlar', h: homeStats?.ShotOffTarget || homeStats?.shotsOffTarget, a: awayStats?.ShotOffTarget || awayStats?.shotsOffTarget },
+                           { label: 'Kornerler', h: homeStats?.Corner || homeStats?.corners, a: awayStats?.Corner || awayStats?.corners },
+                           { label: 'Sarı Kartlar', h: homeStats?.YellowCard || homeStats?.yellowCards, a: awayStats?.YellowCard || awayStats?.yellowCards },
+                           { label: 'Kırmızı Kart', h: homeStats?.RedCard || homeStats?.redCards, a: awayStats?.RedCard || awayStats?.redCards },
                          ].map((stat, i) => {
                            const hVal = stat.h !== undefined ? stat.h : '-';
                            const aVal = stat.a !== undefined ? stat.a : '-';
