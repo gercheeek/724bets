@@ -77,12 +77,13 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
   const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
 
   // Same mock stats logic as modal
-  if (Object.keys(homeStats).length === 0 && match.minute !== 'Yakında') {
-    const min = parseInt(match.minute) || 45;
+  if (Object.keys(homeStats).length === 0 && (match.minute !== 'Yakında' || match.isLive)) {
+    let min = parseInt(match.minute) || 45;
+    if (min === 0) min = 15; // fallback
     const homeAdv = parseFloat(match.homeOdd) < parseFloat(match.awayOdd) ? 1.2 : 0.8;
     if (isFootball) {
-      homeStats = { Corner: Math.floor(min / 15 * homeAdv), YellowCard: Math.floor(min / 30), RedCard: 0 };
-      awayStats = { Corner: Math.floor(min / 15 * (2 - homeAdv)), YellowCard: Math.floor(min / 35), RedCard: 0 };
+      homeStats = { Corner: Math.floor(min / 15 * homeAdv), totalShots: Math.floor(min / 8 * homeAdv), shotsOnTarget: Math.floor(min / 15 * homeAdv), YellowCard: Math.floor(min / 30), RedCard: 0 };
+      awayStats = { Corner: Math.floor(min / 15 * (2 - homeAdv)), totalShots: Math.floor(min / 8 * (2 - homeAdv)), shotsOnTarget: Math.floor(min / 15 * (2 - homeAdv)), YellowCard: Math.floor(min / 35), RedCard: 0 };
     }
   }
   
@@ -595,12 +596,12 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                      {animTab === 'stats' && (
                        <div className="absolute inset-0 overflow-y-auto custom-scrollbar p-3 flex flex-col gap-3">
                          {[
-                           { label: 'Toplam Şutlar', h: homeStats?.Shot || homeStats?.totalShots, a: awayStats?.Shot || awayStats?.totalShots },
-                           { label: 'İsabetli Şutlar', h: homeStats?.ShotOnTarget || homeStats?.shotsOnTarget, a: awayStats?.ShotOnTarget || awayStats?.shotsOnTarget },
-                           { label: 'İsabetsiz Şutlar', h: homeStats?.ShotOffTarget || homeStats?.shotsOffTarget, a: awayStats?.ShotOffTarget || awayStats?.shotsOffTarget },
-                           { label: 'Kornerler', h: homeStats?.Corner || homeStats?.corners, a: awayStats?.Corner || awayStats?.corners },
-                           { label: 'Sarı Kartlar', h: homeStats?.YellowCard || homeStats?.yellowCards, a: awayStats?.YellowCard || awayStats?.yellowCards },
-                           { label: 'Kırmızı Kart', h: homeStats?.RedCard || homeStats?.redCards, a: awayStats?.RedCard || awayStats?.redCards },
+                           { label: 'Toplam Şutlar', h: homeStats?.Shot || homeStats?.totalShots || (match as any).homeStats?.totalShots, a: awayStats?.Shot || awayStats?.totalShots || (match as any).awayStats?.totalShots },
+                           { label: 'İsabetli Şutlar', h: homeStats?.ShotOnTarget || homeStats?.shotsOnTarget || (match as any).homeStats?.shotsOnTarget, a: awayStats?.ShotOnTarget || awayStats?.shotsOnTarget || (match as any).awayStats?.shotsOnTarget },
+                           { label: 'İsabetsiz Şutlar', h: homeStats?.ShotOffTarget || homeStats?.shotsOffTarget || (match as any).homeStats?.shotsOffTarget, a: awayStats?.ShotOffTarget || awayStats?.shotsOffTarget || (match as any).awayStats?.shotsOffTarget },
+                           { label: 'Kornerler', h: homeStats?.Corner || homeStats?.corners || (match as any).homeStats?.corners, a: awayStats?.Corner || awayStats?.corners || (match as any).awayStats?.corners },
+                           { label: 'Sarı Kartlar', h: homeStats?.YellowCard || homeStats?.yellowCards || (match as any).homeStats?.yellowCards, a: awayStats?.YellowCard || awayStats?.yellowCards || (match as any).awayStats?.yellowCards },
+                           { label: 'Kırmızı Kart', h: homeStats?.RedCard || homeStats?.redCards || (match as any).homeStats?.redCards, a: awayStats?.RedCard || awayStats?.redCards || (match as any).awayStats?.redCards },
                          ].map((stat, i) => {
                            const hVal = stat.h !== undefined ? stat.h : '-';
                            const aVal = stat.a !== undefined ? stat.a : '-';
