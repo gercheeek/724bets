@@ -10,6 +10,8 @@ import { LiveTimer } from './MatchCard';
 interface TopMatchesWidgetProps {
   matches: MatchInfo[];
   onSelectMatch: (match: MatchInfo) => void;
+  title?: string;
+  icon?: React.ReactNode;
 }
 
 // Helper to get dummy viewers based on match ID for consistency
@@ -64,7 +66,7 @@ const ELITE_LEAGUES = [
   'konferans ligi', 'conference league', 'dünya kupası', 'world cup', 'avrupa şampiyonası'
 ];
 
-export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onSelectMatch }) => {
+export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onSelectMatch, title = "En İyi Maçlar", icon }) => {
   const { addSelection } = useBetSlip();
   const [now, setNow] = useState(Date.now());
   const [scrollIdx, setScrollIdx] = useState(0);
@@ -179,7 +181,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
         // Zaman olarak en yakın olan öne (Canlılar ve yakın saattekiler)
         return (a.timestamp || 0) - (b.timestamp || 0);
       })
-      .slice(0, 15);
+      .slice(0, 5); // User requested 5 matches
   }, [matches]);
 
   if (topMatches.length === 0) return null;
@@ -211,10 +213,12 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-[#00E5FF]/10 border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.2)]">
-            <span className="text-sm font-bold">$</span>
-          </div>
-          <h2 className="text-lg font-bold text-white tracking-wide">En İyi Maçlar</h2>
+          {icon || (
+            <div className="w-6 h-6 rounded bg-[#00E5FF]/10 border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.2)]">
+              <span className="text-sm font-bold">$</span>
+            </div>
+          )}
+          <h2 className="text-lg font-bold text-white tracking-wide">{title}</h2>
         </div>
         <div className="flex items-center gap-2">
           <button 

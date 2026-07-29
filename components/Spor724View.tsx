@@ -6,7 +6,7 @@ import { getMatchPriorityScore } from '../utils/eliteTeams';
 import { SportsHeroBanner } from './SportsHeroBanner';
 import { AnimatedOdd } from './AnimatedOdd';
 import Footer from './Footer';
-import { ArrowRight, Trophy, Star, Bell, Clock, Search, ShieldCheck, Zap, Activity, Target, Gamepad2, Flame, Volume2, VolumeX, ChevronDown, Radio } from 'lucide-react';
+import { ArrowRight, Trophy, Star, Bell, Clock, Search, ShieldCheck, Zap, Activity, Target, Gamepad2, Flame, Volume2, VolumeX, ChevronDown, Radio, Calendar } from 'lucide-react';
 import { SidebarMenu } from './sports/SidebarMenu';
 import { DualRightPanel } from './sports/DualRightPanel';
 import FeaturedCombos from './sports/FeaturedCombos';
@@ -615,7 +615,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
       return true;
     });
 
-    if (viewMode === 'live') {
+    if (viewMode === 'live' || viewMode === 'bulletin') {
       result = result
         .filter(m => findBestLogoMatch(m.home) && findBestLogoMatch(m.away))
         .sort((a, b) => {
@@ -803,9 +803,24 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
             {navTab === 'home' && (
               <div className="px-4 md:px-6 mb-4 transition-all duration-300">
                   
-                  {/* En İyi Maçlar Widget Moved Under Slider */}
+                  {/* Canlı Maçlar Widget */}
                   <div className="mt-6 mb-2">
-                    <TopMatchesWidget matches={filteredMatches} onSelectMatch={setSelectedMatch} />
+                    <TopMatchesWidget 
+                       title="Öne Çıkan Canlı Maçlar" 
+                       icon={<div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />}
+                       matches={filteredMatches.filter(m => m.isLive)} 
+                       onSelectMatch={setSelectedMatch} 
+                    />
+                  </div>
+
+                  {/* Yaklaşan Maçlar Widget */}
+                  <div className="mt-6 mb-2">
+                    <TopMatchesWidget 
+                       title="Öne Çıkan Yaklaşan Maçlar" 
+                       icon={<Calendar className="w-5 h-5 text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]" />}
+                       matches={filteredMatches.filter(m => !m.isLive)} 
+                       onSelectMatch={setSelectedMatch} 
+                    />
                   </div>
 
                   {/* Popular Events Accordion Moved Here for Home */}
