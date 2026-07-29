@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useLanguage } from './LanguageContext';
+import { createBrowserClient } from '../lib/supabase';
 import { calculateMarketCount } from '../utils/marketUtils';
 
 // Bet Slip Item Structure
@@ -218,170 +219,29 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const clearBetSelections = () => setBetSelections([]);
 
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const reconnectAttemptsRef = useRef(0);
-  const messageBufferRef = useRef<any[]>([]);
-  const processBufferIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // WebSocket Connection
+  // Supabase Realtime Broadcast Connection for Live Matches
   useEffect(() => {
-    const connectWs = () => {
-      // VITE_WS_URL ortam değişkeni varsa onu kullan, yoksa yerel sunucuya bağlan
-      const wsUrl = (import.meta as any).env?.VITE_WS_URL || 'ws://localhost:4000';
-      const ws = new WebSocket(`${wsUrl}/?lang=${language}`);
-      wsRef.current = ws;
+    const supabase = createBrowserClient();
+    const channel = supabase.channel('live-data');
 
-      ws.onopen = () => {
-        console.log('✅ Connected to Local Proxy. Sending LiveEvents subscribe...');
-        setIsConnected(true);
-        reconnectAttemptsRef.current = 0;
-        
-        // Remove fake live matches when connected
-        setEvents(prev => prev.filter(e => {
-          const id = e.id.toString();
-          return !id.startsWith('mock_') && !id.startsWith('pre_') && !id.startsWith('pop_') && !id.startsWith('friendly_') && !id.startsWith('cl_');
-        }));
-        
-        let loc = language === 'tr' ? 'tur' : 'en'; // Send tur for Turkish, en for English, etc to BetConstruct
-        ws.send(`42["subscribe-LiveEvents",{"locale":"${loc}"}]`);
-      };
+    channel.on('broadcast', { event: 'live_matches_update' }, ({ payload }) => {
+      setIsConnected(true);
+      // Backend bot sends the full parsed array of live matches
+      if (Array.isArray(payload)) {
+        setEvents(payload);
+      }
+    });
 
-      ws.onmessage = (event) => {
-        const msg = event.data.toString();
-        if (msg.startsWith('42[')) {
-          try {
-            const parsed = JSON.parse(msg.substring(2));
-            const payload = parsed[1];
-            
-            if (payload && payload.events) {
-              messageBufferRef.current.push(payload.events);
-            } else if (payload && payload.data && payload.data.events) {
-              messageBufferRef.current.push(payload.data.events);
-            } else if (payload && Array.isArray(payload)) {
-              messageBufferRef.current.push(payload);
-            }
-          } catch (e) {
-            console.error("Error parsing WS message", e);
-          }
-        }
-      };
-
-      ws.onclose = () => {
-        setIsConnected(false);
-        console.log('❌ Disconnected from Local Proxy');
-        
-        // Auto-reconnect with exponential backoff (max 5 seconds)
-        const timeout = Math.min(1000 * Math.pow(1.5, reconnectAttemptsRef.current), 5000);
-        reconnectAttemptsRef.current += 1;
-        
-        reconnectTimeoutRef.current = setTimeout(() => {
-           connectWs();
-        }, timeout);
-      };
-
-      ws.onerror = (err) => {
-        console.error('WebSocket Error:', err);
-        ws.close();
-      };
-    };
-
-    connectWs();
-
-
-    // Process Buffer every 500ms to prevent UI freezing
-    processBufferIntervalRef.current = setInterval(() => {
-      if (messageBufferRef.current.length === 0) return;
-      
-      const payloads = [...messageBufferRef.current];
-      messageBufferRef.current = [];
-      
-      setEvents(prev => {
-        // Filter out fake matches since we are connected and receiving socket data
-        let newEvents = prev.filter(e => !e.id.toString().startsWith('mock_') && !e.id.toString().startsWith('pre_') && !e.id.toString().startsWith('pop_'));
-        let hasChanges = false;
-
-        // Build O(1) fast lookup index map
-        const eventIndexMap = new Map<string | number, number>();
-        newEvents.forEach((item, index) => {
-          eventIndexMap.set(item.id, index);
-        });
-        
-        payloads.forEach(newEventsData => {
-          if (!Array.isArray(newEventsData)) return;
-          
-          newEventsData.forEach((rawEv: any) => {
-            const ev = normalizeEvent(rawEv);
-            if (!ev.data) return;
-            const idx = eventIndexMap.get(ev.id);
-            hasChanges = true;
-            
-            if (idx !== undefined && idx >= 0) {
-              const prevData = newEvents[idx].data || {};
-              const nextData = ev.data || {};
-              
-              // 3. Güvenli State Güncellemesi (Safe State Merge)
-              const mergedData = { ...prevData, ...nextData };
-              if (!nextData.sport && prevData.sport) mergedData.sport = prevData.sport;
-              if (!nextData.tournament && prevData.tournament) mergedData.tournament = prevData.tournament;
-              if (!nextData.participants && prevData.participants) mergedData.participants = prevData.participants;
-              if (!nextData.country && prevData.country) mergedData.country = prevData.country;
-              
-              const mergedGroupMarkets = { ...prevData.group_markets };
-              if (ev.group_markets) {
-                for (const groupName in ev.group_markets) {
-                  const newMarkets = ev.group_markets[groupName];
-                  if (!mergedGroupMarkets[groupName]) {
-                    mergedGroupMarkets[groupName] = [...newMarkets];
-                  } else {
-                    const existingMarkets = [...mergedGroupMarkets[groupName]];
-                    for (const newMStr of newMarkets) {
-                      if (!newMStr) continue;
-                      const newMId = newMStr.split('|')[0];
-                      const mIdx = existingMarkets.findIndex((mStr: string) => mStr && mStr.startsWith(newMId + '|'));
-                      if (mIdx >= 0) existingMarkets[mIdx] = newMStr;
-                      else existingMarkets.push(newMStr);
-                    }
-                    mergedGroupMarkets[groupName] = existingMarkets.filter(Boolean);
-                  }
-                }
-              }
-              
-              const removedMarkets = ev.removed_markets || nextData.removed_markets;
-              if (removedMarkets && Array.isArray(removedMarkets)) {
-                const removedIds = new Set(removedMarkets);
-                for (const groupName in mergedGroupMarkets) {
-                  mergedGroupMarkets[groupName] = mergedGroupMarkets[groupName].filter((mStr: string) => {
-                    const mId = mStr.split('|')[0];
-                    return !removedIds.has(mId);
-                  });
-                }
-              }
-
-              newEvents[idx] = {
-                ...newEvents[idx],
-                ...ev,
-                data: {
-                  ...mergedData,
-                  group_markets: mergedGroupMarkets
-                }
-              };
-            } else if (ev.data?.sport) {
-              eventIndexMap.set(ev.id, newEvents.length);
-              newEvents.push(ev);
-            }
-          });
-        });
-        
-        return hasChanges ? newEvents : prev;
-      });
-    }, 500);
+    channel.subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        console.log('✅ Subscribed to Supabase Broadcast (live-data)');
+      }
+    });
 
     return () => {
-      if (wsRef.current) wsRef.current.close();
-      if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
-      if (processBufferIntervalRef.current) clearInterval(processBufferIntervalRef.current);
+      supabase.removeChannel(channel);
     };
-  }, [language]);
+  }, []);
 
   return (
     <BettingContext.Provider value={{
