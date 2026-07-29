@@ -5,6 +5,7 @@ import { useBetSlip } from '../../contexts/BetSlipContext';
 import { isEliteTeam, getMatchPriorityScore } from '../../utils/eliteTeams';
 import { PlayerLogo, findBestLogoMatch } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
+import { LiveTimer } from './MatchCard';
 
 interface TopMatchesWidgetProps {
   matches: MatchInfo[];
@@ -307,7 +308,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                         <div className="text-xs font-bold text-slate-500 italic">VS</div>
                      )}
                      <span className="text-[9px] text-[#00E5FF] font-semibold mt-0.5 animate-pulse tracking-wide drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">
-                        {match.isLive ? (match.minute ? (match.minute.includes("'") ? match.minute : `${match.minute}'`) : 'CANLI') : ''}
+                        {match.isLive ? <LiveTimer minute={match.minute} hidePrefix /> : ''}
                      </span>
                   </div>
 

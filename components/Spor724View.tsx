@@ -606,7 +606,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         // Hide matches that have already started from the upcoming list
         if (m.timestamp && m.timestamp < Date.now()) return false;
       }
-      if (!isAllSportsSelected && m.sport !== activeSport) return false;
+      if (!isAllSportsSelected && m.sport?.toLowerCase() !== activeSport?.toLowerCase()) return false;
       if (activeCountry && m.country !== activeCountry) return false;
       if (viewMode === 'bulletin' && activeDateFilter !== 'all') {
         if (activeDateFilter === 'today' && m.matchDate !== 'Bugün' && m.matchDate !== 'Today') return false;

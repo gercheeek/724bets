@@ -11,6 +11,36 @@ interface MatchCardProps {
   onSelect?: (match: MatchInfo) => void;
 }
 
+export const LiveTimer: React.FC<{ minute: string; hidePrefix?: boolean }> = ({ minute, hidePrefix = false }) => {
+  const [seconds, setSeconds] = React.useState(() => new Date().getSeconds());
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds(new Date().getSeconds());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const prefix = hidePrefix ? '' : 'CANLI ';
+
+  if (!minute) return <span>{hidePrefix ? '' : 'CANLI'}</span>;
+  const cleanMinute = minute.replace(/['"]/g, '').trim();
+
+  if (['ht', 'devre arası', 'devre', 'yarı', '45', 'half time'].includes(cleanMinute.toLowerCase())) {
+    return <span>DEVRE ARASI</span>;
+  }
+  if (['ft', 'bitti', 'ms', '90'].includes(cleanMinute.toLowerCase())) {
+    return <span>BİTTİ</span>;
+  }
+
+  if (!isNaN(Number(cleanMinute))) {
+    const s = seconds.toString().padStart(2, '0');
+    return <span>{`${prefix}${cleanMinute}:${s}`}</span>;
+  }
+
+  return <span>{`${prefix}${minute}`}</span>;
+};
+
 export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSelect }) => {
   const { betSlip, addSelection } = useBetSlip();
 
@@ -38,7 +68,7 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
           {match.isLive ? (
             <span className="text-emerald-400 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              {match.minute === 'DEVRE ARASI' || match.minute === 'Bitti' || match.minute === 'FT' ? match.minute : `CANLI ${match.minute}`}
+              <LiveTimer minute={match.minute} />
             </span>
           ) : (
             <span>{match.matchDate ? `${match.matchDate}, ${match.startTime}` : match.startTime}</span>

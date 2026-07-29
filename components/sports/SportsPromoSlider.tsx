@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useBetting } from '../../contexts/BettingContext';
 import { PlayerLogo, findBestLogoMatch } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
+import { LiveTimer } from './MatchCard';
 
 function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: 'fener'|'cl'|'el'|'conf', leagueName: string }) {
     const { toggleBetSelection } = useBetting();
@@ -93,7 +94,9 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                         {matchData.isLive ? (
                             <div className="flex items-center gap-1.5 md:gap-3 bg-black/60 backdrop-blur-md border border-[#ef4444]/30 rounded-full px-3 md:px-5 py-1 md:py-1.5 shadow-[0_0_20px_rgba(239,68,68,0.3)] z-40 mt-1 md:mt-2 scale-90 md:scale-100">
                                 <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#ef4444] shadow-[0_0_10px_#ef4444] animate-pulse"></div>
-                                <span className="text-white font-bold text-[10px] md:text-[14px] tracking-widest uppercase text-[#ef4444]">CANLI {matchData.minute}'</span>
+                                <span className="text-white font-bold text-[10px] md:text-[14px] tracking-widest uppercase text-[#ef4444]">
+                                    <LiveTimer minute={matchData.minute} />
+                                </span>
                                 <span className="text-white font-black text-[12px] md:text-[16px] tracking-widest">{matchData.score}</span>
                             </div>
                         ) : (

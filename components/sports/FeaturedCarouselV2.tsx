@@ -4,6 +4,7 @@ import { TeamLogoPlaceholder } from './TeamLogoPlaceholder';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useBetSlip } from '../../contexts/BetSlipContext';
 import { Globe } from 'lucide-react';
+import { LiveTimer } from './MatchCard';
 
 interface FeaturedCarouselV2Props {
     matches: MatchInfo[];
@@ -72,7 +73,7 @@ export const FeaturedCarouselV2: React.FC<FeaturedCarouselV2Props> = ({ matches,
                                 {match.isLive ? (
                                     <div className="flex items-center gap-1.5 bg-red-500/10 text-red-500 px-2 py-0.5 rounded border border-red-500/20 shadow-sm">
                                         <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
-                                        <span>{match.liveTime || 'CANLI'}</span>
+                                        <LiveTimer minute={match.liveTime || match.minute} hidePrefix />
                                     </div>
                                 ) : (
                                     <span className="text-[#e2e8f0] bg-white/5 border border-white/10 px-2 py-0.5 rounded">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MatchInfo } from './types';
 import { PlayerLogo } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
+import { LiveTimer } from './MatchCard';
 import { ODDS_ENGINE_CONFIG } from '../../utils/oddsEngineConfig';
 import { useBetSlip } from '../../contexts/BetSlipContext';
 import { generateDetailedMarkets } from '../../utils/oddsGenerator';
@@ -279,7 +280,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef4444] opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#ef4444]"></span>
                              </div>
-                             <span>{match.minute || 'CANLI'}</span>
+                             <LiveTimer minute={match.minute} hidePrefix />
                           </>
                         ) : (
                           <span>{match.startTime || match.minute || 'BAŞLAMADI'}</span>
