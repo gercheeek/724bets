@@ -91,13 +91,13 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                 {/* RIGHT SIDE: Premium Logos & Date Composition */}
                 <div className="w-[65%] md:w-[65%] flex items-center justify-center relative h-full pr-2 md:pr-8">
                     <div className="w-full h-full flex flex-col items-center justify-center relative gap-1 md:gap-5">
-                        {matchData.isLive ? (
+                        {(matchData.isLive || matchData.match?.isLive) ? (
                             <div className="flex items-center gap-1.5 md:gap-3 bg-black/60 backdrop-blur-md border border-[#ef4444]/30 rounded-full px-3 md:px-5 py-1 md:py-1.5 shadow-[0_0_20px_rgba(239,68,68,0.3)] z-40 mt-1 md:mt-2 scale-90 md:scale-100">
                                 <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#ef4444] shadow-[0_0_10px_#ef4444] animate-pulse"></div>
                                 <span className="text-white font-bold text-[10px] md:text-[14px] tracking-widest uppercase text-[#ef4444]">
-                                    <LiveTimer minute={matchData.minute} />
+                                    <LiveTimer minute={matchData.minute || matchData.match?.minute} />
                                 </span>
-                                <span className="text-white font-black text-[12px] md:text-[16px] tracking-widest">{matchData.score}</span>
+                                <span className="text-white font-black text-[12px] md:text-[16px] tracking-widest">{matchData.score || matchData.match?.score}</span>
                             </div>
                         ) : (
                             <div className="flex items-center gap-1.5 md:gap-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-3 md:px-5 py-1 md:py-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-40 mt-1 md:mt-2 scale-90 md:scale-100">
