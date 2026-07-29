@@ -617,14 +617,12 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
 
     if (viewMode === 'live' || viewMode === 'bulletin') {
       result = result
-        .filter(m => findBestLogoMatch(m.home) && findBestLogoMatch(m.away))
         .sort((a, b) => {
           const scoreA = getMatchPriorityScore(a.home, a.away);
           const scoreB = getMatchPriorityScore(b.home, b.away);
           if (scoreA !== scoreB) return scoreB - scoreA;
           return (a.timestamp || 0) - (b.timestamp || 0);
-        })
-        .slice(0, 5);
+        });
     } else {
       result = result.sort((a, b) => {
         if (a.isLive !== b.isLive) return a.isLive ? -1 : 1;
@@ -803,24 +801,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
             {navTab === 'home' && (
               <div className="px-4 md:px-6 mb-4 transition-all duration-300">
                   
-                  {/* Canlı Maçlar Widget */}
+                  {/* En İyi Maçlar Widget Moved Under Slider */}
                   <div className="mt-6 mb-2">
-                    <TopMatchesWidget 
-                       title="Öne Çıkan Canlı Maçlar" 
-                       icon={<div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />}
-                       matches={filteredMatches.filter(m => m.isLive)} 
-                       onSelectMatch={setSelectedMatch} 
-                    />
-                  </div>
-
-                  {/* Yaklaşan Maçlar Widget */}
-                  <div className="mt-6 mb-2">
-                    <TopMatchesWidget 
-                       title="Öne Çıkan Yaklaşan Maçlar" 
-                       icon={<Calendar className="w-5 h-5 text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]" />}
-                       matches={filteredMatches.filter(m => !m.isLive)} 
-                       onSelectMatch={setSelectedMatch} 
-                    />
+                    <TopMatchesWidget matches={filteredMatches} onSelectMatch={setSelectedMatch} />
                   </div>
 
                   {/* Popular Events Accordion Moved Here for Home */}
