@@ -365,7 +365,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           const theme = getLeagueTheme(league, isTennis);
           
           return (
-            <div key={league} className={`bg-[#272c3f] rounded-xl overflow-hidden border border-white/10 border-l-[4px] ${theme.accentBorder} relative mt-3`}>
+            <div key={league} className={`bg-white rounded-xl overflow-hidden border border-zinc-200 border-l-[4px] ${theme.accentBorder} relative mt-3 shadow-sm`}>
               <button 
                 onClick={() => toggleLeague(league)}
                 className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative text-left bg-transparent`}
@@ -373,19 +373,19 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 {/* Content */}
                 <div className="flex items-center gap-4 relative z-10 pl-1 flex-1 min-w-0">
                   {/* Clean League Logo */}
-                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-[14px] shrink-0 z-10 bg-[#161925] border border-white/5">
+                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-[14px] shrink-0 z-10 bg-zinc-50 border border-zinc-200 shadow-sm">
                     {isTennis ? (
                        <span className="text-3xl relative z-10">🎾</span>
                     ) : (
-                       <LeagueLogo league={league} className="w-10 h-10 sm:w-11 sm:h-11 object-contain relative z-10" />
+                       <LeagueLogo league={league} className="w-10 h-10 sm:w-11 sm:h-11 object-contain relative z-10 drop-shadow-sm" />
                     )}
                   </div>
                   
                   <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4">
-                    <span className="text-white font-bold text-[14px] sm:text-[16px] tracking-wider uppercase truncate w-full" title={league}>
+                    <span className="text-zinc-900 font-extrabold text-[14px] sm:text-[16px] tracking-wider uppercase truncate w-full" title={league}>
                       {league}
                     </span>
-                    <span className="text-zinc-400 text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase mt-0.5">
+                    <span className="text-zinc-500 text-[10px] sm:text-[11px] font-bold tracking-wide uppercase mt-0.5">
                       Öne Çıkan Turnuva
                     </span>
                   </div>
@@ -394,18 +394,18 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 {/* Right controls */}
                 <div className="flex items-center gap-3 sm:gap-5 relative z-10">
                   <div className="hidden sm:flex flex-col items-end mr-2">
-                     <span className="text-zinc-500 text-[10px] font-bold tracking-widest uppercase">Aktif</span>
-                     <span className="text-zinc-200 text-[13px] font-black tracking-wide">{leagueMatches.length} MAÇ</span>
+                     <span className="text-zinc-400 text-[10px] font-bold tracking-widest uppercase">Aktif</span>
+                     <span className="text-zinc-800 text-[13px] font-black tracking-wide">{leagueMatches.length} MAÇ</span>
                   </div>
-                  <span className="sm:hidden bg-white/5 border border-white/10 text-zinc-200 text-[11px] font-black px-3 py-1.5 rounded tracking-widest">
+                  <span className="sm:hidden bg-zinc-100 border border-zinc-200 text-zinc-800 text-[11px] font-black px-3 py-1.5 rounded tracking-widest">
                     {leagueMatches.length} MAÇ
                   </span>
                   
-                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#161925] border border-white/5">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-50 border border-zinc-200 shadow-sm">
                     {isExpanded ? (
-                      <ChevronUp className="w-5 h-5 text-zinc-400" />
+                      <ChevronUp className="w-5 h-5 text-zinc-500" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-zinc-400" />
+                      <ChevronDown className="w-5 h-5 text-zinc-500" />
                     )}
                   </div>
                 </div>
