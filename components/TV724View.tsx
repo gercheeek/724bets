@@ -221,56 +221,64 @@ const getGroupConfig = (groupName: string) => {
     if (clean.includes('BEIN')) {
         return {
             color: '#ff7a00',
-            glow: 'rgba(255, 122, 0, 0.12)',
-            icon: '📺'
+            glow: 'rgba(255, 122, 0, 0.15)',
+            gradient: 'linear-gradient(135deg, rgba(255, 122, 0, 0.25) 0%, rgba(255, 122, 0, 0.08) 100%)',
+            icon: <Tv style={{ width: 14, height: 14, color: '#ff7a00' }} />
         };
     }
     if (clean.includes('S SPORT')) {
         return {
             color: '#ef4444',
-            glow: 'rgba(239, 68, 68, 0.12)',
-            icon: '🏆'
+            glow: 'rgba(239, 68, 68, 0.15)',
+            gradient: 'linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(239, 68, 68, 0.08) 100%)',
+            icon: <Trophy style={{ width: 14, height: 14, color: '#ef4444' }} />
         };
     }
     if (clean.includes('SMART SPOR')) {
         return {
             color: '#06b6d4',
-            glow: 'rgba(6, 182, 212, 0.12)',
-            icon: '⚡'
+            glow: 'rgba(6, 182, 212, 0.15)',
+            gradient: 'linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(6, 182, 212, 0.08) 100%)',
+            icon: <Zap style={{ width: 14, height: 14, color: '#06b6d4' }} />
         };
     }
     if (clean.includes('TİVİBU')) {
         return {
             color: '#eab308',
-            glow: 'rgba(234, 179, 8, 0.12)',
-            icon: '🏅'
+            glow: 'rgba(234, 179, 8, 0.15)',
+            gradient: 'linear-gradient(135deg, rgba(234, 179, 8, 0.25) 0%, rgba(234, 179, 8, 0.08) 100%)',
+            icon: <Award style={{ width: 14, height: 14, color: '#eab308' }} />
         };
     }
     if (clean.includes('EUROSPORT')) {
         return {
             color: '#3b82f6',
-            glow: 'rgba(59, 130, 246, 0.12)',
-            icon: '🌍'
+            glow: 'rgba(59, 130, 246, 0.15)',
+            gradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.08) 100%)',
+            icon: <Radio style={{ width: 14, height: 14, color: '#3b82f6' }} />
         };
     }
     if (clean.includes('DİJİTAL')) {
         return {
             color: '#a855f7',
-            glow: 'rgba(168, 85, 247, 0.12)',
-            icon: '🎬'
+            glow: 'rgba(168, 85, 247, 0.15)',
+            gradient: 'linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(168, 85, 247, 0.08) 100%)',
+            icon: <Crown style={{ width: 14, height: 14, color: '#a855f7' }} />
         };
     }
     if (clean.includes('ULUSAL')) {
         return {
             color: '#10b981',
-            glow: 'rgba(16, 185, 129, 0.12)',
-            icon: '⭐'
+            glow: 'rgba(16, 185, 129, 0.15)',
+            gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.08) 100%)',
+            icon: <Star style={{ width: 14, height: 14, color: '#10b981' }} />
         };
     }
     return {
         color: '#9ca3af',
-        glow: 'rgba(156, 163, 175, 0.12)',
-        icon: '📡'
+        glow: 'rgba(156, 163, 175, 0.15)',
+        gradient: 'linear-gradient(135deg, rgba(156, 163, 175, 0.25) 0%, rgba(156, 163, 175, 0.08) 100%)',
+        icon: <Tv style={{ width: 14, height: 14, color: '#9ca3af' }} />
     };
 };
 
@@ -1103,6 +1111,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                             .map(groupName => {
                                                 const config = getGroupConfig(groupName);
                                                 const channelCount = grouped[groupName]?.length || 0;
+                                                const hasLiveChannel = grouped[groupName]?.some(s => s.is_live);
                                                 const isCollapsed = collapsedGroups[groupName];
                                                 
                                                 return (
@@ -1110,13 +1119,14 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                         key={groupName} 
                                                         style={{ 
                                                             marginBottom: '8px', 
-                                                            background: 'linear-gradient(135deg, rgba(19,22,28,0.7) 0%, rgba(13,15,19,0.7) 100%)', 
+                                                            background: 'linear-gradient(135deg, rgba(17,20,26,0.85) 0%, rgba(11,13,18,0.95) 100%)', 
                                                             borderRadius: '10px', 
-                                                            border: isCollapsed ? '1px solid rgba(255,255,255,0.03)' : `1px solid rgba(${config.color === '#ff7a00' ? '255,122,0' : config.color === '#ef4444' ? '239,68,68' : config.color === '#06b6d4' ? '6,182,212' : config.color === '#eab308' ? '234,179,8' : config.color === '#3b82f6' ? '59,130,246' : config.color === '#a855f7' ? '168,85,247' : config.color === '#10b981' ? '16,185,129' : '156,163,175'}, 0.2)`, 
+                                                            border: isCollapsed ? '1px solid rgba(255,255,255,0.04)' : `1px solid ${config.color}44`, 
                                                             overflow: 'hidden',
-                                                            transition: 'all 0.3s ease',
-                                                            boxShadow: isCollapsed ? 'none' : `0 4px 12px ${config.glow}`
+                                                            transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                            boxShadow: isCollapsed ? 'none' : `0 6px 16px -2px ${config.glow}`
                                                         }}
+                                                        className="group/acc hover:border-white/10"
                                                     >
                                                         {/* Accordion Header */}
                                                         <div 
@@ -1125,45 +1135,64 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                 display: 'flex', 
                                                                 alignItems: 'center', 
                                                                 justifyContent: 'space-between', 
-                                                                padding: '10px 14px', 
-                                                                background: isCollapsed ? 'rgba(19, 22, 28, 0.4)' : 'rgba(26, 29, 36, 0.6)', 
+                                                                padding: '11px 14px', 
+                                                                background: isCollapsed ? 'rgba(19, 22, 28, 0.4)' : 'rgba(26, 29, 36, 0.7)', 
                                                                 cursor: 'pointer', 
-                                                                transition: 'all 0.2s',
+                                                                transition: 'all 0.2s ease',
                                                                 borderBottom: isCollapsed ? '1px solid transparent' : '1px solid rgba(255,255,255,0.04)'
                                                             }}
-                                                            className="hover:bg-[#1A1D24]/80 transition-colors"
+                                                            className="hover:bg-[#1C2029]/80 active:scale-[0.99]"
                                                         >
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                                <div style={{
+                                                                    width: '3px',
+                                                                    height: '16px',
+                                                                    borderRadius: '4px',
+                                                                    background: config.color,
+                                                                    boxShadow: isCollapsed ? 'none' : `0 0 8px ${config.color}`
+                                                                }} />
                                                                 <div style={{ 
                                                                     display: 'flex', 
                                                                     alignItems: 'center', 
                                                                     justifyContent: 'center', 
-                                                                    width: '24px', 
-                                                                    height: '24px', 
-                                                                    borderRadius: '6px', 
-                                                                    background: config.glow,
-                                                                    fontSize: '12px',
-                                                                    border: `1px solid rgba(${config.color === '#ff7a00' ? '255,122,0' : config.color === '#ef4444' ? '239,68,68' : config.color === '#06b6d4' ? '6,182,212' : config.color === '#eab308' ? '234,179,8' : config.color === '#3b82f6' ? '59,130,246' : config.color === '#a855f7' ? '168,85,247' : config.color === '#10b981' ? '16,185,129' : '156,163,175'}, 0.1)`
+                                                                    width: '26px', 
+                                                                    height: '26px', 
+                                                                    borderRadius: '7px', 
+                                                                    background: config.gradient,
+                                                                    border: `1px solid ${config.color}33`,
+                                                                    boxShadow: `0 0 10px ${config.glow}`
                                                                 }}>
                                                                     {config.icon}
                                                                 </div>
-                                                                <span style={{ fontSize: '13px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.3px', transition: 'color 0.2s' }}>
+                                                                <span style={{ fontSize: '13px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.4px', transition: 'color 0.2s' }}>
                                                                     {groupName.replace(/^[^\s]+\s+/, '')}
                                                                 </span>
                                                             </div>
                                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                                 <span style={{ 
-                                                                    fontSize: '9px', 
+                                                                    fontSize: '9.5px', 
                                                                     fontWeight: 800, 
                                                                     color: config.color, 
                                                                     background: config.glow, 
-                                                                    padding: '2px 6px', 
-                                                                    borderRadius: '8px',
-                                                                    border: `1px solid rgba(${config.color === '#ff7a00' ? '255,122,0' : config.color === '#ef4444' ? '239,68,68' : config.color === '#06b6d4' ? '6,182,212' : config.color === '#eab308' ? '234,179,8' : config.color === '#3b82f6' ? '59,130,246' : config.color === '#a855f7' ? '168,85,247' : config.color === '#10b981' ? '16,185,129' : '156,163,175'}, 0.1)`
+                                                                    padding: '2px 8px', 
+                                                                    borderRadius: '10px',
+                                                                    border: `1px solid ${config.color}33`,
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: '4px'
                                                                 }}>
+                                                                    {hasLiveChannel && (
+                                                                        <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#10b981', animation: 'pulse 1.5s infinite' }} />
+                                                                    )}
                                                                     {channelCount} Kanal
                                                                 </span>
-                                                                {isCollapsed ? <ChevronDown style={{ width: 14, height: 14, color: '#6b7280' }} /> : <ChevronUp style={{ width: 14, height: 14, color: config.color }} />}
+                                                                <ChevronDown style={{ 
+                                                                    width: 14, 
+                                                                    height: 14, 
+                                                                    color: isCollapsed ? '#6b7280' : config.color,
+                                                                    transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)',
+                                                                    transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                                                                }} />
                                                             </div>
                                                         </div>
                                                 
