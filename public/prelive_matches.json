@@ -711,7 +711,7 @@
       "start_ts": 1785517200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.88!~draw~3.14!~away~2.47",
+          "|1x2||~home~2.93!~draw~3.15!~away~2.43",
           "|gg||~yes~3.9!~no~1.21"
         ]
       }
@@ -2842,80 +2842,8 @@
           "|gg||~yes~2.74!~no~1.33",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~10!~no~1.02",
-          "|gg||~yes~3.25!~no~1.29",
-          "|gg||~yes~4.75!~no~1.15"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30430188",
-    "isScraped": true,
-    "data": {
-      "id": 30430188,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Dünya"
-      },
-      "participants": {
-        "home": "USD Cavese",
-        "away": "ASD Sarnese",
-        "home_id": 34706,
-        "away_id": 7643
-      },
-      "start_time": "2026-07-30T15:30:00.000Z",
-      "start_ts": 1785425400,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.42!~draw~4.8!~away~7.3",
-          "|gg||~yes~2.18!~no~1.52",
-          "|gg||~yes~2.83!~no~1.31",
-          "|gg||~yes~6!~no~1.05",
-          "|gg||~yes~10.3!~no~1.017",
           "|gg||~yes~3.4!~no~1.27",
-          "|gg||~yes~4.75!~no~1.15"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30430189",
-    "isScraped": true,
-    "data": {
-      "id": 30430189,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Dünya"
-      },
-      "participants": {
-        "home": "Trabzonspor",
-        "away": " Al Sadd SC Doha",
-        "home_id": 771,
-        "away_id": 3218
-      },
-      "start_time": "2026-07-30T15:30:00.000Z",
-      "start_ts": 1785425400,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.55!~draw~4.6!~away~5.4",
-          "|gg||~yes~1.79!~no~1.79",
-          "|gg||~yes~2.26!~no~1.48",
-          "|gg||~yes~5.2!~no~1.08",
-          "|gg||~yes~8.2!~no~1.045",
-          "|gg||~yes~2.75!~no~1.39",
-          "|gg||~yes~3.65!~no~1.24"
+          "|gg||~yes~4.57!~no~1.16"
         ]
       }
     }
@@ -2945,12 +2873,12 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.94!~draw~3.47!~away~3.75",
-          "|gg||~yes~2.06!~no~1.58",
-          "|gg||~yes~2.66!~no~1.35",
+          "|1x2||~home~1.84!~draw~3.6!~away~4.33",
+          "|gg||~yes~2.03!~no~1.6",
+          "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.3!~no~1.027",
-          "|gg||~yes~3.4!~no~1.27",
+          "|gg||~yes~3.3!~no~1.28",
           "|gg||~yes~4.05!~no~1.2"
         ]
       }
@@ -2982,12 +2910,12 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~2.21!~draw~3.59!~away~2.96",
-          "|gg||~yes~1.75!~no~1.83",
-          "|gg||~yes~2.22!~no~1.5",
+          "|gg||~yes~1.72!~no~1.87",
+          "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~5.2!~no~1.08",
-          "|gg||~yes~7.85!~no~1.05",
+          "|gg||~yes~7.5!~no~1.055",
           "|gg||~yes~2.62!~no~1.43",
-          "|gg||~yes~3.65!~no~1.24"
+          "|gg||~yes~3.47!~no~1.26"
         ]
       }
     }
@@ -3017,7 +2945,7 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.36!~draw~7!~away~5.8",
+          "|1x2||~home~1.34!~draw~7.3!~away~6",
           "|gg||~yes~1.52!~no~2.18",
           "|gg||~yes~1.85!~no~1.73",
           "|gg||~yes~4.15!~no~1.14",
@@ -3233,12 +3161,12 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.63!~draw~3.82!~away~2.34",
+          "|1x2||~home~2.67!~draw~3.82!~away~2.3",
           "|gg||~yes~1.7!~no~1.89",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~5!~no~1.09",
           "|gg||~yes~7.5!~no~1.055",
-          "|gg||~yes~2.68!~no~1.41",
+          "|gg||~yes~2.62!~no~1.43",
           "|gg||~yes~3.4!~no~1.27"
         ]
       }
@@ -3342,11 +3270,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.85!~draw~3.7!~away~3.85",
-          "|gg||~yes~1.92!~no~1.68",
-          "|gg||~yes~2.48!~no~1.4",
+          "|gg||~yes~1.87!~no~1.72",
+          "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~3!~no~1.34",
+          "|gg||~yes~2.95!~no~1.35",
           "|gg||~yes~3.9!~no~1.21"
         ]
       }
@@ -3377,7 +3305,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.68!~draw~4.1!~away~4.33",
+          "|1x2||~home~1.69!~draw~4.1!~away~4.2",
           "|gg||~yes~2.03!~no~1.6",
           "|gg||~yes~2.66!~no~1.35",
           "|gg||~yes~5.75!~no~1.06",
@@ -3413,13 +3341,13 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.31!~draw~5.6!~away~9.4",
+          "|1x2||~home~1.28!~draw~5.8!~away~11",
           "|gg||~yes~2.12!~no~1.55",
           "|gg||~yes~2.74!~no~1.33",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.7!~no~1.023",
-          "|gg||~yes~3.2!~no~1.3",
-          "|gg||~yes~4.3!~no~1.18"
+          "|gg||~yes~3.25!~no~1.29",
+          "|gg||~yes~4.42!~no~1.17"
         ]
       }
     }
@@ -3778,7 +3706,7 @@
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.2!~no~1.08",
           "|gg||~yes~8.5!~no~1.04",
-          "|gg||~yes~2.8!~no~1.38",
+          "|gg||~yes~2.85!~no~1.37",
           "|gg||~yes~3.9!~no~1.21"
         ]
       }
@@ -3810,12 +3738,12 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.68!~draw~3.82!~away~4.7",
-          "|gg||~yes~1.89!~no~1.7",
+          "|gg||~yes~1.92!~no~1.68",
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
-          "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~3!~no~1.34",
-          "|gg||~yes~3.83!~no~1.22"
+          "|gg||~yes~9!~no~1.03",
+          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~3.9!~no~1.21"
         ]
       }
     }
@@ -3845,7 +3773,7 @@
       "start_ts": 1785432600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.02!~draw~3.47!~away~3.5",
+          "|1x2||~home~2.02!~draw~3.4!~away~3.58",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6!~no~1.05",
@@ -3881,13 +3809,13 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.76!~draw~3.9!~away~4.1",
+          "|1x2||~home~1.88!~draw~3.74!~away~3.71",
           "|gg||~yes~2!~no~1.62",
           "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.5!~no~1.025",
-          "|gg||~yes~3.25!~no~1.29",
-          "|gg||~yes~4.15!~no~1.19"
+          "|gg||~yes~3.2!~no~1.3",
+          "|gg||~yes~4.05!~no~1.2"
         ]
       }
     }
@@ -3990,11 +3918,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.31!~draw~5.6!~away~7.9",
-          "|gg||~yes~2.08!~no~1.57",
-          "|gg||~yes~2.66!~no~1.35",
+          "|gg||~yes~2.03!~no~1.6",
+          "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3.25!~no~1.29",
+          "|gg||~yes~3.15!~no~1.31",
           "|gg||~yes~4.05!~no~1.2"
         ]
       }
@@ -4061,13 +3989,13 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.22!~draw~6.8!~away~12",
+          "|1x2||~home~1.16!~draw~8!~away~15",
           "|gg||~yes~2.48!~no~1.4",
-          "|gg||~yes~3.2!~no~1.24",
+          "|gg||~yes~3.15!~no~1.25",
           "|gg||~yes~6.4!~no~1.04",
-          "|gg||~yes~11!~no~1.01",
+          "|gg||~yes~12!~no~1.009",
           "|gg||~yes~3.9!~no~1.21",
-          "|gg||~yes~5.55!~no~1.11"
+          "|gg||~yes~5.35!~no~1.12"
         ]
       }
     }
@@ -4205,12 +4133,12 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~5!~draw~4.6!~away~1.58",
-          "|gg||~yes~1.92!~no~1.68",
-          "|gg||~yes~2.42!~no~1.42",
+          "|1x2||~home~6!~draw~4.75!~away~1.48",
+          "|gg||~yes~1.93!~no~1.67",
+          "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3!~no~1.34",
+          "|gg||~yes~3.1!~no~1.32",
           "|gg||~yes~3.83!~no~1.22"
         ]
       }
@@ -4317,9 +4245,9 @@
           "|gg||~yes~2!~no~1.62",
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.5!~no~1.07",
-          "|gg||~yes~8.7!~no~1.035",
+          "|gg||~yes~9!~no~1.03",
           "|gg||~yes~3.1!~no~1.32",
-          "|gg||~yes~3.9!~no~1.21"
+          "|gg||~yes~4.05!~no~1.2"
         ]
       }
     }
@@ -4385,13 +4313,13 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~4.1!~draw~3.75!~away~1.78",
-          "|gg||~yes~2!~no~1.62",
-          "|gg||~yes~2.62!~no~1.36",
+          "|1x2||~home~4.2!~draw~3.99!~away~1.77",
+          "|gg||~yes~1.92!~no~1.68",
+          "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.3!~no~1.027",
-          "|gg||~yes~3.25!~no~1.29",
-          "|gg||~yes~4.05!~no~1.2"
+          "|gg||~yes~8.7!~no~1.035",
+          "|gg||~yes~3.1!~no~1.32",
+          "|gg||~yes~3.9!~no~1.21"
         ]
       }
     }
@@ -4529,7 +4457,7 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.66!~draw~3.95!~away~4.6",
+          "|1x2||~home~1.59!~draw~4.1!~away~5.1",
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.66!~no~1.35",
           "|gg||~yes~5.75!~no~1.06",
@@ -4572,42 +4500,6 @@
           "|gg||~yes~9!~no~1.03",
           "|gg||~yes~3.05!~no~1.33",
           "|gg||~yes~3.9!~no~1.21"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30320080",
-    "isScraped": true,
-    "data": {
-      "id": 30320080,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Konferans Ligi. Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "JK Nomme Kalju",
-        "away": "Shelbourne  ",
-        "home_id": 6674,
-        "away_id": 1661
-      },
-      "start_time": "2026-07-30T16:00:00.000Z",
-      "start_ts": 1785427200,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~3.2!~draw~3.55!~away~2.1",
-          "|gg||~yes~1.75!~no~1.83",
-          "|gg||~yes~2.26!~no~1.48",
-          "|gg||~yes~5.2!~no~1.08",
-          "|gg||~yes~7.85!~no~1.05",
-          "|gg||~yes~2.68!~no~1.41",
-          "|gg||~yes~3.57!~no~1.25"
         ]
       }
     }
@@ -4673,13 +4565,13 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.63!~draw~4.1!~away~4.75",
-          "|gg||~yes~2.03!~no~1.6",
-          "|gg||~yes~2.62!~no~1.36",
-          "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.5!~no~1.025",
-          "|gg||~yes~3.25!~no~1.29",
-          "|gg||~yes~4.15!~no~1.19"
+          "|1x2||~home~1.62!~draw~4.1!~away~4.75",
+          "|gg||~yes~1.92!~no~1.68",
+          "|gg||~yes~2.42!~no~1.42",
+          "|gg||~yes~5.5!~no~1.07",
+          "|gg||~yes~8.7!~no~1.035",
+          "|gg||~yes~3!~no~1.34",
+          "|gg||~yes~3.83!~no~1.22"
         ]
       }
     }
@@ -4817,12 +4709,12 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.17!~draw~6.9!~away~15",
-          "|gg||~yes~2.9!~no~1.29",
-          "|gg||~yes~3.7!~no~1.18",
+          "|1x2||~home~1.25!~draw~5.2!~away~17",
+          "|gg||~yes~2.83!~no~1.31",
+          "|gg||~yes~3.6!~no~1.19",
           "|gg||~yes~6.8!~no~1.03",
           "|gg||~yes~15!~no~1.006",
-          "|gg||~yes~4.57!~no~1.16",
+          "|gg||~yes~4.9!~no~1.14",
           "|gg||~yes~6!~no~1.095"
         ]
       }
@@ -4858,7 +4750,7 @@
           "|gg||~yes~2.34!~no~1.45",
           "|gg||~yes~5.2!~no~1.08",
           "|gg||~yes~8.5!~no~1.04",
-          "|gg||~yes~2.95!~no~1.35",
+          "|gg||~yes~2.87!~no~1.36",
           "|gg||~yes~3.65!~no~1.24"
         ]
       }
@@ -4889,13 +4781,13 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.64!~draw~4.2!~away~4.9",
-          "|gg||~yes~1.75!~no~1.83",
-          "|gg||~yes~2.22!~no~1.5",
+          "|1x2||~home~1.74!~draw~4!~away~4.4",
+          "|gg||~yes~1.72!~no~1.87",
+          "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~5!~no~1.09",
           "|gg||~yes~7.5!~no~1.055",
           "|gg||~yes~2.68!~no~1.41",
-          "|gg||~yes~3.47!~no~1.26"
+          "|gg||~yes~3.4!~no~1.27"
         ]
       }
     }
@@ -4961,9 +4853,9 @@
       "start_ts": 1785438000,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.7!~draw~3.75!~away~4.7",
-          "|gg||~yes~2.18!~no~1.52",
-          "|gg||~yes~2.83!~no~1.31",
+          "|1x2||~home~1.85!~draw~3.5!~away~4.1",
+          "|gg||~yes~2.12!~no~1.55",
+          "|gg||~yes~2.78!~no~1.32",
           "|gg||~yes~6!~no~1.05",
           "|gg||~yes~10!~no~1.02",
           "|gg||~yes~3.57!~no~1.25",
@@ -5033,9 +4925,9 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.13!~draw~3.16!~away~3.52",
+          "|1x2||~home~1.99!~draw~3.38!~away~3.96",
           "|gg||~yes~2.18!~no~1.52",
-          "|gg||~yes~2.83!~no~1.31",
+          "|gg||~yes~2.87!~no~1.3",
           "|gg||~yes~6.25!~no~1.045",
           "|gg||~yes~10!~no~1.02",
           "|gg||~yes~3.57!~no~1.25",
@@ -5069,12 +4961,12 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.63!~draw~4.1!~away~4.8",
+          "|1x2||~home~1.6!~draw~4.1!~away~4.9",
           "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~3.1!~no~1.32",
           "|gg||~yes~3.9!~no~1.21"
         ]
       }

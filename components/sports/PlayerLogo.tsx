@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ProceduralLogo } from './ProceduralLogo';
 import logoIndex from '../../public/assets/logo-index.json';
-import uploadsLogoIndex from '../../public/uploads/logo-index.json';
 
 interface PlayerLogoProps {
   name: string;
@@ -48,26 +47,6 @@ export const findBestLogoMatch = (rawName: string): string | null => {
     return logoCache.get(rawName) || null;
   }
 
-  // 1. Önce kullanıcının kendi yüklediği/indirdiği kütüphanede (uploads) ara
-  const cleanInput = rawName.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const cleanInputNoSuffix = cleanInput.replace(/fc$|sc$|fk$|sk$|as$|nk$/g, '').replace(/^fc|^sc|^fk|^sk|^as|^nk/g, '');
-  
-  const uploadMatch = uploadsLogoIndex.find((file: string) => {
-    const cleanFile = file.split('.')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-    const cleanFileNoSuffix = cleanFile.replace(/fc$|sc$|fk$|sk$|as$|nk$/g, '').replace(/^fc|^sc|^fk|^sk|^as|^nk/g, '');
-    
-    return cleanFile === cleanInput || 
-           cleanFileNoSuffix === cleanInputNoSuffix ||
-           (cleanFileNoSuffix.includes(cleanInputNoSuffix) && cleanInputNoSuffix.length > 4) ||
-           (cleanInputNoSuffix.includes(cleanFileNoSuffix) && cleanFileNoSuffix.length > 4);
-  });
-
-  if (uploadMatch) {
-    const fullPath = `/uploads/logos/${uploadMatch}`;
-    logoCache.set(rawName, fullPath);
-    return fullPath;
-  }
-
   const norm = normalize(rawName);
   let match: string | null = null;
   
@@ -88,9 +67,8 @@ export const findBestLogoMatch = (rawName: string): string | null => {
     match = logoIndex.find((file: string) => (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3) || null;
   }
   
-  const finalPath = match ? `/assets/logos/${match}.png` : null;
-  logoCache.set(rawName, finalPath);
-  return finalPath;
+  logoCache.set(rawName, match);
+  return match;
 }
 
 export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, sport }) => {
@@ -100,7 +78,8 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, spor
   const isFootball = !sport || sport.toLowerCase().includes('futbol') || sport.toLowerCase().includes('soccer');
 
   // Akıllı eşleşme algoritması ile lokal dosyayı bul (Sadece Futbol)
-  const localImgUrl = isFootball ? findBestLogoMatch(name) : null;
+  const bestMatch = isFootball ? findBestLogoMatch(name) : null;
+  const localImgUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
 
   const urls = [localImgUrl, fallbackLogo].filter(Boolean) as string[];
   const [pipelineStep, setPipelineStep] = useState(0);
