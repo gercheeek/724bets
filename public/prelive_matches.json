@@ -2585,7 +2585,7 @@
       "start_ts": 1785592800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.43!~draw~3.33!~away~2.79",
+          "|1x2||~home~2.4!~draw~3.39!~away~2.79",
           "|gg||~yes~1.87!~no~1.72",
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
@@ -2945,13 +2945,13 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.76!~draw~3.89!~away~2.22",
-          "|gg||~yes~1.68!~no~1.92",
+          "|1x2||~home~2.8!~draw~3.89!~away~2.19",
+          "|gg||~yes~1.67!~no~1.93",
           "|gg||~yes~2.12!~no~1.55",
           "|gg||~yes~4.8!~no~1.1",
           "|gg||~yes~7.3!~no~1.06",
           "|gg||~yes~2.59!~no~1.44",
-          "|gg||~yes~3.25!~no~1.29"
+          "|gg||~yes~3.3!~no~1.28"
         ]
       }
     }
@@ -2986,8 +2986,8 @@
           "|gg||~yes~2.7!~no~1.34",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~10!~no~1.02",
-          "|gg||~yes~3.25!~no~1.29",
-          "|gg||~yes~4.75!~no~1.15"
+          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~5.35!~no~1.12"
         ]
       }
     }
@@ -3017,7 +3017,7 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.5!~draw~3.18!~away~2.82",
+          "|1x2||~home~2.5!~draw~3.18!~away~2.81",
           "|gg||~yes~1.92!~no~1.68",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.75!~no~1.06",
@@ -3053,12 +3053,12 @@
       "start_ts": 1785433500,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.77!~draw~3.82!~away~4.1",
+          "|1x2||~home~1.72!~draw~4!~away~4.6",
           "|gg||~yes~1.89!~no~1.7",
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~3!~no~1.34",
+          "|gg||~yes~2.95!~no~1.35",
           "|gg||~yes~3.9!~no~1.21"
         ]
       }
@@ -3389,42 +3389,6 @@
     }
   },
   {
-    "id": "30311358",
-    "isScraped": true,
-    "data": {
-      "id": 30311358,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Konferans Ligi. Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "The New Saints ",
-        "away": "FC Flora Tallinn",
-        "home_id": 2709,
-        "away_id": 6694
-      },
-      "start_time": "2026-07-30T17:30:00.000Z",
-      "start_ts": 1785432600,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.79!~draw~3.87!~away~4.33",
-          "|gg||~yes~1.85!~no~1.73",
-          "|gg||~yes~2.42!~no~1.42",
-          "|gg||~yes~5.2!~no~1.08",
-          "|gg||~yes~8.5!~no~1.04",
-          "|gg||~yes~2.85!~no~1.37",
-          "|gg||~yes~3.9!~no~1.21"
-        ]
-      }
-    }
-  },
-  {
     "id": "30311368",
     "isScraped": true,
     "data": {
@@ -3485,7 +3449,7 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.59!~draw~3.76!~away~5.7",
+          "|1x2||~home~1.57!~draw~3.83!~away~5.8",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~3.2!~no~1.24",
           "|gg||~yes~6.6!~no~1.035",
@@ -3605,10 +3569,10 @@
     }
   },
   {
-    "id": "30311378",
+    "id": "30311377",
     "isScraped": true,
     "data": {
-      "id": 30311378,
+      "id": 30311377,
       "status": "not_started",
       "sport": {
         "name": "Futbol"
@@ -3620,21 +3584,21 @@
         "name": "Avrupa"
       },
       "participants": {
-        "home": "Valletta FC",
-        "away": "KS Rakow Czestochowa",
-        "home_id": 4519,
-        "away_id": 6709
+        "home": "FC Nordsjaelland",
+        "away": "GAIS",
+        "home_id": 635,
+        "away_id": 361
       },
-      "start_time": "2026-07-30T17:30:00.000Z",
-      "start_ts": 1785432600,
+      "start_time": "2026-07-30T17:00:00.000Z",
+      "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~5.5!~draw~4.3!~away~1.58",
-          "|gg||~yes~1.96!~no~1.65",
-          "|gg||~yes~2.55!~no~1.38",
+          "|1x2||~home~1.54!~draw~3.99!~away~6.7",
+          "|gg||~yes~1.92!~no~1.68",
+          "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3.1!~no~1.32",
+          "|gg||~yes~3.05!~no~1.33",
           "|gg||~yes~4.05!~no~1.2"
         ]
       }
@@ -3665,12 +3629,12 @@
       "start_ts": 1785437100,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~3.33!~draw~3.67!~away~2.01",
-          "|gg||~yes~1.93!~no~1.67",
+          "|1x2||~home~3.58!~draw~3.61!~away~1.95",
+          "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3.2!~no~1.3",
+          "|gg||~yes~3.25!~no~1.29",
           "|gg||~yes~3.83!~no~1.22"
         ]
       }
@@ -3742,8 +3706,8 @@
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.2!~no~1.08",
           "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~3!~no~1.34",
-          "|gg||~yes~3.75!~no~1.23"
+          "|gg||~yes~3.05!~no~1.33",
+          "|gg||~yes~3.83!~no~1.22"
         ]
       }
     }
@@ -3773,7 +3737,7 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.57!~draw~4.4!~away~5.4",
+          "|1x2||~home~1.59!~draw~4.3!~away~5.3",
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.66!~no~1.35",
           "|gg||~yes~5.75!~no~1.06",
@@ -3857,42 +3821,6 @@
     }
   },
   {
-    "id": "30321345",
-    "isScraped": true,
-    "data": {
-      "id": 30321345,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Konferans Ligi. Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Derry City",
-        "away": "Rijeka",
-        "home_id": 2577,
-        "away_id": 2199
-      },
-      "start_time": "2026-07-30T17:30:00.000Z",
-      "start_ts": 1785432600,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~4.2!~draw~3.15!~away~2.03",
-          "|gg||~yes~2.22!~no~1.5",
-          "|gg||~yes~2.87!~no~1.3",
-          "|gg||~yes~6.25!~no~1.045",
-          "|gg||~yes~10.3!~no~1.017",
-          "|gg||~yes~3.75!~no~1.23",
-          "|gg||~yes~4.57!~no~1.16"
-        ]
-      }
-    }
-  },
-  {
     "id": "30321348",
     "isScraped": true,
     "data": {
@@ -3954,12 +3882,12 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~2.39!~draw~3.23!~away~2.92",
-          "|gg||~yes~2.06!~no~1.58",
+          "|gg||~yes~2.08!~no~1.57",
           "|gg||~yes~2.7!~no~1.34",
-          "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.5!~no~1.025",
+          "|gg||~yes~6!~no~1.05",
+          "|gg||~yes~9.7!~no~1.025",
           "|gg||~yes~3.3!~no~1.28",
-          "|gg||~yes~4.3!~no~1.18"
+          "|gg||~yes~4.42!~no~1.17"
         ]
       }
     }
@@ -4133,7 +4061,7 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.21!~draw~6.4!~away~11",
+          "|1x2||~home~1.21!~draw~6.5!~away~12",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.78!~no~1.32",
           "|gg||~yes~6!~no~1.05",
@@ -4850,6 +4778,68 @@
           "|gg||~yes~10.3!~no~1.017",
           "|gg||~yes~3.47!~no~1.26",
           "|gg||~yes~4.75!~no~1.15"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30433497",
+    "isScraped": true,
+    "data": {
+      "id": 30433497,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Premiere Ligi "
+      },
+      "country": {
+        "name": "Dominik  "
+      },
+      "participants": {
+        "home": "Dublanc FC",
+        "away": "Sagicor South East FC",
+        "home_id": 373826,
+        "away_id": 460159
+      },
+      "start_time": "2026-07-30T23:00:00.000Z",
+      "start_ts": 1785452400,
+      "group_markets": {
+        "full_event|0": [
+          "|1x2||~home~1.11!~draw~11!~away~13",
+          "|gg||~yes~3.4!~no~1.27"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30433498",
+    "isScraped": true,
+    "data": {
+      "id": 30433498,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Premiere Ligi "
+      },
+      "country": {
+        "name": "Dominik  "
+      },
+      "participants": {
+        "home": "Mahaut Soca Strikers",
+        "away": "Mighty Avengers FC",
+        "home_id": 457696,
+        "away_id": 1390321
+      },
+      "start_time": "2026-07-30T23:00:00.000Z",
+      "start_ts": 1785452400,
+      "group_markets": {
+        "full_event|0": [
+          "|1x2||~home~1.04!~draw~17!~away~21",
+          "|gg||~yes~5.35!~no~1.12"
         ]
       }
     }

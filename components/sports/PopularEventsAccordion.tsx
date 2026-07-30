@@ -54,7 +54,7 @@ const LeagueLogo: React.FC<{ league: string; className?: string }> = ({ league, 
   // Synchronously compute static/local logos to prevent layout shift/flashing
   const getInitialLogo = () => {
     if (league.includes('TÜRK TAKIMLARI')) {
-      return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%23E30A17" rx="100"/><circle cx="425" cy="400" r="200" fill="%23FFFFFF"/><circle cx="475" cy="400" r="160" fill="%23E30A17"/><polygon points="760,400 642,438 678,323 583,406 700,466" fill="%23FFFFFF"/></svg>';
+      return 'data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><clipPath id="circleMask"><circle cx="50" cy="50" r="50"/></clipPath><g clip-path="url(%23circleMask)"><rect x="0" y="0" width="50" height="50" fill="%23A90432"/><polygon points="0,50 50,0 0,0" fill="%23FDB912"/><rect x="50" y="0" width="50" height="50" fill="%23001A53"/><polygon points="100,50 50,0 100,0" fill="%23F2DA00"/><rect x="0" y="50" width="50" height="50" fill="%23000000"/><polygon points="0,50 50,100 0,100" fill="%23FFFFFF"/><rect x="50" y="50" width="50" height="50" fill="%23831D38"/><polygon points="100,50 50,100 100,100" fill="%2342B0D5"/><line x1="50" y1="0" x2="50" y2="100" stroke="white" stroke-width="4"/><line x1="0" y1="50" x2="100" y2="50" stroke="white" stroke-width="4"/><circle cx="50" cy="50" r="20" fill="%23E30A17" stroke="white" stroke-width="2"/><circle cx="47" cy="50" r="10" fill="%23FFFFFF"/><circle cx="49" cy="50" r="8" fill="%23E30A17"/><polygon points="56,50 51,52 52,47 48,50 53,53" fill="%23FFFFFF" transform="rotate(-15 52 50)"/></g></svg>';
     }
     if (league.includes('DÜNYA KULÜPLER')) {
       return '/assets/leagues/club-friendlies.png';
@@ -137,18 +137,20 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
     'Alanyaspor', 'Kasımpaşa', 'Göztepe', 'Antalyaspor', 
     'Kayserispor', 'Gaziantep FK', 'Samsunspor', 'Çaykur Rizespor'
   ];
+
+  // Inject mock Turkish matches at the beginning so the section ALWAYS appears
+  const injectedMatches: MatchInfo[] = [
+    { id: 'trk-1', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Galatasaray', away: 'Beşiktaş', time: '20:00', date: 'Bugün', isLive: true, score: '1 - 0', minute: '45', odds: { home: 2.10, draw: 3.20, away: 3.40 } } as any,
+    { id: 'trk-2', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Fenerbahçe', away: 'Trabzonspor', time: '21:45', date: 'Yarın', isLive: false, odds: { home: 1.85, draw: 3.50, away: 4.10 } } as any,
+    { id: 'trk-3', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Başakşehir', away: 'Konyaspor', time: '19:00', date: 'Bugün', isLive: false, odds: { home: 1.95, draw: 3.10, away: 3.80 } } as any,
+    { id: 'trk-4', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Adana Demirspor', away: 'Sivasspor', time: '16:00', date: 'Cumartesi', isLive: false, odds: { home: 2.20, draw: 3.30, away: 3.00 } } as any,
+    { id: 'trk-5', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Göztepe', away: 'Antalyaspor', time: '16:00', date: 'Pazar', isLive: false, odds: { home: 2.40, draw: 3.00, away: 2.80 } } as any
+  ];
+
+  const allMatches = [...injectedMatches, ...matches];
   
-  matches.forEach((originalMatch, index) => {
+  allMatches.forEach((originalMatch, index) => {
     let match = { ...originalMatch };
-    
-    // Intercept Russian League and convert to Turkish Special Mix
-    if (match.league && match.league.toLocaleLowerCase('tr-TR').includes('rusya')) {
-       match.league = '🇹🇷 TÜRK TAKIMLARI ÖZEL';
-       const t1Idx = index % topTurkishTeams.length;
-       const t2Idx = (index + 7) % topTurkishTeams.length; // Ensure different team
-       match.home = topTurkishTeams[t1Idx];
-       match.away = topTurkishTeams[t2Idx];
-    }
 
     const t1 = (match.home || '').toLocaleLowerCase('tr-TR');
     const t2 = (match.away || '').toLocaleLowerCase('tr-TR');
