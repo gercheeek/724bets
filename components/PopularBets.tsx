@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flame, TrendingUp, ArrowRight } from 'lucide-react';
 import { PopularBetsConfig } from '../types';
 
@@ -7,9 +7,43 @@ interface PopularBetsProps {
 }
 
 const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
-    if (!config.isActive || !config.bets || config.bets.length === 0) return null;
+    const [liveBets, setLiveBets] = useState<any[]>([]);
 
-    const sortedBets = [...config.bets].sort((a, b) => b.playCount - a.playCount);
+    useEffect(() => {
+        if (config.bets) setLiveBets(config.bets);
+    }, [config.bets]);
+
+    useEffect(() => {
+        if (!liveBets || liveBets.length === 0) return;
+        const interval = setInterval(() => {
+            setLiveBets(current => current.map(bet => {
+                if (Math.random() > 0.3) return bet;
+                
+                let trend = 'none';
+                let newOdds = bet.odds;
+                
+                if (Math.random() < 0.5) {
+                    const change = (Math.random() * 0.1) + 0.01;
+                    const isUp = Math.random() > 0.5;
+                    newOdds = Math.max(1.01, isUp ? bet.odds + change : bet.odds - change);
+                    trend = isUp ? 'up' : 'down';
+                }
+                
+                if (trend !== 'none') {
+                   setTimeout(() => {
+                      setLiveBets(bets => bets.map(b => b.id === bet.id ? { ...b, trend: 'none' } : b));
+                   }, 2000);
+                }
+
+                return { ...bet, odds: newOdds, trend };
+            }));
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [liveBets.length]);
+
+    if (!config.isActive || !liveBets || liveBets.length === 0) return null;
+
+    const sortedBets = [...liveBets].sort((a, b) => b.playCount - a.playCount);
 
     return (
         <div style={{ margin: '12px 0 16px' }}>
@@ -105,10 +139,13 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
                             justifyContent: 'center',
                             padding: '6px 12px',
                             borderRadius: '6px',
-                            background: 'rgba(255,255,255,0.04)',
-                            border: '1px solid rgba(255,255,255,0.06)',
+                            background: bet.trend === 'up' ? 'rgba(16,185,129,0.1)' : bet.trend === 'down' ? 'rgba(239,68,68,0.1)' : 'rgba(255,255,255,0.04)',
+                            border: '1px solid',
+                            borderColor: bet.trend === 'up' ? 'rgba(16,185,129,0.3)' : bet.trend === 'down' ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.06)',
+                            boxShadow: bet.trend === 'up' ? '0 0 10px rgba(16,185,129,0.2)' : bet.trend === 'down' ? '0 0 10px rgba(239,68,68,0.2)' : 'none',
                             minWidth: '90px',
                             textAlign: 'center',
+                            transition: 'all 0.3s ease',
                         }}>
                             {/* Prediction Type */}
                             <div style={{ fontSize: '9px', fontWeight: 700, color: '#999', textTransform: 'uppercase', letterSpacing: '0.3px', marginBottom: '4px', lineHeight: 1.3 }}>
@@ -119,9 +156,13 @@ const PopularBets: React.FC<PopularBetsProps> = ({ config }) => {
                                 <span style={{ fontSize: '13px', fontWeight: 900, color: '#e5e5e5' }}>
                                     {bet.predictionShort}
                                 </span>
-                                <span style={{ fontSize: '15px', fontWeight: 900, color: '#F5A623' }}>
-                                    {bet.odds.toFixed(2)}
-                                </span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                                    {bet.trend === 'up' && <TrendingUp style={{ width: 10, height: 10, color: '#4ade80' }} />}
+                                    {bet.trend === 'down' && <TrendingUp style={{ width: 10, height: 10, color: '#f87171', transform: 'rotate(180deg)' }} />}
+                                    <span style={{ fontSize: '15px', fontWeight: 900, color: bet.trend === 'up' ? '#4ade80' : bet.trend === 'down' ? '#f87171' : '#F5A623', transition: 'color 0.3s' }}>
+                                        {bet.odds.toFixed(2)}
+                                    </span>
+                                </div>
                             </div>
                         </div>
 

@@ -849,7 +849,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', boxShadow: 'inset 0 0 100px rgba(239, 68, 68, 0.03)', zIndex: 0 }} />
             
             {/* Floating balls / chips effect (CSS only) */}
-            <div className="floating-elements" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.1, background: 'url(/splash-ball.png)', backgroundSize: '100px', animation: 'float-bg 60s linear infinite' }} />
+            <div className="floating-elements" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.1, background: 'url(/splash-ball.webp)', backgroundSize: '100px', animation: 'float-bg 60s linear infinite' }} />
 
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Outfit:wght@700;800;900&display=swap');

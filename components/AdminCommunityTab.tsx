@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageSquare, CloudRain, Gift, Zap, TrendingUp, Users } from 'lucide-react';
+import { MessageSquare, CloudRain, Gift, Zap, TrendingUp, Users, Activity } from 'lucide-react';
 
 const mockChatMessages = [
     { id: 1, user: 'Ahmet123', msg: 'Bonanza yine vermedi be...', sentiment: 'negative' },

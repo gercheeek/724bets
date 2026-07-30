@@ -42,19 +42,19 @@ const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
       badge: "YILIN VIP ETKİNLİĞİ",
       title: "Milyonluk Ödül Havuzu",
       highlight: "$20.000",
-      bgImage: "/images/raffle/raffle_bg_1_1784885265917.jpg",
+      bgImage: "/images/raffle/raffle_bg_1_1784885265917.webp",
     },
     {
       badge: "KAZANMA ŞANSINI ARTIR",
       title: "Her $50 Yatırım = 1 Bilet",
       highlight: "ŞİMDİ KAZAN!",
-      bgImage: "/images/raffle/raffle_bg_2_1784885277775.jpg",
+      bgImage: "/images/raffle/raffle_bg_2_1784885277775.webp",
     },
     {
       badge: "LİDERLİK TABLOSU",
       title: "Canlı Akış & Rekabet",
       highlight: "ZİRVEYE ÇIK",
-      bgImage: "/images/raffle/raffle_bg_3_1784885287128.jpg",
+      bgImage: "/images/raffle/raffle_bg_3_1784885287128.webp",
     }
   ];
 

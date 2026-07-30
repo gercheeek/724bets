@@ -2,6 +2,7 @@ import React from 'react';
 import { MatchInfo } from './types';
 import { Radio, Globe, Star, PlayCircle, Trophy, BarChart3, TrendingUp, MonitorPlay } from 'lucide-react';
 import { TeamLogoPlaceholder } from './TeamLogoPlaceholder';
+import { PlayerLogo } from './PlayerLogo';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useBetSlip } from '../../contexts/BetSlipContext';
 
@@ -81,30 +82,16 @@ export const RainbetMatchCard: React.FC<RainbetMatchCardProps> = ({ match, onSel
             {/* Teams & Scores */}
             <div className="flex flex-col gap-2 mb-4 flex-1">
                 <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center">
-                    {match.homeLogo ? (
-                        <img 
-                            src={match.homeLogo} 
-                            alt="" 
-                            className="w-4 h-4 object-contain" 
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} 
-                        />
-                    ) : (
-                        <TeamLogoPlaceholder teamName={match.home} className="w-4 h-4" />
-                    )}
+                    <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                        <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} />
+                    </div>
                     <span className="text-[#e2e8f0] font-medium text-[13px] truncate">{match.home}</span>
                     {match.isLive && <span className="text-[#e2e8f0] font-bold text-[13px] bg-white/5 text-white px-2 py-0.5 rounded min-w-[28px] text-center">{homeScore}</span>}
                 </div>
                 <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center">
-                    {match.awayLogo ? (
-                        <img 
-                            src={match.awayLogo} 
-                            alt="" 
-                            className="w-4 h-4 object-contain" 
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} 
-                        />
-                    ) : (
-                        <TeamLogoPlaceholder teamName={match.away} className="w-4 h-4" />
-                    )}
+                    <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                        <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} />
+                    </div>
                     <span className="text-[#e2e8f0] font-medium text-[13px] truncate">{match.away}</span>
                     {match.isLive && <span className="text-[#e2e8f0] font-bold text-[13px] bg-white/5 text-white px-2 py-0.5 rounded min-w-[28px] text-center">{awayScore}</span>}
                 </div>

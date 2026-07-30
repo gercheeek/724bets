@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useBetting } from '../contexts/BettingContext';
+import { PlayerLogo } from './sports/PlayerLogo';
 import { 
   Activity, Target, Trophy, Clock, Gamepad2, Flame, Zap,
   ChevronLeft, ChevronRight, Star
@@ -342,11 +343,15 @@ export const UpcomingMatchesView: React.FC = () => {
                          ) : (
                            <>
                              <div className="flex items-center gap-2">
-                               <img src={`/takimlogo/${match.home?.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.homeLogo; }} />
+                               <div className="w-4 h-4 shrink-0">
+                                 <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport="futbol" />
+                               </div>
                                <span className="text-[13px] font-semibold text-white truncate">{match.home}</span>
                              </div>
                              <div className="flex items-center gap-2">
-                               <img src={`/takimlogo/${match.away?.replace(/ /g, '_')}.png`} alt="" className="w-4 h-4 object-contain" onError={(e) => { e.currentTarget.src = match.awayLogo; }} />
+                               <div className="w-4 h-4 shrink-0">
+                                 <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport="futbol" />
+                               </div>
                                <span className="text-[13px] font-semibold text-white truncate">{match.away}</span>
                              </div>
                            </>

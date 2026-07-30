@@ -45,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
   ];
 
   const bottomItems = [
-    { id: 'rewards', label: 'Ödüller', icon: Gift, route: 'rewards' },
+    { id: 'tv', label: '724TV', icon: Tv, route: '724tv' },
     { id: 'docs', label: 'Kullanım Şartları', icon: FileText, route: 'docs' },
     { id: 'support', label: 'Canlı Destek', icon: Headphones, route: 'openChat' },
     { id: 'lang', label: 'Dil', icon: Globe, route: 'openLang' }

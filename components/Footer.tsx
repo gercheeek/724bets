@@ -71,11 +71,18 @@ const Footer: React.FC = () => {
           <div className="col-span-1 lg:col-span-2 flex flex-col">
             <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">724BETS</h4>
             <div className="flex flex-col gap-3 md:gap-4">
-              {['Ödüller', 'Promosyonlar', 'Kanıtlanabilir Şekilde Adil', 'Bize Ulaşın'].map(link => (
+              {['Ödüller', 'Promosyonlar', 'Kanıtlanabilir Şekilde Adil', 'Yönetim Paneli Giriş', 'Bize Ulaşın'].map(link => (
                 <a 
                   key={link} 
                   href="#" 
-                  onClick={(e) => link === 'Bize Ulaşın' ? handleAdminClick(e, link) : undefined}
+                  onClick={(e) => {
+                    if (link === 'Yönetim Paneli Giriş') {
+                      e.preventDefault();
+                      window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'admin' }));
+                    } else if (link === 'Bize Ulaşın') {
+                      handleAdminClick(e, link);
+                    }
+                  }}
                   className="text-zinc-400 text-[13px] hover:text-[#00E5FF] transition-colors"
                 >
                   {link}

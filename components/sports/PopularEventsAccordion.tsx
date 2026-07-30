@@ -21,27 +21,27 @@ const LOCAL_LEAGUE_LOGOS: Record<string, string> = {
   'premier league': '/assets/leagues/premier-league.png',
   'ispanya - la liga': '/assets/leagues/la-liga.png',
   'la liga': '/assets/leagues/la-liga.png',
-  'fransa - ligue 1': '/assets/leagues/ligue-1.png',
-  'lig 1': '/assets/leagues/ligue-1.png',
-  'türkiye - süper lig': '/assets/leagues/super-lig.png',
+  'fransa - ligue 1': '/assets/leagues/ligue-1.webp',
+  'lig 1': '/assets/leagues/ligue-1.webp',
+  'türkiye - süper lig': '/assets/leagues/super-lig.webp',
   'ekvador - serie a': '/assets/leagues/serie-a-ecuador.png',
   'avusturya - bundesliga': '/assets/leagues/bundesliga-austria.png',
   'brezilya - serie a': '/assets/leagues/serie-a-brazil.png',
-  'çin - süper lig': '/assets/leagues/csl-china.png',
+  'çin - süper lig': '/assets/leagues/csl-china.webp',
   'copa sudamericana': '/assets/leagues/copa-sudamericana.png',
   'copa libertadores': '/assets/leagues/copa-libertadores.png',
   'liga profesional': '/assets/leagues/liga-profesional-argentina.png',
-  'arjantin - primera nacional': '/assets/leagues/primera-nacional-argentina.png',
+  'arjantin - primera nacional': '/assets/leagues/primera-nacional-argentina.webp',
   'şili - primera division': '/assets/leagues/primera-chile.png',
   'primera a': '/assets/leagues/primera-a-colombia.png',
-  'çek cumh. - 1. liga': '/assets/leagues/czech-liga.png',
+  'çek cumh. - 1. liga': '/assets/leagues/czech-liga.webp',
   'danimarka - superliga': '/assets/leagues/denmark-superliga.png',
-  'finlandiya - veikkausliiga': '/assets/leagues/finland-veikkausliiga.png',
-  'irlanda - 1. division': '/assets/leagues/ireland-1st-div.png',
-  '1. division': '/assets/leagues/ireland-1st-div.png',
+  'finlandiya - veikkausliiga': '/assets/leagues/finland-veikkausliiga.webp',
+  'irlanda - 1. division': '/assets/leagues/ireland-1st-div.webp',
+  '1. division': '/assets/leagues/ireland-1st-div.webp',
   'rugby ligi': '/assets/leagues/nrl.png',
   'nrl': '/assets/leagues/nrl.png',
-  'altyapı ligi': '/assets/leagues/argentina-reserves.png',
+  'altyapı ligi': '/assets/leagues/argentina-reserves.webp',
   'pro ligi': '/assets/leagues/belgium-pro.png',
   'hnl': '/assets/leagues/croatia-hnl.png',
   '1win essence': '/assets/leagues/club-friendlies.png',
@@ -171,7 +171,6 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
     }
     
     const priorities = [
-      'türk takımları özel', // Virtual top priority league
       'şampiyonlar ligi', 'champions league', 
       'avrupa ligi', 'europa league', 
       'konferans ligi', 'conference league', 
@@ -196,8 +195,22 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
     return 50;
   };
 
-  const getLeagueTheme = (name: string) => {
+  const getLeagueTheme = (name: string, isTennis?: boolean) => {
     const l = name.toLocaleLowerCase('tr-TR');
+    
+    if (isTennis) {
+      return {
+          bgGlow: 'bg-[#10b981]/10',
+          radialGlow: 'from-[#10b981]/20',
+          accentBorder: 'border-l-[#10b981]',
+          accentShadow: 'shadow-[0_0_20px_rgba(16,185,129,0.3)]',
+          textColor: 'text-white', 
+          statColor: 'text-[#10b981]',
+          iconBg: 'bg-[#10b981]/10 border-[#10b981]/20',
+          isTurkish: false,
+          bgImage: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=1200&auto=format&fit=crop'
+      };
+    }
     
     // Default Theme (Standard Leagues)
     const baseTheme = { 
@@ -208,11 +221,11 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
         textColor: 'text-white', 
         statColor: 'text-[#00E5FF]',
         iconBg: 'bg-[#00E5FF]/10 border-[#00E5FF]/20',
+        hexColor: '#00E5FF',
         isTurkish: false,
         bgImage: ''
     };
     
-    // Top 5 Custom Designs: Premium Glassmorphism & Neon Themes with Cinematic Backgrounds
     if (l.includes('türk takımları')) {
       return { 
           bgGlow: 'bg-red-900/10',
@@ -222,6 +235,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           textColor: 'text-white', 
           statColor: 'text-red-400',
           iconBg: 'bg-red-500/10 border-red-500/20',
+          hexColor: '#EF4444',
           isTurkish: true,
           bgImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop'
       };
@@ -235,6 +249,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           textColor: 'text-white', 
           statColor: 'text-blue-300',
           iconBg: 'bg-blue-500/10 border-blue-500/20',
+          hexColor: '#60A5FA',
           isTurkish: false,
           bgImage: 'https://images.unsplash.com/photo-1551280857-2b9bbe5240f5?q=80&w=1200&auto=format&fit=crop'
       };
@@ -248,6 +263,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           textColor: 'text-white', 
           statColor: 'text-orange-400',
           iconBg: 'bg-orange-500/10 border-orange-500/20',
+          hexColor: '#F97316',
           isTurkish: false,
           bgImage: 'https://images.unsplash.com/photo-1574629810360-7efbb6b08561?q=80&w=1200&auto=format&fit=crop'
       };
@@ -261,6 +277,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           textColor: 'text-white', 
           statColor: 'text-green-400',
           iconBg: 'bg-green-500/10 border-green-500/20',
+          hexColor: '#22C55E',
           isTurkish: false,
           bgImage: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?q=80&w=1200&auto=format&fit=crop'
       };
@@ -274,6 +291,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           textColor: 'text-white', 
           statColor: 'text-indigo-300',
           iconBg: 'bg-indigo-500/10 border-indigo-500/20',
+          hexColor: '#818CF8',
           isTurkish: false,
           bgImage: 'https://images.unsplash.com/photo-1518605368461-1ee7e16104bc?q=80&w=1200&auto=format&fit=crop'
       };
@@ -341,8 +359,10 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
       <div className="flex flex-col gap-2">
         {sortedLeagues.slice(0, visibleLeagues).map((league) => {
           const leagueMatches = groupedByLeague[league];
+          const firstMatch = leagueMatches[0];
+          const isTennis = firstMatch?.sport?.toLowerCase().includes('tenis') || firstMatch?.sport?.toLowerCase().includes('tennis');
           const isExpanded = !!expandedLeagues[league];
-          const theme = getLeagueTheme(league);
+          const theme = getLeagueTheme(league, isTennis);
           
           return (
             <div key={league} className={`group ${theme.bgGlow} backdrop-blur-xl rounded-xl rounded-bl-sm overflow-hidden transition-all duration-500 shadow-lg hover:shadow-2xl border border-white/[0.03] border-l-[3px] ${theme.accentBorder} ${theme.accentShadow} relative mt-3`}>
@@ -387,14 +407,23 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 )}
                 
                 {/* Content */}
-                <div className="flex items-center gap-4 relative z-10 pl-1">
-                  {/* Premium Glass Circle Logo */}
-                  <div className={`w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center relative group-hover:scale-105 group-hover:rotate-3 transition-transform duration-500 rounded-full border ${theme.iconBg} backdrop-blur-md shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
-                    <LeagueLogo league={league} className="w-7 h-7 sm:w-8 sm:h-8 object-contain relative z-10 drop-shadow-md" />
+                <div className="flex items-center gap-4 relative z-10 pl-1 flex-1 min-w-0">
+                  {/* Advanced Animated League Logo */}
+                  <div className={`relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center overflow-hidden rounded-[1rem] p-[2px] group-hover:scale-105 transition-transform duration-500 shadow-[0_10px_20px_rgba(0,0,0,0.5)] shrink-0 z-10 bg-[#0A0D14]`}>
+                    <span className={`absolute inset-[-1000%] animate-[spin_4s_linear_infinite] opacity-30 group-hover:opacity-100 transition-opacity duration-500`} style={{ background: `conic-gradient(from 90deg at 50% 50%, transparent 0%, ${(theme as any).hexColor || '#00E5FF'} 80%, transparent 100%)` }} />
+                    <div className="absolute inset-[2px] bg-[#0A0D14] rounded-[14px]"></div>
+                    <div className={`absolute inset-[2px] ${theme.bgGlow} rounded-[14px] mix-blend-screen`}></div>
+                    <div className="relative h-full w-full rounded-[14px] bg-gradient-to-b from-white/10 to-transparent flex items-center justify-center backdrop-blur-md">
+                      {isTennis ? (
+                         <span className="text-3xl drop-shadow-lg relative z-10">🎾</span>
+                      ) : (
+                         <LeagueLogo league={league} className="w-10 h-10 sm:w-11 sm:h-11 object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" />
+                      )}
+                    </div>
                   </div>
                   
-                  <div className="flex flex-col items-start text-left">
-                    <span className={`${theme.textColor} font-bold text-[14px] sm:text-[16px] tracking-wider uppercase drop-shadow-md`}>
+                  <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4">
+                    <span className={`${theme.textColor} font-bold text-[14px] sm:text-[16px] tracking-wider uppercase drop-shadow-md truncate w-full`} title={league}>
                       {league}
                     </span>
                     <span className="text-zinc-500 text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase mt-0.5 group-hover:text-zinc-400 transition-colors">

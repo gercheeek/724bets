@@ -72,12 +72,12 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
   let homeStats = stats.team1_value || {};
   let awayStats = stats.team2_value || {};
   
-  const isFootball = match.sport?.toLowerCase().includes('futbol') || match.sport?.toLowerCase().includes('soccer');
-  const isBasketball = match.sport?.toLowerCase().includes('basketbol') || match.sport?.toLowerCase().includes('basketball');
+  const isFootball = !match.sport || match.sport.toLowerCase().includes('futbol') || match.sport.toLowerCase().includes('soccer');
+  const isBasketball = match.sport?.toLowerCase().includes('basketbol') || match.sport?.toLowerCase().includes('basket');
   const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
 
-  // Same mock stats logic as modal
-  if (Object.keys(homeStats).length === 0 && (match.minute !== 'Yakında' || match.isLive)) {
+  // Same mock stats logic as modal. Only trigger if strictly live.
+  if (Object.keys(homeStats).length === 0 && match.isLive) {
     let min = parseInt(match.minute) || 45;
     if (min === 0) min = 15; // fallback
     const homeAdv = parseFloat(match.homeOdd) < parseFloat(match.awayOdd) ? 1.2 : 0.8;
@@ -158,19 +158,31 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
     setExpandedMarkets(prev => ({ ...prev, [idx]: !prev[idx] }));
   };
 
-  const categories = ['Ana Seçenekler', 'Bahis sihirbazı', 'Toplam', 'İstatistikler', 'Yarılar', 'Kornerler', 'Oyuncular'];
+
+  const categories = isTennis 
+    ? ['Ana Seçenekler', 'Toplam', 'Setler', 'Oyunlar', 'İstatistikler']
+    : isBasketball 
+    ? ['Ana Seçenekler', 'Toplam', 'Çeyrekler', 'Yarılar', 'İstatistikler', 'Oyuncular']
+    : ['Ana Seçenekler', 'Sihirbaz', 'Toplam', 'İstatistikler', 'Yarılar', 'Kornerler', 'Oyuncular'];
   const [activeCategory, setActiveCategory] = useState('Ana Seçenekler');
   
   const [activeRightTab, setActiveRightTab] = useState<'video'|'animation'>('animation');
   const [animTab, setAnimTab] = useState<'pitch'|'stats'|'timeline'|'h2h'|'standings'>('pitch');
 
   // Custom function to format the selections based on screenshots
-  // 1X2 -> Chelsea, beraberlik, Western...
+  // 1X2 -> 1, X, 2
   const formatSelectionLabel = (marketName: string, rawType: string, home: string, away: string) => {
      const t = rawType.toLowerCase();
+     
+     if (marketName === '1x2' || marketName === 'Maç Sonucu') {
+         if (t === '1' || t === 'home') return '1';
+         if (t === '2' || t === 'away') return '2';
+         if (t === 'x' || t === 'draw') return 'X';
+     }
+
      if (t === '1' || t === 'home') return home;
      if (t === '2' || t === 'away') return away;
-     if (t === 'x' || t === 'draw') return 'beraberlik';
+     if (t === 'x' || t === 'draw') return 'Beraberlik';
      
      if (marketName === 'Çifte Şans') {
         if (t === '1x') return `${home} veya beraberlik`;
@@ -240,9 +252,15 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
             
             {/* SCOREBOARD BLOCK */}
             <div className="bg-[#1a1d29] border border-[#222635] rounded-xl p-4 md:p-5 flex flex-col relative overflow-hidden shadow-lg mb-4 group">
+               {/* Stadium Background Texture */}
+               <div className="absolute inset-0 bg-[#0a0c10] opacity-80 z-0">
+                  <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent"></div>
+                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+               </div>
+               
                {/* Dynamic Mesh Gradient Background */}
-               <div className="absolute inset-0 bg-gradient-to-br from-[#06b6d4]/5 via-transparent to-[#3b82f6]/5 opacity-50"></div>
-               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#06b6d4]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+               <div className="absolute inset-0 bg-gradient-to-br from-[#06b6d4]/10 via-transparent to-[#3b82f6]/5 opacity-60 z-0 mix-blend-screen"></div>
+               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#06b6d4]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
                
                {/* Breadcrumb / League Name */}
                <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-400 mb-6 z-10">
@@ -255,11 +273,11 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                   {/* Home */}
                   <div className="flex flex-col flex-1 max-w-[40%]">
                      <div className="w-10 h-10 md:w-14 md:h-14 bg-white/5 rounded-full flex items-center justify-center p-1.5 mb-3 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                       <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} />
-                     </div>
+                       <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} />
+                    </div>
                      <span className="text-[13px] md:text-[15px] font-bold text-white leading-tight mb-2 line-clamp-2 pr-2 break-words">{match.home}</span>
                      <div className="flex items-center gap-1 h-4">
-                        {match.isLive && (
+                        {match.isLive && isFootball && (
                            <>
                               <div className="w-2.5 h-3.5 bg-[#ef4444] rounded-[1px]"></div>
                               <span className="text-white text-[10px] font-bold mx-1">{redCards.home}</span>
@@ -274,39 +292,63 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
 
                   {/* Score & Time */}
                   <div className="flex flex-col items-center justify-start flex-1 shrink-0 mt-[-30px]">
-                     <div className={`flex items-center justify-center gap-1.5 text-[11px] font-black tracking-widest uppercase mb-3 ${match.isLive ? 'text-[#ef4444] drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'text-zinc-400'}`}>
+                     <div className={`flex items-center justify-center gap-2 px-3 py-1 rounded border mb-4 backdrop-blur-sm ${match.isLive ? 'bg-[#ef4444]/10 border-[#ef4444]/30 text-[#ef4444] shadow-[0_0_10px_rgba(239,68,68,0.2)]' : 'bg-white/5 border-white/10 text-zinc-400'}`}>
                         {match.isLive ? (
                           <>
-                             <div className="relative flex h-2.5 w-2.5">
+                             <div className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef4444] opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#ef4444]"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ef4444]"></span>
                              </div>
-                             <LiveTimer minute={match.minute} hidePrefix />
+                             <span className="text-[12px] font-mono font-bold tracking-widest uppercase">
+                                <LiveTimer minute={match.minute} hidePrefix />
+                             </span>
                           </>
                         ) : (
-                          <span>{match.startTime || match.minute || 'BAŞLAMADI'}</span>
+                          <span className="text-[12px] font-bold tracking-wider">{match.startTime || match.minute || 'BAŞLAMADI'}</span>
                         )}
                      </div>
                      <div className="flex items-center gap-2 md:gap-4 text-3xl md:text-5xl font-black text-white tabular-nums drop-shadow-md">
-                        <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner">
-                           {String(match.score).split('-')[0]?.trim() || '0'}
-                        </div>
-                        <span className="text-zinc-600">:</span>
-                        <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner">
-                           {String(match.score).split('-')[1]?.trim() || '0'}
-                        </div>
+                        {isTennis ? (
+                           <div className="flex flex-col items-center">
+                              <div className="flex gap-4 items-center">
+                                 <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner text-[#06b6d4]">
+                                    {match.info?.score1 || '0'}
+                                 </div>
+                                 <div className="flex flex-col gap-1 mx-2">
+                                    <div className="text-[12px] md:text-[14px] font-bold text-[#06b6d4] bg-[#06b6d4]/10 px-2 py-1 rounded">
+                                       {match.info?.current_game_state || '0:0'}
+                                    </div>
+                                    <div className="text-[10px] text-zinc-500 uppercase tracking-wider text-center">
+                                       {match.info?.pass_step ? `${match.info.pass_step}. Set` : 'Puan'}
+                                    </div>
+                                 </div>
+                                 <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner text-[#06b6d4]">
+                                    {match.info?.score2 || '0'}
+                                 </div>
+                              </div>
+                           </div>
+                        ) : (
+                           <>
+                              <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner">
+                                 {String(match.score).split('-')[0]?.trim() || '0'}
+                              </div>
+                              <span className="text-zinc-600">:</span>
+                              <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner">
+                                 {String(match.score).split('-')[1]?.trim() || '0'}
+                              </div>
+                           </>
+                        )}
                      </div>
-
                   </div>
 
                   {/* Away */}
                   <div className="flex flex-col items-end text-right flex-1 max-w-[40%]">
                      <div className="w-10 h-10 md:w-14 md:h-14 bg-white/5 rounded-full flex items-center justify-center p-1.5 mb-3 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                       <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} />
-                     </div>
+                       <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} />
+                    </div>
                      <span className="text-[13px] md:text-[15px] font-bold text-white leading-tight mb-2 line-clamp-2 pl-2 break-words">{match.away}</span>
                      <div className="flex items-center justify-end gap-1 h-4">
-                        {match.isLive && (
+                        {match.isLive && isFootball && (
                            <>
                               <div className="w-2.5 h-3.5 bg-[#ef4444] rounded-[1px]"></div>
                               <span className="text-white text-[10px] font-bold mx-1">{redCards.away}</span>
@@ -332,7 +374,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                     }`}
                   >
                      <div className="relative z-10 flex items-center gap-1.5">
-                       {cat === 'Bahis sihirbazı' && <Star className={`w-3.5 h-3.5 ${activeCategory === cat ? 'text-[#06b6d4]' : 'text-zinc-500'}`} fill="currentColor" />}
+                       {cat === 'Sihirbaz' && <Star className={`w-3.5 h-3.5 ${activeCategory === cat ? 'text-[#06b6d4]' : 'text-zinc-500'}`} fill="currentColor" />}
                        {cat}
                        {idx === 0 && <span className={`text-[10px] px-1.5 py-0.5 rounded ml-1 ${activeCategory === cat ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'bg-white/10 text-white'}`}>15</span>}
                      </div>
@@ -363,6 +405,9 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                   if (activeCategory === 'Toplam') return marketName.includes('Toplam');
                   if (activeCategory === 'Yarılar') return marketName.includes('Yarı');
                   if (activeCategory === 'Kornerler') return marketName.includes('Korner');
+                  if (activeCategory === 'Setler') return marketName.includes('Set');
+                  if (activeCategory === 'Oyunlar') return marketName.includes('Oyun') || marketName.includes('Game');
+                  if (activeCategory === 'Çeyrekler') return marketName.includes('Çeyrek');
                   return true; // Default fallback for other tabs
                }).map((market: string, idx: number) => {
                   const parts = market.split('|');
@@ -385,7 +430,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                        {/* Accordion Header */}
                        <button 
                          onClick={() => toggleMarket(idx)}
-                         className="w-full flex items-center justify-between p-4 bg-[#1a1d29] hover:bg-[#1f2230] transition-colors group border-b border-[#222635]/50"
+                         className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-[#151a25] to-[#11131a] hover:from-[#1a202d] hover:to-[#151821] transition-colors group border-b border-white/[0.02]"
                        >
                           <div className="flex items-center gap-2">
                              <Pin className="w-4 h-4 text-zinc-500 group-hover:text-zinc-300 -rotate-45" />
@@ -404,6 +449,12 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                                if (sParts.length < 3) return null;
                                
                                let rawType = sParts[1];
+                               
+                               // If it's a draw and the sport is tennis or basketball, skip it!
+                               if ((isTennis || isBasketball) && (rawType.toLowerCase() === 'draw' || rawType.toLowerCase() === 'x' || rawType.toLowerCase() === 'beraberlik')) {
+                                 return null;
+                               }
+                               
                                let oddValue = parseFloat(sParts[2]);
                                let typeLabel = formatSelectionLabel(marketName, rawType, match.home, match.away);
                                
@@ -427,16 +478,16 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                                        odd: oddValue
                                      });
                                    }}
-                                   className={`min-h-[46px] rounded-md flex items-center justify-between px-3 md:px-4 transition-all duration-300 border-b-2 border-t border-x border-t-transparent border-x-transparent ${
+                                   className={`min-h-[46px] rounded-md flex items-center justify-between px-3 md:px-4 transition-all duration-300 group cursor-pointer active:scale-[0.98] ${
                                      isSelected 
-                                       ? 'bg-[#06b6d4]/20 border-b-[#06b6d4] shadow-[0_4px_15px_rgba(6,182,212,0.25)] -translate-y-0.5' 
-                                       : 'bg-[#1f222d] border-b-[#1f222d] hover:bg-[#06b6d4]/10 hover:border-[#06b6d4] hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:-translate-y-0.5'
+                                       ? 'bg-gradient-to-b from-[#00E5FF]/20 to-[#00E5FF]/5 border border-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.2)]' 
+                                       : 'bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)]'
                                    }`}
                                  >
-                                   <span className={`text-[11px] md:text-[12px] font-bold leading-tight text-left pr-2 transition-colors ${isSelected ? 'text-[#06b6d4]' : 'text-zinc-300'}`}>
+                                   <span className={`text-[11px] md:text-[12px] font-bold leading-tight text-left pr-2 transition-colors ${isSelected ? 'text-[#00E5FF]' : 'text-[#8e939d] group-hover:text-[#00E5FF]'}`}>
                                      {typeLabel}
                                    </span>
-                                   <span className={`text-[13px] md:text-[14px] font-black tabular-nums shrink-0 transition-colors ${isSelected ? 'text-[#06b6d4] drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]' : 'text-white'}`}>
+                                   <span className={`text-[13px] md:text-[14px] font-black tabular-nums shrink-0 transition-colors ${isSelected ? 'text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]' : 'text-white group-hover:text-white'}`}>
                                      <AnimatedOdd value={oddValue.toFixed(2)} />
                                    </span>
                                  </button>
@@ -530,7 +581,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                        <div className="flex justify-between w-full text-zinc-300">
                          <div className="flex items-center gap-1.5">
                            <div className="w-3.5 h-3.5">
-                             <PlayerLogo name={match.home} fallbackLogo="" />
+                             <PlayerLogo name={match.home} fallbackLogo="" sport={match.sport} />
                            </div>
                            <span className="truncate max-w-[120px]">{match.home}</span>
                          </div>
@@ -543,7 +594,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                        <div className="flex justify-between w-full text-zinc-300">
                          <div className="flex items-center gap-1.5">
                            <div className="w-3.5 h-3.5">
-                             <PlayerLogo name={match.away} fallbackLogo="" />
+                             <PlayerLogo name={match.away} fallbackLogo="" sport={match.sport} />
                            </div>
                            <span className="truncate max-w-[120px]">{match.away}</span>
                          </div>
@@ -560,25 +611,25 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                    <div className="flex-1 relative overflow-hidden bg-[#0a0c10]">
                      
                      {animTab === 'pitch' && (
-                       <div className="absolute inset-0 bg-[#050608] flex flex-col relative overflow-hidden">
-                         {/* Cyber Grid Background */}
-                         <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.05)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+                       <div className="absolute inset-0 flex flex-col relative overflow-hidden bg-[#0d2a15]">
+                         {/* Realistic Football Pitch Background */}
+                         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:30px_30px]"></div>
                          
-                         {/* Pitch Lines (Cyber Neon) */}
-                         <div className="absolute inset-4 border-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)] rounded-lg"></div>
-                         <div className="absolute top-4 bottom-4 left-1/2 w-0.5 bg-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.3)] -translate-x-1/2"></div>
-                         <div className="absolute top-1/2 left-1/2 w-16 h-16 border-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-                         <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-[#06b6d4] shadow-[0_0_10px_rgba(6,182,212,0.8)] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+                         {/* Pitch Lines (White/Neon) */}
+                         <div className="absolute inset-4 border-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
+                         <div className="absolute top-4 bottom-4 left-1/2 w-[1.5px] bg-white/40 shadow-[0_0_10px_rgba(255,255,255,0.3)] -translate-x-1/2"></div>
+                         <div className="absolute top-1/2 left-1/2 w-16 h-16 border-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+                         <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                          
                          {/* Penalty Boxes */}
-                         <div className="absolute top-1/4 bottom-1/4 left-4 w-12 border-y-2 border-r-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]"></div>
-                         <div className="absolute top-1/4 bottom-1/4 right-4 w-12 border-y-2 border-l-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]"></div>
+                         <div className="absolute top-1/4 bottom-1/4 left-4 w-12 border-y-[1.5px] border-r-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
+                         <div className="absolute top-1/4 bottom-1/4 right-4 w-12 border-y-[1.5px] border-l-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
                          
-                         <div className="absolute top-1/3 bottom-1/3 left-4 w-6 border-y-2 border-r-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]"></div>
-                         <div className="absolute top-1/3 bottom-1/3 right-4 w-6 border-y-2 border-l-2 border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]"></div>
+                         <div className="absolute top-1/3 bottom-1/3 left-4 w-6 border-y-[1.5px] border-r-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
+                         <div className="absolute top-1/3 bottom-1/3 right-4 w-6 border-y-[1.5px] border-l-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
                          
                          {/* Dynamic Content Overlay */}
-                         {(match as any).currentAction && (
+                         {(match as any).currentAction ? (
                            <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-4">
                              <div className="bg-black/60 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/10 text-center animate-pulse">
                                <div className="text-white font-black text-sm uppercase tracking-wider mb-0.5 text-shadow-sm shadow-black">
@@ -587,6 +638,13 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                                <div className="text-[#eab308] font-black text-lg uppercase tracking-widest text-shadow-sm shadow-black">
                                  {(match as any).currentAction.type || '-'}
                                </div>
+                             </div>
+                           </div>
+                         ) : (
+                           <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-4 opacity-50">
+                             <Trophy className="w-10 h-10 text-white/30 mb-2" />
+                             <div className="text-white/60 font-bold text-[11px] uppercase tracking-wider text-center max-w-[200px]">
+                               Maç saatinde canlı animasyon burada olacaktır
                              </div>
                            </div>
                          )}

@@ -103,6 +103,11 @@ export const DualRightPanel: React.FC<{
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
   const [showStamp, setShowStamp] = useState(false);
   const [targetWin, setTargetWin] = useState<number | ''>('');
+  const [isConfirmingBet, setIsConfirmingBet] = useState(false);
+
+  React.useEffect(() => {
+    setIsConfirmingBet(false);
+  }, [betSlip, betAmount]);
 
   React.useEffect(() => {
     const handleSetChat = () => {
@@ -377,23 +382,46 @@ export const DualRightPanel: React.FC<{
                   </div>
 
                   <div className="flex gap-2">
-                     <button 
-                        onClick={() => clearBetSlip()}
-                        className="w-10 h-10 md:w-12 md:h-12 bg-[#161920] hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 rounded-lg flex items-center justify-center text-zinc-500 hover:text-red-400 transition-all shrink-0 group"
-                        title="Kuponu Temizle"
-                      >
-                        <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                      </button>
-                      <button 
-                        onClick={handlePlaceBet}
-                        className="flex-1 h-10 md:h-12 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] font-black text-[13px] md:text-[15px] rounded-lg tracking-widest uppercase flex items-center justify-center hover:brightness-110 transition-all gap-1 shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)] active:scale-[0.98] relative overflow-hidden group/btn"
-                      >
-                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:animate-[shine-sweep_2s_ease-in-out_infinite]" />
-                        <span className="relative z-10 flex items-center gap-1">
-                          {!siteUser ? (language === 'tr' ? 'Giriş Yap' : 'Login') : (language === 'tr' ? 'Bahis Yap' : 'Place Bet')}
-                          {siteUser && <ChevronRight className="w-4 h-4 text-[#0A0D14]" />}
-                        </span>
-                      </button>
+                     {!isConfirmingBet ? (
+                       <>
+                         <button 
+                            onClick={() => clearBetSlip()}
+                            className="w-10 h-10 md:w-12 md:h-12 bg-[#161920] hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 rounded-lg flex items-center justify-center text-zinc-500 hover:text-red-400 transition-all shrink-0 group"
+                            title="Kuponu Temizle"
+                          >
+                            <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                          </button>
+                          <button 
+                            onClick={() => siteUser ? setIsConfirmingBet(true) : handlePlaceBet()}
+                            className="flex-1 h-10 md:h-12 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] font-black text-[13px] md:text-[15px] rounded-lg tracking-widest uppercase flex items-center justify-center hover:brightness-110 transition-all gap-1 shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)] active:scale-[0.98] relative overflow-hidden group/btn"
+                          >
+                            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:animate-[shine-sweep_2s_ease-in-out_infinite]" />
+                            <span className="relative z-10 flex items-center gap-1">
+                              {!siteUser ? (language === 'tr' ? 'Giriş Yap' : 'Login') : (language === 'tr' ? 'Bahis Yap' : 'Place Bet')}
+                              {siteUser && <ChevronRight className="w-4 h-4 text-[#0A0D14]" />}
+                            </span>
+                          </button>
+                       </>
+                     ) : (
+                       <div className="w-full flex gap-2 animate-in fade-in zoom-in-95 duration-200">
+                         <button 
+                            onClick={() => setIsConfirmingBet(false)}
+                            className="flex-1 h-10 md:h-12 bg-[#161920] border border-white/10 hover:border-white/20 text-white font-bold text-[13px] rounded-lg transition-all"
+                          >
+                            İptal
+                          </button>
+                          <button 
+                            onClick={() => {
+                              setIsConfirmingBet(false);
+                              handlePlaceBet();
+                            }}
+                            className="flex-[2] h-10 md:h-12 bg-gradient-to-r from-[#10B981] to-[#059669] text-white font-black text-[13px] md:text-[15px] rounded-lg tracking-widest uppercase flex items-center justify-center hover:brightness-110 transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] active:scale-[0.98] gap-1"
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                            Onayla
+                          </button>
+                       </div>
+                     )}
                   </div>
                 </div>
               </div>

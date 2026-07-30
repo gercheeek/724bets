@@ -139,7 +139,9 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                         homeOdd,
                         drawOdd,
                         awayOdd,
-                        priority
+                        priority,
+                        sport: data.sport?.name || ev.sport_name || '',
+                        info: data.info || {}
                     });
                 }
             }
@@ -196,7 +198,7 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
 
                                 <div className="flex flex-col items-center gap-2 w-[80px] z-10">
                                     <div className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden">
-                                        <PlayerLogo name={match.home.name} fallbackLogo="" />
+                                        <PlayerLogo name={match.home.name} fallbackLogo="" sport={match.sport} />
                                     </div>
                                     <span className="text-[12px] font-bold text-zinc-100 text-center leading-tight truncate w-full drop-shadow-sm">{match.home.name}</span>
                                 </div>
@@ -208,7 +210,7 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                                 
                                 <div className="flex flex-col items-center gap-2 w-[80px] z-10">
                                     <div className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden">
-                                        <PlayerLogo name={match.away.name} fallbackLogo="" />
+                                        <PlayerLogo name={match.away.name} fallbackLogo="" sport={match.sport} />
                                     </div>
                                     <span className="text-[12px] font-bold text-zinc-100 text-center leading-tight truncate w-full drop-shadow-sm">{match.away.name}</span>
                                 </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { MatchInfo } from './types';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { PlaySquare } from 'lucide-react';
+import { PlayerLogo } from './PlayerLogo';
 
 interface MatchCardV2Props {
     match: MatchInfo;
@@ -36,25 +37,17 @@ export const MatchCardV2 = ({ match, onSelect }: MatchCardV2Props) => {
                 <div className="flex flex-col gap-2.5">
                     {/* Home Team */}
                     <div className="flex items-center gap-3">
-                        {match.homeLogo ? (
-                            <img src={match.homeLogo} alt={homeTeam} className="w-5 h-5 object-contain" />
-                        ) : (
-                            <div className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center text-[9px] font-bold text-white/50 border border-zinc-700">
-                                {homeTeam.substring(0, 1)}
-                            </div>
-                        )}
+                        <div className="w-5 h-5 shrink-0 flex items-center justify-center">
+                            <PlayerLogo name={homeTeam} fallbackLogo={match.homeLogo} sport={match.sport} />
+                        </div>
                         <span className="text-sm font-bold text-zinc-100 group-hover:text-white transition-colors">{homeTeam}</span>
                         {match.score && <span className="ml-auto text-sm font-bold text-[#a981ff]">{match.score.split('-')[0]?.trim()}</span>}
                     </div>
                     {/* Away Team */}
                     <div className="flex items-center gap-3">
-                        {match.awayLogo ? (
-                            <img src={match.awayLogo} alt={awayTeam} className="w-5 h-5 object-contain" />
-                        ) : (
-                            <div className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center text-[9px] font-bold text-white/50 border border-zinc-700">
-                                {awayTeam.substring(0, 1)}
-                            </div>
-                        )}
+                        <div className="w-5 h-5 shrink-0 flex items-center justify-center">
+                            <PlayerLogo name={awayTeam} fallbackLogo={match.awayLogo} sport={match.sport} />
+                        </div>
                         <span className="text-sm font-bold text-zinc-100 group-hover:text-white transition-colors">{awayTeam}</span>
                         {match.score && <span className="ml-auto text-sm font-bold text-[#a981ff]">{match.score.split('-')[1]?.trim()}</span>}
                     </div>

@@ -28,9 +28,9 @@ const getSliceIcon = (name: string): string => {
 
 /* 724bets Premium Games & Custom Pas Graphics */
 const getSliceImage = (idx: number, prizeName: string) => {
-  if (prizeName.toUpperCase().includes('PAS')) return '/originals/pas_slice_bg.jpg';
+  if (prizeName.toUpperCase().includes('PAS')) return '/originals/pas_slice_bg.webp';
   const premiumGames = [
-    '/images/flat-keno.jpg',
+    '/images/flat-keno.webp',
     '/images/flat-roulette.jpg',
     '/images/flat-blackjack.jpg',
     '/images/flat-plinko.jpg',

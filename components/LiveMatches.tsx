@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
-import { Zap, TrendingUp, ExternalLink, RefreshCw, Wifi } from 'lucide-react';
+import { Zap, TrendingUp, ExternalLink, RefreshCw, Wifi, Lock } from 'lucide-react';
+import { useLiveOddsSimulation, MacDataWithTrends } from '../hooks/useLiveOdds';
 
 interface MacData {
   mac_id: string;
@@ -16,6 +17,7 @@ interface MacData {
 
 const LiveMatches: React.FC = () => {
   const [matches, setMatches] = useState<MacData[]>([]);
+  const liveMatches = useLiveOddsSimulation(matches);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -171,7 +173,7 @@ const LiveMatches: React.FC = () => {
 
       {/* Matches Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {matches.map((match, idx) => (
+        {liveMatches.map((match: MacDataWithTrends, idx: number) => (
           <div
             key={match.mac_id}
             style={{
@@ -221,19 +223,36 @@ const LiveMatches: React.FC = () => {
             </div>
 
             {/* Odds Buttons */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0f172a] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
-                <span className="text-[10px] font-bold text-zinc-500 mb-0.5">1</span>
-                <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['1']) }}>{formatOdd(match.oranlar?.['1'])}</span>
-              </div>
-              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0f172a] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
-                <span className="text-[10px] font-bold text-zinc-500 mb-0.5">X</span>
-                <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['X']) }}>{formatOdd(match.oranlar?.['X'])}</span>
-              </div>
-              <div className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg bg-[#0f172a] hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
-                <span className="text-[10px] font-bold text-zinc-500 mb-0.5">2</span>
-                <span className="font-bold text-[13px]" style={{ color: getOddColor(match.oranlar?.['2']) }}>{formatOdd(match.oranlar?.['2'])}</span>
-              </div>
+            <div className="flex items-center gap-2 mb-4 relative">
+              {match.isLocked && (
+                <div className="absolute inset-0 z-10 bg-[#111111]/80 backdrop-blur-[1px] flex items-center justify-center rounded-lg">
+                  <span className="text-white text-[10px] font-black bg-red-500/80 px-2 py-1 rounded flex items-center gap-1 uppercase tracking-widest shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                    <Lock className="w-3 h-3" /> ASKIDA
+                  </span>
+                </div>
+              )}
+              {['1', 'X', '2'].map((key) => {
+                const trend = match.oranTrendleri?.[key];
+                const isUp = trend === 'up';
+                const isDown = trend === 'down';
+                
+                return (
+                  <div key={key} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg transition-all duration-300 cursor-pointer border ${
+                    isUp ? 'bg-green-500/20 border-green-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]' :
+                    isDown ? 'bg-red-500/20 border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.2)]' :
+                    'bg-[#0f172a] hover:bg-white/5 border-transparent hover:border-white/10'
+                  }`}>
+                    <span className={`text-[10px] font-bold mb-0.5 transition-colors duration-300 ${isUp ? 'text-green-400' : isDown ? 'text-red-400' : 'text-zinc-500'}`}>{key}</span>
+                    <div className="flex items-center gap-1">
+                      {isUp && <TrendingUp className="w-3 h-3 text-green-400 animate-bounce" />}
+                      {isDown && <TrendingUp className="w-3 h-3 text-red-400 rotate-180 animate-bounce" />}
+                      <span className="font-bold text-[13px] transition-colors duration-300" style={{ color: isUp ? '#4ade80' : isDown ? '#f87171' : getOddColor(match.oranlar?.[key]) }}>
+                        {formatOdd(match.oranlar?.[key])}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             {/* CTA Button */}

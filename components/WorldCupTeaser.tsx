@@ -16,7 +16,7 @@ const slides = [
   },
   {
     id: 'worldcup-double',
-    bgImage: '/images/football_macro_hero.jpg',
+    bgImage: '/images/football_macro_hero.webp',
     title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#10b981] to-[#34d399]">DÜNYA KUPASI 2026</span></>,
     subtitle: 'KÂRINIZI İKİYE KATLAYIN! Herhangi bir oyuncuya gol atar bahsi alın, ilk golü o atarsa kazancınızı ikiye katlayalım!',
     buttonText: 'ŞİMDİ OYNA',

@@ -5,6 +5,7 @@ import logoIndex from '../../public/assets/logo-index.json';
 interface PlayerLogoProps {
   name: string;
   fallbackLogo: string;
+  sport?: string;
 }
 
 const normalize = (str: string) => {
@@ -20,6 +21,20 @@ const normalize = (str: string) => {
     .replace(/\s+/g, '-');
 };
 
+const customAliases: Record<string, string> = {
+  'marsilya': 'marseille',
+  'kizilyildiz': 'crvena-zvezda',
+  'bayern-munih': 'bayern-munich',
+  'psg': 'paris-sg',
+  'paris-saint-germain': 'paris-sg',
+  'sporting-lizbon': 'sporting-cp',
+  'roma': 'as-roma',
+  'lazio': 'ss-lazio',
+  'napoli': 'ssc-napoli',
+  'bologna': 'bologna-fc',
+  'fiorentina': 'acf-fiorentina'
+};
+
 const logoCache = new Map<string, string | null>();
 
 export const findBestLogoMatch = (rawName: string) => {
@@ -32,8 +47,12 @@ export const findBestLogoMatch = (rawName: string) => {
   const norm = normalize(rawName);
   let match: string | null = null;
   
+  // 0. Manual Alias
+  if (customAliases[norm] && logoIndex.includes(customAliases[norm])) {
+    match = customAliases[norm];
+  }
   // 1. Birebir tam eşleşme (örn: "fenerbahçe" -> "fenerbahçe.png")
-  if (logoIndex.includes(norm)) {
+  else if (logoIndex.includes(norm)) {
     match = norm;
   } 
   // 2. Prefix eşleşmesi
@@ -41,30 +60,22 @@ export const findBestLogoMatch = (rawName: string) => {
     match = logoIndex.find((file: string) => file.startsWith(norm + '-')) || null;
   }
   // 3. İçinde geçme eşleşmesi
-  else if (logoIndex.find((file: string) => norm.includes(file))) {
-    match = logoIndex.find((file: string) => norm.includes(file)) || null;
-  }
-  // 4. En uzun kelimeden fuzzy (esnek) arama
-  else {
-    const words = norm.split('-');
-    const longestWord = [...words].sort((a, b) => b.length - a.length)[0];
-    
-    if (longestWord && longestWord.length > 4) {
-        const partialMatch = logoIndex.find((file: string) => file.includes(longestWord));
-        if (partialMatch) match = partialMatch;
-    }
+  else if (logoIndex.find((file: string) => norm.includes(file) && file.length > 3)) {
+    match = logoIndex.find((file: string) => norm.includes(file) && file.length > 3) || null;
   }
   
   logoCache.set(rawName, match);
   return match;
 }
 
-export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) => {
+export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, sport }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Akıllı eşleşme algoritması ile lokal dosyayı bul
-  const bestMatch = findBestLogoMatch(name);
+  const isFootball = !sport || sport.toLowerCase().includes('futbol') || sport.toLowerCase().includes('soccer');
+
+  // Akıllı eşleşme algoritması ile lokal dosyayı bul (Sadece Futbol)
+  const bestMatch = isFootball ? findBestLogoMatch(name) : null;
   const localImgUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
 
   const urls = [localImgUrl, fallbackLogo].filter(Boolean) as string[];
@@ -85,7 +96,7 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo }) =>
   };
 
   if (hasError || !currentUrl) {
-    return <ProceduralLogo name={name} />;
+    return <ProceduralLogo name={name} sport={sport} />;
   }
 
   return (

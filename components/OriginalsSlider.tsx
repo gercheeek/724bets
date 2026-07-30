@@ -9,7 +9,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         name: 'Keno',
         desc: t("desc_keno"),
         color: 'from-[#6E42E5] to-[#4F2AA8]',
-        image: '/images/flat-keno.jpg',
+        image: '/images/flat-keno.webp',
         path: 'keno',
         icon: '🎱',
         players: 415,

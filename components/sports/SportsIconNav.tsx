@@ -168,7 +168,7 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                     {activeTab === 'mybets' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#10b981] to-transparent shadow-[0_0_15px_#10b981]"></div>}
                     <div className="relative">
                         <Copy className={`w-5 h-5 transition-all duration-300 ${activeTab === 'mybets' ? 'text-white drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]' : 'text-[#64748b] group-hover:text-white'}`} strokeWidth={1.8} />
-                        {!activeTab === 'mybets' && <div className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_5px_#10b981]"></div>}
+                        {activeTab !== 'mybets' && <div className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_5px_#10b981]"></div>}
                     </div>
                     {activeTab === 'mybets' && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#10b981] shadow-[0_0_8px_#10b981]"></div>}
                 </button>
@@ -207,18 +207,20 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                         )}
                         
                         <div className="relative flex items-center justify-center mb-1.5 mt-1">
-                            {count > 0 && (
-                                <div className="absolute -top-1.5 -right-3.5 bg-gradient-to-b from-[#00ffaa] to-[#00c885] text-[#052e1f] text-[10px] font-black px-1.5 py-[1px] rounded-[4px] z-10 shadow-[inset_0_1px_rgba(255,255,255,0.5),_0_2px_8px_rgba(0,255,170,0.5)] border border-[#b3ffe0] leading-none">
-                                    {count}
-                                </div>
-                            )}
+                            <div className={`absolute -top-1.5 -right-3 text-[9px] font-bold px-1.5 py-0.5 rounded-full z-10 leading-none backdrop-blur-sm ${
+                                count > 0 
+                                ? 'bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/40 shadow-[0_0_10px_rgba(0,229,255,0.3)]' 
+                                : 'bg-white/5 text-white/40 border border-white/5'
+                            }`}>
+                                {count}
+                            </div>
                             
                             <div className={`transition-all duration-300 z-10 ${
                                 isActive 
                                     ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] scale-110' 
                                     : 'text-[#64748b] group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'
                             }`}>
-                                {React.cloneElement(item.icon as React.ReactElement, { width: 22, height: 22, strokeWidth: isActive ? 1.8 : 1.5 })}
+                                {React.cloneElement(item.icon as React.ReactElement<any>, { width: 22, height: 22, strokeWidth: isActive ? 1.8 : 1.5 })}
                             </div>
                         </div>
                         

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { 
   PlayCircle, Clock, LayoutGrid, Receipt, 
   ChevronDown, ChevronUp, Target, Gamepad2, Trophy, Flag,
-  Crosshair, Dribbble, Globe, Timer
+  Crosshair, Dribbble, Globe, Timer, ChevronRight, Star
 } from 'lucide-react';
+import { PlayerLogo } from './sports/PlayerLogo';
 import { useBetting } from '../contexts/BettingContext';
 
 interface SportsSidebarContentProps {
@@ -263,12 +264,12 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               <div className="flex flex-col pl-6 ml-5 border-l border-white/10 mb-2 relative">
                 {[
                   { id: 'yaklasan', name: 'Yaklaşan', Icon: PlayCircle },
-                  { id: 'uzun-vadeli', name: 'Uzun Vadeli Bahis...', Icon: Timer },
-                  { id: 'uefa', name: 'UEFA Şampiyonla...', Icon: Globe, color: 'text-green-400' },
-                  { id: 'kulup', name: 'Kulüp Hazırlık Ma...', Icon: Globe, color: 'text-green-400' },
-                  { id: 'conmebol', name: 'CONMEBOL Suda...', Icon: Globe, color: 'text-green-400' },
+                  { id: 'uzun-vadeli', name: 'Uzun Vadeli Bahisler', Icon: Timer },
+                  { id: 'uefa', name: 'UEFA Şampiyonlar Ligi', logoName: 'uefa-champions-league' },
+                  { id: 'kulup', name: 'Kulüp Hazırlık Maçları', logoName: 'fifa-club-world-cup' },
+                  { id: 'conmebol', name: 'CONMEBOL Sudamericana', logoName: 'conmebol-copa-amrica-2024' },
                   { id: 'tumunu-goruntule', name: 'Tümünü Görüntüle', Icon: LayoutGrid },
-                ].map(sub => (
+                ].map((sub: any) => (
                   <button
                     key={sub.id}
                     onClick={() => {
@@ -278,8 +279,14 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
                     }}
                     className="flex items-center py-2.5 mt-0.5 cursor-pointer text-[#8b92a5] hover:text-white transition-colors group"
                   >
-                    <sub.Icon className={`w-5 h-5 min-w-[20px] mr-3 ${sub.color ? sub.color : 'text-[#8b92a5] group-hover:text-white'} transition-colors ${sub.color ? 'bg-blue-500/20 rounded-full' : ''}`} />
-                    <span className="font-bold text-[13px] tracking-tight">{sub.name}</span>
+                    {sub.logoName ? (
+                      <div className="w-5 h-5 min-w-[20px] mr-3 bg-white/10 rounded-full flex items-center justify-center p-0.5 group-hover:bg-white/20 transition-colors shadow-inner overflow-hidden">
+                        <PlayerLogo name={sub.logoName} fallbackLogo="" sport="futbol" />
+                      </div>
+                    ) : (
+                      <sub.Icon className={`w-5 h-5 min-w-[20px] mr-3 ${sub.color ? sub.color : 'text-[#8b92a5] group-hover:text-white'} transition-colors ${sub.color ? 'bg-blue-500/20 rounded-full' : ''}`} />
+                    )}
+                    <span className="font-bold text-[13px] tracking-tight truncate max-w-[150px]">{sub.name}</span>
                   </button>
                 ))}
               </div>

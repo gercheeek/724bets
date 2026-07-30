@@ -104,24 +104,24 @@ interface GuestLandingProps {
 
 const heroSlides = [
     {
-        image: "/images/haluk_slider_final.jpg",
-        characterImg: "/images/haluk_fixed.png",
+        image: "/images/haluk_slider_final.webp",
+        characterImg: "/images/haluk_fixed.webp",
         badge: "Trustpilot",
         title: <>#1 KRİPTO CASİNO<br/>& SPOR BAHİSLERİ</>,
         subtitle: "2500$'a kadar Hoş Geldin Paketi",
         buttonText: "Şimdi etkinleştir"
     },
     {
-        image: "/images/haluk_slider_final.jpg",
-        characterImg: "/images/haluk_fixed.png",
+        image: "/images/haluk_slider_final.webp",
+        characterImg: "/images/haluk_fixed.webp",
         badge: "iPhone 17 Pro Max Çekilişi",
         title: <>DEV ÇEKİLİŞ<br/>BAŞLADI!</>,
         subtitle: "724bets güvencesiyle büyük ödül seni bekliyor.",
         buttonText: "Çekilişe Katıl"
     },
     {
-        image: "/images/haluk_slider_final.jpg",
-        characterImg: "/images/haluk_fixed.png",
+        image: "/images/haluk_slider_final.webp",
+        characterImg: "/images/haluk_fixed.webp",
         badge: "VIP Kulübü",
         title: <>ÖZEL<br/>AYRICALIKLAR</>,
         subtitle: "Size özel bonuslar ve daha fazlası.",
@@ -144,8 +144,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   const [detailModalGame, setDetailModalGame] = useState<GameData | null>(null);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
   const { t } = useLanguage();
-  const { matches, setSelectedMatch } = useBetting();
-
+  const { events } = useBetting();
+  const matches: any[] = []; // Fallback for featured combos in guest view
+  const setSelectedMatch = (m: any) => {};
     useEffect(() => {
         const timer = setInterval(() => {
             setHeroImageIndex((prev) => (prev + 1) % heroSlides.length);
@@ -289,7 +290,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             <div onClick={() => onViewChange('originals')} className="col-span-2 lg:col-span-1 relative flex-1 w-full h-[90px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.3)] group/orig">
                 <div className="absolute inset-0 z-0 flex justify-end">
                   <div className="w-[100%] sm:w-[80%] h-full relative">
-                    <img src="/images/ai-generated/originals_card.jpg" alt="Originals" className="w-full h-full object-cover object-[center] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
+                    <img src="/images/ai-generated/originals_card.webp" alt="Originals" className="w-full h-full object-cover object-[center] transform group-hover/orig:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/orig:opacity-100" />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                 </div>
@@ -328,7 +329,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             <div onClick={() => onViewChange('blackjack')} className="col-span-1 relative flex-1 w-full h-[85px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/casino">
                 <div className="absolute inset-0 z-0 flex justify-end">
                   <div className="w-[100%] sm:w-[80%] h-full relative">
-                    <img src="/images/ai-generated/casino_card.jpg" alt="Casino" className="w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/casino:opacity-100" />
+                    <img src="/images/ai-generated/casino_card.webp" alt="Casino" className="w-full h-full object-cover object-[center] transform group-hover/casino:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/casino:opacity-100" />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                 </div>
@@ -342,7 +343,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             <div onClick={() => onViewChange('spor724')} className="col-span-1 relative flex-1 w-full h-[85px] md:min-h-[120px] rounded-[6px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#050505] cursor-pointer transition-all duration-300 hover:z-10 hover:shadow-[inset_0_0_0_1px_#06b6d4,0_0_20px_rgba(16,185,129,0.15)] group/sports">
                 <div className="absolute inset-0 z-0 flex justify-end">
                   <div className="w-[100%] sm:w-[80%] h-full relative">
-                    <img src="/images/ai-generated/sports_card.jpg" alt="Sports Betting" className="w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/sports:opacity-100" />
+                    <img src="/images/ai-generated/sports_card.webp" alt="Sports Betting" className="w-full h-full object-cover object-[center] transform group-hover/sports:scale-[1.05] transition-all duration-700 ease-out opacity-60 group-hover/sports:opacity-100" />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent w-full"></div>
                 </div>
@@ -425,7 +426,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
             {/* Yeni Eklenenler Slider (Guest View) */}
             <div className="w-full mt-4">
                 <NewGamesSlider2 onPlayGame={(game) => setDetailModalGame({
-                    id: game.id,
+                    id: String(game.id),
                     name: game.name,
                     provider: game.provider,
                     img: game.img,

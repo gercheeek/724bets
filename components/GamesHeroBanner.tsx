@@ -223,7 +223,7 @@ const HeroBanner = ({ onNavigate }: { onNavigate?: (v: string) => void }) => {
             { id: 'limbo', name: 'LIMBO', color: 'text-[#a855f7]', image: '/images/flat-mission.jpg', players: 843, maxWin: '10,000x' },
             { id: 'roulette', name: 'ROULETTE', color: 'text-emerald-400', image: '/images/flat-roulette.jpg', players: 3201, maxWin: '36x' },
             { id: 'blackjack', name: 'BLACKJACK', color: 'text-white', image: '/images/flat-blackjack.jpg', players: 2150, maxWin: '2.5x' },
-            { id: 'keno', name: 'KENO', color: 'text-yellow-400', image: '/images/flat-keno.jpg', players: 540, maxWin: '500x' },
+            { id: 'keno', name: 'KENO', color: 'text-yellow-400', image: '/images/flat-keno.webp', players: 540, maxWin: '500x' },
           ].map((game, idx) => {
             const isHovered = hoveredGameId ? game.id === hoveredGameId : idx === 0;
             

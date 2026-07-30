@@ -214,19 +214,9 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
               <span className="text-white font-bold text-[14px] md:text-[18px] text-right tracking-wide line-clamp-2">{match.home}</span>
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1a1d24] border-2 border-[#2c313c] shadow-lg flex items-center justify-center shrink-0 relative overflow-hidden">
                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent z-10"></div>
-                 <img 
-                   src={`/takimlogo/${(match.home || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
-                   alt={match.home}
-                   className="w-full h-full object-cover relative z-0"
-                   onError={(e) => {
-                     if (e.currentTarget.src.includes('/takimlogo/') && match.homeLogo) {
-                       e.currentTarget.src = match.homeLogo;
-                     } else {
-                       e.currentTarget.style.display = 'none';
-                       e.currentTarget.parentElement!.innerHTML = `<div class="absolute inset-0 z-10 flex items-center justify-center shadow-inner" style="background-color: ${getTeamColor(match.home || '')};"><span class="text-white font-bold text-lg drop-shadow-md">${(match.home || '??').substring(0, 2).toUpperCase()}</span></div>`;
-                     }
-                   }}
-                 />
+                 <div className="w-full h-full relative z-0 p-1">
+                   <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport="futbol" />
+                 </div>
               </div>
             </div>
 
@@ -252,19 +242,9 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
             <div className="flex items-center justify-start gap-3 md:gap-4 flex-1">
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1a1d24] border-2 border-[#2c313c] shadow-lg flex items-center justify-center shrink-0 relative overflow-hidden">
                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent z-10"></div>
-                 <img 
-                   src={`/takimlogo/${(match.away || '').replace(/ /g, '_').replace(/\./g, '').replace(/\//g, '')}.png`}
-                   alt={match.away}
-                   className="w-full h-full object-cover relative z-0"
-                   onError={(e) => {
-                     if (e.currentTarget.src.includes('/takimlogo/') && match.awayLogo) {
-                       e.currentTarget.src = match.awayLogo;
-                     } else {
-                       e.currentTarget.style.display = 'none';
-                       e.currentTarget.parentElement!.innerHTML = `<div class="absolute inset-0 z-10 flex items-center justify-center shadow-inner" style="background-color: ${getTeamColor(match.away || '')};"><span class="text-white font-bold text-lg drop-shadow-md">${(match.away || '??').substring(0, 2).toUpperCase()}</span></div>`;
-                     }
-                   }}
-                 />
+                 <div className="w-full h-full relative z-0 p-1">
+                   <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport="futbol" />
+                 </div>
               </div>
               <span className="text-white font-bold text-[14px] md:text-[18px] text-left tracking-wide line-clamp-2">{match.away}</span>
             </div>

@@ -34,6 +34,52 @@ const isAuthorized = (role: string | null) => {
     return ['KRAL', 'PATRON', 'ADMIN', 'MODERATOR'].includes(r);
 };
 
+const RainDropMessage = ({ rainMsg }: { rainMsg: string }) => {
+    const [claimed, setClaimed] = useState(false);
+
+    return (
+        <div className="my-3 w-full relative group mx-auto animate-in fade-in zoom-in duration-500">
+            {/* Animated border glow */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#00e701] to-[#00f0ff] rounded-lg blur opacity-30 group-hover:opacity-60 transition duration-1000 animate-pulse"></div>
+            
+            {/* Main Card */}
+            <div className="relative bg-[#0a0f16] border border-[#1f2937] rounded-lg p-4 text-center overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#00e701]/10 to-transparent opacity-50"></div>
+                
+                {/* Content */}
+                <div className="relative z-10 flex flex-col items-center gap-2.5">
+                    <div className="text-3xl animate-bounce mt-1 drop-shadow-lg">💸</div>
+                    
+                    <p className="text-white font-extrabold text-[13px] leading-relaxed tracking-wide drop-shadow-md">
+                        {rainMsg}
+                    </p>
+                    
+                    <button 
+                        disabled={claimed}
+                        onClick={() => {
+                            if (claimed) return;
+                            import('canvas-confetti').then((confetti) => confetti.default({
+                                particleCount: 150,
+                                spread: 80,
+                                origin: { y: 0.6 },
+                                colors: ['#00e701', '#00f0ff', '#ffffff', '#fbbf24']
+                            }));
+                            setClaimed(true);
+                        }}
+                        className={`mt-2 px-6 py-2 text-[11px] font-black rounded-md uppercase tracking-[0.2em] transition-all duration-300 w-full max-w-[200px] ${
+                            claimed 
+                                ? 'bg-[#1f2937] text-gray-500 cursor-not-allowed border border-[#374151]' 
+                                : 'bg-gradient-to-r from-[#00e701] to-[#00c801] text-black hover:shadow-[0_0_20px_rgba(0,231,1,0.6)] hover:scale-105 active:scale-95'
+                        }`}
+                    >
+                        {claimed ? 'TOPLANDI' : 'HEMEN TOPLA'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, type: 'Casino'|'Spor') => void) => {
   let text = msg.message;
   if (!text || typeof text !== 'string') return '';
@@ -61,6 +107,11 @@ const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, 
               <span className="mt-1">{remainingText}</span>
           </div>
       );
+  }
+
+  if (text.startsWith('[RAIN_EVENT]')) {
+      const rainMsg = text.replace('[RAIN_EVENT]', '').trim();
+      return <RainDropMessage rainMsg={rainMsg} />;
   }
 
   const parts = text.split(/(:\w+:)/g);

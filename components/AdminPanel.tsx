@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe, Monitor, Users, ShieldAlert, Gift, Network, Lock, ArrowDownToLine, Gamepad2, MessageSquare, Wallet, Target } from 'lucide-react';
+import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe, Monitor, Users, ShieldAlert, Gift, Network, Lock, ArrowDownToLine, Gamepad2, MessageSquare, Wallet, Target, ChevronDown, ChevronRight } from 'lucide-react';
 import AdminLuckyWheelTab from './AdminLuckyWheelTab';
 import AdminMembersTab from './AdminMembersTab';
 import AdminRiskTab from './AdminRiskTab';
@@ -37,7 +37,10 @@ export default function AdminPanel(props: AdminPanelProps) {
     
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'audit' | 'sports' | 'tv' | 'whale' | 'liquidity' | 'provider' | 'community' | 'kral' | 'odds'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'deposits' | 'audit' | 'sports' | 'tv' | 'whale' | 'liquidity' | 'provider' | 'community' | 'kral' | 'odds'>('dashboard');
+
+    const [expandedGroups, setExpandedGroups] = useState<string[]>(['CASINO YÖNETİMİ', 'PAZARLAMA & BONUS', 'SPOR YÖNETİMİ', 'GÜVENLİK & FRAUD', 'FİNANS & MÜŞTERİ', 'SİSTEM', 'DİĞER']);
+    const toggleGroup = (group: string) => setExpandedGroups(prev => prev.includes(group) ? prev.filter(g => g !== group) : [...prev, group]);
 
     // RBAC: Rol Bazlı Yetki Yönetimi
     const currentAdminRole = 'SUPER_ADMIN'; // test için 'SUPPORT' da yapılabilir.
@@ -115,135 +118,137 @@ export default function AdminPanel(props: AdminPanelProps) {
                 <div className="flex flex-1 overflow-hidden">
                     
                     {/* Pro Sidebar Navigation */}
-                    <div className="w-56 bg-[#090a0f] border-r border-white/5 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)] custom-scrollbar">
+                    <div className="w-56 bg-[#090a0f] border-r border-white/5 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)] custom-scrollbar select-none">
                         
-                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-2">CASINO YÖNETİMİ</div>
-                        <button 
-                            onClick={() => setActiveTab('dashboard')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Activity className="w-3.5 h-3.5" /> Casino Komuta
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('provider')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'provider' ? 'bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 shadow-[0_0_10px_rgba(168,85,247,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Gamepad2 className="w-3.5 h-3.5" /> Sağlayıcı RTP
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('risk')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <ShieldCheck className="w-3.5 h-3.5" /> Casino Risk
-                        </button>
-
-                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">PAZARLAMA & BONUS</div>
-                        <button 
-                            onClick={() => setActiveTab('bonus')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bonus' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Gift className="w-3.5 h-3.5" /> Bonus & Kampanya
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('affiliate')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'affiliate' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Network className="w-3.5 h-3.5" /> Affiliate (Bayi)
-                        </button>
-
-                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">SPOR YÖNETİMİ</div>
-                        <button 
-                            onClick={() => setActiveTab('sports')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Trophy className="w-4 h-4" /> SPOR YÖNETİMİ
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('odds')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'odds' ? 'bg-[#06b6d4]/10 text-[#06b6d4] border border-[#06b6d4]/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Settings className="w-4 h-4" /> ORAN MOTORU
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('radar')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'radar' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_10px_rgba(139,92,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Target className="w-3.5 h-3.5" /> Canlı Oran Takip
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('sports-risk')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports-risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <ShieldAlert className="w-3.5 h-3.5" /> Kupon Radarı
-                        </button>
-
-                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">GÜVENLİK & FRAUD</div>
-                        <button 
-                            onClick={() => setActiveTab('fraud')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'fraud' ? 'bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/30 shadow-[0_0_10px_rgba(220,38,38,0.2)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Lock className="w-3.5 h-3.5" /> Fraud Radarı
-                        </button>
-
-                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">FİNANS & MÜŞTERİ</div>
-                        {currentAdminRole === 'SUPER_ADMIN' && (
-                            <button 
-                                onClick={() => setActiveTab('liquidity')} 
-                                className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'liquidity' ? 'bg-[#26a17b]/10 text-[#26a17b] border border-[#26a17b]/30 shadow-[0_0_10px_rgba(38,161,123,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                            >
-                                <Wallet className="w-3.5 h-3.5" /> Likidite Matrisi
-                            </button>
+                        {/* CASINO YÖNETİMİ */}
+                        <div onClick={() => toggleGroup('CASINO YÖNETİMİ')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
+                            <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] group-hover:text-zinc-400 transition-colors">CASINO YÖNETİMİ</div>
+                            {expandedGroups.includes('CASINO YÖNETİMİ') ? <ChevronDown className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" />}
+                        </div>
+                        {expandedGroups.includes('CASINO YÖNETİMİ') && (
+                            <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
+                                <button onClick={() => setActiveTab('dashboard')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Activity className="w-3.5 h-3.5" /> Casino Komuta
+                                </button>
+                                <button onClick={() => setActiveTab('provider')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'provider' ? 'bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 shadow-[0_0_10px_rgba(168,85,247,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Gamepad2 className="w-3.5 h-3.5" /> Sağlayıcı RTP
+                                </button>
+                                <button onClick={() => setActiveTab('risk')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <ShieldCheck className="w-3.5 h-3.5" /> Casino Risk
+                                </button>
+                            </div>
                         )}
-                        <button 
-                            onClick={() => setActiveTab('whale')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'whale' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Target className="w-3.5 h-3.5" /> VIP Balina Radarı
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('members')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'members' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Users className="w-3.5 h-3.5" /> Müşteri & KYC
-                        </button>
 
-                        <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] mb-1 px-2 mt-4">SİSTEM</div>
-                        {currentAdminRole === 'SUPER_ADMIN' && (
-                            <>
-                                <button 
-                                    onClick={() => setActiveTab('withdrawals')} 
-                                    className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'withdrawals' ? 'bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/30 shadow-[0_0_10px_rgba(245,158,11,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                                >
-                                    <TrendingUp className="w-3.5 h-3.5" /> Çekim Talepleri
+                        {/* PAZARLAMA & BONUS */}
+                        <div onClick={() => toggleGroup('PAZARLAMA & BONUS')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
+                            <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] group-hover:text-zinc-400 transition-colors">PAZARLAMA & BONUS</div>
+                            {expandedGroups.includes('PAZARLAMA & BONUS') ? <ChevronDown className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" />}
+                        </div>
+                        {expandedGroups.includes('PAZARLAMA & BONUS') && (
+                            <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
+                                <button onClick={() => setActiveTab('bonus')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bonus' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Gift className="w-3.5 h-3.5" /> Bonus & Kampanya
                                 </button>
-                                <button 
-                                    onClick={() => setActiveTab('deposits')} 
-                                    className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'deposits' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                                >
-                                    <ArrowDownToLine className="w-3.5 h-3.5" /> Yatırım Talepleri
+                                <button onClick={() => setActiveTab('affiliate')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'affiliate' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Network className="w-3.5 h-3.5" /> Affiliate (Bayi)
                                 </button>
-                                <button 
-                                    onClick={() => setActiveTab('audit')} 
-                                    className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'audit' ? 'bg-zinc-100/10 text-white border border-white/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                                >
-                                    <Monitor className="w-3.5 h-3.5" /> İşlem Kayıtları
+                            </div>
+                        )}
+
+                        {/* SPOR YÖNETİMİ */}
+                        <div onClick={() => toggleGroup('SPOR YÖNETİMİ')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
+                            <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] group-hover:text-zinc-400 transition-colors">SPOR YÖNETİMİ</div>
+                            {expandedGroups.includes('SPOR YÖNETİMİ') ? <ChevronDown className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" />}
+                        </div>
+                        {expandedGroups.includes('SPOR YÖNETİMİ') && (
+                            <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
+                                <button onClick={() => setActiveTab('sports')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Trophy className="w-4 h-4" /> SPOR YÖNETİMİ
                                 </button>
-                            </>
+                                <button onClick={() => setActiveTab('odds')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'odds' ? 'bg-[#06b6d4]/10 text-[#06b6d4] border border-[#06b6d4]/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Settings className="w-4 h-4" /> ORAN MOTORU
+                                </button>
+                                <button onClick={() => setActiveTab('radar')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'radar' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_10px_rgba(139,92,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Target className="w-3.5 h-3.5" /> Canlı Oran Takip
+                                </button>
+                                <button onClick={() => setActiveTab('sports-risk')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports-risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <ShieldAlert className="w-3.5 h-3.5" /> Kupon Radarı
+                                </button>
+                            </div>
+                        )}
+
+                        {/* GÜVENLİK & FRAUD */}
+                        <div onClick={() => toggleGroup('GÜVENLİK & FRAUD')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
+                            <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] group-hover:text-zinc-400 transition-colors">GÜVENLİK & FRAUD</div>
+                            {expandedGroups.includes('GÜVENLİK & FRAUD') ? <ChevronDown className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" />}
+                        </div>
+                        {expandedGroups.includes('GÜVENLİK & FRAUD') && (
+                            <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
+                                <button onClick={() => setActiveTab('fraud')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'fraud' ? 'bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/30 shadow-[0_0_10px_rgba(220,38,38,0.2)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Lock className="w-3.5 h-3.5" /> Fraud Radarı
+                                </button>
+                            </div>
+                        )}
+
+                        {/* FİNANS & MÜŞTERİ */}
+                        <div onClick={() => toggleGroup('FİNANS & MÜŞTERİ')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
+                            <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] group-hover:text-zinc-400 transition-colors">FİNANS & MÜŞTERİ</div>
+                            {expandedGroups.includes('FİNANS & MÜŞTERİ') ? <ChevronDown className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" />}
+                        </div>
+                        {expandedGroups.includes('FİNANS & MÜŞTERİ') && (
+                            <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
+                                {currentAdminRole === 'SUPER_ADMIN' && (
+                                    <button onClick={() => setActiveTab('liquidity')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'liquidity' ? 'bg-[#26a17b]/10 text-[#26a17b] border border-[#26a17b]/30 shadow-[0_0_10px_rgba(38,161,123,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                        <Wallet className="w-3.5 h-3.5" /> Likidite Matrisi
+                                    </button>
+                                )}
+                                <button onClick={() => setActiveTab('whale')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'whale' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Target className="w-3.5 h-3.5" /> VIP Balina Radarı
+                                </button>
+                                <button onClick={() => setActiveTab('members')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'members' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Users className="w-3.5 h-3.5" /> Müşteri & KYC
+                                </button>
+                            </div>
+                        )}
+
+                        {/* SİSTEM */}
+                        <div onClick={() => toggleGroup('SİSTEM')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
+                            <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] group-hover:text-zinc-400 transition-colors">SİSTEM</div>
+                            {expandedGroups.includes('SİSTEM') ? <ChevronDown className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" />}
+                        </div>
+                        {expandedGroups.includes('SİSTEM') && (
+                            <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
+                                {currentAdminRole === 'SUPER_ADMIN' && (
+                                    <>
+                                        <button onClick={() => setActiveTab('withdrawals')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'withdrawals' ? 'bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/30 shadow-[0_0_10px_rgba(245,158,11,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                            <TrendingUp className="w-3.5 h-3.5" /> Çekim Talepleri
+                                        </button>
+                                        <button onClick={() => setActiveTab('deposits')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'deposits' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                            <ArrowDownToLine className="w-3.5 h-3.5" /> Yatırım Talepleri
+                                        </button>
+                                        <button onClick={() => setActiveTab('audit')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'audit' ? 'bg-zinc-100/10 text-white border border-white/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                            <Monitor className="w-3.5 h-3.5" /> İşlem Kayıtları
+                                        </button>
+                                    </>
+                                )}
+                            </div>
                         )}
                         
-                        <button 
-                            onClick={() => setActiveTab('bot')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bot' ? 'bg-[#14b8a6]/10 text-[#14b8a6] border border-[#14b8a6]/30 shadow-[0_0_10px_rgba(20,184,166,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <Bot className="w-3.5 h-3.5" /> AI Chatbot
-                        </button>
-
-                        <button 
-                            onClick={() => setActiveTab('community')} 
-                            className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'community' ? 'bg-[#ec4899]/10 text-[#ec4899] border border-[#ec4899]/30 shadow-[0_0_10px_rgba(236,72,153,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}
-                        >
-                            <MessageSquare className="w-3.5 h-3.5" /> Topluluk & Chat
-                        </button>
+                        {/* DİĞER */}
+                        <div onClick={() => toggleGroup('DİĞER')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
+                            <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] group-hover:text-zinc-400 transition-colors">DİĞER EKSTRALAR</div>
+                            {expandedGroups.includes('DİĞER') ? <ChevronDown className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" />}
+                        </div>
+                        {expandedGroups.includes('DİĞER') && (
+                            <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
+                                <button onClick={() => setActiveTab('bot')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bot' ? 'bg-[#14b8a6]/10 text-[#14b8a6] border border-[#14b8a6]/30 shadow-[0_0_10px_rgba(20,184,166,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Bot className="w-3.5 h-3.5" /> AI Chatbot
+                                </button>
+                                <button onClick={() => setActiveTab('community')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'community' ? 'bg-[#ec4899]/10 text-[#ec4899] border border-[#ec4899]/30 shadow-[0_0_10px_rgba(236,72,153,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <MessageSquare className="w-3.5 h-3.5" /> Topluluk & Chat
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Content Area */}

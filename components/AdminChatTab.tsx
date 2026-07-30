@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
+import { chatBots } from '../utils/chatBots';
 
 interface Bot {
   id: string;
@@ -224,6 +225,14 @@ export default function AdminChatTab() {
   const [autopilotTopic, setAutopilotTopic] = useState('');
   const [activeOverrideTopic, setActiveOverrideTopic] = useState('');
   const [overrideBanner, setOverrideBanner] = useState('');
+
+  // 🌧️ Rain Drop (Yağmur) States
+  const [rainInterval, setRainInterval] = useState(30);
+  const [rainAmount, setRainAmount] = useState(50);
+  const [rainWinners, setRainWinners] = useState(20);
+  const [dailyTopic, setDailyTopic] = useState('Süper Lig transfer haberleri, Fenerbahçe ve Galatasaray rekabeti');
+  const [isRainEnabled, setIsRainEnabled] = useState(false);
+  const lastRainTimeRef = useRef(Date.now());
   
   const autopilotTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -575,7 +584,7 @@ export default function AdminChatTab() {
 
   // 🤖 AI AUTOPILOT ENGINE (Hugging Face / Zephyr tabanlı sonsuz sohbet)
   const runAutopilotStep = async () => {
-    if (bots.length === 0) {
+    if (chatBots.length === 0) {
       setStatusMessage('⚠️ Autopilot için sistemde en az 1 bot hesabı bulunmalıdır.');
       setIsAutopilotRunning(false);
       return;
@@ -601,11 +610,32 @@ export default function AdminChatTab() {
         ? lastMessages.reverse().map(m => `${m.username}: ${m.message}`).join('\n')
         : '';
 
-      // 2. Prompt oluşturma
+      // 2. Rastgele bir bot seç ve persona prompt'u oluştur
+      const randomBot = chatBots[Math.floor(Math.random() * chatBots.length)];
+      
+      let rainReactStr = '';
+      let triggeredRain = false;
+      if (isRainEnabled && (Date.now() - lastRainTimeRef.current > rainInterval * 60 * 1000)) {
+        triggeredRain = true;
+        lastRainTimeRef.current = Date.now();
+        rainReactStr = `\\n\\n[ÖNEMLİ OLAY]: Az önce sohbete Yağmur (Rain) yağdı ve dağıtıldı! Kendi karakterine göre bu yağmura tepki ver (aldın veya alamadın, sevin veya söv).`;
+        
+        await supabase.from('tv_chat').insert([{
+            channel_id: GLOBAL_CHANNEL_ID,
+            user_id: 'rain_system',
+            username: 'SİSTEM',
+            role: 'SYSTEM',
+            message: `[RAIN_EVENT] Sohbete $${rainAmount} yağmur yağdı! ${rainWinners} kişiye dağıtılıyor.`
+        }]);
+      }
+
       let systemPrompt = `Sen 724bets.com sitesinde takılan heyecanlı bir bahisçi ve spor analistisin. 
-Canlı maçları takip edip skorlara göre tepki veriyorsun. Asla bir yapay zeka olduğunu belli etme.
-Kısa, öz ve argo içermeyen sokak ağzıyla (kanka, aga, hoca vb.) spor/casino muhabbeti yap.
-Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino sitelerini öv.`;
+Senin adın ${randomBot.username}. Karakteristiğin: ${randomBot.characteristic}
+Bu karakteristiğe harfiyen uy. Asla bir yapay zeka olduğunu belli etme.
+Kısa, öz ve sokak ağzıyla (kanka, aga, hoca vb.) konuş.
+Mesajların maksimum 1-2 cümle olsun.
+BUGÜNÜN GÜNDEMİ: ${dailyTopic}
+(Eğer konuya girmek mantıklıysa bugün güncel olarak bu gündemi konuşun)${rainReactStr}`;
 
       if (activeOverrideTopic) {
         systemPrompt += `\n\nYÖNETİCİDEN ACİL EMİR: Sohbetin konusunu sıradaki 1 veya en geç 2 mesaj içinde yavaşça, çaktırmadan ve pürüzsüzce şu konuya kaydırın: '${activeOverrideTopic}'. Botlar eski konuyu bir anda kesmesin; önce lafı buraya bağlayacak 1-2 cümle kursunlar, ardından tamamen bu yeni konuyu kendi aralarında bahis jargonuyla tartışmaya devam etsinler.`;
@@ -653,9 +683,6 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
         throw new Error('API geçerli bir mesaj dönmedi. Response: ' + JSON.stringify(data));
       }
 
-      // 4. Rastgele bir bot seç ve mesajı gönder
-      const randomBot = bots[Math.floor(Math.random() * bots.length)];
-      
       setStatusMessage(`💬 ${randomBot.username} yazıyor...`);
       
       // "Yazıyor..." Broadcast
@@ -925,6 +952,50 @@ Mesajların maksimum 1-2 cümle olsun. Zaman zaman Gamdom, 21.com gibi casino si
                   )}
                 </div>
               )}
+            </div>
+
+            {/* GÜNLÜK GÜNDEM VE YAĞMUR (RAIN) AYARLARI */}
+            <div className="p-4 bg-gray-950 rounded-lg border border-gray-800 space-y-3">
+              <div>
+                <label className="block text-xs font-bold text-sky-400 mb-1">📰 Günlük Gündem (Daily Topic)</label>
+                <textarea
+                  value={dailyTopic}
+                  onChange={(e) => setDailyTopic(e.target.value)}
+                  placeholder="Bugün ne konuşsunlar? Örn: Fenerbahçe transferleri"
+                  className="w-full h-16 bg-gray-900 border border-gray-850 p-2 rounded text-xs text-white outline-none focus:border-sky-500"
+                />
+              </div>
+              
+              <div className="bg-blue-900/20 border border-blue-800/50 p-3 rounded-lg space-y-2">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-xs font-bold text-blue-400 flex items-center gap-1">🌧️ Yağmur (Rain) Sistemi</label>
+                  <button
+                    onClick={() => setIsRainEnabled(!isRainEnabled)}
+                    className={`px-3 py-1 text-[10px] rounded font-bold uppercase transition-colors ${
+                      isRainEnabled ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'
+                    }`}
+                  >
+                    {isRainEnabled ? 'Açık' : 'Kapalı'}
+                  </button>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div>
+                    <label className="block text-gray-400 mb-1">Dakikada Bir</label>
+                    <input type="number" value={rainInterval} onChange={(e) => setRainInterval(Number(e.target.value))} className="w-full bg-gray-900 border border-gray-800 p-1.5 rounded text-white outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-1">Miktar ($)</label>
+                    <input type="number" value={rainAmount} onChange={(e) => setRainAmount(Number(e.target.value))} className="w-full bg-gray-900 border border-gray-800 p-1.5 rounded text-white outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-1">Kişi Sayısı</label>
+                    <input type="number" value={rainWinners} onChange={(e) => setRainWinners(Number(e.target.value))} className="w-full bg-gray-900 border border-gray-800 p-1.5 rounded text-white outline-none" />
+                  </div>
+                </div>
+                <button onClick={() => { lastRainTimeRef.current = 0; alert('Zamanlayıcı sıfırlandı, sıradaki mesajda yağmur tetiklenecek.'); }} className="w-full mt-2 bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold py-1.5 rounded uppercase">
+                  Zamanlayıcıyı Sıfırla (Hemen Yağdır)
+                </button>
+              </div>
             </div>
 
             {/* MANUEL SENARYO ALANI */}

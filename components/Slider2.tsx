@@ -12,7 +12,7 @@ const Slider2: React.FC<Slider2Props> = ({ config, onSlideChange, onInternalNavi
   const fallbackSlides = [
     {
       id: 'default-banner',
-      imageUrl: '/banners/yeni-ince-banner.png',
+      imageUrl: '/banners/yeni-ince-banner.webp',
       link: 'https://bahisbey7195.com/tr/lobby/casino',
       title: 'İki Gol Farkla Öne Geç KAZAN',
       isActive: true,
@@ -28,7 +28,7 @@ const Slider2: React.FC<Slider2Props> = ({ config, onSlideChange, onInternalNavi
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [loadedUrls, setLoadedUrls] = useState<Record<string, boolean>>({
-    '/banners/yeni-ince-banner.png': true
+    '/banners/yeni-ince-banner.webp': true
   });
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -37,9 +37,9 @@ const Slider2: React.FC<Slider2Props> = ({ config, onSlideChange, onInternalNavi
   useEffect(() => {
     // Preload default banner
     const defaultImg = new Image();
-    defaultImg.src = '/banners/yeni-ince-banner.png';
+    defaultImg.src = '/banners/yeni-ince-banner.webp';
     defaultImg.onload = () => {
-      setLoadedUrls(prev => ({ ...prev, ['/banners/yeni-ince-banner.png']: true }));
+      setLoadedUrls(prev => ({ ...prev, ['/banners/yeni-ince-banner.webp']: true }));
     };
 
     activeSlides.forEach(slide => {

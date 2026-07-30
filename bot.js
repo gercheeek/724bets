@@ -66,11 +66,16 @@ function startSwarmConnection() {
             if (data.sport) {
                 Object.values(data.sport).forEach(sport => {
                     const sportName = sport.name || 'Futbol';
-                    
-                    // SADECE FUTBOL KONTROLÜ
                     const lowerSport = sportName.toLowerCase();
-                    if (!lowerSport.includes('futbol') && !lowerSport.includes('football') && !lowerSport.includes('soccer')) {
-                        return; // Futbol dışındaki tüm sporları (Basketbol, Tenis, Espor vb.) reddet
+                    
+                    // SADECE BELİRLİ SPORLARI KABUL ET
+                    if (!lowerSport.includes('futbol') && !lowerSport.includes('football') && !lowerSport.includes('soccer') &&
+                        !lowerSport.includes('basketbol') && !lowerSport.includes('basketball') &&
+                        !lowerSport.includes('tenis') && !lowerSport.includes('tennis') &&
+                        !lowerSport.includes('beyzbol') && !lowerSport.includes('baseball') &&
+                        !lowerSport.includes('voleybol') && !lowerSport.includes('volleyball') &&
+                        !lowerSport.includes('buz hokeyi') && !lowerSport.includes('ice hockey')) {
+                        return;
                     }
 
                     if (!sport.region) return;
@@ -96,22 +101,53 @@ function startSwarmConnection() {
                                 };
                                 if (isGamerTag(game.team1_name) || isGamerTag(game.team2_name)) return;
                                 
-                                let oddsStr = null;
+                                let oddsStr = null; // No longer used, handled in groupMarkets
+
+                                let groupMarkets = [];
                                 if (game.market) {
-                                    const mainMarket = Object.values(game.market).find(m => {
+                                    Object.values(game.market).forEach(m => {
                                         const t = (m.type_name || '').toLowerCase();
                                         const n = (m.name || '').toLowerCase();
-                                        return t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' || n === 'match result' || n === 'maç sonucu' || n === '1x2' || n === 'winner' || n === 'kazanan' || n === 'maçın kazananı';
+                                        
+                                        // 1x2 (Maç Sonucu veya Kazanan)
+                                        if (t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' || n.includes('match result') || n.includes('maç sonucu') || n.includes('1x2') || n.includes('winner') || n.includes('kazanan') || n.includes('galib')) {
+                                            if (m.event) {
+                                                const evs = Object.values(m.event);
+                                                const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                                const px = evs.find(e => ['x', 'draw', 'beraberlik'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                                const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                                if (p1 || px || p2) groupMarkets.push(`|1x2||~home~${p1||'-'}!~draw~${px||'-'}!~away~${p2||'-'}`);
+                                            }
+                                        }
+                                        
+                                        // Over/Under (Alt/Üst)
+                                        else if (n.includes('alt') || n.includes('üst') || n.includes('under') || n.includes('over') || t.includes('total') || t.includes('ou')) {
+                                            if (m.event) {
+                                                const evs = Object.values(m.event);
+                                                const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
+                                                const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
+                                                if (over || under) {
+                                                    // Extract base line (like 2.5) from market name
+                                                    const matchLine = n.match(/([0-9]+\.5)/);
+                                                    const arg = matchLine ? matchLine[1] : '';
+                                                    groupMarkets.push(`|ou|${arg}|~over~${over||'-'}!~under~${under||'-'}`);
+                                                }
+                                            }
+                                        }
+                                        
+                                        // Both Teams to Score (Karşılıklı Gol)
+                                        else if (n.includes('karşılıklı gol') || n.includes('btts') || n.includes('both teams')) {
+                                            if (m.event) {
+                                                const evs = Object.values(m.event);
+                                                const yes = evs.find(e => ['var', 'evet', 'yes'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                                const no = evs.find(e => ['yok', 'hayır', 'no'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                                if (yes || no) {
+                                                    groupMarkets.push(`|gg||~yes~${yes||'-'}!~no~${no||'-'}`);
+                                                }
+                                            }
+                                        }
                                     });
-                                    if (mainMarket && mainMarket.event) {
-                                        const evs = Object.values(mainMarket.event);
-                                        const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
-                                        const px = evs.find(e => ['x', 'draw', 'beraberlik'].includes((e.name || '').toLowerCase().trim()))?.price;
-                                        const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
-                                        if (p1 || px || p2) oddsStr = `|1x2|~home~${p1||'-'}!~draw~${px||'-'}!~away~${p2||'-'}`;
-                                    }
                                 }
-
                                 const ev = {
                                     id: String(game.id),
                                     isScraped: true,
@@ -124,6 +160,7 @@ function startSwarmConnection() {
                                         start_time: game.start_ts ? new Date(game.start_ts * 1000).toISOString() : new Date().toISOString(),
                                         score: game.info ? `${game.info.score1 || 0}:${game.info.score2 || 0}` : '0:0',
                                         minute: game.info ? game.info.current_game_time : 0,
+                                        info: game.info || {},
                                         isLive: true,
                                         extended_status: 'live',
                                         stats: game.stats || {}
@@ -140,9 +177,9 @@ function startSwarmConnection() {
                                 ev.isLive = true;
                                 ev.matchStatus = 'live';
 
-                                if (oddsStr) {
-                                    ev.data.group_markets = { 'full_event|0': [oddsStr] };
-                                    ev.group_markets = { 'full_event|0': [oddsStr] };
+                                if (groupMarkets.length > 0) {
+                                    ev.data.group_markets = { 'full_event|0': groupMarkets };
+                                    ev.group_markets = { 'full_event|0': groupMarkets };
                                 }
                                 
                                 newEvents.set(ev.id, ev);

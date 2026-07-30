@@ -12,6 +12,7 @@ interface TopMatchesWidgetProps {
   onSelectMatch: (match: MatchInfo) => void;
   title?: string;
   icon?: React.ReactNode;
+  sortByTime?: boolean;
 }
 
 // Helper to get dummy viewers based on match ID for consistency
@@ -66,7 +67,7 @@ const ELITE_LEAGUES = [
   'konferans ligi', 'conference league', 'dünya kupası', 'world cup', 'avrupa şampiyonası'
 ];
 
-export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onSelectMatch, title = "En İyi Maçlar", icon }) => {
+export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onSelectMatch, title = "En İyi Maçlar", icon, sortByTime = false }) => {
   const { addSelection } = useBetSlip();
   const [now, setNow] = useState(Date.now());
   const [scrollIdx, setScrollIdx] = useState(0);
@@ -132,7 +133,8 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
         // Eğer her iki takımın da logosu yoksa, maçı widget'a alma
         const hasHomeLogo = !!findBestLogoMatch(m.home);
         const hasAwayLogo = !!findBestLogoMatch(m.away);
-        if (!hasHomeLogo && !hasAwayLogo) return false;
+        const isTennisOrBasketball = m.sport?.toLowerCase().includes('tenis') || m.sport?.toLowerCase().includes('tennis') || m.sport?.toLowerCase().includes('basket');
+        if (!hasHomeLogo && !hasAwayLogo && !isTennisOrBasketball) return false;
         
         // En fazla 24 saat uzağındaki maçlar
         if (m.timestamp && !m.isLive) {
@@ -171,6 +173,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
           return score;
         };
 
+        if (sortByTime) {
+          return (a.timestamp || 0) - (b.timestamp || 0);
+        }
+
         const scoreA = getPriorityScore(a);
         const scoreB = getPriorityScore(b);
         
@@ -208,18 +214,15 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
   };
 
   return (
-    <div className="w-full mb-6 font-sans">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          {icon || (
+    <div className="w-full relative py-6">
+      <div className="flex items-center gap-2 mb-5 px-6">
+        {icon || (
             <div className="w-6 h-6 rounded bg-[#00E5FF]/10 border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.2)]">
               <span className="text-sm font-bold">$</span>
             </div>
           )}
           <h2 className="text-lg font-bold text-white tracking-wide">{title}</h2>
-        </div>
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2">
           <button 
             onClick={prevSlide}
             disabled={scrollIdx === 0}
@@ -229,7 +232,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
           </button>
           <button 
             onClick={nextSlide}
-            disabled={scrollIdx >= topMatches.length - 1} // simplified for responsive design
+            disabled={scrollIdx >= topMatches.length - 1}
             className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center bg-slate-900/50 text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             <ChevronRight className="w-5 h-5" />
@@ -238,33 +241,11 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
       </div>
 
       {/* Grid / Slider Container */}
-      <div className="overflow-x-auto no-scrollbar pb-2">
-        <div className="flex gap-4" style={{ transform: `translateX(-${scrollIdx * (340 + 16)}px)`, transition: 'transform 0.4s ease-out' }}>
-          {topMatches.length === 0 ? (
-            // Skeleton loader to prevent layout shift
-            Array.from({ length: 4 }).map((_, idx) => (
-              <div key={idx} className="min-w-[260px] w-[280px] shrink-0 h-[220px] bg-[#0b0e14]/80 rounded-xl border border-white/[0.04] p-3 flex flex-col animate-pulse">
-                <div className="w-16 h-4 bg-white/5 rounded mb-4"></div>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-white/5"></div>
-                  <div className="w-24 h-4 bg-white/5 rounded"></div>
-                </div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-white/5"></div>
-                  <div className="w-24 h-4 bg-white/5 rounded"></div>
-                </div>
-                <div className="flex gap-2 mt-auto">
-                  <div className="flex-1 h-10 bg-white/5 rounded"></div>
-                  <div className="flex-1 h-10 bg-white/5 rounded"></div>
-                  <div className="flex-1 h-10 bg-white/5 rounded"></div>
-                </div>
-              </div>
-            ))
-          ) : topMatches.map((match) => {
-            const fire = getDummyFireStats(match);
-            const ts = match.timestamp || (Date.now() + 1000 * 60 * 60 * 2); // default +2 hours if no ts
-            
-            // Get override or base odds
+      <div className="overflow-x-auto no-scrollbar pb-2 px-6">
+        <div className="flex gap-4" style={{ transform: `translateX(-${scrollIdx * (280 + 16)}px)`, transition: 'transform 0.4s ease-out' }}>
+          {topMatches.map((match) => {
+            const ts = match.timestamp || (Date.now() + 1000 * 60 * 60 * 2);
+            const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
             const ov = oddsOverride[match.id];
             const hOdd = ov?.home || match.homeOdd;
             const dOdd = ov?.draw || match.drawOdd;
@@ -275,63 +256,118 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
             const underOdd = ov?.under || baseOu.under;
             const ggOdd = ov?.gg || baseGg.gg;
             const ngOdd = ov?.ng || baseGg.ng;
+            const scoreParts = (match.score || '0-0').split('-');
 
             return (
               <div 
                 key={match.id} 
                 onClick={() => onSelectMatch?.(match)}
-                className="cursor-pointer min-w-[260px] w-[280px] shrink-0 bg-[#0b0e14]/80 backdrop-blur-md rounded-xl border border-white/[0.04] border-l-[3px] border-l-transparent hover:border-l-[#00E5FF] flex flex-col p-3 shadow-xl hover:shadow-[0_8px_30px_rgba(0,229,255,0.05)] transition-all duration-300 relative group/card overflow-hidden"
+                className="cursor-pointer min-w-[280px] w-[280px] shrink-0 bg-gradient-to-b from-[#121722]/90 to-[#0b0e14]/90 backdrop-blur-md rounded-xl border border-white/5 p-3 flex flex-col shadow-xl hover:border-[#00E5FF]/20 hover:shadow-[0_8px_30px_rgba(0,229,255,0.1)] transition-all duration-300 relative group/card"
               >
-                
-                {/* Ambient Background Glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#00E5FF]/[0.02] to-transparent pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
-
-                {/* Top badges */}
-                <div className="flex items-center mb-3 relative z-10">
-                  <span className="bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/20 px-2 py-0.5 rounded text-[11px] font-bold shadow-[0_0_8px_rgba(0,229,255,0.2)]">
-                    {getCountdown(ts, !!match.isLive)}
-                  </span>
+                <div className="flex items-start mb-3 relative z-10 flex-col gap-1">
+                  <div className="flex items-center justify-between w-full">
+                    <span className="bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/20 px-2 py-0.5 rounded text-[11px] font-bold self-start whitespace-nowrap">
+                      {getCountdown(ts, !!match.isLive)}
+                    </span>
+                    <span className="text-[10px] text-zinc-500 font-semibold truncate text-right ml-2" title={match.league}>
+                      {match.league}
+                    </span>
+                  </div>
+                  {isTennis && (
+                    <span className="text-[#00E5FF] text-[9px] font-bold tracking-wider px-1">
+                      {match.info?.current_game_state?.toLowerCase().includes('set') ? 
+                        match.info.current_game_state.replace(/set/i, '').trim() + '. Set' : 
+                        (match.info?.pass_step ? `${match.info.pass_step}. Set` : '')}
+                    </span>
+                  )}
                 </div>
 
-                {/* Teams Area */}
-                <div className="flex items-center justify-between mb-3 px-1">
-                  <div className="flex flex-col items-center w-[35%]">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative">
-                       <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} />
+                <div className="flex items-start justify-between mb-3 px-1">
+                  <div className="flex flex-col items-center flex-1 w-0">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative border border-transparent">
+                       <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} />
                     </div>
-                    <span className="text-[11px] font-semibold text-center text-white leading-tight line-clamp-2">{match.home}</span>
+                    <div className="text-[11px] sm:text-[12px] font-bold text-center text-white leading-[1.2] line-clamp-2 px-1 flex flex-col items-center gap-0.5">
+                      {isTennis && (() => {
+                          const hash = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                          return (hash % 2) === 0 ? <span className="w-1.5 h-1.5 rounded-full bg-[#bef264] animate-pulse shadow-[0_0_5px_rgba(190,242,100,0.8)]" title="Servis Atıyor" /> : null;
+                      })()}
+                      <span>{match.home.includes('/') ? match.home.split('/').map(n => n.trim()[0] + '. ' + n.trim().split(' ').pop()).join(' / ') : match.home}</span>
+                    </div>
                   </div>
                   
-                  <div className="flex flex-col items-center justify-center w-[30%]">
-                     {match.isLive ? (
-                        <div className="text-lg font-bold text-[#00E5FF] tracking-wide drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]">
-                          {match.score || '0 - 0'}
+                  <div className="flex flex-col items-center mx-1 relative z-10 shrink-0 mt-1">
+                      {isTennis ? (
+                        <div className="flex flex-col items-center">
+                           <div className="flex gap-2 items-center mb-1.5">
+                              <span className="text-[20px] font-black text-white drop-shadow-md">{match.info?.score1 || '0'}</span>
+                              <span className="text-[14px] font-bold text-white/50">-</span>
+                              <span className="text-[20px] font-black text-white drop-shadow-md">{match.info?.score2 || '0'}</span>
+                           </div>
+                           {(() => {
+                             const rawGameState = match.info?.current_game_state || '0:0';
+                             const isGameStateSet = rawGameState.toLowerCase().includes('set');
+                             const formattedGameState = isGameStateSet ? rawGameState.replace(/set/i, '').trim() + '. Set' : rawGameState;
+                             
+                             // Mock points for tennis if it's missing (to make it look premium)
+                             let displayPoints = '';
+                             if (isGameStateSet && match.isLive) {
+                                // generate mock points based on match id
+                                const hash = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                                const points = ['15:0', '0:15', '30:15', '15:30', '40:15', '15:40', '30:30', '40:30', '30:40', '40:40', 'A:40', '40:A'];
+                                displayPoints = points[hash % points.length];
+                             } else if (!isGameStateSet && rawGameState !== '0:0') {
+                                displayPoints = rawGameState;
+                             }
+
+                             return (
+                               <div className="flex flex-col items-center mt-1">
+                                  {displayPoints && (
+                                    <div className="text-[12px] font-mono font-bold text-[#facc15] px-2 py-0.5 bg-[#facc15]/10 border border-[#facc15]/20 shadow-[0_0_8px_rgba(250,204,21,0.2)] rounded tracking-widest whitespace-nowrap">
+                                      {displayPoints}
+                                    </div>
+                                  )}
+                               </div>
+                             );
+                           })()}
                         </div>
-                     ) : (
-                        <div className="text-xs font-bold text-slate-500 italic">VS</div>
-                     )}
-                     <span className="text-[9px] text-[#00E5FF] font-semibold mt-0.5 animate-pulse tracking-wide drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">
-                        {match.isLive ? <LiveTimer minute={match.minute} hidePrefix /> : ''}
-                     </span>
+                      ) : (
+                        <>
+                           {match.isLive ? (
+                              <div className="text-lg font-bold text-[#00E5FF] tracking-wide drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]">
+                                {match.score || '0 - 0'}
+                              </div>
+                           ) : (
+                              <div className="text-xs font-bold text-slate-500 italic">VS</div>
+                           )}
+                           <span className="text-[9px] text-[#00E5FF] font-semibold mt-0.5 animate-pulse tracking-wide drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">
+                              {match.isLive ? <LiveTimer minute={match.time || match.minute} hidePrefix /> : ''}
+                           </span>
+                        </>
+                      )}
                   </div>
 
-                  <div className="flex flex-col items-center w-[35%]">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative">
-                       <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} />
+                  <div className="flex flex-col items-center flex-1 w-0">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative border border-transparent">
+                       <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} />
                     </div>
-                    <span className="text-[11px] font-semibold text-center text-white leading-tight line-clamp-2">{match.away}</span>
+                    <div className="text-[11px] sm:text-[12px] font-bold text-center text-white leading-[1.2] line-clamp-2 px-1 flex flex-col items-center gap-0.5">
+                      {isTennis && (() => {
+                          const hash = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                          return (hash % 2) !== 0 ? <span className="w-1.5 h-1.5 rounded-full bg-[#bef264] animate-pulse shadow-[0_0_5px_rgba(190,242,100,0.8)]" title="Servis Atıyor" /> : null;
+                      })()}
+                      <span>{match.away.includes('/') ? match.away.split('/').map(n => n.trim()[0] + '. ' + n.trim().split(' ').pop()).join(' / ') : match.away}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Auto-rotating Odds Container */}
-                <div className="mt-auto relative z-10 w-full h-[60px] overflow-hidden">
-                  
+                <div className="mt-3 relative z-10 w-full h-[60px] overflow-hidden">
                   {/* Page 1: 1X2 */}
                   <div className={`absolute inset-0 w-full transition-all duration-500 transform ${activeMarket === 0 ? 'translate-x-0 opacity-100 z-10' : activeMarket > 0 ? '-translate-x-full opacity-0 z-0' : 'translate-x-full opacity-0 z-0'}`}>
                     <div className="flex justify-between items-center mb-1.5 px-1">
                       <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">Maç Sonucu</span>
                     </div>
-                    <div className="grid grid-cols-3 gap-1.5">
+                    <div className={`grid ${isTennis ? 'grid-cols-2' : 'grid-cols-3'} gap-1.5`}>
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
@@ -342,16 +378,18 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                         <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">1</span>
                         <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={hOdd} /></div>
                       </button>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addSelection({ id: match.drawId || match.id+'_x', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: X', odd: parseFloat(dOdd.toString().replace(',','.')) });
-                        }}
-                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
-                      >
-                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">X</span>
-                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={dOdd} /></div>
-                      </button>
+                      {!isTennis && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addSelection({ id: match.drawId || match.id+'_x', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: X', odd: parseFloat(dOdd.toString().replace(',','.')) });
+                          }}
+                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                        >
+                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">X</span>
+                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={dOdd} /></div>
+                        </button>
+                      )}
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
@@ -365,10 +403,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                     </div>
                   </div>
 
-                  {/* Page 2: Alt/Üst 2.5 */}
+                  {/* Page 2: Alt/Üst */}
                   <div className={`absolute inset-0 w-full transition-all duration-500 transform ${activeMarket === 1 ? 'translate-x-0 opacity-100 z-10' : activeMarket > 1 ? '-translate-x-full opacity-0 z-0' : 'translate-x-full opacity-0 z-0'}`}>
                     <div className="flex justify-between items-center mb-1.5 px-1">
-                      <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">2.5 Alt / Üst</span>
+                      <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">{isTennis ? 'Toplam Oyun Alt / Üst' : '2.5 Alt / Üst'}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-1.5">
                       <button 
@@ -394,13 +432,40 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                     </div>
                   </div>
 
-                  {/* Page 3: KG Var/Yok */}
+                  {/* Page 3: KG Var/Yok or Taraf Bahsi for Tennis */}
                   <div className={`absolute inset-0 w-full transition-all duration-500 transform ${activeMarket === 2 ? 'translate-x-0 opacity-100 z-10' : activeMarket > 2 ? '-translate-x-full opacity-0 z-0' : 'translate-x-full opacity-0 z-0'}`}>
                     <div className="flex justify-between items-center mb-1.5 px-1">
-                      <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">Karşılıklı Gol</span>
+                      <span className="text-[9px] text-[#8e939d] font-bold uppercase tracking-wider">{isTennis ? 'Maç Kazananı' : 'Karşılıklı Gol'}</span>
                     </div>
                     
                     {(() => {
+                      if (isTennis) {
+                        return (
+                          <div className="grid grid-cols-2 gap-1.5">
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addSelection({ id: match.id+'_1_p3', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(hOdd) });
+                              }}
+                              className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                            >
+                              <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">1</span>
+                              <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={hOdd} /></div>
+                            </button>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addSelection({ id: match.id+'_2_p3', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 2', odd: parseFloat(aOdd) });
+                              }}
+                              className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                            >
+                              <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">2</span>
+                              <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={aOdd} /></div>
+                            </button>
+                          </div>
+                        );
+                      }
+
                       const matchScore = match.score || '0 - 0';
                       const [hS, aS] = matchScore.split('-').map(s => parseInt(s.trim(), 10) || 0);
                       const isGgResolved = hS > 0 && aS > 0;
@@ -413,11 +478,11 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                               if (isGgResolved) return;
                               addSelection({ id: match.id+'_gg', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Var', odd: parseFloat(ggOdd) });
                             }}
-                            className={`bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed grayscale' : 'hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] cursor-pointer active:scale-[0.98]'}`}
+                            className={`bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] cursor-pointer active:scale-[0.98]'}`}
                           >
                             <span className={`text-[10px] text-[#8e939d] font-medium tracking-wide transition-colors ${!isGgResolved && 'group-hover:text-[#00E5FF]'}`}>Var</span>
                             <div className={`text-[12px] transition-colors ${!isGgResolved && 'group-hover:text-white'}`}>
-                              {isGgResolved ? <span className="text-gray-500 font-bold text-[9px] tracking-wider">KİLİTLİ</span> : <AnimatedOdd value={ggOdd} />}
+                              {isGgResolved ? <div className="flex items-center gap-1"><span className="text-[10px]">🔒</span><span className="text-gray-500 font-bold text-[9px] tracking-wider">KİLİTLİ</span></div> : <AnimatedOdd value={ggOdd} />}
                             </div>
                           </button>
                           <button 
@@ -426,11 +491,11 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                               if (isGgResolved) return;
                               addSelection({ id: match.id+'_ng', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Yok', odd: parseFloat(ngOdd) });
                             }}
-                            className={`bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed grayscale' : 'hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] cursor-pointer active:scale-[0.98]'}`}
+                            className={`bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] cursor-pointer active:scale-[0.98]'}`}
                           >
                             <span className={`text-[10px] text-[#8e939d] font-medium tracking-wide transition-colors ${!isGgResolved && 'group-hover:text-[#00E5FF]'}`}>Yok</span>
                             <div className={`text-[12px] transition-colors ${!isGgResolved && 'group-hover:text-white'}`}>
-                              {isGgResolved ? <span className="text-gray-500 font-bold text-[9px] tracking-wider">KİLİTLİ</span> : <AnimatedOdd value={ngOdd} />}
+                              {isGgResolved ? <div className="flex items-center gap-1"><span className="text-[10px]">🔒</span><span className="text-gray-500 font-bold text-[9px] tracking-wider">KİLİTLİ</span></div> : <AnimatedOdd value={ngOdd} />}
                             </div>
                           </button>
                         </div>

@@ -97,15 +97,16 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                                 <span className="text-white font-bold text-[10px] md:text-[14px] tracking-widest uppercase text-[#ef4444]">
                                     <LiveTimer minute={matchData.minute || matchData.match?.minute} />
                                 </span>
-                                <span className="text-white font-black text-[12px] md:text-[16px] tracking-widest">{matchData.score || matchData.match?.score}</span>
                             </div>
                         ) : (
-                            <div className="flex items-center gap-1.5 md:gap-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-3 md:px-5 py-1 md:py-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-40 mt-1 md:mt-2 scale-90 md:scale-100">
-                                <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${t.badgeBg} shadow-[0_0_8px_${t.badgeBg}] animate-ping opacity-75 absolute left-2 md:left-3.5`}></div>
-                                <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${t.badgeBg} shadow-[0_0_8px_${t.badgeBg}] relative z-10 mr-0.5 md:mr-1`}></div>
-                                <span className="text-white font-bold text-[8px] md:text-[12px] tracking-widest uppercase">{matchData.dateStr}</span>
-                                <span className="w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full"></span>
-                                <span className={`${t.leagueColor} font-black text-[9px] md:text-[13px] tracking-widest`}>{matchData.timeStr}</span>
+                            <div className="flex items-center gap-1.5 md:gap-3 bg-[#030712]/80 backdrop-blur-xl border border-white/10 rounded-full px-3 md:px-5 py-1 md:py-1.5 shadow-[inset_0_1px_rgba(255,255,255,0.1),_0_8px_20px_rgba(0,0,0,0.8)] z-40 mt-1 md:mt-2 scale-90 md:scale-100">
+                                <div className="relative flex items-center justify-center mr-0.5 md:mr-1">
+                                    <div className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full ${t.badgeBg} animate-ping opacity-60 absolute`}></div>
+                                    <div className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full ${t.badgeBg} shadow-[0_0_10px_${t.badgeBg}] relative z-10`}></div>
+                                </div>
+                                <span className="text-zinc-200 font-bold text-[9px] md:text-[13px] tracking-[0.2em] uppercase">{matchData.dateStr}</span>
+                                <div className="w-[1px] h-3 md:h-4 bg-white/20 mx-0.5 md:mx-1"></div>
+                                <span className={`${t.leagueColor} font-black text-[10px] md:text-[14px] tracking-[0.1em]`}>{matchData.timeStr}</span>
                             </div>
                         )}
 
@@ -113,7 +114,7 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                             <div className="flex flex-col items-center w-[80px] md:w-[180px]">
                                 <div className="relative w-14 h-14 md:w-28 md:h-28 lg:w-36 lg:h-36 z-20 hover:scale-110 transition-transform duration-500 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
                                     <div className={`absolute inset-0 ${t.badgeBg} opacity-20 blur-[10px] md:blur-[20px] rounded-full mix-blend-screen`}></div>
-                                    <PlayerLogo name={matchData.home} fallbackLogo="" />
+                                    <PlayerLogo name={matchData.home} fallbackLogo="" sport={matchData.sport} />
                                 </div>
                                 <div className="bg-black/30 backdrop-blur-md border border-white/5 rounded-full px-2 md:px-4 py-0.5 md:py-1.5 mt-1 md:mt-3 shadow-lg w-[120%] md:w-auto">
                                     <span className="text-white font-bold text-[6px] md:text-[11px] uppercase tracking-widest text-center truncate drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] opacity-90 block">
@@ -121,16 +122,22 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                                     </span>
                                 </div>
                             </div>
-                            <div className="mx-1 md:mx-6 z-30 flex flex-col items-center justify-center relative">
-                                <div className="w-7 h-7 md:w-14 md:h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl rounded-lg md:rounded-2xl border border-white/30 flex items-center justify-center shadow-[0_0_40px_rgba(0,0,0,0.8)] rotate-45 relative overflow-hidden">
-                                     <div className={`absolute inset-0 bg-gradient-to-tr ${t.bgFrom} to-transparent opacity-60`}></div>
-                                    <span className="text-white font-black text-[10px] md:text-[20px] italic -rotate-45 block transform drop-shadow-lg relative z-10">VS</span>
-                                </div>
+                            <div className="mx-1 md:mx-6 z-30 flex flex-col items-center justify-center relative min-w-[40px] md:min-w-[80px]">
+                                {(matchData.isLive || matchData.match?.isLive) ? (
+                                    <div className="text-white font-black text-[22px] md:text-[44px] tracking-wider drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] whitespace-nowrap">
+                                        {matchData.score || matchData.match?.score || '0 - 0'}
+                                    </div>
+                                ) : (
+                                    <div className="w-7 h-7 md:w-14 md:h-14 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl rounded-lg md:rounded-2xl border border-white/30 flex items-center justify-center shadow-[0_0_40px_rgba(0,0,0,0.8)] rotate-45 relative overflow-hidden">
+                                        <div className={`absolute inset-0 bg-gradient-to-tr ${t.bgFrom} to-transparent opacity-60`}></div>
+                                        <span className="text-white font-black text-[10px] md:text-[20px] italic -rotate-45 block transform drop-shadow-lg relative z-10">VS</span>
+                                    </div>
+                                )}
                             </div>
                             <div className="flex flex-col items-center w-[80px] md:w-[180px]">
                                 <div className="relative w-14 h-14 md:w-28 md:h-28 lg:w-36 lg:h-36 z-20 hover:scale-110 transition-transform duration-500 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
                                     <div className={`absolute inset-0 ${t.badgeBg} opacity-20 blur-[10px] md:blur-[20px] rounded-full mix-blend-screen`}></div>
-                                    <PlayerLogo name={matchData.away} fallbackLogo="" />
+                                    <PlayerLogo name={matchData.away} fallbackLogo="" sport={matchData.sport} />
                                 </div>
                                 <div className="bg-black/30 backdrop-blur-md border border-white/5 rounded-full px-2 md:px-4 py-0.5 md:py-1.5 mt-1 md:mt-3 shadow-lg w-[120%] md:w-auto">
                                     <span className="text-white font-bold text-[6px] md:text-[11px] uppercase tracking-widest text-center truncate drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] opacity-90 block">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
     Medal, Plus, CheckCircle2, AlertTriangle, Search, Filter, 
-    X, TrendingDown, TrendingUp, ShieldAlert, Activity, Database, Check, ChevronDown
+    X, TrendingDown, TrendingUp, ShieldAlert, Activity, Database, Check, ChevronDown, ChevronUp, Calendar
 } from 'lucide-react';
 import { 
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend 
@@ -42,6 +42,7 @@ const riskData = [
 export default function AdminSportsTab() {
     const [activeSubTab, setActiveSubTab] = useState<'pool' | 'active' | 'risk' | 'api_settings' | 'monitor'>('pool');
     const [isLiveWindowOpen, setIsLiveWindowOpen] = useState(false);
+    const [isUpcomingWindowOpen, setIsUpcomingWindowOpen] = useState(false);
     
     // API Provider Settings States
     const [apiProvider, setApiProvider] = useState<'tarafbet' | 'atekbet' | 'bahiks'>('atekbet');

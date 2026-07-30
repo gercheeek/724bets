@@ -16,21 +16,21 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate, isE
   const [activeTab, setActiveTab] = useState<'casino' | 'spor'>('casino');
 
   const promos = [
-    { title: 'Gece Bonusu (Çevrimsiz)', desc: 'Saat 02:00-05:00 arası yatırımlarınız freespinlerle ödüllendiriliyor.', icon: <Clock className="w-6 h-6 text-indigo-400" />, image: '/images/promos/promo_night.jpg' },
-    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: '724BETS\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-6 h-6 text-yellow-400" />, image: '/images/promos/promo_welcome.jpg' },
-    { title: 'İlk Çekime 2 Katı Ödeme (Çevrimsiz)', desc: 'İlk çekiminizi yaparken kazancınızın 2 katını gönderiyoruz.', icon: <Wallet className="w-6 h-6 text-emerald-400" />, image: '/images/promos/promo_2x.jpg' },
-    { title: 'Günlük Prim (Çevrimsiz)', desc: 'Aktifliğinize göre hesabınızda her gün nakit bonuslar yatıyor.', icon: <Gift className="w-6 h-6 text-pink-400" />, image: '/images/promos/promo_gift.jpg' },
-    { title: 'Haftalık Jest Bonusu (Çevrimsiz)', desc: 'Tüm haftaki performansınız her cumartesi ödüllendiriliyor.', icon: <Calendar className="w-6 h-6 text-blue-400" />, image: '/images/promos/promo_gift.jpg' },
-    { title: 'Seviye Atlama Bonusu (Çevrimsiz)', desc: 'VIP seviyeniz yükseldikçe daha fazla ödül ve ayrıcalık sizi bekliyor.', icon: <TrendingUp className="w-6 h-6 text-green-400" />, image: '/images/promos/promo_levelup.jpg' },
-    { title: 'Günlük Kayıp Bonusu (Çevrimsiz)', desc: 'Şanssız geçen her gün yeni bir başlangıça dönüşüyor.', icon: <RefreshCw className="w-6 h-6 text-red-400" />, image: '/images/promos/promo_cashback.jpg' },
-    { title: 'Doğum Günü Bonusu (Çevrimsiz)', desc: 'Profil seviyenize özel nakit bonus hesabınıza otomatik ekleniyor.', icon: <Cake className="w-6 h-6 text-purple-400" />, image: '/images/promos/promo_birthday.jpg' },
-    { title: 'Aylık Kayıp Bonusu (Çevrimsiz)', desc: '724BETS\'te her kayıp miktarı yeni bir geriye dönüş fırsatı.', icon: <RefreshCw className="w-6 h-6 text-orange-400" />, image: '/images/promos/promo_cashback.jpg' },
+    { title: 'Gece Bonusu (Çevrimsiz)', desc: 'Saat 02:00-05:00 arası yatırımlarınız freespinlerle ödüllendiriliyor.', icon: <Clock className="w-6 h-6 text-indigo-400" />, image: '/images/promos/promo_night.webp' },
+    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: '724BETS\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-6 h-6 text-yellow-400" />, image: '/images/promos/promo_welcome.webp' },
+    { title: 'İlk Çekime 2 Katı Ödeme (Çevrimsiz)', desc: 'İlk çekiminizi yaparken kazancınızın 2 katını gönderiyoruz.', icon: <Wallet className="w-6 h-6 text-emerald-400" />, image: '/images/promos/promo_2x.webp' },
+    { title: 'Günlük Prim (Çevrimsiz)', desc: 'Aktifliğinize göre hesabınızda her gün nakit bonuslar yatıyor.', icon: <Gift className="w-6 h-6 text-pink-400" />, image: '/images/promos/promo_gift.webp' },
+    { title: 'Haftalık Jest Bonusu (Çevrimsiz)', desc: 'Tüm haftaki performansınız her cumartesi ödüllendiriliyor.', icon: <Calendar className="w-6 h-6 text-blue-400" />, image: '/images/promos/promo_gift.webp' },
+    { title: 'Seviye Atlama Bonusu (Çevrimsiz)', desc: 'VIP seviyeniz yükseldikçe daha fazla ödül ve ayrıcalık sizi bekliyor.', icon: <TrendingUp className="w-6 h-6 text-green-400" />, image: '/images/promos/promo_levelup.webp' },
+    { title: 'Günlük Kayıp Bonusu (Çevrimsiz)', desc: 'Şanssız geçen her gün yeni bir başlangıça dönüşüyor.', icon: <RefreshCw className="w-6 h-6 text-red-400" />, image: '/images/promos/promo_cashback.webp' },
+    { title: 'Doğum Günü Bonusu (Çevrimsiz)', desc: 'Profil seviyenize özel nakit bonus hesabınıza otomatik ekleniyor.', icon: <Cake className="w-6 h-6 text-purple-400" />, image: '/images/promos/promo_birthday.webp' },
+    { title: 'Aylık Kayıp Bonusu (Çevrimsiz)', desc: '724BETS\'te her kayıp miktarı yeni bir geriye dönüş fırsatı.', icon: <RefreshCw className="w-6 h-6 text-orange-400" />, image: '/images/promos/promo_cashback.webp' },
   ];
 
   const sporPromos = [
-    { title: 'Spor Hoş Geldin Bonusu', desc: 'Spor bahislerine özel 5.000 TL\'ye varan ekstra bakiye ve freebet.', icon: <PartyPopper className="w-6 h-6 text-blue-400" />, image: '/images/promos/promo_sports_welcome.jpg' },
-    { title: 'Kombine Çarpan Bonusu', desc: 'Kombine kuponlarınıza %50\'ye varan ekstra nakit kazanç şansı.', icon: <TrendingUp className="w-6 h-6 text-green-400" />, image: '/images/promos/promo_sports_combo.jpg' },
-    { title: 'Spor Kayıp Bonusu', desc: 'Sporda şansınız yaver gitmediyse kayıplarınızın anında iadesi.', icon: <RefreshCw className="w-6 h-6 text-red-400" />, image: '/images/promos/promo_sports_cashback.jpg' },
+    { title: 'Spor Hoş Geldin Bonusu', desc: 'Spor bahislerine özel 5.000 TL\'ye varan ekstra bakiye ve freebet.', icon: <PartyPopper className="w-6 h-6 text-blue-400" />, image: '/images/promos/promo_sports_welcome.webp' },
+    { title: 'Kombine Çarpan Bonusu', desc: 'Kombine kuponlarınıza %50\'ye varan ekstra nakit kazanç şansı.', icon: <TrendingUp className="w-6 h-6 text-green-400" />, image: '/images/promos/promo_sports_combo.webp' },
+    { title: 'Spor Kayıp Bonusu', desc: 'Sporda şansınız yaver gitmediyse kayıplarınızın anında iadesi.', icon: <RefreshCw className="w-6 h-6 text-red-400" />, image: '/images/promos/promo_sports_cashback.webp' },
   ];
 
   const activePromos = activeTab === 'casino' ? promos : sporPromos;

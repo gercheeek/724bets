@@ -101,35 +101,50 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>([]);
   const [isConnected, setIsConnected] = useState(false);
 
-  // Fetch scraped pre-live matches on mount
-  useEffect(() => {
-    const fetchScraped = async () => {
-      try {
-        const res = await fetch('/prelive_matches.json?v=' + new Date().getTime());
-        if (res.ok) {
-          const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
-              const formattedMatches = data.map((item: any, index: number) => {
-                const isDemoLive = index < 15;
-                
-                return normalizeEvent({
-                  ...item,
-                  home: item.participants?.home || item.data?.participants?.home || item.home,
-                  away: item.participants?.away || item.data?.participants?.away || item.away,
-                  isScraped: true,
-                  isLive: isDemoLive,
-                  timeStr: isDemoLive ? `${Math.floor(Math.random() * 80) + 5}'` : item.timeStr
-                });
+  // Fetch scraped pre-live matches
+  const fetchScraped = async () => {
+    try {
+      const res = await fetch('/prelive_matches.json?v=' + new Date().getTime());
+      if (res.ok) {
+        const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            const formattedMatches = data.map((item: any) => {
+              const rawData = item.data || item;
+              
+              // Extract timestamp properly
+              let timestampStr = rawData.start_time || rawData.start_ts || item.start_time || item.start_ts;
+              let matchTimestamp = 0;
+              if (timestampStr) {
+                  if (typeof timestampStr === 'number') {
+                      matchTimestamp = timestampStr * 1000;
+                  } else {
+                      const d = new Date(timestampStr);
+                      if (!isNaN(d.getTime())) matchTimestamp = d.getTime();
+                  }
+              }
+
+              return normalizeEvent({
+                ...item,
+                home: item.participants?.home || item.data?.participants?.home || item.home,
+                away: item.participants?.away || item.data?.participants?.away || item.away,
+                isScraped: true,
+                isLive: false,
+                timestamp: matchTimestamp
               });
-              setScrapedMatches(formattedMatches);
-              console.log(`🤖 [CONTEXT] Loaded and formatted ${formattedMatches.length} scraped matches dynamically. (15 mapped as Live)`);
-          }
+            });
+            setScrapedMatches(formattedMatches);
+            console.log(`🤖 [CONTEXT] Loaded and formatted ${formattedMatches.length} scraped matches dynamically.`);
         }
-      } catch (e) {
-        console.warn("Failed to load scraped matches", e);
       }
-    };
+    } catch (e) {
+      console.warn("Failed to load scraped matches", e);
+    }
+  };
+
+  useEffect(() => {
     fetchScraped();
+    const interval = setInterval(fetchScraped, 5 * 60 * 1000); // Her 5 dakikada bir yenile
+    return () => clearInterval(interval);
   }, []);
 
   // Synchronize events with language and scraped matches
@@ -182,41 +197,6 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return () => clearInterval(interval);
   }, [scrapedMatches]);
 
-  // Stage 2 & 3: Global Live Matches Polling (Bot Backend) - REMOVED
-  // The user wants to pull everything directly from the WebSocket instead.
-
-  // Auto-start matches whose time has passed (useful for demo/static data)
-  useEffect(() => {
-    const timeChecker = setInterval(() => {
-      const now = Date.now();
-      setScrapedMatches(prev => {
-        let changed = false;
-        const updated = prev.map(m => {
-          if (!m.isLive && !m.isFinished && m.timestamp && now >= m.timestamp) {
-            changed = true;
-            // Generate a fake minute based on how much time has passed
-            const diffMs = now - m.timestamp;
-            const diffMins = Math.floor(diffMs / 60000);
-            let minuteStr = "1'";
-            if (diffMins > 0 && diffMins <= 45) minuteStr = `${diffMins}'`;
-            else if (diffMins > 45 && diffMins <= 60) minuteStr = "HT";
-            else if (diffMins > 60 && diffMins <= 105) minuteStr = `${diffMins - 15}'`;
-            else if (diffMins > 105) minuteStr = "90+'";
-
-            return {
-              ...m,
-              isLive: true,
-              score: m.score && m.score !== '-' ? m.score : '0 - 0',
-              minute: minuteStr
-            };
-          }
-          return m;
-        });
-        return changed ? updated : prev;
-      });
-    }, 10000);
-    return () => clearInterval(timeChecker);
-  }, []);
 
   const wsRef = useRef<WebSocket | null>(null);
 

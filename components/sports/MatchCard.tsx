@@ -43,6 +43,7 @@ export const LiveTimer: React.FC<{ minute: string; hidePrefix?: boolean }> = ({ 
 
 export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSelect }) => {
   const { betSlip, addSelection } = useBetSlip();
+  const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
 
   return (
     <div 
@@ -81,23 +82,37 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 flex items-center justify-center p-0.5">
-              <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} />
+              <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} />
             </div>
             <span className="text-[13px] font-semibold text-white tracking-wide">{match.home}</span>
           </div>
           {match.isLive && (
-            <span className={`text-[14px] font-black tabular-nums ${isGoal ? 'text-emerald-400' : 'text-white'}`}>{String(match.score || '-').split(' - ')[0] || '0'}</span>
+            <div className={`text-[14px] font-black tabular-nums flex items-center gap-2 ${isGoal ? 'text-emerald-400' : 'text-white'}`}>
+              {isTennis && match.info?.current_game_state && (
+                <span className="text-zinc-500 text-[11px] bg-zinc-800/50 px-1 rounded">{match.info.current_game_state.split(':')[0] || '0'}</span>
+              )}
+              <span className={isTennis ? 'text-[#00E5FF]' : ''}>
+                {isTennis ? (match.info?.score1 || '0') : (String(match.score || '-').split(' - ')[0] || '0')}
+              </span>
+            </div>
           )}
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 flex items-center justify-center p-0.5">
-              <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} />
+              <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} />
             </div>
             <span className="text-[13px] font-semibold text-white tracking-wide">{match.away}</span>
           </div>
           {match.isLive && (
-            <span className={`text-[14px] font-black tabular-nums ${isGoal ? 'text-emerald-400' : 'text-white'}`}>{String(match.score || '-').split(' - ')[1] || '0'}</span>
+            <div className={`text-[14px] font-black tabular-nums flex items-center gap-2 ${isGoal ? 'text-emerald-400' : 'text-white'}`}>
+              {isTennis && match.info?.current_game_state && (
+                <span className="text-zinc-500 text-[11px] bg-zinc-800/50 px-1 rounded">{match.info.current_game_state.split(':')[1] || '0'}</span>
+              )}
+              <span className={isTennis ? 'text-[#00E5FF]' : ''}>
+                {isTennis ? (match.info?.score2 || '0') : (String(match.score || '-').split(' - ')[1] || '0')}
+              </span>
+            </div>
           )}
         </div>
       </div>

@@ -22,6 +22,6 @@ export interface MatchInfo {
   homeLogo: string;
   awayLogo: string;
   marketsCount: number;
+  info?: any;
   rawEvent?: any;
 }
-

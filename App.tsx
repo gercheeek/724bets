@@ -2999,7 +2999,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav 
         activeView={view} 
-        onViewChange={(v) => setView(v as any)} 
+        onViewChange={(v) => handleViewChange(v)} 
         siteUser={siteUser}
         onProfileClick={() => {
           if (!siteUser) {

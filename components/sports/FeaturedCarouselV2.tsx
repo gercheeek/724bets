@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { MatchInfo } from './types';
-import { TeamLogoPlaceholder } from './TeamLogoPlaceholder';
+import { PlayerLogo } from './PlayerLogo';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useBetSlip } from '../../contexts/BetSlipContext';
 import { Globe } from 'lucide-react';
@@ -86,17 +86,8 @@ export const FeaturedCarouselV2: React.FC<FeaturedCarouselV2Props> = ({ matches,
                             <div className="flex items-center justify-between mb-5 relative z-10">
                                 {/* Home Team */}
                                 <div className="flex flex-col items-center w-[35%] gap-1.5">
-                                    <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center p-1 shadow-md">
-                                        {match.homeLogo ? (
-                                            <img 
-                                                src={match.homeLogo} 
-                                                alt="" 
-                                                className="w-7 h-7 object-contain"
-                                                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} 
-                                            />
-                                        ) : (
-                                            <TeamLogoPlaceholder teamName={homeTeam} className="w-7 h-7" />
-                                        )}
+                                    <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 flex items-center justify-center bg-[#1a1d24] rounded-full p-2 border border-white/5 shadow-md">
+                                        <PlayerLogo name={homeTeam} fallbackLogo={match.homeLogo} sport={match.sport} />
                                     </div>
                                     <span className="text-[#e2e8f0] font-bold text-[11px] text-center leading-tight line-clamp-2">{homeTeam}</span>
                                 </div>
@@ -116,17 +107,8 @@ export const FeaturedCarouselV2: React.FC<FeaturedCarouselV2Props> = ({ matches,
 
                                 {/* Away Team */}
                                 <div className="flex flex-col items-center w-[35%] gap-1.5">
-                                    <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center p-1 shadow-md">
-                                        {match.awayLogo ? (
-                                            <img 
-                                                src={match.awayLogo} 
-                                                alt="" 
-                                                className="w-7 h-7 object-contain"
-                                                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} 
-                                            />
-                                        ) : (
-                                            <TeamLogoPlaceholder teamName={awayTeam} className="w-7 h-7" />
-                                        )}
+                                    <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 flex items-center justify-center bg-[#1a1d24] rounded-full p-2 border border-white/5 shadow-md">
+                                        <PlayerLogo name={awayTeam} fallbackLogo={match.awayLogo} sport={match.sport} />
                                     </div>
                                     <span className="text-[#e2e8f0] font-bold text-[11px] text-center leading-tight line-clamp-2">{awayTeam}</span>
                                 </div>

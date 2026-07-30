@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface ProceduralLogoProps {
   name: string;
+  sport?: string;
 }
 
 // Simple hash function for string
@@ -15,11 +16,19 @@ const hashString = (str: string) => {
 };
 
 // Generate a pair of colors based on a hash
-const generateColors = (hash: number) => {
+const generateColors = (hash: number, isSleek: boolean) => {
   const hues = [0, 30, 60, 120, 150, 210, 240, 270, 300, 330];
   const primaryHue = hues[hash % hues.length];
   const secondaryHue = hues[(hash + 3) % hues.length];
   
+  if (isSleek) {
+    return {
+      primary: `hsl(${primaryHue}, 20%, 15%)`,
+      secondary: `hsl(${secondaryHue}, 15%, 10%)`,
+      accent: `hsl(${primaryHue}, 80%, 60%)`
+    };
+  }
+
   return {
     primary: `hsl(${primaryHue}, 70%, 45%)`,
     secondary: `hsl(${secondaryHue}, 80%, 35%)`,
@@ -27,13 +36,45 @@ const generateColors = (hash: number) => {
   };
 };
 
-export const ProceduralLogo: React.FC<ProceduralLogoProps> = ({ name }) => {
+const isLikelyFemale = (name: string) => {
+  const n = name.toLowerCase();
+  const parts = n.split(' ').filter(w => w.trim().length > 0);
+  const first = parts[0] || '';
+  const last = parts[parts.length - 1] || '';
+  
+  // Russian/Slavic female suffixes
+  if (last.endsWith('ova') || last.endsWith('eva') || last.endsWith('aya') || last.endsWith('ina')) return true;
+  
+  // Exclude some common male names ending in a, i, e, y
+  const exceptions = ['luca', 'andrea', 'nicola', 'denis', 'yuri', 'ali', 'mustafa', 'emre', 'tolga', 'arda', 'mika', 'iliya'];
+  if (first.endsWith('a') || first.endsWith('i') || first.endsWith('e') || first.endsWith('y')) {
+    if (!exceptions.includes(first)) return true;
+  }
+  
+  const knownFemales = ['sonja', 'maileen', 'valentini', 'imogen', 'eugenia', 'liel', 'maria', 'anna', 'elena', 'chloe', 'zoe'];
+  if (knownFemales.includes(first)) return true;
+  
+  return false;
+};
+
+export const ProceduralLogo: React.FC<ProceduralLogoProps> = ({ name, sport }) => {
+  const [imgError, setImgError] = useState(false);
+
   const hash = hashString(name);
-  const colors = generateColors(hash);
-  const patternType = hash % 4; // 0: Solid, 1: Stripes, 2: Halves, 3: Quarters
+  const isFootball = !sport || sport.toLowerCase().includes('futbol') || sport.toLowerCase().includes('soccer');
+  const isBasketball = sport?.toLowerCase().includes('basket');
+  const isTennis = sport?.toLowerCase().includes('tenis') || sport?.toLowerCase().includes('tennis');
+  const isVolleyball = sport?.toLowerCase().includes('voleybol') || sport?.toLowerCase().includes('volley');
+  
+  const colors = generateColors(hash, true); // Always sleek
+  const patternType = 0; // Always solid gradient
 
   const getInitials = (teamName: string) => {
     if (!teamName) return 'T';
+    if (teamName.includes('/')) {
+      const parts = teamName.split('/');
+      return (parts[0].trim()[0] + parts[1].trim()[0]).toUpperCase();
+    }
     const words = teamName.split(' ').filter(w => w.length > 0);
     if (words.length >= 2) {
       return (words[0][0] + words[1][0]).toUpperCase();
@@ -95,22 +136,37 @@ export const ProceduralLogo: React.FC<ProceduralLogoProps> = ({ name }) => {
           {renderPattern()}
         </defs>
         
-        {/* Crest shape (Shield) */}
-        <path 
-          d="M 5,5 L 35,5 L 35,20 C 35,32 20,38 20,38 C 20,38 5,32 5,20 Z" 
+        {/* Background Shape: Always Circular Sleek Avatar */}
+        <circle 
+          cx="20" 
+          cy="20" 
+          r="17" 
           fill={getFill()} 
           stroke={colors.accent}
           strokeWidth="1.5"
         />
-        
-        {/* Subtle inner highlight */}
-        <path 
-          d="M 7,7 L 33,7 L 33,20 C 33,30 20,35 20,35 C 20,35 7,30 7,20 Z" 
+        <circle 
+          cx="20" 
+          cy="20" 
+          r="15" 
           fill="none" 
           stroke="rgba(255,255,255,0.2)"
           strokeWidth="1"
         />
       </svg>
+
+      {/* Sport-Specific Watermark (Silhouette / Icon) */}
+      {isTennis && (
+        <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+          <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h-2zm0 6h2v2h-2z" />
+            <circle cx="12" cy="12" r="10" fill="none" stroke="white" strokeWidth="1" />
+            {/* Simple tennis ball curve */}
+            <path d="M7 6c2.5 1.5 5 4 4.5 7.5" fill="none" stroke="white" strokeWidth="1.5" />
+            <path d="M17 18c-2.5-1.5-5-4-4.5-7.5" fill="none" stroke="white" strokeWidth="1.5" />
+          </svg>
+        </div>
+      )}
 
       {/* Initials Overlay */}
       <span 

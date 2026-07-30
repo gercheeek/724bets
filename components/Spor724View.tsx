@@ -14,7 +14,6 @@ import FeaturedCombos from './sports/FeaturedCombos';
 import { LiveMatchInline } from './sports/LiveMatchInline';
 import { useBetSlip } from '../contexts/BetSlipContext';
 import { MatchInfo } from './sports/types';
-import { mockSportsData } from '../data/mockSportsData';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import { SportsNavV2 } from './sports/SportsNavV2';
 import { FeaturedCarouselV2 } from './sports/FeaturedCarouselV2';
@@ -166,6 +165,11 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   let minute = 'Yakında';
   let isFinished = data.status === 'finished' || data.status === 'ended' || data.status === 'closed';
   let isLive = !!ev.isLive; // Force live if marked by provider, else determine dynamically
+  
+  // Strict enforcement: A not_started match can never be live
+  if (data.status === 'not_started' || data.status === 'postponed' || data.status === 'canceled') {
+    isLive = false;
+  }
   
   if (data.scores && Array.isArray(data.scores)) {
     const currentScore = data.scores.find((s: string) => s.startsWith('current|'));
@@ -358,6 +362,7 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     awayLogo: awayLogoUrl,
     marketsCount: data.markets_count || calculateMarketCount(ev),
     rawEvent: ev,
+    info: data.info || {},
   };
 
   return matchObj;
@@ -384,10 +389,16 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
 
   useEffect(() => {
     if (activeSlug) {
-      const sportObj = mockSportsData.find(m => m.slug === activeSlug);
-      if (sportObj) {
-        setActiveSport(sportObj.sport);
-      }
+      const slugMap: Record<string, string> = {
+        soccer: 'Futbol',
+        basketball: 'Basketbol',
+        tennis: 'Tenis',
+        volleyball: 'Voleybol',
+        baseball: 'Beyzbol',
+        tabletennis: 'Masa Tenisi',
+        icehockey: 'Buz Hokeyi'
+      };
+      setActiveSport(slugMap[activeSlug] || activeSlug);
     } else {
       setActiveSport(allSportsTabName);
     }
@@ -590,7 +601,16 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     const map: Record<string, number> = {};
     matches.forEach(m => {
       if (m.isLive) {
-         map[m.sport] = (map[m.sport] || 0) + 1;
+         let sName = m.sport || '';
+         if (sName.toLowerCase().includes('futbol') || sName.toLowerCase().includes('soccer')) sName = 'Futbol';
+         else if (sName.toLowerCase().includes('basket')) sName = 'Basketbol';
+         else if ((sName.toLowerCase().includes('tenis') || sName.toLowerCase().includes('tennis')) && !sName.toLowerCase().includes('masa') && !sName.toLowerCase().includes('table')) sName = 'Tenis';
+         else if (sName.toLowerCase().includes('voleybol') || sName.toLowerCase().includes('volley')) sName = 'Voleybol';
+         else if (sName.toLowerCase().includes('beyzbol') || sName.toLowerCase().includes('base')) sName = 'Beyzbol';
+         else if (sName.toLowerCase().includes('buz hokeyi') || sName.toLowerCase().includes('ice hockey')) sName = 'Buz Hokeyi';
+         else if (sName.toLowerCase().includes('masa tenisi') || sName.toLowerCase().includes('table tennis')) sName = 'Masa Tenisi';
+         
+         map[sName] = (map[sName] || 0) + 1;
       }
     });
     return map;
@@ -606,7 +626,18 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         // Hide matches that have already started from the upcoming list
         if (m.timestamp && m.timestamp < Date.now()) return false;
       }
-      if (!isAllSportsSelected && m.sport?.toLowerCase() !== activeSport?.toLowerCase()) return false;
+      if (!isAllSportsSelected) {
+         let sName = m.sport || '';
+         if (sName.toLowerCase().includes('futbol') || sName.toLowerCase().includes('soccer')) sName = 'Futbol';
+         else if (sName.toLowerCase().includes('basket')) sName = 'Basketbol';
+         else if ((sName.toLowerCase().includes('tenis') || sName.toLowerCase().includes('tennis')) && !sName.toLowerCase().includes('masa') && !sName.toLowerCase().includes('table')) sName = 'Tenis';
+         else if (sName.toLowerCase().includes('voleybol') || sName.toLowerCase().includes('volley')) sName = 'Voleybol';
+         else if (sName.toLowerCase().includes('beyzbol') || sName.toLowerCase().includes('base')) sName = 'Beyzbol';
+         else if (sName.toLowerCase().includes('buz hokeyi') || sName.toLowerCase().includes('ice hockey')) sName = 'Buz Hokeyi';
+         else if (sName.toLowerCase().includes('masa tenisi') || sName.toLowerCase().includes('table tennis')) sName = 'Masa Tenisi';
+         
+         if (sName.toLowerCase() !== activeSport?.toLowerCase()) return false;
+      }
       if (activeCountry && m.country !== activeCountry) return false;
       if (viewMode === 'bulletin' && activeDateFilter !== 'all') {
         if (activeDateFilter === 'today' && m.matchDate !== 'Bugün' && m.matchDate !== 'Today') return false;
@@ -615,7 +646,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
       return true;
     });
 
-    if (viewMode === 'live' || viewMode === 'bulletin') {
+    if (viewMode === 'live') {
       result = result
         .sort((a, b) => {
           const scoreA = getMatchPriorityScore(a.home, a.away);
@@ -623,6 +654,8 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
           if (scoreA !== scoreB) return scoreB - scoreA;
           return (a.timestamp || 0) - (b.timestamp || 0);
         });
+    } else if (viewMode === 'bulletin') {
+      result = result.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
     } else {
       result = result.sort((a, b) => {
         if (a.isLive !== b.isLive) return a.isLive ? -1 : 1;
@@ -747,9 +780,22 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
         
         {/* Mesh Gradients (Soft Lights) */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#3b82f6]/5 blur-[120px] rounded-full mix-blend-screen"></div>
-        <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-[#6366f1]/5 blur-[120px] rounded-full mix-blend-screen"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-[600px] h-[600px] bg-[#3b82f6]/5 blur-[150px] rounded-full mix-blend-screen"></div>
+        {activeSport === 'Tenis' || activeSport === 'Tennis' ? (
+          <>
+             {/* Subtle Tennis Court Lines Background */}
+             <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,transparent_49.5%,#10b981_49.5%,#10b981_50.5%,transparent_50.5%),linear-gradient(to_bottom,transparent_10%,#10b981_10%,#10b981_11%,transparent_11%,transparent_89%,#10b981_89%,#10b981_90%,transparent_90%)] pointer-events-none"></div>
+             
+             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#10b981]/10 blur-[120px] rounded-full mix-blend-screen transition-colors duration-1000"></div>
+             <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-[#34d399]/5 blur-[120px] rounded-full mix-blend-screen transition-colors duration-1000"></div>
+             <div className="absolute bottom-1/4 left-1/3 w-[600px] h-[600px] bg-[#059669]/10 blur-[150px] rounded-full mix-blend-screen transition-colors duration-1000"></div>
+          </>
+        ) : (
+          <>
+             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#3b82f6]/5 blur-[120px] rounded-full mix-blend-screen transition-colors duration-1000"></div>
+             <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-[#6366f1]/5 blur-[120px] rounded-full mix-blend-screen transition-colors duration-1000"></div>
+             <div className="absolute bottom-1/4 left-1/3 w-[600px] h-[600px] bg-[#3b82f6]/5 blur-[150px] rounded-full mix-blend-screen transition-colors duration-1000"></div>
+          </>
+        )}
       </div>
 
       {/* Main Content Scrollable Area */}
@@ -784,15 +830,15 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                  <LiveMatchInline 
                    match={selectedMatch} 
                    onBack={() => setSelectedMatch(null)} 
-                   allLiveMatches={matches.filter(m => m.isLive || m.minute)}
+                   allLiveMatches={filteredMatches.filter(m => m.isLive || m.minute)}
                    onSelectAnotherMatch={setSelectedMatch} 
                  />
                </div>
             ) : (
                <>
                
-            {/* Tüm görünümlerde (home, live, bulletin) Slider'ları göster */}
-            {(viewMode === 'home' || viewMode === 'live' || viewMode === 'bulletin') && (isAllSportsSelected || activeSport === 'Futbol') && (
+            {/* Tüm görünümlerde (home, live, bulletin) Slider'ları göster (mybets HARİÇ) */}
+            {navTab !== 'mybets' && (viewMode === 'home' || viewMode === 'live' || viewMode === 'bulletin') && (isAllSportsSelected || activeSport === 'Futbol') && (
               <div className="px-4 md:px-6 mb-2 mt-4">
                 <SportsPromoSlider matches={filteredMatches} />
               </div>
@@ -803,7 +849,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                   
                   {/* En İyi Maçlar Widget Moved Under Slider */}
                   <div className="mt-6 mb-2">
-                    <TopMatchesWidget matches={filteredMatches} onSelectMatch={setSelectedMatch} />
+                    <TopMatchesWidget matches={filteredMatches} onSelectMatch={setSelectedMatch} sortByTime={viewMode === 'bulletin'} />
                   </div>
 
                   {/* Popular Events Accordion Moved Here for Home */}
@@ -828,7 +874,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                   
                   {/* En İyi Maçlar Widget Moved Under Slider */}
                   <div className="mt-6 mb-2">
-                    <TopMatchesWidget matches={filteredMatches.filter(m => m.sport?.toLowerCase().includes('basket') || m.league?.toLowerCase().includes('nba'))} onSelectMatch={setSelectedMatch} />
+                    <TopMatchesWidget matches={filteredMatches.filter(m => m.sport?.toLowerCase().includes('basket') || m.league?.toLowerCase().includes('nba'))} onSelectMatch={setSelectedMatch} sortByTime={viewMode === 'bulletin'} />
                   </div>
               </div>
             )}
@@ -901,11 +947,11 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                                              </div>
                                              <div className="flex flex-col gap-1.5 text-sm font-semibold text-white">
                                                 <div className="flex items-center gap-2">
-                                                   <div className="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center p-0.5"><PlayerLogo name={match.home} fallbackLogo={match.homeLogo} /></div>
+                                                   <div className="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center p-0.5"><PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} /></div>
                                                    <span className="truncate max-w-[150px] md:max-w-[200px]">{match.home}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                   <div className="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center p-0.5"><PlayerLogo name={match.away} fallbackLogo={match.awayLogo} /></div>
+                                                   <div className="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center p-0.5"><PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} /></div>
                                                    <span className="truncate max-w-[150px] md:max-w-[200px]">{match.away}</span>
                                                 </div>
                                              </div>
@@ -978,11 +1024,18 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                     )}
                     
                     {!isLoading && filteredMatches.length === 0 && (
-                       <div className="text-center py-24 text-zinc-500 text-sm font-medium flex flex-col items-center justify-center bg-[#18191c] rounded-xl border border-white/5">
-                          <div className="w-16 h-16 bg-[#23273a] rounded-full flex items-center justify-center mb-4">
-                             <span className="text-2xl">⚽</span>
+                       <div className="text-center py-24 text-zinc-400 text-sm font-medium flex flex-col items-center justify-center bg-gradient-to-b from-[#18191c] to-[#111216] rounded-xl border border-white/5 shadow-inner">
+                          <div className="w-20 h-20 bg-[#23273a]/50 rounded-full flex items-center justify-center mb-5 border border-white/5 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-zinc-500">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                             </svg>
                           </div>
-                          {language === 'tr' ? 'Bu sekmede veya branşta maç bulunamadı.' : 'No matches found in this section.'}
+                          <span className="text-lg font-semibold text-white/80 mb-1">
+                             {language === 'tr' ? 'Karşılaşma Bulunamadı' : 'No Matches Found'}
+                          </span>
+                          <span className="text-zinc-500">
+                             {language === 'tr' ? 'Şu an bu kategoride canlı maç bulunmamaktadır.' : 'There are currently no live matches in this category.'}
+                          </span>
                        </div>
                     )}
                     
@@ -996,7 +1049,17 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                                       acc[sport].push(match);
                                       return acc;
                                   }, {} as Record<string, typeof matches>)
-                                ).map(([sport, sportMatches]) => (
+                                ).sort((a, b) => {
+                                    const getPriority = (s: string) => {
+                                        const ls = s.toLowerCase();
+                                        if (ls.includes('futbol') || ls.includes('soccer')) return 1;
+                                        if (ls.includes('basket')) return 2;
+                                        if (ls.includes('tenis') || ls.includes('tennis')) return 3;
+                                        if (ls.includes('voleybol') || ls.includes('volley')) return 4;
+                                        return 5;
+                                    };
+                                    return getPriority(a[0]) - getPriority(b[0]);
+                                }).map(([sport, sportMatches]) => (
                                     <div key={sport} className="flex flex-col gap-3">
                                         <div className="flex items-center gap-2 px-1 border-b border-white/5 pb-2">
                                             <div className="w-6 h-6 rounded-md bg-[#3b82f6]/10 text-[#3b82f6] flex items-center justify-center">

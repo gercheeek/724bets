@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const banners = [
   {
     id: 'slots',
-    bgImage: '/images/mosaic_casino_bg.jpg',
+    bgImage: '/images/mosaic_casino_bg.webp',
     title: <><span className="text-[#10B981]">Slot Oyna</span> & Kazan</>,
     subtitle: 'Tüm yatırım yöntemleri geçerli. Hemen Al!',
     buttonText: 'KAYIT OL',
@@ -19,7 +19,7 @@ const banners = [
   },
   {
     id: 'vip',
-    bgImage: '/images/vip_casino_card.jpg',
+    bgImage: '/images/vip_casino_card.webp',
     title: <><span className="text-yellow-500">VIP</span> Ayrıcalıkları</>,
     subtitle: 'Sana özel bonuslar ve nakit iade fırsatları!',
     buttonText: 'KEŞFET',

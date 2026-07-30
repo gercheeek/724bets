@@ -49,7 +49,7 @@ export default function RewardsView({ siteUser }: RewardsViewProps) {
         </div>
         
         <div className="relative z-10 mt-8 md:mt-0 w-full max-w-[400px] h-[300px] flex justify-center">
-           <img src="/images/slots/big_chest_banner.jpg" alt="Treasure Chest" className="w-[80%] md:w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]" onError={(e) => { e.currentTarget.style.display='none'; }} />
+           <img src="/images/slots/big_chest_banner.webp" alt="Treasure Chest" className="w-[80%] md:w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]" onError={(e) => { e.currentTarget.style.display='none'; }} />
         </div>
       </div>
 
