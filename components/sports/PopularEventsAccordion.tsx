@@ -365,7 +365,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           const theme = getLeagueTheme(league, isTennis);
           
           return (
-            <div key={league} className={`group bg-[#1a1d29] hover:bg-[#1e2330] rounded-xl overflow-hidden border border-white/5 border-l-[4px] ${theme.accentBorder} relative mt-3`}>
+            <div key={league} className={`group bg-gradient-to-r from-[#181a25] to-[#12141d] hover:from-[#1d202e] hover:to-[#151824] rounded-xl overflow-hidden border border-white/5 border-l-[4px] ${theme.accentBorder} relative mt-3 shadow-lg`}>
               <button 
                 onClick={() => toggleLeague(league)}
                 className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative text-left bg-transparent group`}
@@ -383,21 +383,21 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 )}
                 
                 {/* Content */}
-                <div className="flex items-center gap-4 relative z-10 pl-1 flex-1 min-w-0">
-                  {/* Clean League Logo */}
-                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-[14px] shrink-0 z-10 bg-[#121620] border border-white/5">
+                <div className="flex items-center gap-4 sm:gap-5 relative z-10 pl-1 flex-1 min-w-0">
+                  {/* Clean League Logo - White Background for High Contrast */}
+                  <div className="relative flex h-14 w-14 sm:h-[60px] sm:w-[60px] items-center justify-center rounded-2xl shrink-0 z-10 bg-white/95 border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
                     {isTennis ? (
                        <span className="text-3xl relative z-10">🎾</span>
                     ) : (
-                       <LeagueLogo league={league} className="w-10 h-10 sm:w-11 sm:h-11 object-contain relative z-10 drop-shadow-sm" />
+                       <LeagueLogo league={league} className="w-10 h-10 sm:w-11 sm:h-11 object-contain relative z-10" />
                     )}
                   </div>
                   
                   <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4">
-                    <span className="text-white font-bold text-[14px] sm:text-[16px] tracking-wider uppercase truncate w-full" title={league}>
+                    <span className="text-white font-extrabold text-[15px] sm:text-[17px] tracking-wide uppercase truncate w-full drop-shadow-sm" title={league}>
                       {league}
                     </span>
-                    <span className="text-zinc-400 text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase mt-0.5">
+                    <span className="text-[#a1a1aa] text-[11px] sm:text-[12px] font-semibold tracking-widest uppercase mt-1">
                       Öne Çıkan Turnuva
                     </span>
                   </div>
@@ -407,17 +407,17 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 <div className="flex items-center gap-3 sm:gap-5 relative z-10">
                   <div className="hidden sm:flex flex-col items-end mr-2">
                      <span className="text-zinc-500 text-[10px] font-bold tracking-widest uppercase">Aktif</span>
-                     <span className="text-zinc-300 text-[13px] font-black tracking-wide">{leagueMatches.length} MAÇ</span>
+                     <span className="text-white text-[13px] font-black tracking-wide">{leagueMatches.length} MAÇ</span>
                   </div>
-                  <span className="sm:hidden bg-white/5 border border-white/10 text-zinc-300 text-[11px] font-black px-3 py-1.5 rounded tracking-widest">
+                  <span className="sm:hidden bg-[#222736] border border-white/10 text-white text-[11px] font-black px-3 py-1.5 rounded-lg tracking-widest shadow-sm">
                     {leagueMatches.length} MAÇ
                   </span>
                   
-                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#121620] border border-white/5 group-hover:bg-white/5 transition-colors">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 group-hover:bg-white/10 transition-colors backdrop-blur-sm shadow-sm">
                     {isExpanded ? (
-                      <ChevronUp className="w-5 h-5 text-zinc-400" />
+                      <ChevronUp className="w-5 h-5 text-white" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-zinc-400" />
+                      <ChevronDown className="w-5 h-5 text-white" />
                     )}
                   </div>
                 </div>
