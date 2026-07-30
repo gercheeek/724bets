@@ -365,55 +365,31 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           const theme = getLeagueTheme(league, isTennis);
           
           return (
-            <div key={league} className={`group ${theme.bgGlow} bg-[#0A0D14]/95 md:bg-transparent md:backdrop-blur-xl rounded-xl rounded-bl-sm overflow-hidden transition-all duration-500 shadow-md md:shadow-lg hover:shadow-xl md:hover:shadow-2xl border border-white/[0.03] border-l-[3px] ${theme.accentBorder} ${theme.accentShadow} relative mt-3 transform-gpu`}>
+            <div key={league} className={`group bg-[#1a1d29] hover:bg-[#232838] rounded-xl overflow-hidden transition-all duration-300 border border-white/5 border-l-[4px] ${theme.accentBorder} relative mt-3`}>
               <button 
                 onClick={() => toggleLeague(league)}
                 className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative overflow-hidden transition-all text-left bg-transparent group`}
               >
-                {/* Advanced Ambient Radial Glow from the left */}
-                <div className={`absolute inset-0 opacity-40 group-hover:opacity-70 transition-opacity duration-700 bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] ${theme.radialGlow} via-transparent to-transparent pointer-events-none z-0`} />
-                
-                {/* Elegant Deep Mesh Base */}
-                <div className="absolute inset-0 bg-[#07090d]/60 group-hover:bg-[#07090d]/40 pointer-events-none transition-colors duration-700 z-0" />
-                
                 {/* Custom Cinematic Background Image */}
                 {(theme as any).bgImage && (
                   <div 
-                    className="absolute inset-0 pointer-events-none opacity-30 group-hover:opacity-50 transition-all duration-1000 z-0 bg-cover bg-center bg-no-repeat mix-blend-screen grayscale-[0.3]"
+                    className="absolute inset-0 pointer-events-none opacity-20 group-hover:opacity-30 transition-all duration-1000 z-0 bg-cover bg-center bg-no-repeat mix-blend-screen grayscale-[0.5]"
                     style={{ 
                       backgroundImage: `url(${(theme as any).bgImage})`,
-                      maskImage: 'linear-gradient(to right, transparent 15%, black 90%)',
-                      WebkitMaskImage: 'linear-gradient(to right, transparent 15%, black 90%)'
+                      maskImage: 'linear-gradient(to right, transparent 0%, black 100%)',
+                      WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 100%)'
                     }} 
                   />
-                )}
-                
-                {/* Turkish Flag Watermark (Only for Turkish Teams) */}
-                {(theme as any).isTurkish && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 opacity-[0.03] group-hover:opacity-[0.07] group-hover:scale-110 transition-all duration-700 pointer-events-none overflow-hidden flex items-center justify-end pr-4">
-                    <svg viewBox="0 0 1200 800" className="w-full h-full fill-white mix-blend-screen drop-shadow-[0_0_10px_rgba(255,255,255,1)]">
-                      <circle cx="425" cy="400" r="200" fill="white"/>
-                      <circle cx="475" cy="400" r="160" fill="black" style={{ mixBlendMode: 'destination-out' }}/>
-                      <polygon points="760,400 642,438 678,323 583,406 700,466" fill="white"/>
-                    </svg>
-                  </div>
-                )}
-                
-                {/* Massive, Elegant Watermark Logo for other leagues */}
-                {!(theme as any).isTurkish && (
-                  <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-48 h-48 opacity-[0.03] group-hover:opacity-[0.08] group-hover:-translate-x-4 transition-all duration-1000 pointer-events-none grayscale brightness-200 contrast-125 mix-blend-screen">
-                     <LeagueLogo league={league} className="w-full h-full object-contain" />
-                  </div>
                 )}
                 
                 {/* Content */}
                 <div className="flex items-center gap-4 relative z-10 pl-1 flex-1 min-w-0">
                   {/* Advanced Animated League Logo */}
-                  <div className={`relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center overflow-hidden rounded-[1rem] p-[2px] group-hover:scale-105 transition-transform duration-500 shadow-[0_10px_20px_rgba(0,0,0,0.5)] shrink-0 z-10 bg-[#0A0D14]`}>
+                  <div className={`relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center overflow-hidden rounded-[1rem] p-[2px] group-hover:scale-105 transition-transform duration-500 shrink-0 z-10 bg-[#121620]`}>
                     <span className={`absolute inset-[-1000%] animate-[spin_4s_linear_infinite] opacity-30 group-hover:opacity-100 transition-opacity duration-500`} style={{ background: `conic-gradient(from 90deg at 50% 50%, transparent 0%, ${(theme as any).hexColor || '#00E5FF'} 80%, transparent 100%)` }} />
-                    <div className="absolute inset-[2px] bg-[#0A0D14] rounded-[14px]"></div>
+                    <div className="absolute inset-[2px] bg-[#121620] rounded-[14px]"></div>
                     <div className={`absolute inset-[2px] ${theme.bgGlow} rounded-[14px] mix-blend-screen`}></div>
-                    <div className="relative h-full w-full rounded-[14px] bg-gradient-to-b from-white/10 to-transparent flex items-center justify-center md:backdrop-blur-md">
+                    <div className="relative h-full w-full rounded-[14px] flex items-center justify-center">
                       {isTennis ? (
                          <span className="text-3xl drop-shadow-lg relative z-10">🎾</span>
                       ) : (
