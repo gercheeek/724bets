@@ -55,23 +55,22 @@ const MATCHES_DATA = [
 const getChannelLogo = (channelName: string, avatarUrl?: string) => {
     if (avatarUrl && avatarUrl.trim()) return avatarUrl;
     const nameLower = channelName.toLowerCase();
-    // Check known channel names FIRST to always show proper logos
+    
+    // Check known channel names FIRST to always show proper logos using reliable Favicons
     if (nameLower.includes('724tv') || nameLower.includes('7/24')) return 'https://img.icons8.com/color/96/television.png';
-    if (nameLower.includes('bein') || nameLower.includes('lig tv')) return 'https://upload.wikimedia.org/wikipedia/commons/e/e0/BeIN_Sports_logo.svg';
-    if (nameLower.includes('s sport') || nameLower.includes('ssport')) return 'https://upload.wikimedia.org/wikipedia/tr/d/d7/S_Sport_logo.png';
-    if (nameLower.includes('smart')) return 'https://upload.wikimedia.org/wikipedia/tr/7/7b/Smart_Spor_logo.png';
-    if (nameLower.includes('trt spor')) return 'https://upload.wikimedia.org/wikipedia/commons/e/ee/TRT_Spor_logo.svg';
-    if (nameLower.includes('trt 1') || nameLower.includes('trt1')) return 'https://upload.wikimedia.org/wikipedia/commons/5/5f/TRT_1_logo.svg';
-    if (nameLower.includes('tabii') || nameLower.includes('tabıı')) return 'https://upload.wikimedia.org/wikipedia/commons/0/07/Tabii_logo.png';
-    if (nameLower.includes('a spor')) return 'https://upload.wikimedia.org/wikipedia/tr/b/bf/A_spor_logo.png';
-    if (nameLower.includes('tivibu')) return 'https://upload.wikimedia.org/wikipedia/tr/2/23/Tivibu_logo.png';
-    if (nameLower.includes('exxen')) return 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Exxen_logo.png';
-    if (nameLower.includes('eurosport') || nameLower.includes('euro sport')) return 'https://upload.wikimedia.org/wikipedia/commons/3/38/Eurosport_logo.svg';
-    if (nameLower.includes('tv8.5') || nameLower.includes('tv8')) return 'https://upload.wikimedia.org/wikipedia/commons/d/de/TV8_logo.svg';
+    if (nameLower.includes('bein') || nameLower.includes('lig tv')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://beinsports.com.tr&size=128';
+    if (nameLower.includes('s sport') || nameLower.includes('ssport')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://ssportplus.com&size=128';
+    if (nameLower.includes('smart')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://dsmart.com.tr&size=128';
+    if (nameLower.includes('tivibu')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://tivibu.com.tr&size=128';
+    if (nameLower.includes('trt')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://trtspor.com.tr&size=128';
+    if (nameLower.includes('a spor')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://aspor.com.tr&size=128';
+    if (nameLower.includes('exxen') || nameLower.includes('dijital') || nameLower.includes('platform')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://exxen.com&size=128';
+    if (nameLower.includes('eurosport') || nameLower.includes('euro sport')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://eurosport.com.tr&size=128';
+    if (nameLower.includes('tv8')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://tv8.com.tr&size=128';
     if (nameLower.includes('mac') || nameLower.includes('maç') || nameLower.includes('futbol') || nameLower.includes('taraftar')) return 'https://img.icons8.com/color/96/football.png';
-    if (nameLower.includes('dijital') || nameLower.includes('platform')) return 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Exxen_logo.png';
-    if (nameLower.includes('ulusal')) return 'https://upload.wikimedia.org/wikipedia/commons/5/5f/TRT_1_logo.svg';
+    if (nameLower.includes('ulusal')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://trt1.com.tr&size=128';
     if (nameLower.includes('diğer') || nameLower.includes('diger')) return 'https://img.icons8.com/color/96/tv.png';
+    
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(channelName)}&background=1a2035&color=fff`;
 };
 
