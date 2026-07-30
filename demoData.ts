@@ -193,6 +193,19 @@ export const demoCoupons: any[] = [
             { homeTeam: 'Dortmund', awayTeam: 'Bayern Münih', prediction: 'MS 1', odd: '3.20', analysis: 'Dortmund bu sezon evinde devlere geçit vermiyor.' },
             { homeTeam: 'Napoli', awayTeam: 'Juventus', prediction: 'KG VAR', odd: '1.95', analysis: 'Napoli savunması son haftalarda hata yapıyor, Juve boş geçmez.' }
         ]
+    },
+    {
+        id: 'coupon-4',
+        title: 'TÜRK TAKIMLARI ÖZEL',
+        date: new Date().toISOString().split('T')[0],
+        riskLevel: 'MEDIUM',
+        category: 'Futbol',
+        totalOdd: '5.80',
+        matches: [
+            { homeTeam: 'Galatasaray', awayTeam: 'Beşiktaş', prediction: 'KG VAR', odd: '1.80', analysis: 'Dev derbide iki takım da hücum hattında çok etkili. Karşılıklı gol beklentisi yüksek.' },
+            { homeTeam: 'Fenerbahçe', awayTeam: 'Trabzonspor', prediction: 'MS 1', odd: '1.75', analysis: 'Fenerbahçe Kadıköy\'de müthiş bir taraftar desteğiyle oynuyor. Form grafikleri zirvede.' },
+            { homeTeam: 'Başakşehir', awayTeam: 'Konyaspor', prediction: '2.5 ALT', odd: '1.85', analysis: 'İki takım da taktiksel savunmaya önem veriyor. Kısır bir maç geçmesi muhtemel.' }
+        ]
     }
 ];
 

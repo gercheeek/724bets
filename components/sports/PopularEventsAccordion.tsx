@@ -190,6 +190,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
     }
     
     const priorities = [
+      'türk takımları',
       'şampiyonlar ligi', 'champions league', 
       'avrupa ligi', 'europa league', 
       'konferans ligi', 'conference league', 
