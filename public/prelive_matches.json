@@ -711,7 +711,7 @@
       "start_ts": 1785517200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.75!~draw~3.06!~away~2.64",
+          "|1x2||~home~3.23!~draw~3.01!~away~2.33",
           "|gg||~yes~3.9!~no~1.21"
         ]
       }
@@ -2834,7 +2834,7 @@
       "start_ts": 1785423600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.89!~draw~3.63!~away~4.1",
+          "|1x2||~home~1.83!~draw~3.72!~away~4.3",
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.7!~no~1.34",
           "|gg||~yes~6!~no~1.05",
@@ -2942,12 +2942,12 @@
       "start_ts": 1785425400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.43!~draw~4.75!~away~7.2",
-          "|gg||~yes~2.22!~no~1.5",
-          "|gg||~yes~2.87!~no~1.3",
+          "|1x2||~home~1.42!~draw~4.8!~away~7.3",
+          "|gg||~yes~2.18!~no~1.52",
+          "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6!~no~1.05",
           "|gg||~yes~10.3!~no~1.017",
-          "|gg||~yes~3.57!~no~1.25",
+          "|gg||~yes~3.4!~no~1.27",
           "|gg||~yes~4.75!~no~1.15"
         ]
       }
@@ -2978,13 +2978,13 @@
       "start_ts": 1785425400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.52!~draw~4.4!~away~5.4",
-          "|gg||~yes~1.82!~no~1.76",
-          "|gg||~yes~2.34!~no~1.45",
-          "|gg||~yes~5.2!~no~1.08",
-          "|gg||~yes~8.5!~no~1.04",
-          "|gg||~yes~2.68!~no~1.41",
-          "|gg||~yes~3.9!~no~1.21"
+          "|1x2||~home~1.49!~draw~4.9!~away~5.7",
+          "|gg||~yes~1.74!~no~1.84",
+          "|gg||~yes~2.18!~no~1.52",
+          "|gg||~yes~4.8!~no~1.1",
+          "|gg||~yes~7.5!~no~1.055",
+          "|gg||~yes~2.62!~no~1.43",
+          "|gg||~yes~3.47!~no~1.26"
         ]
       }
     }
@@ -3163,8 +3163,8 @@
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~4.8!~no~1.1",
           "|gg||~yes~6.9!~no~1.07",
-          "|gg||~yes~2.4!~no~1.5",
-          "|gg||~yes~3.3!~no~1.28"
+          "|gg||~yes~2.45!~no~1.48",
+          "|gg||~yes~3.2!~no~1.3"
         ]
       }
     }
@@ -3199,7 +3199,7 @@
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3!~no~1.34",
+          "|gg||~yes~2.95!~no~1.35",
           "|gg||~yes~4.15!~no~1.19"
         ]
       }
@@ -3231,11 +3231,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.98!~draw~3.79!~away~3.31",
-          "|gg||~yes~1.75!~no~1.83",
+          "|gg||~yes~1.77!~no~1.81",
           "|gg||~yes~2.26!~no~1.48",
           "|gg||~yes~5.2!~no~1.08",
           "|gg||~yes~7.85!~no~1.05",
-          "|gg||~yes~2.68!~no~1.41",
+          "|gg||~yes~2.7!~no~1.4",
           "|gg||~yes~3.65!~no~1.24"
         ]
       }
@@ -3339,11 +3339,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.11!~draw~8.9!~away~19",
-          "|gg||~yes~2.12!~no~1.55",
-          "|gg||~yes~2.66!~no~1.35",
+          "|gg||~yes~2.18!~no~1.52",
+          "|gg||~yes~2.74!~no~1.33",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~10.3!~no~1.017",
-          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~3.25!~no~1.27",
           "|gg||~yes~5.1!~no~1.13"
         ]
       }
@@ -3447,11 +3447,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.68!~draw~4.1!~away~4.33",
-          "|gg||~yes~2.06!~no~1.58",
+          "|gg||~yes~2.03!~no~1.6",
           "|gg||~yes~2.66!~no~1.35",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.5!~no~1.025",
-          "|gg||~yes~3.25!~no~1.29",
+          "|gg||~yes~3.15!~no~1.31",
           "|gg||~yes~4.42!~no~1.17"
         ]
       }
@@ -3986,12 +3986,12 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.54!~draw~3.9!~away~6",
+          "|1x2||~home~1.61!~draw~3.74!~away~5.5",
           "|gg||~yes~2.48!~no~1.4",
-          "|gg||~yes~3.2!~no~1.24",
-          "|gg||~yes~6.8!~no~1.03",
+          "|gg||~yes~3.15!~no~1.25",
+          "|gg||~yes~6.6!~no~1.035",
           "|gg||~yes~12.5!~no~1.008",
-          "|gg||~yes~4.15!~no~1.19",
+          "|gg||~yes~4.3!~no~1.18",
           "|gg||~yes~5.35!~no~1.12"
         ]
       }
@@ -4023,11 +4023,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.14!~draw~8!~away~15",
-          "|gg||~yes~2.78!~no~1.32",
-          "|gg||~yes~3.5!~no~1.2",
+          "|gg||~yes~2.7!~no~1.34",
+          "|gg||~yes~3.45!~no~1.21",
           "|gg||~yes~6.6!~no~1.035",
           "|gg||~yes~13!~no~1.007",
-          "|gg||~yes~4.42!~no~1.17",
+          "|gg||~yes~4.15!~no~1.19",
           "|gg||~yes~5.85!~no~1.1"
         ]
       }
@@ -4060,7 +4060,7 @@
         "full_event|0": [
           "|1x2||~home~1.29!~draw~5.7!~away~8.3",
           "|gg||~yes~2.06!~no~1.58",
-          "|gg||~yes~2.55!~no~1.38",
+          "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.7!~no~1.023",
           "|gg||~yes~3!~no~1.34",
@@ -4130,7 +4130,7 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.23!~draw~6.2!~away~11",
+          "|1x2||~home~1.22!~draw~6.3!~away~11",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~3.2!~no~1.24",
           "|gg||~yes~6.4!~no~1.04",
@@ -4238,9 +4238,9 @@
       "start_ts": 1785432600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~6.4!~draw~4.4!~away~1.45",
-          "|gg||~yes~2.06!~no~1.58",
-          "|gg||~yes~2.66!~no~1.35",
+          "|1x2||~home~6.2!~draw~4.3!~away~1.48",
+          "|gg||~yes~2.03!~no~1.6",
+          "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.5!~no~1.025",
           "|gg||~yes~3.2!~no~1.3",
@@ -4274,13 +4274,13 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~4.7!~draw~4.3!~away~1.6",
+          "|1x2||~home~4.9!~draw~4.5!~away~1.56",
           "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.55!~no~1.38",
-          "|gg||~yes~5.5!~no~1.07",
+          "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3.1!~no~1.32",
-          "|gg||~yes~4.05!~no~1.2"
+          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~3.9!~no~1.21"
         ]
       }
     }
@@ -4311,11 +4311,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~3.33!~draw~3.76!~away~1.99",
-          "|gg||~yes~1.89!~no~1.7",
-          "|gg||~yes~2.42!~no~1.42",
-          "|gg||~yes~5.5!~no~1.07",
-          "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~3.2!~no~1.3",
+          "|gg||~yes~1.96!~no~1.65",
+          "|gg||~yes~2.55!~no~1.38",
+          "|gg||~yes~5.75!~no~1.06",
+          "|gg||~yes~9!~no~1.03",
+          "|gg||~yes~3.4!~no~1.27",
           "|gg||~yes~3.75!~no~1.23"
         ]
       }
@@ -4346,7 +4346,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~3.92!~draw~3.31!~away~1.95",
+          "|1x2||~home~3.78!~draw~3.31!~away~1.99",
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.66!~no~1.35",
           "|gg||~yes~5.75!~no~1.06",
@@ -4382,7 +4382,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.21!~draw~6.7!~away~10",
+          "|1x2||~home~1.2!~draw~6.9!~away~11",
           "|gg||~yes~2!~no~1.62",
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.5!~no~1.07",
@@ -4418,7 +4418,7 @@
       "start_ts": 1785438000,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.79!~draw~3.41!~away~2.39",
+          "|1x2||~home~2.71!~draw~3.41!~away~2.45",
           "|gg||~yes~1.83!~no~1.75",
           "|gg||~yes~2.34!~no~1.45",
           "|gg||~yes~5.5!~no~1.07",
@@ -4454,12 +4454,12 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~4.33!~draw~3.74!~away~1.75",
-          "|gg||~yes~1.96!~no~1.65",
-          "|gg||~yes~2.55!~no~1.38",
+          "|1x2||~home~4.1!~draw~3.75!~away~1.78",
+          "|gg||~yes~2!~no~1.62",
+          "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.3!~no~1.027",
-          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~3.25!~no~1.29",
           "|gg||~yes~4.05!~no~1.2"
         ]
       }
@@ -4495,7 +4495,7 @@
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~5!~no~1.09",
           "|gg||~yes~7.5!~no~1.055",
-          "|gg||~yes~2.62!~no~1.43",
+          "|gg||~yes~2.59!~no~1.44",
           "|gg||~yes~3.47!~no~1.26"
         ]
       }
@@ -4562,7 +4562,7 @@
       "start_ts": 1785437100,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.43!~draw~4.7!~away~6.3",
+          "|1x2||~home~1.44!~draw~4.75!~away~6",
           "|gg||~yes~1.89!~no~1.7",
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.2!~no~1.08",
@@ -4634,7 +4634,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.34!~draw~5.2!~away~7.7",
+          "|1x2||~home~1.32!~draw~5.2!~away~8.1",
           "|gg||~yes~2.03!~no~1.6",
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.5!~no~1.07",
@@ -4670,12 +4670,12 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~3.26!~draw~3.47!~away~2.1",
-          "|gg||~yes~1.81!~no~1.77",
-          "|gg||~yes~2.34!~no~1.45",
+          "|1x2||~home~3.2!~draw~3.55!~away~2.1",
+          "|gg||~yes~1.77!~no~1.81",
+          "|gg||~yes~2.29!~no~1.47",
           "|gg||~yes~5.2!~no~1.08",
-          "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~2.75!~no~1.39",
+          "|gg||~yes~8.2!~no~1.045",
+          "|gg||~yes~2.65!~no~1.42",
           "|gg||~yes~3.83!~no~1.22"
         ]
       }
@@ -4778,7 +4778,7 @@
       "start_ts": 1785432600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~4.85!~draw~3.62!~away~1.7",
+          "|1x2||~home~4.6!~draw~3.53!~away~1.76",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.87!~no~1.3",
           "|gg||~yes~6.25!~no~1.045",
@@ -4814,7 +4814,7 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.16!~draw~7.4!~away~14",
+          "|1x2||~home~1.14!~draw~7.9!~away~15",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.74!~no~1.33",
           "|gg||~yes~5.5!~no~1.07",
@@ -4887,8 +4887,8 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.17!~draw~6.9!~away~15",
-          "|gg||~yes~2.87!~no~1.3",
-          "|gg||~yes~3.6!~no~1.19",
+          "|gg||~yes~2.9!~no~1.29",
+          "|gg||~yes~3.7!~no~1.18",
           "|gg||~yes~6.8!~no~1.03",
           "|gg||~yes~15!~no~1.006",
           "|gg||~yes~4.57!~no~1.16",
@@ -5030,7 +5030,7 @@
       "start_ts": 1785438000,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.75!~draw~3.64!~away~4.5",
+          "|1x2||~home~1.7!~draw~3.75!~away~4.7",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6!~no~1.05",
@@ -5102,7 +5102,7 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.16!~draw~3.13!~away~3.5",
+          "|1x2||~home~2.13!~draw~3.16!~away~3.52",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6.25!~no~1.045",
@@ -5211,7 +5211,7 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.22!~draw~6.3!~away~11",
-          "|gg||~yes~2.22!~no~1.5",
+          "|gg||~yes~2.26!~no~1.48",
           "|gg||~yes~2.87!~no~1.3",
           "|gg||~yes~6!~no~1.05",
           "|gg||~yes~10.5!~no~1.015",
@@ -5246,13 +5246,13 @@
       "start_ts": 1785438000,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.23!~draw~6.4!~away~10",
-          "|gg||~yes~2.12!~no~1.55",
-          "|gg||~yes~2.7!~no~1.34",
-          "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.7!~no~1.023",
-          "|gg||~yes~3.3!~no~1.28",
-          "|gg||~yes~4.3!~no~1.18"
+          "|1x2||~home~1.26!~draw~6.4!~away~8.2",
+          "|gg||~yes~2.06!~no~1.58",
+          "|gg||~yes~2.62!~no~1.36",
+          "|gg||~yes~5.5!~no~1.07",
+          "|gg||~yes~9.5!~no~1.025",
+          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~4.15!~no~1.19"
         ]
       }
     }
