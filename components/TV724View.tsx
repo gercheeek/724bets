@@ -260,15 +260,16 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     const [mutedUsers, setMutedUsers] = useState<{ userId: string; username: string; mutedUntil: number }[]>([]);
     const [activeMutePopup, setActiveMutePopup] = useState<string | null>(null);
     const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({
-        '⚽ beIN SPORTS': true,
-        '🏅 S SPORT': true,
-        '🎯 SMART SPOR': true,
-        '🏀 TİVİBU SPOR': true,
-        '🌍 EUROSPORT': true,
-        '🎥 DİJİTAL PLATFORMLAR': true,
-        '📺 ULUSAL KANALLAR': true,
-        '📺 DİĞER KANALLAR': true,
+        '⚽ beIN SPORTS': false,
+        '🏅 S SPORT': false,
+        '🎯 SMART SPOR': false,
+        '🏀 TİVİBU SPOR': false,
+        '🌍 EUROSPORT': false,
+        '🎥 DİJİTAL PLATFORMLAR': false,
+        '📺 ULUSAL KANALLAR': false,
+        '📺 DİĞER KANALLAR': false,
     });
+    const [selectedGroupFilter, setSelectedGroupFilter] = useState<string>('Tümü');
     const toggleGroup = (group: string) => {
         setCollapsedGroups(prev => ({ ...prev, [group]: !prev[group] }));
     };
