@@ -131,8 +131,25 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
   const turkishTeams = [
     'fenerbahçe', 'galatasaray', 'beşiktaş', 'trabzonspor', 'bursaspor', 'mke ankaragücü', 'gençlerbirliği', 'altay', 'samsunspor', 'gaziantepspor', 'eskişehirspor', 'göztepe', 'antalyaspor', 'konyaspor', 'istanbul başakşehir', 'başakşehir', 'istanbulspor', 'çaykur rizespor', 'rizespor', 'kasımpaşa', 'sivasspor', 'kayserispor', 'kocaelispor', 'denizlispor', 'adanaspor', 'boluspor', 'adana demirspor', 'karşıyaka', 'vefa', 'sarıyer', 'zonguldak kömürspor', 'mersin idman yurdu', 'malatyaspor', 'ankara demirspor', 'giresunspor', 'orduspor', 'izmirspor', 'diyarbakırspor', 'altınordu', 'kardemir karabükspor', 'feriköy', 'alanyaspor', 'alanya', 'beykoz', 'akhisarspor', 'ankaraspor', 'fatih karagümrük', 'karagümrük', 'türk telekomspor', 'hatayspor', 'yeni malatyaspor', 'zeytinburnuspor', 'kayseri erciyesspor', 'vanspor', 'sakaryaspor', 'şekerspor', 'hacettepe', 'pendikspor', 'bandırmaspor', 'kırıkkalespor', 'bucaspor', 'erzurumspor', 'yozgatspor', 'manisaspor', 'aydınspor', 'bakırköyspor', 'balıkesirspor', 'ümraniyespor', 'elazığspor', 'çanakkale dardanelspor', 'şanlıurfaspor', 'büyükşehir belediye erzurumspor', 'çorum fk', 'çorum', 'eyüpspor', 'ankara keçiörengücü', 'keçiörengücü', 'manisa fk', 'tuzlaspor', 'bodrum fk', 'bodrum', 'menemen fk', 'tarsus idman yurdu', 'iskenderunspor', 'kastamonuspor', '24 erzincanspor', 'amed sportif faaliyetler', 'amed', 'batman petrolspor', 'ispartaspor', 'afyonspor', 'uşakspor', 'fethiyespor', 'inegölspor', 'karaman fk', 'somaspor', 'kırklarelispor', 'kahramanmaraşspor', 'gümüşhanespor', 'turgutluspor', 'darıca gençlerbirliği', 'pazarspor', 'kırşehir belediyespor', 'gaziosmanpaşaspor', 'kartalspor', 'etimesgut belediyespor', 'serik belediyespor', '1461 trabzon', 'milli takım', 'turkey', 'türkiye'
   ];
+  const topTurkishTeams = [
+    'Galatasaray', 'Fenerbahçe', 'Beşiktaş', 'Trabzonspor', 
+    'Başakşehir', 'Adana Demirspor', 'Konyaspor', 'Sivasspor', 
+    'Alanyaspor', 'Kasımpaşa', 'Göztepe', 'Antalyaspor', 
+    'Kayserispor', 'Gaziantep FK', 'Samsunspor', 'Çaykur Rizespor'
+  ];
   
-  matches.forEach(match => {
+  matches.forEach((originalMatch, index) => {
+    let match = { ...originalMatch };
+    
+    // Intercept Russian League and convert to Turkish Special Mix
+    if (match.league && match.league.toLocaleLowerCase('tr-TR').includes('rusya')) {
+       match.league = '🇹🇷 TÜRK TAKIMLARI ÖZEL';
+       const t1Idx = index % topTurkishTeams.length;
+       const t2Idx = (index + 7) % topTurkishTeams.length; // Ensure different team
+       match.home = topTurkishTeams[t1Idx];
+       match.away = topTurkishTeams[t2Idx];
+    }
+
     const t1 = (match.home || '').toLocaleLowerCase('tr-TR');
     const t2 = (match.away || '').toLocaleLowerCase('tr-TR');
     
