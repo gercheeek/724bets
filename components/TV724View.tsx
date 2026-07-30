@@ -1132,22 +1132,34 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                         }}
                                                         className="group/acc hover:border-white/10"
                                                     >
-                                                        {/* Accordion Header */}
-                                                        <div 
-                                                            onClick={() => setCollapsedGroups(prev => ({ ...prev, [groupName]: !prev[groupName] }))}
-                                                            style={{ 
-                                                                display: 'flex', 
-                                                                alignItems: 'center', 
-                                                                justifyContent: 'space-between', 
-                                                                padding: '11px 14px', 
-                                                                background: isCollapsed ? 'rgba(19, 22, 28, 0.4)' : 'rgba(26, 29, 36, 0.7)', 
-                                                                cursor: 'pointer', 
-                                                                transition: 'all 0.2s ease',
-                                                                borderBottom: isCollapsed ? '1px solid transparent' : '1px solid rgba(255,255,255,0.04)'
-                                                            }}
-                                                            className="hover:bg-[#1C2029]/80 active:scale-[0.99]"
-                                                        >
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                            <div 
+                                                                onClick={() => setCollapsedGroups(prev => ({ ...prev, [groupName]: !prev[groupName] }))}
+                                                                style={{ 
+                                                                    display: 'flex', 
+                                                                    alignItems: 'center', 
+                                                                    justifyContent: 'space-between', 
+                                                                    padding: '11px 14px', 
+                                                                    background: isCollapsed ? 'rgba(19, 22, 28, 0.4)' : 'rgba(26, 29, 36, 0.7)', 
+                                                                    cursor: 'pointer', 
+                                                                    transition: 'all 0.2s ease',
+                                                                    borderBottom: isCollapsed ? '1px solid transparent' : '1px solid rgba(255,255,255,0.04)',
+                                                                    position: 'relative',
+                                                                    overflow: 'hidden'
+                                                                }}
+                                                                className="hover:bg-[#1C2029]/80 active:scale-[0.99] group/header"
+                                                            >
+                                                                {/* Cinematic Background Logo */}
+                                                                <div 
+                                                                    className="absolute inset-0 pointer-events-none opacity-30 group-hover/header:opacity-60 transition-all duration-700 z-0 bg-contain bg-right bg-no-repeat"
+                                                                    style={{ 
+                                                                        backgroundImage: `url(${getChannelLogo(groupName.replace(/^[^\s]+\s+/, ''))})`,
+                                                                        maskImage: 'linear-gradient(to right, transparent 0%, transparent 30%, black 100%)',
+                                                                        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 30%, black 100%)',
+                                                                        backgroundPosition: 'right -10px center',
+                                                                        backgroundSize: '90px'
+                                                                    }} 
+                                                                />
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 1, position: 'relative' }}>
                                                                 <div style={{ width: '28px', height: '28px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid rgba(255,255,255,0.06)' }}>
                                                                     <img 
                                                                         src={getChannelLogo(groupName.replace(/^[^\s]+\s+/, ''))} 
@@ -1163,7 +1175,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                     {groupName.replace(/^[^\s]+\s+/, '')}
                                                                 </span>
                                                             </div>
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', zIndex: 1, position: 'relative' }}>
                                                                 <span style={{ 
                                                                     fontSize: '9.5px', 
                                                                     fontWeight: 800, 
