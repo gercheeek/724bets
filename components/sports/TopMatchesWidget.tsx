@@ -214,28 +214,28 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
   };
 
   return (
-    <div className="w-full relative py-6">
-      <div className="flex items-center gap-2 mb-5 px-6">
+    <div className="w-full relative py-2">
+      <div className="flex items-center gap-2 mb-2 px-4">
         {icon || (
-            <div className="w-6 h-6 rounded bg-[#00E5FF]/10 border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.2)]">
-              <span className="text-sm font-bold">$</span>
+            <div className="w-5 h-5 rounded bg-[#00E5FF]/10 border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.2)]">
+              <span className="text-xs font-bold">$</span>
             </div>
           )}
-          <h2 className="text-lg font-bold text-white tracking-wide">{title}</h2>
-        <div className="ml-auto flex items-center gap-2">
+          <h2 className="text-sm font-bold text-white tracking-wide">{title}</h2>
+        <div className="ml-auto flex items-center gap-1.5">
           <button 
             onClick={prevSlide}
             disabled={scrollIdx === 0}
-            className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center bg-slate-900/50 text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            className="w-6 h-6 rounded-md border border-white/10 flex items-center justify-center bg-slate-900/50 text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
           <button 
             onClick={nextSlide}
             disabled={scrollIdx >= topMatches.length - 1}
-            className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center bg-slate-900/50 text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            className="w-6 h-6 rounded-md border border-white/10 flex items-center justify-center bg-slate-900/50 text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>
