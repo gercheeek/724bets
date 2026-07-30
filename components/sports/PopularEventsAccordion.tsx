@@ -163,7 +163,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
     // First, immediately demote lower divisions, youth, and women's leagues
     const lowPriorities = [
       '2. lig', '3. lig', 'division 2', 'division 3', 'league 2', 'league 3',
-      'kadınlar', 'women', 'rezerv', 'reserves', 'u21', 'u19', 'u20'
+      'kadınlar', 'women', 'rezerv', 'reserves', 'u21', 'u19', 'u20', 'ukrayna'
     ];
     
     for (let i = 0; i < lowPriorities.length; i++) {

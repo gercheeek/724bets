@@ -32,7 +32,10 @@ const customAliases: Record<string, string> = {
   'lazio': 'ss-lazio',
   'napoli': 'ssc-napoli',
   'bologna': 'bologna-fc',
-  'fiorentina': 'acf-fiorentina'
+  'fiorentina': 'acf-fiorentina',
+  'dinamo-kiev': 'dynamo-kyiv',
+  'dynamo-kiev': 'dynamo-kyiv',
+  'kyiv': 'dynamo-kyiv'
 };
 
 const logoCache = new Map<string, string | null>();
@@ -60,8 +63,8 @@ export const findBestLogoMatch = (rawName: string) => {
     match = logoIndex.find((file: string) => file.startsWith(norm + '-')) || null;
   }
   // 3. İçinde geçme eşleşmesi
-  else if (logoIndex.find((file: string) => norm.includes(file) && file.length > 3)) {
-    match = logoIndex.find((file: string) => norm.includes(file) && file.length > 3) || null;
+  else if (logoIndex.find((file: string) => (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3)) {
+    match = logoIndex.find((file: string) => (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3) || null;
   }
   
   logoCache.set(rawName, match);
