@@ -8,17 +8,29 @@ interface PlayerLogoProps {
   sport?: string;
 }
 
+const prefixes = 'fc|afc|sc|asd|cf|fk|nk|hnk|us|as|sk|ik|cd|sd|ac|ss|ssc|rsc|sl|pfk|gnk|tc|jk|kf|sv|fsv|vfb|tsg|rc|rcd|ud|bsc|osc|yfc|wfc|lfc|bfc|rfc|mfc|ufc|sfc|dfc|if|mtk|ak|bk|ff|gf|gfco|a|s'.split('|');
+
 const normalize = (str: string) => {
   if (!str) return '';
   const charMap: Record<string, string> = { 'ğ':'g', 'ü':'u', 'ş':'s', 'ı':'i', 'ö':'o', 'ç':'c' };
   let s = str.toLowerCase();
   s = s.replace(/[ğüşıöç]/g, m => charMap[m]);
-  return s
-    .replace(/\s+(fc|afc|sc|asd|cf|fk|nk|hnk|us|as|sk|ik)$/i, '')
-    .replace(/^(fc|afc|sc|asd|cf|fk|nk|hnk|us|as|sk|ik|cd|sd)\s+/i, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-');
+  
+  s = s.replace(/[^a-z0-9\s]/g, ' ');
+  
+  let words = s.split(/\s+/).filter(Boolean);
+  
+  if (words.length > 1 && prefixes.includes(words[0])) {
+    words.shift();
+  }
+  if (words.length > 1 && prefixes.includes(words[words.length - 1])) {
+    words.pop();
+  }
+  if (words.length > 1 && prefixes.includes(words[words.length - 1])) {
+    words.pop();
+  }
+  
+  return words.join('-');
 };
 
 const customAliases: Record<string, string> = {
