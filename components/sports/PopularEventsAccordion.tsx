@@ -129,7 +129,36 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
 
   const groupedByLeague: Record<string, MatchInfo[]> = {};
   const turkishTeams = [
-    'fenerbahçe', 'galatasaray', 'beşiktaş', 'trabzonspor', 'bursaspor', 'mke ankaragücü', 'gençlerbirliği', 'altay', 'samsunspor', 'gaziantepspor', 'eskişehirspor', 'göztepe', 'antalyaspor', 'konyaspor', 'istanbul başakşehir', 'başakşehir', 'istanbulspor', 'çaykur rizespor', 'rizespor', 'kasımpaşa', 'sivasspor', 'kayserispor', 'kocaelispor', 'denizlispor', 'adanaspor', 'boluspor', 'adana demirspor', 'karşıyaka', 'vefa', 'sarıyer', 'zonguldak kömürspor', 'mersin idman yurdu', 'malatyaspor', 'ankara demirspor', 'giresunspor', 'orduspor', 'izmirspor', 'diyarbakırspor', 'altınordu', 'kardemir karabükspor', 'feriköy', 'alanyaspor', 'alanya', 'beykoz', 'akhisarspor', 'ankaraspor', 'fatih karagümrük', 'karagümrük', 'türk telekomspor', 'hatayspor', 'yeni malatyaspor', 'zeytinburnuspor', 'kayseri erciyesspor', 'vanspor', 'sakaryaspor', 'şekerspor', 'hacettepe', 'pendikspor', 'bandırmaspor', 'kırıkkalespor', 'bucaspor', 'erzurumspor', 'yozgatspor', 'manisaspor', 'aydınspor', 'bakırköyspor', 'balıkesirspor', 'ümraniyespor', 'elazığspor', 'çanakkale dardanelspor', 'şanlıurfaspor', 'büyükşehir belediye erzurumspor', 'çorum fk', 'çorum', 'eyüpspor', 'ankara keçiörengücü', 'keçiörengücü', 'manisa fk', 'tuzlaspor', 'bodrum fk', 'bodrum', 'menemen fk', 'tarsus idman yurdu', 'iskenderunspor', 'kastamonuspor', '24 erzincanspor', 'amed sportif faaliyetler', 'amed', 'batman petrolspor', 'ispartaspor', 'afyonspor', 'uşakspor', 'fethiyespor', 'inegölspor', 'karaman fk', 'somaspor', 'kırklarelispor', 'kahramanmaraşspor', 'gümüşhanespor', 'turgutluspor', 'darıca gençlerbirliği', 'pazarspor', 'kırşehir belediyespor', 'gaziosmanpaşaspor', 'kartalspor', 'etimesgut belediyespor', 'serik belediyespor', '1461 trabzon', 'milli takım', 'turkey', 'türkiye'
+    // Süper Lig & Popüler
+    'galatasaray', 'fenerbahçe', 'fenerbahce', 'beşiktaş', 'besiktas', 'trabzonspor',
+    'başakşehir', 'basaksehir', 'istanbul başakşehir', 'istanbul basaksehir',
+    'konyaspor', 'sivasspor', 'alanyaspor', 'kasımpaşa', 'kasimpasa',
+    'göztepe', 'goztepe', 'antalyaspor', 'kayserispor', 'gaziantep', 'gaziantepspor', 'gaziantep fk',
+    'samsunspor', 'çaykur rizespor', 'caykur rizespor', 'rizespor',
+    'adana demirspor', 'hatayspor', 'pendikspor', 'mke ankaragücü', 'ankaragucu', 'ankaragücü',
+    'fatih karagümrük', 'karagümrük', 'karagumruk', 'istanbulspor',
+    // 1. Lig
+    'eyüpspor', 'eyupspor', 'sakaryaspor', 'kocaelispor', 'bodrum fk', 'bodrumspor', 'bodrum',
+    'çorum fk', 'corum fk', 'çorum', 'corum', 'boluspor', 'gençlerbirliği', 'genclerbirligi',
+    'bandırmaspor', 'bandirmaspor', 'ümraniyespor', 'umraniyespor', 'manisa fk', 'manisaspor', 'manisa',
+    'ankara keçiörengücü', 'keciörengücü', 'keciorengucu', 'şanlıurfaspor', 'sanliurfaspor',
+    'tuzlaspor', 'adanaspor', 'altay', 'giresunspor', 'erzurumspor', 'bb erzurumspor',
+    // Alt Ligler & Tarihi Takımlar
+    'altınordu', 'altinordu', 'menemen', 'menemen fk', 'bucaspor', 'karşıyaka', 'karsiyaka',
+    'denizlispor', 'eskişehirspor', 'eskisehirspor', 'bursaspor', 'karabükspor', 'karabukspor',
+    'akhisarspor', 'orduspor', 'malatyaspor', 'yeni malatyaspor', 'mersin idman yurdu',
+    'diyarbakırspor', 'diyarbakirspor', 'elazığspor', 'elazigspor', 'vanspor', 'yozgatspor',
+    'şekerspor', 'sekerspor', 'sarıyer', 'sariyer', 'vefa', 'beykoz', 'osmanlıspor', 'osmanlispor',
+    'ankaraspor', 'hacettepe', 'kayseri erciyesspor', 'erciyesspor', 'dardanelspor',
+    'zonguldak kömürspor', 'zonguldak komurspor', 'bakırköyspor', 'bakirkoyspor',
+    'zeytinburnuspor', 'aydınspor', 'aydinspor', 'kahramanmaraşspor', 'kahramanmarasspor',
+    'afyonspor', 'ispartaspor', 'uşakspor', 'usakspor', 'fethiyespor', 'inegölspor', 'inegolspor',
+    'karaman fk', 'somaspor', 'kırklarelispor', 'kirklarelispor', 'gümüşhanespor', 'gumushanespor',
+    'turgutluspor', 'pazarspor', 'kırşehir', 'kirsehir', 'etimesgut', 'serik',
+    'kastamonuspor', 'iskenderunspor', 'amed', 'amed sk', 'batman petrolspor',
+    '24 erzincanspor', '1461 trabzon', 'iğdır', 'igdir', 'düzcespor', 'duzcespor',
+    'arnavutköy', 'arnavutkoy', 'çatalcaspor', 'catalcaspor', 'tepecikspor',
+    'silivrispor', 'sultanbeyli', 'çankaya', 'cankaya', 'turkey', 'türkiye', 'milli takım', 'milli takim'
   ];
   const topTurkishTeams = [
     'Galatasaray', 'Fenerbahçe', 'Beşiktaş', 'Trabzonspor', 
