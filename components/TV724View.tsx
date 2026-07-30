@@ -1144,26 +1144,6 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                             className="hover:bg-[#1C2029]/80 active:scale-[0.99]"
                                                         >
                                                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                                <div style={{
-                                                                    width: '3px',
-                                                                    height: '16px',
-                                                                    borderRadius: '4px',
-                                                                    background: config.color,
-                                                                    boxShadow: isCollapsed ? 'none' : `0 0 8px ${config.color}`
-                                                                }} />
-                                                                <div style={{ 
-                                                                    display: 'flex', 
-                                                                    alignItems: 'center', 
-                                                                    justifyContent: 'center', 
-                                                                    width: '26px', 
-                                                                    height: '26px', 
-                                                                    borderRadius: '7px', 
-                                                                    background: config.gradient,
-                                                                    border: `1px solid ${config.color}33`,
-                                                                    boxShadow: `0 0 10px ${config.glow}`
-                                                                }}>
-                                                                    {config.icon}
-                                                                </div>
                                                                 <span style={{ fontSize: '13px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.4px', transition: 'color 0.2s' }}>
                                                                     {groupName.replace(/^[^\s]+\s+/, '')}
                                                                 </span>
