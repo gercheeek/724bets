@@ -1148,19 +1148,15 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                 }}
                                                                 className="hover:bg-[#1C2029]/80 active:scale-[0.99] group/header"
                                                             >
-                                                                {/* Cinematic Background Logo */}
+                                                                {/* Cinematic Glow */}
                                                                 <div 
-                                                                    className="absolute inset-0 pointer-events-none opacity-30 group-hover/header:opacity-60 transition-all duration-700 z-0 bg-contain bg-right bg-no-repeat"
+                                                                    className="absolute inset-0 pointer-events-none opacity-50 group-hover/header:opacity-100 transition-all duration-700 z-0"
                                                                     style={{ 
-                                                                        backgroundImage: `url(${getChannelLogo(groupName.replace(/^[^\s]+\s+/, ''))})`,
-                                                                        maskImage: 'linear-gradient(to right, transparent 0%, transparent 30%, black 100%)',
-                                                                        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 30%, black 100%)',
-                                                                        backgroundPosition: 'right -10px center',
-                                                                        backgroundSize: '90px'
+                                                                        background: `radial-gradient(ellipse at right center, ${config.color}22 0%, transparent 60%)`
                                                                     }} 
                                                                 />
                                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 1, position: 'relative' }}>
-                                                                <div style={{ width: '28px', height: '28px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                                                <div style={{ width: '28px', height: '28px', background: `linear-gradient(135deg, ${config.color}15, transparent)`, borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3px', border: `1px solid ${config.color}33`, boxShadow: `0 0 8px ${config.color}15` }}>
                                                                     <img 
                                                                         src={getChannelLogo(groupName.replace(/^[^\s]+\s+/, ''))} 
                                                                         alt={groupName.replace(/^[^\s]+\s+/, '')} 
