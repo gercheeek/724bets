@@ -1155,19 +1155,19 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                         background: `radial-gradient(ellipse at right center, ${config.color}22 0%, transparent 60%)`
                                                                     }} 
                                                                 />
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 1, position: 'relative' }}>
-                                                                <div style={{ width: '28px', height: '28px', background: `linear-gradient(135deg, ${config.color}15, transparent)`, borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3px', border: `1px solid ${config.color}33`, boxShadow: `0 0 8px ${config.color}15` }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 1, position: 'relative' }}>
+                                                                <div style={{ width: '44px', height: '44px', background: `linear-gradient(135deg, ${config.color}20, transparent)`, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5px', border: `1px solid ${config.color}40`, boxShadow: `0 0 12px ${config.color}20` }}>
                                                                     <img 
                                                                         src={getChannelLogo(groupName.replace(/^[^\s]+\s+/, ''))} 
                                                                         alt={groupName.replace(/^[^\s]+\s+/, '')} 
-                                                                        style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: isCollapsed ? 0.6 : 1, transition: 'opacity 0.2s' }}
+                                                                        style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: isCollapsed ? 0.7 : 1, transition: 'opacity 0.2s', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}
                                                                         onError={(e) => {
                                                                             e.currentTarget.onerror = null;
-                                                                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(groupName.replace(/^[^\s]+\s+/, ''))}&background=1a2035&color=fff`;
+                                                                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(groupName.replace(/^[^\s]+\s+/, ''))}&background=1a2035&color=fff&size=128`;
                                                                         }}
                                                                     />
                                                                 </div>
-                                                                <span style={{ fontSize: '13px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.4px', transition: 'color 0.2s' }}>
+                                                                <span style={{ fontSize: '15px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.5px', transition: 'color 0.2s' }}>
                                                                     {groupName.replace(/^[^\s]+\s+/, '')}
                                                                 </span>
                                                             </div>
