@@ -11,6 +11,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { PlayerLogo } from './PlayerLogo';
+import { useBetting } from '../../contexts/BettingContext';
 
 interface BetSelection {
   id: string;
@@ -34,7 +35,8 @@ interface BetRecord {
   status: 'PENDING' | 'WON' | 'LOST' | 'CASHED_OUT';
 }
 
-export const MyBetsView: React.FC = () => {
+export const MyBetsView: React.FC<{ onSelectMatch?: (match: any) => void }> = ({ onSelectMatch }) => {
+  const { events } = useBetting();
   const [bets, setBets] = useState<BetRecord[]>([]);
   const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'WON' | 'LOST' | 'CASHED_OUT'>('ALL');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -289,8 +291,20 @@ export const MyBetsView: React.FC = () => {
                       const finalSelection = selName.includes(':') ? selName.split(':')[1].trim() : selName;
                       const finalOdd = sel.odd || sel.odds || 1.0;
 
+                      // Check if match is live
+                      const liveMatch = events?.find(e => String(e.id) === String(sel.matchId));
+
                       return (
-                      <div key={idx} className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-[#111620] rounded-xl border border-white/[0.03] hover:border-white/10 transition-colors shadow-inner">
+                      <div 
+                        key={idx} 
+                        onClick={() => {
+                          if (liveMatch && onSelectMatch) {
+                            onSelectMatch(liveMatch);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }
+                        }}
+                        className={`relative flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-[#111620] rounded-xl border transition-colors shadow-inner ${liveMatch ? 'cursor-pointer hover:border-[#00E5FF]/50 border-white/10 hover:shadow-[0_0_15px_rgba(0,229,255,0.1)]' : 'border-white/[0.03] hover:border-white/10'}`}
+                      >
                         
                         <div className="flex items-start sm:items-center gap-4">
                           <div className="w-10 h-10 rounded-full bg-black/60 flex items-center justify-center shrink-0 border border-white/10 shadow-lg">
@@ -298,7 +312,27 @@ export const MyBetsView: React.FC = () => {
                           </div>
                           
                           <div className="flex flex-col">
-                            <span className="text-white font-black text-[15px]">{matchTitle}</span>
+                            <div className="flex items-center flex-wrap gap-2">
+                              <span className="text-white font-black text-[15px]">{matchTitle}</span>
+                              {liveMatch && (
+                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/40 border border-white/5">
+                                  {liveMatch.isLive && (
+                                    <span className="relative flex h-1.5 w-1.5 mr-0.5">
+                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef4444] opacity-75"></span>
+                                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#ef4444]"></span>
+                                    </span>
+                                  )}
+                                  <span className="text-[11px] font-bold text-white tracking-wider">
+                                    {liveMatch.score || '-'}
+                                  </span>
+                                  {liveMatch.minute && (
+                                    <span className="text-[10px] font-mono text-[#00E5FF] ml-1 uppercase">
+                                      {liveMatch.minute}
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                             <div className="flex items-center gap-2 mt-1">
                               <span className="text-zinc-400 text-[11px] uppercase tracking-wider">{marketName}</span>
                               <span className="text-zinc-600 text-[10px]">•</span>

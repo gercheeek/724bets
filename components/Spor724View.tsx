@@ -890,7 +890,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                 </div>
               ) : (
                 <div className="flex-1 w-full bg-[#0a0c10]">
-                  <MyBetsView />
+                  <MyBetsView onSelectMatch={setSelectedMatch} />
                 </div>
               )
             ) : (
