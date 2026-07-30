@@ -293,7 +293,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-indigo-500/10 border-indigo-500/20',
           hexColor: '#818CF8',
           isTurkish: false,
-          bgImage: ''
+          bgImage: '/assets/leagues/friendlies-bg.jpg'
       };
     }
     
