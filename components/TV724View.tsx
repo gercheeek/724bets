@@ -56,22 +56,22 @@ const getChannelLogo = (channelName: string, avatarUrl?: string) => {
     if (avatarUrl && avatarUrl.trim()) return avatarUrl;
     const nameLower = channelName.toLowerCase();
     
-    // Check known channel names FIRST to always show proper logos using reliable Favicons
+    // Check known channel names FIRST to always show proper logos using High-Res PNGs
     if (nameLower.includes('724tv') || nameLower.includes('7/24')) return 'https://img.icons8.com/color/96/television.png';
-    if (nameLower.includes('bein') || nameLower.includes('lig tv')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://beinsports.com.tr&size=128';
-    if (nameLower.includes('s sport') || nameLower.includes('ssport')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://ssportplus.com&size=128';
-    if (nameLower.includes('smart')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://dsmart.com.tr&size=128';
-    if (nameLower.includes('tivibu')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://tivibu.com.tr&size=128';
-    if (nameLower.includes('trt')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://trtspor.com.tr&size=128';
-    if (nameLower.includes('a spor')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://aspor.com.tr&size=128';
-    if (nameLower.includes('exxen') || nameLower.includes('dijital') || nameLower.includes('platform')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://exxen.com&size=128';
-    if (nameLower.includes('eurosport') || nameLower.includes('euro sport')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://eurosport.com.tr&size=128';
-    if (nameLower.includes('tv8')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://tv8.com.tr&size=128';
+    if (nameLower.includes('bein') || nameLower.includes('lig tv')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/512px-BeIN_Sports_logo_%28horizontal_version%29.svg.png';
+    if (nameLower.includes('s sport') || nameLower.includes('ssport')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/SSport_logo.png/512px-SSport_logo.png';
+    if (nameLower.includes('smart')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Smart_Spor_logo.png/512px-Smart_Spor_logo.png';
+    if (nameLower.includes('tivibu')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tivibu_Spor_logo.svg/512px-Tivibu_Spor_logo.svg.png';
+    if (nameLower.includes('trt')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/TRT_Spor_logo.svg/512px-TRT_Spor_logo.svg.png';
+    if (nameLower.includes('a spor')) return 'https://upload.wikimedia.org/wikipedia/tr/b/bf/A_spor_logo.png';
+    if (nameLower.includes('exxen') || nameLower.includes('dijital') || nameLower.includes('platform')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Exxen_Logo.svg/512px-Exxen_Logo.svg.png';
+    if (nameLower.includes('eurosport') || nameLower.includes('euro sport')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Eurosport_logo.svg/512px-Eurosport_logo.svg.png';
+    if (nameLower.includes('tv8')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/TV8_logo.svg/512px-TV8_logo.svg.png';
     if (nameLower.includes('mac') || nameLower.includes('maç') || nameLower.includes('futbol') || nameLower.includes('taraftar')) return 'https://img.icons8.com/color/96/football.png';
-    if (nameLower.includes('ulusal')) return 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://trt1.com.tr&size=128';
+    if (nameLower.includes('ulusal')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/TRT_1_logo.svg/512px-TRT_1_logo.svg.png';
     if (nameLower.includes('diğer') || nameLower.includes('diger')) return 'https://img.icons8.com/color/96/tv.png';
     
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(channelName)}&background=1a2035&color=fff`;
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(channelName)}&background=1a2035&color=fff&size=128&rounded=true&bold=true`;
 };
 
 // ─── STREAMER STATS HELPER ────────────────────────────────────────────────────
@@ -1156,14 +1156,14 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                     }} 
                                                                 />
                                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 1, position: 'relative' }}>
-                                                                <div style={{ width: '44px', height: '44px', background: `linear-gradient(135deg, ${config.color}20, transparent)`, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5px', border: `1px solid ${config.color}40`, boxShadow: `0 0 12px ${config.color}20` }}>
+                                                                <div style={{ width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: `2px solid ${config.color}50`, boxShadow: `0 4px 16px ${config.color}25`, background: '#fff' }}>
                                                                     <img 
                                                                         src={getChannelLogo(groupName.replace(/^[^\s]+\s+/, ''))} 
                                                                         alt={groupName.replace(/^[^\s]+\s+/, '')} 
-                                                                        style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: isCollapsed ? 0.7 : 1, transition: 'opacity 0.2s', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}
+                                                                        style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: isCollapsed ? 0.7 : 1, transition: 'opacity 0.2s', padding: '6px' }}
                                                                         onError={(e) => {
                                                                             e.currentTarget.onerror = null;
-                                                                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(groupName.replace(/^[^\s]+\s+/, ''))}&background=1a2035&color=fff&size=128`;
+                                                                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(groupName.replace(/^[^\s]+\s+/, ''))}&background=1a2035&color=fff&size=128&rounded=true&bold=true`;
                                                                         }}
                                                                     />
                                                                 </div>
