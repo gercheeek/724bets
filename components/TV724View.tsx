@@ -1009,22 +1009,22 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                             .filter(g => grouped[g] && grouped[g].length > 0)
                                             .filter(g => selectedGroupFilter === 'Tümü' || selectedGroupFilter === g)
                                             .map(groupName => (
-                                            <div key={groupName} style={{ marginBottom: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.04)', overflow: 'hidden' }}>
+                                            <div key={groupName} style={{ marginBottom: '8px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.04)', overflow: 'hidden' }}>
                                                 {/* Accordion Header */}
                                                 <div 
                                                     onClick={() => setCollapsedGroups(prev => ({ ...prev, [groupName]: !prev[groupName] }))}
-                                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: '#13161C', cursor: 'pointer', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.02)' }}
+                                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#13161C', cursor: 'pointer', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.02)' }}
                                                     className="hover:bg-[#1A1D24] transition-colors"
                                                 >
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <span style={{ fontSize: '15px', fontWeight: 900, color: '#f3f4f6', letterSpacing: '0.5px' }}>{groupName}</span>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#f3f4f6', letterSpacing: '0.5px' }}>{groupName}</span>
                                                     </div>
-                                                    {collapsedGroups[groupName] ? <ChevronDown style={{ width: 20, height: 20, color: '#9ca3af' }} /> : <ChevronUp style={{ width: 20, height: 20, color: '#9ca3af' }} />}
+                                                    {collapsedGroups[groupName] ? <ChevronDown style={{ width: 16, height: 16, color: '#9ca3af' }} /> : <ChevronUp style={{ width: 16, height: 16, color: '#9ca3af' }} />}
                                                 </div>
                                                 
                                                 {/* Accordion Content */}
                                                 {!collapsedGroups[groupName] && (
-                                                    <div style={{ display: 'flex', flexDirection: 'column', padding: '8px' }}>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', padding: '6px' }}>
                                                         {grouped[groupName].map(s => {
                                                             const isActive = activeChannel?.id === s.id;
                                                             return (
@@ -1042,9 +1042,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                         } as any);
                                                                     }}
                                                                     style={{ 
-                                                                        display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 12px', 
+                                                                        display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 10px', 
                                                                         background: isActive ? 'linear-gradient(90deg, rgba(16,185,129,0.1) 0%, transparent 100%)' : 'transparent', 
-                                                                        borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s',
+                                                                        borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s',
                                                                         borderLeft: isActive ? '3px solid #10b981' : '3px solid transparent'
                                                                     }}
                                                                     className="hover:bg-white/5"
@@ -1053,25 +1053,25 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                         <img 
                                                                             src={getChannelLogo(s.name, s.avatar_url)} 
                                                                             alt={s.name} 
-                                                                            style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'contain', background: 'rgba(0,0,0,0.4)', padding: '4px', border: isActive ? '1px solid rgba(16,185,129,0.3)' : '1px solid rgba(255,255,255,0.05)' }}
+                                                                            style={{ width: '28px', height: '28px', borderRadius: '6px', objectFit: 'contain', background: 'rgba(0,0,0,0.4)', padding: '3px', border: isActive ? '1px solid rgba(16,185,129,0.3)' : '1px solid rgba(255,255,255,0.05)' }}
                                                                             onError={(e) => {
                                                                                 e.currentTarget.onerror = null;
                                                                                 e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=111&color=fff`;
                                                                             }}
                                                                         />
                                                                         {s.is_live && (
-                                                                            <div style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', border: '2px solid #12141a', animation: 'pulse 2s infinite' }} />
+                                                                            <div style={{ position: 'absolute', top: '-1px', right: '-1px', width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', border: '1.5px solid #12141a', animation: 'pulse 2s infinite' }} />
                                                                         )}
                                                                     </div>
                                                                     <div style={{ flex: 1 }}>
-                                                                        <div style={{ fontSize: '13px', fontWeight: 900, color: isActive ? '#fff' : '#d1d5db', marginBottom: '2px' }}>{s.name}</div>
-                                                                        <div style={{ fontSize: '10px', color: s.is_live ? '#10b981' : '#6b7280', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                                        <div style={{ fontSize: '12px', fontWeight: 900, color: isActive ? '#fff' : '#d1d5db', marginBottom: '1px' }}>{s.name}</div>
+                                                                        <div style={{ fontSize: '9px', color: s.is_live ? '#10b981' : '#6b7280', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                                             {s.is_live ? 'CANLI YAYIN' : 'ÇEVRİMDIŞI'}
                                                                         </div>
                                                                     </div>
                                                                     {isActive && (
-                                                                        <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                                            <Play style={{ width: 12, height: 12, color: '#10b981', marginLeft: '2px' }} />
+                                                                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center' }}>
+                                                                            <Play style={{ width: 10, height: 10, color: '#10b981', marginLeft: '1px' }} />
                                                                         </div>
                                                                     )}
                                                                 </div>
