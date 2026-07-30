@@ -34,17 +34,19 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
       const parts = mStr.split('|');
       if (parts.length < 3) return;
       const marketName = parts[1]; // e.g. "1x2", "Alt/Üst"
-      const selectionsStr = parts.slice(2).join('|'); // e.g. "~home~1.17~...~1~"
+      const selectionsStr = parts.slice(2).join('|'); // e.g. "~1~1.17!~X~...~2~"
       
       const selections: any[] = [];
-      const regex = /~([^~]+)~([\d.]+)~[\d.]+~[\d.]+~1~/g;
-      let matchExec;
-      while ((matchExec = regex.exec(selectionsStr)) !== null) {
-        selections.push({
-          name: matchExec[1],
-          odd: parseFloat(matchExec[2])
-        });
-      }
+      const sels = selectionsStr.split('!');
+      sels.forEach(sel => {
+         const matchExec = sel.match(/~([^~]+)~([\d.]+)/);
+         if (matchExec) {
+             selections.push({
+                 name: matchExec[1],
+                 odd: parseFloat(matchExec[2])
+             });
+         }
+      });
 
       if (selections.length > 0) {
         if (!parsedMarkets[marketName]) parsedMarkets[marketName] = [];
@@ -58,13 +60,14 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
   const activeMarkets = getMarketsFromGroup(activeTab);
 
   const formatSelectionName = (name: string) => {
-    if (name === 'home') return homeTeam;
-    if (name === 'away') return awayTeam;
-    if (name === 'draw' || name === 'x') return 'Beraberlik';
-    if (name === 'over') return 'Üst';
-    if (name === 'under') return 'Alt';
-    if (name === 'yes') return 'Evet';
-    if (name === 'no') return 'Hayır';
+    const t = name.toLowerCase();
+    if (t === 'home' || t === '1') return homeTeam;
+    if (t === 'away' || t === '2') return awayTeam;
+    if (t === 'draw' || t === 'x') return 'Beraberlik';
+    if (t === 'over') return 'Üst';
+    if (t === 'under') return 'Alt';
+    if (t === 'yes') return 'Evet';
+    if (t === 'no') return 'Hayır';
     return name;
   };
 

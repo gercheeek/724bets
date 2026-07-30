@@ -39,10 +39,10 @@ const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
 
   const slides = [
     {
-      badge: "YILIN VIP ETKİNLİĞİ",
-      title: "Milyonluk Ödül Havuzu",
-      highlight: "$20.000",
-      bgImage: "/images/raffle/raffle_bg_1_1784885265917.webp",
+      badge: "ÖZEL KOLEKSİYON",
+      title: "Rolex Daytona 'Panda'",
+      highlight: "ORİJİNAL LÜKS SAAT",
+      bgImage: "/images/raffle/rolex_daytona_model.jpg",
     },
     {
       badge: "KAZANMA ŞANSINI ARTIR",
@@ -283,15 +283,17 @@ const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
               {/* 1st Prize */}
               <div className="glass-panel rounded-3xl p-6 lg:p-8 flex items-center justify-between border-amber-500/30 hover:bg-amber-500/5 transition-colors group">
                 <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400/20 to-yellow-600/20 flex items-center justify-center border border-yellow-500/30">
-                    <Trophy className="w-6 h-6 text-yellow-400 drop-shadow-[0_0_12px_rgba(250,204,21,0.8)] group-hover:scale-110 transition-transform" />
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-400/10 to-yellow-600/10 flex items-center justify-center border border-yellow-500/30 overflow-hidden">
+                    <img src="/images/raffle/rolex_daytona.jpg" alt="Rolex Daytona" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 mix-blend-screen" />
                   </div>
                   <div>
-                    <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-wider mb-1">1. Şanslı</div>
-                    <div className="text-amber-100/90 font-bold text-lg">Altın Kupa</div>
+                    <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-wider mb-1 flex items-center gap-2">
+                      <Trophy className="w-3 h-3 text-yellow-400" /> BÜYÜK ÖDÜL
+                    </div>
+                    <div className="text-amber-100/90 font-bold text-lg md:text-xl">Rolex Daytona 'Panda'</div>
                   </div>
                 </div>
-                <div className="text-2xl font-black gold-gradient-text drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]">$10.000</div>
+                <div className="text-xl md:text-2xl font-black gold-gradient-text drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]">$30.000 Değerinde</div>
               </div>
 
               {/* 2nd - 5th Prize */}

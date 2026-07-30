@@ -8,6 +8,13 @@ import {
     ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Clock, Radio, Trophy, Calendar, TrendingUp, ArrowRight,
     Bell, BellOff, Gift as GiftIcon, CheckCircle, AlertCircle, BarChart2,
 } from 'lucide-react';
+import { useBetting } from '../contexts/BettingContext';
+import SportsPromoSlider from './sports/SportsPromoSlider';
+import { TopMatchesWidget } from './sports/TopMatchesWidget';
+
+import { useLanguage } from '../contexts/LanguageContext';
+import { parseMatchData } from './Spor724View';
+import { MatchInfo } from './sports/types';
 
 // ─── STATIC DATA ─────────────────────────────────────────────────────────────
 const HERO_SLIDES = [
@@ -289,6 +296,14 @@ const getGroupConfig = (groupName: string) => {
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBack, onLoginRequired, activeView = '724tv' }) => {
     // ── Core state ──
+    const { events } = useBetting();
+    const { language } = useLanguage();
+    
+    const matches = React.useMemo(() => {
+        if (!events) return [];
+        return events.map(ev => parseMatchData(ev, language)).filter(Boolean) as MatchInfo[];
+    }, [events, language]);
+
     const [currentConfig, setCurrentConfig] = useState<TVConfig>(config);
     const [activeChannel, setActiveChannel] = useState<TVChannel | null>(null);
     const [messages, setMessages] = useState<TVChatMessage[]>([]);
@@ -924,9 +939,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     }
 
     return (
-        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in" style={{ width: '100%', minHeight: '100vh', fontFamily: "'Inter', sans-serif", backgroundColor: '#050505', backgroundImage: 'radial-gradient(circle at 50% 0%, #1a0505 0%, #050505 70%)', position: 'relative', overflow: 'hidden' }}>
-            {/* Neon glowing edges */}
-            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', boxShadow: 'inset 0 0 100px rgba(239, 68, 68, 0.03)', zIndex: 0 }} />
+        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in" style={{ width: '100%', minHeight: '100vh', fontFamily: "'Inter', sans-serif", backgroundColor: '#050508', backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(212,175,55,0.03) 0%, #050508 70%)', position: 'relative', overflow: 'hidden' }}>
+            {/* Elegant dark edges */}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.8)', zIndex: 0 }} />
             
             {/* Floating balls / chips effect (CSS only) */}
             <div className="floating-elements" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.1, background: 'url(/splash-ball.webp)', backgroundSize: '100px', animation: 'float-bg 60s linear infinite' }} />
@@ -1155,109 +1170,12 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                         background: `radial-gradient(ellipse at right center, ${config.color}22 0%, transparent 60%)`
                                                                     }} 
                                                                 />
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 1, position: 'relative' }}>
-                                                                <div style={{ width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: `2px solid ${config.color}50`, boxShadow: `0 4px 16px ${config.color}25`, background: '#fff' }}>
-                                                                    {(() => {
-                                                                        const name = groupName.replace(/^[^\s]+\s+/, '').toLowerCase();
-                                                                        
-                                                                        // Perfect Inline SVGs for Channel Logos
-                                                                        if (name.includes('bein') || name.includes('lig tv')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '4px' }}>
-                                                                                    <rect x="5" y="15" width="90" height="70" rx="10" fill="#581C87" />
-                                                                                    <text x="50%" y="45%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="26" fontWeight="900" fontFamily="sans-serif">beIN</text>
-                                                                                    <text x="50%" y="75%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="bold" fontFamily="sans-serif" letterSpacing="1">SPORTS</text>
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        if (name.includes('s sport') || name.includes('ssport')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '2px' }}>
-                                                                                    <circle cx="50" cy="50" r="45" fill="#fff" stroke="#1e293b" strokeWidth="2" />
-                                                                                    <path d="M 65 35 C 65 25, 35 25, 35 40 C 35 55, 65 60, 65 75 C 65 90, 35 90, 35 80" fill="none" stroke="#dc2626" strokeWidth="8" strokeLinecap="round" />
-                                                                                    <path d="M 60 38 C 60 30, 40 30, 40 40 C 40 52, 60 55, 60 75 C 60 85, 40 85, 40 78" fill="none" stroke="#2563eb" strokeWidth="6" strokeLinecap="round" />
-                                                                                    <text x="75" y="75" fill="#1e293b" fontSize="24" fontWeight="bold">+</text>
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        if (name.includes('smart')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-                                                                                    <rect width="100" height="100" fill="#111" />
-                                                                                    <path d="M 30 25 L 50 25 C 75 25, 75 75, 50 75 L 30 75 Z" fill="none" stroke="#f97316" strokeWidth="12" strokeLinejoin="round" />
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        if (name.includes('tivibu')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '6px' }}>
-                                                                                    <circle cx="50" cy="50" r="46" fill="#fff" />
-                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#ea580c" fontSize="24" fontWeight="900" fontFamily="sans-serif" fontStyle="italic">tivibu</text>
-                                                                                    <text x="50%" y="75%" dominantBaseline="middle" textAnchor="middle" fill="#111" fontSize="12" fontWeight="bold" fontFamily="sans-serif">SPOR</text>
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        if (name.includes('trt')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '4px' }}>
-                                                                                    <rect x="5" y="25" width="28" height="30" fill="#fff" stroke="#111" strokeWidth="2" />
-                                                                                    <rect x="36" y="25" width="28" height="30" fill="#fff" stroke="#111" strokeWidth="2" />
-                                                                                    <rect x="67" y="25" width="28" height="30" fill="#fff" stroke="#111" strokeWidth="2" />
-                                                                                    <text x="19" y="46" dominantBaseline="middle" textAnchor="middle" fill="#111" fontSize="18" fontWeight="bold" fontFamily="sans-serif">T</text>
-                                                                                    <text x="50" y="46" dominantBaseline="middle" textAnchor="middle" fill="#111" fontSize="18" fontWeight="bold" fontFamily="sans-serif">R</text>
-                                                                                    <text x="81" y="46" dominantBaseline="middle" textAnchor="middle" fill="#111" fontSize="18" fontWeight="bold" fontFamily="sans-serif">T</text>
-                                                                                    <text x="50%" y="80%" dominantBaseline="middle" textAnchor="middle" fill="#16a34a" fontSize="22" fontWeight="900" fontFamily="sans-serif">SPOR</text>
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        if (name.includes('exxen') || name.includes('dijital')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-                                                                                    <rect width="100" height="100" fill="#000" />
-                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#fde047" fontSize="22" fontWeight="900" fontFamily="sans-serif" letterSpacing="1">EXXEN</text>
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        if (name.includes('a spor')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '4px' }}>
-                                                                                    <rect x="10" y="20" width="80" height="60" rx="4" fill="#0284c7" />
-                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="32" fontWeight="900" fontFamily="serif" fontStyle="italic">A</text>
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        if (name.includes('tv8')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '6px' }}>
-                                                                                    <circle cx="50" cy="50" r="44" fill="#111" />
-                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="32" fontWeight="900" fontFamily="sans-serif">tv8</text>
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        if (name.includes('eurosport')) {
-                                                                            return (
-                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-                                                                                    <rect width="100" height="100" fill="#1e3a8a" />
-                                                                                    <circle cx="50" cy="50" r="30" fill="none" stroke="#fff" strokeWidth="4" strokeDasharray="8 4" />
-                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="24" fontWeight="bold" fontFamily="sans-serif">E</text>
-                                                                                </svg>
-                                                                            );
-                                                                        }
-                                                                        
-                                                                        // Fallback UI Avatar
-                                                                        return (
-                                                                            <img 
-                                                                                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(groupName.replace(/^[^\s]+\s+/, ''))}&background=1a2035&color=fff&size=128&rounded=true&bold=true`}
-                                                                                alt={groupName.replace(/^[^\s]+\s+/, '')} 
-                                                                                style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: isCollapsed ? 0.7 : 1, transition: 'opacity 0.2s', padding: '0px' }}
-                                                                            />
-                                                                        );
-                                                                    })()}
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 1, position: 'relative' }}>
+                                                                    <div style={{ width: '3px', height: '16px', background: config.color, borderRadius: '4px', boxShadow: `0 0 10px ${config.color}80` }} />
+                                                                    <span style={{ fontSize: '14px', fontWeight: 900, color: '#fff', letterSpacing: '0.5px', transition: 'color 0.2s' }}>
+                                                                        {groupName.replace(/^[^\s]+\s+/, '')}
+                                                                    </span>
                                                                 </div>
-                                                                <span style={{ fontSize: '15px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.5px', transition: 'color 0.2s' }}>
-                                                                    {groupName.replace(/^[^\s]+\s+/, '')}
-                                                                </span>
-                                                            </div>
                                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', zIndex: 1, position: 'relative' }}>
                                                                 <span style={{ 
                                                                     fontSize: '9.5px', 
@@ -1314,26 +1232,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                     }}
                                                                     className={`group/item ${isActive ? '' : 'hover:bg-[#ffffff06] hover:border-l-[#ffffff20] hover:translate-x-1'}`}
                                                                 >
-                                                                    <div style={{ position: 'relative' }}>
-                                                                        <img 
-                                                                            src={getChannelLogo(s.name, s.avatar_url)} 
-                                                                            alt={s.name} 
-                                                                            style={{ 
-                                                                                width: '32px', height: '32px', borderRadius: '8px', objectFit: 'contain', 
-                                                                                background: 'rgba(0,0,0,0.5)', padding: '4px', 
-                                                                                border: isActive ? '1px solid rgba(16,185,129,0.5)' : '1px solid rgba(255,255,255,0.05)', 
-                                                                                boxShadow: isActive ? '0 0 12px rgba(16,185,129,0.3)' : 'none',
-                                                                                transition: 'all 0.2s'
-                                                                            }}
-                                                                            className={isActive ? '' : 'group-hover/item:border-white/20'}
-                                                                            onError={(e) => {
-                                                                                e.currentTarget.onerror = null;
-                                                                                e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=111&color=fff`;
-                                                                            }}
-                                                                        />
-                                                                        {s.is_live && (
-                                                                            <div style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', border: '2px solid #12141a', animation: 'pulse 2s infinite' }} />
-                                                                        )}
+                                                                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '16px' }}>
+                                                                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: isActive ? '#10b981' : (s.is_live ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.2)'), boxShadow: isActive ? '0 0 8px rgba(16,185,129,0.8)' : 'none' }} />
                                                                     </div>
                                                                     <div style={{ flex: 1, minWidth: 0 }}>
                                                                         <div style={{ fontSize: '12px', fontWeight: isActive ? 900 : 800, color: isActive ? '#fff' : '#d1d5db', marginBottom: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', transition: 'color 0.2s' }} className="group-hover/item:text-white">{s.name}</div>
@@ -1385,129 +1285,65 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     </div>
                 </div>
 
-                {/* SYS.ON Cards Block */}
-                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '20px', marginTop: '10px' }}>
-                    
-                    {/* CANLI MASA CARD */}
-                    <div className="group relative rounded-xl overflow-hidden cursor-pointer" style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', minHeight: '260px' }}>
-                        {/* Background & Grid */}
-                        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-                        <div style={{ position: 'absolute', inset: 0, opacity: 0.2, backgroundImage: 'url(https://images.unsplash.com/photo-1605662768434-2e21ea5c1926?q=80&w=600&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center', mixBlendMode: 'luminosity' }} className="group-hover:opacity-40 transition-opacity duration-500"></div>
-                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, #0a0a0a 100%)' }}></div>
-                        
-                        {/* Content */}
-                        <div style={{ position: 'relative', zIndex: 10, padding: '20px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(255,255,255,0.1)', padding: '4px 12px', width: 'fit-content', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
-                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }}></div>
-                                <span style={{ color: '#06b6d4', fontSize: '10px', fontFamily: 'monospace', letterSpacing: '1px' }}>SYS.ON _CASINO</span>
-                            </div>
-                            
-                            {/* Cyan Line */}
-                            <div style={{ width: '100%', height: '2px', background: '#06b6d4', marginTop: 'auto', marginBottom: '15px', position: 'relative' }}>
-                                <div style={{ position: 'absolute', left: '-20px', width: '4px', height: '20px', background: '#06b6d4', top: '-9px' }}></div>
-                            </div>
-                            
-                            <h3 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', letterSpacing: '-1px', margin: '0 0 20px 0' }}>CANLI MASA</h3>
-                            
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                        <span style={{ fontSize: '10px', color: '#06b6d4', fontFamily: 'monospace' }}>SECURE_LINK: <span style={{ color: '#10b981' }}>TRUE</span></span>
-                                    </div>
-                                    <span style={{ fontSize: '9px', color: '#6b7280', fontFamily: 'monospace' }}>[ LATENCY: 12ms ]</span>
-                                </div>
-                                
-                                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(6,182,212,0.1)', display: 'flex', alignItems: 'center', justifyItems: 'center', border: '1px dashed rgba(6,182,212,0.3)', position: 'relative' }} className="group-hover:border-cyan-500 transition-colors">
-                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#06b6d4', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 15px rgba(6,182,212,0.5)', margin: '0 auto' }}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#000" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '2px' }}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {/* CANLI SPOR CARD */}
-                    <div className="group relative rounded-xl overflow-hidden cursor-pointer" style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', minHeight: '260px' }}>
-                        {/* Background & Grid */}
-                        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-                        <div style={{ position: 'absolute', inset: 0, opacity: 0.2, backgroundImage: 'url(https://images.unsplash.com/photo-1518605368461-1e1e34320e8a?q=80&w=600&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center', mixBlendMode: 'luminosity' }} className="group-hover:opacity-40 transition-opacity duration-500"></div>
-                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, #0a0a0a 100%)' }}></div>
-                        
-                        {/* Content */}
-                        <div style={{ position: 'relative', zIndex: 10, padding: '20px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(255,255,255,0.1)', padding: '4px 12px', width: 'fit-content', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
-                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }}></div>
-                                <span style={{ color: '#10b981', fontSize: '10px', fontFamily: 'monospace', letterSpacing: '1px' }}>SYS.ON _SPORTS</span>
-                            </div>
-                            
-                            {/* Green Line */}
-                            <div style={{ width: '100%', height: '2px', background: '#10b981', marginTop: 'auto', marginBottom: '15px', position: 'relative' }}>
-                                <div style={{ position: 'absolute', left: '-20px', width: '4px', height: '20px', background: '#10b981', top: '-9px' }}></div>
-                            </div>
-                            
-                            <h3 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', letterSpacing: '-1px', margin: '0 0 20px 0' }}>CANLI SPOR</h3>
-                            
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                        <span style={{ fontSize: '10px', color: '#10b981', fontFamily: 'monospace' }}>ODDS_SYNC: <span style={{ color: '#10b981' }}>STABLE</span></span>
-                                    </div>
-                                    <span style={{ fontSize: '9px', color: '#6b7280', fontFamily: 'monospace' }}>[ UPTIME: 99.9% ]</span>
-                                </div>
-                                
-                                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(16,185,129,0.1)', display: 'flex', alignItems: 'center', justifyItems: 'center', border: '1px dashed rgba(16,185,129,0.3)', position: 'relative' }} className="group-hover:border-emerald-500 transition-colors">
-                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 15px rgba(16,185,129,0.5)', margin: '0 auto' }}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#000" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '2px' }}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                {/* ─── LIVE TICKER & MATCHES (User Requested) ─── */}
+                <div className="mt-4 flex flex-col gap-4">
+                   {/* 1. Live Ticker */}
+                   <LiveFeedTicker />
 
-                    {/* ÖZEL ÜRETİM CARD */}
-                    <div className="group relative rounded-xl overflow-hidden cursor-pointer" style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', minHeight: '260px' }}>
-                        {/* Background & Grid */}
-                        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-                        <div style={{ position: 'absolute', inset: 0, opacity: 0.2, backgroundImage: 'url(https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=600&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center', mixBlendMode: 'luminosity' }} className="group-hover:opacity-40 transition-opacity duration-500"></div>
-                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, #0a0a0a 100%)' }}></div>
-                        
-                        {/* Content */}
-                        <div style={{ position: 'relative', zIndex: 10, padding: '20px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', border: '1px solid rgba(255,255,255,0.1)', padding: '4px 12px', width: 'fit-content', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
-                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }}></div>
-                                <span style={{ color: '#eab308', fontSize: '10px', fontFamily: 'monospace', letterSpacing: '1px' }}>SYS.ON _ORIGINAL</span>
-                            </div>
-                            
-                            {/* Yellow Line */}
-                            <div style={{ width: '100%', height: '2px', background: '#eab308', marginTop: 'auto', marginBottom: '15px', position: 'relative' }}>
-                                <div style={{ position: 'absolute', left: '-20px', width: '4px', height: '20px', background: '#eab308', top: '-9px' }}></div>
-                            </div>
-                            
-                            <h3 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', letterSpacing: '-1px', margin: '0 0 20px 0' }}>ÖZEL ÜRETİM</h3>
-                            
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                        <span style={{ fontSize: '10px', color: '#eab308', fontFamily: 'monospace' }}>ALGORITHM: <span style={{ color: '#10b981' }}>FAIR</span></span>
-                                    </div>
-                                    <span style={{ fontSize: '9px', color: '#6b7280', fontFamily: 'monospace' }}>[ RTP: 99.0% ]</span>
-                                </div>
-                                
-                                <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(234,179,8,0.1)', display: 'flex', alignItems: 'center', justifyItems: 'center', border: '1px dashed rgba(234,179,8,0.3)', position: 'relative' }} className="group-hover:border-yellow-500 transition-colors">
-                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#eab308', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 15px rgba(234,179,8,0.5)', margin: '0 auto' }}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#000" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '2px' }}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   {/* 2. Sports Slider (Synapse Esports etc) */}
+                   <div className="px-1 md:px-2">
+                       <SportsPromoSlider matches={matches} />
+                   </div>
+
+                   {/* 3. Live Matches List */}
+                   <div className="mt-2">
+                       <TopMatchesWidget 
+                         matches={matches.filter(m => m.isLive || m.minute)} 
+                         onSelectMatch={() => {}}
+                         sortByTime={false}
+                       />
+                   </div>
                 </div>
+
 
             </div>
         </div>
     );
 };
 export default TV724View;
+
+const LiveFeedTicker = () => {
+  const [toastIndex, setToastIndex] = useState(0);
+  const TOAST_MESSAGES = [
+      { user: 'a***7', action: '₺2.500 yatırdı', detail: 've 5 bilet aldı!' },
+      { user: 'm***4', action: 'VIP Çekilişe Katıldı', detail: '₺10.000 değerinde bilet aldı!' },
+      { user: 'k***9', action: '₺1.000 yatırdı', detail: 've 2 bilet aldı!' },
+      { user: 'c***2', action: 'Yeni Üye Oldu', detail: 'Hoşgeldin Bonusu aldı!' }
+  ];
+
+  useEffect(() => {
+      const interval = setInterval(() => {
+          setToastIndex(prev => (prev + 1) % TOAST_MESSAGES.length);
+      }, 3500);
+      return () => clearInterval(interval);
+  }, []);
+
+  const msg = TOAST_MESSAGES[toastIndex];
+
+  return (
+      <div className="w-full bg-[#0a0d14] border-t border-white/5 py-3 overflow-hidden shrink-0 mt-4 rounded-xl shadow-lg border border-white/10">
+          <div className="flex items-center gap-4 px-4 whitespace-nowrap overflow-hidden">
+              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded flex items-center gap-1.5 shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  CANLI AKIŞ
+              </span>
+              <div className="flex-1 flex items-center gap-2 text-sm text-zinc-300 min-w-0">
+                  <span className="text-amber-500 font-medium">⚡ {msg.user}</span>
+                  <span className="text-zinc-400">az önce</span>
+                  <span className="text-emerald-400 font-medium">{msg.action}</span>
+                  <span className="text-zinc-500">{msg.detail}</span>
+              </div>
+          </div>
+      </div>
+  );
+};

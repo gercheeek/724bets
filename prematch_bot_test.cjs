@@ -229,7 +229,7 @@ function fetchPrematchData() {
                                                     });
                                                     // Aynı threshold'a sahip tekrar eden marketleri temizle
                                                     if (matchObj.data.group_markets["full_event|0"]) {
-                                                        let uniqueKeys = new Set();
+                                                        console.log('BEFORE:', matchObj.data.group_markets['full_event|0'].length); let uniqueKeys = new Set();
                                                         matchObj.data.group_markets["full_event|0"] = matchObj.data.group_markets["full_event|0"].filter(item => {
                                                             let parts = item.split('|');
                                                             if (parts.length >= 3) {
@@ -239,6 +239,7 @@ function fetchPrematchData() {
                                                             }
                                                             return true;
                                                         });
+console.log('AFTER:', matchObj.data.group_markets['full_event|0'].length);
                                                     }
                                                 }
                                                 if (matchObj.data.group_markets["full_event|0"].length > 0) matches.push(matchObj);

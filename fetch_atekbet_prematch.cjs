@@ -55,8 +55,8 @@ ws.on('message', (d) => {
                what: {
                  competition: ['id', 'name'],
                  game: ['id', 'team1_name', 'team2_name', 'team1_id', 'team2_id', 'start_ts', 'type', 'is_live', 'info'],
-                 market: ['id', 'name', 'type_name'],
-                 event: ['id', 'name', 'price']
+                 market: ['id', 'name', 'type_name', 'base'],
+                 event: ['id', 'name', 'price', 'base']
                },
                where: {
                  region: { id: reg.regionId },
@@ -107,89 +107,110 @@ ws.on('message', (d) => {
                    const evs = Object.values(m.event);
 
                    // 1x2 (Maç Sonucu)
-                   if (t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' || n === 'match result' || n === 'maç sonucu' || n === '1x2' || n === 'winner' || n === 'kazanan' || n === 'maçın kazananı') {
-                       const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
+                   if (n === 'maç sonucu' || n === '1x2' || t === 'p1x2' || t === 'matchresult') {
+                       const p1 = evs.find(e => ['w1', '1', 'p1'].includes((e.name || '').toLowerCase().trim()))?.price;
                        const px = evs.find(e => ['x', 'draw', 'beraberlik'].includes((e.name || '').toLowerCase().trim()))?.price;
-                       const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const p2 = evs.find(e => ['w2', '2', 'p2'].includes((e.name || '').toLowerCase().trim()))?.price;
                        if (p1 || px || p2) groupMarkets["full_event|0"].push(`|1x2||~1~${p1||'-'}!~X~${px||'-'}!~2~${p2||'-'}`);
                    }
                    // Alt/Üst (Over/Under)
-                   else if (n.includes('alt') || n.includes('üst') || n.includes('under') || n.includes('over') || t.includes('total') || t.includes('ou')) {
-                       // Sadece genel toplam golleri al (korner/kart değilse)
-                       if (!n.includes('korner') && !n.includes('corner') && !n.includes('kart') && !n.includes('card')) {
-                           const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
-                           const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
-                           if (over || under) {
-                               const matchLine = n.match(/([0-9]+\.5)/) || m.base;
-                               const arg = matchLine ? (matchLine[1] || matchLine) : '';
-                               groupMarkets["full_event|0"].push(`|ou|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
+                   else if (n === 'toplam goller' || n.includes('toplam gol') && !n.includes('yarı') && !n.includes('team')) {
+                       const overEv = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'));
+                       const underEv = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'));
+                       const over = overEv?.price;
+                       const under = underEv?.price;
+                       if (over || under) {
+                           let matchLine = n.match(/([0-9]+\.5)/);
+                           if (!matchLine) {
+                               const evName = (overEv?.name || underEv?.name || '').toLowerCase();
+                               matchLine = evName.match(/([0-9]+\.5)/);
                            }
+                           let arg = matchLine ? matchLine[1] : m.base;
+                           if (arg === undefined || arg === null) arg = '';
+                           if (arg === '') console.log("OU NULL:", n, "BASE:", m.base);
+                           groupMarkets["full_event|0"].push(`|ou|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
                        }
                    }
                    // Karşılıklı Gol (BTTS)
-                   else if (n.includes('karşılıklı gol') || n.includes('btts') || n.includes('both teams')) {
+                   else if (n === 'her iki takımda gol atar' || n.includes('karşılıklı gol') && !n.includes('yarı')) {
                        const yes = evs.find(e => ['var', 'evet', 'yes'].includes((e.name || '').toLowerCase().trim()))?.price;
                        const no = evs.find(e => ['yok', 'hayır', 'no'].includes((e.name || '').toLowerCase().trim()))?.price;
                        if (yes || no) groupMarkets["full_event|0"].push(`|gg||~var~${yes||'-'}!~yok~${no||'-'}`);
                    }
                    // Çifte Şans (Double Chance)
-                   else if (n.includes('çifte şans') || n.includes('double chance') || t === 'doublechance') {
+                   else if (n === 'çifte şans' || n === 'cifte sans' || t === 'doublechance') {
                        const p1x = evs.find(e => ['1x', '1 x'].includes((e.name || '').toLowerCase().trim()))?.price;
                        const p12 = evs.find(e => ['12', '1 2'].includes((e.name || '').toLowerCase().trim()))?.price;
                        const px2 = evs.find(e => ['x2', 'x 2', '2x', '2 x'].includes((e.name || '').toLowerCase().trim()))?.price;
                        if (p1x || p12 || px2) groupMarkets["full_event|0"].push(`|Double_Chance||~1X~${p1x||'-'}!~12~${p12||'-'}!~X2~${px2||'-'}`);
                    }
-                   // Beraberlikte İade (Draw No Bet)
-                   else if (n.includes('beraberlikte iade') || n.includes('draw no bet') || t === 'drawnobet') {
-                       const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
-                       const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
-                       if (p1 || p2) groupMarkets["full_event|0"].push(`|Draw_No_Bet||~1~${p1||'-'}!~2~${p2||'-'}`);
-                   }
                    // İlk Yarı Sonucu (Half Time Result)
-                   else if ((n.includes('1. yarı') || n.includes('1.yarı') || n.includes('ilk yarı') || n.includes('1st half') || t.includes('half')) && (n.includes('sonucu') || n.includes('result') || n.includes('1x2'))) {
-                       const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
+                   else if (n === '1.yarı sonucu' || n === '1. yarı sonucu') {
+                       const p1 = evs.find(e => ['w1', '1', 'p1'].includes((e.name || '').toLowerCase().trim()))?.price;
                        const px = evs.find(e => ['x', 'draw', 'beraberlik'].includes((e.name || '').toLowerCase().trim()))?.price;
-                       const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const p2 = evs.find(e => ['w2', '2', 'p2'].includes((e.name || '').toLowerCase().trim()))?.price;
                        if (p1 || px || p2) groupMarkets["full_event|0"].push(`|Half_Time_Result||~1~${p1||'-'}!~X~${px||'-'}!~2~${p2||'-'}`);
                    }
                    // Kornerler (Corners)
-                   else if (n.includes('korner') || n.includes('corner') || t.includes('corner')) {
-                       if (n.includes('alt') || n.includes('üst') || n.includes('under') || n.includes('over') || t.includes('total')) {
-                           const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
-                           const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
-                           if (over || under) {
-                               const matchLine = n.match(/([0-9]+\.5)/) || m.base;
-                               const arg = matchLine ? (matchLine[1] || matchLine) : '';
-                               groupMarkets["full_event|0"].push(`|Corners|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
+                   else if (n.includes('köşe vuruşları: toplam') || n === 'köşe vuruşları : sonuç') {
+                       if (n.includes('yarı') || n.includes('team')) return; // skip half/team corners
+                       const overEv = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'));
+                       const underEv = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'));
+                       const over = overEv?.price;
+                       const under = underEv?.price;
+                       if (over || under) {
+                           let matchLine = n.match(/([0-9]+\.5)/);
+                           if (!matchLine) {
+                               const evName = (overEv?.name || underEv?.name || '').toLowerCase();
+                               matchLine = evName.match(/([0-9]+\.5)/);
                            }
+                           const arg = matchLine ? matchLine[1] : (m.base || '');
+                           groupMarkets["full_event|0"].push(`|Corners|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
                        }
                    }
                    // Kartlar (Cards)
-                   else if (n.includes('kart') || n.includes('card') || t.includes('card')) {
-                       if (n.includes('alt') || n.includes('üst') || n.includes('under') || n.includes('over') || t.includes('total')) {
-                           const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
-                           const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
-                           if (over || under) {
-                               const matchLine = n.match(/([0-9]+\.5)/) || m.base;
-                               const arg = matchLine ? (matchLine[1] || matchLine) : '';
-                               groupMarkets["full_event|0"].push(`|Cards|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
-                           }
+                   else if (n.includes('kartlar: toplam puan') || n.includes('toplam kartlar')) {
+                       if (n.includes('yarı') || n.includes('team')) return;
+                       const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
+                       const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
+                       if (over || under) {
+                           const matchLine = n.match(/([0-9]+\.5)/) || m.base;
+                           const arg = matchLine ? (matchLine[1] || matchLine) : '';
+                           groupMarkets["full_event|0"].push(`|Cards|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
                        }
                    }
                    // Handikap
-                   else if (n.includes('handikap') || n.includes('handicap') || t.includes('handicap')) {
-                       const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1'].includes((e.name || '').toLowerCase().trim()));
-                       const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2'].includes((e.name || '').toLowerCase().trim()));
+                   else if (n === 'gol handikapı' || n === 'goller asya handikapı') {
+                       const p1 = evs.find(e => ['w1', '1', 'p1'].includes((e.name || '').toLowerCase().trim()));
+                       const p2 = evs.find(e => ['w2', '2', 'p2'].includes((e.name || '').toLowerCase().trim()));
                        if (p1?.price || p2?.price) {
-                           // Try to extract handicap base if present
                            const matchLine = n.match(/([+-]?[0-9]+\.5)/) || m.base;
                            const arg = matchLine ? (matchLine[1] || matchLine) : '';
                            groupMarkets["full_event|0"].push(`|Handicap|${arg}|~1~${p1?.price||'-'}!~2~${p2?.price||'-'}`);
                        }
                    }
                });
+               
+               // Aynı threshold'a sahip tekrar eden marketleri temizle (örn. Toplam Alt/Üst (1) vs Toplam Alt/Üst (1))
+               if (groupMarkets["full_event|0"]) {
+                   let uniqueKeys = new Set();
+                   groupMarkets["full_event|0"] = groupMarkets["full_event|0"].filter(item => {
+                       let parts = item.split('|'); 
+                       if (parts.length >= 3) {
+                           let key = parts[1] + '|' + parts[2];
+                           if (uniqueKeys.has(key)) return false;
+                           uniqueKeys.add(key);
+                       }
+                       return true;
+                   });
+               }
            }
            
+           if (game.team1_name.includes('Midtjylland') || game.team2_name.includes('Beşiktaş')) {
+               // Dump this specific match for debugging
+               fs.writeFileSync('public/raw_dump.json', JSON.stringify(game, null, 2));
+           }
+
            let status = game.is_live === 1 || game.type === 1 ? 'in_progress' : 'not_started';
            let score = '-';
            let minute = 'Live';

@@ -58,9 +58,9 @@ export const SportsHeroBanner: React.FC = () => {
       for (const market of markets) {
          if (!market || typeof market !== 'string') continue;
          const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
-         if (is1x2 && (market.includes('~home~') || market.includes('~away~'))) {
+         if (is1x2 && (market.includes('~home~') || market.includes('~away~') || market.includes('~1~') || market.includes('~2~'))) {
             const parts = market.split('|');
-            const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
+            const selectionsPart = parts.find((p: string) => p.includes('~home~') || p.includes('~away~') || p.includes('~1~') || p.includes('~2~'));
             
             if (selectionsPart) {
                const selections = selectionsPart.split('!');
@@ -68,8 +68,11 @@ export const SportsHeroBanner: React.FC = () => {
                   const sParts = sel.split('~');
                   if (sParts.length > 2) {
                     const type = sParts[1].toLowerCase();
-                    const odd = parseFloat(sParts[2]);
+                    let odd = parseFloat(sParts[2]);
                     if (!isNaN(odd)) {
+                        if (odd < 0) odd = Math.abs(odd);
+                        if (odd < 1) odd += 1;
+                        if (odd < 1.01) odd = 1.01;
                         const oddStr = odd.toFixed(2);
                         if (type === 'home' || type === '1') { homeOdd = oddStr; }
                         if (type === 'draw' || type === 'x') { drawOdd = oddStr; }
@@ -77,8 +80,8 @@ export const SportsHeroBanner: React.FC = () => {
                     }
                   }
                });
-               if (homeOdd !== '-' || awayOdd !== '-' || drawOdd !== '-') {
-                  break;
+               if (homeOdd !== '-' || awayOdd !== '-') {
+                  break; // Found valid odds
                }
             }
          }

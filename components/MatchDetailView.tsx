@@ -102,7 +102,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
         const marketId = parts[0];
         const type = parts[1];
         const arg = parts[2];
-        const selectionsStr = parts.find(p => p.includes('~home~') || p.includes('~away~') || p.includes('~over~') || p.includes('~under~') || p.includes('~odd~') || p.includes('~even~') || p.includes('~yes~') || p.includes('~no~'));
+        const selectionsStr = parts.find(p => p.includes('~home~') || p.includes('~away~') || p.includes('~1~') || p.includes('~2~') || p.includes('~over~') || p.includes('~under~') || p.includes('~odd~') || p.includes('~even~') || p.includes('~yes~') || p.includes('~no~'));
         
         if (!selectionsStr) return;
         
@@ -123,7 +123,7 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
         const parsedSelections: Record<string, string> = {};
         selections.forEach(s => {
            const sParts = s.split('~');
-           if (sParts.length > 2) parsedSelections[sParts[1]] = parseFloat(sParts[2]).toFixed(2);
+           if (sParts.length > 2) parsedSelections[sParts[1].toLowerCase()] = parseFloat(sParts[2]).toFixed(2);
         });
         
         // Formatting specific market types
@@ -131,17 +131,17 @@ export default function MatchDetailView({ match, onBack }: MatchDetailViewProps)
            parsedMarkets.push({
              tab, id: marketId, name: marketName, renderType: '1x2',
              options: [
-               { label: '1', value: parsedSelections['home'] || '-' },
-               { label: 'X', value: parsedSelections['draw'] || '-' },
-               { label: '2', value: parsedSelections['away'] || '-' }
+               { label: '1', value: parsedSelections['home'] || parsedSelections['1'] || '-' },
+               { label: 'X', value: parsedSelections['draw'] || parsedSelections['x'] || '-' },
+               { label: '2', value: parsedSelections['away'] || parsedSelections['2'] || '-' }
              ]
            });
         } else if (type === '12') {
            parsedMarkets.push({
              tab, id: marketId, name: marketName, renderType: '1x2',
              options: [
-               { label: '1', value: parsedSelections['home'] || '-' },
-               { label: '2', value: parsedSelections['away'] || '-' }
+               { label: '1', value: parsedSelections['home'] || parsedSelections['1'] || '-' },
+               { label: '2', value: parsedSelections['away'] || parsedSelections['2'] || '-' }
              ]
            });
         } else if (type === 'ou' || type === 'ou_home' || type === 'ou_away') {

@@ -395,14 +395,17 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                {markets.filter(market => {
                   const parts = market.split('|');
                   const marketName = translateMarket(parts[1] || '');
-                  if (activeCategory === 'Ana Seçenekler') return ['1x2', 'Çifte Şans', 'Beraberlikte iade', 'Handikap', 'Karşılıklı Gol', 'Maç Sonucu'].includes(marketName);
+                  if (activeCategory === 'Ana Seçenekler') return ['1x2', 'Çifte Şans', 'Beraberlikte iade', 'Handikap', 'Karşılıklı Gol', 'Maç Sonucu', 'Toplam Alt/Üst'].includes(marketName);
                   if (activeCategory === 'Toplam') return marketName.includes('Toplam') || marketName.includes('Alt/Üst');
                   if (activeCategory === 'Yarılar') return marketName.includes('Yarı');
                   if (activeCategory === 'Kornerler') return marketName.includes('Korner');
+                  if (activeCategory === 'İstatistikler') return marketName.includes('Kart') || marketName.includes('İstatistik') || marketName.includes('Oyuncu');
+                  if (activeCategory === 'Oyuncular' || activeCategory === 'Oyuncu') return marketName.includes('Oyuncu');
                   if (activeCategory === 'Setler') return marketName.includes('Set');
                   if (activeCategory === 'Oyunlar') return marketName.includes('Oyun') || marketName.includes('Game');
                   if (activeCategory === 'Çeyrekler') return marketName.includes('Çeyrek');
-                  return true; // Default fallback for other tabs
+                  if (activeCategory === 'Sihirbaz') return false; // Sihirbaz is a custom builder, usually empty for now
+                  return false; // Hide if it doesn't match the tab
                }).map((market: string, idx: number) => {
                   const parts = market.split('|');
                   const rawMarketName = parts[1] || 'Bahis Türü';

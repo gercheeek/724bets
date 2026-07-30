@@ -23,10 +23,10 @@ export const MatchRow: React.FC<{ event: any }> = ({ event }) => {
     const group = data.group_markets['full_event|0'] || data.group_markets['current|0'];
     if (group) {
       for (const marketStr of group) {
-        if (typeof marketStr === 'string' && (marketStr.includes('|1x2|') || marketStr.includes('|12|') || marketStr.includes('~draw~'))) {
-          const homeMatch = marketStr.match(/~home~([\d.]+)~[\d.]+~[\d.]+~[\d.]+~1~/);
-          const drawMatch = marketStr.match(/~draw~([\d.]+)~[\d.]+~[\d.]+~[\d.]+~1~/) || marketStr.match(/~x~([\d.]+)~[\d.]+~[\d.]+~[\d.]+~1~/);
-          const awayMatch = marketStr.match(/~away~([\d.]+)~[\d.]+~[\d.]+~[\d.]+~1~/);
+        if (typeof marketStr === 'string' && (marketStr.includes('|1x2|') || marketStr.includes('|12|') || marketStr.includes('|match_winner|'))) {
+          const homeMatch = marketStr.match(/~home~([\d.]+)/) || marketStr.match(/~1~([\d.]+)/);
+          const drawMatch = marketStr.match(/~draw~([\d.]+)/) || marketStr.match(/~x~([\d.]+)/);
+          const awayMatch = marketStr.match(/~away~([\d.]+)/) || marketStr.match(/~2~([\d.]+)/);
           
           if (homeMatch) odd1 = parseFloat(homeMatch[1]).toFixed(2);
           if (drawMatch) oddX = parseFloat(drawMatch[1]).toFixed(2);

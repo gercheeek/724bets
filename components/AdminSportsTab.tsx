@@ -93,16 +93,20 @@ export default function AdminSportsTab() {
         for (const market of markets) {
             if (!market || typeof market !== 'string') continue;
             const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
-            if (is1x2) {
+            if (is1x2 && (market.includes('~home~') || market.includes('~away~') || market.includes('~1~') || market.includes('~2~'))) {
                 const parts = market.split('|');
-                const sp = parts.find((p: string) => p.includes('~home~') || p.includes('~away~'));
+                const sp = parts.find((p: string) => p.includes('~home~') || p.includes('~away~') || p.includes('~1~') || p.includes('~2~'));
                 if (sp) {
-                    sp.split('!').forEach((sel: string) => {
-                        const s = sel.split('~');
-                        if (s.length > 2) {
-                            const type = s[1].toLowerCase();
-                            const odd = parseFloat(s[2]);
+                    const sels = sp.split('!');
+                    sels.forEach((sel: string) => {
+                        const sParts = sel.split('~');
+                        if (sParts.length > 2) {
+                            const type = sParts[1].toLowerCase();
+                            let odd = parseFloat(sParts[2]);
                             if (!isNaN(odd)) {
+                                if (odd < 0) odd = Math.abs(odd);
+                                if (odd < 1) odd += 1;
+                                if (odd < 1.01) odd = 1.01;
                                 if (type === 'home' || type === '1') ms1 = odd;
                                 if (type === 'draw' || type === 'x') msx = odd;
                                 if (type === 'away' || type === '2') ms2 = odd;
