@@ -2413,24 +2413,62 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
 
         {view === 'docs' && (
-          <div className="animate-fade-in w-full h-full relative z-[50] flex flex-col items-center p-10 overflow-y-auto">
-            <h1 className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-4 w-full max-w-3xl text-center">Kullanım Şartları ve Gizlilik</h1>
-            <div className="max-w-3xl text-[#8b92a5] space-y-6 text-left text-sm md:text-base bg-[#131823] p-8 rounded-2xl border border-white/5">
-              <p className="text-white font-semibold text-lg mb-2">Platformumuzu kullanmadan önce lütfen aşağıdaki şartları dikkatlice okuyunuz.</p>
+          <div className="animate-fade-in w-full h-full relative z-[50] flex flex-col items-center p-6 md:p-10 overflow-y-auto overflow-x-hidden min-h-screen">
+            {/* Cinematic Background */}
+            <div className="absolute inset-0 pointer-events-none z-0">
+              <div className="absolute inset-0 bg-[#050505]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,229,255,0.12),transparent_60%)]" />
+              <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-[#00E5FF]/5 rounded-full blur-[120px] pointer-events-none" />
+            </div>
+
+            <div className="w-full max-w-5xl relative z-10 flex flex-col items-center mt-4 sm:mt-10 mb-20">
+              <div className="w-20 h-20 bg-[#00E5FF]/10 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(0,229,255,0.15)] border border-[#00E5FF]/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <ShieldCheck className="w-10 h-10 text-[#00E5FF] -rotate-3 group-hover:rotate-0 transition-transform duration-500" />
+              </div>
               
-              <div className="space-y-2">
-                <h3 className="text-white font-bold">1. Genel Kurallar</h3>
-                <p>Sitemiz yalnızca 18 yaşından büyük ve yasal olarak bahis oynama ehliyetine sahip kullanıcılara hizmet vermektedir.</p>
-              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#8b92a5] mb-4 text-center tracking-tight drop-shadow-sm">
+                Kullanım Şartları ve Gizlilik
+              </h1>
+              <p className="text-[#8b92a5] text-base md:text-lg mb-12 text-center max-w-2xl font-medium px-4">
+                Platformumuzu kullanmadan önce lütfen aşağıdaki şartları dikkatlice okuyunuz. Şeffaflık, güvenlik ve adil oyun ilkeleri en büyük önceliğimizdir.
+              </p>
 
-              <div className="space-y-2">
-                <h3 className="text-white font-bold">2. Güvenlik ve Gizlilik</h3>
-                <p>Kullanıcı verileriniz, şifreleriniz ve finansal işlemleriniz uçtan uca şifrelenmiş sunucularımızda (SSL) en üst düzey güvenlik protokolleriyle saklanmaktadır. Üçüncü şahıslarla asla paylaşılmaz.</p>
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full px-4">
+                {/* Rule 1 */}
+                <div className="group bg-[#111111]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/5 hover:border-[#00E5FF]/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,229,255,0.1)] relative overflow-hidden flex flex-col h-full">
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#00E5FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="w-14 h-14 bg-[#1a1f2e] border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#00E5FF]/10 group-hover:border-[#00E5FF]/30 transition-all duration-500 relative z-10 shadow-lg">
+                    <CheckCircle2 className="w-7 h-7 text-gray-400 group-hover:text-[#00E5FF] transition-colors duration-500" />
+                  </div>
+                  <h3 className="text-xl font-extrabold text-white mb-3 tracking-tight relative z-10">1. Genel Kurallar</h3>
+                  <p className="text-[#8b92a5] text-[15px] leading-relaxed relative z-10 flex-1">
+                    Sitemiz yalnızca 18 yaşından büyük ve yasal olarak bahis oynama ehliyetine sahip kullanıcılara hizmet vermektedir. Yasalara tam uygunluk sitemizin temel kuralıdır.
+                  </p>
+                </div>
 
-              <div className="space-y-2">
-                <h3 className="text-white font-bold">3. Sorumlu Oyun</h3>
-                <p>Bahis bir eğlence aracıdır. Limitlerinizi aşmayınız ve kaybetmeyi göze alamayacağınız tutarlarla oynamayınız.</p>
+                {/* Rule 2 */}
+                <div className="group bg-[#111111]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/5 hover:border-[#00E5FF]/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,229,255,0.1)] relative overflow-hidden flex flex-col h-full">
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#00E5FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="w-14 h-14 bg-[#1a1f2e] border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#00E5FF]/10 group-hover:border-[#00E5FF]/30 transition-all duration-500 relative z-10 shadow-lg">
+                    <Lock className="w-7 h-7 text-gray-400 group-hover:text-[#00E5FF] transition-colors duration-500" />
+                  </div>
+                  <h3 className="text-xl font-extrabold text-white mb-3 tracking-tight relative z-10">2. Güvenlik ve Gizlilik</h3>
+                  <p className="text-[#8b92a5] text-[15px] leading-relaxed relative z-10 flex-1">
+                    Kullanıcı verileriniz, şifreleriniz ve finansal işlemleriniz uçtan uca şifrelenmiş sunucularımızda (SSL) en üst düzey banka standartlarındaki güvenlik protokolleriyle saklanmaktadır. Bilgileriniz üçüncü şahıslarla asla paylaşılmaz.
+                  </p>
+                </div>
+
+                {/* Rule 3 */}
+                <div className="group bg-[#111111]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/5 hover:border-[#00E5FF]/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,229,255,0.1)] relative overflow-hidden flex flex-col h-full">
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#00E5FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="w-14 h-14 bg-[#1a1f2e] border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#00E5FF]/10 group-hover:border-[#00E5FF]/30 transition-all duration-500 relative z-10 shadow-lg">
+                    <Gamepad2 className="w-7 h-7 text-gray-400 group-hover:text-[#00E5FF] transition-colors duration-500" />
+                  </div>
+                  <h3 className="text-xl font-extrabold text-white mb-3 tracking-tight relative z-10">3. Sorumlu Oyun</h3>
+                  <p className="text-[#8b92a5] text-[15px] leading-relaxed relative z-10 flex-1">
+                    Bahis ve casino tamamen bir eğlence aracıdır. Lütfen kişisel bütçe limitlerinizi aşmayınız ve kaybetmeyi göze alamayacağınız tutarlarla oynamayınız. İhtiyaç duyduğunuzda canlı destek birimimizden anında yardım alabilirsiniz.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
