@@ -363,6 +363,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           const isTennis = firstMatch?.sport?.toLowerCase().includes('tenis') || firstMatch?.sport?.toLowerCase().includes('tennis');
           const isExpanded = !!expandedLeagues[league];
           const theme = getLeagueTheme(league, isTennis);
+          const displayLeagueName = league.replace(/^AVRUPA\s*-\s*/i, '').trim();
           
           return (
             <div key={league} className={`group bg-gradient-to-r from-[#181a25] to-[#12141d] hover:from-[#1d202e] hover:to-[#151824] rounded-xl overflow-hidden border border-white/5 border-l-[4px] ${theme.accentBorder} relative mt-3 shadow-lg`}>
@@ -383,19 +384,10 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 )}
                 
                 {/* Content */}
-                <div className="flex items-center gap-4 sm:gap-5 relative z-10 pl-1 flex-1 min-w-0">
-                  {/* Clean League Logo - White Background for High Contrast */}
-                  <div className="relative flex h-14 w-14 sm:h-[60px] sm:w-[60px] items-center justify-center rounded-2xl shrink-0 z-10 bg-white/95 border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
-                    {isTennis ? (
-                       <span className="text-3xl relative z-10">🎾</span>
-                    ) : (
-                       <LeagueLogo league={league} className="w-10 h-10 sm:w-11 sm:h-11 object-contain relative z-10" />
-                    )}
-                  </div>
-                  
+                <div className="flex items-center gap-4 sm:gap-5 relative z-10 pl-4 sm:pl-5 flex-1 min-w-0">
                   <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4">
-                    <span className="text-white font-extrabold text-[15px] sm:text-[17px] tracking-wide uppercase truncate w-full drop-shadow-sm" title={league}>
-                      {league}
+                    <span className="text-white font-extrabold text-[15px] sm:text-[17px] tracking-wide uppercase truncate w-full drop-shadow-sm" title={displayLeagueName}>
+                      {displayLeagueName}
                     </span>
                     <span className="text-[#a1a1aa] text-[11px] sm:text-[12px] font-semibold tracking-widest uppercase mt-1">
                       Öne Çıkan Turnuva
