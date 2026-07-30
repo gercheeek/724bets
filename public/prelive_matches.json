@@ -2813,42 +2813,6 @@
     }
   },
   {
-    "id": "30430185",
-    "isScraped": true,
-    "data": {
-      "id": 30430185,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Dünya"
-      },
-      "participants": {
-        "home": "Marsilya",
-        "away": "Nimes Olimpique",
-        "home_id": 433,
-        "away_id": 6014
-      },
-      "start_time": "2026-07-30T16:00:00.000Z",
-      "start_ts": 1785427200,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.21!~draw~7.1!~away~9.8",
-          "|gg||~yes~2.18!~no~1.52",
-          "|gg||~yes~2.74!~no~1.33",
-          "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~10!~no~1.02",
-          "|gg||~yes~3.4!~no~1.27",
-          "|gg||~yes~4.57!~no~1.16"
-        ]
-      }
-    }
-  },
-  {
     "id": "30431421",
     "isScraped": true,
     "data": {
@@ -2945,10 +2909,13 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.33!~draw~7.5!~away~6.2",
-          "|gg||~yes~1.52!~no~2.18",
-          "|gg||~yes~1.84!~no~1.74",
-          "|gg||~yes~3.9!~no~1.16"
+          "|1x2||~home~1.34!~draw~6.9!~away~6.2",
+          "|gg||~yes~1.4!~no~2.48",
+          "|gg||~yes~1.68!~no~1.92",
+          "|gg||~yes~3.7!~no~1.18",
+          "|gg||~yes~4.75!~no~1.15",
+          "|gg||~yes~1.96!~no~1.74",
+          "|gg||~yes~2.5!~no~1.47"
         ]
       }
     }
@@ -3086,7 +3053,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.98!~draw~3.79!~away~3.31",
+          "|1x2||~home~1.98!~draw~3.7!~away~3.38",
           "|gg||~yes~1.77!~no~1.81",
           "|gg||~yes~2.26!~no~1.48",
           "|gg||~yes~5.2!~no~1.08",
@@ -3200,7 +3167,7 @@
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~10!~no~1.02",
           "|gg||~yes~3.25!~no~1.29",
-          "|gg||~yes~4.75!~no~1.15"
+          "|gg||~yes~4.9!~no~1.14"
         ]
       }
     }
@@ -3302,48 +3269,12 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.69!~draw~4.1!~away~4.2",
+          "|1x2||~home~1.71!~draw~4!~away~4.2",
           "|gg||~yes~2.03!~no~1.6",
           "|gg||~yes~2.66!~no~1.35",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.5!~no~1.025",
           "|gg||~yes~3.15!~no~1.31",
-          "|gg||~yes~4.42!~no~1.17"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30386248",
-    "isScraped": true,
-    "data": {
-      "id": 30386248,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Avrupa Ligi - Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Maccabi Tel Aviv FC",
-        "away": "Sheriff Tiraspol",
-        "home_id": 672,
-        "away_id": 6795
-      },
-      "start_time": "2026-07-30T16:00:00.000Z",
-      "start_ts": 1785427200,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.28!~draw~5.8!~away~11",
-          "|gg||~yes~2.12!~no~1.55",
-          "|gg||~yes~2.74!~no~1.33",
-          "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.7!~no~1.023",
-          "|gg||~yes~3.25!~no~1.29",
           "|gg||~yes~4.42!~no~1.17"
         ]
       }
@@ -3950,49 +3881,13 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~5.3!~draw~4.1!~away~1.57",
+          "|1x2||~home~5.6!~draw~4.1!~away~1.54",
           "|gg||~yes~2.08!~no~1.57",
           "|gg||~yes~2.74!~no~1.33",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.7!~no~1.023",
           "|gg||~yes~3.3!~no~1.28",
           "|gg||~yes~4.42!~no~1.17"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30311374",
-    "isScraped": true,
-    "data": {
-      "id": 30311374,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Konferans Ligi. Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "FC Noah",
-        "away": "FC Zimbru Chisinau",
-        "home_id": 366459,
-        "away_id": 6669
-      },
-      "start_time": "2026-07-30T16:00:00.000Z",
-      "start_ts": 1785427200,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.15!~draw~8.3!~away~17",
-          "|gg||~yes~2.55!~no~1.38",
-          "|gg||~yes~3.3!~no~1.23",
-          "|gg||~yes~6.4!~no~1.04",
-          "|gg||~yes~12!~no~1.009",
-          "|gg||~yes~4.05!~no~1.2",
-          "|gg||~yes~5.55!~no~1.11"
         ]
       }
     }
@@ -4130,7 +4025,7 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~6!~draw~4.75!~away~1.48",
+          "|1x2||~home~5.9!~draw~4.7!~away~1.5",
           "|gg||~yes~1.93!~no~1.67",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.5!~no~1.07",
@@ -4274,49 +4169,13 @@
       "start_ts": 1785438000,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.64!~draw~3.39!~away~2.52",
+          "|1x2||~home~2.78!~draw~3.38!~away~2.41",
           "|gg||~yes~1.83!~no~1.75",
           "|gg||~yes~2.34!~no~1.45",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~8.5!~no~1.04",
           "|gg||~yes~2.95!~no~1.35",
           "|gg||~yes~3.65!~no~1.24"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30319647",
-    "isScraped": true,
-    "data": {
-      "id": 30319647,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Konferans Ligi. Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Inter Turku",
-        "away": "Rams Başakşehir",
-        "home_id": 544,
-        "away_id": 1524
-      },
-      "start_time": "2026-07-30T16:00:00.000Z",
-      "start_ts": 1785427200,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~4.2!~draw~3.99!~away~1.77",
-          "|gg||~yes~1.92!~no~1.68",
-          "|gg||~yes~2.48!~no~1.4",
-          "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~3.1!~no~1.32",
-          "|gg||~yes~3.9!~no~1.21"
         ]
       }
     }
@@ -4346,7 +4205,7 @@
       "start_ts": 1785429000,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.92!~draw~3.62!~away~2.21",
+          "|1x2||~home~2.9!~draw~3.7!~away~2.3",
           "|gg||~yes~1.7!~no~1.89",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~5!~no~1.09",
@@ -4531,8 +4390,8 @@
           "|gg||~yes~3.45!~no~1.21",
           "|gg||~yes~6.4!~no~1.04",
           "|gg||~yes~12.5!~no~1.008",
-          "|gg||~yes~4.57!~no~1.16",
-          "|gg||~yes~5.1!~no~1.13"
+          "|gg||~yes~4.3!~no~1.18",
+          "|gg||~yes~5.35!~no~1.12"
         ]
       }
     }
@@ -4598,12 +4457,12 @@
       "start_ts": 1785432600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~4.6!~draw~3.53!~away~1.76",
+          "|1x2||~home~4.75!~draw~3.65!~away~1.71",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.87!~no~1.3",
           "|gg||~yes~6.25!~no~1.045",
           "|gg||~yes~10!~no~1.02",
-          "|gg||~yes~3.65!~no~1.24",
+          "|gg||~yes~3.75!~no~1.23",
           "|gg||~yes~4.57!~no~1.16"
         ]
       }
@@ -4670,49 +4529,13 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.28!~draw~3.36!~away~3",
+          "|1x2||~home~2.41!~draw~3.33!~away~2.82",
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.7!~no~1.34",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.5!~no~1.025",
           "|gg||~yes~3.3!~no~1.28",
           "|gg||~yes~4.3!~no~1.18"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30322896",
-    "isScraped": true,
-    "data": {
-      "id": 30322896,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Konferans Ligi. Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Zira IK ",
-        "away": "Paide Linnameeskond",
-        "home_id": 176268,
-        "away_id": 6707
-      },
-      "start_time": "2026-07-30T16:00:00.000Z",
-      "start_ts": 1785427200,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.25!~draw~5.2!~away~17",
-          "|gg||~yes~2.83!~no~1.31",
-          "|gg||~yes~3.6!~no~1.19",
-          "|gg||~yes~6.8!~no~1.03",
-          "|gg||~yes~15!~no~1.006",
-          "|gg||~yes~4.57!~no~1.16",
-          "|gg||~yes~6!~no~1.095"
         ]
       }
     }
@@ -4742,7 +4565,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.9!~draw~3.67!~away~3.69",
+          "|1x2||~home~1.85!~draw~3.76!~away~3.79",
           "|gg||~yes~1.82!~no~1.76",
           "|gg||~yes~2.34!~no~1.45",
           "|gg||~yes~5.2!~no~1.08",
@@ -4784,7 +4607,7 @@
           "|gg||~yes~5!~no~1.09",
           "|gg||~yes~7.5!~no~1.055",
           "|gg||~yes~2.68!~no~1.41",
-          "|gg||~yes~3.4!~no~1.27"
+          "|gg||~yes~3.3!~no~1.28"
         ]
       }
     }
@@ -4886,7 +4709,7 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~9.4!~draw~6.2!~away~1.25",
+          "|1x2||~home~9.7!~draw~6.7!~away~1.22",
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.5!~no~1.07",
@@ -4922,7 +4745,7 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.94!~draw~3.5!~away~4",
+          "|1x2||~home~1.98!~draw~3.47!~away~3.91",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.87!~no~1.3",
           "|gg||~yes~6.25!~no~1.045",
@@ -4958,7 +4781,7 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.69!~draw~3.9!~away~4.5",
+          "|1x2||~home~1.71!~draw~3.86!~away~4.4",
           "|gg||~yes~1.92!~no~1.74",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.5!~no~1.07",

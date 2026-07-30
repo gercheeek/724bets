@@ -87,7 +87,7 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, spor
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const isFootball = !sport || sport.toLowerCase().includes('futbol') || sport.toLowerCase().includes('soccer');
+  const isFootball = !sport || sport.toLowerCase().includes('futbol') || sport.toLowerCase().includes('soccer') || sport.toLowerCase().includes('football');
 
   // Akıllı eşleşme algoritması ile lokal dosyayı bul (Sadece Futbol)
   const bestMatch = isFootball ? findBestLogoMatch(name) : null;
