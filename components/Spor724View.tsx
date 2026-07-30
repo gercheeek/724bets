@@ -64,11 +64,11 @@ const mapSportName = (name: string, lang: string) => {
   if (norm.includes('american') || norm.includes('amerikan')) return lang === 'tr' ? 'Am. Futbolu' : 'Am. Football';
   if (norm.includes('soccer') || norm.includes('futbol') || norm.includes('football')) return lang === 'tr' ? 'Futbol' : 'Football';
   if (norm.includes('basketball') || norm.includes('basketbol')) return lang === 'tr' ? 'Basketbol' : 'Basketball';
+  if (norm.includes('table tennis') || norm.includes('masa')) return lang === 'tr' ? 'Masa Tenisi' : 'Table Tennis';
   if (norm.includes('tennis') || norm.includes('tenis')) return lang === 'tr' ? 'Tenis' : 'Tennis';
   if (norm.includes('volleyball') || norm.includes('voleybol')) return lang === 'tr' ? 'Voleybol' : 'Volleyball';
   if (norm.includes('hockey')) return lang === 'tr' ? 'Buz Hokeyi' : 'Ice Hockey';
   if (norm.includes('handball')) return lang === 'tr' ? 'Hentbol' : 'Handball';
-  if (norm.includes('table tennis') || norm.includes('masa')) return lang === 'tr' ? 'Masa Tenisi' : 'Table Tennis';
   return name;
 };
 
@@ -77,11 +77,11 @@ const mapReverseSportName = (name: string) => {
   if (norm.includes('am.') || norm.includes('american')) return 'am. football';
   if (norm.includes('futbol') || norm.includes('soccer') || norm.includes('football')) return 'football';
   if (norm.includes('basketbol') || norm.includes('basketball')) return 'basketball';
+  if (norm.includes('masa tenisi') || norm.includes('table tennis')) return 'table-tennis';
   if (norm.includes('tenis') || norm.includes('tennis')) return 'tennis';
   if (norm.includes('voleybol') || norm.includes('volleyball')) return 'volleyball';
   if (norm.includes('buz hokeyi') || norm.includes('ice hockey')) return 'ice-hockey';
   if (norm.includes('hentbol') || norm.includes('handball')) return 'handball';
-  if (norm.includes('masa tenisi') || norm.includes('table tennis')) return 'table-tennis';
   if (norm.includes('boks') || norm.includes('boxing')) return 'boxing';
   if (norm.includes('beyzbol') || norm.includes('baseball')) return 'baseball';
   if (norm.includes('counter')) return 'cs';
@@ -287,7 +287,15 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   const countryName = mapCountryName(data.country?.name, language);
   const tournamentName = data.tournament?.name || 'Uluslararası Turnuva';
   const league = countryName ? `${countryName} - ${tournamentName}` : tournamentName;
-  const sport = mapSportName(data.sport?.name, language);
+  let sport = mapSportName(data.sport?.name, language);
+  
+  if (sport === 'Tenis' || sport === 'Tennis') {
+    const l = league.toLowerCase();
+    if (l.includes('masters league') || l.includes('tt cup') || l.includes('setka cup') || l.includes('wtt ') || l.includes('liga pro') || l.includes('pro league') || l.includes('artem') || l.includes('table tennis') || l.includes('masa tenisi')) {
+        sport = language === 'tr' ? 'Masa Tenisi' : 'Table Tennis';
+    }
+  }
+  
   const country = countryName;
   
   let homeOdd = '-';

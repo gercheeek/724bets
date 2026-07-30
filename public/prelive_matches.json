@@ -1365,8 +1365,8 @@
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6!~no~1.05",
           "|gg||~yes~10.3!~no~1.017",
-          "|gg||~yes~3.4!~no~1.27",
-          "|gg||~yes~4.75!~no~1.15"
+          "|gg||~yes~3.3!~no~1.28",
+          "|gg||~yes~5.1!~no~1.13"
         ]
       }
     }
@@ -1434,6 +1434,36 @@
         "full_event|0": [
           "|1x2||~home~2.16!~draw~3.39!~away~3.2",
           "|gg||~yes~4.3!~no~1.18"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30412682",
+    "isScraped": true,
+    "data": {
+      "id": 30412682,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Süper Kupa - Kadınlar"
+      },
+      "country": {
+        "name": "Hollanda"
+      },
+      "participants": {
+        "home": "PSV (Kadınlar)",
+        "away": "Twente (Kadınlar)",
+        "home_id": 175689,
+        "away_id": 35107
+      },
+      "start_time": "2026-07-31T17:00:00.000Z",
+      "start_ts": 1785517200,
+      "group_markets": {
+        "full_event|0": [
+          "|1x2||~home~1.97!~draw~3.59!~away~3.53"
         ]
       }
     }
@@ -2520,9 +2550,45 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.77!~draw~3.14!~away~5.4",
-          "|gg||~yes~3!~no~1.28",
+          "|gg||~yes~2.9!~no~1.29",
           "|gg||~yes~3.9!~no~1.16",
           "|gg||~yes~7.3!~no~1.02"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30368388",
+    "isScraped": true,
+    "data": {
+      "id": 30368388,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Lig 2"
+      },
+      "country": {
+        "name": "İskoçya"
+      },
+      "participants": {
+        "home": "Stirling Albion  ",
+        "away": "Dumbarton FC",
+        "home_id": 1378,
+        "away_id": 1369
+      },
+      "start_time": "2026-08-01T14:00:00.000Z",
+      "start_ts": 1785592800,
+      "group_markets": {
+        "full_event|0": [
+          "|1x2||~home~2.43!~draw~3.33!~away~2.79",
+          "|gg||~yes~1.87!~no~1.72",
+          "|gg||~yes~2.42!~no~1.42",
+          "|gg||~yes~5.5!~no~1.07",
+          "|gg||~yes~8.7!~no~1.035",
+          "|gg||~yes~2.95!~no~1.35",
+          "|gg||~yes~3.83!~no~1.22"
         ]
       }
     }
@@ -2589,6 +2655,42 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~2.32!~draw~3.59!~away~2.77",
+          "|gg||~yes~1.96!~no~1.65",
+          "|gg||~yes~2.55!~no~1.38",
+          "|gg||~yes~5.75!~no~1.06",
+          "|gg||~yes~9!~no~1.03",
+          "|gg||~yes~3.1!~no~1.32",
+          "|gg||~yes~4.05!~no~1.2"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30368392",
+    "isScraped": true,
+    "data": {
+      "id": 30368392,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Lig 2"
+      },
+      "country": {
+        "name": "İskoçya"
+      },
+      "participants": {
+        "home": "Annan Athletic",
+        "away": "Spartans FC",
+        "home_id": 1363,
+        "away_id": 14020
+      },
+      "start_time": "2026-08-01T14:00:00.000Z",
+      "start_ts": 1785592800,
+      "group_markets": {
+        "full_event|0": [
+          "|1x2||~home~2.97!~draw~3.7!~away~2.16",
           "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.75!~no~1.06",
@@ -2769,8 +2871,8 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.21!~draw~7.1!~away~9.8",
-          "|gg||~yes~2.12!~no~1.55",
-          "|gg||~yes~2.7!~no~1.34",
+          "|gg||~yes~2.18!~no~1.52",
+          "|gg||~yes~2.74!~no~1.33",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~10!~no~1.02",
           "|gg||~yes~3.25!~no~1.29",
@@ -2985,12 +3087,12 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.44!~draw~6!~away~4.75",
-          "|gg||~yes~1.52!~no~2.18",
-          "|gg||~yes~1.87!~no~1.72",
-          "|gg||~yes~4.15!~no~1.14",
+          "|gg||~yes~1.5!~no~2.22",
+          "|gg||~yes~1.83!~no~1.75",
+          "|gg||~yes~4.05!~no~1.15",
           "|gg||~yes~5.35!~no~1.12",
-          "|gg||~yes~2.21!~no~1.59",
-          "|gg||~yes~2.65!~no~1.42"
+          "|gg||~yes~2.15!~no~1.62",
+          "|gg||~yes~2.59!~no~1.44"
         ]
       }
     }
@@ -3024,9 +3126,9 @@
           "|gg||~yes~2.03!~no~1.6",
           "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.3!~no~1.027",
-          "|gg||~yes~3.2!~no~1.3",
-          "|gg||~yes~4.15!~no~1.19"
+          "|gg||~yes~9.5!~no~1.025",
+          "|gg||~yes~3.25!~no~1.29",
+          "|gg||~yes~4.3!~no~1.18"
         ]
       }
     }
@@ -3164,7 +3266,7 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.6!~draw~3.26!~away~2.64",
+          "|1x2||~home~2.62!~draw~3.1!~away~2.74",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6.25!~no~1.045",
@@ -3272,7 +3374,7 @@
       "start_ts": 1785436200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.24!~draw~3.45!~away~3.01",
+          "|1x2||~home~2.27!~draw~3.37!~away~3",
           "|gg||~yes~1.84!~no~1.74",
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
@@ -3889,7 +3991,7 @@
           "|gg||~yes~3.2!~no~1.24",
           "|gg||~yes~6.8!~no~1.03",
           "|gg||~yes~12.5!~no~1.008",
-          "|gg||~yes~4.15!~no~1.19",
+          "|gg||~yes~4.05!~no~1.2",
           "|gg||~yes~5.35!~no~1.12"
         ]
       }
@@ -4100,7 +4202,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.51!~draw~4.4!~away~5.6",
+          "|1x2||~home~1.53!~draw~4.33!~away~5.4",
           "|gg||~yes~1.93!~no~1.67",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.5!~no~1.07",
@@ -4213,7 +4315,7 @@
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~3.1!~no~1.32",
+          "|gg||~yes~3.2!~no~1.3",
           "|gg||~yes~3.75!~no~1.23"
         ]
       }
@@ -4281,8 +4383,8 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.21!~draw~6.8!~away~10",
-          "|gg||~yes~2!~no~1.62",
-          "|gg||~yes~2.48!~no~1.4",
+          "|gg||~yes~2.1!~no~1.65",
+          "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.2!~no~1.08",
           "|gg||~yes~8.7!~no~1.035",
           "|gg||~yes~3.1!~no~1.32",
@@ -4356,9 +4458,9 @@
           "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.7!~no~1.023",
+          "|gg||~yes~9.3!~no~1.027",
           "|gg||~yes~3.15!~no~1.31",
-          "|gg||~yes~4.3!~no~1.18"
+          "|gg||~yes~4.05!~no~1.2"
         ]
       }
     }
@@ -4496,13 +4598,7 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.59!~draw~4.1!~away~5.1",
-          "|gg||~yes~2.06!~no~1.58",
-          "|gg||~yes~2.66!~no~1.35",
-          "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.5!~no~1.025",
-          "|gg||~yes~3.25!~no~1.29",
-          "|gg||~yes~4.15!~no~1.18"
+          "|1x2||~home~1.59!~draw~4.1!~away~5.1"
         ]
       }
     }
@@ -4532,7 +4628,13 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.35!~draw~5.1!~away~7.6"
+          "|1x2||~home~1.35!~draw~5.1!~away~7.6",
+          "|gg||~yes~2.03!~no~1.6",
+          "|gg||~yes~2.55!~no~1.38",
+          "|gg||~yes~5.5!~no~1.07",
+          "|gg||~yes~9.3!~no~1.027",
+          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~4.15!~no~1.19"
         ]
       }
     }
@@ -4778,7 +4880,7 @@
       "start_ts": 1785427200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.17!~draw~6.8!~away~15",
+          "|1x2||~home~1.19!~draw~6.5!~away~14",
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~3.6!~no~1.19",
           "|gg||~yes~6.8!~no~1.03",
@@ -4999,7 +5101,7 @@
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6.25!~no~1.045",
           "|gg||~yes~10!~no~1.02",
-          "|gg||~yes~3.57!~no~1.25",
+          "|gg||~yes~3.47!~no~1.26",
           "|gg||~yes~4.57!~no~1.16"
         ]
       }
@@ -5066,7 +5168,7 @@
       "start_ts": 1785435300,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~4.6!~draw~3.85!~away~1.68",
+          "|1x2||~home~4.5!~draw~4.2!~away~1.64",
           "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.75!~no~1.06",
@@ -5215,7 +5317,7 @@
           "|gg||~yes~2.74!~no~1.33",
           "|gg||~yes~6!~no~1.05",
           "|gg||~yes~9.7!~no~1.023",
-          "|gg||~yes~3.47!~no~1.26",
+          "|gg||~yes~3.3!~no~1.28",
           "|gg||~yes~4.3!~no~1.18"
         ]
       }
@@ -5251,8 +5353,8 @@
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3.15!~no~1.31",
-          "|gg||~yes~3.83!~no~1.22"
+          "|gg||~yes~3.1!~no~1.32",
+          "|gg||~yes~4.05!~no~1.2"
         ]
       }
     }
@@ -5395,7 +5497,7 @@
           "|gg||~yes~3.05!~no~1.27",
           "|gg||~yes~6.25!~no~1.045",
           "|gg||~yes~10.5!~no~1.015",
-          "|gg||~yes~3.65!~no~1.24",
+          "|gg||~yes~3.9!~no~1.21",
           "|gg||~yes~4.57!~no~1.16",
           "|ou||~over~-!~under~6.2",
           "|ou||~over~-!~under~1.04",
@@ -7030,7 +7132,7 @@
           "|gg||~yes~3.05!~no~1.27",
           "|gg||~yes~6.4!~no~1.04",
           "|gg||~yes~10.8!~no~1.012",
-          "|gg||~yes~3.83!~no~1.22",
+          "|gg||~yes~3.75!~no~1.23",
           "|gg||~yes~5.1!~no~1.13"
         ]
       }

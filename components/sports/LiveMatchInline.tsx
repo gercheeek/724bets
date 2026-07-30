@@ -159,11 +159,19 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
   };
 
 
+  const isLowTierMatch = () => {
+    if (isEliteTeam(match.home) || isEliteTeam(match.away)) return false;
+    const l = (match.league || '').toLowerCase();
+    const lowTierKeywords = ['u19', 'u20', 'u21', 'u22', 'u23', 'youth', 'genç', 'women', 'kadınlar', 'bayanlar', 'friendly', 'hazırlık', 'amateur', 'amatör', 'reserve', 'rezerv', '2. lig', '3. lig', 'division 2', 'division 3', 'league 2', 'league 3', 'serie b', 'serie c', 'liga 2', 'liga 3', 'championship', 'segunda', 'b ligi', 'masters league', 'liga pro', 'tt cup', 'atp challenger', 'wtt', 'itf'];
+    return lowTierKeywords.some(kw => l.includes(kw));
+  };
+  const isLowTier = isLowTierMatch();
+
   const categories = isTennis 
-    ? ['Ana Seçenekler', 'Toplam', 'Setler', 'Oyunlar', 'İstatistikler']
+    ? (isLowTier ? ['Ana Seçenekler', 'Toplam', 'Setler'] : ['Ana Seçenekler', 'Toplam', 'Setler', 'Oyunlar', 'İstatistikler'])
     : isBasketball 
-    ? ['Ana Seçenekler', 'Toplam', 'Çeyrekler', 'Yarılar', 'İstatistikler', 'Oyuncular']
-    : ['Ana Seçenekler', 'Sihirbaz', 'Toplam', 'İstatistikler', 'Yarılar', 'Kornerler', 'Oyuncular'];
+    ? (isLowTier ? ['Ana Seçenekler', 'Toplam', 'Yarılar'] : ['Ana Seçenekler', 'Toplam', 'Çeyrekler', 'Yarılar', 'İstatistikler', 'Oyuncular'])
+    : (isLowTier ? ['Ana Seçenekler', 'Toplam', 'Yarılar'] : ['Ana Seçenekler', 'Sihirbaz', 'Toplam', 'İstatistikler', 'Yarılar', 'Kornerler', 'Oyuncular']);
   const [activeCategory, setActiveCategory] = useState('Ana Seçenekler');
   
   const [activeRightTab, setActiveRightTab] = useState<'video'|'animation'>('animation');
