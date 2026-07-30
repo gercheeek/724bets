@@ -1157,15 +1157,102 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                 />
                                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 1, position: 'relative' }}>
                                                                 <div style={{ width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: `2px solid ${config.color}50`, boxShadow: `0 4px 16px ${config.color}25`, background: '#fff' }}>
-                                                                    <img 
-                                                                        src={getChannelLogo(groupName.replace(/^[^\s]+\s+/, ''))} 
-                                                                        alt={groupName.replace(/^[^\s]+\s+/, '')} 
-                                                                        style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: isCollapsed ? 0.7 : 1, transition: 'opacity 0.2s', padding: '6px' }}
-                                                                        onError={(e) => {
-                                                                            e.currentTarget.onerror = null;
-                                                                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(groupName.replace(/^[^\s]+\s+/, ''))}&background=1a2035&color=fff&size=128&rounded=true&bold=true`;
-                                                                        }}
-                                                                    />
+                                                                    {(() => {
+                                                                        const name = groupName.replace(/^[^\s]+\s+/, '').toLowerCase();
+                                                                        
+                                                                        // Perfect Inline SVGs for Channel Logos
+                                                                        if (name.includes('bein') || name.includes('lig tv')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '4px' }}>
+                                                                                    <rect x="5" y="15" width="90" height="70" rx="10" fill="#581C87" />
+                                                                                    <text x="50%" y="45%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="26" fontWeight="900" fontFamily="sans-serif">beIN</text>
+                                                                                    <text x="50%" y="75%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="bold" fontFamily="sans-serif" letterSpacing="1">SPORTS</text>
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        if (name.includes('s sport') || name.includes('ssport')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '2px' }}>
+                                                                                    <circle cx="50" cy="50" r="45" fill="#fff" stroke="#1e293b" strokeWidth="2" />
+                                                                                    <path d="M 65 35 C 65 25, 35 25, 35 40 C 35 55, 65 60, 65 75 C 65 90, 35 90, 35 80" fill="none" stroke="#dc2626" strokeWidth="8" strokeLinecap="round" />
+                                                                                    <path d="M 60 38 C 60 30, 40 30, 40 40 C 40 52, 60 55, 60 75 C 60 85, 40 85, 40 78" fill="none" stroke="#2563eb" strokeWidth="6" strokeLinecap="round" />
+                                                                                    <text x="75" y="75" fill="#1e293b" fontSize="24" fontWeight="bold">+</text>
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        if (name.includes('smart')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+                                                                                    <rect width="100" height="100" fill="#111" />
+                                                                                    <path d="M 30 25 L 50 25 C 75 25, 75 75, 50 75 L 30 75 Z" fill="none" stroke="#f97316" strokeWidth="12" strokeLinejoin="round" />
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        if (name.includes('tivibu')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '6px' }}>
+                                                                                    <circle cx="50" cy="50" r="46" fill="#fff" />
+                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#ea580c" fontSize="24" fontWeight="900" fontFamily="sans-serif" fontStyle="italic">tivibu</text>
+                                                                                    <text x="50%" y="75%" dominantBaseline="middle" textAnchor="middle" fill="#111" fontSize="12" fontWeight="bold" fontFamily="sans-serif">SPOR</text>
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        if (name.includes('trt')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '4px' }}>
+                                                                                    <rect x="5" y="25" width="28" height="30" fill="#fff" stroke="#111" strokeWidth="2" />
+                                                                                    <rect x="36" y="25" width="28" height="30" fill="#fff" stroke="#111" strokeWidth="2" />
+                                                                                    <rect x="67" y="25" width="28" height="30" fill="#fff" stroke="#111" strokeWidth="2" />
+                                                                                    <text x="19" y="46" dominantBaseline="middle" textAnchor="middle" fill="#111" fontSize="18" fontWeight="bold" fontFamily="sans-serif">T</text>
+                                                                                    <text x="50" y="46" dominantBaseline="middle" textAnchor="middle" fill="#111" fontSize="18" fontWeight="bold" fontFamily="sans-serif">R</text>
+                                                                                    <text x="81" y="46" dominantBaseline="middle" textAnchor="middle" fill="#111" fontSize="18" fontWeight="bold" fontFamily="sans-serif">T</text>
+                                                                                    <text x="50%" y="80%" dominantBaseline="middle" textAnchor="middle" fill="#16a34a" fontSize="22" fontWeight="900" fontFamily="sans-serif">SPOR</text>
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        if (name.includes('exxen') || name.includes('dijital')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+                                                                                    <rect width="100" height="100" fill="#000" />
+                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#fde047" fontSize="22" fontWeight="900" fontFamily="sans-serif" letterSpacing="1">EXXEN</text>
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        if (name.includes('a spor')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '4px' }}>
+                                                                                    <rect x="10" y="20" width="80" height="60" rx="4" fill="#0284c7" />
+                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="32" fontWeight="900" fontFamily="serif" fontStyle="italic">A</text>
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        if (name.includes('tv8')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '6px' }}>
+                                                                                    <circle cx="50" cy="50" r="44" fill="#111" />
+                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="32" fontWeight="900" fontFamily="sans-serif">tv8</text>
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        if (name.includes('eurosport')) {
+                                                                            return (
+                                                                                <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+                                                                                    <rect width="100" height="100" fill="#1e3a8a" />
+                                                                                    <circle cx="50" cy="50" r="30" fill="none" stroke="#fff" strokeWidth="4" strokeDasharray="8 4" />
+                                                                                    <text x="50%" y="55%" dominantBaseline="middle" textAnchor="middle" fill="#fff" fontSize="24" fontWeight="bold" fontFamily="sans-serif">E</text>
+                                                                                </svg>
+                                                                            );
+                                                                        }
+                                                                        
+                                                                        // Fallback UI Avatar
+                                                                        return (
+                                                                            <img 
+                                                                                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(groupName.replace(/^[^\s]+\s+/, ''))}&background=1a2035&color=fff&size=128&rounded=true&bold=true`}
+                                                                                alt={groupName.replace(/^[^\s]+\s+/, '')} 
+                                                                                style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: isCollapsed ? 0.7 : 1, transition: 'opacity 0.2s', padding: '0px' }}
+                                                                            />
+                                                                        );
+                                                                    })()}
                                                                 </div>
                                                                 <span style={{ fontSize: '15px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.5px', transition: 'color 0.2s' }}>
                                                                     {groupName.replace(/^[^\s]+\s+/, '')}
