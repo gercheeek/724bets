@@ -251,7 +251,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-blue-500/10 border-blue-500/20',
           hexColor: '#60A5FA',
           isTurkish: false,
-          bgImage: '/assets/leagues/champions-league-bg.jpg'
+          bgImage: ''
       };
     }
     if (l.includes('avrupa ligi') || l.includes('europa league')) {
