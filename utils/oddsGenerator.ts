@@ -37,10 +37,10 @@ export const generateDetailedMarkets = (homeOdd: number, drawOdd: number, awayOd
   markets.push(`${nextMid()}|1x2|${nextSid()}~1~${formatOdd(p1)}!${nextSid()}~X~${formatOdd(px)}!${nextSid()}~2~${formatOdd(p2)}`);
   
   // --- Çifte Şans ---
-  markets.push(`${nextMid()}|Çifte Şans|${nextSid()}~1X~${formatOdd(p1 + px)}!${nextSid()}~12~${formatOdd(p1 + p2)}!${nextSid()}~X2~${formatOdd(px + p2)}`);
+  markets.push(`${nextMid()}|Double_Chance|${nextSid()}~1X~${formatOdd(p1 + px)}!${nextSid()}~12~${formatOdd(p1 + p2)}!${nextSid()}~X2~${formatOdd(px + p2)}`);
   
   // --- Beraberlikte iade (Draw No Bet) ---
-  markets.push(`${nextMid()}|Beraberlikte iade|${nextSid()}~1~${formatOdd(p1 / (p1 + p2))}!${nextSid()}~2~${formatOdd(p2 / (p1 + p2))}`);
+  markets.push(`${nextMid()}|Draw_No_Bet|${nextSid()}~1~${formatOdd(p1 / (p1 + p2))}!${nextSid()}~2~${formatOdd(p2 / (p1 + p2))}`);
   
   // --- Toplam Gol (Over/Under) ---
   const { goalBaseMargin, goalProb1More, goalProb2MoreMultiplier, goalProb3MoreMultiplier, goalProb4MoreMultiplier, maxMinuteThreshold, timeDecayStartMinute, timeDecayEnabled, cornerBaseMargin, cornerTimeFractionMax } = ODDS_ENGINE_CONFIG.rules;
@@ -63,23 +63,23 @@ export const generateDetailedMarkets = (homeOdd: number, drawOdd: number, awayOd
 
   const baseLine = currentTotalGoals + goalBaseMargin; // usually X.5
   
-  markets.push(`${nextMid()}|Toplam|${nextSid()}~${baseLine} üstü~${formatOdd(prob1More)}!${nextSid()}~${baseLine} altı~${formatOdd(1 - prob1More)}`);
-  markets.push(`${nextMid()}|Toplam|${nextSid()}~${baseLine + 1} üstü~${formatOdd(prob2More)}!${nextSid()}~${baseLine + 1} altı~${formatOdd(1 - prob2More)}`);
-  markets.push(`${nextMid()}|Toplam|${nextSid()}~${baseLine + 2} üstü~${formatOdd(prob3More)}!${nextSid()}~${baseLine + 2} altı~${formatOdd(1 - prob3More)}`);
-  markets.push(`${nextMid()}|Toplam|${nextSid()}~${baseLine + 3} üstü~${formatOdd(prob4More)}!${nextSid()}~${baseLine + 3} altı~${formatOdd(1 - prob4More)}`);
+  markets.push(`${nextMid()}|ou|${baseLine}|~üstü~${formatOdd(prob1More)}!~altı~${formatOdd(1 - prob1More)}`);
+  markets.push(`${nextMid()}|ou|${baseLine + 1}|~üstü~${formatOdd(prob2More)}!~altı~${formatOdd(1 - prob2More)}`);
+  markets.push(`${nextMid()}|ou|${baseLine + 2}|~üstü~${formatOdd(prob3More)}!~altı~${formatOdd(1 - prob3More)}`);
+  markets.push(`${nextMid()}|ou|${baseLine + 3}|~üstü~${formatOdd(prob4More)}!~altı~${formatOdd(1 - prob4More)}`);
   
   // --- Karşılıklı Gol (BTTS) ---
   let bttsProb = (0.55 - (Math.abs(p1 - p2) * 0.25)) * timeMultiplier;
   bttsProb = Math.min(0.7, Math.max(0.05, bttsProb));
-  markets.push(`${nextMid()}|Karşılıklı Gol|${nextSid()}~var~${formatOdd(bttsProb)}!${nextSid()}~yok~${formatOdd(1 - bttsProb)}`);
+  markets.push(`${nextMid()}|gg||~var~${formatOdd(bttsProb)}!~yok~${formatOdd(1 - bttsProb)}`);
   
   // --- Handikap ---
   if (p1 > p2) {
     let homeHcapProb = p1 * 0.55;
-    markets.push(`${nextMid()}|Handikap|${nextSid()}~(-1) 1~${formatOdd(homeHcapProb)}!${nextSid()}~(+1) 2~${formatOdd(1 - homeHcapProb)}`);
+    markets.push(`${nextMid()}|Handicap|${nextSid()}~(-1) 1~${formatOdd(homeHcapProb)}!${nextSid()}~(+1) 2~${formatOdd(1 - homeHcapProb)}`);
   } else {
     let awayHcapProb = p2 * 0.55;
-    markets.push(`${nextMid()}|Handikap|${nextSid()}~(+1) 1~${formatOdd(1 - awayHcapProb)}!${nextSid()}~(-1) 2~${formatOdd(awayHcapProb)}`);
+    markets.push(`${nextMid()}|Handicap|${nextSid()}~(+1) 1~${formatOdd(1 - awayHcapProb)}!${nextSid()}~(-1) 2~${formatOdd(awayHcapProb)}`);
   }
   
   // --- İlk Yarı Sonucu ---
@@ -87,7 +87,7 @@ export const generateDetailedMarkets = (homeOdd: number, drawOdd: number, awayOd
   let htP1 = p1 * 0.75;
   let htP2 = p2 * 0.75;
   const htTotal = htPx + htP1 + htP2;
-  markets.push(`${nextMid()}|İlk Yarı Sonucu|${nextSid()}~1~${formatOdd(htP1/htTotal)}!${nextSid()}~X~${formatOdd(htPx/htTotal)}!${nextSid()}~2~${formatOdd(htP2/htTotal)}`);
+  markets.push(`${nextMid()}|Half_Time_Result|${nextSid()}~1~${formatOdd(htP1/htTotal)}!${nextSid()}~X~${formatOdd(htPx/htTotal)}!${nextSid()}~2~${formatOdd(htP2/htTotal)}`);
   
   // --- Kornerler ---
   // Expected corners is current corners + expected remaining based on time
@@ -96,14 +96,14 @@ export const generateDetailedMarkets = (homeOdd: number, drawOdd: number, awayOd
   const cornerBaseLine = Math.max(0.5, Math.floor(expectedTotalCorners) + 0.5);
   
   let cornerProb = 0.5 + (Math.abs(p1 - p2) * 0.15); // usually around 0.5
-  markets.push(`${nextMid()}|Kornerler|${nextSid()}~${cornerBaseLine} üstü~${formatOdd(cornerProb)}!${nextSid()}~${cornerBaseLine} altı~${formatOdd(1 - cornerProb)}`);
+  markets.push(`${nextMid()}|Corners|${cornerBaseLine}|~üstü~${formatOdd(cornerProb)}!~altı~${formatOdd(1 - cornerProb)}`);
   
   let cornerPlus1Prob = Math.min(0.85, cornerProb * 0.6);
-  markets.push(`${nextMid()}|Kornerler|${nextSid()}~${cornerBaseLine + 1} üstü~${formatOdd(cornerPlus1Prob)}!${nextSid()}~${cornerBaseLine + 1} altı~${formatOdd(1 - cornerPlus1Prob)}`);
+  markets.push(`${nextMid()}|Corners|${cornerBaseLine + 1}|~üstü~${formatOdd(cornerPlus1Prob)}!~altı~${formatOdd(1 - cornerPlus1Prob)}`);
   
   let cornerMinus1Prob = Math.max(0.15, cornerProb + (1 - cornerProb) * 0.4);
   if (cornerBaseLine > 1) {
-     markets.push(`${nextMid()}|Kornerler|${nextSid()}~${cornerBaseLine - 1} üstü~${formatOdd(cornerMinus1Prob)}!${nextSid()}~${cornerBaseLine - 1} altı~${formatOdd(1 - cornerMinus1Prob)}`);
+     markets.push(`${nextMid()}|Corners|${cornerBaseLine - 1}|~üstü~${formatOdd(cornerMinus1Prob)}!~altı~${formatOdd(1 - cornerMinus1Prob)}`);
   }
 
   return markets;
