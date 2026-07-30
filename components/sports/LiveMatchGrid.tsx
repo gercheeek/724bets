@@ -58,7 +58,7 @@ export default function LiveMatchGrid({ matches }: LiveMatchGridProps) {
         {displayMatches.map((match, idx) => (
           <div 
             key={match.id || idx}
-            className="group/card bg-[#0b0e14]/80 backdrop-blur-md border border-white/[0.04] border-l-[3px] border-l-transparent hover:border-l-[#00E5FF] rounded-xl p-4 flex flex-col transition-all duration-300 shadow-xl hover:shadow-[0_8px_30px_rgba(0,229,255,0.05)] relative overflow-hidden"
+            className="group/card bg-[#0b0e14]/95 md:bg-[#0b0e14]/80 md:backdrop-blur-md border border-white/[0.04] border-l-[3px] border-l-transparent hover:border-l-[#00E5FF] rounded-xl p-4 flex flex-col transition-all duration-300 shadow-md md:shadow-xl hover:shadow-lg md:hover:shadow-[0_8px_30px_rgba(0,229,255,0.05)] relative overflow-hidden transform-gpu"
           >
             {/* Ambient Background Glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#00E5FF]/[0.02] to-transparent pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>

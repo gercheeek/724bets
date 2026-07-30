@@ -261,8 +261,8 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
             return (
               <div 
                 key={match.id} 
-                onClick={() => onSelectMatch?.(match)}
-                className="cursor-pointer min-w-[280px] w-[280px] shrink-0 bg-gradient-to-b from-[#121722]/90 to-[#0b0e14]/90 backdrop-blur-md rounded-xl border border-white/5 p-3 flex flex-col shadow-xl hover:border-[#00E5FF]/20 hover:shadow-[0_8px_30px_rgba(0,229,255,0.1)] transition-all duration-300 relative group/card"
+                onClick={() => onSelectMatch && onSelectMatch(match)}
+                className="cursor-pointer min-w-[280px] w-[280px] shrink-0 bg-gradient-to-b from-[#121722]/95 to-[#0b0e14]/95 md:from-[#121722]/90 md:to-[#0b0e14]/90 md:backdrop-blur-md rounded-xl border border-white/5 p-3 flex flex-col shadow-md md:shadow-xl hover:border-[#00E5FF]/20 hover:shadow-lg md:hover:shadow-[0_8px_30px_rgba(0,229,255,0.1)] transition-all duration-300 relative group/card transform-gpu"
               >
                 <div className="flex items-start mb-3 relative z-10 flex-col gap-1">
                   <div className="flex items-center justify-between w-full">

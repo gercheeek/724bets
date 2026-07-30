@@ -365,7 +365,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           const theme = getLeagueTheme(league, isTennis);
           
           return (
-            <div key={league} className={`group ${theme.bgGlow} backdrop-blur-xl rounded-xl rounded-bl-sm overflow-hidden transition-all duration-500 shadow-lg hover:shadow-2xl border border-white/[0.03] border-l-[3px] ${theme.accentBorder} ${theme.accentShadow} relative mt-3`}>
+            <div key={league} className={`group ${theme.bgGlow} bg-[#0A0D14]/95 md:bg-transparent md:backdrop-blur-xl rounded-xl rounded-bl-sm overflow-hidden transition-all duration-500 shadow-md md:shadow-lg hover:shadow-xl md:hover:shadow-2xl border border-white/[0.03] border-l-[3px] ${theme.accentBorder} ${theme.accentShadow} relative mt-3 transform-gpu`}>
               <button 
                 onClick={() => toggleLeague(league)}
                 className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative overflow-hidden transition-all text-left bg-transparent group`}
@@ -413,7 +413,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                     <span className={`absolute inset-[-1000%] animate-[spin_4s_linear_infinite] opacity-30 group-hover:opacity-100 transition-opacity duration-500`} style={{ background: `conic-gradient(from 90deg at 50% 50%, transparent 0%, ${(theme as any).hexColor || '#00E5FF'} 80%, transparent 100%)` }} />
                     <div className="absolute inset-[2px] bg-[#0A0D14] rounded-[14px]"></div>
                     <div className={`absolute inset-[2px] ${theme.bgGlow} rounded-[14px] mix-blend-screen`}></div>
-                    <div className="relative h-full w-full rounded-[14px] bg-gradient-to-b from-white/10 to-transparent flex items-center justify-center backdrop-blur-md">
+                    <div className="relative h-full w-full rounded-[14px] bg-gradient-to-b from-white/10 to-transparent flex items-center justify-center md:backdrop-blur-md">
                       {isTennis ? (
                          <span className="text-3xl drop-shadow-lg relative z-10">🎾</span>
                       ) : (
