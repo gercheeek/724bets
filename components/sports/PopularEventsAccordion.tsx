@@ -138,18 +138,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
     'Kayserispor', 'Gaziantep FK', 'Samsunspor', 'Çaykur Rizespor'
   ];
 
-  // Inject mock Turkish matches at the beginning so the section ALWAYS appears
-  const injectedMatches: MatchInfo[] = [
-    { id: 'trk-1', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Galatasaray', away: 'Beşiktaş', time: '20:00', date: 'Bugün', isLive: true, score: '1 - 0', minute: '45', odds: { home: 2.10, draw: 3.20, away: 3.40 } } as any,
-    { id: 'trk-2', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Fenerbahçe', away: 'Trabzonspor', time: '21:45', date: 'Yarın', isLive: false, odds: { home: 1.85, draw: 3.50, away: 4.10 } } as any,
-    { id: 'trk-3', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Başakşehir', away: 'Konyaspor', time: '19:00', date: 'Bugün', isLive: false, odds: { home: 1.95, draw: 3.10, away: 3.80 } } as any,
-    { id: 'trk-4', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Adana Demirspor', away: 'Sivasspor', time: '16:00', date: 'Cumartesi', isLive: false, odds: { home: 2.20, draw: 3.30, away: 3.00 } } as any,
-    { id: 'trk-5', league: '🇹🇷 TÜRK TAKIMLARI ÖZEL', home: 'Göztepe', away: 'Antalyaspor', time: '16:00', date: 'Pazar', isLive: false, odds: { home: 2.40, draw: 3.00, away: 2.80 } } as any
-  ];
-
-  const allMatches = [...injectedMatches, ...matches];
-  
-  allMatches.forEach((originalMatch, index) => {
+  matches.forEach((originalMatch, index) => {
     let match = { ...originalMatch };
 
     const t1 = (match.home || '').toLocaleLowerCase('tr-TR');
