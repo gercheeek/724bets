@@ -216,6 +216,64 @@ interface TV724ViewProps {
 }
 interface FloatingEmoji { id: number; emoji: string; style: React.CSSProperties; }
 
+const getGroupConfig = (groupName: string) => {
+    const clean = groupName.replace(/^[^\s]+\s+/, '').toUpperCase();
+    if (clean.includes('BEIN')) {
+        return {
+            color: '#ff7a00',
+            glow: 'rgba(255, 122, 0, 0.12)',
+            icon: '📺'
+        };
+    }
+    if (clean.includes('S SPORT')) {
+        return {
+            color: '#ef4444',
+            glow: 'rgba(239, 68, 68, 0.12)',
+            icon: '🏆'
+        };
+    }
+    if (clean.includes('SMART SPOR')) {
+        return {
+            color: '#06b6d4',
+            glow: 'rgba(6, 182, 212, 0.12)',
+            icon: '⚡'
+        };
+    }
+    if (clean.includes('TİVİBU')) {
+        return {
+            color: '#eab308',
+            glow: 'rgba(234, 179, 8, 0.12)',
+            icon: '🏅'
+        };
+    }
+    if (clean.includes('EUROSPORT')) {
+        return {
+            color: '#3b82f6',
+            glow: 'rgba(59, 130, 246, 0.12)',
+            icon: '🌍'
+        };
+    }
+    if (clean.includes('DİJİTAL')) {
+        return {
+            color: '#a855f7',
+            glow: 'rgba(168, 85, 247, 0.12)',
+            icon: '🎬'
+        };
+    }
+    if (clean.includes('ULUSAL')) {
+        return {
+            color: '#10b981',
+            glow: 'rgba(16, 185, 129, 0.12)',
+            icon: '⭐'
+        };
+    }
+    return {
+        color: '#9ca3af',
+        glow: 'rgba(156, 163, 175, 0.12)',
+        icon: '📡'
+    };
+};
+
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBack, onLoginRequired, activeView = '724tv' }) => {
     // ── Core state ──
@@ -971,19 +1029,72 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                                         return CHANNEL_GROUP_ORDER
                                             .filter(g => grouped[g] && grouped[g].length > 0)
-                                            .map(groupName => (
-                                            <div key={groupName} style={{ marginBottom: '8px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.04)', overflow: 'hidden' }}>
-                                                {/* Accordion Header */}
-                                                <div 
-                                                    onClick={() => setCollapsedGroups(prev => ({ ...prev, [groupName]: !prev[groupName] }))}
-                                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#13161C', cursor: 'pointer', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.02)' }}
-                                                    className="hover:bg-[#1A1D24] transition-colors"
-                                                >
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#f3f4f6', letterSpacing: '0.5px' }}>{groupName}</span>
-                                                    </div>
-                                                    {collapsedGroups[groupName] ? <ChevronDown style={{ width: 16, height: 16, color: '#9ca3af' }} /> : <ChevronUp style={{ width: 16, height: 16, color: '#9ca3af' }} />}
-                                                </div>
+                                            .map(groupName => {
+                                                const config = getGroupConfig(groupName);
+                                                const channelCount = grouped[groupName]?.length || 0;
+                                                const isCollapsed = collapsedGroups[groupName];
+                                                
+                                                return (
+                                                    <div 
+                                                        key={groupName} 
+                                                        style={{ 
+                                                            marginBottom: '8px', 
+                                                            background: 'linear-gradient(135deg, rgba(19,22,28,0.7) 0%, rgba(13,15,19,0.7) 100%)', 
+                                                            borderRadius: '10px', 
+                                                            border: isCollapsed ? '1px solid rgba(255,255,255,0.03)' : `1px solid rgba(${config.color === '#ff7a00' ? '255,122,0' : config.color === '#ef4444' ? '239,68,68' : config.color === '#06b6d4' ? '6,182,212' : config.color === '#eab308' ? '234,179,8' : config.color === '#3b82f6' ? '59,130,246' : config.color === '#a855f7' ? '168,85,247' : config.color === '#10b981' ? '16,185,129' : '156,163,175'}, 0.2)`, 
+                                                            overflow: 'hidden',
+                                                            transition: 'all 0.3s ease',
+                                                            boxShadow: isCollapsed ? 'none' : `0 4px 12px ${config.glow}`
+                                                        }}
+                                                    >
+                                                        {/* Accordion Header */}
+                                                        <div 
+                                                            onClick={() => setCollapsedGroups(prev => ({ ...prev, [groupName]: !prev[groupName] }))}
+                                                            style={{ 
+                                                                display: 'flex', 
+                                                                alignItems: 'center', 
+                                                                justifyContent: 'space-between', 
+                                                                padding: '10px 14px', 
+                                                                background: isCollapsed ? 'rgba(19, 22, 28, 0.4)' : 'rgba(26, 29, 36, 0.6)', 
+                                                                cursor: 'pointer', 
+                                                                transition: 'all 0.2s',
+                                                                borderBottom: isCollapsed ? '1px solid transparent' : '1px solid rgba(255,255,255,0.04)'
+                                                            }}
+                                                            className="hover:bg-[#1A1D24]/80 transition-colors"
+                                                        >
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                <div style={{ 
+                                                                    display: 'flex', 
+                                                                    alignItems: 'center', 
+                                                                    justifyContent: 'center', 
+                                                                    width: '24px', 
+                                                                    height: '24px', 
+                                                                    borderRadius: '6px', 
+                                                                    background: config.glow,
+                                                                    fontSize: '12px',
+                                                                    border: `1px solid rgba(${config.color === '#ff7a00' ? '255,122,0' : config.color === '#ef4444' ? '239,68,68' : config.color === '#06b6d4' ? '6,182,212' : config.color === '#eab308' ? '234,179,8' : config.color === '#3b82f6' ? '59,130,246' : config.color === '#a855f7' ? '168,85,247' : config.color === '#10b981' ? '16,185,129' : '156,163,175'}, 0.1)`
+                                                                }}>
+                                                                    {config.icon}
+                                                                </div>
+                                                                <span style={{ fontSize: '13px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.3px', transition: 'color 0.2s' }}>
+                                                                    {groupName.replace(/^[^\s]+\s+/, '')}
+                                                                </span>
+                                                            </div>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                <span style={{ 
+                                                                    fontSize: '9px', 
+                                                                    fontWeight: 800, 
+                                                                    color: config.color, 
+                                                                    background: config.glow, 
+                                                                    padding: '2px 6px', 
+                                                                    borderRadius: '8px',
+                                                                    border: `1px solid rgba(${config.color === '#ff7a00' ? '255,122,0' : config.color === '#ef4444' ? '239,68,68' : config.color === '#06b6d4' ? '6,182,212' : config.color === '#eab308' ? '234,179,8' : config.color === '#3b82f6' ? '59,130,246' : config.color === '#a855f7' ? '168,85,247' : config.color === '#10b981' ? '16,185,129' : '156,163,175'}, 0.1)`
+                                                                }}>
+                                                                    {channelCount} Kanal
+                                                                </span>
+                                                                {isCollapsed ? <ChevronDown style={{ width: 14, height: 14, color: '#6b7280' }} /> : <ChevronUp style={{ width: 14, height: 14, color: config.color }} />}
+                                                            </div>
+                                                        </div>
                                                 
                                                 {/* Accordion Content */}
                                                 {!collapsedGroups[groupName] && (
