@@ -957,17 +957,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                             {/* Channels Content */}
                             <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                    <div style={{ position: 'relative', marginBottom: '10px' }}>
-                                        <input 
-                                            type="text" 
-                                            placeholder="Kanal ara..." 
-                                            value={searchQuery}
-                                            onChange={e => setSearchQuery(e.target.value)}
-                                            style={{ width: '100%', background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 12px 12px 40px', color: '#fff', fontSize: '13px', outline: 'none', transition: 'border-color 0.2s' }}
-                                            className="focus:border-[#10b981]/50"
-                                        />
-                                        <Search style={{ width: 16, height: 16, color: '#6b7280', position: 'absolute', left: '14px', top: '13px' }} />
-                                    </div>
+
 
                                     {/* Quick Group Filters */}
                                     <div 
