@@ -265,7 +265,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-orange-500/10 border-orange-500/20',
           hexColor: '#F97316',
           isTurkish: false,
-          bgImage: ''
+          bgImage: '/assets/leagues/europa-league-bg.jpg'
       };
     }
     if (l.includes('konferans ligi') || l.includes('conference league')) {
@@ -279,7 +279,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-green-500/10 border-green-500/20',
           hexColor: '#22C55E',
           isTurkish: false,
-          bgImage: ''
+          bgImage: '/assets/leagues/conference-league-bg.jpg'
       };
     }
     if (l.includes('dostluk maçları') || l.includes('friendlies') || l.includes('friendly')) {
