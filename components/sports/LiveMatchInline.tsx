@@ -24,6 +24,9 @@ const translateMarket = (name: string) => {
   const map: Record<string, string> = {
     'Match_Winner': 'Maç Sonucu',
     '1X2': '1x2',
+    '1x2': '1x2',
+    'ou': 'Toplam Alt/Üst',
+    'gg': 'Karşılıklı Gol',
     'Double_Chance': 'Çifte Şans',
     'Half_Time_Result': 'İlk Yarı Sonucu',
     'Asian_Handicap': 'Handikap (Asya)',
@@ -118,8 +121,8 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
   const parsedMinute = parseInt(match.minute?.replace(/[^0-9]/g, '') || '0');
   const totalCorners = (parseInt(corners.home) || 0) + (parseInt(corners.away) || 0);
 
-  // Procedurally generate markets for lower-tier / mock matches if data is missing or it's an elite match
-  if ((markets.length < 5 || isEliteTeam(match.home) || isEliteTeam(match.away)) && match.homeOdd && match.drawOdd && match.awayOdd) {
+  // Procedurally generate markets for mock/demo matches, NOT for real scraped matches
+  if (!match.rawEvent?.isScraped && (markets.length < 5 || isEliteTeam(match.home) || isEliteTeam(match.away)) && match.homeOdd && match.drawOdd && match.awayOdd) {
     const generated = generateDetailedMarkets(
       parseFloat(match.homeOdd.toString()), 
       parseFloat(match.drawOdd.toString()), 
@@ -409,8 +412,8 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                {markets.filter(market => {
                   const parts = market.split('|');
                   const marketName = translateMarket(parts[1] || '');
-                  if (activeCategory === 'Ana Seçenekler') return ['1x2', 'Çifte Şans', 'Beraberlikte iade', 'Handikap', 'Karşılıklı Gol'].includes(marketName);
-                  if (activeCategory === 'Toplam') return marketName.includes('Toplam');
+                  if (activeCategory === 'Ana Seçenekler') return ['1x2', 'Çifte Şans', 'Beraberlikte iade', 'Handikap', 'Karşılıklı Gol', 'Maç Sonucu'].includes(marketName);
+                  if (activeCategory === 'Toplam') return marketName.includes('Toplam') || marketName.includes('Alt/Üst');
                   if (activeCategory === 'Yarılar') return marketName.includes('Yarı');
                   if (activeCategory === 'Kornerler') return marketName.includes('Korner');
                   if (activeCategory === 'Setler') return marketName.includes('Set');
@@ -420,7 +423,11 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                }).map((market: string, idx: number) => {
                   const parts = market.split('|');
                   const rawMarketName = parts[1] || 'Bahis Türü';
-                  const marketName = translateMarket(rawMarketName);
+                  let marketName = translateMarket(rawMarketName);
+                  const arg = parts[2];
+                  if (arg && !arg.includes('~')) {
+                     marketName = `${marketName} (${arg})`;
+                  }
                   const isExpanded = expandedMarkets[idx] !== false;
                   
                   const selectionsPart = parts.find((p: string) => p.includes('~'));
