@@ -2414,61 +2414,90 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
         {view === 'docs' && (
           <div className="animate-fade-in w-full h-full relative z-[50] flex flex-col items-center p-6 md:p-10 overflow-y-auto overflow-x-hidden min-h-screen">
-            {/* Cinematic Background */}
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <div className="absolute inset-0 bg-[#050505]" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,229,255,0.12),transparent_60%)]" />
-              <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-[#00E5FF]/5 rounded-full blur-[120px] pointer-events-none" />
+            {/* Ultra-Premium Cinematic Background */}
+            <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+              <div className="absolute inset-0 bg-[#020202]" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,229,255,0.15),transparent_50%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
+              <div className="absolute top-[10%] left-[10%] w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full blur-[150px] mix-blend-screen" />
+              <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] mix-blend-screen" />
             </div>
 
-            <div className="w-full max-w-5xl relative z-10 flex flex-col items-center mt-4 sm:mt-10 mb-20">
-              <div className="w-20 h-20 bg-[#00E5FF]/10 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(0,229,255,0.15)] border border-[#00E5FF]/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <ShieldCheck className="w-10 h-10 text-[#00E5FF] -rotate-3 group-hover:rotate-0 transition-transform duration-500" />
+            <div className="w-full max-w-6xl relative z-10 flex flex-col items-center mt-6 sm:mt-12 mb-24">
+              {/* Premium Header Icon */}
+              <div className="relative group mb-8">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#00E5FF] to-purple-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" />
+                <div className="relative w-24 h-24 bg-black/50 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                  <ShieldCheck className="w-12 h-12 text-transparent bg-clip-text bg-gradient-to-br from-[#00E5FF] to-white filter drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]" style={{ stroke: 'url(#cyan-gradient)', color: '#00E5FF' }} />
+                  <svg width="0" height="0">
+                    <linearGradient id="cyan-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop stopColor="#00E5FF" offset="0%" />
+                      <stop stopColor="#ffffff" offset="100%" />
+                    </linearGradient>
+                  </svg>
+                </div>
               </div>
               
-              <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#8b92a5] mb-4 text-center tracking-tight drop-shadow-sm">
-                Kullanım Şartları ve Gizlilik
+              <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50 mb-6 text-center tracking-tighter drop-shadow-2xl">
+                Kullanım Şartları
               </h1>
-              <p className="text-[#8b92a5] text-base md:text-lg mb-12 text-center max-w-2xl font-medium px-4">
-                Platformumuzu kullanmadan önce lütfen aşağıdaki şartları dikkatlice okuyunuz. Şeffaflık, güvenlik ve adil oyun ilkeleri en büyük önceliğimizdir.
+              <p className="text-[#8b92a5] text-lg md:text-xl mb-16 text-center max-w-3xl font-medium px-4 leading-relaxed">
+                Platformumuzu kullanmadan önce lütfen şartları dikkatlice okuyunuz. <span className="text-[#00E5FF]">Şeffaflık</span>, <span className="text-[#00E5FF]">güvenlik</span> ve <span className="text-[#00E5FF]">adil oyun</span> ilkeleri en büyük önceliğimizdir.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full px-4">
-                {/* Rule 1 */}
-                <div className="group bg-[#111111]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/5 hover:border-[#00E5FF]/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,229,255,0.1)] relative overflow-hidden flex flex-col h-full">
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#00E5FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="w-14 h-14 bg-[#1a1f2e] border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#00E5FF]/10 group-hover:border-[#00E5FF]/30 transition-all duration-500 relative z-10 shadow-lg">
-                    <CheckCircle2 className="w-7 h-7 text-gray-400 group-hover:text-[#00E5FF] transition-colors duration-500" />
+              {/* Premium Bento Box Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 w-full px-4 auto-rows-[minmax(280px,auto)]">
+                
+                {/* Rule 1: Large Horizontal (Spans 8 cols) */}
+                <div className="md:col-span-8 group bg-white/[0.02] backdrop-blur-2xl p-10 rounded-[32px] border border-white/5 hover:bg-white/[0.04] hover:border-[#00E5FF]/30 transition-all duration-700 hover:shadow-[0_20px_60px_rgba(0,229,255,0.1),inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden flex flex-col justify-center">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#00E5FF]/10 rounded-full blur-[80px] -mr-32 -mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="flex items-start gap-8 relative z-10">
+                    <div className="w-16 h-16 shrink-0 bg-gradient-to-br from-[#1a1f2e] to-black border border-white/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:border-[#00E5FF]/50 transition-all duration-500 shadow-2xl">
+                      <CheckCircle2 className="w-8 h-8 text-gray-400 group-hover:text-[#00E5FF] transition-colors duration-500" />
+                    </div>
+                    <div>
+                      <h3 className="text-3xl font-black text-white mb-4 tracking-tight">Genel Kurallar</h3>
+                      <p className="text-[#9ca3af] text-lg leading-relaxed font-medium">
+                        Sitemiz yalnızca <strong className="text-white">18 yaşından büyük</strong> ve yasal olarak bahis oynama ehliyetine sahip kullanıcılara hizmet vermektedir. Yasalara tam uygunluk, platformumuzun en tavizsiz ve temel kuralıdır. Tüm işlemleriniz bu yasal çerçevede denetlenir.
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-extrabold text-white mb-3 tracking-tight relative z-10">1. Genel Kurallar</h3>
-                  <p className="text-[#8b92a5] text-[15px] leading-relaxed relative z-10 flex-1">
-                    Sitemiz yalnızca 18 yaşından büyük ve yasal olarak bahis oynama ehliyetine sahip kullanıcılara hizmet vermektedir. Yasalara tam uygunluk sitemizin temel kuralıdır.
+                </div>
+
+                {/* Rule 2: Tall Vertical (Spans 4 cols, 2 rows) */}
+                <div className="md:col-span-4 md:row-span-2 group bg-gradient-to-b from-white/[0.02] to-black/40 backdrop-blur-2xl p-10 rounded-[32px] border border-white/5 hover:border-[#00E5FF]/30 transition-all duration-700 hover:shadow-[0_20px_60px_rgba(0,229,255,0.15),inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden flex flex-col items-center text-center justify-center">
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMikiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] opacity-50" />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-purple-500/20 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  
+                  <div className="relative z-10 w-24 h-24 mb-8">
+                    <div className="absolute inset-0 bg-[#00E5FF] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full" />
+                    <div className="relative w-full h-full bg-[#0a0a0a] border border-white/10 rounded-full flex items-center justify-center group-hover:border-[#00E5FF]/50 transition-all duration-500 shadow-2xl group-hover:scale-110">
+                      <Lock className="w-10 h-10 text-white" />
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-2xl font-black text-white mb-6 tracking-tight relative z-10">Güvenlik & Gizlilik</h3>
+                  <p className="text-[#9ca3af] text-[17px] leading-relaxed relative z-10 font-medium">
+                    Kullanıcı verileriniz, şifreleriniz ve finansal işlemleriniz uçtan uca şifrelenmiş sunucularımızda (SSL) en üst düzey <strong className="text-white">banka standartlarındaki</strong> güvenlik protokolleriyle saklanmaktadır. Bilgileriniz asla üçüncü şahıslarla paylaşılmaz ve dış tehditlere karşı 7/24 korunur.
                   </p>
                 </div>
 
-                {/* Rule 2 */}
-                <div className="group bg-[#111111]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/5 hover:border-[#00E5FF]/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,229,255,0.1)] relative overflow-hidden flex flex-col h-full">
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#00E5FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="w-14 h-14 bg-[#1a1f2e] border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#00E5FF]/10 group-hover:border-[#00E5FF]/30 transition-all duration-500 relative z-10 shadow-lg">
-                    <Lock className="w-7 h-7 text-gray-400 group-hover:text-[#00E5FF] transition-colors duration-500" />
+                {/* Rule 3: Large Horizontal (Spans 8 cols) */}
+                <div className="md:col-span-8 group bg-white/[0.02] backdrop-blur-2xl p-10 rounded-[32px] border border-white/5 hover:bg-white/[0.04] hover:border-purple-500/30 transition-all duration-700 hover:shadow-[0_20px_60px_rgba(168,85,247,0.1),inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden flex flex-col justify-center">
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] -ml-32 -mb-32 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="flex items-start gap-8 relative z-10">
+                    <div className="w-16 h-16 shrink-0 bg-gradient-to-br from-[#1a1f2e] to-black border border-white/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:border-purple-500/50 transition-all duration-500 shadow-2xl">
+                      <Gamepad2 className="w-8 h-8 text-gray-400 group-hover:text-purple-400 transition-colors duration-500" />
+                    </div>
+                    <div>
+                      <h3 className="text-3xl font-black text-white mb-4 tracking-tight">Sorumlu Oyun</h3>
+                      <p className="text-[#9ca3af] text-lg leading-relaxed font-medium">
+                        Bahis ve casino tamamen bir eğlence aracıdır. Lütfen kişisel bütçe limitlerinizi aşmayınız ve kaybetmeyi göze alamayacağınız tutarlarla oynamayınız. İhtiyaç duyduğunuzda <strong className="text-white">canlı destek</strong> birimimizden anında ve kesintisiz yardım alabilirsiniz.
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-extrabold text-white mb-3 tracking-tight relative z-10">2. Güvenlik ve Gizlilik</h3>
-                  <p className="text-[#8b92a5] text-[15px] leading-relaxed relative z-10 flex-1">
-                    Kullanıcı verileriniz, şifreleriniz ve finansal işlemleriniz uçtan uca şifrelenmiş sunucularımızda (SSL) en üst düzey banka standartlarındaki güvenlik protokolleriyle saklanmaktadır. Bilgileriniz üçüncü şahıslarla asla paylaşılmaz.
-                  </p>
                 </div>
 
-                {/* Rule 3 */}
-                <div className="group bg-[#111111]/80 backdrop-blur-xl p-8 rounded-2xl border border-white/5 hover:border-[#00E5FF]/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,229,255,0.1)] relative overflow-hidden flex flex-col h-full">
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#00E5FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="w-14 h-14 bg-[#1a1f2e] border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#00E5FF]/10 group-hover:border-[#00E5FF]/30 transition-all duration-500 relative z-10 shadow-lg">
-                    <Gamepad2 className="w-7 h-7 text-gray-400 group-hover:text-[#00E5FF] transition-colors duration-500" />
-                  </div>
-                  <h3 className="text-xl font-extrabold text-white mb-3 tracking-tight relative z-10">3. Sorumlu Oyun</h3>
-                  <p className="text-[#8b92a5] text-[15px] leading-relaxed relative z-10 flex-1">
-                    Bahis ve casino tamamen bir eğlence aracıdır. Lütfen kişisel bütçe limitlerinizi aşmayınız ve kaybetmeyi göze alamayacağınız tutarlarla oynamayınız. İhtiyaç duyduğunuzda canlı destek birimimizden anında yardım alabilirsiniz.
-                  </p>
-                </div>
               </div>
             </div>
           </div>
