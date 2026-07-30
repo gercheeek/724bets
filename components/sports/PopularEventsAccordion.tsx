@@ -365,15 +365,15 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           const theme = getLeagueTheme(league, isTennis);
           
           return (
-            <div key={league} className={`group bg-[#1a1d29] hover:bg-[#232838] rounded-xl overflow-hidden transition-all duration-300 border border-white/5 border-l-[4px] ${theme.accentBorder} relative mt-3`}>
+            <div key={league} className={`bg-[#272c3f] rounded-xl overflow-hidden border border-white/10 border-l-[4px] ${theme.accentBorder} relative mt-3`}>
               <button 
                 onClick={() => toggleLeague(league)}
-                className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative overflow-hidden transition-all text-left bg-transparent group`}
+                className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative text-left bg-transparent`}
               >
                 {/* Content */}
                 <div className="flex items-center gap-4 relative z-10 pl-1 flex-1 min-w-0">
                   {/* Clean League Logo */}
-                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-[14px] shrink-0 z-10 bg-[#121620] border border-white/5">
+                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-[14px] shrink-0 z-10 bg-[#161925] border border-white/5">
                     {isTennis ? (
                        <span className="text-3xl relative z-10">🎾</span>
                     ) : (
@@ -385,7 +385,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                     <span className="text-white font-bold text-[14px] sm:text-[16px] tracking-wider uppercase truncate w-full" title={league}>
                       {league}
                     </span>
-                    <span className="text-zinc-500 text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase mt-0.5">
+                    <span className="text-zinc-400 text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase mt-0.5">
                       Öne Çıkan Turnuva
                     </span>
                   </div>
@@ -395,17 +395,17 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 <div className="flex items-center gap-3 sm:gap-5 relative z-10">
                   <div className="hidden sm:flex flex-col items-end mr-2">
                      <span className="text-zinc-500 text-[10px] font-bold tracking-widest uppercase">Aktif</span>
-                     <span className="text-zinc-300 text-[13px] font-black tracking-wide">{leagueMatches.length} MAÇ</span>
+                     <span className="text-zinc-200 text-[13px] font-black tracking-wide">{leagueMatches.length} MAÇ</span>
                   </div>
-                  <span className="sm:hidden bg-white/5 border border-white/10 text-zinc-300 text-[11px] font-black px-3 py-1.5 rounded tracking-widest">
+                  <span className="sm:hidden bg-white/5 border border-white/10 text-zinc-200 text-[11px] font-black px-3 py-1.5 rounded tracking-widest">
                     {leagueMatches.length} MAÇ
                   </span>
                   
-                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#121620] border border-white/5 group-hover:bg-white/5 transition-colors">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#161925] border border-white/5">
                     {isExpanded ? (
-                      <ChevronUp className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
+                      <ChevronUp className="w-5 h-5 text-zinc-400" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
+                      <ChevronDown className="w-5 h-5 text-zinc-400" />
                     )}
                   </div>
                 </div>
