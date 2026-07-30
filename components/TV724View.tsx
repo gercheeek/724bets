@@ -1216,36 +1216,68 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                         } as any);
                                                                     }}
                                                                     style={{ 
-                                                                        display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 10px', 
-                                                                        background: isActive ? 'linear-gradient(90deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.02) 100%)' : 'transparent', 
-                                                                        borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s ease',
+                                                                        display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 12px', 
+                                                                        background: isActive ? 'linear-gradient(90deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.02) 100%)' : 'transparent', 
+                                                                        borderRadius: '8px', cursor: 'pointer', transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                                                                         borderLeft: isActive ? '3px solid #10b981' : '3px solid transparent',
+                                                                        marginBottom: '2px'
                                                                     }}
-                                                                    className="hover:bg-white/5 hover:translate-x-1"
+                                                                    className={`group/item ${isActive ? '' : 'hover:bg-[#ffffff06] hover:border-l-[#ffffff20] hover:translate-x-1'}`}
                                                                 >
                                                                     <div style={{ position: 'relative' }}>
                                                                         <img 
                                                                             src={getChannelLogo(s.name, s.avatar_url)} 
                                                                             alt={s.name} 
-                                                                            style={{ width: '28px', height: '28px', borderRadius: '6px', objectFit: 'contain', background: 'rgba(0,0,0,0.4)', padding: '3px', border: isActive ? '1px solid rgba(16,185,129,0.4)' : '1px solid rgba(255,255,255,0.05)', boxShadow: isActive ? '0 0 10px rgba(16,185,129,0.2)' : 'none' }}
+                                                                            style={{ 
+                                                                                width: '32px', height: '32px', borderRadius: '8px', objectFit: 'contain', 
+                                                                                background: 'rgba(0,0,0,0.5)', padding: '4px', 
+                                                                                border: isActive ? '1px solid rgba(16,185,129,0.5)' : '1px solid rgba(255,255,255,0.05)', 
+                                                                                boxShadow: isActive ? '0 0 12px rgba(16,185,129,0.3)' : 'none',
+                                                                                transition: 'all 0.2s'
+                                                                            }}
+                                                                            className={isActive ? '' : 'group-hover/item:border-white/20'}
                                                                             onError={(e) => {
                                                                                 e.currentTarget.onerror = null;
                                                                                 e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=111&color=fff`;
                                                                             }}
                                                                         />
                                                                         {s.is_live && (
-                                                                            <div style={{ position: 'absolute', top: '-1px', right: '-1px', width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', border: '1.5px solid #12141a', animation: 'pulse 2s infinite' }} />
+                                                                            <div style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', border: '2px solid #12141a', animation: 'pulse 2s infinite' }} />
                                                                         )}
                                                                     </div>
-                                                                    <div style={{ flex: 1 }}>
-                                                                        <div style={{ fontSize: '12px', fontWeight: 900, color: isActive ? '#fff' : '#d1d5db', marginBottom: '1px' }}>{s.name}</div>
-                                                                        <div style={{ fontSize: '9px', color: s.is_live ? '#10b981' : '#6b7280', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                                            {s.is_live ? 'CANLI YAYIN' : 'ÇEVRİMDIŞI'}
+                                                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                                                        <div style={{ fontSize: '12px', fontWeight: isActive ? 900 : 800, color: isActive ? '#fff' : '#d1d5db', marginBottom: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', transition: 'color 0.2s' }} className="group-hover/item:text-white">{s.name}</div>
+                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                                            <span style={{ 
+                                                                                fontSize: '9px', fontWeight: 800, 
+                                                                                background: s.is_live ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.04)', 
+                                                                                color: s.is_live ? '#10b981' : '#6b7280', 
+                                                                                padding: '2px 6px', borderRadius: '4px', 
+                                                                                display: 'flex', alignItems: 'center', gap: '3px',
+                                                                                border: s.is_live ? '1px solid rgba(16,185,129,0.2)' : '1px solid transparent'
+                                                                            }}>
+                                                                                {s.is_live ? (
+                                                                                    <>
+                                                                                        <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#10b981' }} />
+                                                                                        CANLI
+                                                                                    </>
+                                                                                ) : 'ÇEVRİMDIŞI'}
+                                                                            </span>
+                                                                            {s.viewer_count && s.viewer_count > 0 && s.is_live && (
+                                                                                <span style={{ fontSize: '9px', color: '#9ca3af', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                                                                                    <Users style={{ width: 10, height: 10 }} />
+                                                                                    {s.viewer_count.toLocaleString()}
+                                                                                </span>
+                                                                            )}
                                                                         </div>
                                                                     </div>
-                                                                    {isActive && (
-                                                                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', boxShadow: '0 0 8px rgba(16,185,129,0.4)' }}>
-                                                                            <Play style={{ width: 10, height: 10, color: '#10b981', marginLeft: '1px' }} />
+                                                                    {isActive ? (
+                                                                        <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(16,185,129,0.3)', border: '1px solid rgba(16,185,129,0.3)' }}>
+                                                                            <Play style={{ width: 10, height: 10, color: '#10b981', marginLeft: '2px' }} />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="opacity-0 group-hover/item:opacity-100 transition-opacity" style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                                                            <Play style={{ width: 10, height: 10, color: '#9ca3af', marginLeft: '2px' }} />
                                                                         </div>
                                                                     )}
                                                                 </div>

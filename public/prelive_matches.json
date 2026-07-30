@@ -1074,7 +1074,7 @@
         "full_event|0": [
           "|1x2||~home~2.1!~draw~3.16!~away~3.61",
           "|gg||~yes~5.1!~no~1.13",
-          "|gg||~yes~2.29!~no~1.47",
+          "|gg||~yes~2.34!~no~1.45",
           "|gg||~yes~3.05!~no~1.27",
           "|gg||~yes~6.4!~no~1.04",
           "|gg||~yes~10.8!~no~1.012",
@@ -2219,7 +2219,7 @@
       "start_ts": 1785538800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.49!~draw~3.92!~away~2.42"
+          "|1x2||~home~2.43!~draw~3.97!~away~2.46"
         ]
       }
     }
@@ -2369,7 +2369,7 @@
       "start_ts": 1785542400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.57!~draw~3.71!~away~2.43"
+          "|1x2||~home~2.79!~draw~3.93!~away~2.19"
         ]
       }
     }
@@ -2734,8 +2734,8 @@
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~8.5!~no~1.04",
-          "|gg||~yes~2.87!~no~1.36",
-          "|gg||~yes~3.9!~no~1.21"
+          "|gg||~yes~3.05!~no~1.33",
+          "|gg||~yes~3.83!~no~1.22"
         ]
       }
     }
@@ -2873,7 +2873,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.81!~draw~3.78!~away~4.33",
+          "|1x2||~home~1.77!~draw~3.8!~away~4.5",
           "|gg||~yes~2.03!~no~1.6",
           "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
@@ -2945,12 +2945,12 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~2.89!~draw~3.79!~away~2.27",
+          "|1x2||~home~2.92!~draw~3.7!~away~2.29",
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.7!~no~1.34",
           "|gg||~yes~6!~no~1.065",
           "|gg||~yes~9.5!~no~1.025",
-          "|gg||~yes~3.15!~no~1.31",
+          "|gg||~yes~3.2!~no~1.3",
           "|gg||~yes~4.57!~no~1.16"
         ]
       }
@@ -2986,7 +2986,7 @@
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6.25!~no~1.045",
           "|gg||~yes~10.3!~no~1.017",
-          "|gg||~yes~3.57!~no~1.25",
+          "|gg||~yes~3.47!~no~1.26",
           "|gg||~yes~4.57!~no~1.16"
         ]
       }
@@ -3521,7 +3521,7 @@
       "start_ts": 1785432600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.99!~draw~3.59!~away~3.45",
+          "|1x2||~home~1.95!~draw~3.75!~away~3.71",
           "|gg||~yes~1.83!~no~1.75",
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.2!~no~1.08",
@@ -3713,42 +3713,6 @@
     }
   },
   {
-    "id": "30311373",
-    "isScraped": true,
-    "data": {
-      "id": 30311373,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Konferans Ligi. Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Havnar Boltfelag",
-        "away": "FC Motherwell",
-        "home_id": 13560,
-        "away_id": 264
-      },
-      "start_time": "2026-07-30T17:00:00.000Z",
-      "start_ts": 1785430800,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~4.6!~draw~4.3!~away~1.66",
-          "|gg||~yes~2.06!~no~1.58",
-          "|gg||~yes~2.66!~no~1.35",
-          "|gg||~yes~5.75!~no~1.06",
-          "|gg||~yes~9.7!~no~1.023",
-          "|gg||~yes~3.25!~no~1.29",
-          "|gg||~yes~4.15!~no~1.19"
-        ]
-      }
-    }
-  },
-  {
     "id": "30311375",
     "isScraped": true,
     "data": {
@@ -3778,8 +3742,8 @@
           "|gg||~yes~2.9!~no~1.29",
           "|gg||~yes~6.25!~no~1.045",
           "|gg||~yes~10.3!~no~1.017",
-          "|gg||~yes~3.57!~no~1.25",
-          "|gg||~yes~4.57!~no~1.16"
+          "|gg||~yes~3.75!~no~1.23",
+          "|gg||~yes~4.75!~no~1.15"
         ]
       }
     }
@@ -3809,7 +3773,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.54!~draw~3.88!~away~6.9",
+          "|1x2||~home~1.56!~draw~3.88!~away~6.6",
           "|gg||~yes~1.93!~no~1.67",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.5!~no~1.07",
@@ -4176,42 +4140,6 @@
           "|gg||~yes~9.5!~no~1.025",
           "|gg||~yes~3.3!~no~1.28",
           "|gg||~yes~4.3!~no~1.18"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30322897",
-    "isScraped": true,
-    "data": {
-      "id": 30322897,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "UEFA Konferans Ligi. Elemeler"
-      },
-      "country": {
-        "name": "Avrupa"
-      },
-      "participants": {
-        "home": "Vmfd Zalgiris",
-        "away": "Dinamo Tiflis",
-        "home_id": 3092,
-        "away_id": 632
-      },
-      "start_time": "2026-07-30T17:00:00.000Z",
-      "start_ts": 1785430800,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.82!~draw~3.94!~away~4.1",
-          "|gg||~yes~1.81!~no~1.77",
-          "|gg||~yes~2.29!~no~1.47",
-          "|gg||~yes~5.2!~no~1.08",
-          "|gg||~yes~8.2!~no~1.045",
-          "|gg||~yes~2.8!~no~1.38",
-          "|gg||~yes~3.57!~no~1.26"
         ]
       }
     }
@@ -4817,9 +4745,9 @@
       "start_ts": 1785585600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.29!~draw~5.5!~away~9.1",
+          "|1x2||~home~1.3!~draw~5.3!~away~8.8",
           "|gg||~yes~4.3!~no~1.18",
-          "|gg||~yes~1.92!~no~1.68",
+          "|gg||~yes~1.89!~no~1.7",
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.2!~no~1.08",
           "|gg||~yes~9!~no~1.03",
@@ -5481,7 +5409,7 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.32!~draw~5.4!~away~8",
-          "|gg||~yes~2.03!~no~1.6",
+          "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9.7!~no~1.023",
@@ -5521,7 +5449,7 @@
           "|gg||~yes~2.12!~no~1.55",
           "|gg||~yes~5!~no~1.09",
           "|gg||~yes~7.3!~no~1.06",
-          "|gg||~yes~2.55!~no~1.45",
+          "|gg||~yes~2.59!~no~1.44",
           "|gg||~yes~3.3!~no~1.28"
         ]
       }
