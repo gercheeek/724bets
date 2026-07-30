@@ -370,39 +370,22 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 onClick={() => toggleLeague(league)}
                 className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative overflow-hidden transition-all text-left bg-transparent group`}
               >
-                {/* Custom Cinematic Background Image */}
-                {(theme as any).bgImage && (
-                  <div 
-                    className="absolute inset-0 pointer-events-none opacity-20 group-hover:opacity-30 transition-all duration-1000 z-0 bg-cover bg-center bg-no-repeat mix-blend-screen grayscale-[0.5]"
-                    style={{ 
-                      backgroundImage: `url(${(theme as any).bgImage})`,
-                      maskImage: 'linear-gradient(to right, transparent 0%, black 100%)',
-                      WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 100%)'
-                    }} 
-                  />
-                )}
-                
                 {/* Content */}
                 <div className="flex items-center gap-4 relative z-10 pl-1 flex-1 min-w-0">
-                  {/* Advanced Animated League Logo */}
-                  <div className={`relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center overflow-hidden rounded-[1rem] p-[2px] group-hover:scale-105 transition-transform duration-500 shrink-0 z-10 bg-[#121620]`}>
-                    <span className={`absolute inset-[-1000%] animate-[spin_4s_linear_infinite] opacity-30 group-hover:opacity-100 transition-opacity duration-500`} style={{ background: `conic-gradient(from 90deg at 50% 50%, transparent 0%, ${(theme as any).hexColor || '#00E5FF'} 80%, transparent 100%)` }} />
-                    <div className="absolute inset-[2px] bg-[#121620] rounded-[14px]"></div>
-                    <div className={`absolute inset-[2px] ${theme.bgGlow} rounded-[14px] mix-blend-screen`}></div>
-                    <div className="relative h-full w-full rounded-[14px] flex items-center justify-center">
-                      {isTennis ? (
-                         <span className="text-3xl drop-shadow-lg relative z-10">🎾</span>
-                      ) : (
-                         <LeagueLogo league={league} className="w-10 h-10 sm:w-11 sm:h-11 object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" />
-                      )}
-                    </div>
+                  {/* Clean League Logo */}
+                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-[14px] shrink-0 z-10 bg-[#121620] border border-white/5">
+                    {isTennis ? (
+                       <span className="text-3xl relative z-10">🎾</span>
+                    ) : (
+                       <LeagueLogo league={league} className="w-10 h-10 sm:w-11 sm:h-11 object-contain relative z-10" />
+                    )}
                   </div>
                   
                   <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4">
-                    <span className={`${theme.textColor} font-bold text-[14px] sm:text-[16px] tracking-wider uppercase drop-shadow-md truncate w-full`} title={league}>
+                    <span className="text-white font-bold text-[14px] sm:text-[16px] tracking-wider uppercase truncate w-full" title={league}>
                       {league}
                     </span>
-                    <span className="text-zinc-500 text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase mt-0.5 group-hover:text-zinc-400 transition-colors">
+                    <span className="text-zinc-500 text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase mt-0.5">
                       Öne Çıkan Turnuva
                     </span>
                   </div>
@@ -412,17 +395,17 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 <div className="flex items-center gap-3 sm:gap-5 relative z-10">
                   <div className="hidden sm:flex flex-col items-end mr-2">
                      <span className="text-zinc-500 text-[10px] font-bold tracking-widest uppercase">Aktif</span>
-                     <span className={`${theme.statColor} text-[13px] font-black tracking-wide drop-shadow-md transition-all`}>{leagueMatches.length} MAÇ</span>
+                     <span className="text-zinc-300 text-[13px] font-black tracking-wide">{leagueMatches.length} MAÇ</span>
                   </div>
-                  <span className={`sm:hidden bg-white/5 border border-white/10 ${theme.statColor} text-[11px] font-black px-3 py-1.5 rounded shadow-lg transition-all tracking-widest`}>
+                  <span className="sm:hidden bg-white/5 border border-white/10 text-zinc-300 text-[11px] font-black px-3 py-1.5 rounded tracking-widest">
                     {leagueMatches.length} MAÇ
                   </span>
                   
-                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#121620] border border-white/5 group-hover:bg-[#00E5FF]/10 group-hover:border-[#00E5FF]/30 transition-all shadow-lg group-hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#121620] border border-white/5 group-hover:bg-white/5 transition-colors">
                     {isExpanded ? (
-                      <ChevronUp className="w-5 h-5 text-zinc-300 group-hover:text-[#00E5FF] transition-colors" />
+                      <ChevronUp className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-zinc-300 group-hover:text-[#00E5FF] transition-colors" />
+                      <ChevronDown className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
                     )}
                   </div>
                 </div>
