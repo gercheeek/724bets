@@ -385,14 +385,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 
                 {/* Content */}
                 <div className="flex items-center gap-4 sm:gap-5 relative z-10 pl-2 sm:pl-3 flex-1 min-w-0">
-                  {/* Clean Accent Icon */}
-                  <div className={`relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl shrink-0 z-10 ${theme.bgGlow} border border-white/10 shadow-sm`}>
-                     {isTennis ? (
-                        <span className="text-xl sm:text-2xl relative z-10">🎾</span>
-                     ) : (
-                        <Trophy className="w-5 h-5 sm:w-5 sm:h-5 opacity-90" style={{ color: theme.hexColor }} />
-                     )}
-                  </div>
+
 
                   <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4 gap-1 sm:gap-1.5">
                     <span className="text-white font-extrabold text-[15px] sm:text-[17px] tracking-wide uppercase truncate w-full drop-shadow-sm" title={displayLeagueName}>

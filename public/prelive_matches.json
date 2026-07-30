@@ -1360,7 +1360,7 @@
       "start_ts": 1785666600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.46!~draw~4.4!~away~6.4",
+          "|1x2||~home~1.46!~draw~4.33!~away~6.5",
           "|gg||~yes~2.18!~no~1.52",
           "|gg||~yes~2.83!~no~1.31",
           "|gg||~yes~6!~no~1.05",
@@ -2849,42 +2849,6 @@
     }
   },
   {
-    "id": "30431424",
-    "isScraped": true,
-    "data": {
-      "id": 30431424,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kulüp Dostluk Maçları"
-      },
-      "country": {
-        "name": "Dünya"
-      },
-      "participants": {
-        "home": "FC Hellas Kagran",
-        "away": "SV Donau Wien",
-        "home_id": 14942,
-        "away_id": 97709
-      },
-      "start_time": "2026-07-30T16:00:00.000Z",
-      "start_ts": 1785427200,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~home~1.36!~draw~6.6!~away~6.2",
-          "|gg||~yes~1.4!~no~2.48",
-          "|gg||~yes~1.68!~no~1.92",
-          "|gg||~yes~3.7!~no~1.18",
-          "|gg||~yes~4.75!~no~1.15",
-          "|gg||~yes~1.95!~no~1.75",
-          "|gg||~yes~2.5!~no~1.47"
-        ]
-      }
-    }
-  },
-  {
     "id": "30432016",
     "isScraped": true,
     "data": {
@@ -2982,11 +2946,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~3.12!~draw~3.64!~away~2.11",
-          "|gg||~yes~1.93!~no~1.67",
+          "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.48!~no~1.43",
           "|gg||~yes~5.75!~no~1.06",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~2.95!~no~1.35",
+          "|gg||~yes~3!~no~1.34",
           "|gg||~yes~4.15!~no~1.19"
         ]
       }
@@ -3126,11 +3090,11 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~home~1.11!~draw~8.9!~away~19",
-          "|gg||~yes~2.12!~no~1.55",
-          "|gg||~yes~2.66!~no~1.35",
+          "|gg||~yes~2.08!~no~1.57",
+          "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~10!~no~1.02",
-          "|gg||~yes~3.25!~no~1.29",
+          "|gg||~yes~3.15!~no~1.31",
           "|gg||~yes~4.9!~no~1.14"
         ]
       }
@@ -3202,7 +3166,7 @@
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~8.7!~no~1.035",
-          "|gg||~yes~2.95!~no~1.35",
+          "|gg||~yes~3!~no~1.34",
           "|gg||~yes~3.9!~no~1.21"
         ]
       }
@@ -3850,7 +3814,7 @@
           "|gg||~yes~2.9!~no~1.29",
           "|gg||~yes~6.25!~no~1.045",
           "|gg||~yes~10.3!~no~1.017",
-          "|gg||~yes~3.57!~no~1.25",
+          "|gg||~yes~3.75!~no~1.23",
           "|gg||~yes~4.57!~no~1.16"
         ]
       }
@@ -3881,7 +3845,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.46!~draw~4.5!~away~6",
+          "|1x2||~home~1.46!~draw~4.8!~away~6.3",
           "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.5!~no~1.07",
@@ -3917,7 +3881,7 @@
       "start_ts": 1785432600,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~6.2!~draw~4.3!~away~1.48",
+          "|1x2||~home~6.4!~draw~4.33!~away~1.46",
           "|gg||~yes~2.03!~no~1.6",
           "|gg||~yes~2.62!~no~1.36",
           "|gg||~yes~5.75!~no~1.06",
@@ -4025,13 +3989,13 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.19!~draw~7!~away~11",
-          "|gg||~yes~2!~no~1.62",
+          "|1x2||~home~1.23!~draw~6.9!~away~11",
+          "|gg||~yes~1.96!~no~1.65",
           "|gg||~yes~2.55!~no~1.38",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~9!~no~1.03",
           "|gg||~yes~3.1!~no~1.32",
-          "|gg||~yes~4.05!~no~1.2"
+          "|gg||~yes~3.9!~no~1.21"
         ]
       }
     }
@@ -4169,7 +4133,7 @@
       "start_ts": 1785434400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.6!~draw~4!~away~5",
+          "|1x2||~home~1.58!~draw~4.1!~away~5.2",
           "|gg||~yes~2.06!~no~1.58",
           "|gg||~yes~2.66!~no~1.35",
           "|gg||~yes~5.75!~no~1.06",
@@ -4205,7 +4169,7 @@
       "start_ts": 1785430800,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~home~1.38!~draw~5!~away~7",
+          "|1x2||~home~1.38!~draw~5.3!~away~7.3",
           "|gg||~yes~1.89!~no~1.7",
           "|gg||~yes~2.42!~no~1.42",
           "|gg||~yes~5.5!~no~1.07",
@@ -5953,7 +5917,7 @@
           "|gg||~yes~2!~no~1.62",
           "|gg||~yes~4.45!~no~1.12",
           "|gg||~yes~6.7!~no~1.1",
-          "|gg||~yes~2.35!~no~1.53",
+          "|gg||~yes~2.37!~no~1.52",
           "|gg||~yes~3.25!~no~1.29"
         ]
       }
@@ -6853,7 +6817,7 @@
           "|gg||~yes~2.87!~no~1.3",
           "|gg||~yes~6!~no~1.05",
           "|gg||~yes~10.5!~no~1.015",
-          "|gg||~yes~3.57!~no~1.25",
+          "|gg||~yes~3.47!~no~1.26",
           "|gg||~yes~4.9!~no~1.14"
         ]
       }
@@ -8270,7 +8234,7 @@
           "|gg||~yes~2.48!~no~1.4",
           "|gg||~yes~5.5!~no~1.07",
           "|gg||~yes~9!~no~1.03",
-          "|gg||~yes~3.05!~no~1.33",
+          "|gg||~yes~3.1!~no~1.32",
           "|gg||~yes~3.9!~no~1.21"
         ]
       }
