@@ -959,42 +959,6 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
 
-                                    {/* Quick Group Filters */}
-                                    <div 
-                                        style={{ 
-                                            display: 'flex', 
-                                            gap: '8px', 
-                                            overflowX: 'auto', 
-                                            paddingBottom: '8px', 
-                                            marginBottom: '8px', 
-                                            scrollbarWidth: 'none',
-                                            msOverflowStyle: 'none'
-                                        }} 
-                                        className="hide-scrollbar"
-                                    >
-                                        {['Tümü', ...CHANNEL_GROUP_ORDER.filter(g => streamers.some(s => getChannelGroup(s.name) === g))].map(g => (
-                                            <button
-                                                key={g}
-                                                onClick={() => setSelectedGroupFilter(g)}
-                                                style={{
-                                                    padding: '8px 14px',
-                                                    background: selectedGroupFilter === g ? 'rgba(16,185,129,0.15)' : '#0d0f13',
-                                                    border: selectedGroupFilter === g ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.05)',
-                                                    color: selectedGroupFilter === g ? '#10b981' : '#8b92a5',
-                                                    borderRadius: '20px',
-                                                    fontSize: '12px',
-                                                    fontWeight: 900,
-                                                    cursor: 'pointer',
-                                                    whiteSpace: 'nowrap',
-                                                    transition: 'all 0.2s'
-                                                }}
-                                                className="hover:bg-white/5 active:scale-95 shadow-sm"
-                                            >
-                                                {g.replace(/^[^\s]+\s+/, '')}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    
                                     {(() => {
                                         const filteredStreamers = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
                                         
@@ -1007,7 +971,6 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                                         return CHANNEL_GROUP_ORDER
                                             .filter(g => grouped[g] && grouped[g].length > 0)
-                                            .filter(g => selectedGroupFilter === 'Tümü' || selectedGroupFilter === g)
                                             .map(groupName => (
                                             <div key={groupName} style={{ marginBottom: '8px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.04)', overflow: 'hidden' }}>
                                                 {/* Accordion Header */}
