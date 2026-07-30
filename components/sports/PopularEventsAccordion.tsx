@@ -251,7 +251,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-blue-500/10 border-blue-500/20',
           hexColor: '#60A5FA',
           isTurkish: false,
-          bgImage: ''
+          bgImage: '/assets/leagues/champions-league-bg.jpg'
       };
     }
     if (l.includes('avrupa ligi') || l.includes('europa league')) {
@@ -373,11 +373,11 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 {/* Custom Cinematic Background Image */}
                 {(theme as any).bgImage && (
                   <div 
-                    className="absolute inset-0 pointer-events-none opacity-40 group-hover:opacity-70 transition-all duration-700 z-0 bg-cover bg-right bg-no-repeat mix-blend-screen"
+                    className="absolute inset-0 pointer-events-none opacity-80 group-hover:opacity-100 transition-all duration-700 z-0 bg-cover bg-right bg-no-repeat"
                     style={{ 
                       backgroundImage: `url(${(theme as any).bgImage})`,
-                      maskImage: 'linear-gradient(to right, transparent 0%, black 100%)',
-                      WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 100%)'
+                      maskImage: 'linear-gradient(to right, transparent 0%, transparent 60%, black 100%)',
+                      WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 60%, black 100%)'
                     }} 
                   />
                 )}
