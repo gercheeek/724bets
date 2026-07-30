@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MatchInfo } from './types';
 import { MatchCard } from './MatchCard';
-import { TrendingUp, ChevronDown, ChevronUp, Monitor, Filter } from 'lucide-react';
+import { TrendingUp, ChevronDown, ChevronUp, Monitor, Filter, Trophy } from 'lucide-react';
 
 interface PopularEventsAccordionProps {
   matches: MatchInfo[];
@@ -384,14 +384,25 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                 )}
                 
                 {/* Content */}
-                <div className="flex items-center gap-4 sm:gap-5 relative z-10 pl-4 sm:pl-5 flex-1 min-w-0">
-                  <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4">
+                <div className="flex items-center gap-4 sm:gap-5 relative z-10 pl-2 sm:pl-3 flex-1 min-w-0">
+                  {/* Clean Accent Icon */}
+                  <div className={`relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl shrink-0 z-10 ${theme.bgGlow} border border-white/10 shadow-sm`}>
+                     {isTennis ? (
+                        <span className="text-xl sm:text-2xl relative z-10">🎾</span>
+                     ) : (
+                        <Trophy className="w-5 h-5 sm:w-5 sm:h-5 opacity-90" style={{ color: theme.hexColor }} />
+                     )}
+                  </div>
+
+                  <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4 gap-1 sm:gap-1.5">
                     <span className="text-white font-extrabold text-[15px] sm:text-[17px] tracking-wide uppercase truncate w-full drop-shadow-sm" title={displayLeagueName}>
                       {displayLeagueName}
                     </span>
-                    <span className="text-[#a1a1aa] text-[11px] sm:text-[12px] font-semibold tracking-widest uppercase mt-1">
-                      Öne Çıkan Turnuva
-                    </span>
+                    <div className="flex items-center">
+                      <span className={`px-2 py-0.5 rounded-md border border-white/10 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase ${theme.bgGlow} shadow-sm`} style={{ color: theme.hexColor }}>
+                        Öne Çıkan Turnuva
+                      </span>
+                    </div>
                   </div>
                 </div>
                 
