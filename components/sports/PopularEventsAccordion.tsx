@@ -208,7 +208,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           statColor: 'text-[#10b981]',
           iconBg: 'bg-[#10b981]/10 border-[#10b981]/20',
           isTurkish: false,
-          bgImage: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=1200&auto=format&fit=crop'
+          bgImage: ''
       };
     }
     
@@ -237,7 +237,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-red-500/10 border-red-500/20',
           hexColor: '#EF4444',
           isTurkish: true,
-          bgImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop'
+          bgImage: ''
       };
     }
     if (l.includes('şampiyonlar ligi') || l.includes('champions league')) {
@@ -265,7 +265,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-orange-500/10 border-orange-500/20',
           hexColor: '#F97316',
           isTurkish: false,
-          bgImage: 'https://images.unsplash.com/photo-1574629810360-7efbb6b08561?q=80&w=1200&auto=format&fit=crop'
+          bgImage: ''
       };
     }
     if (l.includes('konferans ligi') || l.includes('conference league')) {
@@ -279,7 +279,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-green-500/10 border-green-500/20',
           hexColor: '#22C55E',
           isTurkish: false,
-          bgImage: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?q=80&w=1200&auto=format&fit=crop'
+          bgImage: ''
       };
     }
     if (l.includes('dostluk maçları') || l.includes('friendlies') || l.includes('friendly')) {
@@ -293,7 +293,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-indigo-500/10 border-indigo-500/20',
           hexColor: '#818CF8',
           isTurkish: false,
-          bgImage: 'https://images.unsplash.com/photo-1518605368461-1ee7e16104bc?q=80&w=1200&auto=format&fit=crop'
+          bgImage: ''
       };
     }
     
