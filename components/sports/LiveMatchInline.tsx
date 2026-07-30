@@ -33,6 +33,7 @@ const translateMarket = (name: string) => {
     'Handicap': 'Handikap',
     'Draw_No_Bet': 'Beraberlikte iade',
     'Corners': 'Kornerler',
+    'Cards': 'Kartlar',
     'Total': 'Toplam',
     'Over_Under': 'Alt/Üst',
     'Both_Teams_To_Score': 'Karşılıklı Gol',
@@ -123,28 +124,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
   const parsedMinute = parseInt(match.minute?.replace(/[^0-9]/g, '') || '0');
   const totalCorners = (parseInt(corners.home) || 0) + (parseInt(corners.away) || 0);
 
-  // Procedurally generate markets for ALL matches (even scraped ones) 
-  // because our current live scraper (scrape_live.cjs) only pulls 1x2 odds.
-  if ((markets.length < 5 || isEliteTeam(match.home) || isEliteTeam(match.away)) && match.homeOdd && match.drawOdd && match.awayOdd) {
-    const generated = generateDetailedMarkets(
-      parseFloat(match.homeOdd.toString()), 
-      parseFloat(match.drawOdd.toString()), 
-      parseFloat(match.awayOdd.toString()), 
-      match.home, 
-      match.away,
-      currentTotalGoals,
-      parsedMinute,
-      totalCorners
-    );
-    
-    const existingNames = new Set(markets.map(m => (m.split('|')[1] || '').toLowerCase().trim()));
-    generated.forEach(g => {
-       const gName = (g.split('|')[1] || '').toLowerCase().trim();
-       if (!existingNames.has(gName)) {
-           markets.push(g);
-       }
-    });
-  }
+  // Procedural generation disabled as we now fetch native markets.
   
 
 

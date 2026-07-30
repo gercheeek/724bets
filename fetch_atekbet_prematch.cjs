@@ -9,7 +9,7 @@ const formattedEventsMap = new Map();
 const regionsMap = new Map();
 
 ws.on('open', () => {
-  console.log('Connecting to Atekbet Swarm API for real prematch data...');
+  console.log('Connecting to Atekbet Swarm API for ALL data (Live + Prematch)...');
   ws.send(JSON.stringify({
     command: 'request_session',
     params: { site_id: 1, language: 'tur' },
@@ -54,17 +54,17 @@ ws.on('message', (d) => {
                source: 'betting',
                what: {
                  competition: ['id', 'name'],
-                 game: ['id', 'team1_name', 'team2_name', 'team1_id', 'team2_id', 'start_ts', 'type', 'is_live'],
+                 game: ['id', 'team1_name', 'team2_name', 'team1_id', 'team2_id', 'start_ts', 'type', 'is_live', 'info'],
                  market: ['id', 'name', 'type_name'],
                  event: ['id', 'name', 'price']
                },
                where: {
-                 region: { id: reg.regionId }
+                 region: { id: reg.regionId },
+                 game: { type: { '@in': [0, 1, 2] } }
                }
              },
              rid: `reg_${reg.regionId}_${idx}`
            }));
-           // Save mapping for later
            regionsMap.set(String(reg.regionId), { sportName: reg.sportName, regionName: reg.regionName });
         }, idx * 15);
      });
@@ -84,7 +84,6 @@ ws.on('message', (d) => {
 
         Object.values(comp.game).forEach(game => {
            if (!game.team1_name || !game.team2_name) return;
-           if (game.is_live) return; // skip live matches
 
            const virtualKeywords = [
               'cyber', 'sanal', 'virtual', 'simulated', 'srl', 'esoccer', 'ebasketball', 'etennis',
@@ -95,49 +94,127 @@ ws.on('message', (d) => {
 
            const combinedStr = `${tournamentName} ${game.team1_name} ${game.team2_name}`.toLowerCase();
            if (virtualKeywords.some(kw => combinedStr.includes(kw))) {
-              return; // Skip virtual/cyber matches
+              return;
+           }
+
+           const groupMarkets = { "full_event|0": [] };
+
+           if (game.market) {
+               Object.values(game.market).forEach(m => {
+                   const t = (m.type_name || '').toLowerCase();
+                   const n = (m.name || '').toLowerCase();
+                   if (!m.event) return;
+                   const evs = Object.values(m.event);
+
+                   // 1x2 (Maç Sonucu)
+                   if (t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' || n === 'match result' || n === 'maç sonucu' || n === '1x2' || n === 'winner' || n === 'kazanan' || n === 'maçın kazananı') {
+                       const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const px = evs.find(e => ['x', 'draw', 'beraberlik'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       if (p1 || px || p2) groupMarkets["full_event|0"].push(`|1x2||~1~${p1||'-'}!~X~${px||'-'}!~2~${p2||'-'}`);
+                   }
+                   // Alt/Üst (Over/Under)
+                   else if (n.includes('alt') || n.includes('üst') || n.includes('under') || n.includes('over') || t.includes('total') || t.includes('ou')) {
+                       // Sadece genel toplam golleri al (korner/kart değilse)
+                       if (!n.includes('korner') && !n.includes('corner') && !n.includes('kart') && !n.includes('card')) {
+                           const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
+                           const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
+                           if (over || under) {
+                               const matchLine = n.match(/([0-9]+\.5)/) || m.base;
+                               const arg = matchLine ? (matchLine[1] || matchLine) : '';
+                               groupMarkets["full_event|0"].push(`|ou|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
+                           }
+                       }
+                   }
+                   // Karşılıklı Gol (BTTS)
+                   else if (n.includes('karşılıklı gol') || n.includes('btts') || n.includes('both teams')) {
+                       const yes = evs.find(e => ['var', 'evet', 'yes'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const no = evs.find(e => ['yok', 'hayır', 'no'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       if (yes || no) groupMarkets["full_event|0"].push(`|gg||~var~${yes||'-'}!~yok~${no||'-'}`);
+                   }
+                   // Çifte Şans (Double Chance)
+                   else if (n.includes('çifte şans') || n.includes('double chance') || t === 'doublechance') {
+                       const p1x = evs.find(e => ['1x', '1 x'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const p12 = evs.find(e => ['12', '1 2'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const px2 = evs.find(e => ['x2', 'x 2', '2x', '2 x'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       if (p1x || p12 || px2) groupMarkets["full_event|0"].push(`|Double_Chance||~1X~${p1x||'-'}!~12~${p12||'-'}!~X2~${px2||'-'}`);
+                   }
+                   // Beraberlikte İade (Draw No Bet)
+                   else if (n.includes('beraberlikte iade') || n.includes('draw no bet') || t === 'drawnobet') {
+                       const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       if (p1 || p2) groupMarkets["full_event|0"].push(`|Draw_No_Bet||~1~${p1||'-'}!~2~${p2||'-'}`);
+                   }
+                   // İlk Yarı Sonucu (Half Time Result)
+                   else if ((n.includes('1. yarı') || n.includes('1.yarı') || n.includes('ilk yarı') || n.includes('1st half') || t.includes('half')) && (n.includes('sonucu') || n.includes('result') || n.includes('1x2'))) {
+                       const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const px = evs.find(e => ['x', 'draw', 'beraberlik'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
+                       if (p1 || px || p2) groupMarkets["full_event|0"].push(`|Half_Time_Result||~1~${p1||'-'}!~X~${px||'-'}!~2~${p2||'-'}`);
+                   }
+                   // Kornerler (Corners)
+                   else if (n.includes('korner') || n.includes('corner') || t.includes('corner')) {
+                       if (n.includes('alt') || n.includes('üst') || n.includes('under') || n.includes('over') || t.includes('total')) {
+                           const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
+                           const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
+                           if (over || under) {
+                               const matchLine = n.match(/([0-9]+\.5)/) || m.base;
+                               const arg = matchLine ? (matchLine[1] || matchLine) : '';
+                               groupMarkets["full_event|0"].push(`|Corners|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
+                           }
+                       }
+                   }
+                   // Kartlar (Cards)
+                   else if (n.includes('kart') || n.includes('card') || t.includes('card')) {
+                       if (n.includes('alt') || n.includes('üst') || n.includes('under') || n.includes('over') || t.includes('total')) {
+                           const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
+                           const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
+                           if (over || under) {
+                               const matchLine = n.match(/([0-9]+\.5)/) || m.base;
+                               const arg = matchLine ? (matchLine[1] || matchLine) : '';
+                               groupMarkets["full_event|0"].push(`|Cards|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
+                           }
+                       }
+                   }
+                   // Handikap
+                   else if (n.includes('handikap') || n.includes('handicap') || t.includes('handicap')) {
+                       const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1'].includes((e.name || '').toLowerCase().trim()));
+                       const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2'].includes((e.name || '').toLowerCase().trim()));
+                       if (p1?.price || p2?.price) {
+                           // Try to extract handicap base if present
+                           const matchLine = n.match(/([+-]?[0-9]+\.5)/) || m.base;
+                           const arg = matchLine ? (matchLine[1] || matchLine) : '';
+                           groupMarkets["full_event|0"].push(`|Handicap|${arg}|~1~${p1?.price||'-'}!~2~${p2?.price||'-'}`);
+                       }
+                   }
+               });
            }
            
-           let oddsStr = null;
-           if (game.market) {
-              const mainMarket = Object.values(game.market).find(m => {
-                  const t = (m.type_name || '').toLowerCase();
-                  const n = (m.name || '').toLowerCase();
-                  return t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' ||
-                         n === 'match result' || n === 'maç sonucu' || n === '1x2' || n === 'winner' || n === 'kazanan' || n === 'maçın kazananı';
-              });
-              if (mainMarket && mainMarket.event) {
-                 const evs = Object.values(mainMarket.event);
-                 const p1 = evs.find(e => {
-                     const en = (e.name || '').toLowerCase().trim();
-                     return en === 'w1' || en === '1' || en === 'p1' || en === 'team 1' || en === 'ev sahibi';
-                 })?.price;
-                 const px = evs.find(e => {
-                     const en = (e.name || '').toLowerCase().trim();
-                     return en === 'x' || en === 'draw' || en === 'beraberlik';
-                 })?.price;
-                 const p2 = evs.find(e => {
-                     const en = (e.name || '').toLowerCase().trim();
-                     return en === 'w2' || en === '2' || en === 'p2' || en === 'team 2' || en === 'deplasman';
-                 })?.price;
-                 if (p1 || px || p2) {
-                     oddsStr = `|1x2|~home~${p1||'-'}!~draw~${px||'-'}!~away~${p2||'-'}`;
-                 }
-              }
+           let status = game.is_live === 1 || game.type === 1 ? 'in_progress' : 'not_started';
+           let score = '-';
+           let minute = 'Live';
+           if (game.info) {
+               if (game.info.score1 !== undefined && game.info.score2 !== undefined) {
+                   score = `${game.info.score1} - ${game.info.score2}`;
+               }
+               if (game.info.current_game_time) {
+                   minute = String(game.info.current_game_time);
+               }
            }
 
            formattedEventsMap.set(String(game.id), {
                id: String(game.id),
                data: {
-                  status: 'not_started',
+                  status: status,
+                  isLive: status === 'in_progress',
                   sport: { name: regMeta.sportName },
                   tournament: { name: tournamentName },
                   country: { name: regMeta.regionName },
                   participants: { home: game.team1_name, away: game.team2_name, home_id: game.team1_id, away_id: game.team2_id },
                   start_time: new Date(game.start_ts * 1000).toISOString(),
-                  group_markets: {
-                     'full_event|0': [oddsStr]
-                  }
+                  score: score,
+                  minute: minute,
+                  group_markets: groupMarkets
                }
            });
         });
@@ -150,7 +227,7 @@ function saveAndExit() {
    if (saved) return;
    saved = true;
    const eventsArray = Array.from(formattedEventsMap.values());
-   console.log('SUCCESS: Extracted', eventsArray.length, 'real Atekbet pre-match events including UEFA & Champions League!');
+   console.log('SUCCESS: Extracted', eventsArray.length, 'real Atekbet Live & Prematch events with ALL Markets!');
    fs.writeFileSync('public/prelive_matches.json', JSON.stringify(eventsArray, null, 2));
    ws.close();
    process.exit(0);
@@ -158,4 +235,4 @@ function saveAndExit() {
 
 setTimeout(() => {
    saveAndExit();
-}, 12000);
+}, 20000);
