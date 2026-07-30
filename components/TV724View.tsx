@@ -58,15 +58,20 @@ const getChannelLogo = (channelName: string, avatarUrl?: string) => {
     // Check known channel names FIRST to always show proper logos
     if (nameLower.includes('724tv') || nameLower.includes('7/24')) return 'https://img.icons8.com/color/96/television.png';
     if (nameLower.includes('bein') || nameLower.includes('lig tv')) return 'https://upload.wikimedia.org/wikipedia/commons/e/e0/BeIN_Sports_logo.svg';
-    if (nameLower.includes('s sport')) return 'https://upload.wikimedia.org/wikipedia/tr/d/d7/S_Sport_logo.png';
+    if (nameLower.includes('s sport') || nameLower.includes('ssport')) return 'https://upload.wikimedia.org/wikipedia/tr/d/d7/S_Sport_logo.png';
+    if (nameLower.includes('smart')) return 'https://upload.wikimedia.org/wikipedia/tr/7/7b/Smart_Spor_logo.png';
     if (nameLower.includes('trt spor')) return 'https://upload.wikimedia.org/wikipedia/commons/e/ee/TRT_Spor_logo.svg';
     if (nameLower.includes('trt 1') || nameLower.includes('trt1')) return 'https://upload.wikimedia.org/wikipedia/commons/5/5f/TRT_1_logo.svg';
     if (nameLower.includes('tabii') || nameLower.includes('tabıı')) return 'https://upload.wikimedia.org/wikipedia/commons/0/07/Tabii_logo.png';
     if (nameLower.includes('a spor')) return 'https://upload.wikimedia.org/wikipedia/tr/b/bf/A_spor_logo.png';
     if (nameLower.includes('tivibu')) return 'https://upload.wikimedia.org/wikipedia/tr/2/23/Tivibu_logo.png';
     if (nameLower.includes('exxen')) return 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Exxen_logo.png';
+    if (nameLower.includes('eurosport') || nameLower.includes('euro sport')) return 'https://upload.wikimedia.org/wikipedia/commons/3/38/Eurosport_logo.svg';
     if (nameLower.includes('tv8.5') || nameLower.includes('tv8')) return 'https://upload.wikimedia.org/wikipedia/commons/d/de/TV8_logo.svg';
     if (nameLower.includes('mac') || nameLower.includes('maç') || nameLower.includes('futbol') || nameLower.includes('taraftar')) return 'https://img.icons8.com/color/96/football.png';
+    if (nameLower.includes('dijital') || nameLower.includes('platform')) return 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Exxen_logo.png';
+    if (nameLower.includes('ulusal')) return 'https://upload.wikimedia.org/wikipedia/commons/5/5f/TRT_1_logo.svg';
+    if (nameLower.includes('diğer') || nameLower.includes('diger')) return 'https://img.icons8.com/color/96/tv.png';
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(channelName)}&background=1a2035&color=fff`;
 };
 
@@ -1143,7 +1148,18 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                             }}
                                                             className="hover:bg-[#1C2029]/80 active:scale-[0.99]"
                                                         >
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                                <div style={{ width: '28px', height: '28px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                                                    <img 
+                                                                        src={getChannelLogo(groupName.replace(/^[^\s]+\s+/, ''))} 
+                                                                        alt={groupName.replace(/^[^\s]+\s+/, '')} 
+                                                                        style={{ width: '100%', height: '100%', objectFit: 'contain', opacity: isCollapsed ? 0.6 : 1, transition: 'opacity 0.2s' }}
+                                                                        onError={(e) => {
+                                                                            e.currentTarget.onerror = null;
+                                                                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(groupName.replace(/^[^\s]+\s+/, ''))}&background=1a2035&color=fff`;
+                                                                        }}
+                                                                    />
+                                                                </div>
                                                                 <span style={{ fontSize: '13px', fontWeight: 900, color: isCollapsed ? '#d1d5db' : '#fff', letterSpacing: '0.4px', transition: 'color 0.2s' }}>
                                                                     {groupName.replace(/^[^\s]+\s+/, '')}
                                                                 </span>
