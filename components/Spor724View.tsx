@@ -649,6 +649,18 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
     if (viewMode === 'live') {
       result = result
         .sort((a, b) => {
+          const getSportPriority = (s: string) => {
+              const ls = (s || '').toLowerCase();
+              if (ls.includes('futbol') || ls.includes('soccer')) return 1;
+              if (ls.includes('basket')) return 2;
+              if (ls.includes('tenis') || ls.includes('tennis')) return 3;
+              if (ls.includes('voleybol') || ls.includes('volley')) return 4;
+              return 5;
+          };
+          const pA = getSportPriority(a.sport);
+          const pB = getSportPriority(b.sport);
+          if (pA !== pB) return pA - pB;
+
           const scoreA = getMatchPriorityScore(a.home, a.away);
           const scoreB = getMatchPriorityScore(b.home, b.away);
           if (scoreA !== scoreB) return scoreB - scoreA;
@@ -1059,29 +1071,32 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                                         return 5;
                                     };
                                     return getPriority(a[0]) - getPriority(b[0]);
-                                }).map(([sport, sportMatches]) => (
-                                    <div key={sport} className="flex flex-col gap-3">
-                                        <div className="flex items-center gap-2 px-1 border-b border-white/5 pb-2">
-                                            <div className="w-6 h-6 rounded-md bg-[#3b82f6]/10 text-[#3b82f6] flex items-center justify-center">
-                                                {getSportIcon(sport)}
+                                }).map(([sport, sportMatches]) => {
+                                    const totalCount = filteredMatches.filter(m => (m.sport || 'Diğer') === sport).length;
+                                    return (
+                                        <div key={sport} className="flex flex-col gap-3">
+                                            <div className="flex items-center gap-2 px-1 border-b border-white/5 pb-2">
+                                                <div className="w-6 h-6 rounded-md bg-[#3b82f6]/10 text-[#3b82f6] flex items-center justify-center">
+                                                    {getSportIcon(sport)}
+                                                </div>
+                                                <h3 className="text-white font-bold text-[15px] uppercase tracking-wide">{sport}</h3>
+                                                <div className="ml-auto text-xs font-bold text-zinc-500 bg-white/5 px-2 py-0.5 rounded-full">
+                                                    {totalCount}
+                                                </div>
                                             </div>
-                                            <h3 className="text-white font-bold text-[15px] uppercase tracking-wide">{sport}</h3>
-                                            <div className="ml-auto text-xs font-bold text-zinc-500 bg-white/5 px-2 py-0.5 rounded-full">
-                                                {sportMatches.length}
+                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                                                {sportMatches.map(match => (
+                                                    <MatchCard 
+                                                        key={match.id}
+                                                        match={match}
+                                                        isGoal={false}
+                                                        onSelect={setSelectedMatch}
+                                                    />
+                                                ))}
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                                            {sportMatches.map(match => (
-                                                <MatchCard 
-                                                    key={match.id}
-                                                    match={match}
-                                                    isGoal={false}
-                                                    onSelect={setSelectedMatch}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                             {filteredMatches.length > visibleCount && (
                                 <button 
