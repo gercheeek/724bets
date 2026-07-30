@@ -332,6 +332,15 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
         setCollapsedGroups(prev => ({ ...prev, [group]: !prev[group] }));
     };
 
+    const toggleAllGroups = () => {
+        const allCollapsed = Object.values(collapsedGroups).every(v => v);
+        const updated: Record<string, boolean> = {};
+        CHANNEL_GROUP_ORDER.forEach(g => {
+            updated[g] = !allCollapsed;
+        });
+        setCollapsedGroups(updated);
+    };
+
     // ── Hero carousel ──
     const [heroSlide, setHeroSlide] = useState(0);
     const heroTimerRef = useRef<any>(null);
@@ -1006,10 +1015,72 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     <div style={{ flex: 1, minWidth: isMobile ? '100%' : '340px', position: 'relative' }}>
                         <div style={{ position: isMobile ? 'relative' : 'absolute', inset: 0, background: '#12141a', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', display: 'flex', flexDirection: 'column', height: isMobile ? '500px' : '100%', overflow: 'hidden' }}>
                             
-                            {/* Channels Sidebar Title */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%)' }}>
-                                <div style={{ width: '4px', height: '16px', background: '#10b981', borderRadius: '4px', boxShadow: '0 0 10px rgba(16,185,129,0.5)' }} />
-                                <h3 style={{ fontSize: '14px', fontWeight: 900, color: '#fff', letterSpacing: '1px', margin: 0 }}>CANLI KANALLAR</h3>
+                            {/* Channels Sidebar Header */}
+                            <div style={{ padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <div style={{ width: '4px', height: '16px', background: '#10b981', borderRadius: '4px', boxShadow: '0 0 10px rgba(16,185,129,0.5)' }} />
+                                        <h3 style={{ fontSize: '13px', fontWeight: 900, color: '#fff', letterSpacing: '0.8px', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            CANLI KANALLAR
+                                            <span style={{ fontSize: '9px', fontWeight: 800, background: 'rgba(16,185,129,0.15)', color: '#10b981', border: '1px solid rgba(16,185,129,0.3)', padding: '1px 6px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#10b981', animation: 'pulse 1.5s infinite' }} />
+                                                {streamers.length} KANAL
+                                            </span>
+                                        </h3>
+                                    </div>
+                                    
+                                    <button 
+                                        onClick={() => toggleAllGroups()}
+                                        title={Object.values(collapsedGroups).every(v => v) ? "Tümünü Genişlet" : "Tümünü Daralt"}
+                                        style={{
+                                            padding: '4px 8px',
+                                            fontSize: '10px',
+                                            fontWeight: 800,
+                                            color: '#9ca3af',
+                                            background: 'rgba(255,255,255,0.03)',
+                                            border: '1px solid rgba(255,255,255,0.06)',
+                                            borderRadius: '6px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '4px'
+                                        }}
+                                        className="hover:bg-white/10 hover:text-white active:scale-95 shadow-sm"
+                                    >
+                                        {Object.values(collapsedGroups).every(v => v) ? 'Tümünü Aç' : 'Kapat'}
+                                    </button>
+                                </div>
+
+                                {/* Compact Search Bar */}
+                                <div style={{ position: 'relative', width: '100%' }}>
+                                    <input 
+                                        type="text" 
+                                        placeholder="Kanal ara... (beIN 1, Tivibu...)" 
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '6px 28px 6px 30px',
+                                            background: 'rgba(0, 0, 0, 0.4)',
+                                            border: searchQuery ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.06)',
+                                            borderRadius: '8px',
+                                            fontSize: '11px',
+                                            color: '#fff',
+                                            outline: 'none',
+                                            transition: 'all 0.2s'
+                                        }}
+                                    />
+                                    <Search style={{ position: 'absolute', left: '9px', top: '50%', transform: 'translateY(-50%)', width: '13px', height: '13px', color: searchQuery ? '#10b981' : '#6b7280' }} />
+                                    {searchQuery && (
+                                        <button 
+                                            onClick={() => setSearchQuery('')}
+                                            style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+                                        >
+                                            <X style={{ width: '12px', height: '12px' }} />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Channels Content */}
@@ -1117,17 +1188,17 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                     }}
                                                                     style={{ 
                                                                         display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 10px', 
-                                                                        background: isActive ? 'linear-gradient(90deg, rgba(16,185,129,0.1) 0%, transparent 100%)' : 'transparent', 
-                                                                        borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s',
-                                                                        borderLeft: isActive ? '3px solid #10b981' : '3px solid transparent'
+                                                                        background: isActive ? 'linear-gradient(90deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.02) 100%)' : 'transparent', 
+                                                                        borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s ease',
+                                                                        borderLeft: isActive ? '3px solid #10b981' : '3px solid transparent',
                                                                     }}
-                                                                    className="hover:bg-white/5"
+                                                                    className="hover:bg-white/5 hover:translate-x-1"
                                                                 >
                                                                     <div style={{ position: 'relative' }}>
                                                                         <img 
                                                                             src={getChannelLogo(s.name, s.avatar_url)} 
                                                                             alt={s.name} 
-                                                                            style={{ width: '28px', height: '28px', borderRadius: '6px', objectFit: 'contain', background: 'rgba(0,0,0,0.4)', padding: '3px', border: isActive ? '1px solid rgba(16,185,129,0.3)' : '1px solid rgba(255,255,255,0.05)' }}
+                                                                            style={{ width: '28px', height: '28px', borderRadius: '6px', objectFit: 'contain', background: 'rgba(0,0,0,0.4)', padding: '3px', border: isActive ? '1px solid rgba(16,185,129,0.4)' : '1px solid rgba(255,255,255,0.05)', boxShadow: isActive ? '0 0 10px rgba(16,185,129,0.2)' : 'none' }}
                                                                             onError={(e) => {
                                                                                 e.currentTarget.onerror = null;
                                                                                 e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}&background=111&color=fff`;
@@ -1144,7 +1215,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                         </div>
                                                                     </div>
                                                                     {isActive && (
-                                                                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center' }}>
+                                                                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', boxShadow: '0 0 8px rgba(16,185,129,0.4)' }}>
                                                                             <Play style={{ width: 10, height: 10, color: '#10b981', marginLeft: '1px' }} />
                                                                         </div>
                                                                     )}
