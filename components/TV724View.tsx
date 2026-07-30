@@ -1154,7 +1154,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                     </div>
                                                 )}
                                             </div>
-                                        ));
+                                        });
                                     })()}
                                 </div>
                             </div>
