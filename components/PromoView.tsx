@@ -124,20 +124,46 @@ export default function PromoView() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Top Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-11 h-11 rounded-[0.85rem] bg-gradient-to-b from-[#FCD34D] to-[#F59E0B] flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.25)] relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none" />
-              <Trophy className="w-5 h-5 text-black relative z-10" strokeWidth={2.5} />
+        {/* Advanced Top Header */}
+        <div className="mb-10 relative">
+          {/* Subtle background glow for the header area */}
+          <div className="absolute -top-10 -left-10 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none" />
+          
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 relative z-10">
+            <div className="flex-1">
+              <div className="flex items-center gap-4 mb-3">
+                {/* Premium Icon Container */}
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#1A1F2E] to-[#0B0F19] border border-amber-500/30 flex items-center justify-center relative overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                    <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                    <Trophy className="w-7 h-7 text-transparent fill-amber-400 stroke-amber-500 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)] relative z-10" strokeWidth={1.5} />
+                  </div>
+                </div>
+                
+                {/* Advanced Typography */}
+                <h1 className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-zinc-400 tracking-tight leading-none drop-shadow-lg">
+                  Turnuvalar
+                </h1>
+              </div>
+              
+              <p className="text-[#8b929b] text-base md:text-lg font-medium max-w-2xl leading-relaxed pl-1 sm:pl-[72px]">
+                Büyük ödül havuzlu premium turnuvalara katıl, skor tablosunda zirveye oyna ve efsanevi ödülleri kazan!
+              </p>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-none drop-shadow-sm">
-              Turnuvalar
-            </h1>
+
+            {/* Live Status Badge */}
+            <div className="flex items-center gap-3 bg-[#0B0F19]/80 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl shadow-lg shrink-0 w-fit">
+              <div className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
+              </div>
+              <span className="text-sm font-bold text-white tracking-wide">3 Aktif Turnuva</span>
+            </div>
           </div>
-          <p className="text-[#8b929b] text-sm md:text-[15px] font-medium max-w-4xl leading-relaxed">
-            Büyük ödül havuzlu premium turnuvalara katıl, skor tablosunda zirveye oyna ve efsanevi ödülleri kazan!
-          </p>
+          
+          {/* Decorative Divider */}
+          <div className="w-full h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent mt-8" />
         </div>
 
         {/* Tournaments Grid */}
