@@ -41,9 +41,9 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
               </div>
             </div>
 
-            <h1 className="text-[32px] md:text-[46px] font-black leading-[1.1] tracking-tight text-white mb-5 drop-shadow-md">
+            <h1 className="text-[38px] md:text-[56px] font-black leading-[1.1] tracking-tight text-white mb-5 drop-shadow-md">
               Sektörün En Çok <br className="hidden lg:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#10B981] italic drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">Kazandıran</span> Ağı.
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#10B981] drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">Kazandıran</span> Ağı.
             </h1>
             
             <p className="text-[14px] md:text-[15px] text-[#8b92a5] font-medium leading-relaxed max-w-[500px] mb-8">

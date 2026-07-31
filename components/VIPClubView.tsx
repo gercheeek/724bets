@@ -152,24 +152,26 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
                     idx === currentSlide ? 'opacity-100 translate-y-0 scale-100 z-10' : 'opacity-0 translate-y-12 scale-95 -z-10'
                   }`}
                 >
-                  <div className="relative inline-flex items-center justify-center mb-5">
-                    <div className="absolute inset-0 bg-[#00E5FF] rounded-full blur-[20px] animate-pulse opacity-40 mix-blend-screen"></div>
-                    <div className="relative w-14 h-14 bg-[#0a0d14]/80 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/20 shadow-[inset_0_0_30px_rgba(255,255,255,0.1),0_0_30px_rgba(0,229,255,0.3)]">
-                      <slide.icon className="w-6 h-6 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                  <div className="relative inline-flex items-center justify-center mb-6">
+                    {/* Advanced Animated Badge matching the unified design */}
+                    <div className="relative inline-flex overflow-hidden rounded-full p-[1px] shadow-[0_0_20px_rgba(0,229,255,0.2)]">
+                      <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#00E5FF_50%,transparent_100%)]" />
+                      <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-[#0A0D14] px-4 py-2 backdrop-blur-3xl gap-2">
+                        <slide.icon className="w-4 h-4 text-[#00E5FF] animate-pulse" />
+                        <span className="text-[#00E5FF] text-[11px] font-black tracking-[0.2em] uppercase">VIP KULÜBÜ AYRICALIKLARI</span>
+                      </div>
                     </div>
                   </div>
                   
-                  {/* Holographic Typography */}
-                  <h1 className="text-[26px] md:text-[36px] lg:text-[44px] font-black leading-[1.1] tracking-tighter text-white mb-3 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">
+                  {/* Holographic Typography matching PromoView */}
+                  <h1 className="text-[38px] md:text-[56px] font-black leading-[1.1] tracking-tight text-white mb-5 drop-shadow-md">
                     {slide.title} <br className="hidden sm:block"/>
-                    <span className="relative inline-block mt-1 sm:mt-0 text-transparent bg-clip-text bg-gradient-to-r from-white via-[#00E5FF] to-[#10B981] pb-1">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#10B981] drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">
                       {slide.highlight}
-                      {/* Shine effect */}
-                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 bg-clip-text text-transparent animate-[shimmer_3s_infinite_linear] blur-[1px]"></span>
                     </span>
                   </h1>
                   
-                  <p className="text-[13px] lg:text-[15px] text-zinc-400 font-medium leading-relaxed max-w-[550px] mx-auto mt-2">
+                  <p className="text-[14px] md:text-[15px] text-zinc-400 font-medium leading-relaxed max-w-[550px] mx-auto mt-2 mb-8">
                     {slide.desc}
                   </p>
                 </div>

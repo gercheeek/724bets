@@ -263,16 +263,19 @@ export default function PromoView() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00E5FF]/5 rounded-full blur-[100px] pointer-events-none" />
           
           <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
-            {/* Top Badge */}
-            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00E5FF]/30 bg-[#00E5FF]/5 mb-6">
-               <Trophy className="w-4 h-4 text-[#00E5FF]" />
-               <span className="text-[11px] font-bold text-[#00E5FF] tracking-widest uppercase">724BETS TURNUVALARI</span>
+            {/* Advanced Animated Badge */}
+            <div className="relative inline-flex overflow-hidden rounded-full p-[1px] mb-6 shadow-[0_0_20px_rgba(0,229,255,0.2)]">
+              <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#00E5FF_50%,transparent_100%)]" />
+              <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-[#0A0D14] px-4 py-2 backdrop-blur-3xl gap-2">
+                <Trophy className="w-4 h-4 text-[#00E5FF] animate-pulse" />
+                <span className="text-[#00E5FF] text-[11px] font-black tracking-[0.2em] uppercase">Turnuvalar ve Promosyonlar</span>
+              </div>
             </div>
             
             {/* Massive Typography */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1] mb-4">
+            <h1 className="text-[38px] md:text-[56px] font-black leading-[1.1] tracking-tight text-white mb-5 drop-shadow-md">
               Sektörün En Büyük <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#0088FF] drop-shadow-[0_0_20px_rgba(0,229,255,0.3)]">TURNUVALARI</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#10B981] drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">TURNUVALARI</span>
             </h1>
             
             <p className="text-zinc-400 text-base md:text-lg font-medium leading-relaxed max-w-2xl mt-2 mb-8">
