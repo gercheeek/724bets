@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, TrendingUp } from 'lucide-react';
+import { Trophy, TrendingUp, ShoppingCart, Play, CheckCircle2 } from 'lucide-react';
+import { useBetSlip } from '../contexts/BetSlipContext';
+import { useTranslation } from 'react-i18next';
 import { DailyKuponConfig } from '../types';
 
 interface DailyKuponProps {
@@ -47,6 +49,9 @@ const HIGH_RISK_COUPON = {
 const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetKey }) => {
   const cfg = config || DEFAULT_CONFIG;
   const [activeTab, setActiveTab] = useState<'low' | 'medium' | 'high'>('medium');
+  const [isAdded, setIsAdded] = useState(false);
+  const { t } = useTranslation();
+  const { addToBetSlip } = useBetSlip();
 
   useEffect(() => {
     if (resetKey !== undefined && resetKey !== 0) {
@@ -60,7 +65,6 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
 
   if (!cfg.isActive) return null;
 
-  // Determine coupon data to render
   const getActiveCoupon = () => {
     switch (activeTab) {
       case 'low':
@@ -69,7 +73,6 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
         return HIGH_RISK_COUPON;
       case 'medium':
       default:
-        // Use custom dashboard matches if present, otherwise fallback
         if (cfg.matches && cfg.matches.length > 0) {
           const totalCalculated = cfg.matches.reduce((acc, m) => acc * parseFloat(m.odd || '1'), 1);
           return {
@@ -85,6 +88,21 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
 
   const coupon = getActiveCoupon();
 
+  const handleAddToSlip = () => {
+    coupon.matches.forEach(match => {
+      addToBetSlip({
+        id: match.id,
+        league: match.league || '',
+        homeTeam: match.homeTeam,
+        awayTeam: match.awayTeam,
+        prediction: match.prediction,
+        odd: parseFloat(match.odd)
+      });
+    });
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
+  };
+
   return (
     <div style={{
       background: '#111111',
@@ -99,19 +117,18 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
       overflow: 'hidden',
       boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05)'
     }}>
-      {/* Ambient glow */}
       <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '160px', height: '160px', borderRadius: '50%', border: '1px solid rgba(0, 255, 163, 0.1)', boxShadow: '0 0 32px rgba(0, 255, 163, 0.08)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 20%, rgba(0, 255, 163, 0.05) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
-      {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '16px', borderBottom: '1px solid rgba(0, 255, 163, 0.12)', position: 'relative', zIndex: 2 }}>
         <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'rgba(0, 255, 163, 0.08)', border: '1px solid rgba(0, 255, 163, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <Trophy style={{ width: '16px', height: '16px', color: '#06b6d4' }} />
         </div>
-        <h3 style={{ margin: 0, fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', color: '#06b6d4' }}>{coupon.title}</h3>
+        <h3 style={{ margin: 0, fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', color: '#06b6d4' }}>
+          {coupon.title === 'GÜNÜN BANKO KUPONU' ? t('slider.daily_kupon.banko') : coupon.title === 'GÜNÜN AZ RİSK KUPONU' ? t('slider.daily_kupon.low_risk') : coupon.title === 'GÜNÜN YÜKSEK RİSK KUPONU' ? t('slider.daily_kupon.high_risk') : coupon.title}
+        </h3>
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: '8px', margin: '10px 0', position: 'relative', zIndex: 2 }}>
         {(['low', 'medium', 'high'] as const).map((tab) => (
           <button
@@ -134,7 +151,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
               boxShadow: 'none'
             }}
           >
-            {tab === 'low' ? 'Az Risk' : tab === 'medium' ? 'Orta Risk' : 'Yüksek'}
+            {tab === 'low' ? t('slider.daily_kupon.tab_low') : tab === 'medium' ? t('slider.daily_kupon.tab_medium') : t('slider.daily_kupon.tab_high')}
           </button>
         ))}
       </div>
@@ -165,7 +182,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
       {/* Footer */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(0, 255, 163, 0.1)', position: 'relative', zIndex: 2 }}>
         <div>
-          <div style={{ fontSize: '8px', fontWeight: 700, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>TOPLAM ORAN</div>
+          <div style={{ fontSize: '8px', fontWeight: 700, color: '#444', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>{t('slider.daily_kupon.total_odds')}</div>
           <div style={{ fontSize: '22px', fontWeight: 900, color: '#06b6d4', lineHeight: 1, textShadow: 'none', fontStyle: 'italic', letterSpacing: '-0.5px' }}>
             {parseFloat(coupon.totalOdd).toFixed(2)}
             <span style={{ fontSize: '13px', color: '#06b6d4', marginLeft: '1px', fontStyle: 'normal', opacity: 0.7 }}>x</span>
@@ -200,7 +217,7 @@ const DailyKupon: React.FC<DailyKuponProps> = ({ config, interval = 5000, resetK
             e.currentTarget.style.backgroundColor = '#06b6d4';
           }}
         >
-          HEMEN OYNA
+          {t('slider.daily_kupon.play_now')}
         </a>
       </div>
 

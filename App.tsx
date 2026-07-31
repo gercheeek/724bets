@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { BettingProvider } from './contexts/BettingContext';
+import { useTranslation } from 'react-i18next';
 import LanguageTransition from './components/LanguageTransition';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -26,6 +27,7 @@ import MaintenanceScreen from './components/MaintenanceScreen';
 import GlobalToaster from './components/GlobalToaster';
 
 import LiveSupportModal from './components/LiveSupportModal';
+import SupportView from './components/SupportView';
 // Import removed
 import SlotText from './components/SlotText';
 // Import removed
@@ -184,6 +186,7 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
 };
 
 export default function App() {
+  const [view, setView] = useState('home');
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [isFinancePanelOpen, setIsFinancePanelOpen] = useState(false);
   const [isDriverActive, setIsDriverActive] = useState(false);
@@ -217,7 +220,7 @@ export default function App() {
     <ThemeProvider>
       <LanguageProvider>
         <BettingProvider>
-          <SecretCurtain />
+          {/* SecretCurtain removed */}
           <div className="min-h-screen bg-theme-main text-theme-primary flex flex-col font-sans">
             <AppContent setIsAdminPanelOpen={setIsAdminPanelOpen} />
           </div>
@@ -232,6 +235,7 @@ export default function App() {
 }
 
 const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({ setIsAdminPanelOpen }) => {
+  const { t } = useTranslation();
   const sports2ContainerRef = useRef<HTMLDivElement>(null);
   const sportsContainerRef = useRef<HTMLDivElement>(null);
   const sports3ContainerRef = useRef<HTMLDivElement>(null);
@@ -305,10 +309,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     };
 
     const handleOpenSupportChat = () => {
-      setView('spor724');
-      setTimeout(() => {
-        window.dispatchEvent(new Event('openMobileChatPanel'));
-      }, 150);
+      setView('support');
+      window.history.pushState(null, '', '/destek');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.addEventListener('internal-navigate', handleInternalNavigate as EventListener);
@@ -2051,7 +2054,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
           {/* MAIN FLEX LAYOUT (Sidebar + Content + Chat) */}
-          <div className="flex flex-1 w-full overflow-hidden relative">
+          <div className="flex flex-col lg:flex-row w-full h-full relative overflow-hidden">
 
             {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
             {!(view === 'giveaway') && (
@@ -2098,43 +2101,43 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
              {/* Glossy overlay for the entire center */}
              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] pointer-events-none z-0 opacity-30 mix-blend-screen"></div>
 
-            {/* MASAÜSTÜ HEADER (Artık Orta İçerik'te, böylece sol menü en tepeye çıkabilir) */}
-            {view !== 'kral' && (
-              <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-[#0A0D14] shadow-lg">
-                <Header
-                  onAdminClick={() => {
-                    if (userRole) setView('admin');
-                    else setAuthModalMode('admin');
-                  }}
-                  onViewChange={handleViewChange}
-                  activeView={view}
-                  isAuthenticated={!!userRole}
-                  userRole={userRole}
-                  siteUser={siteUser}
-                  onMemberLoginClick={() => setAuthModalMode('member')}
-                  onMemberRegisterClick={() => setAuthModalMode('register')}
-                  onMemberLogout={handleGlobalLogout}
-                  onSearchClick={() => setShowSearch(true)}
-                  onSupportClick={() => {
-                    if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-                    setIsChatOpen(prev => !prev);
-                  }}
-                  navVisibility={navVisibility}
-                  marqueeConfig={marqueeConfig}
-                  isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
-                  isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
-                  onToggleSidebar={() => {
-                    if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-                    setIsSidebarOpen(!isSidebarOpen);
-                  }}
-                  showFakeBetButton={view === 'sports2'}
-                  onFakeBetClick={() => {
-                     if (!siteUser) setAuthModalMode('member');
-                     else setShowFakeBetModal(true);
-                  }}
-                />
-              </div>
-            )}
+             {/* MASAÜSTÜ HEADER */}
+             {view !== 'kral' && (
+               <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-[#0A0D14] shadow-lg">
+                 <Header
+                   onAdminClick={() => {
+                     if (userRole) setView('admin');
+                     else setAuthModalMode('admin');
+                   }}
+                   onViewChange={handleViewChange}
+                   activeView={view}
+                   isAuthenticated={!!userRole}
+                   userRole={userRole}
+                   siteUser={siteUser}
+                   onMemberLoginClick={() => setAuthModalMode('member')}
+                   onMemberRegisterClick={() => setAuthModalMode('register')}
+                   onMemberLogout={handleGlobalLogout}
+                   onSearchClick={() => setShowSearch(true)}
+                   onSupportClick={() => {
+                     if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+                     setIsChatOpen(prev => !prev);
+                   }}
+                   navVisibility={navVisibility}
+                   marqueeConfig={marqueeConfig}
+                   isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
+                   isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
+                   onToggleSidebar={() => {
+                     if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
+                     setIsSidebarOpen(!isSidebarOpen);
+                   }}
+                   showFakeBetButton={view === 'sports2'}
+                   onFakeBetClick={() => {
+                      if (!siteUser) setAuthModalMode('member');
+                      else setShowFakeBetModal(true);
+                   }}
+                 />
+               </div>
+             )}
 
             {/* SADECE MOBİLDE GÖRÜNEN ÜST BAR (Header) */}
             {view !== 'kral' && (
@@ -2257,8 +2260,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         id="tour-main"
         className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
           (view === 'gercek' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis') 
-            ? 'p-0 w-full max-w-[1280px] mx-auto pb-[70px] md:pb-0' 
-            : 'px-2 py-4 md:p-6 w-full max-w-[1280px] mx-auto pb-[80px] md:pb-6'
+            ? 'p-0 w-full pb-[70px] md:pb-0' 
+            : 'w-full pb-[80px] md:pb-0'
         }`}
         style={{ 
           position: 'relative', 
@@ -2329,6 +2332,13 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             <VIPClubView onNavigate={handleViewChange} siteUser={siteUser} />
           </div>
         )}
+
+        {view === 'support' && (
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <SupportView />
+          </div>
+        )}
+
 
         {view === 'gercek' && (
           <div className="animate-fade-in w-full h-full">
@@ -2409,154 +2419,88 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
 
         {view === 'docs' && (
-          <div className="animate-fade-in w-full h-full relative z-[50] flex flex-col items-center p-6 md:p-10 overflow-y-auto overflow-x-hidden min-h-screen">
-            {/* Ultra-Premium Cinematic Background */}
+          <div className="animate-fade-in w-full h-full relative z-[50] flex flex-col items-center justify-center p-4 md:p-6 overflow-hidden min-h-[calc(100vh-60px)] bg-[#030407]">
+            {/* Cinematic Background */}
             <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-              <div className="absolute inset-0 bg-[#030407]" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,229,255,0.12),transparent_50%)]" />
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
-              <div className="absolute top-[10%] left-[10%] w-[600px] h-[600px] bg-[#00E5FF]/10 rounded-full blur-[150px] mix-blend-screen" />
-              <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-fuchsia-600/10 rounded-full blur-[120px] mix-blend-screen" />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(0,229,255,0.1),transparent_70%)]" />
+              <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-fuchsia-600/5 rounded-full blur-[100px]" />
             </div>
 
-            <div className="w-full max-w-6xl relative z-10 flex flex-col items-center mt-6 sm:mt-12 mb-24">
-              {/* Premium Header Icon */}
-              <div className="relative group mb-8">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#00E5FF] to-fuchsia-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200" />
-                <div className="relative w-28 h-28 bg-[#0a0d14]/80 backdrop-blur-2xl rounded-2xl flex items-center justify-center border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] overflow-hidden">
-                   <div className="absolute inset-0 bg-gradient-to-br from-[#00E5FF]/20 to-transparent opacity-50" />
-                   {/* Custom 3D-like Shield SVG */}
-                   <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 drop-shadow-[0_0_15px_rgba(0,229,255,0.8)] relative z-10 group-hover:scale-110 transition-transform duration-700">
-                     <path d="M50 10L15 25V50C15 70 30 85 50 95C70 85 85 70 85 50V25L50 10Z" fill="url(#shield-grad)" stroke="url(#shield-stroke)" strokeWidth="3" strokeLinejoin="round"/>
-                     <path d="M35 55L45 65L65 40" stroke="#ffffff" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-                     <defs>
-                       <linearGradient id="shield-grad" x1="15" y1="10" x2="85" y2="95" gradientUnits="userSpaceOnUse">
-                         <stop stopColor="#00E5FF" stopOpacity="0.4" />
-                         <stop offset="1" stopColor="#030407" stopOpacity="0.9" />
-                       </linearGradient>
-                       <linearGradient id="shield-stroke" x1="15" y1="10" x2="85" y2="95" gradientUnits="userSpaceOnUse">
-                         <stop stopColor="#00E5FF" />
-                         <stop offset="1" stopColor="#a855f7" />
-                       </linearGradient>
-                     </defs>
-                   </svg>
-                </div>
+            <div className="w-full max-w-4xl relative z-10 flex flex-col items-center mt-2 mb-4">
+              
+              {/* Premium Pill Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-3 shadow-[0_0_15px_rgba(0,229,255,0.1)]">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#00E5FF]" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-[#00E5FF]">{t('docs.badge')}</span>
               </div>
               
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-zinc-500 mb-6 text-center tracking-tighter drop-shadow-2xl">
-                Kullanım Şartları
+              <h1 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400 mb-2 text-center tracking-tight">
+                {t('docs.title')}
               </h1>
-              <p className="text-zinc-400 text-lg md:text-xl mb-16 text-center max-w-3xl font-medium px-4 leading-relaxed">
-                Platformumuzu kullanmadan önce lütfen şartları dikkatlice okuyunuz. <span className="text-[#00E5FF] font-bold drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]">Şeffaflık</span>, <span className="text-[#00E5FF] font-bold drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]">güvenlik</span> ve <span className="text-fuchsia-400 font-bold drop-shadow-[0_0_8px_rgba(232,121,249,0.5)]">adil oyun</span> ilkeleri en büyük önceliğimizdir.
+              <p className="text-zinc-400 text-[12px] md:text-[13px] mb-6 text-center max-w-xl font-medium px-4 leading-relaxed">
+                {t('docs.intro_1')} <span className="text-[#00E5FF] font-bold">{t('docs.intro_transparency')}</span>, <span className="text-[#00E5FF] font-bold">{t('docs.intro_security')}</span> {t('common.and', 've')} <span className="text-fuchsia-400 font-bold">{t('docs.intro_fair_play')}</span> {t('docs.intro_2')}
               </p>
 
-              {/* Premium Bento Box Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 w-full px-4 auto-rows-[minmax(280px,auto)]">
+              {/* Premium Stacked Rows Grid - COMPACT */}
+              <div className="flex flex-col gap-3 md:gap-4 w-full px-2">
                 
-                {/* Rule 1: Large Horizontal */}
-                <div className="md:col-span-8 relative group rounded-[32px] p-[2px] overflow-hidden">
-                  {/* Animated Border */}
-                  <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#00000000_50%,#00E5FF_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="relative h-full w-full bg-[#0a0d14]/90 backdrop-blur-3xl rounded-[30px] p-10 flex flex-col justify-center overflow-hidden border border-white/5">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#00E5FF]/10 rounded-full blur-[80px] -mr-32 -mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    
-                    <div className="flex flex-col sm:flex-row items-start gap-8 relative z-10">
-                      <div className="w-24 h-24 shrink-0 relative flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
-                         {/* Custom SVG Hexagon Check */}
-                         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_20px_rgba(0,229,255,0.3)] group-hover:drop-shadow-[0_0_30px_rgba(0,229,255,0.6)] transition-all duration-700">
-                           <path d="M50 5L93.3013 30V70L50 95L6.69873 70V30L50 5Z" fill="url(#hex-grad)" stroke="#00E5FF" strokeWidth="2" strokeOpacity="0.5"/>
-                           <path d="M35 50L45 60L65 40" stroke="url(#check-grad)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-                           <defs>
-                             <linearGradient id="hex-grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-                               <stop stopColor="#00E5FF" stopOpacity="0.3" />
-                               <stop offset="1" stopColor="#0a0d14" stopOpacity="0.9" />
-                             </linearGradient>
-                             <linearGradient id="check-grad" x1="35" y1="40" x2="65" y2="60" gradientUnits="userSpaceOnUse">
-                               <stop stopColor="#ffffff" />
-                               <stop offset="1" stopColor="#00E5FF" />
-                             </linearGradient>
-                           </defs>
-                         </svg>
-                      </div>
-                      <div>
-                        <h3 className="text-3xl font-black text-white mb-4 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#00E5FF] transition-all duration-500">Genel Kurallar</h3>
-                        <p className="text-zinc-400 text-lg leading-relaxed font-medium">
-                          Sitemiz yalnızca <strong className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">18 yaşından büyük</strong> ve yasal olarak bahis oynama ehliyetine sahip kullanıcılara hizmet vermektedir. Yasalara tam uygunluk, platformumuzun en tavizsiz kuralıdır. İşlemleriniz üst düzey teknolojiyle denetlenir.
-                        </p>
-                      </div>
-                    </div>
+                {/* Rule 1 */}
+                <div className="group relative flex flex-col md:flex-row items-center gap-4 p-4 md:p-5 bg-gradient-to-r from-[#03060a]/90 via-[#070b12]/90 to-[#040810]/90 backdrop-blur-2xl rounded-2xl border border-white/5 hover:border-white/20 transition-all duration-700 hover:-translate-y-1 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_15px_40px_rgba(0,229,255,0.1)]">
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMikiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] opacity-50 pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#00E5FF]/5 rounded-full blur-[40px] pointer-events-none group-hover:bg-[#00E5FF]/15 transition-colors duration-700" />
+                  
+                  <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-xl bg-[#00E5FF]/5 border border-[#00E5FF]/20 flex items-center justify-center group-hover:scale-105 group-hover:rotate-3 transition-all duration-700 shadow-[inset_0_0_10px_rgba(0,229,255,0.1)] relative z-10">
+                    <CheckCircle2 className="w-6 h-6 md:w-7 md:h-7 text-[#00E5FF] drop-shadow-[0_0_10px_rgba(0,229,255,0.6)]" strokeWidth={1.5} />
                   </div>
-                </div>
-
-                {/* Rule 2: Tall Vertical */}
-                <div className="md:col-span-4 md:row-span-2 relative group rounded-[32px] p-[2px] overflow-hidden">
-                  <div className="absolute inset-[-100%] animate-[spin_5s_linear_infinite_reverse] bg-[conic-gradient(from_0deg_at_50%_50%,#00000000_50%,#3b82f6_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="relative h-full w-full bg-gradient-to-b from-[#0a0d14]/90 to-black/90 backdrop-blur-3xl rounded-[30px] p-10 flex flex-col items-center text-center justify-center overflow-hidden border border-white/5">
-                    
-                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMikiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] opacity-50" />
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-blue-500/20 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    
-                    <div className="relative z-10 w-32 h-32 mb-8 group-hover:-translate-y-2 transition-transform duration-700">
-                      <div className="absolute inset-0 bg-[#00E5FF] blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 rounded-full" />
-                      {/* Custom SVG Glowing Lock */}
-                      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_25px_rgba(59,130,246,0.6)]">
-                        <rect x="25" y="45" width="50" height="40" rx="10" fill="url(#lock-body)" stroke="#60A5FA" strokeWidth="2"/>
-                        <path d="M35 45V30C35 21.7157 41.7157 15 50 15C58.2843 15 65 21.7157 65 30V45" stroke="url(#lock-shackle)" strokeWidth="8" strokeLinecap="round"/>
-                        <circle cx="50" cy="65" r="5" fill="#ffffff" className="drop-shadow-[0_0_8px_rgba(255,255,255,1)]" />
-                        <path d="M50 70V75" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
-                        <defs>
-                          <linearGradient id="lock-body" x1="25" y1="45" x2="75" y2="85" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#1e3a8a" stopOpacity="0.8" />
-                            <stop offset="1" stopColor="#0a0d14" stopOpacity="0.9" />
-                          </linearGradient>
-                          <linearGradient id="lock-shackle" x1="35" y1="15" x2="65" y2="45" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#60A5FA" />
-                            <stop offset="1" stopColor="#1e3a8a" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                    </div>
-                    
-                    <h3 className="text-3xl font-black text-white mb-6 tracking-tight relative z-10 group-hover:text-blue-400 transition-colors duration-500">Güvenlik & Gizlilik</h3>
-                    <p className="text-zinc-400 text-[17px] leading-relaxed relative z-10 font-medium">
-                      Verileriniz, şifreleriniz ve finansal işlemleriniz uçtan uca şifrelenmiş sunucularımızda (SSL) en üst düzey <strong className="text-white">banka standartlarındaki</strong> protokollerle saklanmaktadır. Bilgileriniz 7/24 korunur.
+                  
+                  <div className="flex flex-col text-center md:text-left relative z-10 flex-1">
+                    <h3 className="text-[15px] md:text-lg font-black text-white mb-1 tracking-tight group-hover:text-[#00E5FF] transition-colors duration-500">{t('docs.rule1_title')}</h3>
+                    <p className="text-zinc-300 text-[11px] md:text-[12.5px] leading-relaxed font-medium mb-1.5">
+                      {t('docs.rule1_desc1_1')} <strong className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">{t('docs.rule1_desc1_18plus')}</strong> {t('docs.rule1_desc1_2')}
+                    </p>
+                    <p className="text-zinc-500 text-[10px] md:text-[11px] leading-relaxed">
+                      {t('docs.rule1_desc2')}
                     </p>
                   </div>
                 </div>
 
-                {/* Rule 3: Large Horizontal */}
-                <div className="md:col-span-8 relative group rounded-[32px] p-[2px] overflow-hidden">
-                  <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_270deg_at_50%_50%,#00000000_50%,#d946ef_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="relative h-full w-full bg-[#0a0d14]/90 backdrop-blur-3xl rounded-[30px] p-10 flex flex-col justify-center overflow-hidden border border-white/5">
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-fuchsia-500/10 rounded-full blur-[80px] -ml-32 -mb-32 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    
-                    <div className="flex flex-col sm:flex-row items-start gap-8 relative z-10">
-                      <div className="w-24 h-24 shrink-0 relative flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
-                         {/* Custom SVG Gamepad */}
-                         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_20px_rgba(217,70,239,0.4)] group-hover:drop-shadow-[0_0_30px_rgba(217,70,239,0.7)] transition-all duration-700">
-                           <path d="M85 35C85 25 75 20 65 20H35C25 20 15 25 15 35V50C15 65 20 75 30 75H35L40 65H60L65 75H70C80 75 85 65 85 50V35Z" fill="url(#gamepad-grad)" stroke="#d946ef" strokeWidth="2" strokeOpacity="0.8"/>
-                           {/* D-Pad */}
-                           <path d="M30 40H35V35H40V40H45V45H40V50H35V45H30V40Z" fill="#ffffff" className="drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]"/>
-                           {/* Action Buttons */}
-                           <circle cx="60" cy="45" r="4" fill="#ffffff" />
-                           <circle cx="70" cy="35" r="4" fill="#ffffff" />
-                           <circle cx="60" cy="35" r="4" fill="#d946ef" />
-                           <circle cx="70" cy="45" r="4" fill="#d946ef" />
-                           <defs>
-                             <linearGradient id="gamepad-grad" x1="15" y1="20" x2="85" y2="75" gradientUnits="userSpaceOnUse">
-                               <stop stopColor="#d946ef" stopOpacity="0.4" />
-                               <stop offset="1" stopColor="#0a0d14" stopOpacity="0.9" />
-                             </linearGradient>
-                           </defs>
-                         </svg>
-                      </div>
-                      <div>
-                        <h3 className="text-3xl font-black text-white mb-4 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-fuchsia-400 transition-all duration-500">Sorumlu Oyun</h3>
-                        <p className="text-zinc-400 text-lg leading-relaxed font-medium">
-                          Bahis ve casino tamamen bir eğlence aracıdır. Kişisel bütçe limitlerinizi aşmayınız ve kaybetmeyi göze alamayacağınız tutarlarla oynamayınız. İhtiyacınız olduğunda <strong className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">7/24 canlı destek</strong> yanınızdadır.
-                        </p>
-                      </div>
-                    </div>
+                {/* Rule 2 */}
+                <div className="group relative flex flex-col md:flex-row items-center gap-4 p-4 md:p-5 bg-gradient-to-r from-[#03060a]/90 via-[#070b12]/90 to-[#040810]/90 backdrop-blur-2xl rounded-2xl border border-white/5 hover:border-white/20 transition-all duration-700 hover:-translate-y-1 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_15px_40px_rgba(59,130,246,0.1)]">
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMikiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] opacity-50 pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-[40px] pointer-events-none group-hover:bg-blue-500/15 transition-colors duration-700" />
+                  
+                  <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-xl bg-blue-500/5 border border-blue-500/20 flex items-center justify-center group-hover:scale-105 group-hover:-rotate-3 transition-all duration-700 shadow-[inset_0_0_10px_rgba(59,130,246,0.1)] relative z-10">
+                    <Lock className="w-6 h-6 md:w-7 md:h-7 text-blue-400 drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]" strokeWidth={1.5} />
+                  </div>
+                  
+                  <div className="flex flex-col text-center md:text-left relative z-10 flex-1">
+                    <h3 className="text-[15px] md:text-lg font-black text-white mb-1 tracking-tight group-hover:text-blue-400 transition-colors duration-500">{t('docs.rule2_title')}</h3>
+                    <p className="text-zinc-300 text-[11px] md:text-[12.5px] leading-relaxed font-medium mb-1.5">
+                      {t('docs.rule2_desc1_1')} <strong className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">{t('docs.rule2_desc1_bank')}</strong> {t('docs.rule2_desc1_2')}
+                    </p>
+                    <p className="text-zinc-500 text-[10px] md:text-[11px] leading-relaxed">
+                      {t('docs.rule2_desc2')}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Rule 3 */}
+                <div className="group relative flex flex-col md:flex-row items-center gap-4 p-4 md:p-5 bg-gradient-to-r from-[#03060a]/90 via-[#070b12]/90 to-[#040810]/90 backdrop-blur-2xl rounded-2xl border border-white/5 hover:border-white/20 transition-all duration-700 hover:-translate-y-1 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_15px_40px_rgba(217,70,239,0.1)]">
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMikiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] opacity-50 pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-fuchsia-500/5 rounded-full blur-[40px] pointer-events-none group-hover:bg-fuchsia-500/15 transition-colors duration-700" />
+                  
+                  <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-xl bg-fuchsia-500/5 border border-fuchsia-500/20 flex items-center justify-center group-hover:scale-105 group-hover:rotate-3 transition-all duration-700 shadow-[inset_0_0_10px_rgba(217,70,239,0.1)] relative z-10">
+                    <Gamepad2 className="w-6 h-6 md:w-7 md:h-7 text-fuchsia-400 drop-shadow-[0_0_10px_rgba(217,70,239,0.6)]" strokeWidth={1.5} />
+                  </div>
+                  
+                  <div className="flex flex-col text-center md:text-left relative z-10 flex-1">
+                    <h3 className="text-[15px] md:text-lg font-black text-white mb-1 tracking-tight group-hover:text-fuchsia-400 transition-colors duration-500">{t('docs.rule3_title')}</h3>
+                    <p className="text-zinc-300 text-[11px] md:text-[12.5px] leading-relaxed font-medium mb-1.5">
+                      {t('docs.rule3_desc1_1')} <strong className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">{t('docs.rule3_desc1_support')}</strong> {t('docs.rule3_desc1_2')}
+                    </p>
+                    <p className="text-zinc-500 text-[10px] md:text-[11px] leading-relaxed">
+                      {t('docs.rule3_desc2')}
+                    </p>
                   </div>
                 </div>
 
@@ -3001,44 +2945,41 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       {view !== 'admin' && view !== 'sports' && view !== 'spor724' && view !== 'upcomingMatches' && (view === 'originals' ? <RetroFooter /> : <Footer />)}
           </main>
 
-          {view !== 'admin' && !showLiveScoreModal && !isMobile && (
-            <>
-              {/* Floating Action Button for Chat */}
-              {!isChatOpen && (
-                <button 
-                  onClick={() => setIsChatOpen(!isChatOpen)}
-                  className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-br from-[#10b981] to-[#00E676] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:scale-110 hover:shadow-[0_0_30px_rgba(16,185,129,0.7)] border border-white/20 transition-all group"
-                >
-                  <svg className="w-7 h-7 text-black group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                </button>
-              )}
 
-              {/* Chat Sidebar (Pushes the layout instead of floating) */}
-              <aside 
-                className={`hidden xl:flex flex-col bg-[#0A0D14] h-full flex-shrink-0 absolute right-0 top-0 2xl:relative z-40 transition-[width,box-shadow] duration-300 ease-in-out ${isChatOpen ? 'w-[350px] shadow-[-20px_0_50px_rgba(0,0,0,0.8)]' : 'w-0'}`}
-                style={{ willChange: 'width' }}
-              >
-                {/* ── Toggle Button (Desktop Only) ── */}
-                <button 
-                  onClick={() => setIsChatOpen(!isChatOpen)}
-                  className="absolute -left-3 top-6 w-6 h-6 bg-[#0F141E] border border-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-[#1A2235] transition-all shadow-lg z-50"
-                >
-                  <svg className={`w-3 h-3 transition-transform duration-300 ${!isChatOpen ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                </button>
-                <div className={`flex-1 overflow-hidden relative transition-opacity duration-300 ${isChatOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-                  <DualRightPanel 
-                    popularMatches={[]} 
-                    language={'tr'} 
-                    isOpenMobile={false} 
-                    onCloseMobile={() => setIsChatOpen(false)} 
-                  />
-                </div>
-              </aside>
-            </>
-          )}
-          </div>
           </div>
         </div>
+
+        {/* 3. SAĞ SOHBET PANELİ (Tüm Boy) */}
+        {view !== 'admin' && !showLiveScoreModal && !isMobile && (
+          <>
+            {/* Floating Action Button for Chat */}
+            {!isChatOpen && (
+              <button 
+                onClick={() => setIsChatOpen(!isChatOpen)}
+                className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-br from-[#10b981] to-[#00E676] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:scale-110 hover:shadow-[0_0_30px_rgba(16,185,129,0.7)] border border-white/20 transition-all group"
+              >
+                <svg className="w-7 h-7 text-black group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+              </button>
+            )}
+
+            {/* Chat Sidebar (Pushes the layout instead of floating) */}
+            <aside 
+              className={`hidden xl:flex flex-col bg-[#0A0D14] h-full shadow-[-5px_0_15px_rgba(0,0,0,0.5)] flex-shrink-0 relative z-[99999] transition-[width,box-shadow] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isChatOpen ? 'w-[350px]' : 'w-0'}`}
+              style={{ willChange: 'width' }}
+            >
+              <div className={`flex-1 overflow-hidden relative transition-opacity duration-300 ${isChatOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                <DualRightPanel 
+                  popularMatches={[]} 
+                  language={'tr'} 
+                  isOpenMobile={false} 
+                  onCloseMobile={() => setIsChatOpen(false)} 
+                />
+              </div>
+            </aside>
+          </>
+        )}
+
+        </div> {/* MAIN FLEX LAYOUT BITİŞİ */}
 
       {/* ── Match Search Modal ── */}
       {showSearch && (

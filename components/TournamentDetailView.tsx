@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Info, ChevronDown, ChevronUp, User, Users, DollarSign, Calendar as CalendarIcon, X, Trophy, Timer, Sparkles, Medal, Play } from 'lucide-react';
+import { ArrowLeft, Info, ChevronDown, ChevronUp, User, Users, DollarSign, Calendar as CalendarIcon, X, Trophy, Timer, Sparkles, Medal, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Tournament {
   id: string;
@@ -51,6 +52,7 @@ const mockDates = [
 ];
 
 export default function TournamentDetailView({ tournament, onBack }: TournamentDetailViewProps) {
+  const { t } = useTranslation();
   const [rulesOpen, setRulesOpen] = useState(false);
 
   let displayGames = pragmaticGames;
@@ -70,7 +72,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
           <div className="absolute inset-0 bg-[#00E5FF]/10 opacity-0 group-hover:opacity-100 transition-opacity" />
           <ArrowLeft className="w-4 h-4 relative z-10" />
         </div>
-        <span className="text-[11px] font-bold tracking-widest uppercase">Turnuvalara Dön</span>
+        <span className="text-[11px] font-bold tracking-widest uppercase">{t('promo_view.back_to_tournaments')}</span>
       </button>
 
       {/* Immersive Hero Banner */}
@@ -92,7 +94,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
           <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-xl border border-white/10 ${tournament.status === 'upcoming' ? 'bg-yellow-500/10 shadow-[0_0_20px_rgba(234,179,8,0.2)]' : 'bg-[#00E5FF]/10 shadow-[0_0_20px_rgba(0,229,255,0.2)]'}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${tournament.status === 'upcoming' ? 'bg-yellow-400' : 'bg-[#00E5FF] animate-pulse'}`} />
             <span className={`text-[9px] font-black uppercase tracking-widest ${tournament.status === 'upcoming' ? 'text-yellow-400' : 'text-[#00E5FF]'}`}>
-              {tournament.status === 'upcoming' ? 'Yaklaşan Turnuva' : 'Aktif Turnuva'}
+              {tournament.status === 'upcoming' ? t('promo_view.upcoming_tournament') : t('promo_view.active_tournament')}
             </span>
           </div>
         </div>
@@ -118,7 +120,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
             <div className="absolute -left-10 -bottom-10 w-32 h-32 bg-purple-500/10 rounded-full blur-[40px]" />
             
             <div className="text-[10px] md:text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-1 md:mb-2 relative z-10 flex items-center gap-2">
-              Ana Ödül Havuzu
+              {t('promo_view.prize_pool')}
             </div>
             <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200 drop-shadow-sm relative z-10 tracking-tighter">
               {tournament.prize}
@@ -128,7 +130,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
           {/* Countdown Card */}
           <div className="flex-1 bg-[#0a0a0a]/80 backdrop-blur-xl rounded-[20px] border border-white/10 p-6 md:p-8 flex flex-col justify-center shadow-[0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden">
             <div className="text-[10px] md:text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-3 md:mb-4 relative z-10">
-              {tournament.status === 'upcoming' ? 'Başlamasına Kalan Süre' : 'Bitiş Tarihi'}
+              {t('promo_view.time_left')}
             </div>
             
             {/* Premium Pill Timer Look-alike */}
@@ -170,7 +172,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
                <Users className="w-5 h-5 text-blue-400" />
             </div>
             <div>
-              <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">Aktif Oyuncular</div>
+              <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">{t('promo_view.participants')}</div>
               <div className="text-[13px] font-black text-white tracking-tight">{tournament.participants || 276} Kişi</div>
             </div>
           </div>
@@ -190,7 +192,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
         <div className="mt-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[16px] font-black text-white uppercase tracking-wider flex items-center gap-2 drop-shadow-sm">
-              <Trophy className="w-4 h-4 text-amber-500" /> Liderler Tablosu
+              <Trophy className="w-4 h-4 text-amber-500" /> {t('promo_view.ranking')}
             </h2>
           </div>
           
@@ -225,7 +227,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
                     
                     <div className="text-right flex flex-col items-end justify-center">
                       <div className="text-[14px] md:text-[16px] font-mono font-bold text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.3)]">
-                        {user.points.toLocaleString()} <span className="text-[8px] md:text-[9px] text-emerald-500/60 uppercase tracking-widest ml-0.5">PTS</span>
+                        {user.points.toLocaleString()} <span className="text-[8px] md:text-[9px] text-emerald-500/60 uppercase tracking-widest ml-0.5">{t('promo_view.pts')}</span>
                       </div>
                       {user.prize && <div className="text-[11px] md:text-[12px] font-black text-white mt-1 bg-white/10 px-2 rounded backdrop-blur-sm border border-white/10">{user.prize}</div>}
                     </div>
@@ -244,7 +246,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
           >
             <span className="font-bold text-white text-[13px] md:text-[15px] tracking-wide uppercase flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] group-hover:shadow-[0_0_8px_rgba(0,229,255,0.8)] transition-shadow"></div>
-              Turnuva Kuralları ve Puanlama
+              {t('promo_view.rules')}
             </span>
             <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 group-hover:border-white/10 transition-colors">
               {rulesOpen ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
@@ -290,7 +292,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
         <div className="mt-8 pt-4">
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-[16px] font-black text-white uppercase tracking-wider flex items-center gap-2 drop-shadow-sm">
-              <Play className="w-4 h-4 text-[#FF9F1C]" /> Turnuva Oyunları
+              <Play className="w-4 h-4 text-[#FF9F1C]" /> {t('promo_view.games')}
             </h2>
             <div className="flex items-center gap-2">
                <button className="p-2 bg-[#0a0a0a]/80 backdrop-blur-md rounded-lg text-zinc-400 hover:text-white border border-white/10 hover:border-white/20 transition-colors"><ChevronLeft className="w-4 h-4" /></button>
@@ -323,10 +325,3 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
   );
 }
 
-// Needed icons for Tournament Games section
-function ChevronLeft(props: any) {
-  return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-}
-function ChevronRight(props: any) {
-  return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-}

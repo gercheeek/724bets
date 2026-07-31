@@ -397,7 +397,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         </>
       ) : (
         // GUEST VIEW (NEW DESIGN - Matches reference)
-        <div className="w-full max-w-[1400px] mx-auto px-4 lg:px-6 pt-2 md:pt-3 pb-6 md:pb-16 flex flex-col items-center">
+        <div className="w-full max-w-[1400px] mx-auto px-4 lg:px-6 pt-2 md:pt-3 pb-6 md:pb-16 flex flex-col">
             {/* MAIN HERO SECTION */}
             <MainHero 
               onRegisterClick={onMemberRegisterClick} 

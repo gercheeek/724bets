@@ -7,7 +7,7 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
     {
         id: 'keno',
         name: 'Keno',
-        desc: t("desc_keno"),
+        desc: t("originals.desc_keno"),
         color: 'from-[#6E42E5] to-[#4F2AA8]',
         image: '/images/flat-keno.webp',
         path: 'keno',
@@ -15,12 +15,12 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         players: 415,
         rtp: '%99.0',
         maxWin: '1000x',
-        volatility: 'Yüksek'
+        volatility: t('slider.volatility_high')
     },
     {
         id: 'roulette',
         name: 'Roulette',
-        desc: t("desc_roulette"),
+        desc: t("originals.desc_roulette"),
         color: 'from-[#201D2C] to-[#15131C]',
         image: '/images/flat-roulette.jpg',
         path: 'roulette',
@@ -28,12 +28,12 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         players: 890,
         rtp: '%97.3',
         maxWin: '36x',
-        volatility: 'Orta'
+        volatility: t('slider.volatility_medium')
     },
     {
         id: 'blackjack',
         name: 'Blackjack',
-        desc: 'Klasik 21 kart oyunu',
+        desc: t("originals.desc_blackjack"),
         color: 'from-[#A158FF] to-[#6E30D6]',
         image: '/images/flat-blackjack.jpg',
         path: 'blackjack',
@@ -41,12 +41,12 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         players: 1205,
         rtp: '%99.5',
         maxWin: '2.5x',
-        volatility: 'Düşük'
+        volatility: t('slider.volatility_low')
     },
     {
         id: 'plinko',
         name: 'Plinko',
-        desc: t("desc_plinko"),
+        desc: t("originals.desc_plinko"),
         color: 'from-[#6E42E5] to-[#4F2AA8]',
         image: '/images/flat-plinko.jpg',
         path: 'plinko',
@@ -54,20 +54,20 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         players: 569,
         rtp: '%99.0',
         maxWin: '1000x',
-        volatility: 'Yüksek'
+        volatility: t('slider.volatility_high')
     },
     {
         id: 'chicken-run',
         name: 'Mission Uncrossable',
-        desc: t("desc_chicken_run"),
+        desc: t("originals.desc_chicken"),
         color: 'from-[#1A1822] to-[#100E15]',
         image: '/images/flat-mission.jpg',
         path: 'chicken-run',
         icon: '🐔',
         players: 345,
         rtp: '%99.0',
-        maxWin: '1000x',
-        volatility: 'Orta'
+        maxWin: '10000x',
+        volatility: t('slider.volatility_medium')
     }
 ];
 

@@ -3,6 +3,7 @@ import {
   Trophy, Shield, Copy, Image as ImageIcon, Share2, 
   ArrowRightLeft, ChevronRight, ChevronLeft, Globe
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Coupon, SiteUser, SiteStatusConfig } from '../types';
 
 interface CouponsViewProps {
@@ -17,16 +18,23 @@ interface CouponsViewProps {
 const CouponsView: React.FC<CouponsViewProps> = ({ 
   siteUser, userRole, setAuthModalMode 
 }) => {
+  const { t } = useTranslation();
   const [activeMainTab, setActiveMainTab] = useState<'aktif' | 'gecmis'>('aktif');
-  const [activeSubTab, setActiveSubTab] = useState('Tümü');
+  const [activeSubTab, setActiveSubTab] = useState('all');
 
-  const subTabs = ['Tümü', 'Ön Maç', 'Canlı', 'Tekliler', 'Kombineler'];
+  const subTabs = [
+    { id: 'all', label: t('coupons.subtab_all', 'Tümü') },
+    { id: 'prematch', label: t('coupons.subtab_prematch', 'Ön Maç') },
+    { id: 'live', label: t('coupons.subtab_live', 'Canlı') },
+    { id: 'single', label: t('coupons.subtab_single', 'Tekliler') },
+    { id: 'combo', label: t('coupons.subtab_combo', 'Kombineler') }
+  ];
 
   // Temporary mock data to exactly match the screenshot requested by the user
   const mockBets = [
     {
       id: '1',
-      type: 'Tekli',
+      type: t('coupons.single', 'Tekli'),
       date: '09.07.2026 16:06',
       sport: 'FIFA Dünya Kupası',
       match: 'Fransa vs. Fas',
@@ -46,7 +54,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
-            <h1 className="text-white text-2xl font-black tracking-tight">Bahislerim</h1>
+            <h1 className="text-white text-2xl font-black tracking-tight">{t('coupons.title', 'Bahislerim')}</h1>
             <span className="bg-[#06b6d4]/10 border border-[#06b6d4]/20 text-[#06b6d4] text-xs font-bold px-2 py-0.5 rounded">
               {mockBets.length}
             </span>
@@ -61,7 +69,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                   : 'text-zinc-500 border border-transparent hover:text-white'
               }`}
             >
-              Aktif Bahisler
+              {t('coupons.active_bets', 'Aktif Bahisler')}
             </button>
             <button 
               onClick={() => setActiveMainTab('gecmis')}
@@ -71,7 +79,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                   : 'text-zinc-500 border border-transparent hover:text-white'
               }`}
             >
-              Bahis Geçmişi
+              {t('coupons.bet_history', 'Bahis Geçmişi')}
             </button>
           </div>
         </div>
@@ -81,15 +89,15 @@ const CouponsView: React.FC<CouponsViewProps> = ({
           <div className="flex items-center gap-6 overflow-x-auto no-scrollbar pb-0">
             {subTabs.map(tab => (
               <button 
-                key={tab}
-                onClick={() => setActiveSubTab(tab)}
+                key={tab.id}
+                onClick={() => setActiveSubTab(tab.id)}
                 className={`pb-3 border-b-2 text-sm font-semibold whitespace-nowrap transition-colors ${
-                  activeSubTab === tab 
+                  activeSubTab === tab.id 
                     ? 'border-[#06b6d4] text-[#06b6d4]' 
                     : 'border-transparent text-zinc-500 hover:text-white'
                 }`}
               >
-                {tab}
+                {tab.label}
               </button>
             ))}
           </div>
@@ -144,13 +152,13 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                     <span className="text-white font-black tracking-wide text-sm">724BAHİS</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-colors" title="Kopyala">
+                    <button className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-colors" title={t('coupons.copy', 'Kopyala')}>
                       <Copy className="w-4 h-4" />
                     </button>
-                    <button className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-colors" title="Görsel Olarak Paylaş">
+                    <button className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-colors" title={t('coupons.share_img', 'Görsel Olarak Paylaş')}>
                       <ImageIcon className="w-4 h-4" />
                     </button>
-                    <button className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-colors" title="Paylaş">
+                    <button className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-colors" title={t('coupons.share', 'Paylaş')}>
                       <Share2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -159,22 +167,22 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                 {/* Financials */}
                 <div className="flex flex-col gap-2.5 mb-6">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-zinc-400 font-medium">Geri dönmek</span>
+                    <span className="text-zinc-400 font-medium">{t('coupons.return_lbl', 'Geri dönmek')}</span>
                     <span className="text-white font-bold">{bet.odds}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-zinc-400 font-medium">Bahis</span>
+                    <span className="text-zinc-400 font-medium">{t('coupons.stake', 'Bahis')}</span>
                     <span className="text-white font-bold">{bet.stake}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-zinc-400 font-medium">Tahmini Ödeme</span>
+                    <span className="text-zinc-400 font-medium">{t('coupons.estimated_payout', 'Tahmini Ödeme')}</span>
                     <span className="text-[#06b6d4] font-black">{bet.estimatedPayout}</span>
                   </div>
                 </div>
                 
                 {/* Action Button */}
                 <button className="w-full py-3.5 bg-[#06b6d4] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-sm rounded-lg transition-all flex items-center justify-between px-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] hover:shadow-[0_0_30px_rgba(0,255,163,0.3)]">
-                  <span>Erken ödeme {bet.cashoutValue}</span>
+                  <span>{t('coupons.early_cashout', 'Erken ödeme')} {bet.cashoutValue}</span>
                   <ArrowRightLeft className="w-4 h-4" />
                 </button>
 

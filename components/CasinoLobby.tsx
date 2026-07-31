@@ -544,9 +544,6 @@ export default function CasinoLobby({
                   : 'text-[#848B9D] hover:text-white hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]'
               }`}
             >
-              <div className={`transition-transform duration-300 ${activeTab === tab.id ? 'scale-110 text-[#00E5FF]' : ''}`}>
-                {tab.icon}
-              </div>
               {tab.label}
               {activeTab === tab.id && (
                 <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] rounded-t-full shadow-[0_-2px_15px_rgba(0,229,255,0.7)]" />
@@ -672,7 +669,6 @@ export default function CasinoLobby({
             {/* NEW GAMES SLIDER SECTION (Moved to top) */}
             <SliderSection 
               title="Yeni Eklenenler" 
-              icon={<Sparkles className="text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.8)] animate-pulse" />} 
               games={newGames} 
               onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
@@ -681,7 +677,6 @@ export default function CasinoLobby({
             {/* POPULAR GAMES SLIDER SECTION */}
             <SliderSection 
               title="Popüler Oyunlar" 
-              icon={<Flame className="text-[#10B981] drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" fill="#10B981" />} 
               games={popularGames} 
               onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}
@@ -690,7 +685,6 @@ export default function CasinoLobby({
 
             <SliderSection 
               title="Çok Kazandıranlar" 
-              icon={<Flame className="text-[#f0b90b] drop-shadow-[0_0_8px_rgba(240,185,11,0.8)]" fill="#f0b90b" />} 
               games={allGames.filter(g => g.type === 'slot' || g.category === 'slots').sort((a, b) => b.players - a.players).slice(12, 24)} 
               onSelect={handleGameSelect}
               onDemo={(game) => { setSelectedGame(game); setShowDemoIframe(true); }}

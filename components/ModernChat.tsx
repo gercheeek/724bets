@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, Shield, Smile, Cpu, Target, ChevronDown } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
+import { useTranslation } from 'react-i18next';
 import { SiteUser } from '../types';
 import { BetShareModal } from './BetShareModal';
 import confetti from 'canvas-confetti';
@@ -131,6 +132,7 @@ const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, 
 };
 
 const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRole, isMobile, botsConfig }) => {
+    const { t } = useTranslation();
     const [messages, setMessages] = useState<any[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isConnected, setIsConnected] = useState(false);
@@ -550,7 +552,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     <input 
                         type="text"
                         disabled
-                        placeholder="Mesaj göndermek için lütfen giriş yapın"
+                        placeholder={t('chat.login_required', 'Mesaj göndermek için lütfen giriş yapın')}
                         className="w-full bg-[#0a0d14] border border-white/10 text-[12px] font-semibold text-center text-slate-500 rounded-full px-5 py-3.5 cursor-not-allowed shadow-inner"
                     />
                 ) : (
@@ -559,7 +561,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder="Bir mesaj gönder..."
+                            placeholder={t('chat.placeholder', 'Bir mesaj gönder...')}
                             className="flex-1 bg-transparent text-[13px] font-medium text-white focus:outline-none placeholder-zinc-600 pl-5 pr-3"
                         />
                         <div className="flex items-center pr-1.5 gap-1 h-full shrink-0">

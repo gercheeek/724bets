@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Ticket, Flame, Trophy, AlertCircle, Gift, Clock, Coins, Users } from 'lucide-react';
+import { Ticket, Flame, Trophy, AlertCircle, Gift, Clock, Coins, Users, UserCircle, ArrowRight, Star, Sparkles, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface VIPRafflePromoProps {
   loyalty: { tickets: number; deposit: number };
@@ -10,6 +11,8 @@ interface VIPRafflePromoProps {
   totalPoolSize: number;
   targetDateStr: string;
   onOpenArenaModal?: () => void;
+  isGuest?: boolean;
+  onLoginRequired?: () => void;
 }
 
 const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
@@ -20,50 +23,24 @@ const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
   totalSoldInMatrix,
   totalPoolSize,
   targetDateStr,
-  onOpenArenaModal
+  onOpenArenaModal,
+  isGuest = false,
+  onLoginRequired
 }) => {
+  const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  const [activeSlide, setActiveSlide] = useState(0);
   const [showAllPrizes, setShowAllPrizes] = useState(false);
   const [activeToastIndex, setActiveToastIndex] = useState(0);
 
   const toasts = [
-    { icon: '🚀', text: <><span className="text-white font-bold font-mono">u***k</span> az önce <span className="text-emerald-400 font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$150</span> yatırdı ve <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">3 bilet</span> kazandı!</> },
-    { icon: '🔥', text: <><span className="text-white font-bold font-mono">a***r</span> az önce <span className="text-emerald-400 font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$50</span> yatırdı ve <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">1 bilet</span> kazandı!</> },
-    { icon: '⚡', text: <><span className="text-white font-bold font-mono">k***9</span> az önce <span className="text-emerald-400 font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$500</span> yatırdı ve <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">10 bilet</span> kazandı!</> },
-    { icon: '⭐', text: <><span className="text-white font-bold font-mono">m***t</span> az önce <span className="text-emerald-400 font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$100</span> yatırdı ve <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">2 bilet</span> kazandı!</> },
+    { icon: '•', text: <><span className="text-white font-bold font-mono">u***k</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$150</span> {t('raffle.toast_deposited')} <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">3 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
+    { icon: '•', text: <><span className="text-white font-bold font-mono">a***r</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$50</span> {t('raffle.toast_deposited')} <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">1 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
+    { icon: '•', text: <><span className="text-white font-bold font-mono">k***9</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$500</span> {t('raffle.toast_deposited')} <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">10 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
+    { icon: '•', text: <><span className="text-white font-bold font-mono">m***t</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$100</span> {t('raffle.toast_deposited')} <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">2 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
   ];
 
   const progressPercent = (totalSoldInMatrix / totalPoolSize) * 100;
   const remainingTickets = totalPoolSize - totalSoldInMatrix;
-
-  const slides = [
-    {
-      badge: "ÖZEL KOLEKSİYON",
-      title: "Rolex Daytona 'Panda'",
-      highlight: "ORİJİNAL LÜKS SAAT",
-      bgImage: "/images/raffle/rolex_daytona_model.jpg",
-    },
-    {
-      badge: "KAZANMA ŞANSINI ARTIR",
-      title: "Her $50 Yatırım = 1 Bilet",
-      highlight: "ŞİMDİ KAZAN!",
-      bgImage: "/images/raffle/raffle_bg_2_1784885277775.webp",
-    },
-    {
-      badge: "LİDERLİK TABLOSU",
-      title: "Canlı Akış & Rekabet",
-      highlight: "ZİRVEYE ÇIK",
-      bgImage: "/images/raffle/raffle_bg_3_1784885287128.webp",
-    }
-  ];
-
-  useEffect(() => {
-    const slideTimer = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % slides.length);
-    }, 4000);
-    return () => clearInterval(slideTimer);
-  }, []);
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -80,399 +57,340 @@ const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
     const timer = setInterval(calculateTimeLeft, 1000);
     return () => clearInterval(timer);
   }, [targetDateStr]);
+  
+  useEffect(() => {
+    const toastTimer = setInterval(() => {
+        setActiveToastIndex((prev) => (prev + 1) % toasts.length);
+    }, 4000);
+    return () => clearInterval(toastTimer);
+  }, [toasts.length]);
 
   return (
-    <div className="w-full flex-1 m-0 p-0 relative font-sans bg-[#050508] flex flex-col">
+    <div className="w-full h-full flex flex-col relative font-sans overflow-hidden bg-[#03060C]">
       <style>{`
-        @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
-        }
-        @keyframes marqueeUp {
-          0% { transform: translateY(0%); }
-          100% { transform: translateY(-50%); }
-        }
-        @keyframes progressStripes {
-          0% { background-position: 1rem 0; }
-          100% { background-position: 0 0; }
-        }
-        .progress-striped {
-          background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-          background-size: 1rem 1rem;
-          animation: progressStripes 1s linear infinite;
-        }
         @keyframes fadeInUp {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in-up {
-          animation: fadeInUp 0.5s ease-out forwards;
-        }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        
+        /* Ultra-premium, perfectly tuned glassmorphism */
         .glass-panel {
-          background: rgba(20, 20, 25, 0.6);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02);
+          background: rgba(10, 15, 25, 0.4);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid rgba(255, 255, 255, 0.04);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
-        .gold-gradient-text {
-          background: linear-gradient(to right, #FDF0D5, #D4AF37, #FDF0D5);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
+        
+        .hero-glow {
+          background: radial-gradient(circle at 50% -10%, rgba(0, 229, 255, 0.08) 0%, rgba(0, 229, 255, 0) 50%);
         }
-        @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
+        
+        .green-glow {
+          background: radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0) 50%);
         }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        @keyframes kenBurns {
-          0% { transform: scale(1) translate(0, 0); }
-          50% { transform: scale(1.05) translate(-1%, -1%); }
-          100% { transform: scale(1) translate(0, 0); }
-        }
-        .animate-ken-burns {
-          animation: kenBurns 20s ease-in-out infinite alternate;
+        
+        .text-gradient-cyan {
+            background: linear-gradient(to right, #E2E8F0, #00E5FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
       `}</style>
+
+      {/* Ambient Lights - Softened for elegance */}
+      <div className="absolute inset-0 pointer-events-none z-0 hero-glow" />
+      <div className="absolute inset-0 pointer-events-none z-0 green-glow" />
       
-      {/* Background Ambient Glow (Subtle) */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
-
-      {/* Main Container */}
-      <div className="relative flex flex-col flex-1 w-full overflow-hidden">
+      {/* ─── SCROLLABLE CONTENT ─── */}
+      <div className="relative z-10 w-full h-full overflow-y-auto custom-scrollbar flex flex-col items-center">
         
-        {/* HEADER SECTION - ULTRA BRIGHT SLIDER */}
-        <div className="w-full border-b border-white/10 relative overflow-hidden flex flex-col items-center text-center min-h-[200px] md:min-h-[250px] justify-center bg-black">
-          
-          {/* Slider Backgrounds */}
-          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#050508]">
-            {slides.map((slide, index) => (
-              <div 
-                key={`bg-${index}`}
-                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                  index === activeSlide ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <img 
-                  src={slide.bgImage} 
-                  alt="" 
-                  className="w-full h-full object-cover opacity-[0.35] mix-blend-screen animate-ken-burns"
-                />
-              </div>
-            ))}
-             
-             {/* Base dark gradient overlay for text readability */}
-             <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/60 to-transparent" />
-             <div className="absolute inset-0 bg-gradient-to-r from-[#050508]/80 via-transparent to-[#050508]/80" />
-             
-             {/* Geometric Grid / Stars for extra texture */}
-             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNykiLz48L3N2Zz4=')] opacity-60 mix-blend-overlay" />
-          </div>
-
-          <div className="w-full max-w-[1400px] mx-auto p-4 md:p-12 relative z-10 flex flex-col items-center justify-center flex-1">
-             
-             <div className="relative w-full h-[160px] md:h-[180px] flex items-center justify-center">
-               {slides.map((slide, index) => (
-                 <div 
-                   key={index}
-                   className={`absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center w-full ${
-                     index === activeSlide 
-                       ? 'opacity-100 transform translate-y-0 scale-100' 
-                       : 'opacity-0 transform translate-y-12 scale-95 pointer-events-none'
-                   }`}
-                 >
-                    {/* Text overlays removed per user request */}
-                 </div>
-               ))}
-             </div>
-             
-             {/* Slider Indicators */}
-             <div className="flex items-center gap-3 mt-auto absolute bottom-8">
-               {slides.map((_, i) => (
-                 <button 
-                   key={i}
-                   onClick={() => setActiveSlide(i)}
-                   className={`h-1.5 rounded-full transition-all duration-500 ${i === activeSlide ? 'w-10 bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,1)]' : 'w-3 bg-white/30 hover:bg-white/60'}`}
-                 />
-               ))}
-             </div>
-          </div>
-        </div>
-
-        {/* VERTICAL CONTENT SECTION */}
-        <div className="w-full max-w-[1000px] mx-auto flex-1 flex flex-col gap-16 py-16 px-6 md:px-8">
-          
-          {/* LÜKS BİLET HAVUZU BANNER */}
-          <div className="flex flex-col items-center justify-start relative">
-             <h2 className="text-amber-500 text-lg md:text-xl font-black uppercase tracking-widest mb-6 w-full text-center flex items-center gap-2 justify-center drop-shadow-[0_0_10px_rgba(245,166,35,0.6)]">
-               <Ticket className="w-6 h-6 animate-pulse" /> VIP Bilet Havuzu
-             </h2>
-             <div className="w-full bg-[#030407]/90 backdrop-blur-2xl rounded-3xl p-6 lg:p-10 border border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.02)] relative overflow-hidden group flex flex-col md:flex-row items-center justify-between gap-6">
-                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 mix-blend-overlay" />
-                 <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                 
-                 <div className="relative z-10 flex flex-col gap-2 text-center md:text-left">
-                    <div className="text-slate-300 font-bold text-sm tracking-widest uppercase">Durum</div>
-                    <div className="text-white font-black text-3xl md:text-4xl drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">1000 Bilet / 50 Kazanan</div>
-                 </div>
-
-                 <button 
-                    onClick={onOpenArenaModal}
-                    className="relative z-10 w-full md:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 border border-amber-300 text-amber-950 font-black text-sm md:text-base uppercase tracking-widest shadow-[0_0_20px_rgba(245,166,35,0.4)] hover:shadow-[0_0_30px_rgba(245,166,35,0.6)] transition-all transform hover:-translate-y-1 animate-sweep flex items-center justify-center gap-3"
-                 >
-                    <Ticket className="w-5 h-5" /> Biletini Seç (Havuzu Aç)
-                 </button>
-             </div>
-          </div>
-
-{/* MIDDLE COLUMN: Prizes */}
-          <div className="flex flex-col items-center justify-start relative">
-            <h2 className="text-[#A0A0AB] text-[11px] font-semibold uppercase tracking-widest mb-4 w-full text-left md:text-center flex items-center gap-2 justify-start md:justify-center">
-              <Trophy className="w-4 h-4 text-yellow-500/70" /> Ödül Dağılımı
-            </h2>
-            
-            <div className="w-full flex flex-col gap-5">
-              {/* 1st Prize */}
-              <div className="glass-panel rounded-3xl p-6 lg:p-8 flex items-center justify-between border-amber-500/30 hover:bg-amber-500/5 transition-colors group">
-                <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-400/10 to-yellow-600/10 flex items-center justify-center border border-yellow-500/30 overflow-hidden">
-                    <img src="/images/raffle/rolex_daytona.jpg" alt="Rolex Daytona" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 mix-blend-screen" />
-                  </div>
-                  <div>
-                    <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-wider mb-1 flex items-center gap-2">
-                      <Trophy className="w-3 h-3 text-yellow-400" /> BÜYÜK ÖDÜL
-                    </div>
-                    <div className="text-amber-100/90 font-bold text-lg md:text-xl">Rolex Daytona 'Panda'</div>
-                  </div>
-                </div>
-                <div className="text-xl md:text-2xl font-black gold-gradient-text drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]">$30.000 Değerinde</div>
-              </div>
-
-              {/* 2nd - 5th Prize */}
-              <div className="glass-panel rounded-3xl p-6 lg:p-8 flex items-center justify-between border-slate-400/20 hover:bg-slate-400/5 transition-colors group">
-                <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-slate-300/10 to-slate-500/10 flex items-center justify-center border border-slate-400/20">
-                    <Trophy className="w-6 h-6 text-slate-300 drop-shadow-[0_0_10px_rgba(203,213,225,0.6)] group-hover:scale-110 transition-transform" />
-                  </div>
-                  <div>
-                    <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-wider mb-1">2. - 5. Şanslılar</div>
-                    <div className="text-amber-100/90 font-bold text-lg">Gümüş Kupa</div>
-                  </div>
-                </div>
-                <div className="text-xl font-black text-slate-200 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">$5.000</div>
-              </div>
-
-              {showAllPrizes && (
-                <>
-                  {/* 6th - 20th Prizes */}
-                  <div className="glass-panel rounded-3xl p-6 lg:p-8 flex items-center justify-between border-amber-600/20 hover:bg-amber-600/5 transition-colors group animate-[scaleIn_0.3s_ease-out]">
-                    <div className="flex items-center gap-5">
-                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                        <Gift className="w-5 h-5 text-amber-500 drop-shadow-[0_0_8px_rgba(245,166,35,0.6)] group-hover:scale-110 transition-transform" />
-                      </div>
-                      <div>
-                        <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-wider mb-1">6. - 20. Şanslılar</div>
-                        <div className="text-slate-300 font-medium text-base">Standart Ödül</div>
-                      </div>
-                    </div>
-                    <div className="text-lg font-black text-amber-500 drop-shadow-[0_0_8px_rgba(245,166,35,0.4)]">$1.000</div>
-                  </div>
-
-                  {/* 21st - 50th Prizes */}
-                  <div className="glass-panel rounded-3xl p-6 lg:p-8 flex items-center justify-between border-slate-600/20 hover:bg-slate-600/5 transition-colors group animate-[scaleIn_0.3s_ease-out]">
-                    <div className="flex items-center gap-5">
-                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                        <Gift className="w-5 h-5 text-slate-400 drop-shadow-[0_0_8px_rgba(148,163,184,0.4)] group-hover:scale-110 transition-transform" />
-                      </div>
-                      <div>
-                        <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-wider mb-1">21. - 50. Şanslılar</div>
-                        <div className="text-slate-300 font-medium text-base">Teselli Ödülü</div>
-                      </div>
-                    </div>
-                    <div className="text-lg font-black text-slate-400 drop-shadow-[0_0_5px_rgba(148,163,184,0.3)]">$500</div>
-                  </div>
-                </>
-              )}
-              
-              <button 
-                onClick={() => setShowAllPrizes(!showAllPrizes)}
-                className="mt-2 text-xs font-bold text-amber-500 hover:text-amber-400 transition-colors uppercase tracking-widest flex items-center justify-center gap-1 w-full py-4 rounded-xl border border-amber-500/20 hover:bg-amber-500/10 hover:shadow-[0_0_15px_rgba(251,191,36,0.1)]"
-              >
-                {showAllPrizes ? 'GİZLE' : 'TÜM 50 ÖDÜLÜ GÖR'}
-              </button>
-            </div>
-          </div>
-
-          {/* LEFT COLUMN: Your Status (Şans Metresi & Bakiye) */}
-          <div className="flex flex-col gap-8">
-            <h2 className="text-[#A0A0AB] text-[11px] font-semibold uppercase tracking-widest mb-1 flex items-center gap-2">
-              <Ticket className="w-4 h-4 text-amber-500/70" /> Senin Durumun
-            </h2>
-            
-            {/* Luck Meter */}
-            <div className="glass-panel rounded-3xl p-8 lg:p-10 relative overflow-hidden group">
-               <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-               <div className="flex justify-between items-end mb-6 relative z-10">
-                 <div>
-                    <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-widest mb-1">Biletleriniz</div>
-                    <div className="text-slate-100 font-bold text-3xl leading-none">{loyalty.tickets}</div>
-                 </div>
-                 <div className="text-right">
-                    <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-widest mb-1">Şans Metresi</div>
-                    <div className={`font-black text-lg ${loyalty.tickets > 0 ? 'text-emerald-400' : 'text-zinc-500'}`}>
-                      %{loyalty.tickets > 0 ? (loyalty.tickets * 0.5).toFixed(1) : '0'}
-                    </div>
-                 </div>
-               </div>
-               
-               <div className="w-full h-2 bg-[#0A0A0E] rounded-full overflow-hidden border border-white/5 relative z-10 mb-4">
-                 <div 
-                   className="h-full rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.8)] transition-all duration-1000"
-                   style={{ width: `${Math.min((loyalty.tickets / 10) * 100, 100)}%` }}
-                 />
-               </div>
-               
-               <div className="text-center relative z-10">
-                 {loyalty.tickets === 0 ? (
-                   <span className="text-[11px] text-amber-400 font-bold uppercase tracking-wider animate-pulse drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]">Şansını artırmak için bilet al!</span>
-                 ) : (
-                   <span className="text-[11px] text-emerald-400 font-bold uppercase tracking-wider animate-pulse drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">Daha çok bilet = Daha çok şans!</span>
-                 )}
-               </div>
+        {/* HERO SECTION - Tightly proportioned */}
+        <div className="w-full max-w-[1200px] flex flex-col items-center text-center pt-10 pb-8 px-6 relative">
+            {/* Watermark $20K - Pushed to background safely */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-black italic leading-none text-white opacity-[0.02] pointer-events-none select-none z-0 tracking-tighter">
+                $20K
             </div>
 
-            {/* Deposit Progress */}
-            <div className="glass-panel rounded-3xl p-8 lg:p-10 flex flex-col gap-5 relative overflow-hidden">
-               <div className="flex items-center justify-between mb-2">
-                 <div className="text-[#A0A0AB] text-[10px] font-semibold uppercase tracking-widest">Geçerli Yatırımınız</div>
-                 <div className="text-slate-100 font-bold text-2xl">${loyalty.deposit.toLocaleString('en-US')}</div>
-               </div>
-               
-               <div className="w-full h-2 bg-[#0A0A0E] rounded-full overflow-hidden border border-white/5 relative z-10 mb-1">
-                 <div 
-                   className="h-full rounded-full bg-amber-500 shadow-[0_0_15px_rgba(245,166,35,0.8)] transition-all duration-1000"
-                   style={{ width: `${Math.min((loyalty.deposit % 50) / 50 * 100, 100)}%` }}
-                 />
-               </div>
-               
-               <div className="text-center text-[11px] text-[#A0A0AB] font-medium uppercase tracking-wider mb-2">
-                 1 Bilet kazanmak için <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">${50 - (loyalty.deposit % 50)}</span> daha yatırın!
-               </div>
-
-               <button 
-                  onClick={onOpenDepositModal}
-                  className="mt-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-amber-950 bg-amber-400 hover:bg-amber-300 transition-colors shadow-[0_0_20px_rgba(251,191,36,0.4)] hover:shadow-[0_0_30px_rgba(251,191,36,0.6)]"
-               >
-                 Yatırım Yap & Bilet Kazan
-               </button>
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: Live Leaderboard & Status */}
-          <div className="flex flex-col gap-8">
-             <h2 className="text-[#A0A0AB] text-[11px] font-semibold uppercase tracking-widest mb-1 flex items-center justify-between">
-                <div className="flex items-center gap-2"><AlertCircle className="w-4 h-4 text-emerald-500/70" /> Canlı Durum</div>
-                {remainingTickets <= 200 ? (
-                  <div className="flex items-center gap-1 bg-red-600/20 text-red-500 px-3 py-1.5 rounded-lg border border-red-500/50 animate-[pulse_1s_ease-in-out_infinite] shadow-[0_0_20px_rgba(239,68,68,0.8)]">
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-ping" /> <span className="font-black text-xs tracking-wider drop-shadow-[0_0_5px_rgba(239,68,68,1)]">SON {remainingTickets} BİLET!</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1 bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded border border-emerald-500/20">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> {remainingTickets} BİLET KALDI
-                  </div>
-                )}
-             </h2>
-
-             {/* Progress */}
-             <div className="glass-panel rounded-3xl p-8 lg:p-10">
-               <div className="flex justify-between items-end mb-4">
-                 <span className="text-[10px] text-[#A0A0AB] font-semibold uppercase tracking-widest">Havuz Doluluk Oranı</span>
-                 <span className="text-lg font-bold text-slate-200">{totalSoldInMatrix} / {totalPoolSize}</span>
-               </div>
-               <div className="w-full h-4 bg-[#0A0A0E] rounded-full overflow-hidden border border-white/5 relative mb-2">
-                 <div 
-                   className="h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r from-red-600 to-amber-500 shadow-[0_0_15px_rgba(245,166,35,0.6)] progress-striped"
-                   style={{ width: `${progressPercent}%` }}
-                 />
-               </div>
-             </div>
-
-             {/* Live Leaderboard */}
-             <div className="flex-1 min-h-[220px] glass-panel rounded-3xl p-8 lg:p-10 flex flex-col relative overflow-hidden">
-                <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-                  <span className="text-[11px] font-semibold text-amber-500 uppercase tracking-widest flex items-center gap-2 drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]">
-                    <AlertCircle className="w-4 h-4" /> Canlı Akış
-                  </span>
-                  <span className="text-[9px] text-[#A0A0AB] font-semibold tracking-widest uppercase">
-                    LIVE
-                  </span>
+            <div className="relative z-10 flex flex-col items-center">
+                <div className="inline-flex items-center gap-2 bg-[#00E5FF]/5 border border-[#00E5FF]/15 px-3 py-1.5 rounded-full mb-4 backdrop-blur-md animate-fade-in-up">
+                    <Sparkles className="w-3.5 h-3.5 text-[#00E5FF]" />
+                    <span className="text-[#00E5FF] font-black text-[10px] tracking-[0.2em] uppercase">{t('raffle.week_promo', 'Haftanın Özel Çekilişi')}</span>
                 </div>
                 
-                <div className="flex-1 overflow-hidden relative flex flex-col justify-end min-h-[120px]">
-                  {toasts.map((toast, index) => (
-                    <div 
-                      key={index}
-                      className={`absolute bottom-0 w-full flex items-center gap-5 bg-gradient-to-r from-white/[0.05] to-transparent p-4 rounded-xl border-l-2 border-amber-500 shadow-[0_0_20px_rgba(245,166,35,0.1)] transition-all duration-500 ${
-                        index === activeToastIndex 
-                          ? 'opacity-100 transform translate-y-0 z-20 animate-fade-in-up' 
-                          : 'opacity-0 transform translate-y-4 pointer-events-none z-10'
-                      }`}
-                    >
-                      <span className="text-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]" role="img" aria-label="icon">{toast.icon}</span>
-                      <span className="text-[#A0A0AB] text-[13px] leading-tight font-medium">{toast.text}</span>
-                    </div>
-                  ))}
-                </div>
-             </div>
-          </div>
-                  </div>
-
-        {/* BOTTOM ACTION BAR */}
-        <div className="w-full bg-white/[0.02] border-t border-white/5">
-          <div className="w-full max-w-[1400px] mx-auto p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8">
-           
-           {/* Timer */}
-           <div className="flex items-center gap-5">
-             <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-               <Clock className="w-5 h-5 text-zinc-400" />
-             </div>
-             <div>
-               <div className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-1">Sonraki Çekilişe Kalan Zaman</div>
-               <div className="flex gap-2 text-2xl font-black text-white font-mono tracking-wider">
-                 <span>{timeLeft.hours.toString().padStart(2, '0')}</span><span className="text-white/30">:</span>
-                 <span>{timeLeft.minutes.toString().padStart(2, '0')}</span><span className="text-white/30">:</span>
-                 <span className="text-amber-400">{timeLeft.seconds.toString().padStart(2, '0')}</span>
-               </div>
-             </div>
-           </div>
-
-           {/* Buttons */}
-           <div className="flex flex-col sm:flex-row items-center gap-5 w-full md:w-auto">
-             <button 
-                onClick={onOpenDepositModal}
-                className="w-full sm:w-auto px-10 py-4 rounded-xl font-black text-sm uppercase tracking-widest text-emerald-950 bg-emerald-400 hover:bg-emerald-300 transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)]"
-             >
-               <Gift className="w-5 h-5" />
-               Yatırım Yap & Bilet Kazan
-             </button>
-           </div>
-          </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-4 animate-fade-in-up drop-shadow-lg" style={{ animationDelay: '0.1s' }}>
+                    <span className="text-white">{t('raffle.grand', 'BÜYÜK')} </span> 
+                    <span className="text-gradient-cyan">{t('raffle.prize_pool', 'ÖDÜL HAVUZU')}</span>
+                </h1>
+                
+                <p className="text-zinc-400 text-sm md:text-base max-w-xl mx-auto font-medium mb-2 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    {t('raffle.pool_desc')}
+                </p>
+            </div>
         </div>
-        
-        {buyMsg && (
-          <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 text-center text-xs font-bold px-4 py-2 rounded-lg backdrop-blur-md border ${buyMsg.includes('✅') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
-              {buyMsg}
-          </div>
-        )}
+
+        {/* MAIN CONTENT GRID - Elegant spacing, no overlap */}
+        <div className="w-full max-w-[1200px] px-4 md:px-6 pb-24 flex flex-col lg:flex-row gap-6 relative z-20 mt-4">
+            
+            {/* LEFT COLUMN - CTA & PRIZES */}
+            <div className="flex-1 flex flex-col gap-6 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                
+                {/* 1. MASTER CTA CARD - Golden ratio proportions */}
+                <div className="glass-panel rounded-2xl overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/5 to-[#10b981]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    
+                    <div className="p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                        <div className="flex flex-col gap-2 text-center md:text-left flex-1">
+                            <div className="text-[#00E5FF] font-bold text-[10px] tracking-widest uppercase flex items-center justify-center md:justify-start gap-1.5">
+                                <Ticket className="w-3.5 h-3.5" /> {t('raffle.ticket_status')}
+                            </div>
+                            <div className="text-white font-black text-3xl md:text-4xl tracking-tight leading-none">
+                                1000 {t('raffle.tickets')} <span className="text-zinc-700 mx-1">/</span> <span className="text-gradient-cyan">50 {t('raffle.winners')}</span>
+                            </div>
+                            <div className="text-zinc-500 text-[13px] font-medium mt-1">{t('raffle.pool_full')}</div>
+                        </div>
+
+                        <button 
+                            onClick={isGuest ? onLoginRequired : onOpenArenaModal}
+                            className="w-full md:w-auto relative overflow-hidden rounded-xl bg-[#00E5FF] hover:bg-[#00cce6] text-[#041E24] px-7 py-3.5 flex items-center justify-center gap-2.5 transition-all shadow-[0_0_20px_rgba(0,229,255,0.2)] hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] group/btn hover:scale-[1.02]"
+                        >
+                            <Ticket className="w-4 h-4 text-[#041E24]" />
+                            <span className="font-black text-[13px] uppercase tracking-widest">{t('raffle.pick_ticket')}</span>
+                        </button>
+                    </div>
+                </div>
+
+                {/* 2. PRIZE SHOWCASE */}
+                <div className="flex flex-col gap-4 mt-2">
+                    <div className="flex items-center gap-2.5 px-1">
+                        <Trophy className="w-4 h-4 text-[#00E5FF]" />
+                        <h3 className="text-white font-black text-[15px] uppercase tracking-widest">{t('raffle.vip_showcase')}</h3>
+                    </div>
+
+                    {/* GRAND PRIZE: ROLEX */}
+                    <div className="glass-panel rounded-2xl overflow-hidden relative group hover:border-[#00E5FF]/20 transition-colors">
+                        <div className="flex flex-col md:flex-row items-stretch gap-0 relative z-10">
+                            {/* Image Side */}
+                            <div className="w-full md:w-[220px] h-[200px] md:h-auto bg-[#03060B] relative flex items-center justify-center overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-white/5">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-[#00E5FF]/5 to-transparent" />
+                                <img src="/images/raffle/rolex_daytona.jpg" alt="Rolex Daytona" className="w-[110%] h-[110%] object-cover mix-blend-screen group-hover:scale-105 transition-transform duration-700" />
+                                <div className="absolute top-3 left-3 bg-[#0A0F1A]/80 border border-[#00E5FF]/20 text-[#00E5FF] text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest backdrop-blur-md">
+                                    {t('raffle.winner_1')}
+                                </div>
+                            </div>
+                            
+                            {/* Content Side */}
+                            <div className="flex-1 flex flex-col p-6 text-center md:text-left justify-center">
+                                <div>
+                                    <h4 className="text-2xl font-black text-white mb-1">Rolex Daytona</h4>
+                                    <div className="text-gradient-cyan text-sm font-bold tracking-wide">'Panda' Edition</div>
+                                </div>
+                                <p className="text-zinc-400 text-[13px] leading-relaxed mt-3 mb-4 max-w-sm">
+                                    {t('raffle.winner_1_desc')}
+                                </p>
+                                <div className="mt-auto">
+                                    <div className="inline-block bg-[#050810] border border-white/5 px-4 py-2 rounded-lg">
+                                        <span className="text-zinc-500 text-[9px] font-bold uppercase tracking-widest block mb-0.5">{t('raffle.value')}</span>
+                                        <span className="text-xl font-black text-white">$30.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* OTHER PRIZES (Grid) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="glass-panel rounded-xl p-5 flex flex-col justify-between hover:border-white/10 transition-colors">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
+                                    <Trophy className="w-5 h-5 text-slate-300" />
+                                </div>
+                                <span className="text-zinc-500 text-[9px] font-bold uppercase tracking-widest">{t('raffle.winners_2_5')}</span>
+                            </div>
+                            <div>
+                                <div className="text-zinc-200 font-bold text-[15px]">{t('raffle.prize_silver')}</div>
+                                <div className="text-xl font-black text-[#00E5FF]">$5.000</div>
+                            </div>
+                        </div>
+
+                        <div className="glass-panel rounded-xl p-5 flex flex-col justify-between hover:border-white/10 transition-colors">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
+                                    <Gift className="w-5 h-5 text-amber-400/80" />
+                                </div>
+                                <span className="text-zinc-500 text-[9px] font-bold uppercase tracking-widest">{t('raffle.winners_6_50')}</span>
+                            </div>
+                            <div>
+                                <div className="text-zinc-200 font-bold text-[15px]">{t('raffle.prize_cash')}</div>
+                                <div className="text-xl font-black text-zinc-400">$1.000 - $500</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {/* RIGHT COLUMN - DASHBOARD WIDGETS - Tight, compact layouts */}
+            <div className="w-full lg:w-[340px] shrink-0 flex flex-col gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                
+                {/* STATUS DASHBOARD OR GUEST WIDGET */}
+                {isGuest ? (
+                    <div className="glass-panel rounded-2xl p-6 relative overflow-hidden border-[#00E5FF]/20 bg-[#00E5FF]/5">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#00E5FF]/10 rounded-bl-full pointer-events-none blur-xl" />
+                        
+                        <div className="flex items-center gap-2 mb-6 relative z-10">
+                            <Sparkles className="w-5 h-5 text-[#00E5FF]" />
+                            <h3 className="text-white font-black text-[15px] uppercase tracking-widest">{t('raffle.guest_title')}</h3>
+                        </div>
+
+                        <div className="flex flex-col gap-5 mb-7 relative z-10">
+                            <div className="flex items-start gap-3">
+                                <div className="w-7 h-7 rounded-full bg-[#00E5FF]/20 flex items-center justify-center shrink-0">
+                                    <span className="text-[#00E5FF] font-black text-[12px]">1</span>
+                                </div>
+                                <div className="pt-0.5">
+                                    <h4 className="text-white font-bold text-[13px]">{t('raffle.guest_step1_title')}</h4>
+                                    <p className="text-zinc-400 text-[11px] mt-0.5">{t('raffle.guest_step1_desc')}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <div className="w-7 h-7 rounded-full bg-[#00E5FF]/20 flex items-center justify-center shrink-0">
+                                    <span className="text-[#00E5FF] font-black text-[12px]">2</span>
+                                </div>
+                                <div className="pt-0.5">
+                                    <h4 className="text-white font-bold text-[13px]">{t('raffle.guest_step2_title')}</h4>
+                                    <p className="text-zinc-400 text-[11px] mt-0.5">{t('raffle.guest_step2_desc')}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <div className="w-7 h-7 rounded-full bg-[#00E5FF]/20 flex items-center justify-center shrink-0">
+                                    <span className="text-[#00E5FF] font-black text-[12px]">3</span>
+                                </div>
+                                <div className="pt-0.5">
+                                    <h4 className="text-white font-bold text-[13px]">{t('raffle.guest_step3_title')}</h4>
+                                    <p className="text-zinc-400 text-[11px] mt-0.5">{t('raffle.guest_step3_desc')}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={onLoginRequired}
+                            className="w-full relative overflow-hidden rounded-xl bg-gradient-to-r from-[#00E5FF] to-[#10b981] text-[#041E24] px-4 py-3.5 flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(0,229,255,0.25)] hover:shadow-[0_0_30px_rgba(0,229,255,0.45)] group/btn hover:scale-[1.02] font-black uppercase text-[12px] tracking-wider z-10"
+                        >
+                            <span>{t('raffle.guest_cta')}</span>
+                            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                        </button>
+                    </div>
+                ) : (
+                    <div className="glass-panel rounded-2xl p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#10b981]/5 rounded-bl-full pointer-events-none" />
+                    
+                    <div className="flex items-center gap-2 mb-6">
+                        <UserCircle className="w-4 h-4 text-[#10b981]" />
+                        <h3 className="text-white font-black text-[13px] uppercase tracking-widest">{t('raffle.your_status')}</h3>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mb-5">
+                        <div className="bg-[#030509] rounded-xl p-4 border border-white/5 flex flex-col items-center text-center">
+                            <span className="text-zinc-500 text-[9px] font-bold uppercase tracking-widest mb-1.5">{t('raffle.your_tickets')}</span>
+                            <span className="text-3xl font-black text-white leading-none">{loyalty.tickets}</span>
+                        </div>
+                        <div className="bg-[#030509] rounded-xl p-4 border border-white/5 flex flex-col items-center text-center">
+                            <span className="text-zinc-500 text-[9px] font-bold uppercase tracking-widest mb-1.5">{t('raffle.luck_meter')}</span>
+                            <span className={`text-3xl font-black leading-none ${loyalty.tickets > 0 ? 'text-[#10b981]' : 'text-zinc-600'}`}>
+                                %{loyalty.tickets > 0 ? (loyalty.tickets * 0.5).toFixed(1) : '0'}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="mb-5">
+                        <div className="flex justify-between items-end mb-1.5">
+                            <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{t('raffle.deposit_progress')}</span>
+                            <span className="text-[11px] font-black text-white">${loyalty.deposit.toLocaleString('en-US')} / $50</span>
+                        </div>
+                        <div className="w-full h-2 bg-[#030509] rounded-full overflow-hidden border border-white/5">
+                            <div 
+                                className="h-full rounded-full bg-gradient-to-r from-[#00E5FF] to-[#10b981] transition-all duration-1000"
+                                style={{ width: `${Math.min((loyalty.deposit % 50) / 50 * 100, 100)}%` }}
+                            />
+                        </div>
+                    </div>
+
+                    <button 
+                        onClick={onOpenDepositModal}
+                        className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-3 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                    >
+                        {t('raffle.deposit_win')}
+                    </button>
+                </div>
+                )}
+
+                {/* LIVE FEED WIDGET */}
+                <div className="glass-panel rounded-2xl p-6 relative flex flex-col">
+                    <div className="flex justify-between items-center mb-5">
+                        <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]" />
+                            <h3 className="text-white font-black text-[13px] uppercase tracking-widest">{t('raffle.live_stream')}</h3>
+                        </div>
+                        <div className="text-white font-black text-[11px] bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                            {totalSoldInMatrix}/{totalPoolSize}
+                        </div>
+                    </div>
+
+                    <div className="w-full h-1 bg-[#030509] rounded-full overflow-hidden mb-5">
+                        <div 
+                            className="h-full rounded-full bg-gradient-to-r from-red-500 to-[#10b981] transition-all duration-1000 ease-out"
+                            style={{ width: `${progressPercent}%` }}
+                        />
+                    </div>
+
+                    <div className="flex-1 relative h-[140px] bg-[#030509] rounded-xl border border-white/5 p-3 overflow-hidden">
+                        {toasts.map((toast, index) => (
+                            <div 
+                                key={index}
+                                className={`absolute left-3 right-3 flex items-center gap-3 bg-[#0A0E17] p-3 rounded-lg border-l-2 border-[#10b981] shadow-md transition-all duration-500 ${
+                                index === activeToastIndex 
+                                    ? 'opacity-100 transform translate-y-0 z-20' 
+                                    : 'opacity-0 transform translate-y-2 pointer-events-none z-10'
+                                }`}
+                            >
+                                <div className="text-lg">
+                                    {toast.icon}
+                                </div>
+                                <div className="text-zinc-300 text-[11px] font-medium leading-relaxed">
+                                    {toast.text}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* COUNTDOWN WIDGET */}
+                <div className="glass-panel rounded-2xl p-5 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-[#00E5FF]" />
+                        <div className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest leading-tight">
+                            {t('raffle.next_draw').split(' ')[0]} <br/> {t('raffle.next_draw').split(' ')[1] || ''}
+                        </div>
+                    </div>
+                    <div className="flex gap-1 text-[17px] font-black text-white font-mono tracking-wider">
+                        <span>{timeLeft.hours.toString().padStart(2, '0')}</span><span className="text-zinc-600">:</span>
+                        <span>{timeLeft.minutes.toString().padStart(2, '0')}</span><span className="text-zinc-600">:</span>
+                        <span className="text-[#00E5FF]">{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
       </div>
+      
+      {/* Toast Alert overlay for buy success/fail */}
+      {buyMsg && (
+        <div className={`absolute top-6 left-1/2 -translate-x-1/2 text-center text-[11px] font-black tracking-widest uppercase px-6 py-3 rounded-xl backdrop-blur-md border z-50 shadow-xl ${buyMsg.includes('✅') ? 'bg-[#10b981]/10 text-[#10b981] border-[#10b981]/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
+            {buyMsg}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,42 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const banners = [
+const getBanners = (t: any) => [
   {
     id: 'slots',
     bgImage: '/images/mosaic_casino_bg.webp',
-    title: <><span className="text-[#10B981]">Slot Oyna</span> & Kazan</>,
-    subtitle: 'Tüm yatırım yöntemleri geçerli. Hemen Al!',
-    buttonText: 'KAYIT OL',
+    title: <><span className="text-[#10B981]">{t('home.banner_slot')}</span> {t('home.banner_slot_and_win')}</>,
+    subtitle: t('home.banner_slot_desc'),
+    buttonText: t('home.banner_register'),
     hoverShadow: 'hover:shadow-[#10B981]/30',
   },
   {
     id: 'sports',
     bgImage: '/images/sports_bg_premium.jpg',
-    title: <><span className="text-white">5000$</span> <span className="text-blue-500">Hoş Geldin</span></>,
-    subtitle: 'Spor bahislerinde geçerli dev bonus seni bekliyor!',
-    buttonText: 'KAYIT OL',
+    title: <><span className="text-white">{t('home.banner_welcome')}</span> <span className="text-blue-500">{t('home.banner_welcome_bonus')}</span></>,
+    subtitle: t('home.banner_welcome_desc'),
+    buttonText: t('home.banner_register'),
     hoverShadow: 'hover:shadow-blue-500/30',
   },
   {
     id: 'vip',
     bgImage: '/images/vip_casino_card.webp',
-    title: <><span className="text-yellow-500">VIP</span> Ayrıcalıkları</>,
-    subtitle: 'Sana özel bonuslar ve nakit iade fırsatları!',
-    buttonText: 'KEŞFET',
+    title: <><span className="text-yellow-500">{t('home.banner_vip')}</span> {t('home.banner_vip_privileges')}</>,
+    subtitle: t('home.banner_vip_desc'),
+    buttonText: t('home.banner_explore'),
     hoverShadow: 'hover:shadow-yellow-500/30',
   },
   {
     id: 'crypto_vip',
     bgImage: '/images/bitcoin_hero_banner.jpg',
-    title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-600 drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]">KRİPTOYA ÖZEL</span> %300 BONUS</>,
-    subtitle: <span className="text-[#94a3b8]">Kripto ile yatır, limitlere takılma, <span className="text-white font-black drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">%300 bonusu kap!</span></span>,
-    buttonText: 'HEMEN YATIR',
+    title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-600 drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]">{t('home.banner_crypto')}</span> {t('home.banner_crypto_bonus')}</>,
+    subtitle: <span className="text-[#94a3b8]">{t('home.banner_crypto_desc_1')} <span className="text-white font-black drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">{t('home.banner_crypto_desc_2')}</span></span>,
+    buttonText: t('home.banner_deposit'),
     hoverShadow: 'hover:shadow-yellow-500/40',
   }
 ];
 
 const SportsBanners: React.FC = () => {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
+  const banners = getBanners(t);
 
   useEffect(() => {
     const timer = setInterval(() => {

@@ -4,6 +4,7 @@ import { useBetSlip } from '../../contexts/BetSlipContext';
 import { useUser } from '../../contexts/UserContext';
 import { triggerGlobalToast } from '../GlobalToaster';
 import ModernChat from '../ModernChat';
+import { useTranslation } from 'react-i18next';
 
 const MOCK_MY_BETS = [
   {
@@ -96,18 +97,27 @@ export const DualRightPanel: React.FC<{
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
 }> = ({ language, isOpenMobile, onCloseMobile }) => {
+  const { t } = useTranslation();
   const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost, betType, setBetType, isLocked } = useBetSlip();
   const { siteUser, placeBet } = useUser();
-  const [activePanel, setActivePanel] = useState<'coupon' | 'chat' | 'mybets'>('coupon');
+  const [activePanel, setActivePanel] = useState<'coupon' | 'chat' | 'mybets'>('chat');
   const [quickBet, setQuickBet] = useState(false);
-  const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
   const [showStamp, setShowStamp] = useState(false);
-  const [targetWin, setTargetWin] = useState<number | ''>('');
   const [isConfirmingBet, setIsConfirmingBet] = useState(false);
 
   React.useEffect(() => {
     setIsConfirmingBet(false);
   }, [betSlip, betAmount]);
+
+  const prevBetSlipLen = React.useRef(betSlip.length);
+  React.useEffect(() => {
+    if (prevBetSlipLen.current === 0 && betSlip.length > 0) {
+      setActivePanel('coupon');
+    } else if (prevBetSlipLen.current > 0 && betSlip.length === 0) {
+      setActivePanel('chat');
+    }
+    prevBetSlipLen.current = betSlip.length;
+  }, [betSlip.length]);
 
   React.useEffect(() => {
     const handleSetChat = () => {
@@ -166,20 +176,17 @@ export const DualRightPanel: React.FC<{
           <>
             {/* PREMIUM BET SLIP HEADER */}
             <div className="bg-[#0A0D14] border-b border-white/5 px-2 py-1.5 flex items-center justify-between z-10">
-              <div className="flex items-center gap-1.5 cursor-pointer group flex-1">
-                <div className="relative">
-                  <div className="w-6 h-6 bg-[#161920] rounded-md border border-white/10 flex flex-col items-center justify-center relative group-hover:border-white/30 transition-colors">
-                    <div className="w-2.5 h-[2px] bg-white rounded-full mb-0.5"></div>
-                    <div className="w-2.5 h-[2px] bg-white/50 rounded-full"></div>
-                  </div>
-                  {betSlip.length > 0 && (
-                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[8px] font-black rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+              <div className="flex items-center gap-1.5 cursor-pointer group flex-1" onClick={() => { if (onCloseMobile) onCloseMobile(); }}>
+                <div className="flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-opacity">
+                  <FileText className="w-4 h-4 text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]" />
+                  <span className="text-white font-extrabold text-[12px] tracking-wide ml-1">{t('bet_slip.title')}</span>
+                </div>
+                {betSlip.length > 0 && (
+                    <span className="w-4 h-4 bg-white text-black text-[8px] font-black rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(255,255,255,0.3)]">
                       {betSlip.length}
                     </span>
                   )}
-                </div>
-                <span className="text-white font-black text-[11px] tracking-wide">{language === 'tr' ? 'Bahis Kuponu' : 'Bet Slip'}</span>
-                <ChevronDown className="w-3 h-3 text-zinc-600 group-hover:text-white transition-colors" />
+                <ChevronDown className="w-3 h-3 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
@@ -194,20 +201,20 @@ export const DualRightPanel: React.FC<{
                   <Share2 className="w-3.5 h-3.5 text-zinc-400 hover:text-white transition-colors" />
                 </div>
 
-                  <div className="flex items-center gap-1.5 cursor-pointer bg-[#161920]/80 backdrop-blur px-2 py-1 rounded-full hover:bg-white/10 transition-all border border-[#00E5FF]/20" onClick={() => setQuickBet(!quickBet)}>
-                  <span className="text-zinc-300 font-bold text-[9px] uppercase tracking-wider">{language === 'tr' ? 'Hızlı' : 'Fast'}</span>
-                  <div className={`w-6 h-3 rounded-full p-0.5 transition-colors border ${quickBet ? 'bg-[#00E5FF]/20 border-[#00E5FF]' : 'bg-[#1a1a1a] border-white/10'}`}>
-                    <div className={`w-2 h-2 rounded-full transition-transform ${quickBet ? 'translate-x-3 bg-[#00E5FF] shadow-[0_0_5px_#00E5FF]' : 'translate-x-0 bg-white'}`}></div>
+                  <div className="flex items-center gap-1.5 cursor-pointer px-2 py-1.5 rounded-full hover:bg-white/5 transition-all" onClick={() => setQuickBet(!quickBet)}>
+                  <span className={`font-bold text-[10px] uppercase tracking-wider transition-colors ${quickBet ? 'text-[#00E5FF]' : 'text-zinc-500'}`}>{t('bet_slip.fast')}</span>
+                  <div className={`w-7 h-4 rounded-full p-[2px] transition-colors ${quickBet ? 'bg-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.4)]' : 'bg-[#1a1a1a] border border-white/10'}`}>
+                    <div className={`w-3 h-3 rounded-full transition-transform ${quickBet ? 'translate-x-3 bg-black' : 'translate-x-0 bg-zinc-400'}`}></div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* TABS (Premium Segmented Control) */}
-            <div className="px-2 py-2 bg-[#0A0D14] border-b border-white/5">
-              <div className="flex items-center p-1 bg-[#0f1118]/80 backdrop-blur rounded-xl border border-white/5 relative shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)] h-[44px]">
+            <div className="px-3 py-3 bg-[#0A0D14]">
+              <div className="flex items-center p-1 bg-[#131823] rounded-xl border border-white/5 relative shadow-inner h-[46px]">
                 <div 
-                  className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-gradient-to-b from-[#00E5FF]/30 to-[#00E5FF]/10 border border-[#00E5FF]/50 rounded-lg shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
+                  className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-[#1e2638] rounded-lg shadow-md transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
                   style={{
                     transform: `translateX(${betType === 'tekli' ? '4px' : betType === 'kombine' ? 'calc(100% + 6px)' : 'calc(200% + 8px)'})`
                   }}
@@ -218,10 +225,10 @@ export const DualRightPanel: React.FC<{
                     onClick={() => {
                       if (!isLocked) setBetType(type as any);
                     }}
-                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'text-zinc-400'} ${isLocked && betType !== type ? 'opacity-30 cursor-not-allowed' : 'hover:text-white'}`}
+                    className={`flex-1 h-full text-[11px] uppercase tracking-wider font-extrabold rounded-lg transition-all duration-300 relative z-10 ${betType === type ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.3)]' : 'text-zinc-500'} ${isLocked && betType !== type ? 'opacity-30 cursor-not-allowed' : 'hover:text-white'}`}
                     disabled={isLocked && betType !== type}
                   >
-                    {type}
+                    {t(`bet_slip.types.${type}`)}
                   </button>
                 ))}
               </div>
@@ -232,7 +239,7 @@ export const DualRightPanel: React.FC<{
               <div className="px-1.5 py-1 bg-gradient-to-b from-[#111]/80 to-[#0A0D14] backdrop-blur border-b border-white/5 flex flex-col gap-0.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1">
-                    <span className="text-[7px] text-zinc-400 font-bold tracking-wide uppercase">Kombine Bonusu</span>
+                    <span className="text-[7px] text-zinc-400 font-bold tracking-wide uppercase">{t('bet_slip.combo_bonus')}</span>
                   </div>
                   <span className="text-[9px] font-black text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]">+{Math.round(accumulatorBoost * 100)}%</span>
                 </div>
@@ -242,9 +249,9 @@ export const DualRightPanel: React.FC<{
                   </div>
                 </div>
                 <div className="flex justify-between text-[7px] text-zinc-600 font-black px-1 mt-px">
-                  <span className={`transition-colors ${betSlip.length >= 3 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>3 Maç (%5)</span>
-                  <span className={`transition-colors ${betSlip.length >= 4 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>4 Maç (%10)</span>
-                  <span className={`transition-colors ${betSlip.length >= 5 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>5+ Maç (%15)</span>
+                  <span className={`transition-colors ${betSlip.length >= 3 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>{t('bet_slip.matches_3')}</span>
+                  <span className={`transition-colors ${betSlip.length >= 4 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>{t('bet_slip.matches_4')}</span>
+                  <span className={`transition-colors ${betSlip.length >= 5 ? 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]' : ''}`}>{t('bet_slip.matches_5')}</span>
                 </div>
               </div>
             )}
@@ -256,10 +263,10 @@ export const DualRightPanel: React.FC<{
                   <FileText className="w-8 h-8 text-[#00E5FF]/60 drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]" strokeWidth={1.5} />
                 </div>
                 <h3 className="text-white font-bold text-[15px] mb-1">
-                  {language === 'tr' ? 'Kuponunuz Boş' : 'Bet Slip Empty'}
+                  {t('bet_slip.empty_title')}
                 </h3>
                 <p className="text-zinc-500 font-medium text-[12px] max-w-[200px]">
-                  {language === 'tr' ? 'Bahis yapmak için oranlara tıklayarak seçim ekleyin.' : 'Click on odds to add selections to your bet slip.'}
+                  {t('bet_slip.empty_desc')}
                 </p>
               </div>
             ) : (
@@ -330,11 +337,11 @@ export const DualRightPanel: React.FC<{
                   
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col">
-                      <span className="text-zinc-400 text-[10px] md:text-[11px] font-bold uppercase">{language === 'tr' ? 'Toplam Oran' : 'Total odds'}</span>
+                      <span className="text-zinc-400 text-[10px] md:text-[11px] font-bold uppercase">{t('bet_slip.total_odds')}</span>
                       <span className="text-white font-black text-[15px] md:text-[16px]">{totalOdds.toFixed(2)}</span>
                     </div>
-                    <div className="flex flex-col items-end">
-                      <span className="text-[#00E5FF] text-[10px] md:text-[11px] font-bold uppercase drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">{language === 'tr' ? 'Olası Kazanç' : 'Potential Win'}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#00E5FF] text-[10px] md:text-[11px] font-bold uppercase drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">{t('bet_slip.potential_win')}</span>
                       <span className="text-[#00E5FF] font-black text-[15px] md:text-[16px] drop-shadow-[0_0_5px_rgba(0,229,255,0.6)]">{potentialPayout.toFixed(2)} ₺</span>
                     </div>
                   </div>
@@ -397,7 +404,7 @@ export const DualRightPanel: React.FC<{
                           >
                             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:animate-[shine-sweep_2s_ease-in-out_infinite]" />
                             <span className="relative z-10 flex items-center gap-1">
-                              {!siteUser ? (language === 'tr' ? 'Giriş Yap' : 'Login') : (language === 'tr' ? 'Bahis Yap' : 'Place Bet')}
+                              {!siteUser ? t('bet_slip.login_to_bet') : t('bet_slip.place_bet')}
                               {siteUser && <ChevronRight className="w-4 h-4 text-[#0A0D14]" />}
                             </span>
                           </button>
@@ -447,24 +454,24 @@ export const DualRightPanel: React.FC<{
           <button onClick={() => setActivePanel('chat')} className="w-full h-[46px] bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(0,229,255,0.4)] hover:shadow-[0_4px_25px_rgba(0,229,255,0.6)] group relative overflow-hidden active:scale-[0.98]">
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <MessageCircle className="w-5 h-5 text-[#0A0D14] group-hover:scale-110 transition-transform relative z-10" />
-            <span className="text-[#0A0D14] text-[14px] font-black tracking-wide uppercase relative z-10">Sohbete Geç</span>
+            <span className="text-[#0A0D14] text-[14px] font-black tracking-wide uppercase relative z-10">{t('bet_slip.chat_button')}</span>
           </button>
         ) : (
           <div className="flex items-center justify-between w-full h-full px-2 pb-2">
             <button className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1">
               <Home className="w-[18px] h-[18px]" />
-              <span className="text-[9px] font-medium tracking-wide">Lobi</span>
+              <span className="text-[9px] font-medium tracking-wide">{t('nav.lobby', 'Lobi')}</span>
             </button>
             <button className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1">
               <Gamepad2 className="w-[18px] h-[18px]" />
-              <span className="text-[9px] font-medium tracking-wide">E-Sporlar</span>
+              <span className="text-[9px] font-medium tracking-wide">{t('nav.esports', 'E-Sporlar')}</span>
             </button>
             <button 
               onClick={() => setActivePanel('mybets')}
               className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1"
             >
               <Flag className={`w-[18px] h-[18px] ${activePanel === 'mybets' ? 'text-[#00E5FF]' : ''}`} />
-              <span className={`text-[9px] font-medium tracking-wide ${activePanel === 'mybets' ? 'text-[#00E5FF]' : ''}`}>Bahislerim</span>
+              <span className={`text-[9px] font-medium tracking-wide ${activePanel === 'mybets' ? 'text-[#00E5FF]' : ''}`}>{t('nav.my_bets', 'Bahislerim')}</span>
             </button>
             <button 
               onClick={() => setActivePanel('coupon')}
@@ -478,11 +485,11 @@ export const DualRightPanel: React.FC<{
                   </span>
                 )}
               </div>
-              <span className="text-[9px] font-medium tracking-wide group-hover:text-[#10b981] transition-colors">Bahis kuponu</span>
+              <span className="text-[9px] font-medium tracking-wide group-hover:text-[#10b981] transition-colors">{t('nav.bet_slip', 'Bahis kuponu')}</span>
             </button>
             <button className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1">
               <Search className="w-[18px] h-[18px]" />
-              <span className="text-[9px] font-medium tracking-wide">Ara</span>
+              <span className="text-[9px] font-medium tracking-wide">{t('nav.search', 'Ara')}</span>
             </button>
           </div>
         )}

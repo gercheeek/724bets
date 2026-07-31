@@ -5,7 +5,7 @@ import { PlayerLogo, findBestLogoMatch } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
 import { LiveTimer } from './MatchCard';
 
-function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: 'fener'|'cl'|'el'|'conf', leagueName: string }) {
+function MatchSlide({ matchData, theme, leagueName, compact = false }: { matchData: any, theme: 'fener'|'cl'|'el'|'conf', leagueName: string, compact?: boolean }) {
     const { toggleBetSelection } = useBetting();
     const themes: any = {
         'fener': {
@@ -67,23 +67,23 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                 <div className="w-[35%] md:w-[35%] flex flex-col justify-center gap-1.5 md:gap-3 h-full pb-2 md:pb-4">
                     {/* Home */}
                     <div className="flex flex-col cursor-pointer hover:opacity-80" onClick={(e) => { e.stopPropagation(); toggleBetSelection(matchData.match, 'Maç Sonucu', matchData.home, parseFloat(matchData.homeOdd)) }}>
-                        <span className="text-gray-300 font-bold text-[8px] md:text-[12px] uppercase tracking-widest leading-none mb-0.5 md:mb-1 truncate max-w-[100px] md:max-w-[150px] drop-shadow-md">{matchData.home}</span>
+                        <span className={`text-gray-300 font-bold uppercase tracking-widest leading-none mb-0.5 truncate max-w-[100px] md:max-w-[150px] drop-shadow-md ${compact ? 'text-[8px] md:text-[10px]' : 'text-[8px] md:text-[12px] md:mb-1'}`}>{matchData.home}</span>
                         <div className="flex items-center gap-1 md:gap-2">
-                            <span className="text-white font-black text-[18px] md:text-[38px] leading-none drop-shadow-md"><AnimatedOdd value={matchData.homeOdd} /></span>
+                            <span className={`text-white font-black leading-none drop-shadow-md ${compact ? 'text-[16px] md:text-[24px]' : 'text-[18px] md:text-[38px]'}`}><AnimatedOdd value={matchData.homeOdd} /></span>
                         </div>
                     </div>
                     {/* Draw */}
                     <div className="flex flex-col cursor-pointer hover:opacity-80" onClick={(e) => { e.stopPropagation(); toggleBetSelection(matchData.match, 'Maç Sonucu', 'Beraberlik', parseFloat(matchData.drawOdd)) }}>
-                        <span className="text-gray-400 font-bold text-[8px] md:text-[12px] uppercase tracking-widest leading-none mb-0.5 md:mb-1 drop-shadow-md">BERABERE</span>
+                        <span className={`text-gray-400 font-bold uppercase tracking-widest leading-none mb-0.5 drop-shadow-md ${compact ? 'text-[8px] md:text-[10px]' : 'text-[8px] md:text-[12px] md:mb-1'}`}>BERABERE</span>
                         <div className="flex items-center gap-1 md:gap-2">
-                            <span className="text-white font-black text-[18px] md:text-[38px] leading-none drop-shadow-md"><AnimatedOdd value={matchData.drawOdd} /></span>
+                            <span className={`text-white font-black leading-none drop-shadow-md ${compact ? 'text-[16px] md:text-[24px]' : 'text-[18px] md:text-[38px]'}`}><AnimatedOdd value={matchData.drawOdd} /></span>
                         </div>
                     </div>
                     {/* Away */}
                     <div className="flex flex-col cursor-pointer hover:opacity-80" onClick={(e) => { e.stopPropagation(); toggleBetSelection(matchData.match, 'Maç Sonucu', matchData.away, parseFloat(matchData.awayOdd)) }}>
-                        <span className="text-gray-300 font-bold text-[8px] md:text-[12px] uppercase tracking-widest leading-none mb-0.5 md:mb-1 truncate max-w-[100px] md:max-w-[150px] drop-shadow-md">{matchData.away}</span>
+                        <span className={`text-gray-300 font-bold uppercase tracking-widest leading-none mb-0.5 truncate max-w-[100px] md:max-w-[150px] drop-shadow-md ${compact ? 'text-[8px] md:text-[10px]' : 'text-[8px] md:text-[12px] md:mb-1'}`}>{matchData.away}</span>
                         <div className="flex items-center gap-1 md:gap-2">
-                            <span className="text-white font-black text-[18px] md:text-[38px] leading-none drop-shadow-md"><AnimatedOdd value={matchData.awayOdd} /></span>
+                            <span className={`text-white font-black leading-none drop-shadow-md ${compact ? 'text-[16px] md:text-[24px]' : 'text-[18px] md:text-[38px]'}`}><AnimatedOdd value={matchData.awayOdd} /></span>
                         </div>
                     </div>
                 </div>
@@ -111,8 +111,8 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                         )}
 
                         <div className="flex items-center justify-center w-full relative z-20">
-                            <div className="flex flex-col items-center w-[80px] md:w-[180px]">
-                                <div className="relative w-14 h-14 md:w-28 md:h-28 lg:w-36 lg:h-36 z-20 hover:scale-110 transition-transform duration-500 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
+                            <div className={`flex flex-col items-center ${compact ? 'w-[70px] md:w-[120px]' : 'w-[80px] md:w-[180px]'}`}>
+                                <div className={`relative z-20 hover:scale-110 transition-transform duration-500 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)] ${compact ? 'w-12 h-12 md:w-20 md:h-20 lg:w-24 lg:h-24' : 'w-14 h-14 md:w-28 md:h-28 lg:w-36 lg:h-36'}`}>
                                     <div className={`absolute inset-0 ${t.badgeBg} opacity-20 blur-[10px] md:blur-[20px] rounded-full mix-blend-screen`}></div>
                                     <PlayerLogo name={matchData.home} fallbackLogo="" sport={matchData.sport} />
                                 </div>
@@ -124,7 +124,7 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                             </div>
                             <div className="mx-1 md:mx-6 z-30 flex flex-col items-center justify-center relative min-w-[40px] md:min-w-[80px]">
                                 {(matchData.isLive || matchData.match?.isLive) ? (
-                                    <div className="text-white font-black text-[22px] md:text-[44px] tracking-wider drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] whitespace-nowrap">
+                                    <div className={`text-white font-black tracking-wider drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] whitespace-nowrap ${compact ? 'text-[20px] md:text-[32px]' : 'text-[22px] md:text-[44px]'}`}>
                                         {matchData.score || matchData.match?.score || '0 - 0'}
                                     </div>
                                 ) : (
@@ -134,8 +134,8 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
                                     </div>
                                 )}
                             </div>
-                            <div className="flex flex-col items-center w-[80px] md:w-[180px]">
-                                <div className="relative w-14 h-14 md:w-28 md:h-28 lg:w-36 lg:h-36 z-20 hover:scale-110 transition-transform duration-500 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
+                            <div className={`flex flex-col items-center ${compact ? 'w-[70px] md:w-[120px]' : 'w-[80px] md:w-[180px]'}`}>
+                                <div className={`relative z-20 hover:scale-110 transition-transform duration-500 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)] ${compact ? 'w-12 h-12 md:w-20 md:h-20 lg:w-24 lg:h-24' : 'w-14 h-14 md:w-28 md:h-28 lg:w-36 lg:h-36'}`}>
                                     <div className={`absolute inset-0 ${t.badgeBg} opacity-20 blur-[10px] md:blur-[20px] rounded-full mix-blend-screen`}></div>
                                     <PlayerLogo name={matchData.away} fallbackLogo="" sport={matchData.sport} />
                                 </div>
@@ -157,7 +157,7 @@ function MatchSlide({ matchData, theme, leagueName }: { matchData: any, theme: '
     );
 }
 
-export default function SportsPromoSlider({ matches = [] }: { matches?: any[] }) {
+export default function SportsPromoSlider({ matches = [], compact = false }: { matches?: any[], compact?: boolean }) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const dynamicSlides = useMemo(() => {
@@ -286,13 +286,13 @@ export default function SportsPromoSlider({ matches = [] }: { matches?: any[] })
                 .title-gradient-cyan { background: linear-gradient(to bottom, #00E5FF 0%, #008899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
             `}</style>
 
-            <div className="overflow-hidden rounded-xl relative w-full h-[190px] sm:h-[220px] md:h-[250px] bg-[#050505] shadow-2xl cursor-pointer font-montserrat">
+            <div className={`overflow-hidden rounded-xl relative w-full ${compact ? 'h-[120px] sm:h-[135px] md:h-[150px]' : 'h-[190px] sm:h-[220px] md:h-[250px]'} bg-[#050505] shadow-2xl cursor-pointer font-montserrat`}>
                 
                 <div className="w-full h-full flex transition-transform duration-700 ease-in-out" style={{ transform: getTransform() }}>
                     
                     {/* DYNAMIC LEAGUE MATCHES */}
                     {dynamicSlides.map((slide, i) => (
-                        <MatchSlide key={slide.id || i} matchData={slide.data} theme={slide.theme} leagueName={slide.name} />
+                        <MatchSlide key={slide.id || i} matchData={slide.data} theme={slide.theme} leagueName={slide.name} compact={compact} />
                     ))}
 
                     {/* ================= STATIC SLIDES ================= */}
@@ -311,7 +311,7 @@ export default function SportsPromoSlider({ matches = [] }: { matches?: any[] })
                                     <div className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF]"></div>
                                     <span className="text-[#00E5FF] font-bold text-[9px] md:text-[10px] tracking-[0.25em] uppercase">GLOBAL PARTNERSHIP</span>
                                 </div>
-                                <h2 className="text-[28px] sm:text-[38px] md:text-[48px] font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2">
+                                <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
                                     <span className="title-gradient-white">SYNAPSE</span> <br className="hidden sm:block"/>
                                     <span className="title-gradient-cyan">ESPORTS</span>
                                 </h2>
@@ -337,7 +337,7 @@ export default function SportsPromoSlider({ matches = [] }: { matches?: any[] })
                                 <div className="inline-flex items-center gap-2 mb-2 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-sm w-fit">
                                     <span className="text-emerald-400 font-bold text-[9px] md:text-[10px] tracking-[0.25em] uppercase">ANINDA NAKİT</span>
                                 </div>
-                                <h2 className="text-[28px] sm:text-[38px] md:text-[48px] font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2">
+                                <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
                                     <span className="title-gradient-white">ERKEN</span> <br className="hidden sm:block"/>
                                     <span className="text-zinc-300">ÖDEME</span>
                                 </h2>
@@ -372,7 +372,7 @@ export default function SportsPromoSlider({ matches = [] }: { matches?: any[] })
                                 <div className="inline-flex items-center gap-2 mb-2 bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2.5 py-1 rounded-sm w-fit">
                                     <span className="text-[#00E5FF] font-bold text-[9px] md:text-[10px] tracking-[0.25em] uppercase">VİP KAZANÇ</span>
                                 </div>
-                                <h2 className="text-[28px] sm:text-[38px] md:text-[48px] font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2">
+                                <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
                                     <span className="title-gradient-white">KAZANCINI</span> <br className="hidden sm:block"/>
                                     <span className="title-gradient-cyan">İKİYE KATLA</span>
                                 </h2>

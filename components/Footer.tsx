@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Mail, Send, Twitter, Instagram, Shield } from 'lucide-react';
+import { Mail, Send, Twitter, Instagram } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation();
   const [adminClickCount, setAdminClickCount] = useState(0);
 
-  const handleAdminClick = (e: React.MouseEvent, link: string) => {
+  const handleAdminClick = (e: React.MouseEvent, linkId: string) => {
     e.preventDefault();
-    if (link === 'Bize Ulaşın') {
+    if (linkId === 'iletisim') {
       const newCount = adminClickCount + 1;
       setAdminClickCount(newCount);
       if (newCount >= 10) {
@@ -15,6 +17,31 @@ const Footer: React.FC = () => {
       }
     }
   };
+
+  const brandLinks = [
+    { key: 'rewards', id: 'ödüller' },
+    { key: 'promotions', id: 'promosyonlar' },
+    { key: 'provably_fair', id: 'adil' },
+    { key: 'admin_login', id: 'admin' },
+    { key: 'contact', id: 'iletisim' }
+  ];
+
+  const resourceLinks = [
+    { key: 'responsible_gaming' },
+    { key: 'accessibility' },
+    { key: 'code_of_ethics' },
+    { key: 'complaints' }
+  ];
+
+  const legalLinks = [
+    { key: 'kpam' },
+    { key: 'betting_rules' },
+    { key: 'cookie_policy' },
+    { key: 'publisher_policy' },
+    { key: 'disclaimer' },
+    { key: 'privacy_policy' },
+    { key: 'terms_of_service' }
+  ];
 
   return (
     <footer className="w-full bg-[#0A0D14] border-t border-white/5 pt-10 pb-28 md:py-12 px-6 lg:px-12 relative z-10 font-sans">
@@ -42,7 +69,7 @@ const Footer: React.FC = () => {
               </div>
             </div>
             <p className="text-zinc-400 text-[13px] mb-8 leading-relaxed max-w-sm">
-              En iyi kripto casino seçenekleri arasında tanınan bir marka olan 724bets, RBGAMING N.V. Firmasının marka adıdır Firma Adresi: Zuikertuintjeweg Z/N, Willemstad, Curacao
+              {t('footer.about')}
             </p>
             
             <div className="flex flex-col gap-3 mb-8">
@@ -69,23 +96,23 @@ const Footer: React.FC = () => {
 
           {/* Col 2: 724BETS */}
           <div className="col-span-1 lg:col-span-2 flex flex-col">
-            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">724BETS</h4>
+            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">{t('footer.brand_title')}</h4>
             <div className="flex flex-col gap-3 md:gap-4">
-              {['Ödüller', 'Promosyonlar', 'Kanıtlanabilir Şekilde Adil', 'Yönetim Paneli Giriş', 'Bize Ulaşın'].map(link => (
+              {brandLinks.map(link => (
                 <a 
-                  key={link} 
+                  key={link.key} 
                   href="#" 
                   onClick={(e) => {
-                    if (link === 'Yönetim Paneli Giriş') {
+                    if (link.id === 'admin') {
                       e.preventDefault();
                       window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'admin' }));
-                    } else if (link === 'Bize Ulaşın') {
-                      handleAdminClick(e, link);
+                    } else if (link.id === 'iletisim') {
+                      handleAdminClick(e, link.id);
                     }
                   }}
                   className="text-zinc-400 text-[13px] hover:text-[#00E5FF] transition-colors"
                 >
-                  {link}
+                  {t(`footer.${link.key}`)}
                 </a>
               ))}
             </div>
@@ -93,26 +120,28 @@ const Footer: React.FC = () => {
 
           {/* Col 3: KAYNAKLAR */}
           <div className="col-span-1 lg:col-span-2 flex flex-col">
-            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">KAYNAKLAR</h4>
+            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">{t('footer.resources_title')}</h4>
             <div className="flex flex-col gap-3 md:gap-4">
-              {['Sorumlu Kumar', 'Erişilebilirlik', 'Etik Kuralları', 'Şikayet Politikası'].map(link => (
-                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#00E5FF] transition-colors">{link}</a>
+              {resourceLinks.map(link => (
+                <a key={link.key} href="#" className="text-zinc-400 text-[13px] hover:text-[#00E5FF] transition-colors">
+                  {t(`footer.${link.key}`)}
+                </a>
               ))}
             </div>
           </div>
 
           {/* Col 4: YASAL */}
           <div className="col-span-2 md:col-span-4 lg:col-span-3 flex flex-col">
-            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">YASAL</h4>
+            <h4 className="text-white text-[13px] font-bold tracking-wider mb-4 md:mb-6 uppercase">{t('footer.legal_title')}</h4>
             <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 md:gap-4">
-              {['KPAM', 'Bahis Merkezi Kuralları', 'Çerez Politikası', 'Yayıncı Politikası', 'Feragatname', 'Gizlilik Politikası', 'Hizmet Şartları'].map(link => (
-                <a key={link} href="#" className="text-zinc-400 text-[13px] hover:text-[#1075fc] transition-colors">{link}</a>
+              {legalLinks.map(link => (
+                <a key={link.key} href="#" className="text-zinc-400 text-[13px] hover:text-[#1075fc] transition-colors">
+                  {t(`footer.${link.key}`)}
+                </a>
               ))}
             </div>
           </div>
         </div>
-
-
 
       </div>
     </footer>

@@ -1,7 +1,7 @@
 import React from 'react';
 import VIPRafflePromo from './VIPRafflePromo';
 
-export default function RaffleLanding() {
+export default function RaffleLanding({ onLoginRequired }: { onLoginRequired: () => void }) {
   return (
     <div className="relative min-h-screen bg-[#050505] overflow-x-hidden flex flex-col items-center pb-20">
       
@@ -31,6 +31,8 @@ export default function RaffleLanding() {
             totalSoldInMatrix={386}
             totalPoolSize={1000}
             targetDateStr="2026-12-31T23:59:59"
+            isGuest={true}
+            onLoginRequired={onLoginRequired}
           />
         </div>
       </section>

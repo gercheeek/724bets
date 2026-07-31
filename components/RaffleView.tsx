@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LoyaltyConfig, UserLoyalty, SiteUser, RaffleConfig } from '../types';
 import { Ticket, Trophy, Clock, Coins, Info, Users, ChevronDown, ChevronUp, Shield, AlertTriangle, CheckCircle, Lock, X, Search } from 'lucide-react';
 import VIPRafflePromo from './VIPRafflePromo';
+import { useTranslation } from 'react-i18next';
 
 function loadUserLoyalty(userId: string): UserLoyalty {
     const stored = localStorage.getItem(`loyalty_${userId}`);
@@ -21,6 +22,7 @@ function getTicketPool(): { slot: number, userId: string, username: string }[] {
 // OPTIMIZATION 1: Isolate CountdownTimer to prevent full page re-renders every 1s
 // --------------------------------------------------------------------------------
 const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
+    const { t } = useTranslation();
     const [timeLeft, setTimeLeft] = useState<{ d: number, h: number, m: number, s: number }>({ d: 0, h: 0, m: 0, s: 0 });
 
     useEffect(() => {
@@ -46,10 +48,10 @@ const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
     return (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6 }}>
             {[
-                { label: 'GÜN', val: timeLeft.d },
-                { label: 'SAAT', val: timeLeft.h },
-                { label: 'DAK', val: timeLeft.m },
-                { label: 'SAN', val: timeLeft.s }
+                { label: t('raffle.day', 'GÜN'), val: timeLeft.d },
+                { label: t('raffle.hour', 'SAAT'), val: timeLeft.h },
+                { label: t('raffle.min', 'DAK'), val: timeLeft.m },
+                { label: t('raffle.sec', 'SAN'), val: timeLeft.s }
             ].map((t, idx) => (
                 <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div style={{
@@ -75,9 +77,10 @@ const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
 // OPTIMIZATION 2: Memoize individual Ticket Slots to stop re-rendering 200 elements
 // --------------------------------------------------------------------------------
 const TicketSlot = React.memo(({ index, isSold, isMe, username, onSelect }: { index: number, isSold: boolean, isMe: boolean, username: string, onSelect: (idx: number) => void }) => {
+    const { t } = useTranslation();
     return (
         <div
-            title={isSold ? (isMe ? 'Sizin' : username) : `Bilet ${index + 1} (Boş)`}
+            title={isSold ? (isMe ? t('raffle.your_ticket', 'Sizin') : username) : t('raffle.empty_ticket', 'Bilet {0} (Boş)').replace('{0}', String(index + 1))}
             onClick={() => !isSold && onSelect(index)}
             className={`
                 relative flex flex-col items-center justify-center p-2 rounded-xl border transition-all duration-300 group
@@ -95,7 +98,7 @@ const TicketSlot = React.memo(({ index, isSold, isMe, username, onSelect }: { in
                 <>
                     {isMe ? <Ticket className="w-5 h-5 mb-1 text-emerald-950" /> : <Lock className="w-4 h-4 mb-1 text-zinc-600" />}
                     <div className={`font-black text-[9px] text-center tracking-wider uppercase ${isMe ? 'text-emerald-950' : 'text-zinc-500'}`}>
-                        {isMe ? 'SİZİN' : 'DOLU'}
+                        {isMe ? t('raffle.yours', 'SİZİN') : t('raffle.taken', 'DOLU')}
                     </div>
                     <div className={`text-[8px] font-mono mt-0.5 ${isMe ? 'text-emerald-900/70 font-bold' : 'text-white/20'}`}>#{String(index + 1).padStart(3, '0')}</div>
                 </>

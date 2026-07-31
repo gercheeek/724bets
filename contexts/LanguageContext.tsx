@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import i18n from '../i18n/config'; // Import the initialized i18n instance
 
 export type LanguageCode = 'tr' | 'en' | 'es' | 'pt';
 
@@ -842,7 +843,17 @@ interface LanguageContextProps {
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState<LanguageCode>('tr');
+  // Use i18n.language as initial state, formatting 'pt-BR' to 'pt'
+  const getInitialLanguage = (): LanguageCode => {
+    if (!i18n || !i18n.language) return 'tr';
+    const lang = i18n.language;
+    if (lang.startsWith('pt')) return 'pt';
+    if (lang.startsWith('en')) return 'en';
+    if (lang.startsWith('es')) return 'es';
+    return 'tr';
+  };
+
+  const [language, setLanguageState] = useState<LanguageCode>(getInitialLanguage());
   const [isAnimating, setIsAnimating] = useState(false);
 
   const setLanguage = (lang: LanguageCode) => {

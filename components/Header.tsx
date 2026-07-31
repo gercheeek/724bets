@@ -8,6 +8,7 @@ import {
 import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
 import { useLanguage, LanguageCode } from '../contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
 import SlotText from './SlotText';
 
 export interface NavVisibility {
@@ -119,6 +120,7 @@ const Header: React.FC<HeaderProps> = ({
   const [walletSearch, setWalletSearch] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const { t: tI18n } = useTranslation();
 
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
@@ -365,19 +367,11 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] flex z-50">
-        <div className="w-full max-w-[1300px] mx-auto h-full flex items-center justify-between relative px-4 lg:px-8">
+      <div className="header-topbar relative w-full h-[72px] bg-[#05070a]/60 backdrop-blur-xl border-b border-white/5 flex z-50 transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+        <div className="w-full max-w-[1280px] mx-auto h-full flex items-center justify-between relative px-2 md:px-6">
             
-            {/* Left Section: Hamburger (Mobile) & Logo */}
+            {/* Left Section: Logo */}
             <div className="flex items-center h-full shrink-0">
-              {/* Hamburger Button (Mobile only) */}
-              <button 
-                onClick={onToggleSidebar}
-                className="lg:hidden text-gray-400 hover:text-white transition-colors flex items-center justify-center shrink-0 w-10 h-10 mr-2"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
-
               {/* Logo */}
               <div 
                 className="flex items-center cursor-pointer select-none group relative font-black text-3xl md:text-4xl tracking-tight"
@@ -567,9 +561,9 @@ const Header: React.FC<HeaderProps> = ({
                   const event = new CustomEvent('openAuthModal', { detail: 'login' });
                   window.dispatchEvent(event);
                 }}
-                className="bg-[#1b2230] hover:bg-[#252e42] text-white font-semibold text-[12px] md:text-[14px] h-full px-3 md:px-5 rounded-[8px] transition-colors whitespace-nowrap"
+                className="bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 text-white font-semibold text-[12px] md:text-[14px] h-full px-4 md:px-6 rounded-[12px] transition-all duration-300 whitespace-nowrap"
               >
-                Giriş Yap
+                {tI18n('header.login')}
               </button>
               
               <button 
@@ -577,9 +571,9 @@ const Header: React.FC<HeaderProps> = ({
                   const event = new CustomEvent('openAuthModal', { detail: 'register' });
                   window.dispatchEvent(event);
                 }}
-                className="bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] font-black text-[12px] md:text-[14px] h-full px-3 md:px-6 rounded-[8px] transition-all shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)] whitespace-nowrap"
+                className="bg-[#00E5FF] hover:bg-[#00d0e8] text-[#002b30] font-black text-[12px] md:text-[14px] h-full px-5 md:px-8 rounded-[12px] transition-all shadow-[0_0_15px_rgba(0,229,255,0.3)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)] whitespace-nowrap"
               >
-                Kayıt Ol
+                {tI18n('header.register')}
               </button>
 
               {/* Chat Icon */}
