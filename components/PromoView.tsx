@@ -263,19 +263,12 @@ export default function PromoView() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00E5FF]/5 rounded-full blur-[100px] pointer-events-none" />
           
           <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
-            {/* Ultra-Premium Top Badge */}
-            <div className="relative inline-flex group mb-6">
-              {/* Outer Glow */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#00E5FF] to-[#0088FF] rounded-full blur opacity-30 group-hover:opacity-70 transition duration-1000 group-hover:duration-300 animate-pulse"></div>
-              {/* Actual Badge */}
-              <div className="relative inline-flex h-full w-full items-center justify-center rounded-full bg-[#04060A]/95 px-5 py-2 backdrop-blur-2xl border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_16px_rgba(0,0,0,0.5)] overflow-hidden">
-                {/* Shine effect (requires adding a keyframe in tailwind config for shimmer, but we can use translate for a quick hack or just a standard transition) */}
-                <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-1000 ease-in-out -skew-x-12" />
-                <Trophy className="w-3.5 h-3.5 text-[#00E5FF] relative z-10 mr-2 drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
-                <span className="text-[#00E5FF] text-[10px] font-black tracking-[0.25em] uppercase relative z-10 drop-shadow-[0_0_5px_rgba(0,229,255,0.5)]">
-                  Milyonluk Turnuvalar
-                </span>
-              </div>
+            {/* Minimalist Top Badge */}
+            <div className="flex items-center gap-2 mb-4 opacity-90">
+              <Trophy className="w-3.5 h-3.5 text-[#00E5FF]" />
+              <span className="text-[#00E5FF] text-[10px] font-bold tracking-[0.2em] uppercase">
+                Milyonluk Turnuvalar
+              </span>
             </div>
             
             {/* Aggressive Guest Typography - Shrunk down */}
@@ -288,28 +281,15 @@ export default function PromoView() {
               Her gün binlerce kullanıcı dev nakit ödüller ve bedava dönüşler kazanıyor. Hayatını değiştirecek o büyük ödülü sadece tek bir spinde sen kazan! Hemen üye ol, sınırsız nakit yağmuruna katıl.
             </p>
 
-            {/* High-Tech / Cyberpunk Status Indicator */}
-            <div className="group relative inline-flex items-center gap-4 bg-[#06080D]/90 backdrop-blur-xl border-y border-white/5 border-x border-[#10B981]/40 px-6 py-3 rounded-xl shadow-[0_0_30px_rgba(16,185,129,0.05),inset_0_1px_2px_rgba(255,255,255,0.05)] overflow-hidden transition-all duration-300 hover:border-[#10B981]/80 hover:shadow-[0_0_40px_rgba(16,185,129,0.15)] cursor-default">
-              {/* Cyber grid background */}
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-40"></div>
-              
-              {/* Radar pulse effect */}
-              <div className="relative flex items-center justify-center w-6 h-6 z-10">
-                <span className="absolute inline-flex w-full h-full rounded-full bg-[#10B981] opacity-30 animate-ping" style={{ animationDuration: '2s' }}></span>
-                <span className="absolute inline-flex w-2/3 h-2/3 rounded-full bg-[#10B981] opacity-50 animate-ping" style={{ animationDuration: '1.5s', animationDelay: '0.3s' }}></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#10B981] shadow-[0_0_12px_#10B981]"></span>
+            {/* Minimalist Status Indicator */}
+            <div className="inline-flex items-center gap-2.5 bg-white/5 backdrop-blur-sm border border-white/5 px-4 py-1.5 rounded-full mt-2">
+              <div className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]"></span>
               </div>
-              
-              <div className="relative z-10 flex flex-col items-start">
-                <span className="text-[9px] text-emerald-500/80 font-black uppercase tracking-[0.2em] mb-0.5">Sistem Durumu</span>
-                <span className="text-[14px] font-black text-white tracking-wide drop-shadow-md">
-                  <span className="text-[#10B981]">3 Aktif</span> Turnuva Sizi Bekliyor
-                </span>
-              </div>
-              
-              {/* Decorative Corner Brackets (visible on hover) */}
-              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#10B981]/70 rounded-tl-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#10B981]/70 rounded-br-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <span className="text-[11px] font-medium text-white/90 tracking-wide">
+                <span className="text-[#10B981] font-bold">3 Aktif</span> Turnuva Sizi Bekliyor
+              </span>
             </div>
           </div>
           
