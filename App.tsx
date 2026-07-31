@@ -2901,11 +2901,6 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
-        {view === 'promo' && (
-          <div className="animate-fade-in">
-            <PromoCodeView siteUser={siteUser} onNavigate={handleViewChange} />
-          </div>
-        )}
 
         {view === 'referral' && (
           <div className="animate-fade-in">
