@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Trophy, Timer, Users, Swords, Calendar } from 'lucide-react';
+import TournamentDetailView from './TournamentDetailView';
 
 interface Tournament {
   id: string;
@@ -106,6 +107,12 @@ const tournaments: Tournament[] = [
 ];
 
 export default function PromoView() {
+  const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
+
+  if (selectedTournament) {
+    return <TournamentDetailView tournament={selectedTournament} onBack={() => setSelectedTournament(null)} />;
+  }
+
   return (
     <div className="flex-1 w-full min-h-screen bg-[#06080D] text-white p-4 md:p-6 lg:p-8 font-sans pb-32 relative overflow-hidden">
       
@@ -137,7 +144,8 @@ export default function PromoView() {
           {tournaments.map((tournament) => (
             <div 
               key={tournament.id}
-              className={`flex flex-col bg-[#0B0F19] rounded-2xl relative overflow-hidden group shadow-lg border border-white/5 hover:border-blue-500/30 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.3)] transition-all duration-500 ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0' : ''}`}
+              onClick={() => setSelectedTournament(tournament)}
+              className={`flex flex-col bg-[#0B0F19] rounded-2xl relative overflow-hidden group shadow-lg border border-white/5 hover:border-blue-500/30 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.3)] transition-all duration-500 cursor-pointer ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0' : ''}`}
             >
               {/* Image Header - Clean, no text overlap */}
               <div className="w-full h-48 relative overflow-hidden">
