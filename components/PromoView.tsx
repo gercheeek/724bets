@@ -168,24 +168,28 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
         
         {/* Unified Status & Time Pills */}
         {tournament.status !== 'ended' && (
-          <div className="mt-auto mb-5 flex items-center justify-between gap-2 w-full">
+          <div className="mt-auto mb-5 flex items-center justify-start gap-2 w-full">
             {tournament.status === 'active' ? (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 rounded-full shrink-0">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_5px_#34d399]" />
-                <span className="text-[10px] sm:text-[11px] font-bold text-emerald-400 tracking-wide">ŞU AN AKTİF</span>
-              </div>
+              <>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0d1c1a] rounded-full shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse shadow-[0_0_8px_2px_rgba(16,185,129,0.6)]" />
+                  <span className="text-[11px] font-bold text-[#10b981] tracking-wide">ŞU AN AKTİF</span>
+                </div>
+                <div className="px-3 py-1.5 rounded-full flex items-center whitespace-nowrap shrink-0 bg-[#0d1c1a] text-[#10b981]">
+                  <span className="font-mono text-[11px] font-bold tracking-wide">Süre: {tournament.timeInfo}</span>
+                </div>
+              </>
             ) : (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500/10 rounded-full shrink-0">
-                <span className="w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_5px_#fbbf24]" />
-                <span className="text-[10px] sm:text-[11px] font-bold text-orange-400 tracking-wide">BAŞLIYOR</span>
-              </div>
+              <>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#241611] rounded-full shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] shadow-[0_0_8px_2px_rgba(245,158,11,0.6)]" />
+                  <span className="text-[11px] font-bold text-[#f59e0b] tracking-wide">BAŞLIYOR</span>
+                </div>
+                <div className="px-3 py-1.5 rounded-full flex items-center whitespace-nowrap shrink-0 bg-[#241611] text-[#f59e0b]">
+                  <span className="font-mono text-[11px] font-bold tracking-wide">Süre: {tournament.timeInfo}</span>
+                </div>
+              </>
             )}
-            
-            <div className={`px-2.5 py-1.5 rounded-full flex items-center whitespace-nowrap shrink-0 ${
-              tournament.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-orange-500/10 text-orange-400'
-            }`}>
-              <span className="font-mono text-[10px] sm:text-[11px] font-bold tracking-wide">Süre: {tournament.timeInfo}</span>
-            </div>
           </div>
         )}
 
@@ -258,7 +262,7 @@ export default function PromoView() {
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Advanced Top Header (VIP / Affiliate Style) */}
-        <div className="mb-12 relative flex flex-col items-center justify-center text-center py-10">
+        <div className="mb-6 relative flex flex-col items-center justify-center text-center py-6">
           {/* Subtle background glow for the header area */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00E5FF]/5 rounded-full blur-[100px] pointer-events-none" />
           
@@ -294,7 +298,7 @@ export default function PromoView() {
           </div>
           
           {/* Decorative Divider */}
-          <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-12" />
+          <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-8" />
         </div>
 
         {/* Tournaments Grid */}
