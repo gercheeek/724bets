@@ -108,6 +108,63 @@ const tournaments: Tournament[] = [
 
 const MOCK_NAMES = ["Al***92", "Kral***", "ProGamer", "Dark***X", "X-Bet", "Lucky***", "Can***11", "VegasKing"];
 
+const parseTimeInfo = (timeInfo: string) => {
+  if (timeInfo.includes('.')) {
+    return { type: 'ended', date: timeInfo };
+  }
+  
+  const parts = timeInfo.split(' ');
+  const result = [];
+  
+  for (const part of parts) {
+    if (part.endsWith('g')) result.push({ value: part.replace('g', ''), label: 'GÜN' });
+    else if (part.endsWith('s')) result.push({ value: part.replace('s', ''), label: 'SAAT' });
+    else if (part.endsWith('d')) result.push({ value: part.replace('d', ''), label: 'DAKİKA' });
+  }
+  
+  if (result.length === 0) {
+     return { type: 'unknown', value: timeInfo };
+  }
+  
+  return { type: 'active', parts: result };
+};
+
+const PremiumTimer = ({ timeInfo, status }: { timeInfo: string, status: string }) => {
+  const parsed = parseTimeInfo(timeInfo);
+  
+  if (status === 'ended' || parsed.type === 'ended') {
+    return null; 
+  }
+  
+  if (parsed.type === 'unknown') {
+    return (
+      <div className="mt-auto pt-2">
+        <span className="text-zinc-400 font-mono text-sm">{parsed.value}</span>
+      </div>
+    );
+  }
+  
+  const activeColor = status === 'active' ? 'text-[#00E5FF]' : 'text-[#FF9F1C]';
+  const labelText = status === 'active' ? 'BİTMESİNE KALAN SÜRE' : 'BAŞLAMASINA KALAN SÜRE';
+  
+  return (
+    <div className="mt-auto flex flex-col gap-2.5 pb-2">
+      <div className={`flex items-center gap-1.5 text-[9px] font-bold ${activeColor} uppercase tracking-[0.2em]`}>
+        <Timer className="w-3.5 h-3.5" />
+        {labelText}
+      </div>
+      <div className="flex gap-2 w-full">
+        {parsed.parts?.map((p, i) => (
+          <div key={i} className="flex-1 flex flex-col items-center justify-center bg-[#13151A] border border-white/[0.04] rounded-[10px] py-2.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_4px_12px_rgba(0,0,0,0.3)]">
+            <span className="font-mono text-xl font-black text-white tracking-wider drop-shadow-md">{p.value}</span>
+            <span className="text-[8px] font-bold text-zinc-500 mt-0.5 uppercase tracking-[0.2em]">{p.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onClick: () => void }) => {
   // Mock live leaderboard state
   const [leaderboard, setLeaderboard] = useState(() =>
@@ -163,14 +220,15 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
         <p className="text-zinc-500 text-[13px] mb-5 line-clamp-2 leading-relaxed">{tournament.desc}</p>
         
         {/* Prize Section */}
-        <div className="mb-6">
+        <div className="mb-4">
           <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Ödül Havuzu</div>
           <div className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-400 font-black text-3xl tracking-tighter drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]">
             {tournament.prize}
           </div>
         </div>
         
-
+        {/* Premium Countdown Timer */}
+        <PremiumTimer timeInfo={tournament.timeInfo} status={tournament.status} />
 
         {/* Mini Live Leaderboard */}
         {tournament.status !== 'ended' && (
