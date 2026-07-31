@@ -257,46 +257,40 @@ export default function PromoView() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Advanced Top Header */}
-        <div className="mb-10 relative">
+        {/* Advanced Top Header (VIP / Affiliate Style) */}
+        <div className="mb-12 relative flex flex-col items-center justify-center text-center py-10">
           {/* Subtle background glow for the header area */}
-          <div className="absolute -top-10 -left-10 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00E5FF]/5 rounded-full blur-[100px] pointer-events-none" />
           
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 relative z-10">
-            <div className="flex-1">
-              <div className="flex items-center gap-4 mb-3">
-                {/* Premium Icon Container */}
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#1A1F2E] to-[#0B0F19] border border-amber-500/30 flex items-center justify-center relative overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                    <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-                    <Trophy className="w-7 h-7 text-transparent fill-amber-400 stroke-amber-500 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)] relative z-10" strokeWidth={1.5} />
-                  </div>
-                </div>
-                
-                {/* Advanced Typography */}
-                <h1 className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-zinc-400 tracking-tight leading-none drop-shadow-lg">
-                  Turnuvalar
-                </h1>
-              </div>
-              
-              <p className="text-[#8b929b] text-base md:text-lg font-medium max-w-2xl leading-relaxed pl-1 sm:pl-[72px]">
-                Büyük ödül havuzlu premium turnuvalara katıl, skor tablosunda zirveye oyna ve efsanevi ödülleri kazan!
-              </p>
+          <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
+            {/* Top Badge */}
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00E5FF]/30 bg-[#00E5FF]/5 mb-6">
+               <Trophy className="w-4 h-4 text-[#00E5FF]" />
+               <span className="text-[11px] font-bold text-[#00E5FF] tracking-widest uppercase">724BETS TURNUVALARI</span>
             </div>
+            
+            {/* Massive Typography */}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1] mb-4">
+              Sektörün En Büyük <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#0088FF] drop-shadow-[0_0_20px_rgba(0,229,255,0.3)]">TURNUVALARI</span>
+            </h1>
+            
+            <p className="text-zinc-400 text-base md:text-lg font-medium leading-relaxed max-w-2xl mt-2 mb-8">
+              Premium turnuvalara katılın, liderlik tablosunda zirveye oynayın ve eşsiz ödüller kazanın. 724Bets ile kazanmanın en eğlenceli yolu.
+            </p>
 
             {/* Live Status Badge */}
-            <div className="flex items-center gap-3 bg-[#0B0F19]/80 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl shadow-lg shrink-0 w-fit">
+            <div className="flex items-center gap-3 bg-[#0B0F19]/80 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-xl shadow-lg">
               <div className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
               </div>
-              <span className="text-sm font-bold text-white tracking-wide">3 Aktif Turnuva</span>
+              <span className="text-sm font-bold text-white tracking-wide">3 Aktif Turnuva Sizi Bekliyor</span>
             </div>
           </div>
           
           {/* Decorative Divider */}
-          <div className="w-full h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent mt-8" />
+          <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-12" />
         </div>
 
         {/* Tournaments Grid */}
