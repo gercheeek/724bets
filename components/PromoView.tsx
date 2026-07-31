@@ -114,14 +114,14 @@ export default function PromoView() {
       </div>
 
       {/* Tournaments Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         {tournaments.map((tournament) => (
           <div 
             key={tournament.id}
-            className={`flex flex-col bg-[#131B31] border border-white/5 hover:border-emerald-500/30 transition-all rounded-2xl relative overflow-hidden group shadow-[0_4px_20px_rgba(0,0,0,0.2)] ${tournament.status === 'ended' ? 'opacity-60 grayscale-[30%]' : ''}`}
+            className={`flex flex-col bg-[#0F1627] rounded-2xl relative overflow-hidden group shadow-[0_8px_30px_rgba(0,0,0,0.4)] ring-1 ring-white/5 hover:ring-blue-500/50 transition-all duration-300 ${tournament.status === 'ended' ? 'opacity-60 grayscale-[30%]' : ''}`}
           >
             {/* Image Banner Header */}
-            <div className="w-full h-48 sm:h-56 relative overflow-hidden border-b border-white/5">
+            <div className="w-full h-32 sm:h-40 relative overflow-hidden">
                <img 
                  src={tournament.image} 
                  alt={tournament.title} 
@@ -129,41 +129,44 @@ export default function PromoView() {
                />
                
                {/* Gradient overlay for text readability */}
-               <div className="absolute inset-0 bg-gradient-to-t from-[#131B31] via-[#131B31]/40 to-transparent" />
+               <div className="absolute inset-0 bg-gradient-to-t from-[#0F1627] via-[#0F1627]/40 to-transparent" />
                
+               {/* Premium Inner Glow on the image wrapper */}
+               <div className="absolute inset-0 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)] rounded-t-2xl pointer-events-none" />
+
                {/* Small overlay badge for active */}
                {tournament.status === 'active' && (
-                 <div className="absolute top-4 right-4 z-20 px-3 py-1.5 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/30 backdrop-blur-md shadow-[0_0_15px_rgba(52,211,153,0.4)] flex items-center gap-1.5">
-                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                   AKTİF
+                 <div className="absolute top-3 right-3 z-20 px-2.5 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-full border border-emerald-500/30 backdrop-blur-md shadow-[0_0_10px_rgba(52,211,153,0.3)] flex items-center gap-1.5 uppercase tracking-wider">
+                   <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                   Aktif
                  </div>
                )}
             </div>
 
             {/* Content Body */}
-            <div className="flex flex-col flex-1 p-5 relative z-10 -mt-8">
-              <h3 className="text-white font-black text-lg sm:text-xl leading-snug mb-1.5 line-clamp-2 drop-shadow-md">
+            <div className="flex flex-col flex-1 px-4 pb-4 pt-1 relative z-10 -mt-6">
+              <h3 className="text-white font-bold text-base sm:text-lg leading-tight mb-1 line-clamp-2 drop-shadow-md">
                 {tournament.title}
               </h3>
-              <p className="text-zinc-400 text-sm mb-4 line-clamp-2">{tournament.desc}</p>
+              <p className="text-zinc-400 text-xs mb-3 line-clamp-2">{tournament.desc}</p>
               
               <div className="mt-auto">
-                <div className="text-sm font-semibold text-zinc-500 mb-1 uppercase tracking-wider">Ödül Havuzu</div>
-                <div className="text-blue-400 font-black text-2xl sm:text-3xl mb-4 drop-shadow-[0_0_12px_rgba(96,165,250,0.5)]">
+                <div className="text-[10px] font-semibold text-zinc-500 mb-0.5 uppercase tracking-wider">Ödül Havuzu</div>
+                <div className="text-blue-400 font-black text-xl sm:text-2xl mb-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.3)]">
                   {tournament.prize}
                 </div>
                 
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/5">
-                  <div className="flex items-center gap-1.5 text-xs font-bold bg-[#1C2646] text-zinc-300 px-3 py-1.5 rounded-lg border border-white/5">
-                    {tournament.status === 'active' && <Timer className="w-3.5 h-3.5 text-emerald-400" />}
-                    {tournament.status === 'upcoming' && <Calendar className="w-3.5 h-3.5 text-amber-400" />}
-                    {tournament.status === 'ended' && <Calendar className="w-3.5 h-3.5 text-zinc-500" />}
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/5">
+                  <div className="flex items-center gap-1 text-[10px] font-bold bg-[#1C2646] text-zinc-300 px-2 py-1 rounded-md border border-white/5">
+                    {tournament.status === 'active' && <Timer className="w-3 h-3 text-emerald-400" />}
+                    {tournament.status === 'upcoming' && <Calendar className="w-3 h-3 text-amber-400" />}
+                    {tournament.status === 'ended' && <Calendar className="w-3 h-3 text-zinc-500" />}
                     {tournament.timeInfo}
                   </div>
                   
                   {tournament.participants !== undefined && (
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-400 bg-black/20 px-3 py-1.5 rounded-lg">
-                      <Users className="w-3.5 h-3.5" /> {tournament.participants}
+                    <div className="flex items-center gap-1 text-[10px] font-bold text-zinc-400 bg-black/20 px-2 py-1 rounded-md">
+                      <Users className="w-3 h-3" /> {tournament.participants}
                     </div>
                   )}
                 </div>
