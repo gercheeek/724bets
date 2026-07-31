@@ -152,16 +152,15 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
       </div>
 
       {/* Content Body */}
-      <div className="flex flex-col flex-1 p-5 relative z-10 bg-gradient-to-b from-[#0F1423] to-[#0B0F19]">
-        <h3 className="text-gray-100 font-bold text-[1.05rem] leading-snug mb-1.5 line-clamp-2 group-hover:text-blue-400 transition-colors duration-300">
+      <div className="flex flex-col flex-1 p-6 relative z-10 bg-gradient-to-b from-[#0F1423] to-[#0B0F19]">
+        <h3 className="text-gray-100 font-bold text-[1.1rem] leading-snug mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors duration-300">
           {tournament.title}
         </h3>
-        <p className="text-zinc-400 text-[13px] mb-4 line-clamp-2 leading-relaxed">{tournament.desc}</p>
+        <p className="text-zinc-400 text-[13px] mb-5 line-clamp-2 leading-relaxed">{tournament.desc}</p>
         
         {/* Prize Section */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]" />
+        <div className="mb-6">
+          <div className="flex items-center mb-1.5">
             <div className="text-[10px] font-bold text-blue-400/90 uppercase tracking-[0.2em]">Ödül Havuzu</div>
           </div>
           <div className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-400 font-black text-3xl tracking-tighter drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]">
@@ -169,46 +168,54 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
           </div>
         </div>
         
-        {/* Unified Status & Time Bar */}
+        {/* Unified Status & Time Pills */}
         {tournament.status !== 'ended' && (
-          <div className={`mt-auto mb-4 py-2 px-3 rounded-lg border flex items-center justify-between text-[11px] sm:text-xs font-bold ${
-            tournament.status === 'active'
-              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-              : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-          }`}>
-            <div className="flex items-center gap-1.5 shrink-0">
-              {tournament.status === 'active' ? (
-                 <><span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_5px_#34d399]" /> 🔥 ŞU AN AKTİF</>
-              ) : (
-                 <><span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_5px_#fbbf24]" /> ⏳ BAŞLIYOR</>
-              )}
+          <div className="mt-auto mb-5 flex items-center justify-between gap-2 w-full">
+            {tournament.status === 'active' ? (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 rounded-full shrink-0">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_5px_#34d399]" />
+                <span className="text-[10px] sm:text-[11px] font-bold text-emerald-400 tracking-wide">ŞU AN AKTİF</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500/10 rounded-full shrink-0">
+                <span className="w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_5px_#fbbf24]" />
+                <span className="text-[10px] sm:text-[11px] font-bold text-orange-400 tracking-wide">BAŞLIYOR</span>
+              </div>
+            )}
+            
+            <div className={`px-2.5 py-1.5 rounded-full flex items-center whitespace-nowrap shrink-0 ${
+              tournament.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-orange-500/10 text-orange-400'
+            }`}>
+              <span className="font-mono text-[10px] sm:text-[11px] font-bold tracking-wide">Süre: {tournament.timeInfo}</span>
             </div>
-            <span className="font-mono bg-black/20 px-2 py-0.5 rounded border border-white/5 whitespace-nowrap overflow-hidden text-ellipsis ml-2">Süre: {tournament.timeInfo}</span>
           </div>
         )}
 
         {tournament.status === 'ended' && (
-          <div className="mt-auto mb-4 py-2 px-3 rounded-lg border border-white/5 bg-white/5 flex items-center justify-between text-[11px] font-bold text-zinc-400">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" /> SONA ERDİ
+          <div className="mt-auto mb-5 flex items-center justify-between gap-2 w-full">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800/50 rounded-full shrink-0">
+              <Calendar className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="text-[10px] sm:text-[11px] font-bold text-zinc-400 tracking-wide">SONA ERDİ</span>
             </div>
-            <span className="font-mono">{tournament.timeInfo}</span>
+            <div className="px-2.5 py-1.5 bg-zinc-800/50 rounded-full flex items-center whitespace-nowrap shrink-0">
+              <span className="font-mono text-[10px] sm:text-[11px] font-bold text-zinc-400">{tournament.timeInfo}</span>
+            </div>
           </div>
         )}
 
         {/* Mini Live Leaderboard */}
         {tournament.status !== 'ended' && (
-          <div className="pt-3 border-t border-white/5 space-y-1.5">
-            <div className="text-[9px] text-zinc-500 font-semibold uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
-              <Trophy className="w-3 h-3 text-amber-500/70" /> Canlı Liderlik
+          <div className="pt-4 border-t border-white/5 space-y-2">
+            <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5">
+              <Trophy className="w-3.5 h-3.5 text-amber-400/90" /> Canlı Liderlik
             </div>
             {leaderboard.map((player, idx) => (
-              <div key={player.id} className="flex items-center justify-between bg-black/20 rounded px-2.5 py-1 transition-all duration-300">
-                 <div className="flex items-center gap-2">
-                   <span className={`text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-amber-500/20 text-amber-500' : idx === 1 ? 'bg-zinc-300/20 text-zinc-300' : 'bg-orange-500/20 text-orange-500'}`}>{idx + 1}</span>
-                   <span className="text-[11px] text-zinc-300 font-medium">{player.name}</span>
+              <div key={player.id} className="flex items-center justify-between bg-black/20 hover:bg-black/40 rounded-md px-3 py-1.5 transition-all duration-300">
+                 <div className="flex items-center gap-2.5">
+                   <span className={`text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-amber-500/20 text-amber-500' : idx === 1 ? 'bg-zinc-300/20 text-zinc-300' : 'bg-orange-500/20 text-orange-500'}`}>{idx + 1}</span>
+                   <span className="text-[11px] text-zinc-200 font-semibold">{player.name}</span>
                  </div>
-                 <span className="text-[11px] font-mono text-emerald-400/90">{player.score.toLocaleString()} pts</span>
+                 <span className="text-[11px] font-mono font-bold text-emerald-400/90">{player.score.toLocaleString()} pts</span>
               </div>
             ))}
           </div>
@@ -216,9 +223,9 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
         
         {/* Ended Footer (Participants only) */}
         {tournament.status === 'ended' && tournament.participants !== undefined && (
-          <div className="pt-3 border-t border-white/5 flex items-center justify-end">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 bg-black/20 px-2 py-1 rounded border border-white/5">
-              <Users className="w-3 h-3" /> {tournament.participants} Katılımcı
+          <div className="pt-4 border-t border-white/5 flex items-center justify-end">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 bg-black/20 px-2.5 py-1.5 rounded-md">
+              <Users className="w-3.5 h-3.5" /> {tournament.participants} Katılımcı
             </div>
           </div>
         )}
