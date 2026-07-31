@@ -146,6 +146,9 @@ const PremiumTimer = ({ timeInfo, status }: { timeInfo: string, status: string }
   
   const activeColor = status === 'active' ? 'text-[#00E5FF]' : 'text-[#FF9F1C]';
   const labelText = status === 'active' ? 'BİTMESİNE KALAN SÜRE' : 'BAŞLAMASINA KALAN SÜRE';
+  const boxBg = status === 'active' ? 'bg-gradient-to-br from-[#00E5FF]/[0.08] to-transparent border-[#00E5FF]/20' : 'bg-gradient-to-br from-[#FF9F1C]/[0.08] to-transparent border-[#FF9F1C]/20';
+  const numberGlow = status === 'active' ? 'drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]' : 'drop-shadow-[0_0_8px_rgba(255,159,28,0.5)]';
+  const labelColor = status === 'active' ? 'text-[#00E5FF]/70' : 'text-[#FF9F1C]/70';
   
   return (
     <div className="mt-auto flex flex-col gap-2 md:gap-2.5 pb-2">
@@ -155,9 +158,9 @@ const PremiumTimer = ({ timeInfo, status }: { timeInfo: string, status: string }
       </div>
       <div className="flex gap-1.5 md:gap-2 w-full">
         {parsed.parts?.map((p, i) => (
-          <div key={i} className="flex-1 flex flex-col items-center justify-center bg-[#13151A] border border-white/[0.04] rounded-lg md:rounded-[10px] py-1.5 md:py-2.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_4px_12px_rgba(0,0,0,0.3)]">
-            <span className="font-mono text-lg md:text-xl font-black text-white tracking-wider drop-shadow-md">{p.value}</span>
-            <span className="text-[7px] md:text-[8px] font-bold text-zinc-500 mt-0.5 uppercase tracking-wider md:tracking-[0.2em]">{p.label}</span>
+          <div key={i} className={`flex-1 flex flex-col items-center justify-center border rounded-lg md:rounded-[10px] py-1.5 md:py-2.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.4)] ${boxBg}`}>
+            <span className={`font-mono text-lg md:text-xl font-black text-white tracking-wider ${numberGlow}`}>{p.value}</span>
+            <span className={`text-[7px] md:text-[8px] font-bold mt-0.5 uppercase tracking-wider md:tracking-[0.2em] ${labelColor}`}>{p.label}</span>
           </div>
         ))}
       </div>
