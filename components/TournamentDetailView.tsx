@@ -58,23 +58,23 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
       </button>
 
       {/* Hero Banner - Ultra Premium */}
-      <div className="relative w-full h-64 md:h-80 rounded-[2rem] overflow-hidden mb-8 bg-[#06080D] flex border border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.8)] group">
+      <div className="relative w-full h-[220px] md:h-[240px] rounded-[1.5rem] overflow-hidden mb-8 bg-[#06080D] flex border border-white/10 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.6)] group">
         <div className="absolute inset-0 bg-gradient-to-r from-[#0B0F19] via-[#0B0F19]/90 to-transparent z-10" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-transparent z-10 opacity-60" />
         
         {/* Glow Effects */}
-        <div className="absolute -left-32 -top-32 w-96 h-96 bg-blue-600/30 rounded-full blur-[100px] z-20 pointer-events-none" />
-        <div className="absolute right-0 bottom-0 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] z-20 pointer-events-none" />
+        <div className="absolute -left-32 -top-32 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] z-20 pointer-events-none" />
+        <div className="absolute right-0 bottom-0 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] z-20 pointer-events-none" />
 
-        <div className="relative z-30 w-full md:w-3/5 p-8 md:p-12 flex flex-col justify-center h-full">
-          <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="w-5 h-5 text-blue-400 animate-pulse" />
-            <span className="text-blue-400 font-bold tracking-[0.2em] uppercase text-xs">Özel Turnuva</span>
+        <div className="relative z-30 w-full md:w-3/5 p-6 md:p-10 flex flex-col justify-center h-full">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-4 h-4 text-blue-400 animate-pulse" />
+            <span className="text-blue-400 font-bold tracking-[0.25em] uppercase text-[10px]">Özel Turnuva</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-300 leading-tight drop-shadow-[0_0_30px_rgba(59,130,246,0.3)] mb-4">
+          <h1 className="text-3xl md:text-[2.75rem] font-black text-white leading-[1.1] drop-shadow-md mb-3 tracking-tight">
             {tournament.title}
           </h1>
-          <p className="text-zinc-400 text-sm md:text-base max-w-lg leading-relaxed">
+          <p className="text-zinc-400 text-[13px] md:text-sm max-w-lg leading-relaxed line-clamp-2">
             {tournament.desc} En iyi oyunlarda yarışın, liderlik tablosuna tırmanın ve devasa ödül havuzundan payınızı alın.
           </p>
         </div>
