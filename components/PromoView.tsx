@@ -19,7 +19,7 @@ const tournaments: Tournament[] = [
     desc: 'Daha yüksek kazanma çarpanı için...',
     prize: '$97,83',
     status: 'active',
-    timeInfo: 'Bitiş tarihi: 05d 20h 01m',
+    timeInfo: '05g 20s 01d',
     participants: 273,
     image: '/images/promos/gates_of_olympus_promo_1785470699172.jpg',
   },
@@ -29,7 +29,7 @@ const tournaments: Tournament[] = [
     desc: 'Daha yüksek kazanma çarpanı için...',
     prize: '$222,52',
     status: 'active',
-    timeInfo: 'Bitiş tarihi: 05d 20h 01m',
+    timeInfo: '05g 20s 01d',
     participants: 36,
     image: '/images/promos/sweet_bonanza_promo_1785470716975.jpg',
   },
@@ -39,7 +39,8 @@ const tournaments: Tournament[] = [
     desc: 'Daha yüksek kazanma çarpanı için...',
     prize: '$5.754,71',
     status: 'upcoming',
-    timeInfo: '.. içinde başlar: 17h 01m',
+    timeInfo: '17s 01d',
+    participants: 142,
     image: '/images/promos/weekend_multiplier_promo_1785470757275.jpg',
   },
   {
@@ -48,7 +49,8 @@ const tournaments: Tournament[] = [
     desc: 'Bahislerin toplamına göre puanlar,...',
     prize: '$644,79',
     status: 'upcoming',
-    timeInfo: '.. içinde başlar: 17h 32m',
+    timeInfo: '17s 32d',
+    participants: 89,
     image: '/images/promos/hacksaw_promo_1785470736175.jpg',
   },
   {
@@ -57,7 +59,8 @@ const tournaments: Tournament[] = [
     desc: 'Daha yüksek kazanma çarpanı için...',
     prize: '$97,83',
     status: 'upcoming',
-    timeInfo: '.. içinde başlar: 06d 03h 02m',
+    timeInfo: '06g 03s 02d',
+    participants: 412,
     image: '/images/promos/gates_of_olympus_promo_1785470699172.jpg',
   },
   {
@@ -66,7 +69,8 @@ const tournaments: Tournament[] = [
     desc: 'Daha yüksek kazanma çarpanı için...',
     prize: '$222,52',
     status: 'upcoming',
-    timeInfo: '.. içinde başlar: 06d 05h 32m',
+    timeInfo: '06g 05s 32d',
+    participants: 67,
     image: '/images/promos/sweet_bonanza_promo_1785470716975.jpg',
   },
   {
@@ -75,7 +79,8 @@ const tournaments: Tournament[] = [
     desc: 'Daha yüksek kazanma çarpanı için...',
     prize: '$5.687,98',
     status: 'ended',
-    timeInfo: 'Bitti: 2026.07.26',
+    timeInfo: '2026.07.26',
+    participants: 843,
     image: '/images/promos/weekend_multiplier_promo_1785470757275.jpg',
   },
   {
@@ -84,7 +89,8 @@ const tournaments: Tournament[] = [
     desc: 'Bahislerin toplamına göre puanlar,...',
     prize: '$642,51',
     status: 'ended',
-    timeInfo: 'Bitti: 2026.07.30',
+    timeInfo: '2026.07.30',
+    participants: 512,
     image: '/images/promos/hacksaw_promo_1785470736175.jpg',
   },
   {
@@ -93,7 +99,8 @@ const tournaments: Tournament[] = [
     desc: 'Daha yüksek kazanma çarpanı için...',
     prize: '$96,81',
     status: 'ended',
-    timeInfo: 'Bitti: 2026.07.29',
+    timeInfo: '2026.07.29',
+    participants: 310,
     image: '/images/promos/gates_of_olympus_promo_1785470699172.jpg',
   }
 ];
@@ -173,17 +180,17 @@ export default function PromoView() {
                     </div>
                   </div>
                   
-                  {/* Footer Stats */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/5">
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-400">
+                  {/* Footer Stats - Fixed height and single line */}
+                  <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
+                    <div className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-400 whitespace-nowrap">
                       {tournament.status === 'active' && <Timer className="w-3.5 h-3.5 text-emerald-500" />}
                       {tournament.status === 'upcoming' && <Calendar className="w-3.5 h-3.5 text-amber-500" />}
                       {tournament.status === 'ended' && <Calendar className="w-3.5 h-3.5 text-zinc-600" />}
-                      <span className="truncate max-w-[140px]">{tournament.timeInfo}</span>
+                      <span>{tournament.timeInfo}</span>
                     </div>
                     
                     {tournament.participants !== undefined && (
-                      <div className="flex items-center gap-1 text-xs font-medium text-zinc-300 bg-white/5 px-2 py-1 rounded-md border border-white/[0.02]">
+                      <div className="flex items-center gap-1 text-[11px] font-medium text-zinc-300 bg-white/5 px-2 py-1 rounded border border-white/[0.02] whitespace-nowrap">
                         <Users className="w-3 h-3 text-zinc-400" /> {tournament.participants}
                       </div>
                     )}
