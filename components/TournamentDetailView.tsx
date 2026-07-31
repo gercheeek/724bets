@@ -28,10 +28,21 @@ const mockLeaderboard = [
   { rank: 8, name: 'hanifi61', status: 'aktif 10 saat önce', points: 5 },
 ];
 
-const mockGames = [
+const pragmaticGames = [
   { id: 1, name: 'Gates of Olympus', provider: 'PRAGMATIC PLAY', image: '/images/slots/gates-of-olympus.webp' },
   { id: 2, name: 'Sweet Bonanza', provider: 'PRAGMATIC PLAY', image: '/images/slots/sweet-bonanza.webp' },
   { id: 3, name: 'Starlight Princess', provider: 'PRAGMATIC PLAY', image: '/images/slots/starlight.webp' },
+];
+
+const hacksawGames = [
+  { id: 4, name: 'Wanted Dead or a Wild', provider: 'HACKSAW GAMING', image: '/images/slots/wanted-dead-or-a-wild.webp' },
+  { id: 5, name: 'RIP City', provider: 'HACKSAW GAMING', image: '/images/slots/rip-city.webp' },
+  { id: 6, name: 'Hand of Anubis', provider: 'HACKSAW GAMING', image: '/images/slots/hand-of-anubis.webp' },
+];
+
+const leSeriesGames = [
+  { id: 7, name: 'Le Bandit', provider: 'HACKSAW GAMING', image: '/images/slots/le-bandit.webp' },
+  { id: 8, name: 'Le Pharaoh', provider: 'HACKSAW GAMING', image: '/images/slots/le-pharaoh.webp' },
 ];
 
 const mockDates = [
@@ -41,6 +52,11 @@ const mockDates = [
 
 export default function TournamentDetailView({ tournament, onBack }: TournamentDetailViewProps) {
   const [rulesOpen, setRulesOpen] = useState(false);
+
+  let displayGames = pragmaticGames;
+  if (tournament.title.includes('Le Serisi')) displayGames = leSeriesGames;
+  else if (tournament.title.includes('Hacksaw')) displayGames = hacksawGames;
+
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 md:p-6 lg:p-8 font-sans pb-32 animate-in fade-in slide-in-from-bottom-8 duration-500">
@@ -245,10 +261,295 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
               </button>
 
               {rulesOpen && (
-                <div className="p-6 pt-2 text-sm text-zinc-400 leading-relaxed font-medium">
-                  <p className="mb-3">1. Turnuvaya katılmak için belirtilen minimum bahis tutarında oynamanız gerekmektedir.</p>
-                  <p className="mb-3">2. Puanlar, kazanç çarpanınıza göre hesaplanır. Ne kadar yüksek çarpan, o kadar yüksek puan.</p>
-                  <p>3. Nakit ödüller turnuva bitiminden hemen sonra hesaplara otomatik olarak yatırılacaktır.</p>
+                <div className="p-4 md:p-6 pt-2 text-sm text-zinc-300 leading-relaxed font-medium bg-[#1a2332]/50 rounded-b-xl border-t border-white/5">
+                  
+                  {tournament.title.includes('Olympus') && (
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Mücadele: Gates of Olympus Super Scatter</h4>
+                        <p>Öne çıkan oyunda çarpanları yakala! Bunu en az bir kez başarman yeterlidir.</p>
+                        <ul className="list-none space-y-0.5 mt-1">
+                          <li>- Her <strong className="text-yellow-400">x50</strong> çarpanda 1 puan kazan</li>
+                          <li>- Her <strong className="text-yellow-400">x100</strong> çarpanda 2 puan kazan</li>
+                          <li>- Her <strong className="text-yellow-400">x500</strong> çarpanda 10 puan kazan</li>
+                          <li>- Her <strong className="text-yellow-400">x1000</strong> çarpanda 500 puan kazan</li>
+                        </ul>
+                        <p className="mt-1">Tek bir ödül sırasında liderlik tablosunun zirvesine çık ve <strong className="text-yellow-400">$100</strong> ödülün sahibi ol.</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Turnuva Oyunu:</h4>
+                        <p>Gates of Olympus Super Scatter</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır</h4>
+                        <ul className="list-none space-y-0.5">
+                          <li>- Minimum bahis: <strong className="text-yellow-400">0.20 $</strong> (veya para birimi karşılığı).</li>
+                          <li>- Sadece Gates of Olympus Super Scatter oyunundaki çevrimeler geçerlidir.</li>
+                          <li>- Puanlama sistemi:</li>
+                        </ul>
+                        <ul className="list-none space-y-0.5 mt-1 ml-2 text-yellow-400/90">
+                          <li>x50 çarpanı yakala = 1 puan</li>
+                          <li>x100 çarpanı yakala = 2 puan</li>
+                          <li>x500 çarpanı yakala = 10 puan</li>
+                          <li>x1000 çarpanı yakala = 500 puan</li>
+                        </ul>
+                        <p className="mt-1">1 hafta içinde en yüksek puana ulaşan oyuncu ödülü kazanır.</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-2">Puanlama Tablosu</h4>
+                        <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
+                          <thead>
+                            <tr className="border-b border-yellow-500/50 text-yellow-400">
+                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
+                              <th className="p-2 font-semibold">Puan</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">10</td></tr>
+                            <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">500</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı</h4>
+                        <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
+                          <thead>
+                            <tr className="border-b border-yellow-500/50 text-yellow-400">
+                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıra</th>
+                              <th className="p-2 font-semibold">Ödül</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr><td className="p-1.5 border-r border-yellow-500/50">1</td><td className="p-1.5">$100</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {tournament.title.includes('Le Serisi') && (
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Meydan Okuma: Le Series Tournament</h4>
+                        <p>Öne çıkan oyunlarda çarpanları yakala! En az bir kez başarman yeterlidir.</p>
+                        <ul className="list-none space-y-0.5 mt-1">
+                          <li>- Her <strong className="text-yellow-400">x50</strong> çarpanı için 1 puan</li>
+                          <li>- Her <strong className="text-yellow-400">x100</strong> çarpanı için 2 puan</li>
+                          <li>- Her <strong className="text-yellow-400">x500</strong> çarpanı için 10 puan</li>
+                          <li>- Her <strong className="text-yellow-400">x1000</strong> çarpanı için 500 puan</li>
+                        </ul>
+                        <p className="mt-1">Liderlik tablosunda zirveye çık ve toplam <strong className="text-yellow-400">10.000 TL</strong> ödül havuzunu paylaş.</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Turnuva Oyunları:</h4>
+                        <p>Le Santa<br/>Le Cowboy<br/>Le Zeus<br/>Le King<br/>Le Viking<br/>Le Pharaoh<br/>Le Bandit</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır</h4>
+                        <ul className="list-none space-y-0.5">
+                          <li>- Minimum bahis: <strong className="text-yellow-400">$0.20</strong> (veya para birimi karşılığı).</li>
+                          <li>- Sadece listelenen Le Series oyunlarındaki dönüşler geçerlidir.</li>
+                          <li>- Puanlama sistemi:</li>
+                        </ul>
+                        <ul className="list-none space-y-0.5 mt-1 ml-2 text-yellow-400/90">
+                          <li>x50 çarpanı = 1 puan</li>
+                          <li>x100 çarpanı = 2 puan</li>
+                          <li>x500 çarpanı = 10 puan</li>
+                          <li>x1000 çarpanı = 500 puan</li>
+                        </ul>
+                        <p className="mt-1">1 hafta sonunda en yüksek puanlara sahip oyuncular ödül kazanır.</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-2">Puan Tablosu</h4>
+                        <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
+                          <thead>
+                            <tr className="border-b border-yellow-500/50 text-yellow-400">
+                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
+                              <th className="p-2 font-semibold">Puan</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">10</td></tr>
+                            <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">500</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı (Toplam: 10.000 TL)</h4>
+                        <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
+                          <thead>
+                            <tr className="border-b border-yellow-500/50 text-yellow-400">
+                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıralama</th>
+                              <th className="p-2 font-semibold">Ödül</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">1.</td><td className="p-1.5">5.000 TL</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">2.</td><td className="p-1.5">3.000 TL</td></tr>
+                            <tr><td className="p-1.5 border-r border-yellow-500/50">3.</td><td className="p-1.5">2.000 TL</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {tournament.title.includes('HAFTASONU') && (
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Turnuva: Hafta Sonu Çarpan Turnuvası</h4>
+                        <p>Seçili oyunlarda çarpanları yakala ve liderlik tablosunda zirveye çık!</p>
+                        <ul className="list-none space-y-0.5 mt-1">
+                          <li>- <strong className="text-yellow-400">x50</strong> çarpan için 1 puan</li>
+                          <li>- <strong className="text-yellow-400">x100</strong> çarpan için 2 puan</li>
+                          <li>- <strong className="text-yellow-400">x150</strong> çarpan için 3 puan</li>
+                          <li>- <strong className="text-yellow-400">x200</strong> çarpan için 4 puan</li>
+                          <li>- <strong className="text-yellow-400">x500</strong> çarpan için 50 puan</li>
+                          <li>- <strong className="text-yellow-400">x1000</strong> çarpan için 100 puan</li>
+                        </ul>
+                        <p className="mt-1">Hafta sonu sonunda en yüksek puanı toplayan oyuncular toplam <strong className="text-yellow-400">5.000 EUR</strong> ödül havuzunu paylaşır.</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır</h4>
+                        <ul className="list-none space-y-0.5">
+                          <li>- Minimum bahis: <strong className="text-yellow-400">0.5 EUR</strong> (veya para birimi karşılığı).</li>
+                          <li>- Yalnızca yukarıda listelenen oyunlarda yapılan dönüşler geçerlidir.</li>
+                          <li>- Puanlama sistemi:</li>
+                        </ul>
+                        <ul className="list-none space-y-0.5 mt-1 ml-2 text-yellow-400/90">
+                          <li>x50 = 1 puan</li>
+                          <li>x100 = 2 puan</li>
+                          <li>x150 = 3 puan</li>
+                          <li>x200 = 4 puan</li>
+                          <li>x500 = 50 puan</li>
+                          <li>x1000 = 100 puan</li>
+                        </ul>
+                        <p className="mt-1">Turnuva sonunda en yüksek puanı toplayan oyuncular ödül kazanır.</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-2">Puan Tablosu</h4>
+                        <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
+                          <thead>
+                            <tr className="border-b border-yellow-500/50 text-yellow-400">
+                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
+                              <th className="p-2 font-semibold">Puan</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x150</td><td className="p-1.5">3</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x200</td><td className="p-1.5">4</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">50</td></tr>
+                            <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">100</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı (Toplam 5.000 EUR)</h4>
+                        <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
+                          <thead>
+                            <tr className="border-b border-yellow-500/50 text-yellow-400">
+                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıralama</th>
+                              <th className="p-2 font-semibold">Ödül</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">1.</td><td className="p-1.5">3.000 EUR</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">2.</td><td className="p-1.5">1.000 EUR</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">3.</td><td className="p-1.5">500 EUR</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">4.</td><td className="p-1.5">200 EUR</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">5.</td><td className="p-1.5">100 EUR</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">6.</td><td className="p-1.5">50 EUR</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">7.</td><td className="p-1.5">40 EUR</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">8.</td><td className="p-1.5">40 EUR</td></tr>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">9.</td><td className="p-1.5">40 EUR</td></tr>
+                            <tr><td className="p-1.5 border-r border-yellow-500/50">10.</td><td className="p-1.5">30 EUR</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {tournament.title.includes('Hacksaw') && (
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Turnuva: Hacksaw Turnuvası</h4>
+                        <p>Seçili <strong className="text-yellow-400">Hacksaw Gaming</strong> oyunlarında bahis yap, puan topla ve liderlik tablosunda zirveye yüksel!</p>
+                        <p className="mt-2">Her <strong className="text-yellow-400">0.17 USD</strong> (veya para birimi karşılığı) bahis için <strong className="text-yellow-400">+1 Puan</strong> kazanırsın.</p>
+                        <p className="mt-1">Ayrıca elde ettiğin her <strong className="text-yellow-400">100 USD</strong> (veya para birimi karşılığı) kazanç için <strong className="text-yellow-400">+5 Ekstra Puan</strong> kazanırsın.</p>
+                        <p className="mt-2">Turnuva sonunda liderlik tablosunda en yüksek puanı toplayan ilk 5 oyuncu ödül kazanmaya hak kazanacaktır.</p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır?</h4>
+                        <ul className="list-none space-y-0.5">
+                          <li>- Turnuvaya yalnızca <strong className="text-yellow-400">turnuva tablosunda yer alan seçili Hacksaw Gaming oyunlarında</strong> geçerlidir.</li>
+                          <li>- Puan kazanmaya başlamak için gereken minimum bahis miktarı <strong className="text-yellow-400">0.17 USD</strong> (veya para birimi karşılığıdır).</li>
+                          <li>- Her <strong className="text-yellow-400">0.17 USD</strong> bahis = <strong className="text-yellow-400">+1 Puan</strong></li>
+                          <li>- Her <strong className="text-yellow-400">100 USD</strong> kazanç = <strong className="text-yellow-400">+5 Ekstra Puan</strong></li>
+                          <li>- Turnuva sonunda en yüksek puanı toplayan ilk 5 oyuncu ödül kazanmaya hak kazanacaktır.</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h4 className="text-yellow-400 font-bold mb-2">Puanlama Sistemi</h4>
+                        <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
+                          <thead>
+                            <tr className="border-b border-yellow-500/50 text-yellow-400">
+                              <th className="p-2 border-r border-yellow-500/50 font-semibold">İşlem</th>
+                              <th className="p-2 font-semibold">Kazanılan Puan</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">Her 0.17 USD Bahis</td><td className="p-1.5">+1 Puan</td></tr>
+                            <tr><td className="p-1.5 border-r border-yellow-500/50">Her 100 USD Kazanç</td><td className="p-1.5">+5 Ekstra Puan</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-6 pt-4 border-t border-white/5 space-y-4">
+                    <div>
+                      <h4 className="text-yellow-400 font-bold mb-1">Turnuva Süresi</h4>
+                      <p>1 Hafta boyunca geçerlidir.</p>
+                    </div>
+                    <div>
+                      <h4 className="text-yellow-400 font-bold mb-1">Liderlik Tablosu</h4>
+                      <p>Gerçek zamanlı olarak güncellenir. Eşitlik durumunda, puana ilk ulaşan oyuncu üst sırada yer alır.</p>
+                    </div>
+                    <div>
+                      <h4 className="text-yellow-400 font-bold mb-1">Önemli Bilgiler</h4>
+                      <ul className="list-none space-y-0.5">
+                        <li>- Şartları karşılamayan bahisler geçersiz sayılır.</li>
+                        <li>- Ters veya risk azaltmaya yönelik bahisler yasaktır.</li>
+                        <li>- Her türlü kötüye kullanım diskalifiye ile sonuçlanır.</li>
+                        <li>- Ödüller, turnuva bitiminden sonra 24 saat içinde otomatik olarak hesaba tanımlanır.</li>
+                      </ul>
+                    </div>
+
+                    <div className="flex justify-center mt-6 pt-2">
+                      <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-black uppercase tracking-wider px-8 py-2.5 rounded-lg shadow-[0_0_15px_rgba(250,204,21,0.4)] transition-all">
+                        Katıl
+                      </button>
+                    </div>
+                  </div>
+
                 </div>
               )}
             </div>
@@ -276,7 +577,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
           <div>
             <h2 className="text-xl font-bold text-white mb-4">Turnuva Oyunları</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {mockGames.map(game => (
+              {displayGames.map(game => (
                 <div key={game.id} className="bg-[#0B0F19] rounded-2xl overflow-hidden group cursor-pointer border border-white/5 hover:border-blue-500/50 hover:shadow-[0_10px_30px_-10px_rgba(59,130,246,0.4)] transition-all duration-300">
                   <div className="aspect-[4/3] relative overflow-hidden">
                     <img src={game.image} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
