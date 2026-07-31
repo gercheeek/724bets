@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Info, ChevronDown, ChevronUp, User, Users, DollarSign, Calendar as CalendarIcon } from 'lucide-react';
+import { ArrowLeft, Info, ChevronDown, ChevronUp, User, Users, DollarSign, Calendar as CalendarIcon, X } from 'lucide-react';
 
 interface Tournament {
   id: string;
