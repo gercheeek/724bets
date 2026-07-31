@@ -160,9 +160,7 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
         
         {/* Prize Section */}
         <div className="mb-6">
-          <div className="flex items-center mb-1.5">
-            <div className="text-[10px] font-bold text-blue-400/90 uppercase tracking-[0.2em]">Ödül Havuzu</div>
-          </div>
+          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Ödül Havuzu</div>
           <div className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-400 font-black text-3xl tracking-tighter drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]">
             {tournament.prize}
           </div>
@@ -205,9 +203,9 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
 
         {/* Mini Live Leaderboard */}
         {tournament.status !== 'ended' && (
-          <div className="pt-4 border-t border-white/5 space-y-2">
-            <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-              <Trophy className="w-3.5 h-3.5 text-amber-400/90" /> Canlı Liderlik
+          <div className="pt-3 mt-1 border-t border-white/5 space-y-2">
+            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Canlı Liderlik
             </div>
             {leaderboard.map((player, idx) => (
               <div key={player.id} className="flex items-center justify-between bg-black/20 hover:bg-black/40 rounded-md px-3 py-1.5 transition-all duration-300">
