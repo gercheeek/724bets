@@ -23,6 +23,7 @@ import VIPHeroBanner from './VIPHeroBanner';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import MainHero from './MainHero';
 import FeaturedCombos from './sports/FeaturedCombos';
+import { UpcomingTournamentsWidget } from './UpcomingTournamentsWidget';
 import { useBetting } from '../contexts/BettingContext';
 
 const getDemoUrl = (game: any): string | null => {
@@ -388,6 +389,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 }} 
               />
             </div>
+            <div className="px-4 lg:px-6">
+              <UpcomingTournamentsWidget onViewChange={onViewChange} />
+            </div>
             <OriginalsSlider onNavigate={onViewChange} />
           </div>
         </>
@@ -416,6 +420,9 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                     onViewChange('sports');
                   }} 
                 />
+              </div>
+              <div className="mt-4 mb-2">
+                <UpcomingTournamentsWidget onViewChange={onViewChange} />
               </div>
               <div className="mt-4">
                 <OriginalsSlider onNavigate={onViewChange} />

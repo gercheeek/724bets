@@ -133,15 +133,6 @@ export const PromoSlider: React.FC = () => {
             
             <div className="relative z-10 p-3 h-full flex flex-col justify-between">
               <div>
-                <h3 className="text-white font-black text-sm leading-tight uppercase" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-                  {promo.title1}
-                </h3>
-                <h3 className="font-black text-[14px] leading-tight uppercase" style={{ color: promo.title2Color || '#76e13b', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-                  {promo.title2}
-                </h3>
-                <p className="text-gray-300 text-[10px] mt-1 leading-snug whitespace-pre-line font-semibold">
-                  {promo.subtitle}
-                </p>
               </div>
               
               <div>

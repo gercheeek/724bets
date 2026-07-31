@@ -1180,7 +1180,8 @@ html, body {
   border: 1px solid rgba(240, 185, 11, 0.15);
   background: var(--bg-main);
   margin-bottom: 20px;
-  aspect-ratio: 24 / 9;
+  aspect-ratio: 3.2 / 1;
+  max-height: 400px;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   transform: translateZ(0);
 }

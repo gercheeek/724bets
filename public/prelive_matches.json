@@ -33,7 +33,185 @@
           "|1x2||~1~1.92!~X~3.65!~2~3.64",
           "|gg||~var~1.6!~yok~2.2",
           "|Double_Chance||~1X~1.27!~12~1.27!~X2~1.85",
-          "|Half_Time_Result||~1~2.34!~X~2.33!~2~4.1"
+          "|Half_Time_Result||~1~2.34!~X~2.36!~2~4"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30445533",
+    "isScraped": true,
+    "data": {
+      "id": 30445533,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "NPL SA State Ligi 1"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "South Adelaide Panthers",
+        "away": "Modbury Jets",
+        "home_id": 32394,
+        "away_id": 175676
+      },
+      "start_time": "2026-08-01T05:30:00.000Z",
+      "start_ts": 1785562200,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~1.5!~altı~2.4",
+          "|ou||~üstü~1.89!~altı~1.85",
+          "|1x2||~1~6.6!~X~6.3!~2~1.32",
+          "|ou||~üstü~1.7!~altı~2.05",
+          "|ou||~üstü~2.1!~altı~1.67",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|ou|2.5|~üstü~8.9!~altı~17",
+          "|ou|1.5|~üstü~7.7!~altı~23",
+          "|gg||~var~1.65!~yok~2.13",
+          "|Double_Chance||~1X~3.2!~12~1.12!~X2~1.11",
+          "|Half_Time_Result||~1~7.1!~X~3!~2~1.6",
+          "|ou||~üstü~1.33!~altı~2.95",
+          "|ou||~üstü~3.1!~altı~1.3"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30445534",
+    "isScraped": true,
+    "data": {
+      "id": 30445534,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "NPL SA State Ligi 1"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "FC Fulham United",
+        "away": "Eastern United FC",
+        "home_id": 263272,
+        "away_id": 177267
+      },
+      "start_time": "2026-08-01T05:30:00.000Z",
+      "start_ts": 1785562200,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.62!~altı~2.17",
+          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|1x2||~1~1.43!~X~5.3!~2~5.5",
+          "|ou||~üstü~1.48!~altı~2.43",
+          "|ou||~üstü~2.25!~altı~1.57",
+          "|ou||~üstü~1.83!~altı~1.91",
+          "|ou|2.5|~üstü~1.83!~altı~5",
+          "|ou|1.5|~üstü~1.57!~altı~9.6",
+          "|gg||~var~1.6!~yok~2.2",
+          "|ou||~üstü~2.95!~altı~1.33",
+          "|ou||~üstü~1.27!~altı~3.4",
+          "|Double_Chance||~1X~1.15!~12~1.16!~X2~2.65",
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|Half_Time_Result||~1~1.79!~X~2.7!~2~5.8"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30445535",
+    "isScraped": true,
+    "data": {
+      "id": 30445535,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "NPL SA State Ligi 1"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Adelaide Blue Eagles",
+        "away": "Adelaide Croatia Raiders",
+        "home_id": 13458,
+        "away_id": 32393
+      },
+      "start_time": "2026-08-01T05:30:00.000Z",
+      "start_ts": 1785562200,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~1.8!~altı~1.94",
+          "|ou||~üstü~1.5!~altı~2.4",
+          "|ou||~üstü~2.23!~altı~1.58",
+          "|1x2||~1~2.3!~X~3.84!~2~2.67",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~1.63!~altı~2.15",
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou|2.5|~üstü~3.02!~altı~6.8",
+          "|ou|1.5|~üstü~2.59!~altı~11",
+          "|gg||~var~1.45!~yok~2.5",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|Double_Chance||~1X~1.44!~12~1.25!~X2~1.57",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|Half_Time_Result||~1~2.73!~X~2.42!~2~3.12"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30445536",
+    "isScraped": true,
+    "data": {
+      "id": 30445536,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "NPL SA State Ligi 1"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Adelaide Atletico FC",
+        "away": "Salisbury United",
+        "home_id": 179403,
+        "away_id": 13461
+      },
+      "start_time": "2026-08-01T05:30:00.000Z",
+      "start_ts": 1785562200,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|ou||~üstü~1.67!~altı~2.1",
+          "|ou||~üstü~1.43!~altı~2.55",
+          "|ou||~üstü~2.1!~altı~1.67",
+          "|1x2||~1~1.88!~X~4.1!~2~3.37",
+          "|ou||~üstü~1.89!~altı~1.85",
+          "|ou||~üstü~2.35!~altı~1.52",
+          "|ou||~üstü~1.53!~altı~2.33",
+          "|ou|2.5|~üstü~2.42!~altı~6.3",
+          "|ou|1.5|~üstü~2.07!~altı~12",
+          "|gg||~var~1.45!~yok~2.5",
+          "|ou||~üstü~3!~altı~1.32",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|Double_Chance||~1X~1.3!~12~1.23!~X2~1.82",
+          "|ou||~üstü~3.4!~altı~1.27",
+          "|Half_Time_Result||~1~2.31!~X~2.51!~2~3.71"
         ]
       }
     }
@@ -65,19 +243,19 @@
         "full_event|0": [
           "|ou||~üstü~1.65!~altı~2.13",
           "|ou||~üstü~2.55!~altı~1.43",
-          "|1x2||~1~2.09!~X~3.7!~2~3.12",
+          "|1x2||~1~2.01!~X~3.84!~2~3.21",
           "|ou||~üstü~2.33!~altı~1.53",
           "|ou||~üstü~1.29!~altı~3.2",
           "|ou||~üstü~1.47!~altı~2.45",
           "|ou||~üstü~1.83!~altı~1.91",
           "|ou||~üstü~2.05!~altı~1.7",
-          "|ou|2.5|~üstü~2.93!~altı~5.4",
-          "|ou|1.5|~üstü~2.44!~altı~8.4",
-          "|gg||~var~1.58!~yok~2.23",
+          "|ou|2.5|~üstü~2.83!~altı~5.2",
+          "|ou|1.5|~üstü~2.33!~altı~8.5",
+          "|gg||~var~1.6!~yok~2.2",
           "|ou||~üstü~3!~altı~1.32",
           "|ou||~üstü~1.23!~altı~3.7",
-          "|Double_Chance||~1X~1.34!~12~1.27!~X2~1.72",
-          "|Half_Time_Result||~1~2.57!~X~2.29!~2~3.65"
+          "|Double_Chance||~1X~1.32!~12~1.25!~X2~1.77",
+          "|Half_Time_Result||~1~2.45!~X~2.31!~2~3.74"
         ]
       }
     }
@@ -127,145 +305,10 @@
     }
   },
   {
-    "id": "30433734",
+    "id": "30436309",
     "isScraped": true,
     "data": {
-      "id": 30433734,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "NPL Victoria 2 "
-      },
-      "country": {
-        "name": "Avustralya"
-      },
-      "participants": {
-        "home": "Essendon Royals SC",
-        "away": "Altona City SC",
-        "home_id": 197354,
-        "away_id": 262462
-      },
-      "start_time": "2026-07-31T10:30:00.000Z",
-      "start_ts": 1785493800,
-      "group_markets": {
-        "full_event|0": [
-          "|1x2||~1~1.34!~X~5.7!~2~6.8",
-          "|ou||~üstü~1.58!~altı~2.23",
-          "|ou||~üstü~1.38!~altı~2.75",
-          "|ou||~üstü~2!~altı~1.75",
-          "|ou||~üstü~1.79!~altı~1.95",
-          "|ou||~üstü~1.47!~altı~2.45",
-          "|ou||~üstü~2.2!~altı~1.6",
-          "|ou||~üstü~2.55!~altı~1.43",
-          "|ou|2.5|~üstü~1.7!~altı~4.8",
-          "|ou|1.5|~üstü~1.46!~altı~9.7",
-          "|gg||~var~1.67!~yok~2.1",
-          "|ou||~üstü~2.85!~altı~1.35",
-          "|ou||~üstü~1.26!~altı~3.45",
-          "|Double_Chance||~1X~1.11!~12~1.14!~X2~3",
-          "|ou||~üstü~3.1!~altı~1.3",
-          "|Half_Time_Result||~1~1.61!~X~2.93!~2~7.3"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30433735",
-    "isScraped": true,
-    "data": {
-      "id": 30433735,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "NPL Victoria 2 "
-      },
-      "country": {
-        "name": "Avustralya"
-      },
-      "participants": {
-        "home": "Whittlesea United FC",
-        "away": "Eastern Lions SC",
-        "home_id": 409056,
-        "away_id": 179360
-      },
-      "start_time": "2026-07-31T10:30:00.000Z",
-      "start_ts": 1785493800,
-      "group_markets": {
-        "full_event|0": [
-          "|ou||~üstü~1.67!~altı~2.1",
-          "|1x2||~1~2.14!~X~3.69!~2~3.01",
-          "|ou||~üstü~2.1!~altı~1.67",
-          "|ou||~üstü~2.55!~altı~1.43",
-          "|ou||~üstü~2.33!~altı~1.53",
-          "|ou||~üstü~1.47!~altı~2.45",
-          "|ou||~üstü~1.29!~altı~3.2",
-          "|ou||~üstü~1.83!~altı~1.91",
-          "|ou|2.5|~üstü~3.02!~altı~5.5",
-          "|ou|1.5|~üstü~2.5!~altı~8.6",
-          "|gg||~var~1.58!~yok~2.23",
-          "|ou||~üstü~3!~altı~1.32",
-          "|ou||~üstü~1.23!~altı~3.7",
-          "|Double_Chance||~1X~1.37!~12~1.27!~X2~1.67",
-          "|Half_Time_Result||~1~2.63!~X~2.3!~2~3.52"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30419946",
-    "isScraped": true,
-    "data": {
-      "id": 30419946,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kuzey Toprakları Premier Ligi"
-      },
-      "country": {
-        "name": "Avustralya"
-      },
-      "participants": {
-        "home": "Port Darwin FC",
-        "away": "Darwin Hearts FC",
-        "home_id": 264258,
-        "away_id": 584914
-      },
-      "start_time": "2026-07-31T11:00:00.000Z",
-      "start_ts": 1785495600,
-      "group_markets": {
-        "full_event|0": [
-          "|ou||~üstü~1.43!~altı~2.55",
-          "|ou||~üstü~2!~altı~1.75",
-          "|ou||~üstü~2.2!~altı~1.6",
-          "|ou||~üstü~1.63!~altı~2.15",
-          "|ou||~üstü~1.82!~altı~1.92",
-          "|ou||~üstü~2.55!~altı~1.43",
-          "|ou||~üstü~1.52!~altı~2.35",
-          "|1x2||~1~2.12!~X~4.3!~2~2.75",
-          "|ou|2.5|~üstü~2.3!~altı~14",
-          "|ou|1.5|~üstü~2.18!~altı~25",
-          "|gg||~var~1.18!~yok~4.3",
-          "|Double_Chance||~1X~1.43!~12~1.22!~X2~1.7",
-          "|ou||~üstü~2.85!~altı~1.35",
-          "|ou||~üstü~1.32!~altı~3",
-          "|ou||~üstü~3!~altı~1.32",
-          "|Half_Time_Result||~1~2.37!~X~2.88!~2~2.87",
-          "|ou||~üstü~3.7!~altı~1.23"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30429014",
-    "isScraped": true,
-    "data": {
-      "id": 30429014,
+      "id": 30436309,
       "status": "not_started",
       "sport": {
         "name": "Futbol"
@@ -277,228 +320,18 @@
         "name": "Avustralya"
       },
       "participants": {
-        "home": "North Star  ",
-        "away": " Capalaba FC",
-        "home_id": 13788,
-        "away_id": 13939
+        "home": "Holland Park Hawks  ",
+        "away": "Robina City",
+        "home_id": 177757,
+        "away_id": 312522
       },
-      "start_time": "2026-07-31T10:30:00.000Z",
-      "start_ts": 1785493800,
+      "start_time": "2026-08-01T06:00:00.000Z",
+      "start_ts": 1785564000,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~1~1.48!~X~5.1!~2~5.1",
-          "|ou||~üstü~1.83!~altı~1.91",
-          "|ou||~üstü~2.4!~altı~1.5",
-          "|ou|2.5|~üstü~1.8!~altı~6",
-          "|ou|1.5|~üstü~1.58!~altı~12",
-          "|gg||~var~1.45!~yok~2.5",
-          "|Double_Chance||~1X~1.16!~12~1.17!~X2~2.5",
-          "|ou||~üstü~3.55!~altı~1.25",
-          "|ou||~üstü~2.65!~altı~1.4",
-          "|ou||~üstü~2.03!~altı~1.72",
-          "|ou||~üstü~1.65!~altı~2.13",
-          "|ou||~üstü~1.37!~altı~2.8",
-          "|ou||~üstü~2.95!~altı~1.33",
-          "|ou||~üstü~1.45!~altı~2.5",
-          "|ou||~üstü~1.32!~altı~3",
-          "|Half_Time_Result||~1~1.86!~X~2.77!~2~4.9"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30429015",
-    "isScraped": true,
-    "data": {
-      "id": 30429015,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Queensland Premier Lig 1"
-      },
-      "country": {
-        "name": "Avustralya"
-      },
-      "participants": {
-        "home": "Broadbeach United",
-        "away": "Logan Lightning  ",
-        "home_id": 362310,
-        "away_id": 13942
-      },
-      "start_time": "2026-07-31T10:30:00.000Z",
-      "start_ts": 1785493800,
-      "group_markets": {
-        "full_event|0": [
-          "|ou||~üstü~2.85!~altı~1.35",
-          "|ou||~üstü~1.7!~altı~2.05",
-          "|ou||~üstü~1.45!~altı~2.5",
-          "|1x2||~1~1.55!~X~4.6!~2~4.8",
-          "|ou||~üstü~2.13!~altı~1.65",
-          "|ou|2.5|~üstü~2.01!~altı~5.1",
-          "|ou|1.5|~üstü~1.72!~altı~9.2",
-          "|gg||~var~1.55!~yok~2.28",
-          "|Double_Chance||~1X~1.18!~12~1.19!~X2~2.33",
-          "|Half_Time_Result||~1~1.94!~X~2.59!~2~4.9",
-          "|ou||~üstü~3.1!~altı~1.3",
-          "|ou||~üstü~2.4!~altı~1.5",
-          "|ou||~üstü~1.92!~altı~1.82",
-          "|ou||~üstü~1.54!~altı~2.28",
-          "|ou||~üstü~1.3!~altı~3.1",
-          "|ou||~üstü~3.45!~altı~1.26"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30428801",
-    "isScraped": true,
-    "data": {
-      "id": 30428801,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Kuzey Ulusal Premier Ligi NSW - Kadınlar"
-      },
-      "country": {
-        "name": "Avustralya"
-      },
-      "participants": {
-        "home": "Broadmeadow Magic FC (Kadınlar)",
-        "away": "New Lambton FC (Kadınlar)",
-        "home_id": 651339,
-        "away_id": 648468
-      },
-      "start_time": "2026-07-31T10:00:00.000Z",
-      "start_ts": 1785492000,
-      "group_markets": {
-        "full_event|0": [
-          "|ou||~üstü~1.62!~altı~2.17",
-          "|1x2||~1~4.2!~X~6.5!~2~1.47",
-          "|ou||~üstü~1.95!~altı~1.79",
-          "|ou||~üstü~1.79!~altı~1.95",
           "|ou||~üstü~1.5!~altı~2.4",
-          "|ou||~üstü~2.17!~altı~1.62",
-          "|Double_Chance||~1X~2.5!~12~1.12!~X2~1.21",
-          "|Half_Time_Result||~1~4.6!~X~3.17!~2~1.76",
-          "|ou||~üstü~2.5!~altı~1.45"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30438300",
-    "isScraped": true,
-    "data": {
-      "id": 30438300,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Queensland Premier Lig 2"
-      },
-      "country": {
-        "name": "Avustralya"
-      },
-      "participants": {
-        "home": " Brisbane Knights",
-        "away": "Mitchelton FC",
-        "home_id": 177106,
-        "away_id": 177052
-      },
-      "start_time": "2026-07-31T10:30:00.000Z",
-      "start_ts": 1785493800,
-      "group_markets": {
-        "full_event|0": [
-          "|ou||~üstü~1.67!~altı~2.1",
-          "|ou||~üstü~2.03!~altı~1.72",
-          "|ou||~üstü~2.2!~altı~1.6",
-          "|ou||~üstü~1.83!~altı~1.91",
-          "|1x2||~1~3.57!~X~4.4!~2~1.78",
-          "|ou||~üstü~1.55!~altı~2.28",
-          "|ou||~üstü~2.5!~altı~1.45",
-          "|Double_Chance||~1X~1.94!~12~1.21!~X2~1.28",
-          "|Half_Time_Result||~1~3.4!~X~2.84!~2~2.2"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30428540",
-    "isScraped": true,
-    "data": {
-      "id": 30428540,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "Queensland Premier Lig - Kadınlar"
-      },
-      "country": {
-        "name": "Avustralya"
-      },
-      "participants": {
-        "home": "Moreton City Excelsior (Kadınlar)",
-        "away": "Mitchelton FC (Kadınlar)",
-        "home_id": 909106,
-        "away_id": 211372
-      },
-      "start_time": "2026-07-31T09:30:00.000Z",
-      "start_ts": 1785490200,
-      "group_markets": {
-        "full_event|0": [
-          "|ou||~üstü~2.4!~altı~1.5",
-          "|ou||~üstü~1.83!~altı~1.91",
-          "|1x2||~1~5.8!~X~6.5!~2~1.35",
-          "|gg||~var~1.6!~yok~2.2",
-          "|Double_Chance||~1X~3.01!~12~1.12!~X2~1.13",
-          "|ou||~üstü~2.03!~altı~1.72",
-          "|ou||~üstü~1.65!~altı~2.13",
-          "|ou||~üstü~1.45!~altı~2.5",
-          "|Half_Time_Result||~1~6.9!~X~3.03!~2~1.61"
-        ]
-      }
-    }
-  },
-  {
-    "id": "30440556",
-    "isScraped": true,
-    "data": {
-      "id": 30440556,
-      "status": "not_started",
-      "sport": {
-        "name": "Futbol"
-      },
-      "tournament": {
-        "name": "U23 NPL Victoria"
-      },
-      "country": {
-        "name": "Avustralya"
-      },
-      "participants": {
-        "home": "Preston Lions FC U23",
-        "away": "Green Gully SC U23",
-        "home_id": 912109,
-        "away_id": 911015
-      },
-      "start_time": "2026-07-31T08:15:00.000Z",
-      "start_ts": 1785485700,
-      "group_markets": {
-        "full_event|0": [
-          "|ou||~üstü~1.7!~altı~2.05",
-          "|ou||~üstü~2.05!~altı~1.7",
-          "|ou||~üstü~2.45!~altı~1.47",
-          "|1x2||~1~2.24!~X~4.1!~2~2.64",
-          "|ou||~üstü~1.52!~altı~2.35",
-          "|ou||~üstü~1.84!~altı~1.9",
-          "|ou||~üstü~2.25!~altı~1.57",
-          "|Double_Chance||~1X~1.45!~12~1.24!~X2~1.59",
-          "|Half_Time_Result||~1~2.65!~X~2.71!~2~2.83"
+          "|ou||~üstü~1.9!~altı~1.84",
+          "|1x2||~1~4!~X~5!~2~1.61"
         ]
       }
     }
@@ -644,16 +477,15 @@
       "start_ts": 1785519000,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~1.8!~altı~1.94",
-          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~1.98!~altı~1.77",
           "|ou||~üstü~1.45!~altı~2.5",
           "|ou||~üstü~1.58!~altı~2.23",
           "|ou||~üstü~2.23!~altı~1.58",
-          "|1x2||~1~1.68!~X~4.4!~2~4",
-          "|gg||~var~1.45!~yok~2.5",
-          "|Double_Chance||~1X~1.23!~12~1.21!~X2~2.13",
-          "|ou||~üstü~2.55!~altı~1.43",
-          "|Half_Time_Result||~1~2.05!~X~2.61!~2~4.4"
+          "|1x2||~1~1.57!~X~4.7!~2~4.5",
+          "|gg||~var~1.48!~yok~2.43",
+          "|Double_Chance||~1X~1.19!~12~1.19!~X2~2.28",
+          "|Half_Time_Result||~1~1.93!~X~2.65!~2~4.8"
         ]
       }
     }
@@ -770,6 +602,52 @@
           "|Double_Chance||~1X~1.29!~12~1.24!~X2~1.85",
           "|Half_Time_Result||~1~2.25!~X~2.51!~2~3.81",
           "|ou||~üstü~1.45!~altı~2.5"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30445627",
+    "isScraped": true,
+    "data": {
+      "id": 30445627,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Amatör Kupası"
+      },
+      "country": {
+        "name": "Avusturya"
+      },
+      "participants": {
+        "home": "SV Welgersdorf",
+        "away": "ASK Kohfidisch",
+        "home_id": 1418829,
+        "away_id": 97634
+      },
+      "start_time": "2026-07-31T17:30:00.000Z",
+      "start_ts": 1785519000,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~1.42!~altı~2.6",
+          "|ou||~üstü~1.67!~altı~2.1",
+          "|ou||~üstü~1.84!~altı~1.9",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|ou||~üstü~1.55!~altı~2.28",
+          "|1x2||~1~13!~X~9.6!~2~1.13",
+          "|ou|2.5|~üstü~17!~altı~34",
+          "|ou|1.5|~üstü~15!~altı~41",
+          "|gg||~var~1.77!~yok~1.98",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|ou||~üstü~3!~altı~1.32",
+          "|Double_Chance||~1X~5.6!~12~1.06!~X2~1.04",
+          "|ou||~üstü~1.28!~altı~3.3",
+          "|Half_Time_Result||~1~12!~X~3.85!~2~1.32"
         ]
       }
     }
@@ -1171,7 +1049,7 @@
           "|ou|3.5|~üstü~2.78!~altı~4.33",
           "|ou|2.5|~üstü~2.07!~altı~11",
           "|ou|4.5|~üstü~4.2!~altı~1.69",
-          "|ou|3.5|~üstü~2.48!~altı~2.33",
+          "|ou|3.5|~üstü~2.46!~altı~2.3",
           "|ou|2.5|~üstü~1.7!~altı~4.2",
           "|ou|1.5|~üstü~1.42!~altı~8.9",
           "|gg||~var~1.85!~yok~1.89",
@@ -1298,6 +1176,44 @@
     }
   },
   {
+    "id": "30439122",
+    "isScraped": true,
+    "data": {
+      "id": 30439122,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "U20 Campeonato Cearense"
+      },
+      "country": {
+        "name": "Brezilya"
+      },
+      "participants": {
+        "home": "CEFAT Tirol U20",
+        "away": "Anjos do Ceu U20",
+        "home_id": 485594,
+        "away_id": 486910
+      },
+      "start_time": "2026-07-31T12:30:00.000Z",
+      "start_ts": 1785501000,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|1x2||~1~1.13!~X~8.5!~2~15",
+          "|ou||~üstü~1.87!~altı~1.87",
+          "|ou||~üstü~2.33!~altı~1.53",
+          "|gg||~var~2.35!~yok~1.52",
+          "|Double_Chance||~1X~1.025!~12~1.07!~X2~5.6",
+          "|Half_Time_Result||~1~1.41!~X~3.23!~2~13",
+          "|ou||~üstü~1.52!~altı~2.35"
+        ]
+      }
+    }
+  },
+  {
     "id": "30186838",
     "isScraped": true,
     "data": {
@@ -1322,11 +1238,11 @@
       "start_ts": 1785776400,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~1~2.21!~X~3.2!~2~3.28",
+          "|1x2||~1~2.33!~X~3.17!~2~3.07",
           "|ou||~üstü~2.05!~altı~1.7",
           "|ou||~üstü~3.6!~altı~1.24",
           "|ou||~üstü~2.85!~altı~1.35",
-          "|Half_Time_Result||~1~2.88!~X~2.04!~2~3.8",
+          "|Half_Time_Result||~1~2.93!~X~2.04!~2~3.73",
           "|ou||~üstü~1.57!~altı~2.25",
           "|ou||~üstü~1.33!~altı~2.95",
           "|gg||~var~2.18!~yok~1.52",
@@ -1340,17 +1256,17 @@
           "|ou||~üstü~2.87!~altı~1.3",
           "|ou|3.5|~üstü~3.99!~altı~2.93",
           "|ou|2.5|~üstü~2.42!~altı~5.8",
-          "|ou|4.5|~üstü~13!~altı~2.45",
-          "|ou|3.5|~üstü~7.5!~altı~2.79",
-          "|ou|2.5|~üstü~3.68!~altı~4.4",
-          "|ou|1.5|~üstü~2.9!~altı~6.4",
+          "|ou|4.5|~üstü~13!~altı~2.56",
+          "|ou|3.5|~üstü~7.9!~altı~2.92",
+          "|ou|2.5|~üstü~3.88!~altı~4.6",
+          "|ou|1.5|~üstü~3.05!~altı~7",
           "|gg||~var~1.83!~yok~1.91",
           "|ou||~üstü~3.3!~altı~1.28",
           "|ou||~üstü~2.35!~altı~1.52",
           "|ou||~üstü~1.82!~altı~1.92",
           "|ou||~üstü~1.42!~altı~2.6",
           "|ou||~üstü~1.21!~altı~3.9",
-          "|Double_Chance||~1X~1.32!~12~1.33!~X2~1.63"
+          "|Double_Chance||~1X~1.35!~12~1.34!~X2~1.58"
         ]
       }
     }
@@ -1654,14 +1570,13 @@
           "|ou||~üstü~3.7!~altı~1.23",
           "|ou||~üstü~2.75!~altı~1.38",
           "|Double_Chance||~1X~1.33!~12~1.3!~X2~1.66",
-          "|Corners||~üstü~1.63!~altı~2.13",
-          "|Corners||~üstü~2.08!~altı~1.66",
-          "|Corners||~üstü~3.9!~altı~1.37",
-          "|Corners||~üstü~2.78!~altı~1.64",
-          "|Corners||~üstü~2.07!~altı~2.11",
-          "|Corners||~üstü~1.63!~altı~2.91",
-          "|Corners||~üstü~1.34!~altı~4.4",
-          "|Corners||~üstü~1.84!~altı~1.86"
+          "|Corners||~üstü~1.95!~altı~1.75",
+          "|Corners||~üstü~3.55!~altı~1.43",
+          "|Corners||~üstü~2.57!~altı~1.75",
+          "|Corners||~üstü~1.95!~altı~2.25",
+          "|Corners||~üstü~1.55!~altı~3.16",
+          "|Corners||~üstü~1.3!~altı~4.8",
+          "|Corners||~üstü~1.72!~altı~2"
         ]
       }
     }
@@ -1724,7 +1639,13 @@
           "|ou||~üstü~1.23!~altı~3.7",
           "|ou||~üstü~3.1!~altı~1.3",
           "|Double_Chance||~1X~1.37!~12~1.36!~X2~1.53",
-          "|Corners||~üstü~1.85!~altı~1.85"
+          "|Corners||~üstü~1.93!~altı~1.77",
+          "|Corners||~üstü~3.5!~altı~1.44",
+          "|Corners||~üstü~2.54!~altı~1.77",
+          "|Corners||~üstü~1.93!~altı~2.28",
+          "|Corners||~üstü~1.54!~altı~3.2",
+          "|Corners||~üstü~1.29!~altı~4.9",
+          "|Corners||~üstü~1.71!~altı~2.01"
         ]
       }
     }
@@ -1750,8 +1671,8 @@
         "home_id": 482,
         "away_id": 7011
       },
-      "start_time": "2026-08-01T19:00:00.000Z",
-      "start_ts": 1785610800,
+      "start_time": "2026-07-31T18:00:00.000Z",
+      "start_ts": 1785520800,
       "group_markets": {
         "full_event|0": [
           "|Half_Time_Result||~1~1.56!~X~2.95!~2~8.6",
@@ -1860,7 +1781,7 @@
           "|ou||~üstü~3.01!~altı~1.96",
           "|ou||~üstü~1.79!~altı~3.6",
           "|ou||~üstü~1.24!~altı~10",
-          "|Corners||~üstü~1.78!~altı~1.92"
+          "|Corners||~üstü~1.8!~altı~1.9"
         ]
       }
     }
@@ -1890,7 +1811,40 @@
       "start_ts": 1785517200,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.85!~altı~1.85"
+          "|ou||~üstü~1.32!~altı~3",
+          "|ou||~üstü~1.82!~altı~1.92",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|ou||~üstü~1.42!~altı~2.6",
+          "|ou||~üstü~2.35!~altı~1.52",
+          "|ou||~üstü~1.53!~altı~2.33",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|1x2||~1~2.31!~X~3.29!~2~3",
+          "|gg||~var~2.23!~yok~1.58",
+          "|gg||~var~2.78!~yok~1.32",
+          "|ou||~üstü~1.33!~altı~2.74",
+          "|ou||~üstü~1.89!~altı~1.7",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~3.2!~altı~1.24",
+          "|ou||~üstü~1.76!~altı~1.82",
+          "|ou||~üstü~7!~altı~1.025",
+          "|ou||~üstü~2.83!~altı~1.31",
+          "|ou|3.5|~üstü~3.95!~altı~2.97",
+          "|ou|2.5|~üstü~2.39!~altı~6",
+          "|ou|4.5|~üstü~13!~altı~2.53",
+          "|ou|3.5|~üstü~7.7!~altı~2.89",
+          "|ou|2.5|~üstü~3.82!~altı~4.6",
+          "|ou|1.5|~üstü~2.98!~altı~6.6",
+          "|gg||~var~1.83!~yok~1.91",
+          "|ou||~üstü~15!~altı~1.08",
+          "|ou||~üstü~7.8!~altı~1.24",
+          "|ou||~üstü~3.6!~altı~1.71",
+          "|ou||~üstü~2.07!~altı~2.96",
+          "|ou||~üstü~1.34!~altı~10",
+          "|Double_Chance||~1X~1.37!~12~1.32!~X2~1.57",
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|ou||~üstü~1.21!~altı~3.9",
+          "|ou||~üstü~3.6!~altı~1.24",
+          "|Half_Time_Result||~1~2.91!~X~2.09!~2~3.61"
         ]
       }
     }
@@ -1920,7 +1874,41 @@
       "start_ts": 1785517200,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.96!~altı~1.74"
+          "|Corners||~üstü~1.96!~altı~1.74",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~2.85!~altı~1.37",
+          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~1.77!~altı~1.98",
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|ou||~üstü~1.98!~altı~1.77",
+          "|1x2||~1~3.82!~X~4.5!~2~1.71",
+          "|gg||~var~2.03!~yok~1.6",
+          "|gg||~var~2.62!~yok~1.36",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.7!~altı~1.89",
+          "|gg||~var~5.75!~yok~1.06",
+          "|ou||~üstü~2.78!~altı~1.32",
+          "|ou||~üstü~1.65!~altı~1.96",
+          "|ou||~üstü~6.4!~altı~1.04",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou|3.5|~üstü~3.33!~altı~3.53",
+          "|ou|2.5|~üstü~2.19!~altı~8.6",
+          "|ou|4.5|~üstü~21!~altı~4.1",
+          "|ou|3.5|~üstü~14!~altı~4.6",
+          "|ou|2.5|~üstü~6.2!~altı~7.4",
+          "|ou|1.5|~üstü~5!~altı~9.6",
+          "|gg||~var~1.85!~yok~1.89",
+          "|ou||~üstü~10!~altı~1.13",
+          "|ou||~üstü~5.3!~altı~1.37",
+          "|ou||~üstü~2.85!~altı~1.98",
+          "|ou||~üstü~1.77!~altı~3.7",
+          "|ou||~üstü~1.23!~altı~14",
+          "|Double_Chance||~1X~2.05!~12~1.2!~X2~1.24",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~1.28!~altı~3.3",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|Half_Time_Result||~1~4.57!~X~2.3!~2~2.16"
         ]
       }
     }
@@ -2127,21 +2115,22 @@
       "start_ts": 1785513600,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~1.4!~altı~2.65",
-          "|ou||~üstü~2.5!~altı~1.45",
-          "|ou||~üstü~1.9!~altı~1.84",
-          "|1x2||~1~4.3!~X~4.33!~2~1.65",
-          "|ou|2.5|~üstü~5.3!~altı~13",
-          "|ou|1.5|~üstü~4.75!~altı~19",
-          "|gg||~var~1.4!~yok~2.65",
-          "|Double_Chance||~1X~2.15!~12~1.21!~X2~1.21",
-          "|ou||~üstü~2.8!~altı~1.37",
-          "|ou||~üstü~2.13!~altı~1.65",
-          "|ou||~üstü~1.7!~altı~2.05",
-          "|ou||~üstü~3.1!~altı~1.3",
-          "|ou||~üstü~1.5!~altı~2.4",
           "|ou||~üstü~1.35!~altı~2.85",
-          "|Half_Time_Result||~1~4.4!~X~2.65!~2~2"
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|1x2||~1~4.3!~X~4.5!~2~1.63",
+          "|ou|2.5|~üstü~5.1!~altı~14",
+          "|ou|1.5|~üstü~4.6!~altı~23",
+          "|gg||~var~1.35!~yok~2.85",
+          "|Double_Chance||~1X~2.14!~12~1.2!~X2~1.21",
+          "|ou||~üstü~2.43!~altı~1.48",
+          "|ou||~üstü~1.95!~altı~1.79",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~1.43!~altı~2.55",
+          "|ou||~üstü~1.29!~altı~3.2",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|Half_Time_Result||~1~4.4!~X~2.74!~2~1.95"
         ]
       }
     }
@@ -2216,20 +2205,21 @@
       "start_ts": 1785511800,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~2.35!~altı~1.52",
-          "|ou||~üstü~1.9!~altı~1.84",
-          "|ou|2.5|~üstü~2.68!~altı~5.6",
-          "|ou|1.5|~üstü~2.25!~altı~9.6",
-          "|gg||~var~1.5!~yok~2.4",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~1.84!~altı~1.9",
+          "|ou|2.5|~üstü~2.6!~altı~5.8",
+          "|ou|1.5|~üstü~2.23!~altı~10",
+          "|gg||~var~1.48!~yok~2.43",
           "|Double_Chance||~1X~1.3!~12~1.26!~X2~1.77",
-          "|ou||~üstü~2.75!~altı~1.38",
-          "|ou||~üstü~2.13!~altı~1.65",
-          "|ou||~üstü~1.7!~altı~2.05",
-          "|ou||~üstü~1.38!~altı~2.75",
-          "|ou||~üstü~3.45!~altı~1.26",
-          "|ou||~üstü~1.55!~altı~2.28",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|ou||~üstü~1.52!~altı~2.35",
           "|Half_Time_Result||~1~2.44!~X~2.4!~2~3.56",
-          "|1x2||~1~1.96!~X~3.78!~2~3.38"
+          "|1x2||~1~1.96!~X~3.78!~2~3.38",
+          "|ou||~üstü~3.6!~altı~1.24"
         ]
       }
     }
@@ -2260,18 +2250,18 @@
       "group_markets": {
         "full_event|0": [
           "|ou||~üstü~1.98!~altı~1.77",
-          "|1x2||~1~2.64!~X~3.08!~2~2.73",
-          "|Half_Time_Result||~1~3.18!~X~2.11!~2~3.21",
+          "|1x2||~1~2.82!~X~3.08!~2~2.56",
+          "|Half_Time_Result||~1~3.15!~X~2.11!~2~3.05",
           "|ou||~üstü~3.45!~altı~1.26",
           "|ou||~üstü~1.32!~altı~3",
           "|ou||~üstü~1.52!~altı~2.35",
           "|ou||~üstü~1.75!~altı~2",
           "|ou||~üstü~2.25!~altı~1.57",
           "|ou||~üstü~2.75!~altı~1.38",
-          "|ou|2.5|~üstü~4.2!~altı~5.4",
-          "|ou|1.5|~üstü~3.4!~altı~7.9",
+          "|ou|2.5|~üstü~4.5!~altı~5.7",
+          "|ou|1.5|~üstü~3.67!~altı~7.6",
           "|gg||~var~1.72!~yok~2.03",
-          "|Double_Chance||~1X~1.43!~12~1.35!~X2~1.45",
+          "|Double_Chance||~1X~1.47!~12~1.35!~X2~1.4",
           "|ou||~üstü~3!~altı~1.32",
           "|ou||~üstü~1.38!~altı~2.75"
         ]
@@ -2382,7 +2372,9 @@
           "|ou||~üstü~3.17!~altı~1.89",
           "|ou||~üstü~1.85!~altı~3.41",
           "|ou||~üstü~1.26!~altı~9.7",
-          "|Corners||~üstü~1.8!~altı~1.9"
+          "|Corners||~üstü~1.64!~altı~2.12",
+          "|Corners||~üstü~2.04!~altı~1.69",
+          "|Corners||~üstü~1.82!~altı~1.88"
         ]
       }
     }
@@ -2429,7 +2421,8 @@
           "|Double_Chance||~1X~1.75!~12~1.27!~X2~1.32",
           "|ou||~üstü~4.3!~altı~1.18",
           "|ou||~üstü~3.3!~altı~1.28",
-          "|Corners||~üstü~2.08!~altı~1.66",
+          "|Corners||~üstü~1.61!~altı~2.17",
+          "|Corners||~üstü~1.82!~altı~1.88",
           "|gg||~var~1.89!~yok~1.7",
           "|gg||~var~2.42!~yok~1.42",
           "|ou||~üstü~2.29!~altı~1.47",
@@ -2447,7 +2440,8 @@
           "|ou||~üstü~5.3!~altı~1.38",
           "|ou||~üstü~2.75!~altı~2.03",
           "|ou||~üstü~1.67!~altı~3.8",
-          "|ou||~üstü~1.22!~altı~15"
+          "|ou||~üstü~1.22!~altı~15",
+          "|Corners||~üstü~2.04!~altı~1.69"
         ]
       }
     }
@@ -2512,7 +2506,13 @@
           "|ou||~üstü~7.2!~altı~1.27",
           "|ou||~üstü~3.56!~altı~1.76",
           "|ou||~üstü~1.99!~altı~3.1",
-          "|ou||~üstü~1.31!~altı~8.5"
+          "|ou||~üstü~1.31!~altı~8.5",
+          "|Corners||~üstü~4.3!~altı~1.32",
+          "|Corners||~üstü~3.01!~altı~1.57",
+          "|Corners||~üstü~2.21!~altı~1.98",
+          "|Corners||~üstü~1.71!~altı~2.71",
+          "|Corners||~üstü~1.39!~altı~4",
+          "|Corners||~üstü~1.94!~altı~1.76"
         ]
       }
     }
@@ -2558,7 +2558,7 @@
           "|ou||~üstü~1.35!~altı~2.85",
           "|Double_Chance||~1X~1.43!~12~1.3!~X2~1.53",
           "|ou||~üstü~1.28!~altı~3.3",
-          "|Corners||~üstü~1.85!~altı~1.85",
+          "|Corners||~üstü~1.69!~altı~2.04",
           "|gg||~var~2!~yok~1.62",
           "|gg||~var~2.62!~yok~1.36",
           "|ou||~üstü~2.62!~altı~1.36",
@@ -2576,7 +2576,9 @@
           "|ou||~üstü~6.6!~altı~1.3",
           "|ou||~üstü~3.1!~altı~1.83",
           "|ou||~üstü~1.91!~altı~3.27",
-          "|ou||~üstü~1.29!~altı~12"
+          "|ou||~üstü~1.29!~altı~12",
+          "|Corners||~üstü~2.15!~altı~1.62",
+          "|Corners||~üstü~1.91!~altı~1.79"
         ]
       }
     }
@@ -2622,7 +2624,7 @@
           "|ou||~üstü~4!~altı~1.2",
           "|ou||~üstü~3.4!~altı~1.27",
           "|ou||~üstü~1.25!~altı~3.55",
-          "|Corners||~üstü~1.97!~altı~1.73",
+          "|Corners||~üstü~1.82!~altı~1.88",
           "|gg||~var~2.34!~yok~1.45",
           "|gg||~var~3.05!~yok~1.27",
           "|ou||~üstü~1.4!~altı~2.48",
@@ -2639,7 +2641,13 @@
           "|ou||~üstü~9.2!~altı~1.2",
           "|ou||~üstü~4.05!~altı~1.6",
           "|ou||~üstü~2.2!~altı~2.65",
-          "|ou||~üstü~1.4!~altı~8.7"
+          "|ou||~üstü~1.4!~altı~8.7",
+          "|Corners||~üstü~3.23!~altı~1.51",
+          "|Corners||~üstü~2.34!~altı~1.89",
+          "|Corners||~üstü~1.78!~altı~2.55",
+          "|Corners||~üstü~1.44!~altı~3.75",
+          "|Corners||~üstü~1.22!~altı~6",
+          "|Corners||~üstü~2.07!~altı~1.67"
         ]
       }
     }
@@ -2687,7 +2695,7 @@
           "|ou||~üstü~4!~altı~1.2",
           "|ou||~üstü~1.21!~altı~3.9",
           "|ou||~üstü~4.3!~altı~1.18",
-          "|Corners||~üstü~1.85!~altı~1.85",
+          "|Corners||~üstü~1.77!~altı~1.93",
           "|gg||~var~1.81!~yok~1.77",
           "|gg||~var~2.34!~yok~1.45",
           "|ou||~üstü~2.22!~altı~1.5",
@@ -2705,7 +2713,8 @@
           "|ou||~üstü~5!~altı~1.43",
           "|ou||~üstü~2.71!~altı~2.11",
           "|ou||~üstü~1.67!~altı~3.9",
-          "|ou||~üstü~1.21!~altı~12"
+          "|ou||~üstü~1.21!~altı~12",
+          "|Corners||~üstü~2!~altı~1.72"
         ]
       }
     }
@@ -2769,7 +2778,8 @@
           "|ou||~üstü~3.1!~altı~1.85",
           "|ou||~üstü~1.89!~altı~3.4",
           "|ou||~üstü~1.27!~altı~12",
-          "|Corners||~üstü~1.73!~altı~1.97"
+          "|Corners||~üstü~1.75!~altı~1.95",
+          "|Corners||~üstü~1.95!~altı~1.75"
         ]
       }
     }
@@ -2896,14 +2906,14 @@
           "|Double_Chance||~1X~1.12!~12~1.23!~X2~2.55",
           "|ou||~üstü~3.4!~altı~1.27",
           "|ou||~üstü~2.95!~altı~1.33",
-          "|Corners||~üstü~1.87!~altı~1.83",
-          "|Corners||~üstü~3.45!~altı~1.46",
-          "|Corners||~üstü~2.47!~altı~1.83",
-          "|Corners||~üstü~1.86!~altı~2.42",
-          "|Corners||~üstü~1.48!~altı~3.53",
-          "|Corners||~üstü~1.25!~altı~5.7",
-          "|Corners||~üstü~2.2!~altı~1.6",
-          "|Corners||~üstü~1.63!~altı~2.13"
+          "|Corners||~üstü~1.69!~altı~2.04",
+          "|Corners||~üstü~2.91!~altı~1.61",
+          "|Corners||~üstü~2.17!~altı~2.04",
+          "|Corners||~üstü~1.69!~altı~2.79",
+          "|Corners||~üstü~1.37!~altı~4.2",
+          "|Corners||~üstü~1.9!~altı~1.8",
+          "|Corners||~üstü~4.1!~altı~1.34",
+          "|Corners||~üstü~2.17!~altı~1.61"
         ]
       }
     }
@@ -2967,13 +2977,14 @@
           "|ou||~üstü~1.32!~altı~3",
           "|Double_Chance||~1X~1.43!~12~1.36!~X2~1.43",
           "|ou||~üstü~2.75!~altı~1.38",
-          "|Corners||~üstü~1.97!~altı~1.73",
+          "|Corners||~üstü~1.78!~altı~1.92",
           "|Corners||~üstü~1.74!~altı~1.96",
           "|Corners||~üstü~3.78!~altı~1.4",
           "|Corners||~üstü~2.67!~altı~1.71",
           "|Corners||~üstü~1.98!~altı~2.26",
           "|Corners||~üstü~1.55!~altı~3.25",
-          "|Corners||~üstü~1.29!~altı~5.1"
+          "|Corners||~üstü~1.29!~altı~5.1",
+          "|Corners||~üstü~1.97!~altı~1.73"
         ]
       }
     }
@@ -3036,13 +3047,13 @@
           "|Double_Chance||~1X~1.28!~12~1.31!~X2~1.7",
           "|ou||~üstü~3.4!~altı~1.27",
           "|ou||~üstü~3!~altı~1.32",
-          "|Corners||~üstü~1.74!~altı~1.96",
-          "|Corners||~üstü~1.97!~altı~1.73",
-          "|Corners||~üstü~3.78!~altı~1.4",
-          "|Corners||~üstü~2.67!~altı~1.71",
-          "|Corners||~üstü~1.98!~altı~2.26",
-          "|Corners||~üstü~1.55!~altı~3.25",
-          "|Corners||~üstü~1.29!~altı~5.1"
+          "|Corners||~üstü~1.76!~altı~1.94",
+          "|Corners||~üstü~3.12!~altı~1.54",
+          "|Corners||~üstü~2.27!~altı~1.94",
+          "|Corners||~üstü~1.76!~altı~2.63",
+          "|Corners||~üstü~1.41!~altı~3.89",
+          "|Corners||~üstü~4.4!~altı~1.3",
+          "|Corners||~üstü~2.01!~altı~1.71"
         ]
       }
     }
@@ -3106,14 +3117,14 @@
           "|ou||~üstü~1.29!~altı~3.2",
           "|Double_Chance||~1X~1.25!~12~1.28!~X2~1.83",
           "|ou||~üstü~2.55!~altı~1.43",
-          "|Corners||~üstü~1.84!~altı~1.86",
-          "|Corners||~üstü~2.08!~altı~1.66",
-          "|Corners||~üstü~1.64!~altı~2.12",
-          "|Corners||~üstü~3.9!~altı~1.37",
-          "|Corners||~üstü~2.78!~altı~1.66",
-          "|Corners||~üstü~2.07!~altı~2.12",
-          "|Corners||~üstü~1.64!~altı~2.91",
-          "|Corners||~üstü~1.34!~altı~4.4"
+          "|Corners||~üstü~1.86!~altı~1.84",
+          "|Corners||~üstü~2.12!~altı~1.64",
+          "|Corners||~üstü~1.65!~altı~2.1",
+          "|Corners||~üstü~3.97!~altı~1.36",
+          "|Corners||~üstü~2.83!~altı~1.64",
+          "|Corners||~üstü~2.12!~altı~2.1",
+          "|Corners||~üstü~1.65!~altı~2.87",
+          "|Corners||~üstü~1.35!~altı~4.3"
         ]
       }
     }
@@ -3177,7 +3188,14 @@
           "|ou||~üstü~1.29!~altı~3.2",
           "|Double_Chance||~1X~1.11!~12~1.21!~X2~2.55",
           "|ou||~üstü~2.55!~altı~1.43",
-          "|Corners||~üstü~1.85!~altı~1.85"
+          "|Corners||~üstü~1.69!~altı~2.04",
+          "|Corners||~üstü~2.92!~altı~1.61",
+          "|Corners||~üstü~2.17!~altı~2.04",
+          "|Corners||~üstü~1.69!~altı~2.79",
+          "|Corners||~üstü~1.37!~altı~4.2",
+          "|Corners||~üstü~1.9!~altı~1.8",
+          "|Corners||~üstü~2.17!~altı~1.61",
+          "|Corners||~üstü~4.1!~altı~1.34"
         ]
       }
     }
@@ -3240,14 +3258,13 @@
           "|ou||~üstü~3.9!~altı~1.21",
           "|ou||~üstü~4.3!~altı~1.18",
           "|ou||~üstü~3.55!~altı~1.25",
-          "|Corners||~üstü~1.85!~altı~1.85",
-          "|Corners||~üstü~3.37!~altı~1.48",
-          "|Corners||~üstü~2.43!~altı~1.85",
-          "|Corners||~üstü~1.85!~altı~2.46",
-          "|Corners||~üstü~1.47!~altı~3.6",
-          "|Corners||~üstü~1.24!~altı~5.8",
-          "|Corners||~üstü~2.15!~altı~1.62",
-          "|Corners||~üstü~1.62!~altı~2.15"
+          "|Corners||~üstü~1.78!~altı~1.92",
+          "|Corners||~üstü~3.16!~altı~1.53",
+          "|Corners||~üstü~2.3!~altı~1.92",
+          "|Corners||~üstü~1.78!~altı~2.59",
+          "|Corners||~üstü~1.42!~altı~3.83",
+          "|Corners||~üstü~1.21!~altı~6.2",
+          "|Corners||~üstü~2.04!~altı~1.69"
         ]
       }
     }
@@ -3334,7 +3351,7 @@
           "|ou|1.5|~üstü~61!~altı~56",
           "|gg||~var~3.4!~yok~1.27",
           "|Double_Chance||~1X~10!~12~1.025!~X2~1.001",
-          "|Half_Time_Result||~1~29!~X~3.58!~2~1.27",
+          "|Half_Time_Result||~1~26!~X~3.51!~2~1.29",
           "|ou||~üstü~1.27!~altı~3.4",
           "|ou||~üstü~3.2!~altı~1.29"
         ]
@@ -3462,14 +3479,14 @@
           "|ou||~üstü~1.35!~altı~2.85",
           "|ou||~üstü~2.4!~altı~1.5",
           "|ou||~üstü~3.6!~altı~1.24",
-          "|ou|2.5|~üstü~3.99!~altı~4.7",
-          "|ou|1.5|~üstü~3.17!~altı~6.4",
+          "|ou|2.5|~üstü~3.97!~altı~4.7",
+          "|ou|1.5|~üstü~3.16!~altı~6.8",
           "|gg||~var~1.8!~yok~1.94",
-          "|Double_Chance||~1X~1.35!~12~1.35!~X2~1.53",
+          "|Double_Chance||~1X~1.36!~12~1.35!~X2~1.53",
           "|ou||~üstü~3.4!~altı~1.27",
           "|ou||~üstü~2.95!~altı~1.33",
-          "|1x2||~1~2.4!~X~3.08!~2~3.04",
-          "|Half_Time_Result||~1~2.85!~X~2.08!~2~3.59"
+          "|1x2||~1~2.39!~X~3.08!~2~3.06",
+          "|Half_Time_Result||~1~2.87!~X~2.08!~2~3.55"
         ]
       }
     }
@@ -4781,7 +4798,7 @@
         "full_event|0": [
           "|Half_Time_Result||~1~1.92!~X~2.52!~2~5.5",
           "|ou||~üstü~1.47!~altı~2.45",
-          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~3.6!~altı~1.24",
           "|ou||~üstü~2.17!~altı~1.62",
           "|1x2||~1~1.41!~X~5!~2~6.2",
           "|gg||~var~1.89!~yok~1.7",
@@ -4795,20 +4812,21 @@
           "|ou||~üstü~2.34!~altı~1.45",
           "|ou|3.5|~üstü~2.64!~altı~3.88",
           "|ou|2.5|~üstü~1.95!~altı~9.5",
-          "|ou|4.5|~üstü~4.7!~altı~1.84",
+          "|ou|4.5|~üstü~4.3!~altı~1.9",
           "|ou|3.5|~üstü~2.78!~altı~2.47",
           "|ou|2.5|~üstü~1.87!~altı~4.5",
           "|ou|1.5|~üstü~1.57!~altı~8.5",
           "|gg||~var~1.7!~yok~2.05",
-          "|ou||~üstü~3.55!~altı~1.25",
-          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~3.3!~altı~1.28",
+          "|ou||~üstü~2.45!~altı~1.47",
           "|ou||~üstü~1.98!~altı~1.77",
           "|ou||~üstü~1.58!~altı~2.23",
           "|ou||~üstü~1.32!~altı~3",
-          "|ou||~üstü~3.1!~altı~1.3",
+          "|ou||~üstü~2.95!~altı~1.33",
           "|ou||~üstü~1.75!~altı~2",
           "|ou||~üstü~1.19!~altı~4.2",
-          "|Double_Chance||~1X~1.12!~12~1.17!~X2~2.75"
+          "|Double_Chance||~1X~1.12!~12~1.17!~X2~2.75",
+          "|ou||~üstü~4.3!~altı~1.18"
         ]
       }
     }
@@ -5079,7 +5097,7 @@
       "start_ts": 1785517200,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~1~2.91!~X~4.2!~2~2.05",
+          "|1x2||~1~2.75!~X~4.1!~2~2.15",
           "|ou||~üstü~1.52!~altı~2.35",
           "|ou||~üstü~1.65!~altı~2.13",
           "|ou||~üstü~2.8!~altı~1.37",
@@ -5087,14 +5105,14 @@
           "|ou||~üstü~2.33!~altı~1.53",
           "|ou||~üstü~1.42!~altı~2.6",
           "|ou||~üstü~2.1!~altı~1.67",
-          "|ou|2.5|~üstü~3.68!~altı~8.6",
-          "|ou|1.5|~üstü~3.25!~altı~14",
+          "|ou|2.5|~üstü~3.52!~altı~8.3",
+          "|ou|1.5|~üstü~3.05!~altı~14",
           "|gg||~var~1.42!~yok~2.6",
-          "|Double_Chance||~1X~1.7!~12~1.22!~X2~1.38",
+          "|Double_Chance||~1X~1.67!~12~1.23!~X2~1.42",
           "|ou||~üstü~3!~altı~1.32",
           "|ou||~üstü~1.29!~altı~3.2",
           "|ou||~üstü~3.4!~altı~1.27",
-          "|Half_Time_Result||~1~3.37!~X~2.51!~2~2.44"
+          "|Half_Time_Result||~1~3.19!~X~2.5!~2~2.52"
         ]
       }
     }
@@ -5366,6 +5384,50 @@
     }
   },
   {
+    "id": "30403482",
+    "isScraped": true,
+    "data": {
+      "id": 30403482,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "2. Division"
+      },
+      "country": {
+        "name": "İsveç"
+      },
+      "participants": {
+        "home": "Ifk Skövde Fk",
+        "away": "Ahlafors IF",
+        "home_id": 193049,
+        "away_id": 99855
+      },
+      "start_time": "2026-07-31T17:30:00.000Z",
+      "start_ts": 1785519000,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~1.63!~altı~2.15",
+          "|ou||~üstü~1.8!~altı~1.94",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~1.5!~altı~2.4",
+          "|ou||~üstü~2.23!~altı~1.58",
+          "|1x2||~1~1.82!~X~3.87!~2~3.83",
+          "|ou|2.5|~üstü~2.39!~altı~5.6",
+          "|ou|1.5|~üstü~2.05!~altı~9",
+          "|gg||~var~1.48!~yok~2.43",
+          "|Double_Chance||~1X~1.24!~12~1.25!~X2~1.95",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|Half_Time_Result||~1~2.21!~X~2.47!~2~4.1"
+        ]
+      }
+    }
+  },
+  {
     "id": "30403483",
     "isScraped": true,
     "data": {
@@ -5406,6 +5468,51 @@
           "|ou||~üstü~1.32!~altı~3",
           "|ou||~üstü~3.6!~altı~1.24",
           "|Half_Time_Result||~1~3.83!~X~2.48!~2~2.3"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30403572",
+    "isScraped": true,
+    "data": {
+      "id": 30403572,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "2. Division"
+      },
+      "country": {
+        "name": "İsveç"
+      },
+      "participants": {
+        "home": "FOC Farsta",
+        "away": "Ragsveds IF",
+        "home_id": 99934,
+        "away_id": 264859
+      },
+      "start_time": "2026-07-31T18:00:00.000Z",
+      "start_ts": 1785520800,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.23!~altı~1.58",
+          "|ou||~üstü~1.8!~altı~1.94",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~1.47!~altı~2.45",
+          "|ou||~üstü~1.38!~altı~2.75",
+          "|1x2||~1~1.89!~X~3.98!~2~3.45",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou|2.5|~üstü~2.35!~altı~6.7",
+          "|ou|1.5|~üstü~2.07!~altı~11",
+          "|gg||~var~1.38!~yok~2.75",
+          "|Double_Chance||~1X~1.29!~12~1.24!~X2~1.83",
+          "|Half_Time_Result||~1~2.25!~X~2.56!~2~3.72",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.27!~altı~3.4",
+          "|ou||~üstü~3.1!~altı~1.3"
         ]
       }
     }
@@ -5549,16 +5656,16 @@
       "start_ts": 1785549600,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.98!~altı~1.77",
           "|ou||~üstü~1.77!~altı~1.98",
           "|ou||~üstü~1.6!~altı~2.2",
-          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~2.45!~altı~1.47",
           "|ou||~üstü~1.48!~altı~2.43",
           "|ou||~üstü~2.2!~altı~1.6",
-          "|1x2||~1~2.41!~X~3.72!~2~2.59",
-          "|gg||~var~1.43!~yok~2.55",
-          "|Double_Chance||~1X~1.46!~12~1.27!~X2~1.55",
-          "|Half_Time_Result||~1~2.7!~X~2.43!~2~2.95"
+          "|1x2||~1~2.25!~X~3.86!~2~2.73",
+          "|gg||~var~1.45!~yok~2.5",
+          "|Double_Chance||~1X~1.42!~12~1.25!~X2~1.62",
+          "|Half_Time_Result||~1~2.59!~X~2.43!~2~3.15"
         ]
       }
     }
@@ -5632,9 +5739,9 @@
           "|ou||~üstü~1.72!~altı~2.03",
           "|ou||~üstü~2.13!~altı~1.65",
           "|ou||~üstü~1.45!~altı~2.5",
-          "|1x2||~1~2.7!~X~3.88!~2~2.27",
-          "|Double_Chance||~1X~1.58!~12~1.25!~X2~1.45",
-          "|Half_Time_Result||~1~3.05!~X~2.47!~2~2.59"
+          "|1x2||~1~2.5!~X~3.95!~2~2.4",
+          "|Double_Chance||~1X~1.53!~12~1.24!~X2~1.5",
+          "|Half_Time_Result||~1~2.87!~X~2.47!~2~2.68"
         ]
       }
     }
@@ -5703,16 +5810,15 @@
       "start_ts": 1785625200,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~1.79!~altı~1.95",
-          "|ou||~üstü~2!~altı~1.75",
-          "|ou||~üstü~2.5!~altı~1.45",
-          "|ou||~üstü~1.6!~altı~2.2",
-          "|ou||~üstü~1.5!~altı~2.4",
-          "|ou||~üstü~2.2!~altı~1.6",
-          "|1x2||~1~2.21!~X~3.76!~2~2.85",
-          "|Double_Chance||~1X~1.4!~12~1.26!~X2~1.65",
-          "|Half_Time_Result||~1~2.55!~X~2.44!~2~3.15",
-          "|gg||~var~1.45!~yok~2.5"
+          "|ou||~üstü~1.72!~altı~2.03",
+          "|ou||~üstü~1.94!~altı~1.8",
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|ou||~üstü~2.13!~altı~1.65",
+          "|1x2||~1~2.26!~X~3.83!~2~2.73",
+          "|Double_Chance||~1X~1.42!~12~1.25!~X2~1.59",
+          "|Half_Time_Result||~1~2.59!~X~2.47!~2~3.05"
         ]
       }
     }
@@ -5780,14 +5886,14 @@
       "start_ts": 1785628800,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~2.05!~altı~1.7",
-          "|ou||~üstü~1.65!~altı~2.13",
-          "|ou||~üstü~1.84!~altı~1.9",
-          "|ou||~üstü~2.28!~altı~1.55",
-          "|1x2||~1~3.19!~X~3.98!~2~1.98",
-          "|ou||~üstü~1.52!~altı~2.35",
-          "|gg||~var~1.5!~yok~2.4",
-          "|Double_Chance||~1X~1.76!~12~1.24!~X2~1.33",
+          "|ou||~üstü~2.1!~altı~1.67",
+          "|ou||~üstü~1.67!~altı~2.1",
+          "|ou||~üstü~1.87!~altı~1.87",
+          "|ou||~üstü~2.33!~altı~1.53",
+          "|1x2||~1~3.47!~X~3.47!~2~2.02",
+          "|ou||~üstü~1.55!~altı~2.28",
+          "|gg||~var~1.47!~yok~2.45",
+          "|Double_Chance||~1X~1.72!~12~1.29!~X2~1.29",
           "|Half_Time_Result||~1~3.61!~X~2.42!~2~2.4"
         ]
       }
@@ -5883,6 +5989,44 @@
           "|ou||~üstü~2.35!~altı~1.52",
           "|ou||~üstü~1.37!~altı~2.8",
           "|Double_Chance||~1X~1.16!~12~1.34!~X2~1.94"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30441074",
+    "isScraped": true,
+    "data": {
+      "id": 30441074,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "NIWFA Şampiyonası - Kadınlar"
+      },
+      "country": {
+        "name": "Kuzey İrlanda"
+      },
+      "participants": {
+        "home": "Ballyclare Comrades FC (Kadınlar)",
+        "away": "Mid Ulster LFC (Kadınlar)",
+        "home_id": 840301,
+        "away_id": 217962
+      },
+      "start_time": "2026-07-31T18:30:00.000Z",
+      "start_ts": 1785522600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|ou||~üstü~1.84!~altı~1.9",
+          "|1x2||~1~1.48!~X~5.6!~2~4.7",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|gg||~var~1.58!~yok~2.23",
+          "|Double_Chance||~1X~1.19!~12~1.14!~X2~2.5",
+          "|ou||~üstü~1.47!~altı~2.45",
+          "|Half_Time_Result||~1~1.75!~X~2.9!~2~5.5"
         ]
       }
     }
@@ -6254,6 +6398,66 @@
     }
   },
   {
+    "id": "30400997",
+    "isScraped": true,
+    "data": {
+      "id": 30400997,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Manchester City",
+        "away": "Inter Milan",
+        "home_id": 395,
+        "away_id": 774
+      },
+      "start_time": "2026-08-01T11:30:00.000Z",
+      "start_ts": 1785583800,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~4.2!~altı~1.19",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|ou||~üstü~1.55!~altı~2.28",
+          "|ou||~üstü~1.32!~altı~3.1",
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|Half_Time_Result||~1~2.56!~X~2.43!~2~3.36",
+          "|ou||~üstü~2.13!~altı~1.65",
+          "|1x2||~1~2.1!~X~3.86!~2~2.99",
+          "|ou||~üstü~1.7!~altı~2.05",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~1.92!~altı~1.82",
+          "|gg||~var~1.62!~yok~2",
+          "|gg||~var~2.06!~yok~1.58",
+          "|ou||~üstü~1.45!~altı~2.34",
+          "|ou||~üstü~1.81!~altı~1.77",
+          "|gg||~var~4.6!~yok~1.11",
+          "|ou||~üstü~1.48!~altı~2.26",
+          "|ou||~üstü~2.18!~altı~1.52",
+          "|ou||~üstü~5.5!~altı~1.07",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou|3.5|~üstü~2.27!~altı~3.23",
+          "|ou|2.5|~üstü~1.66!~altı~7.6",
+          "|ou|4.5|~üstü~6.2!~altı~2.79",
+          "|ou|3.5|~üstü~4.2!~altı~3.47",
+          "|ou|2.5|~üstü~2.7!~altı~6.7",
+          "|ou|1.5|~üstü~2.35!~altı~11",
+          "|Double_Chance||~1X~1.37!~12~1.25!~X2~1.67",
+          "|gg||~var~1.42!~yok~2.6"
+        ]
+      }
+    }
+  },
+  {
     "id": "30417983",
     "isScraped": true,
     "data": {
@@ -6280,15 +6484,15 @@
         "full_event|0": [
           "|1x2||~1~6.3!~X~5.4!~2~1.38",
           "|ou||~üstü~1.45!~altı~2.5",
-          "|ou||~üstü~3.4!~altı~1.27",
-          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|ou||~üstü~2.55!~altı~1.43",
           "|ou||~üstü~1.79!~altı~1.95",
           "|ou||~üstü~1.58!~altı~2.23",
-          "|ou||~üstü~4!~altı~1.2",
+          "|ou||~üstü~3.7!~altı~1.23",
           "|ou||~üstü~1.38!~altı~2.75",
           "|ou||~üstü~1.98!~altı~1.77",
-          "|ou||~üstü~3!~altı~1.32",
-          "|ou||~üstü~2.23!~altı~1.58",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~2.2!~altı~1.6",
           "|ou||~üstü~1.26!~altı~3.45",
           "|Half_Time_Result||~1~5.5!~X~2.71!~2~1.82",
           "|gg||~var~1.76!~yok~1.82",
@@ -6302,7 +6506,7 @@
           "|ou||~üstü~2.22!~altı~1.5",
           "|ou|3.5|~üstü~2.33!~altı~4.1",
           "|ou|2.5|~üstü~1.77!~altı~11",
-          "|ou|4.5|~üstü~23!~altı~7.3",
+          "|ou|4.5|~üstü~21!~altı~7.5",
           "|ou|3.5|~üstü~15!~altı~8.7",
           "|ou|2.5|~üstü~8.5!~altı~15",
           "|ou|1.5|~üstü~7.3!~altı~23",
@@ -6397,7 +6601,7 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~1~1.4!~X~4.9!~2~6.7",
-          "|Half_Time_Result||~1~1.82!~X~2.58!~2~6.2",
+          "|Half_Time_Result||~1~1.79!~X~2.61!~2~6.3",
           "|ou||~üstü~2.25!~altı~1.57",
           "|ou||~üstü~1.52!~altı~2.35",
           "|ou||~üstü~3.8!~altı~1.22",
@@ -6648,40 +6852,40 @@
         "full_event|0": [
           "|Corners||~üstü~2.17!~altı~1.61",
           "|Corners||~üstü~1.67!~altı~2.07",
-          "|ou||~üstü~2.43!~altı~1.48",
-          "|ou||~üstü~1.89!~altı~1.85",
-          "|ou||~üstü~1.52!~altı~2.35",
-          "|ou||~üstü~1.32!~altı~3",
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|ou||~üstü~1.87!~altı~1.87",
+          "|ou||~üstü~1.5!~altı~2.4",
+          "|ou||~üstü~1.3!~altı~3.1",
           "|ou||~üstü~2.65!~altı~1.4",
-          "|1x2||~1~1.96!~X~3.63!~2~3.51",
+          "|1x2||~1~1.86!~X~3.74!~2~3.79",
           "|ou||~üstü~1.7!~altı~2.05",
-          "|ou||~üstü~2.17!~altı~1.62",
-          "|gg||~var~1.87!~yok~1.72",
+          "|ou||~üstü~2.13!~altı~1.65",
+          "|gg||~var~1.89!~yok~1.7",
           "|gg||~var~2.42!~yok~1.42",
-          "|ou||~üstü~2.26!~altı~1.48",
+          "|ou||~üstü~2.22!~altı~1.5",
           "|ou||~üstü~1.65!~altı~1.96",
           "|gg||~var~5.5!~yok~1.07",
           "|ou||~üstü~2.66!~altı~1.35",
           "|ou||~üstü~1.62!~altı~2",
           "|ou||~üstü~6.25!~altı~1.045",
           "|ou||~üstü~2.55!~altı~1.38",
-          "|ou|3.5|~üstü~2.98!~altı~3.05",
-          "|ou|2.5|~üstü~1.99!~altı~6.6",
-          "|ou|4.5|~üstü~7.8!~altı~2.36",
-          "|ou|3.5|~üstü~4.9!~altı~2.84",
-          "|ou|2.5|~üstü~2.82!~altı~4.9",
-          "|ou|1.5|~üstü~2.33!~altı~7.7",
-          "|gg||~var~1.62!~yok~2.17",
+          "|ou|3.5|~üstü~2.98!~altı~2.9",
+          "|ou|2.5|~üstü~2.01!~altı~6.9",
+          "|ou|4.5|~üstü~7.2!~altı~2.25",
+          "|ou|3.5|~üstü~4.4!~altı~2.7",
+          "|ou|2.5|~üstü~2.65!~altı~4.75",
+          "|ou|1.5|~üstü~2.18!~altı~8.2",
+          "|gg||~var~1.65!~yok~2.13",
           "|ou||~üstü~9.1!~altı~1.15",
-          "|ou||~üstü~5.2!~altı~1.4",
+          "|ou||~üstü~5.1!~altı~1.4",
           "|ou||~üstü~2.65!~altı~2.05",
-          "|ou||~üstü~1.7!~altı~3.8",
+          "|ou||~üstü~1.7!~altı~4.2",
           "|ou||~üstü~1.22!~altı~11",
-          "|Double_Chance||~1X~1.28!~12~1.28!~X2~1.76",
-          "|Half_Time_Result||~1~2.41!~X~2.29!~2~4",
-          "|ou||~üstü~3.2!~altı~1.29",
+          "|Double_Chance||~1X~1.25!~12~1.26!~X2~1.91",
+          "|Half_Time_Result||~1~2.3!~X~2.3!~2~4.3",
+          "|ou||~üstü~3.1!~altı~1.3",
           "|ou||~üstü~1.25!~altı~3.55",
-          "|ou||~üstü~4.2!~altı~1.19",
+          "|ou||~üstü~4!~altı~1.2",
           "|ou||~üstü~1.22!~altı~3.8"
         ]
       }
@@ -6712,40 +6916,40 @@
       "start_ts": 1785486600,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~1.42!~altı~2.75",
           "|ou||~üstü~2.4!~altı~1.5",
-          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~2.8!~altı~1.4",
           "|ou||~üstü~2.05!~altı~1.7",
-          "|ou||~üstü~1.62!~altı~2.17",
+          "|ou||~üstü~1.65!~altı~2.2",
           "|ou||~üstü~1.84!~altı~1.9",
           "|1x2||~1~3.45!~X~3.31!~2~2.09",
           "|ou||~üstü~1.32!~altı~3",
           "|gg||~var~2!~yok~1.62",
           "|gg||~var~2.55!~yok~1.38",
           "|ou||~üstü~2.48!~altı~1.4",
-          "|ou||~üstü~1.74!~altı~1.84",
+          "|ou||~üstü~1.75!~altı~1.83",
           "|gg||~var~5.75!~yok~1.06",
           "|ou||~üstü~2.87!~altı~1.3",
-          "|ou||~üstü~1.67!~altı~1.93",
+          "|ou||~üstü~1.68!~altı~1.92",
           "|ou||~üstü~6.6!~altı~1.035",
           "|ou||~üstü~2.7!~altı~1.34",
           "|ou|3.5|~üstü~3.33!~altı~2.97",
           "|ou|2.5|~üstü~2.15!~altı~6.2",
           "|ou|4.5|~üstü~17!~altı~3.78",
-          "|ou|3.5|~üstü~11!~altı~4.3",
+          "|ou|3.5|~üstü~11!~altı~4.33",
           "|ou|2.5|~üstü~5.3!~altı~7",
-          "|ou|1.5|~üstü~4.33!~altı~10",
+          "|ou|1.5|~üstü~4.4!~altı~10",
           "|gg||~var~1.67!~yok~2.1",
-          "|ou||~üstü~11!~altı~1.12",
-          "|ou||~üstü~6.2!~altı~1.32",
-          "|ou||~üstü~3!~altı~1.88",
-          "|ou||~üstü~1.82!~altı~3.45",
-          "|ou||~üstü~1.26!~altı~13",
-          "|ou||~üstü~3.7!~altı~1.23",
+          "|ou||~üstü~13!~altı~1.11",
+          "|ou||~üstü~6.2!~altı~1.33",
+          "|ou||~üstü~3.18!~altı~1.89",
+          "|ou||~üstü~1.85!~altı~3.41",
+          "|ou||~üstü~1.27!~altı~12",
+          "|ou||~üstü~3.8!~altı~1.25",
           "|Double_Chance||~1X~1.72!~12~1.31!~X2~1.29",
           "|ou||~üstü~3!~altı~1.32",
           "|ou||~üstü~1.26!~altı~3.45",
-          "|Half_Time_Result||~1~3.75!~X~2.21!~2~2.55"
+          "|Half_Time_Result||~1~3.75!~X~2.2!~2~2.52"
         ]
       }
     }
@@ -6777,19 +6981,19 @@
         "full_event|0": [
           "|ou||~üstü~1.22!~altı~3.8",
           "|ou||~üstü~4.2!~altı~1.19",
-          "|ou||~üstü~1.32!~altı~3",
-          "|Half_Time_Result||~1~2.2!~X~2.31!~2~4.75",
+          "|ou||~üstü~1.33!~altı~3.15",
+          "|Half_Time_Result||~1~2.25!~X~2.29!~2~4.5",
           "|ou||~üstü~2.65!~altı~1.4",
-          "|ou||~üstü~2.17!~altı~1.62",
+          "|ou||~üstü~2.23!~altı~1.63",
           "|ou||~üstü~1.72!~altı~2.03",
-          "|1x2||~1~1.68!~X~3.83!~2~4.7",
-          "|ou||~üstü~2.43!~altı~1.48",
-          "|ou||~üstü~1.9!~altı~1.84",
+          "|1x2||~1~1.74!~X~3.75!~2~4.4",
+          "|ou||~üstü~2.5!~altı~1.5",
+          "|ou||~üstü~1.94!~altı~1.87",
           "|ou||~üstü~1.52!~altı~2.35",
           "|ou||~üstü~1.26!~altı~3.45",
           "|ou||~üstü~3.2!~altı~1.29",
           "|gg||~var~1.96!~yok~1.65",
-          "|gg||~var~2.55!~yok~1.38",
+          "|gg||~var~2.48!~yok~1.4",
           "|ou||~üstü~2.26!~altı~1.48",
           "|ou||~üstü~1.65!~altı~1.96",
           "|gg||~var~5.75!~yok~1.06",
@@ -6797,14 +7001,80 @@
           "|ou||~üstü~1.62!~altı~2",
           "|ou||~üstü~6.4!~altı~1.04",
           "|ou||~üstü~2.62!~altı~1.36",
-          "|ou|3.5|~üstü~3.12!~altı~3.25",
-          "|ou|2.5|~üstü~2.09!~altı~7.1",
-          "|ou|4.5|~üstü~6.8!~altı~2.04",
-          "|ou|3.5|~üstü~4.1!~altı~2.49",
-          "|ou|2.5|~üstü~2.44!~altı~4.3",
-          "|ou|1.5|~üstü~1.99!~altı~7",
-          "|gg||~var~1.72!~yok~2.03",
-          "|Double_Chance||~1X~1.2!~12~1.25!~X2~2.05"
+          "|ou|3.5|~üstü~3.08!~altı~3.19",
+          "|ou|2.5|~üstü~2.07!~altı~6.9",
+          "|ou|4.5|~üstü~6.9!~altı~2.09",
+          "|ou|3.5|~üstü~4.3!~altı~2.52",
+          "|ou|2.5|~üstü~2.53!~altı~4.33",
+          "|ou|1.5|~üstü~2.07!~altı~7.4",
+          "|gg||~var~1.7!~yok~2.05",
+          "|Double_Chance||~1X~1.21!~12~1.26!~X2~2.07"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30440669",
+    "isScraped": true,
+    "data": {
+      "id": 30440669,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Evesham United FC",
+        "away": "Bishop's Cleeve FC",
+        "home_id": 13894,
+        "away_id": 97537
+      },
+      "start_time": "2026-07-31T18:45:00.000Z",
+      "start_ts": 1785523500,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~2.1!~altı~1.67",
+          "|1x2||~1~1.95!~X~3.71!~2~3.47",
+          "|ou||~üstü~1.67!~altı~2.1",
+          "|ou||~üstü~1.53!~altı~2.33",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~1.87!~altı~1.87",
+          "|gg||~var~1.72!~yok~1.87",
+          "|gg||~var~2.18!~yok~1.52",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~1.96!~altı~1.65",
+          "|gg||~var~5!~yok~1.09",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.51!~altı~3.14",
+          "|ou|2.5|~üstü~1.78!~altı~7",
+          "|ou|4.5|~üstü~6.3!~altı~2.49",
+          "|ou|3.5|~üstü~4.2!~altı~3.07",
+          "|ou|2.5|~üstü~2.59!~altı~5.7",
+          "|ou|1.5|~üstü~2.22!~altı~9.1",
+          "|gg||~var~1.48!~yok~2.43",
+          "|ou||~üstü~17!~altı~1.075",
+          "|ou||~üstü~6.8!~altı~1.21",
+          "|ou||~üstü~4.1!~altı~1.52",
+          "|ou||~üstü~2.36!~altı~2.38",
+          "|ou||~üstü~1.54!~altı~4.7",
+          "|ou||~üstü~1.16!~altı~19",
+          "|Double_Chance||~1X~1.28!~12~1.27!~X2~1.78",
+          "|ou||~üstü~1.22!~altı~3.8",
+          "|ou||~üstü~3.9!~altı~1.21",
+          "|ou||~üstü~3.3!~altı~1.28",
+          "|Half_Time_Result||~1~2.35!~X~2.42!~2~3.84",
+          "|ou||~üstü~3.6!~altı~1.24",
+          "|ou||~üstü~1.19!~altı~4.2"
         ]
       }
     }
@@ -6893,7 +7163,44 @@
       "start_ts": 1785522600,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.9!~altı~1.8"
+          "|Corners||~üstü~1.94!~altı~1.76",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~1.85!~altı~1.89",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|1x2||~1~2.02!~X~4!~2~3.08",
+          "|ou||~üstü~1.53!~altı~2.33",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|gg||~var~1.7!~yok~1.89",
+          "|gg||~var~2.18!~yok~1.52",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~1.96!~altı~1.65",
+          "|gg||~var~5!~yok~1.09",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.49!~altı~3.25",
+          "|ou|2.5|~üstü~1.77!~altı~7.7",
+          "|ou|4.5|~üstü~6.5!~altı~2.58",
+          "|ou|3.5|~üstü~4.3!~altı~3.21",
+          "|ou|2.5|~üstü~2.69!~altı~5.9",
+          "|ou|1.5|~üstü~2.27!~altı~9.8",
+          "|gg||~var~1.5!~yok~2.4",
+          "|ou||~üstü~17!~altı~1.07",
+          "|ou||~üstü~6.7!~altı~1.22",
+          "|ou||~üstü~3.8!~altı~1.55",
+          "|ou||~üstü~2.28!~altı~2.33",
+          "|ou||~üstü~1.53!~altı~4.75",
+          "|ou||~üstü~1.16!~altı~21",
+          "|Double_Chance||~1X~1.35!~12~1.24!~X2~1.73",
+          "|Half_Time_Result||~1~2.44!~X~2.41!~2~3.4",
+          "|ou||~üstü~3.6!~altı~1.24",
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~3.3!~altı~1.28",
+          "|ou||~üstü~1.22!~altı~3.8"
         ]
       }
     }
@@ -6923,7 +7230,43 @@
       "start_ts": 1785522600,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.85!~altı~1.85"
+          "|Corners||~üstü~1.85!~altı~1.85",
+          "|ou||~üstü~1.7!~altı~2.05",
+          "|ou||~üstü~2.75!~altı~1.38",
+          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~1.92!~altı~1.82",
+          "|ou||~üstü~2.15!~altı~1.63",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|1x2||~1~2.87!~X~4.1!~2~2.11",
+          "|gg||~var~1.73!~yok~1.85",
+          "|gg||~var~2.22!~yok~1.5",
+          "|ou||~üstü~1.59!~altı~2.12",
+          "|ou||~üstü~2.03!~altı~1.6",
+          "|gg||~var~5!~yok~1.09",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.59!~altı~3.23",
+          "|ou|2.5|~üstü~1.81!~altı~7.7",
+          "|ou|4.5|~üstü~11!~altı~3.47",
+          "|ou|3.5|~üstü~7!~altı~4.1",
+          "|ou|2.5|~üstü~4!~altı~7.3",
+          "|ou|1.5|~üstü~3.36!~altı~11",
+          "|gg||~var~1.53!~yok~2.33",
+          "|ou||~üstü~7.2!~altı~1.2",
+          "|ou||~üstü~4.33!~altı~1.51",
+          "|ou||~üstü~2.44!~altı~2.31",
+          "|ou||~üstü~1.57!~altı~4.5",
+          "|ou||~üstü~1.17!~altı~19",
+          "|Double_Chance||~1X~1.67!~12~1.24!~X2~1.39",
+          "|ou||~üstü~4!~altı~1.2",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|Half_Time_Result||~1~3.25!~X~2.38!~2~2.52",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~1.2!~altı~4"
         ]
       }
     }
@@ -7019,7 +7362,7 @@
           "|ou||~üstü~2.43!~altı~1.48",
           "|ou||~üstü~1.89!~altı~1.85",
           "|ou||~üstü~1.7!~altı~2.05",
-          "|1x2||~1~2.67!~X~3.67!~2~2.36",
+          "|1x2||~1~2.41!~X~3.68!~2~2.61",
           "|ou||~üstü~2.65!~altı~1.4",
           "|ou||~üstü~1.32!~altı~3",
           "|gg||~var~1.83!~yok~1.75",
@@ -7033,19 +7376,19 @@
           "|ou||~üstü~2.55!~altı~1.38",
           "|ou|3.5|~üstü~2.93!~altı~3.05",
           "|ou|2.5|~üstü~1.96!~altı~6.8",
-          "|ou|4.5|~üstü~11!~altı~3.1",
-          "|ou|3.5|~üstü~7.1!~altı~3.64",
-          "|ou|2.5|~üstü~3.89!~altı~6.2",
-          "|ou|1.5|~üstü~3.2!~altı~10",
+          "|ou|4.5|~üstü~9.8!~altı~2.83",
+          "|ou|3.5|~üstü~6.2!~altı~3.35",
+          "|ou|2.5|~üstü~3.47!~altı~5.8",
+          "|ou|1.5|~üstü~2.86!~altı~8.8",
           "|gg||~var~1.6!~yok~2.2",
           "|ou||~üstü~9.1!~altı~1.15",
           "|ou||~üstü~5.2!~altı~1.41",
           "|ou||~üstü~2.8!~altı~2.07",
           "|ou||~üstü~1.7!~altı~3.8",
           "|ou||~üstü~1.22!~altı~15",
-          "|Double_Chance||~1X~1.56!~12~1.27!~X2~1.45",
+          "|Double_Chance||~1X~1.47!~12~1.27!~X2~1.55",
           "|ou||~üstü~4.15!~altı~1.19",
-          "|Half_Time_Result||~1~3.2!~X~2.27!~2~2.7",
+          "|Half_Time_Result||~1~2.95!~X~2.27!~2~2.95",
           "|ou||~üstü~3.2!~altı~1.29",
           "|ou||~üstü~1.25!~altı~3.55",
           "|ou||~üstü~1.22!~altı~3.8"
@@ -7108,6 +7451,69 @@
           "|ou||~üstü~3.4!~altı~1.27",
           "|ou||~üstü~1.27!~altı~3.4",
           "|Double_Chance||~1X~1.86!~12~1.24!~X2~1.29"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30440702",
+    "isScraped": true,
+    "data": {
+      "id": 30440702,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "CE Sabadell FC",
+        "away": "IC d'Escaldes",
+        "home_id": 1287,
+        "away_id": 37754
+      },
+      "start_time": "2026-07-31T18:00:00.000Z",
+      "start_ts": 1785520800,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.94!~altı~1.8",
+          "|ou||~üstü~1.55!~altı~2.28",
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~1.33!~altı~2.95",
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|1x2||~1~1.72!~X~3.82!~2~4.4",
+          "|ou||~üstü~2.23!~altı~1.58",
+          "|ou||~üstü~1.75!~altı~2",
+          "|gg||~var~2!~yok~1.62",
+          "|gg||~var~2.62!~yok~1.36",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.68!~altı~1.92",
+          "|gg||~var~5.75!~yok~1.06",
+          "|ou||~üstü~2.74!~altı~1.33",
+          "|ou||~üstü~1.62!~altı~2",
+          "|ou||~üstü~6.4!~altı~1.04",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou|3.5|~üstü~3.2!~altı~3.23",
+          "|ou|2.5|~üstü~2.13!~altı~7",
+          "|ou|4.5|~üstü~7.1!~altı~2.06",
+          "|ou|3.5|~üstü~4.3!~altı~2.51",
+          "|ou|2.5|~üstü~2.51!~altı~4.3",
+          "|ou|1.5|~üstü~2.03!~altı~7.1",
+          "|gg||~var~1.75!~yok~2",
+          "|ou||~üstü~9.6!~altı~1.14",
+          "|ou||~üstü~5.5!~altı~1.37",
+          "|ou||~üstü~2.9!~altı~2.01",
+          "|ou||~üstü~1.74!~altı~3.7",
+          "|ou||~üstü~1.23!~altı~14",
+          "|ou||~üstü~3.4!~altı~1.27",
+          "|ou||~üstü~1.27!~altı~3.4",
+          "|Double_Chance||~1X~1.2!~12~1.25!~X2~2.02",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|Half_Time_Result||~1~2.12!~X~2.31!~2~4.57"
         ]
       }
     }
@@ -7196,7 +7602,44 @@
       "start_ts": 1785520800,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.9!~altı~1.8"
+          "|Corners||~üstü~1.9!~altı~1.8",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~1.83!~altı~1.91",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|1x2||~1~2.57!~X~3.73!~2~2.43",
+          "|ou||~üstü~1.52!~altı~2.35",
+          "|ou||~üstü~2.25!~altı~1.57",
+          "|gg||~var~1.68!~yok~1.92",
+          "|gg||~var~2.12!~yok~1.55",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~1.93!~altı~1.67",
+          "|gg||~var~4.8!~yok~1.1",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.44!~altı~3.13",
+          "|ou|2.5|~üstü~1.74!~altı~7.2",
+          "|ou|4.5|~üstü~8.4!~altı~3.21",
+          "|ou|3.5|~üstü~5.7!~altı~3.88",
+          "|ou|2.5|~üstü~3.4!~altı~7.2",
+          "|ou|1.5|~üstü~2.92!~altı~12",
+          "|gg||~var~1.45!~yok~2.5",
+          "|ou||~üstü~17!~altı~1.075",
+          "|ou||~üstü~6.6!~altı~1.22",
+          "|ou||~üstü~3.8!~altı~1.56",
+          "|ou||~üstü~2.33!~altı~2.42",
+          "|ou||~üstü~1.52!~altı~4.8",
+          "|ou||~üstü~1.15!~altı~21",
+          "|Double_Chance||~1X~1.52!~12~1.27!~X2~1.47",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|ou||~üstü~1.22!~altı~3.8",
+          "|Half_Time_Result||~1~2.8!~X~2.41!~2~2.87"
         ]
       }
     }
@@ -7226,7 +7669,238 @@
       "start_ts": 1785520800,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.92!~altı~1.78"
+          "|Corners||~üstü~1.92!~altı~1.78",
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|ou||~üstü~1.94!~altı~1.8",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~2.43!~altı~1.48",
+          "|ou||~üstü~1.72!~altı~2.03",
+          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~2.17!~altı~1.62",
+          "|1x2||~1~3.52!~X~4.33!~2~1.8",
+          "|gg||~var~1.79!~yok~1.79",
+          "|gg||~var~2.29!~yok~1.47",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~2.03!~altı~1.6",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~6!~altı~1.05",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.65!~altı~3.38",
+          "|ou|2.5|~üstü~1.87!~altı~8.2",
+          "|ou|4.5|~üstü~14!~altı~4.1",
+          "|ou|3.5|~üstü~9.4!~altı~4.7",
+          "|ou|2.5|~üstü~5!~altı~8.3",
+          "|ou|1.5|~üstü~4.2!~altı~11",
+          "|gg||~var~1.6!~yok~2.2",
+          "|ou||~üstü~7.3!~altı~1.19",
+          "|ou||~üstü~4.2!~altı~1.51",
+          "|ou||~üstü~2.47!~altı~2.29",
+          "|ou||~üstü~1.58!~altı~4.4",
+          "|ou||~üstü~1.17!~altı~19",
+          "|Double_Chance||~1X~1.97!~12~1.21!~X2~1.28",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~1.2!~altı~4",
+          "|ou||~üstü~4.2!~altı~1.19",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|Half_Time_Result||~1~3.9!~X~2.39!~2~2.23"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30440724",
+    "isScraped": true,
+    "data": {
+      "id": 30440724,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Ballinamallard United FC",
+        "away": "Bangor FC",
+        "home_id": 9494,
+        "away_id": 10888
+      },
+      "start_time": "2026-07-31T18:45:00.000Z",
+      "start_ts": 1785523500,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~1.52!~altı~2.35",
+          "|ou||~üstü~2.25!~altı~1.57",
+          "|1x2||~1~3.75!~X~5!~2~1.66",
+          "|ou||~üstü~1.83!~altı~1.91",
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|gg||~var~1.79!~yok~1.79",
+          "|gg||~var~2.29!~yok~1.47",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~1.93!~altı~1.67",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.61!~altı~3.7",
+          "|ou|2.5|~üstü~1.86!~altı~9.7",
+          "|ou|4.5|~üstü~15!~altı~4.33",
+          "|ou|3.5|~üstü~10!~altı~4.9",
+          "|ou|2.5|~üstü~5.3!~altı~8.8",
+          "|ou|1.5|~üstü~4.6!~altı~12",
+          "|gg||~var~1.65!~yok~2.13",
+          "|ou||~üstü~17!~altı~1.08",
+          "|ou||~üstü~6.6!~altı~1.22",
+          "|ou||~üstü~3.8!~altı~1.57",
+          "|ou||~üstü~2.25!~altı~2.35",
+          "|ou||~üstü~1.52!~altı~4.8",
+          "|ou||~üstü~1.15!~altı~21",
+          "|Double_Chance||~1X~2.15!~12~1.17!~X2~1.25",
+          "|Half_Time_Result||~1~6.9!~X~2.6!~2~1.75",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~1.2!~altı~3.5"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30440725",
+    "isScraped": true,
+    "data": {
+      "id": 30440725,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Weston Super Mare AFC",
+        "away": "Gloucester City AFC",
+        "home_id": 1358,
+        "away_id": 1326
+      },
+      "start_time": "2026-07-31T18:45:00.000Z",
+      "start_ts": 1785523500,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|ou||~üstü~1.7!~altı~2.05",
+          "|ou||~üstü~2.13!~altı~1.65",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|ou||~üstü~1.87!~altı~1.87",
+          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~1.48!~altı~2.43",
+          "|1x2||~1~1.73!~X~3.83!~2~4.33",
+          "|gg||~var~1.93!~yok~1.67",
+          "|gg||~var~2.48!~yok~1.4",
+          "|ou||~üstü~2.22!~altı~1.5",
+          "|ou||~üstü~1.62!~altı~2",
+          "|gg||~var~5.5!~yok~1.07",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou||~üstü~1.6!~altı~2.03",
+          "|ou||~üstü~6.25!~altı~1.045",
+          "|ou||~üstü~2.55!~altı~1.38",
+          "|ou|3.5|~üstü~3.01!~altı~3.21",
+          "|ou|2.5|~üstü~2.04!~altı~7",
+          "|ou|4.5|~üstü~6.7!~altı~2.11",
+          "|ou|3.5|~üstü~4.1!~altı~2.58",
+          "|ou|2.5|~üstü~2.46!~altı~4.5",
+          "|ou|1.5|~üstü~2.03!~altı~7.4",
+          "|gg||~var~1.67!~yok~2.1",
+          "|ou||~üstü~8.8!~altı~1.15",
+          "|ou||~üstü~5.1!~altı~1.42",
+          "|ou||~üstü~2.74!~altı~2.1",
+          "|ou||~üstü~1.68!~altı~3.95",
+          "|ou||~üstü~1.21!~altı~15",
+          "|Double_Chance||~1X~1.21!~12~1.24!~X2~2.05",
+          "|Half_Time_Result||~1~2.15!~X~2.34!~2~4.8",
+          "|ou||~üstü~4!~altı~1.2",
+          "|ou||~üstü~1.21!~altı~3.9",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|ou||~üstü~1.24!~altı~3.6"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30440726",
+    "isScraped": true,
+    "data": {
+      "id": 30440726,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "UD Santarem",
+        "away": "Academica Coimbra",
+        "home_id": 510587,
+        "away_id": 1048
+      },
+      "start_time": "2026-07-31T18:00:00.000Z",
+      "start_ts": 1785520800,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.15!~altı~1.63",
+          "|ou||~üstü~1.72!~altı~2.03",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|ou||~üstü~1.94!~altı~1.8",
+          "|ou||~üstü~1.58!~altı~2.23",
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|1x2||~1~4.33!~X~3.99!~2~1.7",
+          "|gg||~var~1.83!~yok~1.75",
+          "|gg||~var~2.34!~yok~1.45",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~2.03!~altı~1.6",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~6!~altı~1.05",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.7!~altı~3.3",
+          "|ou|2.5|~üstü~1.9!~altı~7.4",
+          "|ou|4.5|~üstü~17!~altı~4.9",
+          "|ou|3.5|~üstü~12!~altı~5.7",
+          "|ou|2.5|~üstü~6.2!~altı~10",
+          "|ou|1.5|~üstü~5.2!~altı~13",
+          "|gg||~var~1.6!~yok~2.2",
+          "|ou||~üstü~7.3!~altı~1.2",
+          "|ou||~üstü~4!~altı~1.51",
+          "|ou||~üstü~2.46!~altı~2.3",
+          "|ou||~üstü~1.58!~altı~4.5",
+          "|ou||~üstü~1.17!~altı~19",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~1.2!~altı~4",
+          "|Double_Chance||~1X~2.05!~12~1.24!~X2~1.21",
+          "|ou||~üstü~4!~altı~1.2",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|Half_Time_Result||~1~4.3!~X~2.43!~2~2.08"
         ]
       }
     }
@@ -7256,7 +7930,41 @@
       "start_ts": 1785522600,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.78!~altı~1.92"
+          "|Corners||~üstü~1.78!~altı~1.92",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.28!~altı~3.3",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~1.58!~altı~2.23",
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|1x2||~1~3.02!~X~3.86!~2~2.08",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|gg||~var~1.93!~yok~1.67",
+          "|gg||~var~2.48!~yok~1.4",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.7!~altı~1.89",
+          "|gg||~var~5.75!~yok~1.08",
+          "|ou||~üstü~2.78!~altı~1.32",
+          "|ou||~üstü~1.65!~altı~1.96",
+          "|ou||~üstü~6.4!~altı~1.04",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou|3.5|~üstü~3.21!~altı~3.19",
+          "|ou|2.5|~üstü~2.09!~altı~7.2",
+          "|ou|4.5|~üstü~15!~altı~3.38",
+          "|ou|3.5|~üstü~9!~altı~3.87",
+          "|ou|2.5|~üstü~4.6!~altı~6.4",
+          "|ou|1.5|~üstü~3.75!~altı~9.8",
+          "|gg||~var~1.72!~yok~2.03",
+          "|ou||~üstü~10!~altı~1.13",
+          "|ou||~üstü~5.3!~altı~1.35",
+          "|ou||~üstü~2.85!~altı~1.96",
+          "|ou||~üstü~1.78!~altı~3.6",
+          "|ou||~üstü~1.24!~altı~9",
+          "|Double_Chance||~1X~1.72!~12~1.24!~X2~1.35",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|Half_Time_Result||~1~3.47!~X~2.23!~2~2.55",
+          "|ou||~üstü~3.55!~altı~1.25"
         ]
       }
     }
@@ -7286,7 +7994,107 @@
       "start_ts": 1785520800,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.94!~altı~1.76"
+          "|Corners||~üstü~1.94!~altı~1.76",
+          "|ou||~üstü~1.94!~altı~1.8",
+          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~2.43!~altı~1.48",
+          "|ou||~üstü~1.42!~altı~2.5",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|1x2||~1~5.1!~X~4.4!~2~1.54",
+          "|ou||~üstü~1.72!~altı~2.03",
+          "|ou||~üstü~2.15!~altı~1.63",
+          "|ou||~üstü~1.32!~altı~3",
+          "|gg||~var~1.76!~yok~1.82",
+          "|gg||~var~2.22!~yok~1.5",
+          "|ou||~üstü~1.47!~altı~2.29",
+          "|ou||~üstü~1.83!~altı~1.75",
+          "|gg||~var~5!~yok~1.09",
+          "|ou||~üstü~1.48!~altı~2.26",
+          "|ou||~üstü~2.22!~altı~1.5",
+          "|ou||~üstü~5.5!~altı~1.07",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou|3.5|~üstü~2.44!~altı~3.56",
+          "|ou|2.5|~üstü~1.79!~altı~8.4",
+          "|ou|4.5|~üstü~19!~altı~6",
+          "|ou|3.5|~üstü~12!~altı~6.9",
+          "|ou|2.5|~üstü~6.9!~altı~13",
+          "|ou|1.5|~üstü~5.9!~altı~17",
+          "|gg||~var~1.55!~yok~2.28",
+          "|ou||~üstü~14!~altı~1.09",
+          "|ou||~üstü~5.9!~altı~1.25",
+          "|ou||~üstü~3.55!~altı~1.64",
+          "|ou||~üstü~2.18!~altı~2.59",
+          "|ou||~üstü~1.46!~altı~5.2",
+          "|ou||~üstü~4.3!~altı~1.18",
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|Double_Chance||~1X~2.32!~12~1.2!~X2~1.16",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|Half_Time_Result||~1~4.57!~X~2.58!~2~1.94"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30440732",
+    "isScraped": true,
+    "data": {
+      "id": 30440732,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "FC Portalban-Gletterens",
+        "away": "Yverdon Sport FC II",
+        "home_id": 406879,
+        "away_id": 856502
+      },
+      "start_time": "2026-07-31T18:00:00.000Z",
+      "start_ts": 1785520800,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~1.98!~altı~1.77",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|1x2||~1~2.03!~X~3.74!~2~3.23",
+          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~2.95!~altı~1.33",
+          "|gg||~var~1.55!~yok~2.12",
+          "|gg||~var~1.96!~yok~1.65",
+          "|ou||~üstü~2.22!~altı~1.5",
+          "|ou||~üstü~1.68!~altı~1.92",
+          "|gg||~var~4.45!~yok~1.12",
+          "|ou||~üstü~1.45!~altı~2.34",
+          "|ou||~üstü~2.06!~altı~1.58",
+          "|ou||~üstü~5.2!~altı~1.08",
+          "|ou||~üstü~2.26!~altı~1.48",
+          "|ou|3.5|~üstü~2.09!~altı~3.29",
+          "|ou|2.5|~üstü~1.57!~altı~7.7",
+          "|ou|4.5|~üstü~5.6!~altı~2.76",
+          "|ou|3.5|~üstü~3.74!~altı~3.62",
+          "|ou|2.5|~üstü~2.5!~altı~7.3",
+          "|ou|1.5|~üstü~2.23!~altı~11",
+          "|gg||~var~1.35!~yok~2.85",
+          "|ou||~üstü~12!~altı~1.12",
+          "|ou||~üstü~5.5!~altı~1.28",
+          "|ou||~üstü~3.3!~altı~1.78",
+          "|ou||~üstü~1.98!~altı~2.89",
+          "|ou||~üstü~1.38!~altı~6",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~1.26!~altı~3.45",
+          "|Double_Chance||~1X~1.32!~12~1.26!~X2~1.72",
+          "|Half_Time_Result||~1~2.34!~X~2.56!~2~3.4",
+          "|ou||~üstü~3.3!~altı~1.28"
         ]
       }
     }
@@ -7317,36 +8125,36 @@
       "group_markets": {
         "full_event|0": [
           "|Half_Time_Result||~1~3.1!~X~2.31!~2~2.83",
-          "|1x2||~1~2.67!~X~3.45!~2~2.48",
+          "|1x2||~1~2.71!~X~3.5!~2~2.41",
           "|ou||~üstü~1.19!~altı~4.2",
           "|ou||~üstü~1.26!~altı~3.45",
-          "|ou||~üstü~2!~altı~1.75",
-          "|ou||~üstü~3.7!~altı~1.23",
-          "|ou||~üstü~2.45!~altı~1.47",
-          "|ou||~üstü~1.62!~altı~2.17",
-          "|ou||~üstü~1.77!~altı~1.98",
-          "|ou||~üstü~2.23!~altı~1.58",
+          "|ou||~üstü~1.98!~altı~1.77",
+          "|ou||~üstü~3.6!~altı~1.24",
+          "|ou||~üstü~2.43!~altı~1.48",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|ou||~üstü~1.75!~altı~2",
+          "|ou||~üstü~2.2!~altı~1.6",
           "|ou||~üstü~1.43!~altı~2.55",
           "|gg||~var~1.76!~yok~1.82",
           "|gg||~var~2.26!~yok~1.48",
-          "|ou||~üstü~2.08!~altı~1.57",
-          "|ou||~üstü~1.58!~altı~2.06",
+          "|ou||~üstü~2.06!~altı~1.58",
+          "|ou||~üstü~1.57!~altı~2.08",
           "|gg||~var~5.2!~yok~1.08",
           "|ou||~üstü~2.48!~altı~1.4",
           "|ou||~üstü~1.57!~altı~2.08",
           "|ou||~üstü~6!~altı~1.05",
           "|ou||~üstü~2.48!~altı~1.4",
-          "|ou|3.5|~üstü~2.68!~altı~2.96",
-          "|ou|2.5|~üstü~1.84!~altı~6.4",
-          "|ou|4.5|~üstü~9.8!~altı~3.21",
-          "|ou|3.5|~üstü~6.5!~altı~3.8",
-          "|ou|2.5|~üstü~3.67!~altı~6.9",
-          "|ou|1.5|~üstü~3.13!~altı~10",
+          "|ou|3.5|~üstü~2.64!~altı~3",
+          "|ou|2.5|~üstü~1.82!~altı~6.5",
+          "|ou|4.5|~üstü~9.8!~altı~3.27",
+          "|ou|3.5|~üstü~6.5!~altı~3.87",
+          "|ou|2.5|~üstü~3.72!~altı~7",
+          "|ou|1.5|~üstü~3.17!~altı~11",
           "|gg||~var~1.5!~yok~2.4",
-          "|ou||~üstü~4!~altı~1.2",
+          "|ou||~üstü~3.9!~altı~1.21",
           "|ou||~üstü~2.85!~altı~1.35",
           "|ou||~üstü~1.22!~altı~3.8",
-          "|Double_Chance||~1X~1.52!~12~1.3!~X2~1.44",
+          "|Double_Chance||~1X~1.55!~12~1.29!~X2~1.43",
           "|ou||~üstü~4.3!~altı~1.18"
         ]
       }
@@ -7377,41 +8185,41 @@
       "start_ts": 1785519000,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~1.33!~altı~2.95",
-          "|ou||~üstü~2.23!~altı~1.58",
-          "|ou||~üstü~1.75!~altı~2",
-          "|1x2||~1~3.53!~X~3.62!~2~1.96",
-          "|ou||~üstü~2.45!~altı~1.47",
-          "|ou||~üstü~1.94!~altı~1.8",
-          "|ou||~üstü~1.53!~altı~2.33",
-          "|ou||~üstü~1.27!~altı~3.4",
-          "|gg||~var~1.92!~yok~1.68",
+          "|Corners||~üstü~1.94!~altı~1.76",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~2.33!~altı~1.53",
+          "|ou||~üstü~1.8!~altı~1.94",
+          "|1x2||~1~2.97!~X~3.64!~2~2.18",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|gg||~var~1.93!~yok~1.67",
           "|gg||~var~2.48!~yok~1.4",
-          "|ou||~üstü~2.34!~altı~1.45",
-          "|ou||~üstü~1.67!~altı~1.93",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.72!~altı~1.87",
           "|gg||~var~5.5!~yok~1.07",
-          "|ou||~üstü~2.7!~altı~1.34",
-          "|ou||~üstü~1.62!~altı~2",
-          "|ou||~üstü~6.4!~altı~1.04",
-          "|ou||~üstü~2.62!~altı~1.36",
-          "|ou|3.5|~üstü~3!~altı~3.07",
-          "|ou|2.5|~üstü~2.04!~altı~6.6",
-          "|ou|4.5|~üstü~17!~altı~3.95",
-          "|ou|3.5|~üstü~10!~altı~4.5",
-          "|ou|2.5|~üstü~5.3!~altı~7.6",
-          "|ou|1.5|~üstü~4.33!~altı~11",
-          "|gg||~var~1.65!~yok~2.13",
-          "|ou||~üstü~9.6!~altı~1.14",
-          "|ou||~üstü~5.4!~altı~1.38",
-          "|ou||~üstü~2.75!~altı~2",
-          "|ou||~üstü~1.75!~altı~3.7",
-          "|ou||~üstü~1.23!~altı~14",
-          "|ou||~üstü~3.4!~altı~1.27",
-          "|Double_Chance||~1X~1.81!~12~1.27!~X2~1.28",
-          "|ou||~üstü~2.75!~altı~1.38",
-          "|Half_Time_Result||~1~3.96!~X~2.27!~2~2.44",
-          "|ou||~üstü~4.3!~altı~1.18",
-          "|ou||~üstü~1.23!~altı~3.7"
+          "|ou||~üstü~2.83!~altı~1.31",
+          "|ou||~üstü~1.65!~altı~1.96",
+          "|ou||~üstü~6.6!~altı~1.035",
+          "|ou||~üstü~2.66!~altı~1.35",
+          "|ou|3.5|~üstü~3.23!~altı~3.08",
+          "|ou|2.5|~üstü~2.09!~altı~6.7",
+          "|ou|4.5|~üstü~14!~altı~3.32",
+          "|ou|3.5|~üstü~8.8!~altı~3.8",
+          "|ou|2.5|~üstü~4.5!~altı~6.3",
+          "|ou|1.5|~üstü~3.67!~altı~9.7",
+          "|gg||~var~1.7!~yok~2.05",
+          "|ou||~üstü~12!~altı~1.12",
+          "|ou||~üstü~5.9!~altı~1.35",
+          "|ou||~üstü~2.85!~altı~1.94",
+          "|ou||~üstü~1.8!~altı~3.6",
+          "|ou||~üstü~1.24!~altı~13",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|Double_Chance||~1X~1.65!~12~1.28!~X2~1.37",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|Half_Time_Result||~1~3.3!~X~2.21!~2~2.68",
+          "|ou||~üstü~1.24!~altı~3.6"
         ]
       }
     }
@@ -7745,7 +8553,7 @@
       "group_markets": {
         "full_event|0": [
           "|1x2||~1~1.68!~X~4!~2~4.5",
-          "|Half_Time_Result||~1~2.11!~X~2.47!~2~4.5",
+          "|Half_Time_Result||~1~2.09!~X~2.48!~2~4.6",
           "|ou||~üstü~3.8!~altı~1.22",
           "|ou||~üstü~1.53!~altı~2.33",
           "|ou||~üstü~2.28!~altı~1.55",
@@ -7804,7 +8612,44 @@
       "start_ts": 1785522600,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.8!~altı~1.9"
+          "|Corners||~üstü~1.78!~altı~1.92",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~2.17!~altı~1.62",
+          "|ou||~üstü~1.95!~altı~1.79",
+          "|ou||~üstü~1.67!~altı~1.93",
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|1x2||~1~3.77!~X~3.85!~2~1.83",
+          "|ou||~üstü~2.4!~altı~1.45",
+          "|ou||~üstü~1.58!~altı~2.23",
+          "|gg||~var~1.79!~yok~1.79",
+          "|gg||~var~2.29!~yok~1.47",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~2.03!~altı~1.6",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.66!~altı~3.25",
+          "|ou|2.5|~üstü~1.87!~altı~7.2",
+          "|ou|4.5|~üstü~15!~altı~4.4",
+          "|ou|3.5|~üstü~9.7!~altı~5.1",
+          "|ou|2.5|~üstü~5.3!~altı~9",
+          "|ou|1.5|~üstü~4.5!~altı~14",
+          "|gg||~var~1.57!~yok~2.25",
+          "|ou||~üstü~8.6!~altı~1.19",
+          "|ou||~üstü~4.2!~altı~1.45",
+          "|ou||~üstü~2.4!~altı~2.23",
+          "|ou||~üstü~1.58!~altı~4.3",
+          "|ou||~üstü~1.17!~altı~19",
+          "|Double_Chance||~1X~1.92!~12~1.25!~X2~1.25",
+          "|ou||~üstü~4.2!~altı~1.19",
+          "|ou||~üstü~3.6!~altı~1.24",
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|Half_Time_Result||~1~3.83!~X~2.4!~2~2.25",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~1.2!~altı~4"
         ]
       }
     }
@@ -7834,7 +8679,7 @@
       "start_ts": 1785510000,
       "group_markets": {
         "full_event|0": [
-          "|Half_Time_Result||~1~1.92!~X~2.63!~2~5",
+          "|Half_Time_Result||~1~1.94!~X~2.62!~2~4.9",
           "|ou||~üstü~3.7!~altı~1.23",
           "|ou||~üstü~2.2!~altı~1.6",
           "|1x2||~1~1.56!~X~5.2!~2~4.2",
@@ -7893,7 +8738,43 @@
       "start_ts": 1785523500,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.85!~altı~1.85"
+          "|Corners||~üstü~1.85!~altı~1.85",
+          "|ou||~üstü~2.95!~altı~1.33",
+          "|ou||~üstü~2.25!~altı~1.57",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~1.63!~altı~2.15",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|1x2||~1~3.18!~X~3.85!~2~2.02",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|gg||~var~1.81!~yok~1.77",
+          "|gg||~var~2.34!~yok~1.45",
+          "|ou||~üstü~1.6!~altı~2.03",
+          "|ou||~üstü~2.12!~altı~1.55",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~2.55!~altı~1.38",
+          "|ou||~üstü~1.58!~altı~2.06",
+          "|ou||~üstü~6!~altı~1.05",
+          "|ou||~üstü~2.48!~altı~1.4",
+          "|ou|3.5|~üstü~2.76!~altı~3.16",
+          "|ou|2.5|~üstü~1.89!~altı~7.2",
+          "|ou|4.5|~üstü~13!~altı~3.67",
+          "|ou|3.5|~üstü~8.4!~altı~4.3",
+          "|ou|2.5|~üstü~4.6!~altı~7.4",
+          "|ou|1.5|~üstü~3.8!~altı~11",
+          "|gg||~var~1.57!~yok~2.25",
+          "|ou||~üstü~8.2!~altı~1.17",
+          "|ou||~üstü~4.7!~altı~1.45",
+          "|ou||~üstü~2.5!~altı~2.15",
+          "|ou||~üstü~1.63!~altı~4.5",
+          "|ou||~üstü~1.2!~altı~17",
+          "|Double_Chance||~1X~1.73!~12~1.25!~X2~1.33",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|Half_Time_Result||~1~3.47!~X~2.32!~2~2.5",
+          "|ou||~üstü~1.2!~altı~4",
+          "|ou||~üstü~4!~altı~1.2",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|ou||~üstü~1.27!~altı~3.4"
         ]
       }
     }
@@ -7983,34 +8864,34 @@
       "start_ts": 1785488400,
       "group_markets": {
         "full_event|0": [
-          "|gg||~var~1.96!~yok~1.65",
+          "|gg||~var~2!~yok~1.62",
           "|gg||~var~2.55!~yok~1.38",
           "|ou||~üstü~2.42!~altı~1.42",
-          "|ou||~üstü~1.7!~altı~1.89",
+          "|ou||~üstü~1.72!~altı~1.87",
           "|gg||~var~5.75!~yok~1.06",
-          "|ou||~üstü~2.78!~altı~1.32",
+          "|ou||~üstü~2.83!~altı~1.31",
           "|ou||~üstü~1.65!~altı~1.96",
-          "|ou||~üstü~6.4!~altı~1.04",
-          "|ou||~üstü~2.62!~altı~1.36",
-          "|ou|3.5|~üstü~3.23!~altı~3.12",
-          "|ou|2.5|~üstü~2.12!~altı~6.7",
-          "|ou|4.5|~üstü~7.9!~altı~2.18",
-          "|ou|3.5|~üstü~4.8!~altı~2.6",
-          "|ou|2.5|~üstü~2.73!~altı~4.4",
-          "|ou|1.5|~üstü~2.21!~altı~7",
+          "|ou||~üstü~6.6!~altı~1.035",
+          "|ou||~üstü~2.66!~altı~1.35",
+          "|ou|3.5|~üstü~3.28!~altı~3.08",
+          "|ou|2.5|~üstü~2.14!~altı~6.5",
+          "|ou|4.5|~üstü~8.3!~altı~2.21",
+          "|ou|3.5|~üstü~5!~altı~2.63",
+          "|ou|2.5|~üstü~2.8!~altı~4.4",
+          "|ou|1.5|~üstü~2.27!~altı~7.4",
           "|gg||~var~1.72!~yok~2.03",
-          "|ou||~üstü~3.45!~altı~1.26",
-          "|ou||~üstü~1.29!~altı~3.2",
-          "|Double_Chance||~1X~1.22!~12~1.27!~X2~1.88",
-          "|ou||~üstü~2.55!~altı~1.43",
-          "|ou||~üstü~1.98!~altı~1.77",
-          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|Double_Chance||~1X~1.25!~12~1.28!~X2~1.89",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.6!~altı~2.2",
           "|ou||~üstü~2.85!~altı~1.35",
-          "|ou||~üstü~2.28!~altı~1.55",
-          "|ou||~üstü~1.35!~altı~2.85",
-          "|ou||~üstü~1.22!~altı~3.6",
-          "|1x2||~1~1.84!~X~3.66!~2~3.93",
-          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~2.33!~altı~1.53",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|1x2||~1~1.88!~X~3.56!~2~3.89",
+          "|ou||~üstü~1.8!~altı~1.94",
           "|Half_Time_Result||~1~2.37!~X~2.23!~2~4.3"
         ]
       }
@@ -8162,7 +9043,7 @@
       "group_markets": {
         "full_event|0": [
           "|ou||~üstü~1.77!~altı~1.98",
-          "|Half_Time_Result||~1~1.11!~X~6!~2~36",
+          "|Half_Time_Result||~1~1.11!~X~6.2!~2~34",
           "|1x2||~1~1.01!~X~19!~2~41",
           "|ou||~üstü~1.92!~altı~1.82",
           "|ou||~üstü~1.32!~altı~3",
@@ -8282,7 +9163,7 @@
       "start_ts": 1785517200,
       "group_markets": {
         "full_event|0": [
-          "|Half_Time_Result||~1~2.15!~X~2.41!~2~4.5",
+          "|Half_Time_Result||~1~2.12!~X~2.41!~2~4.7",
           "|ou||~üstü~1.8!~altı~1.94",
           "|ou||~üstü~2.23!~altı~1.58",
           "|ou||~üstü~3.7!~altı~1.23",
@@ -8457,38 +9338,36 @@
       "start_ts": 1785492000,
       "group_markets": {
         "full_event|0": [
-          "|Half_Time_Result||~1~2.17!~X~2.66!~2~3.71",
-          "|ou||~üstü~1.38!~altı~2.75",
+          "|Half_Time_Result||~1~2.21!~X~2.65!~2~3.65",
+          "|ou||~üstü~1.52!~altı~2.35",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|ou||~üstü~1.35!~altı~2.85",
           "|ou||~üstü~2.5!~altı~1.45",
-          "|ou||~üstü~3.8!~altı~1.22",
-          "|ou||~üstü~1.28!~altı~3.3",
-          "|ou||~üstü~2.13!~altı~1.65",
+          "|ou||~üstü~1.91!~altı~1.83",
+          "|1x2||~1~1.87!~X~3.9!~2~3.59",
+          "|ou||~üstü~2.15!~altı~1.63",
           "|ou||~üstü~1.72!~altı~2.03",
-          "|1x2||~1~1.9!~X~3.99!~2~3.41",
-          "|ou||~üstü~1.89!~altı~1.85",
-          "|ou||~üstü~1.57!~altı~2.25",
-          "|ou||~üstü~2.33!~altı~1.53",
-          "|ou||~üstü~1.33!~altı~2.95",
-          "|ou||~üstü~2.95!~altı~1.33",
-          "|ou||~üstü~1.19!~altı~4.2",
-          "|gg||~var~1.45!~yok~2.34",
-          "|gg||~var~1.81!~yok~1.77",
-          "|ou||~üstü~1.5!~altı~2.22",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.42!~altı~2.6",
+          "|ou||~üstü~3.7!~altı~1.23",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|gg||~var~1.55!~yok~2.12",
+          "|gg||~var~1.93!~yok~1.67",
+          "|ou||~üstü~1.65!~altı~1.96",
+          "|ou||~üstü~2.18!~altı~1.52",
+          "|gg||~var~4.3!~yok~1.13",
+          "|ou||~üstü~1.42!~altı~2.42",
           "|ou||~üstü~2!~altı~1.62",
-          "|gg||~var~4.05!~yok~1.15",
-          "|ou||~üstü~1.38!~altı~2.55",
-          "|ou||~üstü~1.87!~altı~1.72",
-          "|ou||~üstü~4.6!~altı~1.11",
-          "|ou||~üstü~2.12!~altı~1.55",
-          "|ou|3.5|~üstü~1.82!~altı~3.6",
-          "|ou|2.5|~üstü~1.45!~altı~9",
-          "|ou|4.5|~üstü~4.1!~altı~2.98",
-          "|ou|3.5|~üstü~3.1!~altı~3.92",
-          "|ou|2.5|~üstü~2.22!~altı~8.6",
-          "|ou|1.5|~üstü~2.02!~altı~15",
-          "|gg||~var~1.28!~yok~3.3",
-          "|Double_Chance||~1X~1.3!~12~1.24!~X2~1.82",
-          "|ou||~üstü~4!~altı~1.2"
+          "|ou||~üstü~5!~altı~1.09",
+          "|ou||~üstü~2.18!~altı~1.52",
+          "|ou|3.5|~üstü~2.06!~altı~3.41",
+          "|ou|2.5|~üstü~1.57!~altı~8.1",
+          "|ou|4.5|~üstü~5!~altı~2.6",
+          "|ou|3.5|~üstü~3.34!~altı~3.47",
+          "|ou|2.5|~üstü~2.27!~altı~7.2",
+          "|ou|1.5|~üstü~2.03!~altı~13",
+          "|gg||~var~1.35!~yok~2.85",
+          "|Double_Chance||~1X~1.27!~12~1.25!~X2~1.85"
         ]
       }
     }
@@ -8557,6 +9436,69 @@
     }
   },
   {
+    "id": "30441910",
+    "isScraped": true,
+    "data": {
+      "id": 30441910,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Leek Town FC",
+        "away": "Runcorn Linnets FC",
+        "home_id": 13980,
+        "away_id": 14551
+      },
+      "start_time": "2026-07-31T18:45:00.000Z",
+      "start_ts": 1785523500,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.8!~altı~1.94",
+          "|ou||~üstü~3.6!~altı~1.24",
+          "|ou||~üstü~2.35!~altı~1.52",
+          "|1x2||~1~1.96!~X~3.55!~2~3.61",
+          "|gg||~var~1.96!~yok~1.65",
+          "|gg||~var~2.55!~yok~1.38",
+          "|ou||~üstü~1.72!~altı~1.87",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|gg||~var~5.75!~yok~1.06",
+          "|ou||~üstü~2.83!~altı~1.31",
+          "|ou||~üstü~1.65!~altı~1.96",
+          "|ou||~üstü~6.4!~altı~1.04",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou|3.5|~üstü~3.26!~altı~3.05",
+          "|ou|2.5|~üstü~2.12!~altı~6.4",
+          "|ou|4.5|~üstü~8.4!~altı~2.3",
+          "|ou|3.5|~üstü~5.2!~altı~2.71",
+          "|ou|2.5|~üstü~2.92!~altı~4.6",
+          "|ou|1.5|~üstü~2.35!~altı~7.7",
+          "|gg||~var~1.69!~yok~2.04",
+          "|ou||~üstü~12!~altı~1.12",
+          "|ou||~üstü~5.9!~altı~1.35",
+          "|ou||~üstü~2.85!~altı~1.94",
+          "|ou||~üstü~1.8!~altı~3.6",
+          "|ou||~üstü~1.24!~altı~13",
+          "|Double_Chance||~1X~1.27!~12~1.28!~X2~1.77",
+          "|Half_Time_Result||~1~2.39!~X~2.26!~2~3.9",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~1.24!~altı~3.6"
+        ]
+      }
+    }
+  },
+  {
     "id": "30441913",
     "isScraped": true,
     "data": {
@@ -8581,40 +9523,170 @@
       "start_ts": 1785486600,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~1.8!~altı~1.94",
-          "|ou||~üstü~1.37!~altı~2.8",
-          "|ou||~üstü~2.33!~altı~1.53",
-          "|ou||~üstü~1.24!~altı~3.6",
-          "|1x2||~1~1.88!~X~3.51!~2~3.96",
-          "|ou||~üstü~2!~altı~1.75",
-          "|ou||~üstü~1.58!~altı~2.23",
-          "|ou||~üstü~1.3!~altı~3.1",
-          "|gg||~var~2!~yok~1.62",
-          "|gg||~var~2.55!~yok~1.38",
-          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.96!~altı~1.85",
+          "|ou||~üstü~1.47!~altı~2.57",
+          "|ou||~üstü~2.63!~altı~1.45",
+          "|ou||~üstü~1.3!~altı~3.35",
+          "|1x2||~1~1.81!~X~3.47!~2~4.3",
+          "|ou||~üstü~2.2!~altı~1.65",
+          "|ou||~üstü~1.72!~altı~2.1",
+          "|ou||~üstü~1.37!~altı~2.95",
+          "|gg||~var~2.12!~yok~1.55",
+          "|gg||~var~2.78!~yok~1.32",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou||~üstü~1.79!~altı~1.79",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~3.05!~altı~1.27",
           "|ou||~üstü~1.72!~altı~1.87",
-          "|gg||~var~5.75!~yok~1.06",
-          "|ou||~üstü~2.83!~altı~1.31",
-          "|ou||~üstü~1.65!~altı~1.96",
-          "|ou||~üstü~6.4!~altı~1.04",
-          "|ou||~üstü~2.66!~altı~1.35",
-          "|ou|3.5|~üstü~3.26!~altı~3.04",
-          "|ou|2.5|~üstü~2.13!~altı~6.3",
-          "|ou|4.5|~üstü~8.2!~altı~2.21",
-          "|ou|3.5|~üstü~5!~altı~2.62",
-          "|ou|2.5|~üstü~2.79!~altı~4.5",
-          "|ou|1.5|~üstü~2.27!~altı~7.3",
-          "|gg||~var~1.7!~yok~2.05",
-          "|ou||~üstü~12!~altı~1.12",
-          "|ou||~üstü~5.8!~altı~1.35",
-          "|ou||~üstü~2.85!~altı~1.94",
-          "|ou||~üstü~1.8!~altı~3.6",
-          "|ou||~üstü~1.24!~altı~13",
-          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~6.8!~altı~1.03",
+          "|ou||~üstü~2.78!~altı~1.32",
+          "|ou|3.5|~üstü~3.7!~altı~3.13",
+          "|ou|2.5|~üstü~2.33!~altı~6.3",
+          "|ou|4.5|~üstü~9!~altı~2.08",
+          "|ou|3.5|~üstü~5.2!~altı~2.45",
+          "|ou|2.5|~üstü~2.83!~altı~4",
+          "|ou|1.5|~üstü~2.25!~altı~6.2",
+          "|gg||~var~1.86!~yok~1.95",
+          "|ou||~üstü~13!~altı~1.09",
+          "|ou||~üstü~6.7!~altı~1.3",
+          "|ou||~üstü~3.35!~altı~1.85",
+          "|ou||~üstü~1.92!~altı~3.35",
+          "|ou||~üstü~1.3!~altı~12",
+          "|ou||~üstü~4.15!~altı~1.22",
+          "|ou||~üstü~2.95!~altı~1.37",
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|Double_Chance||~1X~1.22!~12~1.3!~X2~1.96",
+          "|Half_Time_Result||~1~2.25!~X~2.19!~2~4.57",
+          "|ou||~üstü~3.35!~altı~1.3"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30441914",
+    "isScraped": true,
+    "data": {
+      "id": 30441914,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Lancy FC",
+        "away": "US Terre Sainte",
+        "home_id": 16594,
+        "away_id": 16642
+      },
+      "start_time": "2026-07-31T18:30:00.000Z",
+      "start_ts": 1785522600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.33!~altı~1.53",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|ou||~üstü~1.82!~altı~1.92",
+          "|1x2||~1~1.81!~X~4.2!~2~3.59",
+          "|ou||~üstü~1.63!~altı~2.15",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|gg||~var~1.5!~yok~2.22",
+          "|gg||~var~1.89!~yok~1.7",
+          "|ou||~üstü~2.03!~altı~1.6",
+          "|ou||~üstü~1.57!~altı~2.08",
+          "|gg||~var~4.3!~yok~1.13",
+          "|ou||~üstü~1.4!~altı~2.48",
+          "|ou||~üstü~1.92!~altı~1.68",
+          "|ou||~üstü~4.8!~altı~1.1",
+          "|ou||~üstü~2.18!~altı~1.52",
+          "|ou|3.5|~üstü~1.95!~altı~3.63",
+          "|ou|2.5|~üstü~1.48!~altı~9.1",
+          "|ou|4.5|~üstü~4.5!~altı~2.61",
+          "|ou|3.5|~üstü~3.05!~altı~3.6",
+          "|ou|2.5|~üstü~2.15!~altı~7.5",
+          "|ou|1.5|~üstü~1.93!~altı~14",
+          "|gg||~var~1.35!~yok~2.85",
+          "|ou||~üstü~9.6!~altı~1.15",
+          "|ou||~üstü~4.5!~altı~1.36",
+          "|ou||~üstü~3.02!~altı~1.93",
+          "|ou||~üstü~1.81!~altı~3.27",
+          "|ou||~üstü~1.31!~altı~7.1",
+          "|ou||~üstü~3.45!~altı~1.26",
           "|ou||~üstü~2.6!~altı~1.42",
-          "|Double_Chance||~1X~1.23!~12~1.29!~X2~1.89",
-          "|Half_Time_Result||~1~2.3!~X~2.24!~2~4.15",
-          "|ou||~üstü~2.85!~altı~1.35"
+          "|ou||~üstü~1.21!~altı~3.9",
+          "|Double_Chance||~1X~1.27!~12~1.22!~X2~1.91",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~4.3!~altı~1.18",
+          "|Half_Time_Result||~1~2.15!~X~2.68!~2~3.82"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30441917",
+    "isScraped": true,
+    "data": {
+      "id": 30441917,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Chertsey Town FC",
+        "away": "Westfield FC",
+        "home_id": 97556,
+        "away_id": 772113
+      },
+      "start_time": "2026-07-31T18:45:00.000Z",
+      "start_ts": 1785523500,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~1.5!~altı~2.4",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|1x2||~1~1.92!~X~3.79!~2~3.5",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|ou||~üstü~2!~altı~1.75",
+          "|gg||~var~1.67!~yok~1.93",
+          "|gg||~var~2.12!~yok~1.55",
+          "|ou||~üstü~1.5!~altı~2.22",
+          "|ou||~üstü~1.89!~altı~1.7",
+          "|gg||~var~4.8!~yok~1.1",
+          "|ou||~üstü~1.5!~altı~2.22",
+          "|ou||~üstü~2.29!~altı~1.47",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou|3.5|~üstü~2.4!~altı~3.16",
+          "|ou|2.5|~üstü~1.72!~altı~7.1",
+          "|ou|4.5|~üstü~5.9!~altı~2.52",
+          "|ou|3.5|~üstü~3.97!~altı~3.13",
+          "|ou|2.5|~üstü~2.51!~altı~5.9",
+          "|ou|1.5|~üstü~2.17!~altı~10",
+          "|gg||~var~1.47!~yok~2.45",
+          "|ou||~üstü~15!~altı~1.085",
+          "|ou||~üstü~6.3!~altı~1.23",
+          "|ou||~üstü~3.9!~altı~1.59",
+          "|ou||~üstü~2.27!~altı~2.49",
+          "|ou||~üstü~1.5!~altı~5",
+          "|Double_Chance||~1X~1.28!~12~1.26!~X2~1.8",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~3.7!~altı~1.23",
+          "|ou||~üstü~1.2!~altı~4",
+          "|Half_Time_Result||~1~2.27!~X~2.46!~2~3.65"
         ]
       }
     }
@@ -8645,7 +9717,103 @@
       "group_markets": {
         "full_event|0": [
           "|ou||~üstü~1.79!~altı~1.95",
-          "|Half_Time_Result||~1~1.15!~X~5.3!~2~25"
+          "|ou||~üstü~2.13!~altı~1.65",
+          "|ou||~üstü~1.55!~altı~2.28",
+          "|ou||~üstü~2.35!~altı~1.52",
+          "|ou||~üstü~1.42!~altı~2.6",
+          "|ou||~üstü~1.95!~altı~1.79",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|ou||~üstü~3.3!~altı~1.28",
+          "|1x2||~1~1.04!~X~14!~2~26",
+          "|Half_Time_Result||~1~1.19!~X~5!~2~21",
+          "|gg||~var~2.48!~yok~1.4",
+          "|gg||~var~3.05!~yok~1.27",
+          "|ou||~üstü~2.03!~altı~1.6",
+          "|ou||~üstü~1.62!~altı~2",
+          "|gg||~var~5.75!~yok~1.06",
+          "|ou||~üstü~1.38!~altı~2.55",
+          "|ou||~üstü~1.96!~altı~1.65",
+          "|ou||~üstü~3.15!~altı~1.25",
+          "|ou||~üstü~1.74!~altı~1.84",
+          "|ou|3.5|~üstü~2.49!~altı~14",
+          "|ou|2.5|~üstü~2.3!~altı~34",
+          "|ou|4.5|~üstü~1.56!~altı~2.62",
+          "|ou|3.5|~üstü~1.27!~altı~4.5",
+          "|ou|2.5|~üstü~1.11!~altı~11",
+          "|ou|1.5|~üstü~1.06!~altı~34",
+          "|gg||~var~2.2!~yok~1.6",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|ou||~üstü~3!~altı~1.32",
+          "|ou||~üstü~1.26!~altı~3.45",
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|Double_Chance||~1X~1.001!~12~1.02!~X2~12"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30446079",
+    "isScraped": true,
+    "data": {
+      "id": 30446079,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kulüp Dostluk Maçları"
+      },
+      "country": {
+        "name": "Dünya"
+      },
+      "participants": {
+        "home": "Portimonense SAD",
+        "away": "Nottingham Forest",
+        "home_id": 1619,
+        "away_id": 940
+      },
+      "start_time": "2026-07-31T10:00:00.000Z",
+      "start_ts": 1785492000,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~2.13!~altı~1.65",
+          "|ou||~üstü~1.7!~altı~2.05",
+          "|ou||~üstü~1.91!~altı~1.83",
+          "|ou||~üstü~2.75!~altı~1.38",
+          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~2.35!~altı~1.52",
+          "|1x2||~1~6.9!~X~3.6!~2~1.54",
+          "|gg||~var~1.89!~yok~1.7",
+          "|gg||~var~2.42!~yok~1.42",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~2!~altı~1.62",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.55!~altı~2.12",
+          "|ou||~üstü~6!~altı~1.05",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.74!~altı~3.21",
+          "|ou|2.5|~üstü~1.95!~altı~6.5",
+          "|ou|4.5|~üstü~29!~altı~7.7",
+          "|ou|3.5|~üstü~19!~altı~8.8",
+          "|ou|2.5|~üstü~9.6!~altı~15",
+          "|ou|1.5|~üstü~8.1!~altı~23",
+          "|gg||~var~1.58!~yok~2.23",
+          "|ou||~üstü~7.3!~altı~1.2",
+          "|ou||~üstü~4.3!~altı~1.52",
+          "|ou||~üstü~2.35!~altı~2.25",
+          "|ou||~üstü~1.57!~altı~4.85",
+          "|Double_Chance||~1X~2.32!~12~1.27!~X2~1.11",
+          "|ou||~üstü~1.2!~altı~4",
+          "|ou||~üstü~3.7!~altı~1.23",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|Half_Time_Result||~1~5.35!~X~2.47!~2~1.89",
+          "|ou||~üstü~4!~altı~1.2",
+          "|ou||~üstü~1.17!~altı~19"
         ]
       }
     }
@@ -8714,16 +9882,15 @@
       "start_ts": 1785511800,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~1.67!~altı~2.1",
-          "|ou||~üstü~2.1!~altı~1.67",
-          "|ou||~üstü~1.43!~altı~2.55",
-          "|1x2||~1~1.36!~X~5.2!~2~6.9",
-          "|ou||~üstü~1.52!~altı~2.35",
-          "|ou||~üstü~1.9!~altı~1.84",
-          "|ou||~üstü~2.4!~altı~1.5",
-          "|gg||~var~1.7!~yok~2.05",
-          "|Double_Chance||~1X~1.1!~12~1.16!~X2~2.95",
-          "|Half_Time_Result||~1~1.63!~X~2.85!~2~7.4"
+          "|ou||~üstü~1.62!~altı~2.17",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|1x2||~1~1.29!~X~5.8!~2~8.2",
+          "|ou||~üstü~1.48!~altı~2.43",
+          "|ou||~üstü~1.83!~altı~1.91",
+          "|ou||~üstü~2.25!~altı~1.57",
+          "|gg||~var~1.77!~yok~1.98",
+          "|Double_Chance||~1X~1.08!~12~1.13!~X2~3.35",
+          "|Half_Time_Result||~1~1.55!~X~2.98!~2~8.5"
         ]
       }
     }
@@ -8762,6 +9929,416 @@
           "|gg||~var~1.55!~yok~2.28",
           "|Double_Chance||~1X~1.25!~12~1.24!~X2~1.98",
           "|Half_Time_Result||~1~2.15!~X~2.46!~2~4.3"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30371821",
+    "isScraped": true,
+    "data": {
+      "id": 30371821,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Avrupa Ligi - Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Jagiellonia Bialystok",
+        "away": "Glasgow Rangers",
+        "home_id": 1556,
+        "away_id": 260
+      },
+      "start_time": "2026-08-06T19:00:00.000Z",
+      "start_ts": 1786042800,
+      "group_markets": {
+        "full_event|0": [
+          "|1x2||~1~2.72!~X~3.23!~2~2.55",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~1.94!~altı~1.8",
+          "|ou||~üstü~1.29!~altı~3.2",
+          "|ou||~üstü~3.3!~altı~1.28",
+          "|ou||~üstü~1.47!~altı~2.45",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~1.72!~altı~2.03",
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|ou||~üstü~2.95!~altı~1.33",
+          "|Half_Time_Result||~1~3.25!~X~2.03!~2~3.17",
+          "|gg||~var~2.03!~yok~1.6",
+          "|gg||~var~2.66!~yok~1.35",
+          "|ou||~üstü~2.7!~altı~1.34",
+          "|ou||~üstü~1.82!~altı~1.76",
+          "|gg||~var~5.75!~yok~1.06",
+          "|ou||~üstü~3.05!~altı~1.27",
+          "|ou||~üstü~1.72!~altı~1.87",
+          "|ou||~üstü~6.8!~altı~1.03",
+          "|ou||~üstü~2.78!~altı~1.32",
+          "|ou|3.5|~üstü~3.59!~altı~2.74",
+          "|ou|2.5|~üstü~2.24!~altı~5.8",
+          "|ou|4.5|~üstü~14!~altı~3",
+          "|ou|3.5|~üstü~8.7!~altı~3.41",
+          "|ou|2.5|~üstü~4.3!~altı~5.6",
+          "|ou|1.5|~üstü~3.47!~altı~7.7",
+          "|gg||~var~1.72!~yok~2.03",
+          "|ou||~üstü~4!~altı~1.2",
+          "|Double_Chance||~1X~1.45!~12~1.33!~X2~1.43"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30423885",
+    "isScraped": true,
+    "data": {
+      "id": 30423885,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Avrupa Ligi - Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Shamrock Rovers",
+        "away": "KS Egnatia Rrogozhine",
+        "home_id": 661,
+        "away_id": 374418
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.87!~altı~1.87",
+          "|1x2||~1~1.79!~X~3.6!~2~4.3",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|Half_Time_Result||~1~2.39!~X~2.16!~2~4.6",
+          "|ou||~üstü~1.27!~altı~3.4",
+          "|ou||~üstü~2.45!~altı~1.47",
+          "|ou||~üstü~1.42!~altı~2.6",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~2.1!~altı~1.67",
+          "|ou||~üstü~2.75!~altı~1.38",
+          "|ou||~üstü~1.33!~altı~2.95",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|gg||~var~2.08!~yok~1.57",
+          "|gg||~var~2.7!~yok~1.34",
+          "|ou||~üstü~2.55!~altı~1.38",
+          "|ou||~üstü~1.77!~altı~1.81",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~2.9!~altı~1.29",
+          "|ou||~üstü~1.68!~altı~1.92",
+          "|ou||~üstü~6.6!~altı~1.035",
+          "|ou||~üstü~2.7!~altı~1.34",
+          "|ou|3.5|~üstü~3.55!~altı~3.14",
+          "|ou|2.5|~üstü~2.27!~altı~6.5",
+          "|ou|4.5|~üstü~8.5!~altı~2.07",
+          "|ou|3.5|~üstü~5!~altı~2.45",
+          "|ou|2.5|~üstü~2.76!~altı~4",
+          "|ou|1.5|~üstü~2.19!~altı~6.3",
+          "|gg||~var~1.8!~yok~1.94",
+          "|Double_Chance||~1X~1.21!~12~1.28!~X2~1.93"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30433315",
+    "isScraped": true,
+    "data": {
+      "id": 30433315,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Avrupa Ligi - Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "KuPS",
+        "away": "Universitatea Craiova",
+        "home_id": 546,
+        "away_id": 15805
+      },
+      "start_time": "2026-08-06T15:00:00.000Z",
+      "start_ts": 1786028400,
+      "group_markets": {
+        "full_event|0": [
+          "|Half_Time_Result||~1~3.85!~X~2.11!~2~2.74",
+          "|ou||~üstü~1.92!~altı~1.82",
+          "|1x2||~1~3.4!~X~3.33!~2~2.1",
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|ou||~üstü~1.29!~altı~3.2",
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|ou||~üstü~2.13!~altı~1.65",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~1.7!~altı~2.05",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|gg||~var~2.03!~yok~1.6",
+          "|gg||~var~2.66!~yok~1.35",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou||~üstü~1.79!~altı~1.79",
+          "|gg||~var~5.75!~yok~1.06",
+          "|ou||~üstü~3.05!~altı~1.27",
+          "|ou||~üstü~1.7!~altı~1.89",
+          "|ou||~üstü~6.8!~altı~1.03",
+          "|ou||~üstü~2.74!~altı~1.33",
+          "|ou|3.5|~üstü~3.56!~altı~2.95",
+          "|ou|2.5|~üstü~2.24!~altı~6",
+          "|ou|4.5|~üstü~19!~altı~3.68",
+          "|ou|3.5|~üstü~11!~altı~4.2",
+          "|ou|2.5|~üstü~5.4!~altı~6.7",
+          "|ou|1.5|~üstü~4.33!~altı~10",
+          "|gg||~var~1.75!~yok~2",
+          "|ou||~üstü~3.9!~altı~1.21",
+          "|Double_Chance||~1X~1.67!~12~1.31!~X2~1.3"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30433316",
+    "isScraped": true,
+    "data": {
+      "id": 30433316,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Avrupa Ligi - Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Lincoln Red Imps FC",
+        "away": "Omonia Nicosia",
+        "home_id": 35420,
+        "away_id": 1709
+      },
+      "start_time": "2026-08-06T15:00:00.000Z",
+      "start_ts": 1786028400,
+      "group_markets": {
+        "full_event|0": [
+          "|Half_Time_Result||~1~5.35!~X~2.42!~2~1.91",
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|1x2||~1~7.1!~X~4.5!~2~1.42",
+          "|ou||~üstü~3.7!~altı~1.23",
+          "|ou||~üstü~1.48!~altı~2.43",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~3.4!~altı~1.27",
+          "|ou||~üstü~3!~altı~1.32",
+          "|gg||~var~1.92!~yok~1.68",
+          "|gg||~var~2.42!~yok~1.42",
+          "|ou||~üstü~1.48!~altı~2.26",
+          "|ou||~üstü~1.89!~altı~1.7",
+          "|gg||~var~5.5!~yok~1.07",
+          "|ou||~üstü~2.26!~altı~1.48",
+          "|ou||~üstü~1.5!~altı~2.22",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou|3.5|~üstü~2.67!~altı~3.7",
+          "|ou|2.5|~üstü~1.95!~altı~8.4",
+          "|ou|4.5|~üstü~29!~altı~7.9",
+          "|ou|3.5|~üstü~19!~altı~9",
+          "|ou|2.5|~üstü~10!~altı~15",
+          "|ou|1.5|~üstü~8.5!~altı~21",
+          "|gg||~var~1.67!~yok~2.1",
+          "|ou||~üstü~1.2!~altı~4",
+          "|Double_Chance||~1X~2.71!~12~1.19!~X2~1.1"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30433317",
+    "isScraped": true,
+    "data": {
+      "id": 30433317,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Avrupa Ligi - Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "FC Thun 1898",
+        "away": "Vikingur Reykjavik",
+        "home_id": 638,
+        "away_id": 1438
+      },
+      "start_time": "2026-08-06T15:00:00.000Z",
+      "start_ts": 1786028400,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~1.77!~altı~1.89",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.47!~altı~2.4",
+          "|1x2||~1~1.38!~X~4.8!~2~7.2",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|ou||~üstü~1.42!~altı~2.6",
+          "|Half_Time_Result||~1~1.84!~X~2.54!~2~6",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.63!~altı~2.15",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|ou||~üstü~1.28!~altı~3.3",
+          "|gg||~var~1.83!~yok~1.75",
+          "|gg||~var~2.34!~yok~1.45",
+          "|ou||~üstü~2.29!~altı~1.47",
+          "|ou||~üstü~1.75!~altı~1.83",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~1.47!~altı~2.29",
+          "|ou||~üstü~2.12!~altı~1.55",
+          "|ou||~üstü~5.2!~altı~1.08",
+          "|ou||~üstü~2.29!~altı~1.47",
+          "|ou|3.5|~üstü~2.48!~altı~3.89",
+          "|ou|2.5|~üstü~1.86!~altı~9.2",
+          "|ou|4.5|~üstü~4.2!~altı~1.87",
+          "|ou|3.5|~üstü~2.59!~altı~2.54",
+          "|ou|2.5|~üstü~1.77!~altı~4.85",
+          "|ou|1.5|~üstü~1.53!~altı~8.8",
+          "|gg||~var~1.62!~yok~2.17",
+          "|ou||~üstü~4.2!~altı~1.19",
+          "|Double_Chance||~1X~1.1!~12~1.18!~X2~2.85"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30433318",
+    "isScraped": true,
+    "data": {
+      "id": 30433318,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Avrupa Ligi - Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Larne FC",
+        "away": "FC Saburtalo Tiflis",
+        "home_id": 10895,
+        "away_id": 176117
+      },
+      "start_time": "2026-08-06T15:00:00.000Z",
+      "start_ts": 1786028400,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.35!~altı~1.52",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~1.82!~altı~1.92",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.55!~altı~2.28",
+          "|ou||~üstü~1.33!~altı~2.95",
+          "|ou||~üstü~3.6!~altı~1.24",
+          "|1x2||~1~2.64!~X~3.23!~2~2.62",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|Half_Time_Result||~1~3.15!~X~2.04!~2~3.15",
+          "|ou||~üstü~3.3!~altı~1.28",
+          "|ou||~üstü~1.21!~altı~3.9",
+          "|gg||~var~2.12!~yok~1.55",
+          "|gg||~var~2.78!~yok~1.32",
+          "|ou||~üstü~1.33!~altı~2.74",
+          "|ou||~üstü~1.89!~altı~1.7",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~3.2!~altı~1.24",
+          "|ou||~üstü~1.76!~altı~1.82",
+          "|ou||~üstü~7!~altı~1.025",
+          "|ou||~üstü~2.83!~altı~1.31",
+          "|ou|3.5|~üstü~3.93!~altı~2.93",
+          "|ou|2.5|~üstü~2.38!~altı~5.8",
+          "|ou|4.5|~üstü~15!~altı~2.87",
+          "|ou|3.5|~üstü~9.1!~altı~3.23",
+          "|ou|2.5|~üstü~4.4!~altı~5.1",
+          "|ou|1.5|~üstü~3.45!~altı~7.2",
+          "|gg||~var~1.82!~yok~1.92",
+          "|Double_Chance||~1X~1.46!~12~1.33!~X2~1.45"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30433319",
+    "isScraped": true,
+    "data": {
+      "id": 30433319,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Avrupa Ligi - Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Lech Poznan",
+        "away": "KÍ Klaksvík",
+        "home_id": 1558,
+        "away_id": 14987
+      },
+      "start_time": "2026-08-06T15:00:00.000Z",
+      "start_ts": 1786028400,
+      "group_markets": {
+        "full_event|0": [
+          "|1x2||~1~1.17!~X~7.1!~2~14",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~1.82!~altı~1.92",
+          "|ou||~üstü~2.75!~altı~1.38",
+          "|ou||~üstü~1.48!~altı~2.43",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|ou||~üstü~2.25!~altı~1.57",
+          "|ou||~üstü~1.27!~altı~3.4",
+          "|ou||~üstü~3!~altı~1.32",
+          "|Half_Time_Result||~1~1.52!~X~2.9!~2~10",
+          "|gg||~var~2.34!~yok~1.45",
+          "|gg||~var~3!~yok~1.28",
+          "|ou||~üstü~2.26!~altı~1.48",
+          "|ou||~üstü~1.72!~altı~1.87",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~1.45!~altı~2.34",
+          "|ou||~üstü~2.08!~altı~1.57",
+          "|ou||~üstü~5.2!~altı~1.08",
+          "|ou||~üstü~2.26!~altı~1.48",
+          "|ou|3.5|~üstü~3.1!~altı~5.5",
+          "|ou|2.5|~üstü~2.37!~altı~14",
+          "|ou|4.5|~üstü~3.63!~altı~1.58",
+          "|ou|3.5|~üstü~2.16!~altı~2.21",
+          "|ou|2.5|~üstü~1.53!~altı~3.97",
+          "|ou|1.5|~üstü~1.28!~altı~8.6",
+          "|gg||~var~2.13!~yok~1.65",
+          "|ou||~üstü~4!~altı~1.2",
+          "|Double_Chance||~1X~1.04!~12~1.09!~X2~4.7"
         ]
       }
     }
@@ -9027,13 +10604,13 @@
       "start_ts": 1785864600,
       "group_markets": {
         "full_event|0": [
-          "|ou||~üstü~1.98!~altı~1.77",
+          "|ou||~üstü~1.95!~altı~1.79",
           "|1x2||~1~3.02!~X~3.47!~2~2.22",
           "|ou||~üstü~3!~altı~1.32",
           "|ou||~üstü~1.75!~altı~2",
           "|ou||~üstü~2.2!~altı~1.6",
-          "|ou||~üstü~1.38!~altı~2.75",
-          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~3.4!~altı~1.27",
           "|ou||~üstü~2.65!~altı~1.4",
           "|ou||~üstü~1.48!~altı~2.43",
           "|Half_Time_Result||~1~3.6!~X~2.12!~2~2.86",
@@ -9041,7 +10618,7 @@
           "|ou||~üstü~4!~altı~1.2",
           "|gg||~var~2.08!~yok~1.57",
           "|gg||~var~2.7!~yok~1.34",
-          "|ou||~üstü~2.74!~altı~1.33",
+          "|ou||~üstü~2.7!~altı~1.34",
           "|ou||~üstü~1.84!~altı~1.74",
           "|gg||~var~6!~yok~1.05",
           "|ou||~üstü~3.15!~altı~1.25",
@@ -9295,6 +10872,845 @@
     }
   },
   {
+    "id": "30441102",
+    "isScraped": true,
+    "data": {
+      "id": 30441102,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Debreceni VSC",
+        "away": "FC Kopenhag",
+        "home_id": 1898,
+        "away_id": 477
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|ou||~üstü~1.29!~altı~3.2",
+          "|ou||~üstü~1.92!~altı~1.82",
+          "|1x2||~1~4.2!~X~3.47!~2~1.85",
+          "|Half_Time_Result||~1~4.4!~X~2.13!~2~2.47",
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~1.7!~altı~2.05",
+          "|ou||~üstü~2.15!~altı~1.63",
+          "|gg||~var~2.12!~yok~1.55",
+          "|gg||~var~2.74!~yok~1.33",
+          "|ou||~üstü~2.66!~altı~1.35",
+          "|ou||~üstü~1.81!~altı~1.77",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~3.05!~altı~1.27",
+          "|ou||~üstü~1.7!~altı~1.89",
+          "|ou||~üstü~6.8!~altı~1.03",
+          "|ou||~üstü~2.74!~altı~1.33",
+          "|ou|3.5|~üstü~3.66!~altı~3.07",
+          "|ou|2.5|~üstü~2.31!~altı~6.2",
+          "|ou|4.5|~üstü~25!~altı~4.4",
+          "|ou|3.5|~üstü~15!~altı~4.9",
+          "|ou|2.5|~üstü~6.8!~altı~7.8",
+          "|ou|1.5|~üstü~5.4!~altı~10",
+          "|gg||~var~1.8!~yok~1.94",
+          "|ou||~üstü~3.9!~altı~1.21",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.17!~altı~4.3",
+          "|Double_Chance||~1X~1.87!~12~1.29!~X2~1.22"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30442270",
+    "isScraped": true,
+    "data": {
+      "id": 30442270,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "FK Jablonec",
+        "away": "FC RFS",
+        "home_id": 345,
+        "away_id": 12978
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|Half_Time_Result||~1~2.03!~X~2.3!~2~5.8",
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|1x2||~1~1.5!~X~4.1!~2~6.2",
+          "|ou||~üstü~2.75!~altı~1.38",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|ou||~üstü~1.75!~altı~2",
+          "|ou||~üstü~1.33!~altı~2.95",
+          "|ou||~üstü~1.92!~altı~1.82",
+          "|ou||~üstü~2.45!~altı~1.47",
+          "|ou||~üstü~1.53!~altı~2.35",
+          "|gg||~var~2.12!~yok~1.55",
+          "|gg||~var~2.78!~yok~1.32",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.67!~altı~1.93",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~2.7!~altı~1.34",
+          "|ou||~üstü~1.62!~altı~2",
+          "|ou||~üstü~6.4!~altı~1.04",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou|3.5|~üstü~3.39!~altı~3.5",
+          "|ou|2.5|~üstü~2.28!~altı~7.5",
+          "|ou|4.5|~üstü~6.3!~altı~1.82",
+          "|ou|3.5|~üstü~3.72!~altı~2.23",
+          "|ou|2.5|~üstü~2.21!~altı~3.76",
+          "|ou|1.5|~üstü~1.78!~altı~6.8",
+          "|gg||~var~1.87!~yok~1.87",
+          "|ou||~üstü~3.4!~altı~1.27",
+          "|ou||~üstü~1.27!~altı~3.4",
+          "|ou||~üstü~4.3!~altı~1.18",
+          "|Double_Chance||~1X~1.13!~12~1.22!~X2~2.43"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30442294",
+    "isScraped": true,
+    "data": {
+      "id": 30442294,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "SK Brann",
+        "away": "Apollon Limassol",
+        "home_id": 219,
+        "away_id": 1551
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~1.8!~altı~1.94",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|1x2||~1~1.9!~X~3.45!~2~3.98",
+          "|ou||~üstü~3.55!~altı~1.23",
+          "|ou||~üstü~1.53!~altı~2.33",
+          "|Half_Time_Result||~1~2.54!~X~2.08!~2~4.4",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~1.32!~altı~3",
+          "|gg||~var~2.18!~yok~1.52",
+          "|gg||~var~2.87!~yok~1.3",
+          "|ou||~üstü~1.33!~altı~2.74",
+          "|ou||~üstü~1.89!~altı~1.7",
+          "|gg||~var~6.25!~yok~1.045",
+          "|ou||~üstü~3.2!~altı~1.24",
+          "|ou||~üstü~1.76!~altı~1.82",
+          "|ou||~üstü~7!~altı~1.025",
+          "|ou||~üstü~2.83!~altı~1.31",
+          "|ou|3.5|~üstü~4!~altı~3.1",
+          "|ou|2.5|~üstü~2.46!~altı~6.3",
+          "|ou|4.5|~üstü~11!~altı~2.12",
+          "|ou|3.5|~üstü~6!~altı~2.46",
+          "|ou|2.5|~üstü~3.11!~altı~3.89",
+          "|ou|1.5|~üstü~2.41!~altı~6",
+          "|gg||~var~1.9!~yok~1.84",
+          "|ou||~üstü~3.2!~altı~1.29",
+          "|ou||~üstü~1.2!~altı~4",
+          "|Double_Chance||~1X~1.23!~12~1.29!~X2~1.82"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30442521",
+    "isScraped": true,
+    "data": {
+      "id": 30442521,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Valur Reykjavik FC",
+        "away": "FC Nordsjaelland",
+        "home_id": 1437,
+        "away_id": 635
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|Half_Time_Result||~1~4.5!~X~2.36!~2~2.2",
+          "|ou||~üstü~1.53!~altı~2.33",
+          "|ou||~üstü~1.85!~altı~1.89",
+          "|1x2||~1~4.7!~X~3.87!~2~1.67",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|gg||~var~1.79!~yok~1.79",
+          "|gg||~var~2.29!~yok~1.47",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~1.96!~altı~1.65",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~5.75!~altı~1.06",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou|3.5|~üstü~2.58!~altı~3.27",
+          "|ou|2.5|~üstü~1.84!~altı~7.3",
+          "|ou|4.5|~üstü~17!~altı~5.4",
+          "|ou|3.5|~üstü~12!~altı~6.3",
+          "|ou|2.5|~üstü~6.4!~altı~11",
+          "|ou|1.5|~üstü~5.4!~altı~15",
+          "|gg||~var~1.55!~yok~2.28",
+          "|ou||~üstü~3.6!~altı~1.24",
+          "|ou||~üstü~1.19!~altı~4.2",
+          "|ou||~üstü~3.3!~altı~1.28",
+          "|ou||~üstü~1.22!~altı~3.8",
+          "|Double_Chance||~1X~2.08!~12~1.25!~X2~1.19"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30442766",
+    "isScraped": true,
+    "data": {
+      "id": 30442766,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "KS Rakow Czestochowa",
+        "away": "Hammarby IF",
+        "home_id": 6709,
+        "away_id": 365
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|Half_Time_Result||~1~2.74!~X~2.15!~2~3.7",
+          "|1x2||~1~2.13!~X~3.4!~2~3.27",
+          "|ou||~üstü~1.8!~altı~1.94",
+          "|ou||~üstü~1.25!~altı~3.55",
+          "|ou||~üstü~2.33!~altı~1.53",
+          "|ou||~üstü~2.6!~altı~1.42",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~1.6!~altı~2.2",
+          "|gg||~var~1.93!~yok~1.67",
+          "|gg||~var~2.48!~yok~1.4",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.72!~altı~1.87",
+          "|gg||~var~5.75!~yok~1.06",
+          "|ou||~üstü~2.83!~altı~1.31",
+          "|ou||~üstü~1.65!~altı~1.96",
+          "|ou||~üstü~6.4!~altı~1.04",
+          "|ou||~üstü~2.66!~altı~1.35",
+          "|ou|3.5|~üstü~3.19!~altı~2.96",
+          "|ou|2.5|~üstü~2.08!~altı~6.2",
+          "|ou|4.5|~üstü~9.4!~altı~2.48",
+          "|ou|3.5|~üstü~5.8!~altı~2.91",
+          "|ou|2.5|~üstü~3.16!~altı~5",
+          "|ou|1.5|~üstü~2.59!~altı~7.4",
+          "|gg||~var~1.65!~yok~2.13",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|Double_Chance||~1X~1.32!~12~1.3!~X2~1.66"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30442767",
+    "isScraped": true,
+    "data": {
+      "id": 30442767,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Hapoel Tel Aviv",
+        "away": "GKS Katowice",
+        "home_id": 640,
+        "away_id": 6697
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.58!~altı~2.23",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|1x2||~1~1.99!~X~3.53!~2~3.51",
+          "|Half_Time_Result||~1~2.58!~X~2.18!~2~3.95",
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|gg||~var~1.93!~yok~1.67",
+          "|gg||~var~2.48!~yok~1.4",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|ou||~üstü~1.7!~altı~1.89",
+          "|gg||~var~5.75!~yok~1.06",
+          "|ou||~üstü~2.83!~altı~1.31",
+          "|ou||~üstü~1.65!~altı~1.96",
+          "|ou||~üstü~6.6!~altı~1.035",
+          "|ou||~üstü~2.66!~altı~1.35",
+          "|ou|3.5|~üstü~3.19!~altı~3.03",
+          "|ou|2.5|~üstü~2.08!~altı~6.4",
+          "|ou|4.5|~üstü~8.8!~altı~2.26",
+          "|ou|3.5|~üstü~5.3!~altı~2.76",
+          "|ou|2.5|~üstü~2.94!~altı~4.7",
+          "|ou|1.5|~üstü~2.4!~altı~7.7",
+          "|gg||~var~1.67!~yok~2.1",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~1.29!~altı~3.2",
+          "|Double_Chance||~1X~1.28!~12~1.28!~X2~1.75"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30444546",
+    "isScraped": true,
+    "data": {
+      "id": 30444546,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Bohemians FC Dublin",
+        "away": "FC Midtjylland",
+        "home_id": 1601,
+        "away_id": 1481
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.05!~altı~1.7",
+          "|Half_Time_Result||~1~7.4!~X~2.42!~2~1.82",
+          "|1x2||~1~9.3!~X~4.7!~2~1.34",
+          "|ou||~üstü~1.2!~altı~4",
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~1.82!~altı~1.92",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~1.47!~altı~2.45",
+          "|ou||~üstü~1.28!~altı~3.3",
+          "|gg||~var~2.26!~yok~1.48",
+          "|gg||~var~2.9!~yok~1.29",
+          "|ou||~üstü~2.18!~altı~1.52",
+          "|ou||~üstü~1.6!~altı~2.03",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~2.55!~altı~1.38",
+          "|ou||~üstü~1.58!~altı~2.06",
+          "|ou||~üstü~6!~altı~1.05",
+          "|ou||~üstü~2.55!~altı~1.38",
+          "|ou|3.5|~üstü~3.4!~altı~3.94",
+          "|ou|2.5|~üstü~2.37!~altı~8.5",
+          "|ou|4.5|~üstü~56!~altı~9.5",
+          "|ou|3.5|~üstü~36!~altı~10",
+          "|ou|2.5|~üstü~15!~altı~17",
+          "|ou|1.5|~üstü~12!~altı~19",
+          "|gg||~var~1.98!~yok~1.77",
+          "|ou||~üstü~4.2!~altı~1.19",
+          "|ou||~üstü~3!~altı~1.32",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|Double_Chance||~1X~3.04!~12~1.18!~X2~1.05"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30444547",
+    "isScraped": true,
+    "data": {
+      "id": 30444547,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Panathinaikos",
+        "away": "CSKA 1948 ",
+        "home_id": 651,
+        "away_id": 368465
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.25!~altı~1.57",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|1x2||~1~1.37!~X~4.4!~2~8.7",
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|ou||~üstü~1.23!~altı~3.7",
+          "|ou||~üstü~1.75!~altı~2",
+          "|Half_Time_Result||~1~1.87!~X~2.34!~2~7.2",
+          "|ou||~üstü~1.5!~altı~2.22",
+          "|ou||~üstü~1.95!~altı~1.79",
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|gg||~var~2.34!~yok~1.45",
+          "|gg||~var~3.05!~yok~1.27",
+          "|ou||~üstü~2.34!~altı~1.45",
+          "|ou||~üstü~1.68!~altı~1.92",
+          "|gg||~var~6.4!~yok~1.04",
+          "|ou||~üstü~2.74!~altı~1.33",
+          "|ou||~üstü~1.62!~altı~2",
+          "|ou||~üstü~6.4!~altı~1.04",
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou|3.5|~üstü~3.7!~altı~3.82",
+          "|ou|2.5|~üstü~2.5!~altı~8.1",
+          "|ou|4.5|~üstü~6!~altı~1.66",
+          "|ou|3.5|~üstü~3.47!~altı~2.03",
+          "|ou|2.5|~üstü~2.11!~altı~3.38",
+          "|ou|1.5|~üstü~1.64!~altı~6.2",
+          "|gg||~var~2.03!~yok~1.72",
+          "|ou||~üstü~3.4!~altı~1.27",
+          "|ou||~üstü~1.28!~altı~3.3",
+          "|Double_Chance||~1X~1.08!~12~1.2!~X2~2.85"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30444548",
+    "isScraped": true,
+    "data": {
+      "id": 30444548,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "Ajax Amsterdam",
+        "away": "Shelbourne  ",
+        "home_id": 765,
+        "away_id": 1661
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.27!~altı~3.4",
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|Half_Time_Result||~1~1.52!~X~3.17!~2~7.8",
+          "|ou||~üstü~1.75!~altı~2",
+          "|ou||~üstü~2.35!~altı~1.52",
+          "|1x2||~1~1.18!~X~6.9!~2~12",
+          "|ou||~üstü~1.57!~altı~2.25",
+          "|ou||~üstü~1.38!~altı~2.75",
+          "|ou||~üstü~1.9!~altı~1.84",
+          "|ou||~üstü~2.15!~altı~1.63",
+          "|gg||~var~1.96!~yok~1.65",
+          "|gg||~var~2.42!~yok~1.42",
+          "|ou||~üstü~1.52!~altı~2.18",
+          "|ou||~üstü~1.96!~altı~1.65",
+          "|gg||~var~5.2!~yok~1.08",
+          "|ou||~üstü~1.38!~altı~2.55",
+          "|ou||~üstü~1.85!~altı~1.73",
+          "|ou||~üstü~4.6!~altı~1.11",
+          "|ou||~üstü~2.12!~altı~1.55",
+          "|ou|3.5|~üstü~2.36!~altı~5.3",
+          "|ou|2.5|~üstü~1.9!~altı~14",
+          "|ou|4.5|~üstü~2.76!~altı~1.81",
+          "|ou|3.5|~üstü~1.93!~altı~2.61",
+          "|ou|2.5|~üstü~1.44!~altı~5.2",
+          "|ou|1.5|~üstü~1.27!~altı~11",
+          "|gg||~var~1.75!~yok~2",
+          "|ou||~üstü~4.2!~altı~1.19",
+          "|ou||~üstü~3!~altı~1.32",
+          "|ou||~üstü~1.32!~altı~3",
+          "|ou||~üstü~1.19!~altı~4.2",
+          "|ou||~üstü~3.8!~altı~1.22",
+          "|Double_Chance||~1X~1.04!~12~1.1!~X2~4.5"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30445111",
+    "isScraped": true,
+    "data": {
+      "id": 30445111,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "UEFA Konferans Ligi. Elemeler"
+      },
+      "country": {
+        "name": "Avrupa"
+      },
+      "participants": {
+        "home": "CFR Cluj",
+        "away": "Tromso IL",
+        "home_id": 1795,
+        "away_id": 227
+      },
+      "start_time": "2026-08-06T17:00:00.000Z",
+      "start_ts": 1786035600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.52!~altı~2.35",
+          "|ou||~üstü~1.32!~altı~3",
+          "|1x2||~1~2.64!~X~3.06!~2~2.74",
+          "|Half_Time_Result||~1~3.23!~X~2.08!~2~3.23",
+          "|ou||~üstü~3.45!~altı~1.26",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.77!~altı~1.98",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~2.8!~altı~1.37",
+          "|ou||~üstü~1.4!~altı~2.65",
+          "|gg||~var~2.08!~yok~1.57",
+          "|gg||~var~2.74!~yok~1.33",
+          "|ou||~üstü~1.32!~altı~2.78",
+          "|ou||~üstü~1.87!~altı~1.72",
+          "|gg||~var~6!~yok~1.05",
+          "|ou||~üstü~3.15!~altı~1.25",
+          "|ou||~üstü~1.75!~altı~1.83",
+          "|ou||~üstü~7!~altı~1.025",
+          "|ou||~üstü~2.83!~altı~1.31",
+          "|ou|3.5|~üstü~3.79!~altı~2.82",
+          "|ou|2.5|~üstü~2.32!~altı~5.4",
+          "|ou|4.5|~üstü~15!~altı~2.89",
+          "|ou|3.5|~üstü~8.8!~altı~3.27",
+          "|ou|2.5|~üstü~4.3!~altı~5.3",
+          "|ou|1.5|~üstü~3.15!~altı~7.2",
+          "|gg||~var~1.75!~yok~2",
+          "|ou||~üstü~4.3!~altı~1.18",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|ou||~üstü~1.2!~altı~4",
+          "|Double_Chance||~1X~1.42!~12~1.36!~X2~1.45"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30419946",
+    "isScraped": true,
+    "data": {
+      "id": 30419946,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kuzey Toprakları Premier Ligi"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Port Darwin FC",
+        "away": "Darwin Hearts FC",
+        "home_id": 264258,
+        "away_id": 584914
+      },
+      "start_time": "2026-07-31T11:00:00.000Z",
+      "start_ts": 1785495600,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.43!~altı~2.55",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|ou||~üstü~1.63!~altı~2.15",
+          "|ou||~üstü~1.82!~altı~1.92",
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|ou||~üstü~1.52!~altı~2.35",
+          "|1x2||~1~2.26!~X~4.2!~2~2.56",
+          "|ou|2.5|~üstü~2.45!~altı~14",
+          "|ou|1.5|~üstü~2.31!~altı~25",
+          "|gg||~var~1.18!~yok~4.3",
+          "|Double_Chance||~1X~1.47!~12~1.22!~X2~1.62",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.32!~altı~3",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|Half_Time_Result||~1~2.51!~X~2.93!~2~2.78"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30429014",
+    "isScraped": true,
+    "data": {
+      "id": 30429014,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Queensland Premier Lig 1"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "North Star  ",
+        "away": " Capalaba FC",
+        "home_id": 13788,
+        "away_id": 13939
+      },
+      "start_time": "2026-07-31T10:30:00.000Z",
+      "start_ts": 1785493800,
+      "group_markets": {
+        "full_event|0": [
+          "|1x2||~1~1.48!~X~5.1!~2~5.1",
+          "|ou||~üstü~1.83!~altı~1.91",
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|ou|2.5|~üstü~1.8!~altı~6",
+          "|ou|1.5|~üstü~1.58!~altı~12",
+          "|gg||~var~1.45!~yok~2.5",
+          "|Double_Chance||~1X~1.16!~12~1.17!~X2~2.5",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~1.37!~altı~2.8",
+          "|ou||~üstü~2.95!~altı~1.33",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|ou||~üstü~1.32!~altı~3",
+          "|Half_Time_Result||~1~1.86!~X~2.77!~2~4.9"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30429015",
+    "isScraped": true,
+    "data": {
+      "id": 30429015,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Queensland Premier Lig 1"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Broadbeach United",
+        "away": "Logan Lightning  ",
+        "home_id": 362310,
+        "away_id": 13942
+      },
+      "start_time": "2026-07-31T10:30:00.000Z",
+      "start_ts": 1785493800,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.7!~altı~2.05",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|1x2||~1~1.55!~X~4.6!~2~4.8",
+          "|ou||~üstü~2.13!~altı~1.65",
+          "|ou|2.5|~üstü~2.01!~altı~5.1",
+          "|ou|1.5|~üstü~1.72!~altı~9.2",
+          "|gg||~var~1.55!~yok~2.28",
+          "|Double_Chance||~1X~1.18!~12~1.19!~X2~2.33",
+          "|Half_Time_Result||~1~1.94!~X~2.59!~2~4.9",
+          "|ou||~üstü~3.1!~altı~1.3",
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|ou||~üstü~1.92!~altı~1.82",
+          "|ou||~üstü~1.54!~altı~2.28",
+          "|ou||~üstü~1.3!~altı~3.1",
+          "|ou||~üstü~3.45!~altı~1.26"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30428801",
+    "isScraped": true,
+    "data": {
+      "id": 30428801,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Kuzey Ulusal Premier Ligi NSW - Kadınlar"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Broadmeadow Magic FC (Kadınlar)",
+        "away": "New Lambton FC (Kadınlar)",
+        "home_id": 651339,
+        "away_id": 648468
+      },
+      "start_time": "2026-07-31T10:00:00.000Z",
+      "start_ts": 1785492000,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.62!~altı~2.17",
+          "|1x2||~1~4.3!~X~6.7!~2~1.46",
+          "|ou||~üstü~1.95!~altı~1.79",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~1.5!~altı~2.4",
+          "|ou||~üstü~2.17!~altı~1.62",
+          "|Double_Chance||~1X~2.55!~12~1.11!~X2~1.21",
+          "|Half_Time_Result||~1~4.75!~X~3.19!~2~1.74",
+          "|ou||~üstü~2.5!~altı~1.45"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30438300",
+    "isScraped": true,
+    "data": {
+      "id": 30438300,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Queensland Premier Lig 2"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": " Brisbane Knights",
+        "away": "Mitchelton FC",
+        "home_id": 177106,
+        "away_id": 177052
+      },
+      "start_time": "2026-07-31T10:30:00.000Z",
+      "start_ts": 1785493800,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~1.67!~altı~2.1",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~2.2!~altı~1.6",
+          "|ou||~üstü~1.84!~altı~1.9",
+          "|1x2||~1~3.18!~X~4.33!~2~1.9",
+          "|ou||~üstü~1.55!~altı~2.28",
+          "|ou||~üstü~2.5!~altı~1.45",
+          "|Double_Chance||~1X~1.81!~12~1.21!~X2~1.33",
+          "|Half_Time_Result||~1~3.05!~X~2.82!~2~2.35"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30428540",
+    "isScraped": true,
+    "data": {
+      "id": 30428540,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "Queensland Premier Lig - Kadınlar"
+      },
+      "country": {
+        "name": "Avustralya"
+      },
+      "participants": {
+        "home": "Moreton City Excelsior (Kadınlar)",
+        "away": "Mitchelton FC (Kadınlar)",
+        "home_id": 909106,
+        "away_id": 211372
+      },
+      "start_time": "2026-07-31T09:30:00.000Z",
+      "start_ts": 1785490200,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.4!~altı~1.5",
+          "|ou||~üstü~1.83!~altı~1.91",
+          "|1x2||~1~5.8!~X~6.5!~2~1.35",
+          "|gg||~var~1.6!~yok~2.2",
+          "|Double_Chance||~1X~3.01!~12~1.12!~X2~1.13",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~1.65!~altı~2.13",
+          "|ou||~üstü~1.45!~altı~2.5",
+          "|Half_Time_Result||~1~6.9!~X~3.03!~2~1.61"
+        ]
+      }
+    }
+  },
+  {
     "id": "30193112",
     "isScraped": true,
     "data": {
@@ -9510,7 +11926,14 @@
           "|ou||~üstü~3.7!~altı~1.23",
           "|ou||~üstü~1.32!~altı~3",
           "|ou||~üstü~2.75!~altı~1.38",
-          "|Corners||~üstü~1.9!~altı~1.8"
+          "|Corners||~üstü~1.83!~altı~1.87",
+          "|Corners||~üstü~3.2!~altı~1.5",
+          "|Corners||~üstü~2.36!~altı~1.87",
+          "|Corners||~üstü~1.82!~altı~2.45",
+          "|Corners||~üstü~1.47!~altı~3.47",
+          "|Corners||~üstü~1.25!~altı~5.4",
+          "|Corners||~üstü~2.1!~altı~1.65",
+          "|Corners||~üstü~1.61!~altı~2.17"
         ]
       }
     }
@@ -9575,13 +11998,13 @@
           "|ou||~üstü~4!~altı~1.2",
           "|ou||~üstü~3!~altı~1.32",
           "|ou||~üstü~1.18!~altı~4.3",
-          "|Corners||~üstü~1.97!~altı~1.73",
-          "|Corners||~üstü~3.64!~altı~1.41",
-          "|Corners||~üstü~2.62!~altı~1.71",
-          "|Corners||~üstü~1.98!~altı~2.21",
-          "|Corners||~üstü~1.57!~altı~3.09",
-          "|Corners||~üstü~1.31!~altı~4.7",
-          "|Corners||~üstü~1.75!~altı~1.95"
+          "|Corners||~üstü~1.93!~altı~1.77",
+          "|Corners||~üstü~3.47!~altı~1.44",
+          "|Corners||~üstü~2.52!~altı~1.77",
+          "|Corners||~üstü~1.93!~altı~2.29",
+          "|Corners||~üstü~1.53!~altı~3.23",
+          "|Corners||~üstü~1.29!~altı~4.9",
+          "|Corners||~üstü~1.7!~altı~2.02"
         ]
       }
     }
@@ -9717,14 +12140,13 @@
           "|ou||~üstü~1.26!~altı~3.45",
           "|ou||~üstü~4.3!~altı~1.18",
           "|ou||~üstü~1.32!~altı~3",
-          "|Corners||~üstü~1.73!~altı~1.97",
-          "|Corners||~üstü~2.92!~altı~1.59",
-          "|Corners||~üstü~2.21!~altı~1.97",
-          "|Corners||~üstü~1.73!~altı~2.64",
-          "|Corners||~üstü~1.41!~altı~3.81",
-          "|Corners||~üstü~1.94!~altı~1.76",
-          "|Corners||~üstü~4.1!~altı~1.34",
-          "|Corners||~üstü~2.21!~altı~1.59"
+          "|Corners||~üstü~1.79!~altı~1.91",
+          "|Corners||~üstü~3.09!~altı~1.53",
+          "|Corners||~üstü~2.29!~altı~1.9",
+          "|Corners||~üstü~1.78!~altı~2.51",
+          "|Corners||~üstü~1.45!~altı~3.6",
+          "|Corners||~üstü~1.24!~altı~5.6",
+          "|Corners||~üstü~2.04!~altı~1.69"
         ]
       }
     }
@@ -9987,14 +12409,14 @@
           "|ou||~üstü~3.1!~altı~1.76",
           "|ou||~üstü~1.99!~altı~2.75",
           "|ou||~üstü~1.38!~altı~6",
-          "|Corners||~üstü~1.87!~altı~1.83",
-          "|Corners||~üstü~3.31!~altı~1.48",
-          "|Corners||~üstü~2.43!~altı~1.83",
-          "|Corners||~üstü~1.86!~altı~2.38",
-          "|Corners||~üstü~1.5!~altı~3.36",
-          "|Corners||~üstü~1.27!~altı~5.2",
-          "|Corners||~üstü~2.15!~altı~1.62",
-          "|Corners||~üstü~1.65!~altı~2.1"
+          "|Corners||~üstü~2.32!~altı~1.87",
+          "|Corners||~üstü~1.83!~altı~2.4",
+          "|Corners||~üstü~1.48!~altı~3.34",
+          "|Corners||~üstü~1.27!~altı~5",
+          "|Corners||~üstü~1.62!~altı~2.15",
+          "|Corners||~üstü~2.08!~altı~1.66",
+          "|Corners||~üstü~3.1!~altı~1.51",
+          "|Corners||~üstü~1.83!~altı~1.87"
         ]
       }
     }
@@ -10059,14 +12481,13 @@
           "|ou||~üstü~3!~altı~1.87",
           "|ou||~üstü~1.87!~altı~3",
           "|ou||~üstü~1.32!~altı~7.2",
-          "|Corners||~üstü~1.83!~altı~1.87",
-          "|Corners||~üstü~3.08!~altı~1.52",
-          "|Corners||~üstü~2.31!~altı~1.87",
-          "|Corners||~üstü~1.81!~altı~2.41",
-          "|Corners||~üstü~1.48!~altı~3.35",
-          "|Corners||~üstü~1.27!~altı~5",
-          "|Corners||~üstü~2.07!~altı~1.67",
-          "|Corners||~üstü~1.61!~altı~2.17"
+          "|Corners||~üstü~1.92!~altı~1.78",
+          "|Corners||~üstü~3.33!~altı~1.46",
+          "|Corners||~üstü~2.47!~altı~1.78",
+          "|Corners||~üstü~1.9!~altı~2.27",
+          "|Corners||~üstü~1.54!~altı~3.12",
+          "|Corners||~üstü~1.3!~altı~4.6",
+          "|Corners||~üstü~1.7!~altı~2.02"
         ]
       }
     }
@@ -10131,14 +12552,14 @@
           "|ou||~üstü~2.95!~altı~1.89",
           "|ou||~üstü~1.85!~altı~3.18",
           "|ou||~üstü~1.32!~altı~7.1",
-          "|Corners||~üstü~1.85!~altı~1.85",
-          "|Corners||~üstü~3.25!~altı~1.49",
-          "|Corners||~üstü~2.39!~altı~1.85",
-          "|Corners||~üstü~1.85!~altı~2.41",
-          "|Corners||~üstü~1.48!~altı~3.41",
-          "|Corners||~üstü~1.26!~altı~5.3",
-          "|Corners||~üstü~2.13!~altı~1.63",
-          "|Corners||~üstü~1.62!~altı~2.15"
+          "|Corners||~üstü~1.59!~altı~2.21",
+          "|Corners||~üstü~2.57!~altı~1.73",
+          "|Corners||~üstü~1.97!~altı~2.21",
+          "|Corners||~üstü~1.59!~altı~2.99",
+          "|Corners||~üstü~1.33!~altı~4.4",
+          "|Corners||~üstü~1.76!~altı~1.94",
+          "|Corners||~üstü~3.5!~altı~1.43",
+          "|Corners||~üstü~1.97!~altı~1.73"
         ]
       }
     }
@@ -10204,13 +12625,14 @@
           "|ou||~üstü~2.56!~altı~2.22",
           "|ou||~üstü~1.62!~altı~4.2",
           "|ou||~üstü~1.19!~altı~17",
-          "|Corners||~üstü~1.97!~altı~1.73",
-          "|Corners||~üstü~3.62!~altı~1.41",
-          "|Corners||~üstü~2.62!~altı~1.71",
-          "|Corners||~üstü~1.97!~altı~2.22",
-          "|Corners||~üstü~1.57!~altı~3.1",
-          "|Corners||~üstü~1.31!~altı~4.7",
-          "|Corners||~üstü~1.75!~altı~1.95"
+          "|Corners||~üstü~1.73!~altı~1.97",
+          "|Corners||~üstü~2.93!~altı~1.59",
+          "|Corners||~üstü~2.21!~altı~1.97",
+          "|Corners||~üstü~1.73!~altı~2.63",
+          "|Corners||~üstü~1.41!~altı~3.8",
+          "|Corners||~üstü~1.94!~altı~1.76",
+          "|Corners||~üstü~4.1!~altı~1.34",
+          "|Corners||~üstü~2.21!~altı~1.59"
         ]
       }
     }
@@ -10240,22 +12662,22 @@
       "start_ts": 1785670500,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~1~3.58!~X~4.5!~2~1.76",
-          "|ou||~üstü~2.13!~altı~1.65",
-          "|Half_Time_Result||~1~3.83!~X~2.52!~2~2.26",
-          "|ou||~üstü~1.92!~altı~1.82",
-          "|ou||~üstü~1.7!~altı~2.05",
-          "|ou||~üstü~2.4!~altı~1.5",
-          "|ou||~üstü~1.55!~altı~2.28",
-          "|Double_Chance||~1X~2!~12~1.2!~X2~1.27",
-          "|ou||~üstü~2.85!~altı~1.35",
-          "|ou||~üstü~1.45!~altı~2.5",
-          "|ou||~üstü~3.55!~altı~1.25",
+          "|1x2||~1~3.32!~X~4.33!~2~1.86",
+          "|ou||~üstü~2.17!~altı~1.62",
+          "|Half_Time_Result||~1~3.65!~X~2.48!~2~2.35",
+          "|ou||~üstü~1.95!~altı~1.79",
+          "|ou||~üstü~1.75!~altı~2",
+          "|ou||~üstü~2.45!~altı~1.47",
+          "|ou||~üstü~1.58!~altı~2.23",
+          "|Double_Chance||~1X~1.86!~12~1.21!~X2~1.3",
+          "|ou||~üstü~2.95!~altı~1.33",
+          "|ou||~üstü~1.47!~altı~2.45",
+          "|ou||~üstü~3.6!~altı~1.24",
           "|ou||~üstü~1.32!~altı~3",
-          "|ou||~üstü~3.1!~altı~1.3",
-          "|gg||~var~1.5!~yok~2.4",
-          "|ou|2.5|~üstü~4.75!~altı~9.7",
-          "|ou|1.5|~üstü~4.1!~altı~15"
+          "|ou||~üstü~3.3!~altı~1.28",
+          "|gg||~var~1.48!~yok~2.43",
+          "|ou|2.5|~üstü~4.4!~altı~8.9",
+          "|ou|1.5|~üstü~3.78!~altı~13"
         ]
       }
     }
@@ -10822,13 +13244,14 @@
           "|ou||~üstü~1.3!~altı~3.1",
           "|Double_Chance||~1X~1.11!~12~1.2!~X2~2.65",
           "|ou||~üstü~2.65!~altı~1.4",
-          "|Corners||~üstü~1.96!~altı~1.74",
-          "|Corners||~üstü~1.74!~altı~1.96",
-          "|Corners||~üstü~3.6!~altı~1.42",
-          "|Corners||~üstü~2.6!~altı~1.72",
-          "|Corners||~üstü~1.97!~altı~2.23",
-          "|Corners||~üstü~1.56!~altı~3.12",
-          "|Corners||~üstü~1.3!~altı~4.75"
+          "|Corners||~üstü~1.82!~altı~1.88",
+          "|Corners||~üstü~1.6!~altı~2.2",
+          "|Corners||~üstü~3.16!~altı~1.51",
+          "|Corners||~üstü~2.33!~altı~1.88",
+          "|Corners||~üstü~1.82!~altı~2.47",
+          "|Corners||~üstü~1.46!~altı~3.52",
+          "|Corners||~üstü~1.25!~altı~5.4",
+          "|Corners||~üstü~2.08!~altı~1.66"
         ]
       }
     }
@@ -10859,9 +13282,46 @@
       "group_markets": {
         "full_event|0": [
           "|Half_Time_Result||~1~3.05!~X~1.97!~2~3.67",
+          "|ou||~üstü~1.55!~altı~2.28",
+          "|ou||~üstü~2.03!~altı~1.72",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~1.43!~altı~2.55",
           "|ou||~üstü~1.75!~altı~2",
-          "|1x2||~1~2.47!~X~3.04!~2~2.98",
-          "|Corners||~üstü~1.92!~altı~1.78"
+          "|1x2||~1~2.17!~X~3.17!~2~3.4",
+          "|gg||~var~2.34!~yok~1.45",
+          "|gg||~var~3.1!~yok~1.26",
+          "|ou||~üstü~1.42!~altı~2.42",
+          "|ou||~üstü~2.08!~altı~1.57",
+          "|gg||~var~6.6!~yok~1.035",
+          "|ou||~üstü~3.6!~altı~1.19",
+          "|ou||~üstü~1.87!~altı~1.72",
+          "|ou||~üstü~7.3!~altı~1.02",
+          "|ou||~üstü~3.05!~altı~1.27",
+          "|ou|3.5|~üstü~4.85!~altı~3.05",
+          "|ou|2.5|~üstü~2.75!~altı~5.9",
+          "|ou|4.5|~üstü~15!~altı~2.32",
+          "|ou|3.5|~üstü~8.6!~altı~2.59",
+          "|ou|2.5|~üstü~3.96!~altı~3.89",
+          "|ou|1.5|~üstü~2.97!~altı~5.5",
+          "|gg||~var~2!~yok~1.72",
+          "|ou||~üstü~10!~altı~1.18",
+          "|ou||~üstü~4.3!~altı~1.55",
+          "|ou||~üstü~2.28!~altı~2.55",
+          "|ou||~üstü~1.43!~altı~8.2",
+          "|Double_Chance||~1X~1.3!~12~1.34!~X2~1.63",
+          "|ou||~üstü~3.9!~altı~1.21",
+          "|ou||~üstü~2.65!~altı~1.4",
+          "|ou||~üstü~1.27!~altı~3.4",
+          "|ou||~üstü~4.3!~altı~1.18",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|Corners||~üstü~1.84!~altı~1.86",
+          "|Corners||~üstü~3.23!~altı~1.5",
+          "|Corners||~üstü~2.37!~altı~1.86",
+          "|Corners||~üstü~1.84!~altı~2.43",
+          "|Corners||~üstü~1.48!~altı~3.45",
+          "|Corners||~üstü~1.26!~altı~5.3",
+          "|Corners||~üstü~1.62!~altı~2.15",
+          "|Corners||~üstü~2.12!~altı~1.64"
         ]
       }
     }
@@ -10891,8 +13351,8 @@
       "start_ts": 1785693600,
       "group_markets": {
         "full_event|0": [
-          "|Corners||~üstü~1.66!~altı~2.08",
-          "|Corners||~üstü~1.85!~altı~1.85",
+          "|Corners||~üstü~1.75!~altı~1.95",
+          "|Corners||~üstü~1.97!~altı~1.73",
           "|Half_Time_Result||~1~1.73!~X~2.5!~2~8.4",
           "|ou||~üstü~1.94!~altı~1.8",
           "|ou||~üstü~1.53!~altı~2.33",
@@ -10928,12 +13388,11 @@
           "|ou||~üstü~1.27!~altı~3.4",
           "|ou||~üstü~4.3!~altı~1.18",
           "|ou||~üstü~1.33!~altı~2.95",
-          "|Corners||~üstü~3.77!~altı~1.38",
-          "|Corners||~üstü~2.74!~altı~1.66",
-          "|Corners||~üstü~2.08!~altı~2.08",
-          "|Corners||~üstü~1.65!~altı~2.8",
-          "|Corners||~üstü~1.37!~altı~4.1",
-          "|Corners||~üstü~2.08!~altı~1.66"
+          "|Corners||~üstü~4.2!~altı~1.33",
+          "|Corners||~üstü~2.98!~altı~1.57",
+          "|Corners||~üstü~2.25!~altı~1.95",
+          "|Corners||~üstü~1.75!~altı~2.59",
+          "|Corners||~üstü~1.42!~altı~3.73"
         ]
       }
     }
@@ -11095,47 +13554,47 @@
       "start_ts": 1785801600,
       "group_markets": {
         "full_event|0": [
-          "|Half_Time_Result||~1~1.69!~X~2.52!~2~9.2",
-          "|ou||~üstü~1.3!~altı~3.1",
-          "|ou||~üstü~2.95!~altı~1.33",
-          "|ou||~üstü~1.82!~altı~1.92",
-          "|ou||~üstü~1.38!~altı~2.75",
-          "|ou||~üstü~1.25!~altı~3.55",
-          "|ou||~üstü~2.03!~altı~1.72",
-          "|ou||~üstü~1.6!~altı~2.2",
-          "|1x2||~1~1.26!~X~5.3!~2~11",
-          "|gg||~var~2.74!~yok~1.33",
+          "|Half_Time_Result||~1~1.65!~X~2.56!~2~10",
+          "|ou||~üstü~1.29!~altı~3.2",
+          "|ou||~üstü~2.85!~altı~1.35",
+          "|ou||~üstü~1.79!~altı~1.95",
+          "|ou||~üstü~1.35!~altı~2.85",
+          "|ou||~üstü~1.24!~altı~3.6",
+          "|ou||~üstü~2!~altı~1.75",
+          "|ou||~üstü~1.58!~altı~2.23",
+          "|1x2||~1~1.24!~X~5.6!~2~12",
+          "|gg||~var~2.78!~yok~1.32",
           "|gg||~var~3.5!~yok~1.2",
-          "|ou||~üstü~1.73!~altı~1.85",
+          "|ou||~üstü~1.7!~altı~1.89",
           "|gg||~var~6.8!~yok~1.03",
-          "|ou||~üstü~2.83!~altı~1.31",
-          "|ou||~üstü~1.67!~altı~1.93",
+          "|ou||~üstü~2.78!~altı~1.32",
+          "|ou||~üstü~1.65!~altı~1.96",
           "|ou||~üstü~6.6!~altı~1.035",
-          "|ou||~üstü~2.7!~altı~1.34",
-          "|ou|3.5|~üstü~4.5!~altı~4.7",
-          "|ou|2.5|~üstü~2.94!~altı~10",
-          "|ou|4.5|~üstü~6.2!~altı~1.49",
-          "|ou|3.5|~üstü~3.34!~altı~1.83",
-          "|ou|2.5|~üstü~1.99!~altı~2.89",
-          "|ou|1.5|~üstü~1.51!~altı~5.4",
-          "|gg||~var~2.4!~yok~1.5",
-          "|ou||~üstü~12!~altı~1.12",
-          "|ou||~üstü~5.5!~altı~1.33",
-          "|ou||~üstü~2.95!~altı~1.92",
-          "|ou||~üstü~1.82!~altı~3.55",
-          "|ou||~üstü~1.25!~altı~12",
-          "|Double_Chance||~1X~1.05!~12~1.15!~X2~3.6",
-          "|ou||~üstü~3.6!~altı~1.24",
-          "|ou||~üstü~2.65!~altı~1.4",
-          "|ou||~üstü~2.4!~altı~1.47",
-          "|ou||~üstü~2.48!~altı~1.4",
-          "|Corners||~üstü~1.8!~altı~1.9",
-          "|Corners||~üstü~3.11!~altı~1.53",
-          "|Corners||~üstü~2.3!~altı~1.89",
-          "|Corners||~üstü~1.78!~altı~2.5",
-          "|Corners||~üstü~1.45!~altı~3.58",
-          "|Corners||~üstü~1.24!~altı~5.5",
-          "|Corners||~üstü~2.05!~altı~1.68"
+          "|ou||~üstü~2.62!~altı~1.36",
+          "|ou|3.5|~üstü~4.5!~altı~4.9",
+          "|ou|2.5|~üstü~2.99!~altı~11",
+          "|ou|4.5|~üstü~5.8!~altı~1.47",
+          "|ou|3.5|~üstü~3.19!~altı~1.82",
+          "|ou|2.5|~üstü~1.93!~altı~2.89",
+          "|ou|1.5|~üstü~1.47!~altı~5.5",
+          "|gg||~var~2.45!~yok~1.47",
+          "|ou||~üstü~10!~altı~1.13",
+          "|ou||~üstü~5.3!~altı~1.36",
+          "|ou||~üstü~3!~altı~1.95",
+          "|ou||~üstü~1.78!~altı~3.6",
+          "|ou||~üstü~1.24!~altı~9",
+          "|Double_Chance||~1X~1.04!~12~1.13!~X2~3.8",
+          "|ou||~üstü~3.55!~altı~1.25",
+          "|ou||~üstü~2.55!~altı~1.43",
+          "|ou||~üstü~2.28!~altı~1.55",
+          "|ou||~üstü~2.42!~altı~1.42",
+          "|Corners||~üstü~1.75!~altı~1.95",
+          "|Corners||~üstü~2.98!~altı~1.56",
+          "|Corners||~üstü~2.22!~altı~1.95",
+          "|Corners||~üstü~1.75!~altı~2.59",
+          "|Corners||~üstü~1.42!~altı~3.73",
+          "|Corners||~üstü~1.97!~altı~1.73",
+          "|Corners||~üstü~4.2!~altı~1.33"
         ]
       }
     }
@@ -12573,18 +15032,18 @@
           "|ou||~üstü~1.47!~altı~2.45",
           "|ou||~üstü~1.84!~altı~1.9",
           "|ou||~üstü~2.55!~altı~1.43",
-          "|Corners||~üstü~1.72!~altı~2",
+          "|Corners||~üstü~1.69!~altı~2.04",
           "|ou||~üstü~1.2!~altı~4",
           "|1x2||~1~3!~X~3.65!~2~2.16",
           "|ou||~üstü~1.67!~altı~2.1",
-          "|Corners||~üstü~2.2!~altı~1.6",
+          "|Corners||~üstü~2.13!~altı~1.63",
           "|Half_Time_Result||~1~3.3!~X~2.29!~2~2.66",
-          "|Corners||~üstü~4!~altı~1.34",
-          "|Corners||~üstü~2.91!~altı~1.6",
-          "|Corners||~üstü~2.2!~altı~1.98",
-          "|Corners||~üstü~1.71!~altı~2.65",
-          "|Corners||~üstü~1.4!~altı~3.83",
-          "|Corners||~üstü~1.93!~altı~1.77",
+          "|Corners||~üstü~3.88!~altı~1.36",
+          "|Corners||~üstü~2.81!~altı~1.63",
+          "|Corners||~üstü~2.13!~altı~2.04",
+          "|Corners||~üstü~1.69!~altı~2.74",
+          "|Corners||~üstü~1.38!~altı~3.97",
+          "|Corners||~üstü~1.89!~altı~1.81",
           "|gg||~var~1.81!~yok~1.77",
           "|gg||~var~2.34!~yok~1.45",
           "|ou||~üstü~2.18!~altı~1.52",
@@ -12648,18 +15107,17 @@
           "|ou||~üstü~1.52!~altı~2.35",
           "|1x2||~1~1.76!~X~3.55!~2~4.6",
           "|ou||~üstü~3.45!~altı~1.26",
-          "|Corners||~üstü~1.85!~altı~1.85",
+          "|Corners||~üstü~1.7!~altı~2.02",
           "|Half_Time_Result||~1~2.28!~X~2.16!~2~5",
           "|ou||~üstü~2.28!~altı~1.55",
-          "|Corners||~üstü~3.25!~altı~1.49",
-          "|Corners||~üstü~2.39!~altı~1.85",
-          "|Corners||~üstü~1.85!~altı~2.41",
-          "|Corners||~üstü~1.48!~altı~3.41",
-          "|Corners||~üstü~1.26!~altı~5.3",
-          "|Corners||~üstü~2.13!~altı~1.63",
-          "|Corners||~üstü~1.62!~altı~2.15",
+          "|Corners||~üstü~2.85!~altı~1.61",
+          "|Corners||~üstü~2.17!~altı~2.02",
+          "|Corners||~üstü~1.7!~altı~2.7",
+          "|Corners||~üstü~1.39!~altı~3.91",
+          "|Corners||~üstü~1.91!~altı~1.79",
           "|gg||~var~2.22!~yok~1.5",
           "|gg||~var~2.87!~yok~1.3",
+          "|ou||~üstü~1.32!~altı~2.78",
           "|ou||~üstü~1.87!~altı~1.72",
           "|gg||~var~6.25!~yok~1.045",
           "|ou||~üstü~3.15!~altı~1.25",
@@ -12683,7 +15141,8 @@
           "|ou||~üstü~3.1!~altı~1.3",
           "|ou||~üstü~1.2!~altı~4",
           "|ou||~üstü~2.8!~altı~1.37",
-          "|ou||~üstü~2.78!~altı~1.32"
+          "|Corners||~üstü~3.94!~altı~1.35",
+          "|Corners||~üstü~2.17!~altı~1.61"
         ]
       }
     }
@@ -12716,18 +15175,17 @@
           "|ou||~üstü~1.6!~altı~2.2",
           "|1x2||~1~1.57!~X~4.3!~2~5",
           "|ou||~üstü~2.45!~altı~1.47",
-          "|Corners||~üstü~1.9!~altı~1.8",
+          "|Corners||~üstü~2.01!~altı~1.71",
           "|ou||~üstü~2.23!~altı~1.58",
           "|Half_Time_Result||~1~2.01!~X~2.43!~2~4.75",
           "|ou||~üstü~2!~altı~1.75",
           "|ou||~üstü~1.77!~altı~1.98",
-          "|Corners||~üstü~3.29!~altı~1.47",
-          "|Corners||~üstü~2.44!~altı~1.8",
-          "|Corners||~üstü~1.89!~altı~2.29",
-          "|Corners||~üstü~1.53!~altı~3.16",
-          "|Corners||~üstü~1.3!~altı~4.7",
-          "|Corners||~üstü~2.2!~altı~1.6",
-          "|Corners||~üstü~1.69!~altı~2.04",
+          "|Corners||~üstü~3.56!~altı~1.41",
+          "|Corners||~üstü~2.61!~altı~1.71",
+          "|Corners||~üstü~1.99!~altı~2.17",
+          "|Corners||~üstü~1.61!~altı~2.94",
+          "|Corners||~üstü~1.34!~altı~4.3",
+          "|Corners||~üstü~1.78!~altı~1.92",
           "|gg||~var~1.89!~yok~1.7",
           "|gg||~var~2.42!~yok~1.42",
           "|ou||~üstü~1.57!~altı~2.08",
@@ -12757,7 +15215,8 @@
           "|ou||~üstü~4.3!~altı~1.18",
           "|ou||~üstü~3.7!~altı~1.23",
           "|ou||~üstü~1.26!~altı~3.45",
-          "|ou||~üstü~1.18!~altı~4.3"
+          "|ou||~üstü~1.18!~altı~4.3",
+          "|Corners||~üstü~1.61!~altı~2.17"
         ]
       }
     }
@@ -13032,14 +15491,14 @@
           "|ou||~üstü~7.3!~altı~1.05",
           "|ou||~üstü~3!~altı~1.28",
           "|ou||~üstü~2.25!~altı~1.04",
-          "|ou||~üstü~1.91!~altı~1.1",
+          "|ou||~üstü~1.9!~altı~1.11",
           "|ou||~üstü~1.61!~altı~1.23",
           "|ou|3.5|~üstü~4.6!~altı~2.87",
           "|ou|2.5|~üstü~2.64!~altı~5.4",
-          "|ou|4.5|~üstü~19!~altı~2.76",
-          "|ou|3.5|~üstü~11!~altı~3.07",
-          "|ou|2.5|~üstü~4.42!~altı~4.7",
-          "|ou|1.5|~üstü~3.58!~altı~6.4",
+          "|ou|4.5|~üstü~19!~altı~2.74",
+          "|ou|3.5|~üstü~10!~altı~3.04",
+          "|ou|2.5|~üstü~4.6!~altı~4.6",
+          "|ou|1.5|~üstü~3.57!~altı~6.15",
           "|gg||~var~1.91!~yok~1.83",
           "|ou||~üstü~11!~altı~1.23",
           "|ou||~üstü~4.4!~altı~1.58",
@@ -13440,6 +15899,51 @@
           "|ou|1.5|~üstü~1.83!~altı~6.4",
           "|gg||~var~1.94!~yok~1.8",
           "|Double_Chance||~1X~1.13!~12~1.21!~X2~2.55"
+        ]
+      }
+    }
+  },
+  {
+    "id": "30427531",
+    "isScraped": true,
+    "data": {
+      "id": 30427531,
+      "status": "not_started",
+      "sport": {
+        "name": "Futbol"
+      },
+      "tournament": {
+        "name": "NRFL Premiership - Kadınlar"
+      },
+      "country": {
+        "name": "Yeni Zelanda"
+      },
+      "participants": {
+        "home": "Fencibles United AFC (Kadınlar)",
+        "away": "Auckland United FC (Kadınlar)",
+        "home_id": 830098,
+        "away_id": 230497
+      },
+      "start_time": "2026-07-31T07:30:00.000Z",
+      "start_ts": 1785483000,
+      "group_markets": {
+        "full_event|0": [
+          "|ou||~üstü~2.95!~altı~1.37",
+          "|ou||~üstü~1.74!~altı~2.08",
+          "|ou||~üstü~2.17!~altı~1.67",
+          "|ou||~üstü~1.48!~altı~2.55",
+          "|1x2||~1~4.75!~X~4.2!~2~1.66",
+          "|ou||~üstü~1.97!~altı~1.84",
+          "|ou||~üstü~1.58!~altı~2.33",
+          "|ou||~üstü~2.45!~altı~1.52",
+          "|ou|2.5|~üstü~6.2!~altı~12",
+          "|ou|1.5|~üstü~5.3!~altı~17",
+          "|gg||~var~1.52!~yok~2.45",
+          "|ou||~üstü~3.25!~altı~1.32",
+          "|ou||~üstü~1.33!~altı~3.15",
+          "|Double_Chance||~1X~2.2!~12~1.23!~X2~1.19",
+          "|ou||~üstü~3.6!~altı~1.26",
+          "|Half_Time_Result||~1~4.6!~X~2.63!~2~1.99"
         ]
       }
     }
@@ -14330,7 +16834,7 @@
           "|ou|4.5|~üstü~4.3!~altı~1.85",
           "|ou|3.5|~üstü~2.77!~altı~2.39",
           "|ou|2.5|~üstü~1.84!~altı~4.4",
-          "|ou|1.5|~üstü~1.56!~altı~8",
+          "|ou|1.5|~üstü~1.55!~altı~8.7",
           "|gg||~var~1.7!~yok~2.05",
           "|Double_Chance||~1X~1.1!~12~1.17!~X2~2.85"
         ]
@@ -14760,14 +17264,14 @@
           "|ou||~üstü~2.35!~altı~2.35",
           "|ou||~üstü~1.53!~altı~4.7",
           "|ou||~üstü~1.16!~altı~14",
-          "|Corners||~üstü~1.9!~altı~1.8",
-          "|Corners||~üstü~3.29!~altı~1.47",
-          "|Corners||~üstü~2.44!~altı~1.78",
-          "|Corners||~üstü~1.89!~altı~2.29",
-          "|Corners||~üstü~1.53!~altı~3.16",
-          "|Corners||~üstü~1.3!~altı~4.7",
-          "|Corners||~üstü~2.2!~altı~1.6",
-          "|Corners||~üstü~1.69!~altı~2.04"
+          "|Corners||~üstü~1.85!~altı~1.85",
+          "|Corners||~üstü~3.14!~altı~1.5",
+          "|Corners||~üstü~2.35!~altı~1.85",
+          "|Corners||~üstü~1.85!~altı~2.37",
+          "|Corners||~üstü~1.5!~altı~3.29",
+          "|Corners||~üstü~1.28!~altı~4.9",
+          "|Corners||~üstü~2.12!~altı~1.64",
+          "|Corners||~üstü~1.64!~altı~2.12"
         ]
       }
     }
@@ -14832,14 +17336,13 @@
           "|ou||~üstü~3.6!~altı~1.62",
           "|ou||~üstü~2.17!~altı~2.54",
           "|ou||~üstü~1.48!~altı~5.1",
-          "|Corners||~üstü~1.85!~altı~1.85",
-          "|Corners||~üstü~3.14!~altı~1.52",
-          "|Corners||~üstü~2.37!~altı~1.85",
-          "|Corners||~üstü~1.85!~altı~2.37",
-          "|Corners||~üstü~1.51!~altı~3.29",
-          "|Corners||~üstü~1.28!~altı~4.9",
-          "|Corners||~üstü~2.12!~altı~1.64",
-          "|Corners||~üstü~1.64!~altı~2.12"
+          "|Corners||~üstü~1.96!~altı~1.74",
+          "|Corners||~üstü~3.45!~altı~1.43",
+          "|Corners||~üstü~2.55!~altı~1.74",
+          "|Corners||~üstü~1.96!~altı~2.21",
+          "|Corners||~üstü~1.58!~altı~3.02",
+          "|Corners||~üstü~1.32!~altı~4.4",
+          "|Corners||~üstü~1.75!~altı~1.95"
         ]
       }
     }
@@ -14904,14 +17407,14 @@
           "|ou||~üstü~3.26!~altı~1.75",
           "|ou||~üstü~2!~altı~2.86",
           "|ou||~üstü~1.39!~altı~5.9",
-          "|Corners||~üstü~1.94!~altı~1.76",
-          "|Corners||~üstü~1.73!~altı~1.97",
-          "|Corners||~üstü~4.1!~altı~1.34",
-          "|Corners||~üstü~2.92!~altı~1.59",
-          "|Corners||~üstü~2.21!~altı~1.97",
-          "|Corners||~üstü~1.71!~altı~2.64",
-          "|Corners||~üstü~1.41!~altı~3.81",
-          "|Corners||~üstü~2.21!~altı~1.59"
+          "|Corners||~üstü~1.76!~altı~1.94",
+          "|Corners||~üstü~1.59!~altı~2.21",
+          "|Corners||~üstü~3.5!~altı~1.43",
+          "|Corners||~üstü~2.57!~altı~1.73",
+          "|Corners||~üstü~1.97!~altı~2.21",
+          "|Corners||~üstü~1.59!~altı~2.98",
+          "|Corners||~üstü~1.33!~altı~4.4",
+          "|Corners||~üstü~1.97!~altı~1.73"
         ]
       }
     }
@@ -15074,46 +17577,46 @@
       "start_ts": 1785510000,
       "group_markets": {
         "full_event|0": [
-          "|1x2||~1~2.9!~X~2.86!~2~3.12",
-          "|ou||~üstü~2.37!~altı~1.65",
-          "|Double_Chance||~1X~1.36!~12~1.41!~X2~1.4",
-          "|gg||~var~1.82!~yok~1.92",
-          "|Half_Time_Result||~1~3.15!~X~2.03!~2~3.2",
+          "|1x2||~1~3!~X~2.63!~2~3.31",
+          "|ou||~üstü~2.4!~altı~1.63",
+          "|Double_Chance||~1X~1.38!~12~1.47!~X2~1.45",
+          "|gg||~var~1.75!~yok~2",
+          "|Half_Time_Result||~1~3.27!~X~2!~2~3.25",
           "|gg||~var~2.26!~yok~1.48",
-          "|gg||~var~3!~yok~1.28",
-          "|ou||~üstü~1.4!~altı~2.48",
+          "|gg||~var~3.05!~yok~1.27",
+          "|ou||~üstü~1.42!~altı~2.42",
           "|ou||~üstü~2.03!~altı~1.6",
           "|gg||~var~6.4!~yok~1.04",
-          "|ou||~üstü~3.5!~altı~1.2",
+          "|ou||~üstü~3.6!~altı~1.19",
           "|ou||~üstü~1.84!~altı~1.74",
           "|ou||~üstü~7.3!~altı~1.02",
           "|ou||~üstü~3!~altı~1.28",
-          "|ou|3.5|~üstü~4.5!~altı~2.68",
-          "|ou|2.5|~üstü~2.9!~altı~4.7",
-          "|ou|4.5|~üstü~19!~altı~2.89",
-          "|ou|3.5|~üstü~11!~altı~3.19",
-          "|ou|2.5|~üstü~4.75!~altı~5",
-          "|ou|1.5|~üstü~3.84!~altı~6.5",
+          "|ou|3.5|~üstü~4.6!~altı~2.54",
+          "|ou|2.5|~üstü~2.64!~altı~4.3",
+          "|ou|4.5|~üstü~19!~altı~2.98",
+          "|ou|3.5|~üstü~12!~altı~3.26",
+          "|ou|2.5|~üstü~4.85!~altı~5.2",
+          "|ou|1.5|~üstü~4.1!~altı~6.3",
           "|ou||~üstü~4.2!~altı~1.26",
-          "|ou||~üstü~2.8!~altı~1.47",
-          "|ou||~üstü~2.08!~altı~1.84",
-          "|ou||~üstü~1.57!~altı~2.5",
+          "|ou||~üstü~2.85!~altı~1.45",
+          "|ou||~üstü~2.1!~altı~1.82",
+          "|ou||~üstü~1.59!~altı~2.47",
           "|ou||~üstü~1.29!~altı~3.85",
           "|ou||~üstü~4.6!~altı~1.23",
           "|ou||~üstü~3.75!~altı~1.3",
-          "|ou||~üstü~1.45!~altı~2.85",
-          "|ou||~üstü~1.76!~altı~2.18",
-          "|ou||~üstü~2.35!~altı~1.02",
-          "|ou||~üstü~1.95!~altı~1.11",
-          "|ou||~üstü~1.64!~altı~1.24",
+          "|ou||~üstü~1.47!~altı~2.8",
+          "|ou||~üstü~1.79!~altı~2.15",
+          "|ou||~üstü~2.45!~altı~1.02",
+          "|ou||~üstü~2!~altı~1.11",
+          "|ou||~üstü~1.68!~altı~1.24",
           "|ou||~üstü~9.3!~altı~1.23",
-          "|ou||~üstü~4.6!~altı~1.65",
-          "|ou||~üstü~2.37!~altı~2.85",
-          "|ou||~üstü~1.45!~altı~8.6",
+          "|ou||~üstü~4.5!~altı~1.63",
+          "|ou||~üstü~2.4!~altı~2.8",
+          "|ou||~üstü~1.47!~altı~8.4",
           "|ou||~üstü~14!~altı~1.05",
           "|ou||~üstü~10!~altı~1.08",
           "|ou||~üstü~1.11!~altı~8",
-          "|ou||~üstü~5.7!~altı~1.17",
+          "|ou||~üstü~6!~altı~1.16",
           "|ou||~üstü~10!~altı~1.08",
           "|ou||~üstü~9!~altı~1.09",
           "|ou||~üstü~1.13!~altı~7",
@@ -15584,18 +18087,18 @@
           "|ou||~üstü~2.74!~altı~1.33",
           "|ou||~üstü~1.91!~altı~1.03",
           "|ou||~üstü~1.63!~altı~1.13",
-          "|ou||~üstü~1.42!~altı~1.26",
-          "|ou|3.5|~üstü~3.47!~altı~2.91",
-          "|ou|2.5|~üstü~2.2!~altı~5.9",
+          "|ou||~üstü~1.43!~altı~1.25",
+          "|ou|3.5|~üstü~3.51!~altı~2.91",
+          "|ou|2.5|~üstü~2.21!~altı~5.9",
           "|ou|4.5|~üstü~11!~altı~2.48",
           "|ou|3.5|~üstü~6.7!~altı~2.87",
           "|ou|2.5|~üstü~3.45!~altı~4.8",
           "|ou|1.5|~üstü~2.78!~altı~6.5",
-          "|gg||~var~1.7!~yok~2.05",
+          "|gg||~var~1.72!~yok~2.03",
           "|ou||~üstü~15!~altı~1.13",
-          "|ou||~üstü~6.6!~altı~1.35",
-          "|ou||~üstü~3.35!~altı~1.93",
-          "|ou||~üstü~1.99!~altı~3.29",
+          "|ou||~üstü~6.6!~altı~1.33",
+          "|ou||~üstü~3.5!~altı~1.92",
+          "|ou||~üstü~2!~altı~3.26",
           "|ou||~üstü~1.28!~altı~12",
           "|ou||~üstü~14!~altı~1.05",
           "|ou||~üstü~9!~altı~1.09",
@@ -15605,21 +18108,21 @@
           "|ou||~üstü~6.7!~altı~1.14",
           "|ou||~üstü~4.3!~altı~1.25",
           "|ou||~üstü~3.1!~altı~1.4",
-          "|ou||~üstü~1.74!~altı~2.22",
-          "|ou||~üstü~1.38!~altı~3.2",
+          "|ou||~üstü~1.75!~altı~2.2",
+          "|ou||~üstü~1.4!~altı~3.1",
           "|ou||~üstü~1.2!~altı~5.1",
           "|ou||~üstü~16.5!~altı~1.04",
           "|ou||~üstü~14!~altı~1.05",
           "|ou||~üstü~7!~altı~1.13",
           "|ou||~üstü~6.3!~altı~1.15",
-          "|ou||~üstü~3.35!~altı~1.35",
-          "|ou||~üstü~2.7!~altı~1.5",
-          "|ou||~üstü~1.99!~altı~1.93",
-          "|ou||~üstü~1.48!~altı~2.75",
+          "|ou||~üstü~3.5!~altı~1.33",
+          "|ou||~üstü~2.75!~altı~1.48",
+          "|ou||~üstü~2!~altı~1.92",
+          "|ou||~üstü~1.5!~altı~2.7",
           "|ou||~üstü~1.32!~altı~3.6",
           "|ou||~üstü~1.08!~altı~10",
           "|ou||~üstü~1.06!~altı~12.5",
-          "|ou||~üstü~2.26!~altı~1.71",
+          "|ou||~üstü~2.27!~altı~1.7",
           "|1x2||~1~2.21!~X~3.27!~2~3.21"
         ]
       }
@@ -16168,14 +18671,14 @@
           "|ou||~üstü~1.35!~altı~2.85",
           "|ou||~üstü~1.05!~altı~8.3",
           "|ou||~üstü~1.03!~altı~10",
-          "|Corners||~üstü~1.78!~altı~1.92",
+          "|Corners||~üstü~1.8!~altı~1.9",
           "|Corners||~üstü~3.56!~altı~1.41",
-          "|Corners||~üstü~2.62!~altı~1.71",
-          "|Corners||~üstü~2.01!~altı~2.17",
-          "|Corners||~üstü~1.61!~altı~2.94",
+          "|Corners||~üstü~2.65!~altı~1.7",
+          "|Corners||~üstü~2.02!~altı~2.15",
+          "|Corners||~üstü~1.62!~altı~2.9",
           "|Corners||~üstü~1.34!~altı~4.3",
-          "|Corners||~üstü~2.01!~altı~1.71",
-          "|Corners||~üstü~1.61!~altı~2.17",
+          "|Corners||~üstü~2.02!~altı~1.7",
+          "|Corners||~üstü~1.62!~altı~2.15",
           "|Cards||~üstü~2.13!~altı~1.63"
         ]
       }
@@ -16335,6 +18838,7 @@
           "|ou||~üstü~4.5!~altı~1.17",
           "|ou||~üstü~2.4!~altı~1.5",
           "|ou||~üstü~1.12!~altı~5.5",
+          "|Corners||~üstü~1.82!~altı~1.88",
           "|Cards||~üstü~1.81!~altı~1.89"
         ]
       }
@@ -16508,6 +19012,7 @@
           "|ou||~üstü~4.6!~altı~1.16",
           "|ou||~üstü~1.04!~altı~8.3",
           "|ou||~üstü~1.04!~altı~9",
+          "|Corners||~üstü~1.91!~altı~1.79",
           "|Cards||~üstü~1.87!~altı~1.83"
         ]
       }
@@ -16709,8 +19214,7 @@
       "group_markets": {
         "full_event|0": [
           "|Corners||~üstü~1.64!~altı~2.12",
-          "|Corners||~üstü~2.07!~altı~1.67",
-          "|Corners||~üstü~1.85!~altı~1.85"
+          "|Corners||~üstü~2.07!~altı~1.67"
         ]
       }
     }

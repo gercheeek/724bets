@@ -189,47 +189,7 @@ const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
                        : 'opacity-0 transform translate-y-12 scale-95 pointer-events-none'
                    }`}
                  >
-                    <div className="relative group px-6 py-4 md:px-12 md:py-5 rounded-[2rem] flex flex-col items-center max-w-4xl w-full mx-4 overflow-hidden border border-white/[0.03] shadow-[0_30px_80px_rgba(0,0,0,0.8)]">
-                      {/* Ultra Premium Glass Background */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] via-[#050508]/60 to-[#000000]/90 backdrop-blur-[50px]" />
-                      
-                      {/* Premium Top Inner Border Highlight */}
-                      <div className="absolute inset-0 rounded-[2rem] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_-1px_1px_rgba(0,0,0,0.8)] pointer-events-none" />
-                      
-                      {/* Subtle Ambient Glow inside the card */}
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[200px] bg-amber-500/10 rounded-[100%] blur-[80px] pointer-events-none transition-opacity duration-1000 opacity-40 group-hover:opacity-70" />
-                      
-                      {/* Edge Lighting (Dynamic on hover) */}
-                      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-amber-300/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                      
-                      <div className="relative z-10 flex flex-col items-center w-full">
-                        <div className="group/badge relative inline-flex items-center justify-center px-4 py-1 mb-2 text-sm font-semibold transition-all duration-300">
-                          {/* Gradient Border Mask */}
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-500/40 via-amber-200/10 to-amber-500/40 p-[1px]">
-                            <div className="absolute inset-0 h-full w-full rounded-full bg-black/40 backdrop-blur-xl" />
-                          </div>
-                          {/* Ambient Glow */}
-                          <div className="absolute inset-0 rounded-full bg-amber-500/20 blur-md opacity-0 group-hover/badge:opacity-100 transition-opacity duration-500" />
-                          
-                          {/* Content */}
-                          <span className="relative z-10 flex items-center gap-3 tracking-[0.2em] text-[10px] uppercase">
-                             <span className="relative flex h-2 w-2">
-                               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                               <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500 shadow-[0_0_10px_rgba(245,166,35,1)]"></span>
-                             </span>
-                             <span className="bg-gradient-to-r from-amber-100 to-amber-400 bg-clip-text text-transparent font-black drop-shadow-sm">{slide.badge}</span>
-                          </span>
-                        </div>
-                        
-                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-white/90 leading-tight mb-0.5 tracking-tight">
-                          {slide.title}
-                        </h1>
-                        
-                        <div className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter gold-gradient-text drop-shadow-2xl">
-                          {slide.highlight}
-                        </div>
-                      </div>
-                    </div>
+                    {/* Text overlays removed per user request */}
                  </div>
                ))}
              </div>

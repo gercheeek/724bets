@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { HeroSliderConfig } from '../types';
 
 interface HeroSliderProps {
@@ -104,7 +104,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ config, onSlideChange, onIntern
             href={slide.link || '#'}
             target={slide.link && !isInternal ? '_blank' : undefined}
             rel="noopener noreferrer"
-            className="hero-slider-slide"
+            className="hero-slider-slide group"
             style={{ 
               display: 'block',
               width: '100%',
@@ -140,8 +140,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ config, onSlideChange, onIntern
                 transition: 'opacity 0.4s ease-in-out',
               }}
             />
-            {/* Gradient overlay for readability */}
-            <div className="hero-slider-overlay" />
+            {/* Details Button Overlay removed as requested to keep slider clean */}
           </a>
           );
         })}
