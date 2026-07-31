@@ -271,6 +271,112 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
   );
 };
 
+const SLIDER_DATA = [
+  {
+    id: 1,
+    titleHighlight: "Milyonluk Turnuvalar",
+    heading1: "Toplam ",
+    headingHighlight: "25.000.000₺",
+    heading2: " Nakit Ödül!",
+    subHeading: "ŞİMDİ PAYINI AL",
+    desc: "Her gün binlerce kullanıcı dev nakit ödüller ve bedava dönüşler kazanıyor. Hayatını değiştirecek o büyük ödülü sadece tek bir spinde sen kazan! Hemen üye ol, sınırsız nakit yağmuruna katıl.",
+    image: "/images/promos/weekend_multiplier_promo_1785470757275.jpg",
+    themeColor: "text-[#00E5FF]",
+    highlightColor: "text-emerald-400",
+  },
+  {
+    id: 2,
+    titleHighlight: "Efsanevi Ödüller",
+    heading1: "Zeus'un Öfkesiyle ",
+    headingHighlight: "Çarpanları",
+    heading2: " Yakala!",
+    subHeading: "BÜYÜK VURGUN ZAMANI",
+    desc: "Olimpos'un kapıları devasa kazançlar için aralandı. En yüksek çarpanları bul, liderlik tablosuna adını yazdır ve Zeus'un hazinesinden payını hemen al!",
+    image: "/images/promos/gates_of_olympus_promo_1785470699172.jpg",
+    themeColor: "text-[#FF9F1C]",
+    highlightColor: "text-[#FFD700]",
+  },
+  {
+    id: 3,
+    titleHighlight: "Tatlı Kazançlar",
+    heading1: "Şeker Gibi ",
+    headingHighlight: "Bedava Dönüşler",
+    heading2: " Seni Bekliyor!",
+    subHeading: "SINIRSIZ EĞLENCE",
+    desc: "Rengarenk şekerlerin ardındaki dev kazançları keşfet. Her patlayan şekerle ödül havuzuna bir adım daha yaklaş. Bu tatlı serüvende yerini ayırt!",
+    image: "/images/promos/sweet_bonanza_promo_1785470716975.jpg",
+    themeColor: "text-[#EC4899]",
+    highlightColor: "text-pink-400",
+  },
+  {
+    id: 4,
+    titleHighlight: "Karanlık Tema",
+    heading1: "Vahşi Batı'da ",
+    headingHighlight: "Büyük Ödül",
+    heading2: " Avı!",
+    subHeading: "KURALLARI SEN KOY",
+    desc: "Karanlık sokaklarda, vahşi batının acımasız atmosferinde hayatta kal ve büyük ikramiyeyi vur. Cesaretin varsa, bu ölümcül turnuvada yerini al!",
+    image: "/images/promos/hacksaw_promo_1785470736175.jpg",
+    themeColor: "text-[#EF4444]",
+    highlightColor: "text-red-500",
+  }
+];
+
+const HeroSlider = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % SLIDER_DATA.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative w-full rounded-2xl md:rounded-[30px] overflow-hidden mb-10 h-[300px] md:h-[400px] border border-white/[0.05] shadow-2xl group">
+       {/* Background Images */}
+       {SLIDER_DATA.map((slide, idx) => (
+         <div key={slide.id} className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${currentSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
+            <img src={slide.image} alt={slide.titleHighlight} className="absolute inset-0 w-full h-full object-cover opacity-40 md:opacity-50 transform scale-105 transition-transform duration-[10000ms] ease-linear" style={{ transform: currentSlide === idx ? 'scale(1)' : 'scale(1.1)' }} />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#06080D] via-[#06080D]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#06080D] via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-[#06080D]/30" />
+            
+            {/* Text Content */}
+            <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 max-w-4xl">
+               <div className="flex items-center gap-2 mb-3 opacity-90 transform translate-y-0 transition-transform duration-700">
+                 <Trophy className={`w-3.5 h-3.5 md:w-4 md:h-4 ${slide.themeColor}`} />
+                 <span className={`${slide.themeColor} text-[10px] md:text-[11px] font-bold tracking-[0.25em] uppercase`}>
+                   {slide.titleHighlight}
+                 </span>
+               </div>
+               
+               <h1 className="text-[22px] md:text-[38px] lg:text-[44px] font-extrabold leading-[1.1] tracking-tight text-white mb-4">
+                 {slide.heading1} <span className={slide.highlightColor}>{slide.headingHighlight}</span> {slide.heading2} <br/>
+                 <span className={slide.themeColor}>{slide.subHeading}</span>
+               </h1>
+               
+               <p className="text-zinc-300 text-xs md:text-[15px] font-medium leading-relaxed max-w-[550px] opacity-90">
+                 {slide.desc}
+               </p>
+            </div>
+         </div>
+       ))}
+
+       {/* Slider Controls / Dots */}
+       <div className="absolute bottom-5 md:bottom-8 left-6 md:left-16 flex gap-2 z-20">
+         {SLIDER_DATA.map((_, idx) => (
+           <button 
+             key={idx}
+             onClick={() => setCurrentSlide(idx)}
+             className={`h-1 md:h-1.5 rounded-full transition-all duration-500 ${currentSlide === idx ? 'w-8 md:w-10 bg-white' : 'w-2 md:w-3 bg-white/30 hover:bg-white/50'}`}
+           />
+         ))}
+       </div>
+    </div>
+  );
+};
+
 export default function PromoView() {
   const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
 
@@ -289,45 +395,7 @@ export default function PromoView() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Advanced Top Header (VIP / Affiliate Style) */}
-        <div className="mb-6 relative flex flex-col items-center justify-center text-center py-6">
-          {/* Subtle background glow for the header area */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00E5FF]/5 rounded-full blur-[100px] pointer-events-none" />
-          
-          <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
-            {/* Minimalist Top Badge */}
-            <div className="flex items-center gap-2 mb-4 opacity-90">
-              <Trophy className="w-3.5 h-3.5 text-[#00E5FF]" />
-              <span className="text-[#00E5FF] text-[10px] font-bold tracking-[0.2em] uppercase">
-                Milyonluk Turnuvalar
-              </span>
-            </div>
-            
-            {/* Aggressive Guest Typography - Shrunk down */}
-            <h1 className="text-[20px] md:text-[28px] font-bold leading-snug tracking-tight text-white mb-3">
-              Toplam <span className="text-emerald-400">25.000.000₺</span> Nakit Ödül! <br/>
-              <span className="text-[#00E5FF]">ŞİMDİ PAYINI AL</span>
-            </h1>
-            
-            <p className="text-zinc-400 text-xs md:text-sm font-medium leading-relaxed max-w-[500px] mt-2 mb-5">
-              Her gün binlerce kullanıcı dev nakit ödüller ve bedava dönüşler kazanıyor. Hayatını değiştirecek o büyük ödülü sadece tek bir spinde sen kazan! Hemen üye ol, sınırsız nakit yağmuruna katıl.
-            </p>
-
-            {/* Minimalist Status Indicator */}
-            <div className="inline-flex items-center gap-2.5 bg-white/5 backdrop-blur-sm border border-white/5 px-4 py-1.5 rounded-full mt-2">
-              <div className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]"></span>
-              </div>
-              <span className="text-[11px] font-medium text-white/90 tracking-wide">
-                <span className="text-[#10B981] font-bold">3 Aktif</span> Turnuva Sizi Bekliyor
-              </span>
-            </div>
-          </div>
-          
-          {/* Decorative Divider */}
-          <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-8" />
-        </div>
+        <HeroSlider />
 
         {/* Tournaments Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
