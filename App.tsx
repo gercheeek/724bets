@@ -86,6 +86,8 @@ import GameLobbyGrid from './components/GameLobbyGrid';
 import Sidebar from './components/Sidebar';
 import GuestLanding from './components/GuestLanding';
 import HeroSection from './components/HeroSection';
+import PromotionsView from './components/PromotionsView';
+import PromoView from './components/PromoView';
 import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
 import Spor724View from './components/Spor724View';
@@ -2401,14 +2403,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
 
         {view === 'promo' && (
-          <div className="animate-fade-in w-full h-full relative z-[50] flex flex-col items-center justify-center text-center p-8">
-            <div className="w-20 h-20 bg-[#00E5FF]/10 rounded-full flex items-center justify-center mb-6">
-              <Percent className="w-10 h-10 text-[#00E5FF]" />
-            </div>
-            <h1 className="text-4xl font-black text-white mb-4">Promosyonlar</h1>
-            <p className="text-[#8b92a5] max-w-lg">
-              En güncel bonuslar, kayıp iadeleri ve bedava dönüş fırsatları (Freespin) çok yakında burada listelenecek. Harika sürprizlere hazır olun!
-            </p>
+          <div className="animate-fade-in w-full h-full relative z-[50]">
+            <PromoView />
           </div>
         )}
 
