@@ -130,65 +130,63 @@ export default function PromoView() {
           {tournaments.map((tournament) => (
             <div 
               key={tournament.id}
-              className={`flex flex-col bg-[#0F1423]/80 backdrop-blur-xl rounded-[2rem] relative overflow-hidden group shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/5 hover:border-[#00E5FF]/30 hover:shadow-[0_0_40px_rgba(0,229,255,0.1)] transition-all duration-500 ${tournament.status === 'ended' ? 'opacity-50 grayscale-[50%] hover:grayscale-0' : ''}`}
+              className={`flex flex-col bg-[#0B0F19] rounded-2xl relative overflow-hidden group shadow-lg border border-white/5 hover:border-blue-500/30 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.3)] transition-all duration-500 ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0' : ''}`}
             >
-              {/* Image Banner Header */}
-              <div className="w-full h-48 sm:h-56 relative overflow-hidden">
+              {/* Image Header - Clean, no text overlap */}
+              <div className="w-full h-48 relative overflow-hidden">
                  <img 
                    src={tournament.image} 
                    alt={tournament.title} 
-                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                  />
                  
-                 {/* Rich Gradient overlays for seamless blend */}
-                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0F1423]/95" />
-                 <div className="absolute inset-0 bg-gradient-to-t from-[#0F1423] via-transparent to-transparent opacity-80" />
-                 
-                 {/* Premium Inner Glow */}
-                 <div className="absolute inset-0 shadow-[inset_0_2px_15px_rgba(255,255,255,0.1)] rounded-[2rem] pointer-events-none" />
+                 {/* Subtle vignette over the image */}
+                 <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none" />
 
                  {/* Status Badge */}
                  {tournament.status === 'active' && (
-                   <div className="absolute top-4 right-4 z-20 px-3 py-1.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-black rounded-full border border-emerald-500/40 backdrop-blur-md shadow-[0_0_15px_rgba(52,211,153,0.3)] flex items-center gap-1.5 uppercase tracking-widest">
+                   <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-[#0B0F19]/80 backdrop-blur-md text-emerald-400 text-[10px] font-bold rounded-lg border border-emerald-500/20 shadow-sm flex items-center gap-1.5 uppercase tracking-wider">
                      <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_5px_#34d399]" />
                      Aktif
                    </div>
                  )}
                  {tournament.status === 'upcoming' && (
-                   <div className="absolute top-4 right-4 z-20 px-3 py-1.5 bg-amber-500/20 text-amber-400 text-[10px] font-black rounded-full border border-amber-500/40 backdrop-blur-md flex items-center gap-1.5 uppercase tracking-widest">
+                   <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-[#0B0F19]/80 backdrop-blur-md text-amber-400 text-[10px] font-bold rounded-lg border border-amber-500/20 flex items-center gap-1.5 uppercase tracking-wider">
                      Yakında
                    </div>
                  )}
               </div>
 
-              {/* Content Body */}
-              <div className="flex flex-col flex-1 px-5 pb-5 pt-0 relative z-10 -mt-6">
-                <h3 className="text-white font-black text-lg sm:text-xl leading-tight mb-2 line-clamp-2 drop-shadow-md group-hover:text-[#00E5FF] transition-colors duration-300">
+              {/* Content Body - Clean white space, refined typography */}
+              <div className="flex flex-col flex-1 p-5 relative z-10 bg-gradient-to-b from-[#0F1423] to-[#0B0F19]">
+                <h3 className="text-gray-100 font-semibold text-lg leading-tight mb-1.5 line-clamp-1 group-hover:text-blue-400 transition-colors duration-300">
                   {tournament.title}
                 </h3>
-                <p className="text-zinc-400 text-xs sm:text-sm mb-5 line-clamp-2 font-medium leading-relaxed">{tournament.desc}</p>
+                <p className="text-zinc-400 text-sm mb-5 line-clamp-2 leading-relaxed">{tournament.desc}</p>
                 
                 <div className="mt-auto">
-                  <div className="bg-black/30 rounded-2xl p-4 border border-white/5 group-hover:border-[#00E5FF]/10 transition-colors duration-300">
-                    <div className="text-[10px] font-bold text-zinc-500 mb-1 uppercase tracking-widest">Ödül Havuzu</div>
-                    <div className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-blue-400 font-black text-2xl sm:text-3xl mb-4 drop-shadow-[0_0_15px_rgba(0,229,255,0.4)]">
+                  {/* Prize Section - Elegant and breathable */}
+                  <div className="mb-4">
+                    <div className="text-[10px] font-medium text-zinc-500 mb-0.5 uppercase tracking-widest">Ödül Havuzu</div>
+                    <div className="text-blue-400 font-bold text-2xl tracking-tight">
                       {tournament.prize}
                     </div>
-                    
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/5">
-                      <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-zinc-300">
-                        {tournament.status === 'active' && <Timer className="w-3.5 h-3.5 text-emerald-400" />}
-                        {tournament.status === 'upcoming' && <Calendar className="w-3.5 h-3.5 text-amber-400" />}
-                        {tournament.status === 'ended' && <Calendar className="w-3.5 h-3.5 text-zinc-600" />}
-                        {tournament.timeInfo}
-                      </div>
-                      
-                      {tournament.participants !== undefined && (
-                        <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-black text-white bg-white/5 px-2.5 py-1 rounded-lg border border-white/5 group-hover:bg-[#00E5FF]/10 group-hover:text-[#00E5FF] group-hover:border-[#00E5FF]/30 transition-all duration-300">
-                          <Users className="w-3.5 h-3.5" /> {tournament.participants}
-                        </div>
-                      )}
+                  </div>
+                  
+                  {/* Footer Stats */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/5">
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-400">
+                      {tournament.status === 'active' && <Timer className="w-3.5 h-3.5 text-emerald-500" />}
+                      {tournament.status === 'upcoming' && <Calendar className="w-3.5 h-3.5 text-amber-500" />}
+                      {tournament.status === 'ended' && <Calendar className="w-3.5 h-3.5 text-zinc-600" />}
+                      <span className="truncate max-w-[140px]">{tournament.timeInfo}</span>
                     </div>
+                    
+                    {tournament.participants !== undefined && (
+                      <div className="flex items-center gap-1 text-xs font-medium text-zinc-300 bg-white/5 px-2 py-1 rounded-md border border-white/[0.02]">
+                        <Users className="w-3 h-3 text-zinc-400" /> {tournament.participants}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
