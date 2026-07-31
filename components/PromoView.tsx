@@ -148,16 +148,16 @@ const PremiumTimer = ({ timeInfo, status }: { timeInfo: string, status: string }
   const labelText = status === 'active' ? 'BİTMESİNE KALAN SÜRE' : 'BAŞLAMASINA KALAN SÜRE';
   
   return (
-    <div className="mt-auto flex flex-col gap-2.5 pb-2">
-      <div className={`flex items-center gap-1.5 text-[9px] font-bold ${activeColor} uppercase tracking-[0.2em]`}>
-        <Timer className="w-3.5 h-3.5" />
+    <div className="mt-auto flex flex-col gap-2 md:gap-2.5 pb-2">
+      <div className={`flex items-center gap-1.5 text-[8.5px] md:text-[10px] font-extrabold ${activeColor} uppercase tracking-wider md:tracking-[0.15em] whitespace-nowrap drop-shadow-sm`}>
+        <Timer className="w-3 h-3 md:w-3.5 md:h-3.5" />
         {labelText}
       </div>
-      <div className="flex gap-2 w-full">
+      <div className="flex gap-1.5 md:gap-2 w-full">
         {parsed.parts?.map((p, i) => (
-          <div key={i} className="flex-1 flex flex-col items-center justify-center bg-[#13151A] border border-white/[0.04] rounded-[10px] py-2.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_4px_12px_rgba(0,0,0,0.3)]">
-            <span className="font-mono text-xl font-black text-white tracking-wider drop-shadow-md">{p.value}</span>
-            <span className="text-[8px] font-bold text-zinc-500 mt-0.5 uppercase tracking-[0.2em]">{p.label}</span>
+          <div key={i} className="flex-1 flex flex-col items-center justify-center bg-[#13151A] border border-white/[0.04] rounded-lg md:rounded-[10px] py-1.5 md:py-2.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_4px_12px_rgba(0,0,0,0.3)]">
+            <span className="font-mono text-lg md:text-xl font-black text-white tracking-wider drop-shadow-md">{p.value}</span>
+            <span className="text-[7px] md:text-[8px] font-bold text-zinc-500 mt-0.5 uppercase tracking-wider md:tracking-[0.2em]">{p.label}</span>
           </div>
         ))}
       </div>
