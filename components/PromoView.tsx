@@ -125,18 +125,20 @@ export default function PromoView() {
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Top Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-4">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400 flex items-center gap-4 tracking-tight">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.3)]">
-                <Trophy className="w-6 h-6 text-black" />
-              </div>
+        <div className="mb-10">
+          <div className="flex items-center gap-4 mb-3">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-b from-[#FCD34D] to-[#F59E0B] flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.25)] relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none" />
+              <Trophy className="w-7 h-7 text-black relative z-10" strokeWidth={2.5} />
+            </div>
+            <h1 className="text-[2.75rem] font-black text-white tracking-tight leading-none drop-shadow-sm">
               Turnuvalar
             </h1>
-            <p className="text-zinc-400 mt-3 text-sm md:text-base font-medium max-w-xl leading-relaxed">
-              Büyük ödül havuzlu premium turnuvalara katıl, skor tablosunda zirveye oyna ve efsanevi ödülleri kazan!
-            </p>
           </div>
+          <p className="text-[#8b929b] text-[15px] font-medium max-w-2xl leading-relaxed">
+            Büyük ödül havuzlu premium turnuvalara katıl, skor tablosunda zirveye oyna<br className="hidden md:block" />
+            ve efsanevi ödülleri kazan!
+          </p>
         </div>
 
         {/* Tournaments Grid */}
