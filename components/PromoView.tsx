@@ -264,22 +264,22 @@ export default function PromoView() {
           
           <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
             {/* Advanced Animated Badge */}
-            <div className="relative inline-flex overflow-hidden rounded-full p-[1px] mb-6 shadow-[0_0_20px_rgba(0,229,255,0.2)]">
+            <div className="relative inline-flex overflow-hidden rounded-full p-[1px] mb-5 shadow-[0_0_15px_rgba(0,229,255,0.2)] scale-90 md:scale-100">
               <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#00E5FF_50%,transparent_100%)]" />
-              <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-[#0A0D14] px-4 py-2 backdrop-blur-3xl gap-2">
-                <Trophy className="w-4 h-4 text-[#00E5FF] animate-pulse" />
-                <span className="text-[#00E5FF] text-[11px] font-black tracking-[0.2em] uppercase">Turnuvalar ve Promosyonlar</span>
+              <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-[#0A0D14] px-4 py-1.5 backdrop-blur-3xl gap-2">
+                <Trophy className="w-3.5 h-3.5 text-[#00E5FF] animate-pulse" />
+                <span className="text-[#00E5FF] text-[10px] font-black tracking-[0.2em] uppercase">Milyonluk Turnuvalar</span>
               </div>
             </div>
             
-            {/* Massive Typography */}
-            <h1 className="text-[38px] md:text-[56px] font-black leading-[1.1] tracking-tight text-white mb-5 drop-shadow-md">
-              Sektörün En Büyük <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#10B981] drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">TURNUVALARI</span>
+            {/* Aggressive Guest Typography - Shrunk down */}
+            <h1 className="text-[28px] md:text-[40px] font-black leading-[1.15] tracking-tight text-white mb-3 drop-shadow-md">
+              Toplam <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-[#10B981]">25.000.000₺</span> Nakit Ödül! <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#0088FF] drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">ŞİMDİ PAYINI AL</span>
             </h1>
             
-            <p className="text-zinc-400 text-base md:text-lg font-medium leading-relaxed max-w-2xl mt-2 mb-8">
-              Premium turnuvalara katılın, liderlik tablosunda zirveye oynayın ve eşsiz ödüller kazanın. 724Bets ile kazanmanın en eğlenceli yolu.
+            <p className="text-zinc-400 text-[13px] md:text-[15px] font-medium leading-relaxed max-w-[600px] mt-2 mb-6">
+              Her gün binlerce kullanıcı dev nakit ödüller ve bedava dönüşler kazanıyor. Hayatını değiştirecek o büyük ödülü sadece tek bir spinde sen kazan! Hemen üye ol, sınırsız nakit yağmuruna katıl.
             </p>
 
             {/* Live Status Badge */}
