@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trophy, Timer, Users, Swords, Calendar } from 'lucide-react';
 import TournamentDetailView from './TournamentDetailView';
 
@@ -106,6 +106,127 @@ const tournaments: Tournament[] = [
   }
 ];
 
+const MOCK_NAMES = ["Al***92", "Kral***", "ProGamer", "Dark***X", "X-Bet", "Lucky***", "Can***11", "VegasKing"];
+
+const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onClick: () => void }) => {
+  // Mock live leaderboard state
+  const [leaderboard, setLeaderboard] = useState(() =>
+    Array.from({ length: 3 }).map((_, i) => ({
+      id: i,
+      name: MOCK_NAMES[Math.floor(Math.random() * MOCK_NAMES.length)],
+      score: Math.floor(Math.random() * 10000) + 10000 - (i * 2000),
+    }))
+  );
+
+  // Live simulation effect
+  useEffect(() => {
+    if (tournament.status !== 'active') return;
+    
+    // Randomize update interval between 3 to 6 seconds for varied, organic feel
+    const interval = setInterval(() => {
+      setLeaderboard(prev => {
+        const newScores = prev.map(p => ({
+          ...p,
+          score: p.score + Math.floor(Math.random() * 500)
+        })).sort((a, b) => b.score - a.score);
+        return newScores;
+      });
+    }, 3000 + Math.random() * 3000);
+    
+    return () => clearInterval(interval);
+  }, [tournament.status]);
+
+  return (
+    <div 
+      onClick={onClick}
+      className={`flex flex-col bg-[#0B0F19] rounded-2xl relative overflow-hidden group shadow-lg border border-white/5 hover:border-blue-500/30 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.3)] transition-all duration-500 cursor-pointer ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0' : ''}`}
+    >
+      {/* Image Header */}
+      <div className="w-full h-40 relative overflow-hidden shrink-0">
+        <img 
+          src={tournament.image} 
+          alt={tournament.title} 
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+        />
+        <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none" />
+      </div>
+
+      {/* Content Body */}
+      <div className="flex flex-col flex-1 p-5 relative z-10 bg-gradient-to-b from-[#0F1423] to-[#0B0F19]">
+        <h3 className="text-gray-100 font-bold text-[1.05rem] leading-snug mb-1.5 line-clamp-2 group-hover:text-blue-400 transition-colors duration-300">
+          {tournament.title}
+        </h3>
+        <p className="text-zinc-400 text-[13px] mb-4 line-clamp-2 leading-relaxed">{tournament.desc}</p>
+        
+        {/* Prize Section */}
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]" />
+            <div className="text-[10px] font-bold text-blue-400/90 uppercase tracking-[0.2em]">Ödül Havuzu</div>
+          </div>
+          <div className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-400 font-black text-3xl tracking-tighter drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+            {tournament.prize}
+          </div>
+        </div>
+        
+        {/* Unified Status & Time Bar */}
+        {tournament.status !== 'ended' && (
+          <div className={`mt-auto mb-4 py-2 px-3 rounded-lg border flex items-center justify-between text-[11px] sm:text-xs font-bold ${
+            tournament.status === 'active'
+              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+              : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+          }`}>
+            <div className="flex items-center gap-1.5 shrink-0">
+              {tournament.status === 'active' ? (
+                 <><span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_5px_#34d399]" /> 🔥 ŞU AN AKTİF</>
+              ) : (
+                 <><span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_5px_#fbbf24]" /> ⏳ BAŞLIYOR</>
+              )}
+            </div>
+            <span className="font-mono bg-black/20 px-2 py-0.5 rounded border border-white/5 whitespace-nowrap overflow-hidden text-ellipsis ml-2">Süre: {tournament.timeInfo}</span>
+          </div>
+        )}
+
+        {tournament.status === 'ended' && (
+          <div className="mt-auto mb-4 py-2 px-3 rounded-lg border border-white/5 bg-white/5 flex items-center justify-between text-[11px] font-bold text-zinc-400">
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5" /> SONA ERDİ
+            </div>
+            <span className="font-mono">{tournament.timeInfo}</span>
+          </div>
+        )}
+
+        {/* Mini Live Leaderboard */}
+        {tournament.status !== 'ended' && (
+          <div className="pt-3 border-t border-white/5 space-y-1.5">
+            <div className="text-[9px] text-zinc-500 font-semibold uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+              <Trophy className="w-3 h-3 text-amber-500/70" /> Canlı Liderlik
+            </div>
+            {leaderboard.map((player, idx) => (
+              <div key={player.id} className="flex items-center justify-between bg-black/20 rounded px-2.5 py-1 transition-all duration-300">
+                 <div className="flex items-center gap-2">
+                   <span className={`text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-amber-500/20 text-amber-500' : idx === 1 ? 'bg-zinc-300/20 text-zinc-300' : 'bg-orange-500/20 text-orange-500'}`}>{idx + 1}</span>
+                   <span className="text-[11px] text-zinc-300 font-medium">{player.name}</span>
+                 </div>
+                 <span className="text-[11px] font-mono text-emerald-400/90">{player.score.toLocaleString()} pts</span>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {/* Ended Footer (Participants only) */}
+        {tournament.status === 'ended' && tournament.participants !== undefined && (
+          <div className="pt-3 border-t border-white/5 flex items-center justify-end">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-400 bg-black/20 px-2 py-1 rounded border border-white/5">
+              <Users className="w-3 h-3" /> {tournament.participants} Katılımcı
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default function PromoView() {
   const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
 
@@ -169,87 +290,11 @@ export default function PromoView() {
         {/* Tournaments Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {tournaments.map((tournament) => (
-            <div 
-              key={tournament.id}
-              onClick={() => setSelectedTournament(tournament)}
-              className={`flex flex-col bg-[#0B0F19] rounded-2xl relative overflow-hidden group shadow-lg border border-white/5 hover:border-blue-500/30 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.3)] transition-all duration-500 cursor-pointer ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0' : ''}`}
-            >
-              {/* Image Header - Clean, no text overlap */}
-              <div className="w-full h-48 relative overflow-hidden">
-                 <img 
-                   src={tournament.image} 
-                   alt={tournament.title} 
-                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                 />
-                 
-                 {/* Subtle vignette over the image */}
-                 <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none" />
-
-                 {/* Status Badge */}
-                 {tournament.status === 'active' && (
-                   <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-black/70 backdrop-blur-md text-emerald-400 text-[10px] font-bold rounded-lg border border-emerald-500/30 shadow-[0_4px_10px_rgba(0,0,0,0.5)] flex items-center gap-1.5 uppercase tracking-wider">
-                     <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_5px_#34d399]" />
-                     Aktif
-                   </div>
-                 )}
-                 {tournament.status === 'upcoming' && (
-                   <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-black/70 backdrop-blur-md text-amber-400 text-[10px] font-bold rounded-lg border border-amber-500/30 shadow-[0_4px_10px_rgba(0,0,0,0.5)] flex items-center gap-1.5 uppercase tracking-wider">
-                     Yakında
-                   </div>
-                 )}
-              </div>
-
-              {/* Content Body - Clean white space, refined typography */}
-              <div className="flex flex-col flex-1 p-6 relative z-10 bg-gradient-to-b from-[#0F1423] to-[#0B0F19]">
-                <h3 className="text-gray-100 font-bold text-[1.05rem] leading-snug mb-2 line-clamp-3 group-hover:text-blue-400 transition-colors duration-300">
-                  {tournament.title}
-                </h3>
-                <p className="text-zinc-400 text-sm mb-6 line-clamp-3 leading-relaxed">{tournament.desc}</p>
-                
-                <div className="mt-auto">
-                  {/* Prize Section - Giant glowing text */}
-                  <div className="mb-6">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]" />
-                      <div className="text-[10px] font-bold text-blue-400/90 uppercase tracking-[0.2em]">Ödül Havuzu</div>
-                    </div>
-                    <div className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-400 font-black text-3xl sm:text-4xl tracking-tighter drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]">
-                      {tournament.prize}
-                    </div>
-                  </div>
-                  
-                  {/* Footer Stats - Prominent countdowns */}
-                  <div className="flex items-center justify-between pt-5 border-t border-white/5 mt-auto">
-                    <div className="flex items-center gap-2 text-sm font-bold whitespace-nowrap">
-                      {tournament.status === 'active' && (
-                        <>
-                          <Timer className="w-4 h-4 text-emerald-400" />
-                          <span className="font-mono text-emerald-400 tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">{tournament.timeInfo}</span>
-                        </>
-                      )}
-                      {tournament.status === 'upcoming' && (
-                        <>
-                          <Calendar className="w-4 h-4 text-amber-400" />
-                          <span className="font-mono text-amber-400 tracking-wider bg-amber-500/10 px-2.5 py-1 rounded-md border border-amber-500/20">{tournament.timeInfo}</span>
-                        </>
-                      )}
-                      {tournament.status === 'ended' && (
-                        <>
-                          <Calendar className="w-4 h-4 text-zinc-500" />
-                          <span className="font-mono text-zinc-400 tracking-wider bg-white/5 px-2.5 py-1 rounded-md border border-white/10">{tournament.timeInfo}</span>
-                        </>
-                      )}
-                    </div>
-                    
-                    {tournament.participants !== undefined && (
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-300 bg-white/5 px-2.5 py-1.5 rounded-md border border-white/10 whitespace-nowrap hover:bg-white/10 transition-colors">
-                        <Users className="w-3.5 h-3.5 text-zinc-400" /> {tournament.participants}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TournamentCard 
+              key={tournament.id} 
+              tournament={tournament} 
+              onClick={() => setSelectedTournament(tournament)} 
+            />
           ))}
         </div>
       </div>
