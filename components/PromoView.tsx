@@ -208,12 +208,19 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
               Canlı Liderlik
             </div>
             {leaderboard.map((player, idx) => (
-              <div key={player.id} className="flex items-center justify-between bg-black/20 hover:bg-black/40 rounded-md px-3 py-1.5 transition-all duration-300">
-                 <div className="flex items-center gap-2.5">
-                   <span className={`text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-amber-500/20 text-amber-500' : idx === 1 ? 'bg-zinc-300/20 text-zinc-300' : 'bg-orange-500/20 text-orange-500'}`}>{idx + 1}</span>
-                   <span className="text-[11px] text-zinc-200 font-semibold">{player.name}</span>
+              <div key={player.id} className="flex items-center justify-between bg-white/[0.02] border border-white/[0.02] hover:bg-white/[0.04] rounded-md px-3 py-2 transition-colors duration-300 gap-3">
+                 <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                   <span className={`shrink-0 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm ${
+                     idx === 0 ? 'bg-amber-500/20 text-amber-500 ring-1 ring-amber-500/30' : 
+                     idx === 1 ? 'bg-zinc-300/20 text-zinc-300 ring-1 ring-zinc-300/30' : 
+                     'bg-orange-900/40 text-orange-400 ring-1 ring-orange-500/30'
+                   }`}>{idx + 1}</span>
+                   <span className="text-[11.5px] text-zinc-200 font-semibold truncate">{player.name}</span>
                  </div>
-                 <span className="text-[11px] font-mono font-bold text-emerald-400/90">{player.score.toLocaleString()} pts</span>
+                 <div className="text-[11px] font-mono font-bold text-emerald-400/90 whitespace-nowrap shrink-0 flex items-baseline gap-1">
+                   <span>{player.score.toLocaleString()}</span>
+                   <span className="text-[9px] text-emerald-500/70 uppercase tracking-wider font-sans">pts</span>
+                 </div>
               </div>
             ))}
           </div>
