@@ -272,12 +272,12 @@ export default function PromoView() {
             </div>
             
             {/* Aggressive Guest Typography - Shrunk down */}
-            <h1 className="text-[28px] md:text-[40px] font-black leading-[1.15] tracking-tight text-white mb-3 drop-shadow-md">
-              Toplam <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-[#10B981]">25.000.000₺</span> Nakit Ödül! <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-[#0088FF] drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">ŞİMDİ PAYINI AL</span>
+            <h1 className="text-[20px] md:text-[28px] font-bold leading-snug tracking-tight text-white mb-3">
+              Toplam <span className="text-emerald-400">25.000.000₺</span> Nakit Ödül! <br/>
+              <span className="text-[#00E5FF]">ŞİMDİ PAYINI AL</span>
             </h1>
             
-            <p className="text-zinc-400 text-[13px] md:text-[15px] font-medium leading-relaxed max-w-[600px] mt-2 mb-6">
+            <p className="text-zinc-400 text-xs md:text-sm font-medium leading-relaxed max-w-[500px] mt-2 mb-5">
               Her gün binlerce kullanıcı dev nakit ödüller ve bedava dönüşler kazanıyor. Hayatını değiştirecek o büyük ödülü sadece tek bir spinde sen kazan! Hemen üye ol, sınırsız nakit yağmuruna katıl.
             </p>
 
