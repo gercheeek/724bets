@@ -92,82 +92,82 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* Left Column: Stats & Prize */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="lg:col-span-1 space-y-4">
           
           {/* Status Badge */}
-          <div className="flex items-center justify-between bg-[#0B0F19]/80 backdrop-blur-md border border-red-500/20 p-5 rounded-2xl shadow-lg relative overflow-hidden group">
+          <div className="flex items-center justify-between bg-[#0B0F19]/80 backdrop-blur-md border border-red-500/20 p-3.5 rounded-xl shadow-lg relative overflow-hidden group">
             <div className="absolute inset-0 bg-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="flex items-center gap-3 relative z-10">
-              <div className="p-2 bg-red-500/10 rounded-lg">
-                <Info className="w-5 h-5 text-red-400" />
+              <div className="p-1.5 bg-red-500/10 rounded-md">
+                <Info className="w-4 h-4 text-red-400" />
               </div>
-              <span className="text-sm font-semibold text-red-400 tracking-wide">Şu an katılmıyorsunuz</span>
+              <span className="text-[13px] font-semibold text-red-400 tracking-wide">Şu an katılmıyorsunuz</span>
             </div>
           </div>
 
-          {/* Prize Box - Massive & Glowing */}
-          <div className="bg-[#0B0F19]/80 backdrop-blur-md p-8 rounded-[2rem] border border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.1)] relative overflow-hidden group hover:border-blue-500/40 transition-colors">
-            <div className="absolute -right-20 -top-20 w-40 h-40 bg-blue-500/20 rounded-full blur-[50px] pointer-events-none" />
-            <div className="flex items-center gap-3 mb-4 relative z-10">
-              <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse shadow-[0_0_10px_#60a5fa]" />
-              <div className="text-xs font-bold text-blue-400/80 uppercase tracking-[0.2em]">Ana Ödül Havuzu</div>
+          {/* Prize Box - Compact */}
+          <div className="bg-[#0B0F19]/80 backdrop-blur-md p-5 rounded-2xl border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)] relative overflow-hidden group hover:border-blue-500/40 transition-colors">
+            <div className="absolute -right-10 -top-10 w-24 h-24 bg-blue-500/20 rounded-full blur-[30px] pointer-events-none" />
+            <div className="flex items-center gap-2 mb-2 relative z-10">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shadow-[0_0_8px_#60a5fa]" />
+              <div className="text-[10px] font-bold text-blue-400/80 uppercase tracking-[0.15em]">Ana Ödül Havuzu</div>
             </div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-200 to-blue-500 font-black text-5xl md:text-6xl tracking-tighter drop-shadow-[0_0_25px_rgba(59,130,246,0.4)] relative z-10">
+            <div className="text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-200 to-blue-500 font-black text-3xl md:text-4xl tracking-tight drop-shadow-[0_0_15px_rgba(59,130,246,0.4)] relative z-10">
               {tournament.prize}
             </div>
           </div>
           
-          {/* Countdown Box */}
-          <div className="bg-[#0B0F19]/80 backdrop-blur-md p-8 rounded-[2rem] border border-white/5 shadow-lg relative overflow-hidden">
-            <div className="flex items-center gap-3 mb-6">
-              <Timer className="w-5 h-5 text-emerald-400" />
-              <div className="text-xs font-bold text-emerald-400/80 uppercase tracking-[0.2em]">Kalan Süre</div>
+          {/* Countdown Box - Compact */}
+          <div className="bg-[#0B0F19]/80 backdrop-blur-md p-5 rounded-2xl border border-white/5 shadow-lg relative overflow-hidden">
+            <div className="flex items-center gap-2 mb-4">
+              <Timer className="w-4 h-4 text-emerald-400" />
+              <div className="text-[10px] font-bold text-emerald-400/80 uppercase tracking-[0.15em]">Kalan Süre</div>
             </div>
             
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center justify-between gap-1">
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-[#131B2B] rounded-xl border border-white/10 flex items-center justify-center text-3xl font-mono font-bold text-white shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">05</div>
-                <span className="text-[10px] text-zinc-500 mt-2 font-bold uppercase tracking-wider">Gün</span>
+                <div className="w-12 h-12 bg-[#131B2B] rounded-lg border border-white/10 flex items-center justify-center text-xl font-mono font-bold text-white shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">05</div>
+                <span className="text-[9px] text-zinc-500 mt-1.5 font-bold uppercase tracking-wider">Gün</span>
               </div>
-              <span className="text-2xl font-black text-zinc-600 mb-6">:</span>
+              <span className="text-xl font-black text-zinc-600 mb-5">:</span>
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-[#131B2B] rounded-xl border border-white/10 flex items-center justify-center text-3xl font-mono font-bold text-white shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">19</div>
-                <span className="text-[10px] text-zinc-500 mt-2 font-bold uppercase tracking-wider">Saat</span>
+                <div className="w-12 h-12 bg-[#131B2B] rounded-lg border border-white/10 flex items-center justify-center text-xl font-mono font-bold text-white shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">19</div>
+                <span className="text-[9px] text-zinc-500 mt-1.5 font-bold uppercase tracking-wider">Saat</span>
               </div>
-              <span className="text-2xl font-black text-zinc-600 mb-6">:</span>
+              <span className="text-xl font-black text-zinc-600 mb-5">:</span>
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-[#131B2B] rounded-xl border border-white/10 flex items-center justify-center text-3xl font-mono font-bold text-emerald-400 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">26</div>
-                <span className="text-[10px] text-zinc-500 mt-2 font-bold uppercase tracking-wider">Dakika</span>
+                <div className="w-12 h-12 bg-[#131B2B] rounded-lg border border-white/10 flex items-center justify-center text-xl font-mono font-bold text-emerald-400 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">26</div>
+                <span className="text-[9px] text-zinc-500 mt-1.5 font-bold uppercase tracking-wider">Dakika</span>
               </div>
             </div>
           </div>
 
-          {/* Quick Info Grid */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-5 rounded-2xl flex flex-col justify-center">
-              <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="w-4 h-4 text-zinc-400" />
-                <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Min Bahis</span>
+          {/* Quick Info Grid - Compact */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-4 rounded-xl flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <DollarSign className="w-3.5 h-3.5 text-zinc-400" />
+                <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">Min Bahis</span>
               </div>
-              <div className="text-lg font-bold text-white">$0,20</div>
+              <div className="text-base font-bold text-white">$0,20</div>
             </div>
-            <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-5 rounded-2xl flex flex-col justify-center">
-              <div className="flex items-center gap-2 mb-2">
-                <Users className="w-4 h-4 text-zinc-400" />
-                <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Katılımcı</span>
+            <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-4 rounded-xl flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <Users className="w-3.5 h-3.5 text-zinc-400" />
+                <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">Katılımcı</span>
               </div>
-              <div className="text-lg font-bold text-white">{tournament.participants || 276}</div>
+              <div className="text-base font-bold text-white">{tournament.participants || 276}</div>
             </div>
           </div>
 
-          {/* Mechanics Banner */}
-          <div className="flex items-start gap-4 bg-[#0B0F19] border border-amber-500/20 text-zinc-300 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+          {/* Mechanics Banner - Compact */}
+          <div className="flex items-start gap-3 bg-[#0B0F19] border border-amber-500/20 text-zinc-300 p-4 rounded-xl shadow-lg relative overflow-hidden">
             <div className="absolute inset-0 bg-amber-500/5" />
-            <div className="p-2 bg-amber-500/10 rounded-lg relative z-10 shrink-0">
-              <Trophy className="w-5 h-5 text-amber-400" />
+            <div className="p-1.5 bg-amber-500/10 rounded-md relative z-10 shrink-0">
+              <Trophy className="w-4 h-4 text-amber-400" />
             </div>
-            <p className="text-sm leading-relaxed relative z-10">
-              <strong className="text-amber-400 block mb-1">Kazanç Çarpanı Sistemi</strong>
+            <p className="text-[13px] leading-snug relative z-10">
+              <strong className="text-amber-400 block mb-0.5 text-sm">Kazanç Çarpanı Sistemi</strong>
               Kazanç çarpanınız ne kadar yüksek olursa o kadar çok puan kazanırsınız. Liderliğe giden yol yüksek oranlardan geçiyor.
             </p>
           </div>
@@ -178,31 +178,31 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
           
           {/* Leaderboard */}
           <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-black text-white flex items-center gap-3">
-                <Medal className="w-6 h-6 text-blue-400" />
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-black text-white flex items-center gap-2">
+                <Medal className="w-5 h-5 text-blue-400" />
                 Liderler Tablosu
               </h2>
             </div>
             
-            <div className="bg-[#0B0F19]/80 backdrop-blur-md rounded-3xl border border-white/5 overflow-hidden shadow-2xl">
+            <div className="bg-[#0B0F19]/80 backdrop-blur-md rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
               <div className="flex flex-col">
                 {mockLeaderboard.map((user, idx) => {
                   const isTop3 = idx < 3;
                   return (
                     <div 
                       key={idx} 
-                      className={`flex items-center justify-between px-6 py-4 ${idx !== mockLeaderboard.length - 1 ? 'border-b border-white/5' : ''} hover:bg-white/[0.02] transition-colors relative group`}
+                      className={`flex items-center justify-between px-5 py-3 ${idx !== mockLeaderboard.length - 1 ? 'border-b border-white/5' : ''} hover:bg-white/[0.02] transition-colors relative group`}
                     >
                       {/* Rank Highlight Background for Top 3 */}
                       {idx === 0 && <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
                       {idx === 1 && <div className="absolute inset-0 bg-gradient-to-r from-zinc-300/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
                       {idx === 2 && <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
 
-                      <div className="flex items-center gap-5 relative z-10">
+                      <div className="flex items-center gap-4 relative z-10">
                         {/* Rank Badge */}
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg ${
-                          idx === 0 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.3)]' :
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm ${
+                          idx === 0 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.3)]' :
                           idx === 1 ? 'bg-zinc-300/20 text-zinc-300 border border-zinc-300/30' :
                           idx === 2 ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
                           'bg-[#131B2B] text-zinc-500 border border-white/5'
@@ -211,8 +211,8 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
                         </div>
                         
                         <div>
-                          <div className={`text-base font-bold ${isTop3 ? 'text-white' : 'text-zinc-300'}`}>{user.name}</div>
-                          <div className="text-xs font-medium text-zinc-500 mt-0.5">{user.status}</div>
+                          <div className={`text-sm font-bold ${isTop3 ? 'text-white' : 'text-zinc-300'}`}>{user.name}</div>
+                          <div className="text-[11px] font-medium text-zinc-500 mt-0.5">{user.status}</div>
                         </div>
                       </div>
                       
@@ -228,20 +228,20 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
           </div>
 
           {/* Tournament Games & Rules Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Rules Accordion */}
             <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-1 rounded-2xl">
               <button 
                 onClick={() => setRulesOpen(!rulesOpen)}
-                className="w-full flex items-center justify-between bg-transparent hover:bg-white/5 transition-colors p-5 rounded-xl"
+                className="w-full flex items-center justify-between bg-transparent hover:bg-white/5 transition-colors p-4 rounded-xl"
               >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-500/10 rounded-lg">
-                    <Info className="w-5 h-5 text-blue-400" />
+                <div className="flex items-center gap-2.5">
+                  <div className="p-1.5 bg-blue-500/10 rounded-lg">
+                    <Info className="w-4 h-4 text-blue-400" />
                   </div>
-                  <span className="font-bold text-white text-lg">Turnuva Kuralları</span>
+                  <span className="font-bold text-white text-base">Turnuva Kuralları</span>
                 </div>
-                {rulesOpen ? <ChevronUp className="w-5 h-5 text-zinc-400" /> : <ChevronDown className="w-5 h-5 text-zinc-400" />}
+                {rulesOpen ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
               </button>
 
               {rulesOpen && (
