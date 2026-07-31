@@ -73,537 +73,385 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
         <span className="text-sm font-semibold tracking-wide uppercase">Turnuvalara Dön</span>
       </button>
 
-      {/* Hero Banner - Ultra Premium */}
-      <div className="relative w-full h-[220px] md:h-[240px] rounded-[1.5rem] overflow-hidden mb-8 bg-[#06080D] flex border border-white/10 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.6)] group">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0F19] via-[#0B0F19]/90 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-transparent z-10 opacity-60" />
-        
-        {/* Glow Effects */}
-        <div className="absolute -left-32 -top-32 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] z-20 pointer-events-none" />
-        <div className="absolute right-0 bottom-0 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] z-20 pointer-events-none" />
-
-        <div className="relative z-30 w-full md:w-3/5 p-6 md:p-10 flex flex-col justify-center h-full">
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="w-4 h-4 text-blue-400 animate-pulse" />
-            <span className="text-blue-400 font-bold tracking-[0.25em] uppercase text-[10px]">Özel Turnuva</span>
-          </div>
-          <h1 className="text-3xl md:text-[2.75rem] font-black text-white leading-[1.1] drop-shadow-md mb-3 tracking-tight">
+      {/* Clean Hero Banner */}
+      <div className="relative w-full h-[180px] md:h-[220px] rounded-t-xl overflow-hidden bg-[#2a3848] flex flex-col md:flex-row border border-white/5 shadow-lg">
+        <div className="relative z-30 w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-center h-full bg-gradient-to-r from-[#172336] to-transparent">
+          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight drop-shadow-md">
             {tournament.title}
           </h1>
-          <p className="text-zinc-400 text-[13px] md:text-sm max-w-lg leading-relaxed line-clamp-2">
-            {tournament.desc} En iyi oyunlarda yarışın, liderlik tablosuna tırmanın ve devasa ödül havuzundan payınızı alın.
-          </p>
         </div>
         
-        <div className="absolute top-0 right-0 w-full md:w-2/3 h-full z-0 overflow-hidden">
+        <div className="absolute top-0 right-0 w-full md:w-1/2 h-full z-0 overflow-hidden">
            <img 
              src={tournament.image} 
              alt="Promo" 
-             className="w-full h-full object-cover object-right-top opacity-80 mix-blend-screen group-hover:scale-105 transition-transform duration-1000"
+             className="w-full h-full object-cover object-right opacity-90"
            />
-           <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#0B0F19]/60 to-[#0B0F19] pointer-events-none" />
+           <div className="absolute inset-0 bg-gradient-to-r from-[#172336] via-transparent to-transparent pointer-events-none" />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Status Bar */}
+      <div className="w-full bg-[#1b263b] p-3 rounded-b-xl border border-white/5 border-t-0 flex items-center gap-2 mb-6 shadow-md">
+        <div className={`p-1 rounded-md ${tournament.status === 'upcoming' ? 'bg-yellow-500/10' : 'bg-blue-500/10'}`}>
+          <Info className={`w-4 h-4 ${tournament.status === 'upcoming' ? 'text-yellow-400' : 'text-blue-400'}`} />
+        </div>
+        <span className={`text-sm font-semibold tracking-wide ${tournament.status === 'upcoming' ? 'text-yellow-400' : 'text-blue-400'}`}>
+          {tournament.status === 'upcoming' ? 'Yaklaşan' : 'Katılmıyorum'}
+        </span>
+      </div>
+
+      <div className="w-full space-y-4">
         
-        {/* Left Column: Stats & Prize */}
-        <div className="lg:col-span-1 space-y-4">
-          
-          {/* Status Badge */}
-          <div className="flex items-center justify-between bg-[#0B0F19]/80 backdrop-blur-md border border-red-500/20 p-3.5 rounded-xl shadow-lg relative overflow-hidden group">
-            <div className="absolute inset-0 bg-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="flex items-center gap-3 relative z-10">
-              <div className="p-1.5 bg-red-500/10 rounded-md">
-                <Info className="w-4 h-4 text-red-400" />
-              </div>
-              <span className="text-[13px] font-semibold text-red-400 tracking-wide">Şu an katılmıyorsunuz</span>
-            </div>
+        {/* Prize & Countdown Box */}
+        <div className="flex flex-col md:flex-row bg-[#1b263b] rounded-xl border border-white/5 overflow-hidden shadow-sm">
+          <div className="flex-1 p-5 border-b md:border-b-0 md:border-r border-white/5 bg-[#172336]/50">
+            <div className="text-[11px] font-medium text-zinc-400 mb-2 tracking-wide">Ana ödül</div>
+            <div className="text-2xl font-bold text-white">{tournament.prize}</div>
           </div>
-
-          {/* Prize Box - Compact */}
-          <div className="bg-[#0B0F19]/80 backdrop-blur-md p-5 rounded-2xl border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)] relative overflow-hidden group hover:border-blue-500/40 transition-colors">
-            <div className="absolute -right-10 -top-10 w-24 h-24 bg-blue-500/20 rounded-full blur-[30px] pointer-events-none" />
-            <div className="flex items-center gap-2 mb-2 relative z-10">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shadow-[0_0_8px_#60a5fa]" />
-              <div className="text-[10px] font-bold text-blue-400/80 uppercase tracking-[0.15em]">Ana Ödül Havuzu</div>
+          <div className="flex-1 p-5 bg-[#1b263b] flex flex-col justify-center">
+            <div className="text-[11px] font-medium text-zinc-400 mb-2 tracking-wide">
+              {tournament.status === 'upcoming' ? '... içinde başlar' : 'Bitiş tarihi'}
             </div>
-            <div className="text-transparent bg-clip-text bg-gradient-to-br from-white via-blue-200 to-blue-500 font-black text-3xl md:text-4xl tracking-tight drop-shadow-[0_0_15px_rgba(59,130,246,0.4)] relative z-10">
-              {tournament.prize}
+            <div className="flex items-center gap-1.5">
+              <div className="bg-[#111827] px-3.5 py-2 rounded text-white font-mono text-sm border border-white/5 shadow-inner">00</div>
+              <span className="text-zinc-500 font-bold">/</span>
+              <div className="bg-[#111827] px-3.5 py-2 rounded text-white font-mono text-sm border border-white/5 shadow-inner">15</div>
+              <span className="text-zinc-500 font-bold">:</span>
+              <div className="bg-[#111827] px-3.5 py-2 rounded text-white font-mono text-sm border border-white/5 shadow-inner">47</div>
+              <span className="text-zinc-500 font-bold">:</span>
+              <div className="bg-[#111827] px-3.5 py-2 rounded text-white font-mono text-sm border border-white/5 shadow-inner">10</div>
             </div>
-          </div>
-          
-          {/* Countdown Box - Compact */}
-          <div className="bg-[#0B0F19]/80 backdrop-blur-md p-5 rounded-2xl border border-white/5 shadow-lg relative overflow-hidden">
-            <div className="flex items-center gap-2 mb-4">
-              <Timer className="w-4 h-4 text-emerald-400" />
-              <div className="text-[10px] font-bold text-emerald-400/80 uppercase tracking-[0.15em]">Kalan Süre</div>
-            </div>
-            
-            <div className="flex items-center justify-between gap-1">
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-[#131B2B] rounded-lg border border-white/10 flex items-center justify-center text-xl font-mono font-bold text-white shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">05</div>
-                <span className="text-[9px] text-zinc-500 mt-1.5 font-bold uppercase tracking-wider">Gün</span>
-              </div>
-              <span className="text-xl font-black text-zinc-600 mb-5">:</span>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-[#131B2B] rounded-lg border border-white/10 flex items-center justify-center text-xl font-mono font-bold text-white shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">19</div>
-                <span className="text-[9px] text-zinc-500 mt-1.5 font-bold uppercase tracking-wider">Saat</span>
-              </div>
-              <span className="text-xl font-black text-zinc-600 mb-5">:</span>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-[#131B2B] rounded-lg border border-white/10 flex items-center justify-center text-xl font-mono font-bold text-emerald-400 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">26</div>
-                <span className="text-[9px] text-zinc-500 mt-1.5 font-bold uppercase tracking-wider">Dakika</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Info Grid - Compact */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-4 rounded-xl flex flex-col justify-center">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <DollarSign className="w-3.5 h-3.5 text-zinc-400" />
-                <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">Min Bahis</span>
-              </div>
-              <div className="text-base font-bold text-white">$0,20</div>
-            </div>
-            <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-4 rounded-xl flex flex-col justify-center">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <Users className="w-3.5 h-3.5 text-zinc-400" />
-                <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">Katılımcı</span>
-              </div>
-              <div className="text-base font-bold text-white">{tournament.participants || 276}</div>
-            </div>
-          </div>
-
-          {/* Mechanics Banner - Compact */}
-          <div className="flex items-start gap-3 bg-[#0B0F19] border border-amber-500/20 text-zinc-300 p-4 rounded-xl shadow-lg relative overflow-hidden">
-            <div className="absolute inset-0 bg-amber-500/5" />
-            <div className="p-1.5 bg-amber-500/10 rounded-md relative z-10 shrink-0">
-              <Trophy className="w-4 h-4 text-amber-400" />
-            </div>
-            <p className="text-[13px] leading-snug relative z-10">
-              <strong className="text-amber-400 block mb-0.5 text-sm">Kazanç Çarpanı Sistemi</strong>
-              Kazanç çarpanınız ne kadar yüksek olursa o kadar çok puan kazanırsınız. Liderliğe giden yol yüksek oranlardan geçiyor.
-            </p>
           </div>
         </div>
 
-        {/* Right Column: Leaderboard & Details */}
-        <div className="lg:col-span-2 space-y-8">
-          
-          {/* Leaderboard */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-black text-white flex items-center gap-2">
-                <Medal className="w-5 h-5 text-blue-400" />
-                Liderler Tablosu
-              </h2>
-            </div>
-            
-            <div className="bg-[#0B0F19]/80 backdrop-blur-md rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
-              <div className="flex flex-col">
-                {mockLeaderboard.map((user, idx) => {
-                  const isTop3 = idx < 3;
-                  return (
-                    <div 
-                      key={idx} 
-                      className={`flex items-center justify-between px-5 py-3 ${idx !== mockLeaderboard.length - 1 ? 'border-b border-white/5' : ''} hover:bg-white/[0.02] transition-colors relative group`}
-                    >
-                      {/* Rank Highlight Background for Top 3 */}
-                      {idx === 0 && <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
-                      {idx === 1 && <div className="absolute inset-0 bg-gradient-to-r from-zinc-300/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
-                      {idx === 2 && <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
-
-                      <div className="flex items-center gap-4 relative z-10">
-                        {/* Rank Badge */}
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm ${
-                          idx === 0 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.3)]' :
-                          idx === 1 ? 'bg-zinc-300/20 text-zinc-300 border border-zinc-300/30' :
-                          idx === 2 ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' :
-                          'bg-[#131B2B] text-zinc-500 border border-white/5'
-                        }`}>
-                          {user.rank}
-                        </div>
-                        
-                        <div>
-                          <div className={`text-sm font-bold ${isTop3 ? 'text-white' : 'text-zinc-300'}`}>{user.name}</div>
-                          <div className="text-[11px] font-medium text-zinc-500 mt-0.5">{user.status}</div>
-                        </div>
-                      </div>
-                      
-                      <div className="text-right relative z-10">
-                        <div className="text-lg font-black text-white">{user.points} <span className="text-xs text-zinc-500 font-medium">puan</span></div>
-                        {user.prize && <div className="text-sm font-bold text-emerald-400 mt-0.5 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]">{user.prize}</div>}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+        {/* Mechanics Info */}
+        <div className="bg-[#1b263b] rounded-xl border border-white/5 p-5 flex flex-col gap-3 shadow-sm">
+          <div className="flex items-center gap-3 text-sm text-zinc-300">
+            <span className="text-zinc-500">☁️</span> Minimum Bahis: $0,20
           </div>
+          <div className="flex items-center gap-3 text-sm text-zinc-300">
+            <span className="text-zinc-500">👥</span> Oyuncular: {tournament.participants || 276}
+          </div>
+          <div className="flex items-center gap-3 text-sm text-zinc-300">
+            <span className="text-zinc-500">⚔️</span> Kazanç çarpanı - kazanç çarpanınız ne kadar yüksek olursa o kadar çok puan kazanırsınız.
+          </div>
+        </div>
 
-          {/* Tournament Games & Rules Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Rules Accordion */}
-            <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-1 rounded-2xl">
-              <button 
-                onClick={() => setRulesOpen(!rulesOpen)}
-                className="w-full flex items-center justify-between bg-transparent hover:bg-white/5 transition-colors p-4 rounded-xl"
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="p-1.5 bg-blue-500/10 rounded-lg">
-                    <Info className="w-4 h-4 text-blue-400" />
+        {/* Rules Accordion */}
+        <div className="bg-[#1b263b] border border-white/5 rounded-xl shadow-sm overflow-hidden">
+          <button 
+            onClick={() => setRulesOpen(!rulesOpen)}
+            className="w-full flex items-center justify-between bg-transparent hover:bg-white/5 transition-colors p-5"
+          >
+            <span className="font-semibold text-white text-sm">Turnuva kuralları</span>
+            {rulesOpen ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
+          </button>
+
+          {rulesOpen && (
+            <div className="p-5 pt-2 text-sm text-zinc-300 leading-relaxed font-medium bg-[#172336]/50 border-t border-white/5">
+              {tournament.title.includes('Olympus') && (
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-1">Mücadele: Gates of Olympus Super Scatter</h4>
+                    <p>Öne çıkan oyunda çarpanları yakala! Bunu en az bir kez başarman yeterlidir.</p>
+                    <ul className="list-none space-y-0.5 mt-1">
+                      <li>- Her <strong className="text-yellow-400">x50</strong> çarpanda 1 puan kazan</li>
+                      <li>- Her <strong className="text-yellow-400">x100</strong> çarpanda 2 puan kazan</li>
+                      <li>- Her <strong className="text-yellow-400">x500</strong> çarpanda 10 puan kazan</li>
+                      <li>- Her <strong className="text-yellow-400">x1000</strong> çarpanda 500 puan kazan</li>
+                    </ul>
+                    <p className="mt-1">Tek bir ödül sırasında liderlik tablosunun zirvesine çık ve <strong className="text-yellow-400">$100</strong> ödülün sahibi ol.</p>
                   </div>
-                  <span className="font-bold text-white text-base">Turnuva Kuralları</span>
-                </div>
-                {rulesOpen ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
-              </button>
 
-              {rulesOpen && (
-                <div className="p-4 md:p-6 pt-2 text-sm text-zinc-300 leading-relaxed font-medium bg-[#1a2332]/50 rounded-b-xl border-t border-white/5">
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-1">Turnuva Oyunu:</h4>
+                    <p>Gates of Olympus Super Scatter</p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır</h4>
+                    <ul className="list-none space-y-0.5">
+                      <li>- Minimum bahis: <strong className="text-yellow-400">0.20 $</strong> (veya para birimi karşılığı).</li>
+                      <li>- Sadece Gates of Olympus Super Scatter oyunundaki çevrimeler geçerlidir.</li>
+                      <li>- Puanlama sistemi:</li>
+                    </ul>
+                    <ul className="list-none space-y-0.5 mt-1 ml-2 text-yellow-400/90">
+                      <li>x50 çarpanı yakala = 1 puan</li>
+                      <li>x100 çarpanı yakala = 2 puan</li>
+                      <li>x500 çarpanı yakala = 10 puan</li>
+                      <li>x1000 çarpanı yakala = 500 puan</li>
+                    </ul>
+                    <p className="mt-1">1 hafta içinde en yüksek puana ulaşan oyuncu ödülü kazanır.</p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-2">Puanlama Tablosu</h4>
+                    <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
+                      <thead>
+                        <tr className="border-b border-yellow-500/50 text-yellow-400">
+                          <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
+                          <th className="p-2 font-semibold">Puan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">10</td></tr>
+                        <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">500</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
                   
-                  {tournament.title.includes('Olympus') && (
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Mücadele: Gates of Olympus Super Scatter</h4>
-                        <p>Öne çıkan oyunda çarpanları yakala! Bunu en az bir kez başarman yeterlidir.</p>
-                        <ul className="list-none space-y-0.5 mt-1">
-                          <li>- Her <strong className="text-yellow-400">x50</strong> çarpanda 1 puan kazan</li>
-                          <li>- Her <strong className="text-yellow-400">x100</strong> çarpanda 2 puan kazan</li>
-                          <li>- Her <strong className="text-yellow-400">x500</strong> çarpanda 10 puan kazan</li>
-                          <li>- Her <strong className="text-yellow-400">x1000</strong> çarpanda 500 puan kazan</li>
-                        </ul>
-                        <p className="mt-1">Tek bir ödül sırasında liderlik tablosunun zirvesine çık ve <strong className="text-yellow-400">$100</strong> ödülün sahibi ol.</p>
-                      </div>
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı</h4>
+                    <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
+                      <thead>
+                        <tr className="border-b border-yellow-500/50 text-yellow-400">
+                          <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıra</th>
+                          <th className="p-2 font-semibold">Ödül</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td className="p-1.5 border-r border-yellow-500/50">1</td><td className="p-1.5">$100</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
 
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Turnuva Oyunu:</h4>
-                        <p>Gates of Olympus Super Scatter</p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır</h4>
-                        <ul className="list-none space-y-0.5">
-                          <li>- Minimum bahis: <strong className="text-yellow-400">0.20 $</strong> (veya para birimi karşılığı).</li>
-                          <li>- Sadece Gates of Olympus Super Scatter oyunundaki çevrimeler geçerlidir.</li>
-                          <li>- Puanlama sistemi:</li>
-                        </ul>
-                        <ul className="list-none space-y-0.5 mt-1 ml-2 text-yellow-400/90">
-                          <li>x50 çarpanı yakala = 1 puan</li>
-                          <li>x100 çarpanı yakala = 2 puan</li>
-                          <li>x500 çarpanı yakala = 10 puan</li>
-                          <li>x1000 çarpanı yakala = 500 puan</li>
-                        </ul>
-                        <p className="mt-1">1 hafta içinde en yüksek puana ulaşan oyuncu ödülü kazanır.</p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-2">Puanlama Tablosu</h4>
-                        <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
-                          <thead>
-                            <tr className="border-b border-yellow-500/50 text-yellow-400">
-                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
-                              <th className="p-2 font-semibold">Puan</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">10</td></tr>
-                            <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">500</td></tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı</h4>
-                        <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
-                          <thead>
-                            <tr className="border-b border-yellow-500/50 text-yellow-400">
-                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıra</th>
-                              <th className="p-2 font-semibold">Ödül</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr><td className="p-1.5 border-r border-yellow-500/50">1</td><td className="p-1.5">$100</td></tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-
-                  {tournament.title.includes('Le Serisi') && (
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Meydan Okuma: Le Series Tournament</h4>
-                        <p>Öne çıkan oyunlarda çarpanları yakala! En az bir kez başarman yeterlidir.</p>
-                        <ul className="list-none space-y-0.5 mt-1">
-                          <li>- Her <strong className="text-yellow-400">x50</strong> çarpanı için 1 puan</li>
-                          <li>- Her <strong className="text-yellow-400">x100</strong> çarpanı için 2 puan</li>
-                          <li>- Her <strong className="text-yellow-400">x500</strong> çarpanı için 10 puan</li>
-                          <li>- Her <strong className="text-yellow-400">x1000</strong> çarpanı için 500 puan</li>
-                        </ul>
-                        <p className="mt-1">Liderlik tablosunda zirveye çık ve toplam <strong className="text-yellow-400">10.000 TL</strong> ödül havuzunu paylaş.</p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Turnuva Oyunları:</h4>
-                        <p>Le Santa<br/>Le Cowboy<br/>Le Zeus<br/>Le King<br/>Le Viking<br/>Le Pharaoh<br/>Le Bandit</p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır</h4>
-                        <ul className="list-none space-y-0.5">
-                          <li>- Minimum bahis: <strong className="text-yellow-400">$0.20</strong> (veya para birimi karşılığı).</li>
-                          <li>- Sadece listelenen Le Series oyunlarındaki dönüşler geçerlidir.</li>
-                          <li>- Puanlama sistemi:</li>
-                        </ul>
-                        <ul className="list-none space-y-0.5 mt-1 ml-2 text-yellow-400/90">
-                          <li>x50 çarpanı = 1 puan</li>
-                          <li>x100 çarpanı = 2 puan</li>
-                          <li>x500 çarpanı = 10 puan</li>
-                          <li>x1000 çarpanı = 500 puan</li>
-                        </ul>
-                        <p className="mt-1">1 hafta sonunda en yüksek puanlara sahip oyuncular ödül kazanır.</p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-2">Puan Tablosu</h4>
-                        <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
-                          <thead>
-                            <tr className="border-b border-yellow-500/50 text-yellow-400">
-                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
-                              <th className="p-2 font-semibold">Puan</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">10</td></tr>
-                            <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">500</td></tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı (Toplam: 10.000 TL)</h4>
-                        <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
-                          <thead>
-                            <tr className="border-b border-yellow-500/50 text-yellow-400">
-                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıralama</th>
-                              <th className="p-2 font-semibold">Ödül</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">1.</td><td className="p-1.5">5.000 TL</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">2.</td><td className="p-1.5">3.000 TL</td></tr>
-                            <tr><td className="p-1.5 border-r border-yellow-500/50">3.</td><td className="p-1.5">2.000 TL</td></tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-
-                  {tournament.title.includes('HAFTASONU') && (
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Turnuva: Hafta Sonu Çarpan Turnuvası</h4>
-                        <p>Seçili oyunlarda çarpanları yakala ve liderlik tablosunda zirveye çık!</p>
-                        <ul className="list-none space-y-0.5 mt-1">
-                          <li>- <strong className="text-yellow-400">x50</strong> çarpan için 1 puan</li>
-                          <li>- <strong className="text-yellow-400">x100</strong> çarpan için 2 puan</li>
-                          <li>- <strong className="text-yellow-400">x150</strong> çarpan için 3 puan</li>
-                          <li>- <strong className="text-yellow-400">x200</strong> çarpan için 4 puan</li>
-                          <li>- <strong className="text-yellow-400">x500</strong> çarpan için 50 puan</li>
-                          <li>- <strong className="text-yellow-400">x1000</strong> çarpan için 100 puan</li>
-                        </ul>
-                        <p className="mt-1">Hafta sonu sonunda en yüksek puanı toplayan oyuncular toplam <strong className="text-yellow-400">5.000 EUR</strong> ödül havuzunu paylaşır.</p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır</h4>
-                        <ul className="list-none space-y-0.5">
-                          <li>- Minimum bahis: <strong className="text-yellow-400">0.5 EUR</strong> (veya para birimi karşılığı).</li>
-                          <li>- Yalnızca yukarıda listelenen oyunlarda yapılan dönüşler geçerlidir.</li>
-                          <li>- Puanlama sistemi:</li>
-                        </ul>
-                        <ul className="list-none space-y-0.5 mt-1 ml-2 text-yellow-400/90">
-                          <li>x50 = 1 puan</li>
-                          <li>x100 = 2 puan</li>
-                          <li>x150 = 3 puan</li>
-                          <li>x200 = 4 puan</li>
-                          <li>x500 = 50 puan</li>
-                          <li>x1000 = 100 puan</li>
-                        </ul>
-                        <p className="mt-1">Turnuva sonunda en yüksek puanı toplayan oyuncular ödül kazanır.</p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-2">Puan Tablosu</h4>
-                        <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
-                          <thead>
-                            <tr className="border-b border-yellow-500/50 text-yellow-400">
-                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
-                              <th className="p-2 font-semibold">Puan</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x150</td><td className="p-1.5">3</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x200</td><td className="p-1.5">4</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">50</td></tr>
-                            <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">100</td></tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı (Toplam 5.000 EUR)</h4>
-                        <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
-                          <thead>
-                            <tr className="border-b border-yellow-500/50 text-yellow-400">
-                              <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıralama</th>
-                              <th className="p-2 font-semibold">Ödül</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">1.</td><td className="p-1.5">3.000 EUR</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">2.</td><td className="p-1.5">1.000 EUR</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">3.</td><td className="p-1.5">500 EUR</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">4.</td><td className="p-1.5">200 EUR</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">5.</td><td className="p-1.5">100 EUR</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">6.</td><td className="p-1.5">50 EUR</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">7.</td><td className="p-1.5">40 EUR</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">8.</td><td className="p-1.5">40 EUR</td></tr>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">9.</td><td className="p-1.5">40 EUR</td></tr>
-                            <tr><td className="p-1.5 border-r border-yellow-500/50">10.</td><td className="p-1.5">30 EUR</td></tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-
-                  {tournament.title.includes('Hacksaw') && (
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Turnuva: Hacksaw Turnuvası</h4>
-                        <p>Seçili <strong className="text-yellow-400">Hacksaw Gaming</strong> oyunlarında bahis yap, puan topla ve liderlik tablosunda zirveye yüksel!</p>
-                        <p className="mt-2">Her <strong className="text-yellow-400">0.17 USD</strong> (veya para birimi karşılığı) bahis için <strong className="text-yellow-400">+1 Puan</strong> kazanırsın.</p>
-                        <p className="mt-1">Ayrıca elde ettiğin her <strong className="text-yellow-400">100 USD</strong> (veya para birimi karşılığı) kazanç için <strong className="text-yellow-400">+5 Ekstra Puan</strong> kazanırsın.</p>
-                        <p className="mt-2">Turnuva sonunda liderlik tablosunda en yüksek puanı toplayan ilk 5 oyuncu ödül kazanmaya hak kazanacaktır.</p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır?</h4>
-                        <ul className="list-none space-y-0.5">
-                          <li>- Turnuvaya yalnızca <strong className="text-yellow-400">turnuva tablosunda yer alan seçili Hacksaw Gaming oyunlarında</strong> geçerlidir.</li>
-                          <li>- Puan kazanmaya başlamak için gereken minimum bahis miktarı <strong className="text-yellow-400">0.17 USD</strong> (veya para birimi karşılığıdır).</li>
-                          <li>- Her <strong className="text-yellow-400">0.17 USD</strong> bahis = <strong className="text-yellow-400">+1 Puan</strong></li>
-                          <li>- Her <strong className="text-yellow-400">100 USD</strong> kazanç = <strong className="text-yellow-400">+5 Ekstra Puan</strong></li>
-                          <li>- Turnuva sonunda en yüksek puanı toplayan ilk 5 oyuncu ödül kazanmaya hak kazanacaktır.</li>
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h4 className="text-yellow-400 font-bold mb-2">Puanlama Sistemi</h4>
-                        <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
-                          <thead>
-                            <tr className="border-b border-yellow-500/50 text-yellow-400">
-                              <th className="p-2 border-r border-yellow-500/50 font-semibold">İşlem</th>
-                              <th className="p-2 font-semibold">Kazanılan Puan</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">Her 0.17 USD Bahis</td><td className="p-1.5">+1 Puan</td></tr>
-                            <tr><td className="p-1.5 border-r border-yellow-500/50">Her 100 USD Kazanç</td><td className="p-1.5">+5 Ekstra Puan</td></tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="mt-6 pt-4 border-t border-white/5 space-y-4">
-                    <div>
-                      <h4 className="text-yellow-400 font-bold mb-1">Turnuva Süresi</h4>
-                      <p>1 Hafta boyunca geçerlidir.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-yellow-400 font-bold mb-1">Liderlik Tablosu</h4>
-                      <p>Gerçek zamanlı olarak güncellenir. Eşitlik durumunda, puana ilk ulaşan oyuncu üst sırada yer alır.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-yellow-400 font-bold mb-1">Önemli Bilgiler</h4>
-                      <ul className="list-none space-y-0.5">
-                        <li>- Şartları karşılamayan bahisler geçersiz sayılır.</li>
-                        <li>- Ters veya risk azaltmaya yönelik bahisler yasaktır.</li>
-                        <li>- Her türlü kötüye kullanım diskalifiye ile sonuçlanır.</li>
-                        <li>- Ödüller, turnuva bitiminden sonra 24 saat içinde otomatik olarak hesaba tanımlanır.</li>
-                      </ul>
-                    </div>
-
-                    <div className="flex justify-center mt-6 pt-2">
-                      <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-black uppercase tracking-wider px-8 py-2.5 rounded-lg shadow-[0_0_15px_rgba(250,204,21,0.4)] transition-all">
-                        Katıl
-                      </button>
-                    </div>
+              {tournament.title.includes('Le Serisi') && (
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-1">Meydan Okuma: Le Series Tournament</h4>
+                    <p>Öne çıkan oyunlarda çarpanları yakala! En az bir kez başarman yeterlidir.</p>
+                    <ul className="list-none space-y-0.5 mt-1">
+                      <li>- Her <strong className="text-yellow-400">x50</strong> çarpanı için 1 puan</li>
+                      <li>- Her <strong className="text-yellow-400">x100</strong> çarpanı için 2 puan</li>
+                      <li>- Her <strong className="text-yellow-400">x500</strong> çarpanı için 10 puan</li>
+                      <li>- Her <strong className="text-yellow-400">x1000</strong> çarpanı için 500 puan</li>
+                    </ul>
+                    <p className="mt-1">Liderlik tablosunda zirveye çık ve toplam <strong className="text-yellow-400">10.000 TL</strong> ödül havuzunu paylaş.</p>
                   </div>
 
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-1">Nasıl Oynanır</h4>
+                    <ul className="list-none space-y-0.5">
+                      <li>- Minimum bahis: <strong className="text-yellow-400">$0.20</strong> (veya para birimi karşılığı).</li>
+                      <li>- Sadece listelenen Le Series oyunlarındaki dönüşler geçerlidir.</li>
+                      <li>- Puanlama sistemi:</li>
+                    </ul>
+                    <ul className="list-none space-y-0.5 mt-1 ml-2 text-yellow-400/90">
+                      <li>x50 çarpanı = 1 puan</li>
+                      <li>x100 çarpanı = 2 puan</li>
+                      <li>x500 çarpanı = 10 puan</li>
+                      <li>x1000 çarpanı = 500 puan</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-2">Puan Tablosu</h4>
+                    <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
+                      <thead>
+                        <tr className="border-b border-yellow-500/50 text-yellow-400">
+                          <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
+                          <th className="p-2 font-semibold">Puan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">10</td></tr>
+                        <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">500</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı (Toplam: 10.000 TL)</h4>
+                    <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
+                      <thead>
+                        <tr className="border-b border-yellow-500/50 text-yellow-400">
+                          <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıralama</th>
+                          <th className="p-2 font-semibold">Ödül</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">1.</td><td className="p-1.5">5.000 TL</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">2.</td><td className="p-1.5">3.000 TL</td></tr>
+                        <tr><td className="p-1.5 border-r border-yellow-500/50">3.</td><td className="p-1.5">2.000 TL</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {tournament.title.includes('HAFTASONU') && (
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-1">Turnuva: Hafta Sonu Çarpan Turnuvası</h4>
+                    <p>Seçili oyunlarda çarpanları yakala ve liderlik tablosunda zirveye çık!</p>
+                    <ul className="list-none space-y-0.5 mt-1">
+                      <li>- <strong className="text-yellow-400">x50</strong> çarpan için 1 puan</li>
+                      <li>- <strong className="text-yellow-400">x100</strong> çarpan için 2 puan</li>
+                      <li>- <strong className="text-yellow-400">x150</strong> çarpan için 3 puan</li>
+                      <li>- <strong className="text-yellow-400">x200</strong> çarpan için 4 puan</li>
+                      <li>- <strong className="text-yellow-400">x500</strong> çarpan için 50 puan</li>
+                      <li>- <strong className="text-yellow-400">x1000</strong> çarpan için 100 puan</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-2">Puan Tablosu</h4>
+                    <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
+                      <thead>
+                        <tr className="border-b border-yellow-500/50 text-yellow-400">
+                          <th className="p-2 border-r border-yellow-500/50 font-semibold">Çarpan</th>
+                          <th className="p-2 font-semibold">Puan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x50</td><td className="p-1.5">1</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x100</td><td className="p-1.5">2</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x150</td><td className="p-1.5">3</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x200</td><td className="p-1.5">4</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">x500</td><td className="p-1.5">50</td></tr>
+                        <tr><td className="p-1.5 border-r border-yellow-500/50">x1000</td><td className="p-1.5">100</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-2">Ödül Dağılımı (Toplam 5.000 EUR)</h4>
+                    <table className="w-full md:w-2/3 mx-auto text-center border-collapse border border-yellow-500/50 text-xs md:text-sm">
+                      <thead>
+                        <tr className="border-b border-yellow-500/50 text-yellow-400">
+                          <th className="p-2 border-r border-yellow-500/50 font-semibold">Sıralama</th>
+                          <th className="p-2 font-semibold">Ödül</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">1.</td><td className="p-1.5">3.000 EUR</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">2.</td><td className="p-1.5">1.000 EUR</td></tr>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">3.</td><td className="p-1.5">500 EUR</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {tournament.title.includes('Hacksaw') && (
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-1">Turnuva: Hacksaw Turnuvası</h4>
+                    <p>Seçili <strong className="text-yellow-400">Hacksaw Gaming</strong> oyunlarında bahis yap, puan topla ve liderlik tablosunda zirveye yüksel!</p>
+                    <p className="mt-2">Her <strong className="text-yellow-400">0.17 USD</strong> bahis için <strong className="text-yellow-400">+1 Puan</strong> kazanırsın.</p>
+                    <p className="mt-1">Ayrıca elde ettiğin her <strong className="text-yellow-400">100 USD</strong> kazanç için <strong className="text-yellow-400">+5 Ekstra Puan</strong> kazanırsın.</p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-yellow-400 font-bold mb-2">Puanlama Sistemi</h4>
+                    <table className="w-full text-center border-collapse border border-yellow-500/50 mb-4 text-xs md:text-sm">
+                      <thead>
+                        <tr className="border-b border-yellow-500/50 text-yellow-400">
+                          <th className="p-2 border-r border-yellow-500/50 font-semibold">İşlem</th>
+                          <th className="p-2 font-semibold">Kazanılan Puan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-yellow-500/50"><td className="p-1.5 border-r border-yellow-500/50">Her 0.17 USD Bahis</td><td className="p-1.5">+1 Puan</td></tr>
+                        <tr><td className="p-1.5 border-r border-yellow-500/50">Her 100 USD Kazanç</td><td className="p-1.5">+5 Ekstra Puan</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
             </div>
+          )}
+        </div>
 
-            {/* Previous Rounds */}
-            <div className="bg-[#0B0F19]/80 backdrop-blur-md border border-white/5 p-6 rounded-2xl">
-               <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                 <CalendarIcon className="w-5 h-5 text-zinc-400" />
-                 Önceki Turlar
-               </h3>
-               <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto pr-2 scrollbar-hide">
-                 {mockDates.map((date, idx) => (
-                   <button 
-                     key={idx}
-                     className="px-3 py-1.5 bg-[#131B2B] hover:bg-blue-500/20 hover:text-blue-400 hover:border-blue-500/30 border border-white/5 rounded-lg text-xs font-semibold text-zinc-400 transition-all"
-                   >
-                     {date}
-                   </button>
-                 ))}
-               </div>
-            </div>
+        {/* Leaderboard */}
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[15px] font-semibold text-white">Liderler Tablosu</h2>
           </div>
-
-          {/* Tournament Games Gallery */}
-          <div>
-            <h2 className="text-xl font-bold text-white mb-4">Turnuva Oyunları</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {displayGames.map(game => (
-                <div key={game.id} className="bg-[#0B0F19] rounded-2xl overflow-hidden group cursor-pointer border border-white/5 hover:border-blue-500/50 hover:shadow-[0_10px_30px_-10px_rgba(59,130,246,0.4)] transition-all duration-300">
-                  <div className="aspect-[4/3] relative overflow-hidden">
-                    <img src={game.image} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-transparent opacity-80" />
-                    
-                    {/* Play Button Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-sm">
-                       <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center shadow-[0_0_20px_#3b82f6]">
-                          <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-1" />
-                       </div>
+          
+          <div className="bg-[#1b263b] rounded-xl border border-white/5 overflow-hidden">
+            <div className="flex flex-col">
+              {mockLeaderboard.map((user, idx) => (
+                <div 
+                  key={idx} 
+                  className={`flex items-center justify-between px-5 py-3.5 ${idx !== mockLeaderboard.length - 1 ? 'border-b border-white/5' : ''} hover:bg-white/[0.02] transition-colors`}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-6 text-center font-semibold text-sm text-zinc-400">
+                      {user.rank}
+                    </div>
+                    <div>
+                      <div className="text-[13px] font-semibold text-zinc-200">{user.name}</div>
+                      <div className="text-[11px] text-zinc-500 mt-0.5">{user.status}</div>
                     </div>
                   </div>
-                  <div className="p-4 relative z-10 bg-[#0B0F19]">
-                    <div className="text-[10px] font-bold text-zinc-500 mb-1 uppercase tracking-wider">{game.provider}</div>
-                    <div className="text-sm font-bold text-white truncate group-hover:text-blue-400 transition-colors">{game.name}</div>
+                  
+                  <div className="text-right">
+                    <div className="text-sm font-semibold text-white">{user.points}</div>
+                    {user.prize && <div className="text-[11px] font-semibold text-zinc-400 mt-0.5">{user.prize}</div>}
                   </div>
                 </div>
               ))}
             </div>
           </div>
-
         </div>
+
+        {/* Tournament Games Grid */}
+        <div className="mt-8 pt-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[15px] font-semibold text-white">Turnuva oyunları</h2>
+            <div className="flex items-center gap-1">
+               <button className="p-1.5 bg-[#1b263b] rounded text-zinc-400 hover:text-white border border-white/5"><ChevronDown className="w-4 h-4 rotate-90" /></button>
+               <button className="p-1.5 bg-[#1b263b] rounded text-zinc-400 hover:text-white border border-white/5"><ChevronDown className="w-4 h-4 -rotate-90" /></button>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+            {displayGames.map(game => (
+              <div key={game.id} className="bg-transparent rounded-lg overflow-hidden group cursor-pointer relative">
+                <div className="aspect-[3/4] relative overflow-hidden rounded-lg">
+                  <img src={game.image} alt={game.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center pl-0.5">
+                      <div className="w-0 h-0 border-t-[4px] border-t-transparent border-l-[6px] border-l-white border-b-[4px] border-b-transparent" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-1 right-1 w-4 h-4 bg-red-600 rounded flex items-center justify-center">
+                    <span className="text-[8px] font-black text-white">H</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Previous Rounds */}
+        <div className="mt-8 pt-4">
+          <h3 className="text-sm font-semibold text-white mb-3">Önceki turlar</h3>
+          <div className="flex flex-wrap gap-2">
+            {mockDates.slice(0,3).map((date, idx) => (
+              <button 
+                key={idx}
+                className="px-3 py-1.5 bg-[#1b263b] hover:bg-white/5 border border-white/5 rounded text-[11px] font-semibold text-zinc-400 transition-all"
+              >
+                {date}
+              </button>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );
 }
+
 
 // Needed icons for Tournament Games section
 function ChevronLeft(props: any) {
