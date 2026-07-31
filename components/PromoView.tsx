@@ -125,19 +125,18 @@ export default function PromoView() {
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Top Header */}
-        <div className="mb-10">
-          <div className="flex items-center gap-4 mb-3">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-b from-[#FCD34D] to-[#F59E0B] flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.25)] relative overflow-hidden">
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-11 h-11 rounded-[0.85rem] bg-gradient-to-b from-[#FCD34D] to-[#F59E0B] flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.25)] relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none" />
-              <Trophy className="w-7 h-7 text-black relative z-10" strokeWidth={2.5} />
+              <Trophy className="w-5 h-5 text-black relative z-10" strokeWidth={2.5} />
             </div>
-            <h1 className="text-[2.75rem] font-black text-white tracking-tight leading-none drop-shadow-sm">
+            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-none drop-shadow-sm">
               Turnuvalar
             </h1>
           </div>
-          <p className="text-[#8b929b] text-[15px] font-medium max-w-2xl leading-relaxed">
-            Büyük ödül havuzlu premium turnuvalara katıl, skor tablosunda zirveye oyna<br className="hidden md:block" />
-            ve efsanevi ödülleri kazan!
+          <p className="text-[#8b929b] text-sm md:text-[15px] font-medium max-w-4xl leading-relaxed">
+            Büyük ödül havuzlu premium turnuvalara katıl, skor tablosunda zirveye oyna ve efsanevi ödülleri kazan!
           </p>
         </div>
 
@@ -162,24 +161,24 @@ export default function PromoView() {
 
                  {/* Status Badge */}
                  {tournament.status === 'active' && (
-                   <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-[#0B0F19]/80 backdrop-blur-md text-emerald-400 text-[10px] font-bold rounded-lg border border-emerald-500/20 shadow-sm flex items-center gap-1.5 uppercase tracking-wider">
+                   <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-black/70 backdrop-blur-md text-emerald-400 text-[10px] font-bold rounded-lg border border-emerald-500/30 shadow-[0_4px_10px_rgba(0,0,0,0.5)] flex items-center gap-1.5 uppercase tracking-wider">
                      <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_5px_#34d399]" />
                      Aktif
                    </div>
                  )}
                  {tournament.status === 'upcoming' && (
-                   <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-[#0B0F19]/80 backdrop-blur-md text-amber-400 text-[10px] font-bold rounded-lg border border-amber-500/20 flex items-center gap-1.5 uppercase tracking-wider">
+                   <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-black/70 backdrop-blur-md text-amber-400 text-[10px] font-bold rounded-lg border border-amber-500/30 shadow-[0_4px_10px_rgba(0,0,0,0.5)] flex items-center gap-1.5 uppercase tracking-wider">
                      Yakında
                    </div>
                  )}
               </div>
 
               {/* Content Body - Clean white space, refined typography */}
-              <div className="flex flex-col flex-1 p-5 relative z-10 bg-gradient-to-b from-[#0F1423] to-[#0B0F19]">
-                <h3 className="text-gray-100 font-semibold text-lg leading-tight mb-1.5 line-clamp-1 group-hover:text-blue-400 transition-colors duration-300">
+              <div className="flex flex-col flex-1 p-6 relative z-10 bg-gradient-to-b from-[#0F1423] to-[#0B0F19]">
+                <h3 className="text-gray-100 font-bold text-[1.05rem] leading-snug mb-2 line-clamp-3 group-hover:text-blue-400 transition-colors duration-300">
                   {tournament.title}
                 </h3>
-                <p className="text-zinc-400 text-sm mb-5 line-clamp-2 leading-relaxed">{tournament.desc}</p>
+                <p className="text-zinc-400 text-sm mb-6 line-clamp-3 leading-relaxed">{tournament.desc}</p>
                 
                 <div className="mt-auto">
                   {/* Prize Section - Giant glowing text */}
