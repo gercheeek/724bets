@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Timer, Users, Swords, Calendar } from 'lucide-react';
+import { Timer, Users, Swords, Calendar } from 'lucide-react';
 import TournamentDetailView from './TournamentDetailView';
+
+const CustomTrophy = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M6 4h12M6 4v7a6 6 0 0 0 12 0V4M6 4H3v3a3 3 0 0 0 3 3h0" />
+    <path d="M18 4h3v3a3 3 0 0 1-3 3h0M12 17v4M8 21h8" />
+  </svg>
+);
 
 interface Tournament {
   id: string;
@@ -348,11 +355,11 @@ const HeroSlider = () => {
             
             {/* Text Content */}
             <div className="absolute inset-0 flex flex-col justify-center px-5 sm:px-8 md:px-16 max-w-full md:max-w-3xl">
-               <div className="flex items-center gap-3 mb-4 md:mb-5 transform translate-y-0 transition-transform duration-700">
-                 <div className="p-1.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
-                   <Trophy className={`w-4 h-4 md:w-5 md:h-5 ${slide.themeColor}`} />
+               <div className="flex items-center gap-4 mb-4 md:mb-5 transform translate-y-0 transition-transform duration-700">
+                 <div className="p-2 md:p-2.5 rounded-[12px] bg-[#0c0c0c] border border-white/5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] flex items-center justify-center">
+                   <CustomTrophy className={`w-4 h-4 md:w-5 md:h-5 ${slide.themeColor} drop-shadow-[0_0_8px_currentColor] opacity-90`} />
                  </div>
-                 <span className={`${slide.themeColor} text-[10px] md:text-xs font-black tracking-[0.25em] uppercase drop-shadow-lg`}>
+                 <span className={`${slide.themeColor} text-[11px] md:text-[13px] font-extrabold tracking-[0.2em] uppercase drop-shadow-[0_0_8px_currentColor] opacity-90`}>
                    {slide.titleHighlight}
                  </span>
                </div>
@@ -364,8 +371,8 @@ const HeroSlider = () => {
                </h1>
                
                <div className="flex items-center gap-3 mb-4 md:mb-6">
-                 <div className={`px-3 py-1 md:px-4 md:py-1.5 rounded-md bg-black/40 backdrop-blur-md border-l-2 ${slide.themeColor.replace('text-', 'border-')} shadow-lg`}>
-                   <span className={`${slide.themeColor} font-bold text-[10px] md:text-xs tracking-widest uppercase`}>
+                 <div className={`px-4 py-2.5 md:px-5 md:py-3 bg-[#080808] border-l-[3px] rounded-bl-[14px] rounded-tr-sm rounded-br-sm ${slide.themeColor.replace('text-', 'border-')} shadow-lg relative`}>
+                   <span className={`${slide.themeColor} font-black text-[11px] md:text-sm tracking-widest uppercase drop-shadow-[0_0_5px_currentColor]`}>
                      {slide.subHeading}
                    </span>
                  </div>
