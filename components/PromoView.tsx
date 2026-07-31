@@ -333,30 +333,45 @@ const HeroSlider = () => {
   }, []);
 
   return (
-    <div className="relative w-full rounded-2xl md:rounded-[30px] overflow-hidden mb-10 h-[300px] md:h-[400px] border border-white/[0.05] shadow-2xl group">
+    <div className="relative w-full rounded-2xl md:rounded-[24px] overflow-hidden mb-8 md:mb-10 min-h-[320px] md:h-[420px] lg:h-[460px] border border-white/[0.08] shadow-[0_0_40px_rgba(0,0,0,0.5)] group">
        {/* Background Images */}
        {SLIDER_DATA.map((slide, idx) => (
-         <div key={slide.id} className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${currentSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
-            <img src={slide.image} alt={slide.titleHighlight} className="absolute inset-0 w-full h-full object-cover opacity-40 md:opacity-50 transform scale-105 transition-transform duration-[10000ms] ease-linear" style={{ transform: currentSlide === idx ? 'scale(1)' : 'scale(1.1)' }} />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#06080D] via-[#06080D]/80 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#06080D] via-transparent to-transparent" />
-            <div className="absolute inset-0 bg-[#06080D]/30" />
+         <div key={slide.id} className={`absolute inset-0 transition-all duration-1000 ease-in-out ${currentSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
+            <img src={slide.image} alt={slide.titleHighlight} className="absolute inset-0 w-full h-full object-cover md:object-right opacity-50 md:opacity-60 transform scale-105 transition-transform duration-[10000ms] ease-linear" style={{ transform: currentSlide === idx ? 'scale(1)' : 'scale(1.15)' }} />
+            
+            {/* Gradients for readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#06080D] via-[#06080D]/90 md:via-[#06080D]/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#06080D] via-transparent to-transparent md:opacity-50" />
+            
+            {/* Subtle glow based on theme */}
+            <div className={`absolute top-0 left-0 w-full h-full opacity-20 mix-blend-screen bg-gradient-to-br from-transparent to-black pointer-events-none`} />
             
             {/* Text Content */}
-            <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 max-w-4xl">
-               <div className="flex items-center gap-2 mb-3 opacity-90 transform translate-y-0 transition-transform duration-700">
-                 <Trophy className={`w-3.5 h-3.5 md:w-4 md:h-4 ${slide.themeColor}`} />
-                 <span className={`${slide.themeColor} text-[10px] md:text-[11px] font-bold tracking-[0.25em] uppercase`}>
+            <div className="absolute inset-0 flex flex-col justify-center px-5 sm:px-8 md:px-16 max-w-full md:max-w-3xl">
+               <div className="flex items-center gap-3 mb-4 md:mb-5 transform translate-y-0 transition-transform duration-700">
+                 <div className="p-1.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
+                   <Trophy className={`w-4 h-4 md:w-5 md:h-5 ${slide.themeColor}`} />
+                 </div>
+                 <span className={`${slide.themeColor} text-[10px] md:text-xs font-black tracking-[0.25em] uppercase drop-shadow-lg`}>
                    {slide.titleHighlight}
                  </span>
                </div>
                
-               <h1 className="text-[22px] md:text-[38px] lg:text-[44px] font-extrabold leading-[1.1] tracking-tight text-white mb-4">
-                 {slide.heading1} <span className={slide.highlightColor}>{slide.headingHighlight}</span> {slide.heading2} <br/>
-                 <span className={slide.themeColor}>{slide.subHeading}</span>
+               <h1 className="text-[26px] sm:text-3xl md:text-5xl lg:text-[52px] font-black leading-[1.1] md:leading-[1.15] tracking-tight text-white mb-3 md:mb-5 drop-shadow-2xl">
+                 {slide.heading1} 
+                 <span className={`inline-block ${slide.highlightColor} drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] mx-1`}>{slide.headingHighlight}</span> 
+                 {slide.heading2}
                </h1>
                
-               <p className="text-zinc-300 text-xs md:text-[15px] font-medium leading-relaxed max-w-[550px] opacity-90">
+               <div className="flex items-center gap-3 mb-4 md:mb-6">
+                 <div className={`px-3 py-1 md:px-4 md:py-1.5 rounded-md bg-black/40 backdrop-blur-md border-l-2 ${slide.themeColor.replace('text-', 'border-')} shadow-lg`}>
+                   <span className={`${slide.themeColor} font-bold text-[10px] md:text-xs tracking-widest uppercase`}>
+                     {slide.subHeading}
+                   </span>
+                 </div>
+               </div>
+               
+               <p className="text-zinc-300 text-xs sm:text-sm md:text-base font-medium leading-relaxed max-w-[90%] sm:max-w-[80%] md:max-w-[550px] drop-shadow-lg">
                  {slide.desc}
                </p>
             </div>
@@ -364,12 +379,13 @@ const HeroSlider = () => {
        ))}
 
        {/* Slider Controls / Dots */}
-       <div className="absolute bottom-5 md:bottom-8 left-6 md:left-16 flex gap-2 z-20">
+       <div className="absolute bottom-4 md:bottom-8 left-5 sm:left-8 md:left-16 flex gap-2 z-20">
          {SLIDER_DATA.map((_, idx) => (
            <button 
              key={idx}
              onClick={() => setCurrentSlide(idx)}
-             className={`h-1 md:h-1.5 rounded-full transition-all duration-500 ${currentSlide === idx ? 'w-8 md:w-10 bg-white' : 'w-2 md:w-3 bg-white/30 hover:bg-white/50'}`}
+             className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(255,255,255,0.2)] ${currentSlide === idx ? 'w-10 md:w-12 bg-white' : 'w-2.5 md:w-3 bg-white/30 hover:bg-white/60'}`}
+             aria-label={`Go to slide ${idx + 1}`}
            />
          ))}
        </div>
