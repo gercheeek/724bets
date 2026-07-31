@@ -139,24 +139,28 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
   return (
     <div 
       onClick={onClick}
-      className={`flex flex-col bg-[#0B0F19] rounded-2xl relative overflow-hidden group shadow-lg border border-white/5 hover:border-blue-500/30 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.3)] transition-all duration-500 cursor-pointer ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0' : ''}`}
+      className={`flex flex-col bg-[#0c0c0c] rounded-[20px] relative overflow-hidden group shadow-2xl ring-1 ring-white/5 hover:ring-white/10 hover:-translate-y-1 hover:shadow-[0_30px_50px_-15px_rgba(0,0,0,1)] transition-all duration-500 cursor-pointer ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0' : ''}`}
     >
+      {/* Inner highlight for premium feel */}
+      <div className="absolute inset-0 rounded-[20px] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] pointer-events-none z-20" />
+
       {/* Image Header */}
-      <div className="w-full h-40 relative overflow-hidden shrink-0">
+      <div className="w-full h-[180px] relative overflow-hidden shrink-0">
         <img 
           src={tournament.image} 
           alt={tournament.title} 
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out"
         />
-        <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none" />
+        {/* Smooth gradient fade into the card body */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0c0c0c] to-transparent pointer-events-none" />
       </div>
 
       {/* Content Body */}
-      <div className="flex flex-col flex-1 p-6 relative z-10 bg-gradient-to-b from-[#0F1423] to-[#0B0F19]">
-        <h3 className="text-gray-100 font-bold text-[1.1rem] leading-snug mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors duration-300">
+      <div className="flex flex-col flex-1 px-5 pb-5 pt-1 relative z-10 bg-[#0c0c0c]">
+        <h3 className="text-gray-100 font-semibold text-[1.1rem] leading-snug mb-2 line-clamp-2 group-hover:text-white transition-colors duration-300">
           {tournament.title}
         </h3>
-        <p className="text-zinc-400 text-[13px] mb-5 line-clamp-2 leading-relaxed">{tournament.desc}</p>
+        <p className="text-zinc-500 text-[13px] mb-5 line-clamp-2 leading-relaxed">{tournament.desc}</p>
         
         {/* Prize Section */}
         <div className="mb-6">
