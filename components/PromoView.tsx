@@ -168,25 +168,25 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
         
         {/* Unified Status & Time Pills */}
         {tournament.status !== 'ended' && (
-          <div className="mt-auto mb-5 flex items-center justify-start gap-2 w-full">
+          <div className="mt-auto mb-5 flex items-center justify-start gap-2.5 w-full">
             {tournament.status === 'active' ? (
               <>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0d1c1a] rounded-full shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse shadow-[0_0_8px_2px_rgba(16,185,129,0.6)]" />
-                  <span className="text-[11px] font-bold text-[#10b981] tracking-wide">ŞU AN AKTİF</span>
+                <div className="flex items-center gap-2.5 px-3.5 py-[6px] bg-[#0B1A14] rounded-full shrink-0">
+                  <span className="w-[7px] h-[7px] rounded-full bg-[#00C875] animate-pulse shadow-[0_0_12px_4px_rgba(0,200,117,0.35)]" />
+                  <span className="text-[11.5px] font-semibold text-[#00C875] tracking-wide">ŞU AN AKTİF</span>
                 </div>
-                <div className="px-3 py-1.5 rounded-full flex items-center whitespace-nowrap shrink-0 bg-[#0d1c1a] text-[#10b981]">
-                  <span className="font-mono text-[11px] font-bold tracking-wide">Süre: {tournament.timeInfo}</span>
+                <div className="px-3.5 py-[6px] rounded-full flex items-center whitespace-nowrap shrink-0 bg-[#0B1A14] text-[#00C875]">
+                  <span className="text-[11.5px] font-semibold tracking-wide">Süre: {tournament.timeInfo}</span>
                 </div>
               </>
             ) : (
               <>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#241611] rounded-full shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] shadow-[0_0_8px_2px_rgba(245,158,11,0.6)]" />
-                  <span className="text-[11px] font-bold text-[#f59e0b] tracking-wide">BAŞLIYOR</span>
+                <div className="flex items-center gap-2.5 px-3.5 py-[6px] bg-[#1F130B] rounded-full shrink-0">
+                  <span className="w-[7px] h-[7px] rounded-full bg-[#FF9F1C] shadow-[0_0_12px_4px_rgba(255,159,28,0.35)]" />
+                  <span className="text-[11.5px] font-semibold text-[#FF9F1C] tracking-wide">BAŞLIYOR</span>
                 </div>
-                <div className="px-3 py-1.5 rounded-full flex items-center whitespace-nowrap shrink-0 bg-[#241611] text-[#f59e0b]">
-                  <span className="font-mono text-[11px] font-bold tracking-wide">Süre: {tournament.timeInfo}</span>
+                <div className="px-3.5 py-[6px] rounded-full flex items-center whitespace-nowrap shrink-0 bg-[#1F130B] text-[#FF9F1C]">
+                  <span className="text-[11.5px] font-semibold tracking-wide">Süre: {tournament.timeInfo}</span>
                 </div>
               </>
             )}
