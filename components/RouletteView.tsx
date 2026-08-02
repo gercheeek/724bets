@@ -70,6 +70,8 @@ const generateReel = (): BrickData[] => {
 
 const INITIAL_HISTORY: BetColor[] = ['black', 'red', 'black', 'black', 'black', 'red', 'red', 'black', 'red', 'black'];
 
+type ActionType = 'Return to Base' | 'Double';
+
 export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const { playInstantGame, isFunMode, demoBalance, setDemoBalance } = useUser();
     const [betAmount, setBetAmount] = useState<number>(1);
@@ -79,6 +81,32 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     // Auto Bet UI State
     const [isAutoBetOpen, setIsAutoBetOpen] = useState(false);
     
+    // --- AUTO BET LOGIC STATES ---
+    const [autoBetIsActive, setAutoBetIsActive] = useState(false);
+    const [autoBetBaseAmount, setAutoBetBaseAmount] = useState<number>(1);
+    const [autoBetCurrentAmount, setAutoBetCurrentAmount] = useState<number>(1);
+    const [autoBetRed, setAutoBetRed] = useState(false);
+    const [autoBetGreen, setAutoBetGreen] = useState(false);
+    const [autoBetBlack, setAutoBetBlack] = useState(false);
+    const [autoBetOnWin, setAutoBetOnWin] = useState<ActionType>('Return to Base');
+    const [autoBetOnLoss, setAutoBetOnLoss] = useState<ActionType>('Return to Base');
+    const [autoBetStopBelow, setAutoBetStopBelow] = useState<string>('');
+    const [autoBetStopAbove, setAutoBetStopAbove] = useState<string>('');
+    
+    // ADVANCED AUTO BET STATES
+    const [advIsActive, setAdvIsActive] = useState(false);
+    const [advOnlyColorBet, setAdvOnlyColorBet] = useState(true);
+    const [advColorNotCome, setAdvColorNotCome] = useState<BetColor>('red');
+    const [advConsecutiveGames, setAdvConsecutiveGames] = useState<number>(3);
+    
+    // GREEN HUNT STATES
+    const [greenHuntIsActive, setGreenHuntIsActive] = useState(false);
+    const [greenHuntAmount, setGreenHuntAmount] = useState<number>(10); // 10%
+    const [greenHuntType, setGreenHuntType] = useState<'Percentage'>('Percentage');
+    
+    // Dropdown toggles
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
     // Global Loop State
     const [gameState, setGameState] = useState<GameState>('betting');
     const [timeLeft, setTimeLeft] = useState<number>(15000);
@@ -141,28 +169,111 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
         }
     }, [gameState]);
 
-    const handleAddBet = (type: BetColor) => {
+    // -- AUTO BET EXECUTION --
+    useEffect(() => {
+        if (gameState !== 'betting') return;
+        
+        const executeAutoBets = () => {
+            const currentBalance = isFunMode ? demoBalance : (siteUser?.balance || 0);
+            const betsToPlace: { type: BetColor, amount: number }[] = [];
+            let stopAutoBet = false;
+            let stopReason = '';
+
+            // Section 1: Regular Auto Bet
+            if (autoBetIsActive) {
+                if (autoBetStopBelow !== '' && currentBalance < Number(autoBetStopBelow)) {
+                    stopAutoBet = true;
+                    stopReason = `Bakiye limitin altına düştü ($${autoBetStopBelow})`;
+                }
+                if (autoBetStopAbove !== '' && currentBalance > Number(autoBetStopAbove)) {
+                    stopAutoBet = true;
+                    stopReason = `Bakiye limitin üstüne çıktı ($${autoBetStopAbove})`;
+                }
+
+                if (stopAutoBet) {
+                    setAutoBetIsActive(false);
+                    // Minimalist non-blocking alert
+                    console.log(`Auto Bet Stopped: ${stopReason}`);
+                } else {
+                    if (autoBetRed) betsToPlace.push({ type: 'red', amount: autoBetCurrentAmount });
+                    if (autoBetGreen) betsToPlace.push({ type: 'green', amount: autoBetCurrentAmount });
+                    if (autoBetBlack) betsToPlace.push({ type: 'black', amount: autoBetCurrentAmount });
+                }
+            }
+
+            // Section 2: Advanced Auto Bet
+            if (advIsActive) {
+                let notCameCount = 0;
+                for (let i = history.length - 1; i >= 0; i--) {
+                    if (history[i] === advColorNotCome) break;
+                    notCameCount++;
+                }
+                
+                if (notCameCount >= advConsecutiveGames) {
+                    betsToPlace.push({ type: advColorNotCome, amount: autoBetBaseAmount });
+                }
+            }
+
+            // Merge and apply
+            const finalBets: Record<BetColor, number> = { red: 0, green: 0, black: 0 };
+            betsToPlace.forEach(b => finalBets[b.type] += b.amount);
+            
+            Object.keys(finalBets).forEach(color => {
+                const amount = finalBets[color as BetColor];
+                if (amount > 0) {
+                    handleAddBet(color as BetColor, amount, true);
+                }
+            });
+        };
+        
+        // Execute slightly after phase start to let UI settle
+        const timer = setTimeout(() => executeAutoBets(), 500);
+        return () => clearTimeout(timer);
+    }, [gameState]);
+
+
+    const handleAddBet = (type: BetColor, amountOverride?: number, isAuto: boolean = false) => {
         if (gameState !== 'betting') return alert('Bahis süresi doldu!');
         if (!isFunMode && !siteUser) {
             onAuthRequired();
             return;
         }
-        if (betAmount <= 0) return alert('Geçerli bir bahis tutarı girin.');
         
-        if (totalBetAmount + betAmount > MAX_BET) {
-            return alert(`Bir turda maksimum bahis tutarı $${MAX_BET} olabilir.`);
+        const amountToAdd = amountOverride || betAmount;
+        if (amountToAdd <= 0) return alert('Geçerli bir bahis tutarı girin.');
+        
+        if (totalBetAmount + amountToAdd > MAX_BET) {
+            if (!isAuto) alert(`Bir turda maksimum bahis tutarı $${MAX_BET} olabilir.`);
+            return;
         }
 
-        if (isFunMode && (totalBetAmount + betAmount) > demoBalance) return alert('Yetersiz demo bakiye.');
+        if (isFunMode && (totalBetAmount + amountToAdd) > demoBalance) {
+            if (!isAuto) alert('Yetersiz demo bakiye.');
+            return;
+        }
+        
+        // Green Hunt calculation
+        let greenHuntAddition = 0;
+        if (greenHuntIsActive && (type === 'red' || type === 'black')) {
+            greenHuntAddition = amountToAdd * (greenHuntAmount / 100);
+        }
         
         setPlacedBets(prev => {
-            const existingIndex = prev.findIndex(b => b.type === type);
-            if (existingIndex >= 0) {
-                const newBets = [...prev];
-                newBets[existingIndex].amount += betAmount;
-                return newBets;
+            const newBets = [...prev];
+            
+            // Add primary
+            const existingIndex = newBets.findIndex(b => b.type === type);
+            if (existingIndex >= 0) newBets[existingIndex].amount += amountToAdd;
+            else newBets.push({ type, amount: amountToAdd });
+            
+            // Add Green Hunt
+            if (greenHuntAddition > 0 && type !== 'green') {
+                const gIndex = newBets.findIndex(b => b.type === 'green');
+                if (gIndex >= 0) newBets[gIndex].amount += greenHuntAddition;
+                else newBets.push({ type: 'green', amount: greenHuntAddition });
             }
-            return [...prev, { type, amount: betAmount }];
+            
+            return newBets;
         });
     };
 
@@ -264,6 +375,22 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     setWinAmount(totalPayout);
                     if (isFunMode && totalPayout > 0) {
                         setDemoBalance(prev => prev + totalPayout);
+                    }
+                }
+                
+                // MULTIPLIER LOGIC FOR AUTO BETS
+                if (autoBetIsActive) {
+                    const hitRed = autoBetRed && winResult === 'red';
+                    const hitGreen = autoBetGreen && winResult === 'green';
+                    const hitBlack = autoBetBlack && winResult === 'black';
+                    const didWin = hitRed || hitGreen || hitBlack;
+                    
+                    if (didWin) {
+                        if (autoBetOnWin === 'Double') setAutoBetCurrentAmount(prev => Math.min(prev * 2, MAX_BET));
+                        else setAutoBetCurrentAmount(autoBetBaseAmount);
+                    } else {
+                        if (autoBetOnLoss === 'Double') setAutoBetCurrentAmount(prev => Math.min(prev * 2, MAX_BET));
+                        else setAutoBetCurrentAmount(autoBetBaseAmount);
                     }
                 }
 
@@ -423,72 +550,105 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     <div className="w-full flex flex-col md:flex-row gap-6 mb-8 animate-pop-in">
                         
                         {/* Section 1: Otomatik Rulet Bahsi */}
-                        <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col">
+                        <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col relative z-20">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="font-bold text-sm text-white">Otomatik Rulet Bahsi</h3>
-                                <span className="text-[10px] font-black text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md">AKTİF DEĞİL</span>
+                                <div className="flex items-center gap-4">
+                                    <span className={`text-[10px] font-black px-2 py-1 rounded-md ${autoBetIsActive ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-500 bg-amber-500/10'}`}>
+                                        {autoBetIsActive ? 'AKTİF' : 'AKTİF DEĞİL'}
+                                    </span>
+                                    <div 
+                                        className={`w-8 h-4.5 rounded-full relative cursor-pointer ${autoBetIsActive ? 'bg-emerald-500' : 'bg-gray-600'}`}
+                                        onClick={() => { setAutoBetIsActive(!autoBetIsActive); setAutoBetCurrentAmount(autoBetBaseAmount); }}
+                                    >
+                                        <div className={`absolute top-0.5 w-3.5 h-3.5 bg-white rounded-full shadow transition-all ${autoBetIsActive ? 'right-0.5' : 'left-0.5'}`}></div>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div className="flex gap-2 mb-4">
                                 <div className="flex-1 flex bg-[#0f1215] rounded-lg border border-white/10 overflow-hidden">
                                     <div className="px-3 flex items-center justify-center bg-white/5"><img src={ASSETS.tanzanite} alt="$" className="h-3" /></div>
-                                    <input type="text" value="1.00" readOnly className="flex-1 bg-transparent text-white font-bold text-sm py-2 px-2 outline-none" />
+                                    <input 
+                                        type="number" 
+                                        value={autoBetBaseAmount} 
+                                        onChange={(e) => { setAutoBetBaseAmount(Number(e.target.value)); setAutoBetCurrentAmount(Number(e.target.value)); }}
+                                        className="flex-1 bg-transparent text-white font-bold text-sm py-2 px-2 outline-none" 
+                                    />
                                 </div>
-                                <button className="px-4 py-2 text-xs font-bold text-gray-400 hover:text-white bg-[#222730] rounded-lg border border-white/5">Temizle</button>
+                                <button className="px-4 py-2 text-xs font-bold text-gray-400 hover:text-white bg-[#222730] rounded-lg border border-white/5" onClick={() => setAutoBetBaseAmount(1)}>Temizle</button>
                             </div>
 
                             <div className="flex flex-wrap gap-3 mb-6">
-                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20">
+                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20" onClick={() => setAutoBetRed(!autoBetRed)}>
                                     <div className="w-3 h-3 rounded-sm bg-red-500"></div>
                                     <span className="text-xs font-medium text-gray-300">Kırmızı</span>
-                                    <div className="ml-2 w-7 h-4 bg-emerald-500 rounded-full relative">
-                                        <div className="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetRed ? 'bg-emerald-500' : 'bg-gray-600'}`}>
+                                        <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${autoBetRed ? 'right-0.5' : 'left-0.5'}`}></div>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20">
+                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20" onClick={() => setAutoBetGreen(!autoBetGreen)}>
                                     <div className="w-3 h-3 rounded-sm bg-green-500"></div>
                                     <span className="text-xs font-medium text-gray-300">Yeşil</span>
-                                    <div className="ml-2 w-7 h-4 bg-gray-600 rounded-full relative">
-                                        <div className="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetGreen ? 'bg-emerald-500' : 'bg-gray-600'}`}>
+                                        <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${autoBetGreen ? 'right-0.5' : 'left-0.5'}`}></div>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20">
+                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20" onClick={() => setAutoBetBlack(!autoBetBlack)}>
                                     <div className="w-3 h-3 rounded-sm bg-gray-500"></div>
                                     <span className="text-xs font-medium text-gray-300">Siyah</span>
-                                    <div className="ml-2 w-7 h-4 bg-emerald-500 rounded-full relative">
-                                        <div className="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetBlack ? 'bg-emerald-500' : 'bg-gray-600'}`}>
+                                        <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${autoBetBlack ? 'right-0.5' : 'left-0.5'}`}></div>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="space-y-4 flex-1">
-                                <div>
+                                <div className="relative">
                                     <label className="text-xs text-gray-500 font-bold mb-1 block">Kazanınca</label>
-                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
-                                        <span className="text-xs font-bold text-gray-300">Return to Base</span>
+                                    <div 
+                                        className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer"
+                                        onClick={() => setOpenDropdown(openDropdown === 'win' ? null : 'win')}
+                                    >
+                                        <span className="text-xs font-bold text-gray-300">{autoBetOnWin}</span>
                                         <ChevronDown size={14} className="text-gray-500" />
                                     </div>
+                                    {openDropdown === 'win' && (
+                                        <div className="absolute top-full left-0 w-full bg-[#0f1215] border border-white/10 rounded-lg mt-1 z-50 overflow-hidden shadow-xl">
+                                            <div className="px-3 py-2 text-xs font-bold text-gray-300 hover:bg-white/5 cursor-pointer" onClick={() => { setAutoBetOnWin('Return to Base'); setOpenDropdown(null); }}>Return to Base</div>
+                                            <div className="px-3 py-2 text-xs font-bold text-gray-300 hover:bg-white/5 cursor-pointer" onClick={() => { setAutoBetOnWin('Double'); setOpenDropdown(null); }}>Double</div>
+                                        </div>
+                                    )}
                                 </div>
-                                <div>
+                                <div className="relative">
                                     <label className="text-xs text-gray-500 font-bold mb-1 block">Kaybedince</label>
-                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
-                                        <span className="text-xs font-bold text-gray-300">Return to Base</span>
+                                    <div 
+                                        className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer"
+                                        onClick={() => setOpenDropdown(openDropdown === 'loss' ? null : 'loss')}
+                                    >
+                                        <span className="text-xs font-bold text-gray-300">{autoBetOnLoss}</span>
                                         <ChevronDown size={14} className="text-gray-500" />
                                     </div>
+                                    {openDropdown === 'loss' && (
+                                        <div className="absolute top-full left-0 w-full bg-[#0f1215] border border-white/10 rounded-lg mt-1 z-50 overflow-hidden shadow-xl">
+                                            <div className="px-3 py-2 text-xs font-bold text-gray-300 hover:bg-white/5 cursor-pointer" onClick={() => { setAutoBetOnLoss('Return to Base'); setOpenDropdown(null); }}>Return to Base</div>
+                                            <div className="px-3 py-2 text-xs font-bold text-gray-300 hover:bg-white/5 cursor-pointer" onClick={() => { setAutoBetOnLoss('Double'); setOpenDropdown(null); }}>Double</div>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="flex gap-4">
                                     <div className="flex-1">
                                         <label className="text-[10px] text-gray-500 font-bold mb-1 block">Bakiye altındaysa dur</label>
                                         <div className="flex bg-[#0f1215] rounded-lg border border-white/5 overflow-hidden">
                                             <div className="px-2 flex items-center justify-center bg-white/5"><img src={ASSETS.tanzanite} alt="$" className="h-3" /></div>
-                                            <input type="text" value="1.00" readOnly className="flex-1 bg-transparent text-white font-bold text-xs py-2 px-2 outline-none" />
+                                            <input type="number" value={autoBetStopBelow} onChange={(e) => setAutoBetStopBelow(e.target.value)} placeholder="0.00" className="flex-1 bg-transparent text-white font-bold text-xs py-2 px-2 outline-none" />
                                         </div>
                                     </div>
                                     <div className="flex-1">
                                         <label className="text-[10px] text-gray-500 font-bold mb-1 block">Bakiye üstündeyse dur</label>
                                         <div className="flex bg-[#0f1215] rounded-lg border border-white/5 overflow-hidden">
                                             <div className="px-2 flex items-center justify-center bg-white/5"><img src={ASSETS.tanzanite} alt="$" className="h-3" /></div>
-                                            <input type="text" value="1.00" readOnly className="flex-1 bg-transparent text-white font-bold text-xs py-2 px-2 outline-none" />
+                                            <input type="number" value={autoBetStopAbove} onChange={(e) => setAutoBetStopAbove(e.target.value)} placeholder="0.00" className="flex-1 bg-transparent text-white font-bold text-xs py-2 px-2 outline-none" />
                                         </div>
                                     </div>
                                 </div>
@@ -496,35 +656,48 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         </div>
 
                         {/* Section 2: İleri seviye */}
-                        <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col">
+                        <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col relative z-10">
                             <h3 className="font-bold text-sm text-white mb-6">İleri seviye</h3>
                             
                             <div className="flex justify-between items-center bg-[#0f1215] px-4 py-3 rounded-lg border border-white/5 mb-4">
                                 <span className="text-xs font-bold text-gray-300">Sadece Renk Bahsi</span>
-                                <div className="w-8 h-4.5 bg-emerald-500 rounded-full relative cursor-pointer">
-                                    <div className="absolute right-0.5 top-0.5 w-3.5 h-3.5 bg-white rounded-full shadow"></div>
+                                <div className={`w-8 h-4.5 rounded-full relative cursor-pointer ${advOnlyColorBet ? 'bg-emerald-500' : 'bg-gray-600'}`} onClick={() => setAdvOnlyColorBet(!advOnlyColorBet)}>
+                                    <div className={`absolute top-0.5 w-3.5 h-3.5 bg-white rounded-full shadow transition-all ${advOnlyColorBet ? 'right-0.5' : 'left-0.5'}`}></div>
                                 </div>
                             </div>
 
                             <div className="space-y-4 mb-6">
-                                <div>
+                                <div className="relative">
                                     <label className="text-[10px] text-gray-500 font-bold mb-1 block">Ne zaman</label>
-                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
-                                        <span className="text-xs font-bold text-gray-300">Gelmedi</span>
+                                    <div 
+                                        className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer"
+                                        onClick={() => setOpenDropdown(openDropdown === 'advColor' ? null : 'advColor')}
+                                    >
+                                        <span className="text-xs font-bold text-gray-300">{advColorNotCome === 'red' ? 'Kırmızı' : advColorNotCome === 'green' ? 'Yeşil' : 'Siyah'} Gelmedi</span>
                                         <ChevronDown size={14} className="text-gray-500" />
                                     </div>
+                                    {openDropdown === 'advColor' && (
+                                        <div className="absolute top-full left-0 w-full bg-[#0f1215] border border-white/10 rounded-lg mt-1 z-50 overflow-hidden shadow-xl">
+                                            <div className="px-3 py-2 text-xs font-bold text-gray-300 hover:bg-white/5 cursor-pointer" onClick={() => { setAdvColorNotCome('red'); setOpenDropdown(null); }}>Kırmızı Gelmedi</div>
+                                            <div className="px-3 py-2 text-xs font-bold text-gray-300 hover:bg-white/5 cursor-pointer" onClick={() => { setAdvColorNotCome('green'); setOpenDropdown(null); }}>Yeşil Gelmedi</div>
+                                            <div className="px-3 py-2 text-xs font-bold text-gray-300 hover:bg-white/5 cursor-pointer" onClick={() => { setAdvColorNotCome('black'); setOpenDropdown(null); }}>Siyah Gelmedi</div>
+                                        </div>
+                                    )}
                                 </div>
                                 <div>
                                     <label className="text-[10px] text-gray-500 font-bold mb-1 block">İçin</label>
-                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
-                                        <span className="text-xs font-bold text-gray-300">3</span>
+                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center">
+                                        <input type="number" value={advConsecutiveGames} onChange={e => setAdvConsecutiveGames(Number(e.target.value))} className="bg-transparent text-xs font-bold text-gray-300 outline-none w-16" />
                                         <span className="text-[10px] text-gray-500">Arka arkaya oyunlar</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <button className="bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg shadow-emerald-500/20">
-                                Otomatik Bahsi Başlat
+                            <button 
+                                className={`mt-auto font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg ${advIsActive ? 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/20' : 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-emerald-500/20'}`}
+                                onClick={() => setAdvIsActive(!advIsActive)}
+                            >
+                                {advIsActive ? 'Dur' : 'Otomatik Bahsi Başlat'}
                             </button>
                         </div>
 
@@ -532,31 +705,35 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="font-bold text-sm text-white">Green Hunt</h3>
-                                <span className="text-[10px] font-black text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md">AKTİF DEĞİL</span>
+                                <span className={`text-[10px] font-black px-2 py-1 rounded-md ${greenHuntIsActive ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-500 bg-amber-500/10'}`}>
+                                    {greenHuntIsActive ? 'AKTİF' : 'AKTİF DEĞİL'}
+                                </span>
                             </div>
 
                             <div className="space-y-4 mb-6">
                                 <div>
-                                    <label className="text-[10px] text-gray-500 font-bold mb-1 block">Otomatik Bahis</label>
-                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5">
-                                        <span className="text-xs font-bold text-gray-300">100.00</span>
+                                    <label className="text-[10px] text-gray-500 font-bold mb-1 block">Otomatik Bahis (%)</label>
+                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex">
+                                        <input type="number" value={greenHuntAmount} onChange={e => setGreenHuntAmount(Number(e.target.value))} className="bg-transparent text-xs font-bold text-gray-300 outline-none flex-1" />
                                     </div>
                                 </div>
-                                <div>
+                                <div className="relative">
                                     <label className="text-[10px] text-gray-500 font-bold mb-1 block">Ne zaman</label>
                                     <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
                                         <span className="text-xs font-bold text-gray-300">Bahsinizin yüzdesi</span>
-                                        <ChevronDown size={14} className="text-gray-500" />
                                     </div>
                                 </div>
                             </div>
                             
                             <p className="text-[11px] text-gray-500 font-medium mb-6 leading-relaxed">
-                                Kırmızı veya Siyah üzerine bahis oynadığınızda (Otomatik veya Manuel) Yeşil üzerine.
+                                Kırmızı veya Siyah üzerine bahis oynadığınızda (Otomatik veya Manuel) Yeşil üzerine belirtilen oranda bahis yapar.
                             </p>
 
-                            <button className="bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg shadow-emerald-500/20">
-                                Green Hunt'ı Başlat
+                            <button 
+                                className={`mt-auto font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg ${greenHuntIsActive ? 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/20' : 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-emerald-500/20'}`}
+                                onClick={() => setGreenHuntIsActive(!greenHuntIsActive)}
+                            >
+                                {greenHuntIsActive ? 'Dur' : "Green Hunt'ı Başlat"}
                             </button>
                         </div>
 
