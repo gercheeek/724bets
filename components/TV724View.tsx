@@ -644,7 +644,19 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
         setIsPlaying(true); 
     }, [activeChannel?.id]);
 
-    useEffect(() => { const h = () => setIsFullscreen(!!document.fullscreenElement); document.addEventListener('fullscreenchange', h); return () => document.removeEventListener('fullscreenchange', h); }, []);
+    useEffect(() => { 
+        const h = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+            // Intercept iframe double-click native fullscreen
+            if (document.fullscreenElement && document.fullscreenElement.tagName === 'IFRAME') {
+                document.exitFullscreen().then(() => {
+                    setIsTheaterMode(prev => !prev);
+                }).catch(() => {});
+            }
+        }; 
+        document.addEventListener('fullscreenchange', h); 
+        return () => document.removeEventListener('fullscreenchange', h); 
+    }, []);
 
     // HLS Initialization Effect
     useEffect(() => {
@@ -994,7 +1006,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 const embedUrl = (parsedId.startsWith('UC') || parsedId.startsWith('HC'))
                     ? `https://www.youtube.com/embed/live_stream?channel=${parsedId}&autoplay=1&mute=${ytMute}&playsinline=1&controls=0&showinfo=0&modestbranding=1&rel=0&disablekb=1&fs=0&iv_load_policy=3`
                     : `https://www.youtube.com/embed/${parsedId}?autoplay=1&mute=${ytMute}&playsinline=1&controls=0&showinfo=0&modestbranding=1&rel=0&disablekb=1&fs=0&iv_load_policy=3`;
-                return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={embedUrl} style={{ width: '100%', height: '100%', border: 'none' }} allow="autoplay; encrypted-media; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
+                return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={embedUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
             }
         }
         if (sourceType === 'video') return <div style={{ width: '100%', height: '100%', background: '#000', position: 'relative' }}>{watermarkOverlay}<video ref={videoRef} src={activeChannel.videoUrl || activeChannel.streamUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
@@ -1011,10 +1023,10 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     finalUrl = `${mbUrl.replace(/\/$/, '')}/channel?id=${idMatch[1]}`;
                 }
             }
-            return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={finalUrl} style={{ width: '100%', height: '100%', border: 'none' }} allow="autoplay; encrypted-media; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
+            return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={finalUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
         }
         if (activeChannel.fallbackType === 'video' && activeChannel.fallbackVideoUrl) return <div style={{ width: '100%', height: '100%', background: '#000', position: 'relative' }}>{watermarkOverlay}<video ref={videoRef} src={activeChannel.fallbackVideoUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
-        if (activeChannel.fallbackType === 'iframe' && activeChannel.fallbackIframeUrl) return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={activeChannel.fallbackIframeUrl} style={{ width: '100%', height: '100%', border: 'none' }} allow="autoplay; encrypted-media; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
+        if (activeChannel.fallbackType === 'iframe' && activeChannel.fallbackIframeUrl) return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={activeChannel.fallbackIframeUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
 
         return (
             <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#06b6d4', gap: '12px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
