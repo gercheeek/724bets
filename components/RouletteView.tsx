@@ -603,7 +603,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
                     {/* Result Display */}
                     {resultNumber !== null && !isPlaying && (
-                        <div className="absolute bottom-6 flex flex-col items-center animate-pop-in z-20">
+                        <div className="absolute bottom-6 left-6 flex flex-col items-start animate-pop-in z-40">
                             {winAmount !== null && winAmount > 0 ? (
                                 <div className="bg-emerald-500/20 backdrop-blur-md text-emerald-400 font-black pr-6 md:pr-8 py-2 md:py-3 rounded-2xl uppercase tracking-[0.1em] text-sm md:text-base animate-[pulse_2s_ease-in-out_infinite] border border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.3)] flex items-center gap-4">
                                     <div className={`w-14 h-14 md:w-16 md:h-16 ml-2 rounded-xl shadow-[0_10px_20px_rgba(0,0,0,0.5),inset_0_0_10px_rgba(0,0,0,0.5)] flex items-center justify-center text-2xl font-black text-white ${
@@ -627,7 +627,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             )}
                             
                             {resultDetails.length > 0 && (
-                                <div className="mt-3 bg-[#0A0D14]/95 border border-white/10 rounded-xl p-3 backdrop-blur-md shadow-xl flex flex-wrap gap-2 justify-center max-w-[90%] md:max-w-md">
+                                <div className="mt-3 bg-[#0A0D14]/95 border border-white/10 rounded-xl p-3 backdrop-blur-md shadow-xl flex flex-wrap gap-2 max-w-[250px]">
                                     {resultDetails.map((det, idx) => (
                                         <div key={idx} className={`text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-md ${det.won ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}`}>
                                             {det.label} {det.won ? '✅' : '❌'}
