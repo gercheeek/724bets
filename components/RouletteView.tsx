@@ -349,7 +349,8 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             const targetIndex = 90;
             const startIndex = 5;
             
-            const randomOffset = Math.floor(Math.random() * (itemWidth - 20)) - (itemWidth - 20)/2;
+            // Remove random offset so it stops perfectly in the center
+            const randomOffset = 0;
             const stopPosition = - (targetIndex * itemWidth) - (itemWidth / 2) + randomOffset;
             const startPosition = - (startIndex * itemWidth) - (itemWidth / 2);
             
