@@ -5,12 +5,13 @@ import { ShieldCheck, Target } from 'lucide-react';
 const ROULETTE_NUMBERS = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
 const RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
 
-type BetType = 'red' | 'black' | 'even' | 'odd' | 'low' | 'high';
+type BetType = 'red' | 'black' | 'even' | 'odd' | 'low' | 'high' | '1st12' | '2nd12' | '3rd12' | 'number';
 
 export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const { playInstantGame, isFunMode, demoBalance, setDemoBalance } = useUser();
     const [betAmount, setBetAmount] = useState<number>(0);
     const [selectedBet, setSelectedBet] = useState<BetType | null>(null);
+    const [selectedNumber, setSelectedNumber] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useState(false);
     
     const [spinRotation, setSpinRotation] = useState<number>(0);
@@ -64,12 +65,29 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             payout = betAmount * 2;
                         }
                     }
+                } else if (['1st12', '2nd12', '3rd12'].includes(selectedBet)) {
+                    if (winningNum !== 0) {
+                        const is1st = winningNum >= 1 && winningNum <= 12;
+                        const is2nd = winningNum >= 13 && winningNum <= 24;
+                        const is3rd = winningNum >= 25 && winningNum <= 36;
+                        if ((selectedBet === '1st12' && is1st) || (selectedBet === '2nd12' && is2nd) || (selectedBet === '3rd12' && is3rd)) {
+                            payout = betAmount * 3;
+                        }
+                    }
+                } else if (selectedBet === 'number') {
+                    if (winningNum === selectedNumber) {
+                        payout = betAmount * 36;
+                    }
                 }
             } else {
                 // --- REAL MONEY LOGIC ---
                 let betPayload = {};
                 if (['red', 'black'].includes(selectedBet)) {
                     betPayload = { type: 'color', value: selectedBet, amount: betAmount };
+                } else if (selectedBet === 'number') {
+                    betPayload = { type: 'number', value: selectedNumber, amount: betAmount };
+                } else if (['1st12', '2nd12', '3rd12'].includes(selectedBet)) {
+                    betPayload = { type: 'dozen', value: selectedBet, amount: betAmount };
                 } else {
                     betPayload = { type: 'outside', value: selectedBet, amount: betAmount };
                 }
@@ -184,6 +202,60 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         >
                             19-36
                         </button>
+                    </div>
+                    
+                    {/* Dozens */}
+                    <div className="grid grid-cols-3 gap-2 mt-2">
+                        <button 
+                            onClick={() => setSelectedBet('1st12')}
+                            disabled={isPlaying}
+                            className={`py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === '1st12' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                        >
+                            1. Düzine
+                        </button>
+                        <button 
+                            onClick={() => setSelectedBet('2nd12')}
+                            disabled={isPlaying}
+                            className={`py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === '2nd12' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                        >
+                            2. Düzine
+                        </button>
+                        <button 
+                            onClick={() => setSelectedBet('3rd12')}
+                            disabled={isPlaying}
+                            className={`py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === '3rd12' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                        >
+                            3. Düzine
+                        </button>
+                    </div>
+
+                    {/* Specific Number */}
+                    <div className="mt-4 p-3 bg-[#151D24] rounded-md border border-[#2A3744]">
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="text-xs text-gray-400 font-semibold cursor-pointer flex items-center gap-2" onClick={() => setSelectedBet('number')}>
+                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${selectedBet === 'number' ? 'border-[#3D82F6] bg-[#3D82F6]/20' : 'border-gray-600'}`}>
+                                    {selectedBet === 'number' && <div className="w-2 h-2 rounded-full bg-[#3D82F6]"></div>}
+                                </div>
+                                Belirli Sayı (Ödeme: 36x)
+                            </label>
+                        </div>
+                        <div className="flex items-center gap-2 opacity-100 transition-opacity">
+                            <input 
+                                type="range" 
+                                min="0" 
+                                max="36" 
+                                value={selectedNumber}
+                                onChange={(e) => {
+                                    setSelectedNumber(Number(e.target.value));
+                                    setSelectedBet('number');
+                                }}
+                                disabled={isPlaying}
+                                className="flex-1 accent-[#3D82F6]"
+                            />
+                            <div className="w-10 h-10 bg-[#0B0E14] rounded flex items-center justify-center font-black text-[#00E5FF] shadow-inner text-lg">
+                                {selectedNumber}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
