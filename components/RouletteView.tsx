@@ -741,29 +741,29 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 )}
 
                 {/* ── BETTING BUTTONS & LISTS ── */}
-                <div className="w-full flex flex-col md:flex-row gap-6 mb-12 items-stretch">
+                <div className="w-full flex flex-col md:flex-row gap-3 md:gap-4 mb-12 items-stretch">
                     
                     {/* RED SECTION */}
                     <div className="flex-1 flex flex-col">
                         <div 
-                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
+                            className={`relative w-full h-14 sm:h-16 mb-3 transition-all flex items-center justify-between px-4 sm:px-6 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnRed})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                             onClick={() => handleAddBet('red')}
                         >
-                            <span className="text-white font-black text-2xl drop-shadow-md">Kırmızı</span>
-                            <span className="text-white/60 font-bold text-lg drop-shadow-md bg-black/20 px-4 py-1 rounded-full">X2</span>
+                            <span className="text-white font-black text-lg sm:text-xl drop-shadow-md">Kırmızı</span>
+                            <span className="text-white/80 font-bold text-xs sm:text-sm drop-shadow-md bg-black/20 px-3 py-1 rounded-full">X2</span>
                         </div>
                         
-                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 flex-1 shadow-inner overflow-hidden flex flex-col">
-                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
-                                <span>{getColumnCount('red')} Toplam Bahisler</span>
+                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-3 flex-1 shadow-inner overflow-hidden flex flex-col">
+                            <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
+                                <span>{getColumnCount('red')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-3" />
+                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-2.5" />
                                     <span>{getColumnTotal('red').toFixed(2)}</span>
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-2 max-h-[160px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 max-h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('red') > 0 && (
                                     <div className="flex justify-between items-center py-1">
@@ -798,24 +798,24 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     {/* GREEN SECTION */}
                     <div className="flex-1 flex flex-col">
                         <div 
-                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
+                            className={`relative w-full h-14 sm:h-16 mb-3 transition-all flex items-center justify-between px-4 sm:px-6 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnGreen})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                             onClick={() => handleAddBet('green')}
                         >
-                            <span className="text-white font-black text-2xl drop-shadow-md">Yeşil</span>
-                            <span className="text-white/60 font-bold text-lg drop-shadow-md bg-black/20 px-4 py-1 rounded-full">X100</span>
+                            <span className="text-white font-black text-lg sm:text-xl drop-shadow-md">Yeşil</span>
+                            <span className="text-white/80 font-bold text-xs sm:text-sm drop-shadow-md bg-black/20 px-3 py-1 rounded-full">X100</span>
                         </div>
                         
-                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 flex-1 shadow-inner overflow-hidden flex flex-col">
-                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
-                                <span>{getColumnCount('green')} Toplam Bahisler</span>
+                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-3 flex-1 shadow-inner overflow-hidden flex flex-col">
+                            <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
+                                <span>{getColumnCount('green')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-3" />
+                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-2.5" />
                                     <span>{getColumnTotal('green').toFixed(2)}</span>
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-2 max-h-[160px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 max-h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('green') > 0 && (
                                     <div className="flex justify-between items-center py-1">
@@ -850,24 +850,24 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     {/* BLACK (GREY) SECTION */}
                     <div className="flex-1 flex flex-col">
                         <div 
-                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
+                            className={`relative w-full h-14 sm:h-16 mb-3 transition-all flex items-center justify-between px-4 sm:px-6 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnGrey})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                             onClick={() => handleAddBet('black')}
                         >
-                            <span className="text-white font-black text-2xl drop-shadow-md">Siyah</span>
-                            <span className="text-white/60 font-bold text-lg drop-shadow-md bg-black/20 px-4 py-1 rounded-full">X2</span>
+                            <span className="text-white font-black text-lg sm:text-xl drop-shadow-md">Siyah</span>
+                            <span className="text-white/80 font-bold text-xs sm:text-sm drop-shadow-md bg-black/20 px-3 py-1 rounded-full">X2</span>
                         </div>
                         
-                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 flex-1 shadow-inner overflow-hidden flex flex-col">
-                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
-                                <span>{getColumnCount('black')} Toplam Bahisler</span>
+                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-3 flex-1 shadow-inner overflow-hidden flex flex-col">
+                            <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
+                                <span>{getColumnCount('black')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-3" />
+                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-2.5" />
                                     <span>{getColumnTotal('black').toFixed(2)}</span>
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-2 max-h-[160px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 max-h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('black') > 0 && (
                                     <div className="flex justify-between items-center py-1">
@@ -902,16 +902,32 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
                 {/* WIN/LOSS Overlay */}
                 {gameState === 'result' && winAmount !== null && (
-                    <div className="fixed top-[30%] left-1/2 -translate-x-1/2 z-50 animate-pop-in pointer-events-none">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none p-4 overflow-hidden">
                         {winAmount > 0 ? (
-                            <div className="bg-[#0f1215]/95 text-emerald-400 font-black px-16 py-8 rounded-2xl shadow-[0_20px_50px_rgba(16,185,129,0.3)] border-2 border-emerald-500/50 text-center flex flex-col items-center backdrop-blur-sm">
-                                <span className="text-sm uppercase tracking-[0.2em] mb-2 text-gray-400">Kazandın</span>
-                                <span className="text-6xl drop-shadow-[0_0_20px_rgba(16,185,129,0.5)]">+${winAmount.toFixed(2)}</span>
+                            <div className="relative bg-gradient-to-br from-[#0f1215]/95 to-[#171a21]/95 px-8 md:px-20 py-8 md:py-12 rounded-3xl shadow-[0_30px_100px_rgba(16,185,129,0.4)] border border-emerald-500/50 flex flex-col items-center backdrop-blur-md animate-pop-in">
+                                <div className="absolute inset-0 bg-emerald-500/10 rounded-3xl animate-pulse"></div>
+                                {/* Glow effect */}
+                                <div className="absolute -top-10 -left-10 w-40 h-40 bg-emerald-500/30 rounded-full blur-[60px]"></div>
+                                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/30 rounded-full blur-[60px]"></div>
+                                
+                                <span className="text-xs md:text-sm font-black uppercase tracking-[0.3em] mb-3 text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] z-10">Kazandın!</span>
+                                <span className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] z-10 mb-4">+${winAmount.toFixed(2)}</span>
+                                <div className="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-4 py-1.5 rounded-full border border-emerald-500/30 z-10">Tebrikler</div>
                             </div>
                         ) : (
-                            <div className="bg-[#0f1215]/95 text-rose-500 font-black px-16 py-8 rounded-2xl shadow-[0_20px_50px_rgba(225,29,72,0.3)] border-2 border-rose-500/50 text-center flex flex-col items-center backdrop-blur-sm">
-                                <span className="text-sm uppercase tracking-[0.2em] mb-2 text-gray-400">Kaybettin</span>
-                                <span className="text-2xl uppercase">Sonuç: {winningColor === 'red' ? 'Kırmızı' : winningColor === 'green' ? 'Yeşil' : 'Siyah'}</span>
+                            <div className="relative bg-[#0f1215]/90 px-8 md:px-20 py-8 md:py-12 rounded-3xl shadow-[0_30px_100px_rgba(225,29,72,0.3)] border border-rose-500/30 flex flex-col items-center backdrop-blur-md animate-pop-in">
+                                {/* Subtle red glow */}
+                                <div className="absolute inset-0 bg-rose-500/5 rounded-3xl"></div>
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-rose-500/10 rounded-full blur-[80px]"></div>
+
+                                <span className="text-xs md:text-sm font-black uppercase tracking-[0.3em] mb-4 text-rose-500 drop-shadow-[0_0_10px_rgba(225,29,72,0.5)] z-10">Kaybettin</span>
+                                <div className="flex items-center gap-3 bg-[#171a21]/80 px-6 py-3 rounded-2xl border border-white/5 z-10 shadow-inner">
+                                    <span className="text-sm font-bold text-gray-400">Sonuç:</span>
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-4 h-4 rounded-full shadow-inner ${winningColor === 'red' ? 'bg-red-500' : winningColor === 'green' ? 'bg-green-500' : 'bg-gray-500'}`}></div>
+                                        <span className="text-lg font-black text-white">{winningColor === 'red' ? 'Kırmızı' : winningColor === 'green' ? 'Yeşil' : 'Siyah'}</span>
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
