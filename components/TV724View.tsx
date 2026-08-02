@@ -1171,8 +1171,31 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     </div>
                                     
                                     {/* Watermark */}
-                                    <div style={{ position: 'absolute', top: '20px', left: '20px', opacity: 0.8, pointerEvents: 'none', zIndex: 40 }}>
+                                    <div style={{ position: 'absolute', top: '20px', left: '130px', opacity: 0.8, pointerEvents: 'none', zIndex: 40 }}>
                                         <span style={{ fontSize: '16px', fontWeight: 900, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>724<span style={{ color: '#10b981' }}>TV</span></span>
+                                    </div>
+
+                                    {/* Left Side Vertical Ad (KAZANCINI İKİYE KATLA) */}
+                                    <div className="absolute top-0 left-0 bottom-0 w-[80px] md:w-[110px] bg-[#050608] border-r border-white/5 z-[60] flex flex-col items-center justify-between py-4 shadow-[10px_0_30px_rgba(0,0,0,0.8)] pointer-events-auto cursor-pointer group hover:bg-[#0a0d14] transition-colors" onClick={(e) => { e.stopPropagation(); /* Prevent video click */ }}>
+                                        {/* Subtle cyan glow */}
+                                        <div className="absolute inset-0 bg-gradient-to-b from-[#06b6d4]/5 via-transparent to-[#06b6d4]/5 opacity-50"></div>
+                                        
+                                        <div className="flex flex-col items-center gap-3 w-full relative z-10 mt-2">
+                                            <div className="bg-[#06b6d4]/10 border border-[#06b6d4]/30 px-1.5 py-1 rounded text-[#06b6d4] text-[9px] md:text-[10px] font-black tracking-widest text-center">
+                                                VIP<br/>KAZANÇ
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
+                                            <div className="flex flex-col items-center -space-y-1 md:-space-y-2 mb-4">
+                                                <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>KAZANCINI</span>
+                                                <span className="text-[#06b6d4] font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>İ. KATLA</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex flex-col items-center relative z-10 mb-2">
+                                            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400 font-black text-3xl md:text-4xl italic tracking-tighter drop-shadow-lg">2X</span>
+                                        </div>
                                     </div>
 
                                     {/* Right Side Vertical Ad (ERKEN ÖDEME) - Covers xslot and blocks clicks */}
