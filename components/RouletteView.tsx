@@ -548,11 +548,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                                         fontSize="18"
                                                         fontWeight="900"
                                                         letterSpacing="-1"
-                                                        style={{ 
-                                                            textShadow: isGreen ? '0 0 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.8)',
-                                                            opacity: isFastSpinning ? 0 : 1,
-                                                            transition: 'opacity 0.5s ease-in-out'
-                                                        }}
+                                                        style={{ textShadow: isGreen ? '0 0 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.8)' }}
                                                     >
                                                         {num}
                                                     </text>
@@ -584,23 +580,6 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         <circle cx="250" cy="250" r="15" fill="url(#gold)" filter="drop-shadow(0 0 8px rgba(0,0,0,0.9))" />
                                         <circle cx="250" cy="250" r="8" fill="#1A212D" />
 
-                                        {/* Fast Spinning 724bets Logo overlay on Numbers */}
-                                        <text
-                                            fill="#00E5FF"
-                                            fontSize="22"
-                                            fontWeight="900"
-                                            letterSpacing="8"
-                                            style={{
-                                                opacity: isFastSpinning ? 1 : 0.05,
-                                                transition: 'opacity 1.5s ease-in-out',
-                                                textShadow: '0 0 10px rgba(0,229,255,0.8)'
-                                            }}
-                                            filter="url(#neon-glow)"
-                                        >
-                                            <textPath href="#wheel-text-path" startOffset="0%">
-                                                724BETS  •  724BETS  •  724BETS  •  724BETS  •  724BETS  •  724BETS  •  724BETS  •  724BETS  •  
-                                            </textPath>
-                                        </text>
                                     </g>
                                 </svg>
                             </div>
