@@ -175,79 +175,101 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 )}
             </div>
 
-            {/* ── RIGHT MAIN AREA (Centered Game Frame) ── */}
-            <div className="flex-1 bg-[#10171E] relative overflow-hidden flex items-center justify-center p-2 sm:p-4 md:p-12 order-1 md:order-2 min-h-[400px] md:min-h-0">
+            {/* ── RIGHT MAIN AREA (Premium Game Frame) ── */}
+            <div className="flex-1 relative overflow-hidden flex items-center justify-center p-2 sm:p-4 md:p-12 order-1 md:order-2 min-h-[400px] md:min-h-0 bg-[#0B0E14]">
+                
+                {/* Ambient Casino Lighting */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,229,255,0.03)_0%,transparent_70%)] pointer-events-none"></div>
                 
                 {/* ── CENTERED GAME CONTAINER ── */}
-                <div className="w-full max-w-5xl h-full max-h-[700px] bg-[#151C23] relative rounded-3xl shadow-2xl overflow-hidden flex flex-col justify-center items-center border-[6px] border-[#1C252D]">
+                <div className="w-full max-w-5xl h-full max-h-[700px] bg-gradient-to-b from-[#111620] to-[#0A0D14] relative rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.05)] overflow-hidden flex flex-col justify-center items-center border border-[#1E2738]">
                     
                     {/* Top Info Badges */}
-                    <div className="absolute top-6 left-6 flex items-center gap-2 z-20">
-                        <Target className="w-5 h-5 text-gray-500" />
-                        <span className="text-white font-bold tracking-widest text-sm flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                    <div className="absolute top-6 left-6 flex items-center gap-3 z-20">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00E5FF] to-[#0099aa] flex items-center justify-center shadow-[0_0_20px_rgba(0,229,255,0.4)]">
+                            <Target className="w-5 h-5 text-[#0A0D14]" />
+                        </div>
+                        <span className="text-white font-black tracking-widest text-sm uppercase drop-shadow-md">
                             Roulette
                         </span>
                     </div>
                     
-                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111] px-3 py-1.5 rounded-full border border-white/5 z-20">
-                        <ShieldCheck className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
+                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#0A0D14]/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 z-20 shadow-lg">
+                        <ShieldCheck className="w-4 h-4 text-[#00E5FF]" />
+                        <span className="text-gray-300 font-bold text-xs uppercase tracking-wider">Adil Oyun</span>
                     </div>
 
                     {/* Wheel Container */}
-                    <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
-                        {/* The Wheel */}
+                    <div className="relative w-[320px] h-[320px] md:w-[480px] md:h-[480px] mt-8">
+                        
+                        {/* Outer Metallic Ring */}
                         <div 
-                            className="absolute inset-0 rounded-full border-[10px] border-[#1A242D] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden transition-transform ease-[cubic-bezier(0.2,0.8,0.2,1)]"
-                            style={{ 
-                                transform: `rotate(${spinRotation}deg)`,
-                                transitionDuration: isPlaying ? '4000ms' : '0ms'
-                            }}
+                            className="absolute inset-0 rounded-full shadow-[0_0_80px_rgba(0,229,255,0.05),inset_0_15px_30px_rgba(0,0,0,1)] p-[12px] md:p-[16px] border border-[#2A3744]" 
+                            style={{ background: 'conic-gradient(from 0deg, #1A212D, #0A0D14, #1A212D, #0A0D14, #1A212D)' }}
                         >
-                            {/* Wheel Numbers & Colors */}
-                            {ROULETTE_NUMBERS.map((num, i) => {
-                                const angle = (360 / ROULETTE_NUMBERS.length) * i;
-                                const isGreen = num === 0;
-                                const color = isGreen ? '#06b6d4' : (isRed(num) ? '#DC2626' : '#111827');
-                                return (
-                                    <div 
-                                        key={num}
-                                        className="absolute top-0 left-1/2 w-8 h-1/2 origin-bottom -translate-x-1/2 flex justify-center pt-2"
-                                        style={{ 
-                                            transform: `rotate(${angle}deg)`,
-                                            backgroundColor: color,
-                                            clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
-                                            width: `${(Math.PI * 400) / ROULETTE_NUMBERS.length + 2}px` // approximate segment width
-                                        }}
-                                    >
-                                        <span className="text-white font-black text-sm block mt-2" style={{ transform: 'rotate(0deg)' }}>{num}</span>
+                            {/* The Wheel */}
+                            <div 
+                                className="absolute inset-[12px] md:inset-[16px] rounded-full overflow-hidden shadow-[inset_0_0_40px_rgba(0,0,0,1)] transition-transform ease-[cubic-bezier(0.15,0.9,0.15,1)] bg-[#05070A]"
+                                style={{ 
+                                    transform: `rotate(${spinRotation}deg)`,
+                                    transitionDuration: isPlaying ? '4000ms' : '0ms'
+                                }}
+                            >
+                                {/* Wheel Numbers & Colors */}
+                                {ROULETTE_NUMBERS.map((num, i) => {
+                                    const angle = (360 / ROULETTE_NUMBERS.length) * i;
+                                    const isGreen = num === 0;
+                                    const color = isGreen ? '#00E5FF' : (isRed(num) ? '#E11D48' : '#111827');
+                                    
+                                    return (
+                                        <div 
+                                            key={num}
+                                            className="absolute top-0 left-1/2 h-1/2 origin-bottom -translate-x-1/2 flex justify-center pt-2 md:pt-3"
+                                            style={{ 
+                                                transform: `rotate(${angle}deg)`,
+                                                backgroundColor: color,
+                                                clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
+                                                width: '11%',
+                                                boxShadow: isGreen ? 'inset 0 0 20px rgba(0,0,0,0.5)' : (isRed(num) ? 'inset 0 0 10px rgba(0,0,0,0.5)' : 'inset 0 0 15px rgba(0,0,0,0.8)')
+                                            }}
+                                        >
+                                            <span className={`font-black block mt-2 ${isGreen ? 'text-[#0A0D14] text-[10px] md:text-[13px] drop-shadow-[0_0_2px_rgba(0,229,255,0.8)]' : 'text-white/90 text-[9px] md:text-[13px] drop-shadow-[0_2px_2px_rgba(0,0,0,1)]'}`} style={{ transform: 'rotate(0deg)' }}>{num}</span>
+                                        </div>
+                                    );
+                                })}
+                                
+                                {/* Inner Circle (Wood/Metal center) */}
+                                <div className="absolute inset-1/4 rounded-full bg-[#1A212D] border-[6px] border-[#2A3744] shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+                                    <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,#2A3744,#151D24,#2A3744,#151D24,#2A3744)] shadow-[inset_0_0_30px_rgba(0,0,0,0.9)] opacity-80"></div>
+                                    <div className="absolute inset-1/3 rounded-full bg-[#0A0D14] border-2 border-[#1E2738] shadow-inner flex items-center justify-center">
+                                        <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.5)] opacity-50"></div>
                                     </div>
-                                );
-                            })}
-                            
-                            {/* Inner Circle (Wood/Metal center) */}
-                            <div className="absolute inset-1/4 rounded-full bg-[#1A242D] border-4 border-[#2A3744] shadow-inner">
-                                <div className="absolute inset-4 rounded-full bg-gradient-to-br from-[#2A3744] to-[#151D24] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"></div>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Top Pointer (The Ball) */}
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10 w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[20px] border-t-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]"></div>
-                        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 w-4 h-4 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                        {/* Holographic Laser Pointer */}
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
+                            {/* Base */}
+                            <div className="w-12 h-3 rounded-full bg-[#0A0D14] border border-[#00E5FF] shadow-[0_0_20px_rgba(0,229,255,0.6)] z-10 flex items-center justify-center">
+                                <div className="w-8 h-1 bg-[#00E5FF] rounded-full animate-pulse"></div>
+                            </div>
+                            {/* Laser Beam */}
+                            <div className="w-1 h-14 bg-gradient-to-b from-[#00E5FF] to-transparent shadow-[0_0_15px_rgba(0,229,255,1)]"></div>
+                        </div>
                     </div>
 
                     {/* Result Display */}
                     {resultNumber !== null && !isPlaying && (
-                        <div className="absolute bottom-16 flex flex-col items-center animate-pop-in z-20">
-                            <div className={`w-24 h-24 rounded-full border-4 shadow-[0_0_30px_rgba(0,0,0,0.5)] flex items-center justify-center text-4xl font-black text-white ${
-                                resultNumber === 0 ? 'bg-emerald-500 border-emerald-400' : isRed(resultNumber) ? 'bg-red-600 border-red-500' : 'bg-gray-900 border-gray-700'
+                        <div className="absolute bottom-12 flex flex-col items-center animate-pop-in z-20">
+                            <div className={`w-28 h-28 rounded-full border-[6px] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center text-5xl font-black text-white ${
+                                resultNumber === 0 ? 'bg-gradient-to-b from-[#00E5FF] to-[#0099aa] border-[#0A0D14] text-[#0A0D14] drop-shadow-[0_0_10px_rgba(0,229,255,0.8)]' : isRed(resultNumber) ? 'bg-gradient-to-b from-[#E11D48] to-[#9f1239] border-[#0A0D14]' : 'bg-gradient-to-b from-[#1F2937] to-[#111827] border-[#0A0D14]'
                             }`}>
                                 {resultNumber}
                             </div>
                             
                             {winAmount !== null && winAmount > 0 && (
-                                <div className="mt-4 bg-emerald-500 text-white font-black px-6 py-2 rounded-full uppercase tracking-widest animate-pulse border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+                                <div className="mt-6 bg-[#00E5FF] text-[#0A0D14] font-black px-8 py-3 rounded-full uppercase tracking-[0.2em] text-sm animate-[pulse_2s_ease-in-out_infinite] border-2 border-white shadow-[0_0_30px_rgba(0,229,255,0.6)]">
                                     Kazandın +₺{winAmount.toFixed(2)}
                                 </div>
                             )}
