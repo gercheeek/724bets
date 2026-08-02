@@ -1208,6 +1208,22 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                         </div>
                     </div>
 
+                    {/* Feature Banners */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                        <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
+                            <h4 className="text-white text-lg md:text-xl font-bold mb-1">Büyük Ödüller</h4>
+                            <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">HOŞGELDİN BONUSU SENİ BEKLİYOR</p>
+                        </div>
+                        <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
+                            <h4 className="text-white text-lg md:text-xl font-bold mb-1">Güvenilir Sistem</h4>
+                            <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">LİSANSLI ALTYAPI İLE GÜVENDESİNİZ</p>
+                        </div>
+                        <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
+                            <h4 className="text-white text-lg md:text-xl font-bold mb-1">Canlı Destek</h4>
+                            <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">7/24 KESİNTİSİZ HİZMET</p>
+                        </div>
+                    </div>
+
                     {/* BOTTOM: Channels Grid */}
                     <div style={{ width: '100%', position: 'relative' }}>
                         <div style={{ background: '#12141a', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', display: 'flex', flexDirection: 'column', padding: '20px', gap: '16px' }}>
