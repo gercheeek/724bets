@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '../contexts/UserContext';
 import { Coins } from 'lucide-react';
 
 type BetColor = 'red' | 'green' | 'black';
+type GameState = 'betting' | 'spinning' | 'result';
 
 interface PlacedBet {
     type: BetColor;
     amount: number;
 }
 
-const BRICK_WIDTH = 100; // pixels
-const TOTAL_BRICKS = 100; // How many bricks in the slider
+const BRICK_WIDTH = 100;
+const TOTAL_BRICKS = 100;
 
 const ASSETS = {
     btnGrey: 'https://gamdom.com/build/button_grey.d7429b7c0b343420ecdf.svg',
@@ -38,19 +39,57 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [betAmount, setBetAmount] = useState<number>(1);
     const [placedBets, setPlacedBets] = useState<PlacedBet[]>([]);
     
-    const [isPlaying, setIsPlaying] = useState(false);
+    // Global Loop State
+    const [gameState, setGameState] = useState<GameState>('betting');
+    const [timeLeft, setTimeLeft] = useState<number>(15000); // 15s betting phase
     const [isSpinning, setIsSpinning] = useState(false);
+    
     const [reel, setReel] = useState<BetColor[]>(generateReel());
-    const [slideOffset, setSlideOffset] = useState<number>(-550); // Initial offset for brick index 5
+    const [slideOffset, setSlideOffset] = useState<number>(-550);
     const [winningColor, setWinningColor] = useState<BetColor | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
 
-    // No need to reset slideOffset on mount if we initialize it correctly
-    // Remove the useEffect that forces it to 0
-
     const totalBetAmount = placedBets.reduce((sum, bet) => sum + bet.amount, 0);
 
+    // -- TIMER LOOP --
+    useEffect(() => {
+        let animationFrameId: number;
+        let lastTime = performance.now();
+
+        const loop = (time: number) => {
+            const delta = time - lastTime;
+            lastTime = time;
+
+            if (gameState === 'betting') {
+                setTimeLeft(prev => {
+                    const next = prev - delta;
+                    if (next <= 0) {
+                        setGameState('spinning');
+                        return 0;
+                    }
+                    return next;
+                });
+            }
+            animationFrameId = requestAnimationFrame(loop);
+        };
+
+        animationFrameId = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(animationFrameId);
+    }, [gameState]);
+
+    // -- PHASE HANDLER --
+    useEffect(() => {
+        if (gameState === 'spinning') {
+            runGameLogic();
+        }
+    }, [gameState]);
+
     const handleAddBet = (type: BetColor) => {
+        if (gameState !== 'betting') return alert('Bahis süresi doldu!');
+        if (!isFunMode && !siteUser) {
+            onAuthRequired();
+            return;
+        }
         if (betAmount <= 0) return alert('Geçerli bir bahis tutarı girin.');
         if (isFunMode && (totalBetAmount + betAmount) > demoBalance) return alert('Yetersiz demo bakiye.');
         
@@ -66,7 +105,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     };
 
     const handleClearBets = () => {
-        if (isPlaying) return;
+        if (gameState !== 'betting') return;
         setPlacedBets([]);
     };
 
@@ -75,56 +114,53 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
         return bet ? bet.amount : 0;
     };
 
-    const handlePlay = async () => {
-        if (!isFunMode && !siteUser) return onAuthRequired();
-        if (placedBets.length === 0) {
-            alert('Lütfen en az bir bahis yapın.');
-            return;
-        }
+    const runGameLogic = async () => {
+        const currentBets = [...placedBets];
+        const betTotal = currentBets.reduce((sum, bet) => sum + bet.amount, 0);
         
-        if (isFunMode && totalBetAmount > demoBalance) {
-            alert('Yetersiz demo bakiye.');
-            return;
-        }
-
-        setIsPlaying(true);
         setWinningColor(null);
         setWinAmount(null);
-        
         const newReel = generateReel();
 
         try {
-            let winResult: BetColor;
+            let winResult: BetColor = 'black'; // fallback
             let totalPayout: number = 0;
 
             if (isFunMode) {
-                setDemoBalance(prev => prev - totalBetAmount);
+                if (betTotal > 0) setDemoBalance(prev => prev - betTotal);
+                
                 const rand = Math.random();
                 if (rand < 0.05) winResult = 'green';
                 else if (rand < 0.525) winResult = 'red';
                 else winResult = 'black';
                 
-                placedBets.forEach(bet => {
-                    if (bet.type === winResult) {
-                        if (winResult === 'green') totalPayout += bet.amount * 100;
-                        else totalPayout += bet.amount * 2;
-                    }
-                });
+                if (betTotal > 0) {
+                    currentBets.forEach(bet => {
+                        if (bet.type === winResult) {
+                            if (winResult === 'green') totalPayout += bet.amount * 100;
+                            else totalPayout += bet.amount * 2;
+                        }
+                    });
+                }
             } else {
-                const betPayloads = placedBets.map(bet => ({ type: 'color', value: bet.type, amount: bet.amount }));
-                const data = await playInstantGame(totalBetAmount, 'Roulette', 0, 'none', { bets: betPayloads });
-                winResult = data.result.color || (data.result.number === 0 ? 'green' : (data.result.number % 2 === 0 ? 'black' : 'red'));
-                totalPayout = data.win_amount;
+                if (betTotal > 0) {
+                    const betPayloads = currentBets.map(bet => ({ type: 'color', value: bet.type, amount: bet.amount }));
+                    const data = await playInstantGame(betTotal, 'Roulette', 0, 'none', { bets: betPayloads });
+                    winResult = data.result.color || (data.result.number === 0 ? 'green' : (data.result.number % 2 === 0 ? 'black' : 'red'));
+                    totalPayout = data.win_amount;
+                } else {
+                    const rand = Math.random();
+                    if (rand < 0.05) winResult = 'green';
+                    else if (rand < 0.525) winResult = 'red';
+                    else winResult = 'black';
+                }
             }
 
-            // Force the target brick to the winning color
+            // Target brick position
             newReel[90] = winResult;
             setReel(newReel);
 
-            const itemWidth = BRICK_WIDTH; // 100
-            
-            // To center brick index `idx` when container is left-1/2:
-            // offset = - (idx * itemWidth) - (itemWidth / 2)
+            const itemWidth = BRICK_WIDTH;
             const targetIndex = 90;
             const startIndex = 5;
             
@@ -142,19 +178,35 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 setSlideOffset(stopPosition);
             }, 50);
 
+            // Wait for 5s animation to finish
             setTimeout(() => {
+                setGameState('result');
                 setWinningColor(winResult);
-                setWinAmount(totalPayout);
-                if (isFunMode && totalPayout > 0) {
-                    setDemoBalance(prev => prev + totalPayout);
+                if (betTotal > 0) {
+                    setWinAmount(totalPayout);
+                    if (isFunMode && totalPayout > 0) {
+                        setDemoBalance(prev => prev + totalPayout);
+                    }
                 }
-                setIsPlaying(false);
-                setIsSpinning(false);
+
+                // Show result for 4 seconds, then restart
+                setTimeout(() => {
+                    setGameState('betting');
+                    setTimeLeft(15000);
+                    setPlacedBets([]);
+                    // Silently reset the slider back to start
+                    setIsSpinning(false);
+                    setSlideOffset(startPosition);
+                }, 4000);
+                
             }, 5050);
             
         } catch (e: any) {
-            alert(e.message || 'Hata oluştu');
-            setIsPlaying(false);
+            console.error("Game error:", e);
+            // If error, just restart the loop safely
+            setGameState('betting');
+            setTimeLeft(15000);
+            setPlacedBets([]);
         }
     };
 
@@ -180,7 +232,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             <div className="flex-1 flex flex-col w-full max-w-6xl mx-auto p-4 md:p-8">
                 
                 {/* ── REEL CONTAINER ── */}
-                <div className="w-full relative h-[180px] bg-[#111419] rounded-xl overflow-hidden border border-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.5)] mb-8 flex items-center justify-center">
+                <div className="w-full relative h-[180px] bg-[#111419] rounded-xl overflow-hidden border border-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.5)] mb-4 flex items-center justify-center">
                     
                     {/* Dark gradient edges */}
                     <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#111419] to-transparent z-10 pointer-events-none"></div>
@@ -205,9 +257,8 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         <img 
                                             src={color === 'red' ? ASSETS.brickRed : (color === 'green' ? ASSETS.brickGreen : ASSETS.brickGrey)} 
                                             alt={color} 
-                                            className="w-[85px] object-contain drop-shadow-xl" 
+                                            className={`w-[85px] object-contain drop-shadow-xl ${gameState === 'result' && idx !== 90 ? 'opacity-40' : ''} transition-opacity duration-500`} 
                                         />
-                                        {/* Number overlay */}
                                         <div className="absolute inset-0 flex items-center justify-center font-black text-2xl text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                             {color === 'green' ? 0 : Math.floor(Math.random() * 99) + 1}
                                         </div>
@@ -218,8 +269,28 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
                 </div>
 
+                {/* ── PROGRESS BAR (Gamdom style) ── */}
+                <div className="w-full h-6 flex items-center justify-center mb-8 relative">
+                    <div className="w-full h-1 bg-[#1a1e24] rounded-full overflow-hidden relative">
+                        {gameState === 'betting' ? (
+                            <div 
+                                className="h-full bg-red-500" 
+                                style={{ width: `${(timeLeft / 15000) * 100}%` }}
+                            ></div>
+                        ) : (
+                            <div className="h-full bg-[#1a1e24]"></div>
+                        )}
+                    </div>
+                    {/* Floating pill in center */}
+                    <div className="absolute bg-[#1a1e24] border border-white/5 px-4 py-1.5 rounded-full shadow-lg text-[10px] font-black text-gray-400 tracking-wider">
+                        {gameState === 'betting' && `${(timeLeft / 1000).toFixed(2)} SANİYE`}
+                        {gameState === 'spinning' && `DÖNÜYOR...`}
+                        {gameState === 'result' && `SONUÇ`}
+                    </div>
+                </div>
+
                 {/* ── BET CONTROLS ── */}
-                <div className="w-full mb-8 flex flex-col items-center">
+                <div className={`w-full mb-8 flex flex-col items-center transition-opacity ${gameState !== 'betting' ? 'opacity-50 pointer-events-none' : ''}`}>
                     <div className="flex flex-wrap items-center gap-4 bg-[#111419] p-2 rounded-xl border border-white/5 w-full shadow-lg">
                         
                         <div className="flex-1 flex bg-[#171a21] rounded-lg border border-white/10 overflow-hidden min-w-[200px]">
@@ -228,7 +299,6 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 type="number" 
                                 value={betAmount}
                                 onChange={(e) => setBetAmount(Number(e.target.value))}
-                                disabled={isPlaying}
                                 placeholder="Tutar..."
                                 className="flex-1 bg-transparent text-white font-bold text-sm py-3 px-2 outline-none"
                             />
@@ -250,9 +320,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 <div className="w-full flex flex-col md:flex-row gap-6 mb-12 items-stretch max-w-6xl mx-auto">
                     
                     {/* RED BUTTON */}
-                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => !isPlaying && handleAddBet('red')}>
+                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => handleAddBet('red')}>
                         <div 
-                            className={`relative w-full h-24 sm:h-28 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-[20px] shadow-lg ${isPlaying ? 'opacity-50' : 'hover:scale-[1.02] active:scale-[0.98]'}`}
+                            className={`relative w-full h-24 sm:h-28 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-[20px] shadow-lg ${gameState !== 'betting' ? 'opacity-50' : 'hover:scale-[1.02] active:scale-[0.98]'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnRed})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                         >
                             <span className="text-white font-black text-2xl drop-shadow-md">Kırmızı</span>
@@ -281,9 +351,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
 
                     {/* GREEN BUTTON */}
-                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => !isPlaying && handleAddBet('green')}>
+                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => handleAddBet('green')}>
                         <div 
-                            className={`relative w-full h-24 sm:h-28 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-[20px] shadow-lg ${isPlaying ? 'opacity-50' : 'hover:scale-[1.02] active:scale-[0.98]'}`}
+                            className={`relative w-full h-24 sm:h-28 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-[20px] shadow-lg ${gameState !== 'betting' ? 'opacity-50' : 'hover:scale-[1.02] active:scale-[0.98]'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnGreen})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                         >
                             <span className="text-white font-black text-2xl drop-shadow-md">Yeşil</span>
@@ -312,9 +382,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
 
                     {/* BLACK (GREY) BUTTON */}
-                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => !isPlaying && handleAddBet('black')}>
+                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => handleAddBet('black')}>
                         <div 
-                            className={`relative w-full h-24 sm:h-28 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-[20px] shadow-lg ${isPlaying ? 'opacity-50' : 'hover:scale-[1.02] active:scale-[0.98]'}`}
+                            className={`relative w-full h-24 sm:h-28 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-[20px] shadow-lg ${gameState !== 'betting' ? 'opacity-50' : 'hover:scale-[1.02] active:scale-[0.98]'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnGrey})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                         >
                             <span className="text-white font-black text-2xl drop-shadow-md">Siyah</span>
@@ -344,9 +414,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 </div>
 
                 {/* WIN/LOSS Overlay */}
-                {winningColor && !isPlaying && (
+                {gameState === 'result' && winAmount !== null && (
                     <div className="fixed top-[30%] left-1/2 -translate-x-1/2 z-50 animate-pop-in pointer-events-none">
-                        {winAmount !== null && winAmount > 0 ? (
+                        {winAmount > 0 ? (
                             <div className="bg-[#171a21]/95 text-emerald-400 font-black px-16 py-8 rounded-2xl shadow-[0_20px_50px_rgba(16,185,129,0.2)] border-2 border-emerald-500/50 text-center flex flex-col items-center backdrop-blur-sm">
                                 <span className="text-sm uppercase tracking-[0.2em] mb-2 text-gray-400">Kazandın</span>
                                 <span className="text-6xl drop-shadow-[0_0_20px_rgba(16,185,129,0.5)]">+${winAmount.toFixed(2)}</span>
@@ -360,18 +430,6 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
                 )}
             </div>
-            
-            {/* Play Button fixed at bottom right */}
-            {!isPlaying && (
-                <div className="fixed bottom-8 right-8 z-40">
-                    <button 
-                        onClick={handlePlay}
-                        className="bg-emerald-500 text-[#0f1215] font-black text-lg uppercase tracking-wider px-10 py-4 rounded-xl shadow-[0_5px_20px_rgba(16,185,129,0.4)] hover:-translate-y-1 hover:bg-emerald-400 active:translate-y-1 transition-all"
-                    >
-                        Bahis Yap
-                    </button>
-                </div>
-            )}
         </div>
     );
 }
