@@ -314,24 +314,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     <div className="absolute inset-0 bg-gradient-to-b from-[#111317]/90 via-transparent to-[#111317]/95 pointer-events-none"></div>
                     <div className="absolute inset-0 bg-gradient-to-r from-[#111317]/80 via-transparent to-[#111317]/30 pointer-events-none hidden md:block"></div>
 
-                    {/* Top Left Premium Logo & Slogan (Desktop only) */}
-                    <div className="absolute top-8 left-8 z-20 pointer-events-none hidden md:flex flex-col items-start">
-                        <div className="flex items-center gap-2.5">
-                            <div className="w-12 h-12 bg-gradient-to-br from-[#00E5FF] to-[#0099aa] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,229,255,0.3)]">
-                                <span className="text-[#0a0c10] font-black text-2xl tracking-tighter">7</span>
-                            </div>
-                            <div className="font-black text-[38px] text-white tracking-tighter drop-shadow-lg flex items-baseline">
-                                24<span className="text-[#00E5FF]">BETS</span>
-                            </div>
-                        </div>
-                        <div className="mt-4 flex items-center gap-3">
-                            <div className="w-6 h-[2px] bg-[#00E5FF]"></div>
-                            <span className="text-[10px] text-white/80 font-bold tracking-[0.4em] uppercase drop-shadow-md">
-                                Yeni Nesil Bahis Deneyimi
-                            </span>
-                        </div>
-                    </div>
-
+                    {/* Top Left Premium Logo & Slogan (Desktop only) - REMOVED */}
+                    
                     {/* Bottom Terms Text */}
                     <div className="relative z-10 w-full pb-6 px-8 justify-center hidden md:flex">
                         <div className="bg-[#0A0D14]/80 backdrop-blur-xl border border-white/10 px-5 py-3.5 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] transition-all hover:bg-black/60">
@@ -348,6 +332,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                     <button onClick={onClose} className="absolute top-4 right-4 md:top-6 md:right-6 w-8 h-8 rounded-full bg-[#1F232B] flex items-center justify-center text-zinc-400 hover:text-white transition-colors z-10 hover:bg-[#2A2E39]">
                         <X className="w-4 h-4" />
                     </button>
+
+                    {/* Standard Site Logo */}
+                    <div className="flex items-center font-black tracking-tighter select-none mb-6 mt-2 md:mt-0" style={{ fontFamily: 'Arial, sans-serif' }}>
+                        <span className="text-white text-[24px] md:text-[28px] drop-shadow-[0_2px_5px_rgba(0,0,0,1)]">724</span>
+                        <span className="text-[#00E5FF] ml-[1px] text-[24px] md:text-[28px] drop-shadow-[0_2px_5px_rgba(0,0,0,1)]">bets</span>
+                        <div className="ml-1 -mt-3 text-[#00E5FF] animate-[pulse_2s_ease-in-out_infinite]">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l2.4 7.6 7.6 2.4-7.6 2.4L12 22l-2.4-7.6-7.6-2.4 7.6-2.4z"/>
+                            </svg>
+                        </div>
+                    </div>
 
                     {/* Top Tabs */}
                     <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-8 border-b border-white/5 pb-2 relative">
