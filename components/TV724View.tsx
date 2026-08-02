@@ -394,6 +394,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     // ── Right panel tabs ──
     const [rightPanelTab, setRightPanelTab] = useState<'chat' | 'channels' | 'matches'>('chat');
     const [searchQuery, setSearchQuery] = useState('');
+    const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
     const [tvTab, setTvTab] = useState<'maclar' | 'kanallar' | 'sohbet'>('maclar');
     const [tvMatches, setTvMatches] = useState<any[]>([]);
 
@@ -1210,9 +1211,12 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                     {/* Feature Banners */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                        <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
-                            <h4 className="text-white text-lg md:text-xl font-bold mb-1">Büyük Ödüller</h4>
-                            <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">HOŞGELDİN BONUSU SENİ BEKLİYOR</p>
+                        <div onClick={() => setIsChannelsModalOpen(true)} className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer relative overflow-hidden group">
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#10b981]/0 via-[#10b981]/5 to-[#10b981]/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <h4 className="text-white text-lg md:text-xl font-bold mb-1 relative z-10 flex items-center gap-2">
+                                <Tv className="w-5 h-5 text-[#10b981]" /> Kanallar
+                            </h4>
+                            <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider relative z-10">TÜM CANLI YAYINLARI KEŞFEDİN</p>
                         </div>
                         <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
                             <h4 className="text-white text-lg md:text-xl font-bold mb-1">Güvenilir Sistem</h4>
@@ -1224,157 +1228,156 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                         </div>
                     </div>
 
-                    {/* BOTTOM: Channels Grid */}
-                    <div style={{ width: '100%', position: 'relative' }}>
-                        <div style={{ background: '#12141a', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', display: 'flex', flexDirection: 'column', padding: '20px', gap: '16px' }}>
-                            
-                            {/* Channels Header & Search */}
-                            <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'center', justifyContent: 'space-between', gap: '16px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '16px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                        <div style={{ width: '4px', height: '16px', background: '#10b981', borderRadius: '4px', boxShadow: '0 0 10px rgba(16,185,129,0.5)' }} />
-                                        <h3 style={{ fontSize: '13px', fontWeight: 900, color: '#fff', letterSpacing: '0.8px', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {/* Channels Modal Overlay */}
+                    {isChannelsModalOpen && (
+                        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6" onClick={() => setIsChannelsModalOpen(false)}>
+                            <div className="bg-[#12141a] border border-white/10 rounded-2xl w-full max-w-5xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+                                
+                                {/* Modal Header & Search */}
+                                <div className="p-4 md:p-6 border-b border-white/5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white/[0.02] shrink-0">
+                                    <div className="flex items-center justify-between md:justify-start gap-4">
+                                        <h2 className="text-white text-lg md:text-xl font-black flex items-center gap-2">
+                                            <div className="w-1.5 h-6 bg-[#10b981] rounded-full shadow-[0_0_10px_#10b981]"></div>
                                             CANLI KANALLAR
-                                            <span style={{ fontSize: '9px', fontWeight: 800, background: 'rgba(16,185,129,0.15)', color: '#10b981', border: '1px solid rgba(16,185,129,0.3)', padding: '1px 6px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#10b981', animation: 'pulse 1.5s infinite' }} />
+                                            <span className="text-[10px] md:text-xs font-bold bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 px-2 py-0.5 rounded-full flex items-center gap-1.5 ml-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
                                                 {streamers.length} KANAL
                                             </span>
-                                        </h3>
-                                    </div>
-
-                                {/* Compact Search Bar */}
-                                <div style={{ position: 'relative', width: isMobile ? '100%' : '300px' }}>
-                                    <input 
-                                        type="text" 
-                                        placeholder="Kanal ara... (beIN 1, Tivibu...)" 
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        style={{
-                                            width: '100%',
-                                            padding: '6px 28px 6px 30px',
-                                            background: 'rgba(0, 0, 0, 0.4)',
-                                            border: searchQuery ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.06)',
-                                            borderRadius: '8px',
-                                            fontSize: '11px',
-                                            color: '#fff',
-                                            outline: 'none',
-                                            transition: 'all 0.2s'
-                                        }}
-                                    />
-                                    <Search style={{ position: 'absolute', left: '9px', top: '50%', transform: 'translateY(-50%)', width: '13px', height: '13px', color: searchQuery ? '#10b981' : '#6b7280' }} />
-                                    {searchQuery && (
-                                        <button 
-                                            onClick={() => setSearchQuery('')}
-                                            style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
-                                        >
-                                            <X style={{ width: '12px', height: '12px' }} />
+                                        </h2>
+                                        <button onClick={() => setIsChannelsModalOpen(false)} className="md:hidden w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-zinc-400">
+                                            <X className="w-5 h-5" />
                                         </button>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Channels Accordion List */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                {(() => {
-                                    const filteredStreamers = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+                                    </div>
                                     
-                                    const grouped: Record<string, Streamer[]> = {};
-                                    filteredStreamers.forEach(s => {
-                                        const groupName = getChannelGroup(s.name);
-                                        if (!grouped[groupName]) grouped[groupName] = [];
-                                        grouped[groupName].push(s);
-                                    });
+                                    <div className="flex items-center gap-4">
+                                        <div className="relative w-full md:w-[300px]">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Kanal ara... (beIN 1, Tivibu...)" 
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                className="w-full bg-black/40 border border-white/10 focus:border-[#10b981] rounded-lg py-2 pl-9 pr-8 text-xs text-white outline-none transition-colors"
+                                            />
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                                            {searchQuery && (
+                                                <button onClick={() => setSearchQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white">
+                                                    <X className="w-3.5 h-3.5" />
+                                                </button>
+                                            )}
+                                        </div>
+                                        <button onClick={() => setIsChannelsModalOpen(false)} className="hidden md:flex w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 items-center justify-center text-zinc-400 hover:text-white transition-colors shrink-0">
+                                            <X className="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                </div>
 
-                                    return CHANNEL_GROUP_ORDER
-                                        .filter(g => grouped[g] && grouped[g].length > 0)
-                                        .map(groupName => {
-                                            const config = getGroupConfig(groupName);
-                                            const isCollapsed = collapsedGroups[groupName];
-                                            
-                                            return (
-                                                <div key={groupName} style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: `1px solid ${config.color}33`, overflow: 'hidden', transition: 'all 0.3s' }}>
-                                                    <button 
-                                                        onClick={() => toggleGroup(groupName)}
-                                                        style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: isCollapsed ? 'transparent' : 'rgba(255,255,255,0.03)', cursor: 'pointer', border: 'none', textAlign: 'left', transition: 'background 0.2s' }}
-                                                        className="hover:bg-[#ffffff08]"
-                                                    >
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                            <div style={{ width: '4px', height: '18px', background: config.color, borderRadius: '4px', boxShadow: `0 0 10px ${config.color}80` }} />
-                                                            <span style={{ fontSize: '15px', fontWeight: 900, color: '#fff', letterSpacing: '0.5px' }}>
-                                                                {groupName}
-                                                            </span>
-                                                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#9ca3af', background: 'rgba(255,255,255,0.08)', padding: '3px 10px', borderRadius: '12px', marginLeft: '8px' }}>
-                                                                {grouped[groupName].length} Kanal
-                                                            </span>
-                                                        </div>
-                                                        <ChevronDown style={{ width: 20, height: 20, color: '#9ca3af', transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 0.3s' }} />
-                                                    </button>
-                                                    
-                                                    <div 
-                                                        style={{ 
-                                                            display: 'grid', 
-                                                            gridTemplateRows: isCollapsed ? '0fr' : '1fr', 
-                                                            transition: 'grid-template-rows 0.3s ease-out'
-                                                        }}
-                                                    >
-                                                        <div style={{ overflow: 'hidden' }}>
-                                                            <div className="p-3 border-t flex flex-row sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-x-auto custom-scrollbar" style={{ borderTopColor: `${config.color}15` }}>
-                                                                {grouped[groupName].map(s => {
-                                                                    const isActive = activeChannel?.id === s.id;
-                                                                    return (
-                                                                        <button 
-                                                                            key={s.id}
-                                                                            onClick={() => {
-                                                                                setActiveChannel({
-                                                                                    id: s.id, name: s.name, slug: s.kick_username || '', platform: s.platform_type,
-                                                                                    streamUrl: s.kick_username || '', thumbnailUrl: s.avatar_url || '',
-                                                                                    category: s.tags?.[0] || 'CANLI YAYIN', isLive: s.is_live, isActive: true,
-                                                                                    order: s.order_index, sourceType: s.source_type, platformType: s.platform_type,
-                                                                                    platformUsername: s.kick_username, videoUrl: s.video_url, iframeUrl: s.iframe_url,
-                                                                                    fallbackType: s.fallback_type, fallbackVideoUrl: s.fallback_video_url,
-                                                                                    fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
-                                                                                } as any);
-                                                                            }}
-                                                                            className={`group/item flex items-center min-w-[150px] sm:min-w-0 w-full gap-2 p-2 rounded-lg cursor-pointer transition-all duration-200 border flex-shrink-0 ${isActive ? 'bg-[#10b981]/10 border-[#10b981]' : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'}`}
-                                                                        >
-                                                                            <div className="relative flex-shrink-0">
-                                                                                <div className={`w-8 h-8 rounded-md overflow-hidden bg-black/50 border ${isActive ? 'border-[#10b981]' : 'border-white/10'}`}>
-                                                                                    <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} className="w-full h-full object-contain p-1" />
-                                                                                </div>
-                                                                                <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-[#0B0E14] ${isActive ? 'bg-[#10b981] shadow-[0_0_8px_#10b981]' : (s.is_live ? 'bg-[#10b981]/50' : 'bg-zinc-600')}`} />
-                                                                            </div>
-                                                                            
-                                                                            <div className="flex-1 min-w-0 text-left flex flex-col justify-center">
-                                                                                <div className={`text-xs font-bold truncate transition-colors ${isActive ? 'text-white' : 'text-zinc-300 group-hover/item:text-white'}`}>
-                                                                                    {s.name}
-                                                                                </div>
-                                                                                {s.is_live ? (
-                                                                                    <div className="flex items-center gap-1 mt-0.5">
-                                                                                        <span className="text-[9px] font-black text-[#10b981] tracking-wider">CANLI</span>
-                                                                                        {s.viewer_count && s.viewer_count > 0 && (
-                                                                                            <>
-                                                                                                <span className="text-zinc-600 text-[8px]">•</span>
-                                                                                                <Users className="w-2.5 h-2.5 text-zinc-500" />
-                                                                                                <span className="text-[9px] font-bold text-zinc-500">{s.viewer_count}</span>
-                                                                                            </>
-                                                                                        )}
+                                {/* Modal Body: Accordion */}
+                                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6 flex flex-col gap-3">
+                                    {(() => {
+                                        const filteredStreamers = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+                                        
+                                        const grouped: Record<string, Streamer[]> = {};
+                                        filteredStreamers.forEach(s => {
+                                            const groupName = getChannelGroup(s.name);
+                                            if (!grouped[groupName]) grouped[groupName] = [];
+                                            grouped[groupName].push(s);
+                                        });
+
+                                        return CHANNEL_GROUP_ORDER
+                                            .filter(g => grouped[g] && grouped[g].length > 0)
+                                            .map(groupName => {
+                                                const config = getGroupConfig(groupName);
+                                                const isCollapsed = collapsedGroups[groupName];
+                                                
+                                                return (
+                                                    <div key={groupName} style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: `1px solid ${config.color}33`, overflow: 'hidden', transition: 'all 0.3s' }}>
+                                                        <button 
+                                                            onClick={() => toggleGroup(groupName)}
+                                                            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: isCollapsed ? 'transparent' : 'rgba(255,255,255,0.03)', cursor: 'pointer', border: 'none', textAlign: 'left', transition: 'background 0.2s' }}
+                                                            className="hover:bg-[#ffffff08]"
+                                                        >
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                                <div style={{ width: '4px', height: '18px', background: config.color, borderRadius: '4px', boxShadow: `0 0 10px ${config.color}80` }} />
+                                                                <span style={{ fontSize: '15px', fontWeight: 900, color: '#fff', letterSpacing: '0.5px' }}>
+                                                                    {groupName}
+                                                                </span>
+                                                                <span style={{ fontSize: '11px', fontWeight: 700, color: '#9ca3af', background: 'rgba(255,255,255,0.08)', padding: '3px 10px', borderRadius: '12px', marginLeft: '8px' }}>
+                                                                    {grouped[groupName].length} Kanal
+                                                                </span>
+                                                            </div>
+                                                            <ChevronDown style={{ width: 20, height: 20, color: '#9ca3af', transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 0.3s' }} />
+                                                        </button>
+                                                        
+                                                        <div 
+                                                            style={{ 
+                                                                display: 'grid', 
+                                                                gridTemplateRows: isCollapsed ? '0fr' : '1fr', 
+                                                                transition: 'grid-template-rows 0.3s ease-out'
+                                                            }}
+                                                        >
+                                                            <div style={{ overflow: 'hidden' }}>
+                                                                <div className="p-3 border-t flex flex-row sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-x-auto custom-scrollbar" style={{ borderTopColor: `${config.color}15` }}>
+                                                                    {grouped[groupName].map(s => {
+                                                                        const isActive = activeChannel?.id === s.id;
+                                                                        return (
+                                                                            <button 
+                                                                                key={s.id}
+                                                                                onClick={() => {
+                                                                                    setActiveChannel({
+                                                                                        id: s.id, name: s.name, slug: s.kick_username || '', platform: s.platform_type,
+                                                                                        streamUrl: s.kick_username || '', thumbnailUrl: s.avatar_url || '',
+                                                                                        category: s.tags?.[0] || 'CANLI YAYIN', isLive: s.is_live, isActive: true,
+                                                                                        order: s.order_index, sourceType: s.source_type, platformType: s.platform_type,
+                                                                                        platformUsername: s.kick_username, videoUrl: s.video_url, iframeUrl: s.iframe_url,
+                                                                                        fallbackType: s.fallback_type, fallbackVideoUrl: s.fallback_video_url,
+                                                                                        fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
+                                                                                    } as any);
+                                                                                    // Auto close modal on mobile after selecting a channel
+                                                                                    if (window.innerWidth < 768) setIsChannelsModalOpen(false);
+                                                                                }}
+                                                                                className={`group/item flex items-center min-w-[150px] sm:min-w-0 w-full gap-2 p-2 rounded-lg cursor-pointer transition-all duration-200 border flex-shrink-0 ${isActive ? 'bg-[#10b981]/10 border-[#10b981]' : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'}`}
+                                                                            >
+                                                                                <div className="relative flex-shrink-0">
+                                                                                    <div className={`w-8 h-8 rounded-md overflow-hidden bg-black/50 border ${isActive ? 'border-[#10b981]' : 'border-white/10'}`}>
+                                                                                        <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} className="w-full h-full object-contain p-1" />
                                                                                     </div>
-                                                                                ) : (
-                                                                                    <span className="text-[9px] font-bold text-zinc-500 mt-0.5">ÇEVRİMDIŞI</span>
-                                                                                )}
-                                                                            </div>
-                                                                        </button>
-                                                                    );
-                                                                })}
+                                                                                    <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-[#0B0E14] ${isActive ? 'bg-[#10b981] shadow-[0_0_8px_#10b981]' : (s.is_live ? 'bg-[#10b981]/50' : 'bg-zinc-600')}`} />
+                                                                                </div>
+                                                                                
+                                                                                <div className="flex-1 min-w-0 text-left flex flex-col justify-center">
+                                                                                    <div className={`text-xs font-bold truncate transition-colors ${isActive ? 'text-white' : 'text-zinc-300 group-hover/item:text-white'}`}>
+                                                                                        {s.name}
+                                                                                    </div>
+                                                                                    {s.is_live ? (
+                                                                                        <div className="flex items-center gap-1 mt-0.5">
+                                                                                            <span className="text-[9px] font-black text-[#10b981] tracking-wider">CANLI</span>
+                                                                                            {s.viewer_count && s.viewer_count > 0 && (
+                                                                                                <>
+                                                                                                    <span className="text-zinc-600 text-[8px]">•</span>
+                                                                                                    <Users className="w-2.5 h-2.5 text-zinc-500" />
+                                                                                                    <span className="text-[9px] font-bold text-zinc-500">{s.viewer_count}</span>
+                                                                                                </>
+                                                                                            )}
+                                                                                        </div>
+                                                                                    ) : (
+                                                                                        <span className="text-[9px] font-bold text-zinc-500 mt-0.5">ÇEVRİMDIŞI</span>
+                                                                                    )}
+                                                                                </div>
+                                                                            </button>
+                                                                        );
+                                                                    })}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        });
-                                })()}
+                                                );
+                                            });
+                                    })()}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
+                    {/* End Modal */}
                 </div>
 
                 {/* 3. Live Matches List (Moved to bottom) */}
