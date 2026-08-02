@@ -2260,7 +2260,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <div className="flex flex-1 w-full overflow-hidden relative">
             <main 
               id="main-scroll-container"
-              className={`flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col ${view === '724tv' ? 'overflow-hidden' : 'overflow-y-auto'}`}
+              className={`flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col ${['724tv', 'blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view) ? 'overflow-hidden' : 'overflow-y-auto'}`}
               style={{ transform: view === '724tv' ? 'none' : 'translateZ(0)' }}
             >
             {/* Gamdom Style Global Ambient Shading / Glows */}
@@ -2274,8 +2274,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
       <div 
         id="tour-main"
-        className={`site-main-content ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'gercek' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis') 
+        className={`site-main-content flex-1 flex flex-col ${view === 'admin' ? 'admin-layout' : ''} ${
+          (view === 'gercek' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis' || ['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view)) 
             ? 'p-0 w-full pb-[70px] md:pb-0' 
             : 'w-full pb-[80px] md:pb-0'
         }`}
@@ -2284,7 +2284,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           zIndex: view === '724tv' ? 'auto' : 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)'
+          paddingBottom: ['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash', '724tv'].includes(view) ? '0px' : 'calc(env(safe-area-inset-bottom, 0px) + 80px)'
         } as React.CSSProperties}
       >
 

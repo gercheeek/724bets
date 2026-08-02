@@ -105,7 +105,7 @@ export default function KenoView({ siteUser, onAuthRequired }: any) {
     const activePayouts = selectedNumbers.length > 0 ? PAYOUTS[selectedNumbers.length] : [];
 
   return (
-    <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-72px)] lg:h-[calc(100vh-72px)] bg-[#0B0E14] text-white font-sans overflow-y-auto lg:overflow-hidden relative">
+    <div className="flex flex-col lg:flex-row w-full h-full bg-[#0B0E14] text-white font-sans overflow-y-auto lg:overflow-hidden relative">
         
         {/* ── LEFT SIDEBAR (Controls) ── */}
         <div className="w-full lg:w-[320px] bg-[#131620] border-r border-[#1E2336] p-4 md:p-5 flex flex-col shrink-0 z-20 lg:h-full overflow-y-auto order-2 lg:order-1 shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
