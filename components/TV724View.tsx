@@ -1230,43 +1230,45 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                     {/* Channels Modal Overlay */}
                     {isChannelsModalOpen && (
-                        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6" onClick={() => setIsChannelsModalOpen(false)}>
-                            <div className="bg-[#12141a] border border-white/10 rounded-2xl w-full max-w-5xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-                                
+                        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6" onClick={() => setIsChannelsModalOpen(false)}>
+                            <div 
+                                className="bg-[#0a0c10] border border-[#10b981]/20 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-[0_0_50px_rgba(16,185,129,0.15)] overflow-hidden" 
+                                onClick={e => e.stopPropagation()}
+                            >
                                 {/* Modal Header & Search */}
-                                <div className="p-4 md:p-6 border-b border-white/5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white/[0.02] shrink-0">
+                                <div className="p-4 md:px-6 md:py-5 border-b border-white/5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-gradient-to-b from-[#10b981]/10 to-transparent shrink-0">
                                     <div className="flex items-center justify-between md:justify-start gap-4">
-                                        <h2 className="text-white text-lg md:text-xl font-black flex items-center gap-2">
-                                            <div className="w-1.5 h-6 bg-[#10b981] rounded-full shadow-[0_0_10px_#10b981]"></div>
+                                        <h2 className="text-white text-lg md:text-xl font-black flex items-center gap-2 tracking-wide">
+                                            <div className="w-1.5 h-6 bg-[#10b981] rounded-full shadow-[0_0_15px_#10b981]"></div>
                                             CANLI KANALLAR
-                                            <span className="text-[10px] md:text-xs font-bold bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 px-2 py-0.5 rounded-full flex items-center gap-1.5 ml-2">
+                                            <span className="text-[10px] md:text-xs font-bold bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ml-2 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
-                                                {streamers.length} KANAL
+                                                {streamers.length}
                                             </span>
                                         </h2>
-                                        <button onClick={() => setIsChannelsModalOpen(false)} className="md:hidden w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-zinc-400">
+                                        <button onClick={() => setIsChannelsModalOpen(false)} className="md:hidden w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 transition-colors">
                                             <X className="w-5 h-5" />
                                         </button>
                                     </div>
                                     
                                     <div className="flex items-center gap-4">
-                                        <div className="relative w-full md:w-[300px]">
+                                        <div className="relative w-full md:w-[280px]">
                                             <input 
                                                 type="text" 
-                                                placeholder="Kanal ara... (beIN 1, Tivibu...)" 
+                                                placeholder="Kanal ara... (beIN 1...)" 
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                                className="w-full bg-black/40 border border-white/10 focus:border-[#10b981] rounded-lg py-2 pl-9 pr-8 text-xs text-white outline-none transition-colors"
+                                                className="w-full bg-[#12141a] border border-white/10 focus:border-[#10b981]/50 rounded-lg py-2.5 pl-9 pr-8 text-xs text-white outline-none transition-colors shadow-inner"
                                             />
                                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                                             {searchQuery && (
-                                                <button onClick={() => setSearchQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white">
+                                                <button onClick={() => setSearchQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors">
                                                     <X className="w-3.5 h-3.5" />
                                                 </button>
                                             )}
                                         </div>
-                                        <button onClick={() => setIsChannelsModalOpen(false)} className="hidden md:flex w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 items-center justify-center text-zinc-400 hover:text-white transition-colors shrink-0">
-                                            <X className="w-5 h-5" />
+                                        <button onClick={() => setIsChannelsModalOpen(false)} className="hidden md:flex w-9 h-9 rounded-lg bg-white/5 hover:bg-red-500/20 items-center justify-center text-zinc-400 hover:text-red-400 transition-colors shrink-0 group">
+                                            <X className="w-5 h-5 group-hover:scale-110 transition-transform" />
                                         </button>
                                     </div>
                                 </div>
@@ -1290,22 +1292,21 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                 const isCollapsed = collapsedGroups[groupName];
                                                 
                                                 return (
-                                                    <div key={groupName} style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: `1px solid ${config.color}33`, overflow: 'hidden', transition: 'all 0.3s' }}>
+                                                    <div key={groupName} className={`rounded-xl border overflow-hidden transition-all duration-300 ${isCollapsed ? 'border-white/5 bg-[#12141a]/50' : 'border-[#10b981]/20 bg-[#12141a]'}`}>
                                                         <button 
                                                             onClick={() => toggleGroup(groupName)}
-                                                            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: isCollapsed ? 'transparent' : 'rgba(255,255,255,0.03)', cursor: 'pointer', border: 'none', textAlign: 'left', transition: 'background 0.2s' }}
-                                                            className="hover:bg-[#ffffff08]"
+                                                            className={`w-full flex items-center justify-between px-5 py-3.5 cursor-pointer border-none text-left transition-colors hover:bg-white/[0.02] ${isCollapsed ? '' : 'bg-white/[0.02]'}`}
                                                         >
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                                <div style={{ width: '4px', height: '18px', background: config.color, borderRadius: '4px', boxShadow: `0 0 10px ${config.color}80` }} />
-                                                                <span style={{ fontSize: '15px', fontWeight: 900, color: '#fff', letterSpacing: '0.5px' }}>
+                                                            <div className="flex items-center gap-3">
+                                                                <div style={{ width: '3px', height: '16px', background: config.color, borderRadius: '4px', boxShadow: `0 0 10px ${config.color}80` }} />
+                                                                <span className="text-[14px] font-bold text-white tracking-wide">
                                                                     {groupName}
                                                                 </span>
-                                                                <span style={{ fontSize: '11px', fontWeight: 700, color: '#9ca3af', background: 'rgba(255,255,255,0.08)', padding: '3px 10px', borderRadius: '12px', marginLeft: '8px' }}>
+                                                                <span className="text-[10px] font-bold text-zinc-400 bg-black/40 px-2.5 py-0.5 rounded-full border border-white/5">
                                                                     {grouped[groupName].length} Kanal
                                                                 </span>
                                                             </div>
-                                                            <ChevronDown style={{ width: 20, height: 20, color: '#9ca3af', transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 0.3s' }} />
+                                                            <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform duration-300 ${isCollapsed ? '' : 'rotate-180'}`} />
                                                         </button>
                                                         
                                                         <div 
@@ -1315,8 +1316,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                 transition: 'grid-template-rows 0.3s ease-out'
                                                             }}
                                                         >
-                                                            <div style={{ overflow: 'hidden' }}>
-                                                                <div className="p-3 border-t flex flex-row sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-x-auto custom-scrollbar" style={{ borderTopColor: `${config.color}15` }}>
+                                                            <div className="overflow-hidden">
+                                                                <div className="p-3 border-t border-white/5 flex flex-row sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-x-auto custom-scrollbar bg-black/20">
                                                                     {grouped[groupName].map(s => {
                                                                         const isActive = activeChannel?.id === s.id;
                                                                         return (
@@ -1332,20 +1333,19 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                                         fallbackType: s.fallback_type, fallbackVideoUrl: s.fallback_video_url,
                                                                                         fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
                                                                                     } as any);
-                                                                                    // Auto close modal on mobile after selecting a channel
                                                                                     if (window.innerWidth < 768) setIsChannelsModalOpen(false);
                                                                                 }}
-                                                                                className={`group/item flex items-center min-w-[150px] sm:min-w-0 w-full gap-2 p-2 rounded-lg cursor-pointer transition-all duration-200 border flex-shrink-0 ${isActive ? 'bg-[#10b981]/10 border-[#10b981]' : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'}`}
+                                                                                className={`group/item flex items-center min-w-[150px] sm:min-w-0 w-full gap-2.5 p-2 rounded-lg cursor-pointer transition-all duration-200 border flex-shrink-0 ${isActive ? 'bg-[#10b981]/10 border-[#10b981]' : 'bg-[#1a1d24] border-transparent hover:border-white/10 hover:bg-[#20242c]'}`}
                                                                             >
                                                                                 <div className="relative flex-shrink-0">
-                                                                                    <div className={`w-8 h-8 rounded-md overflow-hidden bg-black/50 border ${isActive ? 'border-[#10b981]' : 'border-white/10'}`}>
-                                                                                        <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} className="w-full h-full object-contain p-1" />
+                                                                                    <div className={`w-9 h-9 rounded-md overflow-hidden bg-black/60 border ${isActive ? 'border-[#10b981]' : 'border-white/5 group-hover/item:border-white/10 transition-colors'}`}>
+                                                                                        <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} className="w-full h-full object-contain p-1.5" />
                                                                                     </div>
-                                                                                    <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-[#0B0E14] ${isActive ? 'bg-[#10b981] shadow-[0_0_8px_#10b981]' : (s.is_live ? 'bg-[#10b981]/50' : 'bg-zinc-600')}`} />
+                                                                                    <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-[#12141a] ${isActive ? 'bg-[#10b981] shadow-[0_0_8px_#10b981]' : (s.is_live ? 'bg-[#10b981]/60' : 'bg-zinc-600')}`} />
                                                                                 </div>
                                                                                 
                                                                                 <div className="flex-1 min-w-0 text-left flex flex-col justify-center">
-                                                                                    <div className={`text-xs font-bold truncate transition-colors ${isActive ? 'text-white' : 'text-zinc-300 group-hover/item:text-white'}`}>
+                                                                                    <div className={`text-[11px] font-bold truncate transition-colors ${isActive ? 'text-white' : 'text-zinc-300 group-hover/item:text-white'}`}>
                                                                                         {s.name}
                                                                                     </div>
                                                                                     {s.is_live ? (
