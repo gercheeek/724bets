@@ -1174,6 +1174,30 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     <div style={{ position: 'absolute', top: '20px', left: '20px', opacity: 0.8, pointerEvents: 'none', zIndex: 40 }}>
                                         <span style={{ fontSize: '16px', fontWeight: 900, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>724<span style={{ color: '#10b981' }}>TV</span></span>
                                     </div>
+
+                                    {/* Right Side Vertical Ad (ERKEN ÖDEME) - Covers xslot and blocks clicks */}
+                                    <div className="absolute top-0 right-0 bottom-0 w-[80px] md:w-[110px] bg-[#050608] border-l border-white/5 z-[60] flex flex-col items-center justify-between py-4 shadow-[-10px_0_30px_rgba(0,0,0,0.8)] pointer-events-auto cursor-pointer group hover:bg-[#0a0d14] transition-colors" onClick={(e) => { e.stopPropagation(); /* Prevent video click */ }}>
+                                        {/* Subtle green glow */}
+                                        <div className="absolute inset-0 bg-gradient-to-b from-[#10b981]/5 via-transparent to-[#10b981]/5 opacity-50"></div>
+                                        
+                                        <div className="flex flex-col items-center gap-3 w-full relative z-10 mt-2">
+                                            <div className="bg-[#10b981]/10 border border-[#10b981]/30 px-1.5 py-1 rounded text-[#10b981] text-[9px] md:text-[10px] font-black tracking-widest text-center">
+                                                ANINDA<br/>NAKİT
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
+                                            <div className="flex flex-col items-center -space-y-1 md:-space-y-2 mb-4">
+                                                <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>ERKEN</span>
+                                                <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>ÖDEME</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex flex-col items-center relative z-10 mb-2">
+                                            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400 font-black text-3xl md:text-4xl italic tracking-tighter drop-shadow-lg">+2</span>
+                                            <span className="text-white font-black text-[10px] md:text-xs tracking-widest mt-0.5">GOL</span>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>
