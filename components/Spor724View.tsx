@@ -23,6 +23,7 @@ import ModernChat from './ModernChat';
 import { SporxBetSlip } from './SporxBetSlip';
 import { MatchCard } from './sports/MatchCard';
 import SportsPromoSlider from './sports/SportsPromoSlider';
+import SportsBanners from './SportsBanners';
 import BasketballPromoSlider from './sports/BasketballPromoSlider';
 import { TopMatchesWidget } from './sports/TopMatchesWidget';
 import SportsIconNav from './sports/SportsIconNav';
@@ -883,6 +884,9 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                   {viewMode !== 'bulletin' && (
                     <div className="mt-8">
                       <FeaturedCombos activeSport={activeSport} matches={filteredMatches} onSelectMatch={setSelectedMatch} />
+                      <div className="mt-6 w-full">
+                        <SportsBanners />
+                      </div>
                     </div>
                   )}
               </div>

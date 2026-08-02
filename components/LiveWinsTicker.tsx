@@ -109,7 +109,7 @@ export default function LiveWinsTicker({ guestTheme = "retro" }: { guestTheme?: 
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
           </span>
-          <span className="text-gray-200 font-bold text-[8px] tracking-widest uppercase">{t('common.live', { defaultValue: 'CANLI' })}</span>
+          <span className="text-[10px] font-bold text-white tracking-[0.2em]">CANLI KAZANANLAR</span>
         </div>
 
         {/* Horizontal Scrolling List (Full Width) */}

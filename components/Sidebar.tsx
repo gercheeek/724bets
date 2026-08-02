@@ -6,6 +6,7 @@ import {
 import SportsSidebarContent from './SportsSidebarContent';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../contexts/LanguageContext';
+import { viewToPath } from '../utils/routes';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -88,7 +89,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
     }
 
     const isActive = activeView === item.route;
-    const href = item.route === 'home' ? '/' : (['openChat', 'openLang'].includes(item.route) ? '#' : `/${item.route}`);
+    
+    // Build proper URL path
+    let href = '#';
+    if (!['openChat', 'openLang'].includes(item.route)) {
+      const targetPath = viewToPath[item.route] || item.route;
+      href = `/${targetPath}`;
+    }
 
     return (
       <a
@@ -114,16 +121,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
         {item.route === 'openLang' && showLangMenu && (
           <div 
             ref={langMenuRef}
-            className="absolute left-full bottom-0 ml-2 w-40 bg-[#0a0f16] border border-white/10 rounded-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-[999999] animate-in fade-in zoom-in-95 duration-200"
+            className="absolute left-full bottom-0 ml-3 w-44 bg-[#05070a]/90 backdrop-blur-2xl border border-white/5 rounded-2xl shadow-[8px_0_40px_rgba(0,0,0,0.5)] z-[999999] animate-in fade-in slide-in-from-left-2 duration-200 p-1.5"
             onClick={(e) => e.stopPropagation()}
           >
             {languages.map((lang) => (
               <button
                 key={lang.code}
                 onClick={() => handleLanguageSelect(lang.code)}
-                className={`w-full flex items-center px-4 py-3 text-sm transition-colors ${i18n.language === lang.code ? 'bg-[#00E5FF]/10 text-[#00E5FF] font-bold' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}
+                className={`w-full flex items-center px-4 py-2.5 rounded-xl text-[14px] transition-all duration-300 ${i18n.language === lang.code ? 'bg-[#d4af37]/10 text-[#d4af37] font-bold' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white hover:translate-x-1'}`}
               >
-                <span className="mr-3 text-lg leading-none">{lang.flag}</span>
+                <span className="mr-3 text-lg leading-none drop-shadow-sm">{lang.flag}</span>
                 {lang.label}
               </button>
             ))}

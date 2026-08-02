@@ -1,26 +1,84 @@
-import requests
-from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+import os
+import time
+from urllib.parse import urlparse
+from playwright.sync_api import sync_playwright
 
-hedef_url = "https://rainbet.com/tr"
+SAVE_DIR = "avif_images"
+collected_urls = set()
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-}
+def setup_directory():
+    if not os.path.exists(SAVE_DIR):
+        os.makedirs(SAVE_DIR)
+        print(f"[{SAVE_DIR}] klasörü oluşturuldu.")
 
-print("Siteye bağlanılıyor ve linkler toplanıyor...\n")
-
-try:
-    response = requests.get(hedef_url, headers=headers)
-    soup = BeautifulSoup(response.text, 'html.parser')
+def handle_response(response):
+    url = response.url
+    content_type = response.headers.get("content-type", "")
     
-    resimler = soup.find_all('img')
-    
-    for resim in resimler:
-        src = resim.get('src')
-        if src:
-            tam_link = urljoin(hedef_url, src)
-            print(tam_link)
+    if "/format/avif/" in url or "image/avif" in content_type:
+        collected_urls.add(url)
 
-except Exception as e:
-    print("Bir hata oluştu:", e)
+def scrape_images(url: str):
+    print(f"{url} adresi için kazıma başlatılıyor...")
+    
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
+        page = context.new_page()
+
+        page.on("response", handle_response)
+
+        try:
+            page.goto(url, wait_until="domcontentloaded", timeout=60000)
+            print("Sayfa yüklendi, kaydırma (scroll) işlemi başlatılıyor...")
+
+            while True:
+                page.evaluate("window.scrollBy(0, 800);")
+                time.sleep(1.5)
+                
+                new_height = page.evaluate("document.body.scrollHeight")
+                current_scroll = page.evaluate("window.scrollY + window.innerHeight")
+                
+                if current_scroll >= new_height:
+                    time.sleep(3)
+                    final_height = page.evaluate("document.body.scrollHeight")
+                    if current_scroll >= final_height:
+                        print("Sayfanın sonuna ulaşıldı.")
+                        break
+
+            print(f"Toplam {len(collected_urls)} benzersiz avif resmi bulundu. İndiriliyor...")
+            
+            # Şimdi toplanan URL'leri indir
+            for img_url in collected_urls:
+                try:
+                    # Context'in API request özelliği ile indir
+                    res = context.request.get(img_url)
+                    if res.ok:
+                        body = res.body()
+                        parsed = urlparse(img_url)
+                        filename = os.path.basename(parsed.path)
+                        if not filename.endswith(".avif"):
+                            filename += ".avif"
+                            
+                        filepath = os.path.join(SAVE_DIR, filename)
+                        
+                        if not os.path.exists(filepath):
+                            with open(filepath, "wb") as f:
+                                f.write(body)
+                            print(f"[İNDİRİLDİ] {filename}")
+                except Exception as e:
+                    print(f"[HATA] {img_url} indirilemedi: {e}")
+                    
+            print("Tüm işlemler başarıyla tamamlandı.")
+            
+        except Exception as e:
+            print(f"[HATA] Sorun oluştu: {e}")
+        finally:
+            browser.close()
+
+if __name__ == "__main__":
+    setup_directory()
+    TARGET_URL = "https://slotra.com/casino/new"
+    scrape_images(TARGET_URL)

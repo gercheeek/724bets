@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GameDetailModal, GameData } from './GameDetailModal';
 import { useLanguage } from '../contexts/LanguageContext';
+import { BaseGameCard } from './GameCards';
 
 export const getOriginalsData = (t: (key: string) => string): GameData[] => [
     {
@@ -169,29 +170,16 @@ export default function OriginalsSlider({ onNavigate, guestTheme = "retro" }: { 
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                     {originalsData.map((game) => (
-                        <div key={game.id} className="shrink-0 snap-start flex flex-col items-center group">
-                            {/* Card Body - Portrait */}
-                            <div 
+                        <div key={game.id} className="w-[140px] md:w-[160px] shrink-0 snap-start group">
+                            <BaseGameCard 
+                                game={{
+                                    name: game.name,
+                                    img: game.image,
+                                    path: game.path
+                                }}
                                 onClick={() => onNavigate(game.path)}
-                                className="w-[140px] h-[175px] md:w-[160px] md:h-[200px] relative rounded-2xl overflow-hidden cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_40px_rgba(0,255,163,0.25)] transition-all duration-500 transform group-hover:-translate-y-2 border border-white/10 hover:border-white/30 bg-black/40"
-                            >
-                                {/* Subtle Glass Highlight */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50 z-10 pointer-events-none mix-blend-overlay"></div>
-                                
-                                <img src={game.image} alt={game.name} className={`absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out z-0 ${guestTheme === "luxury" ? "opacity-90 saturate-75 group-hover:saturate-100 group-hover:opacity-100" : ""}`} />
-                                
-                                {/* Shine Effect */}
-                                <div className="absolute top-0 left-[-150%] w-[100%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-[30deg] group-hover:translate-x-[250%] transition-transform duration-[1.5s] ease-in-out z-20 pointer-events-none mobile-shine-anim"></div>
-
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
-
-                                {/* Play button appears on hover */}
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-30">
-                                    <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20">
-                                        <Play className="w-5 h-5 text-white fill-current ml-1" />
-                                    </div>
-                                </div>
-                            </div>
+                                variant="gold"
+                            />
                         </div>
                     ))}
                 </div>

@@ -4,10 +4,14 @@ import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
 import './i18n/config'; // Import i18n configuration
 
+import { BrowserRouter } from 'react-router-dom';
+
 const Root = () => {
   return (
     <ErrorBoundary>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ErrorBoundary>
   );
 };

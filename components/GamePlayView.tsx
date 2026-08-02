@@ -16,7 +16,7 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
   const { t } = useLanguage();
   const { siteUser, setSiteUser } = useUser();
   const [activeTab, setActiveTab] = useState<'bigwins' | 'luckywins' | 'desc'>('bigwins');
-  const [isRealMoney, setIsRealMoney] = useState(false);
+  const [isRealMoney, setIsRealMoney] = useState(!!siteUser);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showInsufficientFunds, setShowInsufficientFunds] = useState(false);
   

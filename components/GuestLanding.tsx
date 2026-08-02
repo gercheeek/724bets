@@ -16,9 +16,11 @@ import LimitedTimePromo from './LimitedTimePromo';
 import { useLanguage } from '../contexts/LanguageContext';
 import { GameDetailModal, GameData } from './GameDetailModal';
 import { GamePlayView } from './GamePlayView';
-import { NewGamesSlider2 } from './NewGamesSlider2';
 import AnimatedCyberBackground from './AnimatedCyberBackground';
 import LiveWinsTicker from './LiveWinsTicker';
+import DynamicNewGames from './DynamicNewGames';
+import DynamicPopularGames from './DynamicPopularGames';
+import EmptySectionX from './EmptySectionX';
 import VIPHeroBanner from './VIPHeroBanner';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import MainHero from './MainHero';
@@ -359,27 +361,39 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
 
 
-          {/* Yeni Eklenenler Slider (Member View) */}
-          <NewGamesSlider2 onPlayGame={(game) => {
-            setSelectedGame({
-              id: game.id,
-              title: game.name,
-              name: game.name,
-              provider: game.provider,
-              image: game.img,
-              category: 'slots',
-              players: game.players,
-              customDemoUrl: game.customDemoUrl,
-              demoUrl: game.customDemoUrl,
-              demoSymbol: game.demoSymbol
-            } as any);
-            setShowDemoIframe(true);
-          }} />
-
-          <div className="w-full mt-4">
-
+          {/* Yeni Eklenenler Slider (Member View) Removed */}
+          <div className="w-full mt-6 mb-4 flex flex-col gap-8 md:gap-12">
             <LiveWinsTicker />
-            <div className="mt-4 mb-4 w-full px-4 lg:px-6">
+            <DynamicPopularGames onGameSelect={(game) => {
+              setSelectedGame({
+                ...game,
+                img: game.image || game.img,
+                category: 'slots',
+                players: game.players,
+                customDemoUrl: game.customDemoUrl,
+                demoUrl: game.customDemoUrl,
+                demoSymbol: game.demoSymbol
+              } as any);
+              setShowDemoIframe(true);
+            }} onViewChange={onViewChange} />
+            
+            <OriginalsSlider onNavigate={onViewChange} />
+            
+            <DynamicNewGames onGameSelect={(game) => {
+              // Same handling as other games in GuestLanding
+              setSelectedGame({
+                ...game,
+                img: game.image || game.img,
+                category: 'slots',
+                players: game.players,
+                customDemoUrl: game.customDemoUrl,
+                demoUrl: game.customDemoUrl,
+                demoSymbol: game.demoSymbol
+              } as any);
+              setShowDemoIframe(true);
+            }} />
+            
+            <div className="w-full px-4 lg:px-6">
               <FeaturedCombos 
                 activeSport="Tüm Sporlar" 
                 matches={matches} 
@@ -389,10 +403,10 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 }} 
               />
             </div>
+            
             <div className="px-4 lg:px-6">
               <UpcomingTournamentsWidget onViewChange={onViewChange} />
             </div>
-            <OriginalsSlider onNavigate={onViewChange} />
           </div>
         </>
       ) : (
@@ -404,14 +418,41 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               onNavigate={(v) => onViewChange?.(v)} 
             />
 
-            {/* Static 3-Column Banners */}
-            <SportsBanners />
+            {/* Banners moved to sports section as requested */}
 
 
 
-            <div className="w-full mt-2 mb-2 sm:mt-6 sm:mb-4">
+            <div className="w-full mt-6 mb-6 sm:mt-10 sm:mb-8 flex flex-col gap-8 md:gap-12">
               <LiveWinsTicker />
-              <div className="mt-4 mb-4 w-full">
+              <DynamicPopularGames onGameSelect={(game) => {
+                setSelectedGame({
+                  ...game,
+                  img: game.image || game.img,
+                  category: 'slots',
+                  players: game.players,
+                  customDemoUrl: game.customDemoUrl,
+                  demoUrl: game.customDemoUrl,
+                  demoSymbol: game.demoSymbol
+                } as any);
+                setShowDemoIframe(true);
+              }} onViewChange={onViewChange} />
+              
+              <OriginalsSlider onNavigate={onViewChange} />
+              
+              <DynamicNewGames onGameSelect={(game) => {
+                setSelectedGame({
+                  ...game,
+                  img: game.image || game.img,
+                  category: 'slots',
+                  players: game.players,
+                  customDemoUrl: game.customDemoUrl,
+                  demoUrl: game.customDemoUrl,
+                  demoSymbol: game.demoSymbol
+                } as any);
+                setShowDemoIframe(true);
+              }} />
+              
+              <div className="w-full">
                 <FeaturedCombos 
                   activeSport="Tüm Sporlar" 
                   matches={matches} 
@@ -421,28 +462,12 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   }} 
                 />
               </div>
-              <div className="mt-4 mb-2">
-                <UpcomingTournamentsWidget onViewChange={onViewChange} />
-              </div>
-              <div className="mt-4">
-                <OriginalsSlider onNavigate={onViewChange} />
-              </div>
+              
+              <UpcomingTournamentsWidget onViewChange={onViewChange} />
             </div>
 
 
-            {/* Yeni Eklenenler Slider (Guest View) */}
-            <div className="w-full mt-4">
-                <NewGamesSlider2 onPlayGame={(game) => setDetailModalGame({
-                    id: String(game.id),
-                    name: game.name,
-                    provider: game.provider,
-                    img: game.img,
-                    demoUrl: getDemoUrl(game),
-                    fullDesc: `${game.name}, ${game.provider} tarafından sunulan popüler ve kazançlı bir slottur.`
-                })} />
-                
-
-            </div>
+            {/* Sliders removed as requested */}
 
         </div>
       )}

@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
+import { viewToPath, pathToView } from './utils/routes';
 
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -191,7 +193,18 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
 };
 
 export default function App() {
-  const [view, setView] = useState('home');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const currentPath = location.pathname.substring(1); // remove leading slash
+  // Determine view from URL. If empty or /anasayfa, it's home. Otherwise map it, or fallback to exact path.
+  const view = location.pathname === '/' || currentPath === 'anasayfa' ? 'home' : (pathToView[currentPath] || currentPath);
+
+  const setView = (v: string) => {
+    const targetPath = viewToPath[v] || v;
+    navigate(`/${targetPath}`);
+  };
+
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [isFinancePanelOpen, setIsFinancePanelOpen] = useState(false);
   const [isDriverActive, setIsDriverActive] = useState(false);

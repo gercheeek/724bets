@@ -43,7 +43,6 @@ const translateMarket = (name: string) => {
     'First_Team_To_Score': 'İlk Golü Atan',
     'Last_Team_To_Score': 'Son Golü Atan',
     'Half_Time_Double_Chance': 'İlk Yarı Çifte Şans',
-    'Draw_No_Bet': 'Beraberlikte İade',
     'HT_FT': 'İlk Yarı / Maç Sonucu',
     'Highest_Scoring_Half': 'En Çok Gol Olan Yarı'
   };

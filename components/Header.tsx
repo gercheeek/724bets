@@ -9,6 +9,7 @@ import { SiteUser, UserLoyalty, MarqueeConfig } from '../types';
 import { useTheme } from '../ThemeContext';
 import { useLanguage, LanguageCode } from '../contexts/LanguageContext';
 import { useTranslation } from 'react-i18next';
+import { viewToPath } from '../utils/routes';
 import SlotText from './SlotText';
 
 export interface NavVisibility {

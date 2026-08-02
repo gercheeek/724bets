@@ -808,7 +808,7 @@ export interface UserBalance {
 
 // ─── Casino Lobby Games (Promotional Banner Feed) ───────────────────────────
 export interface CasinoLobbyGame {
-  id: string;
+  id: string | number;
   name: string;
   provider: string;
   type: 'slot' | 'live' | 'sport';
@@ -817,6 +817,7 @@ export interface CasinoLobbyGame {
   badgeColor?: string;
   themeColor: string;
   image: string; // Base64 or Image URL
+  img?: string;
   link: string;  // Redirect Affiliate link
   isActive: boolean;
   order: number;
