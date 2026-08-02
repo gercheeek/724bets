@@ -1084,9 +1084,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     }
 
     return (
-        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in" style={isTheaterMode ? {
-            position: 'fixed', top: 0, left: 0, bottom: 0, right: window.innerWidth >= 1280 ? '350px' : 0, zIndex: 99990, backgroundColor: '#050508', width: 'auto', minHeight: '100vh', fontFamily: "'Inter', sans-serif"
-        } : { width: '100%', minHeight: '100vh', fontFamily: "'Inter', sans-serif", backgroundColor: '#050508', backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(212,175,55,0.03) 0%, #050508 70%)', position: 'relative', overflow: 'hidden' }}>
+        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in" style={{
+            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#050508', fontFamily: "'Inter', sans-serif", display: 'flex', flexDirection: 'column', overflow: 'hidden'
+        }}>
             {/* Elegant dark edges */}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.8)', zIndex: 0 }} />
             
@@ -1107,7 +1107,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 .tv-tab-btn.active::after { transform: scaleX(1); }
             `}</style>
 
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: isTheaterMode ? '0' : (isMobile ? '10px' : '20px'), position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', gap: isTheaterMode ? '0' : '20px', height: isTheaterMode ? '100%' : 'auto' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 10, overflow: 'hidden' }}>
                 
                 {/* ─── SPORTS SLIDER ─── */}
                 {!isTheaterMode && (
@@ -1116,12 +1116,12 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     </div>
                 )}
 
-                {/* Main Column Layout */}
-                <div className="mx-auto w-full max-w-5xl" style={isTheaterMode ? { display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', maxWidth: 'none' } : { display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'stretch' }}>
+                {/* Main Column Layout - fills remaining height */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                     
-                    {/* TOP: Video Player */}
-                    <div className="mx-auto" style={isTheaterMode ? { width: '100%', height: '100%', position: 'relative' } : { width: '100%', maxWidth: '768px', position: 'relative' }}>
-                        <div ref={playerContainerRef} style={isTheaterMode ? { width: '100%', height: '100%', background: '#000', overflow: 'hidden', position: 'relative' } : { width: '100%', aspectRatio: isMobile ? '16/9' : '21/9', maxHeight: '40vh', background: '#000', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
+                    {/* TOP: Video Player - fills all available space */}
+                    <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+                        <div ref={playerContainerRef} style={{ width: '100%', height: '100%', background: '#000', overflow: 'hidden', position: 'relative' }}>
                             
                             {!activeChannel ? (
                                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #0a110d 0%, #000 100%)' }}>
@@ -1237,8 +1237,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                             )}
                         </div>
 
-                        {/* Bonus & Watermark Buttons (Horizontal) */}
-                        <div className="w-full mt-3 flex items-center justify-between gap-3 overflow-x-auto custom-scrollbar pb-1">
+                        {/* Bonus & Watermark Buttons - Absolute overlay at bottom of player */}
+                        <div className="absolute bottom-0 left-0 right-0 z-[65] px-3 pb-2 pt-6 bg-gradient-to-t from-black/80 to-transparent" style={{ pointerEvents: 'auto' }}>
+                         <div className="w-full flex items-center justify-between gap-3 overflow-x-auto custom-scrollbar pb-1">
                             <div className="flex gap-3 flex-1">
                                {/* Bonus Button 3 */}
                                <div className="flex-1 min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-[#f59e0b]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#f59e0b]/10 transition-colors group relative">
@@ -1268,29 +1269,12 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                <span style={{ color: '#00E5FF', fontWeight: 800, fontSize: '14px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>724</span>
                                <span style={{ color: '#fff', fontWeight: 800, fontSize: '14px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>bets<span style={{ color: '#00E5FF' }}>*</span></span>
                            </div>
+                         </div>
+                        </div>
                         </div>
                     </div>
 
-                    {/* Feature Banners */}
-                    {!isTheaterMode && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                            <div onClick={() => setIsChannelsModalOpen(!isChannelsModalOpen)} className={`bg-[#12141a] border rounded-xl p-5 md:p-6 flex flex-col justify-center transition-colors cursor-pointer relative overflow-hidden group ${isChannelsModalOpen ? 'border-[#10b981]/50 bg-[#1a1d24]' : 'border-white/5 hover:bg-[#1a1d24]'}`}>
-                                <div className={`absolute inset-0 bg-gradient-to-r from-[#10b981]/0 via-[#10b981]/5 to-[#10b981]/0 transition-opacity ${isChannelsModalOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-                                <h4 className="text-white text-lg md:text-xl font-bold mb-1 relative z-10 flex items-center gap-2">
-                                    <Tv className="w-5 h-5 text-[#10b981]" /> Kanallar
-                                </h4>
-                                <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider relative z-10">TÜM CANLI YAYINLARI KEŞFEDİN</p>
-                            </div>
-                            <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
-                                <h4 className="text-white text-lg md:text-xl font-bold mb-1">Güvenilir Sistem</h4>
-                                <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">LİSANSLI ALTYAPI İLE GÜVENDESİNİZ</p>
-                            </div>
-                            <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
-                                <h4 className="text-white text-lg md:text-xl font-bold mb-1">Canlı Destek</h4>
-                                <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">7/24 KESİNTİSİZ HİZMET</p>
-                            </div>
-                        </div>
-                    )}
+                    {/* Feature Banners - Hidden in full-screen mode */}
 
 
                     {/* Inline Channels Container */}
@@ -1440,17 +1424,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     {/* End Modal */}
                 </div>
 
-                {/* 3. Live Matches List (Moved to bottom) */}
-                <div className="mt-4 w-full">
-                    <TopMatchesWidget 
-                        matches={matches.filter(m => m.isLive || m.minute)} 
-                        onSelectMatch={() => {}}
-                        sortByTime={false}
-                    />
-                </div>
+                {/* 3. Live Matches List - Hidden in full-screen mode */}
 
             </div>
-        </div>
     );
 };
 export default TV724View;

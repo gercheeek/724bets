@@ -2260,7 +2260,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <div className="flex flex-1 w-full overflow-hidden relative">
             <main 
               id="main-scroll-container"
-              className="flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col overflow-y-auto"
+              className={`flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col ${view === '724tv' ? 'overflow-hidden' : 'overflow-y-auto'}`}
               style={{ transform: view === '724tv' ? 'none' : 'translateZ(0)' }}
             >
             {/* Gamdom Style Global Ambient Shading / Glows */}
@@ -3005,7 +3005,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
             {/* Chat Sidebar (Pushes the layout instead of floating) */}
             <aside 
-              className={`hidden xl:flex flex-col bg-[#0A0D14] h-full shadow-[-5px_0_15px_rgba(0,0,0,0.5)] flex-shrink-0 relative z-[99999] transition-[width,box-shadow] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isChatOpen ? 'w-[350px]' : 'w-0'}`}
+              className={`hidden xl:flex flex-col flex-shrink-0 relative z-[99999] transition-[width,box-shadow] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isChatOpen ? 'w-[350px]' : 'w-0'} ${view === '724tv' ? 'bg-[#0A0D14]/70 backdrop-blur-md border-l border-white/5 shadow-[-10px_0_30px_rgba(0,0,0,0.6)]' : 'bg-[#0A0D14] shadow-[-5px_0_15px_rgba(0,0,0,0.5)]'}`}
               style={{ willChange: 'width' }}
             >
               <div className={`flex-1 overflow-hidden relative transition-opacity duration-300 ${isChatOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
