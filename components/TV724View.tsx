@@ -1107,7 +1107,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 .tv-tab-btn.active::after { transform: scaleX(1); }
             `}</style>
 
-            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: isMobile ? '10px' : '20px', position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ maxWidth: '1400px', margin: '0 auto', padding: isTheaterMode ? '0' : (isMobile ? '10px' : '20px'), position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', gap: isTheaterMode ? '0' : '20px', height: isTheaterMode ? '100%' : 'auto' }}>
                 
                 {/* ─── SPORTS SLIDER ─── */}
                 {!isTheaterMode && (
@@ -1120,7 +1120,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 <div className="mx-auto w-full max-w-5xl" style={isTheaterMode ? { display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', maxWidth: 'none' } : { display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'stretch' }}>
                     
                     {/* TOP: Video Player */}
-                    <div className="mx-auto" style={isTheaterMode ? { width: '100%', height: '100vh', position: 'relative' } : { width: '100%', maxWidth: '768px', position: 'relative' }}>
+                    <div className="mx-auto" style={isTheaterMode ? { width: '100%', height: '100%', position: 'relative' } : { width: '100%', maxWidth: '768px', position: 'relative' }}>
                         <div ref={playerContainerRef} style={isTheaterMode ? { width: '100%', height: '100%', background: '#000', overflow: 'hidden', position: 'relative' } : { width: '100%', aspectRatio: isMobile ? '16/9' : '21/9', maxHeight: '40vh', background: '#000', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
                             
                             {!activeChannel ? (

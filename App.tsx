@@ -2260,7 +2260,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             <main 
               id="main-scroll-container"
               className="flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col overflow-y-auto"
-              style={{ transform: 'translateZ(0)' }}
+              style={{ transform: view === '724tv' ? 'none' : 'translateZ(0)' }}
             >
             {/* Gamdom Style Global Ambient Shading / Glows */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -2280,7 +2280,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         }`}
         style={{ 
           position: 'relative', 
-          zIndex: 10, 
+          zIndex: view === '724tv' ? 'auto' : 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
           paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)'
